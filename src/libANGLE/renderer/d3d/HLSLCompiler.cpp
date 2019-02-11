@@ -34,6 +34,16 @@ struct CompilerFlagInfo
     const char *mName;
 };
 
+constexpr char kOldCompilerLibrary[] = "d3dcompiler_old.dll";
+
+enum CompilerLibraryLoadResult
+{
+    DefaultLibrarySuccess,
+    OldLibrarySuccess,
+    Failure,
+    CompilerLibraryLoadResultBoundary,
+};
+
 CompilerFlagInfo CompilerFlagInfos[] = {
     // NOTE: The data below is copied from d3dcompiler.h
     // If something changes there it should be changed here as well
@@ -132,15 +142,36 @@ angle::Result HLSLCompiler::ensureInitialized(d3d::Context *context)
         // built with.
         mD3DCompilerModule = LoadLibraryA(D3DCOMPILER_DLL_A);
 
-        if (!mD3DCompilerModule)
+        if (mD3DCompilerModule)
         {
-            DWORD lastError = GetLastError();
-            ERR() << "LoadLibrary(" << D3DCOMPILER_DLL_A << ") failed. GetLastError=" << lastError;
-            ANGLE_TRY_HR(context, E_OUTOFMEMORY, "LoadLibrary failed to load D3D Compiler DLL.");
+            ANGLE_HISTOGRAM_ENUMERATION(
+                "GPU.ANGLE.CompilerLoadLibraryResult",
+                CompilerLibraryLoadResult::DefaultLibrarySuccess,
+                CompilerLibraryLoadResult::CompilerLibraryLoadResultBoundary);
+        }
+        else
+        {
+            WARN() << "Failed to load HLSL compiler library. Trying old DLL.";
+            mD3DCompilerModule = LoadLibraryA(kOldCompilerLibrary);
+            if (mD3DCompilerModule)
+            {
+                ANGLE_HISTOGRAM_ENUMERATION(
+                    "GPU.ANGLE.CompilerLoadLibraryResult",
+                    CompilerLibraryLoadResult::OldLibrarySuccess,
+                    CompilerLibraryLoadResult::CompilerLibraryLoadResultBoundary);
+            }
         }
     }
 
-    ASSERT(mD3DCompilerModule);
+    if (!mD3DCompilerModule)
+    {
+        DWORD lastError = GetLastError();
+        ERR() << "LoadLibrary(" << D3DCOMPILER_DLL_A << ") failed. GetLastError=" << lastError;
+        ANGLE_HISTOGRAM_ENUMERATION("GPU.ANGLE.CompilerLoadLibraryResult",
+                                    CompilerLibraryLoadResult::Failure,
+                                    CompilerLibraryLoadResult::CompilerLibraryLoadResultBoundary);
+        ANGLE_TRY_HR(context, E_OUTOFMEMORY, "LoadLibrary failed to load D3D Compiler DLL.");
+    }
 
     mD3DCompileFunc =
         reinterpret_cast<pD3DCompile>(GetProcAddress(mD3DCompilerModule, "D3DCompile"));
