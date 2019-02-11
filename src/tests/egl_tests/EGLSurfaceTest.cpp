@@ -372,6 +372,7 @@ TEST_P(EGLSurfaceTest, SwapInterval)
     {
         if (maxInterval >= 1)
         {
+            fprintf(stderr, "iter %d, vsync\n", iter);
             std::unique_ptr<Timer> timer(CreateTimer());
 
             eglSwapInterval(mDisplay, 1);
@@ -390,13 +391,17 @@ TEST_P(EGLSurfaceTest, SwapInterval)
 
         if (minInterval <= 0)
         {
+            fprintf(stderr, "iter %d, no vsync\n", iter);
             std::unique_ptr<Timer> timer(CreateTimer());
 
             eglSwapInterval(mDisplay, 0);
+            ASSERT_EGL_SUCCESS();
             timer->start();
             for (int i = 0; i < 100; ++i)
             {
+                fprintf(stderr, "Iteration %d\n", i);
                 eglSwapBuffers(mDisplay, mWindowSurface);
+                ASSERT_EGL_SUCCESS();
             }
             timer->stop();
             ASSERT_EGL_SUCCESS();

@@ -771,6 +771,7 @@ Error ValidateSurface(const Display *display, const Surface *surface)
 
     if (!display->isValidSurface(surface))
     {
+        fprintf(stderr, "ValidateSurface failed\n");
         return EglBadSurface();
     }
 
@@ -3005,6 +3006,7 @@ Error ValidateSwapInterval(const Display *display,
 
     if (draw_surface == nullptr)
     {
+        fprintf(stderr, "ValidateSwapInterval failed\n");
         return EglBadSurface();
     }
 

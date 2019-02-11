@@ -41,6 +41,7 @@ egl::Error SurfaceEGL::swap(const gl::Context *context)
     EGLBoolean success = mEGL->swapBuffers(mSurface);
     if (success == EGL_FALSE)
     {
+        fprintf(stderr, "swap failed\n");
         return egl::Error(mEGL->getError(), "eglSwapBuffers failed");
     }
     return egl::NoError();
@@ -59,6 +60,7 @@ egl::Error SurfaceEGL::swapWithDamage(const gl::Context *context, EGLint *rects,
     }
     if (success == EGL_FALSE)
     {
+        fprintf(stderr, "swap with damage failed\n");
         return egl::Error(mEGL->getError(), "eglSwapBuffersWithDamageKHR failed");
     }
     return egl::NoError();
@@ -115,6 +117,7 @@ void SurfaceEGL::setSwapInterval(EGLint interval)
     EGLBoolean success = mEGL->swapInterval(interval);
     if (success == EGL_FALSE)
     {
+        fprintf(stderr, "setSwapInterval failed\n");
         ERR() << "eglSwapInterval error " << egl::Error(mEGL->getError());
         ASSERT(false);
     }
