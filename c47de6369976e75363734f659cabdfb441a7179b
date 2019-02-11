@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "efb12c34_13813322",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-11T15:22:30Z",
+      "side": 1,
+      "message": "Jamie, do you know if it\u0027s OK to move this to the global scope too?  I can\u0027t figure out if an array of a trivially contstructable type counts as a static initializer.",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 56
+      },
+      "revId": "c47de6369976e75363734f659cabdfb441a7179b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1817a71e_59781941",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-11T15:22:30Z",
+      "side": 1,
+      "message": "this can be\n\n   g_debugMutex \u003d new (debugMutex) std::mutex();",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 43,
+        "endChar": 40
+      },
+      "revId": "c47de6369976e75363734f659cabdfb441a7179b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
