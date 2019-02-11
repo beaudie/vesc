@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "117ed195_a85fc828",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2540,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-11T16:38:20Z",
+      "side": 1,
+      "message": "Are these checks not enough or are we mistakenly exposing the extension?",
+      "range": {
+        "startLine": 2535,
+        "startChar": 4,
+        "endLine": 2540,
+        "endChar": 77
+      },
+      "revId": "be04ec4709b0785f57593a03762edaaf4594a646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
