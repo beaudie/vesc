@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad28be67_7d8bbd58",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-11T19:34:14Z",
+      "side": 0,
+      "message": "You introduced this function in the previous change. If it\u0027s no longer necessary, you can remove it and rework the previous change to use `gl::ImageIndex::MakeFromType`. This change would then be a tweak on that.",
+      "range": {
+        "startLine": 587,
+        "startChar": 11,
+        "endLine": 587,
+        "endChar": 24
+      },
+      "revId": "d9b6f143a6afd6ef3f4b71379d86dbf1ed427a0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
