@@ -124,6 +124,7 @@ class CommandPool final : public WrappedObject<CommandPool, VkCommandPool>
     CommandPool() = default;
 
     void destroy(VkDevice device);
+    VkResult reset(VkDevice device);
 
     VkResult init(VkDevice device, const VkCommandPoolCreateInfo &createInfo);
 };
@@ -508,6 +509,16 @@ ANGLE_INLINE void CommandPool::destroy(VkDevice device)
         vkDestroyCommandPool(device, mHandle, nullptr);
         mHandle = VK_NULL_HANDLE;
     }
+}
+
+ANGLE_INLINE VkResult CommandPool::reset(VkDevice device)
+{
+    if (valid())
+    {
+        // Defaulting to soft reset. Can add flags param if/when needed
+        return vkResetCommandPool(device, mHandle, 0);
+    }
+    return VK_SUCCESS;
 }
 
 ANGLE_INLINE VkResult CommandPool::init(VkDevice device, const VkCommandPoolCreateInfo &createInfo)

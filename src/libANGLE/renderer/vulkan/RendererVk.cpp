@@ -40,6 +40,7 @@ const uint32_t kMockVendorID                              = 0xba5eba11;
 const uint32_t kMockDeviceID                              = 0xf005ba11;
 constexpr char kMockDeviceName[]                          = "Vulkan Mock Device";
 constexpr size_t kInFlightCommandsLimit                   = 100u;
+constexpr size_t kDefaultCommandPools                     = 3;
 constexpr VkFormatFeatureFlags kInvalidFormatFeatureFlags = static_cast<VkFormatFeatureFlags>(-1);
 }  // anonymous namespace
 
@@ -544,6 +545,10 @@ void RendererVk::onDestroy(vk::Context *context)
 
     GlslangWrapper::Release();
 
+    for (vk::CommandPool &cp : mCommandPools)
+    {
+        cp.destroy(mDevice);
+    }
     if (mCommandPool.valid())
     {
         mCommandPool.destroy(mDevice);
@@ -935,7 +940,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     commandPoolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
     commandPoolInfo.queueFamilyIndex        = mCurrentQueueFamilyIndex;
 
-    ANGLE_VK_TRY(displayVk, mCommandPool.init(mDevice, commandPoolInfo));
+    mCommandPools.resize(kDefaultCommandPools);
+    for (vk::CommandPool &cp : mCommandPools)
+    {
+        ANGLE_VK_TRY(displayVk, cp.init(mDevice, commandPoolInfo));
+    }
+    updateCurrentCommandPool();
 
     // Initialize the vulkan pipeline cache.
     ANGLE_TRY(initPipelineCache(displayVk));
@@ -1283,7 +1293,9 @@ void RendererVk::freeAllInFlightResources()
             ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
         }
         batch.fence.destroy(mDevice);
-        batch.commandPool.destroy(mDevice);
+        VkResult status = batch.commandPool.reset(mDevice);
+        ASSERT(status == VK_SUCCESS);
+        mCommandPools.push_back(std::move(batch.commandPool));
     }
     mInFlightCommands.clear();
 
@@ -1314,7 +1326,8 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
 
         batch.fence.destroy(mDevice);
         TRACE_EVENT0("gpu.angle", "commandPool.destroy");
-        batch.commandPool.destroy(mDevice);
+        batch.commandPool.reset(mDevice);
+        mCommandPools.push_back(std::move(batch.commandPool));
         ++finishedCount;
     }
 
@@ -1375,15 +1388,31 @@ angle::Result RendererVk::submitFrame(vk::Context *context,
     // Simply null out the command buffer here - it was allocated using the command pool.
     commandBuffer.releaseHandle();
 
-    // Reallocate the command pool for next frame.
-    // TODO(jmadill): Consider reusing command pools.
-    VkCommandPoolCreateInfo poolInfo = {};
-    poolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    poolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
-    poolInfo.queueFamilyIndex        = mCurrentQueueFamilyIndex;
+    if (!mCommandPools.empty())
+    {
+        updateCurrentCommandPool();
+    }
+    else
+    {
+        // Need to create new command pool
+        VkCommandPoolCreateInfo poolInfo = {};
+        poolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+        poolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+        poolInfo.queueFamilyIndex        = mCurrentQueueFamilyIndex;
 
-    ANGLE_VK_TRY(context, mCommandPool.init(mDevice, poolInfo));
+        vk::CommandPool tmpCommandPool;
+        ANGLE_VK_TRY(context, tmpCommandPool.init(mDevice, poolInfo));
+        mCommandPool = std::move(tmpCommandPool);
+    }
+
     return angle::Result::Continue;
+}
+
+void RendererVk::updateCurrentCommandPool()
+{
+    ASSERT(!mCommandPools.empty());
+    mCommandPool = std::move(mCommandPools.back());
+    mCommandPools.pop_back();
 }
 
 void RendererVk::nextSerial()
