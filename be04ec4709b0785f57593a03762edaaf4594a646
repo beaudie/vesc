@@ -22,6 +22,30 @@
       "revId": "be04ec4709b0785f57593a03762edaaf4594a646",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "344c1827_23a514bf",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2540,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-11T17:44:19Z",
+      "side": 1,
+      "message": "We\u0027re mistakenly exposing the extension. I think our checks are correctly determining that the driver supports the compressed formats. We just haven\u0027t implemented the \"glCompressedTexture\" entry points. It\u0027s probably fine to just proceed with implementing those EPs in issue 2904.",
+      "parentUuid": "117ed195_a85fc828",
+      "range": {
+        "startLine": 2535,
+        "startChar": 4,
+        "endLine": 2540,
+        "endChar": 77
+      },
+      "revId": "be04ec4709b0785f57593a03762edaaf4594a646",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
