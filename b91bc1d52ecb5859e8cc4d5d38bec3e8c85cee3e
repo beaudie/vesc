@@ -22,6 +22,30 @@
       "revId": "b91bc1d52ecb5859e8cc4d5d38bec3e8c85cee3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d03c597_187076cd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-11T20:00:01Z",
+      "side": 1,
+      "message": "Yes, good catch. I\u0027ve updated this to reset command pool when grabbing a previously-used command pool instead of when freeing command pool.",
+      "parentUuid": "8656e65c_9be6471f",
+      "range": {
+        "startLine": 1393,
+        "startChar": 21,
+        "endLine": 1393,
+        "endChar": 36
+      },
+      "revId": "b91bc1d52ecb5859e8cc4d5d38bec3e8c85cee3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
