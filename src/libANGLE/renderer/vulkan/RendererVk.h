@@ -224,6 +224,7 @@ class RendererVk : angle::NonCopyable
                               vk::CommandBuffer &&commandBuffer);
     void freeAllInFlightResources();
     angle::Result flushCommandGraph(vk::Context *context, vk::CommandBuffer *commandBatch);
+    void updateCurrentCommandPool();
     void initFeatures(const std::vector<VkExtensionProperties> &deviceExtensionProps);
     void initPipelineCacheVkKey();
     angle::Result initPipelineCache(DisplayVk *display);
@@ -263,7 +264,16 @@ class RendererVk : angle::NonCopyable
     VkQueue mQueue;
     uint32_t mCurrentQueueFamilyIndex;
     VkDevice mDevice;
+
+#define SIMPLE_COMMAND_POOLS 1
+#if SIMPLE_COMMAND_POOLS
+    // Pool of commandPools to allow for re-use
+    std::vector<vk::CommandPool> mCommandPools;
+    // Currently active command pool
     vk::CommandPool mCommandPool;
+#else
+    vk::CommandPool mCommandPool;
+#endif
     SerialFactory mQueueSerialFactory;
     SerialFactory mShaderSerialFactory;
     Serial mLastCompletedQueueSerial;
