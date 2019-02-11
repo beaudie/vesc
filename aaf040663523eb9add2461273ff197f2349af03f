@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3c1d511_bd0af1cf",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-11T16:28:47Z",
+      "side": 1,
+      "message": "nit: this could be const char* kSkippedMessages[] instead.  We don\u0027t need to specify the size because it\u0027s only used in the for-each loop below.",
+      "range": {
+        "startLine": 106,
+        "startChar": 10,
+        "endLine": 106,
+        "endChar": 37
+      },
+      "revId": "aaf040663523eb9add2461273ff197f2349af03f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
