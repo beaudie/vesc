@@ -22,6 +22,30 @@
       "revId": "d2985604936797de1af4d18ae4ae046b345c2be0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e4e3974_efcd9e1b",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-12T20:03:52Z",
+      "side": 1,
+      "message": "Done, went with mImageTextureType to match the other new member names.",
+      "parentUuid": "7967d6a1_979a644e",
+      "range": {
+        "startLine": 36,
+        "startChar": 20,
+        "endLine": 36,
+        "endChar": 36
+      },
+      "revId": "d2985604936797de1af4d18ae4ae046b345c2be0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
