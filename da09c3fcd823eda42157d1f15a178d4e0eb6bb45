@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "0a587a99_8b2c37bc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T17:20:49Z",
+      "side": 1,
+      "message": "Nah, it\u0027s fine. Someone else can change it back if they feel strongly. LGTM with a constexpr named value for this constant.",
+      "parentUuid": "be3cd57f_25270eeb",
+      "range": {
+        "startLine": 208,
+        "startChar": 63,
+        "endLine": 208,
+        "endChar": 66
+      },
+      "revId": "da09c3fcd823eda42157d1f15a178d4e0eb6bb45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "710766c3_6048857b",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 14
