@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9718a6ce_5f8b02c9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-12T15:15:14Z",
+      "side": 1,
+      "message": "Why not do the reset before giving the command pool back to `mCommandPools`? That would mean any command pool in `mCommandPools` is always at init state.\n\nRight now, the pools that are created initially are reset for no reason (no big deal by itself, but it means you don\u0027t have an invariant (like \"any pool taken from `mCommandPools` is at init\") that you can reason about).",
+      "revId": "463469ee2a41fa7b4ebb1fb6a645bb1a1b58e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
