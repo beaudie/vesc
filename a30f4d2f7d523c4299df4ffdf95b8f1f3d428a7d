@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6da6b4e5_fa07c55d",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 17
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-12T18:44:38Z",
+      "side": 1,
+      "message": "Gets reverted by `git cl format`.",
+      "parentUuid": "fc3d4dc9_68bb9e69",
+      "range": {
+        "startLine": 92,
+        "startChar": 31,
+        "endLine": 92,
+        "endChar": 124
+      },
+      "revId": "a30f4d2f7d523c4299df4ffdf95b8f1f3d428a7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8ef7e698_b18ca2f3",
         "filename": "third_party/vulkan-validation-layers/BUILD.gn",
         "patchSetId": 17
@@ -45,6 +69,30 @@
       "revId": "a30f4d2f7d523c4299df4ffdf95b8f1f3d428a7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88a1abec_7a3253ca",
+        "filename": "third_party/vulkan-validation-layers/BUILD.gn",
+        "patchSetId": 17
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-12T18:44:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ef7e698_b18ca2f3",
+      "range": {
+        "startLine": 147,
+        "startChar": 53,
+        "endLine": 147,
+        "endChar": 63
+      },
+      "revId": "a30f4d2f7d523c4299df4ffdf95b8f1f3d428a7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +130,30 @@
       "writtenOn": "2019-02-12T18:40:55Z",
       "side": 1,
       "message": "I\u0027ve removed this, so could you rebase on top of my change?\nAlso, you can drop this condition, since we\u0027ll be building VVL only on 26+.",
+      "parentUuid": "1223d8b6_b1460d2b",
+      "range": {
+        "startLine": 503,
+        "startChar": 10,
+        "endLine": 503,
+        "endChar": 35
+      },
+      "revId": "a30f4d2f7d523c4299df4ffdf95b8f1f3d428a7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "062c3a6d_e8dbd531",
+        "filename": "third_party/vulkan-validation-layers/BUILD.gn",
+        "patchSetId": 17
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-12T18:44:38Z",
+      "side": 1,
+      "message": "Yes, will update.",
       "parentUuid": "1223d8b6_b1460d2b",
       "range": {
         "startLine": 503,
