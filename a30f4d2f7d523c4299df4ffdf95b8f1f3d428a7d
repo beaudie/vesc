@@ -68,6 +68,30 @@
       "revId": "a30f4d2f7d523c4299df4ffdf95b8f1f3d428a7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dc11362_a235d2d4",
+        "filename": "third_party/vulkan-validation-layers/BUILD.gn",
+        "patchSetId": 17
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-02-12T18:40:55Z",
+      "side": 1,
+      "message": "I\u0027ve removed this, so could you rebase on top of my change?\nAlso, you can drop this condition, since we\u0027ll be building VVL only on 26+.",
+      "parentUuid": "1223d8b6_b1460d2b",
+      "range": {
+        "startLine": 503,
+        "startChar": 10,
+        "endLine": 503,
+        "endChar": 35
+      },
+      "revId": "a30f4d2f7d523c4299df4ffdf95b8f1f3d428a7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
