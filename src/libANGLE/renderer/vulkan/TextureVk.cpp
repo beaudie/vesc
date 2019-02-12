@@ -148,6 +148,7 @@ angle::Result TextureVk::setImage(const gl::Context *context,
                                   const gl::PixelUnpackState &unpack,
                                   const uint8_t *pixels)
 {
+    fprintf(stderr, "SetImage\n");
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -184,6 +185,7 @@ angle::Result TextureVk::setSubImage(const gl::Context *context,
                                      gl::Buffer *unpackBuffer,
                                      const uint8_t *pixels)
 {
+    fprintf(stderr, "SetSubImage\n");
     ContextVk *contextVk                 = vk::GetImpl(context);
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, type);
     ANGLE_TRY(mImage->stageSubresourceUpdate(
@@ -531,8 +533,8 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
                                     GLenum internalFormat,
                                     const gl::Extents &size)
 {
-    ContextVk *contextVk             = GetAs<ContextVk>(context->getImplementation());
-    RendererVk *renderer             = contextVk->getRenderer();
+    ContextVk *contextVk = GetAs<ContextVk>(context->getImplementation());
+    RendererVk *renderer = contextVk->getRenderer();
 
     if (!mOwnsImage)
     {
