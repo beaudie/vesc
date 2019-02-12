@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa53fc25_9fbb6351",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-12T16:05:02Z",
+      "side": 1,
+      "message": "Can this ever happen? At this point, shouldn\u0027t the command pool have already been given back to `mCommandPools`? Perhaps you can turn this into:\n\nASSERT(!mCommandPool.valid());",
+      "revId": "3bea31f55e16551035b1f325665d651ddaa53394",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
