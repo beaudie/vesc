@@ -95,23 +95,30 @@ TEST_P(SRGBTextureTest, SRGBValidation)
 
     bool supported = extensionEnabled("GL_EXT_sRGB") || getClientMajorVersion() == 3;
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     GLuint tex = 0;
     glGenTextures(1, &tex);
     glBindTexture(GL_TEXTURE_2D, tex);
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     GLubyte pixel[3] = {0};
     glTexImage2D(GL_TEXTURE_2D, 0, getSRGB8TextureInternalFormat(), 1, 1, 0,
                  getSRGB8TextureFormat(), GL_UNSIGNED_BYTE, pixel);
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     if (supported)
     {
         EXPECT_GL_NO_ERROR();
 
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, getSRGB8TextureFormat(), GL_UNSIGNED_BYTE,
                         pixel);
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
         EXPECT_GL_NO_ERROR();
 
         // Mipmap generation always generates errors for SRGB unsized in ES2 or SRGB8 sized in ES3.
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
         glGenerateMipmap(GL_TEXTURE_2D);
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
         EXPECT_GL_ERROR(GL_INVALID_OPERATION);
     }
     else
@@ -119,7 +126,9 @@ TEST_P(SRGBTextureTest, SRGBValidation)
         EXPECT_GL_ERROR(GL_INVALID_ENUM);
     }
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     glDeleteTextures(1, &tex);
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
 }
 
 TEST_P(SRGBTextureTest, SRGBAValidation)
