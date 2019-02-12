@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "35d143e0_ff31b9d3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-12T17:55:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2427e033_85d2cb34",
+      "range": {
+        "startLine": 1304,
+        "startChar": 26,
+        "endLine": 1304,
+        "endChar": 44
+      },
+      "revId": "8eb7069f3b46b46c8f2596e3175d9838b572056c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "03c291e6_f8cbf668",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "8eb7069f3b46b46c8f2596e3175d9838b572056c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d9e9a64_4545bfb0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-12T17:55:12Z",
+      "side": 1,
+      "message": "device lost not a valid return type for vkResetCommandPool().",
+      "parentUuid": "03c291e6_f8cbf668",
+      "range": {
+        "startLine": 1306,
+        "startChar": 25,
+        "endLine": 1306,
+        "endChar": 35
+      },
+      "revId": "8eb7069f3b46b46c8f2596e3175d9838b572056c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
