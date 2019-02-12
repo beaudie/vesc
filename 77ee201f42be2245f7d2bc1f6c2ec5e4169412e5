@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1dd296b9_7ed5801c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1298,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T18:32:40Z",
+      "side": 1,
+      "message": "nit: could probably use emplace_back. not sure if would make any difference in the generated code.",
+      "range": {
+        "startLine": 1298,
+        "startChar": 22,
+        "endLine": 1298,
+        "endChar": 31
+      },
+      "revId": "77ee201f42be2245f7d2bc1f6c2ec5e4169412e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c43fd568_cd6616ee",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T18:32:40Z",
+      "side": 1,
+      "message": "this should be ANGLE_VK_TRY",
+      "range": {
+        "startLine": 1329,
+        "startChar": 26,
+        "endLine": 1329,
+        "endChar": 31
+      },
+      "revId": "77ee201f42be2245f7d2bc1f6c2ec5e4169412e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8a0ff2b_7871b1a6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1405,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T18:32:40Z",
+      "side": 1,
+      "message": "nit: you can probably just init directly on mCommandPool.",
+      "range": {
+        "startLine": 1403,
+        "startChar": 0,
+        "endLine": 1405,
+        "endChar": 49
+      },
+      "revId": "77ee201f42be2245f7d2bc1f6c2ec5e4169412e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
