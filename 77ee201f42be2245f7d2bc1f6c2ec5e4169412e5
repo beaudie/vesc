@@ -68,6 +68,29 @@
       "revId": "77ee201f42be2245f7d2bc1f6c2ec5e4169412e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f9681ad_992da59c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 520,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T18:47:40Z",
+      "side": 1,
+      "message": "nit: should ASSERT(valid()); Also you should pass the flags parameter to this function so it\u0027s a \"dumb\" wrapper and move the comment to the call site in RendererVk.",
+      "range": {
+        "startLine": 516,
+        "startChar": 4,
+        "endLine": 520,
+        "endChar": 5
+      },
+      "revId": "77ee201f42be2245f7d2bc1f6c2ec5e4169412e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
