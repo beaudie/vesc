@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b3836be0_ec4eba51",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T17:08:21Z",
+      "side": 1,
+      "message": "See below.",
+      "parentUuid": "c51a87c8_b3c3141c",
+      "range": {
+        "startLine": 554,
+        "startChar": 9,
+        "endLine": 554,
+        "endChar": 14
+      },
+      "revId": "463469ee2a41fa7b4ebb1fb6a645bb1a1b58e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eca07271_33d59718",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -131,6 +155,30 @@
       "side": 1,
       "message": "Jamie meant for you to specify the type instead of using auto.",
       "parentUuid": "7e73d7e9_0e088923",
+      "range": {
+        "startLine": 953,
+        "startChar": 9,
+        "endLine": 953,
+        "endChar": 14
+      },
+      "revId": "463469ee2a41fa7b4ebb1fb6a645bb1a1b58e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93c5d962_2eb8ed54",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T17:08:21Z",
+      "side": 1,
+      "message": "Right. Can you use the explicit type for very simple \u0027auto\u0027 cases? And reserve auto for template container iterators and other overly lengthy types?",
+      "parentUuid": "9dd1164d_fad70f9e",
       "range": {
         "startLine": 953,
         "startChar": 9,

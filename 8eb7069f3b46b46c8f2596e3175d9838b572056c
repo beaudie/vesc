@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2427e033_85d2cb34",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1304,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T17:08:21Z",
+      "side": 1,
+      "message": "can you add a method reset to vk::CommandPool to match the rest of the wrapper functions?",
+      "range": {
+        "startLine": 1304,
+        "startChar": 26,
+        "endLine": 1304,
+        "endChar": 44
+      },
+      "revId": "8eb7069f3b46b46c8f2596e3175d9838b572056c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03c291e6_f8cbf668",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T17:08:21Z",
+      "side": 1,
+      "message": "also we should allow device lost.",
+      "range": {
+        "startLine": 1306,
+        "startChar": 25,
+        "endLine": 1306,
+        "endChar": 35
+      },
+      "revId": "8eb7069f3b46b46c8f2596e3175d9838b572056c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
