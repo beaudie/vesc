@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "c51a87c8_b3c3141c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-12T16:22:25Z",
+      "side": 1,
+      "message": "Suggested syntax? Compiler complains w/o auto.",
+      "parentUuid": "e3ba7e1d_68111d41",
+      "range": {
+        "startLine": 554,
+        "startChar": 9,
+        "endLine": 554,
+        "endChar": 14
+      },
+      "revId": "463469ee2a41fa7b4ebb1fb6a645bb1a1b58e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eca07271_33d59718",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -59,6 +83,30 @@
       "writtenOn": "2019-02-12T15:26:25Z",
       "side": 1,
       "message": "nit: don\u0027t need auto here.",
+      "range": {
+        "startLine": 953,
+        "startChar": 9,
+        "endLine": 953,
+        "endChar": 14
+      },
+      "revId": "463469ee2a41fa7b4ebb1fb6a645bb1a1b58e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e73d7e9_0e088923",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-12T16:22:25Z",
+      "side": 1,
+      "message": "Can you clarify? Compiler doesn\u0027t like \"auto\" being removed - \"range-based for loop requires type for loop variable\"",
+      "parentUuid": "eca07271_33d59718",
       "range": {
         "startLine": 953,
         "startChar": 9,
@@ -91,6 +139,30 @@
       "revId": "463469ee2a41fa7b4ebb1fb6a645bb1a1b58e72f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2ac561b_e6505d13",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-12T16:22:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab2c1c59_1c1392d2",
+      "range": {
+        "startLine": 958,
+        "startChar": 0,
+        "endLine": 959,
+        "endChar": 29
+      },
+      "revId": "463469ee2a41fa7b4ebb1fb6a645bb1a1b58e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -144,6 +216,24 @@
       "revId": "463469ee2a41fa7b4ebb1fb6a645bb1a1b58e72f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc9db236_31c7acb2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-12T16:22:25Z",
+      "side": 1,
+      "message": "Yes, switched this around. freeAllInFlightResources() doesn\u0027t have context or display param so just calling raw vkResetCommandPool() and manually checking result similar to fence wait in same function.",
+      "parentUuid": "de16a721_fefbb9c5",
+      "revId": "463469ee2a41fa7b4ebb1fb6a645bb1a1b58e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
