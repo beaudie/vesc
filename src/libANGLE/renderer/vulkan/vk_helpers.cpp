@@ -1401,12 +1401,12 @@ void ImageHelper::init2DWeakReference(VkImage handle,
 {
     ASSERT(!valid());
 
-    mExtents    = extents;
-    mFormat     = &format;
-    mSamples    = samples;
+    mExtents       = extents;
+    mFormat        = &format;
+    mSamples       = samples;
     mCurrentLayout = ImageLayout::Undefined;
-    mLayerCount = 1;
-    mLevelCount = 1;
+    mLayerCount    = 1;
+    mLevelCount    = 1;
 
     mImage.setHandle(handle);
 }
