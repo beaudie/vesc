@@ -168,6 +168,19 @@ class TextureVk : public TextureImpl
                                 const gl::InternalFormat &internalFormat,
                                 const gl::Extents &size);
 
+    angle::Result setImageImpl(const gl::Context *context,
+                               const gl::ImageIndex &index,
+                               const gl::InternalFormat &formatInfo,
+                               const gl::Extents &size,
+                               const gl::PixelUnpackState &unpack,
+                               const uint8_t *pixels);
+    angle::Result setSubImageImpl(const gl::Context *context,
+                                  const gl::ImageIndex &index,
+                                  const gl::Box &area,
+                                  const gl::InternalFormat &formatInfo,
+                                  const gl::PixelUnpackState &unpack,
+                                  const uint8_t *pixels);
+
     angle::Result copyImageDataToBuffer(ContextVk *contextVk,
                                         size_t sourceLevel,
                                         uint32_t layerCount,

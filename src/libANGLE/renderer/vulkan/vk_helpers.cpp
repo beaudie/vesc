@@ -1401,12 +1401,12 @@ void ImageHelper::init2DWeakReference(VkImage handle,
 {
     ASSERT(!valid());
 
-    mExtents    = extents;
-    mFormat     = &format;
-    mSamples    = samples;
+    mExtents       = extents;
+    mFormat        = &format;
+    mSamples       = samples;
     mCurrentLayout = ImageLayout::Undefined;
-    mLayerCount = 1;
-    mLevelCount = 1;
+    mLayerCount    = 1;
+    mLevelCount    = 1;
 
     mImage.setHandle(handle);
 }
@@ -1746,6 +1746,8 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
                                                   GLenum type,
                                                   const uint8_t *pixels)
 {
+    ASSERT(formatInfo.type == type);
+
     GLuint inputRowPitch = 0;
     ANGLE_VK_CHECK_MATH(contextVk, formatInfo.computeRowPitch(type, extents.width, unpack.alignment,
                                                               unpack.rowLength, &inputRowPitch));

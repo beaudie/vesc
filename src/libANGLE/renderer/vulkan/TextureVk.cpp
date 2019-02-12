@@ -148,11 +148,65 @@ angle::Result TextureVk::setImage(const gl::Context *context,
                                   const gl::PixelUnpackState &unpack,
                                   const uint8_t *pixels)
 {
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat, type);
+    ASSERT(formatInfo.type == type);
+
+    return setImageImpl(context, index, formatInfo, size, unpack, pixels);
+}
+
+angle::Result TextureVk::setSubImage(const gl::Context *context,
+                                     const gl::ImageIndex &index,
+                                     const gl::Box &area,
+                                     GLenum format,
+                                     GLenum type,
+                                     const gl::PixelUnpackState &unpack,
+                                     gl::Buffer *unpackBuffer,
+                                     const uint8_t *pixels)
+{
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, type);
+    ASSERT(formatInfo.format == format && formatInfo.type == type);
+
+    return setSubImageImpl(context, index, area, formatInfo, unpack, pixels);
+}
+
+angle::Result TextureVk::setCompressedImage(const gl::Context *context,
+                                            const gl::ImageIndex &index,
+                                            GLenum internalFormat,
+                                            const gl::Extents &size,
+                                            const gl::PixelUnpackState &unpack,
+                                            size_t imageSize,
+                                            const uint8_t *pixels)
+{
+    const gl::InternalFormat &formatInfo = gl::GetSizedInternalFormatInfo(internalFormat);
+
+    return setImageImpl(context, index, formatInfo, size, unpack, pixels);
+}
+
+angle::Result TextureVk::setCompressedSubImage(const gl::Context *context,
+                                               const gl::ImageIndex &index,
+                                               const gl::Box &area,
+                                               GLenum format,
+                                               const gl::PixelUnpackState &unpack,
+                                               size_t imageSize,  // TODO use
+                                               const uint8_t *pixels)
+{
+    gl::TextureTarget target             = index.getTarget();
+    size_t level                         = static_cast<size_t>(index.getLevelIndex());
+    const gl::InternalFormat &formatInfo = *mState.getImageDesc(target, level).format.info;
+    ASSERT(format == formatInfo.format);
+
+    return setSubImageImpl(context, index, area, formatInfo, unpack, pixels);
+}
+
+angle::Result TextureVk::setImageImpl(const gl::Context *context,
+                                      const gl::ImageIndex &index,
+                                      const gl::InternalFormat &formatInfo,
+                                      const gl::Extents &size,
+                                      const gl::PixelUnpackState &unpack,
+                                      const uint8_t *pixels)
+{
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
-
-    // Convert internalFormat to sized internal format.
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat, type);
 
     ANGLE_TRY(redefineImage(context, index, formatInfo, size));
 
@@ -169,55 +223,29 @@ angle::Result TextureVk::setImage(const gl::Context *context,
     if (pixels)
     {
         ANGLE_TRY(mImage->stageSubresourceUpdate(contextVk, getNativeImageIndex(index), size,
-                                                 gl::Offset(), formatInfo, unpack, type, pixels));
+                                                 gl::Offset(), formatInfo, unpack, formatInfo.type,
+                                                 pixels));
     }
 
     return angle::Result::Continue;
 }
 
-angle::Result TextureVk::setSubImage(const gl::Context *context,
-                                     const gl::ImageIndex &index,
-                                     const gl::Box &area,
-                                     GLenum format,
-                                     GLenum type,
-                                     const gl::PixelUnpackState &unpack,
-                                     gl::Buffer *unpackBuffer,
-                                     const uint8_t *pixels)
+angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
+                                         const gl::ImageIndex &index,
+                                         const gl::Box &area,
+                                         const gl::InternalFormat &formatInfo,
+                                         const gl::PixelUnpackState &unpack,
+                                         const uint8_t *pixels)
 {
-    ContextVk *contextVk                 = vk::GetImpl(context);
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, type);
+    ContextVk *contextVk = vk::GetImpl(context);
     ANGLE_TRY(mImage->stageSubresourceUpdate(
         contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
-        gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels));
+        gl::Offset(area.x, area.y, area.z), formatInfo, unpack, formatInfo.type, pixels));
 
     // Create a new graph node to store image initialization commands.
     mImage->finishCurrentCommands(contextVk->getRenderer());
 
     return angle::Result::Continue;
-}
-
-angle::Result TextureVk::setCompressedImage(const gl::Context *context,
-                                            const gl::ImageIndex &index,
-                                            GLenum internalFormat,
-                                            const gl::Extents &size,
-                                            const gl::PixelUnpackState &unpack,
-                                            size_t imageSize,
-                                            const uint8_t *pixels)
-{
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-    return angle::Result::Stop;
-}
-
-angle::Result TextureVk::setCompressedSubImage(const gl::Context *context,
-                                               const gl::ImageIndex &index,
-                                               const gl::Box &area,
-                                               GLenum format,
-                                               const gl::PixelUnpackState &unpack,
-                                               size_t imageSize,
-                                               const uint8_t *pixels)
-{
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-    return angle::Result::Stop;
 }
 
 angle::Result TextureVk::copyImage(const gl::Context *context,
@@ -531,8 +559,8 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
                                     GLenum internalFormat,
                                     const gl::Extents &size)
 {
-    ContextVk *contextVk             = GetAs<ContextVk>(context->getImplementation());
-    RendererVk *renderer             = contextVk->getRenderer();
+    ContextVk *contextVk = GetAs<ContextVk>(context->getImplementation());
+    RendererVk *renderer = contextVk->getRenderer();
 
     if (!mOwnsImage)
     {
