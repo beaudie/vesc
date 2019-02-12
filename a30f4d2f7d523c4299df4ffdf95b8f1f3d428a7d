@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc3d4dc9_68bb9e69",
+        "filename": "android/angle_apk.gni",
+        "patchSetId": 17
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T18:35:27Z",
+      "side": 1,
+      "message": "possibly format issue?",
+      "range": {
+        "startLine": 92,
+        "startChar": 31,
+        "endLine": 92,
+        "endChar": 124
+      },
+      "revId": "a30f4d2f7d523c4299df4ffdf95b8f1f3d428a7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ef7e698_b18ca2f3",
+        "filename": "third_party/vulkan-validation-layers/BUILD.gn",
+        "patchSetId": 17
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T18:35:27Z",
+      "side": 1,
+      "message": "nit: extra \u0027l\u0027",
+      "range": {
+        "startLine": 147,
+        "startChar": 53,
+        "endLine": 147,
+        "endChar": 63
+      },
+      "revId": "a30f4d2f7d523c4299df4ffdf95b8f1f3d428a7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1223d8b6_b1460d2b",
+        "filename": "third_party/vulkan-validation-layers/BUILD.gn",
+        "patchSetId": 17
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T18:35:27Z",
+      "side": 1,
+      "message": "might conflict with Yuly\u0027s change.",
+      "range": {
+        "startLine": 503,
+        "startChar": 10,
+        "endLine": 503,
+        "endChar": 35
+      },
+      "revId": "a30f4d2f7d523c4299df4ffdf95b8f1f3d428a7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
