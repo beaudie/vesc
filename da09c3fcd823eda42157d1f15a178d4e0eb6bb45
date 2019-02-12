@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2c840a0_a270ee25",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T17:16:41Z",
+      "side": 1,
+      "message": "nit: can you resolve auto here",
+      "range": {
+        "startLine": 657,
+        "startChar": 19,
+        "endLine": 657,
+        "endChar": 24
+      },
+      "revId": "da09c3fcd823eda42157d1f15a178d4e0eb6bb45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "696281de_94c12364",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T17:16:41Z",
+      "side": 1,
+      "message": "How many are we at now? Maybe using a FixedVector for extensions wasn\u0027t a great idea. In any case can you make this a static constexpr uint32_t kMaxExtensions?",
+      "range": {
+        "startLine": 208,
+        "startChar": 63,
+        "endLine": 208,
+        "endChar": 66
+      },
+      "revId": "da09c3fcd823eda42157d1f15a178d4e0eb6bb45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "710766c3_6048857b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-12T17:16:41Z",
+      "side": 1,
+      "message": "please use a name for all parameters",
+      "range": {
+        "startLine": 229,
+        "startChar": 28,
+        "endLine": 229,
+        "endChar": 46
+      },
+      "revId": "da09c3fcd823eda42157d1f15a178d4e0eb6bb45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
