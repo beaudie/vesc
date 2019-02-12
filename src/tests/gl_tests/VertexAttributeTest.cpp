@@ -1317,6 +1317,103 @@ void main() {
     }
 }
 
+TEST_P(VertexAttributeTestES31, UseComputeShaderToUpdateVertexBuffer)
+{
+    constexpr char kComputeShader[] =
+        R"(#version 310 es
+layout(local_size_x=24) in;
+layout(std430, binding = 0) buffer buf {
+    uint outData[24];
+};
+void main()
+{
+    outData[gl_LocalInvocationIndex] = gl_LocalInvocationIndex;
+})";
+
+    constexpr char kVertexShader[] =
+        R"(attribute mediump vec4 position;
+attribute mediump vec4 test;
+attribute mediump vec4 expected;
+varying mediump vec4 color;
+void main(void)
+{
+    gl_Position = position;
+    vec4 threshold = max(abs(expected) * 0.01, 1.0 / 64.0);
+    color = vec4(lessThanEqual(abs(test - expected), threshold));
+})";
+
+    constexpr char kFragmentShader[] =
+        R"(varying mediump vec4 color;
+void main(void)
+{
+    gl_FragColor = color;
+})";
+
+    ANGLE_GL_COMPUTE_PROGRAM(computeProgram, kComputeShader);
+    ANGLE_GL_PROGRAM(renderProgram, kVertexShader, kFragmentShader);
+
+    GLint testAttrib = glGetAttribLocation(renderProgram, "test");
+    ASSERT_NE(-1, testAttrib);
+    GLint expectedAttrib = glGetAttribLocation(renderProgram, "expected");
+    ASSERT_NE(-1, expectedAttrib);
+
+    glUseProgram(renderProgram);
+
+    auto quadVertices = GetQuadVertices();
+    GLsizeiptr quadVerticesSize =
+        static_cast<GLsizeiptr>(quadVertices.size() * sizeof(quadVertices[0]));
+    GLBuffer positionBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+    glBufferData(GL_ARRAY_BUFFER, quadVerticesSize, quadVertices.data(), GL_STATIC_DRAW);
+
+    GLint positionLocation = glGetAttribLocation(renderProgram, "position");
+    ASSERT_NE(-1, positionLocation);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+
+    GLuint mid                                 = std::numeric_limits<GLuint>::max() >> 1;
+    GLuint hi                                  = std::numeric_limits<GLuint>::max();
+    std::array<GLuint, kVertexCount> inputData = {
+        {0, 1, 2, 3, 254, 255, 256, mid - 1, mid, mid + 1, hi - 2, hi - 1, hi}};
+    std::array<GLfloat, kVertexCount> expectedData;
+    for (size_t i = 0; i < kVertexCount; i++)
+    {
+        expectedData[i] = Normalize(inputData[i]);
+    }
+
+    TestData data(GL_UNSIGNED_INT, GL_TRUE, Source::BUFFER, inputData.data(), expectedData.data());
+
+    GLint typeSize   = 4;
+    GLsizei dataSize = kVertexCount * TypeStride(data.type);
+    GLBuffer testBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, testBuffer);
+    glBufferData(GL_ARRAY_BUFFER, dataSize, data.inputData, GL_STATIC_DRAW);
+    glVertexAttribPointer(testAttrib, typeSize, data.type, data.normalized, 0,
+                          reinterpret_cast<void *>(data.bufferOffset));
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glVertexAttribPointer(expectedAttrib, typeSize, GL_FLOAT, GL_FALSE, 0, data.expectedData);
+
+    glEnableVertexAttribArray(testAttrib);
+    glEnableVertexAttribArray(expectedAttrib);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    checkPixels();
+
+    glUseProgram(computeProgram);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, testBuffer);
+    glDispatchCompute(1, 1, 1);
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+
+    glUseProgram(renderProgram);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    EXPECT_GL_NO_ERROR();
+    checkPixelsUnEqual();
+
+    glDisableVertexAttribArray(testAttrib);
+    glDisableVertexAttribArray(expectedAttrib);
+}
+
 // Verify that using VertexAttribBinding after VertexAttribPointer won't mess up the draw.
 TEST_P(VertexAttributeTestES31, ChangeAttribBindingAfterVertexAttribPointer)
 {
