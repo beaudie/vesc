@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9dd1164d_fad70f9e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 953,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-12T16:42:09Z",
+      "side": 1,
+      "message": "Jamie meant for you to specify the type instead of using auto.",
+      "parentUuid": "7e73d7e9_0e088923",
+      "range": {
+        "startLine": 953,
+        "startChar": 9,
+        "endLine": 953,
+        "endChar": 14
+      },
+      "revId": "463469ee2a41fa7b4ebb1fb6a645bb1a1b58e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ab2c1c59_1c1392d2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
