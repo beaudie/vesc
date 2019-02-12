@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f882af94_98d8fa5e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-12T15:03:13Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "13243380_52cd8ef4",
+      "range": {
+        "startLine": 1310,
+        "startChar": 7,
+        "endLine": 1310,
+        "endChar": 62
+      },
+      "revId": "c820f99ebee2faa3dd58881689a96322717471c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28f59fb5_50607580",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "c820f99ebee2faa3dd58881689a96322717471c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "918f2f9f_1226ed5c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-12T15:03:13Z",
+      "side": 1,
+      "message": "Yes, I had spaced this. I got confused with my other CL where resets were happened in DynamicPool class. Added explicit reset when pulling command pool from vector for now.",
+      "parentUuid": "28f59fb5_50607580",
+      "range": {
+        "startLine": 1345,
+        "startChar": 7,
+        "endLine": 1345,
+        "endChar": 62
+      },
+      "revId": "c820f99ebee2faa3dd58881689a96322717471c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
