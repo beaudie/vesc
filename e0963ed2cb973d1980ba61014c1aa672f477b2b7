@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "773fff5e_cab77bc6",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-13T12:14:36Z",
+      "side": 1,
+      "message": "maybe you should return const \u0026 to prevent unnecessary copies",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 17
+      },
+      "revId": "e0963ed2cb973d1980ba61014c1aa672f477b2b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71ed9a84_7c79ea67",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-13T12:14:36Z",
+      "side": 1,
+      "message": "same comment",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 16
+      },
+      "revId": "e0963ed2cb973d1980ba61014c1aa672f477b2b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22b71b96_ab63dfa9",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-13T12:14:36Z",
+      "side": 1,
+      "message": "same comment",
+      "range": {
+        "startLine": 385,
+        "startChar": 57,
+        "endLine": 385,
+        "endChar": 67
+      },
+      "revId": "e0963ed2cb973d1980ba61014c1aa672f477b2b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
