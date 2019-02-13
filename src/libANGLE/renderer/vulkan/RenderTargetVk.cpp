@@ -140,6 +140,15 @@ vk::ImageHelper *RenderTargetVk::getImageForRead(vk::CommandGraphResource *readi
     ASSERT(mImage && mImage->valid());
 
     // TODO(jmadill): Better simultaneous resource access. http://anglebug.com/2679
+    // A better alternative would be:
+    //
+    // if (mImage->isLayoutChangeNecessary(layout)
+    // {
+    //     mImage->finishCurrentCommands(renderer);
+    // }
+    // mImage->addReadDependency(readingResource);
+    //
+    // which needs renderer to be available here.
     mImage->addWriteDependency(readingResource);
 
     mImage->changeLayout(mImage->getAspectFlags(), layout, commandBuffer);
