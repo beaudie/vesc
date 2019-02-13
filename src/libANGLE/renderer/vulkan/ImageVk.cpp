@@ -72,7 +72,7 @@ egl::Error ImageVk::initialize(const egl::Display *display)
         ASSERT(mContext != nullptr);
         ContextVk *contextVk = vk::GetImpl(mContext);
         RendererVk *renderer = contextVk->getRenderer();
-        mImage->initStagingBuffer(renderer);
+        mImage->initStagingBuffer(renderer, mImage->getFormat());
 
         mOwnsImage = false;
 
