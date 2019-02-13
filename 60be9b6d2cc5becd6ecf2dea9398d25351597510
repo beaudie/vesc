@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4856458e_6ca2b760",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-02-13T10:02:39Z",
+      "side": 1,
+      "message": "[a] This will trigger \u0027VertexArray::onSubjectStateChange\u0027 is called if the same buffer is also used as a vertex buffer. There, setDependentDirtyBit will be called, which set corresponding dirty bit and notify Context::onSubjectStateChange to set GL_VERTEX_ARRAY. So in the next draw call, we can get right translated static buffer.",
+      "range": {
+        "startLine": 632,
+        "startChar": 4,
+        "endLine": 632,
+        "endChar": 34
+      },
+      "revId": "60be9b6d2cc5becd6ecf2dea9398d25351597510",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
