@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79d9bf30_29568741",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-13T12:17:04Z",
+      "side": 1,
+      "message": "do you need the lock to have the same scope as the logMessage?",
+      "range": {
+        "startLine": 166,
+        "startChar": 8,
+        "endLine": 166,
+        "endChar": 56
+      },
+      "revId": "42697f82c4bc1b72e1d66e1c8ec78dc6a895b1f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
