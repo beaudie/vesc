@@ -519,13 +519,7 @@ void ANGLERenderTest::step()
     else
     {
         drawBenchmark();
-        // Swap is needed so that the GPU driver will occasionally flush its internal command queue
-        // to the GPU. The null device benchmarks are only testing CPU overhead, so they don't need
-        // to swap.
-        if (mTestParams.eglParameters.deviceType != EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE)
-        {
-            mGLWindow->swap();
-        }
+        mGLWindow->swap();
         mOSWindow->messageLoop();
     }
 }
