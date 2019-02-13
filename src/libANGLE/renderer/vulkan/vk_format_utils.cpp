@@ -216,6 +216,12 @@ void MapSwizzleState(const vk::Format &format,
 {
     const angle::Format &angleFormat = format.angleFormat();
 
+    if (angleFormat.isBlock)
+    {
+        // No need to override swizzles for compressed images, as they are not emulated.
+        return;
+    }
+
     switch (format.internalFormat)
     {
         case GL_LUMINANCE8_OES:
