@@ -18,7 +18,7 @@ vars = {
   'spirv_headers_revision': '8bea0a266ac9b718aa0818d9e3a47c0b77c2cb23',
 
   # Current revision of SPIRV-Tools for Vulkan.
-  'spirv_tools_revision': 'e2279da7148d19bd21c6d47ffc96ee4176f43dba',
+  'spirv_tools_revision': '354205b3dc2356546571edbde45db7acde6ab730',
 
   # Current revision of Khronos Vulkan-Headers.
   'vulkan_headers_revision': 'c200cb25db0f47364d3318d92c1d8e9dfff2fef1',
@@ -66,7 +66,7 @@ deps = {
    },
 
   '{angle_root}/third_party/googletest/src': {
-    'url': '{chromium_git}/external/github.com/google/googletest.git@d5932506d6eed73ac80b9bcc47ed723c8c74eb1e',
+    'url': '{chromium_git}/external/github.com/google/googletest.git@c4ccab33aaa0e86741db7c02a1d1040af76bd059',
     'condition': 'not build_with_chromium',
   },
 
