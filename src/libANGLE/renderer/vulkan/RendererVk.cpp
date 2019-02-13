@@ -88,6 +88,7 @@ VkResult VerifyExtensionsPresent(const std::vector<VkExtensionProperties> &exten
     {
         if (extensionNames.count(extensionName) == 0)
         {
+            ERR() << "Extension not present: " << extensionName << "\n";
             return VK_ERROR_EXTENSION_NOT_PRESENT;
         }
     }
