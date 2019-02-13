@@ -1744,11 +1744,9 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     GLuint inputRowPitch = 0;
     ANGLE_VK_CHECK_MATH(contextVk, formatInfo.computeRowPitch(type, extents.width, unpack.alignment,
                                                               unpack.rowLength, &inputRowPitch));
-
     GLuint inputDepthPitch = 0;
     ANGLE_VK_CHECK_MATH(contextVk, formatInfo.computeDepthPitch(extents.height, unpack.imageHeight,
                                                                 inputRowPitch, &inputDepthPitch));
-
     // Note: skip images for 3D Textures.
     ASSERT(!index.usesTex3D());
     bool applySkipImages = false;
@@ -1763,8 +1761,48 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     const vk::Format &vkFormat         = renderer->getFormat(formatInfo.sizedInternalFormat);
     const angle::Format &storageFormat = vkFormat.textureFormat();
 
-    size_t outputRowPitch   = storageFormat.pixelBytes * extents.width;
-    size_t outputDepthPitch = outputRowPitch * extents.height;
+    size_t outputRowPitch;
+    size_t outputDepthPitch;
+    uint32_t bufferRowLength;
+    uint32_t bufferImageHeight;
+
+    if (storageFormat.isBlock)
+    {
+        const gl::InternalFormat &storageFormatInfo =
+            gl::GetInternalFormatInfo(vkFormat.internalFormat, type);
+        GLuint rowPitch;
+        GLuint depthPitch;
+
+        ANGLE_VK_CHECK_MATH(contextVk, storageFormatInfo.computeCompressedImageSize(
+                                           gl::Extents(extents.width, 1, 1), &rowPitch));
+        ANGLE_VK_CHECK_MATH(contextVk,
+                            storageFormatInfo.computeCompressedImageSize(
+                                gl::Extents(extents.width, extents.height, 1), &depthPitch));
+
+        outputRowPitch   = rowPitch;
+        outputDepthPitch = depthPitch;
+
+        angle::CheckedNumeric<uint32_t> checkedRowLength =
+            rx::CheckedRoundUp<uint32_t>(extents.width, storageFormatInfo.compressedBlockWidth);
+        angle::CheckedNumeric<uint32_t> checkedImageHeight =
+            rx::CheckedRoundUp<uint32_t>(extents.height, storageFormatInfo.compressedBlockHeight);
+
+        ANGLE_VK_CHECK_MATH(contextVk, checkedRowLength.IsValid());
+        ANGLE_VK_CHECK_MATH(contextVk, checkedImageHeight.IsValid());
+
+        bufferRowLength   = checkedRowLength.ValueOrDie();
+        bufferImageHeight = checkedImageHeight.ValueOrDie();
+    }
+    else
+    {
+        outputRowPitch   = storageFormat.pixelBytes * extents.width;
+        outputDepthPitch = outputRowPitch * extents.height;
+
+        bufferRowLength   = extents.width;
+        bufferImageHeight = extents.height;
+
+        ASSERT(storageFormat.pixelBytes != 0);
+    }
 
     VkBuffer bufferHandle = VK_NULL_HANDLE;
 
@@ -1784,8 +1822,8 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     VkBufferImageCopy copy = {};
 
     copy.bufferOffset                    = stagingOffset;
-    copy.bufferRowLength                 = extents.width;
-    copy.bufferImageHeight               = extents.height;
+    copy.bufferRowLength                 = bufferRowLength;
+    copy.bufferImageHeight               = bufferImageHeight;
     copy.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
     copy.imageSubresource.mipLevel       = index.getLevelIndex();
     copy.imageSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;
@@ -2001,9 +2039,6 @@ angle::Result ImageHelper::flushStagedUpdates(Context *context,
         }
         else
         {
-            // Note: currently, the staging images are only made through color attachment writes. If
-            // they were written to otherwise in the future, the src stage of this transition should
-            // be adjusted appropriately.
             update.image.image->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT,
                                              vk::ImageLayout::TransferSrc, commandBuffer);
 
