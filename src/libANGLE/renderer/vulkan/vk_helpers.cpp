@@ -1328,6 +1328,10 @@ angle::Result ImageHelper::initMemory(Context *context,
                                       const MemoryProperties &memoryProperties,
                                       VkMemoryPropertyFlags flags)
 {
+    fprintf(stderr, "Initializing memory for %ux%ux%u(layers:%u,mips:%u) image of type %#x\n",
+            mExtents.width, mExtents.height, mExtents.depth, mLayerCount, mLevelCount,
+            mFormat->internalFormat);
+
     // TODO(jmadill): Memory sub-allocation. http://anglebug.com/2162
     ANGLE_TRY(AllocateImageMemory(context, flags, &mImage, &mDeviceMemory));
     return angle::Result::Continue;
@@ -1744,10 +1748,12 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     GLuint inputRowPitch = 0;
     ANGLE_VK_CHECK_MATH(contextVk, formatInfo.computeRowPitch(type, extents.width, unpack.alignment,
                                                               unpack.rowLength, &inputRowPitch));
+    fprintf(stderr, "inputRowPitch: %u\n", inputRowPitch);
 
     GLuint inputDepthPitch = 0;
     ANGLE_VK_CHECK_MATH(contextVk, formatInfo.computeDepthPitch(extents.height, unpack.imageHeight,
                                                                 inputRowPitch, &inputDepthPitch));
+    fprintf(stderr, "inputDepthPitch: %u\n", inputDepthPitch);
 
     // Note: skip images for 3D Textures.
     ASSERT(!index.usesTex3D());
@@ -1757,20 +1763,67 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     ANGLE_VK_CHECK_MATH(contextVk,
                         formatInfo.computeSkipBytes(type, inputRowPitch, inputDepthPitch, unpack,
                                                     applySkipImages, &inputSkipBytes));
+    fprintf(stderr, "inputSkipBytes: %u\n", inputSkipBytes);
 
     RendererVk *renderer = contextVk->getRenderer();
 
     const vk::Format &vkFormat         = renderer->getFormat(formatInfo.sizedInternalFormat);
     const angle::Format &storageFormat = vkFormat.textureFormat();
 
-    size_t outputRowPitch   = storageFormat.pixelBytes * extents.width;
-    size_t outputDepthPitch = outputRowPitch * extents.height;
+    size_t outputRowPitch;
+    size_t outputDepthPitch;
+    uint32_t bufferRowLength;
+    uint32_t bufferImageHeight;
+
+    if (storageFormat.isBlock)
+    {
+        const gl::InternalFormat &storageFormatInfo =
+            gl::GetInternalFormatInfo(vkFormat.internalFormat, type);
+        GLuint rowPitch;
+        GLuint depthPitch;
+
+        ANGLE_VK_CHECK_MATH(contextVk, storageFormatInfo.computeCompressedImageSize(
+                                           gl::Extents(extents.width, 1, 1), &rowPitch));
+        ANGLE_VK_CHECK_MATH(contextVk,
+                            storageFormatInfo.computeCompressedImageSize(
+                                gl::Extents(extents.width, extents.height, 1), &depthPitch));
+
+        outputRowPitch   = rowPitch;
+        outputDepthPitch = depthPitch;
+
+        angle::CheckedNumeric<uint32_t> checkedRowLength =
+            rx::CheckedRoundUp<uint32_t>(extents.width, storageFormatInfo.compressedBlockWidth);
+        angle::CheckedNumeric<uint32_t> checkedImageHeight =
+            rx::CheckedRoundUp<uint32_t>(extents.height, storageFormatInfo.compressedBlockHeight);
+
+        ANGLE_VK_CHECK_MATH(contextVk, checkedRowLength.IsValid());
+        ANGLE_VK_CHECK_MATH(contextVk, checkedImageHeight.IsValid());
+
+        bufferRowLength   = checkedRowLength.ValueOrDie();
+        bufferImageHeight = checkedImageHeight.ValueOrDie();
+    }
+    else
+    {
+        outputRowPitch   = storageFormat.pixelBytes * extents.width;
+        outputDepthPitch = outputRowPitch * extents.height;
+
+        bufferRowLength   = extents.width;
+        bufferImageHeight = extents.height;
+
+        fprintf(stderr, "storageFormat.pixelBytes: %u\n", storageFormat.pixelBytes);
+        ASSERT(storageFormat.pixelBytes != 0);
+    }
 
     VkBuffer bufferHandle = VK_NULL_HANDLE;
 
     uint8_t *stagingPointer    = nullptr;
     VkDeviceSize stagingOffset = 0;
     size_t allocationSize      = outputDepthPitch * extents.depth;
+    fprintf(
+        stderr,
+        "Staging for %ux%ux%u image using buffer of size %zu (row pitch: %zu, depth pitch: %zu)\n",
+        extents.width, extents.height, extents.depth, allocationSize, outputRowPitch,
+        outputDepthPitch);
     ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
                                       &stagingOffset, nullptr));
 
@@ -1784,8 +1837,8 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     VkBufferImageCopy copy = {};
 
     copy.bufferOffset                    = stagingOffset;
-    copy.bufferRowLength                 = extents.width;
-    copy.bufferImageHeight               = extents.height;
+    copy.bufferRowLength                 = bufferRowLength;
+    copy.bufferImageHeight               = bufferImageHeight;
     copy.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
     copy.imageSubresource.mipLevel       = index.getLevelIndex();
     copy.imageSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;

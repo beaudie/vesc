@@ -299,6 +299,8 @@ DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         WARN() << msg;
     }
 
+    ASSERT(false);
+
     return VK_FALSE;
 }
 
