@@ -67,12 +67,14 @@ egl::Error ImageVk::initialize(const egl::Display *display)
         RenderbufferVk *renderbufferVk =
             GetImplAs<RenderbufferVk>(GetAs<gl::Renderbuffer>(mState.source));
         mImage = renderbufferVk->getImage();
+        const gl::InternalFormat &formatInfo =
+            gl::GetSizedInternalFormatInfo(mImage->getFormat().internalFormat);
 
         // Make sure a staging buffer is ready to use to upload data
         ASSERT(mContext != nullptr);
         ContextVk *contextVk = vk::GetImpl(mContext);
         RendererVk *renderer = contextVk->getRenderer();
-        mImage->initStagingBuffer(renderer);
+        mImage->initStagingBuffer(renderer, formatInfo);
 
         mOwnsImage = false;
 
