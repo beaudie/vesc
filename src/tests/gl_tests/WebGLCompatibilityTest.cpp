@@ -2529,9 +2529,6 @@ TEST_P(WebGLCompatibilityTest, GlobalNamesConflict)
 // Test dimension and image size validation of compressed textures
 TEST_P(WebGLCompatibilityTest, CompressedTextureS3TC)
 {
-    // Missing compressed Texture support. http://anglebug.com/2904
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     if (extensionRequestable("GL_EXT_texture_compression_dxt1"))
     {
         glRequestExtensionANGLE("GL_EXT_texture_compression_dxt1");
@@ -4119,9 +4116,6 @@ void WebGLCompatibilityTest::validateCompressedTexImageExtensionFormat(GLenum fo
                                                                        const std::string &extName,
                                                                        bool subImageAllowed)
 {
-    // Missing compressed Texture support. http://anglebug.com/2904
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     std::vector<GLubyte> data(blockSize, 0u);
 
     GLTexture texture;

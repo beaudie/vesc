@@ -25,6 +25,12 @@ apitrace trace -o mytrace ./out/Debug/hello_triangle
 qapitrace mytrace
 ```
 
+## Running ANGLE under RenderDoc
+
+RenderDoc thinks it's capturing GLES when presented with an ANGLE-backed application.  To allow the
+ANGLE backend to be captured, RenderDoc provides a mechanism to disable hooking into EGL: set the
+`RENDERDOC_HOOK_EGL` environment variable to 0.
+
 ## Running ANGLE under GAPID on Linux
 
 [GAPID](https://github.com/google/gapid) can be used to capture trace of Vulkan commands on Linux.

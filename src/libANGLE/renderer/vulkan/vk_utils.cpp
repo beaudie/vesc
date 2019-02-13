@@ -128,6 +128,9 @@ angle::Result AllocateBufferOrImageMemory(vk::Context *context,
     // Call driver to determine memory requirements.
     VkMemoryRequirements memoryRequirements;
     bufferOrImage->getMemoryRequirements(context->getDevice(), &memoryRequirements);
+    fprintf(stderr, "  -- memory requirement: size: %zu, align: %zu, mem types: %#x\n",
+            memoryRequirements.size, memoryRequirements.alignment,
+            memoryRequirements.memoryTypeBits);
 
     ANGLE_TRY(FindAndAllocateCompatibleMemory(context, memoryProperties,
                                               requestedMemoryPropertyFlags, memoryPropertyFlagsOut,
