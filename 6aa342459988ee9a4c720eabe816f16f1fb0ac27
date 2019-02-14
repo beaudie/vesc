@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09b5d1c8_583ac1c1",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-14T18:39:30Z",
+      "side": 1,
+      "message": "I would use std::unique_lock here:\n\n    std::unique_lock\u003cstd::mutex\u003e lock;\n    if (g_debugMutex !\u003d nullptr)\n    {\n        lock.lock(*g_debugMutex);\n    }\n\nThen you don\u0027t need to unlock at the bottom.",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 5
+      },
+      "revId": "6aa342459988ee9a4c720eabe816f16f1fb0ac27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
