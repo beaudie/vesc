@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "aee217f4_08d324ef",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-14T08:48:42Z",
+      "side": 1,
+      "message": "Also confused. This is a command graph resource finish, which stops the current command buffer and creates a new node, not RendererVk::finish. Did you possibly misread it?\n\nIf not:\n\n`addWriteDependency` already has the side effect of `finishCurrentCommands`. I believe the reason why `addWriteDependency` was used here instead of `addReadDependency` is to get that side effect. The reason that side effect is needed is that the layout transition is happening on a node that belongs to another resource.\n\nWith only `addReadDependency`, you would have parallel readers, though one of them (the one whose commandBuffer is passed here) is doing a layout transition. That\u0027s an error.\n\nWhat I\u0027ve been doing everywhere else, is something like this:\n\nif (src-\u003eisLayoutChangeNecessary())\n{\n    CommandBuffer *srcTransition \u003d src-\u003erecordCommands();\n    src-\u003echangeLayout(srcTransition);\n}\n\nCommandBuffer *commandBuffer \u003d dest-\u003erecordCommands();\ndest-\u003echangeLayout(commandBuffer);\n\nsrc-\u003eaddReadDependency(dest);\n\nThis makes a node from src with the sole purpose of layout transition, allowing parallel future readers as long as they don\u0027t change the layout. The dependency would make sure future transitions create a new node.\n\nIMO, that would be the ideal case. Now that I think about it, finish+addReadDependency is probably not correct.\n\nUpdated the comment.",
+      "parentUuid": "3ecc002a_c91efe02",
+      "range": {
+        "startLine": 147,
+        "startChar": 10,
+        "endLine": 147,
+        "endChar": 51
+      },
+      "revId": "663eb46f057b29764e6d803d10306be5f61a89cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c30553e8_bbf37485",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "663eb46f057b29764e6d803d10306be5f61a89cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "124c019d_b8b8b516",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-14T08:48:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c30553e8_bbf37485",
+      "range": {
+        "startLine": 44,
+        "startChar": 20,
+        "endLine": 44,
+        "endChar": 30
+      },
+      "revId": "663eb46f057b29764e6d803d10306be5f61a89cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
