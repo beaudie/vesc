@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "abf1a484_e7566cda",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-14T00:16:05Z",
+      "side": 0,
+      "message": "can we leave the first part of this comment? Maybe with a note that we enable it on the null back-end because some back-ends like Vulkan also accumulate internal command queues?",
+      "range": {
+        "startLine": 522,
+        "startChar": 0,
+        "endLine": 524,
+        "endChar": 19
+      },
+      "revId": "00f43c91358f94606693d7ac96fb34747561775a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
