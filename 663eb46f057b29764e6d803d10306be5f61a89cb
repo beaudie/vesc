@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ecc002a_c91efe02",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-14T00:24:02Z",
+      "side": 1,
+      "message": "confused. why is it better to call finish? note that we won\u0027t ever support only flushing certain objects. flushing works on certain serials.",
+      "range": {
+        "startLine": 147,
+        "startChar": 10,
+        "endLine": 147,
+        "endChar": 51
+      },
+      "revId": "663eb46f057b29764e6d803d10306be5f61a89cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c30553e8_bbf37485",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-14T00:24:02Z",
+      "side": 1,
+      "message": "This is neat. Thanks for pointing that out. When we need to we can probably encode the compatibility table for fast indexing.",
+      "range": {
+        "startLine": 44,
+        "startChar": 20,
+        "endLine": 44,
+        "endChar": 30
+      },
+      "revId": "663eb46f057b29764e6d803d10306be5f61a89cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
