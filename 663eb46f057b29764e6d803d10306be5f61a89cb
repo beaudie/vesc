@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "e8175ae0_57c2f085",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-14T13:52:07Z",
+      "side": 1,
+      "message": "Yeah, sorry, forgot what this version of \u0027finish\u0027did.",
+      "parentUuid": "aee217f4_08d324ef",
+      "range": {
+        "startLine": 147,
+        "startChar": 10,
+        "endLine": 147,
+        "endChar": 51
+      },
+      "revId": "663eb46f057b29764e6d803d10306be5f61a89cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c30553e8_bbf37485",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
