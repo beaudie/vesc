@@ -69,6 +69,27 @@ class EGLContextCompatibilityTest : public EGLTest,
         return (samples > 1);
     }
 
+    // The only configs with 16-bits for each of red, green, blue, and alpha is GL_RGBA16F
+    bool isRGBA16FConfig(EGLConfig config)
+    {
+        EGLint red, green, blue, alpha;
+        eglGetConfigAttrib(mDisplay, config, EGL_RED_SIZE, &red);
+        eglGetConfigAttrib(mDisplay, config, EGL_GREEN_SIZE, &green);
+        eglGetConfigAttrib(mDisplay, config, EGL_BLUE_SIZE, &blue);
+        eglGetConfigAttrib(mDisplay, config, EGL_ALPHA_SIZE, &alpha);
+        return ((red == 16) && (green == 16) && (blue == 16) && (alpha == 16));
+    }
+
+    bool isRGB10_A2Config(EGLConfig config)
+    {
+        EGLint red, green, blue, alpha;
+        eglGetConfigAttrib(mDisplay, config, EGL_RED_SIZE, &red);
+        eglGetConfigAttrib(mDisplay, config, EGL_GREEN_SIZE, &green);
+        eglGetConfigAttrib(mDisplay, config, EGL_BLUE_SIZE, &blue);
+        eglGetConfigAttrib(mDisplay, config, EGL_ALPHA_SIZE, &alpha);
+        return ((red == 10) && (green == 10) && (blue == 10) && (alpha == 2));
+    }
+
     bool areConfigsCompatible(EGLConfig c1, EGLConfig c2, EGLint surfaceBit)
     {
         EGLint colorBufferType1, colorBufferType2;
@@ -237,8 +258,9 @@ TEST_P(EGLContextCompatibilityTest, WindowSameConfig)
         if ((surfaceType & EGL_WINDOW_BIT) != 0)
         {
             // Disabling multisampled configurations due to test instability with various graphics
-            // cards
-            if (isMultisampledConfig(config))
+            // cards, and RGBA16F/RGB10_A2 due to OSWindow on Android not providing compatible
+            // windows
+            if (isMultisampledConfig(config) || isRGB10_A2Config(config) || isRGBA16FConfig(config))
             {
                 continue;
             }
@@ -262,8 +284,8 @@ TEST_P(EGLContextCompatibilityTest, PbufferSameConfig)
         if ((surfaceType & EGL_PBUFFER_BIT) != 0)
         {
             // Disabling multisampled configurations due to test instability with various graphics
-            // cards
-            if (isMultisampledConfig(config))
+            // cards, and RGB10_A2 due to Android issues
+            if (isMultisampledConfig(config) || isRGB10_A2Config(config))
             {
                 continue;
             }
@@ -284,8 +306,9 @@ TEST_P(EGLContextCompatibilityTest, WindowDifferentConfig)
     for (size_t i = 0; i < mConfigs.size(); i++)
     {
         EGLConfig config1 = mConfigs[i];
-        // Disabling multisampled configurations due to test instability with various graphics cards
-        if (isMultisampledConfig(config1))
+        // Disabling multisampled configurations due to test instability with various graphics
+        // cards, and RGBA16F/RGB10_A2 due to OSWindow on Android not providing compatible windows
+        if (isMultisampledConfig(config1) || isRGB10_A2Config(config1) || isRGBA16FConfig(config1))
         {
             continue;
         }
@@ -303,8 +326,10 @@ TEST_P(EGLContextCompatibilityTest, WindowDifferentConfig)
         {
             EGLConfig config2 = mConfigs[j];
             // Disabling multisampled configurations due to test instability with various graphics
-            // cards
-            if (isMultisampledConfig(config2))
+            // cards, and RGBA16F/RGB10_A2 due to OSWindow on Android not providing compatible
+            // windows
+            if (isMultisampledConfig(config2) || isRGB10_A2Config(config2) ||
+                isRGBA16FConfig(config2))
             {
                 continue;
             }
@@ -321,8 +346,9 @@ TEST_P(EGLContextCompatibilityTest, PbufferDifferentConfig)
     for (size_t i = 0; i < mConfigs.size(); i++)
     {
         EGLConfig config1 = mConfigs[i];
-        // Disabling multisampled configurations due to test instability with various graphics cards
-        if (isMultisampledConfig(config1))
+        // Disabling multisampled configurations due to test instability with various graphics
+        // cards, and RGB10_A2 due to Android issues
+        if (isMultisampledConfig(config1) || isRGB10_A2Config(config1))
         {
             continue;
         }
@@ -340,8 +366,8 @@ TEST_P(EGLContextCompatibilityTest, PbufferDifferentConfig)
         {
             EGLConfig config2 = mConfigs[j];
             // Disabling multisampled configurations due to test instability with various graphics
-            // cards
-            if (isMultisampledConfig(config2))
+            // cards, and RGB10_A2 due to Android issues
+            if (isMultisampledConfig(config2) || isRGB10_A2Config(config2))
             {
                 continue;
             }
