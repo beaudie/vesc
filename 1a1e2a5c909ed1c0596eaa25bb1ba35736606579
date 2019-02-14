@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f27eab79_2613b6a0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-14T00:26:28Z",
+      "side": 1,
+      "message": "can you scope this block to the if statement?",
+      "revId": "1a1e2a5c909ed1c0596eaa25bb1ba35736606579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
