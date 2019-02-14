@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0c915d2a_399d0187",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1322304
+      },
+      "writtenOn": "2019-02-14T07:10:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2550f51a_fae3d08c",
+      "range": {
+        "startLine": 962,
+        "startChar": 36,
+        "endLine": 963,
+        "endChar": 48
+      },
+      "revId": "fee4c609a6b18b6a1ec797dca3ec0c36461c5dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a108bc6_9644b614",
         "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "fee4c609a6b18b6a1ec797dca3ec0c36461c5dda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdae6061_4eb321b8",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1322304
+      },
+      "writtenOn": "2019-02-14T07:10:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a108bc6_9644b614",
+      "range": {
+        "startLine": 1267,
+        "startChar": 44,
+        "endLine": 1267,
+        "endChar": 45
+      },
+      "revId": "fee4c609a6b18b6a1ec797dca3ec0c36461c5dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "b5aec6b9_30cce25e",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1271,
+      "author": {
+        "id": 1322304
+      },
+      "writtenOn": "2019-02-14T07:10:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "791b7458_ba8bac78",
+      "range": {
+        "startLine": 1271,
+        "startChar": 13,
+        "endLine": 1271,
+        "endChar": 17
+      },
+      "revId": "fee4c609a6b18b6a1ec797dca3ec0c36461c5dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d9b2fddf_ba981f81",
         "filename": "src/libANGLE/renderer/d3d/ProgramD3D.h",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "fee4c609a6b18b6a1ec797dca3ec0c36461c5dda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48b74f23_217e3f3f",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1322304
+      },
+      "writtenOn": "2019-02-14T07:10:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9b2fddf_ba981f81",
+      "range": {
+        "startLine": 550,
+        "startChar": 18,
+        "endLine": 550,
+        "endChar": 48
+      },
+      "revId": "fee4c609a6b18b6a1ec797dca3ec0c36461c5dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -165,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "0a13ef15_5c876f37",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3716,
+      "author": {
+        "id": 1322304
+      },
+      "writtenOn": "2019-02-14T07:10:13Z",
+      "side": 1,
+      "message": "I\u0027ll create a new CL for the frontend changes and place them under a webgl check.",
+      "parentUuid": "2876f1f3_9c0cb3fe",
+      "range": {
+        "startLine": 3716,
+        "startChar": 12,
+        "endLine": 3716,
+        "endChar": 72
+      },
+      "revId": "fee4c609a6b18b6a1ec797dca3ec0c36461c5dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ec86ded_0bd2141f",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 1
@@ -236,6 +356,30 @@
     },
     {
       "key": {
+        "uuid": "bbd09814_8eaf7088",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3745,
+      "author": {
+        "id": 1322304
+      },
+      "writtenOn": "2019-02-14T07:10:13Z",
+      "side": 1,
+      "message": "Correct, I\u0027ll move those changes to a new CL.",
+      "parentUuid": "d7e92829_229b2950",
+      "range": {
+        "startLine": 3745,
+        "startChar": 13,
+        "endLine": 3745,
+        "endChar": 86
+      },
+      "revId": "fee4c609a6b18b6a1ec797dca3ec0c36461c5dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "21e2c500_7010c9ad",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 1
@@ -259,6 +403,30 @@
     },
     {
       "key": {
+        "uuid": "49763f26_eea6b1c9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3746,
+      "author": {
+        "id": 1322304
+      },
+      "writtenOn": "2019-02-14T07:10:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21e2c500_7010c9ad",
+      "range": {
+        "startLine": 3746,
+        "startChar": 12,
+        "endLine": 3746,
+        "endChar": 18
+      },
+      "revId": "fee4c609a6b18b6a1ec797dca3ec0c36461c5dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f827961d_79f017de",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 1
@@ -279,6 +447,30 @@
       "revId": "fee4c609a6b18b6a1ec797dca3ec0c36461c5dda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba7ed078_0df504b4",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3754,
+      "author": {
+        "id": 1322304
+      },
+      "writtenOn": "2019-02-14T07:10:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f827961d_79f017de",
+      "range": {
+        "startLine": 3754,
+        "startChar": 8,
+        "endLine": 3754,
+        "endChar": 39
+      },
+      "revId": "fee4c609a6b18b6a1ec797dca3ec0c36461c5dda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
