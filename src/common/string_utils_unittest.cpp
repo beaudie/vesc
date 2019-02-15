@@ -9,6 +9,8 @@
 
 #include "string_utils.h"
 
+#include <clocale>
+
 #include <gtest/gtest.h>
 
 using namespace angle;
@@ -213,6 +215,42 @@ TEST(EndsWithTest, EndsWith)
     ASSERT_TRUE(EndsWith("foobar", ""));
     ASSERT_TRUE(EndsWith("bar", "bar"));
     ASSERT_TRUE(EndsWith("", ""));
+}
+
+// Test that WidenString exits with malformed unicode across platforms.
+TEST(StringUtilsTest, WidenString)
+{
+    // Query the original system locale.
+    const char *systemTextLocale = setlocale(LC_CTYPE, nullptr);
+
+    std::string asciiString(u8"A\x42");       // "AB" Only ASCII characters.
+    std::string incompleteString(u8"A\xc2");  // "A" + incomplete byte sequence.
+
+    // Set locale to the default POSIX locale, which on most platforms only supports only ASCII
+    // characters. However, some versions of Android and Fuschia do support non-ASCII in this
+    // locale. This is global state, not thread safe.
+    setlocale(LC_CTYPE, "C");
+
+    // Test both ASCII and incomplete character strings.
+    Optional<std::vector<wchar_t>> result = WidenString(2u, asciiString.data());
+    ASSERT_TRUE(result.valid());
+
+    result = WidenString(2u, incompleteString.data());
+    ASSERT_FALSE(result.valid());
+
+    // Set locale to a wide-string supporting locale to ensure the incomplete byte sequence still
+    // fails. This is global state, not thread safe.
+    setlocale(LC_CTYPE, "en_US.utf8");
+
+    // Test both ASCII and wide character strings (both are supported).
+    result = WidenString(2u, asciiString.data());
+    ASSERT_TRUE(result.valid());
+
+    result = WidenString(2u, incompleteString.data());
+    ASSERT_FALSE(result.valid());
+
+    // Restore the original system locale. This is global state, not thread safe.
+    setlocale(LC_CTYPE, systemTextLocale);
 }
 
 }  // anonymous namespace
