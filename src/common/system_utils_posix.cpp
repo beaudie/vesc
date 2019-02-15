@@ -10,6 +10,7 @@
 
 #include <array>
 
+#include <link.h>
 #include <dlfcn.h>
 #include <unistd.h>
 
@@ -62,6 +63,47 @@ class PosixLibrary : public Library
         if (ret > 0 && ret < 1000)
         {
             mModule = dlopen(buffer, RTLD_NOW);
+            fprintf(stderr, "Opening shared lib %s returned %p\n", buffer, mModule);
+            link_map *linkmap = nullptr;
+            int ret = dlinfo(mModule, RTLD_DI_LINKMAP, &linkmap);
+            if (ret == 0)
+                fprintf(stderr, "  - %s\n", linkmap->l_name);
+#if 1
+           Dl_serinfo serinfo;
+           Dl_serinfo *sip;
+
+           if (dlinfo(mModule, RTLD_DI_SERINFOSIZE, &serinfo) == -1) {
+               fprintf(stderr, "RTLD_DI_SERINFOSIZE failed: %s\n", dlerror());
+               exit(EXIT_FAILURE);
+           }
+
+           /* Allocate the buffer for use with RTLD_DI_SERINFO */
+
+           sip = (Dl_serinfo *)malloc(serinfo.dls_size);
+           if (sip == NULL) {
+               perror("malloc");
+               exit(EXIT_FAILURE);
+           }
+
+           /* Initialize the 'dls_size' and 'dls_cnt' fields in the newly
+              allocated buffer */
+
+           if (dlinfo(mModule, RTLD_DI_SERINFOSIZE, sip) == -1) {
+               fprintf(stderr, "RTLD_DI_SERINFOSIZE failed: %s\n", dlerror());
+               exit(EXIT_FAILURE);
+           }
+
+           /* Fetch and print library search list */
+
+           if (dlinfo(mModule, RTLD_DI_SERINFO, sip) == -1) {
+               fprintf(stderr, "RTLD_DI_SERINFO failed: %s\n", dlerror());
+               exit(EXIT_FAILURE);
+           }
+
+           for (unsigned int j = 0; j < serinfo.dls_cnt; j++)
+               printf("dls_serpath[%d].dls_name = %s\n",
+                       j, sip->dls_serpath[j].dls_name);
+#endif
         }
     }
 

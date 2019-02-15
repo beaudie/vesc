@@ -153,7 +153,11 @@ TEST_P(CopyCompressedTextureTest, Basic)
     glUniform1i(textureLoc, 0);
 
     // Draw.
+    //for (int i = 0; i < 1500; ++i)
+    {
     drawQuad(mProgram, "a_position", 0.5f);
+    //glFlush();
+    }
 
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, CompressedImageColor);
     ASSERT_GL_NO_ERROR();

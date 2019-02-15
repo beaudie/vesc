@@ -537,6 +537,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
     // If destination is valid, copy the source directly into it.
     if (mImage->valid())
     {
+        fprintf(stderr, "\nDirect transfer\n\n");
         // Make sure any updates to the image are already flushed.
         ANGLE_TRY(ensureImageInitialized(contextVk));
 
@@ -559,6 +560,7 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
     }
     else
     {
+        fprintf(stderr, "\nStaging transfer\n\n");
         std::unique_ptr<vk::ImageHelper> stagingImage;
 
         // Create a temporary image to stage the copy

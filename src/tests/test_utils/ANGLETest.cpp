@@ -432,6 +432,7 @@ void ANGLETestBase::ANGLETestSetUp()
         mPlatformMethods.context                = &mPlatformContext;
         mEGLWindow->setPlatformMethods(&mPlatformMethods);
 
+        fprintf(stderr, "Going to get EGL library\n");
         if (!mEGLWindow->initializeDisplayAndSurface(mOSWindow,
                                                      ANGLETestEnvironment::GetEGLLibrary()))
         {
@@ -1298,9 +1299,12 @@ void ANGLETestEnvironment::TearDown()
 angle::Library *ANGLETestEnvironment::GetEGLLibrary()
 {
 #if defined(ANGLE_USE_UTIL_LOADER)
+    fprintf(stderr, "EGL library already initialized? %s\n", gEGLLibrary ? "Yes" : "No");
     if (!gEGLLibrary)
     {
+        fprintf(stderr, " Going to open %s\n", ANGLE_EGL_LIBRARY_NAME);
         gEGLLibrary.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
+        fprintf(stderr, " Done\n");
     }
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
     return gEGLLibrary.get();

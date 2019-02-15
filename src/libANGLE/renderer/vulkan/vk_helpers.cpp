@@ -1510,12 +1510,28 @@ bool ImageHelper::isLayoutChangeNecessary(ImageLayout newLayout)
     return !sameLayoutReadAfterRead;
 }
 
+constexpr angle::PackedEnumMap<ImageLayout, const char *> layoutnames = {
+    { ImageLayout::Undefined, "Undefined" },
+    { ImageLayout::PreInitialized, "PreInitialized" },
+    { ImageLayout::TransferSrc, "TransferSrc" },
+    { ImageLayout::TransferDst, "TransferDst" },
+    { ImageLayout::ComputeShaderReadOnly, "ComputeShaderReadOnly" },
+    { ImageLayout::ComputeShaderWrite, "ComputeShaderWrite" },
+    { ImageLayout::FragmentShaderReadOnly, "FragmentShaderReadOnly" },
+    { ImageLayout::ColorAttachment, "ColorAttachment" },
+    { ImageLayout::DepthStencilAttachment, "DepthStencilAttachment" },
+    { ImageLayout::Present, "Present" },
+};
+
 void ImageHelper::changeLayout(VkImageAspectFlags aspectMask,
                                ImageLayout newLayout,
                                CommandBuffer *commandBuffer)
 {
+    fprintf(stderr, "%p Image layout change: image:%p, %s->%s\n",
+            commandBuffer, mImage.getHandle(), layoutnames[mCurrentLayout], layoutnames[newLayout]);
     if (!isLayoutChangeNecessary(newLayout))
     {
+        fprintf(stderr, "  -- unnecessary\n");
         return;
     }
 
@@ -1821,9 +1837,9 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     size_t allocationSize      = outputDepthPitch * extents.depth;
     fprintf(
         stderr,
-        "Staging for %ux%ux%u image using buffer of size %zu (row pitch: %zu, depth pitch: %zu)\n",
+        "Staging for %ux%ux%u image using buffer of size %zu (row pitch: %zu, depth pitch: %zu, row length: %u, image height: %u)\n",
         extents.width, extents.height, extents.depth, allocationSize, outputRowPitch,
-        outputDepthPitch);
+        outputDepthPitch, bufferRowLength, bufferImageHeight);
     ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
                                       &stagingOffset, nullptr));
 
@@ -1833,6 +1849,13 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
 
     loadFunction.loadFunction(extents.width, extents.height, extents.depth, source, inputRowPitch,
                               inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
+    fprintf(stderr, "  internalFormat: %x, angleFormat: %d, VkFormat: %d, Data:",
+            vkFormat.internalFormat, (uint32_t)vkFormat.angleFormatID, vkFormat.vkTextureFormat);
+    for (size_t i = 0; i < allocationSize && i < 16; ++i)
+    {
+        fprintf(stderr, " %02X", stagingPointer[i]);
+    }
+    fprintf(stderr, "\n");
 
     VkBufferImageCopy copy = {};
 
@@ -2012,6 +2035,7 @@ angle::Result ImageHelper::flushStagedUpdates(Context *context,
                                               uint32_t levelCount,
                                               vk::CommandBuffer *commandBuffer)
 {
+    fprintf(stderr, "Flushing staged updates for image %p (%zu updates)\n", mImage.getHandle(), mSubresourceUpdates.size());
     if (mSubresourceUpdates.empty())
     {
         return angle::Result::Continue;
@@ -2037,6 +2061,8 @@ angle::Result ImageHelper::flushStagedUpdates(Context *context,
         // this image.
         if (updateMipLevel < baseLevel || updateMipLevel >= baseLevel + levelCount)
         {
+            fprintf(stderr, " - skipped update to unused level %u (valid range: %u,+%u)\n", updateMipLevel,
+                    baseLevel, levelCount);
             updatesToKeep.emplace_back(update);
             continue;
         }
@@ -2049,11 +2075,37 @@ angle::Result ImageHelper::flushStagedUpdates(Context *context,
 
         if (update.updateSource == SubresourceUpdate::UpdateSource::Buffer)
         {
+            fprintf(stderr, " + From buffer: level:%u,layers:[%u,+%u),target:%ux%u,+%ux%u\n",
+                    update.buffer.copyRegion.imageSubresource.mipLevel,
+                    update.buffer.copyRegion.imageSubresource.baseArrayLayer,
+                    update.buffer.copyRegion.imageSubresource.layerCount,
+                    update.buffer.copyRegion.imageOffset.x,
+                    update.buffer.copyRegion.imageOffset.y,
+                    update.buffer.copyRegion.imageExtent.width,
+                    update.buffer.copyRegion.imageExtent.height);
             commandBuffer->copyBufferToImage(update.buffer.bufferHandle, mImage, getCurrentLayout(),
                                              1, &update.buffer.copyRegion);
         }
         else
         {
+            fprintf(stderr, " + From image:\n"
+                            "     src: level:%u,layers:[%u,+%u),target:%ux%u,+%ux%u\n"
+                            "     dst: level:%u,layers:[%u,+%u),target:%ux%u,+%ux%u\n",
+                    update.image.copyRegion.srcSubresource.mipLevel,
+                    update.image.copyRegion.srcSubresource.baseArrayLayer,
+                    update.image.copyRegion.srcSubresource.layerCount,
+                    update.image.copyRegion.srcOffset.x,
+                    update.image.copyRegion.srcOffset.y,
+                    update.image.copyRegion.extent.width,
+                    update.image.copyRegion.extent.height,
+                    update.image.copyRegion.dstSubresource.mipLevel,
+                    update.image.copyRegion.dstSubresource.baseArrayLayer,
+                    update.image.copyRegion.dstSubresource.layerCount,
+                    update.image.copyRegion.dstOffset.x,
+                    update.image.copyRegion.dstOffset.y,
+                    update.image.copyRegion.extent.width,
+                    update.image.copyRegion.extent.height);
+
             update.image.image->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT,
                                              vk::ImageLayout::TransferSrc, commandBuffer);
 

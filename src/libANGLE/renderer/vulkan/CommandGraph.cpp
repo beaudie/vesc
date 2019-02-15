@@ -419,12 +419,14 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
 
             if (mOutsideRenderPassCommands.valid())
             {
+                fprintf(stderr, "Outside render pass: %p\n", &mOutsideRenderPassCommands);
                 ANGLE_VK_TRY(context, mOutsideRenderPassCommands.end());
                 primaryCommandBuffer->executeCommands(1, &mOutsideRenderPassCommands);
             }
 
             if (mInsideRenderPassCommands.valid())
             {
+                fprintf(stderr, "Inside render pass: %p\n", &mInsideRenderPassCommands);
                 // Pull a compatible RenderPass from the cache.
                 // TODO(jmadill): Insert real ops and layout transitions.
                 RenderPass *renderPass = nullptr;
