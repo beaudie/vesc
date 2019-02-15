@@ -186,7 +186,7 @@ config("translator_disable_pool_alloc") {
 }
 
 config("debug_annotations_config") {
-  if (is_debug) {
+  if (is_debug || is_android) {
     defines = [ "ANGLE_ENABLE_DEBUG_ANNOTATIONS" ]
   }
 }
