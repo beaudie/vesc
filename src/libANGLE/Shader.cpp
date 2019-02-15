@@ -395,9 +395,9 @@ void Shader::compile(const Context *context)
     ASSERT(compilerHandle);
     mCompilerResourcesString = mShCompilerInstance.getBuiltinResourcesString();
 
-    mWorkerPool   = context->getWorkerThreadPool();
+    mWorkerPool = context->getWorkerThreadPool();
     std::function<void(const std::string &, std::string &)> compileImplFunctor;
-    if (mWorkerPool->isAsync())
+    if (mWorkerPool->isAsync() && !mImplementation->hasNativeParallelCompile())
     {
         compileImplFunctor = [this](const std::string &source, std::string &infoLog) {
             mImplementation->compileAsync(source, infoLog);
@@ -410,7 +410,15 @@ void Shader::compile(const Context *context)
     mCompileTask =
         std::make_shared<CompileTask>(compilerHandle, std::move(sourcePath), std::move(source),
                                       options, std::move(compileImplFunctor));
-    mCompileEvent = mWorkerPool->postWorkerTask(mCompileTask);
+    if (mImplementation->hasNativeParallelCompile())
+    {
+        (*mCompileTask)();
+        mCompileEvent = mImplementation->compileNativeParallel(sh::GetObjectCode(compilerHandle));
+    }
+    else
+    {
+        mCompileEvent = mWorkerPool->postWorkerTask(mCompileTask);
+    }
 }
 
 void Shader::resolveCompile()

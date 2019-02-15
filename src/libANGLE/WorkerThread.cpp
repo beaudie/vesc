@@ -24,6 +24,13 @@ namespace angle
 WaitableEvent::WaitableEvent()  = default;
 WaitableEvent::~WaitableEvent() = default;
 
+void WaitableEventDone::wait() {}
+
+bool WaitableEventDone::isReady()
+{
+    return true;
+}
+
 WorkerThreadPool::WorkerThreadPool()  = default;
 WorkerThreadPool::~WorkerThreadPool() = default;
 
