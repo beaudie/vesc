@@ -15,6 +15,28 @@
 namespace rx
 {
 
+class WaitableCompileEventImpl : public angle::WaitableEvent
+{
+  public:
+    WaitableCompileEventImpl(std::shared_ptr<angle::WaitableEvent> waitableEvent,
+                             std::shared_ptr<angle::WorkerThreadPool> workerThreadPool,
+                             std::shared_ptr<gl::TranslateTask> translateTask,
+                             gl::PostTranslateFunctor &&postTranslateFunctor,
+                             gl::PostTranslateImplFunctor &&postTranslateImplFunctor);
+    ~WaitableCompileEventImpl() override;
+
+    void wait() override;
+
+    bool isReady() override;
+
+  protected:
+    std::shared_ptr<angle::WaitableEvent> mWaitableEvent;
+    std::shared_ptr<angle::WorkerThreadPool> mWorkerThreadPool;
+    std::shared_ptr<gl::TranslateTask> mTranslateTask;
+    gl::PostTranslateFunctor mPostTranslateFunctor;
+    gl::PostTranslateImplFunctor mPostTranslateImplFunctor;
+};
+
 class ShaderImpl : angle::NonCopyable
 {
   public:
@@ -23,22 +45,23 @@ class ShaderImpl : angle::NonCopyable
 
     virtual void destroy() {}
 
-    // Returns additional sh::Compile options.
-    virtual ShCompileOptions prepareSourceAndReturnOptions(const gl::Context *context,
-                                                           std::stringstream *sourceStream,
-                                                           std::string *sourcePath) = 0;
-
-    // Uses the GL driver to compile the shader source in a worker thread.
-    virtual void compileAsync(const std::string &source, std::string &infoLog) {}
-
-    // Returns success for compiling on the driver. Returns success.
-    virtual bool postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog) = 0;
+    virtual std::shared_ptr<angle::WaitableEvent> compile(
+        gl::TranslateTaskConstructor &&translateTaskConstructor,
+        gl::PostTranslateFunctor &&postTranslateFunctor,
+        const gl::Context *context) = 0;
 
     virtual std::string getDebugInfo() const = 0;
 
     const gl::ShaderState &getData() const { return mData; }
 
   protected:
+    std::shared_ptr<angle::WaitableEvent> compileImpl(
+        gl::TranslateTaskConstructor &&translateTaskConstructor,
+        gl::PostTranslateFunctor &&postTranslateFunctor,
+        const gl::Context *context,
+        std::stringstream &&shaderSourceStream,
+        ShCompileOptions compileOptions);
+
     const gl::ShaderState &mData;
 };
 

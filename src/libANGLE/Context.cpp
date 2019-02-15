@@ -7974,6 +7974,7 @@ void Context::maxShaderCompilerThreads(GLuint count)
         mThreadPool = angle::WorkerThreadPool::Create(count > 0);
     }
     mThreadPool->setMaxThreads(count);
+    mImplementation->setMaxShaderCompilerThreads(count);
 }
 
 bool Context::isGLES1() const

@@ -12,6 +12,7 @@
 #ifndef LIBANGLE_SHADER_H_
 #define LIBANGLE_SHADER_H_
 
+#include <functional>
 #include <list>
 #include <memory>
 #include <string>
@@ -24,6 +25,7 @@
 #include "common/angleutils.h"
 #include "libANGLE/Compiler.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/WorkerThread.h"
 #include "libANGLE/angletypes.h"
 
 namespace rx
@@ -120,6 +122,91 @@ class ShaderState final : angle::NonCopyable
     CompileStatus mCompileStatus;
 };
 
+// A TranslateTask is mainly used to translate the input source string into the backend or
+// implementation specific shader source, like HLSL, GLSL. This task can be run in the main thread
+// or a worker thread. It also runs a TranslateImplFunctor which does implementation specific work.
+// This functor was created from the implementation, and passed to the task at its creation in
+// TranslateTaskConstructor.
+//
+// After the TranslateTask has done its job, there might be some post translate work to do. This is
+// what PostTranslateFunctor does. Similarly PostTranslateImplFunctor does implementation specific
+// post translate work. The implementation calls back PostTranslateFunctor after where the task
+// waits. Then PostTranslateFunctor invokes PostTranslateImplFunctor. Briefly, the interactions are
+// shown below:
+//
+//             Shader                                        ShaderImpl       TranslateTask
+//  compile ---->|
+//               |                  translateTaskConstructor,
+//               |                    postTranslateFunctor
+//               |         compile ------------------------------>|
+//                                                                |
+//                 translateImplFunctor                           |
+//               |<---------------------TranslateTaskConstructor  |
+//               |
+//               |                        translateImplFunctor
+//                         new  ----------------------------------------------------->|
+//                                                                |         () ------>|
+//                                                                                    |
+//                                                                  translateTask     |
+//                                                                |<-------------TranslateImplFunctor
+//                                                                |
+//
+//  --------------------------------- post --------------------------------------------------------
+//
+//                                                                |
+//                  postTranslateImplFunctor                      |
+//               |<------------------------- PostTranslateFunctor |
+//               |
+//               |                               translateTask
+//               |  PostTranslateImplFunctor -------------------->|
+
+using TranslateImplFunctor = std::function<bool(const std::string &, std::string *)>;
+
+class TranslateTask : public angle::Closure
+{
+  public:
+    TranslateTask(ShHandle handle,
+                  ShShaderOutput shaderOutput,
+                  std::string &&sourcePath,
+                  std::string &&source,
+                  ShCompileOptions options,
+                  TranslateImplFunctor &&functor);
+
+    ~TranslateTask() override;
+
+    void operator()() override;
+    ShHandle getShHandle() const;
+    ShShaderOutput getShaderOutputType() const;
+    bool getResult() const;
+    bool getResultImpl() const;
+    const std::string &getInfoLog() const;
+    const std::string &getTranslatedSource() const;
+
+  private:
+    ShHandle mHandle;
+    ShShaderOutput mShaderOutput;
+    std::string mSourcePath;
+    std::string mSource;
+    ShCompileOptions mOptions;
+    TranslateImplFunctor mTranslateImplFunctor;
+    bool mResult;
+
+    // Stores the return result of calling mTranslateImplFunctor.
+    bool mResultImpl;
+    std::string mInfoLog;
+};
+
+using TranslateTaskConstructor =
+    std::function<std::shared_ptr<TranslateTask>(ShCompileOptions,
+                                                 std::stringstream &&,
+                                                 std::string &&,
+                                                 TranslateImplFunctor &&)>;
+
+using PostTranslateImplFunctor = std::function<bool(std::shared_ptr<TranslateTask>, std::string *)>;
+
+using PostTranslateFunctor =
+    std::function<void(std::shared_ptr<TranslateTask>, PostTranslateImplFunctor &&)>;
+
 class Shader final : angle::NonCopyable, public LabeledObject
 {
   public:
@@ -209,8 +296,6 @@ class Shader final : angle::NonCopyable, public LabeledObject
     // We keep a reference to the translator in order to defer compiles while preserving settings.
     BindingPointer<Compiler> mBoundCompiler;
     ShCompilerInstance mShCompilerInstance;
-    std::shared_ptr<CompileTask> mCompileTask;
-    std::shared_ptr<angle::WorkerThreadPool> mWorkerPool;
     std::shared_ptr<angle::WaitableEvent> mCompileEvent;
     std::string mCompilerResourcesString;
 
