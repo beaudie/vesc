@@ -28,7 +28,6 @@ ShaderGL::ShaderGL(const gl::ShaderState &data,
       mShaderID(shaderID),
       mMultiviewImplementationType(multiviewImplementationType),
       mRenderer(renderer),
-      mFallbackToMainThread(true),
       mCompileStatus(GL_FALSE)
 {}
 
@@ -43,11 +42,128 @@ void ShaderGL::destroy()
     mShaderID = 0;
 }
 
-ShCompileOptions ShaderGL::prepareSourceAndReturnOptions(const gl::Context *context,
-                                                         std::stringstream *sourceStream,
-                                                         std::string * /*sourcePath*/)
+void ShaderGL::compileAndCheckShader(const char *source)
 {
-    *sourceStream << mData.getSource();
+    compileShader(source);
+    checkShader();
+}
+
+void ShaderGL::compileShader(const char *source)
+{
+    const FunctionsGL *functions = mRenderer->getFunctions();
+    functions->shaderSource(mShaderID, 1, &source, nullptr);
+    functions->compileShader(mShaderID);
+}
+
+void ShaderGL::checkShader()
+{
+    const FunctionsGL *functions = mRenderer->getFunctions();
+
+    // Check for compile errors from the native driver
+    mCompileStatus = GL_FALSE;
+    functions->getShaderiv(mShaderID, GL_COMPILE_STATUS, &mCompileStatus);
+    if (mCompileStatus == GL_FALSE)
+    {
+        // Compilation failed, put the error into the info log
+        GLint infoLogLength = 0;
+        functions->getShaderiv(mShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+        // Info log length includes the null terminator, so 1 means that the info log is an empty
+        // string.
+        if (infoLogLength > 1)
+        {
+            std::vector<char> buf(infoLogLength);
+            functions->getShaderInfoLog(mShaderID, infoLogLength, nullptr, &buf[0]);
+
+            mInfoLog = &buf[0];
+            WARN() << std::endl << mInfoLog;
+        }
+        else
+        {
+            WARN() << std::endl << "Shader compilation failed with no info log.";
+        }
+    }
+}
+
+using CheckShaderFunctor = std::function<bool()>;
+
+class WaitableCompileEventNativeParallel final : public angle::WaitableEvent
+{
+  public:
+    WaitableCompileEventNativeParallel(const FunctionsGL *functions,
+                                       GLuint shaderID,
+                                       gl::PostTranslateFunctor &&postTranslateFunctor,
+                                       std::shared_ptr<gl::TranslateTask> translateTask,
+                                       CheckShaderFunctor &&checkShaderFunctor)
+        : mFunctions(functions),
+          mShaderID(shaderID),
+          mPostTranslateFunctor(postTranslateFunctor),
+          mTranslateTask(translateTask),
+          mCheckShaderFunctor(checkShaderFunctor)
+    {}
+
+    void wait() override
+    {
+        GLint status = mCheckShaderFunctor();
+        gl::PostTranslateImplFunctor postTranslateImplFunctor =
+            [status](std::shared_ptr<gl::TranslateTask>, std::string *) { return status; };
+        mPostTranslateFunctor(mTranslateTask, std::move(postTranslateImplFunctor));
+    }
+
+    bool isReady() override
+    {
+        GLint status = GL_FALSE;
+        mFunctions->getShaderiv(mShaderID, GL_COMPLETION_STATUS, &status);
+        return status == GL_TRUE;
+    }
+
+  private:
+    const FunctionsGL *mFunctions;
+    GLuint mShaderID;
+    gl::PostTranslateFunctor mPostTranslateFunctor;
+    std::shared_ptr<gl::TranslateTask> mTranslateTask;
+    CheckShaderFunctor mCheckShaderFunctor;
+};
+
+using CompileAndCheckShaderFunctor = std::function<void(const char *source)>;
+
+class WaitableCompileEventWorkerContext final : public WaitableCompileEventImpl
+{
+  public:
+    WaitableCompileEventWorkerContext(std::shared_ptr<angle::WaitableEvent> waitableEvent,
+                                      std::shared_ptr<gl::TranslateTask> translateTask,
+                                      gl::PostTranslateFunctor &&postTranslateFunctor,
+                                      gl::PostTranslateImplFunctor &&postTranslateImplFunctor,
+                                      CompileAndCheckShaderFunctor &&compileAndCheckShaderFunctor)
+        : WaitableCompileEventImpl(waitableEvent,
+                                   std::move(translateTask),
+                                   std::move(postTranslateFunctor),
+                                   std::move(postTranslateImplFunctor)),
+          mCompileAndCheckShaderFunctor(std::move(compileAndCheckShaderFunctor))
+    {}
+
+    void wait() override
+    {
+        mWaitableEvent->wait();
+        if (mTranslateTask->getResult() && !mTranslateTask->getResultImpl())
+        {
+            // Fallback to the main thread.
+            mCompileAndCheckShaderFunctor(mTranslateTask->getTranslatedSource().c_str());
+        }
+        mPostTranslateFunctor(mTranslateTask, std::move(mPostTranslateImplFunctor));
+    }
+
+  private:
+    CompileAndCheckShaderFunctor mCompileAndCheckShaderFunctor;
+};
+
+std::shared_ptr<angle::WaitableEvent> ShaderGL::compile(
+    gl::TranslateTaskConstructor &&translateTaskConstructor,
+    gl::PostTranslateFunctor &&postTranslateFunctor,
+    const gl::Context *context)
+{
+    std::stringstream sourceStream;
+    sourceStream << mData.getSource();
 
     ShCompileOptions options = SH_INIT_GL_POSITION;
 
@@ -140,74 +256,70 @@ ShCompileOptions ShaderGL::prepareSourceAndReturnOptions(const gl::Context *cont
         options |= SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER;
     }
 
-    mFallbackToMainThread = true;
+    auto workerThreadPool = context->getWorkerThreadPool();
 
-    return options;
-}
+    auto dummyTranslateImplFunctor = [](const std::string &, std::string *) { return true; };
 
-void ShaderGL::compileAndCheckShader(const char *source)
-{
-    const FunctionsGL *functions = mRenderer->getFunctions();
-    functions->shaderSource(mShaderID, 1, &source, nullptr);
-    functions->compileShader(mShaderID);
+    auto postTranslateImplFunctor = [this](std::shared_ptr<gl::TranslateTask>, std::string *) {
+        return mCompileStatus;
+    };
 
-    // Check for compile errors from the native driver
-    mCompileStatus = GL_FALSE;
-    functions->getShaderiv(mShaderID, GL_COMPILE_STATUS, &mCompileStatus);
-    if (mCompileStatus == GL_FALSE)
+    if (mRenderer->hasNativeParallelCompile())
     {
-        // Compilation failed, put the error into the info log
-        GLint infoLogLength = 0;
-        functions->getShaderiv(mShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
-
-        // Info log length includes the null terminator, so 1 means that the info log is an empty
-        // string.
-        if (infoLogLength > 1)
-        {
-            std::vector<char> buf(infoLogLength);
-            functions->getShaderInfoLog(mShaderID, infoLogLength, nullptr, &buf[0]);
-
-            mInfoLog = &buf[0];
-            WARN() << std::endl << mInfoLog;
-        }
-        else
-        {
-            WARN() << std::endl << "Shader compilation failed with no info log.";
-        }
+        auto translateTask = translateTaskConstructor(
+            options, std::move(sourceStream), std::string(), std::move(dummyTranslateImplFunctor));
+        (*translateTask)();
+        compileShader(translateTask->getTranslatedSource().c_str());
+        auto checkShaderFunctor = [this]() {
+            checkShader();
+            return mCompileStatus;
+        };
+        return std::make_shared<WaitableCompileEventNativeParallel>(
+            mRenderer->getFunctions(), mShaderID, std::move(postTranslateFunctor), translateTask,
+            std::move(checkShaderFunctor));
     }
-}
-
-void ShaderGL::compileAsync(const std::string &source, std::string &infoLog)
-{
-    std::string workerInfoLog;
-    ScopedWorkerContextGL worker(mRenderer.get(), &workerInfoLog);
-    if (worker())
+    else if (workerThreadPool->isAsync())
     {
-        compileAndCheckShader(source.c_str());
-        mFallbackToMainThread = false;
+        auto translateImplFunctor = [this](const std::string &source, std::string *infoLog) {
+            std::string workerInfoLog;
+            ScopedWorkerContextGL worker(mRenderer.get(), &workerInfoLog);
+            if (worker())
+            {
+                compileAndCheckShader(source.c_str());
+                return true;
+            }
+            else
+            {
+#if !defined(NDEBUG)
+                *infoLog += "bindWorkerContext failed.\n" + workerInfoLog;
+#endif
+                return false;
+            }
+        };
+
+        auto translateTask = translateTaskConstructor(
+            options, std::move(sourceStream), std::string(), std::move(translateImplFunctor));
+
+        auto compileAndCheckShaderFunctor = [this](const char *source) {
+            compileAndCheckShader(source);
+        };
+        return std::make_shared<WaitableCompileEventWorkerContext>(
+            workerThreadPool->postWorkerTask(translateTask), translateTask,
+            std::move(postTranslateFunctor), std::move(postTranslateImplFunctor),
+            std::move(compileAndCheckShaderFunctor));
     }
     else
     {
-#if !defined(NDEBUG)
-        infoLog += "bindWorkerContext failed.\n" + workerInfoLog;
-#endif
+        auto translateTask = translateTaskConstructor(
+            options, std::move(sourceStream), std::string(), std::move(dummyTranslateImplFunctor));
+        (*translateTask)();
+        if (translateTask->getResult())
+        {
+            compileAndCheckShader(translateTask->getTranslatedSource().c_str());
+        }
+        postTranslateFunctor(translateTask, std::move(postTranslateImplFunctor));
+        return std::make_shared<angle::WaitableEventDone>();
     }
-}
-
-bool ShaderGL::postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog)
-{
-    if (mFallbackToMainThread)
-    {
-        const char *translatedSourceCString = mData.getTranslatedSource().c_str();
-        compileAndCheckShader(translatedSourceCString);
-    }
-    if (mCompileStatus == GL_FALSE)
-    {
-        *infoLog = mInfoLog;
-        return false;
-    }
-
-    return true;
 }
 
 std::string ShaderGL::getDebugInfo() const
