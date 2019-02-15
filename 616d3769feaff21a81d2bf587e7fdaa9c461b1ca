@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "42238202_fdc6068a",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 1073,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-02-15T14:36:47Z",
+      "side": 1,
+      "message": "I wonder about the naming here. It\u0027s not really an AOSP apk as it doesn\u0027t include the java bits that would be included in an actual AOSP build. Maybe AngleOnly? AngleLibraries?",
+      "revId": "616d3769feaff21a81d2bf587e7fdaa9c461b1ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
