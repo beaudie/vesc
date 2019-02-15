@@ -24,6 +24,17 @@
 #include "libANGLE/renderer/gl/glx/WindowSurfaceGLX.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
+namespace
+{
+
+bool HasParallelShaderCompileExtension(const rx::FunctionsGL *functions)
+{
+    return functions->maxShaderCompilerThreadsKHR != nullptr ||
+           functions->maxShaderCompilerThreadsARB != nullptr;
+}
+
+}  // anonymous namespace
+
 namespace rx
 {
 
@@ -208,9 +219,12 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
     }
 
     const auto &eglAttributes = display->getAttributeMap();
+    std::unique_ptr<FunctionsGL> functionsGL(new FunctionsGLGLX(mGLX.getProc));
+    functionsGL->initialize(eglAttributes);
     if (mHasARBCreateContext)
     {
-        egl::Error error = initializeContext(mContextConfig, eglAttributes, &mContext);
+        egl::Error error =
+            initializeContext(mContextConfig, eglAttributes, &mContext, functionsGL.get());
         if (error.isError())
         {
             return error;
@@ -243,8 +257,10 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
         {
             return egl::EglNotInitialized() << "Could not create GL context.";
         }
-
-        mSharedContext = mGLX.createContext(&mVisuals[0], mContext, True);
+        if (!HasParallelShaderCompileExtension(functionsGL.get()))
+        {
+            mSharedContext = mGLX.createContext(&mVisuals[0], mContext, True);
+        }
     }
     ASSERT(mContext);
 
@@ -271,9 +287,6 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
     {
         return egl::EglNotInitialized() << "Could not make the dummy pbuffer current.";
     }
-
-    std::unique_ptr<FunctionsGL> functionsGL(new FunctionsGLGLX(mGLX.getProc));
-    functionsGL->initialize(eglAttributes);
 
     // TODO(cwallez, angleproject:1303) Disable the OpenGL ES backend on Linux NVIDIA and Intel as
     // it has problems on our automated testing. An OpenGL ES backend might not trigger this test if
@@ -433,7 +446,8 @@ DeviceImpl *DisplayGLX::createDevice()
 
 egl::Error DisplayGLX::initializeContext(glx::FBConfig config,
                                          const egl::AttributeMap &eglAttributes,
-                                         glx::Context *context)
+                                         glx::Context *context,
+                                         const FunctionsGL *functions)
 {
     int profileMask = 0;
 
@@ -464,7 +478,7 @@ egl::Error DisplayGLX::initializeContext(glx::FBConfig config,
         {
             profileMask |= GLX_CONTEXT_CORE_PROFILE_BIT_ARB;
         }
-        return createContextAttribs(config, requestedVersion, profileMask, context);
+        return createContextAttribs(config, requestedVersion, profileMask, context, functions);
     }
 
     // The only way to get a core profile context of the highest version using
@@ -491,7 +505,8 @@ egl::Error DisplayGLX::initializeContext(glx::FBConfig config,
             profileFlag |= GLX_CONTEXT_ES2_PROFILE_BIT_EXT;
         }
 
-        egl::Error error = createContextAttribs(config, info.version, profileFlag, context);
+        egl::Error error =
+            createContextAttribs(config, info.version, profileFlag, context, functions);
         if (!error.isError())
         {
             return error;
@@ -844,7 +859,8 @@ int DisplayGLX::getGLXFBConfigAttrib(glx::FBConfig config, int attrib) const
 egl::Error DisplayGLX::createContextAttribs(glx::FBConfig,
                                             const Optional<gl::Version> &version,
                                             int profileMask,
-                                            glx::Context *context)
+                                            glx::Context *context,
+                                            const FunctionsGL *functions)
 {
     mAttribs.clear();
 
@@ -887,9 +903,11 @@ egl::Error DisplayGLX::createContextAttribs(glx::FBConfig,
     {
         return egl::EglNotInitialized() << "Could not create GL context.";
     }
-
-    mSharedContext = mGLX.createContextAttribsARB(mContextConfig, mContext, True, mAttribs.data());
-
+    if (!HasParallelShaderCompileExtension(functions))
+    {
+        mSharedContext =
+            mGLX.createContextAttribsARB(mContextConfig, mContext, True, mAttribs.data());
+    }
     return egl::NoError();
 }
 

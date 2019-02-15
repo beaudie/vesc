@@ -147,9 +147,20 @@ ShCompileOptions ShaderGL::prepareSourceAndReturnOptions(const gl::Context *cont
 
 void ShaderGL::compileAndCheckShader(const char *source)
 {
+    compileShader(source);
+    checkShader();
+}
+
+void ShaderGL::compileShader(const char *source)
+{
     const FunctionsGL *functions = mRenderer->getFunctions();
     functions->shaderSource(mShaderID, 1, &source, nullptr);
     functions->compileShader(mShaderID);
+}
+
+void ShaderGL::checkShader()
+{
+    const FunctionsGL *functions = mRenderer->getFunctions();
 
     // Check for compile errors from the native driver
     mCompileStatus = GL_FALSE;
@@ -194,12 +205,55 @@ void ShaderGL::compileAsync(const std::string &source, std::string &infoLog)
     }
 }
 
+class WaitableCompileEventNativeParallel final : public angle::WaitableEvent
+{
+  public:
+    WaitableCompileEventNativeParallel(const FunctionsGL *functions, GLuint shaderID)
+        : mFunctions(functions), mShaderID(shaderID)
+    {}
+
+    void wait() override
+    {
+        GLint status = GL_FALSE;
+        mFunctions->getShaderiv(mShaderID, GL_COMPILE_STATUS, &status);
+    }
+
+    bool isReady() override
+    {
+        GLint status = GL_FALSE;
+        mFunctions->getShaderiv(mShaderID, GL_COMPLETION_STATUS, &status);
+        return status == GL_TRUE;
+    }
+
+  private:
+    const FunctionsGL *mFunctions;
+    GLuint mShaderID;
+};
+
+bool ShaderGL::hasNativeParallelCompile()
+{
+    return mRenderer->hasNativeParallelCompile();
+}
+
+std::shared_ptr<angle::WaitableEvent> ShaderGL::compileNativeParallel(const std::string &source)
+{
+    mFallbackToMainThread = false;
+    compileShader(source.c_str());
+
+    return std::make_shared<WaitableCompileEventNativeParallel>(mRenderer->getFunctions(),
+                                                                mShaderID);
+}
+
 bool ShaderGL::postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog)
 {
     if (mFallbackToMainThread)
     {
         const char *translatedSourceCString = mData.getTranslatedSource().c_str();
         compileAndCheckShader(translatedSourceCString);
+    }
+    else if (hasNativeParallelCompile())
+    {
+        checkShader();
     }
     if (mCompileStatus == GL_FALSE)
     {

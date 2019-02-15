@@ -103,7 +103,8 @@ class DisplayGLX : public DisplayGL
   private:
     egl::Error initializeContext(glx::FBConfig config,
                                  const egl::AttributeMap &eglAttributes,
-                                 glx::Context *context);
+                                 glx::Context *context,
+                                 const FunctionsGL *functions);
 
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
     void generateCaps(egl::Caps *outCaps) const override;
@@ -114,7 +115,8 @@ class DisplayGLX : public DisplayGL
     egl::Error createContextAttribs(glx::FBConfig,
                                     const Optional<gl::Version> &version,
                                     int profileMask,
-                                    glx::Context *context);
+                                    glx::Context *context,
+                                    const FunctionsGL *functions);
 
     std::shared_ptr<RendererGL> mRenderer;
 
