@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1f4bddc_f404eab9",
+        "filename": "src/libANGLE/renderer/gl/TransformFeedbackGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-15T22:28:38Z",
+      "side": 1,
+      "message": "nit: could you make a getter on StateManagerGL for the current program ID instead?",
+      "range": {
+        "startLine": 140,
+        "startChar": 12,
+        "endLine": 144,
+        "endChar": 13
+      },
+      "revId": "e256c9728826c2a94128052d306e882362f7febe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
