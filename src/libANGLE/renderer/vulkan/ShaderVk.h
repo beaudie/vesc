@@ -21,12 +21,10 @@ class ShaderVk : public ShaderImpl
     ShaderVk(const gl::ShaderState &data);
     ~ShaderVk() override;
 
-    // Returns additional sh::Compile options.
-    ShCompileOptions prepareSourceAndReturnOptions(const gl::Context *context,
-                                                   std::stringstream *sourceStream,
-                                                   std::string *sourcePath) override;
-    // Returns success for compiling on the driver. Returns success.
-    bool postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog) override;
+    std::shared_ptr<angle::WaitableEvent> compile(
+        gl::TranslateTaskConstructor &&translateTaskConstructor,
+        gl::PostTranslateFunctor &&postTranslateFunctor,
+        const gl::Context *context) override;
 
     std::string getDebugInfo() const override;
 };

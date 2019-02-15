@@ -11,6 +11,7 @@
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/Compiler.h"
+#include "libANGLE/Context.h"
 #include "libANGLE/Shader.h"
 #include "libANGLE/features.h"
 #include "libANGLE/renderer/d3d/ProgramD3D.h"
@@ -154,36 +155,6 @@ bool ShaderD3D::useImage2DFunction(const std::string &functionName) const
     return mUsedImage2DFunctionNames.find(functionName) != mUsedImage2DFunctionNames.end();
 }
 
-ShCompileOptions ShaderD3D::prepareSourceAndReturnOptions(const gl::Context *context,
-                                                          std::stringstream *shaderSourceStream,
-                                                          std::string *sourcePath)
-{
-    uncompile();
-
-    ShCompileOptions additionalOptions = 0;
-
-    const std::string &source = mData.getSource();
-
-#if !defined(ANGLE_ENABLE_WINDOWS_STORE)
-    if (gl::DebugAnnotationsActive())
-    {
-        *sourcePath = getTempPath();
-        writeFile(sourcePath->c_str(), source.c_str(), source.length());
-        additionalOptions |= SH_LINE_DIRECTIVES | SH_SOURCE_PATH;
-    }
-#endif
-
-    additionalOptions |= mAdditionalOptions;
-
-    *shaderSourceStream << source;
-    return additionalOptions;
-}
-
-bool ShaderD3D::hasUniform(const std::string &name) const
-{
-    return mUniformRegisterMap.find(name) != mUniformRegisterMap.end();
-}
-
 const std::map<std::string, unsigned int> &GetUniformRegisterMap(
     const std::map<std::string, unsigned int> *uniformRegisterMap)
 {
@@ -198,71 +169,116 @@ const std::set<std::string> &GetUsedImage2DFunctionNames(
     return *usedImage2DFunctionNames;
 }
 
-bool ShaderD3D::postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog)
+std::shared_ptr<angle::WaitableEvent> ShaderD3D::compile(
+    gl::TranslateTaskConstructor &&translateTaskConstructor,
+    gl::PostTranslateFunctor &&postTranslateFunctor,
+    const gl::Context *context)
 {
-    // TODO(jmadill): We shouldn't need to cache this.
-    mCompilerOutputType = compiler->getShaderOutputType();
+    std::stringstream shaderSourceStream;
+    std::string sourcePath;
+    uncompile();
 
-    const std::string &translatedSource = mData.getTranslatedSource();
+    ShCompileOptions additionalOptions = 0;
 
-    mUsesMultipleRenderTargets = translatedSource.find("GL_USES_MRT") != std::string::npos;
-    mUsesFragColor             = translatedSource.find("GL_USES_FRAG_COLOR") != std::string::npos;
-    mUsesFragData              = translatedSource.find("GL_USES_FRAG_DATA") != std::string::npos;
-    mUsesFragCoord             = translatedSource.find("GL_USES_FRAG_COORD") != std::string::npos;
-    mUsesFrontFacing           = translatedSource.find("GL_USES_FRONT_FACING") != std::string::npos;
-    mUsesPointSize             = translatedSource.find("GL_USES_POINT_SIZE") != std::string::npos;
-    mUsesPointCoord            = translatedSource.find("GL_USES_POINT_COORD") != std::string::npos;
-    mUsesDepthRange            = translatedSource.find("GL_USES_DEPTH_RANGE") != std::string::npos;
-    mUsesFragDepth             = translatedSource.find("GL_USES_FRAG_DEPTH") != std::string::npos;
-    mHasANGLEMultiviewEnabled =
-        translatedSource.find("GL_ANGLE_MULTIVIEW_ENABLED") != std::string::npos;
-    mUsesViewID = translatedSource.find("GL_USES_VIEW_ID") != std::string::npos;
-    mUsesDiscardRewriting =
-        translatedSource.find("ANGLE_USES_DISCARD_REWRITING") != std::string::npos;
-    mUsesNestedBreak = translatedSource.find("ANGLE_USES_NESTED_BREAK") != std::string::npos;
-    mRequiresIEEEStrictCompiling =
-        translatedSource.find("ANGLE_REQUIRES_IEEE_STRICT_COMPILING") != std::string::npos;
+    const std::string &source = mData.getSource();
 
-    ShHandle compilerHandle = compiler->getHandle();
-
-    mUniformRegisterMap = GetUniformRegisterMap(sh::GetUniformRegisterMap(compilerHandle));
-    mReadonlyImage2DRegisterIndex = sh::GetReadonlyImage2DRegisterIndex(compilerHandle);
-    mImage2DRegisterIndex         = sh::GetImage2DRegisterIndex(compilerHandle);
-    mUsedImage2DFunctionNames =
-        GetUsedImage2DFunctionNames(sh::GetUsedImage2DFunctionNames(compilerHandle));
-
-    for (const sh::InterfaceBlock &interfaceBlock : mData.getUniformBlocks())
+#if !defined(ANGLE_ENABLE_WINDOWS_STORE)
+    if (gl::DebugAnnotationsActive())
     {
-        if (interfaceBlock.active)
-        {
-            unsigned int index = static_cast<unsigned int>(-1);
-            bool blockRegisterResult =
-                sh::GetUniformBlockRegister(compilerHandle, interfaceBlock.name, &index);
-            ASSERT(blockRegisterResult);
-
-            mUniformBlockRegisterMap[interfaceBlock.name] = index;
-        }
+        sourcePath = getTempPath();
+        writeFile(sourcePath.c_str(), source.c_str(), source.length());
+        additionalOptions |= SH_LINE_DIRECTIVES | SH_SOURCE_PATH;
     }
+#endif
 
-    for (const sh::InterfaceBlock &interfaceBlock : mData.getShaderStorageBlocks())
-    {
-        if (interfaceBlock.active)
+    additionalOptions |= mAdditionalOptions;
+
+    shaderSourceStream << source;
+
+    auto dummyTranslateImplFunctor = [](const std::string &, std::string *) { return true; };
+
+    auto translateTask =
+        translateTaskConstructor(additionalOptions, std::move(shaderSourceStream),
+                                 std::move(sourcePath), std::move(dummyTranslateImplFunctor));
+
+    auto postTranslateImplFunctor = [this](std::shared_ptr<gl::TranslateTask> translateTask,
+                                           std::string *infoLog) {
+        // TODO(jmadill): We shouldn't need to cache this.
+        mCompilerOutputType = translateTask->getShaderOutputType();
+
+        const std::string &translatedSource = translateTask->getTranslatedSource();
+
+        mUsesMultipleRenderTargets = translatedSource.find("GL_USES_MRT") != std::string::npos;
+        mUsesFragColor   = translatedSource.find("GL_USES_FRAG_COLOR") != std::string::npos;
+        mUsesFragData    = translatedSource.find("GL_USES_FRAG_DATA") != std::string::npos;
+        mUsesFragCoord   = translatedSource.find("GL_USES_FRAG_COORD") != std::string::npos;
+        mUsesFrontFacing = translatedSource.find("GL_USES_FRONT_FACING") != std::string::npos;
+        mUsesPointSize   = translatedSource.find("GL_USES_POINT_SIZE") != std::string::npos;
+        mUsesPointCoord  = translatedSource.find("GL_USES_POINT_COORD") != std::string::npos;
+        mUsesDepthRange  = translatedSource.find("GL_USES_DEPTH_RANGE") != std::string::npos;
+        mUsesFragDepth   = translatedSource.find("GL_USES_FRAG_DEPTH") != std::string::npos;
+        mHasANGLEMultiviewEnabled =
+            translatedSource.find("GL_ANGLE_MULTIVIEW_ENABLED") != std::string::npos;
+        mUsesViewID = translatedSource.find("GL_USES_VIEW_ID") != std::string::npos;
+        mUsesDiscardRewriting =
+            translatedSource.find("ANGLE_USES_DISCARD_REWRITING") != std::string::npos;
+        mUsesNestedBreak = translatedSource.find("ANGLE_USES_NESTED_BREAK") != std::string::npos;
+        mRequiresIEEEStrictCompiling =
+            translatedSource.find("ANGLE_REQUIRES_IEEE_STRICT_COMPILING") != std::string::npos;
+
+        ShHandle compilerHandle = translateTask->getShHandle();
+
+        mUniformRegisterMap = GetUniformRegisterMap(sh::GetUniformRegisterMap(compilerHandle));
+        mReadonlyImage2DRegisterIndex = sh::GetReadonlyImage2DRegisterIndex(compilerHandle);
+        mImage2DRegisterIndex         = sh::GetImage2DRegisterIndex(compilerHandle);
+        mUsedImage2DFunctionNames =
+            GetUsedImage2DFunctionNames(sh::GetUsedImage2DFunctionNames(compilerHandle));
+
+        for (const sh::InterfaceBlock &interfaceBlock : mData.getUniformBlocks())
         {
-            unsigned int index = static_cast<unsigned int>(-1);
-            bool blockRegisterResult =
-                sh::GetShaderStorageBlockRegister(compilerHandle, interfaceBlock.name, &index);
-            ASSERT(blockRegisterResult);
+            if (interfaceBlock.active)
+            {
+                unsigned int index = static_cast<unsigned int>(-1);
+                bool blockRegisterResult =
+                    sh::GetUniformBlockRegister(compilerHandle, interfaceBlock.name, &index);
+                ASSERT(blockRegisterResult);
 
-            mShaderStorageBlockRegisterMap[interfaceBlock.name] = index;
+                mUniformBlockRegisterMap[interfaceBlock.name] = index;
+            }
         }
-    }
 
-    mDebugInfo +=
-        std::string("// ") + gl::GetShaderTypeString(mData.getShaderType()) + " SHADER BEGIN\n";
-    mDebugInfo += "\n// GLSL BEGIN\n\n" + mData.getSource() + "\n\n// GLSL END\n\n\n";
-    mDebugInfo += "// INITIAL HLSL BEGIN\n\n" + translatedSource + "\n// INITIAL HLSL END\n\n\n";
-    // Successive steps will append more info
-    return true;
+        for (const sh::InterfaceBlock &interfaceBlock : mData.getShaderStorageBlocks())
+        {
+            if (interfaceBlock.active)
+            {
+                unsigned int index = static_cast<unsigned int>(-1);
+                bool blockRegisterResult =
+                    sh::GetShaderStorageBlockRegister(compilerHandle, interfaceBlock.name, &index);
+                ASSERT(blockRegisterResult);
+
+                mShaderStorageBlockRegisterMap[interfaceBlock.name] = index;
+            }
+        }
+
+        mDebugInfo +=
+            std::string("// ") + gl::GetShaderTypeString(mData.getShaderType()) + " SHADER BEGIN\n";
+        mDebugInfo += "\n// GLSL BEGIN\n\n" + mData.getSource() + "\n\n// GLSL END\n\n\n";
+        mDebugInfo +=
+            "// INITIAL HLSL BEGIN\n\n" + translatedSource + "\n// INITIAL HLSL END\n\n\n";
+        // Successive steps will append more info
+        return true;
+    };
+
+    auto workerThreadPool = context->getWorkerThreadPool();
+
+    return std::make_shared<WaitableCompileEventImpl>(
+        workerThreadPool->postWorkerTask(translateTask), workerThreadPool, translateTask,
+        std::move(postTranslateFunctor), std::move(postTranslateImplFunctor));
+}
+
+bool ShaderD3D::hasUniform(const std::string &name) const
+{
+    return mUniformRegisterMap.find(name) != mUniformRegisterMap.end();
 }
 
 }  // namespace rx

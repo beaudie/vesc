@@ -12,6 +12,7 @@
 #ifndef LIBANGLE_SHADER_H_
 #define LIBANGLE_SHADER_H_
 
+#include <functional>
 #include <list>
 #include <memory>
 #include <string>
@@ -24,6 +25,7 @@
 #include "common/angleutils.h"
 #include "libANGLE/Compiler.h"
 #include "libANGLE/Debug.h"
+#include "libANGLE/WorkerThread.h"
 #include "libANGLE/angletypes.h"
 
 namespace rx
@@ -120,6 +122,51 @@ class ShaderState final : angle::NonCopyable
     CompileStatus mCompileStatus;
 };
 
+using TranslateImplFunctor = std::function<bool(const std::string &, std::string *)>;
+
+class TranslateTask : public angle::Closure
+{
+  public:
+    TranslateTask(ShHandle handle,
+                  ShShaderOutput shaderOutput,
+                  std::string &&sourcePath,
+                  std::string &&source,
+                  ShCompileOptions options,
+                  TranslateImplFunctor &&functor);
+
+    ~TranslateTask() override;
+
+    void operator()() override;
+    ShHandle getShHandle() const;
+    ShShaderOutput getShaderOutputType() const;
+    bool getResult() const;
+    bool getResultImpl() const;
+    const std::string &getInfoLog() const;
+    const std::string &getTranslatedSource() const;
+
+  private:
+    ShHandle mHandle;
+    ShShaderOutput mShaderOutput;
+    std::string mSourcePath;
+    std::string mSource;
+    ShCompileOptions mOptions;
+    TranslateImplFunctor mTranslateImplFunctor;
+    bool mResult;
+    bool mResultImpl;
+    std::string mInfoLog;
+};
+
+using TranslateTaskConstructor =
+    std::function<std::shared_ptr<TranslateTask>(ShCompileOptions,
+                                                 std::stringstream &&,
+                                                 std::string &&,
+                                                 TranslateImplFunctor &&)>;
+
+using PostTranslateImplFunctor = std::function<bool(std::shared_ptr<TranslateTask>, std::string *)>;
+
+using PostTranslateFunctor =
+    std::function<void(std::shared_ptr<TranslateTask>, PostTranslateImplFunctor &&)>;
+
 class Shader final : angle::NonCopyable, public LabeledObject
 {
   public:
@@ -209,8 +256,6 @@ class Shader final : angle::NonCopyable, public LabeledObject
     // We keep a reference to the translator in order to defer compiles while preserving settings.
     BindingPointer<Compiler> mBoundCompiler;
     ShCompilerInstance mShCompilerInstance;
-    std::shared_ptr<CompileTask> mCompileTask;
-    std::shared_ptr<angle::WorkerThreadPool> mWorkerPool;
     std::shared_ptr<angle::WaitableEvent> mCompileEvent;
     std::string mCompilerResourcesString;
 
