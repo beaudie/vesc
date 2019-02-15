@@ -53,6 +53,14 @@ class WaitableEvent : angle::NonCopyable
     }
 };
 
+// A dummy waitable event.
+class WaitableEventDone final : public WaitableEvent
+{
+  public:
+    void wait() override;
+    bool isReady() override;
+};
+
 // Request WorkerThreads from the WorkerThreadPool. Each pool can keep worker threads around so
 // we avoid the costly spin up and spin down time.
 class WorkerThreadPool : angle::NonCopyable
