@@ -617,6 +617,12 @@ unsigned int RendererGL::getMaxWorkerContexts()
     return std::min(16u, std::thread::hardware_concurrency());
 }
 
+bool RendererGL::hasNativeParallelCompile()
+{
+    return mFunctions->hasGLExtension("GL_ARB_parallel_shader_compile") ||
+           mFunctions->hasGLESExtension("GL_KHR_parallel_shader_compile");
+}
+
 ScopedWorkerContextGL::ScopedWorkerContextGL(RendererGL *renderer, std::string *infoLog)
     : mRenderer(renderer)
 {
