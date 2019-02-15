@@ -66,7 +66,7 @@ for extension in xml_root.findall('extensions/extension'):
         command_name = command.attrib['name']
         if 'gl' in support and 'gles2' in support:
             # Special case for KHR extensions, since in GLES they are suffixed.
-            if '_KHR_' in extension_name:
+            if '_KHR_' in extension_name and not ('parallel_shader_compile' in extension_name):
                 safe_append(gl_extension_commands, command_name, extension_name)
                 safe_append(gles2_extension_commands, command_name, extension_name)
             else:

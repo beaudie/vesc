@@ -731,6 +731,9 @@ class DispatchTableGL : angle::NonCopyable
     PFNGLBLENDBARRIERPROC blendBarrier                 = nullptr;
     PFNGLPRIMITIVEBOUNDINGBOXPROC primitiveBoundingBox = nullptr;
 
+    // GL_ARB_parallel_shader_compile
+    PFNGLMAXSHADERCOMPILERTHREADSARBPROC maxShaderCompilerThreadsARB = nullptr;
+
     // GL_EXT_debug_marker
     PFNGLINSERTEVENTMARKEREXTPROC insertEventMarkerEXT = nullptr;
     PFNGLPOPGROUPMARKEREXTPROC popGroupMarkerEXT       = nullptr;
@@ -738,6 +741,9 @@ class DispatchTableGL : angle::NonCopyable
 
     // GL_EXT_discard_framebuffer
     PFNGLDISCARDFRAMEBUFFEREXTPROC discardFramebufferEXT = nullptr;
+
+    // GL_KHR_parallel_shader_compile
+    PFNGLMAXSHADERCOMPILERTHREADSKHRPROC maxShaderCompilerThreadsKHR = nullptr;
 
     // GL_NV_internalformat_sample_query
     PFNGLGETINTERNALFORMATSAMPLEIVNVPROC getInternalformatSampleivNV = nullptr;

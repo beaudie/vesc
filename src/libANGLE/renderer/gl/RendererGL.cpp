@@ -175,7 +175,8 @@ RendererGL::RendererGL(std::unique_ptr<FunctionsGL> functions, const egl::Attrib
       mMultiviewClearer(nullptr),
       mUseDebugOutput(false),
       mCapsInitialized(false),
-      mMultiviewImplementationType(MultiviewImplementationTypeGL::UNSPECIFIED)
+      mMultiviewImplementationType(MultiviewImplementationTypeGL::UNSPECIFIED),
+      mNativeParallelCompileEnabled(false)
 {
     ASSERT(mFunctions);
     nativegl_gl::GenerateWorkarounds(mFunctions.get(), &mWorkarounds);
@@ -615,6 +616,36 @@ unsigned int RendererGL::getMaxWorkerContexts()
 {
     // No more than 16 worker contexts.
     return std::min(16u, std::thread::hardware_concurrency());
+}
+
+bool RendererGL::hasNativeParallelCompile()
+{
+    bool useKHR  = true;
+    bool present = mFunctions->hasGLExtension("GL_KHR_parallel_shader_compile") ||
+                   mFunctions->hasGLESExtension("GL_KHR_parallel_shader_compile");
+
+    if (!present && mFunctions->hasGLExtension("GL_ARB_parallel_shader_compile"))
+    {
+        useKHR  = false;
+        present = true;
+    }
+
+    // Nvidia drivers require maxShaderCompilerThreads must be called at least once before it
+    // actually works in parallel.
+    if (present & !mNativeParallelCompileEnabled)
+    {
+        if (useKHR)
+        {
+            mFunctions->maxShaderCompilerThreadsKHR(0xffffffff);
+        }
+        else
+        {
+            mFunctions->maxShaderCompilerThreadsARB(0xffffffff);
+        }
+
+        mNativeParallelCompileEnabled = true;
+    }
+    return present;
 }
 
 ScopedWorkerContextGL::ScopedWorkerContextGL(RendererGL *renderer, std::string *infoLog)

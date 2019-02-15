@@ -33,6 +33,8 @@ class ShaderGL : public ShaderImpl
                                                    std::stringstream *sourceStream,
                                                    std::string *sourcePath) override;
     void compileAsync(const std::string &source, std::string &infoLog) override;
+    bool hasNativeParallelCompile() override;
+    std::shared_ptr<angle::WaitableEvent> compileNativeParallel(const std::string &source) override;
     bool postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog) override;
     std::string getDebugInfo() const override;
 
@@ -40,6 +42,8 @@ class ShaderGL : public ShaderImpl
 
   private:
     void compileAndCheckShader(const char *source);
+    void compileShader(const char *source);
+    void checkShader();
 
     GLuint mShaderID;
     MultiviewImplementationTypeGL mMultiviewImplementationType;
