@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73389fc4_c4225046",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-15T18:02:27Z",
+      "side": 1,
+      "message": "Shabi, is there another change I need to make for this layout type?",
+      "range": {
+        "startLine": 71,
+        "startChar": 8,
+        "endLine": 71,
+        "endChar": 36
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
