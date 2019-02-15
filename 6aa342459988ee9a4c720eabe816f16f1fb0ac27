@@ -22,6 +22,30 @@
       "revId": "6aa342459988ee9a4c720eabe816f16f1fb0ac27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "157076f4_c41b09b8",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-02-15T06:36:03Z",
+      "side": 1,
+      "message": "\u003e\u003e lock.lock(*g_debugMutex); \n\nThere is no such method, I changed to this instead:\n\n  \u003e\u003e lock \u003d std::unique_lock\u003cstd::mutex\u003e(*g_debugMutex);",
+      "parentUuid": "09b5d1c8_583ac1c1",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 5
+      },
+      "revId": "6aa342459988ee9a4c720eabe816f16f1fb0ac27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
