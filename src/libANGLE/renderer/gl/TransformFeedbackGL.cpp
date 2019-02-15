@@ -131,8 +131,17 @@ void TransformFeedbackGL::syncActiveState(const gl::Context *context,
         }
         else
         {
+            // Implementations disagree about what should happen if a different program is bound
+            // when calling EndTransformFeedback. We avoid the ambiguity by always re-binding the
+            // program associated with this transform feedback.
             mStateManager->useProgram(mActiveProgram);
             mFunctions->endTransformFeedback();
+            // Restore the current program if we changed it.
+            const gl::Program *currentProgram = context->getState().getProgram();
+            if (currentProgram)
+            {
+                mStateManager->useProgram(GetImplAs<ProgramGL>(currentProgram)->getProgramID());
+            }
         }
     }
 }
