@@ -11,6 +11,7 @@
 
 #include "common/angleutils.h"
 #include "libANGLE/Shader.h"
+#include "libANGLE/WorkerThread.h"
 
 namespace rx
 {
@@ -30,6 +31,12 @@ class ShaderImpl : angle::NonCopyable
 
     // Uses the GL driver to compile the shader source in a worker thread.
     virtual void compileAsync(const std::string &source, std::string &infoLog) {}
+
+    virtual bool hasNativeParallelCompile() { return false; }
+    virtual std::shared_ptr<angle::WaitableEvent> compileNativeParallel(const std::string &source)
+    {
+        return std::make_shared<angle::WaitableEventDone>();
+    }
 
     // Returns success for compiling on the driver. Returns success.
     virtual bool postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog) = 0;
