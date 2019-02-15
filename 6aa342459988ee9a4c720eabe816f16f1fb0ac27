@@ -46,6 +46,30 @@
       "revId": "6aa342459988ee9a4c720eabe816f16f1fb0ac27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4e91a7e_103e0677",
+        "filename": "src/common/debug.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-15T15:44:36Z",
+      "side": 1,
+      "message": "Oh, I see, lock doesn\u0027t take a mutex.  This LGTM.",
+      "parentUuid": "157076f4_c41b09b8",
+      "range": {
+        "startLine": 154,
+        "startChar": 0,
+        "endLine": 159,
+        "endChar": 5
+      },
+      "revId": "6aa342459988ee9a4c720eabe816f16f1fb0ac27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
