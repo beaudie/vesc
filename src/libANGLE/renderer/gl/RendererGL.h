@@ -180,6 +180,7 @@ class RendererGL : angle::NonCopyable
 
     bool bindWorkerContext(std::string *infoLog);
     void unbindWorkerContext();
+    bool hasNativeParallelCompile();
 
     static unsigned int getMaxWorkerContexts();
 
