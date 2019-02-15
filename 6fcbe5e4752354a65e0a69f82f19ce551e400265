@@ -22,6 +22,30 @@
       "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c277e10_b1704a0a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-15T18:23:30Z",
+      "side": 1,
+      "message": "Per our discussion offline, I would rename this to `ImageLayout::ExternalPreInitialized` to make it clear it\u0027s for an external image whose data source is unknown.\n\nThen use this pipeline stage: `VK_PIPELINE_STAGE_HOST_BIT | VK_PIPELINE_STAGE_ALL_COMMANDS_BIT` and this access mask: `VK_ACCESS_MEMORY_WRITE_BIT`.",
+      "parentUuid": "73389fc4_c4225046",
+      "range": {
+        "startLine": 71,
+        "startChar": 8,
+        "endLine": 71,
+        "endChar": 36
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
