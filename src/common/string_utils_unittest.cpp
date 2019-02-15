@@ -9,6 +9,8 @@
 
 #include "string_utils.h"
 
+#include <clocale>
+
 #include <gtest/gtest.h>
 
 using namespace angle;
@@ -213,6 +215,19 @@ TEST(EndsWithTest, EndsWith)
     ASSERT_TRUE(EndsWith("foobar", ""));
     ASSERT_TRUE(EndsWith("bar", "bar"));
     ASSERT_TRUE(EndsWith("", ""));
+}
+
+// Test that WidenString returns invalid with malformed unicode across platforms.
+TEST(StringUtilsTest, WidenString)
+{
+    std::string asciiString(u8"A\x42");       // "AB", only ASCII characters.
+    std::string incompleteString(u8"A\xc2");  // "A" + incomplete byte sequence.
+
+    Optional<std::vector<wchar_t>> result = WidenString(2u, asciiString.data());
+    ASSERT_TRUE(result.valid());
+
+    result = WidenString(2u, incompleteString.data());
+    ASSERT_FALSE(result.valid());
 }
 
 }  // anonymous namespace
