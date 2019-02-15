@@ -190,6 +190,8 @@ class ContextImpl : public GLImplFactory
                      const char *function,
                      unsigned int line);
 
+    virtual void setMaxShaderCompilerThreads(GLuint count) {}
+
   protected:
     const gl::State &mState;
     gl::MemoryProgramCache *mMemoryProgramCache;

@@ -28,23 +28,23 @@ class ShaderGL : public ShaderImpl
 
     void destroy() override;
 
-    // ShaderImpl implementation
-    ShCompileOptions prepareSourceAndReturnOptions(const gl::Context *context,
-                                                   std::stringstream *sourceStream,
-                                                   std::string *sourcePath) override;
-    void compileAsync(const std::string &source, std::string &infoLog) override;
-    bool postTranslateCompile(gl::ShCompilerInstance *compiler, std::string *infoLog) override;
+    std::shared_ptr<angle::WaitableEvent> compile(
+        gl::TranslateTaskConstructor &&translateTaskConstructor,
+        gl::PostTranslateFunctor &&postTranslateFunctor,
+        const gl::Context *context) override;
+
     std::string getDebugInfo() const override;
 
     GLuint getShaderID() const;
 
   private:
     void compileAndCheckShader(const char *source);
+    void compileShader(const char *source);
+    void checkShader();
 
     GLuint mShaderID;
     MultiviewImplementationTypeGL mMultiviewImplementationType;
     std::shared_ptr<RendererGL> mRenderer;
-    bool mFallbackToMainThread;
     GLint mCompileStatus;
     std::string mInfoLog;
 };
