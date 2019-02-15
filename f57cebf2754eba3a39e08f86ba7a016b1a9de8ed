@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70f3cbe0_d1511dd3",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-15T16:47:12Z",
+      "side": 1,
+      "message": "nit: inline is redundant for in-class members",
+      "range": {
+        "startLine": 291,
+        "startChar": 4,
+        "endLine": 291,
+        "endChar": 11
+      },
+      "revId": "f57cebf2754eba3a39e08f86ba7a016b1a9de8ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
