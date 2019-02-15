@@ -9,6 +9,8 @@
 
 #include "string_utils.h"
 
+#include <clocale>
+
 #include <gtest/gtest.h>
 
 using namespace angle;
@@ -213,6 +215,40 @@ TEST(EndsWithTest, EndsWith)
     ASSERT_TRUE(EndsWith("foobar", ""));
     ASSERT_TRUE(EndsWith("bar", "bar"));
     ASSERT_TRUE(EndsWith("", ""));
+}
+
+// Test that WidenString exits with malformed unicode across platforms.
+TEST(StringUtilsTest, WidenString)
+{
+    // Query the original system locale.
+    const char *systemTextLocale = setlocale(LC_CTYPE, nullptr);
+
+    std::string posixString(u8"Hello");      // Only ASCII characters.
+    std::string nonPosixString(u8"Приве́т");  // Non-ASCII (i.e. wide) characters.
+
+    // Set locale to the POSIX locale, which only supports ASCII characters, not wide characters.
+    // This is global state, not thread safe.
+    setlocale(LC_CTYPE, "C");
+
+    // Test both ASCII and wide character strings (only ASCII is supported).
+    Optional<std::vector<wchar_t>> result = WidenString(5u, posixString.data());
+    ASSERT_TRUE(result.valid());
+
+    result = WidenString(6u, nonPosixString.data());
+    ASSERT_FALSE(result.valid());
+
+    // Set locale to a wide-string supporting locale. This is global state, not thread safe.
+    setlocale(LC_CTYPE, "en_US.utf8");
+
+    // Test both ASCII and wide character strings (both are supported).
+    result = WidenString(5u, posixString.data());
+    ASSERT_TRUE(result.valid());
+
+    result = WidenString(6u, nonPosixString.data());
+    ASSERT_TRUE(result.valid());
+
+    // Restore the original system locale. This is global state, not thread safe.
+    setlocale(LC_CTYPE, systemTextLocale);
 }
 
 }  // anonymous namespace
