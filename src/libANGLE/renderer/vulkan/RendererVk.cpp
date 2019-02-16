@@ -584,7 +584,7 @@ void RendererVk::notifyDeviceLost()
 
     mCommandGraph.clear();
     nextSerial();
-    freeAllInFlightResources();
+    freeAllInFlightResources(nullptr);
 
     mDisplay->notifyDeviceLost();
 }
@@ -1250,7 +1250,7 @@ angle::Result RendererVk::finish(vk::Context *context)
 
     ASSERT(mQueue != VK_NULL_HANDLE);
     ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueue));
-    freeAllInFlightResources();
+    freeAllInFlightResources(context);
 
     if (mGpuEventsEnabled)
     {
@@ -1271,7 +1271,7 @@ angle::Result RendererVk::finish(vk::Context *context)
     return angle::Result::Continue;
 }
 
-void RendererVk::freeAllInFlightResources()
+void RendererVk::freeAllInFlightResources(vk::Context *context)
 {
     for (CommandBatch &batch : mInFlightCommands)
     {
@@ -1286,6 +1286,13 @@ void RendererVk::freeAllInFlightResources()
         batch.commandPool.destroy(mDevice);
     }
     mInFlightCommands.clear();
+
+    if (context)
+    {
+        angle::FixedVector<VkSemaphore, kMaxWaitSemaphores> waitSemaphores;
+        angle::FixedVector<VkPipelineStageFlags, kMaxWaitSemaphores> waitStageMasks;
+        getSubmitWaitSemaphores(context, &waitSemaphores, &waitStageMasks);
+    }
 
     for (auto &garbage : mGarbage)
     {
