@@ -289,7 +289,9 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
       mPreTransform(VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR),
       mCompositeAlpha(VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR),
       mCurrentSwapchainImageIndex(0),
-      mCurrentSwapHistoryIndex(0)
+      mCurrentSwapHistoryIndex(0),
+      mPreviousSwapHistoryIndex(0),
+      mSwapchainOutOfDate(false)
 {
     mDepthStencilRenderTarget.init(&mDepthStencilImage, &mDepthStencilImageView, 0, nullptr);
 }
@@ -308,6 +310,7 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     VkInstance instance  = renderer->getInstance();
 
     // We might not need to flush the pipe here.
+    (void)present(displayVk, nullptr, 0);
     (void)renderer->finish(displayVk);
 
     releaseSwapchainImages(renderer);
@@ -668,24 +671,28 @@ egl::Error WindowSurfaceVk::swapWithDamage(const gl::Context *context,
                                            EGLint n_rects)
 {
     DisplayVk *displayVk = vk::GetImpl(context->getCurrentDisplay());
-    angle::Result result = swapImpl(displayVk, rects, n_rects);
+    angle::Result tempResult = present(displayVk, rects, n_rects);
+    angle::Result result =
+        (tempResult == angle::Result::Continue) ? swapImpl(displayVk) : tempResult;
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
 egl::Error WindowSurfaceVk::swap(const gl::Context *context)
 {
     DisplayVk *displayVk = vk::GetImpl(context->getCurrentDisplay());
-    angle::Result result = swapImpl(displayVk, nullptr, 0);
+    angle::Result tempResult = present(displayVk, nullptr, 0);
+    angle::Result result =
+        (tempResult == angle::Result::Continue) ? swapImpl(displayVk) : tempResult;
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
-angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk, EGLint *rects, EGLint n_rects)
+angle::Result WindowSurfaceVk::present(DisplayVk *displayVk, EGLint *rects, EGLint n_rects)
 {
     RendererVk *renderer = displayVk->getRenderer();
 
     // Throttle the submissions to avoid getting too far ahead of the GPU.
     {
-        TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::swapImpl: Throttle CPU");
+        TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present: Throttle CPU");
         SwapHistory &swap = mSwapHistory[mCurrentSwapHistoryIndex];
         ANGLE_TRY(renderer->finishToSerial(displayVk, swap.serial));
         if (swap.swapchain != VK_NULL_HANDLE)
@@ -706,7 +713,7 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk, EGLint *rects, EGL
 
     // Remember the serial of the last submission.
     mSwapHistory[mCurrentSwapHistoryIndex].serial = renderer->getLastSubmittedQueueSerial();
-    uint32_t currentSwapHistoryIndex              = mCurrentSwapHistoryIndex;
+    mPreviousSwapHistoryIndex                     = mCurrentSwapHistoryIndex;
     ++mCurrentSwapHistoryIndex;
     mCurrentSwapHistoryIndex =
         mCurrentSwapHistoryIndex == mSwapHistory.size() ? 0 : mCurrentSwapHistoryIndex;
@@ -754,13 +761,19 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk, EGLint *rects, EGL
 
     // If SUBOPTIMAL/OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before
     // continuing.
-    bool swapchainOutOfDate = result == VK_SUBOPTIMAL_KHR || result == VK_ERROR_OUT_OF_DATE_KHR;
-    if (!swapchainOutOfDate)
+    mSwapchainOutOfDate = result == VK_SUBOPTIMAL_KHR || result == VK_ERROR_OUT_OF_DATE_KHR;
+    if (!mSwapchainOutOfDate)
     {
         ANGLE_VK_TRY(displayVk, result);
     }
 
-    ANGLE_TRY(checkForOutOfDateSwapchain(displayVk, currentSwapHistoryIndex, swapchainOutOfDate));
+    return angle::Result::Continue;
+}
+
+angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk)
+{
+    ANGLE_TRY(
+        checkForOutOfDateSwapchain(displayVk, mPreviousSwapHistoryIndex, mSwapchainOutOfDate));
 
     {
         // Note: TRACE_EVENT0 is put here instead of inside the function to workaround this issue:
@@ -770,6 +783,7 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk, EGLint *rects, EGL
         ANGLE_TRY(nextSwapchainImage(displayVk));
     }
 
+    RendererVk *renderer = displayVk->getRenderer();
     ANGLE_TRY(renderer->syncPipelineCacheVk(displayVk));
 
     return angle::Result::Continue;
