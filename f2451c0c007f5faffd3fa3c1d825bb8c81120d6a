@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc3ebd69_bebc6113",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-16T03:37:29Z",
+      "side": 1,
+      "message": "Interesting find, but I think your solution is kind of an unintended side effect. That is, `WindowSurfaceVk::destroy()` calls `RendererVk::finish()`, but it may not necessarily have to do that (it could instead `finishToSerial` to the maximum serial it has presented at).\n\nIn fact, `WindowSurfaceVk::destroy()` is not returning the acquired image back to the swapchain before destroying it (which sounds like should have been a validation error, but apparently not disallowed by the spec). The problem could be solved by doing the first half of `swap()` upon `destroy()` (followed by the `finishToSerial`, or just `finish` for now).\n\nImagine the first part of `swapImpl()` refactored into another function `present()` which would be the code up to but NOT including `checkForOutOfDateSwapchain`. Then in `destroy()`, before the `finish()` call, you could do:\n\n    (void)present(displayVk, \u0026outOfDate_unused_here);\n    (void)renderer-\u003efinish(displayVk);\n\nThis would return the image back to the swapchain, making sure the semaphores are used up. Without the `nextSwapchainImage` call, there would be no stray semaphore.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 25
+      },
+      "revId": "f2451c0c007f5faffd3fa3c1d825bb8c81120d6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
