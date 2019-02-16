@@ -154,7 +154,8 @@ class WindowSurfaceVk : public SurfaceImpl
                                              bool presentOutOfDate);
     void releaseSwapchainImages(RendererVk *renderer);
     angle::Result nextSwapchainImage(DisplayVk *displayVk);
-    angle::Result swapImpl(DisplayVk *displayVk, EGLint *rects, EGLint n_rects);
+    angle::Result present(DisplayVk *displayVk, EGLint *rects, EGLint n_rects);
+    angle::Result swapImpl(DisplayVk *displayVk);
     angle::Result resizeSwapHistory(DisplayVk *displayVk, size_t imageCount);
 
     VkSurfaceCapabilitiesKHR mSurfaceCaps;
@@ -196,6 +197,8 @@ class WindowSurfaceVk : public SurfaceImpl
     };
     std::vector<SwapHistory> mSwapHistory;
     size_t mCurrentSwapHistoryIndex;
+    size_t mPreviousSwapHistoryIndex;
+    bool mSwapchainOutOfDate;
 
     vk::ImageHelper mDepthStencilImage;
     vk::ImageView mDepthStencilImageView;

@@ -261,7 +261,6 @@
 2546 ANDROID : dEQP-EGL.functional.partial_update.odd_clear_* = FAIL
 2546 ANDROID : dEQP-EGL.functional.partial_update.odd_render_* = FAIL
 2546 ANDROID : dEQP-EGL.functional.partial_update.render_* = FAIL
-2546 ANDROID : dEQP-EGL.functional.query_context.get_current_context.* = FAIL
 2546 ANDROID : dEQP-EGL.functional.query_context.get_current_display.* = FAIL
 2546 ANDROID : dEQP-EGL.functional.query_context.get_current_surface.r* = FAIL
 2546 ANDROID : dEQP-EGL.functional.query_context.query_context.* = FAIL
