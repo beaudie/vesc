@@ -222,7 +222,7 @@ class RendererVk : angle::NonCopyable
     angle::Result submitFrame(vk::Context *context,
                               const VkSubmitInfo &submitInfo,
                               vk::CommandBuffer &&commandBuffer);
-    void freeAllInFlightResources();
+    void freeAllInFlightResources(vk::Context *context);
     angle::Result flushCommandGraph(vk::Context *context, vk::CommandBuffer *commandBatch);
     void initFeatures(const std::vector<VkExtensionProperties> &deviceExtensionProps);
     void initPipelineCacheVkKey();
