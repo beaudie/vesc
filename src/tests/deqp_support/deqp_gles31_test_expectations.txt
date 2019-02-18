@@ -69,7 +69,6 @@
 1951 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.ssbo_block.ssbo_using_shared_qualifier_tests = SKIP
 
 // D3D11 Failing Tests
-1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_shared_memory_size_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_compute_atomic_counters_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_atomic_counter_buffer_size_* = FAIL
 1442 D3D11 : dEQP-GLES31.functional.state_query.integer.max_combined_atomic_counters* = FAIL
