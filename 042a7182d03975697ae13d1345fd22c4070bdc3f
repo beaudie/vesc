@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "b5956bf3_0d69d17e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-19T22:26:35Z",
+      "side": 1,
+      "message": "Your validation error should be due to this. I\u0027m not sure how this HASN\u0027T been crashing all this time!\n\nThe vector\u0027s pointer is accessed through `presentRegions` in `vkQueuePresentKHR`, but it\u0027s destroyed at the end of this scope. Simply moving the vector out of the `if` should fix your issue.",
+      "revId": "042a7182d03975697ae13d1345fd22c4070bdc3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "156ac1d5_a6826fa7",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 5
