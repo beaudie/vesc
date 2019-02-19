@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37a53c3e_6f8c5629",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-19T22:18:57Z",
+      "side": 1,
+      "message": "Please add a `bool *swapchainOutOfDateOut` parameter to get the out-of-date bool out of the function.",
+      "revId": "042a7182d03975697ae13d1345fd22c4070bdc3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "156ac1d5_a6826fa7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-19T22:18:57Z",
+      "side": 1,
+      "message": "Please make `swapImpl` call `present` itself, so the callers don\u0027t need to bother:\n\nangle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk, EGLint *rects, EGLint n_rects)\n{\n    uint32_t currentSwapHistoryIndex \u003d mCurrentSwapHistoryIndex;\n    bool swapchainOutOfDate \u003d false;\n\n    // present the current swapchain image.\n    ANGLE_TRY(present(displayVk, rects, n_rects, \u0026swapchainOutOfDate));\n\n    ANGLE_TRY(\n        checkForOutOfDateSwapchain(displayVk, currentSwapHistoryIndex, swapchainOutOfDate));\n\n    // Acquire the next available swapchain image.\n    ...\n}",
+      "revId": "042a7182d03975697ae13d1345fd22c4070bdc3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aaf4a13_9a0b4d2b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-19T22:18:57Z",
+      "side": 1,
+      "message": "I would really prefer not to keep these info in the class when they only need to just be passed from one function to another. See the other comments.",
+      "revId": "042a7182d03975697ae13d1345fd22c4070bdc3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
