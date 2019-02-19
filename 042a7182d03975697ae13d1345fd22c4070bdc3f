@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "811b8bca_b9fd6692",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-19T22:19:41Z",
+      "side": 1,
+      "message": "Also, a reminder to update the commit message",
+      "revId": "042a7182d03975697ae13d1345fd22c4070bdc3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "37a53c3e_6f8c5629",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 5
