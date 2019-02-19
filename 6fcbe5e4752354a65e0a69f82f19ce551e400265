@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "8d7706b9_080bed56",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-19T22:07:44Z",
+      "side": 1,
+      "message": "Could be refactored into this for a bit of brevity:\n\n    else\n    {\n        if (egl::IsRenderbufferTarget(mState.target))\n        {\n            RenderbufferVk *renderbufferVk \u003d\n                GetImplAs\u003cRenderbufferVk\u003e(GetAs\u003cgl::Renderbuffer\u003e(mState.source));\n            mImage \u003d renderbufferVk-\u003egetImage();\n        }\n        else if (egl::IsExternalImageTarget(mState.target))\n        {\n            const ExternalImageSiblingVk *externalImageSibling \u003d\n                GetImplAs\u003cExternalImageSiblingVk\u003e(GetAs\u003cegl::ExternalImageSibling\u003e    (mState.source));\n            mImage \u003d externalImageSibling-\u003egetImage();\n        }\n\n        // Make sure a staging buffer is ready to use to upload data\n        ASSERT(mContext \u003d\u003d nullptr);\n        DisplayVk *displayVk \u003d vk::GetImpl(display);\n        RendererVk *renderer \u003d displayVk-\u003egetRenderer();\n        mImage-\u003einitStagingBuffer(renderer);\n\n        mOwnsImage \u003d false;\n\n        mImageTextureType \u003d gl::TextureType::_2D;\n        mImageLevel       \u003d 0;\n        mImageLayer       \u003d 0;\n    }",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 5
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f85f3045_621d60b6",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 15
@@ -58,6 +81,46 @@
         "startChar": 51,
         "endLine": 35,
         "endChar": 73
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b96fbd7_040cc661",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-19T22:07:44Z",
+      "side": 1,
+      "message": "Are AHB images necessarily renderable? If not, shouldn\u0027t this be: `format.redBits \u003e 0 || format.depthBits \u003e 0 || format.stencilBits \u003e 0`?",
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "001f945f_1d30df32",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-19T22:07:44Z",
+      "side": 1,
+      "message": "1?",
+      "range": {
+        "startLine": 183,
+        "startChar": 11,
+        "endLine": 183,
+        "endChar": 12
       },
       "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -123,6 +186,30 @@
       "writtenOn": "2019-02-19T18:45:20Z",
       "side": 1,
       "message": "I think we might want a specific API to transition queues. I\u0027m worried some driver might only special case VK_QUEUE_FAMILY_IGNORED and might not check for the queues being equal. We could do this check. But it seems like a special case to transition queues.",
+      "range": {
+        "startLine": 1568,
+        "startChar": 46,
+        "endLine": 1568,
+        "endChar": 70
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff4c0563_3b3827a8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-19T22:07:44Z",
+      "side": 1,
+      "message": "That could work. Provided we do an immediate queue transfer when we receive the image. That way we don\u0027t need to store the current and renderer queue families either.",
+      "parentUuid": "f3e813ba_d5b1280b",
       "range": {
         "startLine": 1568,
         "startChar": 46,
