@@ -2,6 +2,69 @@
   "comments": [
     {
       "key": {
+        "uuid": "4b7148f9_438604d6",
+        "filename": "src/common/android_util.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-19T18:45:20Z",
+      "side": 1,
+      "message": "If you feel like it you can make a split prior CL that moves these files, then move the properties code in this CL. That way it\u0027ll get flagged as a renamed/moved file.",
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f85f3045_621d60b6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-19T18:45:20Z",
+      "side": 1,
+      "message": "maybe we should stick to ANGLE_PLATFORM_ANDROID for the preprocessor checks. Presumably this is something we are in control of by importing the Vulkan headers and extension names as below.",
+      "range": {
+        "startLine": 926,
+        "startChar": 4,
+        "endLine": 926,
+        "endChar": 54
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42353953_da6ca687",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-19T18:45:20Z",
+      "side": 1,
+      "message": "nit: you can use the \u003d {} thing here.",
+      "range": {
+        "startLine": 35,
+        "startChar": 51,
+        "endLine": 35,
+        "endChar": 73
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "73389fc4_c4225046",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -42,6 +105,75 @@
         "startChar": 8,
         "endLine": 71,
         "endChar": 36
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3e813ba_d5b1280b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-19T18:45:20Z",
+      "side": 1,
+      "message": "I think we might want a specific API to transition queues. I\u0027m worried some driver might only special case VK_QUEUE_FAMILY_IGNORED and might not check for the queues being equal. We could do this check. But it seems like a special case to transition queues.",
+      "range": {
+        "startLine": 1568,
+        "startChar": 46,
+        "endLine": 1568,
+        "endChar": 70
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45cc3760_06998d71",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-19T18:45:20Z",
+      "side": 1,
+      "message": "this is a bit too bad. Maybe we could figure out a way we don\u0027t need to store this info.",
+      "range": {
+        "startLine": 747,
+        "startChar": 0,
+        "endLine": 752,
+        "endChar": 0
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e2b29b3_b261d0e3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-19T18:45:20Z",
+      "side": 1,
+      "message": "again I would probably just make this #if defined(ANGLE_PLATFORM_ANDROID)",
+      "range": {
+        "startLine": 412,
+        "startChar": 7,
+        "endLine": 412,
+        "endChar": 57
       },
       "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
