@@ -1,22 +1,16 @@
-// Copyright (C) 2011 Milo Yip
+// Tencent is pleased to support the open source community by making RapidJSON available.
+// 
+// Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip. All rights reserved.
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// Licensed under the MIT License (the "License"); you may not use this file except
+// in compliance with the License. You may obtain a copy of the License at
 //
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
+// http://opensource.org/licenses/MIT
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
+// Unless required by applicable law or agreed to in writing, software distributed 
+// under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+// CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+// specific language governing permissions and limitations under the License.
 
 #ifndef RAPIDJSON_IEEE754_
 #define RAPIDJSON_IEEE754_
@@ -24,54 +18,37 @@
 #include "../rapidjson.h"
 
 RAPIDJSON_NAMESPACE_BEGIN
-namespace internal
-{
+namespace internal {
 
-class Double
-{
-  public:
+class Double {
+public:
     Double() {}
-    Double(double d) : d(d) {}
-    Double(uint64_t u) : u(u) {}
+    Double(double d) : d_(d) {}
+    Double(uint64_t u) : u_(u) {}
 
-    double Value() const { return d; }
-    uint64_t Uint64Value() const { return u; }
+    double Value() const { return d_; }
+    uint64_t Uint64Value() const { return u_; }
 
-    double NextPositiveDouble() const
-    {
+    double NextPositiveDouble() const {
         RAPIDJSON_ASSERT(!Sign());
-        return Double(u + 1).Value();
+        return Double(u_ + 1).Value();
     }
 
-    double PreviousPositiveDouble() const
-    {
-        RAPIDJSON_ASSERT(!Sign());
-        if (d == 0.0)
-            return 0.0;
-        else
-            return Double(u - 1).Value();
-    }
+    bool Sign() const { return (u_ & kSignMask) != 0; }
+    uint64_t Significand() const { return u_ & kSignificandMask; }
+    int Exponent() const { return static_cast<int>(((u_ & kExponentMask) >> kSignificandSize) - kExponentBias); }
 
-    bool Sign() const { return (u & kSignMask) != 0; }
-    uint64_t Significand() const { return u & kSignificandMask; }
-    int Exponent() const { return ((u & kExponentMask) >> kSignificandSize) - kExponentBias; }
+    bool IsNan() const { return (u_ & kExponentMask) == kExponentMask && Significand() != 0; }
+    bool IsInf() const { return (u_ & kExponentMask) == kExponentMask && Significand() == 0; }
+    bool IsNanOrInf() const { return (u_ & kExponentMask) == kExponentMask; }
+    bool IsNormal() const { return (u_ & kExponentMask) != 0 || Significand() == 0; }
+    bool IsZero() const { return (u_ & (kExponentMask | kSignificandMask)) == 0; }
 
-    bool IsNan() const { return (u & kExponentMask) == kExponentMask && Significand() != 0; }
-    bool IsInf() const { return (u & kExponentMask) == kExponentMask && Significand() == 0; }
-    bool IsNormal() const { return (u & kExponentMask) != 0 || Significand() == 0; }
+    uint64_t IntegerSignificand() const { return IsNormal() ? Significand() | kHiddenBit : Significand(); }
+    int IntegerExponent() const { return (IsNormal() ? Exponent() : kDenormalExponent) - kSignificandSize; }
+    uint64_t ToBias() const { return (u_ & kSignMask) ? ~u_ + 1 : u_ | kSignMask; }
 
-    uint64_t IntegerSignificand() const
-    {
-        return IsNormal() ? Significand() | kHiddenBit : Significand();
-    }
-    int IntegerExponent() const
-    {
-        return (IsNormal() ? Exponent() : kDenormalExponent) - kSignificandSize;
-    }
-    uint64_t ToBias() const { return (u & kSignMask) ? ~u + 1 : u | kSignMask; }
-
-    static unsigned EffectiveSignificandSize(int order)
-    {
+    static int EffectiveSignificandSize(int order) {
         if (order >= -1021)
             return 53;
         else if (order <= -1074)
@@ -80,23 +57,22 @@ class Double
             return order + 1074;
     }
 
-  private:
-    static const int kSignificandSize      = 52;
-    static const int kExponentBias         = 0x3FF;
-    static const int kDenormalExponent     = 1 - kExponentBias;
-    static const uint64_t kSignMask        = RAPIDJSON_UINT64_C2(0x80000000, 0x00000000);
-    static const uint64_t kExponentMask    = RAPIDJSON_UINT64_C2(0x7FF00000, 0x00000000);
+private:
+    static const int kSignificandSize = 52;
+    static const int kExponentBias = 0x3FF;
+    static const int kDenormalExponent = 1 - kExponentBias;
+    static const uint64_t kSignMask = RAPIDJSON_UINT64_C2(0x80000000, 0x00000000);
+    static const uint64_t kExponentMask = RAPIDJSON_UINT64_C2(0x7FF00000, 0x00000000);
     static const uint64_t kSignificandMask = RAPIDJSON_UINT64_C2(0x000FFFFF, 0xFFFFFFFF);
-    static const uint64_t kHiddenBit       = RAPIDJSON_UINT64_C2(0x00100000, 0x00000000);
+    static const uint64_t kHiddenBit = RAPIDJSON_UINT64_C2(0x00100000, 0x00000000);
 
-    union
-    {
-        double d;
-        uint64_t u;
+    union {
+        double d_;
+        uint64_t u_;
     };
 };
 
-}  // namespace internal
+} // namespace internal
 RAPIDJSON_NAMESPACE_END
 
-#endif  // RAPIDJSON_IEEE754_
+#endif // RAPIDJSON_IEEE754_

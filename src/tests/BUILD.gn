@@ -116,7 +116,10 @@ template("angle_tests_main") {
     } else {
       sources = [
         "$main.cpp",
+        "test_utils/runner/TestSuite.cpp",
+        "test_utils/runner/TestSuite.h",
       ]
+      deps += [ "third_party/rapidjson:rapidjson" ]
     }
   }
 }
