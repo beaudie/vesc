@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f418a77d_e8525403",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2019-02-19T19:01:16Z",
+      "side": 1,
+      "message": "@jmadill: Do we need to set the binding to 0 here? It would be invalid to do this invalid call on state restoration when we switch virtualized gl contexts, but I am unfamiliar with how state restoration works in ANGLE.",
+      "revId": "268c77e8aacdd4b482e18b589e2f005fcce560a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
