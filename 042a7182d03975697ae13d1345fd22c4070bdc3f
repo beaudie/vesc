@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "5f52cc42_fcd3c069",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-19T22:40:00Z",
+      "side": 1,
+      "message": "Good catch!  I don\u0027t know what the validation error is, but this should be fixed either way.",
+      "parentUuid": "b5956bf3_0d69d17e",
+      "revId": "042a7182d03975697ae13d1345fd22c4070bdc3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "156ac1d5_a6826fa7",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 5
