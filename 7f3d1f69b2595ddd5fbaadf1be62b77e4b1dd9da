@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "8fb87b60_4449cf67",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-19T20:59:51Z",
+      "side": 1,
+      "message": "I believe this is a header to your suggestions that follow. If there are style changes beyond other comments, let me know what\u0027s missing.",
+      "parentUuid": "449b8f30_5388f7a3",
+      "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d20e6bb9_e1d57af2",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 1
@@ -62,6 +80,30 @@
       "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d733bad_f79b887c",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-19T20:59:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d20e6bb9_e1d57af2",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 20
+      },
+      "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "559e5abe_a928b2b2",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-19T20:59:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1450492f_d9f92008",
+      "range": {
+        "startLine": 76,
+        "startChar": 4,
+        "endLine": 76,
+        "endChar": 52
+      },
+      "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8297051b_4847bff6",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 1
@@ -108,6 +174,30 @@
       "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6e89a89_58925fa0",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-19T20:59:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8297051b_4847bff6",
+      "range": {
+        "startLine": 82,
+        "startChar": 4,
+        "endLine": 82,
+        "endChar": 67
+      },
+      "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -134,6 +224,30 @@
     },
     {
       "key": {
+        "uuid": "3f9d9505_73d71319",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-19T20:59:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbe74bdf_26630a77",
+      "range": {
+        "startLine": 107,
+        "startChar": 11,
+        "endLine": 107,
+        "endChar": 15
+      },
+      "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2d7390d8_4d62838d",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 1
@@ -148,6 +262,24 @@
       "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7deadb00_5d0de176",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-19T20:59:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d7390d8_4d62838d",
+      "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -174,6 +306,30 @@
     },
     {
       "key": {
+        "uuid": "ae514618_c1f22392",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-19T20:59:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8665242c_2cf4a539",
+      "range": {
+        "startLine": 193,
+        "startChar": 11,
+        "endLine": 193,
+        "endChar": 20
+      },
+      "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cc39c9a9_cea155f9",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 1
@@ -194,6 +350,30 @@
       "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f47dcdc_586f5a05",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-19T20:59:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc39c9a9_cea155f9",
+      "range": {
+        "startLine": 198,
+        "startChar": 18,
+        "endLine": 198,
+        "endChar": 25
+      },
+      "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -220,6 +400,30 @@
     },
     {
       "key": {
+        "uuid": "82c0ba67_baadc341",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-19T20:59:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11c97443_a2ab1242",
+      "range": {
+        "startLine": 224,
+        "startChar": 11,
+        "endLine": 224,
+        "endChar": 22
+      },
+      "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d75fe2e2_bbfabf8c",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 1
@@ -243,6 +447,30 @@
     },
     {
       "key": {
+        "uuid": "a4ff662b_b74ab15b",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-19T20:59:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d75fe2e2_bbfabf8c",
+      "range": {
+        "startLine": 229,
+        "startChar": 37,
+        "endLine": 229,
+        "endChar": 48
+      },
+      "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66cd67c0_8a8792c8",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 1
@@ -263,6 +491,30 @@
       "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e2e6d79_a12ddb20",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-19T20:59:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66cd67c0_8a8792c8",
+      "range": {
+        "startLine": 242,
+        "startChar": 4,
+        "endLine": 252,
+        "endChar": 56
+      },
+      "revId": "7f3d1f69b2595ddd5fbaadf1be62b77e4b1dd9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
