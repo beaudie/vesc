@@ -783,7 +783,15 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::R10G10B10A2_UNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat               = GL_RGB10_A2;
+            textureFormatID              = angle::FormatID::R10G10B10A2_UNORM;
+            vkTextureFormat              = VK_FORMAT_A2B10G10R10_UNORM_PACK32;
+            textureInitializerFunction   = nullptr;
+            bufferFormatID               = angle::FormatID::R10G10B10A2_UNORM;
+            vkBufferFormat               = VK_FORMAT_A2B10G10R10_UNORM_PACK32;
+            vkBufferFormatIsPacked       = true;
+            vertexLoadFunction           = nullptr;
+            vertexLoadRequiresConversion = false;
             break;
 
         case angle::FormatID::R10G10B10A2_USCALED:
