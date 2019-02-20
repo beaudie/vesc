@@ -87,7 +87,7 @@ void main()
 TEST_P(MaxTextureSizeTest, SpecificationTexImage)
 {
     // http://anglebug.com/2690
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsIntel() && IsVulkan());
+    // ANGLE_SKIP_TEST_IF(IsWindows() && IsIntel() && IsVulkan());
 
     GLuint tex;
     glGenTextures(1, &tex);
@@ -115,6 +115,10 @@ TEST_P(MaxTextureSizeTest, SpecificationTexImage)
             pixel[3] = 255;
         }
     }
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth + 4, textureHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA,
                  GL_UNSIGNED_BYTE, &data[0]);
@@ -234,6 +238,11 @@ TEST_P(MaxTextureSizeTest, RenderToTexture)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, textureWidth, textureHeight + 4, 0, GL_BGRA_EXT,
+                 GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, textureWidth, textureHeight, 0, GL_BGRA_EXT,
                  GL_UNSIGNED_BYTE, nullptr);
     EXPECT_GL_NO_ERROR();
