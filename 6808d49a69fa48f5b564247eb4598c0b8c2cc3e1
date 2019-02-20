@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b38dc9c6_ef1db1b1",
+        "filename": "src/common/PoolAlloc_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-20T20:18:32Z",
+      "side": 1,
+      "message": "this is a good use case for parameterized tests:\n\nhttps://github.com/google/googletest/blob/master/googletest/docs/advanced.md#value-parameterized-tests",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 9
+      },
+      "revId": "6808d49a69fa48f5b564247eb4598c0b8c2cc3e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
