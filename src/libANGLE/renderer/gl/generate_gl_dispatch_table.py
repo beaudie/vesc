@@ -11,12 +11,21 @@ import os
 import re
 import xml.etree.ElementTree as etree
 from datetime import date
+import pprint
 
 # Set the CWD to the script directory.
 os.chdir(os.path.dirname(os.path.abspath(sys.argv[0])))
 
 sys.path.append('..')
 import angle_format
+
+def ensure_api_entry_exists(the_dict, command, proc, api):
+    if command not in the_dict:
+        the_dict[command] = {}
+    if api not in the_dict[command]:
+        the_dict[command][api] = {}
+        the_dict[command][api]['extensions'] = {}
+    return the_dict[command][api]
 
 def safe_append(the_dict, key, element):
     if key not in the_dict:
@@ -34,7 +43,49 @@ data_source_name = 'gl_bindings_data.json'
 json_data = angle_format.load_json(data_source_name)
 xml_root = etree.parse(gl_xml_path).getroot()
 
-api_feature_info = {}
+extension_suffixes =[
+    '3DFX',
+    '3DL',
+    'AMD',
+    'ANDROID',
+    'ANGLE',
+    'APPLE',
+    'ARB',
+    'ARM',
+    'ATI',
+    'DMP',
+    'EXT',
+    'FJ',
+    'GREMEDY',
+    'HP',
+    'I3D',
+    'IBM',
+    'IGLOO',
+    'IMG',
+    'INGR',
+    'INTEL',
+    'KHR',
+    'MESA',
+    'MESAX',
+    'NV',
+    'NVX',
+    'OES',
+    'OML',
+    'OVR',
+    'PGI',
+    'QCOM',
+    'REND',
+    'S3',
+    'SGI',
+    'SGIS',
+    'SGIX',
+    'SUN',
+    'SUNX',
+    'VIV',
+    'WIN',
+]
+
+commands = {}
 
 core_removed_eps = []
 for core_removed_ep in xml_root.findall('feature/remove'):
@@ -47,43 +98,68 @@ for feature in xml_root.findall('feature'):
     name = feature.attrib['name']
     number = feature.attrib['number']
 
-    # OpenGL ES 3.x versions are listed as api 'gles2'
-    if api != 'gl' and api != 'gles2':
-        continue
-
     for command in feature.findall('./require/command'):
         command_name = command.attrib['name']
-        safe_append(api_feature_info, command_name, (api, name, number))
+        command_info = ensure_api_entry_exists(commands, command_name, api)
+        major, minor = number.split(".")
+        command_info['version'] = {
+            'major': major,
+            'minor': minor
+        }
 
-gl_extension_commands = {}
-gles2_extension_commands = {}
-both_extension_commands = {}
+#gl_extension_commands = {}
+#gles2_extension_commands = {}
 
 for extension in xml_root.findall('extensions/extension'):
     extension_name = extension.attrib['name']
-    support = extension.attrib['supported'].split('|')
-    for command in extension.findall('./require/command'):
-        command_name = command.attrib['name']
-        if 'gl' in support and 'gles2' in support:
-            # Special case for KHR extensions, since in GLES they are suffixed.
-            if '_KHR_' in extension_name:
-                safe_append(gl_extension_commands, command_name, extension_name)
-                safe_append(gles2_extension_commands, command_name, extension_name)
-            else:
-                safe_append(both_extension_commands, command_name, extension_name)
-        elif 'gl' in support:
-            safe_append(gl_extension_commands, command_name, extension_name)
-        elif 'gles2' in support:
-            safe_append(gles2_extension_commands, command_name, extension_name)
+    supported = extension.attrib['supported'].split('|')
+    for require in extension.findall('./require'):
+        # If the 'require' element has an API, only add the commands to that specific API, otherwise inherit the APIs from the 'supported' attribute of the extension element
+        apis = [ ]
+        if 'api' in extension.attrib:
+            apis.append(extension.attrib['api'])
+        else:
+            apis = supported
+
+        for command in require.findall('./command'):
+            proc_name = command.attrib['name']
+            command_name = proc_name
+
+            # Remove the extension suffixes from commands that become core
+            for extension_suffix in extension_suffixes:
+                if command_name.endswith(extension_suffix):
+                    bare_command = command_name[:-len(extension_suffix)]
+                    if bare_command in commands:
+                        command_name = bare_command
+                        break
+
+            for api in apis:
+                command_info = ensure_api_entry_exists(commands, command_name, api)
+                extension_info = command_info['extensions']
+                extension_info['extension'] = extension_name
+                extension_info['proc'] = proc_name
+
+pp = pprint.PrettyPrinter(indent=4)
+print pp.pprint(commands)
 
 gl_requirements = {}
 gles2_requirements = {}
 gl_extension_requirements = {}
 gles2_extension_requirements = {}
-both_extension_requirements = {}
 
 # Used later in the NULL bindings.
 all_entry_points = []
+
+def format_load_for_api(api, null_procs):
+    core_versions = { }
+    extensions = { }
+    for command_name, command_info in commands:
+        if not 'api' in command_info:
+            continue
+
+        version = command['version']
+        if 'version' in command:
+            core_versions[command['version']] = command_name
 
 for comment, entry_points in json_data.iteritems():
     for entry_point_no_prefix in entry_points:
@@ -124,25 +200,16 @@ for comment, entry_points in json_data.iteritems():
 
         extension = False
 
-        for ep in [entry_point, entry_point + "EXT", entry_point + "ARB", entry_point + "OES"]:
-            if ep in both_extension_commands:
+        for ep in [entry_point, entry_point + "EXT", entry_point + "ARB", entry_point + "OES", entry_point + "KHR"]:
+            if ep in gl_extension_commands:
                 extension = True
-                for extension in both_extension_commands[ep]:
-                    safe_append(both_extension_requirements, extension, (entry_point, ep))
+                for extension in gl_extension_commands[ep]:
+                    safe_append(gl_extension_requirements, extension, (entry_point, ep))
 
-            else:
-                if ep in gl_extension_commands:
-                    extension = True
-                    for extension in gl_extension_commands[ep]:
-                        safe_append(gl_extension_requirements, extension, (entry_point, ep))
-
-                if ep in gles2_extension_commands:
-                    extension = True
-                    for extension in gles2_extension_commands[ep]:
-                        full_ep = ep
-                        if '_KHR_' in extension:
-                            full_ep += 'KHR'
-                        safe_append(gles2_extension_requirements, extension, (entry_point, full_ep))
+            if ep in gles2_extension_commands:
+                extension = True
+                for extension in gles2_extension_commands[ep]:
+                    safe_append(gles2_extension_requirements, extension, (entry_point, ep))
 
         if not (gl_required or gles2_required or extension):
             raise Exception('Entry point ' + entry_point + ' not found in the xml.')
@@ -264,11 +331,6 @@ void DispatchTableGL::initProcsGLES(const gl::Version &version, const std::set<s
 {gles2_extensions_data}
 }}
 
-void DispatchTableGL::initProcsSharedExtensions(const std::set<std::string> &extensions)
-{{
-{both_extensions_data}
-}}
-
 #if defined(ANGLE_ENABLE_OPENGL_NULL)
 void DispatchTableGL::initProcsDesktopGLNULL(const gl::Version &version, const std::set<std::string> &extensions)
 {{
@@ -284,10 +346,6 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version, const std::s
 {gles2_null_extensions_data}
 }}
 
-void DispatchTableGL::initProcsSharedExtensionsNULL(const std::set<std::string> &extensions)
-{{
-{both_null_extensions_data}
-}}
 #endif  // defined(ANGLE_ENABLE_OPENGL_NULL)
 
 }}  // namespace rx
@@ -325,10 +383,6 @@ gles2_extensions_data = []
 for extension, entry_points in sorted(gles2_extension_requirements.iteritems()):
     gles2_extensions_data.append(format_extension_requirements_lines(extension, entry_points, "gles2"))
 
-both_extensions_data = []
-for extension, entry_points in sorted(both_extension_requirements.iteritems()):
-    both_extensions_data.append(format_extension_requirements_lines(extension, entry_points, "gles2|gl"))
-
 def assign_null_line(line):
     m = re.match(r'        ASSIGN\("gl.*", (.+)\);', line)
     if m:
@@ -352,12 +406,10 @@ dispatch_table_source = dispatch_table_source_template.format(
     gl_extensions_data = "\n\n".join(gl_extensions_data),
     gles2_data = "\n\n".join(gles2_data),
     gles2_extensions_data = "\n\n".join(gles2_extensions_data),
-    both_extensions_data = "\n\n".join(both_extensions_data),
     gl_null_data = "\n\n".join(nullify(gl_data)),
     gl_null_extensions_data = "\n\n".join(nullify(gl_extensions_data)),
     gles2_null_data = "\n\n".join(nullify(gles2_data)),
-    gles2_null_extensions_data = "\n\n".join(nullify(gles2_extensions_data)),
-    both_null_extensions_data = "\n\n".join(nullify(both_extensions_data)))
+    gles2_null_extensions_data = "\n\n".join(nullify(gles2_extensions_data)))
 
 with open(dispatch_source_path, "w") as out:
     out.write(dispatch_table_source)
