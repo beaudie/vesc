@@ -87,7 +87,7 @@ void main()
 TEST_P(MaxTextureSizeTest, SpecificationTexImage)
 {
     // http://anglebug.com/2690
-    ANGLE_SKIP_TEST_IF(IsWindows() && IsIntel() && IsVulkan());
+    // ANGLE_SKIP_TEST_IF(IsWindows() && IsIntel() && IsVulkan());
 
     GLuint tex;
     glGenTextures(1, &tex);
@@ -114,6 +114,35 @@ TEST_P(MaxTextureSizeTest, SpecificationTexImage)
             pixel[2] = 0;
             pixel[3] = 255;
         }
+    }
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth + 4, textureHeight, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+    if (extensionEnabled("GL_EXT_texture_compression_dxt1"))
+    {
+        GLsizei width  = textureWidth + 4;
+        GLsizei height = textureHeight;
+
+        std::vector<uint8_t> imageData(width * height);
+        fprintf(stderr, "Testing compressed textures\n");
+
+        glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGB_S3TC_DXT1_EXT, width, height, 0,
+                               width * height / 2, imageData.data());
+        EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+        glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, width, height, 0,
+                               width * height / 2, imageData.data());
+        EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+        glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, width, height, 0,
+                               width * height, imageData.data());
+        EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+        glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, width, height, 0,
+                               width * height, imageData.data());
+        EXPECT_GL_ERROR(GL_INVALID_VALUE);
     }
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA,
@@ -234,6 +263,11 @@ TEST_P(MaxTextureSizeTest, RenderToTexture)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, textureWidth, textureHeight + 4, 0, GL_BGRA_EXT,
+                 GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_BGRA_EXT, textureWidth, textureHeight, 0, GL_BGRA_EXT,
                  GL_UNSIGNED_BYTE, nullptr);
     EXPECT_GL_NO_ERROR();

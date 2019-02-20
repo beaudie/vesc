@@ -334,6 +334,7 @@ bool ValidateES3TexImageParametersBase(Context *context,
                                        GLsizei imageSize,
                                        const void *pixels)
 {
+    fprintf(stderr, "ValidateES3TexImageParametersBase(%zu, %zu)\n", (size_t)width, (size_t)height);
     TextureType texType = TextureTargetToType(target);
 
     // Validate image size
@@ -366,12 +367,16 @@ bool ValidateES3TexImageParametersBase(Context *context,
 
     const gl::Caps &caps = context->getCaps();
 
+    fprintf(stderr, " - Texture type 2D? %d\n", texType == TextureType::_2D);
+    fprintf(stderr, " - level: %u\n", (unsigned int)level);
     switch (texType)
     {
         case TextureType::_2D:
+            fprintf(stderr, " - width/height vs %zu\n", (size_t)(caps.max2DTextureSize >> level));
             if (static_cast<GLuint>(width) > (caps.max2DTextureSize >> level) ||
                 static_cast<GLuint>(height) > (caps.max2DTextureSize >> level))
             {
+                fprintf(stderr, "   * Too big\n");
                 context->validationError(GL_INVALID_VALUE, kResourceMaxTextureSize);
                 return false;
             }
@@ -430,6 +435,7 @@ bool ValidateES3TexImageParametersBase(Context *context,
             context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
             return false;
     }
+    fprintf(stderr, " - size ok\n");
 
     gl::Texture *texture = context->getTargetTexture(texType);
     if (!texture)
