@@ -63,7 +63,7 @@ deps = {
   # glmark2 is a GPL3-licensed OpenGL ES 2.0 benchmark. We use it for testing.
   # FIXME: need to use chromium_git instead of github
   '{angle_root}/third_party/glmark2/src': {
-    'url': 'https://github.com/null77/glmark2.git@82677a78be11260b63f479672a123fced03c20fd',
+    'url': 'https://github.com/null77/glmark2.git@30d7aed0d7a142cbb5943ad3ae7251c8588b1283',
   },
 
   '{angle_root}/third_party/glslang/src': {
