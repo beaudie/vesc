@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3c68ca6d_830447b1",
+        "filename": "src/common/PoolAlloc_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-20T23:42:22Z",
+      "side": 1,
+      "message": "I had originally started on a more randomized approach using std::iota on the array but realized there was a very limited set of interesting alignments. Yes, will update this directly assign vector.",
+      "parentUuid": "1be66487_adb882f7",
+      "revId": "6808d49a69fa48f5b564247eb4598c0b8c2cc3e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b634d917_1d1c0d01",
         "filename": "src/common/PoolAlloc_unittest.cpp",
         "patchSetId": 5
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "6fd538df_0d4959cc",
+        "filename": "src/common/PoolAlloc_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-20T23:42:22Z",
+      "side": 1,
+      "message": "Yep, thanks for the suggestions. The existing tests were preliminary as I was investigating alignment behavior in the PoolAllocator.",
+      "parentUuid": "c971b5f8_70ec8da5",
+      "revId": "6808d49a69fa48f5b564247eb4598c0b8c2cc3e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b38dc9c6_ef1db1b1",
         "filename": "src/common/PoolAlloc_unittest.cpp",
         "patchSetId": 5
@@ -65,6 +101,30 @@
       "writtenOn": "2019-02-20T20:18:32Z",
       "side": 1,
       "message": "this is a good use case for parameterized tests:\n\nhttps://github.com/google/googletest/blob/master/googletest/docs/advanced.md#value-parameterized-tests",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 9
+      },
+      "revId": "6808d49a69fa48f5b564247eb4598c0b8c2cc3e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18db90b9_b7d5013d",
+        "filename": "src/common/PoolAlloc_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-20T23:42:22Z",
+      "side": 1,
+      "message": "I looked at this and existing examples of parameterized tests in ANGLE code. For a case as simple as this where it\u0027s just the alignment value changing using parameterized tests seems like low ROI as the test is more obscure (at least to me) for the limited benefit of having the alignment parameters broken out into separate test cases.",
+      "parentUuid": "b38dc9c6_ef1db1b1",
       "range": {
         "startLine": 157,
         "startChar": 0,
