@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "adddf7b6_c1496529",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-20T20:09:26Z",
+      "side": 1,
+      "message": "mHeaderSkip is the aligned value to jump over Header.",
+      "revId": "720e428cbbe1750e20ca3004656f680d6478cfa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "902b3152_17c157fe",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-20T20:09:26Z",
+      "side": 1,
+      "message": "allocationSize already accounts for actual size of allocation plus Header, but page offset adds mHeaderSkip as well.",
+      "revId": "720e428cbbe1750e20ca3004656f680d6478cfa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1a1b36f_4f9e6fa4",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-20T20:09:26Z",
+      "side": 1,
+      "message": "Now this call will take the ret ptr, which already accounts for HeaderSkip, and it adds the Header size and Guard band size. So Header is being doubly skipped. Once for the aligned \"mHeaderSkip\" value, and once for actual Header size, which may not be properly aligned.",
+      "revId": "720e428cbbe1750e20ca3004656f680d6478cfa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beb6ffe1_7b665f16",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-20T20:09:26Z",
+      "side": 1,
+      "message": "The calculated allocation size includes the exact HeaderSize(), not mHeaderSkip.",
+      "revId": "720e428cbbe1750e20ca3004656f680d6478cfa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b803e093_cc9a1a9d",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-20T20:09:26Z",
+      "side": 1,
+      "message": "This causes an alignment issue if HeaderSize() does not match alignment.",
+      "revId": "720e428cbbe1750e20ca3004656f680d6478cfa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6eda08f2_4778eb5d",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-20T20:09:26Z",
+      "side": 1,
+      "message": "memory and numBytes come in properly aligned, but this call can mess up the alignment if HeaderSize() does not return an aligned value.\nThe PoolAllocator knows the the requested alignment and stores mHeaderSkip to account for aligned jump over header. However, Allocation class doesn\u0027t know the alignment.",
+      "revId": "720e428cbbe1750e20ca3004656f680d6478cfa2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
