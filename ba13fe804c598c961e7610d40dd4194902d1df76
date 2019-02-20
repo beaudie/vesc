@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8670f0df_6a21653d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-02-20T16:29:25Z",
+      "side": 1,
+      "message": "We took a different approach to this, so this code/comment aren\u0027t relevant anymore.",
+      "parentUuid": "26b6c3a8_1fb08601",
+      "range": {
+        "startLine": 1292,
+        "startChar": 8,
+        "endLine": 1292,
+        "endChar": 59
+      },
+      "revId": "ba13fe804c598c961e7610d40dd4194902d1df76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "751e5b1e_1239865f",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "ba13fe804c598c961e7610d40dd4194902d1df76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f15308b_570b3aac",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-02-20T16:29:25Z",
+      "side": 1,
+      "message": "We took a different approach to this, so this code/comment aren\u0027t relevant anymore.",
+      "parentUuid": "751e5b1e_1239865f",
+      "range": {
+        "startLine": 1293,
+        "startChar": 8,
+        "endLine": 1293,
+        "endChar": 68
+      },
+      "revId": "ba13fe804c598c961e7610d40dd4194902d1df76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "089ed197_60ea1f55",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1294,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-02-20T16:29:25Z",
+      "side": 1,
+      "message": "We took a different approach to this, so this code/comment aren\u0027t relevant anymore.",
+      "parentUuid": "93529390_cf305744",
+      "range": {
+        "startLine": 1294,
+        "startChar": 8,
+        "endLine": 1294,
+        "endChar": 31
+      },
+      "revId": "ba13fe804c598c961e7610d40dd4194902d1df76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a57a53e4_5ef8de3f",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "90bdbf26_058155c7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-02-20T16:29:25Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a57a53e4_5ef8de3f",
+      "range": {
+        "startLine": 312,
+        "startChar": 10,
+        "endLine": 312,
+        "endChar": 16
+      },
+      "revId": "ba13fe804c598c961e7610d40dd4194902d1df76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "962e80ee_3e2af091",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -114,6 +210,30 @@
       "revId": "ba13fe804c598c961e7610d40dd4194902d1df76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6f66bab_b5049b03",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-02-20T16:29:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "962e80ee_3e2af091",
+      "range": {
+        "startLine": 674,
+        "startChar": 4,
+        "endLine": 676,
+        "endChar": 83
+      },
+      "revId": "ba13fe804c598c961e7610d40dd4194902d1df76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

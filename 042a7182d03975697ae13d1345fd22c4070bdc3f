@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f2c6720b_99fb4787",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-02-20T16:29:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "811b8bca_b9fd6692",
+      "revId": "042a7182d03975697ae13d1345fd22c4070bdc3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "37a53c3e_6f8c5629",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 5
@@ -71,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "dd947ea6_60dcbda3",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-02-20T16:29:25Z",
+      "side": 1,
+      "message": "Yeah, very good catch.   My mind hadn\u0027t made it there yet, though it makes total sense considering the values it was seeing.   Must have just been some good luck that the values weren\u0027t being overwritten in the stack until now.",
+      "parentUuid": "5f52cc42_fcd3c069",
+      "revId": "042a7182d03975697ae13d1345fd22c4070bdc3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "156ac1d5_a6826fa7",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 5
@@ -88,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "1512ba33_a936ff24",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-02-20T16:29:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "156ac1d5_a6826fa7",
+      "revId": "042a7182d03975697ae13d1345fd22c4070bdc3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8aaf4a13_9a0b4d2b",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 5
@@ -102,6 +156,24 @@
       "revId": "042a7182d03975697ae13d1345fd22c4070bdc3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bec1a42d_a87f53e2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-02-20T16:29:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8aaf4a13_9a0b4d2b",
+      "revId": "042a7182d03975697ae13d1345fd22c4070bdc3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
