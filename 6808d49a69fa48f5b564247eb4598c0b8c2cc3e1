@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "1be66487_adb882f7",
+        "filename": "src/common/PoolAlloc_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-20T21:08:44Z",
+      "side": 1,
+      "message": "Why are you creating a vector out of an array? You could just do:\n\n`std::vector\u003cint\u003e alignments \u003d {2, 4, 8, 16, 32, 64, 128};`\n\nOr just use the array without creating a vector out of it.",
+      "revId": "6808d49a69fa48f5b564247eb4598c0b8c2cc3e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b634d917_1d1c0d01",
+        "filename": "src/common/PoolAlloc_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-20T21:08:44Z",
+      "side": 1,
+      "message": "The test needs to be a lot harsher. You are allocating once (which means it\u0027s from the beginning of the first allocated page), and the size is a nice 1024. How about something like this?\n\n    size_t numBytes[100] \u003d { /* a sequence of randomly generated positive values with mean 1000 and std 1000 */ };\n    for (int alignment : alignments)\n    {\n        // Create a default pool allocator and allocate from it\n        PoolAllocator poolAllocator(2048, alignment);\n        for (int bytes : numBytes)\n        {\n            void *allocation \u003d poolAllocator.allocate(bytes);\n            // Verify alignment of allocation matches expected default\n            EXPECT_EQ(0u, (reinterpret_cast\u003cstd::uintptr_t\u003e(allocation) % alignment));\n        }\n    }",
+      "revId": "6808d49a69fa48f5b564247eb4598c0b8c2cc3e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b38dc9c6_ef1db1b1",
         "filename": "src/common/PoolAlloc_unittest.cpp",
         "patchSetId": 5
