@@ -1758,6 +1758,26 @@ void Framebuffer::setAttachmentImpl(const Context *context,
                              textureIndex, resource, numViews, baseViewIndex, multiviewLayout,
                              viewportOffsets);
 
+            if (!resource)
+            {
+                mFloat32ColorAttachmentBits.reset(colorIndex);
+            }
+            else
+            {
+                GLenum f =
+                    resource->getAttachmentFormat(binding, textureIndex).info->sizedInternalFormat;
+                // Not using componentType == GL_FLOAT because we only track 32 bit float here
+                // And GL_R16F etc could be used together with GL_FLOAT
+                if (f == GL_R32F || f == GL_RG32F || f == GL_RGB32F || f == GL_RGBA32F)
+                {
+                    mFloat32ColorAttachmentBits.set(colorIndex);
+                }
+                else
+                {
+                    mFloat32ColorAttachmentBits.reset(colorIndex);
+                }
+            }
+
             // TODO(jmadill): ASSERT instead of checking the attachment exists in
             // formsRenderingFeedbackLoopWith
             bool enabled = (type != GL_NONE && getDrawBufferState(colorIndex) != GL_NONE);
@@ -1829,6 +1849,15 @@ void Framebuffer::onSubjectStateChange(const Context *context,
 
     // Mark the appropriate init flag.
     mState.mResourceNeedsInit.set(index, attachment->initState() == InitState::MayNeedInit);
+
+    // Update mFloat32ColorAttachmentBits Cache
+    if (index != DIRTY_BIT_DEPTH_ATTACHMENT && index != DIRTY_BIT_STENCIL_ATTACHMENT)
+    {
+        GLenum f = attachment->getFormat().info->sizedInternalFormat;
+        mFloat32ColorAttachmentBits.set(
+            index - DIRTY_BIT_COLOR_ATTACHMENT_0,
+            f == GL_R32F || f == GL_RG32F || f == GL_RGB32F || f == GL_RGBA32F);
+    }
 }
 
 FramebufferAttachment *Framebuffer::getAttachmentFromSubjectIndex(angle::SubjectIndex index)

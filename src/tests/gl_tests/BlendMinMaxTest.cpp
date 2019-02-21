@@ -40,6 +40,11 @@ class BlendMinMaxTest : public ANGLETest
     void runTest(GLenum colorFormat, GLenum type)
     {
         ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 && !extensionEnabled("GL_EXT_blend_minmax"));
+        if (colorFormat == GL_R32F || colorFormat == GL_RG32F || colorFormat == GL_RGB32F ||
+            colorFormat == GL_RGBA32F)
+        {
+            ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_EXT_float_blend"));
+        }
 
         SetUpFramebuffer(colorFormat);
 
