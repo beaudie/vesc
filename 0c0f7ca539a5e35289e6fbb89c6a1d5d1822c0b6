@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6602e295_53b9bb3f",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2631,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-02-21T19:55:45Z",
+      "side": 1,
+      "message": "You could use \"auto\" as the type here and maybe in the for loop below to make the code shorter.",
+      "revId": "0c0f7ca539a5e35289e6fbb89c6a1d5d1822c0b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a827bbf_121b9b3f",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-02-21T19:55:45Z",
+      "side": 1,
+      "message": "The use of GL_RGBA32F will (or should) fail on ES 2.0 contexts. On ES 2.0 this should use GL_RGBA, and on ES 3.0 it should use GL_RGBA32F.",
+      "revId": "0c0f7ca539a5e35289e6fbb89c6a1d5d1822c0b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
