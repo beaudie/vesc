@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3926b19_47291dc4",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2628,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T19:54:43Z",
+      "side": 1,
+      "message": "context-\u003egetState().isBlendEnabled()",
+      "range": {
+        "startLine": 2628,
+        "startChar": 12,
+        "endLine": 2628,
+        "endChar": 40
+      },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35fa3e81_6748903a",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2630,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T19:54:43Z",
+      "side": 1,
+      "message": "nit: camel case",
+      "range": {
+        "startLine": 2630,
+        "startChar": 17,
+        "endLine": 2630,
+        "endChar": 37
+      },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68f4efbb_3aa48353",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2631,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T19:54:43Z",
+      "side": 1,
+      "message": "nit: camelCase",
+      "range": {
+        "startLine": 2631,
+        "startChar": 54,
+        "endLine": 2631,
+        "endChar": 71
+      },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc183651_4f7fb9ff",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2638,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T19:54:43Z",
+      "side": 1,
+      "message": "Return the error here instead of checking the rest of the attachments.",
+      "range": {
+        "startLine": 2637,
+        "startChar": 20,
+        "endLine": 2638,
+        "endChar": 26
+      },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11c492c6_8966b833",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2644,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T19:54:43Z",
+      "side": 1,
+      "message": "This should be \u0027return kUnsupportedFloatBlending;\u0027",
+      "range": {
+        "startLine": 2644,
+        "startChar": 16,
+        "endLine": 2644,
+        "endChar": 90
+      },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "240b35cb_f9df764c",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2915,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T19:54:43Z",
+      "side": 1,
+      "message": "We have a helper for this pattern:\n\n  ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled(\"GL_EXT_color_buffer_float\"));\n\nIt can be used below too.",
+      "range": {
+        "startLine": 2913,
+        "startChar": 8,
+        "endLine": 2915,
+        "endChar": 61
+      },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
