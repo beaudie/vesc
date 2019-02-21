@@ -16,6 +16,24 @@
       "revId": "268c77e8aacdd4b482e18b589e2f005fcce560a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4202e46e_e5c2a216",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T18:28:34Z",
+      "side": 1,
+      "message": "I think you might want to update the binding. It could actually be a security bug. I imagine you could make a test:\n\n * init a buffer with the secret data.\n * use this buffer as a uniform buffer in the GL back-end.\n * bind a new buffer of size \"3\".\n * now you can read from the secret buffer in the shader.",
+      "parentUuid": "f418a77d_e8525403",
+      "revId": "268c77e8aacdd4b482e18b589e2f005fcce560a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
