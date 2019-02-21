@@ -52,6 +52,24 @@
       "revId": "268c77e8aacdd4b482e18b589e2f005fcce560a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a6aac9d_ec86b004",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2019-02-21T22:32:12Z",
+      "side": 1,
+      "message": "Re: testing, is there any way to write a test here such that it fails without your latest (PS 3..4) change but passes with it? Or does validation always guard against it?\n\n(Either way I\u0027m in favor of unbinding the buffer, just in case.)",
+      "parentUuid": "a004d3c4_500403cf",
+      "revId": "268c77e8aacdd4b482e18b589e2f005fcce560a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
