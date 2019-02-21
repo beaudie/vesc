@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1ece25d_af48525c",
+        "filename": "BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2019-02-21T21:50:10Z",
+      "side": 1,
+      "message": "I don\u0027t understand how this works - does this somehow conditionally expand out to one or two outputs?",
+      "revId": "39c79df4fa46b8ed4e7985c112c921e4404c0e99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
