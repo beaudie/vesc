@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "802927d1_aca8536f",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T15:24:48Z",
+      "side": 1,
+      "message": "I refactored some but these two paths get the renderer in different ways.",
+      "parentUuid": "8d7706b9_080bed56",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 100,
+        "endChar": 5
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f85f3045_621d60b6",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 15
@@ -62,6 +86,30 @@
       "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a441d36_2184af0d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T15:24:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f85f3045_621d60b6",
+      "range": {
+        "startLine": 926,
+        "startChar": 4,
+        "endLine": 926,
+        "endChar": 54
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +136,30 @@
     },
     {
       "key": {
+        "uuid": "3243acb1_b8586261",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T15:24:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42353953_da6ca687",
+      "range": {
+        "startLine": 35,
+        "startChar": 51,
+        "endLine": 35,
+        "endChar": 73
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b96fbd7_040cc661",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 15
@@ -102,6 +174,24 @@
       "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "424c3edf_12ca570c",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T15:24:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b96fbd7_040cc661",
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -125,6 +215,30 @@
       "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b09f10d_39fb5c79",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T15:24:48Z",
+      "side": 1,
+      "message": "This is the GL concept of sample count where 0 means not multisampled and 1 means multisampled with a single sample.",
+      "parentUuid": "001f945f_1d30df32",
+      "range": {
+        "startLine": 183,
+        "startChar": 11,
+        "endLine": 183,
+        "endChar": 12
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -175,6 +289,30 @@
     },
     {
       "key": {
+        "uuid": "308bee8b_87dd8d47",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T15:24:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c277e10_b1704a0a",
+      "range": {
+        "startLine": 71,
+        "startChar": 8,
+        "endLine": 71,
+        "endChar": 36
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3e813ba_d5b1280b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -222,6 +360,30 @@
     },
     {
       "key": {
+        "uuid": "dcbe9e22_ab6d0e11",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T15:24:48Z",
+      "side": 1,
+      "message": "We don\u0027t know how the buffer will be used at initialization time so we don\u0027t know what the new layout should be.  Also, we don\u0027t have a command buffer associated with anything at image creation time.\n\nI can special case when the source and dest queues are equal and use VK_QUEUE_FAMILY_IGNORED but the spec says that them being equal is equivalent to VK_QUEUE_FAMILY_IGNORED.",
+      "parentUuid": "ff4c0563_3b3827a8",
+      "range": {
+        "startLine": 1568,
+        "startChar": 46,
+        "endLine": 1568,
+        "endChar": 70
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45cc3760_06998d71",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 15
@@ -233,6 +395,30 @@
       "writtenOn": "2019-02-19T18:45:20Z",
       "side": 1,
       "message": "this is a bit too bad. Maybe we could figure out a way we don\u0027t need to store this info.",
+      "range": {
+        "startLine": 747,
+        "startChar": 0,
+        "endLine": 752,
+        "endChar": 0
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e362a82f_ec662f40",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T15:24:48Z",
+      "side": 1,
+      "message": "Ideally we only store the current queue index but there are a ton of call sites that call changeLayout and would need to pipe down what queue should be used.\n\nI do like that ImageHelper now has more information about its current state and can use that for more types of transitions.",
+      "parentUuid": "45cc3760_06998d71",
       "range": {
         "startLine": 747,
         "startChar": 0,
@@ -265,6 +451,30 @@
       "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e3032e9_e0855d21",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T15:24:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e2b29b3_b261d0e3",
+      "range": {
+        "startLine": 412,
+        "startChar": 7,
+        "endLine": 412,
+        "endChar": 57
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
