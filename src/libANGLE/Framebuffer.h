@@ -206,6 +206,10 @@ class Framebuffer final : public angle::ObserverInterface,
     const FramebufferAttachment *getFirstNonNullAttachment() const;
 
     const FramebufferAttachment *getAttachment(const Context *context, GLenum attachment) const;
+    const std::vector<FramebufferAttachment> &getColorAttachments() const
+    {
+        return mState.getColorAttachments();
+    }
     GLenum getMultiviewLayout() const;
     bool readDisallowedByMultiview() const;
     GLsizei getNumViews() const;
