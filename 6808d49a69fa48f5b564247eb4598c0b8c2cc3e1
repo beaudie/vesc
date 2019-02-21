@@ -134,6 +134,30 @@
       "revId": "6808d49a69fa48f5b564247eb4598c0b8c2cc3e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7c23a69_cdc6eea9",
+        "filename": "src/common/PoolAlloc_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T14:38:09Z",
+      "side": 1,
+      "message": "It\u0027s not as bad as most examples. Try this:\n\nclass PoolAllocatorAlignmentTest : public testing::TestWithParam\u003cint\u003e {};\n\nTEST_P(PoolAllocatorAlignmentTest, Alignment)\n{\n   int alignment \u003d GetParam();\n   .. test goes here ..\n}\n\nINSTANTIATE_TEST_SUITE_P(, PoolAllocatorAlignmentTest, testing::Values(2, 4, 8, 16, 32, 64, 128));\n\nIMO it looks good. What do you think?",
+      "parentUuid": "18db90b9_b7d5013d",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 173,
+        "endChar": 9
+      },
+      "revId": "6808d49a69fa48f5b564247eb4598c0b8c2cc3e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
