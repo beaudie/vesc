@@ -198,6 +198,30 @@
     },
     {
       "key": {
+        "uuid": "50e6decb_971dd5c3",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T20:20:54Z",
+      "side": 1,
+      "message": "didn\u0027t notice in this file that all the functions were named this way. if you like you can lower-case the first character. Not for \"SetUp\" and \"TearDown\" as they are overrides though.",
+      "parentUuid": "ba66d084_e3d3c27d",
+      "range": {
+        "startLine": 217,
+        "startChar": 9,
+        "endLine": 217,
+        "endChar": 26
+      },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "240b35cb_f9df764c",
         "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
         "patchSetId": 2
