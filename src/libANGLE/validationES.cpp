@@ -2623,6 +2623,13 @@ const char *ValidateDrawStates(Context *context)
         }
     }
 
+    if (!extensions.floatBlend && context->getState().isBlendEnabled() &&
+        framebuffer->hasFloatColorAttachment())
+    {
+        context->validationError(GL_INVALID_OPERATION, kUnsupportedFloatBlending);
+        return kUnsupportedFloatBlending;
+    }
+
     if (!framebuffer->isComplete(context))
     {
         // Note: this error should be generated as INVALID_FRAMEBUFFER_OPERATION.

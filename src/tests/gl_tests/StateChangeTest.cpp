@@ -138,6 +138,71 @@ TEST_P(StateChangeTest, CopyTexSubImage2DSync)
     ASSERT_GL_NO_ERROR();
 }
 
+// Test that has float color attachment caching works when color attachments change for draw
+// blending.
+TEST_P(StateChangeTest, FramebufferFloatColorAttachment)
+{
+    if (getClientMajorVersion() >= 3)
+    {
+        ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_EXT_color_buffer_float"));
+    }
+    else
+    {
+        ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_OES_texture_float"));
+        ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_CHROMIUM_color_buffer_float_rgba"));
+    }
+
+    constexpr char kVS[] =
+        "void main()\n"
+        "{\n"
+        "   gl_Position = vec4(0, 0, 0, 1);\n"
+        "}\n";
+
+    constexpr char kFS[] =
+        "void main()\n"
+        "{\n"
+        "   gl_FragColor = vec4(0, 1, 0, 1);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program);
+
+    GLTexture textureUnsignedByte;
+    glBindTexture(GL_TEXTURE_2D, textureUnsignedByte);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    EXPECT_GL_NO_ERROR();
+
+    GLTexture textureFloat;
+    glBindTexture(GL_TEXTURE_2D, textureFloat);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 1, 1, 0, GL_RGBA, GL_FLOAT, nullptr);
+    EXPECT_GL_NO_ERROR();
+
+    glEnable(GL_BLEND);
+
+    GLFramebuffer fbo1;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo1);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureUnsignedByte,
+                           0);
+    ASSERT_EQ((int)glCheckFramebufferStatus(GL_FRAMEBUFFER), GL_FRAMEBUFFER_COMPLETE);
+
+    GLFramebuffer fbo2;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo2);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureFloat, 0);
+    ASSERT_EQ((int)glCheckFramebufferStatus(GL_FRAMEBUFFER), GL_FRAMEBUFFER_COMPLETE);
+    glDrawArrays(GL_POINTS, 0, 1);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo1);
+    glDrawArrays(GL_POINTS, 0, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureFloat, 0);
+    ASSERT_EQ((int)glCheckFramebufferStatus(GL_FRAMEBUFFER), GL_FRAMEBUFFER_COMPLETE);
+
+    glDrawArrays(GL_POINTS, 0, 1);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
 // Test that Framebuffer completeness caching works when color attachments change.
 TEST_P(StateChangeTest, FramebufferIncompleteColorAttachment)
 {
