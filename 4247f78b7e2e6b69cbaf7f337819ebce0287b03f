@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73147763_d2e10696",
+        "filename": "src/libANGLE/renderer/ShaderImpl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T16:27:34Z",
+      "side": 1,
+      "message": "This is an implementation detail of the GL backend which tells the frontend if it should be creating threads or not, the logic is getting complex now with 4 different functions in ShaderImpl do tell the backend to take different paths when compiling.\n\nI would like to refactor this so that there is only one function to replace prepareSourceAndReturnOptions, compileAsync, hasNativeParallelCompile, compileNativeParallel and postTranslateCompile.\n\nI think we can get to the point where the ShaderImpl function is only:\n\n   virtual std::unique_ptr\u003cangle::WaitableEvent\u003e compile(ShHandle compiler, std::string \u0026\u0026source, ShCompileOptions options, gl::InfoLog* infoLog) \u003d 0;\n\nThis way, the backend only would create threads to compile and create native shaders and it knows exactly when it needs to make threads.  We can make sure there are enough helper functions so we don\u0027t need to duplicate any code that Shader.cpp did to the backends.  This also much more closely resembles how program linking is asynchronous.",
+      "range": {
+        "startLine": 41,
+        "startChar": 17,
+        "endLine": 41,
+        "endChar": 41
+      },
+      "revId": "4247f78b7e2e6b69cbaf7f337819ebce0287b03f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24c3790b_1fed4fef",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T16:27:34Z",
+      "side": 1,
+      "message": "You don\u0027t need to check extension strings, simply checking that mFunctions-\u003emaxShaderCompilerThreadsKHR !\u003d nullptr should be fine.  You could assert that the extensions are present if the function is non-null if you like.",
+      "range": {
+        "startLine": 624,
+        "startChar": 0,
+        "endLine": 627,
+        "endChar": 81
+      },
+      "revId": "4247f78b7e2e6b69cbaf7f337819ebce0287b03f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfed6db4_3c209402",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T16:27:34Z",
+      "side": 1,
+      "message": "Please add a new method to ContextImpl: setMaxShaderCompilerThreads and in ContextGL use it to set this so the driver uses the same number of threads that we use.",
+      "range": {
+        "startLine": 639,
+        "startChar": 52,
+        "endLine": 639,
+        "endChar": 62
+      },
+      "revId": "4247f78b7e2e6b69cbaf7f337819ebce0287b03f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b57cd8c0_ebe0d886",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T16:27:34Z",
+      "side": 1,
+      "message": "This should all be done in the RendererGL constructor.  This method should be const and should just return a member bool.",
+      "range": {
+        "startLine": 623,
+        "startChar": 3,
+        "endLine": 648,
+        "endChar": 19
+      },
+      "revId": "4247f78b7e2e6b69cbaf7f337819ebce0287b03f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0633894_a71d6bbd",
+        "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T16:27:34Z",
+      "side": 1,
+      "message": "Why create a shared context at all if you only destroy it right away when the extensions exist?",
+      "range": {
+        "startLine": 304,
+        "startChar": 8,
+        "endLine": 309,
+        "endChar": 12
+      },
+      "revId": "4247f78b7e2e6b69cbaf7f337819ebce0287b03f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
