@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d30a4b69_1ed6aff8",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T18:45:32Z",
+      "side": 1,
+      "message": "maybe link to https://stackoverflow.com/q/31346887 ?",
+      "revId": "dba153859d3e7302f658265be68b87a19f53a452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d0185e0_1cd523fb",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T18:45:32Z",
+      "side": 1,
+      "message": "as long as you\u0027re using fork, maybe we should add a timeout parameter to RunApp? Otherwise I\u0027m not sure you need fork. But my Linux knowledge isn\u0027t as good.",
+      "revId": "dba153859d3e7302f658265be68b87a19f53a452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89efcf01_8af69843",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T18:45:32Z",
+      "side": 1,
+      "message": "nit: test comment",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 4
+      },
+      "revId": "dba153859d3e7302f658265be68b87a19f53a452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5b1cc2c_16f3d598",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T18:45:32Z",
+      "side": 1,
+      "message": "nit: test comment",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 4
+      },
+      "revId": "dba153859d3e7302f658265be68b87a19f53a452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
