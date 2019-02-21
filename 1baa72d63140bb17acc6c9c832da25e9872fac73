@@ -22,6 +22,30 @@
       "revId": "1baa72d63140bb17acc6c9c832da25e9872fac73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64bad8ed_fb041b87",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-21T16:04:46Z",
+      "side": 1,
+      "message": "Sorry about that.  By the time that I found the actual change that was needed, I was no longer looking at the top of this file (used code search to find it).\n\nDocumenting for the future: There\u0027s a set of steps that must be followed in order to autogen this file on Linux (from an Android build).  I initially thought that the following steps where those to perform:\n\n- Edit \"vk_format_map.json\" to add in the correlation between and ANGLE format and a Vulkan format\n- cd src/third_party/angle/src/libANGLE/renderer/vulkan\n- chmod 755 gen_vk_format_table.py\n- ./gen_vk_format_table.py\n- chmod 644 gen_vk_format_table.py\n- git add -u\n- git cl format\n- Edit \"vk_format_map.json\" to remove the \"./\" from the 2nd line, and to edit the copyright statement (it removed the old year and just left the current year)\n- git add -u\n- git commit\n\nHowever, \"git cl upload\" wouldn\u0027t pass presubmit checks, and the message wasn\u0027t very helpful.  Instead, this appears to be the correct set of steps to perform:\n\n- Edit \"vk_format_map.json\" to add in the correlation between and ANGLE format and a Vulkan format\n- cd src/third_party/angle/src\n- ../scripts/run_code_generation.py\n- DO NOT edit \"vk_format_map.json\" to correct the copyright statement (it removed the old year and just left the current year) in order to avoid presubmit-check failure\n- git commit -a\n\nJamie, if you\u0027d like, I can add to the comment that\u0027s added to the generated file so that this is more obvious in the future.",
+      "parentUuid": "e925a596_399eeee9",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 73
+      },
+      "revId": "1baa72d63140bb17acc6c9c832da25e9872fac73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
