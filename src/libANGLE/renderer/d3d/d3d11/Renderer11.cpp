@@ -521,7 +521,7 @@ Renderer11::Renderer11(egl::Display *display)
                 UNREACHABLE();
         }
 
-        mCreateDebugDevice = false;
+        mCreateDebugDevice = ShouldUseDebugLayers(attributes);
     }
     else if (mDisplay->getPlatform() == EGL_PLATFORM_DEVICE_EXT)
     {
