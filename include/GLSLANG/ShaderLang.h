@@ -44,6 +44,9 @@ enum ShShaderOutput
 {
     // ESSL output only supported in some configurations.
     SH_ESSL_OUTPUT = 0x8B45,
+    SH_ESSL_100_CORE_OUTPUT = 0x8B90,
+    SH_ESSL_300_CORE_OUTPUT = 0x8B91,
+    SH_ESSL_310_CORE_OUTPUT = 0x8B92,
 
     // GLSL output only supported in some configurations.
     SH_GLSL_COMPATIBILITY_OUTPUT = 0x8B46,

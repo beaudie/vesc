@@ -404,7 +404,10 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
 
 bool TCompiler::checkShaderVersion(TParseContext *parseContext)
 {
-    if (MapSpecToShaderVersion(mShaderSpec) < mShaderVersion)
+    // TODO(yizhou) : Highest ShaderSpec is ES 3.0 in Chromium, but
+    // the Shader can be upgrade to ES 3.1 by angle.
+    if (MapSpecToShaderVersion(mShaderSpec) < mShaderVersion &&
+             MapSpecToShaderVersion(mShaderSpec) != 300)
     {
         mDiagnostics.globalError("unsupported shader version");
         return false;

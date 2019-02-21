@@ -867,7 +867,7 @@ void GenerateCaps(const FunctionsGL *functions,
         LimitVersion(maxSupportedESVersion, gl::Version(3, 0));
     }
 
-    if (functions->isAtLeastGL(gl::Version(3, 2)) || functions->isAtLeastGLES(gl::Version(3, 1)) ||
+    if (functions->isAtLeastGL(gl::Version(3, 2)) || functions->isAtLeastGLES(gl::Version(3, 0)) ||
         functions->hasGLExtension("GL_ARB_texture_multisample"))
     {
         caps->maxSampleMaskWords     = QuerySingleGLInt(functions, GL_MAX_SAMPLE_MASK_WORDS);
@@ -1204,6 +1204,7 @@ void GenerateCaps(const FunctionsGL *functions,
         extensions->textureStorageMultisample2DArray && extensions->multiview;
 
     extensions->textureMultisample = functions->isAtLeastGL(gl::Version(3, 2)) ||
+                                     functions->isAtLeastGLES(gl::Version(3, 0)) ||
                                      functions->hasGLExtension("GL_ARB_texture_multisample");
 
     // NV_path_rendering

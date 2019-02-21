@@ -15,7 +15,7 @@ namespace sh
 class TranslatorESSL : public TCompiler
 {
   public:
-    TranslatorESSL(sh::GLenum type, ShShaderSpec spec);
+    TranslatorESSL(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output);
 
   protected:
     void initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu,
