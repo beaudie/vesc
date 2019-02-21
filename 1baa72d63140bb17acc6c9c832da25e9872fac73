@@ -70,6 +70,30 @@
       "revId": "1baa72d63140bb17acc6c9c832da25e9872fac73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7191836f_d0e14cab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-21T17:07:38Z",
+      "side": 1,
+      "message": "Thanks.  That\u0027s what I eventually figured out.",
+      "parentUuid": "577e1efa_bab02f06",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 73
+      },
+      "revId": "1baa72d63140bb17acc6c9c832da25e9872fac73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
