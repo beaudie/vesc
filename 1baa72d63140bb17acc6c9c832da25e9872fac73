@@ -46,6 +46,30 @@
       "revId": "1baa72d63140bb17acc6c9c832da25e9872fac73",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "577e1efa_bab02f06",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-21T16:42:29Z",
+      "side": 1,
+      "message": "You should run scripts/run_code_generation.py which will run this script and any other out-of-date code gen.  We also have a presubmit check that verifies that all code gen has been run.",
+      "parentUuid": "64bad8ed_fb041b87",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 73
+      },
+      "revId": "1baa72d63140bb17acc6c9c832da25e9872fac73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
