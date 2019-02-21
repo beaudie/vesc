@@ -627,6 +627,7 @@ Framebuffer::Framebuffer(const Caps &caps, rx::GLImplFactory *factory, GLuint id
     : mState(caps, id),
       mImpl(factory->createFramebuffer(mState)),
       mCachedStatus(),
+      mCachedHasFloatColorAttachment(false),
       mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
       mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
 {
@@ -644,6 +645,7 @@ Framebuffer::Framebuffer(const Context *context, egl::Surface *surface)
     : mState(),
       mImpl(surface->getImplementation()->createDefaultFramebuffer(context, mState)),
       mCachedStatus(GL_FRAMEBUFFER_COMPLETE),
+      mCachedHasFloatColorAttachment(false),
       mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
       mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
 {
@@ -680,6 +682,7 @@ Framebuffer::Framebuffer(rx::GLImplFactory *factory)
     : mState(),
       mImpl(factory->createFramebuffer(mState)),
       mCachedStatus(GL_FRAMEBUFFER_UNDEFINED_OES),
+      mCachedHasFloatColorAttachment(false),
       mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
       mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
 {
@@ -956,6 +959,11 @@ bool Framebuffer::hasDepth() const
 bool Framebuffer::hasStencil() const
 {
     return mState.hasStencil();
+}
+
+bool Framebuffer::hasFloatColorAttachment() const
+{
+    return mCachedHasFloatColorAttachment;
 }
 
 bool Framebuffer::usingExtendedDrawBuffers() const
@@ -1757,6 +1765,7 @@ void Framebuffer::setAttachmentImpl(const Context *context,
                              &mDirtyColorAttachmentBindings[colorIndex], type, binding,
                              textureIndex, resource, numViews, baseViewIndex, multiviewLayout,
                              viewportOffsets);
+            checkHasFloatColorAttachment();
 
             // TODO(jmadill): ASSERT instead of checking the attachment exists in
             // formsRenderingFeedbackLoopWith
@@ -1808,6 +1817,19 @@ angle::Result Framebuffer::syncState(const Context *context)
     return angle::Result::Continue;
 }
 
+void Framebuffer::checkHasFloatColorAttachment()
+{
+    for (const FramebufferAttachment &a : mState.getColorAttachments())
+    {
+        if (a.getComponentType() == GL_FLOAT)
+        {
+            mCachedHasFloatColorAttachment = true;
+            return;
+        }
+    }
+    mCachedHasFloatColorAttachment = false;
+}
+
 void Framebuffer::onSubjectStateChange(const Context *context,
                                        angle::SubjectIndex index,
                                        angle::SubjectMessage message)
@@ -1829,6 +1851,15 @@ void Framebuffer::onSubjectStateChange(const Context *context,
 
     // Mark the appropriate init flag.
     mState.mResourceNeedsInit.set(index, attachment->initState() == InitState::MayNeedInit);
+
+    // Update hasFloatColorAttachment Cache
+    if (index != DIRTY_BIT_DEPTH_ATTACHMENT && index != DIRTY_BIT_STENCIL_ATTACHMENT &&
+        attachment->getComponentType() == GL_FLOAT)
+    {
+        // only a change of float color attachment could potentailly update the
+        // mCachedHasFloatColorAttachment
+        checkHasFloatColorAttachment();
+    }
 }
 
 FramebufferAttachment *Framebuffer::getAttachmentFromSubjectIndex(angle::SubjectIndex index)

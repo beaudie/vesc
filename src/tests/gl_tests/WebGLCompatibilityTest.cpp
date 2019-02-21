@@ -43,6 +43,7 @@ constexpr const char *FloatingPointTextureExtensions[] = {
     "GL_OES_texture_float",
     "GL_OES_texture_float_linear",
     "GL_EXT_color_buffer_float",
+    "GL_EXT_float_blend",
     "GL_CHROMIUM_color_buffer_float_rgba",
     "GL_CHROMIUM_color_buffer_float_rgb",
 };
@@ -211,6 +212,49 @@ class WebGLCompatibilityTest : public ANGLETest
 
         EXPECT_PIXEL_COLOR32F_NEAR(
             0, 0, GLColor32F(floatData[0], floatData[1], floatData[2], floatData[3]), 1.0f);
+    }
+
+    void TestExtFloatBlend(bool shouldBlend)
+    {
+        constexpr char kVS[] =
+            "void main()\n"
+            "{\n"
+            "   gl_Position = vec4(0, 0, 0, 1);\n"
+            "}\n";
+
+        constexpr char kFS[] =
+            "void main()\n"
+            "{\n"
+            "   gl_FragColor = vec4(0, 1, 0, 1);\n"
+            "}\n";
+
+        ANGLE_GL_PROGRAM(program, kVS, kFS);
+        glUseProgram(program);
+
+        GLTexture texture;
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 1, 1, 0, GL_RGBA, GL_FLOAT, nullptr);
+        EXPECT_GL_NO_ERROR();
+
+        GLFramebuffer fbo;
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+        ASSERT_EQ((int)glCheckFramebufferStatus(GL_FRAMEBUFFER), GL_FRAMEBUFFER_COMPLETE);
+
+        glDisable(GL_BLEND);
+        glDrawArrays(GL_POINTS, 0, 1);
+        EXPECT_GL_NO_ERROR();
+
+        glEnable(GL_BLEND);
+        glDrawArrays(GL_POINTS, 0, 1);
+        if (shouldBlend)
+        {
+            EXPECT_GL_NO_ERROR();
+        }
+        else
+        {
+            EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+        }
     }
 
     void TestDifferentStencilMaskAndRef(GLenum errIfMismatch);
@@ -2859,6 +2903,27 @@ TEST_P(WebGLCompatibilityTest, RGBA32FTextures)
                                    data);
         }
     }
+}
+
+TEST_P(WebGLCompatibilityTest, FloatBlend)
+{
+    ANGLE_SKIP_TEST_IF(!extensionRequestable("GL_EXT_float_blend"));
+    if (getClientMajorVersion() >= 3)
+    {
+        ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_EXT_color_buffer_float"));
+    }
+    else
+    {
+        ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_OES_texture_float"));
+        ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_CHROMIUM_color_buffer_float_rgba"));
+    }
+
+    TestExtFloatBlend(false);
+
+    glRequestExtensionANGLE("GL_EXT_float_blend");
+    ASSERT_GL_NO_ERROR();
+
+    TestExtFloatBlend(true);
 }
 
 TEST_P(WebGLCompatibilityTest, R16FTextures)
