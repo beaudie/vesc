@@ -408,6 +408,30 @@
     },
     {
       "key": {
+        "uuid": "ad87e334_e08c46f1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-21T20:16:48Z",
+      "side": 1,
+      "message": "Since the start of this discussion, I\u0027ve been thinking about whether it would be realistic to think about using multiple queues in the near future. Doing async compute seems to be a bit farther in the future, but doing async transfers is actually doable. In that case, tracking the queue family index as done makes more sense.\n\n---\n\nRegarding async transfers, I still need to understand whether that actually makes a difference (as in, whether the non-transfer barriers within the queue can hinder transfer work on that queue).",
+      "parentUuid": "7f53e166_6d40b88f",
+      "range": {
+        "startLine": 1568,
+        "startChar": 46,
+        "endLine": 1568,
+        "endChar": 70
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45cc3760_06998d71",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 15
