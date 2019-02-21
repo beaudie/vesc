@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "669605d1_97cfc289",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-02-21T04:26:58Z",
+      "side": 1,
+      "message": "This a good point. In current implementation, worker threads and contexts are allocated and destroyed on the fly for most gl backends. The only exception is GLX backend. It pre-allocates a few pbuffers in advance. I improved not to do that if the native extension is present.",
+      "parentUuid": "a3d19502_e837c9f6",
+      "revId": "95fa6de02b8b8b137aeff7f691618ad9909fc8a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7f10826d_8c1b9e64",
         "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-20T22:16:52Z",
       "side": 1,
       "message": "present \u003d true;",
+      "revId": "95fa6de02b8b8b137aeff7f691618ad9909fc8a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b94be4e_7b61ddc7",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-02-21T04:26:58Z",
+      "side": 1,
+      "message": "Good catch, thanks.",
+      "parentUuid": "7f10826d_8c1b9e64",
       "revId": "95fa6de02b8b8b137aeff7f691618ad9909fc8a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3c95309d_93f90108",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-02-21T04:26:58Z",
+      "side": 1,
+      "message": "According to the spec, 0xffffffff means implementation-specific. Probably drivers may have their own considerations on the limit.",
+      "parentUuid": "10e306e3_20fd554a",
+      "revId": "95fa6de02b8b8b137aeff7f691618ad9909fc8a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bd6e0943_22ecdfee",
         "filename": "src/libANGLE/renderer/gl/ShaderGL.cpp",
         "patchSetId": 5
@@ -67,6 +121,24 @@
       "revId": "95fa6de02b8b8b137aeff7f691618ad9909fc8a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03d2bff1_5366b730",
+        "filename": "src/libANGLE/renderer/gl/ShaderGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-02-21T04:26:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd6e0943_22ecdfee",
+      "revId": "95fa6de02b8b8b137aeff7f691618ad9909fc8a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
