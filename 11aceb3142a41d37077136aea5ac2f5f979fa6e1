@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "69c09088_9f236c91",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-21T18:36:17Z",
+      "side": 1,
+      "message": "FYI, the pattern comes from the C standard, that says assert()\u0027s behavior depends on NDEBUG. So NDEBUG (unfortunately) became kind of a standard way of differentiating debug and release builds.",
+      "parentUuid": "95da93b3_60333db1",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 13
+      },
+      "revId": "11aceb3142a41d37077136aea5ac2f5f979fa6e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "115dc516_6bd441b5",
         "filename": "src/common/PoolAlloc.h",
         "patchSetId": 9
@@ -59,6 +83,30 @@
       "writtenOn": "2019-02-21T18:00:03Z",
       "side": 1,
       "message": "and these could become #if defined(GUARD_BLOCKS)",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 19
+      },
+      "revId": "11aceb3142a41d37077136aea5ac2f5f979fa6e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab45b4c2_f2571faa",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-21T18:36:17Z",
+      "side": 1,
+      "message": "If you do `#define GUARD_BLOCKS 1`, you can then do `#if GUARD_BLOCKS`, which is generally the preferred way of doing this.",
+      "parentUuid": "4a9751fc_cf77d3e3",
       "range": {
         "startLine": 59,
         "startChar": 0,
