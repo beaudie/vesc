@@ -16,6 +16,24 @@
       "revId": "39c79df4fa46b8ed4e7985c112c921e4404c0e99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46ac4d9a_5f2a54ea",
+        "filename": "BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T21:51:35Z",
+      "side": 1,
+      "message": "Yes. This is GN magic. \n\nhttps://gn.googlesource.com/gn/+/master/docs/reference.md#func_copy",
+      "parentUuid": "c1ece25d_af48525c",
+      "revId": "39c79df4fa46b8ed4e7985c112c921e4404c0e99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
