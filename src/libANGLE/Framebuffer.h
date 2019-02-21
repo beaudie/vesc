@@ -337,6 +337,12 @@ class Framebuffer final : public angle::ObserverInterface,
     using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
 
+    using FloatColorAttachmentBits = DrawBufferMask;
+    bool hasActiveFloatColorAttachment() const
+    {
+        return (mFloatColorAttachmentBits & getDrawBufferMask()).any();
+    }
+
     bool hasResourceThatNeedsInit() const { return mState.mResourceNeedsInit.any(); }
 
     angle::Result syncState(const Context *context);
@@ -427,6 +433,7 @@ class Framebuffer final : public angle::ObserverInterface,
     angle::ObserverBinding mDirtyStencilAttachmentBinding;
 
     DirtyBits mDirtyBits;
+    FloatColorAttachmentBits mFloatColorAttachmentBits;
 
     // The dirty bits guard is checked when we get a dependent state change message. We verify that
     // we don't set a dirty bit that isn't already set, when inside the dirty bits syncState.

@@ -1758,6 +1758,23 @@ void Framebuffer::setAttachmentImpl(const Context *context,
                              textureIndex, resource, numViews, baseViewIndex, multiviewLayout,
                              viewportOffsets);
 
+            if (!resource)
+            {
+                mFloatColorAttachmentBits.reset(colorIndex);
+            }
+            else
+            {
+                if (resource->getAttachmentFormat(binding, textureIndex).info->componentType ==
+                    GL_FLOAT)
+                {
+                    mFloatColorAttachmentBits.set(colorIndex);
+                }
+                else
+                {
+                    mFloatColorAttachmentBits.reset(colorIndex);
+                }
+            }
+
             // TODO(jmadill): ASSERT instead of checking the attachment exists in
             // formsRenderingFeedbackLoopWith
             bool enabled = (type != GL_NONE && getDrawBufferState(colorIndex) != GL_NONE);
@@ -1829,6 +1846,13 @@ void Framebuffer::onSubjectStateChange(const Context *context,
 
     // Mark the appropriate init flag.
     mState.mResourceNeedsInit.set(index, attachment->initState() == InitState::MayNeedInit);
+
+    // Update mFloatColorAttachmentBits Cache
+    if (index != DIRTY_BIT_DEPTH_ATTACHMENT && index != DIRTY_BIT_STENCIL_ATTACHMENT)
+    {
+        mFloatColorAttachmentBits.set(index - DIRTY_BIT_COLOR_ATTACHMENT_0,
+                                      attachment->getComponentType() == GL_FLOAT);
+    }
 }
 
 FramebufferAttachment *Framebuffer::getAttachmentFromSubjectIndex(angle::SubjectIndex index)
