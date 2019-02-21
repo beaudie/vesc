@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "811920c8_ada029da",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2626,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T19:55:31Z",
+      "side": 1,
+      "message": "This will be a costly thing to check during a draw re-validation. Could you cache this in Framebuffer during attachment update and in onSubjectStateChange?\n\nIt would also be a good idea to add state change tests for this in StateChangeTests.cpp. e.g. a test that enables float blending, draws, disables blending, draws again and ensures that it does not produce an error. Also tests bind a floating point framebuffer, generates an error, then redefines the texture. Now there\u0027s no error.",
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f3926b19_47291dc4",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 2
@@ -42,6 +59,23 @@
         "endLine": 2630,
         "endChar": 37
       },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f31218fb_e870bf99",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2630,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T19:55:31Z",
+      "side": 1,
+      "message": "nit: ANGLE uses camelCase with no underscores for variable names. See https://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md",
       "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -110,6 +144,29 @@
         "startChar": 16,
         "endLine": 2644,
         "endChar": 90
+      },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ef1fb7f_541bd5ba",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T19:55:31Z",
+      "side": 1,
+      "message": "nit: angle style uses lower case for non-static member functions. see https://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md",
+      "range": {
+        "startLine": 217,
+        "startChar": 9,
+        "endLine": 217,
+        "endChar": 26
       },
       "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
