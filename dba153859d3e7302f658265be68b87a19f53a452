@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4aa185b2_a703b11f",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-21T18:59:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d30a4b69_1ed6aff8",
+      "revId": "dba153859d3e7302f658265be68b87a19f53a452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d0185e0_1cd523fb",
         "filename": "src/common/system_utils_posix.cpp",
         "patchSetId": 11
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-21T18:45:32Z",
       "side": 1,
       "message": "as long as you\u0027re using fork, maybe we should add a timeout parameter to RunApp? Otherwise I\u0027m not sure you need fork. But my Linux knowledge isn\u0027t as good.",
+      "revId": "dba153859d3e7302f658265be68b87a19f53a452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70edf9ff_9df76e23",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-21T18:59:54Z",
+      "side": 1,
+      "message": "You need `fork()` because you need to `execve` after. `execve` replaces the current process with the one being executed. Without `fork()`, you would lose your only process! Essentially, `fork()+execve()` is the equivalent of `CreateProcess` on win32, except you don\u0027t have to always do them together (as `CreateProcess` would enforce).\n\nBTW, `fork()` is a very light-weight operation on Linux.\n\n---\n\nTimeout is very unlikely to help. First, it would leave around zombie processes if you timeout, fail and never get the chance to go back and do cleanup.\n\nMore importantly, the two `ReadEntireFile()` calls only ever reach EOF if the calling process terminates (or closes `stdout`/`stderr`, but who does that!). Enforcing a timeout on that would be less trivial.",
+      "parentUuid": "5d0185e0_1cd523fb",
       "revId": "dba153859d3e7302f658265be68b87a19f53a452",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "9e340a8d_e37a6123",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-21T18:59:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89efcf01_8af69843",
+      "range": {
+        "startLine": 97,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 4
+      },
+      "revId": "dba153859d3e7302f658265be68b87a19f53a452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5b1cc2c_16f3d598",
         "filename": "src/common/system_utils_unittest.cpp",
         "patchSetId": 11
@@ -79,6 +139,30 @@
       "revId": "dba153859d3e7302f658265be68b87a19f53a452",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1873f0be_94c45b78",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-21T18:59:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5b1cc2c_16f3d598",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 4
+      },
+      "revId": "dba153859d3e7302f658265be68b87a19f53a452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
