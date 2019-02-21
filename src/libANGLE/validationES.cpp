@@ -2623,6 +2623,29 @@ const char *ValidateDrawStates(Context *context)
         }
     }
 
+    if (!extensions.floatBlend)
+    {
+        if (context->isEnabled(GL_BLEND))
+        {
+            bool has_float_attachment = false;
+            const std::vector<FramebufferAttachment> &color_attachments =
+                framebuffer->getColorAttachments();
+            for (const FramebufferAttachment &a : color_attachments)
+            {
+                if (a.getComponentType() == GL_FLOAT)
+                {
+                    has_float_attachment = true;
+                    break;
+                }
+            }
+
+            if (has_float_attachment)
+            {
+                context->validationError(GL_INVALID_OPERATION, kUnsupportedFloatBlending);
+            }
+        }
+    }
+
     if (!framebuffer->isComplete(context))
     {
         // Note: this error should be generated as INVALID_FRAMEBUFFER_OPERATION.
