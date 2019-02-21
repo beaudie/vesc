@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d67cbd75_6ddbbe61",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-02-21T16:44:09Z",
+      "side": 1,
+      "message": "I noticed that the script removes the old year, and just leaves the current year.  That\u0027s not correct, but I don\u0027t know if you want to fix it.",
+      "revId": "c55ad03efed5019b790f40cfdffc87c75ea3a3c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
