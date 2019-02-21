@@ -28,6 +28,7 @@ class TranslatorESSL : public TCompiler
 
   private:
     void writeExtensionBehavior(ShCompileOptions compileOptions);
+    void writeVersion(TIntermNode *root);
 };
 
 }  // namespace sh

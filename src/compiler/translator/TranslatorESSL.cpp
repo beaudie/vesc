@@ -37,7 +37,14 @@ void TranslatorESSL::translate(TIntermBlock *root,
     int shaderVer = getShaderVersion();
     if (shaderVer > 100)
     {
-        sink << "#version " << shaderVer << " es\n";
+        if (shaderVer >= 300)
+        {
+            sink << "#version " << 310 << " es\n";
+        }
+        else
+        {
+            sink << "#version " << shaderVer << " es\n";
+        }
     }
 
     // Write built-in extension behaviors.
@@ -175,6 +182,11 @@ void TranslatorESSL::writeExtensionBehavior(ShCompileOptions compileOptions)
             {
                 // Don't emit anything. This extension is emulated
                 ASSERT((compileOptions & SH_EMULATE_GL_DRAW_ID) != 0);
+                continue;
+            }
+            else if (iter->first == TExtension::ANGLE_texture_multisample)
+            {
+                // ANGLE_texture_multisample is only supported on GLSL300 but not on GLES
                 continue;
             }
             else
