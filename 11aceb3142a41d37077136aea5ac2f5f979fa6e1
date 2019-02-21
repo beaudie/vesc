@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95da93b3_60333db1",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T18:00:03Z",
+      "side": 1,
+      "message": "nit: #if !defined(NDEBUG) is the style we usually use. The reasoning is a bit obscure but it would at least match most of the other code.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 13
+      },
+      "revId": "11aceb3142a41d37077136aea5ac2f5f979fa6e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "115dc516_6bd441b5",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T18:00:03Z",
+      "side": 1,
+      "message": "nit: we should probably scope this. How about ANGLE_POOL_ALLOC_GUARD_BLOCKS?",
+      "range": {
+        "startLine": 15,
+        "startChar": 12,
+        "endLine": 15,
+        "endChar": 26
+      },
+      "revId": "11aceb3142a41d37077136aea5ac2f5f979fa6e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a9751fc_cf77d3e3",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T18:00:03Z",
+      "side": 1,
+      "message": "and these could become #if defined(GUARD_BLOCKS)",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 19
+      },
+      "revId": "11aceb3142a41d37077136aea5ac2f5f979fa6e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52ff00c7_c072af47",
+        "filename": "src/common/PoolAlloc_unittest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T18:00:03Z",
+      "side": 1,
+      "message": "can you take this out now?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 9
+      },
+      "revId": "11aceb3142a41d37077136aea5ac2f5f979fa6e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d89224b0_dacf9f4f",
+        "filename": "src/common/PoolAlloc_unittest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T18:00:03Z",
+      "side": 1,
+      "message": "nit: expected argument should be the first value, actual second. this would affect the error message mostly.",
+      "range": {
+        "startLine": 163,
+        "startChar": 4,
+        "endLine": 163,
+        "endChar": 37
+      },
+      "revId": "11aceb3142a41d37077136aea5ac2f5f979fa6e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89909fc6_dcdc2e98",
+        "filename": "src/common/PoolAlloc_unittest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-21T18:00:03Z",
+      "side": 1,
+      "message": "how bout #if !defined(ANGLE_POOL_ALLOC_GUARD_BLOCKS) ?",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 65
+      },
+      "revId": "11aceb3142a41d37077136aea5ac2f5f979fa6e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
