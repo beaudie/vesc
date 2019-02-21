@@ -2910,17 +2910,12 @@ TEST_P(WebGLCompatibilityTest, FloatBlend)
     ANGLE_SKIP_TEST_IF(!extensionRequestable("GL_EXT_float_blend"));
     if (getClientMajorVersion() >= 3)
     {
-        ANGLE_SKIP_TEST_IF(!extensionRequestable("GL_EXT_color_buffer_float"));
-
-        glRequestExtensionANGLE("GL_EXT_color_buffer_float");
+        ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_EXT_color_buffer_float"));
     }
     else
     {
-        ANGLE_SKIP_TEST_IF(!extensionRequestable("GL_OES_texture_float"));
-        ANGLE_SKIP_TEST_IF(!extensionRequestable("GL_CHROMIUM_color_buffer_float_rgba"));
-
-        glRequestExtensionANGLE("GL_OES_texture_float");
-        glRequestExtensionANGLE("GL_CHROMIUM_color_buffer_float_rgba");
+        ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_OES_texture_float"));
+        ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_CHROMIUM_color_buffer_float_rgba"));
     }
 
     TestExtFloatBlend(false);
