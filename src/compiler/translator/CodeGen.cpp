@@ -35,7 +35,7 @@ TCompiler *ConstructCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput 
 #ifdef ANGLE_ENABLE_ESSL
     if (IsOutputESSL(output))
     {
-        return new TranslatorESSL(type, spec);
+        return new TranslatorESSL(type, spec, output);
     }
 #endif  // ANGLE_ENABLE_ESSL
 
