@@ -69,6 +69,24 @@
       "revId": "0c0f7ca539a5e35289e6fbb89c6a1d5d1822c0b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a1a588c_c2e41c56",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-02-22T20:58:01Z",
+      "side": 1,
+      "message": "OK, I\u0027d forgotten about that exception.\n\nWould you still be willing to make this a parameter, and test both GL_RGBA and GL_RGBA32F internal formats with the ES 2.0 context? WebGL 1.0 with the OES_texture_float extension uses GL_RGBA/GL_FLOAT as the internal format and type, and it would be best to ensure that both work in the ANGLE test.",
+      "parentUuid": "a03a2b43_01efb8eb",
+      "revId": "0c0f7ca539a5e35289e6fbb89c6a1d5d1822c0b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
