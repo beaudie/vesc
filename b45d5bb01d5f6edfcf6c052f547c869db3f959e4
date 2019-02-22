@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6490666_4b7d1879",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-22T20:41:52Z",
+      "side": 1,
+      "message": "I\u0027m not really happy with the way this turned out. A while back I made a distinction between Draw views and Read views, and it would be possible to turn that into Draw, Sample and Fetch views. That would overcome this issue, with the side effect of every texture now having 3 views instead of 2 (though non cube map textures don\u0027t really need to allocate the third view and can use the second for both).\n\nWhile that would be cleaner, I\u0027m not sure the rare \"copy from a cube map\" use case would justify the additional view on every cube map texture.\n\n---\n\nNow that I write this down, having the third view lazily allocated might not be too bad either.\n\nWhat do you think?",
+      "range": {
+        "startLine": 593,
+        "startChar": 0,
+        "endLine": 612,
+        "endChar": 5
+      },
+      "revId": "b45d5bb01d5f6edfcf6c052f547c869db3f959e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
