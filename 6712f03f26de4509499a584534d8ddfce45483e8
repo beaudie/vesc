@@ -1,0 +1,222 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0afcb3a9_eea82993",
+        "filename": "src/libANGLE/renderer/angle_format_data.json",
+        "patchSetId": 16
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-02-22T18:01:17Z",
+      "side": 1,
+      "message": "nice",
+      "range": {
+        "startLine": 35,
+        "startChar": 2,
+        "endLine": 39,
+        "endChar": 10
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1defd5a7_1405baba",
+        "filename": "src/libANGLE/renderer/gen_angle_format_table.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-02-22T18:01:17Z",
+      "side": 1,
+      "message": "nit: can you assert \u0027blockPixelBytes\u0027 in parsed ?",
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec2168e8_e136d4fa",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-02-22T18:01:17Z",
+      "side": 1,
+      "message": "this is a bit of a placeholder. I wonder if we can get rid of this somehow. just a thought.",
+      "range": {
+        "startLine": 210,
+        "startChar": 61,
+        "endLine": 210,
+        "endChar": 77
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "283c1ebe_003ccdf3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-02-22T18:01:17Z",
+      "side": 1,
+      "message": "the only thing we\u0027re using internalFormat for is getting the vk::Format. Can we instead pass the vkFormat to redefineImage?",
+      "range": {
+        "startLine": 851,
+        "startChar": 4,
+        "endLine": 851,
+        "endChar": 89
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "390b2592_95060a76",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-02-22T18:01:17Z",
+      "side": 1,
+      "message": "just a minor cleanup suggestion.\n\nVkImageUsageFlags usage \u003d (the base three)\n\nif (angleForamt.isBlock)\n{\n   imageUsageFlags |\u003d VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;\n}\n\nANGLE_TRY(... imageUsageFlags ...);\n\nEasier to parse visually. Using ?: in parameter lists adds some complexity.",
+      "range": {
+        "startLine": 1250,
+        "startChar": 0,
+        "endLine": 1256,
+        "endChar": 0
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bafd31b_be8d653f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-02-22T18:01:17Z",
+      "side": 1,
+      "message": "maybe we should just take out the initial clear. and suppress the layer warning.",
+      "range": {
+        "startLine": 1268,
+        "startChar": 4,
+        "endLine": 1268,
+        "endChar": 29
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e37396a_36741ef3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1298,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-02-22T18:01:17Z",
+      "side": 1,
+      "message": "same comment. at this point it becomes hacky.",
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8a35e3c_e196a1f4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-02-22T18:01:17Z",
+      "side": 1,
+      "message": "nit: redundant, can omit.",
+      "range": {
+        "startLine": 1324,
+        "startChar": 0,
+        "endLine": 1325,
+        "endChar": 5
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84c1bf6c_006d4374",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-02-22T18:01:17Z",
+      "side": 1,
+      "message": "nit: could clarify that there aren\u0027t red bits / etc in swizzles. Hence why you need to skip this.",
+      "range": {
+        "startLine": 221,
+        "startChar": 11,
+        "endLine": 221,
+        "endChar": 88
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c2c5e4e_519ed1d5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-02-22T18:01:17Z",
+      "side": 1,
+      "message": "I think block size and pixel bytes are different. i.e. a format like R32G32B32A32F would have a pixel bytes of 16 but should be okay with an alignment of 4. Block size is unique to compressed formats. I would think using an isBlock in here somewhere would be a reasonable idea. You could also make this computation a helper on vk::Format (getImageCopyAlignment())?",
+      "range": {
+        "startLine": 1289,
+        "startChar": 0,
+        "endLine": 1289,
+        "endChar": 64
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
