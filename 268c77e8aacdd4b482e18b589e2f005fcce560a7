@@ -70,6 +70,24 @@
       "revId": "268c77e8aacdd4b482e18b589e2f005fcce560a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8302ab0a_fe8f12db",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-22T16:20:50Z",
+      "side": 1,
+      "message": "Yes, it should be possible. It\u0027s a bit tricky probably. But would be worth adding.",
+      "parentUuid": "6a6aac9d_ec86b004",
+      "revId": "268c77e8aacdd4b482e18b589e2f005fcce560a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
