@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3f200da1_30d11ac0",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2626,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-22T19:44:05Z",
+      "side": 1,
+      "message": "I added some caching logic in the latest patch with a new StateChangeTest with my own understanding. It seems to work. But I\u0027m not sure if this is what you meant. Could you please a take look and point out if I\u0027m doing anything wrong here? Thanks",
+      "parentUuid": "811920c8_ada029da",
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f3926b19_47291dc4",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 2
@@ -39,6 +57,30 @@
       "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0750c1f_9f059f18",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2628,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-22T19:44:05Z",
+      "side": 1,
+      "message": "Fixed as suggested",
+      "parentUuid": "f3926b19_47291dc4",
+      "range": {
+        "startLine": 2628,
+        "startChar": 12,
+        "endLine": 2628,
+        "endChar": 40
+      },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +124,30 @@
     },
     {
       "key": {
+        "uuid": "cb272a57_f1079ef0",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2630,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-22T19:44:05Z",
+      "side": 1,
+      "message": "Fixed as suggested",
+      "parentUuid": "35fa3e81_6748903a",
+      "range": {
+        "startLine": 2630,
+        "startChar": 17,
+        "endLine": 2630,
+        "endChar": 37
+      },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68f4efbb_3aa48353",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 2
@@ -102,6 +168,30 @@
       "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3ff9ee0_a10441dd",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2631,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-22T19:44:05Z",
+      "side": 1,
+      "message": "Fixed as suggested",
+      "parentUuid": "68f4efbb_3aa48353",
+      "range": {
+        "startLine": 2631,
+        "startChar": 54,
+        "endLine": 2631,
+        "endChar": 71
+      },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -128,6 +218,30 @@
     },
     {
       "key": {
+        "uuid": "e2355bc8_1c875e27",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2638,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-22T19:44:05Z",
+      "side": 1,
+      "message": "Fixed as suggested",
+      "parentUuid": "bc183651_4f7fb9ff",
+      "range": {
+        "startLine": 2637,
+        "startChar": 20,
+        "endLine": 2638,
+        "endChar": 26
+      },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "11c492c6_8966b833",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 2
@@ -148,6 +262,30 @@
       "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39d3e347_673aa2ce",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2644,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-22T19:44:05Z",
+      "side": 1,
+      "message": "Fixed as suggested",
+      "parentUuid": "11c492c6_8966b833",
+      "range": {
+        "startLine": 2644,
+        "startChar": 16,
+        "endLine": 2644,
+        "endChar": 90
+      },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
