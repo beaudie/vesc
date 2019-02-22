@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "8ab07518_08393430",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-22T20:59:31Z",
+      "side": 1,
+      "message": "nit: missing \":\" between chromium and number",
+      "revId": "6f1d461c4d8e4d2f07123bd72b6e16d3e714c106",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e916fa0_119de294",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1822,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-22T20:59:31Z",
+      "side": 1,
+      "message": "instead of keeping mCachedHasFloatColorAttachment, can we keep DrawBuffersMask mCachedFloatAttachmentsMask? \"has\" can return .any. And then the update functions won\u0027t need a for loop.",
+      "range": {
+        "startLine": 1822,
+        "startChar": 4,
+        "endLine": 1822,
+        "endChar": 71
+      },
+      "revId": "6f1d461c4d8e4d2f07123bd72b6e16d3e714c106",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6bdadcc2_4e2d0dac",
         "filename": "src/libANGLE/Framebuffer.h",
         "patchSetId": 6
