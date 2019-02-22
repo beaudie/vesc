@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bc1f685_a41988ea",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1117,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-22T20:29:10Z",
+      "side": 1,
+      "message": "This may start interacting with Android apps, creating ES3 contexts when they request it we may consider a ANGLE_VULKAN_CONFORMANT_CONFIGS_ONLY kind of build flag to block that.",
+      "range": {
+        "startLine": 1117,
+        "startChar": 29,
+        "endLine": 1117,
+        "endChar": 47
+      },
+      "revId": "2a4d0a0069d464ecc39dacebb71fa8b942b795e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
