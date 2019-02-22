@@ -404,6 +404,30 @@
       "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "364804c5_d7b9e2b9",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2915,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-22T19:46:24Z",
+      "side": 1,
+      "message": "Fixed as suggested",
+      "parentUuid": "240b35cb_f9df764c",
+      "range": {
+        "startLine": 2913,
+        "startChar": 8,
+        "endLine": 2915,
+        "endChar": 61
+      },
+      "revId": "7b39b68b4b3c07a3d452a683d3647f23dcaa3be9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
