@@ -229,7 +229,7 @@ class WebGLCompatibilityTest : public ANGLETest
             "}\n";
 
         ANGLE_GL_PROGRAM(program, kVS, kFS);
-        glUseProgram(program.get());
+        glUseProgram(program);
 
         GLTexture texture;
         glBindTexture(GL_TEXTURE_2D, texture);

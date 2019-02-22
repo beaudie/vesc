@@ -206,10 +206,6 @@ class Framebuffer final : public angle::ObserverInterface,
     const FramebufferAttachment *getFirstNonNullAttachment() const;
 
     const FramebufferAttachment *getAttachment(const Context *context, GLenum attachment) const;
-    const std::vector<FramebufferAttachment> &getColorAttachments() const
-    {
-        return mState.getColorAttachments();
-    }
     GLenum getMultiviewLayout() const;
     bool readDisallowedByMultiview() const;
     GLsizei getNumViews() const;
@@ -232,6 +228,7 @@ class Framebuffer final : public angle::ObserverInterface,
     size_t getNumColorBuffers() const;
     bool hasDepth() const;
     bool hasStencil() const;
+    bool hasFloatColorAttachment() const;
 
     bool usingExtendedDrawBuffers() const;
 
@@ -265,6 +262,9 @@ class Framebuffer final : public angle::ObserverInterface,
 
         return checkStatusImpl(context);
     }
+
+    void checkHasFloatColorAttachment();
+    ANGLE_INLINE bool hasFloatColorAttachment() { return mCachedHasFloatColorAttachment; }
 
     // For when we don't want to check completeness in getSamples().
     int getCachedSamples(const Context *context);
@@ -426,6 +426,7 @@ class Framebuffer final : public angle::ObserverInterface,
     rx::FramebufferImpl *mImpl;
 
     Optional<GLenum> mCachedStatus;
+    bool mCachedHasFloatColorAttachment;
     std::vector<angle::ObserverBinding> mDirtyColorAttachmentBindings;
     angle::ObserverBinding mDirtyDepthAttachmentBinding;
     angle::ObserverBinding mDirtyStencilAttachmentBinding;

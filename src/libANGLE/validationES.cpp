@@ -2623,21 +2623,11 @@ const char *ValidateDrawStates(Context *context)
         }
     }
 
-    if (!extensions.floatBlend)
+    if (!extensions.floatBlend && context->getState().isBlendEnabled() &&
+        framebuffer->hasFloatColorAttachment())
     {
-        if (context->getState().isBlendEnabled())
-        {
-            const std::vector<FramebufferAttachment> &colorAttachments =
-                framebuffer->getColorAttachments();
-            for (const FramebufferAttachment &a : colorAttachments)
-            {
-                if (a.getComponentType() == GL_FLOAT)
-                {
-                    context->validationError(GL_INVALID_OPERATION, kUnsupportedFloatBlending);
-                    return kUnsupportedFloatBlending;
-                }
-            }
-        }
+        context->validationError(GL_INVALID_OPERATION, kUnsupportedFloatBlending);
+        return kUnsupportedFloatBlending;
     }
 
     if (!framebuffer->isComplete(context))
