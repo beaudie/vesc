@@ -60,10 +60,16 @@ deps = {
     'url': '{chromium_git}/external/deqp@{deqp_revision}',
   },
 
+  # glmark2 is a GPL3-licensed OpenGL ES 2.0 benchmark. We use it for testing.
+  # FIXME: need to use chromium_git instead of github
+  '{angle_root}/third_party/glmark2/src': {
+    'url': 'https://github.com/null77/glmark2.git@windows',
+  },
+
   '{angle_root}/third_party/glslang/src': {
     'url': '{chromium_git}/external/github.com/KhronosGroup/glslang@{glslang_revision}',
     'condition': 'not build_with_chromium',
-   },
+  },
 
   '{angle_root}/third_party/googletest': {
     'url': '{chromium_git}/chromium/src/third_party/googletest@660425b1c5ca04559ab7e50c7572b5b771acca1c',
@@ -72,6 +78,12 @@ deps = {
 
   '{angle_root}/third_party/googletest/src': {
     'url': '{chromium_git}/external/github.com/google/googletest.git@7203f37f57e4fef0d77670098aabc186309eb874',
+    'condition': 'not build_with_chromium',
+  },
+
+  # libjpeg_turbo is used by glmark2.
+  '{angle_root}/third_party/libjpeg_turbo': {
+    'url': '{chromium_git}/chromium/deps/libjpeg_turbo@61a2bbaa9aec89cb2c882d87ace6aba9aee49bb9',
     'condition': 'not build_with_chromium',
   },
 
@@ -136,6 +148,16 @@ deps = {
 
   '{angle_root}/third_party/vulkan-validation-layers/src': {
     'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-ValidationLayers@{vulkan_validation_revision}',
+  },
+
+  '{angle_root}/third_party/yasm': {
+    'url': '{chromium_git}/chromium/src/third_party/yasm@86b6058141a42aed51bbd8bb9f9d54d199d9dbd0',
+    'condition': 'not build_with_chromium',
+  },
+
+  '{angle_root}/third_party/yasm/source/patched-yasm': {
+    'url': '{chromium_git}/chromium/deps/yasm/patched-yasm.git@720b70524a4424b15fc57e82263568c8ba0496ad',
+    'condition': 'not build_with_chromium',
   },
 
   '{angle_root}/third_party/zlib': {
