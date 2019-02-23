@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a34350a_2911498f",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-23T03:49:13Z",
+      "side": 1,
+      "message": "I suggest making `AllocationSize()` do the complete job of getting the allocation size. This is a bit wasteful as not all of the extra `mAlignment` bytes would be necessary (in fact, there\u0027s always at least 1 byte unnecessarily allocated here). To that end, I suggest doing this:\n\nFor brevity, assume this function:\n\n    roundup(size, alignmentMask) { return (size + alignmentMask) \u0026 alignmentMask; }\n\nIn the Allocation class:\n\n    static size_t AllocationSize(size_t startOffset, size_t size, size_t alignmentMask)\n    {\n        size_t headerSize \u003d roundup(startOffset + kGuardBlockSize + HeaderSize()\n        return  size + 2 * kGuardBlockSize + HeaderSize(); }\n\n    static size_t AllocationOffset(size_t startOffset, size_t alignmentMask)\n    {\n        // Calculate how much header needs to grow so the data is aligned.\n        size_t headerSize \u003d roundup(startOffset + kGuardBlockSize + HeaderSize(), alignmentMask) - startOffset;\n        // Return the total size including header and footer.\n        return size + headerSize + kGuardBlockSize;\n    }\n\n    // Offset from surrounding buffer to get to user data buffer.\n    static unsigned char *OffsetAllocation(unsigned char *m, size_t alignmentMask)\n    {\n        return m + AllocationOffset(static_cast\u003cuintptr_t\u003e(m), alignmentMask);\n    }\n\nNote the behavior of `AllocationOffset`:\n- If no guard blocks, kGuardBlocSize + HeaderSize() is 0, so it basically introduces padding after startOffset to make it aligned.\n- If there are guard blocks, the heading itself is not aligned, but only the data.\n\nThen, here, you can do:\n\n    size_t allocationSize \u003d AllocationSize(mCurrentPageOffset, numBytes, mAlignmentMask);\n\nNote that after the first `if` below, you will be creating a new page, and the allocation will inevitably happen at offset `mHeaderSkip` (though multi-page doesn\u0027t have guards, so is special cased), so you need to recalculate allocationSize:\n\n    allocationSize \u003d AllocationSize(mHeaderSkip, numBytes, mAlignmentMask);\n\nLater on, when you call `initializeAllocation`, you can pass down `mAlignmentMask` and remove the extra alignment code you added there (in PS 11).\n\nSee my next comment.",
+      "revId": "84a84a88c719f3decc741bb54ca5a504b208dc21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d007ea76_4fe56411",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-23T03:49:13Z",
+      "side": 1,
+      "message": "If you implement my suggestion above, read this:\n\nWith the AllocationSize and AllocationOffset functions properly avoiding aligning the guarded block and only align the data within, this piece of code is unnecessary (if no guard blocks). In case of guard blocks, it\u0027s only necessary to align `mCurrentPageOffset` to the size of pointer (for the sake of the pointers inside the heading):\n\n        mCurrentPageOffset +\u003d allocationSize;\n    #if defined(ANGLE_POOL_ALLOC_GUARD_BLOCKS)\n        constexpr size_t kPointerAlignmentMask \u003d 7;  // i.e. 8 bytes\n        // Align the heading itself.\n        mCurrentPageOffset \u003d roundup(mCurrentPageOffset, kPointerAlignmentMask);\n    #endif\n\n---\n\nIf you don\u0027t implement my suggestion, read these:\n\nMan this class is broken. Imagine this situation:\n\nmPageSize \u003d 120\nmAlignment \u003d 16\nmCurrentPageOffset \u003d 120 - 17\nallocationSize \u003d 17\n\nThis would lead us in this `if`. At this line, `mCurrentPageOffset` becomes 128, the above `mPageSize - mCurrentPageOffset` becomes negative (but it\u0027s size_t) and hell is unleashed.\n\nMaybe put an `ASSERT(mPageSize % mAlignment \u003d\u003d 0)` somewhere.\n\n---\n\nAlso, this operation by itself is wasteful (only when guards are enabled), as we make sure `mCurrentPageOffset` (where the next allocation happens) is aligned, but we really care for the data payload of it (after the header) to be aligned. `mCurrentPageOffset` should really be aligned to pointer size if guards are enabled. If guards are not enabled, your new changes make this redundant. See my other comment for more on this.",
+      "revId": "84a84a88c719f3decc741bb54ca5a504b208dc21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2aa63c9_1b8a6291",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-23T03:49:13Z",
+      "side": 1,
+      "message": "If you implement my suggestion above, here is where you would recalculate allocationSize without guard blocks for the sake of multi-page:\n\n    allocationSize \u003d numBytes + roundup(mHeaderSkip, mAlignmentMask) - mHeaderSkip;\n\nThere would be some math simplification if you don\u0027t subtract `mHeaderSkip` in the end and account for that fact in the following if.",
+      "revId": "84a84a88c719f3decc741bb54ca5a504b208dc21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b3f02e3_7cf74bf6",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-23T03:49:13Z",
+      "side": 1,
+      "message": "If you implement my suggestion above:\n\n    return (void *)((uintptr_t)memory + roundup(mHeaderSkip, mAlignmentMask));",
+      "revId": "84a84a88c719f3decc741bb54ca5a504b208dc21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd9b6e83_f880dc06",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-23T03:49:13Z",
+      "side": 1,
+      "message": "If you implement my suggestion above, here is where you would recalculate allocationSize (again):\n\n    allocationSize \u003d AllocationSize(mHeaderSkip, numBytes, mAlignmentMask);",
+      "revId": "84a84a88c719f3decc741bb54ca5a504b208dc21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34789fd9_cbe7d038",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-23T03:49:13Z",
+      "side": 1,
+      "message": "If you implement my suggestion above, same comment about aligning to pointer size (only if guards are added).",
+      "revId": "84a84a88c719f3decc741bb54ca5a504b208dc21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "442182b3_02a4fef3",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-23T03:49:13Z",
+      "side": 1,
+      "message": "You are doing this even for !ANGLE_POOL_ALLOC_GUARD_BLOCKS, but that doesn\u0027t need this kind of work. See the other comments for suggestions.",
+      "revId": "84a84a88c719f3decc741bb54ca5a504b208dc21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
