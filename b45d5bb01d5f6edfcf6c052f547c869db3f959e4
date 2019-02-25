@@ -264,6 +264,30 @@
     },
     {
       "key": {
+        "uuid": "695c61e1_02cf1df9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-25T21:55:27Z",
+      "side": 1,
+      "message": "I don\u0027t think this is a glslang bug. I think it\u0027s a limitation in glsl. See the spec:\n\nhttps://www.khronos.org/registry/OpenGL/specs/es/3.0/GLSL_ES_Specification_3.00.pdf\n\ngvec4 texelFetch (gsampler2D sampler, ivec2 P, int lod)\ngvec4 texelFetch (gsampler3D sampler, ivec3 P, int lod)\ngvec4 texelFetch (gsampler2DArray sampler, ivec3 P, int lod)\n\nNo gsamplerCube. :(",
+      "parentUuid": "a8e8819b_ab8e7ca2",
+      "range": {
+        "startLine": 593,
+        "startChar": 0,
+        "endLine": 612,
+        "endChar": 5
+      },
+      "revId": "b45d5bb01d5f6edfcf6c052f547c869db3f959e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "717142a8_4d4b5c9b",
         "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
         "patchSetId": 1
