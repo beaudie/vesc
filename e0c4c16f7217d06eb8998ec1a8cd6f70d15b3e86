@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa58eab0_76bd5473",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-25T19:36:22Z",
+      "side": 1,
+      "message": "I don\u0027t think you need the whole libANGLE. I think you only need common. Can you check for the minimal deps?",
+      "range": {
+        "startLine": 97,
+        "startChar": 19,
+        "endLine": 97,
+        "endChar": 27
+      },
+      "revId": "e0c4c16f7217d06eb8998ec1a8cd6f70d15b3e86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0c9a5d1_607e56b5",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-25T19:36:22Z",
+      "side": 1,
+      "message": "data deps yo!",
+      "range": {
+        "startLine": 115,
+        "startChar": 13,
+        "endLine": 115,
+        "endChar": 35
+      },
+      "revId": "e0c4c16f7217d06eb8998ec1a8cd6f70d15b3e86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
