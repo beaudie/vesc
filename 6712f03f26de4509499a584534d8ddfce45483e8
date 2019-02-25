@@ -272,6 +272,30 @@
     },
     {
       "key": {
+        "uuid": "b4dd8675_b109ddb4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-25T18:57:43Z",
+      "side": 1,
+      "message": "Sounds good. Maybe leave a TODO with that issue?",
+      "parentUuid": "2b5a8ba6_db8d73be",
+      "range": {
+        "startLine": 1268,
+        "startChar": 4,
+        "endLine": 1268,
+        "endChar": 29
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e37396a_36741ef3",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 16
@@ -301,6 +325,24 @@
       "side": 1,
       "message": "This is more of an optimization to avoid creating a view on a texture that will not use it. It would be harmless to remove the `if`.\n\nEventually though, the `if` should say something like `if (format is renderable)`. Do you still want me to remove the if?",
       "parentUuid": "8e37396a_36741ef3",
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5a10a19_35af31a6",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1298,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-25T18:57:43Z",
+      "side": 1,
+      "message": "See above.",
+      "parentUuid": "34b05f90_d7d7c665",
       "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
