@@ -20,6 +20,13 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "third_party/trace_event/trace_event.h"
 
+uint64_t get_cycles()
+{
+    LARGE_INTEGER curTime;
+    QueryPerformanceCounter(&curTime);
+    return (uint64_t)curTime.QuadPart;
+}
+
 namespace rx
 {
 
@@ -395,6 +402,8 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
     // Select appropriate present mode based on vsync parameter.  Default to 1 (FIFO), though it
     // will get clamped to the min/max values specified at display creation time.
+
+    // Note: setting swap interval to 0 right off the bat fixes the regression.
     setSwapInterval(1);
 
     // Default to identity transform.
@@ -514,7 +523,12 @@ angle::Result WindowSurfaceVk::recreateSwapchain(DisplayVk *displayVk,
     swapchainInfo.compositeAlpha           = mCompositeAlpha;
     swapchainInfo.presentMode              = mDesiredSwapchainPresentMode;
     swapchainInfo.clipped                  = VK_TRUE;
+    // Note: setting oldSwapchain to nullptr doesn't change anything, so the regression doesn't come
+    // from the fact that the swapchain is based off another one.
     swapchainInfo.oldSwapchain             = oldSwapchain;
+    fprintf(stderr, "Recreate swapchain: imagecount: %u, extents: %ux%u, present mode: %d\n",
+            swapchainInfo.minImageCount, swapchainInfo.imageExtent.width,
+            swapchainInfo.imageExtent.height, swapchainInfo.presentMode);
 
     // TODO(syoussefi): Once EGL_SWAP_BEHAVIOR_PRESERVED_BIT is supported, the contents of the old
     // swapchain need to carry over to the new one.  http://anglebug.com/2942
@@ -804,9 +818,21 @@ angle::Result WindowSurfaceVk::nextSwapchainImage(DisplayVk *displayVk)
     const vk::Semaphore *acquireNextImageSemaphore = nullptr;
     ANGLE_TRY(renderer->allocateSubmitWaitSemaphore(displayVk, &acquireNextImageSemaphore));
 
+    static uint64_t average_acquire_cycles = 0;
+    static uint32_t average_acquire_count  = 0;
+    uint64_t cycles_start                  = get_cycles();
     ANGLE_VK_TRY(displayVk, vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
                                                   acquireNextImageSemaphore->getHandle(),
                                                   VK_NULL_HANDLE, &mCurrentSwapchainImageIndex));
+    average_acquire_cycles += get_cycles() - cycles_start;
+    ++average_acquire_count;
+    if (average_acquire_count >= 100)
+    {
+        fprintf(stderr, "Average acquire cycles: %llu\n",
+                average_acquire_cycles / average_acquire_count);
+        average_acquire_cycles = 0;
+        average_acquire_count  = 0;
+    }
 
     SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
 
