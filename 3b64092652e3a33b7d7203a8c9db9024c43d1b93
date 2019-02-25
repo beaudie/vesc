@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb20b71a_b6b7cb40",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-25T18:38:59Z",
+      "side": 1,
+      "message": "Could you call setSubImageImpl here (with the null pixel check moved)?",
+      "range": {
+        "startLine": 234,
+        "startChar": 4,
+        "endLine": 242,
+        "endChar": 5
+      },
+      "revId": "3b64092652e3a33b7d7203a8c9db9024c43d1b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7377686d_4ab1b963",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-25T18:38:59Z",
+      "side": 1,
+      "message": "This happens after the stageSubresourceUpdate call but setImageImpl does it before, is this intended?",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 60
+      },
+      "revId": "3b64092652e3a33b7d7203a8c9db9024c43d1b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
