@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "dadc91fc_d2cfd3bc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-25T18:49:37Z",
+      "side": 1,
+      "message": "Gotcha. We have a policy that all new TODOs should be accompanied by a bug link to track the work. Mind you I seem to be the only one who tries to enforce this. But you can file an issue for 2D array texture support and/or change this to a note instead of a todo.",
+      "parentUuid": "62846148_3b18d129",
+      "range": {
+        "startLine": 594,
+        "startChar": 0,
+        "endLine": 594,
+        "endChar": 43
+      },
+      "revId": "b45d5bb01d5f6edfcf6c052f547c869db3f959e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a6490666_4b7d1879",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 1
@@ -108,6 +132,30 @@
       "side": 1,
       "message": "Ok, I\u0027ll think about it more (also see if Yuly has a preference).\n\nWhat really bugs me is the fact that `texelFetch` is not defined for cubemaps. That\u0027s the real nonsense here.",
       "parentUuid": "c1cbd43c_fa950cff",
+      "range": {
+        "startLine": 593,
+        "startChar": 0,
+        "endLine": 612,
+        "endChar": 5
+      },
+      "revId": "b45d5bb01d5f6edfcf6c052f547c869db3f959e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7852334a_ae4fc273",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-25T18:49:37Z",
+      "side": 1,
+      "message": "Yeah it is a bit weird. Historical though.",
+      "parentUuid": "f67684f1_2c37d5c5",
       "range": {
         "startLine": 593,
         "startChar": 0,
