@@ -104,6 +104,7 @@ void TranslatorESSL::translate(TIntermBlock *root,
                            compileOptions);
 
     root->traverse(&outputESSL);
+    printf("%s\n", sink.c_str());
 }
 
 bool TranslatorESSL::shouldFlattenPragmaStdglInvariantAll()

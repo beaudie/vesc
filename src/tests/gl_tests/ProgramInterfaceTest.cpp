@@ -712,6 +712,151 @@ TEST_P(ProgramInterfaceTestES31, GetBufferVariableProperties)
     EXPECT_EQ(GL_FLOAT_VEC3, params[12]);  // type
 }
 
+TEST_P(ProgramInterfaceTestES31, Test2)
+{
+    // TODO(jiajia.qin@intel.com): Don't skip this test once non-simple SSBO sentences are supported
+    // on d3d backend. http://anglebug.com/1951
+    ANGLE_SKIP_TEST_IF(IsD3D11());
+
+    constexpr char kVS[] =
+        R"(#version 310 es
+precision mediump float;
+ layout (location = 0) in vec2 aPos;
+void main(void) {
+   gl_Position = vec4(aPos, 0., 1.);
+}
+)";
+
+    constexpr char kFS[] =
+        R"(#version 310 es
+precision mediump float;
+  out vec4 fragColor;
+void main(void) {
+   fragColor = vec4(0.,0.,0., 1.);
+}
+)";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+}
+
+TEST_P(ProgramInterfaceTestES31, Test)
+{
+    ANGLE_SKIP_TEST_IF(IsD3D11());
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+precision mediump float;
+  layout (local_size_x = 2, local_size_y = 2, local_size_z = 1) in;
+  layout (std430, binding = 0) buffer SSBO {
+    mediump vec2 data[4];
+  } ssbo;
+void main() {
+  ssbo.data[gl_LocalInvocationIndex] = vec2(gl_LocalInvocationID.xy);
+}
+)";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kComputeShaderSource);
+
+    GLuint index = glGetProgramResourceIndex(program, GL_BUFFER_VARIABLE, "SSBO.data");
+    EXPECT_GL_NO_ERROR();
+    EXPECT_NE(GL_INVALID_INDEX, index);
+
+    GLchar name[64];
+    GLsizei length;
+    glGetProgramResourceName(program, GL_BUFFER_VARIABLE, index, sizeof(name), &length, name);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(12, length);
+    EXPECT_EQ("SSBO.data[0]", std::string(name));
+
+    GLenum props[]         = {GL_ARRAY_SIZE,
+                      GL_ARRAY_STRIDE,
+                      GL_BLOCK_INDEX,
+                      GL_IS_ROW_MAJOR,
+                      GL_MATRIX_STRIDE,
+                      GL_NAME_LENGTH,
+                      GL_OFFSET,
+                      GL_REFERENCED_BY_VERTEX_SHADER,
+                      GL_REFERENCED_BY_FRAGMENT_SHADER,
+                      GL_REFERENCED_BY_COMPUTE_SHADER,
+                      GL_TOP_LEVEL_ARRAY_SIZE,
+                      GL_TOP_LEVEL_ARRAY_STRIDE,
+                      GL_TYPE};
+    GLsizei propCount      = static_cast<GLsizei>(ArraySize(props));
+    constexpr int kBufSize = 256;
+    GLint params[kBufSize];
+
+    glGetProgramResourceiv(program, GL_BUFFER_VARIABLE, index, propCount, props, kBufSize, &length,
+                           params);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(propCount, length);
+    EXPECT_EQ(4, params[0]);   // array_size
+    EXPECT_EQ(8, params[1]);   // array_stride
+    EXPECT_LE(0, params[2]);   // block_index
+    EXPECT_EQ(0, params[3]);   // is_row_major
+    EXPECT_EQ(0, params[4]);   // matrix_stride
+    EXPECT_EQ(13, params[5]);  // name_length
+    EXPECT_EQ(0, params[6]);   // offset
+
+    EXPECT_EQ(0, params[7]);  // referenced_by_vertex_shader
+    EXPECT_EQ(0, params[8]);  // referenced_by_fragment_shader
+    EXPECT_EQ(1, params[9]);  // referenced_by_compute_shader
+
+    EXPECT_EQ(1, params[10]);  // top_level_array_size
+    EXPECT_EQ(0, params[11]);  // top_level_array_stride
+}
+
+TEST_P(ProgramInterfaceTestES31, Test1)
+{
+    ANGLE_SKIP_TEST_IF(IsD3D11());
+    constexpr char kComputeShaderSource[] =
+        R"(#version 310 es
+precision mediump float;
+  layout (local_size_x = 2, local_size_y = 2, local_size_z = 1) in;
+  layout (std430, binding = 0) buffer SSBO {
+    mediump vec2 data[4];
+  } ssbo;
+void main() {
+  ssbo.data[gl_LocalInvocationIndex] = vec2(gl_LocalInvocationID.xy);
+}
+)";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kComputeShaderSource);
+
+    GLuint index = glGetProgramResourceIndex(program, GL_BUFFER_VARIABLE, "SSBO.data");
+    EXPECT_GL_NO_ERROR();
+    EXPECT_NE(GL_INVALID_INDEX, index);
+
+    GLchar name[64];
+    GLsizei length;
+    glGetProgramResourceName(program, GL_BUFFER_VARIABLE, index, sizeof(name), &length, name);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(12, length);
+    EXPECT_EQ("SSBO.data[0]", std::string(name));
+
+    GLenum props[]         = {GL_ARRAY_SIZE,
+                      GL_ARRAY_STRIDE,
+                      GL_BLOCK_INDEX,
+                      GL_IS_ROW_MAJOR,
+                      GL_MATRIX_STRIDE,
+                      GL_NAME_LENGTH,
+                      GL_OFFSET,
+                      GL_REFERENCED_BY_VERTEX_SHADER,
+                      GL_REFERENCED_BY_FRAGMENT_SHADER,
+                      GL_REFERENCED_BY_COMPUTE_SHADER,
+                      GL_TOP_LEVEL_ARRAY_SIZE,
+                      GL_TOP_LEVEL_ARRAY_STRIDE,
+                      GL_TYPE};
+    GLsizei propCount      = static_cast<GLsizei>(ArraySize(props));
+    constexpr int kBufSize = 256;
+    GLint params[kBufSize];
+
+    glGetProgramResourceiv(program, GL_BUFFER_VARIABLE, index, propCount, props, kBufSize, &length,
+                           params);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_EQ(propCount, length);
+    EXPECT_EQ(4, params[0]);  // array_size
+    EXPECT_EQ(4, params[1]);  // array_stride
+}
+
 // Tests the resource property querying for buffer variable in std430 SSBO works correctly.
 TEST_P(ProgramInterfaceTestES31, GetStd430BufferVariableProperties)
 {

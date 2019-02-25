@@ -30,7 +30,7 @@ class UniformBufferTest : public ANGLETest
         ANGLETest::SetUp();
 
         mkFS = R"(#version 300 es
-precision highp float;
+precision mediump float;
 uniform uni { vec4 color; };
 out vec4 fragColor;
 void main()
