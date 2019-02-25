@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8b417985_fa00fe1b",
+        "filename": "src/libANGLE/renderer/angle_format_data.json",
+        "patchSetId": 16
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-25T16:10:43Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0afcb3a9_eea82993",
+      "range": {
+        "startLine": 35,
+        "startChar": 2,
+        "endLine": 39,
+        "endChar": 10
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1defd5a7_1405baba",
         "filename": "src/libANGLE/renderer/gen_angle_format_table.py",
         "patchSetId": 16
@@ -39,6 +63,24 @@
       "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec2a9edc_4e7b1a50",
+        "filename": "src/libANGLE/renderer/gen_angle_format_table.py",
+        "patchSetId": 16
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-25T16:10:43Z",
+      "side": 1,
+      "message": "This would already throw an exception if `blockPixelBytes` is not `in parsed`. But ok, I\u0027ll add an assert just to get a better error message.",
+      "parentUuid": "1defd5a7_1405baba",
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "7cdebf29_6dc87e61",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-25T16:10:43Z",
+      "side": 1,
+      "message": "I thought about it, but given that no type is sent to these functions, I\u0027m inclined to think this type is implied. Especially given that `imageSize` is defined as (emphasis mine) \"Specifies the number of **unsigned bytes** of image data starting at the address specified by data.\"",
+      "parentUuid": "ec2168e8_e136d4fa",
+      "range": {
+        "startLine": 210,
+        "startChar": 61,
+        "endLine": 210,
+        "endChar": 77
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "283c1ebe_003ccdf3",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 16
@@ -85,6 +151,30 @@
       "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0363de47_63f697db",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 851,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-25T16:10:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "283c1ebe_003ccdf3",
+      "range": {
+        "startLine": 851,
+        "startChar": 4,
+        "endLine": 851,
+        "endChar": 89
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "6de17c17_716e6e43",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-25T16:10:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "390b2592_95060a76",
+      "range": {
+        "startLine": 1250,
+        "startChar": 0,
+        "endLine": 1256,
+        "endChar": 0
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5bafd31b_be8d653f",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 16
@@ -134,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "2b5a8ba6_db8d73be",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-25T16:10:43Z",
+      "side": 1,
+      "message": "I wouldn\u0027t worry about it. I\u0027ll be working on using renderpass load/store ops in the near future, which means the image clear will be deferred to first use (and only if robust), and this whole block should go away soon.",
+      "parentUuid": "5bafd31b_be8d653f",
+      "range": {
+        "startLine": 1268,
+        "startChar": 4,
+        "endLine": 1268,
+        "endChar": 29
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e37396a_36741ef3",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 16
@@ -145,6 +283,24 @@
       "writtenOn": "2019-02-22T18:01:17Z",
       "side": 1,
       "message": "same comment. at this point it becomes hacky.",
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34b05f90_d7d7c665",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1298,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-25T16:10:43Z",
+      "side": 1,
+      "message": "This is more of an optimization to avoid creating a view on a texture that will not use it. It would be harmless to remove the `if`.\n\nEventually though, the `if` should say something like `if (format is renderable)`. Do you still want me to remove the if?",
+      "parentUuid": "8e37396a_36741ef3",
       "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -174,6 +330,30 @@
     },
     {
       "key": {
+        "uuid": "0a59ae7f_4e71b493",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1325,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-25T16:10:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8a35e3c_e196a1f4",
+      "range": {
+        "startLine": 1324,
+        "startChar": 0,
+        "endLine": 1325,
+        "endChar": 5
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84c1bf6c_006d4374",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 16
@@ -197,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "f0f88bb1_9e023271",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-25T16:10:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84c1bf6c_006d4374",
+      "range": {
+        "startLine": 221,
+        "startChar": 11,
+        "endLine": 221,
+        "endChar": 88
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c2c5e4e_519ed1d5",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 16
@@ -217,6 +421,30 @@
       "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aae524b_8b8076c6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-25T16:10:43Z",
+      "side": 1,
+      "message": "Done, though I named it `getImageCopyBufferAlignment` to clarify that it\u0027s the alignment of the buffer (not the image).",
+      "parentUuid": "7c2c5e4e_519ed1d5",
+      "range": {
+        "startLine": 1289,
+        "startChar": 0,
+        "endLine": 1289,
+        "endChar": 64
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
