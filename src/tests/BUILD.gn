@@ -98,6 +98,10 @@ angle_test("angle_unittests") {
     defines = [ "ANGLE_ENABLE_HLSL" ]
   }
 
+  if (!build_with_chromium) {
+    sources += angle_unittests_nochromium_sources
+  }
+
   deps = googletest_deps + [
            "${angle_root}:libANGLE",
            "${angle_root}:preprocessor",
