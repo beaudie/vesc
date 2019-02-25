@@ -90,6 +90,14 @@ angle_tests_main("angle_perftests_main") {
   main = "angle_perftests_main"
 }
 
+angle_test("angle_unittests_helper") {
+  sources = angle_unittests_helper_sources
+
+  deps = [
+    "${angle_root}:libANGLE",
+  ]
+}
+
 angle_test("angle_unittests") {
   sources = angle_unittests_sources
 
@@ -98,16 +106,13 @@ angle_test("angle_unittests") {
     defines = [ "ANGLE_ENABLE_HLSL" ]
   }
 
-  if (!build_with_chromium) {
-    sources += angle_unittests_nochromium_sources
-  }
-
   deps = googletest_deps + [
            "${angle_root}:libANGLE",
            "${angle_root}:preprocessor",
            "${angle_root}:translator",
            "${angle_root}:libfeature_support${angle_libs_suffix}",
            ":angle_unittests_main",
+           ":angle_unittests_helper",
          ]
 }
 
