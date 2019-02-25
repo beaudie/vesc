@@ -480,6 +480,30 @@
     },
     {
       "key": {
+        "uuid": "ac46f9a7_73f53057",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-25T19:02:26Z",
+      "side": 1,
+      "message": "I\u0027d like to see you do the queue change in the Image classes. That\u0027s the only time we should be doing queue change operations. Right now it\u0027s a bit too lazy.",
+      "parentUuid": "6509981b_73ee64fc",
+      "range": {
+        "startLine": 1568,
+        "startChar": 46,
+        "endLine": 1568,
+        "endChar": 70
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45cc3760_06998d71",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 15
