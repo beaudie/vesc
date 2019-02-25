@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "62846148_3b18d129",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-25T16:56:11Z",
+      "side": 1,
+      "message": "This needs to know if the **source** image is a cubemap. With `copy[Sub]Texture`, the type can be recovered, but with `copy[Sub]Image`, all we have is a framebuffer/render target. I didn\u0027t notice a way to get the type of the underlying texture.\n\nI briefly experimented with storing the type at ImageHelper initialization time, but that didn\u0027t go all too well.",
+      "parentUuid": "6397c7c3_6e27be0c",
+      "range": {
+        "startLine": 594,
+        "startChar": 0,
+        "endLine": 594,
+        "endChar": 43
+      },
+      "revId": "b45d5bb01d5f6edfcf6c052f547c869db3f959e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a6490666_4b7d1879",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 1
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "f67684f1_2c37d5c5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-25T16:56:11Z",
+      "side": 1,
+      "message": "Ok, I\u0027ll think about it more (also see if Yuly has a preference).\n\nWhat really bugs me is the fact that `texelFetch` is not defined for cubemaps. That\u0027s the real nonsense here.",
+      "parentUuid": "c1cbd43c_fa950cff",
+      "range": {
+        "startLine": 593,
+        "startChar": 0,
+        "endLine": 612,
+        "endChar": 5
+      },
+      "revId": "b45d5bb01d5f6edfcf6c052f547c869db3f959e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "717142a8_4d4b5c9b",
         "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
         "patchSetId": 1
@@ -92,6 +140,30 @@
       "revId": "b45d5bb01d5f6edfcf6c052f547c869db3f959e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e93b8cbc_375f153a",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-25T16:56:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "717142a8_4d4b5c9b",
+      "range": {
+        "startLine": 457,
+        "startChar": 16,
+        "endLine": 457,
+        "endChar": 21
+      },
+      "revId": "b45d5bb01d5f6edfcf6c052f547c869db3f959e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
