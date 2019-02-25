@@ -9,15 +9,17 @@
 #include "gtest/gtest.h"
 
 #include "common/system_utils.h"
+#include "common/system_utils_unittest_helper.h"
 
 using namespace angle;
 
 namespace
 {
-constexpr char kRunAppTestEnvVarName[]  = "RUN_APP_TEST_ENV";
-constexpr char kRunAppTestEnvVarValue[] = "RunAppTest environment variable value\n";
-constexpr char kRunAppTestStdout[]      = "RunAppTest stdout test\n";
-constexpr char kRunAppTestStderr[] = "RunAppTest stderr test\n  .. that expands multiple lines\n";
+#if defined(ANGLE_PLATFORM_WINDOWS)
+constexpr char kRunAppHelperExecutable[] = "angle_unittests_helper.exe";
+#else
+constexpr char kRunAppHelperExecutable[] = "angle_unittests_helper";
+#endif
 
 // Transforms various line endings into C/Unix line endings:
 //
@@ -107,11 +109,13 @@ TEST(SystemUtils, RunApp)
     return;
 #endif
 
-    std::string executablePath = GetExecutablePath();
+    std::string executablePath = GetExecutableDirectory();
     EXPECT_NE(executablePath, "");
+    executablePath += "/";
+    executablePath += kRunAppHelperExecutable;
 
-    std::vector<const char *> args = {executablePath.c_str(),
-                                      "--gtest_filter=SystemUtils.RunAppTestTarget", nullptr};
+    std::vector<const char *> args = {executablePath.c_str(), kRunAppTestArg1, kRunAppTestArg2,
+                                      nullptr};
 
     std::string stdoutOutput;
     std::string stderrOutput;
@@ -120,8 +124,7 @@ TEST(SystemUtils, RunApp)
     // Test that the application can be executed.
     bool ranApp = RunApp(args, &stdoutOutput, &stderrOutput, &exitCode);
     EXPECT_TRUE(ranApp);
-    // Note that stdout includes gtest output as well.
-    EXPECT_NE(std::string::npos, NormalizeNewLines(stdoutOutput).find(kRunAppTestStdout));
+    EXPECT_EQ(kRunAppTestStdout, NormalizeNewLines(stdoutOutput));
     EXPECT_EQ(kRunAppTestStderr, NormalizeNewLines(stderrOutput));
     EXPECT_EQ(EXIT_SUCCESS, exitCode);
 
@@ -131,23 +134,9 @@ TEST(SystemUtils, RunApp)
 
     ranApp = RunApp(args, &stdoutOutput, &stderrOutput, &exitCode);
     EXPECT_TRUE(ranApp);
+    EXPECT_EQ("", stdoutOutput);
     EXPECT_EQ(kRunAppTestEnvVarValue, NormalizeNewLines(stderrOutput));
     EXPECT_EQ(EXIT_SUCCESS, exitCode);
-}
-
-// Not an actual test.  Used as an application with controlled output by the RunApp test.
-TEST(SystemUtils, RunAppTestTarget)
-{
-    std::string env = GetEnvironmentVar(kRunAppTestEnvVarName);
-    if (env == "")
-    {
-        printf("%s", kRunAppTestStdout);
-        fprintf(stderr, "%s", kRunAppTestStderr);
-    }
-    else
-    {
-        fprintf(stderr, "%s", env.c_str());
-    }
 }
 
 }  // anonymous namespace
