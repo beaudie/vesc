@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "294834fd_6b0924a9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1559,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-25T19:13:58Z",
+      "side": 1,
+      "message": "nit: could be inlined in the header.",
+      "range": {
+        "startLine": 1555,
+        "startChar": 0,
+        "endLine": 1559,
+        "endChar": 0
+      },
+      "revId": "7803c590c6e6d09f1039d200872eb20ea0d4d229",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14ce4847_5730a897",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1567,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-25T19:13:58Z",
+      "side": 1,
+      "message": "maybe ASSERT here?",
+      "range": {
+        "startLine": 1564,
+        "startChar": 0,
+        "endLine": 1567,
+        "endChar": 5
+      },
+      "revId": "7803c590c6e6d09f1039d200872eb20ea0d4d229",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

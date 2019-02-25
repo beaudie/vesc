@@ -504,6 +504,30 @@
     },
     {
       "key": {
+        "uuid": "db7f70b6_09386c17",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-25T19:13:58Z",
+      "side": 1,
+      "message": "Whoops, I misjudged this. I thought the check was in an update function but it\u0027s setStorageEGLImargetTarget. That seems reasonable. Having the queue index integer still seems unnecessary to track I don\u0027t want to hold this up.",
+      "parentUuid": "ac46f9a7_73f53057",
+      "range": {
+        "startLine": 1568,
+        "startChar": 46,
+        "endLine": 1568,
+        "endChar": 70
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45cc3760_06998d71",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 15
