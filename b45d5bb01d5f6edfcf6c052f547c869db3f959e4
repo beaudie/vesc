@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "6397c7c3_6e27be0c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-25T15:18:41Z",
+      "side": 1,
+      "message": "maybe you could change this now. I think you can use mState.getType(). Then you can remove the TODO.",
+      "range": {
+        "startLine": 594,
+        "startChar": 0,
+        "endLine": 594,
+        "endChar": 43
+      },
+      "revId": "b45d5bb01d5f6edfcf6c052f547c869db3f959e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a6490666_4b7d1879",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 1
@@ -18,6 +41,53 @@
         "startChar": 0,
         "endLine": 612,
         "endChar": 5
+      },
+      "revId": "b45d5bb01d5f6edfcf6c052f547c869db3f959e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1cbd43c_fa950cff",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-25T15:18:41Z",
+      "side": 1,
+      "message": "Lazily allocated might be fine if we make it work just for cube maps. It would really just be a pointer. SGTM either way.",
+      "parentUuid": "a6490666_4b7d1879",
+      "range": {
+        "startLine": 593,
+        "startChar": 0,
+        "endLine": 612,
+        "endChar": 5
+      },
+      "revId": "b45d5bb01d5f6edfcf6c052f547c869db3f959e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "717142a8_4d4b5c9b",
+        "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-25T15:18:41Z",
+      "side": 1,
+      "message": "thanks for the detailed tests.",
+      "range": {
+        "startLine": 457,
+        "startChar": 16,
+        "endLine": 457,
+        "endChar": 21
       },
       "revId": "b45d5bb01d5f6edfcf6c052f547c869db3f959e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
