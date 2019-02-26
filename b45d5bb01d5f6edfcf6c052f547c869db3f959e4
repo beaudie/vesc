@@ -288,6 +288,30 @@
     },
     {
       "key": {
+        "uuid": "27374b2f_2e3e8f9a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-26T16:42:14Z",
+      "side": 1,
+      "message": "I know, it\u0027s a missing feature from GLSL. That doesn\u0027t stop them from adding Vulkan-only features, though.",
+      "parentUuid": "695c61e1_02cf1df9",
+      "range": {
+        "startLine": 593,
+        "startChar": 0,
+        "endLine": 612,
+        "endChar": 5
+      },
+      "revId": "b45d5bb01d5f6edfcf6c052f547c869db3f959e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "717142a8_4d4b5c9b",
         "filename": "src/tests/gl_tests/CopyTexImageTest.cpp",
         "patchSetId": 1
