@@ -296,6 +296,30 @@
     },
     {
       "key": {
+        "uuid": "bd26430f_7da54a54",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1268,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-26T14:57:07Z",
+      "side": 1,
+      "message": "Updated the TODO that\u0027s just below this line",
+      "parentUuid": "b4dd8675_b109ddb4",
+      "range": {
+        "startLine": 1268,
+        "startChar": 4,
+        "endLine": 1268,
+        "endChar": 29
+      },
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e37396a_36741ef3",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 16
@@ -343,6 +367,24 @@
       "side": 1,
       "message": "See above.",
       "parentUuid": "34b05f90_d7d7c665",
+      "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7e75617_82a884f0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1298,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-26T14:57:07Z",
+      "side": 1,
+      "message": "Sorry, but I don\u0027t see how the comments above relate to this particular if.",
+      "parentUuid": "c5a10a19_35af31a6",
       "revId": "6712f03f26de4509499a584534d8ddfce45483e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true

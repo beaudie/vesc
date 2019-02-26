@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "34c83d44_750564a7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-26T14:57:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb20b71a_b6b7cb40",
+      "range": {
+        "startLine": 234,
+        "startChar": 4,
+        "endLine": 242,
+        "endChar": 5
+      },
+      "revId": "3b64092652e3a33b7d7203a8c9db9024c43d1b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7377686d_4ab1b963",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 17
@@ -45,6 +69,30 @@
       "revId": "3b64092652e3a33b7d7203a8c9db9024c43d1b93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c86920bc_e610b18c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-26T14:57:07Z",
+      "side": 1,
+      "message": "Actually this call is kind of nonsense, but removing it proved a bit nontrivial for this CL. The point of this call is to make sure a new graph node is created. stageSubresourceUpdate has no interaction with the graph, so the order doesn\u0027t matter.\n\nI forgot what was exactly happening, but effectively somewhere we are not setting some dependency right, so whatever was happening before this call and what happens after it (such as staged changes being uploaded) incorrectly end up in the same graph node, which messes things up.\n\nI would eventually like to remove this call, but I would need to more carefully audit where we set node dependencies.",
+      "parentUuid": "7377686d_4ab1b963",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 60
+      },
+      "revId": "3b64092652e3a33b7d7203a8c9db9024c43d1b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "cc3a1dd5_925e1fa2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-26T14:57:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2855b5d2_37f7e2b8",
+      "range": {
+        "startLine": 186,
+        "startChar": 30,
+        "endLine": 186,
+        "endChar": 67
+      },
+      "revId": "3b64092652e3a33b7d7203a8c9db9024c43d1b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bfbe7090_817281ab",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 17
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "fc01da4c_c2b7fb59",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-26T14:57:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfbe7090_817281ab",
+      "range": {
+        "startLine": 404,
+        "startChar": 20,
+        "endLine": 404,
+        "endChar": 32
+      },
+      "revId": "3b64092652e3a33b7d7203a8c9db9024c43d1b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e2cfb54_940cd410",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 17
@@ -114,6 +210,30 @@
       "revId": "3b64092652e3a33b7d7203a8c9db9024c43d1b93",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ff7f4e2_7dda9d8e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1790,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-26T14:57:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e2cfb54_940cd410",
+      "range": {
+        "startLine": 1789,
+        "startChar": 0,
+        "endLine": 1790,
+        "endChar": 69
+      },
+      "revId": "3b64092652e3a33b7d7203a8c9db9024c43d1b93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
