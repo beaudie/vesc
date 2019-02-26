@@ -22,6 +22,30 @@
       "revId": "a5d09412786f2eaf9458270e8d07cae2cac5aca3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee1a548c_9461d202",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1167049
+      },
+      "writtenOn": "2019-02-26T04:55:44Z",
+      "side": 1,
+      "message": "The context in chromium is CONTEXT_TYPE_OPENGLES3(context_creation_attribs.h).\nSo mShaderSpec is 300 according to the following code,\nhttps://cs.chromium.org/chromium/src/gpu/command_buffer/service/gles2_cmd_decoder.cc?type\u003dcs\u0026q\u003dCONTEXT_TYPE_OPENGLES3\u0026g\u003d0\u0026l\u003d4423",
+      "parentUuid": "fa7642a9_e5463142",
+      "range": {
+        "startLine": 409,
+        "startChar": 8,
+        "endLine": 409,
+        "endChar": 43
+      },
+      "revId": "a5d09412786f2eaf9458270e8d07cae2cac5aca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
