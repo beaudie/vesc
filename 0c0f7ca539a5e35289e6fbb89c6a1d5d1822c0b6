@@ -105,6 +105,24 @@
       "revId": "0c0f7ca539a5e35289e6fbb89c6a1d5d1822c0b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67c46d61_b236abb8",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-26T01:18:56Z",
+      "side": 1,
+      "message": "There is no extension that makes this format renderable in ES. For WebGL, we expose the GL_CHROMIUM_color_buffer_float_rgba extension which allows you to create sized rgba32f textures and render to them.",
+      "parentUuid": "91b8c6fc_85858e2d",
+      "revId": "0c0f7ca539a5e35289e6fbb89c6a1d5d1822c0b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
