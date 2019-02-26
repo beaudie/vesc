@@ -470,6 +470,172 @@ void GarbageObject::destroy(VkDevice device)
             break;
     }
 }
+
+//size_t CustomCommandBuffer::commandSize(CommandType cmdType)
+//{
+//    return sizeof(CommandHeader) + CommandParamSize[cmdType];
+//}
+
+void CustomCommandBuffer::bindDescriptorSets(VkPipelineBindPoint bindPoint,
+                                             const PipelineLayout& layout,
+                                             uint32_t firstSet,
+                                             uint32_t descriptorSetCount,
+                                             const VkDescriptorSet* descriptorSets,
+                                             uint32_t dynamicOffsetCount,
+                                             const uint32_t* dynamicOffsets)
+{
+    CommandType type = CommandType::CMD_TYPE_BIND_DESCRIPTOR_SETS;
+    uint32_t cmdIndex = static_cast<uint32_t>(type);
+    size_t paramSize = CommandInfos[cmdIndex].paramSize;
+    size_t baseSize = sizeof(CommandHeader) + paramSize;
+    size_t varSize = descriptorSetCount*sizeof(VkDescriptorSet) + dynamicOffsetCount*sizeof(uint32_t);
+    size_t cmdSize = baseSize + varSize;
+    void *cmdAllocation = mAllocator.allocate(cmdSize);
+    CommandHeader *header = static_cast<CommandHeader*>(cmdAllocation);
+    // Update mHead ptr
+    mHead = (mHead == nullptr) ? header : mHead;
+    // Update prev cmd ptr and mLast ptr
+    if (mLast)
+    {
+        mLast->next = header;
+    }
+    // Update mLast ptr
+    mLast = header;
+
+    // For ptr arithmetic
+    char *basePtr = static_cast<char*>(cmdAllocation);
+    // Write type into Header
+    static_cast<CommandHeader*>(cmdAllocation)->type = type;
+    // Copy params into memory
+    BindDescriptorSetParams* paramStruct = reinterpret_cast<BindDescriptorSetParams*>(basePtr + sizeof(CommandHeader));
+    paramStruct->bindPoint = bindPoint;
+    paramStruct->layout = layout.getHandle();
+    paramStruct->firstSet = firstSet;
+    paramStruct->descriptorSetCount = descriptorSetCount;
+    paramStruct->descriptorSets = descriptorSets;
+    paramStruct->dynamicOffsetCount = dynamicOffsetCount;
+    paramStruct->dynamicOffsets = dynamicOffsets;
+}
+
+#if 0
+    void bindIndexBuffer(const VkBuffer &buffer, VkDeviceSize offset, VkIndexType indexType);
+
+    void bindPipeline(VkPipelineBindPoint pipelineBindPoint, const Pipeline &pipeline);
+
+    void bindVertexBuffers(uint32_t firstBinding,
+                           uint32_t bindingCount,
+                           const VkBuffer *buffers,
+                           const VkDeviceSize *offsets);
+
+    void blitImage(const Image &srcImage,
+                   VkImageLayout srcImageLayout,
+                   const Image &dstImage,
+                   VkImageLayout dstImageLayout,
+                   uint32_t regionCount,
+                   VkImageBlit *pRegions,
+                   VkFilter filter);
+
+    void copyBuffer(const VkBuffer &srcBuffer,
+                    const VkBuffer &destBuffer,
+                    uint32_t regionCount,
+                    const VkBufferCopy *regions);
+
+    void copyBufferToImage(VkBuffer srcBuffer,
+                           const Image &dstImage,
+                           VkImageLayout dstImageLayout,
+                           uint32_t regionCount,
+                           const VkBufferImageCopy *regions);
+
+    void copyImage(const Image &srcImage,
+                   VkImageLayout srcImageLayout,
+                   const Image &dstImage,
+                   VkImageLayout dstImageLayout,
+                   uint32_t regionCount,
+                   const VkImageCopy *regions);
+
+    void copyImageToBuffer(const Image &srcImage,
+                           VkImageLayout srcImageLayout,
+                           VkBuffer dstBuffer,
+                           uint32_t regionCount,
+                           const VkBufferImageCopy *regions);
+
+    void clearAttachments(uint32_t attachmentCount,
+                          const VkClearAttachment *attachments,
+                          uint32_t rectCount,
+                          const VkClearRect *rects);
+
+    void clearColorImage(const Image &image,
+                         VkImageLayout imageLayout,
+                         const VkClearColorValue &color,
+                         uint32_t rangeCount,
+                         const VkImageSubresourceRange *ranges);
+
+    void clearDepthStencilImage(const Image &image,
+                                VkImageLayout imageLayout,
+                                const VkClearDepthStencilValue &depthStencil,
+                                uint32_t rangeCount,
+                                const VkImageSubresourceRange *ranges);
+
+    void updateBuffer(const vk::Buffer &buffer,
+                      VkDeviceSize dstOffset,
+                      VkDeviceSize dataSize,
+                      const void *data);
+
+    void pushConstants(const PipelineLayout &layout,
+                       VkShaderStageFlags flag,
+                       uint32_t offset,
+                       uint32_t size,
+                       const void *data);
+
+    void setViewport(uint32_t firstViewport, uint32_t viewportCount, const VkViewport *viewports);
+    void setScissor(uint32_t firstScissor, uint32_t scissorCount, const VkRect2D *scissors);
+
+    void draw(uint32_t vertexCount,
+              uint32_t instanceCount,
+              uint32_t firstVertex,
+              uint32_t firstInstance);
+
+    void drawIndexed(uint32_t indexCount,
+                     uint32_t instanceCount,
+                     uint32_t firstIndex,
+                     int32_t vertexOffset,
+                     uint32_t firstInstance);
+
+    void dispatch(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ);
+
+    void pipelineBarrier(VkPipelineStageFlags srcStageMask,
+                         VkPipelineStageFlags dstStageMask,
+                         VkDependencyFlags dependencyFlags,
+                         uint32_t memoryBarrierCount,
+                         const VkMemoryBarrier *memoryBarriers,
+                         uint32_t bufferMemoryBarrierCount,
+                         const VkBufferMemoryBarrier *bufferMemoryBarriers,
+                         uint32_t imageMemoryBarrierCount,
+                         const VkImageMemoryBarrier *imageMemoryBarriers);
+
+    void setEvent(VkEvent event, VkPipelineStageFlags stageMask);
+    void resetEvent(VkEvent event, VkPipelineStageFlags stageMask);
+    void waitEvents(uint32_t eventCount,
+                    const VkEvent *events,
+                    VkPipelineStageFlags srcStageMask,
+                    VkPipelineStageFlags dstStageMask,
+                    uint32_t memoryBarrierCount,
+                    const VkMemoryBarrier *memoryBarriers,
+                    uint32_t bufferMemoryBarrierCount,
+                    const VkBufferMemoryBarrier *bufferMemoryBarriers,
+                    uint32_t imageMemoryBarrierCount,
+                    const VkImageMemoryBarrier *imageMemoryBarriers);
+
+    void resetQueryPool(VkQueryPool queryPool, uint32_t firstQuery, uint32_t queryCount);
+    void beginQuery(VkQueryPool queryPool, uint32_t query, VkQueryControlFlags flags);
+    void endQuery(VkQueryPool queryPool, uint32_t query);
+    void writeTimestamp(VkPipelineStageFlagBits pipelineStage,
+                        VkQueryPool queryPool,
+                        uint32_t query);
+
+    // Parse the cmds in this cmd buffer into given primary cmd buffer
+    void parse(VkCommandBuffer cmdBuffer);
+#endif
 }  // namespace vk
 
 // VK_EXT_debug_utils
