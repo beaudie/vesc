@@ -197,11 +197,6 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                           uint32_t rectCount,
                           const VkClearRect *rects);
 
-    void copyBuffer(const Buffer &srcBuffer,
-                    const Buffer &destBuffer,
-                    uint32_t regionCount,
-                    const VkBufferCopy *regions);
-
     void copyBuffer(const VkBuffer &srcBuffer,
                     const VkBuffer &destBuffer,
                     uint32_t regionCount,
@@ -591,16 +586,6 @@ ANGLE_INLINE void CommandBuffer::destroy(VkDevice device, const vk::CommandPool 
         vkFreeCommandBuffers(device, commandPool.getHandle(), 1, &mHandle);
         mHandle = VK_NULL_HANDLE;
     }
-}
-
-ANGLE_INLINE void CommandBuffer::copyBuffer(const vk::Buffer &srcBuffer,
-                                            const vk::Buffer &destBuffer,
-                                            uint32_t regionCount,
-                                            const VkBufferCopy *regions)
-{
-    ASSERT(valid());
-    ASSERT(srcBuffer.valid() && destBuffer.valid());
-    vkCmdCopyBuffer(mHandle, srcBuffer.getHandle(), destBuffer.getHandle(), regionCount, regions);
 }
 
 ANGLE_INLINE void CommandBuffer::copyBuffer(const VkBuffer &srcBuffer,

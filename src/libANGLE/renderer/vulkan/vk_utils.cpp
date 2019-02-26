@@ -470,6 +470,426 @@ void GarbageObject::destroy(VkDevice device)
             break;
     }
 }
+
+//size_t CustomCommandBuffer::commandSize(CommandID cmdType)
+//{
+//    return sizeof(CommandHeader) + CommandParamSize[cmdType];
+//}
+
+// Allocate/initialize memory for the command and return pointer to Cmd Header
+void *CustomCommandBuffer::initCommand(CommandID cmdID, size_t variableSize)
+{
+    size_t paramSize = CommandParamSizes[static_cast<uint32_t>(cmdID)];
+    size_t completeSize = sizeof(CommandHeader) + paramSize + variableSize;
+    CommandHeader *header = static_cast<CommandHeader*>(mAllocator.allocate(completeSize));
+    // Update cmd ID in header
+    header->id = cmdID;
+    // Update mHead ptr
+    mHead = (mHead == nullptr) ? header : mHead;
+    // Update prev cmd's "next" ptr and mLast ptr
+    if (mLast)
+    {
+        mLast->next = header;
+    }
+    // Update mLast ptr
+    mLast = header;
+
+    return static_cast<void*>(reinterpret_cast<char*>(header) + sizeof(CommandHeader));
+}
+
+void *CustomCommandBuffer::getCmdVariableDataPtr(CommandID cmdID, void *paramPtr)
+{
+    return static_cast<void*>(reinterpret_cast<char*>(paramPtr) + CommandParamSizes[static_cast<uint32_t>(cmdID)]);
+}
+
+void CustomCommandBuffer::bindDescriptorSets(VkPipelineBindPoint bindPoint,
+                                             const PipelineLayout& layout,
+                                             uint32_t firstSet,
+                                             uint32_t descriptorSetCount,
+                                             const VkDescriptorSet* descriptorSets,
+                                             uint32_t dynamicOffsetCount,
+                                             const uint32_t* dynamicOffsets)
+{
+    size_t descSize = descriptorSetCount*sizeof(VkDescriptorSet);
+    size_t offsetSize = dynamicOffsetCount*sizeof(uint32_t);
+    size_t varSize =  descSize + offsetSize;
+    void *basePtr = initCommand(CommandID::CMD_ID_BIND_DESCRIPTOR_SETS, varSize);
+    BindDescriptorSetParams* paramStruct = static_cast<BindDescriptorSetParams*>(basePtr);
+    // Copy params into memory
+    paramStruct->bindPoint = bindPoint;
+    paramStruct->layout = layout.getHandle();
+    paramStruct->firstSet = firstSet;
+    paramStruct->descriptorSetCount = descriptorSetCount;
+    paramStruct->dynamicOffsetCount = dynamicOffsetCount;
+    // Copy variable sized data
+    void *ptrData = getCmdVariableDataPtr(CommandID::CMD_ID_BIND_DESCRIPTOR_SETS, basePtr);
+    memcpy(ptrData, descriptorSets, descSize);
+    paramStruct->descriptorSets = static_cast<const VkDescriptorSet*>(ptrData);
+    ptrData = reinterpret_cast<char*>(ptrData) + descSize;
+    memcpy(ptrData, dynamicOffsets, offsetSize);
+    paramStruct->dynamicOffsets = static_cast<const uint32_t*>(ptrData);
+}
+
+void CustomCommandBuffer::bindIndexBuffer(const VkBuffer &buffer, VkDeviceSize offset, VkIndexType indexType)
+{
+    BindIndexBufferParams* paramStruct = reinterpret_cast<BindIndexBufferParams*>(initCommand(CommandID::CMD_ID_BIND_INDEX_BUFFER, 0));
+    paramStruct->buffer = buffer;
+    paramStruct->offset = offset;
+    paramStruct->indexType = indexType;
+}
+
+void CustomCommandBuffer::bindPipeline(VkPipelineBindPoint pipelineBindPoint, const Pipeline &pipeline)
+{
+    BindPipelineParams* paramStruct = reinterpret_cast<BindPipelineParams*>(initCommand(CommandID::CMD_ID_BIND_PIPELINE, 0));
+    paramStruct->pipelineBindPoint = pipelineBindPoint;
+    paramStruct->pipeline = pipeline.getHandle();
+}
+
+void CustomCommandBuffer::bindVertexBuffers(uint32_t firstBinding,
+                           uint32_t bindingCount,
+                           const VkBuffer *buffers,
+                           const VkDeviceSize *offsets)
+{
+    size_t buffSize = bindingCount*sizeof(VkBuffer);
+    size_t offsetSize = bindingCount*sizeof(VkDeviceSize);
+    size_t varSize =  buffSize + offsetSize;
+    void *basePtr = initCommand(CommandID::CMD_ID_BIND_VERTEX_BUFFERS, varSize);
+    BindVertexBuffersParams* paramStruct = reinterpret_cast<BindVertexBuffersParams*>(basePtr);
+    // Copy params
+    paramStruct->firstBinding = firstBinding;
+    paramStruct->bindingCount = bindingCount;
+    // Copy variable sized data
+    void *ptrData = getCmdVariableDataPtr(CommandID::CMD_ID_BIND_VERTEX_BUFFERS, basePtr);
+    memcpy(ptrData, buffers, buffSize);
+    paramStruct->buffers = static_cast<const VkBuffer *>(ptrData);
+    ptrData = reinterpret_cast<char*>(ptrData) + buffSize;
+    memcpy(ptrData, offsets, offsetSize);
+    paramStruct->offsets = static_cast<const VkDeviceSize*>(ptrData);
+}
+
+void CustomCommandBuffer::blitImage(const Image &srcImage,
+                   VkImageLayout srcImageLayout,
+                   const Image &dstImage,
+                   VkImageLayout dstImageLayout,
+                   uint32_t regionCount,
+                   VkImageBlit *pRegions,
+                   VkFilter filter)
+{
+    size_t regionSize = regionCount*sizeof(VkImageBlit);
+    void *basePtr = initCommand(CommandID::CMD_ID_BLIT_IMAGE, regionSize);
+    BlitImageParams* paramStruct = reinterpret_cast<BlitImageParams*>(basePtr);
+    paramStruct->srcImage = srcImage.getHandle();
+    paramStruct->srcImageLayout = srcImageLayout;
+    paramStruct->dstImage = dstImage.getHandle();
+    paramStruct->dstImageLayout = dstImageLayout;
+    paramStruct->regionCount = regionCount;
+    paramStruct->filter = filter;
+    // Copy variable sized data
+    void *ptrData = getCmdVariableDataPtr(CommandID::CMD_ID_BLIT_IMAGE, basePtr);
+    memcpy(ptrData, pRegions, regionSize);
+    paramStruct->pRegions = reinterpret_cast<VkImageBlit*>(ptrData);
+}
+
+void CustomCommandBuffer::copyBuffer(const VkBuffer &srcBuffer,
+                    const VkBuffer &destBuffer,
+                    uint32_t regionCount,
+                    const VkBufferCopy *regions)
+{
+    size_t regionSize = regionCount*sizeof(VkBufferCopy);
+    void *basePtr = initCommand(CommandID::CMD_ID_COPY_BUFFER, regionSize);
+    CopyBufferParams* paramStruct = reinterpret_cast<CopyBufferParams*>(basePtr);
+    paramStruct->srcBuffer = srcBuffer;
+    paramStruct->destBuffer = destBuffer;
+    paramStruct->regionCount = regionCount;
+    // Copy variable sized data
+    void *ptrData = getCmdVariableDataPtr(CommandID::CMD_ID_COPY_BUFFER, basePtr);
+    memcpy(ptrData, regions, regionSize);
+    paramStruct->regions = static_cast<const VkBufferCopy*>(ptrData);
+}
+
+void CustomCommandBuffer::copyBufferToImage(VkBuffer srcBuffer,
+                           const Image &dstImage,
+                           VkImageLayout dstImageLayout,
+                           uint32_t regionCount,
+                           const VkBufferImageCopy *regions)
+{
+    size_t regionSize = regionCount*sizeof(VkBufferImageCopy);
+    void *basePtr = initCommand(CommandID::CMD_ID_COPY_BUFFER_TO_IMAGE, regionSize);
+    CopyBufferToImageParams* paramStruct = reinterpret_cast<CopyBufferToImageParams*>(basePtr);
+    paramStruct->srcBuffer = srcBuffer;
+    paramStruct->dstImage = dstImage.getHandle();
+    paramStruct->dstImageLayout = dstImageLayout;
+    paramStruct->regionCount = regionCount;
+    // Copy variable sized data
+    void *ptrData = getCmdVariableDataPtr(CommandID::CMD_ID_COPY_BUFFER_TO_IMAGE, basePtr);
+    memcpy(ptrData, regions, regionSize);
+    paramStruct->regions = static_cast<const VkBufferImageCopy*>(ptrData);
+}
+
+void CustomCommandBuffer::copyImage(const Image &srcImage,
+                   VkImageLayout srcImageLayout,
+                   const Image &dstImage,
+                   VkImageLayout dstImageLayout,
+                   uint32_t regionCount,
+                   const VkImageCopy *regions)
+{
+    size_t regionSize = regionCount*sizeof(VkImageCopy);
+    void *basePtr = initCommand(CommandID::CMD_ID_COPY_IMAGE, regionSize);
+    CopyImageParams* paramStruct = reinterpret_cast<CopyImageParams*>(basePtr);
+    paramStruct->srcImage = srcImage.getHandle();
+    paramStruct->srcImageLayout = srcImageLayout;
+    paramStruct->dstImage = dstImage.getHandle();
+    paramStruct->dstImageLayout = dstImageLayout;
+    paramStruct->regionCount = regionCount;
+    // Copy variable sized data
+    void *ptrData = getCmdVariableDataPtr(CommandID::CMD_ID_COPY_IMAGE, basePtr);
+    memcpy(ptrData, regions, regionSize);
+    paramStruct->regions = static_cast<const VkImageCopy*>(ptrData);
+}
+
+void CustomCommandBuffer::copyImageToBuffer(const Image &srcImage,
+                           VkImageLayout srcImageLayout,
+                           VkBuffer dstBuffer,
+                           uint32_t regionCount,
+                           const VkBufferImageCopy *regions)
+{
+    size_t regionSize = regionCount*sizeof(VkBufferImageCopy);
+    void *basePtr = initCommand(CommandID::CMD_ID_COPY_IMAGE_TO_BUFFER, regionSize);
+    CopyImageToBufferParams* paramStruct = reinterpret_cast<CopyImageToBufferParams*>(basePtr);
+    paramStruct->srcImage = srcImage.getHandle();
+    paramStruct->srcImageLayout = srcImageLayout;
+    paramStruct->dstBuffer = dstBuffer;
+    paramStruct->regionCount = regionCount;
+    // Copy variable sized data
+    void *ptrData = getCmdVariableDataPtr(CommandID::CMD_ID_COPY_IMAGE_TO_BUFFER, basePtr);
+    memcpy(ptrData, regions, regionSize);
+    paramStruct->regions = static_cast<const VkBufferImageCopy*>(ptrData);
+}
+
+void CustomCommandBuffer::clearAttachments(uint32_t attachmentCount,
+                          const VkClearAttachment *attachments,
+                          uint32_t rectCount,
+                          const VkClearRect *rects)
+{
+    size_t attachSize = attachmentCount*sizeof(VkClearAttachment);
+    size_t rectSize = rectCount*sizeof(VkClearRect);
+    size_t varSize = attachSize + rectSize;
+    void *basePtr = initCommand(CommandID::CMD_ID_CLEAR_ATTACHMENTS, varSize);
+    ClearAttachmentsParams* paramStruct = reinterpret_cast<ClearAttachmentsParams*>(basePtr);
+    paramStruct->attachmentCount = attachmentCount;
+    paramStruct->rectCount = rectCount;
+    // Copy variable sized data
+    void *ptrData = getCmdVariableDataPtr(CommandID::CMD_ID_CLEAR_ATTACHMENTS, basePtr);
+    memcpy(ptrData, attachments, attachSize);
+    paramStruct->attachments = static_cast<const VkClearAttachment *>(ptrData);
+    ptrData = reinterpret_cast<char*>(ptrData) + attachSize;
+    memcpy(ptrData, rects, rectSize);
+    paramStruct->rects = static_cast<const VkClearRect *>(ptrData);
+}
+
+void CustomCommandBuffer::clearColorImage(const Image &image,
+                         VkImageLayout imageLayout,
+                         const VkClearColorValue &color,
+                         uint32_t rangeCount,
+                         const VkImageSubresourceRange *ranges)
+{
+    size_t rangeSize = rangeCount*sizeof(VkImageSubresourceRange);
+    void *basePtr = initCommand(CommandID::CMD_ID_CLEAR_COLOR_IMAGE, rangeSize);
+    ClearColorImageParams* paramStruct = reinterpret_cast<ClearColorImageParams*>(basePtr);
+    paramStruct->image = image.getHandle();
+    paramStruct->imageLayout = imageLayout;
+    paramStruct->color = color;
+    paramStruct->rangeCount = rangeCount;
+    // Copy variable sized data
+    void *ptrData = getCmdVariableDataPtr(CommandID::CMD_ID_CLEAR_COLOR_IMAGE, basePtr);
+    memcpy(ptrData, ranges, rangeSize);
+    paramStruct->ranges = static_cast<const VkImageSubresourceRange *>(ptrData);
+}
+
+void CustomCommandBuffer::clearDepthStencilImage(const Image &image,
+                                VkImageLayout imageLayout,
+                                const VkClearDepthStencilValue &depthStencil,
+                                uint32_t rangeCount,
+                                const VkImageSubresourceRange *ranges)
+{
+    size_t rangeSize = rangeCount*sizeof(VkImageSubresourceRange);
+    void *basePtr = initCommand(CommandID::CMD_ID_CLEAR_DEPTH_STENCIL_IMAGE, rangeSize);
+    ClearDepthStencilImageParams* paramStruct = reinterpret_cast<ClearDepthStencilImageParams*>(basePtr);
+    paramStruct->image = image.getHandle();
+    paramStruct->imageLayout = imageLayout;
+    paramStruct->depthStencil = depthStencil;
+    paramStruct->rangeCount = rangeCount;
+    // Copy variable sized data
+    void *ptrData = getCmdVariableDataPtr(CommandID::CMD_ID_CLEAR_DEPTH_STENCIL_IMAGE, basePtr);
+    memcpy(ptrData, ranges, rangeSize);
+    paramStruct->ranges = static_cast<const VkImageSubresourceRange *>(ptrData);
+}
+
+void CustomCommandBuffer::updateBuffer(const vk::Buffer &buffer,
+                      VkDeviceSize dstOffset,
+                      VkDeviceSize dataSize,
+                      const void *data)
+{
+    void *basePtr = initCommand(CommandID::CMD_ID_UPDATE_BUFFER, dataSize);
+    UpdateBufferParams* paramStruct = reinterpret_cast<UpdateBufferParams*>(basePtr);
+    paramStruct->buffer = buffer.getHandle();
+    paramStruct->dstOffset = dstOffset;
+    paramStruct->dataSize = dataSize;
+    // Copy variable sized data
+    void *ptrData = getCmdVariableDataPtr(CommandID::CMD_ID_UPDATE_BUFFER, basePtr);
+    memcpy(ptrData, data, dataSize);
+    paramStruct->data = ptrData;
+}
+
+void CustomCommandBuffer::pushConstants(const PipelineLayout &layout,
+                       VkShaderStageFlags flag,
+                       uint32_t offset,
+                       uint32_t size,
+                       const void *data)
+{
+    void *basePtr = initCommand(CommandID::CMD_ID_PUSH_CONSTANTS, size);
+    PushConstantsParams* paramStruct = reinterpret_cast<PushConstantsParams*>(basePtr);
+    paramStruct->layout = layout.getHandle();
+    paramStruct->flag = flag;
+    paramStruct->offset = offset;
+    paramStruct->size = size;
+    // Copy variable sized data
+    void *ptrData = getCmdVariableDataPtr(CommandID::CMD_ID_PUSH_CONSTANTS, basePtr);
+    memcpy(ptrData, data, size);
+    paramStruct->data = ptrData;
+}
+
+void CustomCommandBuffer::setViewport(uint32_t firstViewport, uint32_t viewportCount, const VkViewport *viewports)
+{
+    size_t viewportSize = viewportCount*sizeof(VkViewport);
+    void *basePtr = initCommand(CommandID::CMD_ID_SET_VIEWPORT, viewportSize);
+    SetViewportParams* paramStruct = reinterpret_cast<SetViewportParams*>(basePtr);
+    paramStruct->firstViewport = firstViewport;
+    paramStruct->viewportCount = viewportCount;
+    // Copy variable sized data
+    void *ptrData = getCmdVariableDataPtr(CommandID::CMD_ID_SET_VIEWPORT, basePtr);
+    memcpy(ptrData, viewports, viewportSize);
+    paramStruct->viewports = static_cast<const VkViewport*>(ptrData);
+}
+
+void CustomCommandBuffer::setScissor(uint32_t firstScissor, uint32_t scissorCount, const VkRect2D *scissors)
+{
+    size_t scissorSize = scissorCount*sizeof(VkRect2D);
+    void *basePtr = initCommand(CommandID::CMD_ID_SET_SCISSORS, viewportSize);
+    SetScissorParams* paramStruct = reinterpret_cast<SetScissorParams*>(basePtr);
+    paramStruct->firstScissor = firstScissor;
+    paramStruct->scissorCount = scissorCount;
+    // Copy variable sized data
+    void *ptrData = getCmdVariableDataPtr(CommandID::CMD_ID_SET_SCISSORS, basePtr);
+    memcpy(ptrData, scissors, scissorSize);
+    paramStruct->scissors = static_cast<const VkRect2D *>(ptrData);
+}
+
+void CustomCommandBuffer::draw(uint32_t vertexCount,
+              uint32_t instanceCount,
+              uint32_t firstVertex,
+              uint32_t firstInstance)
+{
+    DrawParams* paramStruct = reinterpret_cast<DrawParams*>(initCommand(CommandID::CMD_ID_DRAW, 0));
+    paramStruct->vertexCount = vertexCount;
+    paramStruct->instanceCount = instanceCount;
+    paramStruct->firstVertex = firstVertex;
+    paramStruct->firstInstance = firstInstance;
+}
+
+void CustomCommandBuffer::drawIndexed(uint32_t indexCount,
+                     uint32_t instanceCount,
+                     uint32_t firstIndex,
+                     int32_t vertexOffset,
+                     uint32_t firstInstance)
+{
+    DrawIndexedParams* paramStruct = reinterpret_cast<DrawIndexedParams*>(initCommand(CommandID::CMD_ID_DRAW_INDEXED, 0));
+    paramStruct->indexCount = indexCount;
+    paramStruct->instanceCount = instanceCount;
+    paramStruct->firstIndex = firstIndex;
+    paramStruct->vertexOffset = vertexOffset;
+    paramStruct->firstInstance = firstInstance;
+}
+
+void CustomCommandBuffer::dispatch(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ)
+{
+    CommandHeader *header = initCommand(CommandID::CMD_ID_BIND_INDEX_BUFFER, 0);
+    XXXParams* paramStruct = reinterpret_cast<XXXParams*>(reinterpret_cast<char*>(header) + sizeof(CommandHeader));
+}
+#if 0
+void CustomCommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask,
+                         VkPipelineStageFlags dstStageMask,
+                         VkDependencyFlags dependencyFlags,
+                         uint32_t memoryBarrierCount,
+                         const VkMemoryBarrier *memoryBarriers,
+                         uint32_t bufferMemoryBarrierCount,
+                         const VkBufferMemoryBarrier *bufferMemoryBarriers,
+                         uint32_t imageMemoryBarrierCount,
+                         const VkImageMemoryBarrier *imageMemoryBarriers)
+{
+    CommandHeader *header = initCommand(CommandID::CMD_ID_BIND_INDEX_BUFFER, 0);
+    XXXParams* paramStruct = reinterpret_cast<XXXParams*>(reinterpret_cast<char*>(header) + sizeof(CommandHeader));
+}
+
+void CustomCommandBuffer::setEvent(VkEvent event, VkPipelineStageFlags stageMask)
+{
+    CommandHeader *header = initCommand(CommandID::CMD_ID_BIND_INDEX_BUFFER, 0);
+    XXXParams* paramStruct = reinterpret_cast<XXXParams*>(reinterpret_cast<char*>(header) + sizeof(CommandHeader));
+}
+
+void CustomCommandBuffer::resetEvent(VkEvent event, VkPipelineStageFlags stageMask)
+{
+    CommandHeader *header = initCommand(CommandID::CMD_ID_BIND_INDEX_BUFFER, 0);
+    XXXParams* paramStruct = reinterpret_cast<XXXParams*>(reinterpret_cast<char*>(header) + sizeof(CommandHeader));
+}
+
+void CustomCommandBuffer::waitEvents(uint32_t eventCount,
+                    const VkEvent *events,
+                    VkPipelineStageFlags srcStageMask,
+                    VkPipelineStageFlags dstStageMask,
+                    uint32_t memoryBarrierCount,
+                    const VkMemoryBarrier *memoryBarriers,
+                    uint32_t bufferMemoryBarrierCount,
+                    const VkBufferMemoryBarrier *bufferMemoryBarriers,
+                    uint32_t imageMemoryBarrierCount,
+                    const VkImageMemoryBarrier *imageMemoryBarriers)
+{
+    CommandHeader *header = initCommand(CommandID::CMD_ID_BIND_INDEX_BUFFER, 0);
+    XXXParams* paramStruct = reinterpret_cast<XXXParams*>(reinterpret_cast<char*>(header) + sizeof(CommandHeader));
+}
+
+void CustomCommandBuffer::resetQueryPool(VkQueryPool queryPool, uint32_t firstQuery, uint32_t queryCount)
+{
+    CommandHeader *header = initCommand(CommandID::CMD_ID_BIND_INDEX_BUFFER, 0);
+    XXXParams* paramStruct = reinterpret_cast<XXXParams*>(reinterpret_cast<char*>(header) + sizeof(CommandHeader));
+}
+
+void CustomCommandBuffer::beginQuery(VkQueryPool queryPool, uint32_t query, VkQueryControlFlags flags)
+{
+    CommandHeader *header = initCommand(CommandID::CMD_ID_BIND_INDEX_BUFFER, 0);
+    XXXParams* paramStruct = reinterpret_cast<XXXParams*>(reinterpret_cast<char*>(header) + sizeof(CommandHeader));
+}
+
+void CustomCommandBuffer::endQuery(VkQueryPool queryPool, uint32_t query)
+{
+    CommandHeader *header = initCommand(CommandID::CMD_ID_BIND_INDEX_BUFFER, 0);
+    XXXParams* paramStruct = reinterpret_cast<XXXParams*>(reinterpret_cast<char*>(header) + sizeof(CommandHeader));
+}
+
+void CustomCommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipelineStage,
+                        VkQueryPool queryPool,
+                        uint32_t query)
+{
+    CommandHeader *header = initCommand(CommandID::CMD_ID_BIND_INDEX_BUFFER, 0);
+    XXXParams* paramStruct = reinterpret_cast<XXXParams*>(reinterpret_cast<char*>(header) + sizeof(CommandHeader));
+}
+
+// Parse the cmds in this cmd buffer into given primary cmd buffer
+void CustomCommandBuffer::parse(VkCommandBuffer cmdBuffer)
+{
+    
+}
+#endif
 }  // namespace vk
 
 // VK_EXT_debug_utils

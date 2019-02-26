@@ -1130,7 +1130,7 @@ angle::Result BufferHelper::copyFromBuffer(Context *context,
         mCurrentReadAccess  = 0;
     }
 
-    commandBuffer->copyBuffer(buffer, mBuffer, 1, &copyRegion);
+    commandBuffer->copyBuffer(buffer.getHandle(), mBuffer.getHandle(), 1, &copyRegion);
 
     return angle::Result::Continue;
 }
