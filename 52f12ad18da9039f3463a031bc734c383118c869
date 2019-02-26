@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4462a74b_7f53ba12",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-26T14:35:02Z",
+      "side": 1,
+      "message": "there\u0027s no \"CORE\" in ESSL. It\u0027s just ESSL. You can remove _CORE.",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 28
+      },
+      "revId": "52f12ad18da9039f3463a031bc734c383118c869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9e05dd3_d2e2c522",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-26T14:35:02Z",
+      "side": 1,
+      "message": "we have a policy that all TODOs should be accompanied by bug links. you can change this TODO to a comment unless you plan to implement it soon. Please add an open bug link if you want to leave it a TODO.",
+      "range": {
+        "startLine": 407,
+        "startChar": 0,
+        "endLine": 408,
+        "endChar": 52
+      },
+      "revId": "52f12ad18da9039f3463a031bc734c383118c869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b85c931c_28648537",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-26T14:35:02Z",
+      "side": 1,
+      "message": "this looks odd to me. I feel like there\u0027s probably a safer way to get what you want. but I\u0027m not sure what this is doing.",
+      "range": {
+        "startLine": 410,
+        "startChar": 7,
+        "endLine": 410,
+        "endChar": 49
+      },
+      "revId": "52f12ad18da9039f3463a031bc734c383118c869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f17c338d_2d04a74b",
+        "filename": "src/compiler/translator/TranslatorESSL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-26T14:35:02Z",
+      "side": 1,
+      "message": "this also looks strange. the output type should probably be the output type.",
+      "range": {
+        "startLine": 40,
+        "startChar": 12,
+        "endLine": 40,
+        "endChar": 74
+      },
+      "revId": "52f12ad18da9039f3463a031bc734c383118c869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e219ae47_d811bad6",
+        "filename": "src/compiler/translator/TranslatorESSL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-26T14:35:02Z",
+      "side": 1,
+      "message": "Is the comment wrong here? Should it be // Don\u0027t emit anything. This extension is core in GLES 3.10 ?",
+      "range": {
+        "startLine": 187,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 13
+      },
+      "revId": "52f12ad18da9039f3463a031bc734c383118c869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6482d186_06819e28",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1207,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-26T14:35:02Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be GLES 3.1 not 3.0?",
+      "range": {
+        "startLine": 1207,
+        "startChar": 37,
+        "endLine": 1207,
+        "endChar": 80
+      },
+      "revId": "52f12ad18da9039f3463a031bc734c383118c869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
