@@ -552,6 +552,30 @@
     },
     {
       "key": {
+        "uuid": "7e3bb8b4_b592cc92",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-26T16:09:04Z",
+      "side": 1,
+      "message": "It\u0027s unfortunate that you can\u0027t keep the layout PREINITIALIZED and only transfer between queues. I wouldn\u0027t worry about the extra layout transition though, it\u0027s a one-time thing (though could have unfortunate consequences under unlucky circumstances). For the long run, I do prefer the queue transfer to be done on first use, but I\u0027m not concerned about it at this time.",
+      "parentUuid": "fdaa8b75_0f8e87c9",
+      "range": {
+        "startLine": 1568,
+        "startChar": 46,
+        "endLine": 1568,
+        "endChar": 70
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45cc3760_06998d71",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 15
