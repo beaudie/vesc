@@ -87,6 +87,24 @@
       "revId": "0c0f7ca539a5e35289e6fbb89c6a1d5d1822c0b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91b8c6fc_85858e2d",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-26T00:48:49Z",
+      "side": 1,
+      "message": "Turns out GL_RGBA/GL_FLOAT texture would results in a FRAMEBUFFER_INCOMPLETE_ATTACHMENT when bind to a framebuffer. \nIs this an unexpected behavior? Shall I add another test for this or file a bug ticket?",
+      "parentUuid": "0a1a588c_c2e41c56",
+      "revId": "0c0f7ca539a5e35289e6fbb89c6a1d5d1822c0b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
