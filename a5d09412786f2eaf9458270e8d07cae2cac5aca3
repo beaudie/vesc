@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa7642a9_e5463142",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1167049
+      },
+      "writtenOn": "2019-02-26T04:15:10Z",
+      "side": 1,
+      "message": "mShaderSpec is 300 pass from chromium. Skip this by \u0027MapSpecToShaderVersion(mShaderSpec) !\u003d 300\u0027. Not sure if we should modify mShaderSpec to 310.",
+      "range": {
+        "startLine": 409,
+        "startChar": 8,
+        "endLine": 409,
+        "endChar": 43
+      },
+      "revId": "a5d09412786f2eaf9458270e8d07cae2cac5aca3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
