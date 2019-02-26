@@ -528,6 +528,30 @@
     },
     {
       "key": {
+        "uuid": "fdaa8b75_0f8e87c9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1568,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-26T15:29:00Z",
+      "side": 1,
+      "message": "Turns out that I have to change the layout when I do the queue transition, preinitialized or undefined layouts are not valid as a destination layout.  So I have to guess a layout to use.. I chose FragmentShaderReadOnly for textures and ColorAttachment for renderbuffers which may result in a bunch of extra layout changes if we guess wrong.",
+      "parentUuid": "db7f70b6_09386c17",
+      "range": {
+        "startLine": 1568,
+        "startChar": 46,
+        "endLine": 1568,
+        "endChar": 70
+      },
+      "revId": "6fcbe5e4752354a65e0a69f82f19ce551e400265",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45cc3760_06998d71",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 15
