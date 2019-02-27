@@ -537,6 +537,7 @@ Error Display::initialize()
     if (mConfigSet.size() == 0)
     {
         mImplementation->terminate();
+        SafeDelete(mImplementation);
         return EglNotInitialized();
     }
 
@@ -565,6 +566,7 @@ Error Display::initialize()
                 ERR() << "Failed to initialize display because device creation failed: "
                       << error.getMessage();
                 mImplementation->terminate();
+                SafeDelete(mImplementation);
                 return error;
             }
             mDevice = new Device(this, impl.release());
@@ -636,6 +638,7 @@ Error Display::terminate(const Thread *thread)
     }
 
     mImplementation->terminate();
+    SafeDelete(mImplementation);
 
     mDeviceLost = false;
 
