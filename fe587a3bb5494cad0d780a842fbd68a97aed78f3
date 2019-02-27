@@ -113,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "64fa17e2_505a4c78",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-02-27T18:06:05Z",
+      "side": 1,
+      "message": "No, this should be okay. We are\u0027t creating the gl::TraceEvent::TraceEndOnScopeClose object here. Here we are just adding an event. No scoping involved.",
+      "parentUuid": "fa493f4e_e7d8541d",
+      "revId": "fe587a3bb5494cad0d780a842fbd68a97aed78f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f79d3cc3_62608e12",
         "filename": "src/third_party/trace_event/trace_event.h",
         "patchSetId": 2
