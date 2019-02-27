@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "b471ae0d_853781ab",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-27T19:12:56Z",
+      "side": 1,
+      "message": "Yes, it should.  The format of the data being uploaded is different than the internal format of the texture, \u0027type\u0027 is the type of the internal format of the texture.\n\nComponentType is something different, used to implement the GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE query of glGetFramebufferAttachmentParameteriv and can only be one of a few values.\n\nYou can see where these values come from in our big format table: https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/formatutils.cpp?l\u003d718",
+      "parentUuid": "17655fea_e99c3419",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1e2858dd_5619a166",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 10
