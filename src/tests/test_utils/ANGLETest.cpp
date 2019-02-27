@@ -1262,7 +1262,11 @@ void ANGLETestBase::ignoreD3D11SDKLayersWarnings()
 
 void ANGLETestBase::treatPlatformWarningsAsErrors()
 {
-    mPlatformContext.warningsAsErrors = true;
+    // Disable because of Windows 7. We are falling back to the old compiler DLL.
+    if (!angle::IsWindows())
+    {
+        mPlatformContext.warningsAsErrors = true;
+    }
 }
 
 ANGLETestBase::ScopedIgnorePlatformMessages::ScopedIgnorePlatformMessages(ANGLETestBase *test)
