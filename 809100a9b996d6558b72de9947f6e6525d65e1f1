@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d95620db_afbdb8ef",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-27T21:43:57Z",
+      "side": 1,
+      "message": "How about when we are ready to land this and take out vk::CommandBuffer let\u0027s just go all the way and call this vk::CommandBuffer? Also I would just call the file CommandBuffer.cpp.",
+      "range": {
+        "startLine": 18,
+        "startChar": 6,
+        "endLine": 18,
+        "endChar": 23
+      },
+      "revId": "809100a9b996d6558b72de9947f6e6525d65e1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9c77166_181837b5",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-27T21:43:57Z",
+      "side": 1,
+      "message": "to avoid needing this indexing struct I would suggest passing the struct as a template parameter. Then you could also return the struct type after reinterpret_cast.",
+      "range": {
+        "startLine": 20,
+        "startChar": 28,
+        "endLine": 20,
+        "endChar": 45
+      },
+      "revId": "809100a9b996d6558b72de9947f6e6525d65e1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e702312e_3f76772c",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-27T21:43:57Z",
+      "side": 1,
+      "message": "I would suggest one change I think would make this slightly cleaner. That is to move the memcpy into a helper. And store the current command offset (or pointer). Initially the offset is the fixed size, or the pointer is returned from \"allocate\" plus the fixed size.\n\nYou could rename this helper to be storePointerParameter(const uint8_t *paramData, size_t sizeInBytes).\n\nWe could optimize this later by keeping the offset on the stack or in a register. But this should clean up the code slightly on this first pass. WDYT?",
+      "range": {
+        "startLine": 38,
+        "startChar": 25,
+        "endLine": 38,
+        "endChar": 46
+      },
+      "revId": "809100a9b996d6558b72de9947f6e6525d65e1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "821fa996_a26885f7",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-27T21:43:57Z",
+      "side": 1,
+      "message": "I think storing these is redundant. You will still have to unpack the stored parameters. So when you unpack you can set the pointers. That could save us a memory write per pointer.",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 31
+      },
+      "revId": "809100a9b996d6558b72de9947f6e6525d65e1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06a2b5d8_cb595d5a",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-27T21:43:57Z",
+      "side": 1,
+      "message": "nit: because enum class is totally scoped you can use non-underscore names and can drop the CMD_ID prefix. So just \"BindDescriptorSets\", \"BindIndexBuffer\", etc.",
+      "range": {
+        "startLine": 24,
+        "startChar": 5,
+        "endLine": 24,
+        "endChar": 10
+      },
+      "revId": "809100a9b996d6558b72de9947f6e6525d65e1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
