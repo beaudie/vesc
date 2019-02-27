@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1cd8579_a552ce10",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-27T16:53:46Z",
+      "side": 1,
+      "message": "I think it was actually the do / while refactor. So you could probably update this.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 13
+      },
+      "revId": "fe587a3bb5494cad0d780a842fbd68a97aed78f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7bb5048_2df1537e",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-27T16:53:46Z",
+      "side": 1,
+      "message": "aha, the do while refactor got us! good catch. I broke this accidentally in https://chromium-review.googlesource.com/c/1446493",
+      "range": {
+        "startLine": 466,
+        "startChar": 0,
+        "endLine": 474,
+        "endChar": 5
+      },
+      "revId": "fe587a3bb5494cad0d780a842fbd68a97aed78f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f79d3cc3_62608e12",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-27T16:53:46Z",
+      "side": 1,
+      "message": "you can remove this",
+      "range": {
+        "startLine": 533,
+        "startChar": 0,
+        "endLine": 533,
+        "endChar": 39
+      },
+      "revId": "fe587a3bb5494cad0d780a842fbd68a97aed78f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aaa23a93_a71e897b",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-27T16:53:46Z",
+      "side": 1,
+      "message": "and these",
+      "range": {
+        "startLine": 710,
+        "startChar": 0,
+        "endLine": 713,
+        "endChar": 29
+      },
+      "revId": "fe587a3bb5494cad0d780a842fbd68a97aed78f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
