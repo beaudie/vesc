@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "289f0a3e_288899fe",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-02-27T19:01:09Z",
+      "side": 1,
+      "message": "Are you checking type or componentType?  I believe type should always be what you expect, the data type of the sized internal format.",
+      "parentUuid": "07ce568c_202ecc0e",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1e2858dd_5619a166",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 10
