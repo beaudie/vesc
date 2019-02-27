@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "93055c6b_73cc254c",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-27T17:45:33Z",
+      "side": 1,
+      "message": "What compiler are you using? Isn\u0027t the same one Chrome uses? (e.g. a new version of Clang)",
+      "parentUuid": "02f8c722_2f812930",
+      "range": {
+        "startLine": 533,
+        "startChar": 0,
+        "endLine": 533,
+        "endChar": 39
+      },
+      "revId": "fe587a3bb5494cad0d780a842fbd68a97aed78f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aaa23a93_a71e897b",
         "filename": "src/third_party/trace_event/trace_event.h",
         "patchSetId": 2
