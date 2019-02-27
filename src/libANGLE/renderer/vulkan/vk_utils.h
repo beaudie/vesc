@@ -319,6 +319,7 @@ class RefCounted : angle::NonCopyable
 
     RefCounted(RefCounted &&copy) : mRefCount(copy.mRefCount), mObject(std::move(copy.mObject))
     {
+        ASSERT(this != &copy);
         copy.mRefCount = 0;
     }
 
@@ -383,6 +384,40 @@ class BindingPointer final : angle::NonCopyable
 
   private:
     RefCounted<T> *mRefCounted;
+};
+
+// Helper class to share ref-counted Vulkan objects.  Requires that T have a destroy method
+// that takes a VkDevice and returns void.
+template <typename T>
+class Shared final : angle::NonCopyable
+{
+  public:
+    Shared(VkDevice device) : mDevice(device) {}
+    Shared(Shared &&other) = default;
+    ~Shared()              = default;
+
+    Shared &operator=(Shared &&other) = default;
+
+    void addRef() { mRefCounted.addRef(); }
+
+    void releaseRef()
+    {
+        mRefCounted.releaseRef();
+        if (!isReferenced())
+        {
+            get().destroy(mDevice);
+            delete this;
+        }
+    }
+
+    bool isReferenced() const { return mRefCounted.isReferenced(); }
+
+    T &get() { return mRefCounted.get(); }
+    const T &get() const { return mRefCounted.get(); }
+
+  private:
+    VkDevice mDevice;
+    RefCounted<T> mRefCounted;
 };
 }  // namespace vk
 

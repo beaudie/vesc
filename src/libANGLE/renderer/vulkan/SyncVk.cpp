@@ -17,7 +17,7 @@
 
 namespace rx
 {
-FenceSyncVk::FenceSyncVk() {}
+FenceSyncVk::FenceSyncVk() : mFence(nullptr) {}
 
 FenceSyncVk::~FenceSyncVk() {}
 
@@ -27,6 +27,9 @@ void FenceSyncVk::onDestroy(RendererVk *renderer)
     {
         renderer->releaseObject(renderer->getCurrentQueueSerial(), &mEvent);
     }
+
+    mFence->releaseRef();
+    mFence = nullptr;
 }
 
 angle::Result FenceSyncVk::initialize(vk::Context *context)
@@ -43,8 +46,10 @@ angle::Result FenceSyncVk::initialize(vk::Context *context)
     vk::Scoped<vk::Event> event(device);
     ANGLE_VK_TRY(context, event.get().init(device, eventCreateInfo));
 
+    ANGLE_TRY(renderer->getSubmitFence(context, &mFence));
+    mFence->addRef();
+
     mEvent        = event.release();
-    mSignalSerial = renderer->getCurrentQueueSerial();
 
     renderer->getCommandGraph()->setFenceSync(mEvent);
     return angle::Result::Continue;
@@ -73,23 +78,22 @@ angle::Result FenceSyncVk::clientWait(vk::Context *context,
         return angle::Result::Continue;
     }
 
-    // If asked to flush, only do so if the queue serial hasn't changed (as otherwise the event
-    // signal is already flushed). If not asked to flush, do the flush anyway!  This is because
-    // there's no cpu-side wait on the event and there's no fence yet inserted to wait on.  We could
-    // test the event in a loop with a sleep, which can only ever not timeout if another thread
-    // performs the flush.  Instead, we perform the flush for simplicity.
-    if (hasPendingWork(renderer))
+    if (flushCommands)
     {
         ANGLE_TRY(renderer->flush(context));
     }
 
-    // Wait on the fence that's implicitly inserted at the end of every submission.
-    bool timedOut = false;
-    angle::Result result =
-        renderer->finishToSerialOrTimeout(context, mSignalSerial, timeout, &timedOut);
-    ANGLE_TRY(result);
+    // Wait on the fence that's expected to be signaled on the first vkQueueSubmit after
+    // `initialize` was called.
+    VkResult status = mFence->get().wait(renderer->getDevice(), timeout);
 
-    *outResult = timedOut ? VK_TIMEOUT : VK_SUCCESS;
+    // Check for errors, but don't consider timeout as such.
+    if (status != VK_TIMEOUT)
+    {
+        ANGLE_VK_TRY(context, status);
+    }
+
+    *outResult = status;
     return angle::Result::Continue;
 }
 
@@ -108,11 +112,6 @@ angle::Result FenceSyncVk::getStatus(vk::Context *context, bool *signaled)
     }
     *signaled = result == VK_EVENT_SET;
     return angle::Result::Continue;
-}
-
-bool FenceSyncVk::hasPendingWork(RendererVk *renderer)
-{
-    return mSignalSerial == renderer->getCurrentQueueSerial();
 }
 
 SyncVk::SyncVk() : SyncImpl() {}
