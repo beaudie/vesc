@@ -23,17 +23,21 @@ namespace rx
 {
 
 DisplayVk::DisplayVk(const egl::DisplayState &state)
-    : DisplayImpl(state), vk::Context(new RendererVk()), mScratchBuffer(1000u)
+    : DisplayImpl(state), vk::Context(nullptr), mScratchBuffer(1000u)
 {}
 
 DisplayVk::~DisplayVk()
 {
-    delete mRenderer;
+    ASSERT(mRenderer == nullptr);
 }
 
 egl::Error DisplayVk::initialize(egl::Display *display)
 {
-    ASSERT(mRenderer != nullptr && display != nullptr);
+    ASSERT(display != nullptr);
+
+    ASSERT(mRenderer == nullptr);
+    mRenderer = new RendererVk();
+
     angle::Result result = mRenderer->initialize(this, display, getWSIExtension(), getWSILayer());
     ANGLE_TRY(angle::ToEGL(result, this, EGL_NOT_INITIALIZED));
     return egl::NoError();
@@ -43,6 +47,7 @@ void DisplayVk::terminate()
 {
     ASSERT(mRenderer);
     mRenderer->onDestroy(this);
+    SafeDelete(mRenderer);
 }
 
 egl::Error DisplayVk::makeCurrent(egl::Surface * /*drawSurface*/,
@@ -54,7 +59,7 @@ egl::Error DisplayVk::makeCurrent(egl::Surface * /*drawSurface*/,
 
 bool DisplayVk::testDeviceLost()
 {
-    return mRenderer->isDeviceLost();
+    return getRenderer()->isDeviceLost();
 }
 
 egl::Error DisplayVk::restoreLostDevice(const egl::Display *display)
@@ -67,9 +72,9 @@ egl::Error DisplayVk::restoreLostDevice(const egl::Display *display)
 std::string DisplayVk::getVendorString() const
 {
     std::string vendorString = "Google Inc.";
-    if (mRenderer)
+    if (getRenderer())
     {
-        vendorString += " " + mRenderer->getVendorString();
+        vendorString += " " + getRenderer()->getVendorString();
     }
 
     return vendorString;
@@ -84,7 +89,7 @@ DeviceImpl *DisplayVk::createDevice()
 egl::Error DisplayVk::waitClient(const gl::Context *context)
 {
     TRACE_EVENT0("gpu.angle", "DisplayVk::waitClient");
-    return angle::ToEGL(mRenderer->finish(this), this, EGL_BAD_ACCESS);
+    return angle::ToEGL(getRenderer()->finish(this), this, EGL_BAD_ACCESS);
 }
 
 egl::Error DisplayVk::waitNative(const gl::Context *context, EGLint engine)
@@ -106,7 +111,7 @@ SurfaceImpl *DisplayVk::createWindowSurface(const egl::SurfaceState &state,
 SurfaceImpl *DisplayVk::createPbufferSurface(const egl::SurfaceState &state,
                                              const egl::AttributeMap &attribs)
 {
-    ASSERT(mRenderer);
+    ASSERT(getRenderer());
 
     EGLint width  = attribs.getAsInt(EGL_WIDTH, 0);
     EGLint height = attribs.getAsInt(EGL_HEIGHT, 0);
@@ -145,7 +150,7 @@ rx::ContextImpl *DisplayVk::createContext(const gl::State &state,
                                           const gl::Context *shareContext,
                                           const egl::AttributeMap &attribs)
 {
-    return new ContextVk(state, errorSet, mRenderer);
+    return new ContextVk(state, errorSet, getRenderer());
 }
 
 StreamProducerImpl *DisplayVk::createStreamProducerD3DTexture(
@@ -163,7 +168,7 @@ EGLSyncImpl *DisplayVk::createSync(const egl::AttributeMap &attribs)
 
 gl::Version DisplayVk::getMaxSupportedESVersion() const
 {
-    return mRenderer->getMaxSupportedESVersion();
+    return getRenderer()->getMaxSupportedESVersion();
 }
 
 void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
@@ -225,7 +230,7 @@ void DisplayVk::handleError(VkResult result,
     if (result == VK_ERROR_DEVICE_LOST)
     {
         WARN() << mStoredErrorString;
-        mRenderer->notifyDeviceLost();
+        getRenderer()->notifyDeviceLost();
     }
 }
 

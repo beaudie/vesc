@@ -153,7 +153,7 @@ angle::Result ContextVk::initialize()
     VkDescriptorPoolSize uniformSetSize = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
                                            GetUniformBufferDescriptorCount()};
     VkDescriptorPoolSize textureSetSize = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                           mRenderer->getMaxActiveTextures()};
+                                           getRenderer()->getMaxActiveTextures()};
     VkDescriptorPoolSize driverSetSize  = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1};
     ANGLE_TRY(mDynamicDescriptorPools[kUniformsDescriptorSetIndex].init(this, &uniformSetSize, 1));
     ANGLE_TRY(mDynamicDescriptorPools[kTextureDescriptorSetIndex].init(this, &textureSetSize, 1));
@@ -170,8 +170,8 @@ angle::Result ContextVk::initialize()
                                                            vk::kDefaultTimestampQueryPoolSize));
 
     size_t minAlignment = static_cast<size_t>(
-        mRenderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
-    mDriverUniformsBuffer.init(minAlignment, mRenderer);
+        getRenderer()->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
+    mDriverUniformsBuffer.init(minAlignment, getRenderer());
 
     mGraphicsPipelineDesc.reset(new vk::GraphicsPipelineDesc());
     mGraphicsPipelineDesc->initDefaults();
@@ -179,7 +179,7 @@ angle::Result ContextVk::initialize()
     // Initialize current value/default attribute buffers.
     for (vk::DynamicBuffer &buffer : mDefaultAttribBuffers)
     {
-        buffer.init(1, mRenderer);
+        buffer.init(1, getRenderer());
     }
 
     return angle::Result::Continue;
@@ -187,12 +187,12 @@ angle::Result ContextVk::initialize()
 
 angle::Result ContextVk::flush(const gl::Context *context)
 {
-    return mRenderer->flush(this);
+    return getRenderer()->flush(this);
 }
 
 angle::Result ContextVk::finish(const gl::Context *context)
 {
-    return mRenderer->finish(this);
+    return getRenderer()->finish(this);
 }
 
 angle::Result ContextVk::setupDraw(const gl::Context *context,
@@ -228,7 +228,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     if (!mCommandBuffer)
     {
         mDirtyBits |= mNewCommandBufferDirtyBits;
-        if (!mDrawFramebuffer->appendToStartedRenderPass(mRenderer->getCurrentQueueSerial(),
+        if (!mDrawFramebuffer->appendToStartedRenderPass(getRenderer()->getCurrentQueueSerial(),
                                                          &mCommandBuffer))
         {
             ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, &mCommandBuffer));
@@ -371,7 +371,7 @@ angle::Result ContextVk::handleDirtyPipeline(const gl::Context *context,
 
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentPipeline && mCurrentPipeline->valid());
-    mCurrentPipeline->updateSerial(mRenderer->getCurrentQueueSerial());
+    mCurrentPipeline->updateSerial(getRenderer()->getCurrentQueueSerial());
     return angle::Result::Continue;
 }
 
@@ -540,7 +540,7 @@ angle::Result ContextVk::drawRangeElements(const gl::Context *context,
 
 VkDevice ContextVk::getDevice() const
 {
-    return mRenderer->getDevice();
+    return getRenderer()->getDevice();
 }
 
 angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
@@ -562,7 +562,7 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
 
 GLenum ContextVk::getResetStatus()
 {
-    if (mRenderer->isDeviceLost())
+    if (getRenderer()->isDeviceLost())
     {
         // TODO(geofflang): It may be possible to track which context caused the device lost and
         // return either GL_GUILTY_CONTEXT_RESET or GL_INNOCENT_CONTEXT_RESET.
@@ -581,36 +581,36 @@ std::string ContextVk::getVendorString() const
 
 std::string ContextVk::getRendererDescription() const
 {
-    return mRenderer->getRendererDescription();
+    return getRenderer()->getRendererDescription();
 }
 
 void ContextVk::insertEventMarker(GLsizei length, const char *marker)
 {
     std::string markerStr(marker, length <= 0 ? strlen(marker) : length);
-    mRenderer->insertDebugMarker(GL_DEBUG_SOURCE_APPLICATION, static_cast<GLuint>(-1),
-                                 std::move(markerStr));
+    getRenderer()->insertDebugMarker(GL_DEBUG_SOURCE_APPLICATION, static_cast<GLuint>(-1),
+                                     std::move(markerStr));
 }
 
 void ContextVk::pushGroupMarker(GLsizei length, const char *marker)
 {
     std::string markerStr(marker, length <= 0 ? strlen(marker) : length);
-    mRenderer->pushDebugMarker(GL_DEBUG_SOURCE_APPLICATION, static_cast<GLuint>(-1),
-                               std::move(markerStr));
+    getRenderer()->pushDebugMarker(GL_DEBUG_SOURCE_APPLICATION, static_cast<GLuint>(-1),
+                                   std::move(markerStr));
 }
 
 void ContextVk::popGroupMarker()
 {
-    mRenderer->popDebugMarker();
+    getRenderer()->popDebugMarker();
 }
 
 void ContextVk::pushDebugGroup(GLenum source, GLuint id, const std::string &message)
 {
-    mRenderer->pushDebugMarker(source, id, std::string(message));
+    getRenderer()->pushDebugMarker(source, id, std::string(message));
 }
 
 void ContextVk::popDebugGroup()
 {
-    mRenderer->popDebugMarker();
+    getRenderer()->popDebugMarker();
 }
 
 bool ContextVk::isViewportFlipEnabledForDrawFBO() const
@@ -944,7 +944,7 @@ GLint64 ContextVk::getTimestamp()
 {
     uint64_t timestamp = 0;
 
-    (void)mRenderer->getTimestamp(this, &timestamp);
+    (void)getRenderer()->getTimestamp(this, &timestamp);
 
     return static_cast<GLint64>(timestamp);
 }
@@ -955,7 +955,7 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
     // surface is flipped.
     egl::Surface *drawSurface = context->getCurrentDrawSurface();
     mFlipYForCurrentSurface =
-        drawSurface != nullptr && mRenderer->getFeatures().flipViewportY &&
+        drawSurface != nullptr && getRenderer()->getFeatures().flipViewportY &&
         !IsMaskFlagSet(drawSurface->getOrientation(), EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE);
 
     const gl::State &glState = context->getState();
@@ -969,34 +969,34 @@ void ContextVk::updateFlipViewportDrawFramebuffer(const gl::State &glState)
 {
     gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
     mFlipViewportForDrawFramebuffer =
-        drawFramebuffer->isDefault() && mRenderer->getFeatures().flipViewportY;
+        drawFramebuffer->isDefault() && getRenderer()->getFeatures().flipViewportY;
 }
 
 void ContextVk::updateFlipViewportReadFramebuffer(const gl::State &glState)
 {
     gl::Framebuffer *readFramebuffer = glState.getReadFramebuffer();
     mFlipViewportForReadFramebuffer =
-        readFramebuffer->isDefault() && mRenderer->getFeatures().flipViewportY;
+        readFramebuffer->isDefault() && getRenderer()->getFeatures().flipViewportY;
 }
 
 gl::Caps ContextVk::getNativeCaps() const
 {
-    return mRenderer->getNativeCaps();
+    return getRenderer()->getNativeCaps();
 }
 
 const gl::TextureCapsMap &ContextVk::getNativeTextureCaps() const
 {
-    return mRenderer->getNativeTextureCaps();
+    return getRenderer()->getNativeTextureCaps();
 }
 
 const gl::Extensions &ContextVk::getNativeExtensions() const
 {
-    return mRenderer->getNativeExtensions();
+    return getRenderer()->getNativeExtensions();
 }
 
 const gl::Limitations &ContextVk::getNativeLimitations() const
 {
-    return mRenderer->getNativeLimitations();
+    return getRenderer()->getNativeLimitations();
 }
 
 CompilerImpl *ContextVk::createCompiler()
@@ -1016,12 +1016,12 @@ ProgramImpl *ContextVk::createProgram(const gl::ProgramState &state)
 
 FramebufferImpl *ContextVk::createFramebuffer(const gl::FramebufferState &state)
 {
-    return FramebufferVk::CreateUserFBO(mRenderer, state);
+    return FramebufferVk::CreateUserFBO(getRenderer(), state);
 }
 
 TextureImpl *ContextVk::createTexture(const gl::TextureState &state)
 {
-    return new TextureVk(state, mRenderer);
+    return new TextureVk(state, getRenderer());
 }
 
 RenderbufferImpl *ContextVk::createRenderbuffer(const gl::RenderbufferState &state)
@@ -1157,7 +1157,7 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
                                                    vk::CommandBuffer *commandBuffer)
 {
     // Release any previously retained buffers.
-    mDriverUniformsBuffer.releaseRetainedBuffers(mRenderer);
+    mDriverUniformsBuffer.releaseRetainedBuffers(getRenderer());
 
     const gl::Rectangle &glViewport = mState.getViewport();
     float halfRenderAreaHeight =
@@ -1194,7 +1194,7 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
         vk::DescriptorSetLayoutDesc desc;
         desc.update(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1);
 
-        ANGLE_TRY(mRenderer->getDescriptorSetLayout(this, desc, &mDriverUniformsSetLayout));
+        ANGLE_TRY(getRenderer()->getDescriptorSetLayout(this, desc, &mDriverUniformsSetLayout));
     }
 
     // Allocate a new descriptor set.
@@ -1239,7 +1239,7 @@ void ContextVk::handleError(VkResult errorCode,
     if (errorCode == VK_ERROR_DEVICE_LOST)
     {
         WARN() << errorStream.str();
-        mRenderer->notifyDeviceLost();
+        getRenderer()->notifyDeviceLost();
     }
 
     mErrors->handleError(glErrorCode, errorStream.str().c_str(), file, function, line);
@@ -1297,7 +1297,7 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
 {
     vk::DynamicBuffer &defaultBuffer = mDefaultAttribBuffers[attribIndex];
 
-    defaultBuffer.releaseRetainedBuffers(mRenderer);
+    defaultBuffer.releaseRetainedBuffers(getRenderer());
 
     uint8_t *ptr;
     VkBuffer bufferHandle = VK_NULL_HANDLE;
