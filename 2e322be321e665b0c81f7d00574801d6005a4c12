@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94f7192b_4fd6463e",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2019-02-27T21:46:18Z",
+      "side": 1,
+      "message": "Can we just do this on Windows 7? IsWindows7OrGreater() is the Windows function to detect this. We could even only do it when the new DLL fails to load. Thoughts?",
+      "revId": "2e322be321e665b0c81f7d00574801d6005a4c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
