@@ -319,6 +319,7 @@ class RefCounted : angle::NonCopyable
 
     RefCounted(RefCounted &&copy) : mRefCount(copy.mRefCount), mObject(std::move(copy.mObject))
     {
+        ASSERT(this != &copy);
         copy.mRefCount = 0;
     }
 
@@ -383,6 +384,86 @@ class BindingPointer final : angle::NonCopyable
 
   private:
     RefCounted<T> *mRefCounted;
+};
+
+// Helper class to share ref-counted Vulkan objects.  Requires that T have a destroy method
+// that takes a VkDevice and returns void.
+template <typename T>
+class Shared final : angle::NonCopyable
+{
+  public:
+    Shared() : mRefCounted(nullptr) {}
+    ~Shared() { ASSERT(mRefCounted == nullptr); }
+
+    Shared(Shared &&other) { *this = std::move(other); }
+    Shared &operator=(Shared &&other)
+    {
+        ASSERT(this != &other);
+        mRefCounted       = other.mRefCounted;
+        other.mRefCounted = nullptr;
+        return *this;
+    }
+
+    void set(RefCounted<T> *refCounted, VkDevice device)
+    {
+        if (mRefCounted)
+        {
+            mRefCounted->releaseRef();
+            if (!mRefCounted->isReferenced())
+            {
+                get().destroy(device);
+                SafeDelete(mRefCounted);
+            }
+        }
+
+        mRefCounted = refCounted;
+
+        if (mRefCounted)
+        {
+            mRefCounted->addRef();
+        }
+    }
+
+    void set(const Shared<T> &other, VkDevice device) { set(other.mRefCounted, device); }
+
+    void reset(VkDevice device) { set(nullptr, device); }
+
+    bool isReferenced() const
+    {
+        // If reference is zero, the object should have been deleted.  I.e. if the object is not
+        // nullptr, it should have a reference.
+        ASSERT(!mRefCounted || mRefCounted->isReferenced());
+        return mRefCounted != nullptr;
+    }
+
+    T &get() { return mRefCounted->get(); }
+    const T &get() const { return mRefCounted->get(); }
+
+  private:
+    RefCounted<T> *mRefCounted;
+};
+
+template <typename T>
+class ScopedShared final : angle::NonCopyable
+{
+  public:
+    ScopedShared(VkDevice device) : mDevice(device) {}
+    ~ScopedShared()
+    {
+        if (mShared.isReferenced())
+        {
+            mShared.reset(mDevice);
+        }
+    }
+
+    const Shared<T> &get() const { return mShared; }
+    Shared<T> &get() { return mShared; }
+
+    Shared<T> &&release() { return std::move(mShared); }
+
+  private:
+    VkDevice mDevice;
+    Shared<T> mShared;
 };
 }  // namespace vk
 
