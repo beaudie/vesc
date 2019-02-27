@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "eaff1f7b_aeea9d7f",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-27T15:50:57Z",
+      "side": 1,
+      "message": "String literals. I thought I got rid of all the \\n style. Might have missed a few.",
+      "parentUuid": "6677c113_96d5b2d3",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 14
+      },
+      "revId": "bdea22a9048ae2f97c53296682132794bbbc2a39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1e3397b0_d52c29f0",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 7
