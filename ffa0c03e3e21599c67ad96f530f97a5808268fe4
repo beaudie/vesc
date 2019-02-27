@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b189163a_75d42027",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1844,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-27T23:59:42Z",
+      "side": 1,
+      "message": "nit: you can make this one \u0027if\u0027 faster by using index \u003c DIRTY_BIT_COLOR_ATTACHMENT_MAX. You can also ASSERT(index !\u003d DIRTY_BIT_DEPTH_ATTACHMENT) etc if you\u0027re worried.",
+      "range": {
+        "startLine": 1844,
+        "startChar": 8,
+        "endLine": 1844,
+        "endChar": 84
+      },
+      "revId": "ffa0c03e3e21599c67ad96f530f97a5808268fe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7c98e3b_a700a59e",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1983,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-27T23:59:42Z",
+      "side": 1,
+      "message": "looks like one continuation test is failing. not sure if there\u0027s a slight typo. Or if the new syntax doesn\u0027t work with continuations. Could you check?",
+      "range": {
+        "startLine": 1983,
+        "startChar": 31,
+        "endLine": 1983,
+        "endChar": 59
+      },
+      "revId": "ffa0c03e3e21599c67ad96f530f97a5808268fe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
