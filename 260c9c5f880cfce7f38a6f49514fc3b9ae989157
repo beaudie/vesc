@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "354caefb_a4d247ce",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T01:02:06Z",
+      "side": 1,
+      "message": "Use sizedInternalFormat instead of componentType to detect 32 bit float only (throw no error when blending other sized float such as half float as indicated here:\nhttps://chromium.googlesource.com/angle/angle/+/master/extensions/EXT_color_buffer_float.txt#132\n)\nNeed confirmation.",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a455606c_a1bae8c6",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T01:02:06Z",
+      "side": 1,
+      "message": "Use a bit set mFloat32ColorAttachmentBits to cache instead of looping through attachments to improve performance.",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d5edda2_d382c0ed",
+        "filename": "src/tests/gl_tests/BlendMinMaxTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T01:02:06Z",
+      "side": 1,
+      "message": "Need to request EXT_float_blend to blend on 32 bit float.",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3beac798_faf61ca8",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2910,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T01:02:06Z",
+      "side": 1,
+      "message": "This test is moved from StateChangeTest.cpp to here. Since only by not explicitly requiring EXT_float_blend in the WebGL manner could trigger the check for float color attachment and thus throw some error.",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2229dd3_d50b0f89",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2989,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T01:02:06Z",
+      "side": 1,
+      "message": "Add a test for float color attachment with multiple color attachment.",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

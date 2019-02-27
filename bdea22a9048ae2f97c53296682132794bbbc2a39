@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6677c113_96d5b2d3",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T01:02:06Z",
+      "side": 1,
+      "message": "Yep. I saw the raw string literal style in StateChangeTest.cpp.\nHowever since I moved these tests to WebGLCompatibilityTest.cpp (that\u0027s where EXT_float_blend could be requested explicitly thus only way AFIK to trigger the check for has float color attachment)\nShaders there uses this \\n style (Where I originally inherited from)\nShall I keep it like this, or change all of them into using string literal?",
+      "parentUuid": "723fda6e_1d616f85",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 14
+      },
+      "revId": "bdea22a9048ae2f97c53296682132794bbbc2a39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1e3397b0_d52c29f0",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "bdea22a9048ae2f97c53296682132794bbbc2a39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c703fd5c_dd7d2b49",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T01:02:06Z",
+      "side": 1,
+      "message": "Fixed as suggested",
+      "parentUuid": "1e3397b0_d52c29f0",
+      "range": {
+        "startLine": 186,
+        "startChar": 4,
+        "endLine": 186,
+        "endChar": 86
+      },
+      "revId": "bdea22a9048ae2f97c53296682132794bbbc2a39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "8dea5e4e_d2323f90",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T01:02:06Z",
+      "side": 1,
+      "message": "Fixed as suggested",
+      "parentUuid": "36874d63_4e93c23a",
+      "range": {
+        "startLine": 191,
+        "startChar": 4,
+        "endLine": 191,
+        "endChar": 86
+      },
+      "revId": "bdea22a9048ae2f97c53296682132794bbbc2a39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50a773aa_de2be11c",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "bdea22a9048ae2f97c53296682132794bbbc2a39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33738535_3eebb9c4",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T01:02:06Z",
+      "side": 1,
+      "message": "Fixed as suggested",
+      "parentUuid": "50a773aa_de2be11c",
+      "range": {
+        "startLine": 201,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 0
+      },
+      "revId": "bdea22a9048ae2f97c53296682132794bbbc2a39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
