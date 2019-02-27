@@ -163,7 +163,10 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
 
     VkDevice getDevice() const;
 
-    ANGLE_INLINE const angle::FeaturesVk &getFeatures() const { return mRenderer->getFeatures(); }
+    ANGLE_INLINE const angle::FeaturesVk &getFeatures() const
+    {
+        return getRenderer()->getFeatures();
+    }
 
     ANGLE_INLINE void invalidateVertexAndIndexBuffers()
     {

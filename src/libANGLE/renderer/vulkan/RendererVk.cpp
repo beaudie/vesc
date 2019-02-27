@@ -514,6 +514,9 @@ void RendererVk::onDestroy(vk::Context *context)
         (void)finish(context);
     }
 
+    mCapsInitialized = false;
+    mNativeTextureCaps.clear();
+
     mUtils.destroy(mDevice);
 
     mPipelineLayoutCache.destroy(mDevice);

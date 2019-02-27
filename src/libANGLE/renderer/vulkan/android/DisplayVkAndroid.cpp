@@ -26,7 +26,7 @@ DisplayVkAndroid::DisplayVkAndroid(const egl::DisplayState &state) : DisplayVk(s
 egl::Error DisplayVkAndroid::initialize(egl::Display *display)
 {
     ANGLE_TRY(DisplayVk::initialize(display));
-    std::string rendererDescription = mRenderer->getRendererDescription();
+    std::string rendererDescription = getRenderer()->getRendererDescription();
     __android_log_print(ANDROID_LOG_INFO, "ANGLE", "%s", rendererDescription.c_str());
     return egl::NoError();
 }
@@ -67,7 +67,7 @@ egl::Error DisplayVkAndroid::validateImageClientBuffer(const gl::Context *contex
     switch (target)
     {
         case EGL_NATIVE_BUFFER_ANDROID:
-            return HardwareBufferImageSiblingVkAndroid::ValidateHardwareBuffer(mRenderer,
+            return HardwareBufferImageSiblingVkAndroid::ValidateHardwareBuffer(getRenderer(),
                                                                                clientBuffer);
 
         default:
