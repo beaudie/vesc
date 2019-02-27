@@ -16,6 +16,24 @@
       "revId": "8dcc7e271aee945aa4251643f25cc756c76cc16e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d026606f_cc3d6610",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-02-27T17:43:01Z",
+      "side": 0,
+      "message": "Just removing the do / while was not sufficient to fix the issue.",
+      "parentUuid": "d0045d6b_fdbb7045",
+      "revId": "8dcc7e271aee945aa4251643f25cc756c76cc16e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

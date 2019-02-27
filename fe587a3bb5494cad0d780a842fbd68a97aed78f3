@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "36561a6e_1494a68c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-02-27T17:43:01Z",
+      "side": 1,
+      "message": "Yeah, I started there but that did NOT fix the issue. I had to add the static variable for things to behave the way I wanted. Maybe I could put the do / while back the way it was but that seems wrong - scope ends at the end of the macro which I don\u0027t think what\u0027s intended.\n\nI could see that some compilers wouldn\u0027t have the issue because they always waited until end-of-scope to call the destructor. For those that do call the destructor early, by having an obvious side effect, the compiler is required to wait to destroy the object until the end of scope - at least that\u0027s the general consensus on StackOverflow. If the compiler were to do the destroy earlier that would be a bug.",
+      "parentUuid": "4c269cdb_54682bf2",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 13
+      },
+      "revId": "fe587a3bb5494cad0d780a842fbd68a97aed78f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a7bb5048_2df1537e",
         "filename": "src/third_party/trace_event/trace_event.h",
         "patchSetId": 2
@@ -95,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "02f8c722_2f812930",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-02-27T17:43:01Z",
+      "side": 1,
+      "message": "Without this, Android\u0027s compiler will immediately destroy the scoped trace.",
+      "parentUuid": "f79d3cc3_62608e12",
+      "range": {
+        "startLine": 533,
+        "startChar": 0,
+        "endLine": 533,
+        "endChar": 39
+      },
+      "revId": "fe587a3bb5494cad0d780a842fbd68a97aed78f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aaa23a93_a71e897b",
         "filename": "src/third_party/trace_event/trace_event.h",
         "patchSetId": 2
@@ -106,6 +154,30 @@
       "writtenOn": "2019-02-27T16:53:46Z",
       "side": 1,
       "message": "and these",
+      "range": {
+        "startLine": 710,
+        "startChar": 0,
+        "endLine": 713,
+        "endChar": 29
+      },
+      "revId": "fe587a3bb5494cad0d780a842fbd68a97aed78f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a22b9db_bab5da4c",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-02-27T17:43:01Z",
+      "side": 1,
+      "message": "Won\u0027t work without this.",
+      "parentUuid": "aaa23a93_a71e897b",
       "range": {
         "startLine": 710,
         "startChar": 0,
