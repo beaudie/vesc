@@ -96,6 +96,23 @@
     },
     {
       "key": {
+        "uuid": "fa493f4e_e7d8541d",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-02-27T17:53:46Z",
+      "side": 1,
+      "message": "I should probably remove any other do / while\u0027s in these macros as well.",
+      "revId": "fe587a3bb5494cad0d780a842fbd68a97aed78f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f79d3cc3_62608e12",
         "filename": "src/third_party/trace_event/trace_event.h",
         "patchSetId": 2
@@ -155,6 +172,30 @@
       "side": 1,
       "message": "What compiler are you using? Isn\u0027t the same one Chrome uses? (e.g. a new version of Clang)",
       "parentUuid": "02f8c722_2f812930",
+      "range": {
+        "startLine": 533,
+        "startChar": 0,
+        "endLine": 533,
+        "endChar": 39
+      },
+      "revId": "fe587a3bb5494cad0d780a842fbd68a97aed78f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42596bfb_18c36079",
+        "filename": "src/third_party/trace_event/trace_event.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-02-27T17:53:46Z",
+      "side": 1,
+      "message": "Using the standard compiler. Build shows: \n../../third_party/llvm-build/Release+Asserts/bin/clang++",
+      "parentUuid": "93055c6b_73cc254c",
       "range": {
         "startLine": 533,
         "startChar": 0,
