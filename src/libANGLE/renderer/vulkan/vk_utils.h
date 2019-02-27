@@ -110,8 +110,11 @@ class Context : angle::NonCopyable
     VkDevice getDevice() const;
     RendererVk *getRenderer() const { return mRenderer; }
 
-  protected:
-    RendererVk *const mRenderer;
+  private:
+    RendererVk *mRenderer;
+
+    // DisplayVk is allowed to new and delete mRenderer, while ContextVk can only use the pointer.
+    friend class rx::DisplayVk;
 };
 
 VkImageAspectFlags GetDepthStencilAspectFlags(const angle::Format &format);
