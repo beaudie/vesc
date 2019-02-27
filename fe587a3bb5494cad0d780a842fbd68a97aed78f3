@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4c269cdb_54682bf2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-27T16:56:20Z",
+      "side": 1,
+      "message": "Yeap, that\u0027s what I was gonna say as well. Now the question is why it was working on debug!\n\nAlso, the issue with sentences that say \"... the compiler ...\" is that there is no such thing as _the_ compiler. If you try it on some compiler version, there is no guarantee it would work on another compiler, or even a different version of the same compiler.",
+      "parentUuid": "f1cd8579_a552ce10",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 13
+      },
+      "revId": "fe587a3bb5494cad0d780a842fbd68a97aed78f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a7bb5048_2df1537e",
         "filename": "src/third_party/trace_event/trace_event.h",
         "patchSetId": 2
