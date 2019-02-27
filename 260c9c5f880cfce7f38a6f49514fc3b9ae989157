@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "17655fea_e99c3419",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T19:06:14Z",
+      "side": 1,
+      "message": "I used componentType \u003d\u003d GL_FLOAT. Now switching to sizedInternalFormat \u003d\u003d GL_R*16F.\nSo you are saying if using type https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/formatutils.h?type\u003dcs\u0026g\u003d0\u0026l\u003d158\nit will return GL_FLOAT for float32 texture and GL_HALF_FLOAT for float16, no matter what the user input is when calling glTexImage2D?\nIf that\u0027s the case, I will switch to using type to do the detection.",
+      "parentUuid": "289f0a3e_288899fe",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1e2858dd_5619a166",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 10
