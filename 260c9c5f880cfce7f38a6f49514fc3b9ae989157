@@ -127,6 +127,24 @@
     },
     {
       "key": {
+        "uuid": "5123b3f5_a936853d",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T22:48:59Z",
+      "side": 1,
+      "message": "This big table really clarifies things to me. Thanks!\nFixed to using `type` for float32 detection",
+      "parentUuid": "b471ae0d_853781ab",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e2858dd_5619a166",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 10
@@ -171,6 +189,30 @@
       "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26b5125a_926efdbb",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1777,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T22:48:59Z",
+      "side": 1,
+      "message": "Fixed as suggested.",
+      "parentUuid": "2eef418f_669e3e45",
+      "range": {
+        "startLine": 1773,
+        "startChar": 0,
+        "endLine": 1777,
+        "endChar": 66
+      },
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -221,6 +263,30 @@
     },
     {
       "key": {
+        "uuid": "0031d12a_018987ff",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1859,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T22:48:59Z",
+      "side": 1,
+      "message": "Fixed as suggested.",
+      "parentUuid": "30e29bc0_92391200",
+      "range": {
+        "startLine": 1857,
+        "startChar": 8,
+        "endLine": 1859,
+        "endChar": 79
+      },
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a455606c_a1bae8c6",
         "filename": "src/libANGLE/Framebuffer.h",
         "patchSetId": 10
@@ -253,6 +319,24 @@
       "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8fce4421_851e1b59",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T22:48:59Z",
+      "side": 1,
+      "message": "Fixed as suggested.",
+      "parentUuid": "ef139aff_8d8b7b9a",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -291,6 +375,24 @@
     },
     {
       "key": {
+        "uuid": "5de38c98_82bae725",
+        "filename": "src/tests/gl_tests/BlendMinMaxTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T22:48:59Z",
+      "side": 1,
+      "message": "Fixed as suggested.",
+      "parentUuid": "bd5cd182_4fca4eb9",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f9bfda7d_95617c30",
         "filename": "src/tests/gl_tests/BlendMinMaxTest.cpp",
         "patchSetId": 10
@@ -308,6 +410,24 @@
     },
     {
       "key": {
+        "uuid": "7af88d80_aafb7a29",
+        "filename": "src/tests/gl_tests/BlendMinMaxTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T22:48:59Z",
+      "side": 1,
+      "message": "Fixed as suggested.",
+      "parentUuid": "f9bfda7d_95617c30",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3e604b80_68a99ef3",
         "filename": "src/tests/gl_tests/BlendMinMaxTest.cpp",
         "patchSetId": 10
@@ -322,6 +442,24 @@
       "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f724d8ed_7c4def89",
+        "filename": "src/tests/gl_tests/BlendMinMaxTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T22:48:59Z",
+      "side": 1,
+      "message": "Didn\u0027t change since it\u0027s RGBA16F which wouldn\u0027t require any extension to blend.",
+      "parentUuid": "3e604b80_68a99ef3",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -374,6 +512,24 @@
       "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16cff172_baf6e8f3",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2989,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T22:48:59Z",
+      "side": 1,
+      "message": "Fixed as suggested.",
+      "parentUuid": "790192d0_fe1a9707",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "7d37067c_58641864",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T22:48:59Z",
+      "side": 1,
+      "message": "Fixed as suggested. (Moved to WebGLCompatibilityTest.cpp)\nI also changed all shader strings to use string literal in WebGLCompatibilityTest.cpp",
+      "parentUuid": "eaff1f7b_aeea9d7f",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 14
+      },
+      "revId": "bdea22a9048ae2f97c53296682132794bbbc2a39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e3397b0_d52c29f0",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 7
