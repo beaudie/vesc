@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "25c590f5_5bebe648",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-02-27T17:32:13Z",
+      "side": 1,
+      "message": "It\u0027s both. The current code doesn\u0027t allow trace events at all and the build rule prevents it from being enabled for release builds.",
+      "parentUuid": "aecbe4af_f3d45d7e",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 34
+      },
+      "revId": "8dcc7e271aee945aa4251643f25cc756c76cc16e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f7185229_ba9867c1",
         "filename": "BUILD.gn",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "8dcc7e271aee945aa4251643f25cc756c76cc16e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6e7ce9a_4b45c97f",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-02-27T17:32:13Z",
+      "side": 1,
+      "message": "I\u0027ll switch this to angle_enable_trace\nThat\u0027s an existing variable you need to set anyway to enable tracing.\nThis does mean that this change could affect more than just the Android build.",
+      "parentUuid": "f7185229_ba9867c1",
+      "range": {
+        "startLine": 189,
+        "startChar": 18,
+        "endLine": 189,
+        "endChar": 28
+      },
+      "revId": "8dcc7e271aee945aa4251643f25cc756c76cc16e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
