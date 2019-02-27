@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "07ce568c_202ecc0e",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1771,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-27T18:53:06Z",
+      "side": 1,
+      "message": "According to https://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glTexImage2D.xhtml\nThe sizedInternalFormat/format combination for half float could be either GL_R16F/GL_HALF_FLOAT or GL_R16F/GL_FLOAT. Thus relying on componentType alone couldn\u0027t tell if it\u0027s 32 bit float.\nI made this change cuz it used to fail the webgl conformance test sdk/tests/deqp/functional/gles3/fbocolorbuffer.html with --use-gl\u003dangle --use-cmd-decoder\u003dpassthrough (This test is pretty slow so you might want to comment out all tests except for .blend section if running locally)",
+      "parentUuid": "e8a21652_7d46d4a4",
+      "revId": "260c9c5f880cfce7f38a6f49514fc3b9ae989157",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1e2858dd_5619a166",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 10
