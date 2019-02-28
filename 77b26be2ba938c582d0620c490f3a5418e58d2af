@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e55d361f_9288d98e",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-28T22:49:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a0b1a79_3f17a1b5",
+      "revId": "77b26be2ba938c582d0620c490f3a5418e58d2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "821c0f32_ee521ab3",
         "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
         "patchSetId": 6
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "76b26695_3195ca15",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-28T22:49:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "821c0f32_ee521ab3",
+      "revId": "77b26be2ba938c582d0620c490f3a5418e58d2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b295133_6afeb0aa",
         "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
         "patchSetId": 6
@@ -82,6 +118,24 @@
       "writtenOn": "2019-02-28T22:46:09Z",
       "side": 1,
       "message": "This is a decent idea. Maybe we can keep both around for testing.",
+      "parentUuid": "0b295133_6afeb0aa",
+      "revId": "77b26be2ba938c582d0620c490f3a5418e58d2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91a3e2fb_bf478e72",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-28T22:49:17Z",
+      "side": 1,
+      "message": "SGTM. I\u0027m going to start plumbing this in next and will initially create two separate codepaths based on a #define. We can determine if we want them to both live on or kill one.\nI\u0027ll update the existing vk::CommandBuffer\u0027s interface as it makes sense. I talked to Jamie about this earlier and the one inconvenience is additional getHandle() calls at various calling sites but I\u0027ll put that in and we can see what we think.",
       "parentUuid": "0b295133_6afeb0aa",
       "revId": "77b26be2ba938c582d0620c490f3a5418e58d2af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
