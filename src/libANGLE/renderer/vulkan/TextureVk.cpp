@@ -149,10 +149,9 @@ TextureVk::~TextureVk() = default;
 void TextureVk::onDestroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
-    releaseAndDeleteImage(context, renderer);
-    renderer->releaseObject(renderer->getCurrentQueueSerial(), &mSampler);
+    releaseAndDeleteImage(contextVk);
+    contextVk->releaseObject(contextVk->getCurrentQueueSerial(), &mSampler);
 }
 
 angle::Result TextureVk::setImage(const gl::Context *context,
@@ -252,7 +251,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
             gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels));
 
         // Create a new graph node to store image initialization commands.
-        mImage->finishCurrentCommands(contextVk->getRenderer());
+        mImage->finishCurrentCommands(contextVk);
     }
 
     return angle::Result::Continue;
@@ -419,7 +418,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
         gl::Extents(clippedSourceArea.width, clippedSourceArea.height, 1), internalFormat,
         framebufferVk));
 
-    mImage->finishCurrentCommands(renderer);
+    mImage->finishCurrentCommands(contextVk);
     framebufferVk->getFramebuffer()->addReadDependency(mImage);
     return angle::Result::Continue;
 }
@@ -510,7 +509,7 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
                       unpackUnmultiplyAlpha);
 
     // Create a new graph node to store image initialization commands.
-    mImage->finishCurrentCommands(contextVk->getRenderer());
+    mImage->finishCurrentCommands(contextVk);
 
     return angle::Result::Continue;
 }
@@ -618,8 +617,8 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
                                                   const vk::ImageView *srcView)
 {
     RendererVk *renderer      = contextVk->getRenderer();
-    UtilsVk &utilsVk          = renderer->getUtils();
-    Serial currentQueueSerial = renderer->getCurrentQueueSerial();
+    UtilsVk &utilsVk          = contextVk->getUtils();
+    Serial currentQueueSerial = contextVk->getCurrentQueueSerial();
 
     UtilsVk::CopyImageParameters params;
     params.srcOffset[0]        = sourceArea.x;
@@ -715,7 +714,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
 
             // Queue the resource for cleanup as soon as the copy above is finished.  There's no
             // need to keep it around.
-            renderer->releaseObject(currentQueueSerial, &stagingView);
+            contextVk->releaseObject(currentQueueSerial, &stagingView);
         }
 
         // Stage the copy for when the image storage is actually created.
@@ -726,7 +725,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
 
     if (cubeAs2DArrayView.valid())
     {
-        renderer->releaseObject(currentQueueSerial, &cubeAs2DArrayView);
+        contextVk->releaseObject(currentQueueSerial, &cubeAs2DArrayView);
     }
 
     return angle::Result::Continue;
@@ -743,18 +742,18 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
 
     if (!mOwnsImage)
     {
-        releaseAndDeleteImage(context, renderer);
+        releaseAndDeleteImage(contextVk);
     }
 
     const vk::Format &format = renderer->getFormat(internalFormat);
-    ANGLE_TRY(ensureImageAllocated(renderer, format));
+    ANGLE_TRY(ensureImageAllocated(contextVk, format));
 
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
 
     if (mImage->valid())
     {
-        releaseImage(renderer);
+        releaseImage(contextVk);
     }
 
     ANGLE_TRY(initImage(contextVk, format, size, static_cast<uint32_t>(levels), commandBuffer));
@@ -768,12 +767,12 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    releaseAndDeleteImage(context, renderer);
+    releaseAndDeleteImage(contextVk);
 
     const vk::Format &format = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
 
     ImageVk *imageVk = vk::GetImpl(image);
-    setImageHelper(renderer, imageVk->getImage(), imageVk->getImageTextureType(), format,
+    setImageHelper(contextVk, imageVk->getImage(), imageVk->getImageTextureType(), format,
                    imageVk->getImageLevel(), imageVk->getImageLayer(), false);
 
     ANGLE_TRY(initImageViews(contextVk, format, 1));
@@ -831,31 +830,31 @@ uint32_t TextureVk::getNativeImageLayer(uint32_t frontendLayer) const
     return mImageLayerOffset + frontendLayer;
 }
 
-void TextureVk::releaseAndDeleteImage(const gl::Context *context, RendererVk *renderer)
+void TextureVk::releaseAndDeleteImage(ContextVk *context)
 {
     if (mImage)
     {
-        releaseImage(renderer);
-        releaseStagingBuffer(renderer);
+        releaseImage(context);
+        releaseStagingBuffer(context);
         SafeDelete(mImage);
     }
 }
 
-angle::Result TextureVk::ensureImageAllocated(RendererVk *renderer, const vk::Format &format)
+angle::Result TextureVk::ensureImageAllocated(ContextVk *context, const vk::Format &format)
 {
     if (mImage == nullptr)
     {
-        setImageHelper(renderer, new vk::ImageHelper(), mState.getType(), format, 0, 0, true);
+        setImageHelper(context, new vk::ImageHelper(), mState.getType(), format, 0, 0, true);
     }
     else
     {
-        updateImageHelper(renderer, format);
+        updateImageHelper(context, format);
     }
 
     return angle::Result::Continue;
 }
 
-void TextureVk::setImageHelper(RendererVk *renderer,
+void TextureVk::setImageHelper(ContextVk *context,
                                vk::ImageHelper *imageHelper,
                                gl::TextureType imageType,
                                const vk::Format &format,
@@ -870,7 +869,7 @@ void TextureVk::setImageHelper(RendererVk *renderer,
     mImageLevelOffset = imageLevelOffset;
     mImageLayerOffset = imageLayerOffset;
     mImage            = imageHelper;
-    mImage->initStagingBuffer(renderer, format);
+    mImage->initStagingBuffer(context->getRenderer(), format);
 
     mRenderTarget.init(mImage, &mDrawBaseLevelImageView, getNativeImageLevel(0),
                        getNativeImageLayer(0), this);
@@ -879,10 +878,10 @@ void TextureVk::setImageHelper(RendererVk *renderer,
     mCubeMapRenderTargets.clear();
 }
 
-void TextureVk::updateImageHelper(RendererVk *renderer, const vk::Format &format)
+void TextureVk::updateImageHelper(ContextVk *context, const vk::Format &format)
 {
     ASSERT(mImage != nullptr);
-    mImage->initStagingBuffer(renderer, format);
+    mImage->initStagingBuffer(context->getRenderer(), format);
 }
 
 angle::Result TextureVk::redefineImage(const gl::Context *context,
@@ -891,18 +890,17 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
                                        const gl::Extents &size)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
     if (!mOwnsImage)
     {
-        releaseAndDeleteImage(context, renderer);
+        releaseAndDeleteImage(contextVk);
     }
 
     if (mImage != nullptr)
     {
         // If there is any staged changes for this index, we can remove them since we're going to
         // override them with this call.
-        mImage->removeStagedUpdates(renderer, index);
+        mImage->removeStagedUpdates(contextVk, index);
 
         if (mImage->valid())
         {
@@ -911,14 +909,14 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
             // must release it.
             if (mImage->getFormat() != format || size != mImage->getSize(index))
             {
-                releaseImage(renderer);
+                releaseImage(contextVk);
             }
         }
     }
 
     if (!size.empty())
     {
-        ANGLE_TRY(ensureImageAllocated(renderer, format));
+        ANGLE_TRY(ensureImageAllocated(contextVk, format));
     }
 
     return angle::Result::Continue;
@@ -1046,7 +1044,7 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
     }
 
     // We're changing this textureVk content, make sure we let the graph know.
-    mImage->finishCurrentCommands(renderer);
+    mImage->finishCurrentCommands(contextVk);
 
     return angle::Result::Continue;
 }
@@ -1062,13 +1060,13 @@ angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    releaseAndDeleteImage(context, renderer);
+    releaseAndDeleteImage(contextVk);
 
     const vk::Format &format = renderer->getFormat(surface->getConfig()->renderTargetFormat);
 
     // eglBindTexImage can only be called with pbuffer (offscreen) surfaces
     OffscreenSurfaceVk *offscreenSurface = GetImplAs<OffscreenSurfaceVk>(surface);
-    setImageHelper(renderer, offscreenSurface->getColorAttachmentImage(), mState.getType(), format,
+    setImageHelper(contextVk, offscreenSurface->getColorAttachmentImage(), mState.getType(), format,
                    surface->getMipmapLevel(), 0, false);
 
     return initImageViews(contextVk, format, 1);
@@ -1077,9 +1075,8 @@ angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *
 angle::Result TextureVk::releaseTexImage(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
-    releaseImage(renderer);
+    releaseImage(contextVk);
 
     return angle::Result::Continue;
 }
@@ -1172,7 +1169,7 @@ angle::Result TextureVk::syncState(const gl::Context *context,
     RendererVk *renderer = contextVk->getRenderer();
     if (mSampler.valid())
     {
-        renderer->releaseObject(renderer->getCurrentQueueSerial(), &mSampler);
+        contextVk->releaseObject(contextVk->getCurrentQueueSerial(), &mSampler);
     }
 
     const gl::Extensions &extensions     = renderer->getNativeExtensions();
@@ -1226,10 +1223,9 @@ angle::Result TextureVk::initializeContents(const gl::Context *context,
 void TextureVk::releaseOwnershipOfImage(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
     mOwnsImage = false;
-    releaseAndDeleteImage(context, renderer);
+    releaseAndDeleteImage(contextVk);
 }
 
 const vk::ImageView &TextureVk::getReadImageView() const
@@ -1355,13 +1351,13 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-void TextureVk::releaseImage(RendererVk *renderer)
+void TextureVk::releaseImage(ContextVk *context)
 {
     if (mImage)
     {
         if (mOwnsImage)
         {
-            mImage->releaseImage(renderer);
+            mImage->releaseImage(context);
         }
         else
         {
@@ -1369,11 +1365,11 @@ void TextureVk::releaseImage(RendererVk *renderer)
         }
     }
 
-    Serial currentSerial = renderer->getCurrentQueueSerial();
+    Serial currentSerial = context->getCurrentQueueSerial();
 
-    renderer->releaseObject(currentSerial, &mDrawBaseLevelImageView);
-    renderer->releaseObject(currentSerial, &mReadBaseLevelImageView);
-    renderer->releaseObject(currentSerial, &mReadMipmapImageView);
+    context->releaseObject(currentSerial, &mDrawBaseLevelImageView);
+    context->releaseObject(currentSerial, &mReadBaseLevelImageView);
+    context->releaseObject(currentSerial, &mReadMipmapImageView);
 
     for (auto &layerViews : mLayerLevelDrawImageViews)
     {
@@ -1381,7 +1377,7 @@ void TextureVk::releaseImage(RendererVk *renderer)
         {
             if (imageView.valid())
             {
-                renderer->releaseObject(currentSerial, &imageView);
+                context->releaseObject(currentSerial, &imageView);
             }
         }
     }
@@ -1389,11 +1385,11 @@ void TextureVk::releaseImage(RendererVk *renderer)
     mCubeMapRenderTargets.clear();
 }
 
-void TextureVk::releaseStagingBuffer(RendererVk *renderer)
+void TextureVk::releaseStagingBuffer(ContextVk *context)
 {
     if (mImage)
     {
-        mImage->releaseStagingBuffer(renderer);
+        mImage->releaseStagingBuffer(context);
     }
 }
 
