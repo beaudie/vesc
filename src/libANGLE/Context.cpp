@@ -575,6 +575,24 @@ egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
     if (!mHasBeenCurrent)
     {
         initialize();
+    }
+
+    ASSERT(mCurrentSurface == nullptr);
+
+    Framebuffer *newDefault = nullptr;
+    if (surface != nullptr)
+    {
+        ANGLE_TRY(surface->makeCurrent(this));
+        mCurrentSurface = surface;
+        newDefault      = surface->createDefaultFramebuffer(this);
+    }
+    else
+    {
+        newDefault = new Framebuffer(mImplementation.get());
+    }
+
+    if (!mHasBeenCurrent)
+    {
         initRendererString();
         initVersionStrings();
         initExtensionStrings();
@@ -596,20 +614,6 @@ egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
     // TODO(jmadill): Rework this when we support ContextImpl
     mState.setAllDirtyBits();
     mState.setAllDirtyObjects();
-
-    ASSERT(mCurrentSurface == nullptr);
-
-    Framebuffer *newDefault = nullptr;
-    if (surface != nullptr)
-    {
-        ANGLE_TRY(surface->setIsCurrent(this, true));
-        mCurrentSurface = surface;
-        newDefault      = surface->createDefaultFramebuffer(this);
-    }
-    else
-    {
-        newDefault = new Framebuffer(mImplementation.get());
-    }
 
     // Update default framebuffer, the binding of the previous default
     // framebuffer (or lack of) will have a nullptr.
@@ -656,7 +660,7 @@ egl::Error Context::unMakeCurrent(const egl::Display *display)
 
     if (mCurrentSurface)
     {
-        ANGLE_TRY(mCurrentSurface->setIsCurrent(this, false));
+        ANGLE_TRY(mCurrentSurface->unMakeCurrent(this));
         mCurrentSurface = nullptr;
     }
 

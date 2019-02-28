@@ -454,9 +454,6 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
     vkGetPhysicalDeviceProperties(*physicalDeviceOut, physicalDevicePropertiesOut);
 }
 
-// Initially dumping the command graphs is disabled.
-constexpr bool kEnableCommandGraphDiagnostics = false;
-
 }  // anonymous namespace
 
 // RendererVk implementation.
@@ -1218,15 +1215,96 @@ uint32_t RendererVk::getMaxActiveTextures()
                               gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES);
 }
 
+angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)
+{
+    // TODO: Synchronize access to the pipeline/blob caches?
+
+    ASSERT(mPipelineCache.valid());
+
+    if (--mPipelineCacheVkUpdateTimeout > 0)
+    {
+        return angle::Result::Continue;
+    }
+
+    mPipelineCacheVkUpdateTimeout = kPipelineCacheVkUpdatePeriod;
+
+    // Get the size of the cache.
+    size_t pipelineCacheSize = 0;
+    VkResult result          = mPipelineCache.getCacheData(mDevice, &pipelineCacheSize, nullptr);
+    if (result != VK_INCOMPLETE)
+    {
+        ANGLE_VK_TRY(displayVk, result);
+    }
+
+    angle::MemoryBuffer *pipelineCacheData = nullptr;
+    ANGLE_VK_CHECK_ALLOC(displayVk,
+                         displayVk->getScratchBuffer(pipelineCacheSize, &pipelineCacheData));
+
+    size_t originalPipelineCacheSize = pipelineCacheSize;
+    result = mPipelineCache.getCacheData(mDevice, &pipelineCacheSize, pipelineCacheData->data());
+    // Note: currently we don't accept incomplete as we don't expect it (the full size of cache
+    // was determined just above), so receiving it hints at an implementation bug we would want
+    // to know about early.
+    ASSERT(result != VK_INCOMPLETE);
+    ANGLE_VK_TRY(displayVk, result);
+
+    // If vkGetPipelineCacheData ends up writing fewer bytes than requested, zero out the rest of
+    // the buffer to avoid leaking garbage memory.
+    ASSERT(pipelineCacheSize <= originalPipelineCacheSize);
+    if (pipelineCacheSize < originalPipelineCacheSize)
+    {
+        memset(pipelineCacheData->data() + pipelineCacheSize, 0,
+               originalPipelineCacheSize - pipelineCacheSize);
+    }
+
+    displayVk->getBlobCache()->putApplication(mPipelineCacheVkBlobKey, *pipelineCacheData);
+
+    return angle::Result::Continue;
+}
+
+Serial RendererVk::issueShaderSerial()
+{
+    return mShaderSerialFactory.generate();
+}
+
+bool RendererVk::hasLinearTextureFormatFeatureBits(VkFormat format,
+                                                   const VkFormatFeatureFlags featureBits)
+{
+    return hasFormatFeatureBits<&VkFormatProperties::linearTilingFeatures>(format, featureBits);
+}
+
+bool RendererVk::hasTextureFormatFeatureBits(VkFormat format,
+                                             const VkFormatFeatureFlags featureBits)
+{
+    return hasFormatFeatureBits<&VkFormatProperties::optimalTilingFeatures>(format, featureBits);
+}
+
+bool RendererVk::hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits)
+{
+    return hasFormatFeatureBits<&VkFormatProperties::bufferFeatures>(format, featureBits);
+}
+
 angle::Result RendererVk::queueSubmit(vk::Context *context,
                                       const VkSubmitInfo &submitInfo,
                                       const vk::Fence &fence)
 {
     // TODO: synchronize queue access
-
     ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, fence.getHandle()));
 
     return angle::Result::Continue;
+}
+
+angle::Result RendererVk::queueWaitIdle(vk::Context *context)
+{
+    // TODO: synchronize queue access
+    ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueue));
+    return angle::Result::Continue;
+}
+
+VkResult RendererVk::queuePresent(const VkPresentInfoKHR &presentInfo)
+{
+    // TODO: synchronize queue access
+    return vkQueuePresentKHR(mQueue, &presentInfo);
 }
 
 Serial RendererVk::nextSerial()
