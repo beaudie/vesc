@@ -143,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "a750cdf3_b081363a",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-28T22:55:08Z",
+      "side": 1,
+      "message": "You can probably adapt these methods to accept getHandle. BTW you can implement the define by selecting vk::CommandBuffer as either the old vk::CommandBuffer or this new command buffer class. Command replay will need some other define handling.\n\nAlternately we could look at a runtime option in FeatureVk. But that would have pretty significant overhead. We\u0027d need virtual calls or at least \"if\" statements. So the define is probably better.",
+      "parentUuid": "91a3e2fb_bf478e72",
+      "revId": "77b26be2ba938c582d0620c490f3a5418e58d2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "86756b5c_b5edd498",
         "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.h",
         "patchSetId": 6
