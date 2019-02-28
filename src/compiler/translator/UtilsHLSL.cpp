@@ -11,7 +11,6 @@
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/StructureHLSL.h"
 #include "compiler/translator/SymbolTable.h"
-#include "compiler/translator/util.h"
 
 namespace sh
 {
@@ -857,13 +856,6 @@ TString DecorateVariableIfNeeded(const TVariable &variable)
         ASSERT(!name.beginsWith("f_"));
         ASSERT(!name.beginsWith("_"));
         return TString(name.data());
-    }
-    // For user defined variables, combine variable name with unique id
-    // so variables of the same name in different scopes do not get overwritten.
-    else if (variable.symbolType() == SymbolType::UserDefined &&
-             variable.getType().getQualifier() == EvqTemporary)
-    {
-        return Decorate(variable.name()) + str(variable.uniqueId().get());
     }
     else
     {

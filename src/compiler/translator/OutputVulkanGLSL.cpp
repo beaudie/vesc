@@ -11,7 +11,6 @@
 
 #include "compiler/translator/OutputVulkanGLSL.h"
 
-#include "compiler/translator/BaseTypes.h"
 #include "compiler/translator/Symbol.h"
 #include "compiler/translator/util.h"
 
@@ -98,19 +97,6 @@ void TOutputVulkanGLSL::writeQualifier(TQualifier qualifier, const TSymbol *symb
 
     TInfoSinkBase &out = objSink();
     out << "@@ QUALIFIER-" << symbol->name().data() << " @@ ";
-}
-
-void TOutputVulkanGLSL::writeVariableType(const TType &type, const TSymbol *symbol)
-{
-    TType overrideType(type);
-
-    // External textures are treated as 2D textures in the vulkan back-end
-    if (type.getBasicType() == EbtSamplerExternalOES)
-    {
-        overrideType.setBasicType(EbtSampler2D);
-    }
-
-    TOutputGLSL::writeVariableType(overrideType, symbol);
 }
 
 void TOutputVulkanGLSL::writeStructType(const TStructure *structure)

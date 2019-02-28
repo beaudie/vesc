@@ -28,7 +28,6 @@ class WindowSurfaceVkXcb : public WindowSurfaceVk
 
   private:
     angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut) override;
-    angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) override;
 
     xcb_connection_t *mXcbConnection;
 };
