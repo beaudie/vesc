@@ -12,6 +12,7 @@
 
 #include <cstdint>
 
+#include <atomic>
 #include <limits>
 #include <map>
 
@@ -101,7 +102,7 @@ class Serial final
 class SerialFactory final : angle::NonCopyable
 {
   public:
-    SerialFactory() : mSerial(1) {}
+    SerialFactory();
 
     Serial generate()
     {
@@ -110,7 +111,7 @@ class SerialFactory final : angle::NonCopyable
     }
 
   private:
-    uint64_t mSerial;
+    std::atomic<uint64_t> mSerial;
 };
 
 using MipGenerationFunction = void (*)(size_t sourceWidth,

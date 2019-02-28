@@ -159,6 +159,8 @@ bool ExpandMatrix(T *target, const GLfloat *value)
 }
 }  // anonymous namespace
 
+SerialFactory::SerialFactory() : mSerial(1) {}
+
 PackPixelsParams::PackPixelsParams()
     : destFormat(nullptr), outputPitch(0), packBuffer(nullptr), offset(0)
 {}
