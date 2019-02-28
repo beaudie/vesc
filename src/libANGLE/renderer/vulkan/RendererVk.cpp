@@ -454,9 +454,6 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
     vkGetPhysicalDeviceProperties(*physicalDeviceOut, physicalDevicePropertiesOut);
 }
 
-// Initially dumping the command graphs is disabled.
-constexpr bool kEnableCommandGraphDiagnostics = false;
-
 }  // anonymous namespace
 
 // RendererVk implementation.
@@ -1266,6 +1263,7 @@ angle::Result RendererVk::getPipelineLayout(
 
 angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)
 {
+    // TODO: Synchronize access to the pipeline/blob caches?
     ASSERT(mPipelineCache.valid());
 
     if (--mPipelineCacheVkUpdateTimeout > 0)
@@ -1309,6 +1307,11 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)
     return angle::Result::Continue;
 }
 
+Serial RendererVk::issueShaderSerial()
+{
+    return mShaderSerialFactory.generate();
+}
+
 // These functions look at the mandatory format for support, and fallback to querying the device (if
 // necessary) to test the availability of the bits.
 bool RendererVk::hasLinearImageFormatFeatureBits(VkFormat format,
@@ -1338,10 +1341,22 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
                                       const vk::Fence &fence)
 {
     // TODO: synchronize queue access
-
     ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, fence.getHandle()));
 
     return angle::Result::Continue;
+}
+
+angle::Result RendererVk::queueWaitIdle(vk::Context *context)
+{
+    // TODO: synchronize queue access
+    ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueue));
+    return angle::Result::Continue;
+}
+
+VkResult RendererVk::queuePresent(const VkPresentInfoKHR &presentInfo)
+{
+    // TODO: synchronize queue access
+    return vkQueuePresentKHR(mQueue, &presentInfo);
 }
 
 Serial RendererVk::nextSerial()
