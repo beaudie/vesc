@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "cbc3a488_3513535f",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-28T19:57:52Z",
+      "side": 1,
+      "message": "Personal OCD: could you reorder Optional\u0027s members so the bool is last, then put the above bool after it. Hoping for a better packing.\n\n---\n\nOn further read, is it possible to have programHash.valid() ^ linkingFromBinary? If not, this doesn\u0027t need to be Optional. The bool can nevertheless be moved after this variable.",
+      "revId": "de6b8eb48ad9caeb7cdfb465bb935802100cf522",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "011c6db2_7ac96323",
         "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
         "patchSetId": 3
