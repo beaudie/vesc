@@ -30,12 +30,12 @@ ImageVk::~ImageVk() {}
 void ImageVk::onDestroy(const egl::Display *display)
 {
     DisplayVk *displayVk = vk::GetImpl(display);
-    RendererVk *renderer = displayVk->getRenderer();
 
     if (mImage != nullptr && mOwnsImage)
     {
-        mImage->releaseImage(renderer);
-        mImage->releaseStagingBuffer(renderer);
+        // TODO(geofflang): Figure out when it is safe to destroy this image.
+        mImage->destroyImage(displayVk);
+        mImage->destroyStagingBuffer(displayVk);
         delete mImage;
     }
     mImage = nullptr;

@@ -150,19 +150,24 @@ class WindowSurfaceVk : public SurfaceImpl
     virtual angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) = 0;
 
     angle::Result initializeImpl(DisplayVk *displayVk);
-    angle::Result recreateSwapchain(DisplayVk *displayVk,
+    angle::Result recreateSwapchain(ContextVk *contextVk,
                                     const gl::Extents &extents,
                                     uint32_t swapHistoryIndex);
-    angle::Result checkForOutOfDateSwapchain(DisplayVk *displayVk,
+    angle::Result createSwapChain(vk::Context *context,
+                                  const gl::Extents &extents,
+                                  VkSwapchainKHR oldSwapchain);
+    angle::Result checkForOutOfDateSwapchain(ContextVk *contextVk,
                                              uint32_t swapHistoryIndex,
                                              bool presentOutOfDate);
-    void releaseSwapchainImages(RendererVk *renderer);
-    angle::Result nextSwapchainImage(DisplayVk *displayVk);
-    angle::Result present(DisplayVk *displayVk,
+    void releaseSwapchainImages(ContextVk *contextVk);
+    void destroySwapChainImages(DisplayVk *displayVk);
+    angle::Result nextSwapchainImage(vk::Context *context);
+    angle::Result present(ContextVk *contextVk,
                           EGLint *rects,
                           EGLint n_rects,
                           bool &swapchainOutOfDate);
-    angle::Result swapImpl(DisplayVk *displayVk, EGLint *rects, EGLint n_rects);
+
+    angle::Result swapImpl(const gl::Context *context, EGLint *rects, EGLint n_rects);
 
     VkSurfaceCapabilitiesKHR mSurfaceCaps;
     std::vector<VkPresentModeKHR> mPresentModes;
