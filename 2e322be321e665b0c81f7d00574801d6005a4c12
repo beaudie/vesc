@@ -16,6 +16,24 @@
       "revId": "2e322be321e665b0c81f7d00574801d6005a4c12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee96b6c3_d6fece51",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1265,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-28T00:15:06Z",
+      "side": 1,
+      "message": "Used !IsWindows10OrGreater(). I think IsWindows7OrGreater will only return false on XP.",
+      "parentUuid": "94f7192b_4fd6463e",
+      "revId": "2e322be321e665b0c81f7d00574801d6005a4c12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
