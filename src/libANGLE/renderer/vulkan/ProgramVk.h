@@ -131,8 +131,8 @@ class ProgramVk : public ProgramImpl
         ASSERT(shaderProgram->isGraphicsProgram());
         RendererVk *renderer = contextVk->getRenderer();
         return shaderProgram->getGraphicsPipeline(
-            contextVk, &renderer->getRenderPassCache(), renderer->getPipelineCache(),
-            renderer->getCurrentQueueSerial(), mPipelineLayout.get(), desc, activeAttribLocations,
+            contextVk, &contextVk->getRenderPassCache(), renderer->getPipelineCache(),
+            contextVk->getCurrentQueueSerial(), mPipelineLayout.get(), desc, activeAttribLocations,
             descPtrOut, pipelineOut);
     }
 
