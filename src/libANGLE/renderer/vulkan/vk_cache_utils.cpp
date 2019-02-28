@@ -1419,12 +1419,12 @@ void GraphicsPipelineCache::destroy(VkDevice device)
     mPayload.clear();
 }
 
-void GraphicsPipelineCache::release(RendererVk *renderer)
+void GraphicsPipelineCache::release(ContextVk *context)
 {
     for (auto &item : mPayload)
     {
         vk::PipelineHelper &pipeline = item.second;
-        renderer->releaseObject(pipeline.getSerial(), &pipeline.getPipeline());
+        context->releaseObject(pipeline.getSerial(), &pipeline.getPipeline());
     }
 
     mPayload.clear();
