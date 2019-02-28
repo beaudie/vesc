@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "54ea1ae8_482a1cc2",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-28T17:38:22Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d95620db_afbdb8ef",
+      "range": {
+        "startLine": 18,
+        "startChar": 6,
+        "endLine": 18,
+        "endChar": 23
+      },
+      "revId": "809100a9b996d6558b72de9947f6e6525d65e1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9c77166_181837b5",
         "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "658debef_8324c6e9",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-28T17:38:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9c77166_181837b5",
+      "range": {
+        "startLine": 20,
+        "startChar": 28,
+        "endLine": 20,
+        "endChar": 45
+      },
+      "revId": "809100a9b996d6558b72de9947f6e6525d65e1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e702312e_3f76772c",
         "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2019-02-27T21:43:57Z",
       "side": 1,
       "message": "I would suggest one change I think would make this slightly cleaner. That is to move the memcpy into a helper. And store the current command offset (or pointer). Initially the offset is the fixed size, or the pointer is returned from \"allocate\" plus the fixed size.\n\nYou could rename this helper to be storePointerParameter(const uint8_t *paramData, size_t sizeInBytes).\n\nWe could optimize this later by keeping the offset on the stack or in a register. But this should clean up the code slightly on this first pass. WDYT?",
+      "range": {
+        "startLine": 38,
+        "startChar": 25,
+        "endLine": 38,
+        "endChar": 46
+      },
+      "revId": "809100a9b996d6558b72de9947f6e6525d65e1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e9c8833_a40f8e60",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-28T17:38:22Z",
+      "side": 1,
+      "message": "I think I\u0027m following you. I uploaded a small change that just does this for the bindDescriptorSets() call initially. PTAL\nI\u0027m saving mCurrentCmdData as a class member and updating it in the memcpy helper. The alternative is to just have it be a local var in each function that has variable data, pass it into the helper function and return it\u0027s updated value. Not sure which is better from a perf standpoint.",
+      "parentUuid": "e702312e_3f76772c",
       "range": {
         "startLine": 38,
         "startChar": 25,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "261a4d99_244bf7b2",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-28T17:38:22Z",
+      "side": 1,
+      "message": "We can avoid saving the ptr for the first ptr param and it can be assumed to be the next address beyond the fixed params, but if there are multiple ptr params, then we would need to re-calculate the variable data size for each pointer beyond the first.\nFor the initial version I think I\u0027d like to just consistently save all the ptrs in the struct up-front. That simplifies debug to see all of the params in the struct. Once that\u0027s all working, I can make a follow-on pass to optimize memory consumption.",
+      "parentUuid": "821fa996_a26885f7",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 31
+      },
+      "revId": "809100a9b996d6558b72de9947f6e6525d65e1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "06a2b5d8_cb595d5a",
         "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.h",
         "patchSetId": 2
@@ -114,6 +210,30 @@
       "revId": "809100a9b996d6558b72de9947f6e6525d65e1f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdb4fb3d_c390a0e0",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-02-28T17:38:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06a2b5d8_cb595d5a",
+      "range": {
+        "startLine": 24,
+        "startChar": 5,
+        "endLine": 24,
+        "endChar": 10
+      },
+      "revId": "809100a9b996d6558b72de9947f6e6525d65e1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
