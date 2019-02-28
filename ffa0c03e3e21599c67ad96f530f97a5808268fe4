@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0b89b716_4a2b7873",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1844,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-28T00:40:34Z",
+      "side": 1,
+      "message": "Fixed as suggested",
+      "parentUuid": "b189163a_75d42027",
+      "range": {
+        "startLine": 1844,
+        "startChar": 8,
+        "endLine": 1844,
+        "endChar": 84
+      },
+      "revId": "ffa0c03e3e21599c67ad96f530f97a5808268fe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f7c98e3b_a700a59e",
         "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
         "patchSetId": 11
@@ -45,6 +69,30 @@
       "revId": "ffa0c03e3e21599c67ad96f530f97a5808268fe4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9342d06a_7244132b",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1983,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-02-28T00:40:34Z",
+      "side": 1,
+      "message": "Yep. I\u0027ve spotted the case that went wrong. It\u0027s the double slash at 2024.\nTalked to Ken and Kai offline, since this string literal change is pretty big, I\u0027ve removed it and will open another CL specially for this shader string format change later.",
+      "parentUuid": "f7c98e3b_a700a59e",
+      "range": {
+        "startLine": 1983,
+        "startChar": 31,
+        "endLine": 1983,
+        "endChar": 59
+      },
+      "revId": "ffa0c03e3e21599c67ad96f530f97a5808268fe4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
