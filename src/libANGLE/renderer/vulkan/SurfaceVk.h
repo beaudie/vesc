@@ -159,15 +159,10 @@ class WindowSurfaceVk : public SurfaceImpl
                           EGLint n_rects,
                           bool &swapchainOutOfDate);
     angle::Result swapImpl(DisplayVk *displayVk, EGLint *rects, EGLint n_rects);
-    angle::Result resizeSwapHistory(DisplayVk *displayVk, size_t imageCount);
-
-    VkSurfaceCapabilitiesKHR mSurfaceCaps;
-    std::vector<VkPresentModeKHR> mPresentModes;
 
     VkSwapchainKHR mSwapchain;
     // Cached information used to recreate swapchains.
-    VkPresentModeKHR mSwapchainPresentMode;         // Current swapchain mode
-    VkPresentModeKHR mDesiredSwapchainPresentMode;  // Desired mode set through setSwapInterval()
+    VkPresentModeKHR mSwapchainPresentMode;
     uint32_t mMinImageCount;
     VkSurfaceTransformFlagBitsKHR mPreTransform;
     VkCompositeAlphaFlagBitsKHR mCompositeAlpha;
