@@ -30,7 +30,6 @@ if (!build_with_chromium) {
     deps = [
       ":angle_shader_translator",
       ":translator_fuzzer",
-      ":xxhash_fuzzer",
       "//samples:all",
       "//src/tests:all",
     ]
@@ -101,9 +100,6 @@ config("internal_config") {
     if (angle_enable_vulkan_gpu_trace_events) {
       defines += [ "ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS=1" ]
     }
-    if (angle_vulkan_conformant_configs_only) {
-      defines += [ "ANGLE_VULKAN_CONFORMANT_CONFIGS_ONLY=1" ]
-    }
   }
 
   if (angle_enable_trace) {
@@ -125,14 +121,10 @@ config("extra_warnings") {
     ]
   }
   if (is_clang) {
-    if (!is_fuchsia) {
-      cflags += [
-        # Remove when crbug.com/926235 is resolved.
-        "-Wextra-semi",
-      ]
-    }
-
     cflags += [
+      # Remove when crbug.com/926235 is resolved.
+      "-Wextra-semi",
+
       # Enable after anglebug.com/3128 is fixed.
       # "-Wextra-semi-stmt",
 
@@ -156,23 +148,12 @@ config("build_id_config") {
 # Windows ARM64 is available since 10.0.16299 so no need to copy
 # d3dcompiler_47.dll because this file is available as inbox.
 if (is_win && target_cpu != "arm64") {
-  # We also ship an older DLL for compatiblity with Windows 7 machines without
-  # the UCRT. This DLL isn't available in the standard SDK distribution.
-  _old_compiler = "$windows_sdk_path/Redist/D3D/$target_cpu/d3dcompiler_old.dll"
-  _has_old_compiler =
-      exec_script("scripts/file_exists.py", [ _old_compiler ], "value")
-
   copy("copy_compiler_dll") {
     sources = [
       "$windows_sdk_path/Redist/D3D/$target_cpu/d3dcompiler_47.dll",
     ]
-
-    if (_has_old_compiler) {
-      sources += [ _old_compiler ]
-    }
-
     outputs = [
-      "$root_out_dir/{{source_file_part}}",
+      "$root_out_dir/d3dcompiler_47.dll",
     ]
   }
 }
@@ -225,15 +206,6 @@ angle_source_set("angle_system_utils") {
 angle_source_set("xxhash") {
   sources = xxhash_sources
   configs -= [ "${angle_root}:extra_warnings" ]
-}
-
-fuzzer_test("xxhash_fuzzer") {
-  sources = [
-    "src/common/third_party/xxhash/xxhash_fuzzer.cpp",
-  ]
-  deps = [
-    ":xxhash",
-  ]
 }
 
 angle_static_library("angle_common") {
@@ -483,9 +455,7 @@ config("libANGLE_config") {
   }
 
   if (is_android && (angle_enable_gl || angle_enable_vulkan)) {
-    # In API level 26 ANativeWindow APIs were moved from libandroid.so
-    # into a separate library, libnativewindow.so
-    if (ndk_api_level_at_least_26) {
+    if (ndk_supports_nativewindow) {
       libs += [ "nativewindow" ]
     } else {
       libs += [ "android" ]
@@ -514,9 +484,6 @@ if (angle_enable_vulkan) {
       ]
       libs = [ "vulkan" ]
     }
-    if (is_fuchsia) {
-      defines = [ "VK_USE_PLATFORM_FUCHSIA" ]
-    }
   }
 
   # Use this target to include everything ANGLE needs for Vulkan.
@@ -526,7 +493,7 @@ if (angle_enable_vulkan) {
     ]
     public_configs = [ ":vulkan_config" ]
     data_deps = []
-    if (!is_android && !is_fuchsia) {
+    if (!is_android) {
       deps = [
         "$angle_root/third_party/vulkan-loader:libvulkan",
       ]
@@ -534,24 +501,11 @@ if (angle_enable_vulkan) {
       public_configs +=
           [ "$angle_root/third_party/vulkan-loader:vulkan_loader_config" ]
     }
-    if (is_fuchsia) {
-      public_deps += [
-        "$angle_root/src/common/fuchsia_egl",
-        "//third_party/fuchsia-sdk:vulkan_base",
-        "//third_party/fuchsia-sdk/sdk:vulkan",
-      ]
-    }
 
     if (angle_enable_vulkan_validation_layers) {
-      if (is_fuchsia) {
-        deps = [
-          "//third_party/fuchsia-sdk:vulkan_validation",
-        ]
-      } else {
-        data_deps += [ "$angle_root/third_party/vulkan-validation-layers:vulkan_validation_layers" ]
-        if (!is_android) {
-          data_deps += [ "$angle_root/third_party/vulkan-validation-layers:vulkan_gen_json_files" ]
-        }
+      data_deps += [ "$angle_root/third_party/vulkan-validation-layers:vulkan_validation_layers" ]
+      if (!is_android) {
+        data_deps += [ "$angle_root/third_party/vulkan-validation-layers:vulkan_gen_json_files" ]
       }
     }
   }
@@ -653,13 +607,6 @@ angle_static_library("libANGLE") {
     }
     if (is_linux) {
       sources += libangle_vulkan_xcb_sources
-    }
-    if (is_fuchsia) {
-      sources += libangle_vulkan_fuchsia_sources
-      deps += [
-        "$angle_root/src/common/fuchsia_egl",
-        "$angle_root/src/common/fuchsia_egl:backend",
-      ]
     }
     if (is_android) {
       sources += libangle_vulkan_android_sources
@@ -967,6 +914,10 @@ foreach(is_shared_library,
       ]
     }
 
+    if (use_ozone) {
+      sources += util_ozone_sources
+    }
+
     configs += [ ":debug_annotations_config" ]
 
     public_configs += [ ":angle_util_config" ]
@@ -976,24 +927,6 @@ foreach(is_shared_library,
       ":angle_util_loader_headers",
     ]
 
-    public_deps = []
-    if (is_fuchsia) {
-      sources += util_fuchsia_sources
-      public_deps += [
-        "$angle_root/src/common/fuchsia_egl",
-        "//third_party/fuchsia-sdk/sdk:async_loop_cpp",
-        "//third_party/fuchsia-sdk/sdk:fdio",
-        "//third_party/fuchsia-sdk/sdk:images",
-        "//third_party/fuchsia-sdk/sdk:scenic_cpp",
-        "//third_party/fuchsia-sdk/sdk:ui_gfx",
-        "//third_party/fuchsia-sdk/sdk:ui_policy",
-        "//third_party/fuchsia-sdk/sdk:ui_scenic",
-        "//third_party/fuchsia-sdk/sdk:ui_viewsv1",
-      ]
-    } else if (use_ozone) {
-      sources += util_ozone_sources
-    }
-
     if (is_shared_library) {
       defines = [ "LIBANGLE_UTIL_IMPLEMENTATION" ]
 
@@ -1001,7 +934,9 @@ foreach(is_shared_library,
         sources += util_win_shared_sources
       }
 
-      public_deps += [ ":angle_util_loader" ]
+      public_deps = [
+        ":angle_util_loader",
+      ]
 
       if (is_mac && !is_component_build) {
         ldflags = [
@@ -1125,12 +1060,18 @@ if (!is_component_build && is_android &&
   # Package ANGLE libraries for pre-installed system image
   angle_apk("aosp_apk") {
     package_name = "com.android.angle"
-    apk_name = "AngleLibraries"
+    apk_name = "AngleAosp"
+  }
+
+  angle_apk("google_apk") {
+    package_name = "com.google.android.angle"
+    apk_name = "ANGLEPrebuilt"
   }
 
   group("angle_apks") {
     deps = [
       ":aosp_apk",
+      ":google_apk",
     ]
   }
 

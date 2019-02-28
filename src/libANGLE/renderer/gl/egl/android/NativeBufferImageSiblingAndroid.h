@@ -12,6 +12,8 @@
 
 #include "libANGLE/renderer/gl/egl/ExternalImageSiblingEGL.h"
 
+struct ANativeWindowBuffer;
+
 namespace rx
 {
 
@@ -20,8 +22,6 @@ class NativeBufferImageSiblingAndroid : public ExternalImageSiblingEGL
   public:
     NativeBufferImageSiblingAndroid(EGLClientBuffer buffer);
     virtual ~NativeBufferImageSiblingAndroid();
-
-    egl::Error initialize(const egl::Display *display) override;
 
     // ExternalImageSiblingImpl interface
     gl::Format getFormat() const override;
@@ -34,9 +34,7 @@ class NativeBufferImageSiblingAndroid : public ExternalImageSiblingEGL
     EGLClientBuffer getBuffer() const override;
 
   private:
-    EGLClientBuffer mBuffer;
-    gl::Extents mSize;
-    gl::Format mFormat;
+    struct ANativeWindowBuffer *mBuffer;
 };
 
 }  // namespace rx

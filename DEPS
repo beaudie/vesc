@@ -18,7 +18,7 @@ vars = {
   'spirv_headers_revision': '79b6681aadcb53c27d1052e5f8a0e82a981dbf2f',
 
   # Current revision of SPIRV-Tools for Vulkan.
-  'spirv_tools_revision': 'fde69dcd80cc1ca548300702adf01eeb25441f3e',
+  'spirv_tools_revision': 'd14db341b834cfb3c574a258c331b3a6b1c2cbc5',
 
   # Current revision of Khronos Vulkan-Headers.
   'vulkan_headers_revision': 'b65941cc4b2b43b74de00534d110b581c52c394b',
@@ -36,12 +36,12 @@ vars = {
 deps = {
 
   '{angle_root}/build': {
-    'url': '{chromium_git}/chromium/src/build.git@9a53be87ebb636c35f2ed9772e5deaeb350d790b',
+    'url': '{chromium_git}/chromium/src/build.git@9dbdd5c2ae8c298bef55ca7c42754079aabe60c7',
     'condition': 'not build_with_chromium',
   },
 
   '{angle_root}/buildtools': {
-    'url': '{chromium_git}/chromium/buildtools.git@6fbda1b24c1893a893b17aa219b765b9e7c801d8',
+    'url': '{chromium_git}/chromium/buildtools.git@24ebce4578745db15274e180da1938ebc1358243',
     'condition': 'not build_with_chromium',
   },
 
@@ -65,13 +65,8 @@ deps = {
     'condition': 'not build_with_chromium',
    },
 
-  '{angle_root}/third_party/googletest': {
-    'url': '{chromium_git}/chromium/src/third_party/googletest@660425b1c5ca04559ab7e50c7572b5b771acca1c',
-    'condition': 'not build_with_chromium',
-  },
-
   '{angle_root}/third_party/googletest/src': {
-    'url': '{chromium_git}/external/github.com/google/googletest.git@7203f37f57e4fef0d77670098aabc186309eb874',
+    'url': '{chromium_git}/external/github.com/google/googletest.git@d5932506d6eed73ac80b9bcc47ed723c8c74eb1e',
     'condition': 'not build_with_chromium',
   },
 
@@ -89,32 +84,6 @@ deps = {
     'url' : '{chromium_git}/external/github.com/open-source-parsers/jsoncpp@f572e8e42e22cfcf5ab0aea26574f408943edfa4',
     'condition': 'not build_with_chromium',
    },
-
-  '{angle_root}/third_party/qemu-linux-x64': {
-      'packages': [
-          {
-              'package': 'fuchsia/qemu/linux-amd64',
-              'version': '9cc486c5b18a0be515c39a280ca9a309c54cf994'
-          },
-      ],
-      'condition': 'not build_with_chromium and (host_os == "linux" and checkout_fuchsia)',
-      'dep_type': 'cipd',
-  },
-
-  '{angle_root}/third_party/qemu-mac-x64': {
-      'packages': [
-          {
-              'package': 'fuchsia/qemu/mac-amd64',
-              'version': '2d3358ae9a569b2d4a474f498b32b202a152134f'
-          },
-      ],
-      'condition': 'not build_with_chromium and (host_os == "mac" and checkout_fuchsia)',
-      'dep_type': 'cipd',
-  },
-
-  '{angle_root}/third_party/rapidjson/src': {
-    'url': '{chromium_git}/external/github.com/Tencent/rapidjson@7484e06c589873e1ed80382d262087e4fa80fb63',
-  },
 
   '{angle_root}/third_party/spirv-headers/src': {
     'url': '{chromium_git}/external/github.com/KhronosGroup/SPIRV-Headers@{spirv_headers_revision}',
@@ -150,11 +119,6 @@ deps = {
   '{angle_root}/tools/clang': {
     'url': '{chromium_git}/chromium/src/tools/clang.git@3114fbc11f9644c54dd0a4cdbfa867bac50ff983',
     'condition': 'not build_with_chromium',
-  },
-
-  '{angle_root}/third_party/fuchsia-sdk': {
-    'url': '{chromium_git}/chromium/src/third_party/fuchsia-sdk.git@8e8db13b538ecb251e5ce9d5c781fc142f9752fd',
-    'condition': 'checkout_fuchsia and not build_with_chromium',
   },
 }
 
@@ -282,16 +246,6 @@ hooks = [
                 '--no_auth',
                 '--bucket', 'chromium-browser-clang/rc',
                 '-s', '{angle_root}/build/toolchain/win/rc/win/rc.exe.sha1',
-    ],
-  },
-
-  {
-    'name': 'fuchsia_sdk',
-    'pattern': '.',
-    'condition': 'checkout_fuchsia and not build_with_chromium',
-    'action': [
-      'python',
-      '{angle_root}/build/fuchsia/update_sdk.py',
     ],
   },
 ]

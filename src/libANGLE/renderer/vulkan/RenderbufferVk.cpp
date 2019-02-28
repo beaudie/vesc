@@ -10,9 +10,7 @@
 #include "libANGLE/renderer/vulkan/RenderbufferVk.h"
 
 #include "libANGLE/Context.h"
-#include "libANGLE/Image.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
-#include "libANGLE/renderer/vulkan/ImageVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
 namespace rx
@@ -26,7 +24,7 @@ constexpr VkClearColorValue kBlackClearColorValue                 = {{0}};
 }  // anonymous namespace
 
 RenderbufferVk::RenderbufferVk(const gl::RenderbufferState &state)
-    : RenderbufferImpl(state), mOwnsImage(false), mImage(nullptr)
+    : RenderbufferImpl(state), mImage(nullptr)
 {}
 
 RenderbufferVk::~RenderbufferVk() {}
@@ -35,7 +33,15 @@ void RenderbufferVk::onDestroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
-    releaseAndDeleteImage(context, renderer);
+
+    if (mImage)
+    {
+        mImage->releaseImage(renderer);
+        mImage->releaseStagingBuffer(renderer);
+        SafeDelete(mImage);
+    }
+
+    renderer->releaseObject(renderer->getCurrentQueueSerial(), &mImageView);
 }
 
 angle::Result RenderbufferVk::setStorage(const gl::Context *context,
@@ -47,11 +53,6 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
     RendererVk *renderer       = contextVk->getRenderer();
     const vk::Format &vkFormat = renderer->getFormat(internalformat);
 
-    if (!mOwnsImage)
-    {
-        releaseAndDeleteImage(context, renderer);
-    }
-
     if (mImage != nullptr && mImage->valid())
     {
         // Check against the state if we need to recreate the storage.
@@ -59,7 +60,8 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
             static_cast<GLsizei>(width) != mState.getWidth() ||
             static_cast<GLsizei>(height) != mState.getHeight())
         {
-            releaseImage(context, renderer);
+            mImage->releaseImage(renderer);
+            renderer->releaseObject(renderer->getCurrentQueueSerial(), &mImageView);
         }
     }
 
@@ -67,8 +69,7 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
     {
         if (mImage == nullptr)
         {
-            mImage     = new vk::ImageHelper();
-            mOwnsImage = true;
+            mImage = new vk::ImageHelper();
         }
 
         const angle::Format &textureFormat = vkFormat.textureFormat();
@@ -90,7 +91,7 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
         // Note that LUMA textures are not color-renderable, so a read-view with swizzle is not
         // needed.
         ANGLE_TRY(mImage->initImageView(contextVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
-                                        &mImageView, 0, 1));
+                                        &mImageView, 1));
 
         // TODO(jmadill): Fold this into the RenderPass load/store ops. http://anglebug.com/2361
         vk::CommandBuffer *commandBuffer = nullptr;
@@ -106,7 +107,7 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
             mImage->clearColor(kBlackClearColorValue, 0, 1, commandBuffer);
         }
 
-        mRenderTarget.init(mImage, &mImageView, 0, 0, nullptr);
+        mRenderTarget.init(mImage, &mImageView, 0, nullptr);
     }
 
     return angle::Result::Continue;
@@ -125,38 +126,8 @@ angle::Result RenderbufferVk::setStorageMultisample(const gl::Context *context,
 angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *context,
                                                        egl::Image *image)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
-
-    releaseAndDeleteImage(context, renderer);
-
-    ImageVk *imageVk = vk::GetImpl(image);
-    mImage           = imageVk->getImage();
-    mOwnsImage       = false;
-
-    const vk::Format &vkFormat = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
-    const angle::Format &textureFormat = vkFormat.textureFormat();
-
-    VkImageAspectFlags aspect = vk::GetFormatAspectFlags(textureFormat);
-
-    // Transfer the image to this queue if needed
-    uint32_t rendererQueueFamilyIndex = contextVk->getRenderer()->getQueueFamilyIndex();
-    if (mImage->isQueueChangeNeccesary(rendererQueueFamilyIndex))
-    {
-        vk::CommandBuffer *commandBuffer = nullptr;
-        ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
-        mImage->changeLayoutAndQueue(aspect, vk::ImageLayout::ColorAttachment,
-                                     rendererQueueFamilyIndex, commandBuffer);
-    }
-
-    ANGLE_TRY(mImage->initLayerImageView(contextVk, imageVk->getImageTextureType(), aspect,
-                                         gl::SwizzleState(), &mImageView, imageVk->getImageLevel(),
-                                         1, imageVk->getImageLayer(), 1));
-
-    mRenderTarget.init(mImage, &mImageView, imageVk->getImageLevel(), imageVk->getImageLayer(),
-                       nullptr);
-
-    return angle::Result::Continue;
+    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
+    return angle::Result::Stop;
 }
 
 angle::Result RenderbufferVk::getAttachmentRenderTarget(const gl::Context *context,
@@ -174,36 +145,6 @@ angle::Result RenderbufferVk::initializeContents(const gl::Context *context,
 {
     UNIMPLEMENTED();
     return angle::Result::Continue;
-}
-
-void RenderbufferVk::releaseOwnershipOfImage(const gl::Context *context)
-{
-    ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
-
-    mOwnsImage = false;
-    releaseAndDeleteImage(context, renderer);
-}
-
-void RenderbufferVk::releaseAndDeleteImage(const gl::Context *context, RendererVk *renderer)
-{
-    releaseImage(context, renderer);
-    SafeDelete(mImage);
-}
-
-void RenderbufferVk::releaseImage(const gl::Context *context, RendererVk *renderer)
-{
-    if (mImage && mOwnsImage)
-    {
-        mImage->releaseImage(renderer);
-        mImage->releaseStagingBuffer(renderer);
-    }
-    else
-    {
-        mImage = nullptr;
-    }
-
-    renderer->releaseObject(renderer->getCurrentQueueSerial(), &mImageView);
 }
 
 }  // namespace rx
