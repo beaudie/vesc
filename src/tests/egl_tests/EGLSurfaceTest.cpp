@@ -353,6 +353,9 @@ TEST_P(EGLSurfaceTest, SwapInterval)
 {
     // On OSX, maxInterval >= 1 is advertised, but is not implemented.  http://anglebug.com/3140
     ANGLE_SKIP_TEST_IF(IsOSX());
+    // Suspected for flaky timeouts on Linux Intel and random flaky failures on Win Intel.
+    // http://anglebug.com/3153
+    ANGLE_SKIP_TEST_IF(IsIntel());
 
     initializeDisplay();
     initializeSurfaceWithDefaultConfig();
