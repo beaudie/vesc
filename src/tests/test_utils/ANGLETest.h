@@ -399,7 +399,6 @@ class ANGLETestBase
 
   private:
     void checkD3D11SDKLayersMessages();
-    bool hasNvidiaGPU();
 
     void drawQuad(GLuint program,
                   const std::string &positionAttribName,
@@ -454,6 +453,8 @@ class ANGLETestEnvironment : public testing::Environment
     static angle::Library *GetWGLLibrary();
 
     static angle::SystemInfo *GetSystemInfo();
+    static bool hasIntelGPU();
+    static bool hasNvidiaGPU();
 
   private:
     // For loading entry points.

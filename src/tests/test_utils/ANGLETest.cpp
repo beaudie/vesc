@@ -321,7 +321,7 @@ ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
             // Workaround if any of the GPUs is Nvidia, since we can't detect current GPU.
             EGLint renderer = params.getRenderer();
             bool needsWindowSwap =
-                hasNvidiaGPU() && mLastRendererType.valid() &&
+                ANGLETestEnvironment::hasNvidiaGPU() && mLastRendererType.valid() &&
                 ((renderer != EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE) !=
                  (mLastRendererType.value() != EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE));
 
@@ -924,18 +924,6 @@ void ANGLETestBase::checkD3D11SDKLayersMessages()
 #endif  // defined(ANGLE_PLATFORM_WINDOWS)
 }
 
-bool ANGLETestBase::hasNvidiaGPU()
-{
-    for (const angle::GPUDeviceInfo &gpu : ANGLETestEnvironment::GetSystemInfo()->gpus)
-    {
-        if (angle::IsNvidia(gpu.vendorId))
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
 bool ANGLETestBase::extensionEnabled(const std::string &extName)
 {
     return CheckExtensionExists(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)),
@@ -1343,6 +1331,30 @@ angle::SystemInfo *ANGLETestEnvironment::GetSystemInfo()
         }
     }
     return gSystemInfo.get();
+}
+
+bool ANGLETestEnvironment::hasIntelGPU()
+{
+    for (const angle::GPUDeviceInfo &gpu : GetSystemInfo()->gpus)
+    {
+        if (angle::IsIntel(gpu.vendorId))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool ANGLETestEnvironment::hasNvidiaGPU()
+{
+    for (const angle::GPUDeviceInfo &gpu : GetSystemInfo()->gpus)
+    {
+        if (angle::IsNvidia(gpu.vendorId))
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void ANGLEProcessTestArgs(int *argc, char *argv[])
