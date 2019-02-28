@@ -157,6 +157,7 @@ bool ExpandMatrix(T *target, const GLfloat *value)
     memcpy(target, staging, kTargetWidth * kTargetHeight * sizeof(T));
     return true;
 }
+
 }  // anonymous namespace
 
 PackPixelsParams::PackPixelsParams()
