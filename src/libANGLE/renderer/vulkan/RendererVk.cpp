@@ -476,9 +476,6 @@ angle::Result WaitFences(vk::Context *context,
     return angle::Result::Continue;
 }
 
-// Initially dumping the command graphs is disabled.
-constexpr bool kEnableCommandGraphDiagnostics = false;
-
 }  // anonymous namespace
 
 // RendererVk implementation.
@@ -1271,6 +1268,77 @@ uint32_t RendererVk::getMaxActiveTextures()
                               gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES);
 }
 
+angle::Result RendererVk::getDescriptorSetLayout(
+    vk::Context *context,
+    const vk::DescriptorSetLayoutDesc &desc,
+    vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
+{
+    // TODO(geofflang): Synchronize access to the descriptor set layout cache
+    return mDescriptorSetLayoutCache.getDescriptorSetLayout(context, desc, descriptorSetLayoutOut);
+}
+
+angle::Result RendererVk::getPipelineLayout(
+    vk::Context *context,
+    const vk::PipelineLayoutDesc &desc,
+    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
+    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
+{
+    // TODO(geofflang): Synchronize access to the pipeline layout cache
+    return mPipelineLayoutCache.getPipelineLayout(context, desc, descriptorSetLayouts,
+                                                  pipelineLayoutOut);
+}
+
+angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)
+{
+    // TODO: Synchronize access to the pipeline/blob caches?
+    ASSERT(mPipelineCache.valid());
+
+    if (--mPipelineCacheVkUpdateTimeout > 0)
+    {
+        return angle::Result::Continue;
+    }
+
+    mPipelineCacheVkUpdateTimeout = kPipelineCacheVkUpdatePeriod;
+
+    // Get the size of the cache.
+    size_t pipelineCacheSize = 0;
+    VkResult result          = mPipelineCache.getCacheData(mDevice, &pipelineCacheSize, nullptr);
+    if (result != VK_INCOMPLETE)
+    {
+        ANGLE_VK_TRY(displayVk, result);
+    }
+
+    angle::MemoryBuffer *pipelineCacheData = nullptr;
+    ANGLE_VK_CHECK_ALLOC(displayVk,
+                         displayVk->getScratchBuffer(pipelineCacheSize, &pipelineCacheData));
+
+    size_t originalPipelineCacheSize = pipelineCacheSize;
+    result = mPipelineCache.getCacheData(mDevice, &pipelineCacheSize, pipelineCacheData->data());
+    // Note: currently we don't accept incomplete as we don't expect it (the full size of cache
+    // was determined just above), so receiving it hints at an implementation bug we would want
+    // to know about early.
+    ASSERT(result != VK_INCOMPLETE);
+    ANGLE_VK_TRY(displayVk, result);
+
+    // If vkGetPipelineCacheData ends up writing fewer bytes than requested, zero out the rest of
+    // the buffer to avoid leaking garbage memory.
+    ASSERT(pipelineCacheSize <= originalPipelineCacheSize);
+    if (pipelineCacheSize < originalPipelineCacheSize)
+    {
+        memset(pipelineCacheData->data() + pipelineCacheSize, 0,
+               originalPipelineCacheSize - pipelineCacheSize);
+    }
+
+    displayVk->getBlobCache()->putApplication(mPipelineCacheVkBlobKey, *pipelineCacheData);
+
+    return angle::Result::Continue;
+}
+
+Serial RendererVk::issueShaderSerial()
+{
+    return mShaderSerialFactory.generate();
+}
+
 // These functions look at the mandatory format for support, and fallback to querying the device (if
 // necessary) to test the availability of the bits.
 bool RendererVk::hasLinearImageFormatFeatureBits(VkFormat format,
@@ -1300,12 +1368,24 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
                                       const vk::Fence &fence)
 {
     // TODO: synchronize queue access
-
     ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, fence.getHandle()));
 
     ANGLE_TRY(checkFencedGarbage(context, 0));
 
     return angle::Result::Continue;
+}
+
+angle::Result RendererVk::queueWaitIdle(vk::Context *context)
+{
+    // TODO: synchronize queue access
+    ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueue));
+    return angle::Result::Continue;
+}
+
+VkResult RendererVk::queuePresent(const VkPresentInfoKHR &presentInfo)
+{
+    // TODO: synchronize queue access
+    return vkQueuePresentKHR(mQueue, &presentInfo);
 }
 
 Serial RendererVk::nextSerial()
