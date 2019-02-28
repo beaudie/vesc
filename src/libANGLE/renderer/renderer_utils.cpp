@@ -168,6 +168,7 @@ bool SetFloatUniformMatrix(unsigned int arrayElementOffset,
 
     return dirty;
 }
+
 }  // anonymous namespace
 
 PackPixelsParams::PackPixelsParams()
