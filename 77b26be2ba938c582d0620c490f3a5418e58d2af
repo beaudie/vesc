@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a0b1a79_3f17a1b5",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-28T22:13:01Z",
+      "side": 1,
+      "message": "`header-\u003enext \u003d nullptr;` is missing",
+      "revId": "77b26be2ba938c582d0620c490f3a5418e58d2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "821c0f32_ee521ab3",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-28T22:13:01Z",
+      "side": 1,
+      "message": "I would like to second Jamie\u0027s suggestion to name this `storePointerParameter()`. `updatePtrCmdData` is not descriptive enough (doesn\u0027t tell there\u0027s a copy involved), at the same time it\u0027s too implementation-based (sounds like it says this function \"updates mPtrCmdData\", which is an implementation detail)",
+      "revId": "77b26be2ba938c582d0620c490f3a5418e58d2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b295133_6afeb0aa",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-28T22:13:01Z",
+      "side": 1,
+      "message": "It might be worthwhile to match vk::CommandBuffer\u0027s functions and vk::LiteCommandBuffer\u0027s (w.r.t to VkBuffer vs vk::Buffer usage and such). That would let us quickly substitute one for the other for performance comparison. It would be a nice clean up as well, given that vk::CommandBuffer\u0027s functions are kind of a mix and match.\n\nI personally prefer passing Vk* parameters as done here, as that\u0027s more flexible (if there\u0027s necessity to avoid using vk::* somewhere), but I would be fine with either.\n\nWe could even keep both classes alive and include a perf test that performs performance comparisons between the two.",
+      "revId": "77b26be2ba938c582d0620c490f3a5418e58d2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
