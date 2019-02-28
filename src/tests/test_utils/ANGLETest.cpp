@@ -399,6 +399,9 @@ void ANGLETestBase::ANGLETestSetUp()
         needSwap = true;
     }
 
+    // Use no-vsync mode for tests, so they can run faster.
+    getGLWindow()->setSwapInterval(0);
+
     if (mWGLWindow)
     {
 #if defined(ANGLE_PLATFORM_WINDOWS) && defined(ANGLE_USE_UTIL_LOADER)
