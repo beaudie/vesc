@@ -30,7 +30,6 @@ ImageVk::~ImageVk() {}
 void ImageVk::onDestroy(const egl::Display *display)
 {
     DisplayVk *displayVk = vk::GetImpl(display);
-    RendererVk *renderer = displayVk->getRenderer();
 
     std::vector<vk::GarbageObjectBase> garbage;
 
@@ -38,7 +37,6 @@ void ImageVk::onDestroy(const egl::Display *display)
     {
         mImage->releaseImage(displayVk, &garbage);
         mImage->releaseStagingBuffer(displayVk, &garbage);
-        delete mImage;
     }
     else if (egl::IsExternalImageTarget(mState.target))
     {
@@ -51,7 +49,7 @@ void ImageVk::onDestroy(const egl::Display *display)
 
     if (!garbage.empty())
     {
-        renderer->addGarbage(std::move(mImageLastUseFences), std::move(garbage));
+        displayVk->getRenderer()->addGarbage(std::move(mImageLastUseFences), std::move(garbage));
     }
     else
     {
@@ -157,7 +155,7 @@ angle::Result ImageVk::orphan(const gl::Context *context, egl::ImageSibling *sib
     // Flush the context to make sure the fence has been submitted.
     ANGLE_TRY(contextVk->flushImpl());
 
-    vk::Shared<vk::Fence> fence = contextVk->getRenderer()->getLastSubmittedFence();
+    vk::Shared<vk::Fence> fence = contextVk->getLastSubmittedFence();
     if (fence)
     {
         mImageLastUseFences.push_back(std::move(fence));

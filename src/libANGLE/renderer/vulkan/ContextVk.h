@@ -219,9 +219,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
 
     const vk::CommandPool &getCommandPool() const;
 
-    Serial getCurrentContextQueueSerial() const { return mCurrentQueueSerial; }
-    Serial getLastSubmittedContextQueueSerial() const { return mLastSubmittedQueueSerial; }
-    Serial getLastCompletedContextQueueSerial() const { return mLastCompletedQueueSerial; }
+    Serial getCurrentQueueSerial() const { return mCurrentQueueSerial; }
+    Serial getLastSubmittedQueueSerial() const { return mLastSubmittedQueueSerial; }
+    Serial getLastCompletedQueueSerial() const { return mLastCompletedQueueSerial; }
 
     bool isSerialInUse(Serial serial) const;
 
@@ -230,7 +230,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     {
         if (!isSerialInUse(resourceSerial))
         {
-            object->destroy(mDevice);
+            object->destroy(getDevice());
         }
         else
         {
