@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12fba2ee_90615d45",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-28T22:48:36Z",
+      "side": 1,
+      "message": "can we make these types defined outside of the #if !defined as well? so they can be before the mAlignment?",
+      "range": {
+        "startLine": 173,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 0
+      },
+      "revId": "d4504d8e8450bc4e31672e1f6ce108f277afc071",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
