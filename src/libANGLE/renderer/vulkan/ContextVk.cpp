@@ -148,9 +148,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mDriverUniformsDescriptorSet(VK_NULL_HANDLE),
       mDefaultAttribBuffers{{INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT,
                              INIT, INIT, INIT, INIT}},
-      mLastCompletedQueueSerial(renderer->getCurrentQueueSerial()),
-      mCurrentQueueSerial(renderer->getCurrentQueueSerial()),  // Should this always be higher than
-                                                               // mLastCompletedQueueSerial?
+      mLastCompletedQueueSerial(renderer->nextSerial()),
+      mCurrentQueueSerial(renderer->nextSerial()),
       mPoolAllocator(kDefaultPoolAllocatorPageSize, 1),
       mCommandGraph(kEnableCommandGraphDiagnostics, &mPoolAllocator),
       mGpuEventsEnabled(false),
@@ -216,8 +215,7 @@ void ContextVk::onDestroy(const gl::Context *context)
 
     if (!mInFlightCommands.empty() || !mGarbage.empty())
     {
-        // TODO(jmadill): Not nice to pass nullptr here, but shouldn't be a problem.
-        (void)finish(context);
+        (void)finishImpl();
     }
 
     mUtils.destroy(device);
@@ -354,7 +352,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mDirtyBits |= mNewCommandBufferDirtyBits;
 
         gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getScissoredRenderArea(this);
-        if (!mDrawFramebuffer->appendToStartedRenderPass(mRenderer->getCurrentQueueSerial(),
+        if (!mDrawFramebuffer->appendToStartedRenderPass(getCurrentQueueSerial(),
                                                          scissoredRenderArea, &mCommandBuffer))
         {
             ANGLE_TRY(
@@ -496,7 +494,7 @@ angle::Result ContextVk::handleDirtyPipeline(const gl::Context *context,
     commandBuffer->bindGraphicsPipeline(mCurrentPipeline->getPipeline());
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentPipeline && mCurrentPipeline->valid());
-    mCurrentPipeline->updateSerial(mRenderer->getCurrentQueueSerial());
+    mCurrentPipeline->updateSerial(getCurrentQueueSerial());
     return angle::Result::Continue;
 }
 
@@ -605,7 +603,7 @@ angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
     // InterleavedAttributeDataBenchmark perf test for example issues a large number of flushes.
     ASSERT(mInFlightCommands.size() <= kInFlightCommandsLimit);
 
-    mLastCompletedQueueSerial = mCurrentQueueSerial;
+    mLastSubmittedQueueSerial = mCurrentQueueSerial;
     mCurrentQueueSerial       = getRenderer()->nextSerial();
 
     ANGLE_TRY(checkCompletedCommands());
@@ -840,7 +838,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime(const vk::Semaphore *waitSemaphor
         double TeS = platform->monotonicallyIncreasingTime(platform);
 
         // Get the query results
-        ANGLE_TRY(finishToSerial(getLastSubmittedContextQueueSerial()));
+        ANGLE_TRY(finishToSerial(getLastSubmittedQueueSerial()));
 
         constexpr VkQueryResultFlags queryFlags = VK_QUERY_RESULT_WAIT_BIT | VK_QUERY_RESULT_64_BIT;
 
@@ -1518,6 +1516,9 @@ GLint64 ContextVk::getTimestamp()
 
 angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
 {
+    ASSERT(mCommandGraph.empty());
+    mCurrentQueueSerial = getRenderer()->nextSerial();
+
     // Flip viewports if FeaturesVk::flipViewportY is enabled and the user did not request that the
     // surface is flipped.
     egl::Surface *drawSurface = context->getCurrentDrawSurface();
@@ -1746,7 +1747,7 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
                                                    vk::CommandBuffer *commandBuffer)
 {
     // Release any previously retained buffers.
-    mDriverUniformsBuffer.releaseRetainedBuffers(mRenderer);
+    mDriverUniformsBuffer.releaseRetainedBuffers(this);
 
     const gl::Rectangle &glViewport = mState.getViewport();
     float halfRenderAreaHeight =
@@ -1923,6 +1924,7 @@ angle::Result ContextVk::finishImpl()
     }
 
     ANGLE_TRY(finishToSerial(mLastSubmittedQueueSerial));
+    freeAllInFlightResources();
 
     if (mGpuEventsEnabled)
     {
@@ -2200,7 +2202,7 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
 {
     vk::DynamicBuffer &defaultBuffer = mDefaultAttribBuffers[attribIndex];
 
-    defaultBuffer.releaseRetainedBuffers(mRenderer);
+    defaultBuffer.releaseRetainedBuffers(this);
 
     uint8_t *ptr;
     VkBuffer bufferHandle = VK_NULL_HANDLE;
