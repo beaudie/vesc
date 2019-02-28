@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "735f8b1d_531ff6c4",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-28T22:46:09Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s fair. SGTM.",
+      "parentUuid": "261a4d99_244bf7b2",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 31
+      },
+      "revId": "809100a9b996d6558b72de9947f6e6525d65e1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "06a2b5d8_cb595d5a",
         "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.h",
         "patchSetId": 2
