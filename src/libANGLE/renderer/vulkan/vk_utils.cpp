@@ -100,7 +100,6 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
                                               VkMemoryPropertyFlags requestedMemoryPropertyFlags,
                                               VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                               const VkMemoryRequirements &memoryRequirements,
-                                              const void *extraAllocationInfo,
                                               vk::DeviceMemory *deviceMemoryOut)
 {
     uint32_t memoryTypeIndex = 0;
@@ -110,7 +109,6 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
 
     VkMemoryAllocateInfo allocInfo = {};
     allocInfo.sType                = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    allocInfo.pNext                = extraAllocationInfo;
     allocInfo.memoryTypeIndex      = memoryTypeIndex;
     allocInfo.allocationSize       = memoryRequirements.size;
 
@@ -119,39 +117,22 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
 }
 
 template <typename T>
-angle::Result AllocateAndBindBufferOrImageMemory(vk::Context *context,
-                                                 VkMemoryPropertyFlags requestedMemoryPropertyFlags,
-                                                 VkMemoryPropertyFlags *memoryPropertyFlagsOut,
-                                                 const VkMemoryRequirements &memoryRequirements,
-                                                 const void *extraAllocationInfo,
-                                                 T *bufferOrImage,
-                                                 vk::DeviceMemory *deviceMemoryOut)
-{
-    const vk::MemoryProperties &memoryProperties = context->getRenderer()->getMemoryProperties();
-
-    ANGLE_TRY(FindAndAllocateCompatibleMemory(
-        context, memoryProperties, requestedMemoryPropertyFlags, memoryPropertyFlagsOut,
-        memoryRequirements, extraAllocationInfo, deviceMemoryOut));
-    ANGLE_VK_TRY(context, bufferOrImage->bindMemory(context->getDevice(), *deviceMemoryOut));
-    return angle::Result::Continue;
-}
-
-template <typename T>
 angle::Result AllocateBufferOrImageMemory(vk::Context *context,
                                           VkMemoryPropertyFlags requestedMemoryPropertyFlags,
                                           VkMemoryPropertyFlags *memoryPropertyFlagsOut,
-                                          const void *extraAllocationInfo,
                                           T *bufferOrImage,
                                           vk::DeviceMemory *deviceMemoryOut)
 {
+    const vk::MemoryProperties &memoryProperties = context->getRenderer()->getMemoryProperties();
+
     // Call driver to determine memory requirements.
     VkMemoryRequirements memoryRequirements;
     bufferOrImage->getMemoryRequirements(context->getDevice(), &memoryRequirements);
 
-    ANGLE_TRY(AllocateAndBindBufferOrImageMemory(
-        context, requestedMemoryPropertyFlags, memoryPropertyFlagsOut, memoryRequirements,
-        extraAllocationInfo, bufferOrImage, deviceMemoryOut));
-
+    ANGLE_TRY(FindAndAllocateCompatibleMemory(context, memoryProperties,
+                                              requestedMemoryPropertyFlags, memoryPropertyFlagsOut,
+                                              memoryRequirements, deviceMemoryOut));
+    ANGLE_VK_TRY(context, bufferOrImage->bindMemory(context->getDevice(), *deviceMemoryOut));
     return angle::Result::Continue;
 }
 
@@ -354,7 +335,7 @@ angle::Result StagingBuffer::init(Context *context, VkDeviceSize size, StagingUs
 
     ANGLE_VK_TRY(context, mBuffer.init(context->getDevice(), createInfo));
     VkMemoryPropertyFlags flagsOut = 0;
-    ANGLE_TRY(AllocateBufferMemory(context, flags, &flagsOut, nullptr, &mBuffer, &mDeviceMemory));
+    ANGLE_TRY(AllocateBufferMemory(context, flags, &flagsOut, &mBuffer, &mDeviceMemory));
     mSize = static_cast<size_t>(size);
     return angle::Result::Continue;
 }
@@ -368,37 +349,21 @@ void StagingBuffer::dumpResources(Serial serial, std::vector<vk::GarbageObject> 
 angle::Result AllocateBufferMemory(vk::Context *context,
                                    VkMemoryPropertyFlags requestedMemoryPropertyFlags,
                                    VkMemoryPropertyFlags *memoryPropertyFlagsOut,
-                                   const void *extraAllocationInfo,
                                    Buffer *buffer,
                                    DeviceMemory *deviceMemoryOut)
 {
     return AllocateBufferOrImageMemory(context, requestedMemoryPropertyFlags,
-                                       memoryPropertyFlagsOut, extraAllocationInfo, buffer,
-                                       deviceMemoryOut);
+                                       memoryPropertyFlagsOut, buffer, deviceMemoryOut);
 }
 
 angle::Result AllocateImageMemory(vk::Context *context,
                                   VkMemoryPropertyFlags memoryPropertyFlags,
-                                  const void *extraAllocationInfo,
                                   Image *image,
                                   DeviceMemory *deviceMemoryOut)
 {
     VkMemoryPropertyFlags memoryPropertyFlagsOut = 0;
-    return AllocateBufferOrImageMemory(context, memoryPropertyFlags, &memoryPropertyFlagsOut,
-                                       extraAllocationInfo, image, deviceMemoryOut);
-}
-
-angle::Result AllocateImageMemoryWithRequirements(vk::Context *context,
-                                                  VkMemoryPropertyFlags memoryPropertyFlags,
-                                                  const VkMemoryRequirements &memoryRequirements,
-                                                  const void *extraAllocationInfo,
-                                                  Image *image,
-                                                  DeviceMemory *deviceMemoryOut)
-{
-    VkMemoryPropertyFlags memoryPropertyFlagsOut = 0;
-    return AllocateAndBindBufferOrImageMemory(context, memoryPropertyFlags, &memoryPropertyFlagsOut,
-                                              memoryRequirements, extraAllocationInfo, image,
-                                              deviceMemoryOut);
+    return AllocateBufferOrImageMemory(context, memoryPropertyFlags, &memoryPropertyFlagsOut, image,
+                                       deviceMemoryOut);
 }
 
 angle::Result InitShaderAndSerial(Context *context,
@@ -515,14 +480,6 @@ PFN_vkDestroyDebugUtilsMessengerEXT vkDestroyDebugUtilsMessengerEXT = nullptr;
 PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT   = nullptr;
 PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReportCallbackEXT = nullptr;
 
-// VK_KHR_get_physical_device_properties2
-PFN_vkGetPhysicalDeviceProperties2KHR vkGetPhysicalDeviceProperties2KHR = nullptr;
-
-#if defined(ANGLE_PLATFORM_FUCHSIA)
-// VK_FUCHSIA_imagepipe_surface
-PFN_vkCreateImagePipeSurfaceFUCHSIA vkCreateImagePipeSurfaceFUCHSIA = nullptr;
-#endif
-
 #define GET_FUNC(vkName)                                                                   \
     do                                                                                     \
     {                                                                                      \
@@ -541,29 +498,6 @@ void InitDebugReportEXTFunctions(VkInstance instance)
     GET_FUNC(vkCreateDebugReportCallbackEXT);
     GET_FUNC(vkDestroyDebugReportCallbackEXT);
 }
-
-void InitGetPhysicalDeviceProperties2KHRFunctions(VkInstance instance)
-{
-    GET_FUNC(vkGetPhysicalDeviceProperties2KHR);
-}
-
-#if defined(ANGLE_PLATFORM_FUCHSIA)
-void InitImagePipeSurfaceFUCHSIAFunctions(VkInstance instance)
-{
-    GET_FUNC(vkCreateImagePipeSurfaceFUCHSIA);
-}
-#endif
-
-#if defined(ANGLE_PLATFORM_ANDROID)
-PFN_vkGetAndroidHardwareBufferPropertiesANDROID vkGetAndroidHardwareBufferPropertiesANDROID =
-    nullptr;
-PFN_vkGetMemoryAndroidHardwareBufferANDROID vkGetMemoryAndroidHardwareBufferANDROID = nullptr;
-void InitExternalMemoryHardwareBufferANDROIDFunctions(VkInstance instance)
-{
-    GET_FUNC(vkGetAndroidHardwareBufferPropertiesANDROID);
-    GET_FUNC(vkGetMemoryAndroidHardwareBufferANDROID);
-}
-#endif
 
 #undef GET_FUNC
 
@@ -758,7 +692,6 @@ VkImageType GetImageType(gl::TextureType textureType)
         case gl::TextureType::_2DMultisample:
         case gl::TextureType::_2DMultisampleArray:
         case gl::TextureType::CubeMap:
-        case gl::TextureType::External:
             return VK_IMAGE_TYPE_2D;
         case gl::TextureType::_3D:
             return VK_IMAGE_TYPE_3D;
@@ -775,7 +708,6 @@ VkImageViewType GetImageViewType(gl::TextureType textureType)
     {
         case gl::TextureType::_2D:
         case gl::TextureType::_2DMultisample:
-        case gl::TextureType::External:
             return VK_IMAGE_VIEW_TYPE_2D;
         case gl::TextureType::_2DArray:
         case gl::TextureType::_2DMultisampleArray:

@@ -13,7 +13,6 @@
 #include <array>
 #include <cstdio>
 #include <fstream>
-#include <mutex>
 #include <ostream>
 #include <vector>
 
@@ -31,8 +30,6 @@ namespace
 {
 
 DebugAnnotator *g_debugAnnotator = nullptr;
-
-std::mutex *g_debugMutex = nullptr;
 
 constexpr std::array<const char *, LOG_NUM_SEVERITIES> g_logSeverityNames = {
     {"EVENT", "WARN", "ERR"}};
@@ -99,14 +96,6 @@ void UninitializeDebugAnnotations()
     g_debugAnnotator = nullptr;
 }
 
-void InitializeDebugMutexIfNeeded()
-{
-    if (g_debugMutex == nullptr)
-    {
-        g_debugMutex = new std::mutex();
-    }
-}
-
 ScopedPerfEventHelper::ScopedPerfEventHelper(const char *format, ...) : mFunctionName(nullptr)
 {
     bool dbgTrace = DebugAnnotationsActive();
@@ -151,12 +140,6 @@ LogMessage::LogMessage(const char *function, int line, LogSeverity severity)
 
 LogMessage::~LogMessage()
 {
-    std::unique_lock<std::mutex> lock;
-    if (g_debugMutex != nullptr)
-    {
-        lock = std::unique_lock<std::mutex>(*g_debugMutex);
-    }
-
     if (DebugAnnotationsInitialized() && (mSeverity == LOG_ERR || mSeverity == LOG_WARN))
     {
         g_debugAnnotator->logMessage(*this);

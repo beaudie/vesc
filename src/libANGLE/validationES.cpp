@@ -5262,7 +5262,8 @@ bool ValidateGetVertexAttribBase(Context *context,
                     GL_VERTEX_ATTRIB_ARRAY_DIVISOR == GL_VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE,
                     "ANGLE extension enums not equal to GL enums.");
                 if (context->getClientMajorVersion() < 3 &&
-                    !context->getExtensions().instancedArraysAny())
+                    !context->getExtensions().instancedArraysANGLE &&
+                    !context->getExtensions().instancedArraysEXT)
                 {
                     context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
                     return false;

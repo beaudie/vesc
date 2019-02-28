@@ -19,7 +19,6 @@ namespace rx
 {
 class GLImplFactory;
 class TransformFeedbackImpl;
-class TransformFeedbackGL;
 }  // namespace rx
 
 namespace gl
@@ -37,7 +36,6 @@ class TransformFeedbackState final : angle::NonCopyable
 
     const OffsetBindingPointer<Buffer> &getIndexedBuffer(size_t idx) const;
     const std::vector<OffsetBindingPointer<Buffer>> &getIndexedBuffers() const;
-    const Program *getBoundProgram() const { return mProgram; }
 
   private:
     friend class TransformFeedback;

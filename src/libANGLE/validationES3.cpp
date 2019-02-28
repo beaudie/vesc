@@ -3100,7 +3100,8 @@ bool ValidateMultiDrawArraysInstancedANGLE(Context *context,
     }
     if (context->getClientMajorVersion() < 3)
     {
-        if (!context->getExtensions().instancedArraysAny())
+        if (!context->getExtensions().instancedArraysANGLE &&
+            !context->getExtensions().instancedArraysEXT)
         {
             context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
             return false;
@@ -3136,7 +3137,8 @@ bool ValidateMultiDrawElementsInstancedANGLE(Context *context,
     }
     if (context->getClientMajorVersion() < 3)
     {
-        if (!context->getExtensions().instancedArraysAny())
+        if (!context->getExtensions().instancedArraysANGLE &&
+            !context->getExtensions().instancedArraysEXT)
         {
             context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
             return false;
