@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e6afdbb_5fa2bd54",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-02-28T20:03:05Z",
+      "side": 0,
+      "message": "Before you commit this, can you make a change where you only change this call to `setSwapInterval(0)`?\n\nIf that fixes the issue, we can think about temporarily setting this to 0 only on intel.",
+      "revId": "5de69e91bd939f8c2acc3ccab095d770bf378481",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
