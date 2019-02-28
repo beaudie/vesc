@@ -30,7 +30,8 @@ class FenceSyncVk
     FenceSyncVk();
     ~FenceSyncVk();
 
-    void onDestroy(RendererVk *renderer);
+    void onDestroy(ContextVk *contextVk);
+    void onDestroy(vk::Context *context);
 
     angle::Result initialize(ContextVk *contextVk);
     angle::Result clientWait(vk::Context *context,

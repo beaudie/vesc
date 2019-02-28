@@ -83,7 +83,7 @@ class RendererVk : angle::NonCopyable
     const gl::Limitations &getNativeLimitations() const;
     uint32_t getMaxActiveTextures();
 
-    Serial getCurrentQueueSerial() const { return mCurrentQueueSerial; }
+    Serial getCurrentQueueSerial_() const { return mCurrentQueueSerial; }
 
     uint32_t getQueueFamilyIndex() const { return mCurrentQueueFamilyIndex; }
 
@@ -124,6 +124,9 @@ class RendererVk : angle::NonCopyable
     angle::Result queueSubmit(vk::Context *context,
                               const VkSubmitInfo &submitInfo,
                               const vk::Fence &fence);
+    angle::Result queueWaitIdle(vk::Context *context);
+    VkResult queuePresent(const VkPresentInfoKHR &presentInfo);
+
     Serial nextSerial();
 
     static constexpr size_t kMaxExtensionNames = 200;
