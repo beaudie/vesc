@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99bec2c8_b17eaa05",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-28T16:36:15Z",
+      "side": 1,
+      "message": "also should rename this to angle_disable_pool_alloc",
+      "range": {
+        "startLine": 195,
+        "startChar": 8,
+        "endLine": 195,
+        "endChar": 37
+      },
+      "revId": "cba67247ac7273f62e9c40d6aa84879767639bed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
