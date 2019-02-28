@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a649042_200117e7",
+        "filename": "src/libANGLE/MemoryProgramCache.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-28T19:35:34Z",
+      "side": 1,
+      "message": "I think WARN() Will append a \"\\n\" automatically.",
+      "range": {
+        "startLine": 148,
+        "startChar": 56,
+        "endLine": 148,
+        "endChar": 58
+      },
+      "revId": "de6b8eb48ad9caeb7cdfb465bb935802100cf522",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "011c6db2_7ac96323",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-28T19:35:34Z",
+      "side": 1,
+      "message": "nit: maybe angle::MemoryBuffer?",
+      "range": {
+        "startLine": 930,
+        "startChar": 4,
+        "endLine": 930,
+        "endChar": 37
+      },
+      "revId": "de6b8eb48ad9caeb7cdfb465bb935802100cf522",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
