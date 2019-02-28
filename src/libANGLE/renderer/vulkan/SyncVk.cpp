@@ -21,22 +21,21 @@ FenceSyncVk::FenceSyncVk() {}
 
 FenceSyncVk::~FenceSyncVk() {}
 
-void FenceSyncVk::onDestroy(RendererVk *renderer)
+void FenceSyncVk::onDestroy(ContextVk *contextVk)
 {
     if (mEvent.valid())
     {
-        renderer->releaseObject(renderer->getCurrentQueueSerial(), &mEvent);
+        contextVk->releaseObject(contextVk->getCurrentQueueSerial(), &mEvent);
     }
 
-    mFence.reset(renderer->getDevice());
+    mFence.reset(contextVk->getDevice());
 }
 
-angle::Result FenceSyncVk::initialize(vk::Context *context)
+angle::Result FenceSyncVk::initialize(ContextVk *context)
 {
     ASSERT(!mEvent.valid());
 
-    RendererVk *renderer = context->getRenderer();
-    VkDevice device      = renderer->getDevice();
+    VkDevice device = context->getDevice();
 
     VkEventCreateInfo eventCreateInfo = {};
     eventCreateInfo.sType             = VK_STRUCTURE_TYPE_EVENT_CREATE_INFO;
@@ -45,15 +44,15 @@ angle::Result FenceSyncVk::initialize(vk::Context *context)
     vk::Scoped<vk::Event> event(device);
     ANGLE_VK_TRY(context, event.get().init(device, eventCreateInfo));
 
-    ANGLE_TRY(renderer->getSubmitFence(context, &mFence));
+    ANGLE_TRY(context->getSubmitFence(&mFence));
 
     mEvent        = event.release();
 
-    renderer->getCommandGraph()->setFenceSync(mEvent);
+    context->getCommandGraph()->setFenceSync(mEvent);
     return angle::Result::Continue;
 }
 
-angle::Result FenceSyncVk::clientWait(vk::Context *context,
+angle::Result FenceSyncVk::clientWait(ContextVk *context,
                                       bool flushCommands,
                                       uint64_t timeout,
                                       VkResult *outResult)
@@ -78,7 +77,7 @@ angle::Result FenceSyncVk::clientWait(vk::Context *context,
 
     if (flushCommands)
     {
-        ANGLE_TRY(renderer->flush(context));
+        ANGLE_TRY(context->flush());
     }
 
     // Wait on the fence that's expected to be signaled on the first vkQueueSubmit after
@@ -95,13 +94,13 @@ angle::Result FenceSyncVk::clientWait(vk::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result FenceSyncVk::serverWait(vk::Context *context)
+angle::Result FenceSyncVk::serverWait(ContextVk *context)
 {
-    context->getRenderer()->getCommandGraph()->waitFenceSync(mEvent);
+    context->getCommandGraph()->waitFenceSync(mEvent);
     return angle::Result::Continue;
 }
 
-angle::Result FenceSyncVk::getStatus(vk::Context *context, bool *signaled)
+angle::Result FenceSyncVk::getStatus(ContextVk *context, bool *signaled)
 {
     VkResult result = mEvent.getStatus(context->getRenderer()->getDevice());
     if (result != VK_EVENT_SET && result != VK_EVENT_RESET)
@@ -118,7 +117,7 @@ SyncVk::~SyncVk() {}
 
 void SyncVk::onDestroy(const gl::Context *context)
 {
-    mFenceSync.onDestroy(vk::GetImpl(context)->getRenderer());
+    mFenceSync.onDestroy(vk::GetImpl(context));
 }
 
 angle::Result SyncVk::set(const gl::Context *context, GLenum condition, GLbitfield flags)
@@ -190,17 +189,23 @@ EGLSyncVk::~EGLSyncVk() {}
 
 void EGLSyncVk::onDestroy(const egl::Display *display)
 {
+    // TODO(geofflang): EGL sync objects with no command graph in renderer
+    /*
     mFenceSync.onDestroy(vk::GetImpl(display)->getRenderer());
+    */
 }
 
 egl::Error EGLSyncVk::initialize(const egl::Display *display, EGLenum type)
 {
     ASSERT(type == EGL_SYNC_FENCE_KHR);
 
+    // TODO(geofflang): EGL sync objects with no command graph in renderer
+    /*
     if (mFenceSync.initialize(vk::GetImpl(display)) == angle::Result::Stop)
     {
         return egl::Error(EGL_BAD_ALLOC, "eglCreateSyncKHR failed to create sync object");
     }
+    */
 
     return egl::NoError();
 }
@@ -210,6 +215,8 @@ egl::Error EGLSyncVk::clientWait(const egl::Display *display,
                                  EGLTime timeout,
                                  EGLint *outResult)
 {
+    // TODO(geofflang): EGL sync objects with no command graph in renderer
+    /*
     ASSERT((flags & ~EGL_SYNC_FLUSH_COMMANDS_BIT_KHR) == 0);
 
     bool flush = (flags & EGL_SYNC_FLUSH_COMMANDS_BIT_KHR) != 0;
@@ -239,20 +246,27 @@ egl::Error EGLSyncVk::clientWait(const egl::Display *display,
             *outResult = EGL_FALSE;
             return egl::Error(EGL_BAD_ALLOC);
     }
+    */
+    return egl::NoError();
 }
 
 egl::Error EGLSyncVk::serverWait(const egl::Display *display, EGLint flags)
 {
+    // TODO(geofflang): EGL sync objects with no command graph in renderer
+    /*
     ASSERT(flags == 0);
     if (mFenceSync.serverWait(vk::GetImpl(display)) == angle::Result::Stop)
     {
         return egl::Error(EGL_BAD_ALLOC);
     }
+    */
     return egl::NoError();
 }
 
 egl::Error EGLSyncVk::getStatus(const egl::Display *display, EGLint *outStatus)
 {
+    // TODO(geofflang): EGL sync objects with no command graph in renderer
+    /*
     bool signaled = false;
     if (mFenceSync.getStatus(vk::GetImpl(display), &signaled) == angle::Result::Stop)
     {
@@ -260,6 +274,7 @@ egl::Error EGLSyncVk::getStatus(const egl::Display *display, EGLint *outStatus)
     }
 
     *outStatus = signaled ? EGL_SIGNALED_KHR : EGL_UNSIGNALED_KHR;
+    */
     return egl::NoError();
 }
 

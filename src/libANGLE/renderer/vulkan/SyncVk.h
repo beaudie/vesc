@@ -30,15 +30,15 @@ class FenceSyncVk
     FenceSyncVk();
     ~FenceSyncVk();
 
-    void onDestroy(RendererVk *renderer);
+    void onDestroy(ContextVk *contextVk);
 
-    angle::Result initialize(vk::Context *context);
-    angle::Result clientWait(vk::Context *context,
+    angle::Result initialize(ContextVk *context);
+    angle::Result clientWait(ContextVk *context,
                              bool flushCommands,
                              uint64_t timeout,
                              VkResult *outResult);
-    angle::Result serverWait(vk::Context *context);
-    angle::Result getStatus(vk::Context *context, bool *signaled);
+    angle::Result serverWait(ContextVk *context);
+    angle::Result getStatus(ContextVk *context, bool *signaled);
 
   private:
     // The vkEvent that's signaled on `init` and can be waited on in `serverWait`, or queried with

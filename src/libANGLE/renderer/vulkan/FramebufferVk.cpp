@@ -129,11 +129,10 @@ FramebufferVk::~FramebufferVk() = default;
 void FramebufferVk::destroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
-    mFramebuffer.release(renderer);
+    mFramebuffer.release(contextVk);
 
-    mReadPixelBuffer.release(renderer);
-    mBlitPixelBuffer.release(renderer);
+    mReadPixelBuffer.release(contextVk);
+    mBlitPixelBuffer.release(contextVk);
 }
 
 angle::Result FramebufferVk::discard(const gl::Context *context,
@@ -363,7 +362,6 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
     const gl::Extents &fbSize = getState().getReadAttachment()->getSize();
     const gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
     gl::Rectangle clippedArea;
     if (!ClipRectangle(area, fbRect, &clippedArea))
@@ -405,7 +403,7 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
     ANGLE_TRY(readPixelsImpl(contextVk, flippedArea, params, VK_IMAGE_ASPECT_COLOR_BIT,
                              getColorReadRenderTarget(),
                              static_cast<uint8_t *>(pixels) + outputSkipBytes));
-    mReadPixelBuffer.releaseRetainedBuffers(renderer);
+    mReadPixelBuffer.releaseRetainedBuffers(contextVk);
     return angle::Result::Continue;
 }
 
@@ -461,7 +459,6 @@ angle::Result FramebufferVk::blitWithReadback(ContextVk *contextVk,
                                               RenderTargetVk *readRenderTarget,
                                               RenderTargetVk *drawRenderTarget)
 {
-    RendererVk *renderer            = contextVk->getRenderer();
     const angle::Format &readFormat = readRenderTarget->getImageFormat().textureFormat();
 
     ASSERT(aspect == VK_IMAGE_ASPECT_DEPTH_BIT || aspect == VK_IMAGE_ASPECT_STENCIL_BIT);
@@ -522,7 +519,7 @@ angle::Result FramebufferVk::blitWithReadback(ContextVk *contextVk,
     commandBuffer->copyBufferToImage(destBufferHandle, imageForWrite->getImage(),
                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyRegion);
 
-    mBlitPixelBuffer.releaseRetainedBuffers(renderer);
+    mBlitPixelBuffer.releaseRetainedBuffers(contextVk);
 
     return angle::Result::Continue;
 }
@@ -737,7 +734,6 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                                        const gl::Framebuffer::DirtyBits &dirtyBits)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
     ASSERT(dirtyBits.any());
     for (size_t dirtyBit : dirtyBits)
@@ -793,11 +789,11 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         mActiveColorComponentMasksForClear[0].any(), mActiveColorComponentMasksForClear[1].any(),
         mActiveColorComponentMasksForClear[2].any(), mActiveColorComponentMasksForClear[3].any());
 
-    mFramebuffer.release(renderer);
+    mFramebuffer.release(contextVk);
 
     // Will freeze the current set of dependencies on this FBO. The next time we render we will
     // create a new entry in the command graph.
-    mFramebuffer.finishCurrentCommands(renderer);
+    mFramebuffer.finishCurrentCommands(contextVk);
 
     // Notify the ContextVk to update the pipeline desc.
     updateRenderPassDesc();
@@ -837,8 +833,7 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
     }
 
     vk::RenderPass *renderPass = nullptr;
-    ANGLE_TRY(
-        contextVk->getRenderer()->getCompatibleRenderPass(contextVk, mRenderPassDesc, &renderPass));
+    ANGLE_TRY(contextVk->getCompatibleRenderPass(mRenderPassDesc, &renderPass));
 
     // If we've a Framebuffer provided by a Surface (default FBO/backbuffer), query it.
     if (mBackbuffer)
@@ -899,7 +894,7 @@ angle::Result FramebufferVk::clearWithClearAttachments(
     const VkClearDepthStencilValue &clearDepthStencilValue)
 {
     // Trigger a new command node to ensure overlapping writes happen sequentially.
-    mFramebuffer.finishCurrentCommands(contextVk->getRenderer());
+    mFramebuffer.finishCurrentCommands(contextVk);
 
     // This command can only happen inside a render pass, so obtain one if its already happening
     // or create a new one if not.
@@ -999,8 +994,6 @@ angle::Result FramebufferVk::clearWithClearAttachments(
 angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
                                            VkColorComponentFlags colorMaskFlags)
 {
-    RendererVk *renderer = contextVk->getRenderer();
-
     // If the format of the framebuffer does not have an alpha channel, we need to make sure we do
     // not affect the alpha channel of the type we're using to emulate the format.
     // TODO(jmadill): Implement EXT_draw_buffers http://anglebug.com/2394
@@ -1020,7 +1013,7 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
 
     params.renderAreaHeight = mState.getDimensions().height;
 
-    return renderer->getUtils().clearImage(contextVk, this, params);
+    return contextVk->getUtils().clearImage(contextVk, this, params);
 }
 
 angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
@@ -1035,10 +1028,8 @@ angle::Result FramebufferVk::getCommandBufferForDraw(ContextVk *contextVk,
                                                      vk::CommandBuffer **commandBufferOut,
                                                      vk::RecordingMode *modeOut)
 {
-    RendererVk *renderer = contextVk->getRenderer();
-
     // This will clear the current write operation if it is complete.
-    if (appendToStartedRenderPass(renderer->getCurrentQueueSerial(), commandBufferOut))
+    if (appendToStartedRenderPass(contextVk->getCurrentQueueSerial(), commandBufferOut))
     {
         *modeOut = vk::RecordingMode::Append;
         return angle::Result::Continue;
@@ -1108,7 +1099,6 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
                                             void *pixels)
 {
     TRACE_EVENT0("gpu.angle", "FramebufferVk::readPixelsImpl");
-    RendererVk *renderer = contextVk->getRenderer();
 
     ANGLE_TRY(renderTarget->ensureImageInitialized(contextVk));
 
@@ -1155,7 +1145,7 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
 
     // Triggers a full finish.
     // TODO(jmadill): Don't block on asynchronous readback.
-    ANGLE_TRY(renderer->finish(contextVk));
+    ANGLE_TRY(contextVk->finish());
 
     // The buffer we copied to needs to be invalidated before we read from it because its not been
     // created with the host coherent bit.

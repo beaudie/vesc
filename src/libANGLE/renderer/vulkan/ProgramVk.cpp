@@ -118,7 +118,7 @@ angle::Result SyncDefaultUniformBlock(ContextVk *contextVk,
                                       uint32_t *outOffset,
                                       bool *outBufferModified)
 {
-    dynamicBuffer->releaseRetainedBuffers(contextVk->getRenderer());
+    dynamicBuffer->releaseRetainedBuffers(contextVk);
 
     ASSERT(!bufferData.empty());
     uint8_t *data       = nullptr;
@@ -162,13 +162,13 @@ angle::Result ProgramVk::ShaderInfo::initShaders(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-void ProgramVk::ShaderInfo::release(RendererVk *renderer)
+void ProgramVk::ShaderInfo::release(ContextVk *contextVk)
 {
-    mProgramHelper.release(renderer);
+    mProgramHelper.release(contextVk);
 
     for (vk::RefCounted<vk::ShaderAndSerial> &shader : mShaders)
     {
-        shader.get().destroy(renderer->getDevice());
+        shader.get().destroy(contextVk->getDevice());
     }
 }
 
@@ -191,10 +191,10 @@ ProgramVk::~ProgramVk() = default;
 void ProgramVk::destroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    reset(contextVk->getRenderer());
+    reset(contextVk);
 }
 
-void ProgramVk::reset(RendererVk *renderer)
+void ProgramVk::reset(ContextVk *contextVk)
 {
     for (auto &descriptorSetLayout : mDescriptorSetLayouts)
     {
@@ -204,13 +204,13 @@ void ProgramVk::reset(RendererVk *renderer)
 
     for (auto &uniformBlock : mDefaultUniformBlocks)
     {
-        uniformBlock.storage.release(renderer);
+        uniformBlock.storage.release(contextVk);
     }
 
-    mDefaultShaderInfo.release(renderer);
-    mLineRasterShaderInfo.release(renderer);
+    mDefaultShaderInfo.release(contextVk);
+    mLineRasterShaderInfo.release(contextVk);
 
-    mEmptyUniformBlockStorage.release(renderer);
+    mEmptyUniformBlockStorage.release(contextVk);
 
     mDescriptorSets.clear();
     mUsedDescriptorSetRange.invalidate();
@@ -258,9 +258,8 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
                                   gl::InfoLog &infoLog)
 {
     ContextVk *contextVk = vk::GetImpl(glContext);
-    RendererVk *renderer = contextVk->getRenderer();
 
-    reset(renderer);
+    reset(contextVk);
 
     GlslangWrapper::GetShaderSource(mState, resources, &mVertexSource, &mFragmentSource);
 
@@ -280,8 +279,8 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
     uniformsSetDesc.update(kFragmentUniformsBindingIndex, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
                            1);
 
-    ANGLE_TRY(renderer->getDescriptorSetLayout(
-        contextVk, uniformsSetDesc, &mDescriptorSetLayouts[kUniformsDescriptorSetIndex]));
+    ANGLE_TRY(contextVk->getDescriptorSetLayout(
+        uniformsSetDesc, &mDescriptorSetLayouts[kUniformsDescriptorSetIndex]));
 
     vk::DescriptorSetLayoutDesc texturesSetDesc;
 
@@ -295,14 +294,13 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
         texturesSetDesc.update(textureIndex, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, count);
     }
 
-    ANGLE_TRY(renderer->getDescriptorSetLayout(contextVk, texturesSetDesc,
-                                               &mDescriptorSetLayouts[kTextureDescriptorSetIndex]));
+    ANGLE_TRY(contextVk->getDescriptorSetLayout(
+        texturesSetDesc, &mDescriptorSetLayouts[kTextureDescriptorSetIndex]));
 
     vk::DescriptorSetLayoutDesc driverUniformsSetDesc;
     driverUniformsSetDesc.update(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1);
-    ANGLE_TRY(renderer->getDescriptorSetLayout(
-        contextVk, driverUniformsSetDesc,
-        &mDescriptorSetLayouts[kDriverUniformsDescriptorSetIndex]));
+    ANGLE_TRY(contextVk->getDescriptorSetLayout(
+        driverUniformsSetDesc, &mDescriptorSetLayouts[kDriverUniformsDescriptorSetIndex]));
 
     vk::PipelineLayoutDesc pipelineLayoutDesc;
     pipelineLayoutDesc.updateDescriptorSetLayout(kUniformsDescriptorSetIndex, uniformsSetDesc);
@@ -310,8 +308,8 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
     pipelineLayoutDesc.updateDescriptorSetLayout(kDriverUniformsDescriptorSetIndex,
                                                  driverUniformsSetDesc);
 
-    ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc, mDescriptorSetLayouts,
-                                          &mPipelineLayout));
+    ANGLE_TRY(
+        contextVk->getPipelineLayout(pipelineLayoutDesc, mDescriptorSetLayouts, &mPipelineLayout));
 
     if (!mState.getUniforms().empty())
     {

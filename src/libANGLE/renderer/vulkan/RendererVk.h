@@ -82,7 +82,7 @@ class RendererVk : angle::NonCopyable
     const gl::Limitations &getNativeLimitations() const;
     uint32_t getMaxActiveTextures();
 
-    Serial getCurrentQueueSerial() const { return mCurrentQueueSerial; }
+    Serial getCurrentQueueSerial_() const { return mCurrentQueueSerial; }
 
     uint32_t getQueueFamilyIndex() const { return mCurrentQueueFamilyIndex; }
 
@@ -97,6 +97,16 @@ class RendererVk : angle::NonCopyable
     const vk::Format &getFormat(angle::FormatID formatID) const { return mFormatTable[formatID]; }
 
     angle::Result syncPipelineCacheVk(DisplayVk *displayVk);
+
+    vk::DynamicSemaphorePool *getDynamicSemaphorePool() { return &mSubmitSemaphorePool; }
+
+    // Request a semaphore, that is expected to be signaled externally.  The next submission will
+    // wait on it.
+    angle::Result allocateSubmitWaitSemaphore(vk::Context *context,
+                                              const vk::Semaphore **outSemaphore);
+    // Get the last signaled semaphore to wait on externally.  The semaphore will not be waited on
+    // by next submission.
+    const vk::Semaphore *getSubmitLastSignaledSemaphore(vk::Context *context);
 
     // Issues a new serial for linked shader modules. Used in the pipeline cache.
     Serial issueShaderSerial();
@@ -120,6 +130,9 @@ class RendererVk : angle::NonCopyable
     angle::Result queueSubmit(vk::Context *context,
                               const VkSubmitInfo &submitInfo,
                               const vk::Fence &fence);
+    angle::Result queueWaitIdle(vk::Context *context);
+    VkResult queuePresent(const VkPresentInfoKHR &presentInfo);
+
     Serial nextSerial();
 
     static constexpr size_t kMaxExtensionNames = 200;
@@ -174,6 +187,26 @@ class RendererVk : angle::NonCopyable
 
     // A cache of VkFormatProperties as queried from the device over time.
     std::array<VkFormatProperties, vk::kNumVkFormats> mFormatProperties;
+
+    // mSubmitWaitSemaphores is a list of specifically requested semaphores to be waited on before a
+    // command buffer submission, for example, semaphores signaled by vkAcquireNextImageKHR.
+    // After first use, the list is automatically cleared.  This is a vector to support concurrent
+    // rendering to multiple surfaces.
+    //
+    // Note that with multiple contexts present, this may result in a context waiting on image
+    // acquisition even if it doesn't render to that surface.  If CommandGraphs are separated by
+    // context or share group for example, this could be moved to the one that actually uses the
+    // image.
+    angle::FixedVector<vk::SemaphoreHelper, kMaxExternalSemaphores> mSubmitWaitSemaphores;
+    // mSubmitLastSignaledSemaphore shows which semaphore was last signaled by submission.  This can
+    // be set to nullptr if retrieved to be waited on outside RendererVk, such
+    // as by the surface before presentation.  Each submission waits on the
+    // previously signaled semaphore (as well as any in mSubmitWaitSemaphores)
+    // and allocates a new semaphore to signal.
+    vk::SemaphoreHelper mSubmitLastSignaledSemaphore;
+
+    // A pool of semaphores used to support the aforementioned mid-frame submissions.
+    vk::DynamicSemaphorePool mSubmitSemaphorePool;
 };
 
 uint32_t GetUniformBufferDescriptorCount();

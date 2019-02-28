@@ -25,7 +25,7 @@ namespace vk
 {
 namespace
 {
-angle::Result InitAndBeginCommandBuffer(vk::Context *context,
+angle::Result InitAndBeginCommandBuffer(ContextVk *context,
                                         const CommandPool &commandPool,
                                         const VkCommandBufferInheritanceInfo &inheritanceInfo,
                                         VkCommandBufferUsageFlags flags,
@@ -133,28 +133,28 @@ CommandGraphResource::CommandGraphResource(CommandGraphResourceType resourceType
 
 CommandGraphResource::~CommandGraphResource() = default;
 
-bool CommandGraphResource::isResourceInUse(RendererVk *renderer) const
+bool CommandGraphResource::isResourceInUse(ContextVk *context) const
 {
-    return renderer->isSerialInUse(mStoredQueueSerial);
+    return context->isSerialInUse(mStoredQueueSerial);
 }
 
-angle::Result CommandGraphResource::recordCommands(Context *context,
+angle::Result CommandGraphResource::recordCommands(ContextVk *context,
                                                    CommandBuffer **commandBufferOut)
 {
-    updateQueueSerial(context->getRenderer()->getCurrentQueueSerial());
+    updateQueueSerial(context->getCurrentQueueSerial());
 
     if (!hasChildlessWritingNode() || hasStartedRenderPass())
     {
-        startNewCommands(context->getRenderer());
+        startNewCommands(context);
         return mCurrentWritingNode->beginOutsideRenderPassRecording(
-            context, context->getRenderer()->getCommandPool(), commandBufferOut);
+            context, context->getCommandPool(), commandBufferOut);
     }
 
     CommandBuffer *outsideRenderPassCommands = mCurrentWritingNode->getOutsideRenderPassCommands();
     if (!outsideRenderPassCommands->valid())
     {
         ANGLE_TRY(mCurrentWritingNode->beginOutsideRenderPassRecording(
-            context, context->getRenderer()->getCommandPool(), commandBufferOut));
+            context, context->getCommandPool(), commandBufferOut));
     }
     else
     {
@@ -180,7 +180,7 @@ angle::Result CommandGraphResource::beginRenderPass(ContextVk *contextVk,
     // If a barrier has been inserted in the meantime, stop the command buffer.
     if (!hasChildlessWritingNode())
     {
-        startNewCommands(contextVk->getRenderer());
+        startNewCommands(contextVk);
     }
 
     // Hard-code RenderPass to clear the first render target to the current clear value.
@@ -217,17 +217,17 @@ void CommandGraphResource::addReadDependency(CommandGraphResource *readingResour
     mCurrentReadingNodes.push_back(readingNode);
 }
 
-void CommandGraphResource::finishCurrentCommands(RendererVk *renderer)
+void CommandGraphResource::finishCurrentCommands(ContextVk *contextVk)
 {
-    startNewCommands(renderer);
+    startNewCommands(contextVk);
 }
 
-void CommandGraphResource::startNewCommands(RendererVk *renderer)
+void CommandGraphResource::startNewCommands(ContextVk *contextVk)
 {
     CommandGraphNode *newCommands =
-        renderer->getCommandGraph()->allocateNode(CommandGraphNodeFunction::Generic);
+        contextVk->getCommandGraph()->allocateNode(CommandGraphNodeFunction::Generic);
     newCommands->setDiagnosticInfo(mResourceType, reinterpret_cast<uintptr_t>(this));
-    onWriteImpl(newCommands, renderer->getCurrentQueueSerial());
+    onWriteImpl(newCommands, contextVk->getCurrentQueueSerial());
 }
 
 void CommandGraphResource::onWriteImpl(CommandGraphNode *writingNode, Serial currentSerial)
@@ -279,7 +279,7 @@ CommandBuffer *CommandGraphNode::getOutsideRenderPassCommands()
     return &mOutsideRenderPassCommands;
 }
 
-angle::Result CommandGraphNode::beginOutsideRenderPassRecording(Context *context,
+angle::Result CommandGraphNode::beginOutsideRenderPassRecording(ContextVk *context,
                                                                 const CommandPool &commandPool,
                                                                 CommandBuffer **commandsOut)
 {
@@ -302,7 +302,7 @@ angle::Result CommandGraphNode::beginOutsideRenderPassRecording(Context *context
     return angle::Result::Continue;
 }
 
-angle::Result CommandGraphNode::beginInsideRenderPassRecording(Context *context,
+angle::Result CommandGraphNode::beginInsideRenderPassRecording(ContextVk *context,
                                                                CommandBuffer **commandsOut)
 {
     ASSERT(!mHasChildren);
@@ -310,8 +310,7 @@ angle::Result CommandGraphNode::beginInsideRenderPassRecording(Context *context,
     // Get a compatible RenderPass from the cache so we can initialize the inheritance info.
     // TODO(jmadill): Support query for compatible/conformant render pass. http://anglebug.com/2361
     RenderPass *compatibleRenderPass;
-    ANGLE_TRY(context->getRenderer()->getCompatibleRenderPass(context, mRenderPassDesc,
-                                                              &compatibleRenderPass));
+    ANGLE_TRY(context->getCompatibleRenderPass(mRenderPassDesc, &compatibleRenderPass));
 
     VkCommandBufferInheritanceInfo inheritanceInfo = {};
     inheritanceInfo.sType       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
@@ -323,9 +322,9 @@ angle::Result CommandGraphNode::beginInsideRenderPassRecording(Context *context,
     inheritanceInfo.queryFlags         = 0;
     inheritanceInfo.pipelineStatistics = 0;
 
-    ANGLE_TRY(InitAndBeginCommandBuffer(
-        context, context->getRenderer()->getCommandPool(), inheritanceInfo,
-        VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT, &mInsideRenderPassCommands));
+    ANGLE_TRY(InitAndBeginCommandBuffer(context, context->getCommandPool(), inheritanceInfo,
+                                        VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT,
+                                        &mInsideRenderPassCommands));
 
     *commandsOut = &mInsideRenderPassCommands;
     return angle::Result::Continue;
@@ -646,7 +645,7 @@ void CommandGraph::setNewBarrier(CommandGraphNode *newBarrier)
     mLastBarrierIndex = mNodes.size() - 1;
 }
 
-angle::Result CommandGraph::submitCommands(Context *context,
+angle::Result CommandGraph::submitCommands(ContextVk *context,
                                            Serial serial,
                                            RenderPassCache *renderPassCache,
                                            CommandPool *commandPool,
@@ -689,8 +688,8 @@ angle::Result CommandGraph::submitCommands(Context *context,
 
     ANGLE_VK_TRY(context, primaryCommandBufferOut->begin(beginInfo));
 
-    ANGLE_TRY(context->getRenderer()->traceGpuEvent(
-        context, primaryCommandBufferOut, TRACE_EVENT_PHASE_BEGIN, "Primary Command Buffer"));
+    ANGLE_TRY(context->traceGpuEvent(primaryCommandBufferOut, TRACE_EVENT_PHASE_BEGIN,
+                                     "Primary Command Buffer"));
 
     for (CommandGraphNode *topLevelNode : mNodes)
     {
@@ -725,8 +724,8 @@ angle::Result CommandGraph::submitCommands(Context *context,
         }
     }
 
-    ANGLE_TRY(context->getRenderer()->traceGpuEvent(
-        context, primaryCommandBufferOut, TRACE_EVENT_PHASE_END, "Primary Command Buffer"));
+    ANGLE_TRY(context->traceGpuEvent(primaryCommandBufferOut, TRACE_EVENT_PHASE_END,
+                                     "Primary Command Buffer"));
 
     ANGLE_VK_TRY(context, primaryCommandBufferOut->end());
 
