@@ -161,6 +161,24 @@
     },
     {
       "key": {
+        "uuid": "0f35e8a5_affd6b38",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-02-28T22:55:41Z",
+      "side": 1,
+      "message": "Adapt these to accept wrapped types that is.",
+      "parentUuid": "a750cdf3_b081363a",
+      "revId": "77b26be2ba938c582d0620c490f3a5418e58d2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "86756b5c_b5edd498",
         "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.h",
         "patchSetId": 6
