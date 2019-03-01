@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "71e500ee_b9378b02",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-03-01T14:41:05Z",
+      "side": 1,
+      "message": "Sure, I\u0027ll double check.",
+      "parentUuid": "a625c278_5ba7b304",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 13
+      },
+      "revId": "fe587a3bb5494cad0d780a842fbd68a97aed78f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a7bb5048_2df1537e",
         "filename": "src/third_party/trace_event/trace_event.h",
         "patchSetId": 2
