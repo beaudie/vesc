@@ -1227,6 +1227,20 @@ bool ValidateES2TexImageParameters(Context *context,
 
     if (isSubImage)
     {
+        if ((format != GL_ALPHA) && (format != GL_RGB) && (format != GL_RGBA) &&
+            (format != GL_LUMINANCE) && (format != GL_LUMINANCE_ALPHA))
+        {
+            context->validationError(GL_INVALID_ENUM, kInvalidFormat);
+            return false;
+        }
+
+        if ((type != GL_UNSIGNED_BYTE) && (type != GL_UNSIGNED_SHORT_5_6_5) &&
+            (type != GL_UNSIGNED_SHORT_4_4_4_4) && (type != GL_UNSIGNED_SHORT_5_5_5_1))
+        {
+            context->validationError(GL_INVALID_ENUM, kInvalidType);
+            return false;
+        }
+
         const InternalFormat &textureInternalFormat = *texture->getFormat(target, level).info;
         if (textureInternalFormat.internalFormat == GL_NONE)
         {
@@ -1234,14 +1248,17 @@ bool ValidateES2TexImageParameters(Context *context,
             return false;
         }
 
-        if (format != GL_NONE)
+        if ((textureInternalFormat.internalFormat == GL_RGB565) && (format != GL_RGB))
         {
-            if (GetInternalFormatInfo(format, type).sizedInternalFormat !=
-                textureInternalFormat.sizedInternalFormat)
-            {
-                context->validationError(GL_INVALID_OPERATION, kTypeMismatch);
-                return false;
-            }
+            context->validationError(GL_INVALID_OPERATION, kTypeMismatch);
+            return false;
+        }
+        else if (((textureInternalFormat.internalFormat == GL_RGBA4) ||
+                  (textureInternalFormat.internalFormat == GL_RGB5_A1)) &&
+                 (format != GL_RGBA))
+        {
+            context->validationError(GL_INVALID_OPERATION, kTypeMismatch);
+            return false;
         }
 
         if (static_cast<size_t>(xoffset + width) > texture->getWidth(target, level) ||
