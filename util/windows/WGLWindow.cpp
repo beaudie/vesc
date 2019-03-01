@@ -39,13 +39,42 @@ HMODULE gCurrentModule                             = nullptr;
 
 angle::GenericProc WINAPI GetProcAddressWithFallback(const char *name)
 {
+    if (GetLastError() != ERROR_SUCCESS)
+    {
+        std::cerr << "Unexpected error entering GetProcAddressWithFallback: 0x" << std::hex
+                  << GetLastError() << std::endl;
+    }
     angle::GenericProc proc = reinterpret_cast<angle::GenericProc>(gCurrentWGLGetProcAddress(name));
+    // ERROR_INVALID_HANDLE and ERROR_PROC_NOT_FOUND are expected from wglGetProcAddress,
+    // reset last error if they happen.
+    if (GetLastError() != ERROR_SUCCESS && GetLastError() != ERROR_INVALID_HANDLE &&
+        GetLastError() != ERROR_PROC_NOT_FOUND)
+    {
+        std::cerr << "Unexpected error calling wglGetProcAddress: 0x" << std::hex << GetLastError()
+                  << std::endl;
+    }
+    else
+    {
+        SetLastError(ERROR_SUCCESS);
+    }
+
     if (proc)
     {
         return proc;
     }
 
-    return reinterpret_cast<angle::GenericProc>(GetProcAddress(gCurrentModule, name));
+    proc = reinterpret_cast<angle::GenericProc>(GetProcAddress(gCurrentModule, name));
+    // ERROR_PROC_NOT_FOUND is expected from GetProcAddress, reset last error if it happens.
+    if (GetLastError() != ERROR_SUCCESS && GetLastError() != ERROR_PROC_NOT_FOUND)
+    {
+        std::cerr << "Unexpected error calling GetProcAddress: 0x" << std::hex << GetLastError()
+                  << std::endl;
+    }
+    else
+    {
+        SetLastError(ERROR_SUCCESS);
+    }
+    return proc;
 }
 
 bool HasExtension(const std::vector<std::string> &extensions, const char *ext)
@@ -71,6 +100,12 @@ WGLWindow::~WGLWindow() {}
 // Internally initializes GL resources.
 bool WGLWindow::initializeGL(OSWindow *osWindow, angle::Library *glWindowingLibrary)
 {
+    if (hasError())
+    {
+        std::cerr << "Unexpected error entering WGLWindow::initializeGL." << std::endl;
+        DumpLastWindowsError();
+        return false;
+    }
     glWindowingLibrary->getAs("wglGetProcAddress", &gCurrentWGLGetProcAddress);
 
     if (!gCurrentWGLGetProcAddress)
@@ -179,6 +214,12 @@ bool WGLWindow::initializeGL(OSWindow *osWindow, angle::Library *glWindowingLibr
     }
 
     angle::LoadGLES(GetProcAddressWithFallback);
+    if (hasError())
+    {
+        std::cerr << "Unexpected error leaving WGLWindow::initializeGL." << std::endl;
+        DumpLastWindowsError();
+        return false;
+    }
     return true;
 }
 
