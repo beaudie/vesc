@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffa79923_1aaa4cfe",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-01T16:43:14Z",
+      "side": 1,
+      "message": "parse sounds more like a preparation step. How about execute? or executeCommands? That would mirror vkCmdExecuteCommands.",
+      "range": {
+        "startLine": 453,
+        "startChar": 29,
+        "endLine": 453,
+        "endChar": 34
+      },
+      "revId": "6393a2fdf3168e85083fcd76e062eac46289adbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7f90ac9_48084bf9",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-01T16:43:14Z",
+      "side": 1,
+      "message": "nit: very minor, but could rephrase this as \n\nfor (CommandHeader *currentCommand \u003d mHead; currentCommand; currentCommand \u003d currentCommand-\u003enext)",
+      "range": {
+        "startLine": 455,
+        "startChar": 0,
+        "endLine": 456,
+        "endChar": 26
+      },
+      "revId": "6393a2fdf3168e85083fcd76e062eac46289adbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73401388_b7db8377",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-01T16:43:14Z",
+      "side": 1,
+      "message": "nit: can add UNREACHABLE() here.",
+      "range": {
+        "startLine": 663,
+        "startChar": 15,
+        "endLine": 663,
+        "endChar": 22
+      },
+      "revId": "6393a2fdf3168e85083fcd76e062eac46289adbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8544f6a_edbcf3da",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-01T16:43:14Z",
+      "side": 1,
+      "message": "the command header being 5 bytes is a bit odd. I\u0027d say maybe just forego the bit packing here and let the compiler decide how to pack this.",
+      "range": {
+        "startLine": 288,
+        "startChar": 0,
+        "endLine": 293,
+        "endChar": 2
+      },
+      "revId": "6393a2fdf3168e85083fcd76e062eac46289adbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edc1ca2a_59314284",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-01T16:43:14Z",
+      "side": 1,
+      "message": "nit: should be caps",
+      "range": {
+        "startLine": 434,
+        "startChar": 20,
+        "endLine": 434,
+        "endChar": 30
+      },
+      "revId": "6393a2fdf3168e85083fcd76e062eac46289adbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5326b2f2_e41f4278",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-01T16:43:14Z",
+      "side": 1,
+      "message": "nit: should be caps",
+      "revId": "6393a2fdf3168e85083fcd76e062eac46289adbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "089bf107_6ca11cad",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-01T16:43:14Z",
+      "side": 1,
+      "message": "nit: should be caps",
+      "range": {
+        "startLine": 446,
+        "startChar": 20,
+        "endLine": 446,
+        "endChar": 27
+      },
+      "revId": "6393a2fdf3168e85083fcd76e062eac46289adbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
