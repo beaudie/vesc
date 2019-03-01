@@ -34,6 +34,7 @@ std::string GetShaderExtensionHeader(bool usesMultiview, int numViews, GLenum sh
     {
         return "#extension GL_OVR_multiview : require\nlayout(num_views = " + ToString(numViews) +
                ") in;\n";
+        ;
     }
     return "#extension GL_OVR_multiview : require\n";
 }

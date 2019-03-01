@@ -211,13 +211,6 @@ Error ValidateConfigAttribute(const Display *display, EGLAttrib attribute)
             }
             break;
 
-        case EGL_RECORDABLE_ANDROID:
-            if (!display->getExtensions().recordable)
-            {
-                return EglBadAttribute() << "EGL_ANDROID_recordable is not enabled.";
-            }
-            break;
-
         default:
             return EglBadAttribute() << "Unknown attribute.";
     }
@@ -280,19 +273,6 @@ Error ValidateConfigAttributeValue(const Display *display, EGLAttrib attribute, 
                     break;
                 default:
                     return EglBadAttribute() << "EGL_transparent_type invalid attribute: " << value;
-            }
-            break;
-
-        case EGL_RECORDABLE_ANDROID:
-            switch (value)
-            {
-                case EGL_TRUE:
-                case EGL_FALSE:
-                case EGL_DONT_CARE:
-                    break;
-                default:
-                    return EglBadAttribute()
-                           << "EGL_RECORDABLE_ANDROID invalid attribute: " << value;
             }
             break;
 

@@ -74,7 +74,7 @@ MacroExpander::ScopedMacroReenabler::ScopedMacroReenabler(MacroExpander *expande
 MacroExpander::ScopedMacroReenabler::~ScopedMacroReenabler()
 {
     mExpander->mDeferReenablingMacros = false;
-    for (const std::shared_ptr<Macro> &macro : mExpander->mMacrosToReenable)
+    for (auto macro : mExpander->mMacrosToReenable)
     {
         // Copying the string here by using substr is a check for use-after-free. It detects
         // use-after-free more reliably than just toggling the disabled flag.

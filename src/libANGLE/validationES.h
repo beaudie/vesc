@@ -325,33 +325,20 @@ bool ValidateDrawArraysInstancedANGLE(Context *context,
                                       GLint first,
                                       GLsizei count,
                                       GLsizei primcount);
-bool ValidateDrawArraysInstancedEXT(Context *context,
-                                    PrimitiveMode mode,
-                                    GLint first,
-                                    GLsizei count,
-                                    GLsizei primcount);
 
-bool ValidateDrawElementsInstancedBase(Context *context,
-                                       PrimitiveMode mode,
-                                       GLsizei count,
-                                       DrawElementsType type,
-                                       const void *indices,
-                                       GLsizei primcount);
+bool ValidateDrawElementsInstancedCommon(Context *context,
+                                         PrimitiveMode mode,
+                                         GLsizei count,
+                                         DrawElementsType type,
+                                         const void *indices,
+                                         GLsizei primcount);
 bool ValidateDrawElementsInstancedANGLE(Context *context,
                                         PrimitiveMode mode,
                                         GLsizei count,
                                         DrawElementsType type,
                                         const void *indices,
                                         GLsizei primcount);
-bool ValidateDrawElementsInstancedEXT(Context *context,
-                                      PrimitiveMode mode,
-                                      GLsizei count,
-                                      DrawElementsType type,
-                                      const void *indices,
-                                      GLsizei primcount);
-
 bool ValidateDrawInstancedANGLE(Context *context);
-bool ValidateDrawInstancedEXT(Context *context);
 
 bool ValidateFramebufferTextureBase(Context *context,
                                     GLenum target,
@@ -674,8 +661,8 @@ bool ValidateSampleMaskiBase(Context *context, GLuint maskNumber, GLbitfield mas
 // Utility macro for handling implementation methods inside Validation.
 #define ANGLE_HANDLE_VALIDATION_ERR(X) \
     (void)(X);                         \
-    return false
-#define ANGLE_VALIDATION_TRY(EXPR) ANGLE_TRY_TEMPLATE(EXPR, ANGLE_HANDLE_VALIDATION_ERR)
+    return false;
+#define ANGLE_VALIDATION_TRY(EXPR) ANGLE_TRY_TEMPLATE(EXPR, ANGLE_HANDLE_VALIDATION_ERR);
 
 // We should check with Khronos if returning INVALID_FRAMEBUFFER_OPERATION is OK when querying
 // implementation format info for incomplete framebuffers. It seems like these queries are

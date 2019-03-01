@@ -194,7 +194,7 @@ bool IncludeSameArrayElement(const std::set<std::string> &nameSet, const std::st
 {
     std::vector<unsigned int> subscripts;
     std::string baseName = ParseResourceName(name, &subscripts);
-    for (const std::string &nameInSet : nameSet)
+    for (auto nameInSet : nameSet)
     {
         std::vector<unsigned int> arrayIndices;
         std::string arrayName = ParseResourceName(nameInSet, &arrayIndices);
@@ -1449,7 +1449,7 @@ void ProgramState::updateTransformFeedbackStrides()
     {
         mTransformFeedbackStrides.resize(1);
         size_t totalSize = 0;
-        for (const TransformFeedbackVarying &varying : mLinkedTransformFeedbackVaryings)
+        for (auto &varying : mLinkedTransformFeedbackVaryings)
         {
             totalSize += varying.size() * VariableExternalSize(varying.type);
         }
@@ -1460,7 +1460,7 @@ void ProgramState::updateTransformFeedbackStrides()
         mTransformFeedbackStrides.resize(mLinkedTransformFeedbackVaryings.size());
         for (size_t i = 0; i < mLinkedTransformFeedbackVaryings.size(); i++)
         {
-            TransformFeedbackVarying &varying = mLinkedTransformFeedbackVaryings[i];
+            auto &varying = mLinkedTransformFeedbackVaryings[i];
             mTransformFeedbackStrides[i] =
                 static_cast<GLsizei>(varying.size() * VariableExternalSize(varying.type));
         }

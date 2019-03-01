@@ -50,41 +50,66 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
 {
     ANGLE_TRY(initializeRendererProgram(context, glState));
 
-    GLES1State &gles1State = glState->gles1();
+    const GLES1State &gles1State = glState->gles1();
 
     Program *programObject = getProgram(mProgramState.program);
 
     GLES1UniformBuffers &uniformBuffers = mUniformBuffers;
 
-    // If anything is dirty in gles1 or the common parts of gles1/2, just redo these parts
-    // completely for now.
-
-    // Feature enables
+    if (!gles1State.isClientStateEnabled(ClientVertexArrayType::Normal))
     {
-        setUniform1i(context, programObject, mProgramState.enableAlphaTestLoc,
-                     glState->getEnableFeature(GL_ALPHA_TEST));
-        setUniform1i(context, programObject, mProgramState.enableLightingLoc,
-                     glState->getEnableFeature(GL_LIGHTING));
-        setUniform1i(context, programObject, mProgramState.enableRescaleNormalLoc,
-                     glState->getEnableFeature(GL_RESCALE_NORMAL));
-        setUniform1i(context, programObject, mProgramState.enableNormalizeLoc,
-                     glState->getEnableFeature(GL_NORMALIZE));
-        setUniform1i(context, programObject, mProgramState.enableColorMaterialLoc,
-                     glState->getEnableFeature(GL_COLOR_MATERIAL));
-        setUniform1i(context, programObject, mProgramState.fogEnableLoc,
-                     glState->getEnableFeature(GL_FOG));
-
-        bool enableClipPlanes = false;
-        for (int i = 0; i < kClipPlaneCount; i++)
-        {
-            uniformBuffers.clipPlaneEnables[i] = glState->getEnableFeature(GL_CLIP_PLANE0 + i);
-            enableClipPlanes = enableClipPlanes || uniformBuffers.clipPlaneEnables[i];
-        }
-
-        setUniform1i(context, programObject, mProgramState.enableClipPlanesLoc, enableClipPlanes);
+        const angle::Vector3 normal = gles1State.getCurrentNormal();
+        context->vertexAttrib3f(kNormalAttribIndex, normal.x(), normal.y(), normal.z());
     }
 
-    // Texture unit enables and format info
+    if (!gles1State.isClientStateEnabled(ClientVertexArrayType::Color))
+    {
+        const ColorF color = gles1State.getCurrentColor();
+        context->vertexAttrib4f(kColorAttribIndex, color.red, color.green, color.blue, color.alpha);
+    }
+
+    if (!gles1State.isClientStateEnabled(ClientVertexArrayType::PointSize))
+    {
+        GLfloat pointSize = gles1State.mPointParameters.pointSize;
+        context->vertexAttrib1f(kPointSizeAttribIndex, pointSize);
+    }
+
+    for (int i = 0; i < kTexUnitCount; i++)
+    {
+        if (!gles1State.mTexCoordArrayEnabled[i])
+        {
+            const TextureCoordF texcoord = gles1State.getCurrentTextureCoords(i);
+            context->vertexAttrib4f(kTextureCoordAttribIndexBase + i, texcoord.s, texcoord.t,
+                                    texcoord.r, texcoord.q);
+        }
+    }
+
+    // Matrices
+    {
+        angle::Mat4 proj = gles1State.mProjectionMatrices.back();
+        setUniformMatrix4fv(programObject, mProgramState.projMatrixLoc, 1, GL_FALSE, proj.data());
+
+        angle::Mat4 modelview = gles1State.mModelviewMatrices.back();
+        setUniformMatrix4fv(programObject, mProgramState.modelviewMatrixLoc, 1, GL_FALSE,
+                            modelview.data());
+
+        angle::Mat4 modelviewInvTr = modelview.transpose().inverse();
+        setUniformMatrix4fv(programObject, mProgramState.modelviewInvTrLoc, 1, GL_FALSE,
+                            modelviewInvTr.data());
+
+        Mat4Uniform *textureMatrixBuffer = uniformBuffers.textureMatrices.data();
+
+        for (int i = 0; i < kTexUnitCount; i++)
+        {
+            angle::Mat4 textureMatrix = gles1State.mTextureMatrices[i].back();
+            memcpy(textureMatrixBuffer + i, textureMatrix.data(), sizeof(Mat4Uniform));
+        }
+
+        setUniformMatrix4fv(programObject, mProgramState.textureMatrixLoc, kTexUnitCount, GL_FALSE,
+                            reinterpret_cast<float *>(uniformBuffers.textureMatrices.data()));
+    }
+
+    // Texturing
     {
         std::array<GLint, kTexUnitCount> &tex2DEnables   = uniformBuffers.tex2DEnables;
         std::array<GLint, kTexUnitCount> &texCubeEnables = uniformBuffers.texCubeEnables;
@@ -150,70 +175,7 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
 
         setUniform4fv(programObject, mProgramState.drawTextureNormalizedCropRectLoc, kTexUnitCount,
                       reinterpret_cast<GLfloat *>(cropRectBuffer));
-    }
 
-    // Client state / current vector enables
-    if (gles1State.isDirty(GLES1State::DIRTY_GLES1_CLIENT_STATE_ENABLE) ||
-        gles1State.isDirty(GLES1State::DIRTY_GLES1_CURRENT_VECTOR))
-    {
-        if (!gles1State.isClientStateEnabled(ClientVertexArrayType::Normal))
-        {
-            const angle::Vector3 normal = gles1State.getCurrentNormal();
-            context->vertexAttrib3f(kNormalAttribIndex, normal.x(), normal.y(), normal.z());
-        }
-
-        if (!gles1State.isClientStateEnabled(ClientVertexArrayType::Color))
-        {
-            const ColorF color = gles1State.getCurrentColor();
-            context->vertexAttrib4f(kColorAttribIndex, color.red, color.green, color.blue,
-                                    color.alpha);
-        }
-
-        if (!gles1State.isClientStateEnabled(ClientVertexArrayType::PointSize))
-        {
-            GLfloat pointSize = gles1State.mPointParameters.pointSize;
-            context->vertexAttrib1f(kPointSizeAttribIndex, pointSize);
-        }
-
-        for (int i = 0; i < kTexUnitCount; i++)
-        {
-            if (!gles1State.mTexCoordArrayEnabled[i])
-            {
-                const TextureCoordF texcoord = gles1State.getCurrentTextureCoords(i);
-                context->vertexAttrib4f(kTextureCoordAttribIndexBase + i, texcoord.s, texcoord.t,
-                                        texcoord.r, texcoord.q);
-            }
-        }
-    }
-
-    // Matrices
-    if (gles1State.isDirty(GLES1State::DIRTY_GLES1_MATRICES))
-    {
-        angle::Mat4 proj = gles1State.mProjectionMatrices.back();
-        setUniformMatrix4fv(programObject, mProgramState.projMatrixLoc, 1, GL_FALSE, proj.data());
-
-        angle::Mat4 modelview = gles1State.mModelviewMatrices.back();
-        setUniformMatrix4fv(programObject, mProgramState.modelviewMatrixLoc, 1, GL_FALSE,
-                            modelview.data());
-
-        angle::Mat4 modelviewInvTr = modelview.transpose().inverse();
-        setUniformMatrix4fv(programObject, mProgramState.modelviewInvTrLoc, 1, GL_FALSE,
-                            modelviewInvTr.data());
-
-        Mat4Uniform *textureMatrixBuffer = uniformBuffers.textureMatrices.data();
-
-        for (int i = 0; i < kTexUnitCount; i++)
-        {
-            angle::Mat4 textureMatrix = gles1State.mTextureMatrices[i].back();
-            memcpy(textureMatrixBuffer + i, textureMatrix.data(), sizeof(Mat4Uniform));
-        }
-
-        setUniformMatrix4fv(programObject, mProgramState.textureMatrixLoc, kTexUnitCount, GL_FALSE,
-                            reinterpret_cast<float *>(uniformBuffers.textureMatrices.data()));
-    }
-
-    if (gles1State.isDirty(GLES1State::DIRTY_GLES1_TEXTURE_ENVIRONMENT))
-    {
         for (int i = 0; i < kTexUnitCount; i++)
         {
             const auto &env = gles1State.textureEnvironment(i);
@@ -292,22 +254,27 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
     }
 
     // Alpha test
-    if (gles1State.isDirty(GLES1State::DIRTY_GLES1_ALPHA_TEST))
     {
+        setUniform1i(context, programObject, mProgramState.enableAlphaTestLoc,
+                     glState->getEnableFeature(GL_ALPHA_TEST));
         setUniform1i(context, programObject, mProgramState.alphaFuncLoc,
                      ToGLenum(gles1State.mAlphaTestFunc));
         setUniform1f(programObject, mProgramState.alphaTestRefLoc, gles1State.mAlphaTestRef);
     }
 
     // Shading, materials, and lighting
-    if (gles1State.isDirty(GLES1State::DIRTY_GLES1_SHADE_MODEL))
     {
         setUniform1i(context, programObject, mProgramState.shadeModelFlatLoc,
                      gles1State.mShadeModel == ShadingModel::Flat);
-    }
+        setUniform1i(context, programObject, mProgramState.enableLightingLoc,
+                     glState->getEnableFeature(GL_LIGHTING));
+        setUniform1i(context, programObject, mProgramState.enableRescaleNormalLoc,
+                     glState->getEnableFeature(GL_RESCALE_NORMAL));
+        setUniform1i(context, programObject, mProgramState.enableNormalizeLoc,
+                     glState->getEnableFeature(GL_NORMALIZE));
+        setUniform1i(context, programObject, mProgramState.enableColorMaterialLoc,
+                     glState->getEnableFeature(GL_COLOR_MATERIAL));
 
-    if (gles1State.isDirty(GLES1State::DIRTY_GLES1_MATERIAL))
-    {
         const auto &material = gles1State.mMaterial;
 
         setUniform4fv(programObject, mProgramState.materialAmbientLoc, 1, material.ambient.data());
@@ -318,10 +285,7 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
                       material.emissive.data());
         setUniform1f(programObject, mProgramState.materialSpecularExponentLoc,
                      material.specularExponent);
-    }
 
-    if (gles1State.isDirty(GLES1State::DIRTY_GLES1_LIGHTS))
-    {
         const auto &lightModel = gles1State.mLightModel;
 
         setUniform4fv(programObject, mProgramState.lightModelSceneAmbientLoc, 1,
@@ -375,9 +339,11 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
                       reinterpret_cast<float *>(uniformBuffers.attenuationQuadratics.data()));
     }
 
-    if (gles1State.isDirty(GLES1State::DIRTY_GLES1_FOG))
+    // Fog
     {
         const FogParameters &fog = gles1State.fogParameters();
+        setUniform1i(context, programObject, mProgramState.fogEnableLoc,
+                     glState->getEnableFeature(GL_FOG));
         setUniform1i(context, programObject, mProgramState.fogModeLoc, ToGLenum(fog.mode));
         setUniform1f(programObject, mProgramState.fogDensityLoc, fog.density);
         setUniform1f(programObject, mProgramState.fogStartLoc, fog.start);
@@ -386,7 +352,6 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
     }
 
     // Clip planes
-    if (gles1State.isDirty(GLES1State::DIRTY_GLES1_CLIP_PLANES))
     {
         bool enableClipPlanes = false;
         for (int i = 0; i < kClipPlaneCount; i++)
@@ -426,7 +391,6 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
         setUniform2fv(programObject, mProgramState.drawTextureDimsLoc, 1, mDrawTextureDims);
     }
 
-    gles1State.clearDirty();
     // None of those are changes in sampler, so there is no need to set the GL_PROGRAM dirty.
     // Otherwise, put the dirtying here.
 
@@ -493,8 +457,6 @@ void GLES1Renderer::drawTexture(Context *context,
     AttributesMask prevAttributesMask = glState->gles1().getVertexArraysAttributeMask();
 
     setAttributesEnabled(context, glState, AttributesMask());
-
-    glState->gles1().setAllDirty();
 
     context->drawArrays(PrimitiveMode::Triangles, 0, 6);
 

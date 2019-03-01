@@ -6419,7 +6419,7 @@ bool ValidateTexStorage2DEXT(Context *context,
 
 bool ValidateVertexAttribDivisorANGLE(Context *context, GLuint index, GLuint divisor)
 {
-    if (!context->getExtensions().instancedArraysANGLE)
+    if (!context->getExtensions().instancedArrays)
     {
         context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
@@ -6442,23 +6442,6 @@ bool ValidateVertexAttribDivisorANGLE(Context *context, GLuint index, GLuint div
             ERR() << kAttributeZeroRequiresDivisorLimitation;
             return false;
         }
-    }
-
-    return true;
-}
-
-bool ValidateVertexAttribDivisorEXT(Context *context, GLuint index, GLuint divisor)
-{
-    if (!context->getExtensions().instancedArraysEXT)
-    {
-        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
-        return false;
-    }
-
-    if (index >= MAX_VERTEX_ATTRIBS)
-    {
-        context->validationError(GL_INVALID_VALUE, kIndexExceedsMaxVertexAttribute);
-        return false;
     }
 
     return true;

@@ -2245,7 +2245,7 @@ void StateManagerGL::syncTransformFeedbackState(const gl::Context *context)
         TransformFeedbackGL *transformFeedbackGL =
             GetImplAs<TransformFeedbackGL>(transformFeedback);
         bindTransformFeedback(GL_TRANSFORM_FEEDBACK, transformFeedbackGL->getTransformFeedbackID());
-        transformFeedbackGL->syncActiveState(context, transformFeedback->isActive(),
+        transformFeedbackGL->syncActiveState(transformFeedback->isActive(),
                                              transformFeedback->getPrimitiveMode());
         transformFeedbackGL->syncPausedState(transformFeedback->isPaused());
         mCurrentTransformFeedback = transformFeedbackGL;

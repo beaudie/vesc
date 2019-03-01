@@ -194,14 +194,11 @@ void TIntermExpression::setTypePreservePrecision(const TType &t)
 }
 
 #define REPLACE_IF_IS(node, type, original, replacement) \
-    do                                                   \
+    if (node == original)                                \
     {                                                    \
-        if (node == original)                            \
-        {                                                \
-            node = static_cast<type *>(replacement);     \
-            return true;                                 \
-        }                                                \
-    } while (0)
+        node = static_cast<type *>(replacement);         \
+        return true;                                     \
+    }
 
 size_t TIntermSymbol::getChildCount() const
 {

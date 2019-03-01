@@ -24,7 +24,6 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
-#include "third_party/trace_event/trace_event.h"
 
 namespace rx
 {
@@ -297,9 +296,10 @@ angle::Result FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
 
         ASSERT(colorRenderTarget);
         vk::ImageHelper *image = colorRenderTarget->getImageForWrite(&mFramebuffer);
+        GLint mipLevelToClear  = (attachment->type() == GL_TEXTURE) ? attachment->mipLevel() : 0;
 
         // If we're clearing a cube map face ensure we only clear the selected layer.
-        image->clearColorLayer(modifiedClearColorValue, colorRenderTarget->getLevelIndex(), 1,
+        image->clearColorLayer(modifiedClearColorValue, mipLevelToClear, 1,
                                colorRenderTarget->getLayerIndex(), 1, commandBuffer);
     }
 
@@ -421,30 +421,19 @@ angle::Result FramebufferVk::blitWithCopy(ContextVk *contextVk,
                                           bool blitDepthBuffer,
                                           bool blitStencilBuffer)
 {
-    VkImageAspectFlags aspectMask =
-        vk::GetDepthStencilAspectFlagsForCopy(blitDepthBuffer, blitStencilBuffer);
+    vk::ImageHelper *writeImage = drawRenderTarget->getImageForWrite(&mFramebuffer);
 
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &commandBuffer));
 
-    vk::ImageHelper *writeImage = drawRenderTarget->getImageForWrite(&mFramebuffer);
-    writeImage->changeLayout(writeImage->getAspectFlags(), vk::ImageLayout::TransferDst,
-                             commandBuffer);
-
     vk::ImageHelper *readImage = readRenderTarget->getImageForRead(
-        &mFramebuffer, vk::ImageLayout::TransferSrc, commandBuffer);
+        &mFramebuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, commandBuffer);
 
-    VkImageSubresourceLayers readSubresource = {};
-    readSubresource.aspectMask               = aspectMask;
-    readSubresource.mipLevel                 = 0;
-    readSubresource.baseArrayLayer           = 0;
-    readSubresource.layerCount               = 1;
-
-    VkImageSubresourceLayers writeSubresource = readSubresource;
-
+    VkImageAspectFlags aspectMask =
+        vk::GetDepthStencilAspectFlagsForCopy(blitDepthBuffer, blitStencilBuffer);
     vk::ImageHelper::Copy(readImage, writeImage, gl::Offset(), gl::Offset(),
-                          gl::Extents(copyArea.width, copyArea.height, 1), readSubresource,
-                          writeSubresource, commandBuffer);
+                          gl::Extents(copyArea.width, copyArea.height, 1), aspectMask,
+                          commandBuffer);
     return angle::Result::Continue;
 }
 
@@ -516,8 +505,9 @@ angle::Result FramebufferVk::blitWithReadback(ContextVk *contextVk,
     // destination target.
     vk::ImageHelper *imageForWrite = drawRenderTarget->getImageForWrite(&mFramebuffer);
 
-    imageForWrite->changeLayout(imageForWrite->getAspectFlags(), vk::ImageLayout::TransferDst,
-                                commandBuffer);
+    imageForWrite->changeLayoutWithStages(
+        imageForWrite->getAspectFlags(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, commandBuffer);
 
     commandBuffer->copyBufferToImage(destBufferHandle, imageForWrite->getImage(),
                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyRegion);
@@ -677,7 +667,7 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
         colorBlit ? VK_IMAGE_ASPECT_COLOR_BIT
                   : vk::GetDepthStencilAspectFlags(readImageFormat.textureFormat());
     vk::ImageHelper *srcImage = readRenderTarget->getImageForRead(
-        &mFramebuffer, vk::ImageLayout::TransferSrc, commandBuffer);
+        &mFramebuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, commandBuffer);
 
     const gl::Extents sourceFrameBufferExtents = readRenderTarget->getImageExtents();
     gl::Rectangle readRect                     = readRectIn;
@@ -712,7 +702,9 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
 
     // Requirement of the copyImageToBuffer, the dst image must be in
     // VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL layout.
-    dstImage->changeLayout(aspectMask, vk::ImageLayout::TransferDst, commandBuffer);
+    dstImage->changeLayoutWithStages(aspectMask, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                     VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                                     VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, commandBuffer);
 
     commandBuffer->blitImage(srcImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                              dstImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit,
@@ -1107,7 +1099,6 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
                                             RenderTargetVk *renderTarget,
                                             void *pixels)
 {
-    TRACE_EVENT0("gpu.angle", "FramebufferVk::readPixelsImpl");
     RendererVk *renderer = contextVk->getRenderer();
 
     ANGLE_TRY(renderTarget->ensureImageInitialized(contextVk));
@@ -1117,8 +1108,8 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
 
     // Note that although we're reading from the image, we need to update the layout below.
 
-    vk::ImageHelper *srcImage =
-        renderTarget->getImageForRead(&mFramebuffer, vk::ImageLayout::TransferSrc, commandBuffer);
+    vk::ImageHelper *srcImage = renderTarget->getImageForRead(
+        &mFramebuffer, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, commandBuffer);
 
     const angle::Format *readFormat = &srcImage->getFormat().textureFormat();
 
@@ -1148,7 +1139,7 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
     region.imageSubresource.aspectMask     = copyAspectFlags;
     region.imageSubresource.baseArrayLayer = renderTarget->getLayerIndex();
     region.imageSubresource.layerCount     = 1;
-    region.imageSubresource.mipLevel       = renderTarget->getLevelIndex();
+    region.imageSubresource.mipLevel       = 0;
 
     commandBuffer->copyImageToBuffer(srcImage->getImage(), srcImage->getCurrentLayout(),
                                      bufferHandle, 1, &region);

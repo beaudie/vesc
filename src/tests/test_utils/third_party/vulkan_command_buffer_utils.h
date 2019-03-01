@@ -30,15 +30,7 @@ samples utility functions
 #include <sstream>
 #include <string>
 #include <vector>
-
-#include "common/debug.h"
-
-// glslang has issues with some specific warnings.
-ANGLE_DISABLE_EXTRA_SEMI_WARNING
-
 #include "SPIRV/GlslangToSpv.h"
-
-ANGLE_REENABLE_EXTRA_SEMI_WARNING
 
 #if defined(__linux__) && !defined(__ANDROID__)
 #    define VK_USE_PLATFORM_XCB_KHR
@@ -61,8 +53,8 @@ ANGLE_REENABLE_EXTRA_SEMI_WARNING
 #    define VK_USE_PLATFORM_ANDROID_KHR
 #    include <android/log.h>
 #    include <unistd.h>
-#    include "util/OSWindow.h"
-#    include "util/android/third_party/android_native_app_glue.h"
+#    include "OSWindow.h"
+#    include "android/third_party/android_native_app_glue.h"
 #else
 #    include <unistd.h>
 #    include "vulkan/vk_sdk_platform.h"
@@ -214,6 +206,7 @@ struct sample_info
     std::vector<float> MVP;
 
     VkCommandBuffer cmd;                 // Buffer for initialization commands
+    VkCommandBuffer cmd2;                // Place to hold secondary command buffer
     std::vector<VkCommandBuffer> cmds;   // Place to hold a lot of buffers
     std::vector<VkCommandBuffer> cmd2s;  // Place to hold a lot of 2nd buffers
     VkPipelineLayout pipeline_layout;
@@ -509,7 +502,7 @@ VkBool32 demo_check_layers(const std::vector<layer_properties> &layer_props,
 void init_connection(struct sample_info &info);
 void init_window(struct sample_info &info);
 void init_swapchain_extension(struct sample_info &info);
-void init_command_pool(struct sample_info &info, VkCommandPoolCreateFlags cmd_pool_create_flags);
+void init_command_pool(struct sample_info &info);
 void init_command_buffer(struct sample_info &info);
 void init_command_buffer_array(struct sample_info &info, int numBuffers);
 void init_command_buffer2_array(struct sample_info &info, int numBuffers);
@@ -561,9 +554,6 @@ void destroy_swap_chain(struct sample_info &info);
 void destroy_command_buffer(struct sample_info &info);
 void destroy_command_buffer_array(struct sample_info &info, int numBuffers);
 void destroy_command_buffer2_array(struct sample_info &info, int numBuffers);
-void reset_command_buffer2_array(struct sample_info &info,
-                                 VkCommandBufferResetFlags cmd_buffer_reset_flags);
-void reset_command_pool(struct sample_info &info, VkCommandPoolResetFlags cmd_pool_reset_flags);
 void destroy_command_pool(struct sample_info &info);
 void destroy_device(struct sample_info &info);
 void destroy_instance(struct sample_info &info);

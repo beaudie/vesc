@@ -12,7 +12,6 @@
 
 #include <limits>
 
-#include "common/FixedVector.h"
 #include "common/Optional.h"
 #include "common/PackedEnums.h"
 #include "common/debug.h"
@@ -33,7 +32,6 @@
 namespace egl
 {
 class Display;
-class Image;
 }
 
 namespace gl
@@ -47,7 +45,7 @@ struct SwizzleState;
 struct VertexAttribute;
 class VertexBinding;
 
-ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_OBJECT)
+ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_OBJECT);
 }  // namespace gl
 
 #define ANGLE_PRE_DECLARE_VK_OBJECT(OBJ) class OBJ##Vk;
@@ -56,7 +54,6 @@ namespace rx
 {
 class CommandGraphResource;
 class DisplayVk;
-class ImageVk;
 class RenderTargetVk;
 class RendererVk;
 class RenderPassCache;
@@ -69,17 +66,14 @@ egl::Error ToEGL(Result result, rx::DisplayVk *displayVk, EGLint errorCode);
 
 namespace rx
 {
-ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_VK_OBJECT)
+ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_VK_OBJECT);
 
 const char *VulkanResultString(VkResult result);
-
-constexpr size_t kMaxVulkanLayers = 20;
-using VulkanLayerVector           = angle::FixedVector<const char *, kMaxVulkanLayers>;
-
 // Verify that validation layers are available.
 bool GetAvailableValidationLayers(const std::vector<VkLayerProperties> &layerProps,
                                   bool mustHaveLayers,
-                                  VulkanLayerVector *enabledLayerNames);
+                                  const char *const **enabledLayerNames,
+                                  uint32_t *enabledLayerCount);
 
 extern const char *g_VkLoaderLayersPathEnv;
 extern const char *g_VkICDPathEnv;
@@ -136,12 +130,6 @@ template <>
 struct ImplTypeHelper<egl::Display>
 {
     using ImplType = DisplayVk;
-};
-
-template <>
-struct ImplTypeHelper<egl::Image>
-{
-    using ImplType = ImageVk;
 };
 
 template <typename T>
@@ -259,21 +247,13 @@ class ObjectAndSerial final : angle::NonCopyable
 angle::Result AllocateBufferMemory(vk::Context *context,
                                    VkMemoryPropertyFlags requestedMemoryPropertyFlags,
                                    VkMemoryPropertyFlags *memoryPropertyFlagsOut,
-                                   const void *extraAllocationInfo,
                                    Buffer *buffer,
                                    DeviceMemory *deviceMemoryOut);
 
 angle::Result AllocateImageMemory(vk::Context *context,
                                   VkMemoryPropertyFlags memoryPropertyFlags,
-                                  const void *extraAllocationInfo,
                                   Image *image,
                                   DeviceMemory *deviceMemoryOut);
-angle::Result AllocateImageMemoryWithRequirements(vk::Context *context,
-                                                  VkMemoryPropertyFlags memoryPropertyFlags,
-                                                  const VkMemoryRequirements &memoryRequirements,
-                                                  const void *extraAllocationInfo,
-                                                  Image *image,
-                                                  DeviceMemory *deviceMemoryOut);
 
 using ShaderAndSerial = ObjectAndSerial<ShaderModule>;
 
@@ -395,26 +375,9 @@ extern PFN_vkDestroyDebugUtilsMessengerEXT vkDestroyDebugUtilsMessengerEXT;
 extern PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT;
 extern PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReportCallbackEXT;
 
-// VK_KHR_get_physical_device_properties2
-extern PFN_vkGetPhysicalDeviceProperties2KHR vkGetPhysicalDeviceProperties2KHR;
-
 // Lazily load entry points for each extension as necessary.
 void InitDebugUtilsEXTFunctions(VkInstance instance);
 void InitDebugReportEXTFunctions(VkInstance instance);
-void InitGetPhysicalDeviceProperties2KHRFunctions(VkInstance instance);
-
-#if defined(ANGLE_PLATFORM_FUCHSIA)
-// VK_FUCHSIA_imagepipe_surface
-extern PFN_vkCreateImagePipeSurfaceFUCHSIA vkCreateImagePipeSurfaceFUCHSIA;
-void InitImagePipeSurfaceFUCHSIAFunctions(VkInstance instance);
-#endif
-
-#if defined(ANGLE_PLATFORM_ANDROID)
-// VK_ANDROID_external_memory_android_hardware_buffer
-extern PFN_vkGetAndroidHardwareBufferPropertiesANDROID vkGetAndroidHardwareBufferPropertiesANDROID;
-extern PFN_vkGetMemoryAndroidHardwareBufferANDROID vkGetMemoryAndroidHardwareBufferANDROID;
-void InitExternalMemoryHardwareBufferANDROIDFunctions(VkInstance instance);
-#endif
 
 namespace gl_vk
 {
