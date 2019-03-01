@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fedf9f8b_9d318435",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-01T18:13:08Z",
+      "side": 1,
+      "message": "two suggestions:\n\n1. pass device instead of storing it. we should always have access to it when we\u0027re defering. that\u0027s the general design of the back-end so far.\n2. instead of storing mSharedObject as a pointer, store mRefCounted as a pointer here. that is more in line with how std::shared_ptr works. then you can store mSharedObject as a value type.",
+      "range": {
+        "startLine": 419,
+        "startChar": 0,
+        "endLine": 420,
+        "endChar": 30
+      },
+      "revId": "9bdf642fc42ea1f70521581de72b8e19057249dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
