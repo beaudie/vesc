@@ -177,10 +177,10 @@ void ShaderGL::compileAndCheckShader(const char *source)
     }
 }
 
-void ShaderGL::compileAsync(const std::string &source, std::string &infoLog)
+void ShaderGL::compileAsync(const std::string &source)
 {
-    std::string workerInfoLog;
-    ScopedWorkerContextGL worker(mRenderer.get(), &workerInfoLog);
+    std::string infoLog;
+    ScopedWorkerContextGL worker(mRenderer.get(), &infoLog);
     if (worker())
     {
         compileAndCheckShader(source.c_str());
@@ -189,7 +189,7 @@ void ShaderGL::compileAsync(const std::string &source, std::string &infoLog)
     else
     {
 #if !defined(NDEBUG)
-        infoLog += "bindWorkerContext failed.\n" + workerInfoLog;
+        WARN() << "bindWorkerContext failed." << std::endl << infoLog;
 #endif
     }
 }

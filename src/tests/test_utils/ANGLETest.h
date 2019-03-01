@@ -22,11 +22,6 @@
 #include "util/system_utils.h"
 #include "util/util_gl.h"
 
-namespace angle
-{
-struct SystemInfo;
-}  // namespace angle
-
 #define ASSERT_GL_TRUE(a) ASSERT_EQ(static_cast<GLboolean>(GL_TRUE), (a))
 #define ASSERT_GL_FALSE(a) ASSERT_EQ(static_cast<GLboolean>(GL_FALSE), (a))
 #define EXPECT_GL_TRUE(a) EXPECT_EQ(static_cast<GLboolean>(GL_TRUE), (a))
@@ -250,7 +245,6 @@ class WGLWindow;
 struct TestPlatformContext final : private angle::NonCopyable
 {
     bool ignoreMessages        = false;
-    bool warningsAsErrors      = false;
     ANGLETestBase *currentTest = nullptr;
 };
 
@@ -375,9 +369,6 @@ class ANGLETestBase
 
     void ignoreD3D11SDKLayersWarnings();
 
-    // Allows a test to be more restrictive about platform warnings.
-    void treatPlatformWarningsAsErrors();
-
     static OSWindow *GetOSWindow() { return mOSWindow; }
 
     GLuint get2DTexturedQuadProgram();
@@ -399,7 +390,6 @@ class ANGLETestBase
 
   private:
     void checkD3D11SDKLayersMessages();
-    bool hasNvidiaGPU();
 
     void drawQuad(GLuint program,
                   const std::string &positionAttribName,
@@ -453,14 +443,10 @@ class ANGLETestEnvironment : public testing::Environment
     static angle::Library *GetEGLLibrary();
     static angle::Library *GetWGLLibrary();
 
-    static angle::SystemInfo *GetSystemInfo();
-
   private:
     // For loading entry points.
     static std::unique_ptr<angle::Library> gEGLLibrary;
     static std::unique_ptr<angle::Library> gWGLLibrary;
-
-    static std::unique_ptr<angle::SystemInfo> gSystemInfo;
 };
 
 // This base fixture loads the EGL entry points.
@@ -490,7 +476,14 @@ bool IsD3DSM3();
 bool IsDesktopOpenGL();
 bool IsOpenGLES();
 bool IsOpenGL();
+bool IsOzone();
 bool IsNULL();
+
+// Operating systems
+bool IsAndroid();
+bool IsLinux();
+bool IsOSX();
+bool IsWindows();
 bool IsVulkan();
 
 // Debug/Release

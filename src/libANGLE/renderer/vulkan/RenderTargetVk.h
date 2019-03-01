@@ -14,7 +14,6 @@
 
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/renderer/renderer_utils.h"
-#include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 namespace rx
 {
@@ -38,18 +37,14 @@ class TextureVk;
 class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 {
   public:
-    RenderTargetVk();
+    RenderTargetVk(vk::ImageHelper *image,
+                   vk::ImageView *imageView,
+                   size_t layerIndex,
+                   TextureVk *ownwer);
     ~RenderTargetVk() override;
 
     // Used in std::vector initialization.
     RenderTargetVk(RenderTargetVk &&other);
-
-    void init(vk::ImageHelper *image,
-              vk::ImageView *imageView,
-              size_t levelIndex,
-              size_t layerIndex,
-              TextureVk *owner);
-    void reset();
 
     // Note: RenderTargets should be called in order, with the depth/stencil onRender last.
     void onColorDraw(vk::FramebufferHelper *framebufferVk,
@@ -64,7 +59,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     // getImageForRead will also transition the resource to the given layout.
     vk::ImageHelper *getImageForRead(vk::CommandGraphResource *readingResource,
-                                     vk::ImageLayout layout,
+                                     VkImageLayout layout,
                                      vk::CommandBuffer *commandBuffer);
     vk::ImageHelper *getImageForWrite(vk::CommandGraphResource *writingResource) const;
 
@@ -73,7 +68,6 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     const vk::Format &getImageFormat() const;
     const gl::Extents &getImageExtents() const;
-    size_t getLevelIndex() const { return mLevelIndex; }
     size_t getLayerIndex() const { return mLayerIndex; }
 
     // Special mutator for Surface RenderTargets. Allows the Framebuffer to keep a single
@@ -87,7 +81,6 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     // Note that the draw and read image views are the same, given the requirements of a render
     // target.
     vk::ImageView *mImageView;
-    size_t mLevelIndex;
     size_t mLayerIndex;
 
     // If owned by the texture, this will be non-nullptr, and is used to ensure texture changes

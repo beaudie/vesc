@@ -860,13 +860,15 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
             vk::ImageHelper &image = textureVk->getImage();
 
             // Ensure the image is in read-only layout
-            if (image.isLayoutChangeNecessary(vk::ImageLayout::FragmentShaderReadOnly))
+            if (image.getCurrentLayout() != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL)
             {
                 vk::CommandBuffer *srcLayoutChange;
                 ANGLE_TRY(image.recordCommands(contextVk, &srcLayoutChange));
 
-                image.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT,
-                                   vk::ImageLayout::FragmentShaderReadOnly, srcLayoutChange);
+                image.changeLayoutWithStages(
+                    VK_IMAGE_ASPECT_COLOR_BIT, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                    VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                    srcLayoutChange);
             }
 
             image.addReadDependency(framebuffer);

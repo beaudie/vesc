@@ -163,10 +163,8 @@ typedef void (GL_APIENTRYP PFNGLDELETEQUERIESEXTCONTEXTANGLEPROC)(GLeglContext c
 typedef void (GL_APIENTRYP PFNGLDELETEVERTEXARRAYSOESCONTEXTANGLEPROC)(GLeglContext ctx, GLsizei n, const GLuint *arrays);
 typedef void (GL_APIENTRYP PFNGLDISCARDFRAMEBUFFEREXTCONTEXTANGLEPROC)(GLeglContext ctx, GLenum target, GLsizei numAttachments, const GLenum *attachments);
 typedef void (GL_APIENTRYP PFNGLDRAWARRAYSINSTANCEDANGLECONTEXTANGLEPROC)(GLeglContext ctx, GLenum mode, GLint first, GLsizei count, GLsizei primcount);
-typedef void (GL_APIENTRYP PFNGLDRAWARRAYSINSTANCEDEXTCONTEXTANGLEPROC)(GLeglContext ctx, GLenum mode, GLint start, GLsizei count, GLsizei primcount);
 typedef void (GL_APIENTRYP PFNGLDRAWBUFFERSEXTCONTEXTANGLEPROC)(GLeglContext ctx, GLsizei n, const GLenum *bufs);
 typedef void (GL_APIENTRYP PFNGLDRAWELEMENTSINSTANCEDANGLECONTEXTANGLEPROC)(GLeglContext ctx, GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei primcount);
-typedef void (GL_APIENTRYP PFNGLDRAWELEMENTSINSTANCEDEXTCONTEXTANGLEPROC)(GLeglContext ctx, GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei primcount);
 typedef void (GL_APIENTRYP PFNGLEGLIMAGETARGETRENDERBUFFERSTORAGEOESCONTEXTANGLEPROC)(GLeglContext ctx, GLenum target, GLeglImageOES image);
 typedef void (GL_APIENTRYP PFNGLEGLIMAGETARGETTEXTURE2DOESCONTEXTANGLEPROC)(GLeglContext ctx, GLenum target, GLeglImageOES image);
 typedef void (GL_APIENTRYP PFNGLENDQUERYEXTCONTEXTANGLEPROC)(GLeglContext ctx, GLenum target);
@@ -227,7 +225,6 @@ typedef void (GL_APIENTRYP PFNGLTEXSTORAGE3DEXTCONTEXTANGLEPROC)(GLeglContext ct
 typedef void (GL_APIENTRYP PFNGLTEXSTORAGE3DMULTISAMPLEOESCONTEXTANGLEPROC)(GLeglContext ctx, GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations);
 typedef GLboolean (GL_APIENTRYP PFNGLUNMAPBUFFEROESCONTEXTANGLEPROC)(GLeglContext ctx, GLenum target);
 typedef void (GL_APIENTRYP PFNGLVERTEXATTRIBDIVISORANGLECONTEXTANGLEPROC)(GLeglContext ctx, GLuint index, GLuint divisor);
-typedef void (GL_APIENTRYP PFNGLVERTEXATTRIBDIVISOREXTCONTEXTANGLEPROC)(GLeglContext ctx, GLuint index, GLuint divisor);
 typedef void (GL_APIENTRYP PFNGLBINDUNIFORMLOCATIONCHROMIUMCONTEXTANGLEPROC)(GLeglContext ctx, GLuint program, GLint location, const GLchar* name);
 typedef void (GL_APIENTRYP PFNGLCOVERAGEMODULATIONCHROMIUMCONTEXTANGLEPROC)(GLeglContext ctx, GLenum components);
 typedef void (GL_APIENTRYP PFNGLMATRIXLOADFCHROMIUMCONTEXTANGLEPROC)(GLeglContext ctx, GLenum matrixMode, const GLfloat * matrix);
@@ -493,10 +490,8 @@ GL_APICALL void GL_APIENTRY glDeleteQueriesEXTContextANGLE(GLeglContext ctx, GLs
 GL_APICALL void GL_APIENTRY glDeleteVertexArraysOESContextANGLE(GLeglContext ctx, GLsizei n, const GLuint *arrays);
 GL_APICALL void GL_APIENTRY glDiscardFramebufferEXTContextANGLE(GLeglContext ctx, GLenum target, GLsizei numAttachments, const GLenum *attachments);
 GL_APICALL void GL_APIENTRY glDrawArraysInstancedANGLEContextANGLE(GLeglContext ctx, GLenum mode, GLint first, GLsizei count, GLsizei primcount);
-GL_APICALL void GL_APIENTRY glDrawArraysInstancedEXTContextANGLE(GLeglContext ctx, GLenum mode, GLint start, GLsizei count, GLsizei primcount);
 GL_APICALL void GL_APIENTRY glDrawBuffersEXTContextANGLE(GLeglContext ctx, GLsizei n, const GLenum *bufs);
 GL_APICALL void GL_APIENTRY glDrawElementsInstancedANGLEContextANGLE(GLeglContext ctx, GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei primcount);
-GL_APICALL void GL_APIENTRY glDrawElementsInstancedEXTContextANGLE(GLeglContext ctx, GLenum mode, GLsizei count, GLenum type, const void *indices, GLsizei primcount);
 GL_APICALL void GL_APIENTRY glEGLImageTargetRenderbufferStorageOESContextANGLE(GLeglContext ctx, GLenum target, GLeglImageOES image);
 GL_APICALL void GL_APIENTRY glEGLImageTargetTexture2DOESContextANGLE(GLeglContext ctx, GLenum target, GLeglImageOES image);
 GL_APICALL void GL_APIENTRY glEndQueryEXTContextANGLE(GLeglContext ctx, GLenum target);
@@ -557,7 +552,6 @@ GL_APICALL void GL_APIENTRY glTexStorage3DEXTContextANGLE(GLeglContext ctx, GLen
 GL_APICALL void GL_APIENTRY glTexStorage3DMultisampleOESContextANGLE(GLeglContext ctx, GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations);
 GL_APICALL GLboolean GL_APIENTRY glUnmapBufferOESContextANGLE(GLeglContext ctx, GLenum target);
 GL_APICALL void GL_APIENTRY glVertexAttribDivisorANGLEContextANGLE(GLeglContext ctx, GLuint index, GLuint divisor);
-GL_APICALL void GL_APIENTRY glVertexAttribDivisorEXTContextANGLE(GLeglContext ctx, GLuint index, GLuint divisor);
 GL_APICALL void GL_APIENTRY glBindUniformLocationCHROMIUMContextANGLE(GLeglContext ctx, GLuint program, GLint location, const GLchar* name);
 GL_APICALL void GL_APIENTRY glCoverageModulationCHROMIUMContextANGLE(GLeglContext ctx, GLenum components);
 GL_APICALL void GL_APIENTRY glMatrixLoadfCHROMIUMContextANGLE(GLeglContext ctx, GLenum matrixMode, const GLfloat * matrix);

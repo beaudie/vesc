@@ -18,7 +18,6 @@
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
-#include "third_party/trace_event/trace_event.h"
 
 namespace rx
 {
@@ -262,7 +261,6 @@ angle::Result VertexArrayVk::convertVertexBufferCpu(ContextVk *contextVk,
                                                     size_t attribIndex,
                                                     const vk::Format &vertexFormat)
 {
-    TRACE_EVENT0("gpu.angle", "VertexArrayVk::convertVertexBufferCpu");
     // Needed before reading buffer or we could get stale data.
     ANGLE_TRY(contextVk->getRenderer()->finish(contextVk));
 
@@ -492,7 +490,6 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
 angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
                                                  GLint firstVertex,
                                                  GLsizei vertexOrIndexCount,
-                                                 GLsizei instanceCount,
                                                  gl::DrawElementsType indexTypeOrInvalid,
                                                  const void *indices)
 {
@@ -523,35 +520,22 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
         const vk::Format &vertexFormat = renderer->getFormat(GetVertexFormatID(attrib));
         GLuint stride                  = vertexFormat.bufferFormat().pixelBytes;
 
+        const size_t bytesToAllocate = (startVertex + vertexCount) * stride;
+        const uint8_t *src =
+            static_cast<const uint8_t *>(attrib.pointer) + startVertex * binding.getStride();
+
+        size_t destOffset = startVertex * stride;
         ASSERT(GetVertexInputAlignment(vertexFormat) <= kMaxVertexFormatAlignment);
 
-        const uint8_t *src = static_cast<const uint8_t *>(attrib.pointer);
-        if (binding.getDivisor() > 0)
-        {
-            // instanced attrib
-            size_t count           = UnsignedCeilDivide(instanceCount, binding.getDivisor());
-            size_t bytesToAllocate = count * stride;
-
-            ANGLE_TRY(StreamVertexData(contextVk, &mDynamicVertexData, src, bytesToAllocate, 0,
-                                       count, binding.getStride(), vertexFormat.vertexLoadFunction,
-                                       &mCurrentArrayBuffers[attribIndex],
-                                       &mCurrentArrayBufferOffsets[attribIndex]));
-        }
-        else
-        {
-            // Allocate space for startVertex + vertexCount so indexing will work.  If we don't
-            // start at zero all the indices will be off.
-            // Only vertexCount vertices will be used by the upcoming draw so that is all we copy.
-            size_t bytesToAllocate = (startVertex + vertexCount) * stride;
-            src += startVertex * binding.getStride();
-            size_t destOffset = startVertex * stride;
-
-            ANGLE_TRY(StreamVertexData(
-                contextVk, &mDynamicVertexData, src, bytesToAllocate, destOffset, vertexCount,
-                binding.getStride(), vertexFormat.vertexLoadFunction,
-                &mCurrentArrayBuffers[attribIndex], &mCurrentArrayBufferOffsets[attribIndex]));
-        }
-
+        // Only vertexCount() vertices will be used by the upcoming draw. so that is all we copy.
+        // We allocate space for startVertex + vertexCount so indexing will work.  If we
+        // don't start at zero all the indices will be off.
+        // TODO(fjhenigman): See if we can account for indices being off by adjusting the
+        // offset, thus avoiding wasted memory.
+        ANGLE_TRY(StreamVertexData(
+            contextVk, &mDynamicVertexData, src, bytesToAllocate, destOffset, vertexCount,
+            binding.getStride(), vertexFormat.vertexLoadFunction,
+            &mCurrentArrayBuffers[attribIndex], &mCurrentArrayBufferOffsets[attribIndex]));
         mCurrentArrayBufferHandles[attribIndex] =
             mCurrentArrayBuffers[attribIndex]->getBuffer().getHandle();
     }
@@ -676,7 +660,6 @@ angle::Result VertexArrayVk::updateIndexTranslation(ContextVk *contextVk,
         // as well support the ubyte to ushort case with correct handling of primitive restart.
         // http://anglebug.com/3003
 
-        TRACE_EVENT0("gpu.angle", "VertexArrayVk::updateIndexTranslation");
         // Needed before reading buffer or we could get stale data.
         ANGLE_TRY(renderer->finish(contextVk));
 

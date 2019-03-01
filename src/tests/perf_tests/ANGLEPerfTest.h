@@ -97,7 +97,7 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
     bool mSkipTest;
 
   private:
-    double printResults();
+    void printResults();
 
     unsigned int mStepsToRun;
     unsigned int mNumStepsPerformed;
