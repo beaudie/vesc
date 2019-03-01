@@ -1060,7 +1060,12 @@ void LineLoopHelper::destroy(VkDevice device)
 }
 
 // static
-void LineLoopHelper::Draw(uint32_t count, CommandBuffer *commandBuffer)
+void LineLoopHelper::Draw(uint32_t count,
+#if USE_CUSTOM_CMD_BUFFERS
+                          SecondaryCommandBuffer *commandBuffer)
+#else
+                          CommandBuffer *commandBuffer)
+#endif
 {
     // Our first index is always 0 because that's how we set it up in createIndexBuffer*.
     // Note: this could theoretically overflow and wrap to zero.
@@ -1128,7 +1133,11 @@ angle::Result BufferHelper::copyFromBuffer(Context *context,
                                            const VkBufferCopy &copyRegion)
 {
     // 'recordCommands' will implicitly stop any reads from using the old buffer data.
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
     vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     ANGLE_TRY(recordCommands(context, &commandBuffer));
 
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
@@ -1148,7 +1157,7 @@ angle::Result BufferHelper::copyFromBuffer(Context *context,
         mCurrentReadAccess  = 0;
     }
 
-    commandBuffer->copyBuffer(buffer, mBuffer, 1, &copyRegion);
+    commandBuffer->copyBuffer(buffer.getHandle(), mBuffer.getHandle(), 1, &copyRegion);
 
     return angle::Result::Continue;
 }
@@ -1558,7 +1567,11 @@ bool ImageHelper::isLayoutChangeNecessary(ImageLayout newLayout) const
 
 void ImageHelper::changeLayout(VkImageAspectFlags aspectMask,
                                ImageLayout newLayout,
+#if USE_CUSTOM_CMD_BUFFERS
+                               SecondaryCommandBuffer *commandBuffer)
+#else
                                CommandBuffer *commandBuffer)
+#endif
 {
     if (!isLayoutChangeNecessary(newLayout))
     {
@@ -1571,7 +1584,11 @@ void ImageHelper::changeLayout(VkImageAspectFlags aspectMask,
 void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                        ImageLayout newLayout,
                                        uint32_t newQueueFamilyIndex,
+#if USE_CUSTOM_CMD_BUFFERS
+                                       SecondaryCommandBuffer *commandBuffer)
+#else
                                        CommandBuffer *commandBuffer)
+#endif
 {
     ASSERT(isQueueChangeNeccesary(newQueueFamilyIndex));
     forceChangeLayoutAndQueue(aspectMask, newLayout, newQueueFamilyIndex, commandBuffer);
@@ -1580,7 +1597,11 @@ void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
 void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                             ImageLayout newLayout,
                                             uint32_t newQueueFamilyIndex,
+#if USE_CUSTOM_CMD_BUFFERS
+                                            SecondaryCommandBuffer *commandBuffer)
+#else
                                             CommandBuffer *commandBuffer)
+#endif
 {
 
     const ImageMemoryBarrierData &transitionFrom = kImageMemoryBarrierData[mCurrentLayout];
@@ -1613,8 +1634,11 @@ void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
 void ImageHelper::clearColor(const VkClearColorValue &color,
                              uint32_t baseMipLevel,
                              uint32_t levelCount,
+#if USE_CUSTOM_CMD_BUFFERS
+                             SecondaryCommandBuffer *commandBuffer)
+#else
                              CommandBuffer *commandBuffer)
-
+#endif
 {
     clearColorLayer(color, baseMipLevel, levelCount, 0, mLayerCount, commandBuffer);
 }
@@ -1624,7 +1648,11 @@ void ImageHelper::clearColorLayer(const VkClearColorValue &color,
                                   uint32_t levelCount,
                                   uint32_t baseArrayLayer,
                                   uint32_t layerCount,
+#if USE_CUSTOM_CMD_BUFFERS
+                                  SecondaryCommandBuffer *commandBuffer)
+#else
                                   CommandBuffer *commandBuffer)
+#endif
 {
     ASSERT(valid());
 
@@ -1637,13 +1665,17 @@ void ImageHelper::clearColorLayer(const VkClearColorValue &color,
     range.baseArrayLayer          = baseArrayLayer;
     range.layerCount              = layerCount;
 
-    commandBuffer->clearColorImage(mImage, getCurrentLayout(), color, 1, &range);
+    commandBuffer->clearColorImage(mImage.getHandle(), getCurrentLayout(), color, 1, &range);
 }
 
 void ImageHelper::clearDepthStencil(VkImageAspectFlags imageAspectFlags,
                                     VkImageAspectFlags clearAspectFlags,
                                     const VkClearDepthStencilValue &depthStencil,
+#if USE_CUSTOM_CMD_BUFFERS
+                                    SecondaryCommandBuffer *commandBuffer)
+#else
                                     CommandBuffer *commandBuffer)
+#endif
 {
     ASSERT(valid());
 
@@ -1657,7 +1689,8 @@ void ImageHelper::clearDepthStencil(VkImageAspectFlags imageAspectFlags,
         /*layerCount*/ 1,
     };
 
-    commandBuffer->clearDepthStencilImage(mImage, getCurrentLayout(), depthStencil, 1, &clearRange);
+    commandBuffer->clearDepthStencilImage(mImage.getHandle(), getCurrentLayout(), depthStencil, 1,
+                                          &clearRange);
 }
 
 gl::Extents ImageHelper::getSize(const gl::ImageIndex &index) const
@@ -1678,7 +1711,11 @@ void ImageHelper::Copy(ImageHelper *srcImage,
                        const gl::Extents &copySize,
                        const VkImageSubresourceLayers &srcSubresource,
                        const VkImageSubresourceLayers &dstSubresource,
+#if USE_CUSTOM_CMD_BUFFERS
+                       SecondaryCommandBuffer *commandBuffer)
+#else
                        CommandBuffer *commandBuffer)
+#endif
 {
     ASSERT(commandBuffer->valid() && srcImage->valid() && dstImage->valid());
 
@@ -1698,13 +1735,18 @@ void ImageHelper::Copy(ImageHelper *srcImage,
     region.extent.height  = copySize.height;
     region.extent.depth   = copySize.depth;
 
-    commandBuffer->copyImage(srcImage->getImage(), srcImage->getCurrentLayout(),
-                             dstImage->getImage(), dstImage->getCurrentLayout(), 1, &region);
+    commandBuffer->copyImage(srcImage->getImage().getHandle(), srcImage->getCurrentLayout(),
+                             dstImage->getImage().getHandle(), dstImage->getCurrentLayout(), 1,
+                             &region);
 }
 
 angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint maxLevel)
 {
+#if USE_CUSTOM_CMD_BUFFERS
+    SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
     vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
 
     changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, commandBuffer);
@@ -1759,8 +1801,9 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
         mipWidth  = nextMipWidth;
         mipHeight = nextMipHeight;
 
-        commandBuffer->blitImage(mImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, mImage,
-                                 VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit, VK_FILTER_LINEAR);
+        commandBuffer->blitImage(mImage.getHandle(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                                 mImage.getHandle(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit,
+                                 VK_FILTER_LINEAR);
     }
 
     // Transition the last mip level to the same layout as all the other ones, so we can declare
@@ -2065,7 +2108,11 @@ angle::Result ImageHelper::allocateStagingMemory(ContextVk *contextVk,
 angle::Result ImageHelper::flushStagedUpdates(Context *context,
                                               uint32_t baseLevel,
                                               uint32_t levelCount,
-                                              vk::CommandBuffer *commandBuffer)
+#if USE_CUSTOM_CMD_BUFFERS
+                                              SecondaryCommandBuffer *commandBuffer)
+#else
+                                              CommandBuffer *commandBuffer)
+#endif
 {
     if (mSubresourceUpdates.empty())
     {
@@ -2104,8 +2151,8 @@ angle::Result ImageHelper::flushStagedUpdates(Context *context,
 
         if (update.updateSource == SubresourceUpdate::UpdateSource::Buffer)
         {
-            commandBuffer->copyBufferToImage(update.buffer.bufferHandle, mImage, getCurrentLayout(),
-                                             1, &update.buffer.copyRegion);
+            commandBuffer->copyBufferToImage(update.buffer.bufferHandle, mImage.getHandle(),
+                                             getCurrentLayout(), 1, &update.buffer.copyRegion);
         }
         else
         {
@@ -2114,8 +2161,8 @@ angle::Result ImageHelper::flushStagedUpdates(Context *context,
 
             update.image.image->addReadDependency(this);
 
-            commandBuffer->copyImage(update.image.image->getImage(),
-                                     update.image.image->getCurrentLayout(), mImage,
+            commandBuffer->copyImage(update.image.image->getImage().getHandle(),
+                                     update.image.image->getCurrentLayout(), mImage.getHandle(),
                                      getCurrentLayout(), 1, &update.image.copyRegion);
         }
 

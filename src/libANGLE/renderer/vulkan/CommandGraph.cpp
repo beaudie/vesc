@@ -29,26 +29,35 @@ angle::Result InitAndBeginCommandBuffer(vk::Context *context,
                                         const CommandPool &commandPool,
                                         const VkCommandBufferInheritanceInfo &inheritanceInfo,
                                         VkCommandBufferUsageFlags flags,
+#if USE_CUSTOM_CMD_BUFFERS
+                                        SecondaryCommandBuffer *commandBuffer)
+{
+    ASSERT(!commandBuffer->valid());
+    commandBuffer->setValid();
+    return angle::Result::Continue;
+}
+#else
                                         CommandBuffer *commandBuffer)
 {
     ASSERT(!commandBuffer->valid());
 
     VkCommandBufferAllocateInfo createInfo = {};
-    createInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    createInfo.commandPool                 = commandPool.getHandle();
-    createInfo.level                       = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
-    createInfo.commandBufferCount          = 1;
+    createInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    createInfo.commandPool = commandPool.getHandle();
+    createInfo.level = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
+    createInfo.commandBufferCount = 1;
 
     ANGLE_VK_TRY(context, commandBuffer->init(context->getDevice(), createInfo));
 
     VkCommandBufferBeginInfo beginInfo = {};
-    beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags                    = flags | VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-    beginInfo.pInheritanceInfo         = &inheritanceInfo;
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = flags | VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+    beginInfo.pInheritanceInfo = &inheritanceInfo;
 
     ANGLE_VK_TRY(context, commandBuffer->begin(beginInfo));
     return angle::Result::Continue;
 }
+#endif
 
 const char *GetResourceTypeName(CommandGraphResourceType resourceType,
                                 CommandGraphNodeFunction function)
@@ -139,7 +148,11 @@ bool CommandGraphResource::isResourceInUse(RendererVk *renderer) const
 }
 
 angle::Result CommandGraphResource::recordCommands(Context *context,
+#if USE_CUSTOM_CMD_BUFFERS
+                                                   SecondaryCommandBuffer **commandBufferOut)
+#else
                                                    CommandBuffer **commandBufferOut)
+#endif
 {
     updateQueueSerial(context->getRenderer()->getCurrentQueueSerial());
 
@@ -150,7 +163,12 @@ angle::Result CommandGraphResource::recordCommands(Context *context,
             context, context->getRenderer()->getCommandPool(), commandBufferOut);
     }
 
+#if USE_CUSTOM_CMD_BUFFERS
+    SecondaryCommandBuffer *outsideRenderPassCommands =
+        mCurrentWritingNode->getOutsideRenderPassCommands();
+#else
     CommandBuffer *outsideRenderPassCommands = mCurrentWritingNode->getOutsideRenderPassCommands();
+#endif
     if (!outsideRenderPassCommands->valid())
     {
         ANGLE_TRY(mCurrentWritingNode->beginOutsideRenderPassRecording(
@@ -175,7 +193,11 @@ angle::Result CommandGraphResource::beginRenderPass(ContextVk *contextVk,
                                                     const gl::Rectangle &renderArea,
                                                     const RenderPassDesc &renderPassDesc,
                                                     const std::vector<VkClearValue> &clearValues,
+#if USE_CUSTOM_CMD_BUFFERS
+                                                    SecondaryCommandBuffer **commandBufferOut)
+#else
                                                     CommandBuffer **commandBufferOut)
+#endif
 {
     // If a barrier has been inserted in the meantime, stop the command buffer.
     if (!hasChildlessWritingNode())
@@ -251,9 +273,19 @@ void CommandGraphResource::onWriteImpl(CommandGraphNode *writingNode, Serial cur
 }
 
 // CommandGraphNode implementation.
-CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function)
+CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function
+#if USE_CUSTOM_CMD_BUFFERS
+                                   ,
+                                   angle::PoolAllocator *poolAllocator)
+#else
+                                   )
+#endif
     : mRenderPassClearValues{},
       mFunction(function),
+#if USE_CUSTOM_CMD_BUFFERS
+      mOutsideRenderPassCommands{poolAllocator},
+      mInsideRenderPassCommands{poolAllocator},
+#endif
       mQueryPool(VK_NULL_HANDLE),
       mQueryIndex(0),
       mFenceSyncEvent(VK_NULL_HANDLE),
@@ -267,21 +299,48 @@ CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function)
 CommandGraphNode::~CommandGraphNode()
 {
     mRenderPassFramebuffer.setHandle(VK_NULL_HANDLE);
-
+#if USE_CUSTOM_CMD_BUFFERS
+#else
     // Command buffers are managed by the command pool, so don't need to be freed.
     mOutsideRenderPassCommands.releaseHandle();
     mInsideRenderPassCommands.releaseHandle();
+#endif
 }
 
+#if USE_CUSTOM_CMD_BUFFERS
+SecondaryCommandBuffer *CommandGraphNode::getOutsideRenderPassCommands()
+{
+    ASSERT(!mHasChildren);
+    return &mOutsideRenderPassCommands;
+}
+
+SecondaryCommandBuffer *CommandGraphNode::getInsideRenderPassCommands()
+{
+    ASSERT(!mHasChildren);
+    return &mInsideRenderPassCommands;
+}
+#else
 CommandBuffer *CommandGraphNode::getOutsideRenderPassCommands()
 {
     ASSERT(!mHasChildren);
     return &mOutsideRenderPassCommands;
 }
 
-angle::Result CommandGraphNode::beginOutsideRenderPassRecording(Context *context,
-                                                                const CommandPool &commandPool,
-                                                                CommandBuffer **commandsOut)
+CommandBuffer *CommandGraphNode::getInsideRenderPassCommands()
+{
+    ASSERT(!mHasChildren);
+    return &mInsideRenderPassCommands;
+}
+#endif
+
+angle::Result CommandGraphNode::beginOutsideRenderPassRecording(
+    Context *context,
+    const CommandPool &commandPool,
+#if USE_CUSTOM_CMD_BUFFERS
+    SecondaryCommandBuffer **commandsOut)
+#else
+    CommandBuffer **commandsOut)
+#endif
 {
     ASSERT(!mHasChildren);
 
@@ -303,7 +362,11 @@ angle::Result CommandGraphNode::beginOutsideRenderPassRecording(Context *context
 }
 
 angle::Result CommandGraphNode::beginInsideRenderPassRecording(Context *context,
+#if USE_CUSTOM_CMD_BUFFERS
+                                                               SecondaryCommandBuffer **commandsOut)
+#else
                                                                CommandBuffer **commandsOut)
+#endif
 {
     ASSERT(!mHasChildren);
 
@@ -461,8 +524,12 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
 
             if (mOutsideRenderPassCommands.valid())
             {
+#if USE_CUSTOM_CMD_BUFFERS
+                mOutsideRenderPassCommands.executeCommands(primaryCommandBuffer->getHandle());
+#else
                 ANGLE_VK_TRY(context, mOutsideRenderPassCommands.end());
                 primaryCommandBuffer->executeCommands(1, &mOutsideRenderPassCommands);
+#endif
             }
 
             if (mInsideRenderPassCommands.valid())
@@ -472,8 +539,10 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
                 RenderPass *renderPass = nullptr;
                 ANGLE_TRY(renderPassCache->getCompatibleRenderPass(context, serial, mRenderPassDesc,
                                                                    &renderPass));
-
+#if USE_CUSTOM_CMD_BUFFERS
+#else
                 ANGLE_VK_TRY(context, mInsideRenderPassCommands.end());
+#endif
 
                 VkRenderPassBeginInfo beginInfo = {};
                 beginInfo.sType                 = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -488,9 +557,14 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
                 beginInfo.clearValueCount = mRenderPassDesc.attachmentCount();
                 beginInfo.pClearValues    = mRenderPassClearValues.data();
 
+#if USE_CUSTOM_CMD_BUFFERS
+                primaryCommandBuffer->beginRenderPass(beginInfo, VK_SUBPASS_CONTENTS_INLINE);
+                mInsideRenderPassCommands.executeCommands(primaryCommandBuffer->getHandle());
+#else
                 primaryCommandBuffer->beginRenderPass(
                     beginInfo, VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS);
                 primaryCommandBuffer->executeCommands(1, &mInsideRenderPassCommands);
+#endif
                 primaryCommandBuffer->endRenderPass();
             }
             break;
@@ -601,7 +675,11 @@ const gl::Rectangle &CommandGraphNode::getRenderPassRenderArea() const
 
 // CommandGraph implementation.
 CommandGraph::CommandGraph(bool enableGraphDiagnostics)
-    : mEnableGraphDiagnostics(enableGraphDiagnostics), mLastBarrierIndex(kInvalidNodeIndex)
+    : mEnableGraphDiagnostics(enableGraphDiagnostics),
+#if USE_CUSTOM_CMD_BUFFERS
+      mPoolAllocator{},
+#endif
+      mLastBarrierIndex(kInvalidNodeIndex)
 {}
 
 CommandGraph::~CommandGraph()
@@ -611,8 +689,12 @@ CommandGraph::~CommandGraph()
 
 CommandGraphNode *CommandGraph::allocateNode(CommandGraphNodeFunction function)
 {
+#if USE_CUSTOM_CMD_BUFFERS
     // TODO(jmadill): Use a pool allocator for the CPU node allocations.
+    CommandGraphNode *newCommands = new CommandGraphNode(function, &mPoolAllocator);
+#else
     CommandGraphNode *newCommands = new CommandGraphNode(function);
+#endif
     mNodes.emplace_back(newCommands);
     return newCommands;
 }

@@ -862,7 +862,11 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
             // Ensure the image is in read-only layout
             if (image.isLayoutChangeNecessary(vk::ImageLayout::FragmentShaderReadOnly))
             {
+#if USE_CUSTOM_CMD_BUFFERS
+                vk::SecondaryCommandBuffer *srcLayoutChange;
+#else
                 vk::CommandBuffer *srcLayoutChange;
+#endif
                 ANGLE_TRY(image.recordCommands(contextVk, &srcLayoutChange));
 
                 image.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT,
@@ -911,7 +915,11 @@ void ProgramVk::setDefaultUniformBlocksMinSizeForTesting(size_t minSize)
 }
 
 angle::Result ProgramVk::updateDescriptorSets(ContextVk *contextVk,
+#if USE_CUSTOM_CMD_BUFFERS
+                                              vk::SecondaryCommandBuffer *commandBuffer)
+#else
                                               vk::CommandBuffer *commandBuffer)
+#endif
 {
     // Can probably use better dirty bits here.
 
@@ -928,15 +936,15 @@ angle::Result ProgramVk::updateDescriptorSets(ContextVk *contextVk,
         constexpr uint32_t kShaderTypeMin = static_cast<uint32_t>(gl::kGLES2ShaderTypeMin);
         constexpr uint32_t kShaderTypeMax = static_cast<uint32_t>(gl::kGLES2ShaderTypeMax);
         commandBuffer->bindDescriptorSets(
-            VK_PIPELINE_BIND_POINT_GRAPHICS, mPipelineLayout.get(), low,
+            VK_PIPELINE_BIND_POINT_GRAPHICS, mPipelineLayout.get().getHandle(), low,
             mUsedDescriptorSetRange.length(), &mDescriptorSets[low],
             kShaderTypeMax - kShaderTypeMin + 1, mUniformBlocksOffsets.data() + kShaderTypeMin);
     }
     else
     {
-        commandBuffer->bindDescriptorSets(VK_PIPELINE_BIND_POINT_GRAPHICS, mPipelineLayout.get(),
-                                          low, mUsedDescriptorSetRange.length(),
-                                          &mDescriptorSets[low], 0, nullptr);
+        commandBuffer->bindDescriptorSets(
+            VK_PIPELINE_BIND_POINT_GRAPHICS, mPipelineLayout.get().getHandle(), low,
+            mUsedDescriptorSetRange.length(), &mDescriptorSets[low], 0, nullptr);
     }
 
     return angle::Result::Continue;
