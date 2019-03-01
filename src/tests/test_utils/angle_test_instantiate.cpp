@@ -34,7 +34,10 @@ SystemInfo *GetTestSystemInfo()
     if (sSystemInfo == nullptr)
     {
         sSystemInfo = new SystemInfo;
-        GetSystemInfo(sSystemInfo);
+        if (!GetSystemInfo(sSystemInfo))
+        {
+            std::cerr << "Failed to get system info." << std::endl;
+        }
     }
     return sSystemInfo;
 }
@@ -58,6 +61,12 @@ bool IsANGLEConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
 bool IsWGLConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
 {
 #if defined(ANGLE_PLATFORM_WINDOWS) && defined(ANGLE_USE_UTIL_LOADER)
+    // Disable WGL on Windows Intel due to flakiness. http://anglebug.com/3153
+    if (angle::hasIntelGPU())
+    {
+        return false;
+    }
+
     std::unique_ptr<angle::Library> openglLibrary(angle::OpenSharedLibrary("opengl32"));
 
     WGLWindow *wglWindow = WGLWindow::New(param.majorVersion, param.minorVersion);
@@ -131,6 +140,30 @@ bool IsFuchsia()
 #endif
 }
 
+bool hasNvidiaGPU()
+{
+    for (const GPUDeviceInfo &gpu : GetTestSystemInfo()->gpus)
+    {
+        if (IsNvidia(gpu.vendorId))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool hasIntelGPU()
+{
+    for (const GPUDeviceInfo &gpu : GetTestSystemInfo()->gpus)
+    {
+        if (IsIntel(gpu.vendorId))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters &param)
 {
     VendorID vendorID = systemInfo.gpus[systemInfo.primaryGPUIndex].vendorId;
@@ -178,8 +211,10 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
                         return false;
                 }
             case GLESDriverType::SystemWGL:
-                // AMD does not support the ES compatibility extensions.
-                return vendorID != kVendorID_AMD;
+                // 1. AMD does not support the ES compatibility extensions.
+                // 2. Blacklist OpenGL backend on Windows Intel due to flakiness.
+                //    http://anglebug.com/3153
+                return vendorID != kVendorID_AMD && !angle::hasIntelGPU();
             default:
                 return false;
         }
