@@ -25,6 +25,10 @@ bool IsOzone();
 bool IsWindows();
 bool IsFuchsia();
 
+// GPUs
+bool hasNvidiaGPU();
+bool hasIntelGPU();
+
 bool IsPlatformAvailable(const PlatformParameters &param);
 
 // This functions is used to filter which tests should be registered,

@@ -10,7 +10,6 @@
 #include "ANGLETest.h"
 
 #include "common/platform.h"
-#include "gpu_info_util/SystemInfo.h"
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
 
@@ -325,7 +324,7 @@ ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
             // Workaround if any of the GPUs is Nvidia, since we can't detect current GPU.
             EGLint renderer = params.getRenderer();
             bool needsWindowSwap =
-                hasNvidiaGPU() && mLastRendererType.valid() &&
+                angle::hasNvidiaGPU() && mLastRendererType.valid() &&
                 ((renderer != EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE) !=
                  (mLastRendererType.value() != EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE));
 
@@ -928,18 +927,6 @@ void ANGLETestBase::checkD3D11SDKLayersMessages()
 #endif  // defined(ANGLE_PLATFORM_WINDOWS)
 }
 
-bool ANGLETestBase::hasNvidiaGPU()
-{
-    for (const angle::GPUDeviceInfo &gpu : ANGLETestEnvironment::GetSystemInfo()->gpus)
-    {
-        if (angle::IsNvidia(gpu.vendorId))
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
 bool ANGLETestBase::extensionEnabled(const std::string &extName)
 {
     return CheckExtensionExists(reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS)),
@@ -1303,7 +1290,6 @@ Optional<EGLint> ANGLETestBase::mLastRendererType;
 
 std::unique_ptr<angle::Library> ANGLETestEnvironment::gEGLLibrary;
 std::unique_ptr<angle::Library> ANGLETestEnvironment::gWGLLibrary;
-std::unique_ptr<angle::SystemInfo> ANGLETestEnvironment::gSystemInfo;
 
 void ANGLETestEnvironment::SetUp()
 {
@@ -1338,19 +1324,6 @@ angle::Library *ANGLETestEnvironment::GetWGLLibrary()
     }
 #endif  // defined(ANGLE_USE_UTIL_LOADER) && defined(ANGLE_PLATFORM_WINDOWS)
     return gWGLLibrary.get();
-}
-
-angle::SystemInfo *ANGLETestEnvironment::GetSystemInfo()
-{
-    if (!gSystemInfo)
-    {
-        gSystemInfo = std::make_unique<angle::SystemInfo>();
-        if (!angle::GetSystemInfo(gSystemInfo.get()))
-        {
-            std::cerr << "Failed to get system info." << std::endl;
-        }
-    }
-    return gSystemInfo.get();
 }
 
 void ANGLEProcessTestArgs(int *argc, char *argv[])
