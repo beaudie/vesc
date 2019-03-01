@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff02bf52_9d859e15",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBufferVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-01T14:39:23Z",
+      "side": 1,
+      "message": "nit: can rename this file to just \"SecondaryCommandBuffer.cpp/h\" to match the class",
+      "revId": "66bc871cc34206ecafa08c6bb845d35fe9169de5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
