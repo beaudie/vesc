@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a38cc094_427e1f3f",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-01T21:41:08Z",
+      "side": 1,
+      "message": "Is this if validating this? _GL_INVALID_OPERATION is generated if type is GL_UNSIGNED_SHORT_5_6_5 and format is not GL_RGB._\n\nIf so, `type` and `format` should be validated, and not `internalFormat` and `format`.",
+      "revId": "dd713829385c51527b831fba64bc2b99bf2f86ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f980a66e_9ff045d6",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1258,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-01T21:41:08Z",
+      "side": 1,
+      "message": "Similarly",
+      "revId": "dd713829385c51527b831fba64bc2b99bf2f86ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d04a3f77_065e46d7",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-01T21:41:08Z",
+      "side": 1,
+      "message": "Isn\u0027t this validation missing now? _GL_INVALID_OPERATION is generated if the texture array has not been defined by a previous glTexImage2D or glCopyTexImage2D operation whose internalformat matches the format of glTexSubImage2D._\n\nIt should read something like:\n\nif (textureInternalFormat.internalFormat !\u003d format)\n{\n    context-\u003evalidationError(GL_INVALID_OPERATION, ...);\n    return false;\n}",
+      "revId": "dd713829385c51527b831fba64bc2b99bf2f86ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
