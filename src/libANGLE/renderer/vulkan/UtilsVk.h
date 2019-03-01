@@ -192,7 +192,11 @@ class UtilsVk : angle::NonCopyable
                                const VkDescriptorSet descriptorSet,
                                const void *pushConstants,
                                size_t pushConstantsSize,
+#if USE_CUSTOM_CMD_BUFFERS
+                               vk::SecondaryCommandBuffer *commandBuffer);
+#else
                                vk::CommandBuffer *commandBuffer);
+#endif
 
     // Initializes descriptor set layout, pipeline layout and descriptor pool corresponding to given
     // function, if not already initialized.  Uses setSizes to create the layout.  For example, if
@@ -218,7 +222,11 @@ class UtilsVk : angle::NonCopyable
                                   const vk::ImageView *imageView,
                                   const vk::RenderPassDesc &renderPassDesc,
                                   const gl::Rectangle &renderArea,
+#if USE_CUSTOM_CMD_BUFFERS
+                                  vk::SecondaryCommandBuffer **commandBufferOut);
+#else
                                   vk::CommandBuffer **commandBufferOut);
+#endif
 
     angle::PackedEnumMap<Function, vk::DescriptorSetLayoutPointerArray> mDescriptorSetLayouts;
     angle::PackedEnumMap<Function, vk::BindingPointer<vk::PipelineLayout>> mPipelineLayouts;

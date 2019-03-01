@@ -106,14 +106,24 @@ class FramebufferVk : public FramebufferImpl
     RenderTargetVk *getColorReadRenderTarget() const;
 
     // This will clear the current write operation if it is complete.
-    bool appendToStartedRenderPass(Serial currentQueueSerial, vk::CommandBuffer **commandBufferOut)
+    bool appendToStartedRenderPass(Serial currentQueueSerial,
+#if USE_CUSTOM_CMD_BUFFERS
+                                   vk::SecondaryCommandBuffer **commandBufferOut)
+#else
+                                   vk::CommandBuffer **commandBufferOut)
+#endif
     {
         return mFramebuffer.appendToStartedRenderPass(currentQueueSerial, commandBufferOut);
     }
 
     vk::FramebufferHelper *getFramebuffer() { return &mFramebuffer; }
 
-    angle::Result startNewRenderPass(ContextVk *context, vk::CommandBuffer **commandBufferOut);
+    angle::Result startNewRenderPass(ContextVk *context,
+#if USE_CUSTOM_CMD_BUFFERS
+                                     vk::SecondaryCommandBuffer **commandBufferOut);
+#else
+                                     vk::CommandBuffer **commandBufferOut);
+#endif
 
     RenderTargetVk *getFirstRenderTarget() const;
     GLint getSamples() const;
@@ -127,7 +137,11 @@ class FramebufferVk : public FramebufferImpl
 
     // Helper for appendToStarted/else startNewRenderPass.
     angle::Result getCommandBufferForDraw(ContextVk *contextVk,
+#if USE_CUSTOM_CMD_BUFFERS
+                                          vk::SecondaryCommandBuffer **commandBufferOut,
+#else
                                           vk::CommandBuffer **commandBufferOut,
+#endif
                                           vk::RecordingMode *modeOut);
 
     // The 'in' rectangles must be clipped to the scissor and FBO. The clipping is done in 'blit'.

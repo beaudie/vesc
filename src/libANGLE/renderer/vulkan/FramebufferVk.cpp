@@ -166,7 +166,11 @@ angle::Result FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
     ContextVk *contextVk = vk::GetImpl(context);
 
     // This command buffer is only started once.
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
     vk::CommandBuffer *commandBuffer = nullptr;
+#endif
 
     const gl::FramebufferAttachment *depthAttachment = mState.getDepthAttachment();
     bool clearDepth = (depthAttachment && (mask & GL_DEPTH_BUFFER_BIT) != 0);
@@ -424,7 +428,11 @@ angle::Result FramebufferVk::blitWithCopy(ContextVk *contextVk,
     VkImageAspectFlags aspectMask =
         vk::GetDepthStencilAspectFlagsForCopy(blitDepthBuffer, blitStencilBuffer);
 
-    vk::CommandBuffer *commandBuffer;
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
+    vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &commandBuffer));
 
     vk::ImageHelper *writeImage = drawRenderTarget->getImageForWrite(&mFramebuffer);
@@ -509,7 +517,11 @@ angle::Result FramebufferVk::blitWithReadback(ContextVk *contextVk,
 
     // Reinitialize the commandBuffer after a read pixels because it calls
     // renderer->finish which makes command buffers obsolete.
-    vk::CommandBuffer *commandBuffer;
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
+    vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &commandBuffer));
 
     // We read the bytes of the image in a buffer, now we have to copy them into the
@@ -519,7 +531,7 @@ angle::Result FramebufferVk::blitWithReadback(ContextVk *contextVk,
     imageForWrite->changeLayout(imageForWrite->getAspectFlags(), vk::ImageLayout::TransferDst,
                                 commandBuffer);
 
-    commandBuffer->copyBufferToImage(destBufferHandle, imageForWrite->getImage(),
+    commandBuffer->copyBufferToImage(destBufferHandle, imageForWrite->getImage().getHandle(),
                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyRegion);
 
     mBlitPixelBuffer.releaseRetainedBuffers(renderer);
@@ -669,7 +681,11 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
 
     vk::ImageHelper *dstImage = drawRenderTarget->getImageForWrite(&mFramebuffer);
 
-    vk::CommandBuffer *commandBuffer;
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
+    vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &commandBuffer));
 
     const vk::Format &readImageFormat = readRenderTarget->getImageFormat();
@@ -714,9 +730,9 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
     // VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL layout.
     dstImage->changeLayout(aspectMask, vk::ImageLayout::TransferDst, commandBuffer);
 
-    commandBuffer->blitImage(srcImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                             dstImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit,
-                             gl_vk::GetFilter(filter));
+    commandBuffer->blitImage(srcImage->getImage().getHandle(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                             dstImage->getImage().getHandle(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                             1, &blit, gl_vk::GetFilter(filter));
 
     return angle::Result::Continue;
 }
@@ -903,7 +919,11 @@ angle::Result FramebufferVk::clearWithClearAttachments(
 
     // This command can only happen inside a render pass, so obtain one if its already happening
     // or create a new one if not.
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
     vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     vk::RecordingMode mode           = vk::RecordingMode::Start;
     ANGLE_TRY(getCommandBufferForDraw(contextVk, &commandBuffer, &mode));
 
@@ -1032,7 +1052,11 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
 }
 
 angle::Result FramebufferVk::getCommandBufferForDraw(ContextVk *contextVk,
+#if USE_CUSTOM_CMD_BUFFERS
+                                                     vk::SecondaryCommandBuffer **commandBufferOut,
+#else
                                                      vk::CommandBuffer **commandBufferOut,
+#endif
                                                      vk::RecordingMode *modeOut)
 {
     RendererVk *renderer = contextVk->getRenderer();
@@ -1048,7 +1072,11 @@ angle::Result FramebufferVk::getCommandBufferForDraw(ContextVk *contextVk,
 }
 
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
+#if USE_CUSTOM_CMD_BUFFERS
+                                                vk::SecondaryCommandBuffer **commandBufferOut)
+#else
                                                 vk::CommandBuffer **commandBufferOut)
+#endif
 {
     vk::Framebuffer *framebuffer = nullptr;
     ANGLE_TRY(getFramebuffer(contextVk, &framebuffer));
@@ -1056,7 +1084,11 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     // TODO(jmadill): Proper clear value implementation. http://anglebug.com/2361
     std::vector<VkClearValue> attachmentClearValues;
 
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *writeCommands = nullptr;
+#else
     vk::CommandBuffer *writeCommands = nullptr;
+#endif
     ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &writeCommands));
 
     vk::RenderPassDesc renderPassDesc;
@@ -1112,7 +1144,11 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
 
     ANGLE_TRY(renderTarget->ensureImageInitialized(contextVk));
 
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
     vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &commandBuffer));
 
     // Note that although we're reading from the image, we need to update the layout below.
@@ -1150,7 +1186,7 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
     region.imageSubresource.layerCount     = 1;
     region.imageSubresource.mipLevel       = renderTarget->getLevelIndex();
 
-    commandBuffer->copyImageToBuffer(srcImage->getImage(), srcImage->getCurrentLayout(),
+    commandBuffer->copyImageToBuffer(srcImage->getImage().getHandle(), srcImage->getCurrentLayout(),
                                      bufferHandle, 1, &region);
 
     // Triggers a full finish.

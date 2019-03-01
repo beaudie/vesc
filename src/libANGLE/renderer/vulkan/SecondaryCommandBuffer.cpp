@@ -19,13 +19,15 @@ namespace vk
 template <class StructType>
 StructType *SecondaryCommandBuffer::initCommand(CommandID cmdID, size_t variableSize)
 {
+    // As soon as a cmd is initialized, the cmd buffer is valid
+    mValid                = true;
     size_t paramSize      = sizeof(StructType);
     size_t completeSize   = sizeof(CommandHeader) + paramSize + variableSize;
     CommandHeader *header = static_cast<CommandHeader *>(mAllocator->allocate(completeSize));
     // Update cmd ID in header
     header->id   = cmdID;
     header->next = nullptr;
-    // Update mHead ptr
+    // Update mHead ptr if this is the first cmd
     mHead = (mHead == nullptr) ? header : mHead;
     // Update prev cmd's "next" ptr and mLast ptr
     if (mLast)
@@ -356,6 +358,7 @@ void SecondaryCommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask,
         CommandID::PipelinBarrier, memBarrierSize + buffBarrierSize + imgBarrierSize);
     paramStruct->srcStageMask             = srcStageMask;
     paramStruct->dstStageMask             = dstStageMask;
+    paramStruct->dependencyFlags          = dependencyFlags;
     paramStruct->memoryBarrierCount       = memoryBarrierCount;
     paramStruct->bufferMemoryBarrierCount = bufferMemoryBarrierCount;
     paramStruct->imageMemoryBarrierCount  = imageMemoryBarrierCount;
