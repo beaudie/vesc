@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "83c68583_aaef3a17",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-03-01T18:05:49Z",
+      "side": 1,
+      "message": "Okay, this time I get good behavior. I must have had something confusing things last time.\nYay, this change makes sense.",
+      "parentUuid": "71e500ee_b9378b02",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 13
+      },
+      "revId": "fe587a3bb5494cad0d780a842fbd68a97aed78f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a7bb5048_2df1537e",
         "filename": "src/third_party/trace_event/trace_event.h",
         "patchSetId": 2
