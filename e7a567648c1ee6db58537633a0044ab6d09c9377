@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2532a650_18d74cbf",
+        "filename": "doc/Orientation.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-01T17:26:47Z",
+      "side": 1,
+      "message": "Is it ok for this to become public?\n\nAlso, oops, it\u0027s already in gerrit.",
+      "revId": "e7a567648c1ee6db58537633a0044ab6d09c9377",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "681d5a96_5e782d49",
+        "filename": "doc/Starter-Projects.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-01T17:26:47Z",
+      "side": 1,
+      "message": "I presume whoever needs this can gain access?",
+      "revId": "e7a567648c1ee6db58537633a0044ab6d09c9377",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
