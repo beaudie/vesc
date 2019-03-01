@@ -427,6 +427,9 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     // Parse the cmds in this cmd buffer into given primary cmd buffer for execution
     void executeCommands(VkCommandBuffer cmdBuffer);
 
+    // TODO: This is a temp hack to make integration with old vk::CommandBuffers easier
+    bool valid() { return true; }
+
   private:
     // Allocate and initialize memory for given commandID & variable param size
     //  returning a pointer to the start of the commands parameter data and updating

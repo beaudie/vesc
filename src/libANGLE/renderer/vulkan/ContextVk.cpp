@@ -203,7 +203,11 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    gl::DrawElementsType indexTypeOrNone,
                                    const void *indices,
                                    DirtyBits dirtyBitMask,
+#if USE_CUSTOM_CMD_BUFFERS
+                                   vk::SecondaryCommandBuffer **commandBufferOut)
+#else
                                    vk::CommandBuffer **commandBufferOut)
+#endif
 {
     // Set any dirty bits that depend on draw call parameters or other objects.
     if (mode != mCurrentDrawMode)
@@ -270,7 +274,11 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
                                           GLsizei instanceCount,
                                           gl::DrawElementsType indexType,
                                           const void *indices,
+#if USE_CUSTOM_CMD_BUFFERS
+                                          vk::SecondaryCommandBuffer **commandBufferOut)
+#else
                                           vk::CommandBuffer **commandBufferOut)
+#endif
 {
     if (indexType != mCurrentDrawElementsType)
     {
@@ -309,7 +317,11 @@ angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
                                            GLsizei vertexOrIndexCount,
                                            gl::DrawElementsType indexTypeOrInvalid,
                                            const void *indices,
+#if USE_CUSTOM_CMD_BUFFERS
+                                           vk::SecondaryCommandBuffer **commandBufferOut)
+#else
                                            vk::CommandBuffer **commandBufferOut)
+#endif
 {
     ANGLE_TRY(mVertexArray->handleLineLoop(this, firstVertex, vertexOrIndexCount,
                                            indexTypeOrInvalid, indices));
@@ -322,7 +334,11 @@ angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
 }
 
 angle::Result ContextVk::handleDirtyDefaultAttribs(const gl::Context *context,
+#if USE_CUSTOM_CMD_BUFFERS
+                                                   vk::SecondaryCommandBuffer *commandBuffer)
+#else
                                                    vk::CommandBuffer *commandBuffer)
+#endif
 {
     ASSERT(mDirtyDefaultAttribsMask.any());
 
@@ -336,7 +352,11 @@ angle::Result ContextVk::handleDirtyDefaultAttribs(const gl::Context *context,
 }
 
 angle::Result ContextVk::handleDirtyPipeline(const gl::Context *context,
+#if USE_CUSTOM_CMD_BUFFERS
+                                             vk::SecondaryCommandBuffer *commandBuffer)
+#else
                                              vk::CommandBuffer *commandBuffer)
+#endif
 {
     if (!mCurrentPipeline)
     {
@@ -367,7 +387,8 @@ angle::Result ContextVk::handleDirtyPipeline(const gl::Context *context,
         mGraphicsPipelineTransition.reset();
     }
 
-    commandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline->getPipeline());
+    commandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                mCurrentPipeline->getPipeline().getHandle());
 
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentPipeline && mCurrentPipeline->valid());
@@ -376,7 +397,11 @@ angle::Result ContextVk::handleDirtyPipeline(const gl::Context *context,
 }
 
 angle::Result ContextVk::handleDirtyTextures(const gl::Context *context,
+#if USE_CUSTOM_CMD_BUFFERS
+                                             vk::SecondaryCommandBuffer *commandBuffer)
+#else
                                              vk::CommandBuffer *commandBuffer)
+#endif
 {
     ANGLE_TRY(updateActiveTextures(context));
 
@@ -388,7 +413,11 @@ angle::Result ContextVk::handleDirtyTextures(const gl::Context *context,
 }
 
 angle::Result ContextVk::handleDirtyVertexBuffers(const gl::Context *context,
+#if USE_CUSTOM_CMD_BUFFERS
+                                                  vk::SecondaryCommandBuffer *commandBuffer)
+#else
                                                   vk::CommandBuffer *commandBuffer)
+#endif
 {
     uint32_t maxAttrib = mProgram->getState().getMaxActiveAttribLocation();
     const gl::AttribArray<VkBuffer> &bufferHandles = mVertexArray->getCurrentArrayBufferHandles();
@@ -414,7 +443,11 @@ angle::Result ContextVk::handleDirtyVertexBuffers(const gl::Context *context,
 }
 
 angle::Result ContextVk::handleDirtyIndexBuffer(const gl::Context *context,
+#if USE_CUSTOM_CMD_BUFFERS
+                                                vk::SecondaryCommandBuffer *commandBuffer)
+#else
                                                 vk::CommandBuffer *commandBuffer)
+#endif
 {
     vk::BufferHelper *elementArrayBuffer = mVertexArray->getCurrentElementArrayBuffer();
     ASSERT(elementArrayBuffer != nullptr);
@@ -430,13 +463,17 @@ angle::Result ContextVk::handleDirtyIndexBuffer(const gl::Context *context,
 }
 
 angle::Result ContextVk::handleDirtyDescriptorSets(const gl::Context *context,
+#if USE_CUSTOM_CMD_BUFFERS
+                                                   vk::SecondaryCommandBuffer *commandBuffer)
+#else
                                                    vk::CommandBuffer *commandBuffer)
+#endif
 {
     ANGLE_TRY(mProgram->updateDescriptorSets(this, commandBuffer));
 
     // Bind the graphics descriptor sets.
     commandBuffer->bindDescriptorSets(
-        VK_PIPELINE_BIND_POINT_GRAPHICS, mProgram->getPipelineLayout(),
+        VK_PIPELINE_BIND_POINT_GRAPHICS, mProgram->getPipelineLayout().getHandle(),
         kDriverUniformsDescriptorSetIndex, 1, &mDriverUniformsDescriptorSet, 0, nullptr);
     return angle::Result::Continue;
 }
@@ -446,7 +483,11 @@ angle::Result ContextVk::drawArrays(const gl::Context *context,
                                     GLint first,
                                     GLsizei count)
 {
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
     vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     uint32_t clampedVertexCount      = gl::GetClampedVertexCount<uint32_t>(count);
 
     if (mode == gl::PrimitiveMode::LineLoop)
@@ -478,7 +519,11 @@ angle::Result ContextVk::drawArraysInstanced(const gl::Context *context,
         return angle::Result::Stop;
     }
 
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
     vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     ANGLE_TRY(setupDraw(context, mode, first, count, instances, gl::DrawElementsType::InvalidEnum,
                         nullptr, mNonIndexedDirtyBitsMask, &commandBuffer));
     commandBuffer->draw(gl::GetClampedVertexCount<uint32_t>(count), instances, first, 0);
@@ -491,7 +536,11 @@ angle::Result ContextVk::drawElements(const gl::Context *context,
                                       gl::DrawElementsType type,
                                       const void *indices)
 {
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
     vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     if (mode == gl::PrimitiveMode::LineLoop)
     {
         ANGLE_TRY(setupLineLoopDraw(context, mode, 0, count, type, indices, &commandBuffer));
@@ -519,8 +568,11 @@ angle::Result ContextVk::drawElementsInstanced(const gl::Context *context,
         ANGLE_VK_UNREACHABLE(this);
         return angle::Result::Stop;
     }
-
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
     vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     ANGLE_TRY(setupIndexedDraw(context, mode, count, instances, type, indices, &commandBuffer));
     commandBuffer->drawIndexed(count, instances, 0, 0, 0);
     return angle::Result::Continue;
@@ -1150,7 +1202,11 @@ VkColorComponentFlags ContextVk::getClearColorMask() const
 }
 
 angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
+#if USE_CUSTOM_CMD_BUFFERS
+                                                   vk::SecondaryCommandBuffer *commandBuffer)
+#else
                                                    vk::CommandBuffer *commandBuffer)
+#endif
 {
     // Release any previously retained buffers.
     mDriverUniformsBuffer.releaseRetainedBuffers(mRenderer);

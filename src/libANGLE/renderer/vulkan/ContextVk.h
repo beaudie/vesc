@@ -224,7 +224,11 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
 
     using DirtyBitHandler = angle::Result (ContextVk::*)(const gl::Context *,
+#if USE_CUSTOM_CMD_BUFFERS
+                                                         vk::SecondaryCommandBuffer *commandBuffer);
+#else
                                                          vk::CommandBuffer *commandBuffer);
+#endif
 
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mDirtyBitHandlers;
 
@@ -236,21 +240,33 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
                             gl::DrawElementsType indexTypeOrInvalid,
                             const void *indices,
                             DirtyBits dirtyBitMask,
+#if USE_CUSTOM_CMD_BUFFERS
+                            vk::SecondaryCommandBuffer **commandBufferOut);
+#else
                             vk::CommandBuffer **commandBufferOut);
+#endif
     angle::Result setupIndexedDraw(const gl::Context *context,
                                    gl::PrimitiveMode mode,
                                    GLsizei indexCount,
                                    GLsizei instanceCount,
                                    gl::DrawElementsType indexType,
                                    const void *indices,
+#if USE_CUSTOM_CMD_BUFFERS
+                                   vk::SecondaryCommandBuffer **commandBufferOut);
+#else
                                    vk::CommandBuffer **commandBufferOut);
+#endif
     angle::Result setupLineLoopDraw(const gl::Context *context,
                                     gl::PrimitiveMode mode,
                                     GLint firstVertex,
                                     GLsizei vertexOrIndexCount,
                                     gl::DrawElementsType indexTypeOrInvalid,
                                     const void *indices,
+#if USE_CUSTOM_CMD_BUFFERS
+                                    vk::SecondaryCommandBuffer **commandBufferOut);
+#else
                                     vk::CommandBuffer **commandBufferOut);
+#endif
 
     void updateViewport(FramebufferVk *framebufferVk,
                         const gl::Rectangle &viewport,
@@ -270,6 +286,22 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     void invalidateCurrentTextures();
     void invalidateDriverUniforms();
 
+#if USE_CUSTOM_CMD_BUFFERS
+    angle::Result handleDirtyDefaultAttribs(const gl::Context *context,
+                                            vk::SecondaryCommandBuffer *commandBuffer);
+    angle::Result handleDirtyPipeline(const gl::Context *context,
+                                      vk::SecondaryCommandBuffer *commandBuffer);
+    angle::Result handleDirtyTextures(const gl::Context *context,
+                                      vk::SecondaryCommandBuffer *commandBuffer);
+    angle::Result handleDirtyVertexBuffers(const gl::Context *context,
+                                           vk::SecondaryCommandBuffer *commandBuffer);
+    angle::Result handleDirtyIndexBuffer(const gl::Context *context,
+                                         vk::SecondaryCommandBuffer *commandBuffer);
+    angle::Result handleDirtyDriverUniforms(const gl::Context *context,
+                                            vk::SecondaryCommandBuffer *commandBuffer);
+    angle::Result handleDirtyDescriptorSets(const gl::Context *context,
+                                            vk::SecondaryCommandBuffer *commandBuffer);
+#else
     angle::Result handleDirtyDefaultAttribs(const gl::Context *context,
                                             vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyPipeline(const gl::Context *context, vk::CommandBuffer *commandBuffer);
@@ -282,6 +314,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
                                             vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyDescriptorSets(const gl::Context *context,
                                             vk::CommandBuffer *commandBuffer);
+#endif
 
     vk::PipelineHelper *mCurrentPipeline;
     gl::PrimitiveMode mCurrentDrawMode;
