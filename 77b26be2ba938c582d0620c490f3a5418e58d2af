@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "9228a33e_d499c953",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-03-01T00:04:29Z",
+      "side": 1,
+      "message": "Inferred template argument. Magical.",
+      "parentUuid": "76b26695_3195ca15",
+      "revId": "77b26be2ba938c582d0620c490f3a5418e58d2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b295133_6afeb0aa",
         "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
         "patchSetId": 6
@@ -190,6 +208,30 @@
       "writtenOn": "2019-02-28T22:46:09Z",
       "side": 1,
       "message": "how about SecondaryBuffer?",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 20
+      },
+      "revId": "77b26be2ba938c582d0620c490f3a5418e58d2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9102ba8_b960776b",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-03-01T00:04:29Z",
+      "side": 1,
+      "message": "Without \"Command\" could be some confusion with vk::Buffer. I\u0027m up for a name change, for sure, though. Will ruminate on it a bit longer as I plumb them in.",
+      "parentUuid": "86756b5c_b5edd498",
       "range": {
         "startLine": 6,
         "startChar": 3,
