@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6b867b4c_686c124f",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-01T14:08:37Z",
+      "side": 1,
+      "message": "nit: StructType should be capitalized since it\u0027s a type.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 11
+      },
+      "revId": "03b0858ff7457701ebe48966ee6884be29ad2403",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a93f96ac_bd4dcd4c",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-01T14:08:37Z",
+      "side": 1,
+      "message": "nit: prefer data members after types and methods.\n\nhttps://google.github.io/styleguide/cppguide.html#Declaration_Order",
+      "range": {
+        "startLine": 431,
+        "startChar": 0,
+        "endLine": 458,
+        "endChar": 51
+      },
+      "revId": "03b0858ff7457701ebe48966ee6884be29ad2403",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -241,6 +241,30 @@
       "revId": "77b26be2ba938c582d0620c490f3a5418e58d2af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "517f7e61_21d80d07",
+        "filename": "src/libANGLE/renderer/vulkan/LiteCommandBufferVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-01T14:08:37Z",
+      "side": 1,
+      "message": "Maybe just SecondaryCommandBuffer ?",
+      "parentUuid": "f9102ba8_b960776b",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 20
+      },
+      "revId": "77b26be2ba938c582d0620c490f3a5418e58d2af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
