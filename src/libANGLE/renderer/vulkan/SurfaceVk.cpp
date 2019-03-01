@@ -13,6 +13,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Surface.h"
+#include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/FramebufferVk.h"
@@ -395,7 +396,10 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
     // Select appropriate present mode based on vsync parameter.  Default to 1 (FIFO), though it
     // will get clamped to the min/max values specified at display creation time.
-    setSwapInterval(1);
+    // VK_PRESENT_MODE_FIFO_KHR causes random timeouts on Linux Intel. http://anglebug.com/3153
+    bool disableFifoPresentMode =
+        IsLinux() && IsIntel(renderer->getPhysicalDeviceProperties().vendorID);
+    setSwapInterval(disableFifoPresentMode ? 0 : 1);
 
     // Default to identity transform.
     mPreTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
