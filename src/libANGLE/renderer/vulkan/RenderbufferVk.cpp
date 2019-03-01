@@ -93,7 +93,11 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
                                         &mImageView, 0, 1));
 
         // TODO(jmadill): Fold this into the RenderPass load/store ops. http://anglebug.com/2361
+#if USE_CUSTOM_CMD_BUFFERS
+        vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
         vk::CommandBuffer *commandBuffer = nullptr;
+#endif
         ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
 
         if (isDepthOrStencilFormat)
@@ -143,7 +147,11 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
     uint32_t rendererQueueFamilyIndex = contextVk->getRenderer()->getQueueFamilyIndex();
     if (mImage->isQueueChangeNeccesary(rendererQueueFamilyIndex))
     {
+#if USE_CUSTOM_CMD_BUFFERS
+        vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
         vk::CommandBuffer *commandBuffer = nullptr;
+#endif
         ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
         mImage->changeLayoutAndQueue(aspect, vk::ImageLayout::ColorAttachment,
                                      rendererQueueFamilyIndex, commandBuffer);

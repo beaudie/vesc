@@ -53,10 +53,17 @@ void RenderTargetVk::reset()
 }
 
 void RenderTargetVk::onColorDraw(vk::FramebufferHelper *framebufferVk,
+#if USE_CUSTOM_CMD_BUFFERS
+                                 vk::SecondaryCommandBuffer *commandBuffer,
+                                 vk::RenderPassDesc *renderPassDesc)
+{
+    ASSERT(commandBuffer != nullptr);
+#else
                                  vk::CommandBuffer *commandBuffer,
                                  vk::RenderPassDesc *renderPassDesc)
 {
     ASSERT(commandBuffer->valid());
+#endif
     ASSERT(!mImage->getFormat().textureFormat().hasDepthOrStencilBits());
 
     // Store the attachment info in the renderPassDesc.
@@ -71,10 +78,17 @@ void RenderTargetVk::onColorDraw(vk::FramebufferHelper *framebufferVk,
 }
 
 void RenderTargetVk::onDepthStencilDraw(vk::FramebufferHelper *framebufferVk,
+#if USE_CUSTOM_CMD_BUFFERS
+                                        vk::SecondaryCommandBuffer *commandBuffer,
+                                        vk::RenderPassDesc *renderPassDesc)
+{
+    ASSERT(commandBuffer != nullptr);
+#else
                                         vk::CommandBuffer *commandBuffer,
                                         vk::RenderPassDesc *renderPassDesc)
 {
     ASSERT(commandBuffer->valid());
+#endif
     ASSERT(mImage->getFormat().textureFormat().hasDepthOrStencilBits());
 
     // Store the attachment info in the renderPassDesc.
@@ -135,7 +149,11 @@ void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image, vk::ImageView 
 
 vk::ImageHelper *RenderTargetVk::getImageForRead(vk::CommandGraphResource *readingResource,
                                                  vk::ImageLayout layout,
+#if USE_CUSTOM_CMD_BUFFERS
+                                                 vk::SecondaryCommandBuffer *commandBuffer)
+#else
                                                  vk::CommandBuffer *commandBuffer)
+#endif
 {
     ASSERT(mImage && mImage->valid());
 

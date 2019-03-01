@@ -533,7 +533,11 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
     // Change source layout if necessary
     if (srcImage->isLayoutChangeNecessary(vk::ImageLayout::TransferSrc))
     {
+#if USE_CUSTOM_CMD_BUFFERS
+        vk::SecondaryCommandBuffer *srcLayoutChange;
+#else
         vk::CommandBuffer *srcLayoutChange;
+#endif
         ANGLE_TRY(srcImage->recordCommands(contextVk, &srcLayoutChange));
         srcImage->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferSrc,
                                srcLayoutChange);
@@ -551,7 +555,11 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
         // Make sure any updates to the image are already flushed.
         ANGLE_TRY(ensureImageInitialized(contextVk));
 
+#if USE_CUSTOM_CMD_BUFFERS
+        vk::SecondaryCommandBuffer *commandBuffer;
+#else
         vk::CommandBuffer *commandBuffer;
+#endif
         ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
 
         // Change the image layout before the transfer
@@ -579,7 +587,11 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
                                               gl::Extents(sourceArea.width, sourceArea.height, 1),
                                               destFormat, kTransferStagingImageFlags, layerCount));
 
+#if USE_CUSTOM_CMD_BUFFERS
+        vk::SecondaryCommandBuffer *commandBuffer;
+#else
         vk::CommandBuffer *commandBuffer;
+#endif
         ANGLE_TRY(stagingImage->recordCommands(contextVk, &commandBuffer));
 
         // Change the image layout before the transfer
@@ -715,7 +727,11 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
     const vk::Format &format = renderer->getFormat(internalFormat);
     ANGLE_TRY(ensureImageAllocated(renderer, format));
 
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
     vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
 
     if (mImage->valid())
@@ -748,7 +764,11 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
     uint32_t rendererQueueFamilyIndex = renderer->getQueueFamilyIndex();
     if (mImage->isQueueChangeNeccesary(rendererQueueFamilyIndex))
     {
+#if USE_CUSTOM_CMD_BUFFERS
+        vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
         vk::CommandBuffer *commandBuffer = nullptr;
+#endif
         ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
         mImage->changeLayoutAndQueue(VK_IMAGE_ASPECT_COLOR_BIT,
                                      vk::ImageLayout::FragmentShaderReadOnly,
@@ -904,7 +924,11 @@ angle::Result TextureVk::copyImageDataToBuffer(ContextVk *contextVk,
     size_t sourceCopyAllocationSize =
         sourceArea.width * sourceArea.height * imageFormat.pixelBytes * layerCount;
 
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
     vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
 
     // Requirement of the copyImageToBuffer, the source image must be in SRC_OPTIMAL layout.
@@ -932,7 +956,7 @@ angle::Result TextureVk::copyImageDataToBuffer(ContextVk *contextVk,
     region.imageSubresource.layerCount     = layerCount;
     region.imageSubresource.mipLevel       = static_cast<uint32_t>(sourceLevel);
 
-    commandBuffer->copyImageToBuffer(mImage->getImage(), mImage->getCurrentLayout(),
+    commandBuffer->copyImageToBuffer(mImage->getImage().getHandle(), mImage->getCurrentLayout(),
                                      copyBufferHandle, 1, &region);
 
     // Explicitly finish. If new use cases arise where we don't want to block we can change this.
@@ -970,7 +994,11 @@ angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
             sourceRowPitch, imageData + bufferOffset));
     }
 
-    vk::CommandBuffer *commandBuffer;
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
+    vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
     return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), getLevelCount(),
                                       commandBuffer);
@@ -1098,7 +1126,11 @@ angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
     {
         return angle::Result::Continue;
     }
+#if USE_CUSTOM_CMD_BUFFERS
+    vk::SecondaryCommandBuffer *commandBuffer = nullptr;
+#else
     vk::CommandBuffer *commandBuffer = nullptr;
+#endif
     ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
 
     if (!mImage->valid())
@@ -1256,7 +1288,11 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
                                    const vk::Format &format,
                                    const gl::Extents &extents,
                                    const uint32_t levelCount,
+#if USE_CUSTOM_CMD_BUFFERS
+                                   vk::SecondaryCommandBuffer *commandBuffer)
+#else
                                    vk::CommandBuffer *commandBuffer)
+#endif
 {
     const RendererVk *renderer       = contextVk->getRenderer();
     const angle::Format &angleFormat = format.textureFormat();
