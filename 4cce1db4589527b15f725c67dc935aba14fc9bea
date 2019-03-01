@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e709aa5d_e06ae335",
+        "filename": "doc/Orientation.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-01T18:16:35Z",
+      "side": 1,
+      "message": "micro-nit: Could you make it bold like **Results** instead of italic? I think it renders prettier.",
+      "range": {
+        "startLine": 73,
+        "startChar": 8,
+        "endLine": 73,
+        "endChar": 33
+      },
+      "revId": "4cce1db4589527b15f725c67dc935aba14fc9bea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfed60a5_7762770b",
+        "filename": "doc/Orientation.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-01T18:16:35Z",
+      "side": 1,
+      "message": "khronos site is dead occasionally, which is very disruptive to work.\nI\u0027ve checked out https://github.com/KhronosGroup/OpenGL-Registry.git and sync periodically",
+      "range": {
+        "startLine": 116,
+        "startChar": 3,
+        "endLine": 116,
+        "endChar": 33
+      },
+      "revId": "4cce1db4589527b15f725c67dc935aba14fc9bea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d56c9b27_d7fbafcf",
+        "filename": "doc/Starter-Projects.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-01T18:16:35Z",
+      "side": 1,
+      "message": "I\u0027m afraid it will be a hassle to maintain this.\nWould be better to label good starter bugs on anglebug.com as such and give a link to the corresponding query here.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 24
+      },
+      "revId": "4cce1db4589527b15f725c67dc935aba14fc9bea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
