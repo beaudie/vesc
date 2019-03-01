@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c3a75b9e_e91e1e35",
+        "filename": "src/libANGLE/MemoryProgramCache.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-03-01T20:52:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a649042_200117e7",
+      "range": {
+        "startLine": 148,
+        "startChar": 56,
+        "endLine": 148,
+        "endChar": 58
+      },
+      "revId": "de6b8eb48ad9caeb7cdfb465bb935802100cf522",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cbc3a488_3513535f",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 3
@@ -39,6 +63,24 @@
       "revId": "de6b8eb48ad9caeb7cdfb465bb935802100cf522",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f8a5fe9_b68b3f3e",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-03-01T20:52:46Z",
+      "side": 1,
+      "message": "You\u0027re right, if we link from binary, the program caching is always skipped. Updated.",
+      "parentUuid": "cbc3a488_3513535f",
+      "revId": "de6b8eb48ad9caeb7cdfb465bb935802100cf522",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -62,6 +104,30 @@
       "revId": "de6b8eb48ad9caeb7cdfb465bb935802100cf522",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "402e3f36_3e3e20cd",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-03-01T20:52:46Z",
+      "side": 1,
+      "message": "Done, it\u0027s good to catch the error if the user gives a huge buffer by accident.",
+      "parentUuid": "011c6db2_7ac96323",
+      "range": {
+        "startLine": 930,
+        "startChar": 4,
+        "endLine": 930,
+        "endChar": 37
+      },
+      "revId": "de6b8eb48ad9caeb7cdfb465bb935802100cf522",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
