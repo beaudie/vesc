@@ -22,11 +22,6 @@
 #include "util/system_utils.h"
 #include "util/util_gl.h"
 
-namespace angle
-{
-struct SystemInfo;
-}  // namespace angle
-
 #define ASSERT_GL_TRUE(a) ASSERT_EQ(static_cast<GLboolean>(GL_TRUE), (a))
 #define ASSERT_GL_FALSE(a) ASSERT_EQ(static_cast<GLboolean>(GL_FALSE), (a))
 #define EXPECT_GL_TRUE(a) EXPECT_EQ(static_cast<GLboolean>(GL_TRUE), (a))
@@ -399,7 +394,6 @@ class ANGLETestBase
 
   private:
     void checkD3D11SDKLayersMessages();
-    bool hasNvidiaGPU();
 
     void drawQuad(GLuint program,
                   const std::string &positionAttribName,
@@ -452,8 +446,6 @@ class ANGLETestEnvironment : public testing::Environment
 
     static angle::Library *GetEGLLibrary();
     static angle::Library *GetWGLLibrary();
-
-    static angle::SystemInfo *GetSystemInfo();
 
   private:
     // For loading entry points.
