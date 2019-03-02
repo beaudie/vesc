@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68277a8a_3c9ae4a6",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-02T03:42:15Z",
+      "side": 1,
+      "message": "Don\u0027t forget to reset the pool at the end of `submitCommands()`",
+      "revId": "2bc00a3edb6baa8efc7d17601779822eb844e201",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
