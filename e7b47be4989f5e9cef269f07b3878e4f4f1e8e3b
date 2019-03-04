@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a437b685_681d0099",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-04T18:58:15Z",
+      "side": 1,
+      "message": "nit: the isReferenced is redundant I believe, you can remove it. this keeps the destroy style consistent.",
+      "range": {
+        "startLine": 486,
+        "startChar": 4,
+        "endLine": 486,
+        "endChar": 29
+      },
+      "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81da304d_b3b9ab2e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1714,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-04T18:58:15Z",
+      "side": 1,
+      "message": "One more suggestion.\n\nYou could create and use a local vk::Fence here. On success, call a new method vk::Shared::assign that takes an rvalue reference to vk::WrappedObject. This would avoid the need for a ScopedShared helper. And could replace the use of polymorphism of the two set functions. And also hide the implementation details of Shared using RefCounted.",
+      "range": {
+        "startLine": 1706,
+        "startChar": 7,
+        "endLine": 1714,
+        "endChar": 0
+      },
+      "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "274bde71_efcbe581",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-04T18:58:15Z",
+      "side": 1,
+      "message": "very minor detail, but I usually pass Context/Device/Renderer as a first argument since it is a kind of global context variable.",
+      "range": {
+        "startLine": 407,
+        "startChar": 13,
+        "endLine": 407,
+        "endChar": 55
+      },
+      "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bdaaa1b_7f7ee42d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-04T18:58:15Z",
+      "side": 1,
+      "message": "same nit",
+      "range": {
+        "startLine": 427,
+        "startChar": 37,
+        "endLine": 427,
+        "endChar": 52
+      },
+      "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4303690_7629c2ca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-04T18:58:15Z",
+      "side": 1,
+      "message": "You could ASSERT that this object is referenced in these methods. Otherwise you could maintain a non-null mRefCounted.",
+      "range": {
+        "startLine": 439,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 55
+      },
+      "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
