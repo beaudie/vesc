@@ -187,6 +187,10 @@ T GetClampedVertexCount(size_t vertexCount)
     static constexpr size_t kMax = static_cast<size_t>(std::numeric_limits<T>::max());
     return static_cast<T>(vertexCount > kMax ? kMax : vertexCount);
 }
+
+const char *GetDebugTypeMessage(GLenum type);
+const char *GetDebugSourceMessage(GLenum source);
+const char *GetDebugSeverityMessage(GLenum error);
 }  // namespace gl
 
 namespace egl

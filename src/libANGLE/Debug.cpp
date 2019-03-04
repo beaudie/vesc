@@ -8,7 +8,12 @@
 
 #include "libANGLE/Debug.h"
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+#    include <android/log.h>
+#endif
+
 #include "common/debug.h"
+#include "common/utilities.h"
 
 #include <algorithm>
 #include <tuple>
@@ -99,6 +104,13 @@ void Debug::insertMessage(GLenum source,
                           GLenum severity,
                           std::string &&message) const
 {
+#if defined(ANGLE_ENABLE_DEBUG_ANNOTATIONS) && defined(ANGLE_PLATFORM_ANDROID)
+    __android_log_print(
+        ANDROID_LOG_VERBOSE, "ANGLE", "source: %s, type: %s, id: %s, severity: %s, message: %s",
+        GetDebugSourceMessage(source), GetDebugTypeMessage(type), GetGenericErrorMessage(id),
+        GetDebugSeverityMessage(severity), message.c_str());
+#endif
+
     if (!isMessageEnabled(source, type, id, severity))
     {
         return;
