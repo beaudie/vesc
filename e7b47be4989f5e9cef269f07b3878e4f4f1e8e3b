@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "ae93ffa3_4e8702d9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1535,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-04T19:35:45Z",
+      "side": 1,
+      "message": "ANGLE_VK_TRY below will take care of this, I believe",
+      "range": {
+        "startLine": 1535,
+        "startChar": 30,
+        "endLine": 1535,
+        "endChar": 34
+      },
+      "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81da304d_b3b9ab2e",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -41,6 +64,29 @@
         "startChar": 7,
         "endLine": 1714,
         "endChar": 0
+      },
+      "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b89ba567_dda0fd70",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-04T19:35:45Z",
+      "side": 1,
+      "message": "What would happen if TRY above fails?",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 54
       },
       "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
