@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ebe4c3f6_6fd393d2",
+        "filename": "src/libANGLE/renderer/ShaderImpl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-03-04T12:32:00Z",
+      "side": 1,
+      "message": "I had ever thought about this as well. But I hesitated as I was afraid it would be a quite big refactor. Anyway I\u0027ve made it now.",
+      "parentUuid": "73147763_d2e10696",
+      "range": {
+        "startLine": 41,
+        "startChar": 17,
+        "endLine": 41,
+        "endChar": 41
+      },
+      "revId": "4247f78b7e2e6b69cbaf7f337819ebce0287b03f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "24c3790b_1fed4fef",
         "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "e66b5702_dd887553",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-03-04T12:32:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24c3790b_1fed4fef",
+      "range": {
+        "startLine": 624,
+        "startChar": 0,
+        "endLine": 627,
+        "endChar": 81
+      },
+      "revId": "4247f78b7e2e6b69cbaf7f337819ebce0287b03f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfed6db4_3c209402",
         "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
         "patchSetId": 6
@@ -59,6 +107,30 @@
       "writtenOn": "2019-02-21T16:27:34Z",
       "side": 1,
       "message": "Please add a new method to ContextImpl: setMaxShaderCompilerThreads and in ContextGL use it to set this so the driver uses the same number of threads that we use.",
+      "range": {
+        "startLine": 639,
+        "startChar": 52,
+        "endLine": 639,
+        "endChar": 62
+      },
+      "revId": "4247f78b7e2e6b69cbaf7f337819ebce0287b03f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca465af4_7756ab19",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-03-04T12:32:00Z",
+      "side": 1,
+      "message": "Good catch. I totally forgot this API. Thanks!",
+      "parentUuid": "dfed6db4_3c209402",
       "range": {
         "startLine": 639,
         "startChar": 52,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "3f414b93_0c905d08",
+        "filename": "src/libANGLE/renderer/gl/RendererGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-03-04T12:32:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b57cd8c0_ebe0d886",
+      "range": {
+        "startLine": 623,
+        "startChar": 3,
+        "endLine": 648,
+        "endChar": 19
+      },
+      "revId": "4247f78b7e2e6b69cbaf7f337819ebce0287b03f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d0633894_a71d6bbd",
         "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.cpp",
         "patchSetId": 6
@@ -105,6 +201,30 @@
       "writtenOn": "2019-02-21T16:27:34Z",
       "side": 1,
       "message": "Why create a shared context at all if you only destroy it right away when the extensions exist?",
+      "range": {
+        "startLine": 304,
+        "startChar": 8,
+        "endLine": 309,
+        "endChar": 12
+      },
+      "revId": "4247f78b7e2e6b69cbaf7f337819ebce0287b03f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c2ae6f6_6fed0bd5",
+        "filename": "src/libANGLE/renderer/gl/glx/DisplayGLX.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1109831
+      },
+      "writtenOn": "2019-03-04T12:32:00Z",
+      "side": 1,
+      "message": "There are a few different paths creating the shared context. It seems bad smell to me slightly adding the same extension checking code snippet to each path repeatedly. Besides the extension checking relies on functionsGL, which requires the dummy pbuffer being created, and the GLX context making current on it. Unfortunately these happen after creating contexts currently.",
+      "parentUuid": "d0633894_a71d6bbd",
       "range": {
         "startLine": 304,
         "startChar": 8,
