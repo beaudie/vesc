@@ -31,6 +31,14 @@ constexpr int kLineLoopDynamicBufferMinSize = 1024 * 1024;
 // This is an arbitrary max. We can change this later if necessary.
 constexpr uint32_t kDefaultDescriptorPoolMaxSets = 128;
 
+// WebGL requires color textures to be initialized to transparent black.
+constexpr VkClearValue kWebGLInitColorValue = {};
+// WebGL requires depth/stencil textures to be initialized to depth=1, stencil=0.
+// Note: this can be turned into constexpr with `= { .depthStencil = {1.0f, 0} }` once C++20 is
+// used, otherwise it's expected to be a constant value (currently, it's initialized on first use
+// due to lack of C99 designated initializers support).
+VkClearValue kWebGLInitDepthStencilValue = {};
+
 struct ImageMemoryBarrierData
 {
     // The Vk layout corresponding to the ImageLayout key.
@@ -1252,11 +1260,13 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mSamples(other.mSamples),
       mCurrentLayout(other.mCurrentLayout),
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
+      mClearInfo(std::move(other.mClearInfo)),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
       mStagingBuffer(std::move(other.mStagingBuffer)),
       mSubresourceUpdates(std::move(other.mSubresourceUpdates))
 {
+    ASSERT(this != &other);
     other.mCurrentLayout = ImageLayout::Undefined;
     other.mLayerCount    = 0;
     other.mLevelCount    = 0;
@@ -1279,10 +1289,11 @@ angle::Result ImageHelper::init(Context *context,
                                 GLint samples,
                                 VkImageUsageFlags usage,
                                 uint32_t mipLevels,
-                                uint32_t layerCount)
+                                uint32_t layerCount,
+                                bool clear)
 {
     return initExternal(context, textureType, extents, format, samples, usage,
-                        ImageLayout::Undefined, nullptr, mipLevels, layerCount);
+                        ImageLayout::Undefined, nullptr, mipLevels, layerCount, clear);
 }
 
 angle::Result ImageHelper::initExternal(Context *context,
@@ -1294,7 +1305,8 @@ angle::Result ImageHelper::initExternal(Context *context,
                                         ImageLayout initialLayout,
                                         const void *externalImageCreateInfo,
                                         uint32_t mipLevels,
-                                        uint32_t layerCount)
+                                        uint32_t layerCount,
+                                        bool clear)
 {
     ASSERT(!valid());
 
@@ -1309,6 +1321,8 @@ angle::Result ImageHelper::initExternal(Context *context,
     mSamples    = samples;
     mLayerCount = layerCount;
     mLevelCount = mipLevels;
+
+    resizeCreateInfo(clear);
 
     VkImageCreateInfo imageInfo     = {};
     imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -1442,6 +1456,7 @@ void ImageHelper::destroy(VkDevice device)
     mCurrentLayout = ImageLayout::Undefined;
     mLayerCount    = 0;
     mLevelCount    = 0;
+    mNeedsClear.clear();
 }
 
 void ImageHelper::init2DWeakReference(VkImage handle,
@@ -1457,6 +1472,10 @@ void ImageHelper::init2DWeakReference(VkImage handle,
     mCurrentLayout = ImageLayout::Undefined;
     mLayerCount    = 1;
     mLevelCount    = 1;
+
+    // No need to clear the weak reference.  Only user currently is the swapchain, which clears the
+    // image itself.
+    resizeClearInfo(false);
 
     mImage.setHandle(handle);
 }
@@ -1475,6 +1494,9 @@ angle::Result ImageHelper::init2DStaging(Context *context,
     mSamples    = 1;
     mLayerCount = layerCount;
     mLevelCount = 1;
+
+    // No need to clear the staging image.  It's made to be promptly filled with data.
+    resizeClearInfo(false);
 
     mCurrentLayout = ImageLayout::Undefined;
 
@@ -1544,6 +1566,18 @@ GLint ImageHelper::getSamples() const
 VkImageLayout ImageHelper::getCurrentLayout() const
 {
     return kImageMemoryBarrierData[mCurrentLayout].layout;
+}
+
+const VkClearValue &getOverrideColorValue()
+{
+    return kWebGLInitColorValue;
+}
+
+const VkClearValue &getOverrideDepthStencilValue()
+{
+    // Note: see definition of this variable for why initilization is done here.
+    kWebGLInitDepthStencilValue.depthStencil.depth = 1.0f;
+    return kWebGLInitDepthStencilValue;
 }
 
 bool ImageHelper::isLayoutChangeNecessary(ImageLayout newLayout) const

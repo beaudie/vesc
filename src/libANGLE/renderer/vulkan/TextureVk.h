@@ -151,7 +151,7 @@ class TextureVk : public TextureImpl
                                              vk::ImageView **imageViewOut);
     const vk::Sampler &getSampler() const;
 
-    angle::Result ensureImageInitialized(ContextVk *contextVk);
+    angle::Result ensureImageInitialized(gl::Context *context);
 
   private:
     // Transform an image index from the frontend into one that can be used on the backing
@@ -216,7 +216,7 @@ class TextureVk : public TextureImpl
                                    const gl::InternalFormat &internalFormat,
                                    gl::Framebuffer *source);
 
-    angle::Result copySubTextureImpl(ContextVk *contextVk,
+    angle::Result copySubTextureImpl(gl::ContextVk *context,
                                      const gl::ImageIndex &index,
                                      const gl::Offset &destOffset,
                                      const gl::InternalFormat &destFormat,
@@ -227,7 +227,7 @@ class TextureVk : public TextureImpl
                                      bool unpackUnmultiplyAlpha,
                                      TextureVk *source);
 
-    angle::Result copySubImageImplWithTransfer(ContextVk *contextVk,
+    angle::Result copySubImageImplWithTransfer(gl::Context *context,
                                                const gl::ImageIndex &index,
                                                const gl::Offset &destOffset,
                                                const vk::Format &destFormat,
@@ -235,7 +235,7 @@ class TextureVk : public TextureImpl
                                                const gl::Rectangle &sourceArea,
                                                vk::ImageHelper *srcImage);
 
-    angle::Result copySubImageImplWithDraw(ContextVk *contextVk,
+    angle::Result copySubImageImplWithDraw(gl::Context *context,
                                            const gl::ImageIndex &index,
                                            const gl::Offset &destOffset,
                                            const vk::Format &destFormat,
@@ -248,7 +248,7 @@ class TextureVk : public TextureImpl
                                            vk::ImageHelper *srcImage,
                                            const vk::ImageView *srcView);
 
-    angle::Result initImage(ContextVk *contextVk,
+    angle::Result initImage(gl::Context *context,
                             const vk::Format &format,
                             const gl::Extents &extents,
                             const uint32_t levelCount,

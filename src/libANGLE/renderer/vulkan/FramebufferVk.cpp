@@ -836,14 +836,14 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
         return angle::Result::Continue;
     }
 
-    vk::RenderPass *renderPass = nullptr;
-    ANGLE_TRY(
-        contextVk->getRenderer()->getCompatibleRenderPass(contextVk, mRenderPassDesc, &renderPass));
+    vk::RenderPass *compatibleRenderPass = nullptr;
+    ANGLE_TRY(contextVk->getRenderer()->getCompatibleRenderPass(contextVk, mRenderPassDesc,
+                                                                &compatibleRenderPass));
 
     // If we've a Framebuffer provided by a Surface (default FBO/backbuffer), query it.
     if (mBackbuffer)
     {
-        return mBackbuffer->getCurrentFramebuffer(contextVk, *renderPass, framebufferOut);
+        return mBackbuffer->getCurrentFramebuffer(contextVk, *compatibleRenderPass, framebufferOut);
     }
 
     // Gather VkImageViews over all FBO attachments, also size of attached region.
@@ -878,7 +878,7 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
 
     framebufferInfo.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     framebufferInfo.flags           = 0;
-    framebufferInfo.renderPass      = renderPass->getHandle();
+    framebufferInfo.renderPass      = compatibleRenderPass->getHandle();
     framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
     framebufferInfo.pAttachments    = attachments.data();
     framebufferInfo.width           = static_cast<uint32_t>(attachmentsSize.width);
@@ -1053,7 +1053,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     vk::Framebuffer *framebuffer = nullptr;
     ANGLE_TRY(getFramebuffer(contextVk, &framebuffer));
 
-    // TODO(jmadill): Proper clear value implementation. http://anglebug.com/2361
+    vk::AttachmentOpsArray renderPassAttachmentOps;
     std::vector<VkClearValue> attachmentClearValues;
 
     vk::CommandBuffer *writeCommands = nullptr;
@@ -1068,23 +1068,61 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndex];
         ASSERT(colorRenderTarget);
+        ASSERT(colorRenderTarget->getImage().getCurrentLayout() ==
+               VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+
+        bool useOverrideColor = false;
+        bool needsClear       = colorRenderTarget->needsClear(&useOverrideColor);
+        renderPassAttachmentOps.setOp(
+            attachmentClearValues.size(), VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+            VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+            needsClear ? VK_ATTACHMENT_LOAD_OP_CLEAR : VK_ATTACHMENT_LOAD_OP_LOAD,
+            VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+            VK_ATTACHMENT_STORE_OP_DONT_CARE);
 
         colorRenderTarget->onColorDraw(&mFramebuffer, writeCommands, &renderPassDesc);
-        attachmentClearValues.emplace_back(contextVk->getClearColorValue());
+
+        const VkClearColor &clearValue = useOverrideColor
+                                             ? colorRenderTarget->getImage().getOverrideColorValue()
+                                             : contextVk->getClearColorValue();
+
+        attachmentClearValues.emplace_back(clearValue);
     }
 
     RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
     if (depthStencilRenderTarget)
     {
         depthStencilRenderTarget->onDepthStencilDraw(&mFramebuffer, writeCommands, &renderPassDesc);
-        attachmentClearValues.emplace_back(contextVk->getClearDepthStencilValue());
+        ASSERT(depthStencilRenderTarget->getImage().getCurrentLayout() ==
+               VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+
+        bool useOverrideDepthStencil = false;
+        bool needsClear = depthStencilRenderTarget->needsClear(&useOverrideDepthStencil);
+        // TODO(syoussefi): support separate depth and stencil clear ops.  TODO: be careful when
+        // folding clear into render pass op to disallow disjoint depth or stencil clear from
+        // setting needsClear.  http://anglebug.com/2361
+        renderPassAttachmentOps.setOp(
+            attachmentClearValues.size(), VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+            needsClear ? VK_ATTACHMENT_LOAD_OP_CLEAR : VK_ATTACHMENT_LOAD_OP_LOAD,
+            VK_ATTACHMENT_STORE_OP_STORE,
+            needsClear ? VK_ATTACHMENT_LOAD_OP_CLEAR : VK_ATTACHMENT_LOAD_OP_LOAD,
+            VK_ATTACHMENT_STORE_OP_STORE);
+
+        const VkClearColor &clearValue =
+            useOverrideDepthStencil
+                ? depthStencilRenderTarget->getImage().getOverrideDepthStencilValue()
+                : contextVk->getClearDepthStencilValue();
+
+        attachmentClearValues.emplace_back(clearValue);
     }
 
     gl::Rectangle renderArea =
         gl::Rectangle(0, 0, mState.getDimensions().width, mState.getDimensions().height);
 
     return mFramebuffer.beginRenderPass(contextVk, *framebuffer, renderArea, mRenderPassDesc,
-                                        attachmentClearValues, commandBufferOut);
+                                        renderPassAttachmentOps, attachmentClearValues,
+                                        commandBufferOut);
 }
 
 void FramebufferVk::updateActiveColorMasks(size_t colorIndex, bool r, bool g, bool b, bool a)

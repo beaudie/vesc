@@ -82,6 +82,21 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     angle::Result ensureImageInitialized(ContextVk *contextVk);
 
+    bool needsClear(bool *useOverrideValueOut) const
+    {
+        return mImage->needsClear(mLevelIndex, mLayerIndex, useOverrideValueOut);
+    }
+
+    bool setNeedsClear(uint32_t level, uint32_t layer)
+    {
+        return mImage->setNeedsClear(mLevelIndex, mLayerIndex);
+    }
+
+    void setCleared(uint32_t level, uint32_t layer)
+    {
+        mImage->setCleared(mLevelIndex, mLayerIndex);
+    }
+
   private:
     vk::ImageHelper *mImage;
     // Note that the draw and read image views are the same, given the requirements of a render

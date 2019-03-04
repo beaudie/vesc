@@ -537,7 +537,8 @@ class ImageHelper final : public CommandGraphResource
                        GLint samples,
                        VkImageUsageFlags usage,
                        uint32_t mipLevels,
-                       uint32_t layerCount);
+                       uint32_t layerCount,
+                       bool clear);
     angle::Result initExternal(Context *context,
                                gl::TextureType textureType,
                                const gl::Extents &extents,
@@ -547,7 +548,8 @@ class ImageHelper final : public CommandGraphResource
                                ImageLayout initialLayout,
                                const void *externalImageCreateInfo,
                                uint32_t mipLevels,
-                               uint32_t layerCount);
+                               uint32_t layerCount,
+                               bool clear);
     angle::Result initMemory(Context *context,
                              const MemoryProperties &memoryProperties,
                              VkMemoryPropertyFlags flags);
@@ -706,11 +708,54 @@ class ImageHelper final : public CommandGraphResource
                               uint32_t newQueueFamilyIndex,
                               CommandBuffer *commandBuffer);
 
+    // Image clear is deferred until first use.  If that use happens to be a render pass attachment,
+    // the clear will be done as a render pass loadOp.
+    bool needsClear(uint32_t level, uint32_t layer, bool *useOverrideValueOut) const
+    {
+        size_t index = (level * mLayerCount + layer) * 2;
+        ASSERT(index + 1 < mClearInfo.size());
+
+        *useOverrideColorOut = mClearInfo[index + 1];
+        return mClearInfo[index];
+    }
+
+    bool setNeedsClear(uint32_t level, uint32_t layer)
+    {
+        size_t index = (level * mLayerCount + layer) * 2;
+        ASSERT(index + 1 < mClearInfo.size());
+
+        // Needs to be cleared:
+        mClearInfo[index] = true;
+        // If image is asked to be cleared, it's no longer required to clear to the override color:
+        mClearInfo[index + 1] = false;
+    }
+
+    void setCleared(uint32_t level, uint32_t layer)
+    {
+        size_t index = (level * mLayerCount + layer) * 2;
+        ASSERT(index + 1 < mClearInfo.size());
+
+        // No longer needs to be cleared:
+        mClearInfo[index] = false;
+        // Note: it's not necessary to clear the second bit (saying that it should no longer use the
+        // override clear color).  If the image is ever asked to be cleared (setNeedsClear()), this
+        // bit will be reset.
+    }
+
+    const VkClearValue &getOverrideColorValue();
+    const VkClearValue &getOverrideDepthStencilValue();
+
   private:
     void forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                    ImageLayout newLayout,
                                    uint32_t newQueueFamilyIndex,
                                    CommandBuffer *commandBuffer);
+
+    void resizeClearInfo(bool needsClear)
+    {
+        // 2 bits per (level, layer)
+        mClearInfo.resize(mLevelCount * mLayerCount * 2, needsClear);
+    }
 
     struct SubresourceUpdate
     {
@@ -764,6 +809,13 @@ class ImageHelper final : public CommandGraphResource
     // Current state.
     ImageLayout mCurrentLayout;
     uint32_t mCurrentQueueFamilyIndex;
+    // Every two bits indicate:
+    //
+    //  - bit 0: Whether each layer/level needs clearing prior to use.
+    //  - bit 1: Whether context's clear color should be used, or an override according to WebGL.
+    //
+    // Note that vector<bool> is specialized to take 1 bit per entry.
+    std::vector<bool> mClearInfo;
 
     // Cached properties.
     uint32_t mLayerCount;
