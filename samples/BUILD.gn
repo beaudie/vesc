@@ -71,6 +71,12 @@ angle_sample("hello_triangle") {
   ]
 }
 
+angle_sample("benchmark") {
+  sources = [
+    "benchmark/Benchmark.cpp",
+  ]
+}
+
 angle_sample("mip_map_2d") {
   sources = [
     "mip_map_2d/MipMap2D.cpp",
