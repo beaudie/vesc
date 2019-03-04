@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "532ff29d_9c61eab2",
+        "filename": "doc/Orientation.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-04T16:40:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e709aa5d_e06ae335",
+      "range": {
+        "startLine": 73,
+        "startChar": 8,
+        "endLine": 73,
+        "endChar": 33
+      },
+      "revId": "4cce1db4589527b15f725c67dc935aba14fc9bea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dfed60a5_7762770b",
         "filename": "doc/Orientation.md",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "5ad20e05_a68ae0fb",
+        "filename": "doc/Orientation.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-04T16:40:19Z",
+      "side": 1,
+      "message": "Added a note specifying this.",
+      "parentUuid": "dfed60a5_7762770b",
+      "range": {
+        "startLine": 116,
+        "startChar": 3,
+        "endLine": 116,
+        "endChar": 33
+      },
+      "revId": "4cce1db4589527b15f725c67dc935aba14fc9bea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d56c9b27_d7fbafcf",
         "filename": "doc/Starter-Projects.md",
         "patchSetId": 4
@@ -59,6 +107,30 @@
       "writtenOn": "2019-03-01T18:16:35Z",
       "side": 1,
       "message": "I\u0027m afraid it will be a hassle to maintain this.\nWould be better to label good starter bugs on anglebug.com as such and give a link to the corresponding query here.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 24
+      },
+      "revId": "4cce1db4589527b15f725c67dc935aba14fc9bea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd1866e1_f5ca3968",
+        "filename": "doc/Starter-Projects.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-04T16:40:19Z",
+      "side": 1,
+      "message": "That\u0027s true, though I\u0027d argue that a page like this is a lot less intimidating to someone who\u0027s very new to anything chromium.\n\nI added the link to anglebug.com with the appropriate search query (excellent suggestions), but kept the rest of the document as is (with the hope that it would be more encouraging to new contributors).",
+      "parentUuid": "d56c9b27_d7fbafcf",
       "range": {
         "startLine": 1,
         "startChar": 0,
