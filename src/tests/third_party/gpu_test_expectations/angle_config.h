@@ -21,6 +21,7 @@
 #define DCHECK_NE(A, B) ASSERT((A) != (B))
 #define DCHECK(X) ASSERT(X)
 #define DLOG(X) std::cerr
+#define DVLOG(X) std::cerr
 #define LOG(X) std::cerr
 
 #define GPU_EXPORT
