@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "166e24cb_2217d3b5",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-05T18:37:49Z",
+      "side": 1,
+      "message": "can probably pass the allocator unconditionally. especially if we use it for other purposes like allocating from the vector.",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 264,
+        "endChar": 6
+      },
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "310930cb_83a82e39",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-05T18:37:49Z",
+      "side": 1,
+      "message": "can maybe make this release the handle to the pool allocator.",
+      "range": {
+        "startLine": 284,
+        "startChar": 0,
+        "endLine": 289,
+        "endChar": 6
+      },
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe277da7_1b205345",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-05T18:37:49Z",
+      "side": 1,
+      "message": "as mentioned offline: using overloaded local helper methods could be a good way to remove the ifdefs.",
+      "range": {
+        "startLine": 486,
+        "startChar": 0,
+        "endLine": 491,
+        "endChar": 6
+      },
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0328f0c6_fba8f534",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-05T18:37:49Z",
+      "side": 1,
+      "message": "per comments offline. One suggested way of solving the valid problem is to pass the allocator pointer to an init method.",
+      "range": {
+        "startLine": 429,
+        "startChar": 0,
+        "endLine": 433,
+        "endChar": 35
+      },
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50555b65_815578be",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-05T18:37:49Z",
+      "side": 1,
+      "message": "could I ask that we pass wrapper objects to the classes instead? And unbox them in the vk::SecondaryCommandBuffer class? Or optionally accept both types if we need to.",
+      "range": {
+        "startLine": 338,
+        "startChar": 71,
+        "endLine": 338,
+        "endChar": 83
+      },
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
