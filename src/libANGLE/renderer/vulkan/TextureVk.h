@@ -266,6 +266,7 @@ class TextureVk : public TextureImpl
                                              const gl::Extents &baseLevelExtents,
                                              uint32_t levelCount,
                                              const vk::Format &format);
+    void initializeContentsImpl(const gl::ImageIndex &imageIndex, vk::CommandBuffer *commandBuffer);
 
     bool mOwnsImage;
 
@@ -289,6 +290,9 @@ class TextureVk : public TextureImpl
 
     RenderTargetVk mRenderTarget;
     std::vector<RenderTargetVk> mCubeMapRenderTargets;
+
+    // A list of image indices to be cleared on initialization.
+    std::vector<gl::ImageIndex> mIndicesToInitialize;
 };
 
 }  // namespace rx
