@@ -599,14 +599,14 @@ class ImageHelper final : public CommandGraphResource
                              GLint samples);
     void resetImageWeakReference();
 
-    const Image &getImage() const;
-    const DeviceMemory &getDeviceMemory() const;
+    const Image &getImage() const { return mImage; }
+    const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
 
-    const gl::Extents &getExtents() const;
+    const gl::Extents &getExtents() const { return mExtents; }
     uint32_t getLayerCount() const { return mLayerCount; }
     uint32_t getLevelCount() const { return mLevelCount; }
-    const Format &getFormat() const;
-    GLint getSamples() const;
+    const Format &getFormat() const { return *mFormat; }
+    GLint getSamples() const { return mSamples; }
 
     VkImageLayout getCurrentLayout() const;
 
@@ -680,12 +680,19 @@ class ImageHelper final : public CommandGraphResource
                                         VkDeviceSize *offsetOut,
                                         bool *newBufferAllocatedOut);
 
+    // Flushes staged updates to a range of levels and layers.  Due to the nature of updates
+    // (done wholly to a VkImageSubresourceLayers), some unsolicited layers may also be updated.
+    // If asked to flush pending clears, a subresource that doesn't have any staged updates will
+    // be cleared regardless.
     angle::Result flushStagedUpdates(Context *context,
                                      uint32_t baseLevel,
                                      uint32_t levelCount,
+                                     uint32_t baseLayer,
+                                     uint32_t layerCount,
+                                     bool flushPendingClear,
                                      vk::CommandBuffer *commandBuffer);
 
-    bool hasStagedUpdates() const;
+    bool hasStagedUpdates() const { return !mSubresourceUpdates.empty(); }
 
     // changeLayout automatically skips the layout change if it's unnecessary.  This function can be
     // used to prevent creating a command graph node and subsequently a command buffer for the sole
@@ -706,11 +713,25 @@ class ImageHelper final : public CommandGraphResource
                               uint32_t newQueueFamilyIndex,
                               CommandBuffer *commandBuffer);
 
+    // Image clear is deferred until first use.  If that use happens to be a render pass attachment,
+    // the clear will be done as a render pass loadOp.
+    bool needsClear(uint32_t level, uint32_t layer, bool *useOverrideValueOut) const;
+    bool needsClearAnySubresource() const { return mNeedsClearCount > 0; }
+    void setNeedsClear(uint32_t level, uint32_t layer);
+    void setNeedsClearWholeImage();
+    void setCleared(uint32_t level, uint32_t layer);
+
+    const VkClearValue &getOverrideColorValue();
+    const VkClearValue &getOverrideDepthStencilValue();
+
   private:
     void forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                    ImageLayout newLayout,
                                    uint32_t newQueueFamilyIndex,
                                    CommandBuffer *commandBuffer);
+
+    void resizeClearInfo(bool needsClear);
+    bool clearLevelLayer(uint32_t level, uint32_t layer, CommandBuffer *commandBuffer);
 
     struct SubresourceUpdate
     {
@@ -725,6 +746,16 @@ class ImageHelper final : public CommandGraphResource
         {
             return updateSource == UpdateSource::Buffer ? buffer.copyRegion.imageSubresource
                                                         : image.copyRegion.dstSubresource;
+        }
+        const VkOffset3D &dstOffset() const
+        {
+            return updateSource == UpdateSource::Buffer ? buffer.copyRegion.imageOffset
+                                                        : image.copyRegion.dstOffset;
+        }
+        const VkExtent3D &dstExtent() const
+        {
+            return updateSource == UpdateSource::Buffer ? buffer.copyRegion.imageExtent
+                                                        : image.copyRegion.extent;
         }
         bool isUpdateToLayerLevel(uint32_t layerIndex, uint32_t levelIndex) const;
 
@@ -764,6 +795,16 @@ class ImageHelper final : public CommandGraphResource
     // Current state.
     ImageLayout mCurrentLayout;
     uint32_t mCurrentQueueFamilyIndex;
+    // Every two bits indicate:
+    //
+    //  - bit 0: Whether each layer/level needs clearing prior to use.
+    //  - bit 1: Whether context's clear color should be used, or an override according to WebGL.
+    //
+    // Note that vector<bool> is specialized to take 1 bit per entry.
+    std::vector<bool> mClearInfo;
+    // A cached value showing how many "needs clear" bits are set in `mClearInfo`.  This is used to
+    // quickly understand whether the image needs clearing at all.
+    size_t mNeedsClearCount;
 
     // Cached properties.
     uint32_t mLayerCount;

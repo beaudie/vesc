@@ -646,6 +646,8 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
         {
             params.srcLayer = layerIndex;
+            params.destMip   = level;
+            params.destLayer = baseLayer + layerIndex;
 
             vk::ImageView *destView;
             ANGLE_TRY(
@@ -674,6 +676,8 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
         {
             params.srcLayer = layerIndex;
+            params.destMip   = 0;
+            params.destLayer = layerIndex;
 
             // Create a temporary view for this layer.
             vk::ImageView stagingView;
@@ -723,7 +727,7 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
         releaseImage(renderer);
     }
 
-    ANGLE_TRY(initImage(contextVk, format, size, static_cast<uint32_t>(levels), commandBuffer));
+    ANGLE_TRY(initImage(contextVk, format, size, static_cast<uint32_t>(levels)));
     return angle::Result::Continue;
 }
 
@@ -805,6 +809,8 @@ void TextureVk::releaseAndDeleteImage(const gl::Context *context, RendererVk *re
         releaseStagingBuffer(renderer);
         SafeDelete(mImage);
     }
+
+    mIndicesToInitialize.clear();
 }
 
 angle::Result TextureVk::ensureImageAllocated(RendererVk *renderer, const vk::Format &format)
@@ -973,6 +979,7 @@ angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
     return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), getLevelCount(),
+                                      getNativeImageLayer(0), mImage->getLayerCount(), true,
                                       commandBuffer);
 }
 
@@ -984,7 +991,7 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
     if (!mImage->valid())
     {
         // lets initialize the image so we can generate the next levels.
-        if (mImage->hasStagedUpdates())
+        if (mImage->hasStagedUpdates() || mImage->needsClearAnySubresource())
         {
             ANGLE_TRY(ensureImageInitialized(contextVk));
             ASSERT(mImage->valid());
@@ -1086,7 +1093,48 @@ angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk)
     const vk::Format &format =
         contextVk->getRenderer()->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
 
-    return ensureImageInitializedImpl(contextVk, baseLevelExtents, levelCount, format);
+    ANGLE_TRY(ensureImageInitializedImpl(contextVk, baseLevelExtents, levelCount, format));
+
+    // Completely initialize the image, including clearing all levels and layers.  When this
+    // function is called, it's expected that the image is going to be used for reading.
+    if (!mImage->hasStagedUpdates() || mImage->needsClearAnySubresource())
+    {
+        return angle::Result::Continue;
+    }
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
+
+    return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), levelCount,
+                                      getNativeImageLayer(0), mImage->getLayerCount(), true,
+                                      commandBuffer);
+}
+
+angle::Result TextureVk::ensureImageInitializedForDraw(ContextVk *contextVk,
+                                                       size_t level,
+                                                       size_t layer)
+{
+    const gl::ImageDesc &baseLevelDesc  = mState.getBaseLevelDesc();
+    const gl::Extents &baseLevelExtents = baseLevelDesc.size;
+    const uint32_t levelCount           = getLevelCount();
+
+    const vk::Format &format =
+        contextVk->getRenderer()->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
+
+    ANGLE_TRY(ensureImageInitializedImpl(contextVk, baseLevelExtents, levelCount, format));
+
+    // Only flush staged updates without necessarily clearing the level or layer.  The image is
+    // about to be renderer into and the render pass loadOp will take care of clearing it.
+    if (!mImage->hasStagedUpdates())
+    {
+        return angle::Result::Continue;
+    }
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
+
+    return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(level), 1,
+                                      getNativeImageLayer(layer), 1, false, commandBuffer);
 }
 
 angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
@@ -1094,19 +1142,25 @@ angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
                                                     uint32_t levelCount,
                                                     const vk::Format &format)
 {
-    if (mImage->valid() && !mImage->hasStagedUpdates())
-    {
-        return angle::Result::Continue;
-    }
-    vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
-
     if (!mImage->valid())
     {
-        ANGLE_TRY(initImage(contextVk, format, baseLevelExtents, levelCount, commandBuffer));
+        ANGLE_TRY(initImage(contextVk, format, baseLevelExtents, levelCount));
     }
 
-    return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), levelCount, commandBuffer);
+    for (const gl::ImageIndex &imageIndex : mIndicesToInitialize)
+    {
+        uint32_t level      = imageIndex.getLevelIndex();
+        uint32_t baseLayer  = imageIndex.hasLayer() ? imageIndex.getLayerIndex() : 0;
+        uint32_t layerCount = imageIndex.getLayerCount();
+
+        for (uint32_t layer = 0; layer < layerCount; ++layer)
+        {
+            mImage->setNeedsClear(level, baseLayer + layer);
+        }
+    }
+    mIndicesToInitialize.clear();
+
+    return angle::Result::Continue;
 }
 
 angle::Result TextureVk::initCubeMapRenderTargets(ContextVk *contextVk)
@@ -1185,7 +1239,22 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
 angle::Result TextureVk::initializeContents(const gl::Context *context,
                                             const gl::ImageIndex &imageIndex)
 {
-    UNIMPLEMENTED();
+    if (mImage && mImage->getImage().valid())
+    {
+        uint32_t level      = imageIndex.getLevelIndex();
+        uint32_t baseLayer  = imageIndex.hasLayer() ? imageIndex.getLayerIndex() : 0;
+        uint32_t layerCount = imageIndex.getLayerCount();
+
+        for (uint32_t layer = 0; layer < layerCount; ++layer)
+        {
+            mImage->setNeedsClear(level, baseLayer + layer);
+        }
+
+        return angle::Result::Continue;
+    }
+
+    // Buffer this request until the image is initialized.
+    mIndicesToInitialize.push_back(imageIndex);
     return angle::Result::Continue;
 }
 
@@ -1255,8 +1324,7 @@ const vk::Sampler &TextureVk::getSampler() const
 angle::Result TextureVk::initImage(ContextVk *contextVk,
                                    const vk::Format &format,
                                    const gl::Extents &extents,
-                                   const uint32_t levelCount,
-                                   vk::CommandBuffer *commandBuffer)
+                                   const uint32_t levelCount)
 {
     const RendererVk *renderer       = contextVk->getRenderer();
     const angle::Format &angleFormat = format.textureFormat();
@@ -1280,13 +1348,6 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
 
     ANGLE_TRY(initImageViews(contextVk, format, levelCount));
 
-    if (!angleFormat.isBlock)
-    {
-        // TODO(jmadill): Fold this into the RenderPass load/store ops if possible, or defer to
-        // first use.  This is only necessary if robustness is required.  http://anglebug.com/2361
-        VkClearColorValue black = {{0, 0, 0, 1.0f}};
-        mImage->clearColor(black, 0, levelCount, commandBuffer);
-    }
     return angle::Result::Continue;
 }
 
