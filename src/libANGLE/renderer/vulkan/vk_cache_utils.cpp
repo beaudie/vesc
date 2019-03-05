@@ -1081,14 +1081,27 @@ void AttachmentOpsArray::initDummyOp(size_t index,
                                      VkImageLayout initialLayout,
                                      VkImageLayout finalLayout)
 {
+    setOp(index, initialLayout, finalLayout, VK_ATTACHMENT_LOAD_OP_LOAD,
+          VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+          VK_ATTACHMENT_STORE_OP_DONT_CARE);
+}
+
+void AttachmentOpsArray::setOp(size_t index,
+                               VkImageLayout initialLayout,
+                               VkImageLayout finalLayout,
+                               VkAttachmentLoadOp loadOp,
+                               VkAttachmentStoreOp storeOp,
+                               VkAttachmentLoadOp stencilLoadOp,
+                               VkAttachmentStoreOp stencilStoreOp)
+{
     PackedAttachmentOpsDesc &ops = mOps[index];
 
-    ops.loadOp         = VK_ATTACHMENT_LOAD_OP_LOAD;
-    ops.storeOp        = VK_ATTACHMENT_STORE_OP_STORE;
-    ops.stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    ops.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    ops.initialLayout  = static_cast<uint16_t>(initialLayout);
-    ops.finalLayout    = static_cast<uint16_t>(finalLayout);
+    SetBitField(ops.loadOp, loadOp);
+    SetBitField(ops.storeOp, storeOp);
+    SetBitField(ops.stencilLoadOp, stencilLoadOp);
+    SetBitField(ops.stencilStoreOp, stencilStoreOp);
+    SetBitField(ops.initialLayout, initialLayout);
+    SetBitField(ops.finalLayout, finalLayout);
 }
 
 size_t AttachmentOpsArray::hash() const
