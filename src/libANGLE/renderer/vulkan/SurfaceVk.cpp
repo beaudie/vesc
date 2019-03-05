@@ -547,12 +547,8 @@ angle::Result WindowSurfaceVk::recreateSwapchain(DisplayVk *displayVk,
                                              VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(),
                                              &member.imageView, 0, 1));
 
-        // Allocate a command buffer for clearing our images to black.
-        vk::CommandBuffer *commandBuffer = nullptr;
-        ANGLE_TRY(member.image.recordCommands(displayVk, &commandBuffer));
-
-        // Set transfer dest layout, and clear the image to black.
-        member.image.clearColor(transparentBlack, 0, 1, commandBuffer);
+        // Ask the image to be cleared to black on first use.
+        member.image.setNeedsClearWholeImage(false);
     }
 
     // Initialize depth/stencil if requested.
@@ -568,16 +564,12 @@ angle::Result WindowSurfaceVk::recreateSwapchain(DisplayVk *displayVk,
                                                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
         const VkImageAspectFlags aspect = vk::GetDepthStencilAspectFlags(dsFormat.textureFormat());
-        VkClearDepthStencilValue depthStencilClearValue = {1.0f, 0};
-
-        // Clear the image.
-        vk::CommandBuffer *commandBuffer = nullptr;
-        ANGLE_TRY(mDepthStencilImage.recordCommands(displayVk, &commandBuffer));
-        mDepthStencilImage.clearDepthStencil(aspect, aspect, depthStencilClearValue, commandBuffer);
-
         ANGLE_TRY(mDepthStencilImage.initImageView(displayVk, gl::TextureType::_2D, aspect,
                                                    gl::SwizzleState(), &mDepthStencilImageView, 0,
                                                    1));
+
+        // Ask the image to be cleared to defaults on first use.
+        mDepthStencilImage.setNeedsClearWholeImage(false);
 
         // We will need to pass depth/stencil image views to the RenderTargetVk in the future.
     }
