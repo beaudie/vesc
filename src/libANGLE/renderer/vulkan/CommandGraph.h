@@ -98,6 +98,7 @@ class CommandGraphNode final : angle::NonCopyable
     void storeRenderPassInfo(const Framebuffer &framebuffer,
                              const gl::Rectangle renderArea,
                              const vk::RenderPassDesc &renderPassDesc,
+                             const AttachmentOpsArray &renderPassAttachmentOps,
                              const std::vector<VkClearValue> &clearValues);
 
     // Dependency commands order node execution in the command graph.
@@ -174,6 +175,7 @@ class CommandGraphNode final : angle::NonCopyable
 
     // Only used if we need a RenderPass for these commands.
     RenderPassDesc mRenderPassDesc;
+    AttachmentOpsArray mRenderPassAttachmentOps;
     Framebuffer mRenderPassFramebuffer;
     gl::Rectangle mRenderPassRenderArea;
     gl::AttachmentArray<VkClearValue> mRenderPassClearValues;
@@ -265,6 +267,7 @@ class CommandGraphResource : angle::NonCopyable
                                   const Framebuffer &framebuffer,
                                   const gl::Rectangle &renderArea,
                                   const RenderPassDesc &renderPassDesc,
+                                  const AttachmentOpsArray &renderPassAttachmentOps,
                                   const std::vector<VkClearValue> &clearValues,
                                   CommandBuffer **commandBufferOut);
 
