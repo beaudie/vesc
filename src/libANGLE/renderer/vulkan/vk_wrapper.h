@@ -226,23 +226,28 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
               uint32_t instanceCount,
               uint32_t firstVertex,
               uint32_t firstInstance);
-
+    void draw(uint32_t vertexCount, uint32_t firstVertex);
+    void drawInstanced(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex);
     void drawIndexed(uint32_t indexCount,
                      uint32_t instanceCount,
                      uint32_t firstIndex,
                      int32_t vertexOffset,
                      uint32_t firstInstance);
+    void drawIndexed(uint32_t indexCount);
+    void drawIndexedInstanced(uint32_t indexCount, uint32_t instanceCount);
 
     void dispatch(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ);
 
     void bindPipeline(VkPipelineBindPoint pipelineBindPoint, const Pipeline &pipeline);
+    void bindGraphicsPipeline(const Pipeline &pipeline);
+    void bindComputePipeline(const Pipeline &pipeline);
 
     void bindVertexBuffers(uint32_t firstBinding,
                            uint32_t bindingCount,
                            const VkBuffer *buffers,
                            const VkDeviceSize *offsets);
 
-    void bindIndexBuffer(const VkBuffer &buffer, VkDeviceSize offset, VkIndexType indexType);
+    void bindIndexBuffer(const Buffer &buffer, VkDeviceSize offset, VkIndexType indexType);
     void bindDescriptorSets(VkPipelineBindPoint bindPoint,
                             const PipelineLayout &layout,
                             uint32_t firstSet,
@@ -252,7 +257,7 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                             const uint32_t *dynamicOffsets);
 
     void executeCommands(uint32_t commandBufferCount, const CommandBuffer *commandBuffers);
-    void updateBuffer(const vk::Buffer &buffer,
+    void updateBuffer(const Buffer &buffer,
                       VkDeviceSize dstOffset,
                       VkDeviceSize dataSize,
                       const void *data);
@@ -534,7 +539,7 @@ ANGLE_INLINE void CommandBuffer::blitImage(const Image &srcImage,
                                            VkImageBlit *pRegions,
                                            VkFilter filter)
 {
-    ASSERT(valid());
+    ASSERT(valid() && srcImage.valid() && dstImage.valid());
     vkCmdBlitImage(mHandle, srcImage.getHandle(), srcImageLayout, dstImage.getHandle(),
                    dstImageLayout, regionCount, pRegions, filter);
 }
@@ -588,13 +593,12 @@ ANGLE_INLINE void CommandBuffer::destroy(VkDevice device, const vk::CommandPool 
     }
 }
 
-ANGLE_INLINE void CommandBuffer::copyBuffer(const vk::Buffer &srcBuffer,
-                                            const vk::Buffer &destBuffer,
+ANGLE_INLINE void CommandBuffer::copyBuffer(const Buffer &srcBuffer,
+                                            const Buffer &destBuffer,
                                             uint32_t regionCount,
                                             const VkBufferCopy *regions)
 {
-    ASSERT(valid());
-    ASSERT(srcBuffer.valid() && destBuffer.valid());
+    ASSERT(valid() && srcBuffer.valid() && destBuffer.valid());
     vkCmdCopyBuffer(mHandle, srcBuffer.getHandle(), destBuffer.getHandle(), regionCount, regions);
 }
 
@@ -604,9 +608,8 @@ ANGLE_INLINE void CommandBuffer::copyBufferToImage(VkBuffer srcBuffer,
                                                    uint32_t regionCount,
                                                    const VkBufferImageCopy *regions)
 {
-    ASSERT(valid());
+    ASSERT(valid() && dstImage.valid());
     ASSERT(srcBuffer != VK_NULL_HANDLE);
-    ASSERT(dstImage.valid());
     vkCmdCopyBufferToImage(mHandle, srcBuffer, dstImage.getHandle(), dstImageLayout, regionCount,
                            regions);
 }
@@ -617,14 +620,13 @@ ANGLE_INLINE void CommandBuffer::copyImageToBuffer(const Image &srcImage,
                                                    uint32_t regionCount,
                                                    const VkBufferImageCopy *regions)
 {
-    ASSERT(valid());
+    ASSERT(valid() && srcImage.valid());
     ASSERT(dstBuffer != VK_NULL_HANDLE);
-    ASSERT(srcImage.valid());
     vkCmdCopyImageToBuffer(mHandle, srcImage.getHandle(), srcImageLayout, dstBuffer, regionCount,
                            regions);
 }
 
-ANGLE_INLINE void CommandBuffer::clearColorImage(const vk::Image &image,
+ANGLE_INLINE void CommandBuffer::clearColorImage(const Image &image,
                                                  VkImageLayout imageLayout,
                                                  const VkClearColorValue &color,
                                                  uint32_t rangeCount,
@@ -635,7 +637,7 @@ ANGLE_INLINE void CommandBuffer::clearColorImage(const vk::Image &image,
 }
 
 ANGLE_INLINE void CommandBuffer::clearDepthStencilImage(
-    const vk::Image &image,
+    const Image &image,
     VkImageLayout imageLayout,
     const VkClearDepthStencilValue &depthStencil,
     uint32_t rangeCount,
@@ -655,9 +657,9 @@ ANGLE_INLINE void CommandBuffer::clearAttachments(uint32_t attachmentCount,
     vkCmdClearAttachments(mHandle, attachmentCount, attachments, rectCount, rects);
 }
 
-ANGLE_INLINE void CommandBuffer::copyImage(const vk::Image &srcImage,
+ANGLE_INLINE void CommandBuffer::copyImage(const Image &srcImage,
                                            VkImageLayout srcImageLayout,
-                                           const vk::Image &dstImage,
+                                           const Image &dstImage,
                                            VkImageLayout dstImageLayout,
                                            uint32_t regionCount,
                                            const VkImageCopy *regions)
@@ -680,23 +682,23 @@ ANGLE_INLINE void CommandBuffer::endRenderPass()
     vkCmdEndRenderPass(mHandle);
 }
 
-ANGLE_INLINE void CommandBuffer::bindIndexBuffer(const VkBuffer &buffer,
+ANGLE_INLINE void CommandBuffer::bindIndexBuffer(const Buffer &buffer,
                                                  VkDeviceSize offset,
                                                  VkIndexType indexType)
 {
     ASSERT(valid());
-    vkCmdBindIndexBuffer(mHandle, buffer, offset, indexType);
+    vkCmdBindIndexBuffer(mHandle, buffer.getHandle(), offset, indexType);
 }
 
 ANGLE_INLINE void CommandBuffer::bindDescriptorSets(VkPipelineBindPoint bindPoint,
-                                                    const vk::PipelineLayout &layout,
+                                                    const PipelineLayout &layout,
                                                     uint32_t firstSet,
                                                     uint32_t descriptorSetCount,
                                                     const VkDescriptorSet *descriptorSets,
                                                     uint32_t dynamicOffsetCount,
                                                     const uint32_t *dynamicOffsets)
 {
-    ASSERT(valid());
+    ASSERT(valid() && layout.valid());
     vkCmdBindDescriptorSets(mHandle, bindPoint, layout.getHandle(), firstSet, descriptorSetCount,
                             descriptorSets, dynamicOffsetCount, dynamicOffsets);
 }
@@ -708,7 +710,7 @@ ANGLE_INLINE void CommandBuffer::executeCommands(uint32_t commandBufferCount,
     vkCmdExecuteCommands(mHandle, commandBufferCount, commandBuffers[0].ptr());
 }
 
-ANGLE_INLINE void CommandBuffer::updateBuffer(const vk::Buffer &buffer,
+ANGLE_INLINE void CommandBuffer::updateBuffer(const Buffer &buffer,
                                               VkDeviceSize dstOffset,
                                               VkDeviceSize dataSize,
                                               const void *data)
@@ -811,6 +813,20 @@ ANGLE_INLINE void CommandBuffer::draw(uint32_t vertexCount,
     vkCmdDraw(mHandle, vertexCount, instanceCount, firstVertex, firstInstance);
 }
 
+ANGLE_INLINE void CommandBuffer::draw(uint32_t vertexCount, uint32_t firstVertex)
+{
+    ASSERT(valid());
+    vkCmdDraw(mHandle, vertexCount, 1, firstVertex, 0);
+}
+
+ANGLE_INLINE void CommandBuffer::drawInstanced(uint32_t vertexCount,
+                                               uint32_t instanceCount,
+                                               uint32_t firstVertex)
+{
+    ASSERT(valid());
+    vkCmdDraw(mHandle, vertexCount, instanceCount, firstVertex, 0);
+}
+
 ANGLE_INLINE void CommandBuffer::drawIndexed(uint32_t indexCount,
                                              uint32_t instanceCount,
                                              uint32_t firstIndex,
@@ -819,6 +835,18 @@ ANGLE_INLINE void CommandBuffer::drawIndexed(uint32_t indexCount,
 {
     ASSERT(valid());
     vkCmdDrawIndexed(mHandle, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
+}
+
+ANGLE_INLINE void CommandBuffer::drawIndexed(uint32_t indexCount)
+{
+    ASSERT(valid());
+    vkCmdDrawIndexed(mHandle, indexCount, 1, 0, 0, 0);
+}
+
+ANGLE_INLINE void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint32_t instanceCount)
+{
+    ASSERT(valid());
+    vkCmdDrawIndexed(mHandle, indexCount, instanceCount, 0, 0, 0);
 }
 
 ANGLE_INLINE void CommandBuffer::dispatch(uint32_t groupCountX,
@@ -834,6 +862,18 @@ ANGLE_INLINE void CommandBuffer::bindPipeline(VkPipelineBindPoint pipelineBindPo
 {
     ASSERT(valid() && pipeline.valid());
     vkCmdBindPipeline(mHandle, pipelineBindPoint, pipeline.getHandle());
+}
+
+ANGLE_INLINE void CommandBuffer::bindGraphicsPipeline(const Pipeline &pipeline)
+{
+    ASSERT(valid() && pipeline.valid());
+    vkCmdBindPipeline(mHandle, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getHandle());
+}
+
+ANGLE_INLINE void CommandBuffer::bindComputePipeline(const Pipeline &pipeline)
+{
+    ASSERT(valid() && pipeline.valid());
+    vkCmdBindPipeline(mHandle, VK_PIPELINE_BIND_POINT_COMPUTE, pipeline.getHandle());
 }
 
 ANGLE_INLINE void CommandBuffer::bindVertexBuffers(uint32_t firstBinding,
