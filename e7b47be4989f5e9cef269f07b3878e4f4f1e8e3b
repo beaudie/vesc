@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "02aa4fa0_2034f695",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-05T22:00:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a437b685_681d0099",
+      "range": {
+        "startLine": 486,
+        "startChar": 4,
+        "endLine": 486,
+        "endChar": 29
+      },
+      "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae93ffa3_4e8702d9",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff68f3e7_28fde02c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1535,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-05T22:00:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae93ffa3_4e8702d9",
+      "range": {
+        "startLine": 1535,
+        "startChar": 30,
+        "endLine": 1535,
+        "endChar": 34
+      },
+      "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "401e6029_dcffa601",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1714,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-05T22:00:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81da304d_b3b9ab2e",
+      "range": {
+        "startLine": 1706,
+        "startChar": 7,
+        "endLine": 1714,
+        "endChar": 0
+      },
+      "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b89ba567_dda0fd70",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 4
@@ -82,6 +154,30 @@
       "writtenOn": "2019-03-04T19:35:45Z",
       "side": 1,
       "message": "What would happen if TRY above fails?",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 54
+      },
+      "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "331ec52d_9f3aeed5",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-05T22:00:33Z",
+      "side": 1,
+      "message": "If `initialize` fails, `Display::createSync` fails, which means the object is going to be destroyed right away.",
+      "parentUuid": "b89ba567_dda0fd70",
       "range": {
         "startLine": 50,
         "startChar": 0,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "5afdd2b4_0048317f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-05T22:00:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "274bde71_efcbe581",
+      "range": {
+        "startLine": 407,
+        "startChar": 13,
+        "endLine": 407,
+        "endChar": 55
+      },
+      "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7bdaaa1b_7f7ee42d",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 4
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "d363f81f_67b88cef",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-05T22:00:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bdaaa1b_7f7ee42d",
+      "range": {
+        "startLine": 427,
+        "startChar": 37,
+        "endLine": 427,
+        "endChar": 52
+      },
+      "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4303690_7629c2ca",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 4
@@ -160,6 +304,30 @@
       "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be2d3e21_1c0e4783",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-05T22:00:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4303690_7629c2ca",
+      "range": {
+        "startLine": 439,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 55
+      },
+      "revId": "e7b47be4989f5e9cef269f07b3878e4f4f1e8e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
