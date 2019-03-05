@@ -1257,6 +1257,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mStagingBuffer(std::move(other.mStagingBuffer)),
       mSubresourceUpdates(std::move(other.mSubresourceUpdates))
 {
+    ASSERT(this != &other);
     other.mCurrentLayout = ImageLayout::Undefined;
     other.mLayerCount    = 0;
     other.mLevelCount    = 0;
@@ -1516,31 +1517,6 @@ void ImageHelper::dumpResources(Serial serial, std::vector<GarbageObject> *garba
     mDeviceMemory.dumpResources(serial, garbageQueue);
 }
 
-const Image &ImageHelper::getImage() const
-{
-    return mImage;
-}
-
-const DeviceMemory &ImageHelper::getDeviceMemory() const
-{
-    return mDeviceMemory;
-}
-
-const gl::Extents &ImageHelper::getExtents() const
-{
-    return mExtents;
-}
-
-const Format &ImageHelper::getFormat() const
-{
-    return *mFormat;
-}
-
-GLint ImageHelper::getSamples() const
-{
-    return mSamples;
-}
-
 VkImageLayout ImageHelper::getCurrentLayout() const
 {
     return kImageMemoryBarrierData[mCurrentLayout].layout;
@@ -1606,7 +1582,7 @@ void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
     commandBuffer->pipelineBarrier(transitionFrom.srcStageMask, transitionTo.dstStageMask, 0, 0,
                                    nullptr, 0, nullptr, 1, &imageMemoryBarrier);
 
-    mCurrentLayout = newLayout;
+    mCurrentLayout           = newLayout;
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
 }
 
@@ -2063,8 +2039,10 @@ angle::Result ImageHelper::allocateStagingMemory(ContextVk *contextVk,
 }
 
 angle::Result ImageHelper::flushStagedUpdates(Context *context,
-                                              uint32_t baseLevel,
-                                              uint32_t levelCount,
+                                              uint32_t levelStart,
+                                              uint32_t levelEnd,
+                                              uint32_t layerStart,
+                                              uint32_t layerEnd,
                                               vk::CommandBuffer *commandBuffer)
 {
     if (mSubresourceUpdates.empty())
@@ -2085,21 +2063,30 @@ angle::Result ImageHelper::flushStagedUpdates(Context *context,
                (update.updateSource == SubresourceUpdate::UpdateSource::Image &&
                 update.image.image != nullptr && update.image.image->valid()));
 
-        const uint32_t updateMipLevel = update.dstSubresource().mipLevel;
+        const VkImageSubresourceLayers &dstSubresource = update.dstSubresource();
+        const uint32_t updateMipLevel                  = dstSubresource.mipLevel;
+        const uint32_t updateBaseLayer                 = dstSubresource.baseArrayLayer;
+        const uint32_t updateLayerCount                = dstSubresource.layerCount;
 
         // It's possible we've accumulated updates that are no longer applicable if the image has
-        // never been flushed but the image description has changed. Check if this level exist for
+        // never been flushed but the image description has changed. Check if this level exists for
         // this image.
-        if (updateMipLevel < baseLevel || updateMipLevel >= baseLevel + levelCount)
+        if (updateMipLevel < levelStart || updateMipLevel >= levelEnd)
         {
             updatesToKeep.emplace_back(update);
             continue;
         }
 
-        // Conservatively flush all writes to the image. We could use a more restricted barrier.
-        // Do not move this above the for loop, otherwise multiple updates can have race conditions
-        // and not be applied correctly as seen in:
-        // dEQP-gles2.functional_texture_specification_texsubimage2d_align_2d* tests on Windows AMD
+        // If the interesting layers don't intersect the update layers, skip the update.
+        if (updateBaseLayer + updateLayerCount <= layerStart || layerEnd <= updateBaseLayer)
+        {
+            updatesToKeep.emplace_back(update);
+            continue;
+        }
+
+        // Conservatively add a barrier between every update.  This is to avoid races when updating
+        // the same subresource.  A possible optimization could be to only issue this barrier when
+        // an overlap in updates is observed.
         changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst, commandBuffer);
 
         if (update.updateSource == SubresourceUpdate::UpdateSource::Buffer)
@@ -2129,18 +2116,8 @@ angle::Result ImageHelper::flushStagedUpdates(Context *context,
     {
         mStagingBuffer.releaseRetainedBuffers(context->getRenderer());
     }
-    else
-    {
-        WARN() << "Internal Vulkan buffer could not be released. This is likely due to having "
-                  "extra images defined in the Texture.";
-    }
 
     return angle::Result::Continue;
-}
-
-bool ImageHelper::hasStagedUpdates() const
-{
-    return !mSubresourceUpdates.empty();
 }
 
 // ImageHelper::SubresourceUpdate implementation
