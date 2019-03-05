@@ -1064,7 +1064,11 @@ void LineLoopHelper::Draw(uint32_t count, CommandBufferT *commandBuffer)
 {
     // Our first index is always 0 because that's how we set it up in createIndexBuffer*.
     // Note: this could theoretically overflow and wrap to zero.
+#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+    commandBuffer->drawIndexed(count + 1);
+#else
     commandBuffer->drawIndexed(count + 1, 1, 0, 0, 0);
+#endif
 }
 
 // BufferHelper implementation.
@@ -1603,10 +1607,14 @@ void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
     imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
     imageMemoryBarrier.subresourceRange.layerCount     = mLayerCount;
 
+#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+    commandBuffer->imageBarrier(transitionFrom.srcStageMask, transitionTo.dstStageMask,
+                                &imageMemoryBarrier);
+#else
     commandBuffer->pipelineBarrier(transitionFrom.srcStageMask, transitionTo.dstStageMask, 0, 0,
                                    nullptr, 0, nullptr, 1, &imageMemoryBarrier);
-
-    mCurrentLayout = newLayout;
+#endif
+    mCurrentLayout           = newLayout;
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
 }
 
@@ -1614,7 +1622,6 @@ void ImageHelper::clearColor(const VkClearColorValue &color,
                              uint32_t baseMipLevel,
                              uint32_t levelCount,
                              CommandBufferT *commandBuffer)
-
 {
     clearColorLayer(color, baseMipLevel, levelCount, 0, mLayerCount, commandBuffer);
 }
@@ -1738,10 +1745,14 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
         barrier.dstAccessMask                 = VK_ACCESS_TRANSFER_READ_BIT;
 
         // We can do it for all layers at once.
+#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+        commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                    &barrier);
+#else
         commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT,
                                        VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 0, nullptr, 0, nullptr, 1,
                                        &barrier);
-
+#endif
         VkImageBlit blit                   = {};
         blit.srcOffsets[0]                 = {0, 0, 0};
         blit.srcOffsets[1]                 = {mipWidth, mipHeight, 1};
@@ -1770,9 +1781,13 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
     barrier.newLayout                     = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
 
     // We can do it for all layers at once.
+#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+    commandBuffer->imageBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                &barrier);
+#else
     commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT, VK_PIPELINE_STAGE_TRANSFER_BIT,
                                    0, 0, nullptr, 0, nullptr, 1, &barrier);
-
+#endif
     // This is just changing the internal state of the image helper so that the next call
     // to changeLayout will use this layout as the "oldLayout" argument.
     mCurrentLayout = ImageLayout::TransferSrc;

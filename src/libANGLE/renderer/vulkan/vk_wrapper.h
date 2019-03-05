@@ -226,16 +226,21 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
               uint32_t instanceCount,
               uint32_t firstVertex,
               uint32_t firstInstance);
-
+    void draw(uint32_t vertexCount, uint32_t firstVertex);
+    void drawInstanced(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex);
     void drawIndexed(uint32_t indexCount,
                      uint32_t instanceCount,
                      uint32_t firstIndex,
                      int32_t vertexOffset,
                      uint32_t firstInstance);
+    void drawIndexed(uint32_t indexCount);
+    void drawIndexedInstanced(uint32_t indexCount, uint32_t instanceCount);
 
     void dispatch(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ);
 
     void bindPipeline(VkPipelineBindPoint pipelineBindPoint, const Pipeline &pipeline);
+    void bindGraphicsPipeline(const Pipeline &pipeline);
+    void bindComputePipeline(const Pipeline &pipeline);
 
     void bindVertexBuffers(uint32_t firstBinding,
                            uint32_t bindingCount,
@@ -808,6 +813,20 @@ ANGLE_INLINE void CommandBuffer::draw(uint32_t vertexCount,
     vkCmdDraw(mHandle, vertexCount, instanceCount, firstVertex, firstInstance);
 }
 
+ANGLE_INLINE void CommandBuffer::draw(uint32_t vertexCount, uint32_t firstVertex)
+{
+    ASSERT(valid());
+    vkCmdDraw(mHandle, vertexCount, 1, firstVertex, 0);
+}
+
+ANGLE_INLINE void CommandBuffer::drawInstanced(uint32_t vertexCount,
+                                               uint32_t instanceCount,
+                                               uint32_t firstVertex)
+{
+    ASSERT(valid());
+    vkCmdDraw(mHandle, vertexCount, instanceCount, firstVertex, 0);
+}
+
 ANGLE_INLINE void CommandBuffer::drawIndexed(uint32_t indexCount,
                                              uint32_t instanceCount,
                                              uint32_t firstIndex,
@@ -816,6 +835,18 @@ ANGLE_INLINE void CommandBuffer::drawIndexed(uint32_t indexCount,
 {
     ASSERT(valid());
     vkCmdDrawIndexed(mHandle, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
+}
+
+ANGLE_INLINE void CommandBuffer::drawIndexed(uint32_t indexCount)
+{
+    ASSERT(valid());
+    vkCmdDrawIndexed(mHandle, indexCount, 1, 0, 0, 0);
+}
+
+ANGLE_INLINE void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint32_t instanceCount)
+{
+    ASSERT(valid());
+    vkCmdDrawIndexed(mHandle, indexCount, instanceCount, 0, 0, 0);
 }
 
 ANGLE_INLINE void CommandBuffer::dispatch(uint32_t groupCountX,
@@ -831,6 +862,18 @@ ANGLE_INLINE void CommandBuffer::bindPipeline(VkPipelineBindPoint pipelineBindPo
 {
     ASSERT(valid() && pipeline.valid());
     vkCmdBindPipeline(mHandle, pipelineBindPoint, pipeline.getHandle());
+}
+
+ANGLE_INLINE void CommandBuffer::bindGraphicsPipeline(const Pipeline &pipeline)
+{
+    ASSERT(valid() && pipeline.valid());
+    vkCmdBindPipeline(mHandle, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline.getHandle());
+}
+
+ANGLE_INLINE void CommandBuffer::bindComputePipeline(const Pipeline &pipeline)
+{
+    ASSERT(valid() && pipeline.valid());
+    vkCmdBindPipeline(mHandle, VK_PIPELINE_BIND_POINT_COMPUTE, pipeline.getHandle());
 }
 
 ANGLE_INLINE void CommandBuffer::bindVertexBuffers(uint32_t firstBinding,

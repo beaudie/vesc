@@ -366,9 +366,7 @@ angle::Result ContextVk::handleDirtyPipeline(const gl::Context *context,
 
         mGraphicsPipelineTransition.reset();
     }
-
-    commandBuffer->bindPipeline(VK_PIPELINE_BIND_POINT_GRAPHICS, mCurrentPipeline->getPipeline());
-
+    commandBuffer->bindGraphicsPipeline(mCurrentPipeline->getPipeline());
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentPipeline && mCurrentPipeline->valid());
     mCurrentPipeline->updateSerial(mRenderer->getCurrentQueueSerial());
@@ -446,8 +444,8 @@ angle::Result ContextVk::drawArrays(const gl::Context *context,
                                     GLint first,
                                     GLsizei count)
 {
-    CommandBufferT *commandBuffer    = nullptr;
-    uint32_t clampedVertexCount      = gl::GetClampedVertexCount<uint32_t>(count);
+    CommandBufferT *commandBuffer = nullptr;
+    uint32_t clampedVertexCount   = gl::GetClampedVertexCount<uint32_t>(count);
 
     if (mode == gl::PrimitiveMode::LineLoop)
     {
@@ -459,7 +457,7 @@ angle::Result ContextVk::drawArrays(const gl::Context *context,
     {
         ANGLE_TRY(setupDraw(context, mode, first, count, 1, gl::DrawElementsType::InvalidEnum,
                             nullptr, mNonIndexedDirtyBitsMask, &commandBuffer));
-        commandBuffer->draw(clampedVertexCount, 1, first, 0);
+        commandBuffer->draw(clampedVertexCount, first);
     }
 
     return angle::Result::Continue;
@@ -481,7 +479,7 @@ angle::Result ContextVk::drawArraysInstanced(const gl::Context *context,
     CommandBufferT *commandBuffer = nullptr;
     ANGLE_TRY(setupDraw(context, mode, first, count, instances, gl::DrawElementsType::InvalidEnum,
                         nullptr, mNonIndexedDirtyBitsMask, &commandBuffer));
-    commandBuffer->draw(gl::GetClampedVertexCount<uint32_t>(count), instances, first, 0);
+    commandBuffer->drawInstanced(gl::GetClampedVertexCount<uint32_t>(count), instances, first);
     return angle::Result::Continue;
 }
 
@@ -500,7 +498,7 @@ angle::Result ContextVk::drawElements(const gl::Context *context,
     else
     {
         ANGLE_TRY(setupIndexedDraw(context, mode, count, 1, type, indices, &commandBuffer));
-        commandBuffer->drawIndexed(count, 1, 0, 0, 0);
+        commandBuffer->drawIndexed(count);
     }
 
     return angle::Result::Continue;
@@ -522,7 +520,7 @@ angle::Result ContextVk::drawElementsInstanced(const gl::Context *context,
 
     CommandBufferT *commandBuffer = nullptr;
     ANGLE_TRY(setupIndexedDraw(context, mode, count, instances, type, indices, &commandBuffer));
-    commandBuffer->drawIndexed(count, instances, 0, 0, 0);
+    commandBuffer->drawIndexedInstanced(count, instances);
     return angle::Result::Continue;
 }
 
