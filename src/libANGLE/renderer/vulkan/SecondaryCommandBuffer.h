@@ -296,7 +296,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
 {
   public:
     SecondaryCommandBuffer(angle::PoolAllocator *allocator)
-        : mHead(nullptr), mLast(nullptr), mAllocator(allocator)
+        : mHead(nullptr), mLast(nullptr), mValid(false), mAllocator(allocator)
     {}
     ~SecondaryCommandBuffer() {}
 
@@ -427,6 +427,11 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     // Parse the cmds in this cmd buffer into given primary cmd buffer for execution
     void executeCommands(VkCommandBuffer cmdBuffer);
 
+    // TODO: These valid calls are a temp hack to make integration with old vk::CommandBuffers
+    // easier
+    void setValid() { mValid = true; }
+    bool valid() { return mValid; }
+
   private:
     // Allocate and initialize memory for given commandID & variable param size
     //  returning a pointer to the start of the commands parameter data and updating
@@ -452,6 +457,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     CommandHeader *mHead;
     // Last command inserted in cmd buffer
     CommandHeader *mLast;
+    // Has the cmd buffer been initialized or explicitly set Valid?
+    bool mValid;
     angle::PoolAllocator *mAllocator;
     // Ptr to write variable ptr data section of cmd into.
     //  This is set to just past fixed parameter data when initCommand() is called
