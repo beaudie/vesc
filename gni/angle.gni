@@ -84,6 +84,9 @@ declare_args() {
 
     # Disallow non-conformant configurations
     angle_vulkan_conformant_configs_only = false
+
+    # Enable custom (cpu-side) secondary command buffers
+    angle_enable_custom_vulkan_cmd_buffers = true
   }
 }
 
