@@ -25,6 +25,46 @@
     },
     {
       "key": {
+        "uuid": "b908a86a_af07fcf8",
+        "filename": "src/common/utilities.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-05T14:16:27Z",
+      "side": 1,
+      "message": "nit: GetDebugTypeString ? etc for the rest.",
+      "range": {
+        "startLine": 878,
+        "startChar": 12,
+        "endLine": 878,
+        "endChar": 31
+      },
+      "revId": "5bdd24904ac103bdc2bc8b80ba775cb72094ea6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "550964ca_2ea41068",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-05T14:16:27Z",
+      "side": 1,
+      "message": "I have a suggestion for how to do this.\n\nWe have WARN() and ERR() in ANGLE. We used to have INFO() but took it out because Chrome didn\u0027t need it. But it looks like what Android wants is INFO().\n\nCan you add INFO() to src/common/debug.h? You can copy the logic for WARN(). You\u0027ll need to add cases for the severity and the stream macros. All copy/paste. Then update src/libANGLE/LoggingAnnotator to output info severity messages to plat-\u003elogInfo(). I checked in the loader and Tobin already hooked up logInfo. So you shouldn\u0027t need any loader-side changes.\n\nYou could also update gl::Trace in debug.cpp to handle logging info messages appropriately when the ANGLE platform callbacks are disabled.",
+      "revId": "5bdd24904ac103bdc2bc8b80ba775cb72094ea6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5736c005_2d5a7b46",
         "filename": "src/libANGLE/Debug.cpp",
         "patchSetId": 1
