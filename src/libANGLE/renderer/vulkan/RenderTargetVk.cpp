@@ -156,6 +156,9 @@ vk::ImageHelper *RenderTargetVk::getImageForRead(vk::CommandGraphResource *readi
     // to perform the layout transition and set the dependency.
     mImage->addWriteDependency(readingResource);
 
+    // If reading the image, any pending clear must be performed.
+    mImage->ensureCleared(mLevelIndex, mLayerIndex, true, commandBuffer);
+
     mImage->changeLayout(mImage->getAspectFlags(), layout, commandBuffer);
 
     return mImage;
@@ -172,7 +175,7 @@ angle::Result RenderTargetVk::ensureImageInitialized(ContextVk *contextVk)
 {
     if (mOwner)
     {
-        return mOwner->ensureImageInitialized(contextVk);
+        return mOwner->ensureImageInitializedForDraw(contextVk, mLevelIndex, mLayerIndex);
     }
     return angle::Result::Continue;
 }
