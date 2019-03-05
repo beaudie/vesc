@@ -14,6 +14,7 @@
 #include <vulkan/vulkan.h>
 
 #include "common/PoolAlloc.h"
+#include "libANGLE/renderer/vulkan/vk_wrapper.h"
 
 namespace rx
 {
@@ -45,14 +46,16 @@ enum class CommandID
     DrawIndexed = 17,
     Dispatch    = 18,
     // Sync & Query cmds
-    PipelinBarrier = 19,
-    ResetEvent     = 20,
-    SetEvent       = 21,
-    WaitEvents     = 22,
-    ResetQueryPool = 23,
-    BeginQuery     = 24,
-    EndQuery       = 25,
-    WriteTimestamp = 26,
+    PipelineBarrier = 19,
+    ResetEvent      = 20,
+    SetEvent        = 21,
+    WaitEvents      = 22,
+    ResetQueryPool  = 23,
+    BeginQuery      = 24,
+    EndQuery        = 25,
+    WriteTimestamp  = 26,
+    // Custom commands for optimization
+    ImageBarrier = 27,
 };
 
 // Structs to encapsulate parameters for different commands
@@ -232,6 +235,13 @@ struct PipelineBarrierParams
     const VkImageMemoryBarrier *imageMemoryBarriers;
 };
 
+struct ImageBarrierParams
+{
+    VkPipelineStageFlags srcStageMask;
+    VkPipelineStageFlags dstStageMask;
+    VkImageMemoryBarrier imageMemoryBarrier;
+};
+
 struct SetEventParams
 {
     VkEvent event;
@@ -295,56 +305,56 @@ struct CommandHeader
 class SecondaryCommandBuffer final : angle::NonCopyable
 {
   public:
-    SecondaryCommandBuffer(angle::PoolAllocator *allocator)
-        : mHead(nullptr), mLast(nullptr), mAllocator(allocator)
+    SecondaryCommandBuffer()
+        : mHead(nullptr), mLast(nullptr), mAllocator(nullptr), mLastBoundPipeline(VK_NULL_HANDLE)
     {}
     ~SecondaryCommandBuffer() {}
 
     // Add commands
     void bindDescriptorSets(VkPipelineBindPoint bindPoint,
-                            VkPipelineLayout layout,
+                            const PipelineLayout &layout,
                             uint32_t firstSet,
                             uint32_t descriptorSetCount,
                             const VkDescriptorSet *descriptorSets,
                             uint32_t dynamicOffsetCount,
                             const uint32_t *dynamicOffsets);
 
-    void bindIndexBuffer(const VkBuffer &buffer, VkDeviceSize offset, VkIndexType indexType);
+    void bindIndexBuffer(const Buffer &buffer, VkDeviceSize offset, VkIndexType indexType);
 
-    void bindPipeline(VkPipelineBindPoint pipelineBindPoint, VkPipeline pipeline);
+    void bindPipeline(VkPipelineBindPoint pipelineBindPoint, const Pipeline &pipelin);
 
     void bindVertexBuffers(uint32_t firstBinding,
                            uint32_t bindingCount,
                            const VkBuffer *buffers,
                            const VkDeviceSize *offsets);
 
-    void blitImage(VkImage srcImage,
+    void blitImage(const Image &srcImage,
                    VkImageLayout srcImageLayout,
-                   VkImage dstImage,
+                   const Image &dstImage,
                    VkImageLayout dstImageLayout,
                    uint32_t regionCount,
                    const VkImageBlit *pRegions,
                    VkFilter filter);
 
-    void copyBuffer(const VkBuffer &srcBuffer,
-                    const VkBuffer &destBuffer,
+    void copyBuffer(const Buffer &srcBuffer,
+                    const Buffer &destBuffer,
                     uint32_t regionCount,
                     const VkBufferCopy *regions);
 
     void copyBufferToImage(VkBuffer srcBuffer,
-                           VkImage dstImage,
+                           const Image &dstImage,
                            VkImageLayout dstImageLayout,
                            uint32_t regionCount,
                            const VkBufferImageCopy *regions);
 
-    void copyImage(VkImage srcImage,
+    void copyImage(const Image &srcImage,
                    VkImageLayout srcImageLayout,
-                   VkImage dstImage,
+                   const Image &dstImage,
                    VkImageLayout dstImageLayout,
                    uint32_t regionCount,
                    const VkImageCopy *regions);
 
-    void copyImageToBuffer(VkImage srcImage,
+    void copyImageToBuffer(const Image &srcImage,
                            VkImageLayout srcImageLayout,
                            VkBuffer dstBuffer,
                            uint32_t regionCount,
@@ -355,24 +365,24 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                           uint32_t rectCount,
                           const VkClearRect *rects);
 
-    void clearColorImage(VkImage image,
+    void clearColorImage(const Image &image,
                          VkImageLayout imageLayout,
                          const VkClearColorValue &color,
                          uint32_t rangeCount,
                          const VkImageSubresourceRange *ranges);
 
-    void clearDepthStencilImage(VkImage image,
+    void clearDepthStencilImage(const Image &image,
                                 VkImageLayout imageLayout,
                                 const VkClearDepthStencilValue &depthStencil,
                                 uint32_t rangeCount,
                                 const VkImageSubresourceRange *ranges);
 
-    void updateBuffer(VkBuffer buffer,
+    void updateBuffer(const Buffer &buffer,
                       VkDeviceSize dstOffset,
                       VkDeviceSize dataSize,
                       const void *data);
 
-    void pushConstants(VkPipelineLayout layout,
+    void pushConstants(const PipelineLayout &layout,
                        VkShaderStageFlags flag,
                        uint32_t offset,
                        uint32_t size,
@@ -404,6 +414,10 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                          uint32_t imageMemoryBarrierCount,
                          const VkImageMemoryBarrier *imageMemoryBarriers);
 
+    void imageBarrier(VkPipelineStageFlags srcStageMask,
+                      VkPipelineStageFlags dstStageMask,
+                      VkImageMemoryBarrier *imageMemoryBarrier);
+
     void setEvent(VkEvent event, VkPipelineStageFlags stageMask);
     void resetEvent(VkEvent event, VkPipelineStageFlags stageMask);
     void waitEvents(uint32_t eventCount,
@@ -424,8 +438,18 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                         VkQueryPool queryPool,
                         uint32_t query);
 
+    // No-op for compatibility
+    VkResult end() { return VK_SUCCESS; }
+
     // Parse the cmds in this cmd buffer into given primary cmd buffer for execution
     void executeCommands(VkCommandBuffer cmdBuffer);
+
+    // Initialize the SecondaryCommandBuffer by setting the allocator it will use
+    void initialize(angle::PoolAllocator *allocator) { mAllocator = allocator; }
+    // This will cause the SecondaryCommandBuffer to become invalid by clearing its allocator
+    void releaseHandle() { mAllocator = nullptr; }
+    // The SecondaryCommandBuffer is valid if it's been initialized
+    bool valid() { return mAllocator != nullptr; }
 
   private:
     // Allocate and initialize memory for given commandID & variable param size
@@ -452,10 +476,16 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     CommandHeader *mHead;
     // Last command inserted in cmd buffer
     CommandHeader *mLast;
+    // Allocator used by this class. If non-null then the class is valid.
     angle::PoolAllocator *mAllocator;
     // Ptr to write variable ptr data section of cmd into.
     //  This is set to just past fixed parameter data when initCommand() is called
     uint8_t *mPtrCmdData;
+    // Track last bound pipeline to avoid re-binding it
+    //  TODO: This needs to be moved up the chain so that pipeline isn't dirtied
+    //  when it doesn't need to be. See related TODO comment in ContextVk.h function
+    //  invalidateVertexAndIndexBuffers().
+    VkPipeline mLastBoundPipeline;
 };
 
 }  // namespace vk

@@ -123,7 +123,14 @@ class PoolAllocator : angle::NonCopyable
 {
   public:
     static const int kDefaultAlignment = 16;
-    PoolAllocator(int growthIncrement = 8 * 1024, int allocationAlignment = kDefaultAlignment);
+    //
+    // Create PoolAllocator. If fastEnable is set, alignment will be set to
+    // 1 byte and fastAllocate() function can be used to make allocations with
+    // less overhead.
+    //
+    PoolAllocator(int growthIncrement     = 8 * 1024,
+                  int allocationAlignment = kDefaultAlignment,
+                  bool fastEnable         = false);
 
     //
     // Don't call the destructor just to free up the memory, call pop()
@@ -152,6 +159,11 @@ class PoolAllocator : angle::NonCopyable
     // available, otherwise a properly aligned pointer to 'numBytes' of memory.
     //
     void *allocate(size_t numBytes);
+
+    //
+    // Call fastAllocate() for a faster allocate function that does minimal bookkeeping
+    // preCondition: Allocator must have been created w/ alignment of 1
+    void *fastAllocate(size_t numBytes);
 
     //
     // There is no deallocate.  The point of this class is that
