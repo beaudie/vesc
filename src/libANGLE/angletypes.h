@@ -84,6 +84,14 @@ struct Extents
 
     bool empty() const { return (width * height * depth) == 0; }
 
+    int getMipWidth(int mip) const { return std::max(width >> mip, 1); }
+    int getMipHeight(int mip) const { return std::max(height >> mip, 1); }
+    int getMipDepth(int mip) const { return std::max(depth >> mip, 1); }
+    Extents getMip(int mip) const
+    {
+        return Extents(getMipWidth(mip), getMipHeight(mip), getMipDepth(mip));
+    }
+
     int width;
     int height;
     int depth;
