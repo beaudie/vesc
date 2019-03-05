@@ -599,14 +599,14 @@ class ImageHelper final : public CommandGraphResource
                              GLint samples);
     void resetImageWeakReference();
 
-    const Image &getImage() const;
-    const DeviceMemory &getDeviceMemory() const;
+    const Image &getImage() const { return mImage; }
+    const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
 
-    const gl::Extents &getExtents() const;
+    const gl::Extents &getExtents() const { return mExtents; }
     uint32_t getLayerCount() const { return mLayerCount; }
     uint32_t getLevelCount() const { return mLevelCount; }
-    const Format &getFormat() const;
-    GLint getSamples() const;
+    const Format &getFormat() const { return *mFormat; }
+    GLint getSamples() const { return mSamples; }
 
     VkImageLayout getCurrentLayout() const;
 
@@ -680,12 +680,19 @@ class ImageHelper final : public CommandGraphResource
                                         VkDeviceSize *offsetOut,
                                         bool *newBufferAllocatedOut);
 
+    // Flushes staged updates to a range of levels and layers.  Due to the nature of updates
+    // (done wholly to a VkImageSubresourceLayers), some unsolicited layers may also be updated.
+    // If asked to flush pending clears, a subresource that doesn't have any staged updates will
+    // be cleared regardless.
     angle::Result flushStagedUpdates(Context *context,
                                      uint32_t baseLevel,
                                      uint32_t levelCount,
+                                     uint32_t baseLayer,
+                                     uint32_t layerCount,
+                                     bool flushPendingClear,
                                      vk::CommandBuffer *commandBuffer);
 
-    bool hasStagedUpdates() const;
+    bool hasStagedUpdates() const { return !mSubresourceUpdates.empty(); }
 
     // changeLayout automatically skips the layout change if it's unnecessary.  This function can be
     // used to prevent creating a command graph node and subsequently a command buffer for the sole
@@ -706,11 +713,45 @@ class ImageHelper final : public CommandGraphResource
                               uint32_t newQueueFamilyIndex,
                               CommandBuffer *commandBuffer);
 
+    // Image clear is deferred until first use.  If that use happens to be a render pass attachment,
+    // the clear will be done as a render pass loadOp.
+    bool needsClear(uint32_t level, uint32_t layer, bool *useDefaultValueOut) const;
+    bool needsClearAnySubresource() const { return mNeedsClearCount > 0; }
+    // Marks a subresource as requiring to be cleared.  In the case of robust images, such as with
+    // WebGL, the image needs to be cleared to the default value.  With framebuffers, the
+    // subresource needs to be cleared to the current clear color (which should happen before the
+    // clear color changes as this class does not track individual clear colors per subresource).
+    void setNeedsClear(uint32_t level, uint32_t layer, bool clearToDefault);
+    // A whole image may need to be cleared to default value under some circumstances, e.g. when
+    // first acquiring a swapchain image or when an image has an emulated channel.  In the latter
+    // case, the default clear color is different, hence the bool argument.
+    void setNeedsClearWholeImage(bool clearToEmulatedDefault);
+    void setCleared(uint32_t level, uint32_t layer);
+    // Prior to writes, call this function to clear the subresource if necessary.  If the write
+    // covers the whole subresource, clear is not done.
+    void ensureClearedPriorToWrite(const VkImageSubresourceLayers &subresource,
+                                   const VkOffset3D &offset,
+                                   const VkExtent3D &extent,
+                                   CommandBuffer *commandBuffer);
+    // Call this function to clear the subresource.  This is usually done prior to reads.  If the
+    // image is already transitioned to TransferDst, set autoLayoutTransition=false to avoid an
+    // unnecessary barrier.  Otherwise, the image will be transfered to TransferDst if the clear is
+    // performed.
+    bool ensureCleared(uint32_t level,
+                       uint32_t layer,
+                       bool autoLayoutTransition,
+                       CommandBuffer *commandBuffer);
+
+    const VkClearValue &getDefaultColorValue();
+    const VkClearValue &getDefaultDepthStencilValue();
+
   private:
     void forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                    ImageLayout newLayout,
                                    uint32_t newQueueFamilyIndex,
                                    CommandBuffer *commandBuffer);
+
+    void resizeClearInfo(bool needsClear);
 
     struct SubresourceUpdate
     {
@@ -725,6 +766,16 @@ class ImageHelper final : public CommandGraphResource
         {
             return updateSource == UpdateSource::Buffer ? buffer.copyRegion.imageSubresource
                                                         : image.copyRegion.dstSubresource;
+        }
+        const VkOffset3D &dstOffset() const
+        {
+            return updateSource == UpdateSource::Buffer ? buffer.copyRegion.imageOffset
+                                                        : image.copyRegion.dstOffset;
+        }
+        const VkExtent3D &dstExtent() const
+        {
+            return updateSource == UpdateSource::Buffer ? buffer.copyRegion.imageExtent
+                                                        : image.copyRegion.extent;
         }
         bool isUpdateToLayerLevel(uint32_t layerIndex, uint32_t levelIndex) const;
 
@@ -764,6 +815,19 @@ class ImageHelper final : public CommandGraphResource
     // Current state.
     ImageLayout mCurrentLayout;
     uint32_t mCurrentQueueFamilyIndex;
+    // Every two bits indicate:
+    //
+    //  - bit 0: Whether each layer/level needs clearing prior to use.
+    //  - bit 1: Whether context's clear color should be used, or an override according to WebGL.
+    //
+    // Note that vector<bool> is specialized to take 1 bit per entry.
+    std::vector<bool> mClearInfo;
+    // A cached value showing how many "needs clear" bits are set in `mClearInfo`.  This is used to
+    // quickly understand whether the image needs clearing at all.
+    size_t mNeedsClearCount;
+    // The default clear color is different between WebGL and emulated images.  WebGL requires
+    // color images to clear to (0,0,0,0) while an emulated texture should clear to (0,0,0,1).
+    bool mClearToEmulatedDefault;
 
     // Cached properties.
     uint32_t mLayerCount;
