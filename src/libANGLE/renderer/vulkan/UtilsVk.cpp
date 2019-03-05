@@ -576,33 +576,62 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
                                        const vk::ImageView *imageView,
                                        const vk::RenderPassDesc &renderPassDesc,
                                        const gl::Rectangle &renderArea,
+                                       int level,
+                                       int layer,
                                        vk::CommandBuffer **commandBufferOut)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
-    vk::RenderPass *renderPass = nullptr;
-    ANGLE_TRY(renderer->getCompatibleRenderPass(contextVk, renderPassDesc, &renderPass));
+    bool useOverrideColor = false;
+    bool needsClear       = image->needsClear(level, layer, &useOverrideColor);
+
+    // If the image needs to be cleared, we can only support having it cleared to the override
+    // color.  If not using the override color, we would have to know what the clear color value
+    // was at the time the image was cleared.  That's information we don't currently keep.
+    //
+    // When a framebuffer is cleared, a render pass is started with the clear info, which should
+    // already take care of clearing the image to the appropriate color.
+    ASSERT(!needsClear || useOverrideColor);
+
+    vk::RenderPass *compatibleRenderPass = nullptr;
+    ANGLE_TRY(renderer->getCompatibleRenderPass(contextVk, renderPassDesc, &compatibleRenderPass));
 
     VkFramebufferCreateInfo framebufferInfo = {};
 
+    // If the image needs to be cleared, make the framebuffer size cover the whole image. Otherwise,
+    // minimize the framebuffer coverage to only cover up to the render area.
+    int mipWidth          = image->getExtents().getMipWidth(level);
+    int mipHeight         = image->getExtents().getMipHeight(level);
+    int framebufferWidth  = needsClear ? mipWidth : renderArea.x + renderArea.width;
+    int framebufferHeight = needsClear ? mipHeight : renderArea.y + renderArea.height;
+
     framebufferInfo.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     framebufferInfo.flags           = 0;
-    framebufferInfo.renderPass      = renderPass->getHandle();
+    framebufferInfo.renderPass      = compatibleRenderPass->getHandle();
     framebufferInfo.attachmentCount = 1;
     framebufferInfo.pAttachments    = imageView->ptr();
-    framebufferInfo.width           = renderArea.x + renderArea.width;
-    framebufferInfo.height          = renderArea.y + renderArea.height;
+    framebufferInfo.width           = framebufferWidth;
+    framebufferInfo.height          = framebufferHeight;
     framebufferInfo.layers          = 1;
 
     vk::Framebuffer framebuffer;
     ANGLE_VK_TRY(contextVk, framebuffer.init(contextVk->getDevice(), framebufferInfo));
 
-    // TODO(jmadill): Proper clear value implementation. http://anglebug.com/2361
-    std::vector<VkClearValue> clearValues = {{}};
-    ASSERT(clearValues.size() == 1);
+    vk::AttachmentOpsArray renderPassAttachmentOps;
+    std::vector<VkClearValue> clearValues;
+
+    renderPassAttachmentOps.setOp(
+        0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+        needsClear ? VK_ATTACHMENT_LOAD_OP_CLEAR : VK_ATTACHMENT_LOAD_OP_LOAD,
+        VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+        VK_ATTACHMENT_STORE_OP_DONT_CARE);
+    clearValues.emplace_back(image->getOverrideColorValue());
 
     ANGLE_TRY(image->beginRenderPass(contextVk, framebuffer, renderArea, renderPassDesc,
-                                     clearValues, commandBufferOut));
+                                     renderPassAttachmentOps, clearValues, commandBufferOut));
+
+    // Image is cleared after this render pass.
+    image->setCleared(level, layer);
 
     renderer->releaseObject(renderer->getCurrentQueueSerial(), &framebuffer);
 
@@ -754,8 +783,8 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
                        destLayoutChange);
 
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(
-        startRenderPass(contextVk, dest, destView, renderPassDesc, renderArea, &commandBuffer));
+    ANGLE_TRY(startRenderPass(contextVk, dest, destView, renderPassDesc, renderArea, params.destMip,
+                              params.destLayer, &commandBuffer));
 
     // Source's layout change should happen before rendering
     src->addReadDependency(dest);

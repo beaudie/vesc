@@ -151,7 +151,12 @@ class TextureVk : public TextureImpl
                                              vk::ImageView **imageViewOut);
     const vk::Sampler &getSampler() const;
 
+    // Completely initializes the image by clearing it if necessary and upload staged changes.
     angle::Result ensureImageInitialized(ContextVk *contextVk);
+    // Initializes a single level-layer of the image.  If there are staged changes, the level-layer
+    // is cleared first (if necessary) and the changes uploaded.  Otherwise the image is not
+    // cleared, allowing it to be cleared through render pass loadOps.
+    angle::Result ensureImageInitializedForDraw(ContextVk *contextVk, size_t level, size_t layer);
 
   private:
     // Transform an image index from the frontend into one that can be used on the backing
@@ -251,8 +256,7 @@ class TextureVk : public TextureImpl
     angle::Result initImage(ContextVk *contextVk,
                             const vk::Format &format,
                             const gl::Extents &extents,
-                            const uint32_t levelCount,
-                            vk::CommandBuffer *commandBuffer);
+                            const uint32_t levelCount);
     void releaseImage(RendererVk *renderer);
     void releaseStagingBuffer(RendererVk *renderer);
     uint32_t getLevelCount() const;
@@ -267,6 +271,7 @@ class TextureVk : public TextureImpl
                                              const vk::Format &format);
 
     bool mOwnsImage;
+    bool mInitializeContents;
 
     gl::TextureType mImageNativeType;
 

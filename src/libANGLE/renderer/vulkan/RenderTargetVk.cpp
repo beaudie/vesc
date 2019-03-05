@@ -172,7 +172,7 @@ angle::Result RenderTargetVk::ensureImageInitialized(ContextVk *contextVk)
 {
     if (mOwner)
     {
-        return mOwner->ensureImageInitialized(contextVk);
+        return mOwner->ensureImageInitializedForDraw(contextVk, mLevelIndex, mLayerIndex);
     }
     return angle::Result::Continue;
 }
