@@ -295,9 +295,7 @@ struct CommandHeader
 class SecondaryCommandBuffer final : angle::NonCopyable
 {
   public:
-    SecondaryCommandBuffer(angle::PoolAllocator *allocator)
-        : mHead(nullptr), mLast(nullptr), mAllocator(allocator)
-    {}
+    SecondaryCommandBuffer() : mHead(nullptr), mLast(nullptr), mAllocator(nullptr) {}
     ~SecondaryCommandBuffer() {}
 
     // Add commands
@@ -424,8 +422,18 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                         VkQueryPool queryPool,
                         uint32_t query);
 
+    // No-op for compatibility
+    VkResult end() { return VK_SUCCESS; }
+
     // Parse the cmds in this cmd buffer into given primary cmd buffer for execution
     void executeCommands(VkCommandBuffer cmdBuffer);
+
+    // Initialize the SecondaryCommandBuffer by setting the allocator it will use
+    void initialize(angle::PoolAllocator *allocator) { mAllocator = allocator; }
+    // This will cause the SecondaryCommandBuffer to become invalid by clearing its allocator
+    void releaseHandle() { mAllocator = nullptr; }
+    // The SecondaryCommandBuffer is valid if it's been initialized
+    bool valid() { return mAllocator != nullptr; }
 
   private:
     // Allocate and initialize memory for given commandID & variable param size
@@ -452,6 +460,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     CommandHeader *mHead;
     // Last command inserted in cmd buffer
     CommandHeader *mLast;
+    // Allocator used by this class. If non-null then the class is valid.
     angle::PoolAllocator *mAllocator;
     // Ptr to write variable ptr data section of cmd into.
     //  This is set to just past fixed parameter data when initCommand() is called
