@@ -25,7 +25,7 @@ namespace angle
 // Implement the functionality of the PoolAllocator class, which
 // is documented in PoolAlloc.h.
 //
-PoolAllocator::PoolAllocator(int growthIncrement, int allocationAlignment)
+PoolAllocator::PoolAllocator(int growthIncrement, int allocationAlignment, bool fastEnable)
     : mAlignment(allocationAlignment),
 #if !defined(ANGLE_DISABLE_POOL_ALLOC)
       mPageSize(growthIncrement),
@@ -36,43 +36,50 @@ PoolAllocator::PoolAllocator(int growthIncrement, int allocationAlignment)
 #endif
       mLocked(false)
 {
-    //
-    // Adjust mAlignment to be at least pointer aligned and
-    // power of 2.
-    //
-    size_t minAlign = sizeof(void *);
-    mAlignment &= ~(minAlign - 1);
-    if (mAlignment < minAlign)
-        mAlignment = minAlign;
-    size_t a = 1;
-    while (a < mAlignment)
-        a <<= 1;
-    mAlignment     = a;
-    mAlignmentMask = a - 1;
+    if (fastEnable)
+    {
+        mAlignment  = 1;
+        mHeaderSkip = sizeof(Header);
+    }
+    else
+    {
+        //
+        // Adjust mAlignment to be at least pointer aligned and
+        // power of 2.
+        //
+        size_t minAlign = sizeof(void *);
+        mAlignment &= ~(minAlign - 1);
+        if (mAlignment < minAlign)
+            mAlignment = minAlign;
+        size_t a = 1;
+        while (a < mAlignment)
+            a <<= 1;
+        mAlignment     = a;
+        mAlignmentMask = a - 1;
 
 #if !defined(ANGLE_DISABLE_POOL_ALLOC)
+        //
+        // Align header skip
+        //
+        mHeaderSkip = minAlign;
+        if (mHeaderSkip < sizeof(Header))
+        {
+            mHeaderSkip = (sizeof(Header) + mAlignmentMask) & ~mAlignmentMask;
+        }
+    }
     //
     // Don't allow page sizes we know are smaller than all common
     // OS page sizes.
     //
     if (mPageSize < 4 * 1024)
         mPageSize = 4 * 1024;
-
     //
     // A large mCurrentPageOffset indicates a new page needs to
     // be obtained to allocate memory.
     //
     mCurrentPageOffset = mPageSize;
-
-    //
-    // Align header skip
-    //
-    mHeaderSkip = minAlign;
-    if (mHeaderSkip < sizeof(Header))
-    {
-        mHeaderSkip = (sizeof(Header) + mAlignmentMask) & ~mAlignmentMask;
-    }
 #else  // !defined(ANGLE_DISABLE_POOL_ALLOC)
+    }
     mStack.push_back({});
 #endif
 }
@@ -294,6 +301,51 @@ void *PoolAllocator::allocate(size_t numBytes)
     intAlloc          = (intAlloc + mAlignmentMask) & ~mAlignmentMask;
     return reinterpret_cast<void *>(intAlloc);
 #endif
+}
+
+void *PoolAllocator::fastAllocate(size_t numBytes)
+{
+    ASSERT(mAlignment == 1);
+    // No multi-page allocations
+    ASSERT(numBytes <= (mPageSize - mHeaderSkip));
+    //
+    // Do the allocation, most likely case first, for efficiency.
+    // This step could be moved to be inline sometime.
+    //
+    if (numBytes <= mPageSize - mCurrentPageOffset)
+    {
+        //
+        // Safe to allocate from mCurrentPageOffset.
+        //
+        unsigned char *memory = reinterpret_cast<unsigned char *>(mInUseList) + mCurrentPageOffset;
+        mCurrentPageOffset += numBytes;
+        return memory;
+    }
+
+    //
+    // Need a simple page to allocate from.
+    //
+    Header *memory;
+    if (mFreeList)
+    {
+        memory    = mFreeList;
+        mFreeList = mFreeList->nextPage;
+    }
+    else
+    {
+        memory = reinterpret_cast<Header *>(::new char[mPageSize]);
+        if (memory == 0)
+            return 0;
+    }
+
+    // Use placement-new to initialize header
+    new (memory) Header(mInUseList, 1);
+    mInUseList = memory;
+
+    unsigned char *ret = reinterpret_cast<unsigned char *>(mInUseList) + mHeaderSkip;
+    mCurrentPageOffset = mHeaderSkip + numBytes;
+
+    return ret;
 }
 
 void PoolAllocator::lock()
