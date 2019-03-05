@@ -31,6 +31,18 @@ constexpr int kLineLoopDynamicBufferMinSize = 1024 * 1024;
 // This is an arbitrary max. We can change this later if necessary.
 constexpr uint32_t kDefaultDescriptorPoolMaxSets = 128;
 
+// WebGL requires color textures to be initialized to transparent black.
+constexpr VkClearValue kWebGLInitColorValue = {};
+// When emulating a texture, we want the emulated channels to be 0, with alpha 1.
+// Note: this can be turned into constexpr with `= { .color.float32 = {0, 0, 0, 1} }` once C++20 is
+// used, otherwise it's expected to be a constant value (currently, it's initialized on first use
+// due to lack of C99 designated initializers support).
+VkClearValue kEmulatedInitColorValue = {};
+// WebGL requires depth/stencil textures to be initialized to depth=1, stencil=0.
+// Note: this can be turned into constexpr with `= { .depthStencil = {1.0f, 0} }` once C++20 is
+// used.
+VkClearValue kWebGLInitDepthStencilValue = {};
+
 struct ImageMemoryBarrierData
 {
     // The Vk layout corresponding to the ImageLayout key.
@@ -1238,6 +1250,8 @@ ImageHelper::ImageHelper()
       mSamples(0),
       mCurrentLayout(ImageLayout::Undefined),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
+      mNeedsClearCount(0),
+      mClearToEmulatedDefault(false),
       mLayerCount(0),
       mLevelCount(0),
       mStagingBuffer(kStagingBufferFlags, kStagingBufferSize, true)
@@ -1252,12 +1266,17 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mSamples(other.mSamples),
       mCurrentLayout(other.mCurrentLayout),
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
+      mClearInfo(std::move(other.mClearInfo)),
+      mNeedsClearCount(other.mNeedsClearCount),
+      mClearToEmulatedDefault(other.mClearToEmulatedDefault),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
       mStagingBuffer(std::move(other.mStagingBuffer)),
       mSubresourceUpdates(std::move(other.mSubresourceUpdates))
 {
+    ASSERT(this != &other);
     other.mCurrentLayout = ImageLayout::Undefined;
+    other.mNeedsClearCount = 0;
     other.mLayerCount    = 0;
     other.mLevelCount    = 0;
 }
@@ -1309,6 +1328,10 @@ angle::Result ImageHelper::initExternal(Context *context,
     mSamples    = samples;
     mLayerCount = layerCount;
     mLevelCount = mipLevels;
+
+    // Don't clear the image by default.  If necessary, a future call to setNeedsClearWholeImage()
+    // will make sure No need to clear the  image.  It's made to be promptly filled with data.
+    resizeClearInfo(false);
 
     VkImageCreateInfo imageInfo     = {};
     imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -1442,6 +1465,8 @@ void ImageHelper::destroy(VkDevice device)
     mCurrentLayout = ImageLayout::Undefined;
     mLayerCount    = 0;
     mLevelCount    = 0;
+    mClearInfo.clear();
+    mNeedsClearCount = 0;
 }
 
 void ImageHelper::init2DWeakReference(VkImage handle,
@@ -1457,6 +1482,8 @@ void ImageHelper::init2DWeakReference(VkImage handle,
     mCurrentLayout = ImageLayout::Undefined;
     mLayerCount    = 1;
     mLevelCount    = 1;
+
+    resizeClearInfo(false);
 
     mImage.setHandle(handle);
 }
@@ -1475,6 +1502,9 @@ angle::Result ImageHelper::init2DStaging(Context *context,
     mSamples    = 1;
     mLayerCount = layerCount;
     mLevelCount = 1;
+
+    // No need to clear the staging image.  It's made to be promptly filled with data.
+    resizeClearInfo(false);
 
     mCurrentLayout = ImageLayout::Undefined;
 
@@ -1514,31 +1544,6 @@ void ImageHelper::dumpResources(Serial serial, std::vector<GarbageObject> *garba
 {
     mImage.dumpResources(serial, garbageQueue);
     mDeviceMemory.dumpResources(serial, garbageQueue);
-}
-
-const Image &ImageHelper::getImage() const
-{
-    return mImage;
-}
-
-const DeviceMemory &ImageHelper::getDeviceMemory() const
-{
-    return mDeviceMemory;
-}
-
-const gl::Extents &ImageHelper::getExtents() const
-{
-    return mExtents;
-}
-
-const Format &ImageHelper::getFormat() const
-{
-    return *mFormat;
-}
-
-GLint ImageHelper::getSamples() const
-{
-    return mSamples;
 }
 
 VkImageLayout ImageHelper::getCurrentLayout() const
@@ -1610,6 +1615,179 @@ void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
 }
 
+bool ImageHelper::needsClear(uint32_t level, uint32_t layer, bool *useOverrideValueOut) const
+{
+    size_t index = (level * mLayerCount + layer) * 2;
+    ASSERT(index + 1 < mClearInfo.size());
+
+    *useOverrideValueOut = mClearInfo[index + 1];
+    return mClearInfo[index];
+}
+
+void ImageHelper::setNeedsClear(uint32_t level, uint32_t layer)
+{
+    size_t index = (level * mLayerCount + layer) * 2;
+    ASSERT(index + 1 < mClearInfo.size());
+
+    // Needs to be cleared:
+    if (!mClearInfo[index])
+    {
+        ++mNeedsClearCount;
+    }
+    mClearInfo[index] = true;
+    // If image is asked to be cleared, it's no longer required to clear to the override color:
+    mClearInfo[index + 1] = false;
+}
+
+void ImageHelper::setNeedsClearWholeImage(bool clearToEmulatedDefault)
+{
+    mClearToEmulatedDefault = clearToEmulatedDefault;
+    resizeClearInfo(true);
+}
+
+void ImageHelper::setCleared(uint32_t level, uint32_t layer)
+{
+    size_t index = (level * mLayerCount + layer) * 2;
+    ASSERT(index + 1 < mClearInfo.size());
+
+    // No longer needs to be cleared:
+    if (mClearInfo[index])
+    {
+        --mNeedsClearCount;
+    }
+    mClearInfo[index] = false;
+    // Note: it's not necessary to clear the second bit (saying that it should no longer use the
+    // override clear color).  If the image is ever asked to be cleared (setNeedsClear()), this
+    // bit will be reset.
+}
+
+void ImageHelper::resizeClearInfo(bool needsClear)
+{
+    mClearInfo.clear();
+    // 2 bits per (level, layer)
+    mClearInfo.resize(mLevelCount * mLayerCount * 2, needsClear);
+    mNeedsClearCount = needsClear ? mLevelCount * mLayerCount : 0;
+}
+
+void ImageHelper::ensureClearedPriorToWrite(const VkImageSubresourceLayers &subresource,
+                                            const VkOffset3D &offset,
+                                            const VkExtent3D &extent,
+                                            CommandBuffer *commandBuffer)
+{
+    if (!needsClearAnySubresource())
+    {
+        return;
+    }
+
+    // If the update covers the whole level, no need to clear the image in the staged layers of that
+    // level.
+    uint32_t mipWidth  = mExtents.getMipWidth(subresource.mipLevel);
+    uint32_t mipHeight = mExtents.getMipHeight(subresource.mipLevel);
+    uint32_t mipDepth  = mExtents.getMipDepth(subresource.mipLevel);
+    if (offset.x == 0 && offset.y == 0 && offset.z == 0 && extent.width == mipWidth &&
+        extent.height == mipHeight && extent.depth == mipDepth)
+    {
+        for (uint32_t layer = 0; layer < subresource.layerCount; ++layer)
+        {
+            setCleared(subresource.mipLevel, subresource.baseArrayLayer + layer);
+        }
+    }
+
+    // Clear any layer that needs clearing.  Any write that covers a whole layer is already marked
+    // above as not needing a clear.  That means any write done after this call will only partially
+    // cover the layer and thus clearing it before the write is necessary.
+    bool firstClear = true;
+    for (uint32_t i = 0; i < subresource.layerCount; ++i)
+    {
+        uint32_t layer = subresource.baseArrayLayer + i;
+
+        bool useOverrideValue = false;
+        if (!needsClear(subresource.mipLevel, layer, &useOverrideValue))
+        {
+            continue;
+        }
+
+        if (firstClear)
+        {
+            firstClear = false;
+
+            // Add a barrier so the clear operation doesn't race with previous updates.  The clear
+            // operations themselves don't race as they target different levels and layers, so this
+            // is done only once.
+            changeLayout(getAspectFlags(), vk::ImageLayout::TransferDst, commandBuffer);
+        }
+
+        ensureCleared(subresource.mipLevel, layer, false, commandBuffer);
+    }
+}
+
+bool ImageHelper::ensureCleared(uint32_t level,
+                                uint32_t layer,
+                                bool autoLayoutTransition,
+                                vk::CommandBuffer *commandBuffer)
+{
+    bool useOverrideValue = false;
+    if (!needsClear(level, layer, &useOverrideValue))
+    {
+        return false;
+    }
+
+    // We can only support clearing to the override value, as the clear value is not stored
+    // otherwise.  When a framebuffer is cleared, a render pass is started with the clear info,
+    // which should already take care of clearing the image to the appropriate color.
+    ASSERT(useOverrideValue);
+
+    const angle::Format &textureFormat = mFormat->textureFormat();
+    bool isDepthStencil = textureFormat.depthBits > 0 || textureFormat.stencilBits > 0;
+
+    if (isDepthStencil)
+    {
+        ASSERT(level == 0 && layer == 0);
+        VkImageAspectFlags aspectFlags = 0;
+        if (textureFormat.depthBits > 0)
+        {
+            aspectFlags |= VK_IMAGE_ASPECT_DEPTH_BIT;
+        }
+        if (textureFormat.stencilBits > 0)
+        {
+            aspectFlags |= VK_IMAGE_ASPECT_STENCIL_BIT;
+        }
+
+        if (autoLayoutTransition)
+        {
+            changeLayout(aspectFlags, ImageLayout::TransferDst, commandBuffer);
+        }
+
+        clearDepthStencil(aspectFlags, aspectFlags, getOverrideDepthStencilValue().depthStencil,
+                          commandBuffer);
+    }
+    else
+    {
+        if (autoLayoutTransition)
+        {
+            changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, commandBuffer);
+        }
+
+        clearColorLayer(getOverrideColorValue().color, level, 1, layer, 1, commandBuffer);
+    }
+
+    return true;
+}
+
+const VkClearValue &ImageHelper::getOverrideColorValue()
+{
+    // Note: see definition of this variable for why initilization is done here.
+    kEmulatedInitColorValue.color.float32[3] = 1.0f;
+    return mClearToEmulatedDefault ? kEmulatedInitColorValue : kWebGLInitColorValue;
+}
+
+const VkClearValue &ImageHelper::getOverrideDepthStencilValue()
+{
+    // Note: see definition of this variable for why initilization is done here.
+    kWebGLInitDepthStencilValue.depthStencil.depth = 1.0f;
+    return kWebGLInitDepthStencilValue;
+}
+
 void ImageHelper::clearColor(const VkClearColorValue &color,
                              uint32_t baseMipLevel,
                              uint32_t levelCount,
@@ -1628,8 +1806,6 @@ void ImageHelper::clearColorLayer(const VkClearColorValue &color,
 {
     ASSERT(valid());
 
-    changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, commandBuffer);
-
     VkImageSubresourceRange range = {};
     range.aspectMask              = VK_IMAGE_ASPECT_COLOR_BIT;
     range.baseMipLevel            = baseMipLevel;
@@ -1638,6 +1814,14 @@ void ImageHelper::clearColorLayer(const VkClearColorValue &color,
     range.layerCount              = layerCount;
 
     commandBuffer->clearColorImage(mImage, getCurrentLayout(), color, 1, &range);
+
+    for (uint32_t level = 0; level < levelCount; ++level)
+    {
+        for (uint32_t layer = 0; layer < layerCount; ++layer)
+        {
+            setCleared(baseMipLevel + level, baseArrayLayer + layer);
+        }
+    }
 }
 
 void ImageHelper::clearDepthStencil(VkImageAspectFlags imageAspectFlags,
@@ -1646,8 +1830,6 @@ void ImageHelper::clearDepthStencil(VkImageAspectFlags imageAspectFlags,
                                     CommandBuffer *commandBuffer)
 {
     ASSERT(valid());
-
-    changeLayout(imageAspectFlags, ImageLayout::TransferDst, commandBuffer);
 
     VkImageSubresourceRange clearRange = {
         /*aspectMask*/ clearAspectFlags,
@@ -1658,6 +1840,8 @@ void ImageHelper::clearDepthStencil(VkImageAspectFlags imageAspectFlags,
     };
 
     commandBuffer->clearDepthStencilImage(mImage, getCurrentLayout(), depthStencil, 1, &clearRange);
+
+    setCleared(0, 0);
 }
 
 gl::Extents ImageHelper::getSize(const gl::ImageIndex &index) const
@@ -2030,6 +2214,7 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
 
     // 3- enqueue the destination image subresource update
     mSubresourceUpdates.emplace_back(bufferHandle, copyToImage);
+
     return angle::Result::Continue;
 }
 
@@ -2065,9 +2250,12 @@ angle::Result ImageHelper::allocateStagingMemory(ContextVk *contextVk,
 angle::Result ImageHelper::flushStagedUpdates(Context *context,
                                               uint32_t baseLevel,
                                               uint32_t levelCount,
+                                              uint32_t baseLayer,
+                                              uint32_t layerCount,
+                                              bool flushPendingClear,
                                               vk::CommandBuffer *commandBuffer)
 {
-    if (mSubresourceUpdates.empty())
+    if (mSubresourceUpdates.empty() && !(flushPendingClear && needsClearAnySubresource()))
     {
         return angle::Result::Continue;
     }
@@ -2075,6 +2263,23 @@ angle::Result ImageHelper::flushStagedUpdates(Context *context,
     RendererVk *renderer = context->getRenderer();
 
     ANGLE_TRY(mStagingBuffer.flush(context));
+
+    // If asked to clear, go through levels and layers and clear them if necessary.
+    if (flushPendingClear)
+    {
+        bool transitionDone = false;
+        for (uint32_t layer = 0; layer < layerCount; ++layer)
+        {
+            for (uint32_t level = 0; level < levelCount; ++level)
+            {
+                if (ensureCleared(baseLevel + level, baseLayer + layer, !transitionDone,
+                                  commandBuffer))
+                {
+                    transitionDone = true;
+                }
+            }
+        }
+    }
 
     std::vector<SubresourceUpdate> updatesToKeep;
 
@@ -2085,10 +2290,13 @@ angle::Result ImageHelper::flushStagedUpdates(Context *context,
                (update.updateSource == SubresourceUpdate::UpdateSource::Image &&
                 update.image.image != nullptr && update.image.image->valid()));
 
-        const uint32_t updateMipLevel = update.dstSubresource().mipLevel;
+        const VkImageSubresourceLayers &dstSubresource = update.dstSubresource();
+        const uint32_t updateMipLevel                  = dstSubresource.mipLevel;
+        const uint32_t updateBaseLayer                 = dstSubresource.baseArrayLayer;
+        const uint32_t updateLayerCount                = dstSubresource.layerCount;
 
         // It's possible we've accumulated updates that are no longer applicable if the image has
-        // never been flushed but the image description has changed. Check if this level exist for
+        // never been flushed but the image description has changed. Check if this level exists for
         // this image.
         if (updateMipLevel < baseLevel || updateMipLevel >= baseLevel + levelCount)
         {
@@ -2096,10 +2304,20 @@ angle::Result ImageHelper::flushStagedUpdates(Context *context,
             continue;
         }
 
-        // Conservatively flush all writes to the image. We could use a more restricted barrier.
-        // Do not move this above the for loop, otherwise multiple updates can have race conditions
-        // and not be applied correctly as seen in:
-        // dEQP-gles2.functional_texture_specification_texsubimage2d_align_2d* tests on Windows AMD
+        // If the interesting layers don't intersect the update layers, skip the update.
+        if (updateBaseLayer + updateLayerCount <= baseLayer ||
+            baseLayer + layerCount <= updateBaseLayer)
+        {
+            updatesToKeep.emplace_back(update);
+            continue;
+        }
+
+        ensureClearedPriorToWrite(dstSubresource, update.dstOffset(), update.dstExtent(),
+                                  commandBuffer);
+
+        // Conservatively add a barrier between every update.  This is to avoid races when updating
+        // the same subresource.  A possible optimization could be to only issue this barrier when
+        // an overlap in updates is observed.
         changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst, commandBuffer);
 
         if (update.updateSource == SubresourceUpdate::UpdateSource::Buffer)
@@ -2129,18 +2347,8 @@ angle::Result ImageHelper::flushStagedUpdates(Context *context,
     {
         mStagingBuffer.releaseRetainedBuffers(context->getRenderer());
     }
-    else
-    {
-        WARN() << "Internal Vulkan buffer could not be released. This is likely due to having "
-                  "extra images defined in the Texture.";
-    }
 
     return angle::Result::Continue;
-}
-
-bool ImageHelper::hasStagedUpdates() const
-{
-    return !mSubresourceUpdates.empty();
 }
 
 // ImageHelper::SubresourceUpdate implementation

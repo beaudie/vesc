@@ -17,14 +17,6 @@
 
 namespace rx
 {
-
-namespace
-{
-constexpr VkClearDepthStencilValue kDefaultClearDepthStencilValue = {0.0f, 1};
-constexpr VkClearColorValue kBlackClearColorValue                 = {{0}};
-
-}  // anonymous namespace
-
 RenderbufferVk::RenderbufferVk(const gl::RenderbufferState &state)
     : RenderbufferImpl(state), mOwnsImage(false), mImage(nullptr)
 {}
@@ -92,21 +84,10 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
         ANGLE_TRY(mImage->initImageView(contextVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
                                         &mImageView, 0, 1));
 
-        // TODO(jmadill): Fold this into the RenderPass load/store ops. http://anglebug.com/2361
-        vk::CommandBuffer *commandBuffer = nullptr;
-        ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
-
-        if (isDepthOrStencilFormat)
-        {
-            mImage->clearDepthStencil(aspect, aspect, kDefaultClearDepthStencilValue,
-                                      commandBuffer);
-        }
-        else
-        {
-            mImage->clearColor(kBlackClearColorValue, 0, 1, commandBuffer);
-        }
-
         mRenderTarget.init(mImage, &mImageView, 0, 0, nullptr);
+
+        // Ask the image to be cleared on first use.
+        mImage->setNeedsClearWholeImage(false);
     }
 
     return angle::Result::Continue;

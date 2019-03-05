@@ -76,6 +76,8 @@ class UtilsVk : angle::NonCopyable
         int srcMip;
         int srcLayer;
         int srcHeight;
+        int destMip;
+        int destLayer;
         bool srcPremultiplyAlpha;
         bool srcUnmultiplyAlpha;
         bool srcFlipY;
@@ -218,6 +220,8 @@ class UtilsVk : angle::NonCopyable
                                   const vk::ImageView *imageView,
                                   const vk::RenderPassDesc &renderPassDesc,
                                   const gl::Rectangle &renderArea,
+                                  int level,
+                                  int layer,
                                   vk::CommandBuffer **commandBufferOut);
 
     angle::PackedEnumMap<Function, vk::DescriptorSetLayoutPointerArray> mDescriptorSetLayouts;
