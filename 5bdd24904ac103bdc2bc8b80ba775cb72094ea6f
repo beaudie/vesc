@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80d04e8d_2f594908",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-05T02:46:45Z",
+      "side": 1,
+      "message": "Is this a valid way of using a `Test:` tag? I don\u0027t know if there are automated scripts looking for this tag, but I suspect they won\u0027t get much out of this. You can specify this as part of the commit message instead.",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 219
+      },
+      "revId": "5bdd24904ac103bdc2bc8b80ba775cb72094ea6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5736c005_2d5a7b46",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-05T02:46:45Z",
+      "side": 1,
+      "message": "I recommend doing %s (%#04x) for the source, type and severity, so you have both the enum name and enum value. This will especially come in handy when you encounter an enum you didn\u0027t expect (so the message would be an unhelpful \"Unknown X\").",
+      "range": {
+        "startLine": 109,
+        "startChar": 47,
+        "endLine": 109,
+        "endChar": 49
+      },
+      "revId": "5bdd24904ac103bdc2bc8b80ba775cb72094ea6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
