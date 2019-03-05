@@ -159,6 +159,9 @@ class FramebufferVk : public FramebufferImpl
 
     angle::Result getFramebuffer(ContextVk *contextVk, vk::Framebuffer **framebufferOut);
 
+    angle::Result clearWithRenderPassOp(ContextVk *contextVk,
+                                        bool clearColor,
+                                        bool clearDepthStencil);
     angle::Result clearWithClearAttachments(ContextVk *contextVk,
                                             bool clearColor,
                                             bool clearDepth,

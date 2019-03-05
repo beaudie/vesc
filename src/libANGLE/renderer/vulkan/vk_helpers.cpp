@@ -31,6 +31,14 @@ constexpr int kLineLoopDynamicBufferMinSize = 1024 * 1024;
 // This is an arbitrary max. We can change this later if necessary.
 constexpr uint32_t kDefaultDescriptorPoolMaxSets = 128;
 
+// WebGL requires color textures to be initialized to transparent black.
+constexpr VkClearValue kWebGLInitColorValue = {};
+// WebGL requires depth/stencil textures to be initialized to depth=1, stencil=0.
+// Note: this can be turned into constexpr with `= { .depthStencil = {1.0f, 0} }` once C++20 is
+// used, otherwise it's expected to be a constant value (currently, it's initialized on first use
+// due to lack of C99 designated initializers support).
+VkClearValue kWebGLInitDepthStencilValue = {};
+
 struct ImageMemoryBarrierData
 {
     // The Vk layout corresponding to the ImageLayout key.
@@ -1252,11 +1260,13 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mSamples(other.mSamples),
       mCurrentLayout(other.mCurrentLayout),
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
+      mClearInfo(std::move(other.mClearInfo)),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
       mStagingBuffer(std::move(other.mStagingBuffer)),
       mSubresourceUpdates(std::move(other.mSubresourceUpdates))
 {
+    ASSERT(this != &other);
     other.mCurrentLayout = ImageLayout::Undefined;
     other.mLayerCount    = 0;
     other.mLevelCount    = 0;
@@ -1309,6 +1319,8 @@ angle::Result ImageHelper::initExternal(Context *context,
     mSamples    = samples;
     mLayerCount = layerCount;
     mLevelCount = mipLevels;
+
+    resizeClearInfo(false);
 
     VkImageCreateInfo imageInfo     = {};
     imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -1442,6 +1454,7 @@ void ImageHelper::destroy(VkDevice device)
     mCurrentLayout = ImageLayout::Undefined;
     mLayerCount    = 0;
     mLevelCount    = 0;
+    mClearInfo.clear();
 }
 
 void ImageHelper::init2DWeakReference(VkImage handle,
@@ -1457,6 +1470,8 @@ void ImageHelper::init2DWeakReference(VkImage handle,
     mCurrentLayout = ImageLayout::Undefined;
     mLayerCount    = 1;
     mLevelCount    = 1;
+
+    resizeClearInfo(false);
 
     mImage.setHandle(handle);
 }
@@ -1475,6 +1490,9 @@ angle::Result ImageHelper::init2DStaging(Context *context,
     mSamples    = 1;
     mLayerCount = layerCount;
     mLevelCount = 1;
+
+    // No need to clear the staging image.  It's made to be promptly filled with data.
+    resizeClearInfo(false);
 
     mCurrentLayout = ImageLayout::Undefined;
 
@@ -1514,31 +1532,6 @@ void ImageHelper::dumpResources(Serial serial, std::vector<GarbageObject> *garba
 {
     mImage.dumpResources(serial, garbageQueue);
     mDeviceMemory.dumpResources(serial, garbageQueue);
-}
-
-const Image &ImageHelper::getImage() const
-{
-    return mImage;
-}
-
-const DeviceMemory &ImageHelper::getDeviceMemory() const
-{
-    return mDeviceMemory;
-}
-
-const gl::Extents &ImageHelper::getExtents() const
-{
-    return mExtents;
-}
-
-const Format &ImageHelper::getFormat() const
-{
-    return *mFormat;
-}
-
-GLint ImageHelper::getSamples() const
-{
-    return mSamples;
 }
 
 VkImageLayout ImageHelper::getCurrentLayout() const
@@ -1610,6 +1603,62 @@ void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
     mCurrentQueueFamilyIndex = newQueueFamilyIndex;
 }
 
+bool ImageHelper::needsClear(uint32_t level, uint32_t layer, bool *useOverrideValueOut) const
+{
+    size_t index = (level * mLayerCount + layer) * 2;
+    ASSERT(index + 1 < mClearInfo.size());
+
+    *useOverrideValueOut = mClearInfo[index + 1];
+    return mClearInfo[index];
+}
+
+void ImageHelper::setNeedsClear(uint32_t level, uint32_t layer)
+{
+    size_t index = (level * mLayerCount + layer) * 2;
+    ASSERT(index + 1 < mClearInfo.size());
+
+    // Needs to be cleared:
+    mClearInfo[index] = true;
+    // If image is asked to be cleared, it's no longer required to clear to the override color:
+    mClearInfo[index + 1] = false;
+}
+
+void ImageHelper::setNeedsClearWholeImage()
+{
+    resizeClearInfo(true);
+}
+
+void ImageHelper::setCleared(uint32_t level, uint32_t layer)
+{
+    size_t index = (level * mLayerCount + layer) * 2;
+    ASSERT(index + 1 < mClearInfo.size());
+
+    // No longer needs to be cleared:
+    mClearInfo[index] = false;
+    // Note: it's not necessary to clear the second bit (saying that it should no longer use the
+    // override clear color).  If the image is ever asked to be cleared (setNeedsClear()), this
+    // bit will be reset.
+}
+
+void ImageHelper::resizeClearInfo(bool needsClear)
+{
+    mClearInfo.clear();
+    // 2 bits per (level, layer)
+    mClearInfo.resize(mLevelCount * mLayerCount * 2, needsClear);
+}
+
+const VkClearValue &ImageHelper::getOverrideColorValue()
+{
+    return kWebGLInitColorValue;
+}
+
+const VkClearValue &ImageHelper::getOverrideDepthStencilValue()
+{
+    // Note: see definition of this variable for why initilization is done here.
+    kWebGLInitDepthStencilValue.depthStencil.depth = 1.0f;
+    return kWebGLInitDepthStencilValue;
+}
+
 void ImageHelper::clearColor(const VkClearColorValue &color,
                              uint32_t baseMipLevel,
                              uint32_t levelCount,
@@ -1638,6 +1687,14 @@ void ImageHelper::clearColorLayer(const VkClearColorValue &color,
     range.layerCount              = layerCount;
 
     commandBuffer->clearColorImage(mImage, getCurrentLayout(), color, 1, &range);
+
+    for (uint32_t level = 0; level < levelCount; ++level)
+    {
+        for (uint32_t layer = 0; layer < layerCount; ++layer)
+        {
+            setCleared(baseMipLevel + level, baseArrayLayer + layer);
+        }
+    }
 }
 
 void ImageHelper::clearDepthStencil(VkImageAspectFlags imageAspectFlags,
@@ -1658,6 +1715,8 @@ void ImageHelper::clearDepthStencil(VkImageAspectFlags imageAspectFlags,
     };
 
     commandBuffer->clearDepthStencilImage(mImage, getCurrentLayout(), depthStencil, 1, &clearRange);
+
+    setCleared(0, 0);
 }
 
 gl::Extents ImageHelper::getSize(const gl::ImageIndex &index) const

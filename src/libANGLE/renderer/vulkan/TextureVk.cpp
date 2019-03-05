@@ -141,7 +141,7 @@ angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,
 
 // TextureVk implementation.
 TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
-    : TextureImpl(state), mOwnsImage(false), mImage(nullptr)
+    : TextureImpl(state), mOwnsImage(false), mInitializeContents(false), mImage(nullptr)
 {}
 
 TextureVk::~TextureVk() = default;
@@ -646,6 +646,8 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
         {
             params.srcLayer = layerIndex;
+            params.destMip   = level;
+            params.destLayer = baseLayer + layerIndex;
 
             vk::ImageView *destView;
             ANGLE_TRY(
@@ -674,6 +676,8 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
         {
             params.srcLayer = layerIndex;
+            params.destMip   = 0;
+            params.destLayer = layerIndex;
 
             // Create a temporary view for this layer.
             vk::ImageView stagingView;
@@ -1106,6 +1110,18 @@ angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
         ANGLE_TRY(initImage(contextVk, format, baseLevelExtents, levelCount, commandBuffer));
     }
 
+    if (mInitializeContents)
+    {
+        mImage->setNeedsClearWholeImage();
+        mInitializeContents = false;
+    }
+
+    // TODO: specialize flushStagedUpdates further to:
+    //
+    // 1. get layer range
+    // 2. if necessary, clear the image level-layer prior to writing data to it, but only if an
+    // update doesn't cover
+    //    the whole subresource.
     return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), levelCount, commandBuffer);
 }
 
@@ -1185,7 +1201,7 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
 angle::Result TextureVk::initializeContents(const gl::Context *context,
                                             const gl::ImageIndex &imageIndex)
 {
-    UNIMPLEMENTED();
+    mInitializeContents = true;
     return angle::Result::Continue;
 }
 
@@ -1280,13 +1296,6 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
 
     ANGLE_TRY(initImageViews(contextVk, format, levelCount));
 
-    if (!angleFormat.isBlock)
-    {
-        // TODO(jmadill): Fold this into the RenderPass load/store ops if possible, or defer to
-        // first use.  This is only necessary if robustness is required.  http://anglebug.com/2361
-        VkClearColorValue black = {{0, 0, 0, 1.0f}};
-        mImage->clearColor(black, 0, levelCount, commandBuffer);
-    }
     return angle::Result::Continue;
 }
 

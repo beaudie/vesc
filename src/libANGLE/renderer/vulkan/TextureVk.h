@@ -267,6 +267,7 @@ class TextureVk : public TextureImpl
                                              const vk::Format &format);
 
     bool mOwnsImage;
+    bool mInitializeContents;
 
     gl::TextureType mImageNativeType;
 

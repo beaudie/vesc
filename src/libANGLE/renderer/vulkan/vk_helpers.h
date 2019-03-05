@@ -599,14 +599,14 @@ class ImageHelper final : public CommandGraphResource
                              GLint samples);
     void resetImageWeakReference();
 
-    const Image &getImage() const;
-    const DeviceMemory &getDeviceMemory() const;
+    const Image &getImage() const { return mImage; }
+    const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
 
-    const gl::Extents &getExtents() const;
+    const gl::Extents &getExtents() const { return mExtents; }
     uint32_t getLayerCount() const { return mLayerCount; }
     uint32_t getLevelCount() const { return mLevelCount; }
-    const Format &getFormat() const;
-    GLint getSamples() const;
+    const Format &getFormat() const { return *mFormat; }
+    GLint getSamples() const { return mSamples; }
 
     VkImageLayout getCurrentLayout() const;
 
@@ -706,11 +706,23 @@ class ImageHelper final : public CommandGraphResource
                               uint32_t newQueueFamilyIndex,
                               CommandBuffer *commandBuffer);
 
+    // Image clear is deferred until first use.  If that use happens to be a render pass attachment,
+    // the clear will be done as a render pass loadOp.
+    bool needsClear(uint32_t level, uint32_t layer, bool *useOverrideValueOut) const;
+    void setNeedsClear(uint32_t level, uint32_t layer);
+    void setNeedsClearWholeImage();
+    void setCleared(uint32_t level, uint32_t layer);
+
+    const VkClearValue &getOverrideColorValue();
+    const VkClearValue &getOverrideDepthStencilValue();
+
   private:
     void forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                    ImageLayout newLayout,
                                    uint32_t newQueueFamilyIndex,
                                    CommandBuffer *commandBuffer);
+
+    void resizeClearInfo(bool needsClear);
 
     struct SubresourceUpdate
     {
@@ -764,6 +776,13 @@ class ImageHelper final : public CommandGraphResource
     // Current state.
     ImageLayout mCurrentLayout;
     uint32_t mCurrentQueueFamilyIndex;
+    // Every two bits indicate:
+    //
+    //  - bit 0: Whether each layer/level needs clearing prior to use.
+    //  - bit 1: Whether context's clear color should be used, or an override according to WebGL.
+    //
+    // Note that vector<bool> is specialized to take 1 bit per entry.
+    std::vector<bool> mClearInfo;
 
     // Cached properties.
     uint32_t mLayerCount;

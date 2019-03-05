@@ -576,18 +576,20 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
                                        const vk::ImageView *imageView,
                                        const vk::RenderPassDesc &renderPassDesc,
                                        const gl::Rectangle &renderArea,
+                                       int level,
+                                       int layer,
                                        vk::CommandBuffer **commandBufferOut)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
-    vk::RenderPass *renderPass = nullptr;
-    ANGLE_TRY(renderer->getCompatibleRenderPass(contextVk, renderPassDesc, &renderPass));
+    vk::RenderPass *compatibleRenderPass = nullptr;
+    ANGLE_TRY(renderer->getCompatibleRenderPass(contextVk, renderPassDesc, &compatibleRenderPass));
 
     VkFramebufferCreateInfo framebufferInfo = {};
 
     framebufferInfo.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     framebufferInfo.flags           = 0;
-    framebufferInfo.renderPass      = renderPass->getHandle();
+    framebufferInfo.renderPass      = compatibleRenderPass->getHandle();
     framebufferInfo.attachmentCount = 1;
     framebufferInfo.pAttachments    = imageView->ptr();
     framebufferInfo.width           = renderArea.x + renderArea.width;
@@ -597,12 +599,39 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
     vk::Framebuffer framebuffer;
     ANGLE_VK_TRY(contextVk, framebuffer.init(contextVk->getDevice(), framebufferInfo));
 
-    // TODO(jmadill): Proper clear value implementation. http://anglebug.com/2361
-    std::vector<VkClearValue> clearValues = {{}};
-    ASSERT(clearValues.size() == 1);
+    vk::AttachmentOpsArray renderPassAttachmentOps;
+    std::vector<VkClearValue> clearValues;
+
+    bool useOverrideColor = false;
+    bool needsClear       = image->needsClear(level, layer, &useOverrideColor);
+
+    // If the image needs to be cleared, we can only support having it cleared to the override
+    // color.  If not using the override color, we would have to know what the clear color value
+    // was at the time the image was cleared.  That's information we don't currently keep.
+    //
+    // When a framebuffer is cleared, a render pass is started with the clear info, which should
+    // already take care of clearing the image to the appropriate color.
+    ASSERT(!needsClear || useOverrideColor);
+
+    renderPassAttachmentOps.setOp(
+        0, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+        needsClear ? VK_ATTACHMENT_LOAD_OP_CLEAR : VK_ATTACHMENT_LOAD_OP_LOAD,
+        VK_ATTACHMENT_STORE_OP_STORE, VK_ATTACHMENT_LOAD_OP_DONT_CARE,
+        VK_ATTACHMENT_STORE_OP_DONT_CARE);
+    clearValues.emplace_back(image->getOverrideColorValue());
 
     ANGLE_TRY(image->beginRenderPass(contextVk, framebuffer, renderArea, renderPassDesc,
-                                     clearValues, commandBufferOut));
+                                     renderPassAttachmentOps, clearValues, commandBufferOut));
+
+    // If the renderpass covers the whole level-layer of the image, mark it as no longer needing
+    // clear.
+    int mipWidth  = std::max(image->getExtents().width >> level, 1);
+    int mipHeight = std::max(image->getExtents().height >> level, 1);
+    if (renderArea.x == 0 && renderArea.y == 0 && renderArea.width == mipWidth &&
+        renderArea.height == mipHeight)
+    {
+        image->setCleared(level, layer);
+    }
 
     renderer->releaseObject(renderer->getCurrentQueueSerial(), &framebuffer);
 
@@ -754,8 +783,8 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
                        destLayoutChange);
 
     vk::CommandBuffer *commandBuffer;
-    ANGLE_TRY(
-        startRenderPass(contextVk, dest, destView, renderPassDesc, renderArea, &commandBuffer));
+    ANGLE_TRY(startRenderPass(contextVk, dest, destView, renderPassDesc, renderArea, params.destMip,
+                              params.destLayer, &commandBuffer));
 
     // Source's layout change should happen before rendering
     src->addReadDependency(dest);
