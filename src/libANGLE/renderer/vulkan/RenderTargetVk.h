@@ -72,7 +72,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     vk::ImageView *getReadImageView() const;
 
     const vk::Format &getImageFormat() const;
-    const gl::Extents &getImageExtents() const;
+    gl::Extents getImageExtents() const;
     size_t getLevelIndex() const { return mLevelIndex; }
     size_t getLayerIndex() const { return mLayerIndex; }
 
@@ -81,6 +81,15 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     void updateSwapchainImage(vk::ImageHelper *image, vk::ImageView *imageView);
 
     angle::Result ensureImageInitialized(ContextVk *contextVk);
+
+    bool needsClear(bool *useOverrideValueOut) const
+    {
+        return mImage->needsClear(mLevelIndex, mLayerIndex, useOverrideValueOut);
+    }
+
+    void setNeedsClear() { mImage->setNeedsClear(mLevelIndex, mLayerIndex); }
+
+    void setCleared() { mImage->setCleared(mLevelIndex, mLayerIndex); }
 
   private:
     vk::ImageHelper *mImage;

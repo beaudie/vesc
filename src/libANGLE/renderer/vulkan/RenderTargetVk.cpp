@@ -119,10 +119,10 @@ const vk::Format &RenderTargetVk::getImageFormat() const
     return mImage->getFormat();
 }
 
-const gl::Extents &RenderTargetVk::getImageExtents() const
+gl::Extents RenderTargetVk::getImageExtents() const
 {
     ASSERT(mImage && mImage->valid());
-    return mImage->getExtents();
+    return mImage->getExtents().getMip(mLevelIndex);
 }
 
 void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image, vk::ImageView *imageView)
@@ -156,6 +156,9 @@ vk::ImageHelper *RenderTargetVk::getImageForRead(vk::CommandGraphResource *readi
     // to perform the layout transition and set the dependency.
     mImage->addWriteDependency(readingResource);
 
+    // If reading the image, any pending clear must be performed.
+    mImage->ensureCleared(mLevelIndex, mLayerIndex, true, commandBuffer);
+
     mImage->changeLayout(mImage->getAspectFlags(), layout, commandBuffer);
 
     return mImage;
@@ -172,7 +175,7 @@ angle::Result RenderTargetVk::ensureImageInitialized(ContextVk *contextVk)
 {
     if (mOwner)
     {
-        return mOwner->ensureImageInitialized(contextVk);
+        return mOwner->ensureImageInitializedForDraw(contextVk, mLevelIndex, mLayerIndex);
     }
     return angle::Result::Continue;
 }
