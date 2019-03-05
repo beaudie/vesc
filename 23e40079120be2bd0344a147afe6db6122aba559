@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "30724c35_410bc1d7",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-03-05T22:18:11Z",
+      "side": 1,
+      "message": "There was (at least one) test case in end2end test that was broken w/o this b/c secondary command buffers could be \"valid\" (have a handle) without any commands actually being added to them which in the bad case was causing us to miss saving the renderPass data. I\u0027ve re-done the valid check for SecondaryCommandBuffers, though so that SecondaryCommandBuffer now has explicit init() to add pool allocator which is now used to verify \"validity\". May rework this further in the future if needed/beneficial.",
+      "parentUuid": "d7568cb7_bd532889",
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "166e24cb_2217d3b5",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 7
@@ -65,6 +83,30 @@
     },
     {
       "key": {
+        "uuid": "2803ff47_acd30dbc",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-03-05T22:18:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41faa33b_e888afbd",
+      "range": {
+        "startLine": 287,
+        "startChar": 31,
+        "endLine": 287,
+        "endChar": 44
+      },
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "310930cb_83a82e39",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 7
@@ -85,6 +127,30 @@
       "revId": "23e40079120be2bd0344a147afe6db6122aba559",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2f82328_a56ea4c1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-03-05T22:18:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "310930cb_83a82e39",
+      "range": {
+        "startLine": 284,
+        "startChar": 0,
+        "endLine": 289,
+        "endChar": 6
+      },
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "da968fbf_a872c6fc",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-03-05T22:18:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe277da7_1b205345",
+      "range": {
+        "startLine": 486,
+        "startChar": 0,
+        "endLine": 491,
+        "endChar": 6
+      },
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c8f1854_8903b2c0",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 7
@@ -131,6 +221,30 @@
       "revId": "23e40079120be2bd0344a147afe6db6122aba559",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "704b3908_22e18ccc",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-03-05T22:18:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c8f1854_8903b2c0",
+      "range": {
+        "startLine": 503,
+        "startChar": 64,
+        "endLine": 503,
+        "endChar": 67
+      },
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -157,6 +271,30 @@
     },
     {
       "key": {
+        "uuid": "e4caa1c2_7f7720d8",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-03-05T22:18:11Z",
+      "side": 1,
+      "message": "Done. Also made getOutSideRenderPassCommands() inline for consistency.",
+      "parentUuid": "d53f283b_65493412",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 39
+      },
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3dd5a8c9_7ff0403a",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 7
@@ -171,6 +309,24 @@
       "revId": "23e40079120be2bd0344a147afe6db6122aba559",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d112066_9b9507c8",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-03-05T22:18:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dd5a8c9_7ff0403a",
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -197,6 +353,30 @@
     },
     {
       "key": {
+        "uuid": "d855e371_05f8f5fd",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-03-05T22:18:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0328f0c6_fba8f534",
+      "range": {
+        "startLine": 429,
+        "startChar": 0,
+        "endLine": 433,
+        "endChar": 35
+      },
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50555b65_815578be",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 7
@@ -208,6 +388,30 @@
       "writtenOn": "2019-03-05T18:37:49Z",
       "side": 1,
       "message": "could I ask that we pass wrapper objects to the classes instead? And unbox them in the vk::SecondaryCommandBuffer class? Or optionally accept both types if we need to.",
+      "range": {
+        "startLine": 338,
+        "startChar": 71,
+        "endLine": 338,
+        "endChar": 83
+      },
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "581e5a14_622b83a8",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-03-05T22:18:11Z",
+      "side": 1,
+      "message": "This is certainly possible. Right now SecondaryCommandBuffer only knows about Vulkan types and the PoolAllocator so it\u0027s more of a \"pure\" Vulkan class apart from ANGLE. We can pull in vk_wrappers.h and use the wrapper objects instead. Unwrapping at the source of the call as is currently done shields SecondaryCommandBuffer from vk_wrapper knowledge, at the expense of some extra getHandle() calls when there are multiple source points for the same command (which there\u0027s a few of but not a ton).\nUpdating SecondaryCommandBuffer and vk::CommandBuffer wrapper class to deal with wrappers in place of raw VkHandles saves some getHandle() calls at the source point. Is that a worthwhile benefit?",
+      "parentUuid": "50555b65_815578be",
       "range": {
         "startLine": 338,
         "startChar": 71,
