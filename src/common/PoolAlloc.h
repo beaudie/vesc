@@ -123,7 +123,14 @@ class PoolAllocator : angle::NonCopyable
 {
   public:
     static const int kDefaultAlignment = 16;
-    PoolAllocator(int growthIncrement = 8 * 1024, int allocationAlignment = kDefaultAlignment);
+    //
+    // Create PoolAllocator. If fastEnable is set, alignment will be set to
+    // 1 byte and fastAllocate() function can be used to make allocations with
+    // less overhead.
+    //
+    PoolAllocator(int growthIncrement     = 8 * 1024,
+                  int allocationAlignment = kDefaultAlignment,
+                  bool fastEnable         = false);
 
     //
     // Don't call the destructor just to free up the memory, call pop()
@@ -152,6 +159,29 @@ class PoolAllocator : angle::NonCopyable
     // available, otherwise a properly aligned pointer to 'numBytes' of memory.
     //
     void *allocate(size_t numBytes);
+
+    //
+    // Call fastAllocate() for a faster allocate function that does minimal bookkeeping
+    // preCondition: Allocator must have been created w/ alignment of 1
+    ANGLE_INLINE uint8_t *fastAllocate(size_t numBytes)
+    {
+        // ASSERT(mAlignment == 1);
+        // No multi-page allocations
+        // ASSERT(numBytes <= (mPageSize - mHeaderSkip));
+        //
+        // Do the allocation, most likely case inline first, for efficiency.
+        //
+        if (numBytes <= mPageSize - mCurrentPageOffset)
+        {
+            //
+            // Safe to allocate from mCurrentPageOffset.
+            //
+            uint8_t *memory = reinterpret_cast<uint8_t *>(mInUseList) + mCurrentPageOffset;
+            mCurrentPageOffset += numBytes;
+            return memory;
+        }
+        return reinterpret_cast<uint8_t *>(allocateNewPage(numBytes));
+    }
 
     //
     // There is no deallocate.  The point of this class is that
@@ -205,6 +235,8 @@ class PoolAllocator : angle::NonCopyable
     };
     using AllocStack = std::vector<AllocState>;
 
+    // Slow path of allocation when we have to get a new page.
+    void *allocateNewPage(size_t numBytes);
     // Track allocations if and only if we're using guard blocks
     void *initializeAllocation(Header *block, unsigned char *memory, size_t numBytes)
     {

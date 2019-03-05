@@ -14,6 +14,7 @@
 #include <vulkan/vulkan.h>
 
 #include "common/PoolAlloc.h"
+#include "libANGLE/renderer/vulkan/vk_wrapper.h"
 
 namespace rx
 {
@@ -23,10 +24,10 @@ namespace vk
 
 enum class CommandID
 {
+    Invalid = 0,
     // State update cmds
-    BindDescriptorSets     = 0,
     BindIndexBuffer        = 1,
-    BindPipeline           = 2,
+    BindDescriptorSets     = 2,
     BindVertexBuffers      = 3,
     BlitImage              = 4,
     CopyBuffer             = 5,
@@ -45,14 +46,20 @@ enum class CommandID
     DrawIndexed = 17,
     Dispatch    = 18,
     // Sync & Query cmds
-    PipelinBarrier = 19,
-    ResetEvent     = 20,
-    SetEvent       = 21,
-    WaitEvents     = 22,
-    ResetQueryPool = 23,
-    BeginQuery     = 24,
-    EndQuery       = 25,
-    WriteTimestamp = 26,
+    PipelineBarrier = 19,
+    ResetEvent      = 20,
+    SetEvent        = 21,
+    WaitEvents      = 22,
+    ResetQueryPool  = 23,
+    BeginQuery      = 24,
+    EndQuery        = 25,
+    WriteTimestamp  = 26,
+    // Custom commands for optimization
+    ImageBarrier         = 27,
+    BindGraphicsPipeline = 28,
+    BindComputePipeline  = 29,
+    DrawInstanced        = 30,
+    DrawIndexedInstanced = 31,
 };
 
 // Structs to encapsulate parameters for different commands
@@ -79,13 +86,12 @@ struct BindIndexBufferParams
 
 struct BindPipelineParams
 {
-    VkPipelineBindPoint pipelineBindPoint;
     VkPipeline pipeline;
 };
 
 struct BindVertexBuffersParams
 {
-    uint32_t firstBinding;
+    // ANGLE always has firstBinding of 0 so not storing that currently
     uint32_t bindingCount;
     const VkBuffer *buffers;
     const VkDeviceSize *offsets;
@@ -198,18 +204,25 @@ struct SetScissorParams
 struct DrawParams
 {
     uint32_t vertexCount;
+    uint32_t firstVertex;
+};
+
+struct DrawInstancedParams
+{
+    uint32_t vertexCount;
     uint32_t instanceCount;
     uint32_t firstVertex;
-    uint32_t firstInstance;
 };
 
 struct DrawIndexedParams
 {
     uint32_t indexCount;
+};
+
+struct DrawIndexedInstancedParams
+{
+    uint32_t indexCount;
     uint32_t instanceCount;
-    uint32_t firstIndex;
-    int32_t vertexOffset;
-    uint32_t firstInstance;
 };
 
 struct DispatchParams
@@ -230,6 +243,13 @@ struct PipelineBarrierParams
     const VkBufferMemoryBarrier *bufferMemoryBarriers;
     uint32_t imageMemoryBarrierCount;
     const VkImageMemoryBarrier *imageMemoryBarriers;
+};
+
+struct ImageBarrierParams
+{
+    VkPipelineStageFlags srcStageMask;
+    VkPipelineStageFlags dstStageMask;
+    VkImageMemoryBarrier imageMemoryBarrier;
 };
 
 struct SetEventParams
@@ -295,56 +315,103 @@ struct CommandHeader
 class SecondaryCommandBuffer final : angle::NonCopyable
 {
   public:
-    SecondaryCommandBuffer(angle::PoolAllocator *allocator)
-        : mHead(nullptr), mLast(nullptr), mAllocator(allocator)
-    {}
-    ~SecondaryCommandBuffer() {}
+    SecondaryCommandBuffer();
+    ~SecondaryCommandBuffer();
 
     // Add commands
-    void bindDescriptorSets(VkPipelineBindPoint bindPoint,
-                            VkPipelineLayout layout,
-                            uint32_t firstSet,
-                            uint32_t descriptorSetCount,
-                            const VkDescriptorSet *descriptorSets,
-                            uint32_t dynamicOffsetCount,
-                            const uint32_t *dynamicOffsets);
+    ANGLE_INLINE void bindDescriptorSets(VkPipelineBindPoint bindPoint,
+                                         const PipelineLayout &layout,
+                                         uint32_t firstSet,
+                                         uint32_t descriptorSetCount,
+                                         const VkDescriptorSet *descriptorSets,
+                                         uint32_t dynamicOffsetCount,
+                                         const uint32_t *dynamicOffsets)
+    {
+        size_t descSize   = descriptorSetCount * sizeof(VkDescriptorSet);
+        size_t offsetSize = dynamicOffsetCount * sizeof(uint32_t);
+        size_t varSize    = descSize + offsetSize;
+        BindDescriptorSetParams *paramStruct =
+            initCommand<BindDescriptorSetParams>(CommandID::BindDescriptorSets, varSize);
+        // Copy params into memory
+        paramStruct->bindPoint          = bindPoint;
+        paramStruct->layout             = layout.getHandle();
+        paramStruct->firstSet           = firstSet;
+        paramStruct->descriptorSetCount = descriptorSetCount;
+        paramStruct->dynamicOffsetCount = dynamicOffsetCount;
+        // Copy variable sized data
+        storePointerParameter(descriptorSets, &paramStruct->descriptorSets, descSize);
+        storePointerParameter(dynamicOffsets, &paramStruct->dynamicOffsets, offsetSize);
+    }
 
-    void bindIndexBuffer(const VkBuffer &buffer, VkDeviceSize offset, VkIndexType indexType);
+    ANGLE_INLINE void bindIndexBuffer(const Buffer &buffer,
+                                      VkDeviceSize offset,
+                                      VkIndexType indexType)
+    {
+        BindIndexBufferParams *paramStruct =
+            initCommand<BindIndexBufferParams>(CommandID::BindIndexBuffer);
+        paramStruct->buffer    = buffer.getHandle();
+        paramStruct->offset    = offset;
+        paramStruct->indexType = indexType;
+    }
 
-    void bindPipeline(VkPipelineBindPoint pipelineBindPoint, VkPipeline pipeline);
+    ANGLE_INLINE void bindGraphicsPipeline(const Pipeline &pipeline)
+    {
+        BindPipelineParams *paramStruct =
+            initCommand<BindPipelineParams>(CommandID::BindGraphicsPipeline);
+        paramStruct->pipeline = pipeline.getHandle();
+    }
 
-    void bindVertexBuffers(uint32_t firstBinding,
-                           uint32_t bindingCount,
-                           const VkBuffer *buffers,
-                           const VkDeviceSize *offsets);
+    ANGLE_INLINE void bindComputePipeline(const Pipeline &pipeline)
+    {
+        BindPipelineParams *paramStruct =
+            initCommand<BindPipelineParams>(CommandID::BindComputePipeline);
+        paramStruct->pipeline = pipeline.getHandle();
+    }
 
-    void blitImage(VkImage srcImage,
+    ANGLE_INLINE void bindVertexBuffers(uint32_t firstBinding,
+                                        uint32_t bindingCount,
+                                        const VkBuffer *buffers,
+                                        const VkDeviceSize *offsets)
+    {
+        ASSERT(firstBinding == 0);
+        size_t buffSize                      = bindingCount * sizeof(VkBuffer);
+        size_t offsetSize                    = bindingCount * sizeof(VkDeviceSize);
+        BindVertexBuffersParams *paramStruct = initCommand<BindVertexBuffersParams>(
+            CommandID::BindVertexBuffers, buffSize + offsetSize);
+        // Copy params
+        paramStruct->bindingCount = bindingCount;
+        // Copy variable sized data
+        storePointerParameter(buffers, &paramStruct->buffers, buffSize);
+        storePointerParameter(offsets, &paramStruct->offsets, offsetSize);
+    }
+
+    void blitImage(const Image &srcImage,
                    VkImageLayout srcImageLayout,
-                   VkImage dstImage,
+                   const Image &dstImage,
                    VkImageLayout dstImageLayout,
                    uint32_t regionCount,
                    const VkImageBlit *pRegions,
                    VkFilter filter);
 
-    void copyBuffer(const VkBuffer &srcBuffer,
-                    const VkBuffer &destBuffer,
+    void copyBuffer(const Buffer &srcBuffer,
+                    const Buffer &destBuffer,
                     uint32_t regionCount,
                     const VkBufferCopy *regions);
 
     void copyBufferToImage(VkBuffer srcBuffer,
-                           VkImage dstImage,
+                           const Image &dstImage,
                            VkImageLayout dstImageLayout,
                            uint32_t regionCount,
                            const VkBufferImageCopy *regions);
 
-    void copyImage(VkImage srcImage,
+    void copyImage(const Image &srcImage,
                    VkImageLayout srcImageLayout,
-                   VkImage dstImage,
+                   const Image &dstImage,
                    VkImageLayout dstImageLayout,
                    uint32_t regionCount,
                    const VkImageCopy *regions);
 
-    void copyImageToBuffer(VkImage srcImage,
+    void copyImageToBuffer(const Image &srcImage,
                            VkImageLayout srcImageLayout,
                            VkBuffer dstBuffer,
                            uint32_t regionCount,
@@ -355,24 +422,24 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                           uint32_t rectCount,
                           const VkClearRect *rects);
 
-    void clearColorImage(VkImage image,
+    void clearColorImage(const Image &image,
                          VkImageLayout imageLayout,
                          const VkClearColorValue &color,
                          uint32_t rangeCount,
                          const VkImageSubresourceRange *ranges);
 
-    void clearDepthStencilImage(VkImage image,
+    void clearDepthStencilImage(const Image &image,
                                 VkImageLayout imageLayout,
                                 const VkClearDepthStencilValue &depthStencil,
                                 uint32_t rangeCount,
                                 const VkImageSubresourceRange *ranges);
 
-    void updateBuffer(VkBuffer buffer,
+    void updateBuffer(const Buffer &buffer,
                       VkDeviceSize dstOffset,
                       VkDeviceSize dataSize,
                       const void *data);
 
-    void pushConstants(VkPipelineLayout layout,
+    void pushConstants(const PipelineLayout &layout,
                        VkShaderStageFlags flag,
                        uint32_t offset,
                        uint32_t size,
@@ -381,16 +448,37 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void setViewport(uint32_t firstViewport, uint32_t viewportCount, const VkViewport *viewports);
     void setScissor(uint32_t firstScissor, uint32_t scissorCount, const VkRect2D *scissors);
 
-    void draw(uint32_t vertexCount,
-              uint32_t instanceCount,
-              uint32_t firstVertex,
-              uint32_t firstInstance);
+    ANGLE_INLINE void draw(uint32_t vertexCount, uint32_t firstVertex)
+    {
+        DrawParams *paramStruct  = initCommand<DrawParams>(CommandID::Draw);
+        paramStruct->vertexCount = vertexCount;
+        paramStruct->firstVertex = firstVertex;
+    }
 
-    void drawIndexed(uint32_t indexCount,
-                     uint32_t instanceCount,
-                     uint32_t firstIndex,
-                     int32_t vertexOffset,
-                     uint32_t firstInstance);
+    ANGLE_INLINE void drawInstanced(uint32_t vertexCount,
+                                    uint32_t instanceCount,
+                                    uint32_t firstVertex)
+    {
+        DrawInstancedParams *paramStruct =
+            initCommand<DrawInstancedParams>(CommandID::DrawInstanced);
+        paramStruct->vertexCount   = vertexCount;
+        paramStruct->instanceCount = instanceCount;
+        paramStruct->firstVertex   = firstVertex;
+    }
+
+    ANGLE_INLINE void drawIndexed(uint32_t indexCount)
+    {
+        DrawIndexedParams *paramStruct = initCommand<DrawIndexedParams>(CommandID::DrawIndexed);
+        paramStruct->indexCount        = indexCount;
+    }
+
+    ANGLE_INLINE void drawIndexedInstanced(uint32_t indexCount, uint32_t instanceCount)
+    {
+        DrawIndexedInstancedParams *paramStruct =
+            initCommand<DrawIndexedInstancedParams>(CommandID::DrawIndexedInstanced);
+        paramStruct->indexCount    = indexCount;
+        paramStruct->instanceCount = instanceCount;
+    }
 
     void dispatch(uint32_t groupCountX, uint32_t groupCountY, uint32_t groupCountZ);
 
@@ -403,6 +491,10 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                          const VkBufferMemoryBarrier *bufferMemoryBarriers,
                          uint32_t imageMemoryBarrierCount,
                          const VkImageMemoryBarrier *imageMemoryBarriers);
+
+    void imageBarrier(VkPipelineStageFlags srcStageMask,
+                      VkPipelineStageFlags dstStageMask,
+                      VkImageMemoryBarrier *imageMemoryBarrier);
 
     void setEvent(VkEvent event, VkPipelineStageFlags stageMask);
     void resetEvent(VkEvent event, VkPipelineStageFlags stageMask);
@@ -424,15 +516,63 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                         VkQueryPool queryPool,
                         uint32_t query);
 
+    // No-op for compatibility
+    VkResult end() { return VK_SUCCESS; }
+
     // Parse the cmds in this cmd buffer into given primary cmd buffer for execution
     void executeCommands(VkCommandBuffer cmdBuffer);
 
+    // Initialize the SecondaryCommandBuffer by setting the allocator it will use
+    void initialize(angle::PoolAllocator *allocator) { mAllocator = allocator; }
+    // This will cause the SecondaryCommandBuffer to become invalid by clearing its allocator
+    void releaseHandle() { mAllocator = nullptr; }
+    // The SecondaryCommandBuffer is valid if it's been initialized
+    bool valid() { return mAllocator != nullptr; }
+
   private:
+    ANGLE_INLINE CommandHeader *commonInit(CommandID cmdID, size_t allocSize)
+    {
+        ASSERT(mAllocator != nullptr);
+        CommandHeader *header =
+            reinterpret_cast<CommandHeader *>(mAllocator->fastAllocate(allocSize));
+        // Update cmd ID in header
+        header->id   = cmdID;
+        header->next = nullptr;
+        // Update prev cmd's "next" ptr and mLast ptr
+        if (mLast)
+        {
+            mLast->next = header;
+        }
+        else  // This is first cmd of Cmd Buffer so update mHead
+        {
+            ASSERT(mHead == nullptr);
+            mHead = header;
+        }
+        // Update mLast ptr
+        mLast = header;
+        return header;
+    }
     // Allocate and initialize memory for given commandID & variable param size
     //  returning a pointer to the start of the commands parameter data and updating
     //  mPtrCmdData to just past the fixed parameter data.
     template <class StructType>
-    StructType *initCommand(CommandID cmdID, size_t variableSize);
+    ANGLE_INLINE StructType *initCommand(CommandID cmdID, size_t variableSize)
+    {
+        size_t paramSize      = sizeof(StructType);
+        CommandHeader *header = commonInit(cmdID, sizeof(CommandHeader) + paramSize + variableSize);
+
+        uint8_t *fixedParamPtr = reinterpret_cast<uint8_t *>(header) + sizeof(CommandHeader);
+        mPtrCmdData            = fixedParamPtr + sizeof(StructType);
+        return reinterpret_cast<StructType *>(fixedParamPtr);
+    }
+    // Initialize a command that doesn't have variable-sized ptr data
+    template <class StructType>
+    ANGLE_INLINE StructType *initCommand(CommandID cmdID)
+    {
+        CommandHeader *header = commonInit(cmdID, sizeof(StructType) + sizeof(CommandHeader));
+        return reinterpret_cast<StructType *>(reinterpret_cast<uint8_t *>(header) +
+                                              sizeof(CommandHeader));
+    }
     // Return a ptr to the parameter type
     template <class StructType>
     StructType *getParamPtr(CommandHeader *header)
@@ -446,17 +586,30 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     template <class PtrType>
     void storePointerParameter(const PtrType *paramData,
                                const PtrType **writePtr,
-                               size_t sizeInBytes);
+                               size_t sizeInBytes)
+    {
+        if (0 == sizeInBytes)
+            return;
+        *writePtr = reinterpret_cast<const PtrType *>(mPtrCmdData);
+        memcpy(mPtrCmdData, paramData, sizeInBytes);
+        mPtrCmdData += sizeInBytes;
+    }
 
     // Pointer to start of cmd buffer
     CommandHeader *mHead;
     // Last command inserted in cmd buffer
     CommandHeader *mLast;
+    // Allocator used by this class. If non-null then the class is valid.
     angle::PoolAllocator *mAllocator;
     // Ptr to write variable ptr data section of cmd into.
     //  This is set to just past fixed parameter data when initCommand() is called
     uint8_t *mPtrCmdData;
 };
+
+ANGLE_INLINE SecondaryCommandBuffer::SecondaryCommandBuffer()
+    : mHead(nullptr), mLast(nullptr), mAllocator(nullptr)
+{}
+ANGLE_INLINE SecondaryCommandBuffer::~SecondaryCommandBuffer() {}
 
 }  // namespace vk
 }  // namespace rx
