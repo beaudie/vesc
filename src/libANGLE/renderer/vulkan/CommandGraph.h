@@ -24,6 +24,7 @@ namespace rx
 
 namespace vk
 {
+
 enum class VisitedState
 {
     Unvisited,
@@ -90,7 +91,6 @@ class CommandGraphNode final : angle::NonCopyable
         ASSERT(!mHasChildren);
         return &mInsideRenderPassCommands;
     }
-
     // For outside the render pass (copies, transitions, etc).
     angle::Result beginOutsideRenderPassRecording(Context *context,
                                                   const CommandPool &commandPool,
@@ -189,7 +189,6 @@ class CommandGraphNode final : angle::NonCopyable
     // TODO(jmadill): We might not need inside and outside RenderPass commands separate.
     CommandBufferT mOutsideRenderPassCommands;
     CommandBufferT mInsideRenderPassCommands;
-
     // Special-function additional data:
     // Queries:
     VkQueryPool mQueryPool;
