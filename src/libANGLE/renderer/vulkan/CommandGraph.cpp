@@ -303,7 +303,6 @@ CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function,
 CommandGraphNode::~CommandGraphNode()
 {
     mRenderPassFramebuffer.setHandle(VK_NULL_HANDLE);
-
     // Command buffers are managed by the command pool, so don't need to be freed.
     mOutsideRenderPassCommands.releaseHandle();
     mInsideRenderPassCommands.releaseHandle();
@@ -503,7 +502,6 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
                 RenderPass *renderPass = nullptr;
                 ANGLE_TRY(renderPassCache->getCompatibleRenderPass(context, serial, mRenderPassDesc,
                                                                    &renderPass));
-
                 ANGLE_VK_TRY(context, mInsideRenderPassCommands.end());
 
                 VkRenderPassBeginInfo beginInfo = {};
