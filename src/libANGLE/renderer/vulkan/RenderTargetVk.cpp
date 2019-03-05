@@ -53,7 +53,7 @@ void RenderTargetVk::reset()
 }
 
 void RenderTargetVk::onColorDraw(vk::FramebufferHelper *framebufferVk,
-                                 vk::CommandBuffer *commandBuffer,
+                                 CommandBufferT *commandBuffer,
                                  vk::RenderPassDesc *renderPassDesc)
 {
     ASSERT(commandBuffer->valid());
@@ -71,7 +71,7 @@ void RenderTargetVk::onColorDraw(vk::FramebufferHelper *framebufferVk,
 }
 
 void RenderTargetVk::onDepthStencilDraw(vk::FramebufferHelper *framebufferVk,
-                                        vk::CommandBuffer *commandBuffer,
+                                        CommandBufferT *commandBuffer,
                                         vk::RenderPassDesc *renderPassDesc)
 {
     ASSERT(commandBuffer->valid());
@@ -135,7 +135,7 @@ void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image, vk::ImageView 
 
 vk::ImageHelper *RenderTargetVk::getImageForRead(vk::CommandGraphResource *readingResource,
                                                  vk::ImageLayout layout,
-                                                 vk::CommandBuffer *commandBuffer)
+                                                 CommandBufferT *commandBuffer)
 {
     ASSERT(mImage && mImage->valid());
 
