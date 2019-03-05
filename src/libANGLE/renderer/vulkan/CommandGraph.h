@@ -11,12 +11,20 @@
 #define LIBANGLE_RENDERER_VULKAN_COMMAND_GRAPH_H_
 
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
+//#define ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS 1
+#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+#    include "libANGLE/renderer/vulkan/SecondaryCommandBuffer.h"
+using CommandBufferT = rx::vk::SecondaryCommandBuffer;
+#else
+using CommandBufferT = rx::vk::CommandBuffer;
+#endif
 
 namespace rx
 {
 
 namespace vk
 {
+
 enum class VisitedState
 {
     Unvisited,
@@ -61,32 +69,37 @@ class CommandBufferOwner
     ANGLE_INLINE void onCommandBufferFinished() { mCommandBuffer = nullptr; }
 
   protected:
-    vk::CommandBuffer *mCommandBuffer = nullptr;
+    CommandBufferT *mCommandBuffer = nullptr;
 };
 
 // Only used internally in the command graph. Kept in the header for better inlining performance.
 class CommandGraphNode final : angle::NonCopyable
 {
   public:
-    CommandGraphNode(CommandGraphNodeFunction function);
+    CommandGraphNode(CommandGraphNodeFunction function
+#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+                     ,
+                     angle::PoolAllocator *poolAllocator);
+#else
+    );
+#endif
     ~CommandGraphNode();
 
     // Immutable queries for when we're walking the commands tree.
+#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+    SecondaryCommandBuffer *getOutsideRenderPassCommands();
+    SecondaryCommandBuffer *getInsideRenderPassCommands();
+#else
     CommandBuffer *getOutsideRenderPassCommands();
-
-    CommandBuffer *getInsideRenderPassCommands()
-    {
-        ASSERT(!mHasChildren);
-        return &mInsideRenderPassCommands;
-    }
-
+    CommandBuffer *getInsideRenderPassCommands();
+#endif
     // For outside the render pass (copies, transitions, etc).
     angle::Result beginOutsideRenderPassRecording(Context *context,
                                                   const CommandPool &commandPool,
-                                                  CommandBuffer **commandsOut);
+                                                  CommandBufferT **commandsOut);
 
     // For rendering commands (draws).
-    angle::Result beginInsideRenderPassRecording(Context *context, CommandBuffer **commandsOut);
+    angle::Result beginInsideRenderPassRecording(Context *context, CommandBufferT **commandsOut);
 
     // storeRenderPassInfo and append*RenderTarget store info relevant to the RenderPass.
     void storeRenderPassInfo(const Framebuffer &framebuffer,
@@ -171,12 +184,15 @@ class CommandGraphNode final : angle::NonCopyable
     gl::AttachmentArray<VkClearValue> mRenderPassClearValues;
 
     CommandGraphNodeFunction mFunction;
-
+#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+    SecondaryCommandBuffer mOutsideRenderPassCommands;
+    SecondaryCommandBuffer mInsideRenderPassCommands;
+#else
     // Keep separate buffers for commands inside and outside a RenderPass.
     // TODO(jmadill): We might not need inside and outside RenderPass commands separate.
     CommandBuffer mOutsideRenderPassCommands;
     CommandBuffer mInsideRenderPassCommands;
-
+#endif
     // Special-function additional data:
     // Queries:
     VkQueryPool mQueryPool;
@@ -249,7 +265,7 @@ class CommandGraphResource : angle::NonCopyable
     // Allocates a write node via getNewWriteNode and returns a started command buffer.
     // The started command buffer will render outside of a RenderPass.
     // Will append to an existing command buffer/graph node if possible.
-    angle::Result recordCommands(Context *context, CommandBuffer **commandBufferOut);
+    angle::Result recordCommands(Context *context, CommandBufferT **commandBufferOut);
 
     // Begins a command buffer on the current graph node for in-RenderPass rendering.
     // Called from FramebufferVk::startNewRenderPass and UtilsVk functions.
@@ -258,12 +274,12 @@ class CommandGraphResource : angle::NonCopyable
                                   const gl::Rectangle &renderArea,
                                   const RenderPassDesc &renderPassDesc,
                                   const std::vector<VkClearValue> &clearValues,
-                                  CommandBuffer **commandBufferOut);
+                                  CommandBufferT **commandBufferOut);
 
     // Checks if we're in a RenderPass, returning true if so. Updates serial internally.
     // Returns the started command buffer in commandBufferOut.
     ANGLE_INLINE bool appendToStartedRenderPass(Serial currentQueueSerial,
-                                                CommandBuffer **commandBufferOut)
+                                                CommandBufferT **commandBufferOut)
     {
         updateQueueSerial(currentQueueSerial);
         if (hasStartedRenderPass())
@@ -338,13 +354,13 @@ class CommandGraphResource : angle::NonCopyable
 // ANGLE's CommandGraph (and CommandGraphNode) attempt to solve these problems using deferred
 // command submission. We also sometimes call this command re-ordering. A brief summary:
 //
-// During GL command processing, we record Vulkan commands into secondary command buffers, which
+// During GL command processing, we record Vulkan commands into SecondaryCommandBuffers, which
 // are stored in CommandGraphNodes, and these nodes are chained together via dependencies to
-// for a directed acyclic CommandGraph. When we need to submit the CommandGraph, say during a
+// form a directed acyclic CommandGraph. When we need to submit the CommandGraph, say during a
 // SwapBuffers or ReadPixels call, we begin a primary Vulkan CommandBuffer, and walk the
-// CommandGraph, starting at the most senior nodes, recording secondary CommandBuffers inside
+// CommandGraph, starting at the most senior nodes, recording SecondaryCommandBuffers inside
 // and outside RenderPasses as necessary, filled with the right load/store operations. Once
-// the primary CommandBuffer has recorded all of the secondary CommandBuffers from all the open
+// the primary CommandBuffer has recorded all of the SecondaryCommandBuffers from all the open
 // CommandGraphNodes, we submit the primary CommandBuffer to the VkQueue on the device.
 //
 // The Command Graph consists of an array of open Command Graph Nodes. It supports allocating new
@@ -394,6 +410,9 @@ class CommandGraph final : angle::NonCopyable
 
     std::vector<CommandGraphNode *> mNodes;
     bool mEnableGraphDiagnostics;
+#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+    angle::PoolAllocator mPoolAllocator;
+#endif
 
     // A set of nodes (eventually) exist that act as barriers to guarantee submission order.  For
     // example, a glMemoryBarrier() calls would lead to such a barrier or beginning and ending a
