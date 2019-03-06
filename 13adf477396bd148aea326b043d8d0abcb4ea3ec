@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53cf68ec_6a4778b7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-06T15:36:36Z",
+      "side": 1,
+      "message": "nit: we\u0027re supposed to tag TODOs with issues. maybe use http://anglebug.com/2701 ?",
+      "range": {
+        "startLine": 332,
+        "startChar": 7,
+        "endLine": 332,
+        "endChar": 11
+      },
+      "revId": "13adf477396bd148aea326b043d8d0abcb4ea3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
