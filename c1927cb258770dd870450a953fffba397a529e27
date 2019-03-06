@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8429a4a0_c447f472",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-06T15:31:02Z",
+      "side": 1,
+      "message": "Maybe you should also add glmark2_x11? To run against the native driver.",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 5
+      },
+      "revId": "c1927cb258770dd870450a953fffba397a529e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84739bc5_53a31d81",
+        "filename": "src/tests/perf_tests/glmark2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-06T15:31:02Z",
+      "side": 1,
+      "message": "nit: maybe call this glmark2Benchmark.cpp for consistency?",
+      "revId": "c1927cb258770dd870450a953fffba397a529e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c822666_5f73b1d8",
+        "filename": "src/tests/perf_tests/glmark2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-06T15:31:02Z",
+      "side": 1,
+      "message": "One suggestion here. Could we make these tests run a separate test step for each glmark2 scene? This will help run them with perf_test_runner.py to reduce variance. Even internally here we could decide to run a scene three times and take the mean.\n\nTwo ways of implementing this. The easiest is to make N TEST_P() tests. Each with a scene. The more fancy way is to use testing::Combine to combine the list of platform configs with a list of scenes. Either seems fine to me. I think we should hard-code the list of scenes for now.\n\nScene list produced when running glmark2 with \"-l\":\n[Scene] buffer\n[Scene] build\n[Scene] bump\n[Scene] clear\n[Scene] conditionals\n[Scene] desktop\n[Scene] effect2d\n[Scene] function\n[Scene] ideas\n[Scene] jellyfish\n[Scene] loop\n[Scene] pulsar\n[Scene] refract\n[Scene] shading\n[Scene] shadow\n[Scene] terrain\n[Scene] texture",
+      "range": {
+        "startLine": 182,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 0
+      },
+      "revId": "c1927cb258770dd870450a953fffba397a529e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
