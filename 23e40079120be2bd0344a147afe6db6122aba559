@@ -421,6 +421,30 @@
       "revId": "23e40079120be2bd0344a147afe6db6122aba559",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "733efa76_2c571eeb",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-06T14:59:43Z",
+      "side": 1,
+      "message": "I think it\u0027s worth. As ANGLE grows into ES 3.0 and 3.1 there will be more calls at the source points than there are resource usages in the Secondary class. So it\u0027ll be a net savings. Not a big thing by any means but my preference is to do the unboxing in the Secondary.",
+      "parentUuid": "581e5a14_622b83a8",
+      "range": {
+        "startLine": 338,
+        "startChar": 71,
+        "endLine": 338,
+        "endChar": 83
+      },
+      "revId": "23e40079120be2bd0344a147afe6db6122aba559",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
