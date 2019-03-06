@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "88aa43bc_8e1b546e",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-06T16:18:40Z",
+      "side": 1,
+      "message": "I was suggesting the gl/x11 integration. It\u0027s useful to compare ANGLE\u0027s implementation that produces the same output as a desktop GL driver.",
+      "parentUuid": "4906fa43_79d5a92b",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 5
+      },
+      "revId": "c1927cb258770dd870450a953fffba397a529e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "84739bc5_53a31d81",
         "filename": "src/tests/perf_tests/glmark2.cpp",
         "patchSetId": 6
@@ -119,6 +143,30 @@
       "side": 1,
       "message": "\u003e One suggestion here. Could we make these tests run a separate test step for each glmark2 scene?\n\nI\u0027ll look into it. Some scenes are run (by default) with multiple configurations, so that list is not enough. This is what currently gets output from the benchmark:\n\n*RESULT [build]use-vbo\u003dfalse:vulkan: fps\u003d 1161 \n*RESULT [build]use-vbo\u003dtrue:vulkan: fps\u003d 1482 \n*RESULT [texture]texture-filter\u003dnearest:vulkan: fps\u003d 1381 \n*RESULT [texture]texture-filter\u003dlinear:vulkan: fps\u003d 1376 \n*RESULT [texture]texture-filter\u003dmipmap:vulkan: fps\u003d 1302 \n*RESULT [shading]shading\u003dgouraud:vulkan: fps\u003d 1511 \n*RESULT [shading]shading\u003dblinn-phong-inf:vulkan: fps\u003d 1511 \n*RESULT [shading]shading\u003dphong:vulkan: fps\u003d 1508 \n*RESULT [shading]shading\u003dcel:vulkan: fps\u003d 1501 \n*RESULT [bump]bump-render\u003dhigh-poly:vulkan: fps\u003d 1451 \n*RESULT [bump]bump-render\u003dnormals:vulkan: fps\u003d 1344 \n*RESULT [bump]bump-render\u003dheight:vulkan: fps\u003d 1360 \n*RESULT [effect2d]kernel\u003d0,1,0;1,-4,1;0,1,0;:vulkan: fps\u003d 1463 \n*RESULT [effect2d]kernel\u003d1,1,1,1,1;1,1,1,1,1;1,1,1,1,1;:vulkan: fps\u003d 1439 \n*RESULT [pulsar]light\u003dfalse:quads\u003d5:texture\u003dfalse:vulkan: fps\u003d 1063 \n*RESULT [desktop]blur-radius\u003d5:effect\u003dblur:passes\u003d1:separable\u003dtrue:windows\u003d4:vulkan: fps\u003d 198 \n*RESULT [desktop]effect\u003dshadow:windows\u003d4:vulkan: fps\u003d 207 \n*RESULT [buffer]columns\u003d200:interleave\u003dfalse:update-dispersion\u003d0.9:update-fraction\u003d0.5:update-method\u003dmap:vulkan: fps\u003d 315 \n*RESULT [buffer]columns\u003d200:interleave\u003dfalse:update-dispersion\u003d0.9:update-fraction\u003d0.5:update-method\u003dsubdata:vulkan: fps\u003d 179 \n*RESULT [buffer]columns\u003d200:interleave\u003dtrue:update-dispersion\u003d0.9:update-fraction\u003d0.5:update-method\u003dmap:vulkan: fps\u003d 469 \n*RESULT [ideas]speed\u003dduration:vulkan: fps\u003d 103 \n*RESULT [jellyfish]\u003cdefault\u003e:vulkan: fps\u003d 1051 \n*RESULT [terrain]\u003cdefault\u003e:vulkan: fps\u003d 212 \n*RESULT [conditionals]fragment-steps\u003d0:vertex-steps\u003d0:vulkan: fps\u003d 1470 \n*RESULT [conditionals]fragment-steps\u003d5:vertex-steps\u003d0:vulkan: fps\u003d 1481 \n*RESULT [conditionals]fragment-steps\u003d0:vertex-steps\u003d5:vulkan: fps\u003d 1412 \n*RESULT [function]fragment-complexity\u003dlow:fragment-steps\u003d5:vulkan: fps\u003d 1421 \n*RESULT [function]fragment-complexity\u003dmedium:fragment-steps\u003d5:vulkan: fps\u003d 1408 \n*RESULT [loop]fragment-loop\u003dfalse:fragment-steps\u003d5:vertex-steps\u003d5:vulkan: fps\u003d 1515 \n*RESULT [loop]fragment-steps\u003d5:fragment-uniform\u003dfalse:vertex-steps\u003d5:vulkan: fps\u003d 1491 \n*RESULT [loop]fragment-steps\u003d5:fragment-uniform\u003dtrue:vertex-steps\u003d5:vulkan: fps\u003d 1467 \n*RESULT glmark2vulkan: score\u003d 1137 \n\nI do like the idea of being able to run specific scenes, though, so I\u0027ll try to make the above list a thing.\n\n\u003e This will help run them with perf_test_runner.py to reduce variance. Even internally here we could decide to run a scene three times and take the mean.\n\nI\u0027m not sure how useful that would be. glmark2 already runs each scene for many seconds, so the result is already a mean over a long time.\n\n\u003e Two ways of implementing this. The easiest is to make N TEST_P() tests. Each with a scene. The more fancy way is to use testing::Combine to combine the list of platform configs with a list of scenes. Either seems fine to me. I think we should hard-code the list of scenes for now.\n\nI\u0027ll go with testing::Combine. I\u0027ve been meaning to look into that so this could be a good opportunity for me to try it out.",
       "parentUuid": "3c822666_5f73b1d8",
+      "range": {
+        "startLine": 182,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 0
+      },
+      "revId": "c1927cb258770dd870450a953fffba397a529e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49b00e4e_c5b38e19",
+        "filename": "src/tests/perf_tests/glmark2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-06T16:18:40Z",
+      "side": 1,
+      "message": "Good point about the other parameters.\n\n\u003e I\u0027m not sure how useful that would be. glmark2 already runs each scene for many seconds, so the result is already a mean over a long time.\n\nIt can be useful to re-run a test with a different process. Because of address space layout randomization. The particular randomization the OS gives a specific process can be a source of variance. So running the same test in multiple different processes can smooth that out. But that\u0027s a long-term solution that we don\u0027t need to worry about to land the integration.",
+      "parentUuid": "72268824_65043be8",
       "range": {
         "startLine": 182,
         "startChar": 0,
