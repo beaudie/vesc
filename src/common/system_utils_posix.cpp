@@ -139,6 +139,7 @@ bool RunApp(const std::vector<const char *> &args,
         return false;
     }
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     if (pid == 0)
     {
         // Child.  Execute the application.
@@ -182,16 +183,20 @@ bool RunApp(const std::vector<const char *> &args,
     stdoutPipe.closeEndPoint(1);
     stderrPipe.closeEndPoint(1);
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     // Read back the output of the child.
     if (stdoutOut)
     {
         ReadEntireFile(stdoutPipe.fds[0], stdoutOut);
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     }
     if (stderrOut)
     {
         ReadEntireFile(stderrPipe.fds[0], stderrOut);
+        fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     }
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     // Cleanup the child.
     int status = 0;
     do
@@ -203,6 +208,7 @@ bool RunApp(const std::vector<const char *> &args,
         }
         if (changedPid < 0)
         {
+            fprintf(stderr, "%s:%d: %d %d\n", __FILE__, __LINE__, changedPid, status);
             return false;
         }
     } while (!WIFEXITED(status) && !WIFSIGNALED(status));
@@ -213,6 +219,7 @@ bool RunApp(const std::vector<const char *> &args,
         *exitCodeOut = WEXITSTATUS(status);
     }
 
+    fprintf(stderr, "%s:%d: %d\n", __FILE__, __LINE__, status);
     return true;
 }
 
