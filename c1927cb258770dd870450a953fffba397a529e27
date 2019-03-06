@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "5b7f4430_04b1fe46",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-06T17:01:57Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "88aa43bc_8e1b546e",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 5
+      },
+      "revId": "c1927cb258770dd870450a953fffba397a529e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84739bc5_53a31d81",
         "filename": "src/tests/perf_tests/glmark2.cpp",
         "patchSetId": 6
@@ -167,6 +191,30 @@
       "side": 1,
       "message": "Good point about the other parameters.\n\n\u003e I\u0027m not sure how useful that would be. glmark2 already runs each scene for many seconds, so the result is already a mean over a long time.\n\nIt can be useful to re-run a test with a different process. Because of address space layout randomization. The particular randomization the OS gives a specific process can be a source of variance. So running the same test in multiple different processes can smooth that out. But that\u0027s a long-term solution that we don\u0027t need to worry about to land the integration.",
       "parentUuid": "72268824_65043be8",
+      "range": {
+        "startLine": 182,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 0
+      },
+      "revId": "c1927cb258770dd870450a953fffba397a529e27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69862bbf_ed6ef8c0",
+        "filename": "src/tests/perf_tests/glmark2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-06T17:01:57Z",
+      "side": 1,
+      "message": "ASLR is at page-level (way above cache-line size) and no cache-line crosses its boundaries. ASLR as a source of variance sounds far-fetched to me TBH, but I haven\u0027t given it much thought either.\n\nEither way, this will be a possibility anyway as I separate out the scenes!",
+      "parentUuid": "49b00e4e_c5b38e19",
       "range": {
         "startLine": 182,
         "startChar": 0,
