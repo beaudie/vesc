@@ -41,6 +41,7 @@ if os.path.exists(hash_filename):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dump-intermediate-json', help='Dump parsed function data as a JSON file builtin_functions.json', action="store_true")
+parser.add_argument('auto_script_command', nargs='?', default='')
 args = parser.parse_args()
 
 template_immutablestringtest_cpp = """// GENERATED FILE - DO NOT EDIT.
@@ -643,20 +644,6 @@ def get_parsed_functions():
 
     return parsed_functions
 
-parsed_functions = get_parsed_functions()
-
-if args.dump_intermediate_json:
-    with open('builtin_functions.json', 'w') as outfile:
-        def serialize_obj(obj):
-            if isinstance(obj, TType):
-                return obj.data
-            else:
-                raise "Cannot serialize to JSON: " + str(obj)
-        json.dump(parsed_functions, outfile, indent=4, separators=(',', ': '), default=serialize_obj)
-
-with open(variables_json_filename) as f:
-    parsed_variables = json.load(f, object_pairs_hook=OrderedDict)
-
 # Declarations of symbol unique ids
 builtin_id_declarations = []
 
@@ -668,10 +655,6 @@ name_declarations = set()
 
 # Declarations of builtin TVariables
 variable_declarations = []
-
-# Declarations of parameter arrays for builtin TFunctions. Map from C++ variable name to the full
-# declaration.
-parameter_declarations = {}
 
 # Declarations of builtin TFunctions
 function_declarations = []
@@ -701,6 +684,8 @@ is_in_group_definitions = []
 
 # Counts of variables with a certain name string:
 variable_name_count = {}
+
+ttype_mangled_name_variants = []
 
 id_counter = 0
 
@@ -776,19 +761,6 @@ def get_function_human_readable_name(function_name, parameters):
         name += '_' + param.get_human_readable_name()
     return name
 
-ttype_mangled_name_variants = []
-for basic_type in basic_types_enumeration:
-    primary_sizes = [1]
-    secondary_sizes = [1]
-    if basic_type in ['Float', 'Int', 'UInt', 'Bool']:
-        primary_sizes = [1, 2, 3, 4]
-    if basic_type == 'Float':
-        secondary_sizes = [1, 2, 3, 4]
-    for primary_size in primary_sizes:
-        for secondary_size in secondary_sizes:
-            type = TType({'basic': basic_type, 'primarySize': primary_size, 'secondarySize': secondary_size})
-            ttype_mangled_name_variants.append(type.get_mangled_name())
-
 def gen_parameters_variant_ids(str_len):
     # Note that this doesn't generate variants with array parameters or struct / interface block parameters. They are assumed to have been filtered out separately.
     if str_len % 2 != 0:
@@ -813,8 +785,8 @@ def get_parameters_mangled_name_variant(variant_id, paren_location, total_length
 # Calculate the mangled name hash of a common prefix string that's been pre-hashed with hash32()
 # plus a variant of the parameters. This is faster than constructing the whole string and then
 # calculating the hash for that.
-num_type_variants = len(ttype_mangled_name_variants)
-def get_mangled_name_variant_hash(prefix_hash32, variant_id, paren_location, total_length):
+def get_mangled_name_variant_hash(prefix_hash32, variant_id, paren_location, total_length,
+        num_type_variants):
     hash = prefix_hash32
     parameter_count = (total_length - paren_location) >> 1
     parameter_variant_id_base = variant_id
@@ -828,11 +800,7 @@ def get_mangled_name_variant_hash(prefix_hash32, variant_id, paren_location, tot
         parameter_variant_id_base = parameter_variant_id_base / num_type_variants
     return ((hash >> 13) ^ (hash & 0x1fff)) | (total_length << 19) | (paren_location << 25)
 
-# Sanity check for get_mangled_name_variant_hash:
-if get_mangled_name_variant_hash(hash32("atan("), 3, 4, len("atan(0123")) != mangledNameHash("atan(" + get_parameters_mangled_name_variant(3, 4, len("atan(0123"))):
-    raise Exception("get_mangled_name_variant_hash sanity check failed")
-
-def mangled_name_hash_can_collide_with_different_parameters(function_variant_props):
+def mangled_name_hash_can_collide_with_different_parameters(function_variant_props, num_type_variants):
     # We exhaustively search through all possible lists of parameters and see if any other mangled
     # name has the same hash.
     mangled_name = function_variant_props['mangled_name']
@@ -847,7 +815,9 @@ def mangled_name_hash_can_collide_with_different_parameters(function_variant_pro
         # This increases the complexity of searching for hash collisions considerably, so rather than doing it we just conservatively assume that a hash collision may be possible.
         return True
     for variant_id in gen_parameters_variant_ids(parameters_mangled_name_len):
-        if get_mangled_name_variant_hash(prefix_hash32, variant_id, paren_location, mangled_name_len) == hash and get_parameters_mangled_name_variant(variant_id, paren_location, mangled_name_len) != parameters_mangled_name:
+        variant_hash = get_mangled_name_variant_hash(prefix_hash32, variant_id, paren_location, mangled_name_len, num_type_variants)
+        manged_name_variant = get_parameters_mangled_name_variant(variant_id, paren_location, mangled_name_len)
+        if variant_hash == hash and manged_name_variant != parameters_mangled_name:
             return True
     return False
 
@@ -931,7 +901,7 @@ def gen_function_variants(function_name, function_props):
 defined_function_variants = set()
 defined_parameter_names = set()
 
-def process_single_function_group(condition, group_name, group):
+def process_single_function_group(condition, group_name, group, num_type_variants, parameter_declarations):
     global id_counter
     if 'functions' not in group:
         return
@@ -1026,7 +996,7 @@ def process_single_function_group(condition, group_name, group):
             # name and hash, then we can only check the mangled name length and the function name
             # instead of checking the whole mangled name.
             template_mangled_if = ''
-            if mangled_name_hash_can_collide_with_different_parameters(template_args):
+            if mangled_name_hash_can_collide_with_different_parameters(template_args, num_type_variants):
                 template_mangled_name_declaration = 'constexpr const ImmutableString {unique_name}("{mangled_name}");'
                 name_declarations.add(template_mangled_name_declaration.format(**template_args))
                 template_mangled_if = """if (name == BuiltInName::{unique_name})
@@ -1044,7 +1014,7 @@ def process_single_function_group(condition, group_name, group):
 
             id_counter += 1
 
-def process_function_group(group_name, group):
+def process_function_group(group_name, group, num_type_variants, parameter_declarations):
     global id_counter
     first_id = id_counter
 
@@ -1052,11 +1022,11 @@ def process_function_group(group_name, group):
     if 'condition' in group:
         condition = group['condition']
 
-    process_single_function_group(condition, group_name, group)
+    process_single_function_group(condition, group_name, group, num_type_variants, parameter_declarations)
 
     if 'subgroups' in group:
         for subgroup_name, subgroup in group['subgroups'].iteritems():
-            process_function_group(group_name + subgroup_name, subgroup)
+            process_function_group(group_name + subgroup_name, subgroup, num_type_variants, parameter_declarations)
 
     if 'queryFunction' in group:
         template_args = {
@@ -1071,12 +1041,8 @@ def process_function_group(group_name, group):
 }}"""
         is_in_group_definitions.append(template_is_in_group_definition.format(**template_args))
 
-for group_name, group in parsed_functions.iteritems():
-    process_function_group(group_name, group)
-
-def prune_parameters_arrays():
+def prune_parameters_arrays(parameter_declarations):
     # We can share parameters arrays between functions in case one array is a subarray of another.
-    global parameter_declarations
     parameter_variable_name_replacements = {}
     used_param_variable_names = set()
     for param_variable_name, param_declaration in sorted(parameter_declarations.iteritems(), key=lambda item: -len(item[0])):
@@ -1093,7 +1059,6 @@ def prune_parameters_arrays():
     for i in xrange(len(function_declarations)):
         for replaced, replacement in parameter_variable_name_replacements.iteritems():
             function_declarations[i] = function_declarations[i].replace('BuiltInParameters::' + replaced + ',', 'BuiltInParameters::' + replacement + ',')
-prune_parameters_arrays()
 
 def process_single_variable_group(condition, group_name, group):
     global id_counter
@@ -1260,63 +1225,142 @@ def process_variable_group(parent_condition, group_name, group):
         for subgroup_name, subgroup in group['subgroups'].iteritems():
             process_variable_group(condition, subgroup_name, subgroup)
 
-for group_name, group in parsed_variables.iteritems():
-    count_variable_names(group)
 
-for group_name, group in parsed_variables.iteritems():
-    process_variable_group('NO_CONDITION', group_name, group)
+def main():
 
-output_strings = {
-    'script_name': os.path.basename(__file__),
-    'copyright_year': date.today().year,
+    test_filename = '../../tests/compiler_tests/ImmutableString_test_autogen.cpp'
 
-    'builtin_id_declarations': '\n'.join(builtin_id_declarations),
-    'builtin_id_definitions': '\n'.join(builtin_id_definitions),
-    'last_builtin_id': id_counter - 1,
-    'name_declarations': '\n'.join(sorted(list(name_declarations))),
+    # auto_script parameters.
+    if args.auto_script_command != '':
+        inputs = [
+            'builtin_function_declarations.txt',
+            'builtin_variables.json',
+        ]
+        outputs = [
+            'ParseContext_autogen.h',
+            'SymbolTable_autogen.cpp',
+            'SymbolTable_autogen.h',
+            'tree_util/BuiltIn_autogen.h',
+            test_filename,
+            hash_filename,
+        ]
 
-    'function_data_source_name': functions_txt_filename,
-    'function_declarations': '\n'.join(function_declarations),
-    'parameter_declarations': '\n'.join(sorted(parameter_declarations)),
+        if args.auto_script_command == 'inputs':
+            print ','.join(inputs)
+        elif args.auto_script_command == 'outputs':
+            print ','.join(outputs)
+        else:
+            print('Invalid script parameters')
+            return 1
+        return 0
 
-    'is_in_group_definitions': '\n'.join(is_in_group_definitions),
+    parsed_functions = get_parsed_functions()
 
-    'variable_data_source_name': variables_json_filename,
-    'variable_declarations': '\n'.join(sorted(variable_declarations)),
-    'get_variable_declarations': '\n'.join(sorted(get_variable_declarations)),
-    'get_variable_definitions': '\n'.join(sorted(get_variable_definitions)),
-    'unmangled_builtin_declarations': '\n'.join(sorted(unmangled_builtin_declarations)),
+    if args.dump_intermediate_json:
+        with open('builtin_functions.json', 'w') as outfile:
+            def serialize_obj(obj):
+                if isinstance(obj, TType):
+                    return obj.data
+                else:
+                    raise "Cannot serialize to JSON: " + str(obj)
+            json.dump(parsed_functions, outfile, indent=4, separators=(',', ': '), default=serialize_obj)
 
-    'declare_member_variables': '\n'.join(declare_member_variables),
-    'init_member_variables': '\n'.join(init_member_variables),
+    with open(variables_json_filename) as f:
+        parsed_variables = json.load(f, object_pairs_hook=OrderedDict)
 
-    'get_unmangled_builtin': unmangled_function_if_statements.get_switch_code(),
-    'get_builtin': get_builtin_if_statements.get_switch_code(),
-    'max_unmangled_name_length': unmangled_function_if_statements.get_max_name_length(),
-    'max_mangled_name_length': get_builtin_if_statements.get_max_name_length(),
+    for basic_type in basic_types_enumeration:
+        primary_sizes = [1]
+        secondary_sizes = [1]
+        if basic_type in ['Float', 'Int', 'UInt', 'Bool']:
+            primary_sizes = [1, 2, 3, 4]
+        if basic_type == 'Float':
+            secondary_sizes = [1, 2, 3, 4]
+        for primary_size in primary_sizes:
+            for secondary_size in secondary_sizes:
+                type = TType({'basic': basic_type, 'primarySize': primary_size, 'secondarySize': secondary_size})
+                ttype_mangled_name_variants.append(type.get_mangled_name())
 
-    'script_generated_hash_tests': '\n'.join(script_generated_hash_tests.iterkeys())
-}
+    num_type_variants = len(ttype_mangled_name_variants)
 
-with open('../../tests/compiler_tests/ImmutableString_test_autogen.cpp', 'wt') as outfile_cpp:
-    output_cpp = template_immutablestringtest_cpp.format(**output_strings)
-    outfile_cpp.write(output_cpp)
+    # Sanity check for get_mangled_name_variant_hash:
+    variant_hash = get_mangled_name_variant_hash(hash32("atan("), 3, 4, len("atan(0123"), num_type_variants)
+    mangled_name_hash = mangledNameHash("atan(" + get_parameters_mangled_name_variant(3, 4, len("atan(0123")))
+    if variant_hash != mangled_name_hash:
+        raise Exception("get_mangled_name_variant_hash sanity check failed")
 
-with open('tree_util/BuiltIn_autogen.h', 'wt') as outfile_header:
-    output_header = template_builtin_header.format(**output_strings)
-    outfile_header.write(output_header)
+    # Declarations of parameter arrays for builtin TFunctions. Map from C++ variable name to the full
+    # declaration.
+    parameter_declarations = {}
 
-with open('SymbolTable_autogen.cpp', 'wt') as outfile_cpp:
-    output_cpp = template_symboltable_cpp.format(**output_strings)
-    outfile_cpp.write(output_cpp)
+    for group_name, group in parsed_functions.iteritems():
+        process_function_group(group_name, group, num_type_variants, parameter_declarations)
 
-with open('ParseContext_autogen.h', 'wt') as outfile_header:
-    output_header = template_parsecontext_header.format(**output_strings)
-    outfile_header.write(output_header)
+    prune_parameters_arrays(parameter_declarations)
+    print(parameter_declarations)
 
-with open('SymbolTable_autogen.h', 'wt') as outfile_h:
-    output_h = template_symboltable_h.format(**output_strings)
-    outfile_h.write(output_h)
+    for group_name, group in parsed_variables.iteritems():
+        count_variable_names(group)
 
-with open(hash_filename, 'wt') as hash_file:
-    hash_file.write(input_hash)
+    for group_name, group in parsed_variables.iteritems():
+        process_variable_group('NO_CONDITION', group_name, group)
+
+    output_strings = {
+        'script_name': os.path.basename(__file__),
+        'copyright_year': date.today().year,
+
+        'builtin_id_declarations': '\n'.join(builtin_id_declarations),
+        'builtin_id_definitions': '\n'.join(builtin_id_definitions),
+        'last_builtin_id': id_counter - 1,
+        'name_declarations': '\n'.join(sorted(list(name_declarations))),
+
+        'function_data_source_name': functions_txt_filename,
+        'function_declarations': '\n'.join(function_declarations),
+        'parameter_declarations': '\n'.join(sorted(parameter_declarations)),
+
+        'is_in_group_definitions': '\n'.join(is_in_group_definitions),
+
+        'variable_data_source_name': variables_json_filename,
+        'variable_declarations': '\n'.join(sorted(variable_declarations)),
+        'get_variable_declarations': '\n'.join(sorted(get_variable_declarations)),
+        'get_variable_definitions': '\n'.join(sorted(get_variable_definitions)),
+        'unmangled_builtin_declarations': '\n'.join(sorted(unmangled_builtin_declarations)),
+
+        'declare_member_variables': '\n'.join(declare_member_variables),
+        'init_member_variables': '\n'.join(init_member_variables),
+
+        'get_unmangled_builtin': unmangled_function_if_statements.get_switch_code(),
+        'get_builtin': get_builtin_if_statements.get_switch_code(),
+        'max_unmangled_name_length': unmangled_function_if_statements.get_max_name_length(),
+        'max_mangled_name_length': get_builtin_if_statements.get_max_name_length(),
+
+        'script_generated_hash_tests': '\n'.join(script_generated_hash_tests.iterkeys())
+    }
+
+    with open(test_filename, 'wt') as outfile_cpp:
+        output_cpp = template_immutablestringtest_cpp.format(**output_strings)
+        outfile_cpp.write(output_cpp)
+
+    with open('tree_util/BuiltIn_autogen.h', 'wt') as outfile_header:
+        output_header = template_builtin_header.format(**output_strings)
+        outfile_header.write(output_header)
+
+    with open('SymbolTable_autogen.cpp', 'wt') as outfile_cpp:
+        output_cpp = template_symboltable_cpp.format(**output_strings)
+        outfile_cpp.write(output_cpp)
+
+    with open('ParseContext_autogen.h', 'wt') as outfile_header:
+        output_header = template_parsecontext_header.format(**output_strings)
+        outfile_header.write(output_header)
+
+    with open('SymbolTable_autogen.h', 'wt') as outfile_h:
+        output_h = template_symboltable_h.format(**output_strings)
+        outfile_h.write(output_h)
+
+    with open(hash_filename, 'wt') as hash_file:
+        hash_file.write(input_hash)
+
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
