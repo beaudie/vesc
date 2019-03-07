@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b15c0254_e665d177",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-07T22:12:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a1a9550_dfa02aca",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 5
+      },
+      "revId": "7e561d3d24cd39f86e37592b1e6e1bd9c35c81c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "133a5e78_f6a417ed",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -71,6 +95,54 @@
     },
     {
       "key": {
+        "uuid": "a888b144_5e3079b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-07T22:12:32Z",
+      "side": 1,
+      "message": "Done (My hands keep typing Combing by reflex for some reason)",
+      "parentUuid": "74703182_cc46df98",
+      "range": {
+        "startLine": 24,
+        "startChar": 9,
+        "endLine": 24,
+        "endChar": 16
+      },
+      "revId": "7e561d3d24cd39f86e37592b1e6e1bd9c35c81c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ac36b070_ecb1ce6f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-07T22:12:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "133a5e78_f6a417ed",
+      "range": {
+        "startLine": 24,
+        "startChar": 23,
+        "endLine": 24,
+        "endChar": 32
+      },
+      "revId": "7e561d3d24cd39f86e37592b1e6e1bd9c35c81c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6fa3187a_9f6bf06c",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "a903a1bc_5511684c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-07T22:12:32Z",
+      "side": 1,
+      "message": "Done. Also updated to the latest change, where a pretty-print function is also passed to the macro.",
+      "parentUuid": "6fa3187a_9f6bf06c",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 5
+      },
+      "revId": "7e561d3d24cd39f86e37592b1e6e1bd9c35c81c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "357535e6_f5724e9e",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -105,6 +201,30 @@
       "writtenOn": "2019-03-07T20:18:41Z",
       "side": 1,
       "message": "What about MultiviewDrawTest?",
+      "range": {
+        "startLine": 46,
+        "startChar": 9,
+        "endLine": 46,
+        "endChar": 24
+      },
+      "revId": "7e561d3d24cd39f86e37592b1e6e1bd9c35c81c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f15f5f4_e2e7055f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-07T22:12:32Z",
+      "side": 1,
+      "message": "Could possibly be converted too, though the variations are not really a Cartesian product of platforms by configs. Let me see if I can convert it without breaking things.",
+      "parentUuid": "357535e6_f5724e9e",
       "range": {
         "startLine": 46,
         "startChar": 9,
