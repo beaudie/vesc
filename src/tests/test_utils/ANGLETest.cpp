@@ -300,7 +300,8 @@ std::array<angle::Vector3, 4> ANGLETestBase::GetIndexedQuadVertices()
 }
 
 ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
-    : mEGLWindow(nullptr),
+    : mParams(params),
+      mEGLWindow(nullptr),
       mWGLWindow(nullptr),
       mWidth(16),
       mHeight(16),
@@ -1161,7 +1162,7 @@ void ANGLETestBase::SetWindowVisible(bool isVisible)
     mOSWindow->setVisible(isVisible);
 }
 
-ANGLETest::ANGLETest() : ANGLETestBase(GetParam()) {}
+ANGLETest::ANGLETest(const angle::PlatformParameters &params) : ANGLETestBase(params) {}
 
 void ANGLETest::SetUp()
 {

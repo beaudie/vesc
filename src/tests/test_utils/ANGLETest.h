@@ -397,6 +397,8 @@ class ANGLETestBase
         ANGLETestBase *mTest;
     };
 
+    const angle::PlatformParameters &GetParam() const { return mParams; }
+
   private:
     void checkD3D11SDKLayersMessages();
     bool hasNvidiaGPU();
@@ -408,6 +410,8 @@ class ANGLETestBase
                   bool useVertexBuffer,
                   bool useInstancedDrawCalls,
                   GLuint numInstances);
+
+    angle::PlatformParameters mParams;
 
     EGLWindow *mEGLWindow;
     WGLWindow *mWGLWindow;
@@ -434,10 +438,10 @@ class ANGLETestBase
     static Optional<EGLint> mLastRendererType;
 };
 
-class ANGLETest : public ANGLETestBase, public ::testing::TestWithParam<angle::PlatformParameters>
+class ANGLETest : public ANGLETestBase, public ::testing::Test
 {
   protected:
-    ANGLETest();
+    ANGLETest(const angle::PlatformParameters &params);
 
   public:
     void SetUp() override;

@@ -15,13 +15,59 @@
 
 using namespace angle;
 
+using ANGLETestParams = std::initializer_list<angle::PlatformParameters>;
+
 namespace
 {
+
+// Helper macro for defining tests.
+#define ANGLE_GTEST_TEST_(Param, TestSuiteName, TestName, parent_id)                         \
+    class ANGLE_TEST_NAME(Param, TestSuiteName, TestName)                                    \
+        : public ANGLE_TEST_CLASS_NAME(TestSuiteName, TestName)                              \
+    {                                                                                        \
+      public:                                                                                \
+        ANGLE_TEST_NAME(Param, TestSuiteName, TestName)                                      \
+        () : ANGLE_TEST_CLASS_NAME(TestSuiteName, TestName)(Param())                         \
+        {}                                                                                   \
+                                                                                             \
+      private:                                                                               \
+        static ::testing::TestInfo *const test_info_ GTEST_ATTRIBUTE_UNUSED_;                \
+        GTEST_DISALLOW_COPY_AND_ASSIGN_(ANGLE_TEST_NAME(Param, TestSuiteName, TestName));    \
+    };                                                                                       \
+                                                                                             \
+    ::testing::TestInfo *const ANGLE_TEST_NAME(Param, TestSuiteName, TestName)::test_info_ = \
+        ::testing::internal::MakeAndRegisterTestInfo(                                        \
+            #Param, #TestSuiteName "_" #TestName, nullptr, nullptr,                          \
+            ::testing::internal::CodeLocation(__FILE__, __LINE__), (parent_id),              \
+            ::testing::internal::SuiteApiResolver<TestSuiteName>::GetSetUpCaseOrSuite(),     \
+            ::testing::internal::SuiteApiResolver<TestSuiteName>::GetTearDownCaseOrSuite(),  \
+            new ::testing::internal::TestFactoryImpl<ANGLE_TEST_NAME(Param, TestSuiteName,   \
+                                                                     TestName)>);
+
+#define ANGLE_TEST_NAME(Param, TestSuiteName, TestName) \
+    GTEST_TEST_CLASS_NAME_(Param, TestSuiteName##TestName)
+#define ANGLE_TEST_CLASS_NAME(TestSuiteName, TestName) _##TestSuiteName##_##TestName##BaseClass
+
+#define ANGLE_INSTANTIATE_TESTS(Param, TestSuiteName, TestName) \
+    ANGLE_GTEST_TEST_(Param, TestSuiteName, TestName,           \
+                      ::testing::internal::GetTypeId<TestSuiteName>())
+
+#define ANGLE_TEST_P(TestSuiteName, TestName)                                   \
+    class ANGLE_TEST_CLASS_NAME(TestSuiteName, TestName) : public TestSuiteName \
+    {                                                                           \
+      public:                                                                   \
+        ANGLE_TEST_CLASS_NAME(TestSuiteName, TestName)                          \
+        (const PlatformParameters &params) : TestSuiteName(params)              \
+        {}                                                                      \
+        virtual void TestBody();                                                \
+    };                                                                          \
+    ANGLE_ALL_TEST_CONFIGS_X(ANGLE_INSTANTIATE_TESTS, TestSuiteName, TestName)  \
+    void ANGLE_TEST_CLASS_NAME(TestSuiteName, TestName)::TestBody()
 
 class RendererTest : public ANGLETest
 {
   protected:
-    RendererTest()
+    RendererTest(const PlatformParameters &params) : ANGLETest(params)
     {
         setWindowWidth(128);
         setWindowHeight(128);
@@ -29,7 +75,7 @@ class RendererTest : public ANGLETest
 };
 
 // Print vendor, renderer, version and extension strings. Useful for debugging.
-TEST_P(RendererTest, Strings)
+ANGLE_TEST_P(RendererTest, Strings)
 {
     std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
     std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
@@ -38,7 +84,7 @@ TEST_P(RendererTest, Strings)
     EXPECT_GL_NO_ERROR();
 }
 
-TEST_P(RendererTest, RequestedRendererCreated)
+ANGLE_TEST_P(RendererTest, RequestedRendererCreated)
 {
     std::string rendererString =
         std::string(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
@@ -47,6 +93,9 @@ TEST_P(RendererTest, RequestedRendererCreated)
     std::string versionString =
         std::string(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
     angle::ToLower(&versionString);
+
+    if (GetParam().driver != angle::GLESDriverType::AngleEGL)
+        return;
 
     const EGLPlatformParameters &platform = GetParam().eglParameters;
 
@@ -144,6 +193,10 @@ TEST_P(RendererTest, RequestedRendererCreated)
     {
         ASSERT_NE(versionString.find(std::string("es 2.0")), std::string::npos);
     }
+    else if (glesMajorVersion == 1 && glesMinorVersion == 0)
+    {
+        ASSERT_NE(versionString.find(std::string("es 1.0")), std::string::npos);
+    }
     else
     {
         FAIL() << "Unhandled GL ES client version.";
@@ -154,9 +207,10 @@ TEST_P(RendererTest, RequestedRendererCreated)
 }
 
 // Perform a simple operation (clear and read pixels) to verify the device is working
-TEST_P(RendererTest, SimpleOperation)
+ANGLE_TEST_P(RendererTest, SimpleOperation)
 {
-    if (IsNULL())
+    if (IsNULL() ||
+        GetParam().eglParameters.deviceType == EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE)
     {
         std::cout << "ANGLE NULL backend clears are not functional" << std::endl;
         return;
@@ -168,81 +222,4 @@ TEST_P(RendererTest, SimpleOperation)
 
     ASSERT_GL_NO_ERROR();
 }
-
-// Select configurations (e.g. which renderer, which GLES major version) these tests should be run
-// against.
-
-ANGLE_INSTANTIATE_TEST(RendererTest,
-                       // ES2 on top of D3D9
-                       ES2_D3D9(),
-
-                       // ES2 on top of D3D11 feature level 9.3 to 11.0
-                       ES2_D3D11(),
-                       ES2_D3D11_FL11_0(),
-                       ES2_D3D11_FL10_1(),
-                       ES2_D3D11_FL10_0(),
-                       ES2_D3D11_FL9_3(),
-
-                       // ES2 on top of D3D11 WARP feature level 9.3 to 11.0
-                       ES2_D3D11_WARP(),
-                       ES2_D3D11_FL11_0_WARP(),
-                       ES2_D3D11_FL10_1_WARP(),
-                       ES2_D3D11_FL10_0_WARP(),
-                       ES2_D3D11_FL9_3_WARP(),
-
-                       // ES3 on top of D3D11.
-                       ES3_D3D11(),
-                       ES3_D3D11_FL11_0(),
-                       ES3_D3D11_FL10_1(),
-
-                       // ES3 on top of D3D11 WARP.
-                       ES3_D3D11_WARP(),
-                       ES3_D3D11_FL11_0_WARP(),
-                       ES3_D3D11_FL10_1_WARP(),
-
-                       // ES2 on top of desktop OpenGL versions 2.1 to 4.5
-                       ES2_OPENGL(),
-                       ES2_OPENGL(2, 1),
-                       ES2_OPENGL(3, 0),
-                       ES2_OPENGL(3, 1),
-                       ES2_OPENGL(3, 2),
-                       ES2_OPENGL(3, 3),
-                       ES2_OPENGL(4, 0),
-                       ES2_OPENGL(4, 1),
-                       ES2_OPENGL(4, 2),
-                       ES2_OPENGL(4, 3),
-                       ES2_OPENGL(4, 4),
-                       ES2_OPENGL(4, 5),
-
-                       // ES2 on top of desktop OpenGL versions 3.2 to 4.5
-                       ES3_OPENGL(),
-                       ES3_OPENGL(3, 2),
-                       ES3_OPENGL(3, 3),
-                       ES3_OPENGL(4, 0),
-                       ES3_OPENGL(4, 1),
-                       ES3_OPENGL(4, 2),
-                       ES3_OPENGL(4, 3),
-                       ES3_OPENGL(4, 4),
-                       ES3_OPENGL(4, 5),
-
-                       // ES2 on top of OpenGL ES 2.0 to 3.2
-                       ES2_OPENGLES(),
-                       ES2_OPENGLES(2, 0),
-                       ES2_OPENGLES(3, 0),
-                       ES2_OPENGLES(3, 1),
-                       ES2_OPENGLES(3, 2),
-
-                       // ES2 on top of OpenGL ES 3.0 to 3.2
-                       ES3_OPENGLES(),
-                       ES3_OPENGLES(3, 0),
-                       ES3_OPENGLES(3, 1),
-                       ES3_OPENGLES(3, 2),
-
-                       // All ES version on top of the NULL backend
-                       ES2_NULL(),
-                       ES3_NULL(),
-                       ES31_NULL(),
-
-                       // ES on top of Vulkan
-                       ES2_VULKAN());
 }  // anonymous namespace
