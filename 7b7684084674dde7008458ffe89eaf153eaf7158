@@ -39,6 +39,30 @@
       "revId": "7b7684084674dde7008458ffe89eaf153eaf7158",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d37a4bc9_0efa638c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/DebugAnnotator11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-03-07T21:46:13Z",
+      "side": 1,
+      "message": "Unfortunately, no. ID3DUserDefinedAnnotation.GetStatus is what tells you whether PIX is attached so you do need the pointer.  \n\nIf we want to be hardcore about not having the pointer, we can put the call to DynamicCastComObject behind #if defined (ANGLE_ENABLE_DEBUG_ANNOTATIONS), which is only defined in debug builds. People will have to manually #define it if they want fancy PIX shader debugging in retail builds.\n\nI do not feel strongly either way.",
+      "parentUuid": "1979c26c_81e6455b",
+      "range": {
+        "startLine": 73,
+        "startChar": 40,
+        "endLine": 73,
+        "endChar": 65
+      },
+      "revId": "7b7684084674dde7008458ffe89eaf153eaf7158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
