@@ -15,13 +15,53 @@
 
 using namespace angle;
 
+using ANGLETestParams = std::initializer_list<angle::PlatformParameters>;
+
 namespace
 {
 
-class RendererTest : public ANGLETest
+#define ANGLE_TEST_SUITE_NAME(TestSuite) _ ## TestSuite ## BaseClass
+#define ANGLE_INSTANTIATION_NAME(Param, TestSuite) Param ## _ ## TestSuite
+#define ANGLE_TEST_CLASS_NAME(TestSuite, Test) _ ## TestSuite ## _ ## Test ## BaseClass
+
+#define ANGLE_INSTANTIATE_TEST_SUITE(Param, TestSuite, Ignored) \
+class ANGLE_INSTANTIATION_NAME(Param, TestSuite) : public ANGLE_TEST_SUITE_NAME(TestSuite) \
+{ \
+  public: \
+    ANGLE_INSTANTIATION_NAME(Param, TestSuite)() : ANGLE_TEST_SUITE_NAME(TestSuite)(Param()) {} \
+};
+
+#define ANGLE_TEST_SUITE(TestSuite) \
+template <typename ParamT> \
+class ANGLE_TEST_SUITE_NAME(TestSuite) : public ANGLETestBase, public testing::Test \
+{ \
+  public: \
+    ANGLE_TEST_SUITE_NAME(TestSuite)() \
+      : ANGLETestBase(ParamT()) {} \
+}; \
+ANGLE_ALL_TEST_CONFIGS_X(ANGLE_INSTANTIATE_TEST_SUITE, TestSuite, "") \
+class TestSuite
+
+#define ANGLE_INSTANTIATE_TESTS(Param, TestSuite, Test) \
+GTEST_TEST_(ANGLE_INSTANTIATION_NAME(Param, TestSuite), Test, ANGLE_TEST_CLASS_NAME(TestSuite, Test), ::testing::internal::GetTypeId<TestSuite>()) \
+{ \
+    ANGLE_TEST_CLASS_NAME(TestSuite, Test)::TestBody(); \
+}
+
+#define ANGLE_TEST_P(TestSuite, Test) \
+class ANGLE_TEST_CLASS_NAME(TestSuite, Test) : public TestSuite \
+{ \
+public: \
+    ANGLE_TEST_CLASS_NAME(TestSuite, Test)(const PlatformParameters &params) : TestSuite(params) {} \
+    void TestBody() override; \
+}; \
+ANGLE_ALL_TEST_CONFIGS_X(ANGLE_INSTANTIATE_TESTS, TestSuite, Test) \
+void ANGLE_TEST_CLASS_NAME(TestSuite, Test)::TestBody()
+
+ANGLE_TEST_SUITE(RendererTest)
 {
   protected:
-    RendererTest()
+    RendererTest(const PlatformParameters &params) : ANGLETestBase(params)
     {
         setWindowWidth(128);
         setWindowHeight(128);
@@ -29,7 +69,7 @@ class RendererTest : public ANGLETest
 };
 
 // Print vendor, renderer, version and extension strings. Useful for debugging.
-TEST_P(RendererTest, Strings)
+ANGLE_TEST_P(RendererTest, Strings)
 {
     std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
     std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
@@ -38,7 +78,7 @@ TEST_P(RendererTest, Strings)
     EXPECT_GL_NO_ERROR();
 }
 
-TEST_P(RendererTest, RequestedRendererCreated)
+ANGLE_TEST_P(RendererTest, RequestedRendererCreated)
 {
     std::string rendererString =
         std::string(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
@@ -154,7 +194,7 @@ TEST_P(RendererTest, RequestedRendererCreated)
 }
 
 // Perform a simple operation (clear and read pixels) to verify the device is working
-TEST_P(RendererTest, SimpleOperation)
+ANGLE_TEST_P(RendererTest, SimpleOperation)
 {
     if (IsNULL())
     {
@@ -168,81 +208,4 @@ TEST_P(RendererTest, SimpleOperation)
 
     ASSERT_GL_NO_ERROR();
 }
-
-// Select configurations (e.g. which renderer, which GLES major version) these tests should be run
-// against.
-
-ANGLE_INSTANTIATE_TEST(RendererTest,
-                       // ES2 on top of D3D9
-                       ES2_D3D9(),
-
-                       // ES2 on top of D3D11 feature level 9.3 to 11.0
-                       ES2_D3D11(),
-                       ES2_D3D11_FL11_0(),
-                       ES2_D3D11_FL10_1(),
-                       ES2_D3D11_FL10_0(),
-                       ES2_D3D11_FL9_3(),
-
-                       // ES2 on top of D3D11 WARP feature level 9.3 to 11.0
-                       ES2_D3D11_WARP(),
-                       ES2_D3D11_FL11_0_WARP(),
-                       ES2_D3D11_FL10_1_WARP(),
-                       ES2_D3D11_FL10_0_WARP(),
-                       ES2_D3D11_FL9_3_WARP(),
-
-                       // ES3 on top of D3D11.
-                       ES3_D3D11(),
-                       ES3_D3D11_FL11_0(),
-                       ES3_D3D11_FL10_1(),
-
-                       // ES3 on top of D3D11 WARP.
-                       ES3_D3D11_WARP(),
-                       ES3_D3D11_FL11_0_WARP(),
-                       ES3_D3D11_FL10_1_WARP(),
-
-                       // ES2 on top of desktop OpenGL versions 2.1 to 4.5
-                       ES2_OPENGL(),
-                       ES2_OPENGL(2, 1),
-                       ES2_OPENGL(3, 0),
-                       ES2_OPENGL(3, 1),
-                       ES2_OPENGL(3, 2),
-                       ES2_OPENGL(3, 3),
-                       ES2_OPENGL(4, 0),
-                       ES2_OPENGL(4, 1),
-                       ES2_OPENGL(4, 2),
-                       ES2_OPENGL(4, 3),
-                       ES2_OPENGL(4, 4),
-                       ES2_OPENGL(4, 5),
-
-                       // ES2 on top of desktop OpenGL versions 3.2 to 4.5
-                       ES3_OPENGL(),
-                       ES3_OPENGL(3, 2),
-                       ES3_OPENGL(3, 3),
-                       ES3_OPENGL(4, 0),
-                       ES3_OPENGL(4, 1),
-                       ES3_OPENGL(4, 2),
-                       ES3_OPENGL(4, 3),
-                       ES3_OPENGL(4, 4),
-                       ES3_OPENGL(4, 5),
-
-                       // ES2 on top of OpenGL ES 2.0 to 3.2
-                       ES2_OPENGLES(),
-                       ES2_OPENGLES(2, 0),
-                       ES2_OPENGLES(3, 0),
-                       ES2_OPENGLES(3, 1),
-                       ES2_OPENGLES(3, 2),
-
-                       // ES2 on top of OpenGL ES 3.0 to 3.2
-                       ES3_OPENGLES(),
-                       ES3_OPENGLES(3, 0),
-                       ES3_OPENGLES(3, 1),
-                       ES3_OPENGLES(3, 2),
-
-                       // All ES version on top of the NULL backend
-                       ES2_NULL(),
-                       ES3_NULL(),
-                       ES31_NULL(),
-
-                       // ES on top of Vulkan
-                       ES2_VULKAN());
 }  // anonymous namespace

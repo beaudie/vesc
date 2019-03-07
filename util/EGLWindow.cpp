@@ -16,45 +16,6 @@
 #include "util/OSWindow.h"
 #include "util/system_utils.h"
 
-EGLPlatformParameters::EGLPlatformParameters()
-    : renderer(EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE),
-      majorVersion(EGL_DONT_CARE),
-      minorVersion(EGL_DONT_CARE),
-      deviceType(EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE),
-      presentPath(EGL_DONT_CARE)
-{}
-
-EGLPlatformParameters::EGLPlatformParameters(EGLint renderer)
-    : renderer(renderer),
-      majorVersion(EGL_DONT_CARE),
-      minorVersion(EGL_DONT_CARE),
-      deviceType(EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE),
-      presentPath(EGL_DONT_CARE)
-{}
-
-EGLPlatformParameters::EGLPlatformParameters(EGLint renderer,
-                                             EGLint majorVersion,
-                                             EGLint minorVersion,
-                                             EGLint deviceType)
-    : renderer(renderer),
-      majorVersion(majorVersion),
-      minorVersion(minorVersion),
-      deviceType(deviceType),
-      presentPath(EGL_DONT_CARE)
-{}
-
-EGLPlatformParameters::EGLPlatformParameters(EGLint renderer,
-                                             EGLint majorVersion,
-                                             EGLint minorVersion,
-                                             EGLint deviceType,
-                                             EGLint presentPath)
-    : renderer(renderer),
-      majorVersion(majorVersion),
-      minorVersion(minorVersion),
-      deviceType(deviceType),
-      presentPath(presentPath)
-{}
-
 bool operator<(const EGLPlatformParameters &a, const EGLPlatformParameters &b)
 {
     if (a.renderer != b.renderer)
