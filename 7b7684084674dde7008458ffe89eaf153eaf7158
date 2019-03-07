@@ -63,6 +63,30 @@
       "revId": "7b7684084674dde7008458ffe89eaf153eaf7158",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ba2f9f0_001b299a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/DebugAnnotator11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1105324
+      },
+      "writtenOn": "2019-03-07T21:49:34Z",
+      "side": 1,
+      "message": "I think it\u0027s fine the way you have it now. LGTM",
+      "parentUuid": "d37a4bc9_0efa638c",
+      "range": {
+        "startLine": 73,
+        "startChar": 40,
+        "endLine": 73,
+        "endChar": 65
+      },
+      "revId": "7b7684084674dde7008458ffe89eaf153eaf7158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
