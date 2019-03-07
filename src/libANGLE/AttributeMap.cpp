@@ -93,6 +93,29 @@ AttributeMap AttributeMap::CreateFromIntArray(const EGLint *attributes)
 }
 
 // static
+AttributeMap AttributeMap::CreateFromIntArrayWithDefaults(const EGLint *attributes)
+{
+    AttributeMap map;
+    map.insert(EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER);
+    map.insert(EGL_LEVEL, 0);
+    map.insert(EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT);
+    map.insert(EGL_SURFACE_TYPE, EGL_WINDOW_BIT);
+    map.insert(EGL_TRANSPARENT_TYPE, EGL_NONE);
+#if 0
+    map.insert(EGL_OPTIMAL_SURFACE_ORIENTATION_ANGLE, 0);
+#endif
+    map.insert(EGL_COLOR_COMPONENT_TYPE_EXT, EGL_COLOR_COMPONENT_TYPE_FIXED_EXT);
+    if (attributes)
+    {
+        for (const EGLint *curAttrib = attributes; curAttrib[0] != EGL_NONE; curAttrib += 2)
+        {
+            map.insert(static_cast<EGLAttrib>(curAttrib[0]), static_cast<EGLAttrib>(curAttrib[1]));
+        }
+    }
+    return map;
+}
+
+// static
 AttributeMap AttributeMap::CreateFromAttribArray(const EGLAttrib *attributes)
 {
     AttributeMap map;
