@@ -232,6 +232,7 @@ std::vector<const Config *> ConfigSet::filter(const AttributeMap &attributeMap) 
     {
         const Config &config = configIter->second;
         bool match           = true;
+        bool needToCompareColorBufferType = !attributeMap.isEmpty();
 
         for (auto attribIter = attributeMap.begin(); attribIter != attributeMap.end(); attribIter++)
         {
@@ -240,6 +241,10 @@ std::vector<const Config *> ConfigSet::filter(const AttributeMap &attributeMap) 
 
             if (attributeValue == EGL_DONT_CARE)
             {
+                if (needToCompareColorBufferType && attributeKey == EGL_COLOR_COMPONENT_TYPE_EXT)
+                {
+                    needToCompareColorBufferType = false;
+                }
                 continue;
             }
 
@@ -273,7 +278,7 @@ std::vector<const Config *> ConfigSet::filter(const AttributeMap &attributeMap) 
                     match = config.configID == attributeValue;
                     break;
                 case EGL_LEVEL:
-                    match = config.level >= attributeValue;
+                    match = config.level == attributeValue;
                     break;
                 case EGL_NATIVE_RENDERABLE:
                     match = config.nativeRenderable == static_cast<EGLBoolean>(attributeValue);
@@ -347,6 +352,7 @@ std::vector<const Config *> ConfigSet::filter(const AttributeMap &attributeMap) 
                     break;
                 case EGL_COLOR_COMPONENT_TYPE_EXT:
                     match = config.colorComponentType == static_cast<EGLenum>(attributeValue);
+                    needToCompareColorBufferType = false;
                     break;
                 case EGL_RECORDABLE_ANDROID:
                     match = config.recordable == static_cast<EGLBoolean>(attributeValue);
@@ -361,6 +367,10 @@ std::vector<const Config *> ConfigSet::filter(const AttributeMap &attributeMap) 
             }
         }
 
+        if (match && needToCompareColorBufferType)
+        {
+            match = config.colorComponentType == EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
+        }
         if (match)
         {
             result.push_back(&config);
