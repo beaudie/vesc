@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4dedc1a0_0586cd69",
+        "filename": "src/libANGLE/AttributeMap.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-08T18:54:56Z",
+      "side": 1,
+      "message": "This should happen only if we support the extension.",
+      "range": {
+        "startLine": 107,
+        "startChar": 15,
+        "endLine": 107,
+        "endChar": 43
+      },
+      "revId": "48597a5f5df326135a2a5d0c3f746f5a9c9d93b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e362e1e_5fe783bc",
+        "filename": "src/libANGLE/AttributeMap.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-08T18:54:56Z",
+      "side": 1,
+      "message": "this would not replace the defaults if user overrides them",
+      "range": {
+        "startLine": 112,
+        "startChar": 16,
+        "endLine": 112,
+        "endChar": 22
+      },
+      "revId": "48597a5f5df326135a2a5d0c3f746f5a9c9d93b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "899a6923_d65d1c35",
+        "filename": "src/libANGLE/Config.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-08T18:54:56Z",
+      "side": 1,
+      "message": "This logic doesn\u0027t apply now",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 235,
+        "endChar": 68
+      },
+      "revId": "48597a5f5df326135a2a5d0c3f746f5a9c9d93b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "250c5477_40ad103e",
+        "filename": "src/tests/egl_tests/EGLChooseConfigDefaultTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-08T18:54:56Z",
+      "side": 1,
+      "message": "I was thinking of a simpler test, just checking that all \"defaultConfigs\" have EGL_COLOR_BUFFER_TYPE\u003d\u003dEGL_RGB_BUFFER, EGL_LEVEL\u003d\u003d0, etc.\nYou don\u0027t check this explicitly, please do.\n\nNot sure if the other tests add something to what I\u0027d want to test.\nIf not, would be simpler to just check all attributes in one test.",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 74
+      },
+      "revId": "48597a5f5df326135a2a5d0c3f746f5a9c9d93b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
