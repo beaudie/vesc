@@ -262,7 +262,8 @@ TEST_P(EGLContextCompatibilityTest, WindowSameConfig)
             // cards, and RGBA16F/RGB10_A2 on Android due to OSWindow on Android not providing
             // compatible windows (anglebug.com/3156)
             if (isMultisampledConfig(config) ||
-                (IsAndroid() && (isRGB10_A2Config(config) || isRGBA16FConfig(config))))
+                (IsAndroid() && (isRGB10_A2Config(config) || isRGBA16FConfig(config))) ||
+                (IsLinux() && (IsVulkan())))
             {
                 continue;
             }
