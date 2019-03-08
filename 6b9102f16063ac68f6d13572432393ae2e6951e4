@@ -22,6 +22,30 @@
       "revId": "6b9102f16063ac68f6d13572432393ae2e6951e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4201c9db_4c5d12b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-03-08T00:43:07Z",
+      "side": 1,
+      "message": "Done. I bow to the bugdroid\u0027s demands.  :-)",
+      "parentUuid": "affd1f8c_876c8b3b",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 3
+      },
+      "revId": "6b9102f16063ac68f6d13572432393ae2e6951e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
