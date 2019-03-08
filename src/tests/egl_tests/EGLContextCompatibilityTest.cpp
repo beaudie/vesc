@@ -262,7 +262,8 @@ TEST_P(EGLContextCompatibilityTest, WindowSameConfig)
             // cards, and RGBA16F/RGB10_A2 on Android due to OSWindow on Android not providing
             // compatible windows (anglebug.com/3156)
             if (isMultisampledConfig(config) ||
-                (IsAndroid() && (isRGB10_A2Config(config) || isRGBA16FConfig(config))))
+                (IsAndroid() && (isRGB10_A2Config(config) || isRGBA16FConfig(config))) ||
+                (IsLinux() && (IsVulkan())))
             {
                 continue;
             }
@@ -288,7 +289,8 @@ TEST_P(EGLContextCompatibilityTest, PbufferSameConfig)
             // Disabling multisampled configurations due to test instability with various graphics
             // cards, and RGB10_A2 on Android due to OSWindow on Android not providing compatible
             // windows (anglebug.com/3156)
-            if (isMultisampledConfig(config) || (IsAndroid() && isRGB10_A2Config(config)))
+            if (isMultisampledConfig(config) || (IsAndroid() && isRGB10_A2Config(config)) ||
+                (IsLinux() && (IsVulkan())))
             {
                 continue;
             }
@@ -313,7 +315,8 @@ TEST_P(EGLContextCompatibilityTest, WindowDifferentConfig)
         // cards, and RGBA16F/RGB10_A2 on Android due to OSWindow on Android not providing
         // compatible windows (anglebug.com/3156)
         if (isMultisampledConfig(config1) ||
-            (IsAndroid() && (isRGB10_A2Config(config1) || isRGBA16FConfig(config1))))
+            (IsAndroid() && (isRGB10_A2Config(config1) || isRGBA16FConfig(config1))) ||
+            (IsLinux() && (IsVulkan())))
         {
             continue;
         }
@@ -334,7 +337,8 @@ TEST_P(EGLContextCompatibilityTest, WindowDifferentConfig)
             // cards, and RGBA16F/RGB10_A2 on Android due to OSWindow on Android not providing
             // compatible windows (anglebug.com/3156)
             if (isMultisampledConfig(config2) ||
-                (IsAndroid() && (isRGB10_A2Config(config2) || isRGBA16FConfig(config2))))
+                (IsAndroid() && (isRGB10_A2Config(config2) || isRGBA16FConfig(config2))) ||
+                (IsLinux() && (IsVulkan())))
             {
                 continue;
             }
@@ -354,7 +358,8 @@ TEST_P(EGLContextCompatibilityTest, PbufferDifferentConfig)
         // Disabling multisampled configurations due to test instability with various graphics
         // cards, and RGB10_A2 on Android due to OSWindow on Android not providing compatible
         // windows (anglebug.com/3156)
-        if (isMultisampledConfig(config1) || (IsAndroid() && isRGB10_A2Config(config1)))
+        if (isMultisampledConfig(config1) || (IsAndroid() && isRGB10_A2Config(config1)) ||
+            (IsLinux() && (IsVulkan())))
         {
             continue;
         }
@@ -374,7 +379,8 @@ TEST_P(EGLContextCompatibilityTest, PbufferDifferentConfig)
             // Disabling multisampled configurations due to test instability with various graphics
             // cards, and RGB10_A2 on Android due to OSWindow on Android not providing compatible
             // windows (anglebug.com/3156)
-            if (isMultisampledConfig(config2) || (IsAndroid() && isRGB10_A2Config(config2)))
+            if (isMultisampledConfig(config2) || (IsAndroid() && isRGB10_A2Config(config2)) ||
+                (IsLinux() && (IsVulkan())))
             {
                 continue;
             }
