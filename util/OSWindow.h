@@ -57,6 +57,7 @@ class ANGLE_UTIL_EXPORT OSWindow
     virtual bool setPosition(int x, int y)      = 0;
     virtual bool resize(int width, int height)  = 0;
     virtual void setVisible(bool isVisible)     = 0;
+    virtual bool setDefaultPixelFormat();
 
     virtual void signalTestEvent() = 0;
 

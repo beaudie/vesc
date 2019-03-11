@@ -9,6 +9,7 @@
 
 #include "util/windows/WGLWindow.h"
 
+#include "common/debug.h"
 #include "common/string_utils.h"
 #include "util/OSWindow.h"
 #include "util/system_utils.h"
@@ -17,45 +18,48 @@
 
 namespace
 {
-PIXELFORMATDESCRIPTOR GetDefaultPixelFormatDescriptor()
-{
-    PIXELFORMATDESCRIPTOR pixelFormatDescriptor = {0};
-    pixelFormatDescriptor.nSize                 = sizeof(pixelFormatDescriptor);
-    pixelFormatDescriptor.nVersion              = 1;
-    pixelFormatDescriptor.dwFlags =
-        PFD_DRAW_TO_WINDOW | PFD_GENERIC_ACCELERATED | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
-    pixelFormatDescriptor.iPixelType   = PFD_TYPE_RGBA;
-    pixelFormatDescriptor.cColorBits   = 24;
-    pixelFormatDescriptor.cAlphaBits   = 8;
-    pixelFormatDescriptor.cDepthBits   = 24;
-    pixelFormatDescriptor.cStencilBits = 8;
-    pixelFormatDescriptor.iLayerType   = PFD_MAIN_PLANE;
-
-    return pixelFormatDescriptor;
-}
-
 PFNWGLGETPROCADDRESSPROC gCurrentWGLGetProcAddress = nullptr;
 HMODULE gCurrentModule                             = nullptr;
 
 angle::GenericProc WINAPI GetProcAddressWithFallback(const char *name)
 {
+    ASSERT(GetLastError() == ERROR_SUCCESS);
     angle::GenericProc proc = reinterpret_cast<angle::GenericProc>(gCurrentWGLGetProcAddress(name));
+    // ERROR_INVALID_HANDLE and ERROR_PROC_NOT_FOUND are expected from wglGetProcAddress,
+    // reset last error if they happen.
+    if (GetLastError() != ERROR_SUCCESS && GetLastError() != ERROR_INVALID_HANDLE &&
+        GetLastError() != ERROR_PROC_NOT_FOUND)
+    {
+        std::cerr << "Unexpected error calling wglGetProcAddress: 0x" << std::hex << GetLastError()
+                  << std::endl;
+    }
+    else
+    {
+        SetLastError(ERROR_SUCCESS);
+    }
+
     if (proc)
     {
         return proc;
     }
 
-    return reinterpret_cast<angle::GenericProc>(GetProcAddress(gCurrentModule, name));
+    proc = reinterpret_cast<angle::GenericProc>(GetProcAddress(gCurrentModule, name));
+    // ERROR_PROC_NOT_FOUND is expected from GetProcAddress, reset last error if it happens.
+    if (GetLastError() != ERROR_SUCCESS && GetLastError() != ERROR_PROC_NOT_FOUND)
+    {
+        std::cerr << "Unexpected error calling GetProcAddress: 0x" << std::hex << GetLastError()
+                  << std::endl;
+    }
+    else
+    {
+        SetLastError(ERROR_SUCCESS);
+    }
+    return proc;
 }
 
 bool HasExtension(const std::vector<std::string> &extensions, const char *ext)
 {
     return std::find(extensions.begin(), extensions.end(), ext) != extensions.end();
-}
-
-void DumpLastWindowsError()
-{
-    std::cerr << "Last Windows error code: 0x" << std::hex << GetLastError() << std::endl;
 }
 }  // namespace
 
@@ -82,30 +86,14 @@ bool WGLWindow::initializeGL(OSWindow *osWindow, angle::Library *glWindowingLibr
     gCurrentModule = reinterpret_cast<HMODULE>(glWindowingLibrary->getNative());
     angle::LoadWGL(GetProcAddressWithFallback);
 
-    mWindow                                           = osWindow->getNativeWindow();
-    mDeviceContext                                    = GetDC(mWindow);
-    const PIXELFORMATDESCRIPTOR pixelFormatDescriptor = GetDefaultPixelFormatDescriptor();
-
-    int pixelFormat = ChoosePixelFormat(mDeviceContext, &pixelFormatDescriptor);
-    if (pixelFormat == 0)
+    if (!osWindow->setDefaultPixelFormat())
     {
-        std::cerr << "Could not find a compatible pixel format." << std::endl;
-        DumpLastWindowsError();
+        std::cerr << "Failed to set default pixel format." << std::endl;
         return false;
     }
 
-    // According to the Windows docs, it is an error to set a pixel format twice.
-    int currentPixelFormat = GetPixelFormat(mDeviceContext);
-    if (currentPixelFormat != pixelFormat)
-    {
-        if (SetPixelFormat(mDeviceContext, pixelFormat, &pixelFormatDescriptor) != TRUE)
-        {
-            std::cerr << "Failed to set the pixel format." << std::endl;
-            DumpLastWindowsError();
-            return false;
-        }
-    }
-
+    mWindow        = osWindow->getNativeWindow();
+    mDeviceContext = GetDC(mWindow);
     mWGLContext = _wglCreateContext(mDeviceContext);
     if (!mWGLContext)
     {

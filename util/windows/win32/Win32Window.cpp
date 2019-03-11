@@ -8,10 +8,13 @@
 
 #include "util/windows/win32/Win32Window.h"
 
+#include <iostream>
 #include <sstream>
 
 #include "common/debug.h"
 
+namespace
+{
 Key VirtualKeyCodeToKey(WPARAM key, LPARAM flags)
 {
     switch (key)
@@ -227,6 +230,29 @@ Key VirtualKeyCodeToKey(WPARAM key, LPARAM flags)
 
     return Key(0);
 }
+
+PIXELFORMATDESCRIPTOR GetDefaultPixelFormatDescriptor()
+{
+    PIXELFORMATDESCRIPTOR pixelFormatDescriptor = {0};
+    pixelFormatDescriptor.nSize                 = sizeof(pixelFormatDescriptor);
+    pixelFormatDescriptor.nVersion              = 1;
+    pixelFormatDescriptor.dwFlags =
+        PFD_DRAW_TO_WINDOW | PFD_GENERIC_ACCELERATED | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+    pixelFormatDescriptor.iPixelType   = PFD_TYPE_RGBA;
+    pixelFormatDescriptor.cColorBits   = 24;
+    pixelFormatDescriptor.cAlphaBits   = 8;
+    pixelFormatDescriptor.cDepthBits   = 24;
+    pixelFormatDescriptor.cStencilBits = 8;
+    pixelFormatDescriptor.iLayerType   = PFD_MAIN_PLANE;
+
+    return pixelFormatDescriptor;
+}
+
+void DumpLastWindowsError()
+{
+    std::cerr << "Last Windows error code: 0x" << std::hex << GetLastError() << std::endl;
+}
+}  // namespace
 
 LRESULT CALLBACK Win32Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -485,7 +511,10 @@ LRESULT CALLBACK Win32Window::WndProc(HWND hWnd, UINT message, WPARAM wParam, LP
 }
 
 Win32Window::Win32Window()
-    : mIsVisible(false),
+    : mParentClassRegistered(false),
+      mChildClassRegistered(false),
+      mPixelFormatIsSet(false),
+      mIsVisible(false),
       mSetVisibleTimer(CreateTimer()),
       mIsMouseInWindow(false),
       mNativeWindow(0),
@@ -560,7 +589,10 @@ bool Win32Window::initialize(const std::string &name, size_t width, size_t heigh
                                     sizeRect.right - sizeRect.left, sizeRect.bottom - sizeRect.top,
                                     nullptr, nullptr, GetModuleHandle(nullptr), this);
 
-    mNativeWindow = CreateWindowExA(0, mChildClassName.c_str(), name.c_str(), WS_CHILD, 0, 0,
+    // An OpenGL window should be created with the WS_CLIPCHILDREN and WS_CLIPSIBLINGS styles.
+    // Additionally, the window class attribute should not include the CS_PARENTDC style.
+    mNativeWindow = CreateWindowExA(WS_EX_NOPARENTNOTIFY, mChildClassName.c_str(), name.c_str(),
+                                    WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0, 0,
                                     static_cast<int>(width), static_cast<int>(height),
                                     mParentWindow, nullptr, GetModuleHandle(nullptr), this);
 
@@ -594,8 +626,16 @@ void Win32Window::destroy()
         mParentWindow = 0;
     }
 
-    UnregisterClassA(mParentClassName.c_str(), nullptr);
-    UnregisterClassA(mChildClassName.c_str(), nullptr);
+    if (mParentClassRegistered)
+    {
+        UnregisterClassA(mParentClassName.c_str(), nullptr);
+        mParentClassRegistered = false;
+    }
+    if (mChildClassRegistered)
+    {
+        UnregisterClassA(mChildClassName.c_str(), nullptr);
+        mChildClassRegistered = false;
+    }
 }
 
 bool Win32Window::takeScreenshot(uint8_t *pixelData)
@@ -809,6 +849,54 @@ void Win32Window::setVisible(bool isVisible)
     }
 }
 
+bool Win32Window::setDefaultPixelFormat()
+{
+    HDC deviceContext                                 = GetDC(getNativeWindow());
+    const PIXELFORMATDESCRIPTOR pixelFormatDescriptor = GetDefaultPixelFormatDescriptor();
+
+    int pixelFormat = ChoosePixelFormat(deviceContext, &pixelFormatDescriptor);
+    if (pixelFormat == 0)
+    {
+        std::cerr << "Could not find a compatible pixel format." << std::endl;
+        DumpLastWindowsError();
+        return false;
+    }
+
+    ASSERT(GetLastError() == ERROR_SUCCESS);
+    int currentPixelFormat = GetPixelFormat(deviceContext);
+    if (GetLastError() != ERROR_SUCCESS)
+    {
+        // ERROR_INVALID_PIXEL_FORMAT is expected from GetPixelFormat, when !mPixelFormatIsSet,
+        // reset last error if it happens.
+        if (mPixelFormatIsSet || GetLastError() != ERROR_INVALID_PIXEL_FORMAT)
+        {
+            std::cerr << "Unexpected error calling GetPixelFormat: 0x" << std::hex << GetLastError()
+                      << std::endl;
+            return false;
+        }
+        else
+        {
+            SetLastError(ERROR_SUCCESS);
+        }
+    }
+
+    // According to the Windows docs, it is an error to set a pixel format twice.
+    if (mPixelFormatIsSet)
+    {
+        return currentPixelFormat == pixelFormat;
+    }
+
+    if (SetPixelFormat(deviceContext, pixelFormat, &pixelFormatDescriptor) != TRUE)
+    {
+        std::cerr << "Failed to set the pixel format." << std::endl;
+        DumpLastWindowsError();
+        return false;
+    }
+
+    mPixelFormatIsSet = true;
+    return true;
+}
+
 void Win32Window::pushEvent(Event event)
 {
     OSWindow::pushEvent(event);
@@ -816,7 +904,10 @@ void Win32Window::pushEvent(Event event)
     switch (event.Type)
     {
         case Event::EVENT_RESIZED:
-            MoveWindow(mNativeWindow, 0, 0, mWidth, mHeight, FALSE);
+            if (mNativeWindow)
+            {
+                MoveWindow(mNativeWindow, 0, 0, mWidth, mHeight, FALSE);
+            }
             break;
         default:
             break;

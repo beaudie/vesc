@@ -427,6 +427,12 @@ bool OSWindow::didTestEventFire()
     return false;
 }
 
+bool OSWindow::setDefaultPixelFormat()
+{
+    UNIMPLEMENTED();
+    return false;
+}
+
 // static
 void OSWindow::Delete(OSWindow **window)
 {
