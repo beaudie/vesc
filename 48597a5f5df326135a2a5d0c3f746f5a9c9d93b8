@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "72eab533_c01f98c5",
+        "filename": "src/libANGLE/AttributeMap.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-03-11T20:58:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4dedc1a0_0586cd69",
+      "range": {
+        "startLine": 107,
+        "startChar": 15,
+        "endLine": 107,
+        "endChar": 43
+      },
+      "revId": "48597a5f5df326135a2a5d0c3f746f5a9c9d93b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e362e1e_5fe783bc",
         "filename": "src/libANGLE/AttributeMap.cpp",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2019-03-08T18:54:56Z",
       "side": 1,
       "message": "this would not replace the defaults if user overrides them",
+      "range": {
+        "startLine": 112,
+        "startChar": 16,
+        "endLine": 112,
+        "endChar": 22
+      },
+      "revId": "48597a5f5df326135a2a5d0c3f746f5a9c9d93b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a90df1e9_3b5f12fd",
+        "filename": "src/libANGLE/AttributeMap.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-03-11T20:58:38Z",
+      "side": 1,
+      "message": "Actually, it does, but the method name doesn\u0027t make that obvious.  The implementation of insert is:\n\n  void AttributeMap::insert(EGLAttrib key, EGLAttrib value)\n  {\n      mAttributes[key] \u003d value;\n  }\n\nmAttributes is a map (which will create/insert or replace depending on whether the key exists already):\n\n  std::map\u003cEGLAttrib, EGLAttrib\u003e mAttributes;\n\nShould we change the method name, or should I add a comment to clarify?",
+      "parentUuid": "6e362e1e_5fe783bc",
       "range": {
         "startLine": 112,
         "startChar": 16,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "4db70e75_f6819ca7",
+        "filename": "src/libANGLE/Config.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-03-11T20:58:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "899a6923_d65d1c35",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 235,
+        "endChar": 68
+      },
+      "revId": "48597a5f5df326135a2a5d0c3f746f5a9c9d93b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "250c5477_40ad103e",
         "filename": "src/tests/egl_tests/EGLChooseConfigDefaultTest.cpp",
         "patchSetId": 4
@@ -91,6 +163,30 @@
       "revId": "48597a5f5df326135a2a5d0c3f746f5a9c9d93b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05f6f759_3bf6d5a3",
+        "filename": "src/tests/egl_tests/EGLChooseConfigDefaultTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-03-11T20:58:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "250c5477_40ad103e",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 74
+      },
+      "revId": "48597a5f5df326135a2a5d0c3f746f5a9c9d93b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
