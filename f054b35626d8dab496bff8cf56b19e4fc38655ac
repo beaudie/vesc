@@ -22,6 +22,30 @@
       "revId": "f054b35626d8dab496bff8cf56b19e4fc38655ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34862f92_d717d653",
+        "filename": "util/OSWindow.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-11T22:37:32Z",
+      "side": 1,
+      "message": "Done\nThough, I thought it would be beneficial to have this in OSWindow.\nCurrently, we are limited to testing with EGL configs which match the default window pixel format, at least on Android this is RGB8. If the tests were to control the pixel format of the window, this would allow testing with other EGL configs as well, like RGB565.",
+      "parentUuid": "1e409d48_408f55b9",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 41
+      },
+      "revId": "f054b35626d8dab496bff8cf56b19e4fc38655ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
