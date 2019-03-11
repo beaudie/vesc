@@ -5,6 +5,7 @@
 //
 
 #include "libANGLE/AttributeMap.h"
+#include "libANGLE/Display.h"
 
 #include "common/debug.h"
 
@@ -82,6 +83,30 @@ AttributeMap::const_iterator AttributeMap::end() const
 AttributeMap AttributeMap::CreateFromIntArray(const EGLint *attributes)
 {
     AttributeMap map;
+    if (attributes)
+    {
+        for (const EGLint *curAttrib = attributes; curAttrib[0] != EGL_NONE; curAttrib += 2)
+        {
+            map.insert(static_cast<EGLAttrib>(curAttrib[0]), static_cast<EGLAttrib>(curAttrib[1]));
+        }
+    }
+    return map;
+}
+
+// static
+AttributeMap AttributeMap::CreateFromIntArrayWithDefaults(EGLDisplay dpy, const EGLint *attributes)
+{
+    AttributeMap map;
+    map.insert(EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER);
+    map.insert(EGL_LEVEL, 0);
+    map.insert(EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT);
+    map.insert(EGL_SURFACE_TYPE, EGL_WINDOW_BIT);
+    map.insert(EGL_TRANSPARENT_TYPE, EGL_NONE);
+    egl::Display *display = static_cast<egl::Display *>(dpy);
+    if (display->getExtensions().pixelFormatFloat)
+    {
+        map.insert(EGL_COLOR_COMPONENT_TYPE_EXT, EGL_COLOR_COMPONENT_TYPE_FIXED_EXT);
+    }
     if (attributes)
     {
         for (const EGLint *curAttrib = attributes; curAttrib[0] != EGL_NONE; curAttrib += 2)

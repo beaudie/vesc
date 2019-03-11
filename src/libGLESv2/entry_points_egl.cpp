@@ -200,7 +200,7 @@ EGLBoolean EGLAPIENTRY EGL_ChooseConfig(EGLDisplay dpy,
     Thread *thread = egl::GetCurrentThread();
 
     egl::Display *display  = static_cast<egl::Display *>(dpy);
-    AttributeMap attribMap = AttributeMap::CreateFromIntArray(attrib_list);
+    AttributeMap attribMap = AttributeMap::CreateFromIntArrayWithDefaults(dpy, attrib_list);
 
     ANGLE_EGL_TRY_RETURN(thread, ValidateChooseConfig(display, attribMap, config_size, num_config),
                          "eglChooseConfig", GetDisplayIfValid(display), EGL_FALSE);
