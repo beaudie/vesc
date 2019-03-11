@@ -34,13 +34,23 @@ SystemInfo *GetTestSystemInfo()
     if (sSystemInfo == nullptr)
     {
         sSystemInfo = new SystemInfo;
-        GetSystemInfo(sSystemInfo);
+        if (!GetSystemInfo(sSystemInfo))
+        {
+            std::cerr << "Failed to get system info." << std::endl;
+        }
     }
     return sSystemInfo;
 }
 
 bool IsANGLEConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
 {
+    // Disable D3D11 backend on Windows Intel due to flakiness. http://anglebug.com/3153
+    if (IsWindows() && param.getRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE &&
+        angle::hasIntelGPU())
+    {
+        return false;
+    }
+
     std::unique_ptr<angle::Library> eglLibrary;
 
 #if defined(ANGLE_USE_UTIL_LOADER)
@@ -131,6 +141,30 @@ bool IsFuchsia()
 #endif
 }
 
+bool hasNvidiaGPU()
+{
+    for (const GPUDeviceInfo &gpu : GetTestSystemInfo()->gpus)
+    {
+        if (IsNvidia(gpu.vendorId))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool hasIntelGPU()
+{
+    for (const GPUDeviceInfo &gpu : GetTestSystemInfo()->gpus)
+    {
+        if (IsIntel(gpu.vendorId))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters &param)
 {
     VendorID vendorID = systemInfo.gpus[systemInfo.primaryGPUIndex].vendorId;
@@ -160,10 +194,13 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
                 switch (param.getRenderer())
                 {
                     case EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE:
-                    case EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE:
                     case EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE:
                     case EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE:
                         return true;
+                    case EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE:
+                        // Blacklist D3D11 backend on Windows Intel due to flakiness.
+                        // http://anglebug.com/3153
+                        return !angle::hasIntelGPU();
                     case EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE:
                         // ES 3.1+ back-end is not supported properly.
                         if (param.eglParameters.majorVersion == 3 &&
