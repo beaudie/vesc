@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aff6e366_162dad4d",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-11T17:45:40Z",
+      "side": 1,
+      "message": "could you please file a bug on the angle issue tracker with reproduction steps? We should report this driver bug to NVIDIA.",
+      "range": {
+        "startLine": 277,
+        "startChar": 0,
+        "endLine": 282,
+        "endChar": 0
+      },
+      "revId": "6cd7635a8da6404981bcce0269b40f5f5565bb3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
