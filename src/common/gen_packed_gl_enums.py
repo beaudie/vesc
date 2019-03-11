@@ -210,8 +210,14 @@ def main():
 
     # auto_script parameters.
     if len(sys.argv) > 1:
-        inputs = [generator['json'] for generator in Generators]
-        outputs = [generator['output'] for generator in Generators]
+        inputs = []
+        outputs = []
+        for generator in Generators:
+            inputs += [generator['json']]
+            outputs += [
+                generator['output'] + '_autogen.cpp',
+                generator['output'] + '_autogen.h',
+            ]
 
         if sys.argv[1] == 'inputs':
             print ','.join(inputs)
