@@ -273,7 +273,7 @@ std::vector<const Config *> ConfigSet::filter(const AttributeMap &attributeMap) 
                     match = config.configID == attributeValue;
                     break;
                 case EGL_LEVEL:
-                    match = config.level >= attributeValue;
+                    match = config.level == attributeValue;
                     break;
                 case EGL_NATIVE_RENDERABLE:
                     match = config.nativeRenderable == static_cast<EGLBoolean>(attributeValue);
