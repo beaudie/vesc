@@ -22,6 +22,30 @@
       "revId": "6cd7635a8da6404981bcce0269b40f5f5565bb3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7df37d29_0affd525",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1322304
+      },
+      "writtenOn": "2019-03-11T22:07:14Z",
+      "side": 1,
+      "message": "Done\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d3246",
+      "parentUuid": "aff6e366_162dad4d",
+      "range": {
+        "startLine": 277,
+        "startChar": 0,
+        "endLine": 282,
+        "endChar": 0
+      },
+      "revId": "6cd7635a8da6404981bcce0269b40f5f5565bb3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
