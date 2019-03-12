@@ -56,6 +56,7 @@ class AttributeMap final
     const_iterator end() const;
 
     static AttributeMap CreateFromIntArray(const EGLint *attributes);
+    static AttributeMap CreateFromIntArrayForChooseConfig(EGLDisplay dpy, const EGLint *attributes);
     static AttributeMap CreateFromAttribArray(const EGLAttrib *attributes);
 
   private:
