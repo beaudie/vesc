@@ -163,7 +163,7 @@ class PoolAllocator : angle::NonCopyable
     //
     // Call fastAllocate() for a faster allocate function that does minimal bookkeeping
     // preCondition: Allocator must have been created w/ alignment of 1
-    ANGLE_INLINE void *fastAllocate(size_t numBytes)
+    ANGLE_INLINE uint8_t *fastAllocate(size_t numBytes)
     {
         // ASSERT(mAlignment == 1);
         // No multi-page allocations
@@ -181,7 +181,7 @@ class PoolAllocator : angle::NonCopyable
             mCurrentPageOffset += numBytes;
             return memory;
         }
-        return allocateNewPage(numBytes);
+        return reinterpret_cast<uint8_t *>(allocateNewPage(numBytes));
     }
 
     //
