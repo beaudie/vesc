@@ -22,13 +22,12 @@ namespace rx
 namespace vk
 {
 
-enum class CommandID
+enum class CommandID : uint8_t
 {
+    Invalid = 0,
     // State update cmds
-    BindDescriptorSets = 0,
-    BindIndexBuffer    = 1,
-    // Specialized to Gfx & Compute BindPipeline cmds below
-    // BindPipeline           = 2,
+    BindIndexBuffer        = 1,
+    BindDescriptorSets     = 2,
     BindVertexBuffers      = 3,
     BlitImage              = 4,
     CopyBuffer             = 5,
@@ -310,14 +309,22 @@ struct WriteTimestampParams
 struct CommandHeader
 {
     CommandID id;
-    CommandHeader *next;
+    uint8_t size;
 };
+
+static_assert(sizeof(CommandHeader) == 2, "Check CommandHeader size");
+
+template <typename DestT, typename T>
+ANGLE_INLINE DestT *Offset(T *ptr, size_t bytes)
+{
+    return reinterpret_cast<DestT *>((reinterpret_cast<uint8_t *>(ptr) + bytes));
+}
 
 class SecondaryCommandBuffer final : angle::NonCopyable
 {
   public:
-    SecondaryCommandBuffer() : mHead(nullptr), mLast(nullptr), mAllocator(nullptr) {}
-    ~SecondaryCommandBuffer() {}
+    SecondaryCommandBuffer();
+    ~SecondaryCommandBuffer();
 
     // Add commands
     ANGLE_INLINE void bindDescriptorSets(VkPipelineBindPoint bindPoint,
@@ -523,62 +530,81 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     // Parse the cmds in this cmd buffer into given primary cmd buffer for execution
     void executeCommands(VkCommandBuffer cmdBuffer);
 
+    static constexpr size_t kBlockSize = 1024;
+
     // Initialize the SecondaryCommandBuffer by setting the allocator it will use
-    void initialize(angle::PoolAllocator *allocator) { mAllocator = allocator; }
+    void initialize(angle::PoolAllocator *allocator)
+    {
+        ASSERT(allocator);
+        mAllocator = allocator;
+        allocateNewBlock();
+        // Set first command to Invalid to start
+        *mCurrentWritePointer = 0;
+    }
+
     // This will cause the SecondaryCommandBuffer to become invalid by clearing its allocator
     void releaseHandle() { mAllocator = nullptr; }
     // The SecondaryCommandBuffer is valid if it's been initialized
     bool valid() { return mAllocator != nullptr; }
 
   private:
-    ANGLE_INLINE CommandHeader *commonInit(CommandID cmdID, size_t allocSize)
+    template <class StructType>
+    ANGLE_INLINE StructType *commonInit(CommandID cmdID, size_t allocationSize)
     {
-        ASSERT(mAllocator != nullptr);
-        CommandHeader *header = static_cast<CommandHeader *>(mAllocator->fastAllocate(allocSize));
-        // Update cmd ID in header
-        header->id   = cmdID;
-        header->next = nullptr;
-        // Update prev cmd's "next" ptr and mLast ptr
-        if (mLast)
-        {
-            mLast->next = header;
-        }
-        else  // This is first cmd of Cmd Buffer so update mHead
-        {
-            ASSERT(mHead == nullptr);
-            mHead = header;
-        }
-        // Update mLast ptr
-        mLast = header;
-        return header;
+        mCurrentBytesRemaining -= allocationSize;
+
+        CommandHeader *header = reinterpret_cast<CommandHeader *>(mCurrentWritePointer);
+        header->id            = cmdID;
+        header->size          = static_cast<uint8_t>(allocationSize);
+        ASSERT(allocationSize <= std::numeric_limits<uint8_t>::max());
+
+        mCurrentWritePointer += allocationSize;
+        // Set next cmd header to Invalid (0) so cmd sequence will be terminated
+        *mCurrentWritePointer = 0;
+        return Offset<StructType>(header, sizeof(CommandHeader));
     }
+    ANGLE_INLINE void allocateNewBlock()
+    {
+        ASSERT(mAllocator);
+        mCurrentWritePointer   = mAllocator->fastAllocate(kBlockSize);
+        mCurrentBytesRemaining = kBlockSize;
+        mCommands.push_back(reinterpret_cast<CommandHeader *>(mCurrentWritePointer));
+    }
+
     // Allocate and initialize memory for given commandID & variable param size
     //  returning a pointer to the start of the commands parameter data and updating
     //  mPtrCmdData to just past the fixed parameter data.
     template <class StructType>
     ANGLE_INLINE StructType *initCommand(CommandID cmdID, size_t variableSize)
     {
-        size_t paramSize      = sizeof(StructType);
-        CommandHeader *header = commonInit(cmdID, sizeof(CommandHeader) + paramSize + variableSize);
-
-        uint8_t *fixedParamPtr = reinterpret_cast<uint8_t *>(header) + sizeof(CommandHeader);
-        mPtrCmdData            = fixedParamPtr + sizeof(StructType);
-        return reinterpret_cast<StructType *>(fixedParamPtr);
+        constexpr size_t fixedAllocationSize = sizeof(StructType) + 2 * sizeof(CommandHeader);
+        const size_t allocationSize          = fixedAllocationSize + variableSize;
+        if (mCurrentBytesRemaining <= allocationSize)
+        {
+            allocateNewBlock();
+        }
+        mPtrCmdData = mCurrentWritePointer + fixedAllocationSize;
+        return commonInit<StructType>(cmdID, allocationSize);
     }
+
     // Initialize a command that doesn't have variable-sized ptr data
     template <class StructType>
     ANGLE_INLINE StructType *initCommand(CommandID cmdID)
     {
-        CommandHeader *header = commonInit(cmdID, sizeof(StructType) + sizeof(CommandHeader));
-        return reinterpret_cast<StructType *>(reinterpret_cast<uint8_t *>(header) +
-                                              sizeof(CommandHeader));
+        size_t allocationSize = sizeof(StructType) + 2 * sizeof(CommandHeader);
+        if (mCurrentBytesRemaining <= allocationSize)
+        {
+            allocateNewBlock();
+        }
+        return commonInit<StructType>(cmdID, allocationSize);
     }
+
     // Return a ptr to the parameter type
     template <class StructType>
-    StructType *getParamPtr(CommandHeader *header)
+    const StructType *getParamPtr(const CommandHeader *header) const
     {
-        return reinterpret_cast<StructType *>(reinterpret_cast<char *>(header) +
-                                              sizeof(CommandHeader));
+        return reinterpret_cast<const StructType *>(reinterpret_cast<const uint8_t *>(header) +
+                                                    sizeof(CommandHeader));
     }
     // Copy sizeInBytes data from paramData to mPtrCmdData and assign *writePtr
     //  to mPtrCmdData. Then increment mPtrCmdData by sizeInBytes.
@@ -595,16 +621,23 @@ class SecondaryCommandBuffer final : angle::NonCopyable
         mPtrCmdData += sizeInBytes;
     }
 
-    // Pointer to start of cmd buffer
-    CommandHeader *mHead;
-    // Last command inserted in cmd buffer
-    CommandHeader *mLast;
+    std::vector<CommandHeader *> mCommands;
+
     // Allocator used by this class. If non-null then the class is valid.
     angle::PoolAllocator *mAllocator;
+
+    uint8_t *mCurrentWritePointer;
+    size_t mCurrentBytesRemaining;
+
     // Ptr to write variable ptr data section of cmd into.
     //  This is set to just past fixed parameter data when initCommand() is called
     uint8_t *mPtrCmdData;
 };
+
+ANGLE_INLINE SecondaryCommandBuffer::SecondaryCommandBuffer()
+    : mAllocator(nullptr), mCurrentWritePointer(nullptr), mCurrentBytesRemaining(0)
+{}
+ANGLE_INLINE SecondaryCommandBuffer::~SecondaryCommandBuffer() {}
 
 }  // namespace vk
 }  // namespace rx
