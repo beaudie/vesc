@@ -219,7 +219,7 @@ int main(int argc, char *argv[])
                       case 'n': resources.NV_shader_framebuffer_fetch = 1; break;
                       case 'a': resources.ARM_shader_framebuffer_fetch = 1; break;
                       case 'm':
-                          resources.OVR_multiview = 1;
+                          resources.OVR_multiview2 = 1;
                           compileOptions |= SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW;
                           compileOptions |= SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER;
                           break;
