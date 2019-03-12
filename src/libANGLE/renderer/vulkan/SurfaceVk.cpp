@@ -503,18 +503,18 @@ angle::Result WindowSurfaceVk::recreateSwapchain(DisplayVk *displayVk,
     swapchainInfo.imageFormat              = nativeFormat;
     swapchainInfo.imageColorSpace          = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
     // Note: Vulkan doesn't allow 0-width/height swapchains.
-    swapchainInfo.imageExtent.width        = std::max(extents.width, 1);
-    swapchainInfo.imageExtent.height       = std::max(extents.height, 1);
-    swapchainInfo.imageArrayLayers         = 1;
-    swapchainInfo.imageUsage               = kImageUsageFlags;
-    swapchainInfo.imageSharingMode         = VK_SHARING_MODE_EXCLUSIVE;
-    swapchainInfo.queueFamilyIndexCount    = 0;
-    swapchainInfo.pQueueFamilyIndices      = nullptr;
-    swapchainInfo.preTransform             = mPreTransform;
-    swapchainInfo.compositeAlpha           = mCompositeAlpha;
-    swapchainInfo.presentMode              = mDesiredSwapchainPresentMode;
-    swapchainInfo.clipped                  = VK_TRUE;
-    swapchainInfo.oldSwapchain             = oldSwapchain;
+    swapchainInfo.imageExtent.width     = std::max(extents.width, 1);
+    swapchainInfo.imageExtent.height    = std::max(extents.height, 1);
+    swapchainInfo.imageArrayLayers      = 1;
+    swapchainInfo.imageUsage            = kImageUsageFlags;
+    swapchainInfo.imageSharingMode      = VK_SHARING_MODE_EXCLUSIVE;
+    swapchainInfo.queueFamilyIndexCount = 0;
+    swapchainInfo.pQueueFamilyIndices   = nullptr;
+    swapchainInfo.preTransform          = mPreTransform;
+    swapchainInfo.compositeAlpha        = mCompositeAlpha;
+    swapchainInfo.presentMode           = mDesiredSwapchainPresentMode;
+    swapchainInfo.clipped               = VK_TRUE;
+    swapchainInfo.oldSwapchain          = oldSwapchain;
 
     // TODO(syoussefi): Once EGL_SWAP_BEHAVIOR_PRESERVED_BIT is supported, the contents of the old
     // swapchain need to carry over to the new one.  http://anglebug.com/2942
@@ -548,7 +548,7 @@ angle::Result WindowSurfaceVk::recreateSwapchain(DisplayVk *displayVk,
                                              &member.imageView, 0, 1));
 
         // Allocate a command buffer for clearing our images to black.
-        vk::CommandBuffer *commandBuffer = nullptr;
+        CommandBufferT *commandBuffer = nullptr;
         ANGLE_TRY(member.image.recordCommands(displayVk, &commandBuffer));
 
         // Set transfer dest layout, and clear the image to black.
@@ -571,7 +571,7 @@ angle::Result WindowSurfaceVk::recreateSwapchain(DisplayVk *displayVk,
         VkClearDepthStencilValue depthStencilClearValue = {1.0f, 0};
 
         // Clear the image.
-        vk::CommandBuffer *commandBuffer = nullptr;
+        CommandBufferT *commandBuffer = nullptr;
         ANGLE_TRY(mDepthStencilImage.recordCommands(displayVk, &commandBuffer));
         mDepthStencilImage.clearDepthStencil(aspect, aspect, depthStencilClearValue, commandBuffer);
 
@@ -706,7 +706,7 @@ angle::Result WindowSurfaceVk::present(DisplayVk *displayVk,
 
     SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
 
-    vk::CommandBuffer *swapCommands = nullptr;
+    CommandBufferT *swapCommands = nullptr;
     ANGLE_TRY(image.image.recordCommands(displayVk, &swapCommands));
 
     image.image.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::Present, swapCommands);
@@ -738,7 +738,7 @@ angle::Result WindowSurfaceVk::present(DisplayVk *displayVk,
     std::vector<VkRectLayerKHR> vk_rects;
     if (renderer->getFeatures().supportsIncrementalPresent && (n_rects > 0))
     {
-        EGLint *egl_rects = rects;
+        EGLint *egl_rects            = rects;
         presentRegion.rectangleCount = n_rects;
         vk_rects.resize(n_rects);
         for (EGLint rect = 0; rect < n_rects; rect++)

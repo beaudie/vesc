@@ -15,104 +15,9 @@ namespace rx
 namespace vk
 {
 
-// Allocate/initialize memory for the command and return pointer to Cmd Header
-template <class StructType>
-StructType *SecondaryCommandBuffer::initCommand(CommandID cmdID, size_t variableSize)
-{
-    size_t paramSize      = sizeof(StructType);
-    size_t completeSize   = sizeof(CommandHeader) + paramSize + variableSize;
-    CommandHeader *header = static_cast<CommandHeader *>(mAllocator->allocate(completeSize));
-    // Update cmd ID in header
-    header->id   = cmdID;
-    header->next = nullptr;
-    // Update mHead ptr
-    mHead = (mHead == nullptr) ? header : mHead;
-    // Update prev cmd's "next" ptr and mLast ptr
-    if (mLast)
-    {
-        mLast->next = header;
-    }
-    // Update mLast ptr
-    mLast = header;
-
-    uint8_t *fixedParamPtr = reinterpret_cast<uint8_t *>(header) + sizeof(CommandHeader);
-    mPtrCmdData            = fixedParamPtr + sizeof(StructType);
-    return reinterpret_cast<StructType *>(fixedParamPtr);
-}
-
-template <class PtrType>
-void SecondaryCommandBuffer::storePointerParameter(const PtrType *paramData,
-                                                   const PtrType **writePtr,
-                                                   size_t sizeInBytes)
-{
-    *writePtr = reinterpret_cast<const PtrType *>(mPtrCmdData);
-    memcpy(mPtrCmdData, paramData, sizeInBytes);
-    mPtrCmdData += sizeInBytes;
-}
-
-void SecondaryCommandBuffer::bindDescriptorSets(VkPipelineBindPoint bindPoint,
-                                                VkPipelineLayout layout,
-                                                uint32_t firstSet,
-                                                uint32_t descriptorSetCount,
-                                                const VkDescriptorSet *descriptorSets,
-                                                uint32_t dynamicOffsetCount,
-                                                const uint32_t *dynamicOffsets)
-{
-    size_t descSize   = descriptorSetCount * sizeof(VkDescriptorSet);
-    size_t offsetSize = dynamicOffsetCount * sizeof(uint32_t);
-    size_t varSize    = descSize + offsetSize;
-    BindDescriptorSetParams *paramStruct =
-        initCommand<BindDescriptorSetParams>(CommandID::BindDescriptorSets, varSize);
-    // Copy params into memory
-    paramStruct->bindPoint          = bindPoint;
-    paramStruct->layout             = layout;
-    paramStruct->firstSet           = firstSet;
-    paramStruct->descriptorSetCount = descriptorSetCount;
-    paramStruct->dynamicOffsetCount = dynamicOffsetCount;
-    // Copy variable sized data
-    storePointerParameter(descriptorSets, &paramStruct->descriptorSets, descSize);
-    storePointerParameter(dynamicOffsets, &paramStruct->dynamicOffsets, offsetSize);
-}
-
-void SecondaryCommandBuffer::bindIndexBuffer(const VkBuffer &buffer,
-                                             VkDeviceSize offset,
-                                             VkIndexType indexType)
-{
-    BindIndexBufferParams *paramStruct =
-        initCommand<BindIndexBufferParams>(CommandID::BindIndexBuffer, 0);
-    paramStruct->buffer    = buffer;
-    paramStruct->offset    = offset;
-    paramStruct->indexType = indexType;
-}
-
-void SecondaryCommandBuffer::bindPipeline(VkPipelineBindPoint pipelineBindPoint,
-                                          VkPipeline pipeline)
-{
-    BindPipelineParams *paramStruct = initCommand<BindPipelineParams>(CommandID::BindPipeline, 0);
-    paramStruct->pipelineBindPoint  = pipelineBindPoint;
-    paramStruct->pipeline           = pipeline;
-}
-
-void SecondaryCommandBuffer::bindVertexBuffers(uint32_t firstBinding,
-                                               uint32_t bindingCount,
-                                               const VkBuffer *buffers,
-                                               const VkDeviceSize *offsets)
-{
-    size_t buffSize   = bindingCount * sizeof(VkBuffer);
-    size_t offsetSize = bindingCount * sizeof(VkDeviceSize);
-    BindVertexBuffersParams *paramStruct =
-        initCommand<BindVertexBuffersParams>(CommandID::BindVertexBuffers, buffSize + offsetSize);
-    // Copy params
-    paramStruct->firstBinding = firstBinding;
-    paramStruct->bindingCount = bindingCount;
-    // Copy variable sized data
-    storePointerParameter(buffers, &paramStruct->buffers, buffSize);
-    storePointerParameter(offsets, &paramStruct->offsets, offsetSize);
-}
-
-void SecondaryCommandBuffer::blitImage(VkImage srcImage,
+void SecondaryCommandBuffer::blitImage(const Image &srcImage,
                                        VkImageLayout srcImageLayout,
-                                       VkImage dstImage,
+                                       const Image &dstImage,
                                        VkImageLayout dstImageLayout,
                                        uint32_t regionCount,
                                        const VkImageBlit *pRegions,
@@ -120,9 +25,9 @@ void SecondaryCommandBuffer::blitImage(VkImage srcImage,
 {
     size_t regionSize            = regionCount * sizeof(VkImageBlit);
     BlitImageParams *paramStruct = initCommand<BlitImageParams>(CommandID::BlitImage, regionSize);
-    paramStruct->srcImage        = srcImage;
+    paramStruct->srcImage        = srcImage.getHandle();
     paramStruct->srcImageLayout  = srcImageLayout;
-    paramStruct->dstImage        = dstImage;
+    paramStruct->dstImage        = dstImage.getHandle();
     paramStruct->dstImageLayout  = dstImageLayout;
     paramStruct->regionCount     = regionCount;
     paramStruct->filter          = filter;
@@ -130,23 +35,23 @@ void SecondaryCommandBuffer::blitImage(VkImage srcImage,
     storePointerParameter(pRegions, &paramStruct->pRegions, regionSize);
 }
 
-void SecondaryCommandBuffer::copyBuffer(const VkBuffer &srcBuffer,
-                                        const VkBuffer &destBuffer,
+void SecondaryCommandBuffer::copyBuffer(const Buffer &srcBuffer,
+                                        const Buffer &destBuffer,
                                         uint32_t regionCount,
                                         const VkBufferCopy *regions)
 {
     size_t regionSize = regionCount * sizeof(VkBufferCopy);
     CopyBufferParams *paramStruct =
         initCommand<CopyBufferParams>(CommandID::CopyBuffer, regionSize);
-    paramStruct->srcBuffer   = srcBuffer;
-    paramStruct->destBuffer  = destBuffer;
+    paramStruct->srcBuffer   = srcBuffer.getHandle();
+    paramStruct->destBuffer  = destBuffer.getHandle();
     paramStruct->regionCount = regionCount;
     // Copy variable sized data
     storePointerParameter(regions, &paramStruct->regions, regionSize);
 }
 
 void SecondaryCommandBuffer::copyBufferToImage(VkBuffer srcBuffer,
-                                               VkImage dstImage,
+                                               const Image &dstImage,
                                                VkImageLayout dstImageLayout,
                                                uint32_t regionCount,
                                                const VkBufferImageCopy *regions)
@@ -155,32 +60,32 @@ void SecondaryCommandBuffer::copyBufferToImage(VkBuffer srcBuffer,
     CopyBufferToImageParams *paramStruct =
         initCommand<CopyBufferToImageParams>(CommandID::CopyBufferToImage, regionSize);
     paramStruct->srcBuffer      = srcBuffer;
-    paramStruct->dstImage       = dstImage;
+    paramStruct->dstImage       = dstImage.getHandle();
     paramStruct->dstImageLayout = dstImageLayout;
     paramStruct->regionCount    = regionCount;
     // Copy variable sized data
     storePointerParameter(regions, &paramStruct->regions, regionSize);
 }
 
-void SecondaryCommandBuffer::copyImage(VkImage srcImage,
+void SecondaryCommandBuffer::copyImage(const Image &srcImage,
                                        VkImageLayout srcImageLayout,
-                                       VkImage dstImage,
+                                       const Image &dstImage,
                                        VkImageLayout dstImageLayout,
                                        uint32_t regionCount,
                                        const VkImageCopy *regions)
 {
     size_t regionSize            = regionCount * sizeof(VkImageCopy);
     CopyImageParams *paramStruct = initCommand<CopyImageParams>(CommandID::CopyImage, regionSize);
-    paramStruct->srcImage        = srcImage;
+    paramStruct->srcImage        = srcImage.getHandle();
     paramStruct->srcImageLayout  = srcImageLayout;
-    paramStruct->dstImage        = dstImage;
+    paramStruct->dstImage        = dstImage.getHandle();
     paramStruct->dstImageLayout  = dstImageLayout;
     paramStruct->regionCount     = regionCount;
     // Copy variable sized data
     storePointerParameter(regions, &paramStruct->regions, regionSize);
 }
 
-void SecondaryCommandBuffer::copyImageToBuffer(VkImage srcImage,
+void SecondaryCommandBuffer::copyImageToBuffer(const Image &srcImage,
                                                VkImageLayout srcImageLayout,
                                                VkBuffer dstBuffer,
                                                uint32_t regionCount,
@@ -189,7 +94,7 @@ void SecondaryCommandBuffer::copyImageToBuffer(VkImage srcImage,
     size_t regionSize = regionCount * sizeof(VkBufferImageCopy);
     CopyImageToBufferParams *paramStruct =
         initCommand<CopyImageToBufferParams>(CommandID::CopyImageToBuffer, regionSize);
-    paramStruct->srcImage       = srcImage;
+    paramStruct->srcImage       = srcImage.getHandle();
     paramStruct->srcImageLayout = srcImageLayout;
     paramStruct->dstBuffer      = dstBuffer;
     paramStruct->regionCount    = regionCount;
@@ -213,7 +118,7 @@ void SecondaryCommandBuffer::clearAttachments(uint32_t attachmentCount,
     storePointerParameter(rects, &paramStruct->rects, rectSize);
 }
 
-void SecondaryCommandBuffer::clearColorImage(VkImage image,
+void SecondaryCommandBuffer::clearColorImage(const Image &image,
                                              VkImageLayout imageLayout,
                                              const VkClearColorValue &color,
                                              uint32_t rangeCount,
@@ -222,7 +127,7 @@ void SecondaryCommandBuffer::clearColorImage(VkImage image,
     size_t rangeSize = rangeCount * sizeof(VkImageSubresourceRange);
     ClearColorImageParams *paramStruct =
         initCommand<ClearColorImageParams>(CommandID::ClearColorImage, rangeSize);
-    paramStruct->image       = image;
+    paramStruct->image       = image.getHandle();
     paramStruct->imageLayout = imageLayout;
     paramStruct->color       = color;
     paramStruct->rangeCount  = rangeCount;
@@ -230,7 +135,7 @@ void SecondaryCommandBuffer::clearColorImage(VkImage image,
     storePointerParameter(ranges, &paramStruct->ranges, rangeSize);
 }
 
-void SecondaryCommandBuffer::clearDepthStencilImage(VkImage image,
+void SecondaryCommandBuffer::clearDepthStencilImage(const Image &image,
                                                     VkImageLayout imageLayout,
                                                     const VkClearDepthStencilValue &depthStencil,
                                                     uint32_t rangeCount,
@@ -239,7 +144,7 @@ void SecondaryCommandBuffer::clearDepthStencilImage(VkImage image,
     size_t rangeSize = rangeCount * sizeof(VkImageSubresourceRange);
     ClearDepthStencilImageParams *paramStruct =
         initCommand<ClearDepthStencilImageParams>(CommandID::ClearDepthStencilImage, rangeSize);
-    paramStruct->image        = image;
+    paramStruct->image        = image.getHandle();
     paramStruct->imageLayout  = imageLayout;
     paramStruct->depthStencil = depthStencil;
     paramStruct->rangeCount   = rangeCount;
@@ -247,7 +152,7 @@ void SecondaryCommandBuffer::clearDepthStencilImage(VkImage image,
     storePointerParameter(ranges, &paramStruct->ranges, rangeSize);
 }
 
-void SecondaryCommandBuffer::updateBuffer(VkBuffer buffer,
+void SecondaryCommandBuffer::updateBuffer(const Buffer &buffer,
                                           VkDeviceSize dstOffset,
                                           VkDeviceSize dataSize,
                                           const void *data)
@@ -255,14 +160,14 @@ void SecondaryCommandBuffer::updateBuffer(VkBuffer buffer,
     ASSERT(dataSize == static_cast<size_t>(dataSize));
     UpdateBufferParams *paramStruct =
         initCommand<UpdateBufferParams>(CommandID::UpdateBuffer, static_cast<size_t>(dataSize));
-    paramStruct->buffer    = buffer;
+    paramStruct->buffer    = buffer.getHandle();
     paramStruct->dstOffset = dstOffset;
     paramStruct->dataSize  = dataSize;
     // Copy variable sized data
     storePointerParameter(data, &paramStruct->data, static_cast<size_t>(dataSize));
 }
 
-void SecondaryCommandBuffer::pushConstants(VkPipelineLayout layout,
+void SecondaryCommandBuffer::pushConstants(const PipelineLayout &layout,
                                            VkShaderStageFlags flag,
                                            uint32_t offset,
                                            uint32_t size,
@@ -271,7 +176,7 @@ void SecondaryCommandBuffer::pushConstants(VkPipelineLayout layout,
     ASSERT(size == static_cast<size_t>(size));
     PushConstantsParams *paramStruct =
         initCommand<PushConstantsParams>(CommandID::PushConstants, static_cast<size_t>(size));
-    paramStruct->layout = layout;
+    paramStruct->layout = layout.getHandle();
     paramStruct->flag   = flag;
     paramStruct->offset = offset;
     paramStruct->size   = size;
@@ -305,37 +210,11 @@ void SecondaryCommandBuffer::setScissor(uint32_t firstScissor,
     storePointerParameter(scissors, &paramStruct->scissors, scissorSize);
 }
 
-void SecondaryCommandBuffer::draw(uint32_t vertexCount,
-                                  uint32_t instanceCount,
-                                  uint32_t firstVertex,
-                                  uint32_t firstInstance)
-{
-    DrawParams *paramStruct    = initCommand<DrawParams>(CommandID::Draw, 0);
-    paramStruct->vertexCount   = vertexCount;
-    paramStruct->instanceCount = instanceCount;
-    paramStruct->firstVertex   = firstVertex;
-    paramStruct->firstInstance = firstInstance;
-}
-
-void SecondaryCommandBuffer::drawIndexed(uint32_t indexCount,
-                                         uint32_t instanceCount,
-                                         uint32_t firstIndex,
-                                         int32_t vertexOffset,
-                                         uint32_t firstInstance)
-{
-    DrawIndexedParams *paramStruct = initCommand<DrawIndexedParams>(CommandID::DrawIndexed, 0);
-    paramStruct->indexCount        = indexCount;
-    paramStruct->instanceCount     = instanceCount;
-    paramStruct->firstIndex        = firstIndex;
-    paramStruct->vertexOffset      = vertexOffset;
-    paramStruct->firstInstance     = firstInstance;
-}
-
 void SecondaryCommandBuffer::dispatch(uint32_t groupCountX,
                                       uint32_t groupCountY,
                                       uint32_t groupCountZ)
 {
-    DispatchParams *paramStruct = initCommand<DispatchParams>(CommandID::Dispatch, 0);
+    DispatchParams *paramStruct = initCommand<DispatchParams>(CommandID::Dispatch);
     paramStruct->groupCountX    = groupCountX;
     paramStruct->groupCountY    = groupCountY;
     paramStruct->groupCountZ    = groupCountZ;
@@ -355,9 +234,10 @@ void SecondaryCommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask,
     size_t buffBarrierSize             = bufferMemoryBarrierCount * sizeof(VkBufferMemoryBarrier);
     size_t imgBarrierSize              = imageMemoryBarrierCount * sizeof(VkImageMemoryBarrier);
     PipelineBarrierParams *paramStruct = initCommand<PipelineBarrierParams>(
-        CommandID::PipelinBarrier, memBarrierSize + buffBarrierSize + imgBarrierSize);
+        CommandID::PipelineBarrier, memBarrierSize + buffBarrierSize + imgBarrierSize);
     paramStruct->srcStageMask             = srcStageMask;
     paramStruct->dstStageMask             = dstStageMask;
+    paramStruct->dependencyFlags          = dependencyFlags;
     paramStruct->memoryBarrierCount       = memoryBarrierCount;
     paramStruct->bufferMemoryBarrierCount = bufferMemoryBarrierCount;
     paramStruct->imageMemoryBarrierCount  = imageMemoryBarrierCount;
@@ -368,16 +248,27 @@ void SecondaryCommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask,
     storePointerParameter(imageMemoryBarriers, &paramStruct->imageMemoryBarriers, imgBarrierSize);
 }
 
+void SecondaryCommandBuffer::imageBarrier(VkPipelineStageFlags srcStageMask,
+                                          VkPipelineStageFlags dstStageMask,
+                                          VkImageMemoryBarrier *imageMemoryBarrier)
+{
+    ImageBarrierParams *paramStruct =
+        initCommand<ImageBarrierParams>(CommandID::ImageBarrier, sizeof(VkImageMemoryBarrier));
+    paramStruct->srcStageMask       = srcStageMask;
+    paramStruct->dstStageMask       = dstStageMask;
+    paramStruct->imageMemoryBarrier = *imageMemoryBarrier;
+}
+
 void SecondaryCommandBuffer::setEvent(VkEvent event, VkPipelineStageFlags stageMask)
 {
-    SetEventParams *paramStruct = initCommand<SetEventParams>(CommandID::SetEvent, 0);
+    SetEventParams *paramStruct = initCommand<SetEventParams>(CommandID::SetEvent);
     paramStruct->event          = event;
     paramStruct->stageMask      = stageMask;
 }
 
 void SecondaryCommandBuffer::resetEvent(VkEvent event, VkPipelineStageFlags stageMask)
 {
-    ResetEventParams *paramStruct = initCommand<ResetEventParams>(CommandID::ResetEvent, 0);
+    ResetEventParams *paramStruct = initCommand<ResetEventParams>(CommandID::ResetEvent);
     paramStruct->event            = event;
     paramStruct->stageMask        = stageMask;
 }
@@ -418,7 +309,7 @@ void SecondaryCommandBuffer::resetQueryPool(VkQueryPool queryPool,
                                             uint32_t queryCount)
 {
     ResetQueryPoolParams *paramStruct =
-        initCommand<ResetQueryPoolParams>(CommandID::ResetQueryPool, 0);
+        initCommand<ResetQueryPoolParams>(CommandID::ResetQueryPool);
     paramStruct->queryPool  = queryPool;
     paramStruct->firstQuery = firstQuery;
     paramStruct->queryCount = queryCount;
@@ -428,7 +319,7 @@ void SecondaryCommandBuffer::beginQuery(VkQueryPool queryPool,
                                         uint32_t query,
                                         VkQueryControlFlags flags)
 {
-    BeginQueryParams *paramStruct = initCommand<BeginQueryParams>(CommandID::BeginQuery, 0);
+    BeginQueryParams *paramStruct = initCommand<BeginQueryParams>(CommandID::BeginQuery);
     paramStruct->queryPool        = queryPool;
     paramStruct->query            = query;
     paramStruct->flags            = flags;
@@ -436,7 +327,7 @@ void SecondaryCommandBuffer::beginQuery(VkQueryPool queryPool,
 
 void SecondaryCommandBuffer::endQuery(VkQueryPool queryPool, uint32_t query)
 {
-    EndQueryParams *paramStruct = initCommand<EndQueryParams>(CommandID::EndQuery, 0);
+    EndQueryParams *paramStruct = initCommand<EndQueryParams>(CommandID::EndQuery);
     paramStruct->queryPool      = queryPool;
     paramStruct->query          = query;
 }
@@ -446,7 +337,7 @@ void SecondaryCommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipelineStag
                                             uint32_t query)
 {
     WriteTimestampParams *paramStruct =
-        initCommand<WriteTimestampParams>(CommandID::WriteTimestamp, 0);
+        initCommand<WriteTimestampParams>(CommandID::WriteTimestamp);
     paramStruct->pipelineStage = pipelineStage;
     paramStruct->queryPool     = queryPool;
     paramStruct->query         = query;
@@ -460,6 +351,26 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
     {
         switch (currentCommand->id)
         {
+            case CommandID::BindGraphicsPipeline:
+            {
+                BindPipelineParams *params = getParamPtr<BindPipelineParams>(currentCommand);
+                vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, params->pipeline);
+                break;
+            }
+            case CommandID::BindComputePipeline:
+            {
+                BindPipelineParams *params = getParamPtr<BindPipelineParams>(currentCommand);
+                vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, params->pipeline);
+                break;
+            }
+            case CommandID::BindVertexBuffers:
+            {
+                BindVertexBuffersParams *params =
+                    getParamPtr<BindVertexBuffersParams>(currentCommand);
+                vkCmdBindVertexBuffers(cmdBuffer, 0, params->bindingCount, params->buffers,
+                                       params->offsets);
+                break;
+            }
             case CommandID::BindDescriptorSets:
             {
                 BindDescriptorSetParams *params =
@@ -470,24 +381,24 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                                         params->dynamicOffsets);
                 break;
             }
+            case CommandID::Draw:
+            {
+                DrawParams *params = getParamPtr<DrawParams>(currentCommand);
+                vkCmdDraw(cmdBuffer, params->vertexCount, params->instanceCount,
+                          params->firstVertex, params->firstInstance);
+                break;
+            }
+            case CommandID::DrawIndexed:
+            {
+                DrawIndexedParams *params = getParamPtr<DrawIndexedParams>(currentCommand);
+                vkCmdDrawIndexed(cmdBuffer, params->indexCount, params->instanceCount,
+                                 params->firstIndex, params->vertexOffset, params->firstInstance);
+                break;
+            }
             case CommandID::BindIndexBuffer:
             {
                 BindIndexBufferParams *params = getParamPtr<BindIndexBufferParams>(currentCommand);
                 vkCmdBindIndexBuffer(cmdBuffer, params->buffer, params->offset, params->indexType);
-                break;
-            }
-            case CommandID::BindPipeline:
-            {
-                BindPipelineParams *params = getParamPtr<BindPipelineParams>(currentCommand);
-                vkCmdBindPipeline(cmdBuffer, params->pipelineBindPoint, params->pipeline);
-                break;
-            }
-            case CommandID::BindVertexBuffers:
-            {
-                BindVertexBuffersParams *params =
-                    getParamPtr<BindVertexBuffersParams>(currentCommand);
-                vkCmdBindVertexBuffers(cmdBuffer, params->firstBinding, params->bindingCount,
-                                       params->buffers, params->offsets);
                 break;
             }
             case CommandID::BlitImage:
@@ -582,20 +493,6 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                                 params->scissors);
                 break;
             }
-            case CommandID::Draw:
-            {
-                DrawParams *params = getParamPtr<DrawParams>(currentCommand);
-                vkCmdDraw(cmdBuffer, params->vertexCount, params->instanceCount,
-                          params->firstVertex, params->firstInstance);
-                break;
-            }
-            case CommandID::DrawIndexed:
-            {
-                DrawIndexedParams *params = getParamPtr<DrawIndexedParams>(currentCommand);
-                vkCmdDrawIndexed(cmdBuffer, params->indexCount, params->instanceCount,
-                                 params->firstIndex, params->vertexOffset, params->firstInstance);
-                break;
-            }
             case CommandID::Dispatch:
             {
                 DispatchParams *params = getParamPtr<DispatchParams>(currentCommand);
@@ -603,7 +500,7 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                               params->groupCountZ);
                 break;
             }
-            case CommandID::PipelinBarrier:
+            case CommandID::PipelineBarrier:
             {
                 PipelineBarrierParams *params = getParamPtr<PipelineBarrierParams>(currentCommand);
                 vkCmdPipelineBarrier(cmdBuffer, params->srcStageMask, params->dstStageMask,
@@ -611,6 +508,13 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                                      params->memoryBarriers, params->bufferMemoryBarrierCount,
                                      params->bufferMemoryBarriers, params->imageMemoryBarrierCount,
                                      params->imageMemoryBarriers);
+                break;
+            }
+            case CommandID::ImageBarrier:
+            {
+                ImageBarrierParams *params = getParamPtr<ImageBarrierParams>(currentCommand);
+                vkCmdPipelineBarrier(cmdBuffer, params->srcStageMask, params->dstStageMask, 0, 0,
+                                     nullptr, 0, nullptr, 1, &params->imageMemoryBarrier);
                 break;
             }
             case CommandID::SetEvent:
