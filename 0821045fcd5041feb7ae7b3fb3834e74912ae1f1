@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e67c6b6_acb9ec95",
+        "filename": "src/gpu_info_util/SystemInfo_win.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-12T02:53:59Z",
+      "side": 1,
+      "message": "How about this:\n\n    // ERROR_MOD_NOT_FOUND is expected from GetModuleHandleW, reset last error if it happens.\n    if (GetLastError() \u003d\u003d ERROR_MOD_NOT_FOUND)\n    {\n        SetLastError(ERROR_SUCCESS);\n    }\n\nand let the caller deal with other errors as fit? I could be wrong though, just a thought.",
+      "range": {
+        "startLine": 249,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 5
+      },
+      "revId": "0821045fcd5041feb7ae7b3fb3834e74912ae1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "242c6765_c3aa1b23",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-12T02:53:59Z",
+      "side": 1,
+      "message": "Same comment",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 5
+      },
+      "revId": "0821045fcd5041feb7ae7b3fb3834e74912ae1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd6ab533_8d64e25d",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-12T02:53:59Z",
+      "side": 1,
+      "message": "And again",
+      "revId": "0821045fcd5041feb7ae7b3fb3834e74912ae1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
