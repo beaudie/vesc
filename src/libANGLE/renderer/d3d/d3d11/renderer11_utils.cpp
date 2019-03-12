@@ -1609,6 +1609,7 @@ void GenerateCaps(ID3D11Device *device,
     // and https://msdn.microsoft.com/en-us/library/windows/desktop/ff476900(v=vs.85).aspx
     extensions->robustBufferAccessBehavior = true;
     extensions->blendMinMax                = true;
+    extensions->floatBlend                 = true;
     extensions->framebufferBlit            = GetFramebufferBlitSupport(featureLevel);
     extensions->framebufferMultisample     = GetFramebufferMultisampleSupport(featureLevel);
     extensions->instancedArraysANGLE       = GetInstancingSupport(featureLevel);

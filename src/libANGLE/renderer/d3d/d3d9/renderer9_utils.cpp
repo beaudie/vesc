@@ -709,6 +709,7 @@ void GenerateCaps(IDirect3D9 *d3d9,
     // https://www.khronos.org/registry/OpenGL/extensions/ARB/ARB_robustness.txt
     extensions->robustBufferAccessBehavior = false;
     extensions->blendMinMax                = true;
+    extensions->floatBlend                 = false;
     extensions->framebufferBlit            = true;
     extensions->framebufferMultisample     = true;
     extensions->instancedArraysANGLE       = deviceCaps.PixelShaderVersion >= D3DPS_VERSION(3, 0);
