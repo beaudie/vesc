@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "190a88e6_8a6315dd",
+        "filename": "src/gpu_info_util/SystemInfo_win.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-12T03:04:04Z",
+      "side": 1,
+      "message": "If I reverse the order, I\u0027d still want to log the error in \"else if(GetLastError() !\u003d ERROR_SUCCESS)\", so this won\u0027t really change anything.",
+      "parentUuid": "3e67c6b6_acb9ec95",
+      "range": {
+        "startLine": 249,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 5
+      },
+      "revId": "0821045fcd5041feb7ae7b3fb3834e74912ae1f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "242c6765_c3aa1b23",
         "filename": "util/windows/WGLWindow.cpp",
         "patchSetId": 2
