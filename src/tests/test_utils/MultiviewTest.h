@@ -25,7 +25,7 @@ GLuint CreateSimplePassthroughProgram(int numViews);
 // created beforehand. If depthTexture or stencilTexture is 0, it will not be initialized.
 // If samples is 0, then non-multisampled textures are created. Otherwise multisampled textures are
 // created with the requested sample count.
-void CreateMultiviewBackingTextures(GLenum multiviewLayout,
+void CreateMultiviewBackingTextures(bool isMultiview,
                                     int samples,
                                     int viewWidth,
                                     int height,
@@ -33,7 +33,7 @@ void CreateMultiviewBackingTextures(GLenum multiviewLayout,
                                     std::vector<GLuint> colorTextures,
                                     GLuint depthTexture,
                                     GLuint depthStencilTexture);
-void CreateMultiviewBackingTextures(GLenum multiviewLayout,
+void CreateMultiviewBackingTextures(bool isMultiview,
                                     int samples,
                                     int viewWidth,
                                     int height,
@@ -47,7 +47,7 @@ void CreateMultiviewBackingTextures(GLenum multiviewLayout,
 // GL_FRAMEBUFFER_MULTIVIEW_SIDE_BY_SIDE_ANGLE, then the viewport offsets are set so that the views
 // are tightly packed inside the attachments.
 void AttachMultiviewTextures(GLenum target,
-                             GLenum multiviewLayout,
+                             bool isMultiview,
                              int viewWidth,
                              int numViews,
                              int baseViewIndex,
@@ -55,7 +55,7 @@ void AttachMultiviewTextures(GLenum target,
                              GLuint depthTexture,
                              GLuint depthStencilTexture);
 void AttachMultiviewTextures(GLenum target,
-                             GLenum multiviewLayout,
+                             bool isMultiview,
                              int viewWidth,
                              int numViews,
                              int baseViewIndex,
@@ -101,17 +101,17 @@ class MultiviewTestBase : public ANGLETestBase
 
     void MultiviewTestBaseTearDown() { ANGLETestBase::ANGLETestTearDown(); }
 
-    // Requests the ANGLE_multiview extension and returns true if the operation succeeds.
+    // Requests the OVR_multiview2 extension and returns true if the operation succeeds.
     bool requestMultiviewExtension(bool requireMultiviewMultisample)
     {
-        if (extensionRequestable("GL_ANGLE_multiview"))
+        if (extensionRequestable("GL_OVR_multiview2"))
         {
-            glRequestExtensionANGLE("GL_ANGLE_multiview");
+            glRequestExtensionANGLE("GL_OVR_multiview2");
         }
 
-        if (!extensionEnabled("GL_ANGLE_multiview"))
+        if (!extensionEnabled("GL_OVR_multiview2"))
         {
-            std::cout << "Test skipped due to missing GL_ANGLE_multiview." << std::endl;
+            std::cout << "Test skipped due to missing GL_OVR_multiview2." << std::endl;
             return false;
         }
 
