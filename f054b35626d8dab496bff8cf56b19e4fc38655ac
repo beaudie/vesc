@@ -70,6 +70,30 @@
       "revId": "f054b35626d8dab496bff8cf56b19e4fc38655ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90052232_8c848671",
+        "filename": "util/OSWindow.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-12T17:30:52Z",
+      "side": 1,
+      "message": "Looks like X11 is the only odd one.\nIt calls \"pixel format\" a \"Visual\" and allows to specify it only at window creation time.\nAndroid has\nint32_t ANativeWindow_setBuffersGeometry(\n  ANativeWindow *window,\n  int32_t width,\n  int32_t height,\n  int32_t format\n)\n\"format\" being AHARDWAREBUFFER_FORMAT_*\n\nI don\u0027t know Mac, but looks like this is NSOpenGLPixelFormat or AGLPixelFormat.",
+      "parentUuid": "b5383b16_48b4f86d",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 41
+      },
+      "revId": "f054b35626d8dab496bff8cf56b19e4fc38655ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
