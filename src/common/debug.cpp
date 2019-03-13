@@ -35,7 +35,7 @@ DebugAnnotator *g_debugAnnotator = nullptr;
 std::mutex *g_debugMutex = nullptr;
 
 constexpr std::array<const char *, LOG_NUM_SEVERITIES> g_logSeverityNames = {
-    {"EVENT", "WARN", "ERR"}};
+    {"EVENT", "WARN", "ERR", "FATAL"}};
 
 constexpr const char *LogSeverityName(int severity)
 {
@@ -164,6 +164,11 @@ LogMessage::~LogMessage()
     else
     {
         Trace(getSeverity(), getMessage().c_str());
+    }
+
+    if (mSeverity == LOG_FATAL)
+    {
+        ANGLE_CRASH();
     }
 }
 
