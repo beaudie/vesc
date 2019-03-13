@@ -489,6 +489,12 @@ void ShaderConstants11::onViewportChange(const gl::Rectangle &glViewport,
     mVertex.viewScale[1] = mPixel.viewScale[1];
 }
 
+void ShaderConstants11::onFirstVertexChange(GLint firstVertex)
+{
+    mVertex.firstVertex = static_cast<uint32_t>(firstVertex);
+    mShaderConstantsDirty.set(gl::ShaderType::Vertex);
+}
+
 void ShaderConstants11::onSamplerChange(gl::ShaderType shaderType,
                                         unsigned int samplerIndex,
                                         const gl::Texture &texture,
@@ -2169,6 +2175,8 @@ angle::Result StateManager11::updateState(const gl::Context *context,
     if (!mLastFirstVertex.valid() || mLastFirstVertex.value() != firstVertex)
     {
         mLastFirstVertex = firstVertex;
+        mShaderConstants.onFirstVertexChange(firstVertex);
+        mInternalDirtyBits.set(DIRTY_BIT_PROGRAM_UNIFORM_BUFFERS);
         invalidateInputLayout();
     }
 
