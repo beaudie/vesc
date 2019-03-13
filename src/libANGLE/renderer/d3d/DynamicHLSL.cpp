@@ -244,6 +244,11 @@ std::string DynamicHLSL::generateVertexShaderForInputLayout(
                 initStream << "input." << DecorateVariable(shaderAttribute.name);
             }
 
+            if (shaderAttribute.name == "gl_VertexID")
+            {
+                initStream << " + dx_VertexID";
+            }
+
             initStream << ";\n";
 
             inputIndex += VariableRowCount(TransposeMatrixType(shaderAttribute.type));
