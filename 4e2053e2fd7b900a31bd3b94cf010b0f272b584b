@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35eca703_17a8ca11",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-03-13T20:52:34Z",
+      "side": 1,
+      "message": "Does this mean that this test isn\u0027t drawing any points?",
+      "range": {
+        "startLine": 615,
+        "startChar": 23,
+        "endLine": 615,
+        "endChar": 24
+      },
+      "revId": "4e2053e2fd7b900a31bd3b94cf010b0f272b584b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
