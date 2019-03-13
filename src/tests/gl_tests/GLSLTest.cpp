@@ -609,6 +609,64 @@ void main()
     ANGLE_GL_PROGRAM(program, kVS, kFS);
 }
 
+TEST_P(GLSLTest_ES3, GLVertexIDOffsetZero)
+{
+    constexpr char kVS[] =
+        "#version 300 es\n"
+        "precision highp float;"
+        "out float vertexID;"
+        "void main() {\n"
+        "  gl_Position = vec4(0, 0, 0, 1);\n"
+        "  gl_PointSize = 10.0;\n"
+        "  vertexID = float(gl_VertexID);"
+        "}\n";
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision highp float;"
+        "in float vertexID;"
+        "out vec4 outColor;"
+        "void main() {\n"
+        "  outColor = vec4(vertexID/255.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+
+    glUseProgram(program);
+    glDrawArrays(GL_POINTS, 0, 1);
+
+    EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 0, 0, 0, 255);
+}
+
+TEST_P(GLSLTest_ES3, GLVertexIDOffsetOne)
+{
+    constexpr char kVS[] =
+        "#version 300 es\n"
+        "precision highp float;"
+        "out float vertexID;"
+        "void main() {\n"
+        "  gl_Position = vec4(0, 0, 0, 1);\n"
+        "  gl_PointSize = 10.0;\n"
+        "  vertexID = float(gl_VertexID);"
+        "}\n";
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision highp float;"
+        "in float vertexID;"
+        "out vec4 outColor;"
+        "void main() {\n"
+        "  outColor = vec4(vertexID/255.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+
+    glUseProgram(program);
+    glDrawArrays(GL_POINTS, 1, 1);
+
+    EXPECT_PIXEL_EQ(getWindowWidth() / 2, getWindowHeight() / 2, 1, 0, 0, 255);
+}
+
 TEST_P(GLSLTest, ElseIfRewriting)
 {
     constexpr char kVS[] =
