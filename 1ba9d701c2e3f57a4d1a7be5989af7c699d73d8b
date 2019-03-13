@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2257ed01_35fd13c6",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-13T21:18:04Z",
+      "side": 1,
+      "message": "Can you make this a helper function?\n6 is not obvious to me here.",
+      "range": {
+        "startLine": 760,
+        "startChar": 28,
+        "endLine": 760,
+        "endChar": 84
+      },
+      "revId": "1ba9d701c2e3f57a4d1a7be5989af7c699d73d8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
