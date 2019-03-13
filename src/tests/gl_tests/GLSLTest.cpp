@@ -609,6 +609,80 @@ void main()
     ANGLE_GL_PROGRAM(program, kVS, kFS);
 }
 
+TEST_P(GLSLTest_ES3, GLVertexIDOffsetZeroDrawArray)
+{
+    int start_index  = 0;
+    int array_length = 5;
+    constexpr char kVS[] =
+        "#version 300 es\n"
+        "precision highp float;"
+        "void main() {\n"
+        "  gl_Position = vec4(float(gl_VertexID)/10.0, 0, 0, 1);\n"
+        "  gl_PointSize = 3.0;\n"
+        "}\n";
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision highp float;"
+        "out vec4 outColor;"
+        "void main() {\n"
+        "  outColor = vec4(255.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+
+    glUseProgram(program);
+    glDrawArrays(GL_POINTS, start_index, array_length);
+
+    double point_center_x = static_cast<double>(getWindowWidth()) / 2.0;
+    double point_center_y = static_cast<double>(getWindowHeight()) / 2.0;
+    for (int i = start_index; i < start_index + array_length; i++)
+    {
+        double point_offset_x = static_cast<double>(i * getWindowWidth()) / 20.0;
+        EXPECT_PIXEL_EQ(static_cast<int>(point_center_x + point_offset_x),
+                        static_cast<int>(point_center_y), 255, 0, 0, 255);
+    }
+}
+
+TEST_P(GLSLTest_ES3, GLVertexIDOffsetFiveDrawArray)
+{
+    // TODO(jonahr): Remove test suppression once Nexus 5X is removed from bots
+    // (http://anglebug.com/3264)
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsOpenGLES());
+
+    int start_index  = 5;
+    int array_length = 5;
+    constexpr char kVS[] =
+        "#version 300 es\n"
+        "precision highp float;"
+        "void main() {\n"
+        "  gl_Position = vec4(float(gl_VertexID)/10.0, 0, 0, 1);\n"
+        "  gl_PointSize = 3.0;\n"
+        "}\n";
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision highp float;"
+        "out vec4 outColor;"
+        "void main() {\n"
+        "  outColor = vec4(255.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+
+    glUseProgram(program);
+    glDrawArrays(GL_POINTS, start_index, array_length);
+
+    double point_center_x = static_cast<double>(getWindowWidth()) / 2.0;
+    double point_center_y = static_cast<double>(getWindowHeight()) / 2.0;
+    for (int i = start_index; i < start_index + array_length; i++)
+    {
+        double point_offset_x = static_cast<double>(i * getWindowWidth()) / 20.0;
+        EXPECT_PIXEL_EQ(static_cast<int>(point_center_x + point_offset_x),
+                        static_cast<int>(point_center_y), 255, 0, 0, 255);
+    }
+}
+
 TEST_P(GLSLTest, ElseIfRewriting)
 {
     constexpr char kVS[] =
