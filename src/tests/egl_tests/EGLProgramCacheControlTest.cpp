@@ -35,21 +35,23 @@ class EGLProgramCacheControlTest : public ANGLETest
 
     void SetUp() override
     {
-        mPlatformMethods.cacheProgram = &TestCacheProgram;
-
         ANGLETest::SetUp();
 
         if (extensionAvailable())
         {
             EGLDisplay display = getEGLWindow()->getDisplay();
-            setContextProgramCacheEnabled(true);
+            setContextProgramCacheEnabled(true, &TestCacheProgram);
             eglProgramCacheResizeANGLE(display, kEnabledCacheSize, EGL_PROGRAM_CACHE_RESIZE_ANGLE);
         }
 
         getEGLWindow()->initializeContext();
     }
 
-    void TearDown() override { ANGLETest::TearDown(); }
+    void TearDown() override
+    {
+        ANGLETest::TearDown();
+        setContextProgramCacheEnabled(false, angle::DefaultCacheProgram);
+    }
 
     bool extensionAvailable()
     {
