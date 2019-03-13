@@ -270,13 +270,26 @@ std::ostream &FmtHex(std::ostream &os, T value)
 #define ANGLE_EAT_STREAM_PARAMETERS \
     true ? static_cast<void>(0) : ::gl::priv::LogMessageVoidify() & (*::gl::priv::gSwallowStream)
 
+#if defined(COMPILER_GCC) || defined(__clang__)
+// This macro can be used to isolate part of an expression and ensure that all temporary objects
+// created inside it are destroyed before the rest of the expression executes. This is done by
+// converting the inner expression into a statement. GCC and Clang provide a "statement expression"
+// language extension.
+#    define ANGLE_DESTROY_TEMPORARIES(expression) ({ (expression); })
+#else
+// For compilers that do not support the statement expression language extension (MSVC), use a
+// lambda instead.
+#    define ANGLE_DESTROY_TEMPORARIES(expression) ([&]() { return expression; }())
+#endif
+
 // A macro asserting a condition and outputting failures to the debug log
 #if defined(ANGLE_ENABLE_ASSERTS)
-#    define ASSERT(expression)                                                              \
-        (expression ? static_cast<void>(0)                                                  \
-                    : ((ERR() << "\t! Assert failed in " << __FUNCTION__ << "(" << __LINE__ \
-                              << "): " << #expression),                                     \
-                       ANGLE_ASSERT_IMPL(expression)))
+#    define ASSERT(expression)                                                                    \
+        (expression                                                                               \
+             ? static_cast<void>(0)                                                               \
+             : (ANGLE_DESTROY_TEMPORARIES(ERR() << "\t! Assert failed in " << __FUNCTION__ << "(" \
+                                                << __LINE__ << "): " << #expression),             \
+                ANGLE_ASSERT_IMPL(expression)))
 #    define UNREACHABLE_IS_NORETURN ANGLE_ASSERT_IMPL_IS_NORETURN
 #else
 #    define ASSERT(condition) ANGLE_EAT_STREAM_PARAMETERS << !(condition)
