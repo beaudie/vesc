@@ -609,6 +609,74 @@ void main()
     ANGLE_GL_PROGRAM(program, kVS, kFS);
 }
 
+TEST_P(GLSLTest_ES3, GLVertexIDOffsetZeroDrawArray)
+{
+    int start_index  = 0;
+    int array_length = 0;
+    constexpr char kVS[] =
+        "#version 300 es\n"
+        "precision highp float;"
+        "void main() {\n"
+        "  gl_Position = vec4(float(gl_VertexID)/10.0, 0, 0, 1);\n"
+        "  gl_PointSize = 3.0;\n"
+        "}\n";
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision highp float;"
+        "out vec4 outColor;"
+        "void main() {\n"
+        "  outColor = vec4(255.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+
+    glUseProgram(program);
+    glDrawArrays(GL_POINTS, start_index, array_length);
+
+    int point_center_x = getWindowWidth() / 2;
+    int point_center_y = getWindowHeight() / 2;
+    for (int i = start_index; i < start_index + array_length; i++)
+    {
+        int point_offset_x = i * getWindowWidth() / 20;
+        EXPECT_PIXEL_EQ(point_center_x + point_offset_x, point_center_y, 255, 0, 0, 255);
+    }
+}
+
+TEST_P(GLSLTest_ES3, GLVertexIDOffsetFiveDrawArray)
+{
+    int start_index  = 5;
+    int array_length = 5;
+    constexpr char kVS[] =
+        "#version 300 es\n"
+        "precision highp float;"
+        "void main() {\n"
+        "  gl_Position = vec4(float(gl_VertexID)/10.0, 0, 0, 1);\n"
+        "  gl_PointSize = 3.0;\n"
+        "}\n";
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision highp float;"
+        "out vec4 outColor;"
+        "void main() {\n"
+        "  outColor = vec4(255.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+
+    glUseProgram(program);
+    glDrawArrays(GL_POINTS, start_index, array_length);
+
+    int point_center_x = getWindowWidth() / 2;
+    int point_center_y = getWindowHeight() / 2;
+    for (int i = start_index; i < start_index + array_length; i++)
+    {
+        int point_offset_x = i * getWindowWidth() / 20;
+        EXPECT_PIXEL_EQ(point_center_x + point_offset_x, point_center_y, 255, 0, 0, 255);
+    }
+}
+
 TEST_P(GLSLTest, ElseIfRewriting)
 {
     constexpr char kVS[] =
