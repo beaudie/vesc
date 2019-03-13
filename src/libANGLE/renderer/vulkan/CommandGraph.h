@@ -384,8 +384,9 @@ class CommandGraph final : angle::NonCopyable
     void popDebugMarker();
 
   private:
-    CommandGraphNode *allocateBarrierNode(CommandGraphResourceType resourceType,
-                                          CommandGraphNodeFunction function);
+    CommandGraphNode *allocateBarrierNode(CommandGraphNodeFunction function,
+                                          CommandGraphResourceType resourceType,
+                                          uintptr_t resourceID);
     void setNewBarrier(CommandGraphNode *newBarrier);
     CommandGraphNode *getLastBarrierNode(size_t *indexOut);
     void addDependenciesToNextBarrier(size_t begin, size_t end, CommandGraphNode *nextBarrier);
