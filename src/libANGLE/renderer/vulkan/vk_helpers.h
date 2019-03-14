@@ -15,6 +15,7 @@
 namespace gl
 {
 class ImageIndex;
+struct Format;
 }  // namespace gl
 
 namespace rx
@@ -653,7 +654,8 @@ class ImageHelper final : public CommandGraphResource
                                          const gl::InternalFormat &formatInfo,
                                          const gl::PixelUnpackState &unpack,
                                          GLenum type,
-                                         const uint8_t *pixels);
+                                         const uint8_t *pixels,
+                                         const vk::Format &vkFormat);
 
     angle::Result stageSubresourceUpdateAndGetData(ContextVk *contextVk,
                                                    size_t allocationSize,
