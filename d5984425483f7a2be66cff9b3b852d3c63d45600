@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7d54643a_43423084",
+        "filename": "src/libANGLE/renderer/load_functions_table_autogen.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1298,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-03-14T17:01:14Z",
+      "side": 1,
+      "message": "These tests pass with this version, so I\u0027m assuming it\u0027s just named wrong.   I can change it as part of these changes, but I\u0027m not planning on implementing a new function based on the test results (since it would just be the exact same function with a different name).",
+      "parentUuid": "c4b1d399_efd98961",
+      "range": {
+        "startLine": 1298,
+        "startChar": 41,
+        "endLine": 1298,
+        "endChar": 57
+      },
+      "revId": "d5984425483f7a2be66cff9b3b852d3c63d45600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "efc4642a_2291844d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c0cabbdb_a560f98e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1831,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-03-14T17:01:14Z",
+      "side": 1,
+      "message": "This is null for at least this test:\n\ndEQP.EGL/functional_image_modify_tex_rgb8_tex_subimage_rgb8\n\nIt segfaults and dies at that point, so there may be others.",
+      "parentUuid": "efc4642a_2291844d",
+      "range": {
+        "startLine": 1831,
+        "startChar": 9,
+        "endLine": 1831,
+        "endChar": 17
+      },
+      "revId": "d5984425483f7a2be66cff9b3b852d3c63d45600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6fc66940_ddbe9d19",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2019-03-14T16:46:12Z",
       "side": 1,
       "message": "this needs to come out to land obviously.",
+      "range": {
+        "startLine": 1237,
+        "startChar": 0,
+        "endLine": 1237,
+        "endChar": 16
+      },
+      "revId": "d5984425483f7a2be66cff9b3b852d3c63d45600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "867609b8_86d356c3",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-03-14T17:01:14Z",
+      "side": 1,
+      "message": "Yup.   This is the second half I was referring to that I need to chat with Geoff about.",
+      "parentUuid": "6fc66940_ddbe9d19",
       "range": {
         "startLine": 1237,
         "startChar": 0,
