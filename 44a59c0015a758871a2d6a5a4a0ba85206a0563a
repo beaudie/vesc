@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6478dd4b_f938e299",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-14T21:15:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e0060f1_3ebf9544",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 21,
+        "endChar": 2
+      },
+      "revId": "44a59c0015a758871a2d6a5a4a0ba85206a0563a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c59724a_59576c5d",
         "filename": "doc/DebuggingTips.md",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "44a59c0015a758871a2d6a5a4a0ba85206a0563a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38de9131_84ffe0cf",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-14T21:15:02Z",
+      "side": 1,
+      "message": "Hahaha, yes that\u0027s just habit. I do find it easier to locate the beginning of sentences with the double space, which is how I got used to the habit. In a non-fixed-width editor, they do end up increasing the space size after . automatically, so this is kind of emulating that.\n\nAlthough I do add double spaces after ., this particular case was courtesy of vim\u0027s auto-wrap.\n\nIn short, I wouldn\u0027t call it anachronism, as it\u0027s still being debated whether it\u0027s a good thing or not (e.g. https://www.theatlantic.com/science/archive/2018/05/two-spaces-after-a-period/559304/)",
+      "parentUuid": "0c59724a_59576c5d",
+      "range": {
+        "startLine": 45,
+        "startChar": 30,
+        "endLine": 45,
+        "endChar": 32
+      },
+      "revId": "44a59c0015a758871a2d6a5a4a0ba85206a0563a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "958695bb_a6b09751",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-14T21:15:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1ccd1ad_17f7bbd9",
+      "range": {
+        "startLine": 98,
+        "startChar": 3,
+        "endLine": 98,
+        "endChar": 6
+      },
+      "revId": "44a59c0015a758871a2d6a5a4a0ba85206a0563a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6379195f_c0d8751b",
         "filename": "doc/DebuggingTips.md",
         "patchSetId": 1
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "46295d2b_7c133c84",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-14T21:15:02Z",
+      "side": 1,
+      "message": "Done. Marginal was your word by the way: https://github.com/baldurk/renderdoc/issues/1045#issuecomment-407170497\n\nChanged to \"special case\".",
+      "parentUuid": "6379195f_c0d8751b",
+      "range": {
+        "startLine": 99,
+        "startChar": 23,
+        "endLine": 101,
+        "endChar": 0
+      },
+      "revId": "44a59c0015a758871a2d6a5a4a0ba85206a0563a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef63ada9_11d5fc65",
         "filename": "doc/DebuggingTips.md",
         "patchSetId": 1
@@ -114,6 +210,30 @@
       "revId": "44a59c0015a758871a2d6a5a4a0ba85206a0563a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4aac3d0e_82122cc4",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-14T21:15:02Z",
+      "side": 1,
+      "message": "See the discussion in the bug (https://github.com/baldurk/renderdoc/issues/1045#issuecomment-463999869). He is using `LD_PRELOAD` to link with its own .so file and since the .so file has the hooks for libEGL, RenderDoc\u0027s symbols are inevitably picked over the library\u0027s.\n\nChanging that could be complicated, but yes, I would love to see that happen.",
+      "parentUuid": "ef63ada9_11d5fc65",
+      "range": {
+        "startLine": 111,
+        "startChar": 8,
+        "endLine": 111,
+        "endChar": 68
+      },
+      "revId": "44a59c0015a758871a2d6a5a4a0ba85206a0563a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
