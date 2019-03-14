@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "d341e239_2c0a9ca8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1831,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-14T17:11:39Z",
+      "side": 1,
+      "message": "It would be worthwhile to identify how we reach to this situation. We are assuming this pointer to be non-null in many places.",
+      "parentUuid": "c0cabbdb_a560f98e",
+      "range": {
+        "startLine": 1831,
+        "startChar": 9,
+        "endLine": 1831,
+        "endChar": 17
+      },
+      "revId": "d5984425483f7a2be66cff9b3b852d3c63d45600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6fc66940_ddbe9d19",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 2
