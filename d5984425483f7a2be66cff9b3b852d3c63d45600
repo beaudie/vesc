@@ -192,6 +192,30 @@
     },
     {
       "key": {
+        "uuid": "29e38c4e_bf5ee4c8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1831,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-14T19:02:21Z",
+      "side": 1,
+      "message": "Ok, actually now that you say it, I do recall having had an issue like this when working on compressed texture support. I briefly experimented with storing the format earlier, but that didn\u0027t work out.\n\nSo, since `init` hasn\u0027t happened, we don\u0027t know what format the image is going to have. So far, it looks like we have assumed it will be `formatInfo.sizedInternalFormat` which in your failing case turned out to be wrong. That tells me that using `formatInfo.sizedInternalFormat` is semantically wrong. Using `mFormat` should be correct, but we could probably write breaking tests that reach here with `mFormat` being `nullptr` and eventually create the texture with a format different from `formatInfo.sizedInternalFormat`.\n\nNot sure if my understanding is right, but if it is, we may have to defer the functionality of this function altogether.",
+      "parentUuid": "fe986dba_a664be4a",
+      "range": {
+        "startLine": 1831,
+        "startChar": 9,
+        "endLine": 1831,
+        "endChar": 17
+      },
+      "revId": "d5984425483f7a2be66cff9b3b852d3c63d45600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6fc66940_ddbe9d19",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 2
