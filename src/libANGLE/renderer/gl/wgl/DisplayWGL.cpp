@@ -641,13 +641,7 @@ egl::Error DisplayWGL::initializeD3DDevice()
         return egl::EglNotInitialized() << "Could not create D3D11 device, " << gl::FmtHR(result);
     }
 
-    egl::Error error = registerD3DDevice(mD3D11Device, &mD3D11DeviceHandle);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    return egl::NoError();
+    return registerD3DDevice(mD3D11Device, &mD3D11DeviceHandle);
 }
 
 void DisplayWGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
@@ -704,21 +698,27 @@ egl::Error DisplayWGL::makeCurrent(egl::Surface *drawSurface,
     CurrentNativeContext &currentContext = mCurrentData[std::this_thread::get_id()];
 
     HDC newDC = currentContext.dc;
+    HGLRC newContext = currentContext.glrc;
     if (drawSurface)
     {
         SurfaceWGL *drawSurfaceWGL = GetImplAs<SurfaceWGL>(drawSurface);
         newDC                      = drawSurfaceWGL->getDC();
     }
 
-    HGLRC newContext = currentContext.glrc;
     if (context)
     {
         ContextWGL *contextWGL = GetImplAs<ContextWGL>(context);
         newContext             = contextWGL->getContext();
     }
+    else
+    {
+        newContext = 0;
+    }
 
     if (newDC != currentContext.dc || newContext != currentContext.glrc)
     {
+        ASSERT(newDC != 0);
+
         if (!mFunctionsWGL->makeCurrent(newDC, newContext))
         {
             // TODO(geofflang): What error type here?
