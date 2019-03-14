@@ -70,6 +70,30 @@
       "revId": "1ba9d701c2e3f57a4d1a7be5989af7c699d73d8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15d1f032_4d28429d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-14T18:39:45Z",
+      "side": 1,
+      "message": "The only way I can see this becoming bullet proof is if `dumpGraphDotFile` creates a special map for queries that assigns IDs based on `std::make_pair(queryPool, queryIndex)`.\n\nI\u0027ll do that.",
+      "parentUuid": "ac36c70f_a2fd8430",
+      "range": {
+        "startLine": 760,
+        "startChar": 28,
+        "endLine": 760,
+        "endChar": 84
+      },
+      "revId": "1ba9d701c2e3f57a4d1a7be5989af7c699d73d8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
