@@ -1646,7 +1646,16 @@ bool ValidateES2TexImageParameters(Context *context,
             return false;
         }
 
-        if (format != GL_NONE)
+        GLenum textureIFVal = (textureInternalFormat.sized && !textureInternalFormat.compressed)
+                                  ? GetUnsizedFormat(textureInternalFormat.internalFormat)
+                                  : textureInternalFormat.internalFormat;
+        if (format != textureIFVal)
+        {
+            context->validationError(GL_INVALID_OPERATION, kTypeMismatch);
+            return false;
+        }
+
+        if (context->getExtensions().webglCompatibility && (format != GL_NONE))
         {
             if (GetInternalFormatInfo(format, type).sizedInternalFormat !=
                 textureInternalFormat.sizedInternalFormat)
