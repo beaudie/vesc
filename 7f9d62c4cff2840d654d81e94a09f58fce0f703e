@@ -1,0 +1,216 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "455d1d0a_0eefd861",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T18:27:59Z",
+      "side": 1,
+      "message": "nit: bugdroid needs the following syntax:\n\nBug: angleproject:3090",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 15
+      },
+      "revId": "7f9d62c4cff2840d654d81e94a09f58fce0f703e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3507bed6_82726de3",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T18:27:59Z",
+      "side": 1,
+      "message": "nit: can you inline this? with ANGLE_INLINE probably in the header.",
+      "range": {
+        "startLine": 492,
+        "startChar": 0,
+        "endLine": 496,
+        "endChar": 1
+      },
+      "revId": "7f9d62c4cff2840d654d81e94a09f58fce0f703e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "981a1bfe_6a82a3fc",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T18:27:59Z",
+      "side": 1,
+      "message": "nit: can you add a one-line comment before new tests?",
+      "revId": "7f9d62c4cff2840d654d81e94a09f58fce0f703e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc24defb_3f983c86",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T18:27:59Z",
+      "side": 1,
+      "message": "nit: can you use the R() syntax for test shaders?",
+      "revId": "7f9d62c4cff2840d654d81e94a09f58fce0f703e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ee44ccf_a71b755b",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T18:27:59Z",
+      "side": 1,
+      "message": "nit: camelCaps",
+      "revId": "7f9d62c4cff2840d654d81e94a09f58fce0f703e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efc66933_364e7dd2",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T18:27:59Z",
+      "side": 1,
+      "message": "nit: you can use EXPECT_PIXEL_COLOR_EQ(..., GLColor::red);",
+      "range": {
+        "startLine": 642,
+        "startChar": 8,
+        "endLine": 642,
+        "endChar": 23
+      },
+      "revId": "7f9d62c4cff2840d654d81e94a09f58fce0f703e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf2f7f87_d7a3c8e2",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T18:27:59Z",
+      "side": 1,
+      "message": "I think this can be constexpr, also use the ANGLE naming scheme:\n\nkStartIndex, kArrayLength",
+      "range": {
+        "startLine": 648,
+        "startChar": 8,
+        "endLine": 648,
+        "endChar": 21
+      },
+      "revId": "7f9d62c4cff2840d654d81e94a09f58fce0f703e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04d429c3_5a41be40",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T18:27:59Z",
+      "side": 1,
+      "message": "same comment",
+      "range": {
+        "startLine": 650,
+        "startChar": 4,
+        "endLine": 650,
+        "endChar": 14
+      },
+      "revId": "7f9d62c4cff2840d654d81e94a09f58fce0f703e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6ca01b6_9297bb69",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T18:27:59Z",
+      "side": 1,
+      "message": "nit: camelCaps",
+      "range": {
+        "startLine": 671,
+        "startChar": 8,
+        "endLine": 671,
+        "endChar": 23
+      },
+      "revId": "7f9d62c4cff2840d654d81e94a09f58fce0f703e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2246b4c9_be54ac40",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T18:27:59Z",
+      "side": 1,
+      "message": "same comment",
+      "range": {
+        "startLine": 673,
+        "startChar": 4,
+        "endLine": 673,
+        "endChar": 8
+      },
+      "revId": "7f9d62c4cff2840d654d81e94a09f58fce0f703e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
