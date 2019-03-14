@@ -1827,9 +1827,9 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
                         formatInfo.computeSkipBytes(type, inputRowPitch, inputDepthPitch, unpack,
                                                     applySkipImages, &inputSkipBytes));
 
-    RendererVk *renderer = contextVk->getRenderer();
-
-    const vk::Format &vkFormat         = renderer->getFormat(formatInfo.sizedInternalFormat);
+    const vk::Format &vkFormat =
+        (mFormat != nullptr) ? *mFormat
+                             : contextVk->getRenderer()->getFormat(formatInfo.sizedInternalFormat);
     const angle::Format &storageFormat = vkFormat.textureFormat();
 
     size_t outputRowPitch;
