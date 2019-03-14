@@ -1646,14 +1646,10 @@ bool ValidateES2TexImageParameters(Context *context,
             return false;
         }
 
-        if (format != GL_NONE)
+        if (format != textureInternalFormat.format)
         {
-            if (GetInternalFormatInfo(format, type).sizedInternalFormat !=
-                textureInternalFormat.sizedInternalFormat)
-            {
-                context->validationError(GL_INVALID_OPERATION, kTypeMismatch);
-                return false;
-            }
+            context->validationError(GL_INVALID_OPERATION, kTypeMismatch);
+            return false;
         }
 
         if (static_cast<size_t>(xoffset + width) > texture->getWidth(target, level) ||

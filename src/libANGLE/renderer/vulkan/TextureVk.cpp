@@ -247,9 +247,13 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
 
     if (pixels)
     {
+        gl::Format format = (mState.getType() != gl::TextureType::CubeMap)
+                                ? mState.getBaseLevelDesc().format
+                                : gl::Format(0);
+
         ANGLE_TRY(mImage->stageSubresourceUpdate(
             contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
-            gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels));
+            gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels, format));
 
         // Create a new graph node to store image initialization commands.
         mImage->finishCurrentCommands(contextVk->getRenderer());
