@@ -249,7 +249,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     {
         ANGLE_TRY(mImage->stageSubresourceUpdate(
             contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
-            gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels));
+            gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels, mState));
 
         // Create a new graph node to store image initialization commands.
         mImage->finishCurrentCommands(contextVk->getRenderer());
