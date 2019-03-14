@@ -118,6 +118,30 @@
       "revId": "1ba9d701c2e3f57a4d1a7be5989af7c699d73d8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01ae8cc0_39b0f960",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-14T19:14:13Z",
+      "side": 1,
+      "message": "The `map` is inside `dumpGraphDotFile`, so it has no impact on the normal usage of ANGLE. Adding a subresource ID though increases the size of every node.\n\nSee the latest PS to see if you still have concerns.",
+      "parentUuid": "3b7c87ba_478f8443",
+      "range": {
+        "startLine": 760,
+        "startChar": 28,
+        "endLine": 760,
+        "endChar": 84
+      },
+      "revId": "1ba9d701c2e3f57a4d1a7be5989af7c699d73d8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
