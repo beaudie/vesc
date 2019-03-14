@@ -1827,10 +1827,7 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
                         formatInfo.computeSkipBytes(type, inputRowPitch, inputDepthPitch, unpack,
                                                     applySkipImages, &inputSkipBytes));
 
-    RendererVk *renderer = contextVk->getRenderer();
-
-    const vk::Format &vkFormat         = renderer->getFormat(formatInfo.sizedInternalFormat);
-    const angle::Format &storageFormat = vkFormat.textureFormat();
+    const angle::Format &storageFormat = mFormat->textureFormat();
 
     size_t outputRowPitch;
     size_t outputDepthPitch;
@@ -1839,7 +1836,7 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
 
     if (storageFormat.isBlock)
     {
-        const gl::InternalFormat &storageFormatInfo = vkFormat.getInternalFormatInfo(type);
+        const gl::InternalFormat &storageFormatInfo = mFormat->getInternalFormatInfo(type);
         GLuint rowPitch;
         GLuint depthPitch;
 
@@ -1884,7 +1881,7 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
 
     const uint8_t *source = pixels + inputSkipBytes;
 
-    LoadImageFunctionInfo loadFunction = vkFormat.textureLoadFunctions(type);
+    LoadImageFunctionInfo loadFunction = mFormat->textureLoadFunctions(type);
 
     loadFunction.loadFunction(extents.width, extents.height, extents.depth, source, inputRowPitch,
                               inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);

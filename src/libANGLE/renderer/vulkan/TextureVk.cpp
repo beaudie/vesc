@@ -713,7 +713,7 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
     }
 
     const vk::Format &format = renderer->getFormat(internalFormat);
-    ANGLE_TRY(ensureImageAllocated(renderer, format));
+    ANGLE_TRY(ensureImageAllocated(contextVk, renderer, format, size));
 
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
@@ -807,11 +807,15 @@ void TextureVk::releaseAndDeleteImage(const gl::Context *context, RendererVk *re
     }
 }
 
-angle::Result TextureVk::ensureImageAllocated(RendererVk *renderer, const vk::Format &format)
+angle::Result TextureVk::ensureImageAllocated(ContextVk *contextVk,
+                                              RendererVk *renderer,
+                                              const vk::Format &format,
+                                              const gl::Extents &size)
 {
     if (mImage == nullptr)
     {
         setImageHelper(renderer, new vk::ImageHelper(), mState.getType(), format, 0, 0, true);
+        ANGLE_TRY(ensureImageInitializedImpl(contextVk, size, getLevelCount(), format));
     }
     else
     {
@@ -884,7 +888,7 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
 
     if (!size.empty())
     {
-        ANGLE_TRY(ensureImageAllocated(renderer, format));
+        ANGLE_TRY(ensureImageAllocated(contextVk, renderer, format, size));
     }
 
     return angle::Result::Continue;
