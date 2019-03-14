@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "888164aa_6b8f8e30",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T19:49:52Z",
+      "side": 1,
+      "message": "nit: can you tag this with a bug in the issue tracker?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 6
+      },
+      "revId": "795b1cb30a18d87089830b8d99fbffa7d65e4495",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fabc67e3_a965805e",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T19:49:52Z",
+      "side": 1,
+      "message": "could you make this if defined(D3D11) -\u003e D3D11, else if defined(D3D9) -\u003e D3D9? I think I also like the nested #ifs better for platform-dependent decisions. So I might keep the Android setup more similar to how it was.",
+      "range": {
+        "startLine": 176,
+        "startChar": 11,
+        "endLine": 176,
+        "endChar": 45
+      },
+      "revId": "795b1cb30a18d87089830b8d99fbffa7d65e4495",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
