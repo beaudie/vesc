@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "fe986dba_a664be4a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1831,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-03-14T18:35:57Z",
+      "side": 1,
+      "message": "This change is being made so we can pass the test:\ndEQP.EGL/functional_image_modify_renderbuffer_rgb565_tex_subimage_rgb8\n\nIn that case, mFormat is set to a valid address via:\n#0  rx::vk::ImageHelper::initExternal (this\u003d0x1acbb6417700, context\u003d0x1acbb6d1e020, textureType\u003dgl::TextureType::_2D, extents\u003d..., format\u003d..., samples\u003d1, usage\u003d23, initialLayout\u003drx::vk::ImageLayout::Undefined, externalImageCreateInfo\u003d0x0, mipLevels\u003d1, layerCount\u003d1) at ../../third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp:1308\n#1  0x00007f50c8d40d2b in rx::vk::ImageHelper::init (this\u003d0x1acbb6417700, context\u003d0x1acbb6d1e020, textureType\u003dgl::TextureType::_2D, extents\u003d..., format\u003d..., samples\u003d1, usage\u003d23, mipLevels\u003d1, layerCount\u003d1) at ../../third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp:1284\n#2  0x00007f50c8d00229 in rx::RenderbufferVk::setStorage (this\u003d0x1acbb6d1d4e0, context\u003d0x1acbb6d19000, internalformat\u003d36194, width\u003d64, height\u003d64) at ../../third_party/angle/src/libANGLE/renderer/vulkan/RenderbufferVk.cpp:83\n#3  0x00007f50c8b7affa in gl::Renderbuffer::setStorage (this\u003d0x1acbb6417620, context\u003d0x1acbb6d19000, internalformat\u003d36194, width\u003d64, height\u003d64) at ../../third_party/angle/src/libANGLE/Renderbuffer.cpp:101\n#4  0x00007f50c8b116a5 in gl::Context::renderbufferStorage (this\u003d0x1acbb6d19000, target\u003d36161, internalformat\u003d36194, width\u003d64, height\u003d64) at ../../third_party/angle/src/libANGLE/Context.cpp:5191\n#5  0x00007f50c8957402 in gl::RenderbufferStorage (target\u003d36161, internalformat\u003d36194, width\u003d64, height\u003d64) at ../../third_party/angle/src/libGLESv2/entry_points_gles_2_0_autogen.cpp:1675\n#6  0x00007f50cc5aca86 in deqp::egl::Image::RenderbufferImageSource::createBuffer (this\u003d0x1acbb6632680, gl\u003d..., ref\u003d0x1acbb6686130) at ../../third_party/angle/third_party/deqp/src/modules/egl/teglImageUtil.cpp:476\n#7  0x00007f50cc594e23 in deqp::egl::Image::GLES2ImageApi::Create::invokeGLES2 (this\u003d0x1acbb64375c0, api\u003d..., image\u003d..., ref\u003d...) at ../../third_party/angle/third_party/deqp/src/modules/egl/teglImageFormatTests.cpp:318\n#8  0x00007f50cc594d9b in deqp::egl::Image::GLES2ImageApi::GLES2Action::invoke (this\u003d0x1acbb64375c0, api\u003d..., image\u003d..., ref\u003d...) at ../../third_party/angle/third_party/deqp/src/modules/egl/teglImageFormatTests.cpp:312\n#9  0x00007f50cc59daa8 in deqp::egl::Image::ImageFormatCase::iterate (this\u003d0x1acbb6686000) at ../../third_party/angle/third_party/deqp/src/modules/egl/teglImageFormatTests.cpp:1035\n\n\nI\u0027m keeping the check for non-null to pass the test:\ndEQP.EGL/functional_image_modify_tex_rgb8_tex_subimage_rgb8\n\nIn that case, we never go through that same code path, presumably because there is no renderbuffer involved that needs to be initialized (based on the test name).   Instead, once we\u0027ve made it to here, the ImageHelper has only been created but not initialized with anything useful:\n\n[[[... ImageHelper::stageSubresourceUpdate() ...]]]\nthis \u003d {rx::vk::ImageHelper * | 0x1c0d507e8620} 0x1c0d507e8620\n rx::vk::CommandGraphResource \u003d {rx::vk::CommandGraphResource} \n mImage \u003d {rx::vk::Image} \n mDeviceMemory \u003d {rx::vk::DeviceMemory} \n mExtents \u003d {gl::Extents} \n mFormat \u003d {const rx::vk::Format * | 0x0} NULL    \u003c\u003c\u003d\u003d\u003d\u003d why I\u0027m checking for NULL\n mSamples \u003d {GLint} 0 [0x0]\n mCurrentLayout \u003d {rx::vk::ImageLayout} rx::vk::ImageLayout::Undefined\n mCurrentQueueFamilyIndex \u003d {uint32_t} 4294967295 [0xffffffff]\n mLayerCount \u003d {uint32_t} 0 [0x0]\n mLevelCount \u003d {uint32_t} 0 [0x0]\n mStagingBuffer \u003d {rx::vk::DynamicBuffer} \n mSubresourceUpdates \u003d {std::__1::vector\u003crx::vk::ImageHelper::SubresourceUpdate, std::__1::allocator\u003e} \n\nThis is what the ImageHelper object contains when mFormat is non-NULL (the renderbuffer case):\n\n[[[... ImageHelper::stageSubresourceUpdate() ...]]]\nthis \u003d {rx::vk::ImageHelper * | 0x1acbb6417700} 0x1acbb6417700\n rx::vk::CommandGraphResource \u003d {rx::vk::CommandGraphResource} \n mImage \u003d {rx::vk::Image} \n mDeviceMemory \u003d {rx::vk::DeviceMemory} \n mExtents \u003d {gl::Extents} \n mFormat \u003d {const rx::vk::Format * | 0x1acbb66b2098} 0x1acbb66b2098\n mSamples \u003d {GLint} 1 [0x1]\n mCurrentLayout \u003d {rx::vk::ImageLayout} rx::vk::ImageLayout::TransferSrc\n mCurrentQueueFamilyIndex \u003d {uint32_t} 0 [0x0]\n mLayerCount \u003d {uint32_t} 1 [0x1]\n mLevelCount \u003d {uint32_t} 1 [0x1]\n mStagingBuffer \u003d {rx::vk::DynamicBuffer} \n mSubresourceUpdates \u003d {std::__1::vector\u003crx::vk::ImageHelper::SubresourceUpdate, std::__1::allocator\u003e} \n\n\nI\u0027m not sure if that explains it entirely, but it at least points out the values are different because we going down different paths to get here.",
+      "parentUuid": "d341e239_2c0a9ca8",
+      "range": {
+        "startLine": 1831,
+        "startChar": 9,
+        "endLine": 1831,
+        "endChar": 17
+      },
+      "revId": "d5984425483f7a2be66cff9b3b852d3c63d45600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6fc66940_ddbe9d19",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 2
