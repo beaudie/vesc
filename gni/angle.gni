@@ -17,8 +17,6 @@ if (build_with_chromium) {
 
   import("//ui/ozone/ozone.gni")
 } else {
-  angle_root = "//"
-
   declare_args() {
     ozone_platform_gbm = false
   }
