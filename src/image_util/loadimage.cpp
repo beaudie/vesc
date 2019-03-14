@@ -1267,6 +1267,34 @@ void LoadRGB32FToRGBA16F(size_t width,
     }
 }
 
+void LoadRGB32FToRGB16F(size_t width,
+                        size_t height,
+                        size_t depth,
+                        const uint8_t *input,
+                        size_t inputRowPitch,
+                        size_t inputDepthPitch,
+                        uint8_t *output,
+                        size_t outputRowPitch,
+                        size_t outputDepthPitch)
+{
+    for (size_t z = 0; z < depth; z++)
+    {
+        for (size_t y = 0; y < height; y++)
+        {
+            const float *source =
+                priv::OffsetDataPointer<float>(input, y, z, inputRowPitch, inputDepthPitch);
+            uint16_t *dest =
+                priv::OffsetDataPointer<uint16_t>(output, y, z, outputRowPitch, outputDepthPitch);
+            for (size_t x = 0; x < width; x++)
+            {
+                dest[x * 3 + 0] = gl::float32ToFloat16(source[x * 3 + 0]);
+                dest[x * 3 + 1] = gl::float32ToFloat16(source[x * 3 + 1]);
+                dest[x * 3 + 2] = gl::float32ToFloat16(source[x * 3 + 2]);
+            }
+        }
+    }
+}
+
 void LoadR32ToR16(size_t width,
                   size_t height,
                   size_t depth,
