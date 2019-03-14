@@ -309,7 +309,8 @@ static bool SizedFloatRGBATextureAttachmentSupport(const Version &clientVersion,
 }
 
 InternalFormat::InternalFormat()
-    : internalFormat(GL_NONE),
+    : initialized(false),
+      internalFormat(GL_NONE),
       sized(false),
       sizedInternalFormat(GL_NONE),
       redBits(0),
@@ -542,10 +543,11 @@ bool InternalFormat::operator!=(const InternalFormat &other) const
     return !(*this == other);
 }
 
-void InsertFormatInfo(InternalFormatInfoMap *map, const InternalFormat &formatInfo)
+void InsertFormatInfo(InternalFormatInfoMap *map, InternalFormat &formatInfo)
 {
     ASSERT(!formatInfo.sized || (*map).count(formatInfo.internalFormat) == 0);
     ASSERT((*map)[formatInfo.internalFormat].count(formatInfo.type) == 0);
+    formatInfo.initialized                             = true;
     (*map)[formatInfo.internalFormat][formatInfo.type] = formatInfo;
 }
 
