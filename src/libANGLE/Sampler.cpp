@@ -39,6 +39,7 @@ const std::string &Sampler::getLabel() const
 void Sampler::setMinFilter(GLenum minFilter)
 {
     mState.setMinFilter(minFilter);
+    onStateChange(nullptr, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
 GLenum Sampler::getMinFilter() const
@@ -49,6 +50,7 @@ GLenum Sampler::getMinFilter() const
 void Sampler::setMagFilter(GLenum magFilter)
 {
     mState.setMagFilter(magFilter);
+    onStateChange(nullptr, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
 GLenum Sampler::getMagFilter() const
@@ -59,6 +61,7 @@ GLenum Sampler::getMagFilter() const
 void Sampler::setWrapS(GLenum wrapS)
 {
     mState.setWrapS(wrapS);
+    onStateChange(nullptr, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
 GLenum Sampler::getWrapS() const
@@ -69,6 +72,7 @@ GLenum Sampler::getWrapS() const
 void Sampler::setWrapT(GLenum wrapT)
 {
     mState.setWrapT(wrapT);
+    onStateChange(nullptr, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
 GLenum Sampler::getWrapT() const
@@ -79,6 +83,7 @@ GLenum Sampler::getWrapT() const
 void Sampler::setWrapR(GLenum wrapR)
 {
     mState.setWrapR(wrapR);
+    onStateChange(nullptr, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
 GLenum Sampler::getWrapR() const
@@ -89,6 +94,7 @@ GLenum Sampler::getWrapR() const
 void Sampler::setMaxAnisotropy(float maxAnisotropy)
 {
     mState.setMaxAnisotropy(maxAnisotropy);
+    onStateChange(nullptr, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
 float Sampler::getMaxAnisotropy() const
@@ -99,6 +105,7 @@ float Sampler::getMaxAnisotropy() const
 void Sampler::setMinLod(GLfloat minLod)
 {
     mState.setMinLod(minLod);
+    onStateChange(nullptr, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
 GLfloat Sampler::getMinLod() const
@@ -109,6 +116,7 @@ GLfloat Sampler::getMinLod() const
 void Sampler::setMaxLod(GLfloat maxLod)
 {
     mState.setMaxLod(maxLod);
+    onStateChange(nullptr, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
 GLfloat Sampler::getMaxLod() const
@@ -119,6 +127,7 @@ GLfloat Sampler::getMaxLod() const
 void Sampler::setCompareMode(GLenum compareMode)
 {
     mState.setCompareMode(compareMode);
+    onStateChange(nullptr, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
 GLenum Sampler::getCompareMode() const
@@ -129,6 +138,7 @@ GLenum Sampler::getCompareMode() const
 void Sampler::setCompareFunc(GLenum compareFunc)
 {
     mState.setCompareFunc(compareFunc);
+    onStateChange(nullptr, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
 GLenum Sampler::getCompareFunc() const
@@ -139,6 +149,7 @@ GLenum Sampler::getCompareFunc() const
 void Sampler::setSRGBDecode(GLenum sRGBDecode)
 {
     mState.setSRGBDecode(sRGBDecode);
+    onStateChange(nullptr, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
 GLenum Sampler::getSRGBDecode() const
@@ -149,6 +160,7 @@ GLenum Sampler::getSRGBDecode() const
 void Sampler::setBorderColor(const ColorGeneric &color)
 {
     mState.setBorderColor(color);
+    onStateChange(nullptr, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
 }
 
 const ColorGeneric &Sampler::getBorderColor() const
