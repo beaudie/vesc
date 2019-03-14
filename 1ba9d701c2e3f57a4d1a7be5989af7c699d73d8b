@@ -22,6 +22,30 @@
       "revId": "1ba9d701c2e3f57a4d1a7be5989af7c699d73d8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0b469fa_94136658",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-14T14:27:04Z",
+      "side": 1,
+      "message": "Sure.\n\n6 comes from the default size of query pools (64). There\u0027s currently no \"correct\" way of constructing this id, as each pool can theoretically have different sizes. We are also losing information from the top bits of the query pool address.\n\nThis is just a debug feature, so we should be fine with this.",
+      "parentUuid": "2257ed01_35fd13c6",
+      "range": {
+        "startLine": 760,
+        "startChar": 28,
+        "endLine": 760,
+        "endChar": 84
+      },
+      "revId": "1ba9d701c2e3f57a4d1a7be5989af7c699d73d8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
