@@ -94,6 +94,30 @@
       "revId": "1ba9d701c2e3f57a4d1a7be5989af7c699d73d8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b7c87ba_478f8443",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T18:51:42Z",
+      "side": 1,
+      "message": "I see. Because you refer to the query in multiple places? Map is way too heavy for this, I prefer your current approach to that. If anything you could just change ResourceID into {ResourceID/SubresourceID} in the diagnostic info.",
+      "parentUuid": "15d1f032_4d28429d",
+      "range": {
+        "startLine": 760,
+        "startChar": 28,
+        "endLine": 760,
+        "endChar": 84
+      },
+      "revId": "1ba9d701c2e3f57a4d1a7be5989af7c699d73d8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
