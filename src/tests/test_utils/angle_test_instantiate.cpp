@@ -49,7 +49,8 @@ bool IsANGLEConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
 
     EGLWindow *eglWindow =
         EGLWindow::New(param.majorVersion, param.minorVersion, param.eglParameters);
-    bool result = eglWindow->initializeGL(osWindow, eglLibrary.get());
+    ConfigParameters configParams;
+    bool result = eglWindow->initializeGL(osWindow, eglLibrary.get(), configParams);
     eglWindow->destroyGL();
     EGLWindow::Delete(&eglWindow);
     return result;
@@ -61,7 +62,8 @@ bool IsWGLConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
     std::unique_ptr<angle::Library> openglLibrary(angle::OpenSharedLibrary("opengl32"));
 
     WGLWindow *wglWindow = WGLWindow::New(param.majorVersion, param.minorVersion);
-    bool result          = wglWindow->initializeGL(osWindow, openglLibrary.get());
+    ConfigParameters configParams;
+    bool result = wglWindow->initializeGL(osWindow, openglLibrary.get(), configParams);
     wglWindow->destroyGL();
     WGLWindow::Delete(&wglWindow);
     return result;
