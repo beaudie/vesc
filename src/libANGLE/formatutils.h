@@ -129,6 +129,8 @@ struct InternalFormat
     bool operator==(const InternalFormat &other) const;
     bool operator!=(const InternalFormat &other) const;
 
+    bool initialized;
+
     GLenum internalFormat;
 
     bool sized;
