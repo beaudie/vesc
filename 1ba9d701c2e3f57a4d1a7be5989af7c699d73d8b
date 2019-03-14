@@ -46,6 +46,30 @@
       "revId": "1ba9d701c2e3f57a4d1a7be5989af7c699d73d8b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac36c70f_a2fd8430",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T18:22:28Z",
+      "side": 1,
+      "message": "This size could change runtime the way the code is set up. I do side with Yuly that it could be safer. Could you do something like make a query ID counter in the command graph? We can optimize this later if need be.",
+      "parentUuid": "c0b469fa_94136658",
+      "range": {
+        "startLine": 760,
+        "startChar": 28,
+        "endLine": 760,
+        "endChar": 84
+      },
+      "revId": "1ba9d701c2e3f57a4d1a7be5989af7c699d73d8b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
