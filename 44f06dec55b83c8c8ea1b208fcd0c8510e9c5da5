@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6067fb83_a58b54b6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2180,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-03-14T20:57:09Z",
+      "side": 1,
+      "message": "I think we can avoid updating this buffer when the program doesn\u0027t use vertex ID, saving lots of buffer uploads.  The logic on when to update it may get a bit more complicated though if it\u0027s out of sync with mLastFirstVertex.",
+      "range": {
+        "startLine": 2179,
+        "startChar": 0,
+        "endLine": 2180,
+        "endChar": 66
+      },
+      "revId": "44f06dec55b83c8c8ea1b208fcd0c8510e9c5da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
