@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e0060f1_3ebf9544",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T20:52:24Z",
+      "side": 1,
+      "message": "nit: tabs",
+      "range": {
+        "startLine": 21,
+        "startChar": 1,
+        "endLine": 21,
+        "endChar": 2
+      },
+      "revId": "44a59c0015a758871a2d6a5a4a0ba85206a0563a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c59724a_59576c5d",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T20:52:24Z",
+      "side": 1,
+      "message": "super-nit: you don\u0027t need this typewriter fixed-width anachronism of double-spacing :) I don\u0027t even think markdown cares about the amount of whitespace but not sure.",
+      "range": {
+        "startLine": 45,
+        "startChar": 30,
+        "endLine": 45,
+        "endChar": 32
+      },
+      "revId": "44a59c0015a758871a2d6a5a4a0ba85206a0563a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1ccd1ad_17f7bbd9",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T20:52:24Z",
+      "side": 1,
+      "message": "nit: it \u003d renderdoc or application or angle? (clarify)",
+      "range": {
+        "startLine": 98,
+        "startChar": 3,
+        "endLine": 98,
+        "endChar": 6
+      },
+      "revId": "44a59c0015a758871a2d6a5a4a0ba85206a0563a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6379195f_c0d8751b",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T20:52:24Z",
+      "side": 1,
+      "message": "nit: can link to the RenderDoc bug. I don\u0027t know if ANGLE is a marginal case, would probably omit that.",
+      "range": {
+        "startLine": 99,
+        "startChar": 23,
+        "endLine": 101,
+        "endChar": 0
+      },
+      "revId": "44a59c0015a758871a2d6a5a4a0ba85206a0563a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef63ada9_11d5fc65",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-14T20:52:24Z",
+      "side": 1,
+      "message": "off, that\u0027s unfortunate. We should make an organized push to get Baldur to fix this.",
+      "range": {
+        "startLine": 111,
+        "startChar": 8,
+        "endLine": 111,
+        "endChar": 68
+      },
+      "revId": "44a59c0015a758871a2d6a5a4a0ba85206a0563a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
