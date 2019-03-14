@@ -180,7 +180,7 @@ angle::Result TextureVk::setSubImage(const gl::Context *context,
 {
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, type);
 
-    return setSubImageImpl(context, index, area, formatInfo, type, unpack, pixels);
+    return setSubImageImpl(context, index, area, formatInfo, type, unpack, pixels, true);
 }
 
 angle::Result TextureVk::setCompressedImage(const gl::Context *context,
@@ -207,7 +207,8 @@ angle::Result TextureVk::setCompressedSubImage(const gl::Context *context,
 
     const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, GL_UNSIGNED_BYTE);
 
-    return setSubImageImpl(context, index, area, formatInfo, GL_UNSIGNED_BYTE, unpack, pixels);
+    return setSubImageImpl(context, index, area, formatInfo, GL_UNSIGNED_BYTE, unpack, pixels,
+                           true);
 }
 
 angle::Result TextureVk::setImageImpl(const gl::Context *context,
@@ -232,7 +233,7 @@ angle::Result TextureVk::setImageImpl(const gl::Context *context,
     }
 
     return setSubImageImpl(context, index, gl::Box(0, 0, 0, size.width, size.height, size.depth),
-                           formatInfo, type, unpack, pixels);
+                           formatInfo, type, unpack, pixels, false);
 }
 
 angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
@@ -241,15 +242,22 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                                          const gl::InternalFormat &formatInfo,
                                          GLenum type,
                                          const gl::PixelUnpackState &unpack,
-                                         const uint8_t *pixels)
+                                         const uint8_t *pixels,
+                                         const bool isSubImage)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
     if (pixels)
     {
+        const gl::ImageDesc &levelDesc = mState.getImageDesc(index);
+        const vk::Format &vkFormat =
+            isSubImage
+                ? contextVk->getRenderer()->getFormat(levelDesc.format.info->sizedInternalFormat)
+                : renderer->getFormat(formatInfo.sizedInternalFormat);
+
         ANGLE_TRY(mImage->stageSubresourceUpdate(
             contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
-            gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels));
+            gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels, vkFormat));
 
         // Create a new graph node to store image initialization commands.
         mImage->finishCurrentCommands(contextVk->getRenderer());
