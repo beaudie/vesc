@@ -713,7 +713,7 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
     }
 
     const vk::Format &format = renderer->getFormat(internalFormat);
-    ANGLE_TRY(ensureImageAllocated(renderer, format));
+    ANGLE_TRY(ensureImageAllocated(contextVk, renderer, format, size));
 
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
@@ -739,8 +739,10 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
     const vk::Format &format = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
 
     ImageVk *imageVk = vk::GetImpl(image);
-    setImageHelper(renderer, imageVk->getImage(), imageVk->getImageTextureType(), format,
-                   imageVk->getImageLevel(), imageVk->getImageLayer(), false);
+    const gl::Extents size(static_cast<int>(image->getWidth()),
+                           static_cast<int>(image->getHeight()), 1);
+    setImageHelper(contextVk, renderer, imageVk->getImage(), imageVk->getImageTextureType(), format,
+                   size, imageVk->getImageLevel(), imageVk->getImageLayer(), false);
 
     ANGLE_TRY(initImageViews(contextVk, format, 1));
 
@@ -807,24 +809,30 @@ void TextureVk::releaseAndDeleteImage(const gl::Context *context, RendererVk *re
     }
 }
 
-angle::Result TextureVk::ensureImageAllocated(RendererVk *renderer, const vk::Format &format)
+angle::Result TextureVk::ensureImageAllocated(ContextVk *contextVk,
+                                              RendererVk *renderer,
+                                              const vk::Format &format,
+                                              const gl::Extents &size)
 {
     if (mImage == nullptr)
     {
-        setImageHelper(renderer, new vk::ImageHelper(), mState.getType(), format, 0, 0, true);
+        setImageHelper(contextVk, renderer, new vk::ImageHelper(), mState.getType(), format, size,
+                       0, 0, true);
     }
     else
     {
-        updateImageHelper(renderer, format);
+        updateImageHelper(contextVk, renderer, format, size);
     }
 
     return angle::Result::Continue;
 }
 
-void TextureVk::setImageHelper(RendererVk *renderer,
+void TextureVk::setImageHelper(ContextVk *contextVk,
+                               RendererVk *renderer,
                                vk::ImageHelper *imageHelper,
                                gl::TextureType imageType,
                                const vk::Format &format,
+                               const gl::Extents &size,
                                uint32_t imageLevelOffset,
                                uint32_t imageLayerOffset,
                                bool selfOwned)
@@ -837,6 +845,7 @@ void TextureVk::setImageHelper(RendererVk *renderer,
     mImageLayerOffset = imageLayerOffset;
     mImage            = imageHelper;
     mImage->initStagingBuffer(renderer, format);
+    (void)ensureImageInitializedImpl(contextVk, size, getLevelCount(), format);
 
     mRenderTarget.init(mImage, &mDrawBaseLevelImageView, getNativeImageLevel(0),
                        getNativeImageLayer(0), this);
@@ -845,10 +854,14 @@ void TextureVk::setImageHelper(RendererVk *renderer,
     mCubeMapRenderTargets.clear();
 }
 
-void TextureVk::updateImageHelper(RendererVk *renderer, const vk::Format &format)
+void TextureVk::updateImageHelper(ContextVk *contextVk,
+                                  RendererVk *renderer,
+                                  const vk::Format &format,
+                                  const gl::Extents &size)
 {
     ASSERT(mImage != nullptr);
     mImage->initStagingBuffer(renderer, format);
+    (void)ensureImageInitializedImpl(contextVk, size, getLevelCount(), format);
 }
 
 angle::Result TextureVk::redefineImage(const gl::Context *context,
@@ -884,7 +897,7 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
 
     if (!size.empty())
     {
-        ANGLE_TRY(ensureImageAllocated(renderer, format));
+        ANGLE_TRY(ensureImageAllocated(contextVk, renderer, format, size));
     }
 
     return angle::Result::Continue;
@@ -1034,8 +1047,9 @@ angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *
 
     // eglBindTexImage can only be called with pbuffer (offscreen) surfaces
     OffscreenSurfaceVk *offscreenSurface = GetImplAs<OffscreenSurfaceVk>(surface);
-    setImageHelper(renderer, offscreenSurface->getColorAttachmentImage(), mState.getType(), format,
-                   surface->getMipmapLevel(), 0, false);
+    const gl::Extents size(surface->getWidth(), surface->getHeight(), 1);
+    setImageHelper(contextVk, renderer, offscreenSurface->getColorAttachmentImage(),
+                   mState.getType(), format, size, surface->getMipmapLevel(), 0, false);
 
     return initImageViews(contextVk, format, 1);
 }
@@ -1079,14 +1093,7 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
 
 angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk)
 {
-    const gl::ImageDesc &baseLevelDesc  = mState.getBaseLevelDesc();
-    const gl::Extents &baseLevelExtents = baseLevelDesc.size;
-    const uint32_t levelCount           = getLevelCount();
-
-    const vk::Format &format =
-        contextVk->getRenderer()->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
-
-    return ensureImageInitializedImpl(contextVk, baseLevelExtents, levelCount, format);
+    return flushStagedImageUpdates(contextVk, getLevelCount());
 }
 
 angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
@@ -1094,17 +1101,20 @@ angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
                                                     uint32_t levelCount,
                                                     const vk::Format &format)
 {
-    if (mImage->valid() && !mImage->hasStagedUpdates())
-    {
-        return angle::Result::Continue;
-    }
-    vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
-
     if (!mImage->valid())
     {
-        ANGLE_TRY(initImage(contextVk, format, baseLevelExtents, levelCount, commandBuffer));
+        vk::CommandBuffer *commandBuffer = nullptr;
+        ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
+        return initImage(contextVk, format, baseLevelExtents, levelCount, commandBuffer);
     }
+
+    return angle::Result::Continue;
+}
+
+angle::Result TextureVk::flushStagedImageUpdates(ContextVk *contextVk, uint32_t levelCount)
+{
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
 
     return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), levelCount, commandBuffer);
 }

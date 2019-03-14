@@ -161,15 +161,23 @@ class TextureVk : public TextureImpl
     uint32_t getNativeImageLayer(uint32_t frontendLayer) const;
 
     void releaseAndDeleteImage(const gl::Context *context, RendererVk *renderer);
-    angle::Result ensureImageAllocated(RendererVk *renderer, const vk::Format &format);
-    void setImageHelper(RendererVk *renderer,
+    angle::Result ensureImageAllocated(ContextVk *contextVk,
+                                       RendererVk *renderer,
+                                       const vk::Format &format,
+                                       const gl::Extents &size);
+    void setImageHelper(ContextVk *contextVk,
+                        RendererVk *renderer,
                         vk::ImageHelper *imageHelper,
                         gl::TextureType imageType,
                         const vk::Format &format,
+                        const gl::Extents &size,
                         uint32_t imageLevelOffset,
                         uint32_t imageLayerOffset,
                         bool selfOwned);
-    void updateImageHelper(RendererVk *renderer, const vk::Format &internalFormat);
+    void updateImageHelper(ContextVk *contextVk,
+                           RendererVk *renderer,
+                           const vk::Format &internalFormat,
+                           const gl::Extents &size);
 
     angle::Result redefineImage(const gl::Context *context,
                                 const gl::ImageIndex &index,
@@ -265,6 +273,8 @@ class TextureVk : public TextureImpl
                                              const gl::Extents &baseLevelExtents,
                                              uint32_t levelCount,
                                              const vk::Format &format);
+
+    angle::Result flushStagedImageUpdates(ContextVk *contextVk, uint32_t levelCount);
 
     bool mOwnsImage;
 
