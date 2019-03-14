@@ -2733,6 +2733,11 @@ const char *ValidateDrawStates(Context *context)
         // Do some additonal WebGL-specific validation
         if (extensions.webglCompatibility)
         {
+            if (context->isWebGL())
+            {
+                // __sanitizer_print_stack_trace();
+                ERR() << "validating sampler formats";
+            }
             if (!state.validateSamplerFormats())
             {
                 return kSamplerFormatMismatch;
