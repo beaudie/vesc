@@ -1234,6 +1234,7 @@ bool ValidateES2TexImageParameters(Context *context,
             return false;
         }
 
+#if 0  // TIMTIM
         if (format != GL_NONE)
         {
             if (GetInternalFormatInfo(format, type).sizedInternalFormat !=
@@ -1243,6 +1244,7 @@ bool ValidateES2TexImageParameters(Context *context,
                 return false;
             }
         }
+#endif
 
         if (static_cast<size_t>(xoffset + width) > texture->getWidth(target, level) ||
             static_cast<size_t>(yoffset + height) > texture->getHeight(target, level))
