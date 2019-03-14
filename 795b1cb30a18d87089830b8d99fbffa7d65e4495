@@ -45,6 +45,30 @@
       "revId": "795b1cb30a18d87089830b8d99fbffa7d65e4495",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecad68df_cccd615b",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-03-14T20:34:07Z",
+      "side": 1,
+      "message": "The itch I was scratching was that it is possible to turn off the default platform, and this builds, but crashes at runtime.\n\nThat seems wrong to me; I thought we should do one of the following:\n\n(1) Require at least one enabled backend, and always set the default to an enabled backend\n(2) Fail at compile time if the default backend for the platform is turned off\n\nThis is doing (1).\n\nDoing (1) while partitioning by platform is going requires as many cases as there are are backend/platform combinations. That\u0027s a lot of cases.\n\nDoing (2) with nested ifdefs requires fewer cases, but you wouldn\u0027t be able to turn certain platforms off (e.g. can\u0027t turn of D3D on Windows).\n\nWDYWT?",
+      "parentUuid": "fabc67e3_a965805e",
+      "range": {
+        "startLine": 176,
+        "startChar": 11,
+        "endLine": 176,
+        "endChar": 45
+      },
+      "revId": "795b1cb30a18d87089830b8d99fbffa7d65e4495",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
