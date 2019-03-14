@@ -180,10 +180,6 @@
 // Android GLES-only failues
 2567 ANDROID GLES : dEQP-EGL.functional.image.api.create_image_gles2_tex2d_red = FAIL
 2567 ANDROID GLES : dEQP-EGL.functional.image.api.create_image_gles2_tex2d_rg = FAIL
-2507 ANDROID GLES : dEQP-EGL.functional.image.modify.renderbuffer_rgb565_tex_subimage_rgb8 = FAIL
-2507 ANDROID GLES : dEQP-EGL.functional.image.modify.renderbuffer_rgba4_tex_subimage_rgba8 = FAIL
-2507 ANDROID GLES : dEQP-EGL.functional.image.modify.tex_rgb565_tex_subimage_rgb8 = FAIL
-2507 ANDROID GLES : dEQP-EGL.functional.image.modify.tex_rgba4_tex_subimage_rgba8 = FAIL
 2716 ANDROID GLES : dEQP-EGL.functional.preserve_swap.preserve.* = FAIL
 
 // Seems to crash on the 5x. Possibly other Android devices.
