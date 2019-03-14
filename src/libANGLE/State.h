@@ -614,6 +614,9 @@ class State : angle::NonCopyable
     // "onActiveTextureStateChange" calls when the Texture itself changed but the binding did not.
     void onActiveTextureStateChange(const Context *context, size_t textureUnit);
 
+    // Called when a sampler parameter changes.
+    void onSamplerParameterChange(const Context *context, Sampler *sampler);
+
     void onImageStateChange(const Context *context, size_t unit);
 
     void onUniformBufferStateChange(size_t uniformBufferIndex);
