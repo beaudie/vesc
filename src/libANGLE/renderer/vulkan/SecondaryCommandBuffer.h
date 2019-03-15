@@ -93,8 +93,6 @@ struct BindVertexBuffersParams
 {
     // ANGLE always has firstBinding of 0 so not storing that currently
     uint32_t bindingCount;
-    const VkBuffer *buffers;
-    const VkDeviceSize *offsets;
 };
 
 struct BlitImageParams
@@ -320,6 +318,12 @@ ANGLE_INLINE DestT *Offset(T *ptr, size_t bytes)
     return reinterpret_cast<DestT *>((reinterpret_cast<uint8_t *>(ptr) + bytes));
 }
 
+template <typename DestT, typename T>
+ANGLE_INLINE const DestT *Offset(const T *ptr, size_t bytes)
+{
+    return reinterpret_cast<const DestT *>((reinterpret_cast<const uint8_t *>(ptr) + bytes));
+}
+
 class SecondaryCommandBuffer final : angle::NonCopyable
 {
   public:
@@ -382,15 +386,17 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                                         const VkDeviceSize *offsets)
     {
         ASSERT(firstBinding == 0);
-        size_t buffSize                      = bindingCount * sizeof(VkBuffer);
-        size_t offsetSize                    = bindingCount * sizeof(VkDeviceSize);
+        size_t buffersSize                   = bindingCount * sizeof(VkBuffer);
+        size_t offsetsSize                   = bindingCount * sizeof(VkDeviceSize);
         BindVertexBuffersParams *paramStruct = initCommand<BindVertexBuffersParams>(
-            CommandID::BindVertexBuffers, buffSize + offsetSize);
+            CommandID::BindVertexBuffers, buffersSize + offsetsSize);
         // Copy params
         paramStruct->bindingCount = bindingCount;
-        // Copy variable sized data
-        storePointerParameter(buffers, &paramStruct->buffers, buffSize);
-        storePointerParameter(offsets, &paramStruct->offsets, offsetSize);
+        uint8_t *writePointer =
+            reinterpret_cast<uint8_t *>(paramStruct) + sizeof(BindVertexBuffersParams);
+        memcpy(writePointer, buffers, buffersSize);
+        writePointer += buffersSize;
+        memcpy(writePointer, offsets, offsetsSize);
     }
 
     void blitImage(const Image &srcImage,
@@ -530,7 +536,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     // Parse the cmds in this cmd buffer into given primary cmd buffer for execution
     void executeCommands(VkCommandBuffer cmdBuffer);
 
-    static constexpr size_t kBlockSize = 1024;
+    static constexpr size_t kBlockSize = 2048;
 
     // Initialize the SecondaryCommandBuffer by setting the allocator it will use
     void initialize(angle::PoolAllocator *allocator)

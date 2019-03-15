@@ -14,7 +14,6 @@ namespace rx
 {
 namespace vk
 {
-
 void SecondaryCommandBuffer::blitImage(const Image &srcImage,
                                        VkImageLayout srcImageLayout,
                                        const Image &dstImage,
@@ -376,8 +375,11 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                 {
                     const BindVertexBuffersParams *params =
                         getParamPtr<BindVertexBuffersParams>(currentCommand);
-                    vkCmdBindVertexBuffers(cmdBuffer, 0, params->bindingCount, params->buffers,
-                                           params->offsets);
+                    const VkBuffer *buffers =
+                        Offset<VkBuffer>(params, sizeof(BindVertexBuffersParams));
+                    const VkDeviceSize *offsets =
+                        Offset<VkDeviceSize>(buffers, sizeof(VkBuffer *) * params->bindingCount);
+                    vkCmdBindVertexBuffers(cmdBuffer, 0, params->bindingCount, buffers, offsets);
                     break;
                 }
                 case CommandID::BindDescriptorSets:
