@@ -33,6 +33,24 @@
       "revId": "3622463ba7159a6235187a0b2ded08f1c0edad4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3aa273ea_d6af337b",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-15T15:40:52Z",
+      "side": 1,
+      "message": "Yeah, should probably use uint8_t everywhere in place of unsigned char * or void *.",
+      "parentUuid": "3c4f2be0_47777705",
+      "revId": "3622463ba7159a6235187a0b2ded08f1c0edad4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
