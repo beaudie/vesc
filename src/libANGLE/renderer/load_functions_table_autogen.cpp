@@ -56,6 +56,20 @@ void UnreachableLoadFunction(size_t width,
     UNREACHABLE();
 }
 
+LoadImageFunctionInfo A1RGB5_ANGLEX_to_A1R5G5B5_UNORM(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadRGB5A1ToRGBA8, true);
+        case GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT:
+            return LoadImageFunctionInfo(LoadToNative<GLushort, 1>, false);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo ALPHA_to_R16G16B16A16_FLOAT(GLenum type)
 {
     switch (type)
@@ -165,7 +179,7 @@ LoadImageFunctionInfo BGR565_ANGLEX_to_B5G6R5_UNORM(GLenum type)
     switch (type)
     {
         case GL_UNSIGNED_BYTE:
-            return LoadImageFunctionInfo(LoadToNative<GLushort, 1>, false);
+            return LoadImageFunctionInfo(LoadRGB8ToBGR565, true);
         case GL_UNSIGNED_SHORT_5_6_5:
             return LoadImageFunctionInfo(LoadRGB565ToBGR565, true);
         default:
@@ -179,9 +193,9 @@ LoadImageFunctionInfo BGR5_A1_ANGLEX_to_default(GLenum type)
     switch (type)
     {
         case GL_UNSIGNED_BYTE:
-            return LoadImageFunctionInfo(LoadToNative<GLubyte, 4>, false);
-        case GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT:
             return LoadImageFunctionInfo(LoadRGB5A1ToRGBA8, true);
+        case GL_UNSIGNED_SHORT_1_5_5_5_REV_EXT:
+            return LoadImageFunctionInfo(LoadToNative<GLushort, 1>, false);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -214,12 +228,60 @@ LoadImageFunctionInfo BGRA8_EXT_to_default(GLenum type)
     }
 }
 
+LoadImageFunctionInfo BGRA8_SRGB_ANGLEX_to_B8G8R8A8_UNORM_SRGB(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadToNative<GLubyte, 4>, false);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo BGRA_EXT_to_default(GLenum type)
 {
     switch (type)
     {
         case GL_UNSIGNED_BYTE:
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo BGRX8_ANGLEX_to_B8G8R8A8_UNORM(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadToNative<GLubyte, 4>, false);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo BGRX8_ANGLEX_to_B8G8R8X8_UNORM(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadToNative<GLubyte, 4>, false);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_R11_EAC_to_EAC_R11_UNORM_BLOCK(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<4, 4, 8>, true);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -238,12 +300,36 @@ LoadImageFunctionInfo COMPRESSED_R11_EAC_to_R16_UNORM(GLenum type)
     }
 }
 
+LoadImageFunctionInfo COMPRESSED_RG11_EAC_to_EAC_R11G11_UNORM_BLOCK(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<4, 4, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo COMPRESSED_RG11_EAC_to_R16G16_UNORM(GLenum type)
 {
     switch (type)
     {
         case GL_UNSIGNED_BYTE:
             return LoadImageFunctionInfo(LoadEACRG11ToRG16, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGB8_ETC2_to_ETC2_R8G8B8_UNORM_BLOCK(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<4, 4, 8>, true);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -268,6 +354,19 @@ LoadImageFunctionInfo COMPRESSED_RGB8_LOSSY_DECODE_ETC2_ANGLE_to_BC1_RGB_UNORM_B
     {
         case GL_UNSIGNED_BYTE:
             return LoadImageFunctionInfo(LoadETC2RGB8ToBC1, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2_to_ETC2_R8G8B8A1_UNORM_BLOCK(
+    GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<4, 4, 8>, true);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -299,12 +398,192 @@ COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_LOSSY_DECODE_ETC2_ANGLE_to_BC1_RGBA_UNORM_BL
     }
 }
 
+LoadImageFunctionInfo COMPRESSED_RGBA8_ETC2_EAC_to_ETC2_R8G8B8A8_UNORM_BLOCK(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<4, 4, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo COMPRESSED_RGBA8_ETC2_EAC_to_R8G8B8A8_UNORM(GLenum type)
 {
     switch (type)
     {
         case GL_UNSIGNED_BYTE:
             return LoadImageFunctionInfo(LoadETC2RGBA8ToRGBA8, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGBA_ASTC_10x10_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<10, 10, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGBA_ASTC_10x5_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<10, 5, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGBA_ASTC_10x6_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<10, 6, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGBA_ASTC_10x8_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<10, 8, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGBA_ASTC_12x10_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<12, 10, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGBA_ASTC_12x12_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<12, 12, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGBA_ASTC_4x4_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<4, 4, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGBA_ASTC_5x4_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<5, 4, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGBA_ASTC_5x5_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<5, 5, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGBA_ASTC_6x5_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<6, 5, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGBA_ASTC_6x6_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<6, 6, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGBA_ASTC_8x5_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<8, 5, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGBA_ASTC_8x6_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<8, 6, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_RGBA_ASTC_8x8_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<8, 8, 16>, true);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -395,12 +674,36 @@ LoadImageFunctionInfo COMPRESSED_RGB_S3TC_DXT1_EXT_to_default(GLenum type)
     }
 }
 
+LoadImageFunctionInfo COMPRESSED_SIGNED_R11_EAC_to_EAC_R11_SNORM_BLOCK(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<4, 4, 8>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo COMPRESSED_SIGNED_R11_EAC_to_R16_SNORM(GLenum type)
 {
     switch (type)
     {
         case GL_UNSIGNED_BYTE:
             return LoadImageFunctionInfo(LoadEACR11SToR16, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SIGNED_RG11_EAC_to_EAC_R11G11_SNORM_BLOCK(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<4, 4, 16>, true);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -419,12 +722,204 @@ LoadImageFunctionInfo COMPRESSED_SIGNED_RG11_EAC_to_R16G16_SNORM(GLenum type)
     }
 }
 
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<10, 10, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<10, 5, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<10, 6, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<10, 8, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<12, 10, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<12, 12, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<4, 4, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<5, 4, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<5, 5, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<6, 5, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<6, 6, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<8, 5, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<8, 6, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR_to_default(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<8, 8, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ETC2_EAC_to_ETC2_R8G8B8A8_SRGB_BLOCK(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<4, 4, 16>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo COMPRESSED_SRGB8_ALPHA8_ETC2_EAC_to_R8G8B8A8_UNORM_SRGB(GLenum type)
 {
     switch (type)
     {
         case GL_UNSIGNED_BYTE:
             return LoadImageFunctionInfo(LoadETC2SRGBA8ToSRGBA8, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_ETC2_to_ETC2_R8G8B8_SRGB_BLOCK(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<4, 4, 8>, true);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -450,6 +945,19 @@ LoadImageFunctionInfo COMPRESSED_SRGB8_LOSSY_DECODE_ETC2_ANGLE_to_BC1_RGB_UNORM_
     {
         case GL_UNSIGNED_BYTE:
             return LoadImageFunctionInfo(LoadETC2SRGB8ToBC1, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2_to_ETC2_R8G8B8A1_SRGB_BLOCK(
+    GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<4, 4, 8>, true);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -554,6 +1062,30 @@ LoadImageFunctionInfo DEPTH24_STENCIL8_to_D24_UNORM_S8_UINT(GLenum type)
     }
 }
 
+LoadImageFunctionInfo DEPTH24_STENCIL8_to_D32_FLOAT_S8X24_UINT(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_INT_24_8:
+            return LoadImageFunctionInfo(LoadD24S8ToD32FS8X24, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo DEPTH32F_STENCIL8_to_D24_UNORM_S8_UINT(GLenum type)
+{
+    switch (type)
+    {
+        case GL_FLOAT_32_UNSIGNED_INT_24_8_REV:
+            return LoadImageFunctionInfo(LoadD32FS8X24ToD24S8, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo DEPTH32F_STENCIL8_to_D32_FLOAT_S8X24_UINT(GLenum type)
 {
     switch (type)
@@ -592,6 +1124,18 @@ LoadImageFunctionInfo DEPTH_COMPONENT24_to_D24_UNORM_S8_UINT(GLenum type)
     }
 }
 
+LoadImageFunctionInfo DEPTH_COMPONENT24_to_D32_FLOAT_S8X24_UINT(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_INT_24_8:
+            return LoadImageFunctionInfo(LoadD24S8ToD32FS8X24, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo DEPTH_COMPONENT32F_to_D32_FLOAT(GLenum type)
 {
     switch (type)
@@ -622,6 +1166,18 @@ LoadImageFunctionInfo ETC1_RGB8_LOSSY_DECODE_ANGLE_to_BC1_RGB_UNORM_BLOCK(GLenum
     {
         case GL_UNSIGNED_BYTE:
             return LoadImageFunctionInfo(LoadETC1RGB8ToBC1, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo ETC1_RGB8_OES_to_ETC1_R8G8B8_UNORM_BLOCK(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadCompressedToNative<4, 4, 8>, true);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -1192,12 +1748,40 @@ LoadImageFunctionInfo RGB16F_to_R16G16B16A16_FLOAT(GLenum type)
     }
 }
 
+LoadImageFunctionInfo RGB16F_to_R16G16B16_FLOAT(GLenum type)
+{
+    switch (type)
+    {
+        case GL_FLOAT:
+            return LoadImageFunctionInfo(LoadRGB32FToRGB16F, true);
+        case GL_HALF_FLOAT:
+            return LoadImageFunctionInfo(LoadToNative<GLhalf, 3>, false);
+        case GL_HALF_FLOAT_OES:
+            return LoadImageFunctionInfo(LoadToNative<GLhalf, 3>, false);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo RGB16I_to_R16G16B16A16_SINT(GLenum type)
 {
     switch (type)
     {
         case GL_SHORT:
             return LoadImageFunctionInfo(LoadToNative3To4<GLshort, 0x0001>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo RGB16I_to_R16G16B16_SINT(GLenum type)
+{
+    switch (type)
+    {
+        case GL_SHORT:
+            return LoadImageFunctionInfo(LoadToNative<GLshort, 3>, false);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -1216,12 +1800,36 @@ LoadImageFunctionInfo RGB16UI_to_R16G16B16A16_UINT(GLenum type)
     }
 }
 
+LoadImageFunctionInfo RGB16UI_to_R16G16B16_UINT(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_SHORT:
+            return LoadImageFunctionInfo(LoadToNative<GLushort, 3>, false);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo RGB16_EXT_to_R16G16B16A16_UNORM(GLenum type)
 {
     switch (type)
     {
         case GL_UNSIGNED_SHORT:
             return LoadImageFunctionInfo(LoadToNative3To4<GLushort, 0xFFFF>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo RGB16_EXT_to_R16G16B16_UNORM(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_SHORT:
+            return LoadImageFunctionInfo(LoadToNative<GLushort, 3>, false);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -1240,12 +1848,36 @@ LoadImageFunctionInfo RGB16_SNORM_EXT_to_R16G16B16A16_SNORM(GLenum type)
     }
 }
 
+LoadImageFunctionInfo RGB16_SNORM_EXT_to_R16G16B16_SNORM(GLenum type)
+{
+    switch (type)
+    {
+        case GL_SHORT:
+            return LoadImageFunctionInfo(LoadToNative<GLushort, 3>, false);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo RGB32F_to_R32G32B32A32_FLOAT(GLenum type)
 {
     switch (type)
     {
         case GL_FLOAT:
             return LoadImageFunctionInfo(LoadToNative3To4<GLfloat, gl::Float32One>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo RGB32F_to_R32G32B32_FLOAT(GLenum type)
+{
+    switch (type)
+    {
+        case GL_FLOAT:
+            return LoadImageFunctionInfo(LoadToNative<GLfloat, 3>, false);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -1264,12 +1896,36 @@ LoadImageFunctionInfo RGB32I_to_R32G32B32A32_SINT(GLenum type)
     }
 }
 
+LoadImageFunctionInfo RGB32I_to_R32G32B32_SINT(GLenum type)
+{
+    switch (type)
+    {
+        case GL_INT:
+            return LoadImageFunctionInfo(LoadToNative<GLint, 3>, false);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo RGB32UI_to_R32G32B32A32_UINT(GLenum type)
 {
     switch (type)
     {
         case GL_UNSIGNED_INT:
             return LoadImageFunctionInfo(LoadToNative3To4<GLuint, 0x00000001>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo RGB32UI_to_R32G32B32_UINT(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_INT:
+            return LoadImageFunctionInfo(LoadToNative<GLuint, 3>, false);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -1384,6 +2040,18 @@ LoadImageFunctionInfo RGB8I_to_R8G8B8A8_SINT(GLenum type)
     }
 }
 
+LoadImageFunctionInfo RGB8I_to_R8G8B8_SINT(GLenum type)
+{
+    switch (type)
+    {
+        case GL_BYTE:
+            return LoadImageFunctionInfo(LoadToNative<GLbyte, 3>, false);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo RGB8UI_to_R8G8B8A8_UINT(GLenum type)
 {
     switch (type)
@@ -1396,12 +2064,36 @@ LoadImageFunctionInfo RGB8UI_to_R8G8B8A8_UINT(GLenum type)
     }
 }
 
+LoadImageFunctionInfo RGB8UI_to_R8G8B8_UINT(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadToNative<GLubyte, 3>, false);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo RGB8_SNORM_to_R8G8B8A8_SNORM(GLenum type)
 {
     switch (type)
     {
         case GL_BYTE:
             return LoadImageFunctionInfo(LoadToNative3To4<GLbyte, 0x7F>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo RGB8_SNORM_to_R8G8B8_SNORM(GLenum type)
+{
+    switch (type)
+    {
+        case GL_BYTE:
+            return LoadImageFunctionInfo(LoadToNative<GLbyte, 3>, false);
         default:
             UNREACHABLE();
             return LoadImageFunctionInfo(UnreachableLoadFunction, true);
@@ -1661,6 +2353,17 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
     // clang-format off
     switch (internalFormat)
     {
+        case GL_A1RGB5_ANGLEX:
+        {
+            switch (angleFormat)
+            {
+                case FormatID::A1R5G5B5_UNORM:
+                    return A1RGB5_ANGLEX_to_A1R5G5B5_UNORM;
+                default:
+                    break;
+            }
+            break;
+        }
         case GL_ALPHA:
         {
             switch (angleFormat)
@@ -1709,12 +2412,38 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             return BGRA4_ANGLEX_to_default;
         case GL_BGRA8_EXT:
             return BGRA8_EXT_to_default;
+        case GL_BGRA8_SRGB_ANGLEX:
+        {
+            switch (angleFormat)
+            {
+                case FormatID::B8G8R8A8_UNORM_SRGB:
+                    return BGRA8_SRGB_ANGLEX_to_B8G8R8A8_UNORM_SRGB;
+                default:
+                    break;
+            }
+            break;
+        }
         case GL_BGRA_EXT:
             return BGRA_EXT_to_default;
+        case GL_BGRX8_ANGLEX:
+        {
+            switch (angleFormat)
+            {
+                case FormatID::B8G8R8A8_UNORM:
+                    return BGRX8_ANGLEX_to_B8G8R8A8_UNORM;
+                case FormatID::B8G8R8X8_UNORM:
+                    return BGRX8_ANGLEX_to_B8G8R8X8_UNORM;
+                default:
+                    break;
+            }
+            break;
+        }
         case GL_COMPRESSED_R11_EAC:
         {
             switch (angleFormat)
             {
+                case FormatID::EAC_R11_UNORM_BLOCK:
+                    return COMPRESSED_R11_EAC_to_EAC_R11_UNORM_BLOCK;
                 case FormatID::R16_UNORM:
                     return COMPRESSED_R11_EAC_to_R16_UNORM;
                 default:
@@ -1726,6 +2455,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
         {
             switch (angleFormat)
             {
+                case FormatID::EAC_R11G11_UNORM_BLOCK:
+                    return COMPRESSED_RG11_EAC_to_EAC_R11G11_UNORM_BLOCK;
                 case FormatID::R16G16_UNORM:
                     return COMPRESSED_RG11_EAC_to_R16G16_UNORM;
                 default:
@@ -1737,6 +2468,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
         {
             switch (angleFormat)
             {
+                case FormatID::ETC2_R8G8B8_UNORM_BLOCK:
+                    return COMPRESSED_RGB8_ETC2_to_ETC2_R8G8B8_UNORM_BLOCK;
                 case FormatID::R8G8B8A8_UNORM:
                     return COMPRESSED_RGB8_ETC2_to_R8G8B8A8_UNORM;
                 default:
@@ -1759,6 +2492,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
         {
             switch (angleFormat)
             {
+                case FormatID::ETC2_R8G8B8A1_UNORM_BLOCK:
+                    return COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2_to_ETC2_R8G8B8A1_UNORM_BLOCK;
                 case FormatID::R8G8B8A8_UNORM:
                     return COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2_to_R8G8B8A8_UNORM;
                 default:
@@ -1781,6 +2516,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
         {
             switch (angleFormat)
             {
+                case FormatID::ETC2_R8G8B8A8_UNORM_BLOCK:
+                    return COMPRESSED_RGBA8_ETC2_EAC_to_ETC2_R8G8B8A8_UNORM_BLOCK;
                 case FormatID::R8G8B8A8_UNORM:
                     return COMPRESSED_RGBA8_ETC2_EAC_to_R8G8B8A8_UNORM;
                 default:
@@ -1788,6 +2525,34 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             }
             break;
         }
+        case GL_COMPRESSED_RGBA_ASTC_10x10_KHR:
+            return COMPRESSED_RGBA_ASTC_10x10_KHR_to_default;
+        case GL_COMPRESSED_RGBA_ASTC_10x5_KHR:
+            return COMPRESSED_RGBA_ASTC_10x5_KHR_to_default;
+        case GL_COMPRESSED_RGBA_ASTC_10x6_KHR:
+            return COMPRESSED_RGBA_ASTC_10x6_KHR_to_default;
+        case GL_COMPRESSED_RGBA_ASTC_10x8_KHR:
+            return COMPRESSED_RGBA_ASTC_10x8_KHR_to_default;
+        case GL_COMPRESSED_RGBA_ASTC_12x10_KHR:
+            return COMPRESSED_RGBA_ASTC_12x10_KHR_to_default;
+        case GL_COMPRESSED_RGBA_ASTC_12x12_KHR:
+            return COMPRESSED_RGBA_ASTC_12x12_KHR_to_default;
+        case GL_COMPRESSED_RGBA_ASTC_4x4_KHR:
+            return COMPRESSED_RGBA_ASTC_4x4_KHR_to_default;
+        case GL_COMPRESSED_RGBA_ASTC_5x4_KHR:
+            return COMPRESSED_RGBA_ASTC_5x4_KHR_to_default;
+        case GL_COMPRESSED_RGBA_ASTC_5x5_KHR:
+            return COMPRESSED_RGBA_ASTC_5x5_KHR_to_default;
+        case GL_COMPRESSED_RGBA_ASTC_6x5_KHR:
+            return COMPRESSED_RGBA_ASTC_6x5_KHR_to_default;
+        case GL_COMPRESSED_RGBA_ASTC_6x6_KHR:
+            return COMPRESSED_RGBA_ASTC_6x6_KHR_to_default;
+        case GL_COMPRESSED_RGBA_ASTC_8x5_KHR:
+            return COMPRESSED_RGBA_ASTC_8x5_KHR_to_default;
+        case GL_COMPRESSED_RGBA_ASTC_8x6_KHR:
+            return COMPRESSED_RGBA_ASTC_8x6_KHR_to_default;
+        case GL_COMPRESSED_RGBA_ASTC_8x8_KHR:
+            return COMPRESSED_RGBA_ASTC_8x8_KHR_to_default;
         case GL_COMPRESSED_RGBA_BPTC_UNORM_EXT:
             return COMPRESSED_RGBA_BPTC_UNORM_EXT_to_default;
         case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
@@ -1806,6 +2571,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
         {
             switch (angleFormat)
             {
+                case FormatID::EAC_R11_SNORM_BLOCK:
+                    return COMPRESSED_SIGNED_R11_EAC_to_EAC_R11_SNORM_BLOCK;
                 case FormatID::R16_SNORM:
                     return COMPRESSED_SIGNED_R11_EAC_to_R16_SNORM;
                 default:
@@ -1817,6 +2584,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
         {
             switch (angleFormat)
             {
+                case FormatID::EAC_R11G11_SNORM_BLOCK:
+                    return COMPRESSED_SIGNED_RG11_EAC_to_EAC_R11G11_SNORM_BLOCK;
                 case FormatID::R16G16_SNORM:
                     return COMPRESSED_SIGNED_RG11_EAC_to_R16G16_SNORM;
                 default:
@@ -1824,10 +2593,40 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             }
             break;
         }
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR:
+            return COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR_to_default;
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR:
+            return COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR_to_default;
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR:
+            return COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR_to_default;
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR:
+            return COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR_to_default;
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR:
+            return COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR_to_default;
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR:
+            return COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR_to_default;
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR:
+            return COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR_to_default;
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR:
+            return COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR_to_default;
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR:
+            return COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR_to_default;
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR:
+            return COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR_to_default;
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR:
+            return COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR_to_default;
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR:
+            return COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR_to_default;
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR:
+            return COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR_to_default;
+        case GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR:
+            return COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR_to_default;
         case GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC:
         {
             switch (angleFormat)
             {
+                case FormatID::ETC2_R8G8B8A8_SRGB_BLOCK:
+                    return COMPRESSED_SRGB8_ALPHA8_ETC2_EAC_to_ETC2_R8G8B8A8_SRGB_BLOCK;
                 case FormatID::R8G8B8A8_UNORM_SRGB:
                     return COMPRESSED_SRGB8_ALPHA8_ETC2_EAC_to_R8G8B8A8_UNORM_SRGB;
                 default:
@@ -1839,6 +2638,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
         {
             switch (angleFormat)
             {
+                case FormatID::ETC2_R8G8B8_SRGB_BLOCK:
+                    return COMPRESSED_SRGB8_ETC2_to_ETC2_R8G8B8_SRGB_BLOCK;
                 case FormatID::R8G8B8A8_UNORM_SRGB:
                     return COMPRESSED_SRGB8_ETC2_to_R8G8B8A8_UNORM_SRGB;
                 default:
@@ -1861,6 +2662,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
         {
             switch (angleFormat)
             {
+                case FormatID::ETC2_R8G8B8A1_SRGB_BLOCK:
+                    return COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2_to_ETC2_R8G8B8A1_SRGB_BLOCK;
                 case FormatID::R8G8B8A8_UNORM_SRGB:
                     return COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2_to_R8G8B8A8_UNORM_SRGB;
                 default:
@@ -1895,6 +2698,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::D24_UNORM_S8_UINT:
                     return DEPTH24_STENCIL8_to_D24_UNORM_S8_UINT;
+                case FormatID::D32_FLOAT_S8X24_UINT:
+                    return DEPTH24_STENCIL8_to_D32_FLOAT_S8X24_UINT;
                 default:
                     break;
             }
@@ -1904,6 +2709,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
         {
             switch (angleFormat)
             {
+                case FormatID::D24_UNORM_S8_UINT:
+                    return DEPTH32F_STENCIL8_to_D24_UNORM_S8_UINT;
                 case FormatID::D32_FLOAT_S8X24_UINT:
                     return DEPTH32F_STENCIL8_to_D32_FLOAT_S8X24_UINT;
                 default:
@@ -1928,6 +2735,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::D24_UNORM_S8_UINT:
                     return DEPTH_COMPONENT24_to_D24_UNORM_S8_UINT;
+                case FormatID::D32_FLOAT_S8X24_UINT:
+                    return DEPTH_COMPONENT24_to_D32_FLOAT_S8X24_UINT;
                 default:
                     break;
             }
@@ -1961,6 +2770,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
         {
             switch (angleFormat)
             {
+                case FormatID::ETC1_R8G8B8_UNORM_BLOCK:
+                    return ETC1_RGB8_OES_to_ETC1_R8G8B8_UNORM_BLOCK;
                 case FormatID::R8G8B8A8_UNORM:
                     return ETC1_RGB8_OES_to_R8G8B8A8_UNORM;
                 default:
@@ -2331,6 +3142,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::R16G16B16A16_FLOAT:
                     return RGB16F_to_R16G16B16A16_FLOAT;
+                case FormatID::R16G16B16_FLOAT:
+                    return RGB16F_to_R16G16B16_FLOAT;
                 default:
                     break;
             }
@@ -2342,6 +3155,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::R16G16B16A16_SINT:
                     return RGB16I_to_R16G16B16A16_SINT;
+                case FormatID::R16G16B16_SINT:
+                    return RGB16I_to_R16G16B16_SINT;
                 default:
                     break;
             }
@@ -2353,6 +3168,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::R16G16B16A16_UINT:
                     return RGB16UI_to_R16G16B16A16_UINT;
+                case FormatID::R16G16B16_UINT:
+                    return RGB16UI_to_R16G16B16_UINT;
                 default:
                     break;
             }
@@ -2364,6 +3181,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::R16G16B16A16_UNORM:
                     return RGB16_EXT_to_R16G16B16A16_UNORM;
+                case FormatID::R16G16B16_UNORM:
+                    return RGB16_EXT_to_R16G16B16_UNORM;
                 default:
                     break;
             }
@@ -2375,6 +3194,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::R16G16B16A16_SNORM:
                     return RGB16_SNORM_EXT_to_R16G16B16A16_SNORM;
+                case FormatID::R16G16B16_SNORM:
+                    return RGB16_SNORM_EXT_to_R16G16B16_SNORM;
                 default:
                     break;
             }
@@ -2386,6 +3207,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::R32G32B32A32_FLOAT:
                     return RGB32F_to_R32G32B32A32_FLOAT;
+                case FormatID::R32G32B32_FLOAT:
+                    return RGB32F_to_R32G32B32_FLOAT;
                 default:
                     break;
             }
@@ -2397,6 +3220,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::R32G32B32A32_SINT:
                     return RGB32I_to_R32G32B32A32_SINT;
+                case FormatID::R32G32B32_SINT:
+                    return RGB32I_to_R32G32B32_SINT;
                 default:
                     break;
             }
@@ -2408,6 +3233,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::R32G32B32A32_UINT:
                     return RGB32UI_to_R32G32B32A32_UINT;
+                case FormatID::R32G32B32_UINT:
+                    return RGB32UI_to_R32G32B32_UINT;
                 default:
                     break;
             }
@@ -2460,6 +3287,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::R8G8B8A8_SINT:
                     return RGB8I_to_R8G8B8A8_SINT;
+                case FormatID::R8G8B8_SINT:
+                    return RGB8I_to_R8G8B8_SINT;
                 default:
                     break;
             }
@@ -2471,6 +3300,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::R8G8B8A8_UINT:
                     return RGB8UI_to_R8G8B8A8_UINT;
+                case FormatID::R8G8B8_UINT:
+                    return RGB8UI_to_R8G8B8_UINT;
                 default:
                     break;
             }
@@ -2482,6 +3313,8 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::R8G8B8A8_SNORM:
                     return RGB8_SNORM_to_R8G8B8A8_SNORM;
+                case FormatID::R8G8B8_SNORM:
+                    return RGB8_SNORM_to_R8G8B8_SNORM;
                 default:
                     break;
             }
@@ -2674,6 +3507,9 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             break;
     }
     // clang-format on
+    fprintf(stderr, "Going to fail with internalFormat 0x%04X, 0x%04X\n", internalFormat,
+            Format::Get(angleFormat).glInternalFormat);
+    ASSERT(internalFormat == GL_NONE || angleFormat == angle::FormatID::NONE);
     static LoadFunctionMap emptyLoadFunctionsMap;
     return emptyLoadFunctionsMap;
 
