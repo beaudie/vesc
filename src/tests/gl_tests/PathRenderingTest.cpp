@@ -58,7 +58,7 @@ void ExpectEqualMatrix(const GLfloat *expected, const GLint *actual)
     }
 }
 
-const int kResolution = 300;
+const int kResolution = 128;
 
 class CHROMIUMPathRenderingTest : public ANGLETest
 {
