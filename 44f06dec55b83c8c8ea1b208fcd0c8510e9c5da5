@@ -22,6 +22,30 @@
       "revId": "44f06dec55b83c8c8ea1b208fcd0c8510e9c5da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76f6d1a0_5788c9fe",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2180,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-15T15:33:27Z",
+      "side": 1,
+      "message": "I think this should work. Only update/check the ShaderConstants\u0027 firstVertex if vertexID is used. When doing that, if it actually changed since it was last updated, then dirty the uniform buffers.",
+      "parentUuid": "6067fb83_a58b54b6",
+      "range": {
+        "startLine": 2179,
+        "startChar": 0,
+        "endLine": 2180,
+        "endChar": 66
+      },
+      "revId": "44f06dec55b83c8c8ea1b208fcd0c8510e9c5da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
