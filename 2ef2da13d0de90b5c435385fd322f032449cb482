@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5331175e_5d0b145e",
+        "filename": "src/libANGLE/renderer/gen_load_functions_table.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-15T18:26:21Z",
+      "side": 1,
+      "message": "don\u0027t forget to remove this before landing.",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 134
+      },
+      "revId": "2ef2da13d0de90b5c435385fd322f032449cb482",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
