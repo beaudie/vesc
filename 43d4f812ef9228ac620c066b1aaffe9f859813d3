@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fdb80554_ae8f177a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-03-15T22:28:49Z",
+      "side": 1,
+      "message": "I don\u0027t like calling ensureImageInitializedImpl() directly (skipping ensureImageInitialized()), but this allows the tests to all pass while dereferencing mFormat directly in ImageHelper::stageSubresourceUpdate().\n\nI need to skip ensureImageInitialized() so I can pass along the correct size/format values, since the values pulled from contextVk in ensureImageInitialized() are wrong.   I haven\u0027t tried setting those values in contextVk before calling ensureImageInitialized() since I have no idea how safe/correct that is.\n\nThoughts on a clean way to do this since it seems to be on the right path to what we want (assuming passing tests implies correctness)?",
+      "revId": "43d4f812ef9228ac620c066b1aaffe9f859813d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
