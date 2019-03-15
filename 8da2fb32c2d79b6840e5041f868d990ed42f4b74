@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e86d21e8_17249998",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-15T19:07:15Z",
+      "side": 1,
+      "message": "examples here",
+      "range": {
+        "startLine": 593,
+        "startChar": 0,
+        "endLine": 598,
+        "endChar": 4
+      },
+      "revId": "8da2fb32c2d79b6840e5041f868d990ed42f4b74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8a7696a_f928635f",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-15T19:07:15Z",
+      "side": 1,
+      "message": "nit: you can unindent these. It looks a bit weird but it makes the shaders look correct in the debugger.",
+      "range": {
+        "startLine": 619,
+        "startChar": 0,
+        "endLine": 624,
+        "endChar": 0
+      },
+      "revId": "8da2fb32c2d79b6840e5041f868d990ed42f4b74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6d404c7_fb874956",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-15T19:07:15Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 626,
+        "startChar": 0,
+        "endLine": 631,
+        "endChar": 12
+      },
+      "revId": "8da2fb32c2d79b6840e5041f868d990ed42f4b74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee2061b9_54a38926",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-15T19:07:15Z",
+      "side": 1,
+      "message": "same here too",
+      "range": {
+        "startLine": 658,
+        "startChar": 0,
+        "endLine": 664,
+        "endChar": 0
+      },
+      "revId": "8da2fb32c2d79b6840e5041f868d990ed42f4b74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
