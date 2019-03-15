@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f8eb547_7ac8d392",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-03-15T14:06:20Z",
+      "side": 1,
+      "message": "allocation-\u003eallocating",
+      "revId": "3622463ba7159a6235187a0b2ded08f1c0edad4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c4f2be0_47777705",
+        "filename": "src/common/PoolAlloc.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-03-15T14:06:20Z",
+      "side": 1,
+      "message": "Do we want to change these two decls to also be uint8_t?",
+      "revId": "3622463ba7159a6235187a0b2ded08f1c0edad4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
