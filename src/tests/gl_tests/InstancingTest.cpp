@@ -51,6 +51,8 @@ class InstancingTest : public ANGLETest
         glDeleteBuffers(1, &mInstanceBuffer);
         glDeleteProgram(mProgram[0]);
         glDeleteProgram(mProgram[1]);
+
+        ANGLETest::TearDown();
     }
 
     void SetUp() override
