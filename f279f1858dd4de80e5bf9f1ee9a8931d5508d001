@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98ff9b56_e536cb61",
+        "filename": "gni/angle.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2019-03-15T02:22:44Z",
+      "side": 1,
+      "message": "I believe you\u0027ll need angle_root in more than just this main BUILD.gn file. I suggest doing something like https://cs.chromium.org/chromium/src/third_party/dawn/scripts/dawn_overrides_with_defaults.gni",
+      "revId": "f279f1858dd4de80e5bf9f1ee9a8931d5508d001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
