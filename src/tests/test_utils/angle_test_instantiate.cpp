@@ -15,6 +15,7 @@
 #include "angle_gl.h"
 #include "common/platform.h"
 #include "gpu_info_util/SystemInfo.h"
+#include "test_utils/ANGLETest.h"
 #include "test_utils/angle_test_configs.h"
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
@@ -28,17 +29,6 @@ namespace angle
 {
 namespace
 {
-SystemInfo *GetTestSystemInfo()
-{
-    static SystemInfo *sSystemInfo = nullptr;
-    if (sSystemInfo == nullptr)
-    {
-        sSystemInfo = new SystemInfo;
-        GetSystemInfo(sSystemInfo);
-    }
-    return sSystemInfo;
-}
-
 bool IsANGLEConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
 {
     std::unique_ptr<angle::Library> eglLibrary;
@@ -49,7 +39,8 @@ bool IsANGLEConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
 
     EGLWindow *eglWindow =
         EGLWindow::New(param.majorVersion, param.minorVersion, param.eglParameters);
-    bool result = eglWindow->initializeGL(osWindow, eglLibrary.get());
+    ConfigParameters configParams;
+    bool result = eglWindow->initializeGL(osWindow, eglLibrary.get(), configParams);
     eglWindow->destroyGL();
     EGLWindow::Delete(&eglWindow);
     return result;
@@ -61,7 +52,8 @@ bool IsWGLConfigSupported(const PlatformParameters &param, OSWindow *osWindow)
     std::unique_ptr<angle::Library> openglLibrary(angle::OpenSharedLibrary("opengl32"));
 
     WGLWindow *wglWindow = WGLWindow::New(param.majorVersion, param.minorVersion);
-    bool result          = wglWindow->initializeGL(osWindow, openglLibrary.get());
+    ConfigParameters configParams;
+    bool result = wglWindow->initializeGL(osWindow, openglLibrary.get(), configParams);
     wglWindow->destroyGL();
     WGLWindow::Delete(&wglWindow);
     return result;
@@ -173,13 +165,13 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
                         }
 
                         // Win ES emulation is currently only supported on NVIDIA.
-                        return vendorID == kVendorID_Nvidia;
+                        return IsNVIDIA(vendorID);
                     default:
                         return false;
                 }
             case GLESDriverType::SystemWGL:
                 // AMD does not support the ES compatibility extensions.
-                return vendorID != kVendorID_AMD;
+                return IsAMD(vendorID);
             default:
                 return false;
         }
@@ -355,7 +347,7 @@ bool IsPlatformAvailable(const PlatformParameters &param)
     }
     else
     {
-        const SystemInfo *systemInfo = GetTestSystemInfo();
+        const SystemInfo *systemInfo = ANGLETestEnvironment::GetSystemInfo();
 
         bool result = false;
         if (systemInfo)
