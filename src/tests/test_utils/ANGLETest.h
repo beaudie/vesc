@@ -18,6 +18,7 @@
 #include "common/angleutils.h"
 #include "common/vector_utils.h"
 #include "platform/Platform.h"
+#include "util/EGLWindow.h"
 #include "util/shader_utils.h"
 #include "util/system_utils.h"
 #include "util/util_gl.h"
@@ -261,9 +262,7 @@ class ANGLETestBase
     virtual ~ANGLETestBase();
 
   public:
-    static bool InitTestWindow();
-    static bool DestroyTestWindow();
-    static void SetWindowVisible(bool isVisible);
+    void setWindowVisible(bool isVisible);
     static bool eglDisplayExtensionEnabled(EGLDisplay display, const std::string &extName);
 
     virtual void overrideWorkaroundsD3D(angle::WorkaroundsD3D *workaroundsD3D) {}
@@ -356,8 +355,9 @@ class ANGLETestBase
     void setDebugLayersEnabled(bool enabled);
     void setClientArraysEnabled(bool enabled);
     void setRobustResourceInit(bool enabled);
-    void setContextProgramCacheEnabled(bool enabled);
+    void setContextProgramCacheEnabled(bool enabled, angle::CacheProgramFunc cacheProgramFunc);
     void setContextVirtualization(bool enabled);
+    void forceNewDisplay();
 
     // Some EGL extension tests would like to defer the Context init until the test body.
     void setDeferContextInit(bool enabled);
@@ -378,28 +378,23 @@ class ANGLETestBase
     // Allows a test to be more restrictive about platform warnings.
     void treatPlatformWarningsAsErrors();
 
-    static OSWindow *GetOSWindow() { return mOSWindow; }
+    OSWindow *getOSWindow() { return mCurrentPlatform->osWindow; }
 
     GLuint get2DTexturedQuadProgram();
 
     // Has a float uniform "u_layer" to choose the 3D texture layer.
     GLuint get3DTexturedQuadProgram();
 
-    angle::PlatformMethods mPlatformMethods;
-
     class ScopedIgnorePlatformMessages : angle::NonCopyable
     {
       public:
-        ScopedIgnorePlatformMessages(ANGLETestBase *test);
+        ScopedIgnorePlatformMessages();
         ~ScopedIgnorePlatformMessages();
-
-      private:
-        ANGLETestBase *mTest;
     };
 
   private:
     void checkD3D11SDKLayersMessages();
-    bool hasNvidiaGPU();
+    bool hasNVIDIAGPU() const;
 
     void drawQuad(GLuint program,
                   const std::string &positionAttribName,
@@ -409,8 +404,17 @@ class ANGLETestBase
                   bool useInstancedDrawCalls,
                   GLuint numInstances);
 
-    EGLWindow *mEGLWindow;
-    WGLWindow *mWGLWindow;
+    struct Platform
+    {
+        Platform();
+        ~Platform();
+
+        EGLWindow *eglWindow = nullptr;
+        WGLWindow *wglWindow = nullptr;
+        OSWindow *osWindow   = nullptr;
+        ConfigParameters configParams;
+    };
+
     int mWidth;
     int mHeight;
 
@@ -424,11 +428,11 @@ class ANGLETestBase
     GLuint m2DTexturedQuadProgram;
     GLuint m3DTexturedQuadProgram;
 
-    TestPlatformContext mPlatformContext;
-
     bool mDeferContextInit;
+    bool mForceNewDisplay;
 
-    static OSWindow *mOSWindow;
+    static std::map<angle::PlatformParameters, Platform> gPlatforms;
+    Platform *mCurrentPlatform;
 
     // Workaround for NVIDIA not being able to share a window with OpenGL and Vulkan.
     static Optional<EGLint> mLastRendererType;
@@ -469,14 +473,10 @@ class ANGLETestEnvironment : public testing::Environment
     static angle::Library *GetEGLLibrary();
     static angle::Library *GetWGLLibrary();
 
-    static angle::SystemInfo *GetSystemInfo();
-
   private:
     // For loading entry points.
     static std::unique_ptr<angle::Library> gEGLLibrary;
     static std::unique_ptr<angle::Library> gWGLLibrary;
-
-    static std::unique_ptr<angle::SystemInfo> gSystemInfo;
 };
 
 // This base fixture loads the EGL entry points.
