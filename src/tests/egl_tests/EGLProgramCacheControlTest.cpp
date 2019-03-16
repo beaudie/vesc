@@ -31,25 +31,27 @@ class EGLProgramCacheControlTest : public ANGLETest
     }
 
   protected:
-    EGLProgramCacheControlTest() { setDeferContextInit(true); }
+    EGLProgramCacheControlTest()
+    {
+        forceNewDisplay();
+        setDeferContextInit(true);
+    }
 
     void SetUp() override
     {
-        mPlatformMethods.cacheProgram = &TestCacheProgram;
+        setContextProgramCacheEnabled(true, &TestCacheProgram);
 
         ANGLETest::SetUp();
 
         if (extensionAvailable())
         {
             EGLDisplay display = getEGLWindow()->getDisplay();
-            setContextProgramCacheEnabled(true);
             eglProgramCacheResizeANGLE(display, kEnabledCacheSize, EGL_PROGRAM_CACHE_RESIZE_ANGLE);
+            ASSERT_EGL_SUCCESS();
         }
 
-        getEGLWindow()->initializeContext();
+        ASSERT_TRUE(getEGLWindow()->initializeContext());
     }
-
-    void TearDown() override { ANGLETest::TearDown(); }
 
     bool extensionAvailable()
     {
@@ -212,6 +214,7 @@ TEST_P(EGLProgramCacheControlTest, SaveAndReload)
     EXPECT_EQ(mCachedBinary, binaryBuffer);
 
     // Restart EGL and GL.
+    forceNewDisplay();
     TearDown();
     SetUp();
 
