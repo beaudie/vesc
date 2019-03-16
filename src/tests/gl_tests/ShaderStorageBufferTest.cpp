@@ -65,6 +65,9 @@ class ShaderStorageBufferTest31 : public ANGLETest
         setConfigGreenBits(8);
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
+
+        // TODO: Figure out why this needs a state reset. http://anglebug.com/
+        forceNewDisplay();
     }
 
     void runMatrixTest(const MatrixCase &matrixCase)
