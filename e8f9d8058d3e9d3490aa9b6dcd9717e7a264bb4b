@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f808758_039916b1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-18T15:46:46Z",
+      "side": 1,
+      "message": "I wonder if we could come up with a clean way of making sure `CommandBufferT` is always used. For example, if the bots always build without `ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS`, then code that uses `CommandBuffer` instead of `CommandBufferT` could slip in undetected.",
+      "revId": "e8f9d8058d3e9d3490aa9b6dcd9717e7a264bb4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
