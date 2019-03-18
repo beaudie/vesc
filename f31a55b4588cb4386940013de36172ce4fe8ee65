@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8dd90233_8472c435",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-18T19:59:11Z",
+      "side": 1,
+      "message": "nit: does git cl format reorder these?",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "f31a55b4588cb4386940013de36172ce4fe8ee65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fff9e462_13e68591",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-18T19:59:11Z",
+      "side": 1,
+      "message": "nit: you can say *value \u003d std::string(propertyBuf.begin(), propertyBuf.end());",
+      "range": {
+        "startLine": 123,
+        "startChar": 13,
+        "endLine": 123,
+        "endChar": 52
+      },
+      "revId": "f31a55b4588cb4386940013de36172ce4fe8ee65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f852ffb_40ce36e2",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-18T19:59:11Z",
+      "side": 1,
+      "message": "nit: \u0026\u003d is a binary operator, not a boolean. for style points you should convert these to boolean ops (\u0026\u0026 / ||)",
+      "range": {
+        "startLine": 131,
+        "startChar": 21,
+        "endLine": 131,
+        "endChar": 22
+      },
+      "revId": "f31a55b4588cb4386940013de36172ce4fe8ee65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
