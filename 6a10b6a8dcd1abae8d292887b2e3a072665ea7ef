@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "00052bde_391cd623",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-18T17:44:45Z",
+      "side": 1,
+      "message": "Done on e.g. . Positional arguments are always required so no need for an explicit setting.",
+      "parentUuid": "64b9b0e7_726a0515",
+      "range": {
+        "startLine": 19,
+        "startChar": 50,
+        "endLine": 19,
+        "endChar": 69
+      },
+      "revId": "6a10b6a8dcd1abae8d292887b2e3a072665ea7ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99d5d090_74243821",
         "filename": "scripts/trigger.py",
         "patchSetId": 2
@@ -62,6 +86,24 @@
       "revId": "6a10b6a8dcd1abae8d292887b2e3a072665ea7ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68a56018_94f6ea6a",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-18T17:44:45Z",
+      "side": 1,
+      "message": "I haven\u0027t found that to be necessary. Would rather leave that out as I have no idea what it does.",
+      "parentUuid": "99d5d090_74243821",
+      "revId": "6a10b6a8dcd1abae8d292887b2e3a072665ea7ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +130,30 @@
     },
     {
       "key": {
+        "uuid": "324c19df_68062bb1",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-18T17:44:45Z",
+      "side": 1,
+      "message": "Thanks. Made pool an option.",
+      "parentUuid": "419794c3_e8a65d11",
+      "range": {
+        "startLine": 53,
+        "startChar": 23,
+        "endLine": 53,
+        "endChar": 33
+      },
+      "revId": "6a10b6a8dcd1abae8d292887b2e3a072665ea7ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d62e08f0_da05633a",
         "filename": "scripts/trigger.py",
         "patchSetId": 2
@@ -108,6 +174,30 @@
       "revId": "6a10b6a8dcd1abae8d292887b2e3a072665ea7ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "987e69a5_dff0e782",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-18T17:44:45Z",
+      "side": 1,
+      "message": "Yep, good suggestion. Added.",
+      "parentUuid": "d62e08f0_da05633a",
+      "range": {
+        "startLine": 56,
+        "startChar": 17,
+        "endLine": 56,
+        "endChar": 18
+      },
+      "revId": "6a10b6a8dcd1abae8d292887b2e3a072665ea7ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
