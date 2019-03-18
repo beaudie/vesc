@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85c6fe28_c6c61623",
+        "filename": "src/libANGLE/LoggingAnnotator.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-18T16:05:20Z",
+      "side": 1,
+      "message": "This annotator is used by everything other than D3D9 and D3D11, so Mac, Linux and other OpenGL would be affected, I think.",
+      "range": {
+        "startLine": 17,
+        "startChar": 5,
+        "endLine": 17,
+        "endChar": 21
+      },
+      "revId": "40839404f4d069abc74975289cc96bde684be98b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
