@@ -204,6 +204,17 @@ class RobustResourceInitTest : public ANGLETest
         setConfigStencilBits(8);
 
         setRobustResourceInit(true);
+
+        // Work around a driver crash.
+        forceNewDisplay();
+    }
+
+    void TearDown() override
+    {
+        ANGLETest::TearDown();
+
+        // Work around driver crashes
+        forceNewDisplay();
     }
 
     bool hasGLExtension() { return extensionEnabled("GL_ANGLE_robust_resource_initialization"); }

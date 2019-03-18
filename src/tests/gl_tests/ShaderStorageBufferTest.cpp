@@ -65,6 +65,9 @@ class ShaderStorageBufferTest31 : public ANGLETest
         setConfigGreenBits(8);
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
+
+        // This test seems to have issues with window reuse on NVIDIA.
+        forceNewDisplay();
     }
 
     void runMatrixTest(const MatrixCase &matrixCase)
@@ -145,6 +148,13 @@ class ShaderStorageBufferTest31 : public ANGLETest
         }
 
         EXPECT_GL_NO_ERROR();
+    }
+
+    void TearDown() override
+    {
+        // This test seems to have issues with window reuse on NVIDIA.
+        forceNewDisplay();
+        ANGLETest::TearDown();
     }
 };
 
