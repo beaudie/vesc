@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64b9b0e7_726a0515",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-18T14:44:46Z",
+      "side": 1,
+      "message": "Suggest `(e.g. X)`. It\u0027s unclear from reading the help whether this is a default value or an example.\n\nAlso, please add `required\u003dTrue` so the appropriate message is generated instead of an exception if an arg is missing.",
+      "range": {
+        "startLine": 19,
+        "startChar": 50,
+        "endLine": 19,
+        "endChar": 69
+      },
+      "revId": "6a10b6a8dcd1abae8d292887b2e3a072665ea7ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
