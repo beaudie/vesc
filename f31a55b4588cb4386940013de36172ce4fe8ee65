@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "11b1af1a_e29aa57a",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-18T20:54:06Z",
+      "side": 1,
+      "message": "It didn\u0027t, but I can put them in alphabetical order",
+      "parentUuid": "8dd90233_8472c435",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "f31a55b4588cb4386940013de36172ce4fe8ee65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fff9e462_13e68591",
         "filename": "src/gpu_info_util/SystemInfo_android.cpp",
         "patchSetId": 1
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "c952d16b_fa2d2645",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-18T20:54:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89dc6a30_5ec8880e",
+      "range": {
+        "startLine": 123,
+        "startChar": 13,
+        "endLine": 123,
+        "endChar": 52
+      },
+      "revId": "f31a55b4588cb4386940013de36172ce4fe8ee65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f852ffb_40ce36e2",
         "filename": "src/gpu_info_util/SystemInfo_android.cpp",
         "patchSetId": 1
@@ -92,6 +140,30 @@
       "revId": "f31a55b4588cb4386940013de36172ce4fe8ee65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eef79cfb_a9f6ed4f",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-18T20:54:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f852ffb_40ce36e2",
+      "range": {
+        "startLine": 131,
+        "startChar": 21,
+        "endLine": 131,
+        "endChar": 22
+      },
+      "revId": "f31a55b4588cb4386940013de36172ce4fe8ee65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -135,6 +207,48 @@
     },
     {
       "key": {
+        "uuid": "80e3f5ea_1df9785e",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-18T20:54:06Z",
+      "side": 1,
+      "message": "Ok, that makes sense. I made a bug to add OS-specific info to this struct: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d3276",
+      "parentUuid": "d7267af1_16de48b7",
+      "range": {
+        "startLine": 135,
+        "startChar": 68,
+        "endLine": 135,
+        "endChar": 87
+      },
+      "revId": "f31a55b4588cb4386940013de36172ce4fe8ee65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e39e4047_ae531efe",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-18T20:54:06Z",
+      "side": 1,
+      "message": "I was basing this behavior off the comment for this function is SystemInfo.h:\n// Gathers information about the system without starting a GPU driver and returns them in `info`.\n// Returns true if all info was gathered, false otherwise. Even when false is returned, `info` will\n// be filled with partial information.\n\nSo if we\u0027re going with that behavior, then we can return false and still attempt to use some info that may be partially populated.\nFYI this always returns false on Nexus 5X, because it doesn\u0027t implement vulkan (just below).",
+      "parentUuid": "e36cc186_d8671937",
+      "revId": "f31a55b4588cb4386940013de36172ce4fe8ee65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b67b6a6d_df6eb551",
         "filename": "src/tests/test_utils/angle_test_instantiate.h",
         "patchSetId": 1
@@ -155,6 +269,30 @@
       "revId": "f31a55b4588cb4386940013de36172ce4fe8ee65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bb3fe10_ee0740e4",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-18T20:54:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b67b6a6d_df6eb551",
+      "range": {
+        "startLine": 30,
+        "startChar": 5,
+        "endLine": 30,
+        "endChar": 15
+      },
+      "revId": "f31a55b4588cb4386940013de36172ce4fe8ee65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
