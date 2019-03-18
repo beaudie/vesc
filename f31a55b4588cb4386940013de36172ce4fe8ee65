@@ -109,6 +109,52 @@
       "revId": "f31a55b4588cb4386940013de36172ce4fe8ee65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7267af1_16de48b7",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-18T20:18:42Z",
+      "side": 1,
+      "message": "I don\u0027t see that Chrome populates machineModelVersion on Android, so I\u0027d prefer if we didn\u0027t do it as well. \nFor Chrome/Mac this seems to be the actual version of the hardware, but ro.build.version.release is the OS version, so this is going to be confusing.",
+      "range": {
+        "startLine": 135,
+        "startChar": 68,
+        "endLine": 135,
+        "endChar": 87
+      },
+      "revId": "f31a55b4588cb4386940013de36172ce4fe8ee65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b67b6a6d_df6eb551",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-18T20:18:42Z",
+      "side": 1,
+      "message": "nit: we don\u0027t have Pixel 2 XL (taimen) bots. Only Pixel XL (marlin) and Pixel 2 (walleye).",
+      "range": {
+        "startLine": 30,
+        "startChar": 5,
+        "endLine": 30,
+        "endChar": 15
+      },
+      "revId": "f31a55b4588cb4386940013de36172ce4fe8ee65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
