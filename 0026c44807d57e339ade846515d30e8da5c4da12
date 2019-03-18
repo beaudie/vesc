@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90e3d70f_88d02eda",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-18T18:53:47Z",
+      "side": 1,
+      "message": "this looks like a functionality change. Maybe it should be in the next CL?",
+      "revId": "0026c44807d57e339ade846515d30e8da5c4da12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1496389d_12fb0aac",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 788,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-18T18:53:47Z",
+      "side": 1,
+      "message": "this looks like a functionality change. Maybe it should be in the next CL?",
+      "range": {
+        "startLine": 782,
+        "startChar": 0,
+        "endLine": 788,
+        "endChar": 0
+      },
+      "revId": "0026c44807d57e339ade846515d30e8da5c4da12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

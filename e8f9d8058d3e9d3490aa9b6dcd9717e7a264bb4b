@@ -16,6 +16,47 @@
       "revId": "e8f9d8058d3e9d3490aa9b6dcd9717e7a264bb4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5e0e468_83997602",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-18T18:53:47Z",
+      "side": 1,
+      "message": "We could actually renaming vk::CommandBuffer to vk::priv::CommandBuffer and vk::SecondaryCommandBuffer simiarly. Then make vk::CommandBufferT be the only one that\u0027s exposed in a \u0027normal\u0027 namespace. We could even call it just vk::CommandBuffer and make the refactoring simpler.",
+      "parentUuid": "7f808758_039916b1",
+      "revId": "e8f9d8058d3e9d3490aa9b6dcd9717e7a264bb4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fcc56ec_7cb1dbdf",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-18T18:53:47Z",
+      "side": 1,
+      "message": "nit: can probably use () brackets",
+      "range": {
+        "startLine": 509,
+        "startChar": 20,
+        "endLine": 509,
+        "endChar": 51
+      },
+      "revId": "e8f9d8058d3e9d3490aa9b6dcd9717e7a264bb4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
