@@ -12,13 +12,13 @@ vars = {
   'deqp_revision': '66a49e0a43f7af654ee1de8a3b1bcaf6c0d14aa4',
 
   # Current revision of glslang, the Khronos SPIRV compiler.
-  'glslang_revision': 'f6e7c4d2de0d59724ea07739df70c466d169a2cd',
+  'glslang_revision': '40c16ec0b3ad03fc170f1369a58e7bbe662d82cd',
 
   # Current revision fo the SPIRV-Headers Vulkan support library.
   'spirv_headers_revision': '8bea0a266ac9b718aa0818d9e3a47c0b77c2cb23',
 
   # Current revision of SPIRV-Tools for Vulkan.
-  'spirv_tools_revision': 'fde69dcd80cc1ca548300702adf01eeb25441f3e',
+  'spirv_tools_revision': '2ac348b5c0a58c64305379baca778c2e58873cd6',
 
   # Current revision of Khronos Vulkan-Headers.
   'vulkan_headers_revision': 'c200cb25db0f47364d3318d92c1d8e9dfff2fef1',
