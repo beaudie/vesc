@@ -67,7 +67,7 @@ struct SystemInfo
     // Only available on Android, when added by the feature support utility
     std::string machineManufacturer;
 
-    // Only available on macOS
+    // Only available on macOS and Android
     std::string machineModelName;
     std::string machineModelVersion;
 
