@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "0fb1076c_b3eecf24",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-18T15:34:31Z",
+      "side": 1,
+      "message": "circumvent?",
+      "range": {
+        "startLine": 11,
+        "startChar": 16,
+        "endLine": 11,
+        "endChar": 25
+      },
+      "revId": "6a10b6a8dcd1abae8d292887b2e3a072665ea7ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "64b9b0e7_726a0515",
         "filename": "scripts/trigger.py",
         "patchSetId": 2
@@ -18,6 +41,69 @@
         "startChar": 50,
         "endLine": 19,
         "endChar": 69
+      },
+      "revId": "6a10b6a8dcd1abae8d292887b2e3a072665ea7ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99d5d090_74243821",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-18T15:34:31Z",
+      "side": 1,
+      "message": "This doc\nhttps://www.chromium.org/developers/testing/isolated-testing/for-swes\nsays to do \necho gn \u003e out/Release/mb_type\nonce before running mb.py.",
+      "revId": "6a10b6a8dcd1abae8d292887b2e3a072665ea7ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "419794c3_e8a65d11",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-18T15:34:31Z",
+      "side": 1,
+      "message": "Note some Macs are in Chrome pool.\nAs well as Nexus 5X Marshmallows.",
+      "range": {
+        "startLine": 53,
+        "startChar": 23,
+        "endLine": 53,
+        "endChar": 33
+      },
+      "revId": "6a10b6a8dcd1abae8d292887b2e3a072665ea7ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d62e08f0_da05633a",
+        "filename": "scripts/trigger.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-18T15:34:31Z",
+      "side": 1,
+      "message": "I find \"--\" for passing additional arguments, like --gtest_filter useful.",
+      "range": {
+        "startLine": 56,
+        "startChar": 17,
+        "endLine": 56,
+        "endChar": 18
       },
       "revId": "6a10b6a8dcd1abae8d292887b2e3a072665ea7ef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
