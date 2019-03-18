@@ -16,6 +16,24 @@
       "revId": "43d4f812ef9228ac620c066b1aaffe9f859813d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3297ffc_8c768521",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-18T14:18:41Z",
+      "side": 1,
+      "message": "This is a partial solution at best. There are other places that call `setImageHelper`, and they would be missing this.\n\nI also vaguely recall having issues with the frontend setting the state _after_ making calls to the implementation, which means functions like `getLevelCount()` would not yet be correct (but for example the `levels` arg to `setStorage` should be used instead).\n\n---\n\nIt looks like with such a change, you can ensure that not only the image helper is set, but it\u0027s also `init()`ialized. If that works, it would be great. In that case, my suggestion would be to split `ensureImageInitializedImpl` into one that `init()`ializes the image, and another the flushes the staged updates.  Call the former in `setImageHelper` (with an appropriate name change) (and updateImageHelper) and the latter in `ensureImageInitialized`.\n\nWhat I\u0027m trying to do here is to create an invariant we can reason about. If you succeed in doing the above (and if it\u0027s at all possible), we can always say that \"if image helper is not nullptr, it\u0027s `valid()`\".\n\n---\n\nWhat makes me hesitant is that if the invariant above were possible, we wouldn\u0027t need to stage changes. I haven\u0027t yet put my finger on it. It\u0027s possible that `getLevelCount()` is (one of) the reason(s) you can\u0027t perform this call here.",
+      "parentUuid": "fdb80554_ae8f177a",
+      "revId": "43d4f812ef9228ac620c066b1aaffe9f859813d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
