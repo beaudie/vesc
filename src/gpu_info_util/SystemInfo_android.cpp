@@ -133,6 +133,8 @@ bool GetSystemInfo(SystemInfo *info)
         isFullyPopulated;
     isFullyPopulated =
         GetAndroidSystemProperty("ro.product.model", &info->machineModelName) && isFullyPopulated;
+    printf("machineManufacturer: %s\n", info->machineManufacturer);
+    printf("machineModelName: %s\n", info->machineModelName);
 
     // This implementation builds on top of the Vulkan API, but cannot assume the existence of the
     // Vulkan library.  ANGLE can be installed on versions of Android as old as Ice Cream Sandwich.
