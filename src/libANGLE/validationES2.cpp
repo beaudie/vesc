@@ -1129,6 +1129,8 @@ bool ValidateES2TexImageParameters(Context *context,
                                    GLsizei imageSize,
                                    const void *pixels)
 {
+    bool nonEqualFormatsAllowed = false;
+
     if (!ValidTexture2DDestinationTarget(context, target))
     {
         context->validationError(GL_INVALID_ENUM, kInvalidTextureTarget);
@@ -1152,21 +1154,6 @@ bool ValidateES2TexImageParameters(Context *context,
         std::numeric_limits<GLsizei>::max() - yoffset < height)
     {
         context->validationError(GL_INVALID_VALUE, kResourceMaxTextureSize);
-        return false;
-    }
-
-    // From GL_CHROMIUM_color_buffer_float_rgb[a]:
-    // GL_RGB[A] / GL_RGB[A]32F becomes an allowable format / internalformat parameter pair for
-    // TexImage2D. The restriction in section 3.7.1 of the OpenGL ES 2.0 spec that the
-    // internalformat parameter and format parameter of TexImage2D must match is lifted for this
-    // case.
-    bool nonEqualFormatsAllowed =
-        (internalformat == GL_RGB32F && context->getExtensions().colorBufferFloatRGB) ||
-        (internalformat == GL_RGBA32F && context->getExtensions().colorBufferFloatRGBA);
-
-    if (!isSubImage && !isCompressed && internalformat != format && !nonEqualFormatsAllowed)
-    {
-        context->validationError(GL_INVALID_OPERATION, kInvalidFormatCombination);
         return false;
     }
 
@@ -1223,48 +1210,6 @@ bool ValidateES2TexImageParameters(Context *context,
     {
         context->validationError(GL_INVALID_OPERATION, kBufferNotBound);
         return false;
-    }
-
-    if (isSubImage)
-    {
-        const InternalFormat &textureInternalFormat = *texture->getFormat(target, level).info;
-        if (textureInternalFormat.internalFormat == GL_NONE)
-        {
-            context->validationError(GL_INVALID_OPERATION, kInvalidTextureLevel);
-            return false;
-        }
-
-        if (format != GL_NONE)
-        {
-            if (GetInternalFormatInfo(format, type).sizedInternalFormat !=
-                textureInternalFormat.sizedInternalFormat)
-            {
-                context->validationError(GL_INVALID_OPERATION, kTypeMismatch);
-                return false;
-            }
-        }
-
-        if (static_cast<size_t>(xoffset + width) > texture->getWidth(target, level) ||
-            static_cast<size_t>(yoffset + height) > texture->getHeight(target, level))
-        {
-            context->validationError(GL_INVALID_VALUE, kOffsetOverflow);
-            return false;
-        }
-
-        if (width > 0 && height > 0 && pixels == nullptr &&
-            context->getState().getTargetBuffer(BufferBinding::PixelUnpack) == nullptr)
-        {
-            context->validationError(GL_INVALID_VALUE, kPixelDataNull);
-            return false;
-        }
-    }
-    else
-    {
-        if (texture->getImmutableFormat())
-        {
-            context->validationError(GL_INVALID_OPERATION, kTextureIsImmutable);
-            return false;
-        }
     }
 
     // Verify zero border
@@ -1589,6 +1534,9 @@ bool ValidateES2TexImageParameters(Context *context,
                         context->validationError(GL_INVALID_ENUM, kInvalidFormat);
                         return false;
                     }
+
+                    nonEqualFormatsAllowed = true;
+
                     if (type != GL_FLOAT)
                     {
                         context->validationError(GL_INVALID_OPERATION, kMismatchedTypeAndFormat);
@@ -1607,6 +1555,9 @@ bool ValidateES2TexImageParameters(Context *context,
                         context->validationError(GL_INVALID_ENUM, kInvalidFormat);
                         return false;
                     }
+
+                    nonEqualFormatsAllowed = true;
+
                     if (type != GL_FLOAT)
                     {
                         context->validationError(GL_INVALID_OPERATION, kMismatchedTypeAndFormat);
@@ -1619,8 +1570,55 @@ bool ValidateES2TexImageParameters(Context *context,
                     }
                     break;
 
-                default:
+                case GL_ALPHA:
                     break;
+
+                case GL_BGRA_EXT:
+                    if (!context->getExtensions().textureFormatBGRA8888)
+                    {
+                        context->validationError(GL_INVALID_ENUM, kInvalidFormat);
+                        return false;
+                    }
+                    break;
+
+                case GL_DEPTH_COMPONENT:
+                case GL_DEPTH_STENCIL:
+                    if (!context->getExtensions().depthTextures)
+                    {
+                        context->validationError(GL_INVALID_ENUM, kInvalidFormat);
+                        return false;
+                    }
+                    break;
+
+                case GL_LUMINANCE:
+                case GL_LUMINANCE_ALPHA:
+                    break;
+
+                case GL_RED:
+                case GL_RG:
+                    if (!context->getExtensions().textureRG)
+                    {
+                        context->validationError(GL_INVALID_ENUM, kInvalidFormat);
+                        return false;
+                    }
+                    break;
+
+                case GL_RGB:
+                case GL_RGBA:
+                    break;
+
+                case GL_SRGB_EXT:
+                case GL_SRGB_ALPHA_EXT:
+                    if (!context->getExtensions().sRGB)
+                    {
+                        context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
+                        return false;
+                    }
+                    break;
+
+                default:
+                    context->validationError(GL_INVALID_VALUE, kInvalidInternalFormat);
+                    return false;
             }
         }
 
@@ -1642,14 +1640,62 @@ bool ValidateES2TexImageParameters(Context *context,
         }
     }
 
-    GLenum sizeCheckFormat = isSubImage ? format : internalformat;
-    if (!ValidImageDataSize(context, texType, width, height, 1, sizeCheckFormat, type, pixels,
-                            imageSize))
+    if (isSubImage)
     {
+        const InternalFormat &textureInternalFormat = *texture->getFormat(target, level).info;
+        if (textureInternalFormat.internalFormat == GL_NONE)
+        {
+            context->validationError(GL_INVALID_OPERATION, kInvalidTextureLevel);
+            return false;
+        }
+
+        if (format != GL_NONE)
+        {
+            if (GetInternalFormatInfo(format, type).sizedInternalFormat !=
+                textureInternalFormat.sizedInternalFormat)
+            {
+                context->validationError(GL_INVALID_OPERATION, kTypeMismatch);
+                return false;
+            }
+        }
+
+        if (static_cast<size_t>(xoffset + width) > texture->getWidth(target, level) ||
+            static_cast<size_t>(yoffset + height) > texture->getHeight(target, level))
+        {
+            context->validationError(GL_INVALID_VALUE, kOffsetOverflow);
+            return false;
+        }
+
+        if (width > 0 && height > 0 && pixels == nullptr &&
+            context->getState().getTargetBuffer(BufferBinding::PixelUnpack) == nullptr)
+        {
+            context->validationError(GL_INVALID_VALUE, kPixelDataNull);
+            return false;
+        }
+    }
+    else
+    {
+        if (texture->getImmutableFormat())
+        {
+            context->validationError(GL_INVALID_OPERATION, kTextureIsImmutable);
+            return false;
+        }
+    }
+
+    // From GL_CHROMIUM_color_buffer_float_rgb[a]:
+    // GL_RGB[A] / GL_RGB[A]32F becomes an allowable format / internalformat parameter pair for
+    // TexImage2D. The restriction in section 3.7.1 of the OpenGL ES 2.0 spec that the
+    // internalformat parameter and format parameter of TexImage2D must match is lifted for this
+    // case.
+    if (!isSubImage && !isCompressed && internalformat != format && !nonEqualFormatsAllowed)
+    {
+        context->validationError(GL_INVALID_OPERATION, kInvalidFormatCombination);
         return false;
     }
 
-    return true;
+    GLenum sizeCheckFormat = isSubImage ? format : internalformat;
+    return ValidImageDataSize(context, texType, width, height, 1, sizeCheckFormat, type, pixels,
+                              imageSize);
 }
 
 bool ValidateES2TexStorageParameters(Context *context,
