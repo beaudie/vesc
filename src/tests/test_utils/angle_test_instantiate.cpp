@@ -150,6 +150,16 @@ bool IsNexus5X()
     return IsAndroidDevice("Nexus 5X");
 }
 
+bool IsNexus6P()
+{
+    return IsAndroidDevice("Nexus 6P");
+}
+
+bool IsNexus9()
+{
+    return IsAndroidDevice("Nexus 9");
+}
+
 bool IsPixelXL()
 {
     return IsAndroidDevice("Pixel XL");
@@ -158,6 +168,11 @@ bool IsPixelXL()
 bool IsPixel2()
 {
     return IsAndroidDevice("Pixel 2");
+}
+
+bool IsNVIDIAShield()
+{
+    return IsAndroidDevice("SHIELD Android TV");
 }
 
 bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters &param)
@@ -286,7 +301,10 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
         // exclude the problematic devices.
         if (param.eglParameters.majorVersion == 3 && param.eglParameters.minorVersion == 2)
         {
-            return false;
+            if (IsNexus5X() || IsNexus6P())
+            {
+                return false;
+            }
         }
 
         switch (param.getRenderer())
