@@ -45,6 +45,46 @@
       "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ff1b43d_2efcccd0",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-03-19T20:58:41Z",
+      "side": 1,
+      "message": "Do we care about the RGB case also, so we can see how much it hurts to convert RGB-\u003eRGBA?   Or is that considered bad enough practice that we don\u0027t care how it performs?",
+      "range": {
+        "startLine": 157,
+        "startChar": 45,
+        "endLine": 157,
+        "endChar": 52
+      },
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52936c5d_5f7c97a8",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-03-19T20:58:41Z",
+      "side": 1,
+      "message": "Where are the vertices defined, or does it not matter?",
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
