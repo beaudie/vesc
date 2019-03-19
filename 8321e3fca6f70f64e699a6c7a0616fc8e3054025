@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f3e5ffff_93aec7a0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-19T17:00:16Z",
+      "side": 1,
+      "message": "instead of passing the texture state, you can pass the format",
+      "range": {
+        "startLine": 653,
+        "startChar": 41,
+        "endLine": 654,
+        "endChar": 69
+      },
+      "revId": "8321e3fca6f70f64e699a6c7a0616fc8e3054025",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
