@@ -533,8 +533,9 @@ TEST_P(MultiviewDrawValidationTest, IndirectDraw)
         "#version 300 es\n"
         "#extension GL_OVR_multiview : require\n"
         "precision mediump float;\n"
+        "out vec4 color;\n"
         "void main()\n"
-        "{}\n";
+        "{color = vec4(1);}\n";
 
     GLVertexArray vao;
     GLBuffer vertexBuffer;
@@ -616,8 +617,9 @@ TEST_P(MultiviewDrawValidationTest, NumViewsMismatch)
         "#version 300 es\n"
         "#extension GL_OVR_multiview : require\n"
         "precision mediump float;\n"
+        "out vec4 color;\n"
         "void main()\n"
-        "{}\n";
+        "{color = vec4(1);}\n";
     ANGLE_GL_PROGRAM(program, kVS, kFS);
     glUseProgram(program);
 
@@ -759,6 +761,9 @@ void main()
     GLTexture tex2D;
     initOnePixelColorTexture2D(tex2D);
 
+    GLenum bufs[] = {GL_NONE};
+    glDrawBuffers(1, bufs);
+
     // Check that drawArrays generates an error when there is an active transform feedback object
     // and the number of views in the draw framebuffer is greater than 1.
     {
@@ -851,6 +856,9 @@ TEST_P(MultiviewDrawValidationTest, ActiveTimeElapsedQuery)
 
     GLTexture tex2D;
     initOnePixelColorTexture2D(tex2D);
+
+    GLenum bufs[] = {GL_NONE};
+    glDrawBuffers(1, bufs);
 
     // Check first case.
     {
