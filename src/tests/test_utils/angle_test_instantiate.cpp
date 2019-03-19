@@ -150,6 +150,11 @@ bool IsNexus5X()
     return IsAndroidDevice("Nexus 5X");
 }
 
+bool IsNexus6P()
+{
+    return IsAndroidDevice("Nexus 6P");
+}
+
 bool IsPixelXL()
 {
     return IsAndroidDevice("Pixel XL");
@@ -158,6 +163,11 @@ bool IsPixelXL()
 bool IsPixel2()
 {
     return IsAndroidDevice("Pixel 2");
+}
+
+bool IsNVIDIAShield()
+{
+    return IsAndroidDevice("SHIELD Android TV");
 }
 
 bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters &param)
@@ -282,11 +292,13 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
             return false;
         }
 
-        // Some Android devices don't support backing 3.2 contexts. We should refine this to only
-        // exclude the problematic devices.
+        // Nexus Android devices don't support backing 3.2 contexts
         if (param.eglParameters.majorVersion == 3 && param.eglParameters.minorVersion == 2)
         {
-            return false;
+            if (IsNexus5X() || IsNexus6P())
+            {
+                return false;
+            }
         }
 
         switch (param.getRenderer())

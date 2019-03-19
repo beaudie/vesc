@@ -32,6 +32,7 @@ class AtomicCounterBufferTest : public ANGLETest
 // Test GL_ATOMIC_COUNTER_BUFFER is not supported with version lower than ES31.
 TEST_P(AtomicCounterBufferTest, AtomicCounterBufferBindings)
 {
+    printf("renderer: %s\n", glGetString(GL_RENDERER));
     ASSERT_EQ(3, getClientMajorVersion());
     GLBuffer atomicCounterBuffer;
     glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, atomicCounterBuffer.get());
