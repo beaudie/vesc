@@ -16,6 +16,24 @@
       "revId": "6887169a96a685af0cd041d9165ad3cca6b54ff2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe6b52b1_b42e4d3b",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-19T14:38:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f9cc759_9d5438d1",
+      "revId": "6887169a96a685af0cd041d9165ad3cca6b54ff2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
