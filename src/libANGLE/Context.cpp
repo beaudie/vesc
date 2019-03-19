@@ -3305,6 +3305,8 @@ void Context::updateCaps()
     mState.mCaps.compressedTextureFormats.clear();
     mState.mTextureCaps.clear();
 
+    mState.mExtensions.setTextureExtensionSupport(mImplementation->getNativeTextureCaps());
+
     for (GLenum sizedInternalFormat : GetAllSizedInternalFormats())
     {
         TextureCaps formatCaps = mImplementation->getNativeTextureCaps().get(sizedInternalFormat);

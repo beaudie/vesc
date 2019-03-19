@@ -821,6 +821,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_OES_texture_float"] = enableableExtension(&Extensions::textureFloat);
         map["GL_OES_texture_float_linear"] = enableableExtension(&Extensions::textureFloatLinear);
         map["GL_EXT_texture_rg"] = enableableExtension(&Extensions::textureRG);
+        map["GL_EXT_texture_sRGB"] = enableableExtension(&Extensions::sRGB);
         map["GL_EXT_texture_compression_dxt1"] = enableableExtension(&Extensions::textureCompressionDXT1);
         map["GL_ANGLE_texture_compression_dxt3"] = enableableExtension(&Extensions::textureCompressionDXT3);
         map["GL_ANGLE_texture_compression_dxt5"] = enableableExtension(&Extensions::textureCompressionDXT5);
