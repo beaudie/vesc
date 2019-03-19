@@ -46,6 +46,30 @@
       "revId": "8321e3fca6f70f64e699a6c7a0616fc8e3054025",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f783d059_62612f78",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-19T17:27:07Z",
+      "side": 1,
+      "message": "I\u0027d say just pass a const vk::Format \u0026.",
+      "parentUuid": "88958b23_35ff3511",
+      "range": {
+        "startLine": 653,
+        "startChar": 41,
+        "endLine": 654,
+        "endChar": 69
+      },
+      "revId": "8321e3fca6f70f64e699a6c7a0616fc8e3054025",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
