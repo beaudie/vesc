@@ -374,6 +374,7 @@ class ProgramState final : angle::NonCopyable
   private:
     friend class MemoryProgramCache;
     friend class Program;
+    friend class ProgramStateVariables;
 
     void updateTransformFeedbackStrides();
     void updateActiveSamplers();
@@ -470,6 +471,116 @@ class ProgramState final : angle::NonCopyable
     ActiveTextureArray<SamplerFormat> mActiveSamplerFormats;
 
     // Cached mask of active images.
+    ActiveTextureMask mActiveImagesMask;
+};
+
+class ProgramStateVariables final
+{
+  public:
+    ProgramStateVariables(const ProgramState &state)
+        : mComputeShaderLocalSize(state.mComputeShaderLocalSize),
+          mLinkedTransformFeedbackVaryings(state.mLinkedTransformFeedbackVaryings),
+          mActiveUniformBlockBindings(state.mActiveUniformBlockBindings),
+
+          mAttributes(state.mAttributes),
+          mActiveAttribLocationsMask(state.mActiveAttribLocationsMask),
+          mMaxActiveAttribLocation(state.mMaxActiveAttribLocation),
+          mAttributesTypeMask(state.mAttributesTypeMask),
+          mAttributesMask(state.mAttributesMask),
+
+          mUniforms(state.mUniforms),
+          mUniformLocations(state.mUniformLocations),
+          mUniformBlocks(state.mUniformBlocks),
+
+          mAtomicCounterBuffers(state.mAtomicCounterBuffers),
+
+          mSamplerBindings(state.mSamplerBindings),
+          mImageBindings(state.mImageBindings),
+
+          mOutputVariables(state.mOutputVariables),
+          mOutputLocations(state.mOutputLocations),
+          mActiveOutputVariables(state.mActiveOutputVariables),
+          mOutputVariableTypes(state.mOutputVariableTypes),
+          mDrawBufferTypeMask(state.mDrawBufferTypeMask),
+
+          mNumViews(state.mNumViews),
+          mGeometryShaderInputPrimitiveType(state.mGeometryShaderInputPrimitiveType),
+          mGeometryShaderOutputPrimitiveType(state.mGeometryShaderOutputPrimitiveType),
+          mGeometryShaderInvocations(state.mGeometryShaderInvocations),
+          mGeometryShaderMaxVertices(state.mGeometryShaderMaxVertices),
+          mDrawIDLocation(state.mDrawIDLocation),
+          mActiveImagesMask(state.mActiveImagesMask)
+    {}
+
+    void restore(ProgramState &state) const
+    {
+        state.mAttributes                        = mAttributes;
+        state.mAttributesTypeMask                = mAttributesTypeMask;
+        state.mAttributesMask                    = mAttributesMask;
+        state.mActiveAttribLocationsMask         = mActiveAttribLocationsMask;
+        state.mMaxActiveAttribLocation           = mMaxActiveAttribLocation;
+        state.mLinkedTransformFeedbackVaryings   = mLinkedTransformFeedbackVaryings;
+        state.mUniforms                          = mUniforms;
+        state.mUniformLocations                  = mUniformLocations;
+        state.mUniformBlocks                     = mUniformBlocks;
+        state.mActiveUniformBlockBindings        = mActiveUniformBlockBindings;
+        state.mAtomicCounterBuffers              = mAtomicCounterBuffers;
+        state.mOutputVariables                   = mOutputVariables;
+        state.mOutputLocations                   = mOutputLocations;
+        state.mOutputVariableTypes               = mOutputVariableTypes;
+        state.mDrawBufferTypeMask                = mDrawBufferTypeMask;
+        state.mActiveOutputVariables             = mActiveOutputVariables;
+        state.mComputeShaderLocalSize            = mComputeShaderLocalSize;
+        state.mSamplerBindings                   = mSamplerBindings;
+        state.mImageBindings                     = mImageBindings;
+        state.mActiveImagesMask                  = mActiveImagesMask;
+        state.mNumViews                          = mNumViews;
+        state.mGeometryShaderInputPrimitiveType  = mGeometryShaderInputPrimitiveType;
+        state.mGeometryShaderOutputPrimitiveType = mGeometryShaderOutputPrimitiveType;
+        state.mGeometryShaderInvocations         = mGeometryShaderInvocations;
+        state.mGeometryShaderMaxVertices         = mGeometryShaderMaxVertices;
+        state.mDrawIDLocation                    = mDrawIDLocation;
+    }
+
+  private:
+    sh::WorkGroupSize mComputeShaderLocalSize;
+    std::vector<TransformFeedbackVarying> mLinkedTransformFeedbackVaryings;
+    UniformBlockBindingMask mActiveUniformBlockBindings;
+
+    std::vector<sh::Attribute> mAttributes;
+    angle::BitSet<MAX_VERTEX_ATTRIBS> mActiveAttribLocationsMask;
+    unsigned int mMaxActiveAttribLocation;
+    ComponentTypeMask mAttributesTypeMask;
+    AttributesMask mAttributesMask;
+
+    std::vector<LinkedUniform> mUniforms;
+
+    std::vector<VariableLocation> mUniformLocations;
+    std::vector<InterfaceBlock> mUniformBlocks;
+
+    std::vector<AtomicCounterBuffer> mAtomicCounterBuffers;
+
+    std::vector<SamplerBinding> mSamplerBindings;
+
+    std::vector<ImageBinding> mImageBindings;
+
+    std::vector<sh::OutputVariable> mOutputVariables;
+    std::vector<VariableLocation> mOutputLocations;
+
+    DrawBufferMask mActiveOutputVariables;
+
+    std::vector<GLenum> mOutputVariableTypes;
+    ComponentTypeMask mDrawBufferTypeMask;
+
+    int mNumViews;
+
+    PrimitiveMode mGeometryShaderInputPrimitiveType;
+    PrimitiveMode mGeometryShaderOutputPrimitiveType;
+    int mGeometryShaderInvocations;
+    int mGeometryShaderMaxVertices;
+
+    int mDrawIDLocation;
+
     ActiveTextureMask mActiveImagesMask;
 };
 

@@ -1221,12 +1221,15 @@ angle::Result Program::link(const Context *context)
     auto *platform   = ANGLEPlatformCurrent();
     double startTime = platform->currentTime(platform);
 
+    ProgramStateVariables programStateVariables(mState);
+
     unlink();
     mInfoLog.reset();
 
     // Validate we have properly attached shaders before checking the cache.
     if (!linkValidateShaders(mInfoLog))
     {
+        programStateVariables.restore(mState);
         return angle::Result::Continue;
     }
 
