@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "4e8a91a6_1ecf6593",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-19T21:02:42Z",
+      "side": 1,
+      "message": "could you consider merging the TexSubImage benchmark into this one? They both have some overlap. And they\u0027re both testing texture upload performance. we don\u0027t monitor TexSubImage so it\u0027s fine to rename if you want. Or you could keep the prior names.",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 20
+      },
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b8342fc5_5001ac37",
         "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
         "patchSetId": 2
