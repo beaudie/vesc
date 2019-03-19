@@ -79,6 +79,7 @@ bool IsNativeConfigSupported(const PlatformParameters &param, OSWindow *osWindow
 
 bool IsAndroid()
 {
+    return false;
 #if defined(ANGLE_PLATFORM_ANDROID)
     return true;
 #else
@@ -274,7 +275,7 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
         }
     }
 
-    if (IsAndroid())
+    // if (IsAndroid())
     {
         // Currently we support the GLES and Vulkan back-ends on Linux.
         if (param.driver != GLESDriverType::AngleEGL)
@@ -286,7 +287,7 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
         // exclude the problematic devices.
         if (param.eglParameters.majorVersion == 3 && param.eglParameters.minorVersion == 2)
         {
-            return false;
+            return (!IsNexus5X());
         }
 
         switch (param.getRenderer())
