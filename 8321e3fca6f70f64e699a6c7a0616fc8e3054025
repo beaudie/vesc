@@ -22,6 +22,30 @@
       "revId": "8321e3fca6f70f64e699a6c7a0616fc8e3054025",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88958b23_35ff3511",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-03-19T17:11:17Z",
+      "side": 1,
+      "message": "Ha, good point.   That would still require a gl::Format declaration in vk_helpers.h, since there\u0027s a rx::vk::Format also.   Forward declarations feel bad to me, but maybe it\u0027s not really a big deal.\n\nnamespace gl\n{\nclass ImageIndex;\nclass Format:\n}  // namespace gl\n\n\nThe other option is to take your suggestion all the way and just pass the sizedInternalFormat value itself to stageSubresourceUpdate():\n\n    angle::Result stageSubresourceUpdate(ContextVk *contextVk,\n                                         const gl::ImageIndex \u0026index,\n                                         const gl::Extents \u0026extents,\n                                         const gl::Offset \u0026offset,\n                                         const gl::InternalFormat \u0026formatInfo,\n                                         const gl::PixelUnpackState \u0026unpack,\n                                         GLenum type,\n                                         const uint8_t *pixels,\n                                         const GLenum sizedInternalFormat);\n\nand then we can just use it directly:\n\n    RendererVk *renderer \u003d contextVk-\u003egetRenderer();\n    const vk::Format \u0026vkFormat \u003d renderer-\u003egetFormat(sizedInternalFormat);\n    const angle::Format \u0026storageFormat \u003d vkFormat.textureFormat();\n\nI\u0027m not sure if there\u0027s any ambiguity there as to what \u0027sizedInternalFormat\u0027 is referring to, since it\u0027s now just a plain GLenum.\n\nWhich do you prefer?",
+      "parentUuid": "f3e5ffff_93aec7a0",
+      "range": {
+        "startLine": 653,
+        "startChar": 41,
+        "endLine": 654,
+        "endChar": 69
+      },
+      "revId": "8321e3fca6f70f64e699a6c7a0616fc8e3054025",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
