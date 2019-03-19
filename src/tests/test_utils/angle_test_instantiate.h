@@ -105,6 +105,7 @@ bool IsConfigWhitelisted(const SystemInfo &systemInfo, const PlatformParameters 
 // Determines if a config is supported by trying to initialize it. Does not require SystemInfo.
 bool IsConfigSupported(const PlatformParameters &param);
 
+SystemInfo *GetTestSystemInfo();
 }  // namespace angle
 
 #endif  // ANGLE_TEST_INSTANTIATE_H_
