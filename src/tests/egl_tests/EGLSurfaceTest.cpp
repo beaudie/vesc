@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "common/platform.h"
+#include "gpu_info_util/SystemInfo.h"
 #include "test_utils/ANGLETest.h"
 #include "util/EGLWindow.h"
 #include "util/OSWindow.h"
@@ -351,6 +352,12 @@ TEST_P(EGLSurfaceTest, ResizeWindow)
 // Test that swap interval works.
 TEST_P(EGLSurfaceTest, SwapInterval)
 {
+    SystemInfo info;
+    if (GetSystemInfo(&info))
+    {
+        ANGLE_SKIP_TEST_IF(IsAndroid());
+    }
+
     // On OSX, maxInterval >= 1 is advertised, but is not implemented.  http://anglebug.com/3140
     ANGLE_SKIP_TEST_IF(IsOSX());
 
@@ -399,7 +406,7 @@ TEST_P(EGLSurfaceTest, SwapInterval)
 
                 // Second eglSwapBuffers causes an EGL_BAD_SURFACE on Nvidia shield tv.
                 // http://anglebug.com/3144.
-                ANGLE_SKIP_TEST_IF(IsAndroid());
+                ANGLE_SKIP_TEST_IF(IsNVIDIAShield());
             }
             timer->stop();
             ASSERT_EGL_SUCCESS();
