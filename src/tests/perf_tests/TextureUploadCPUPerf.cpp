@@ -1,10 +1,10 @@
 //
-// Copyright (c) 2014 The ANGLE Project Authors. All rights reserved.
+// Copyright 2014 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// TexSubImageBenchmark:
-//   Performace test for ANGLE texture updates.
+// TextureUploadCPUBenchmark:
+//   CPU performance test for uploading texture data.
 //
 
 #include <sstream>
@@ -18,9 +18,9 @@ namespace
 {
 constexpr unsigned int kIterationsPerStep = 9;
 
-struct TexSubImageParams final : public RenderTestParams
+struct TextureUploadCPUParams final : public RenderTestParams
 {
-    TexSubImageParams()
+    TextureUploadCPUParams()
     {
         iterationsPerStep = kIterationsPerStep;
 
@@ -45,17 +45,17 @@ struct TexSubImageParams final : public RenderTestParams
     int subImageHeight;
 };
 
-std::ostream &operator<<(std::ostream &os, const TexSubImageParams &params)
+std::ostream &operator<<(std::ostream &os, const TextureUploadCPUParams &params)
 {
     os << params.suffix().substr(1);
     return os;
 }
 
-class TexSubImageBenchmark : public ANGLERenderTest,
-                             public ::testing::WithParamInterface<TexSubImageParams>
+class TextureUploadCPUBenchmark : public ANGLERenderTest,
+                                  public ::testing::WithParamInterface<TextureUploadCPUParams>
 {
   public:
-    TexSubImageBenchmark();
+    TextureUploadCPUBenchmark();
 
     void initializeBenchmark() override;
     void destroyBenchmark() override;
@@ -84,14 +84,14 @@ class TexSubImageBenchmark : public ANGLERenderTest,
     GLubyte *mPixels;
 };
 
-std::string TexSubImageParams::suffix() const
+std::string TextureUploadCPUParams::suffix() const
 {
     // TODO(jmadill)
     return RenderTestParams::suffix();
 }
 
-TexSubImageBenchmark::TexSubImageBenchmark()
-    : ANGLERenderTest("TexSubImage", GetParam()),
+TextureUploadCPUBenchmark::TextureUploadCPUBenchmark()
+    : ANGLERenderTest("TextureUploadCPU", GetParam()),
       mProgram(0),
       mPositionLoc(-1),
       mTexCoordLoc(-1),
@@ -104,7 +104,7 @@ TexSubImageBenchmark::TexSubImageBenchmark()
     addExtensionPrerequisite("GL_EXT_texture_storage");
 }
 
-GLuint TexSubImageBenchmark::createTexture()
+GLuint TextureUploadCPUBenchmark::createTexture()
 {
     const auto &params = GetParam();
 
@@ -127,7 +127,7 @@ GLuint TexSubImageBenchmark::createTexture()
     return texture;
 }
 
-void TexSubImageBenchmark::initializeBenchmark()
+void TextureUploadCPUBenchmark::initializeBenchmark()
 {
     const auto &params = GetParam();
 
@@ -202,7 +202,7 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
-void TexSubImageBenchmark::destroyBenchmark()
+void TextureUploadCPUBenchmark::destroyBenchmark()
 {
     glDeleteProgram(mProgram);
     glDeleteBuffers(1, &mVertexBuffer);
@@ -211,7 +211,7 @@ void TexSubImageBenchmark::destroyBenchmark()
     delete[] mPixels;
 }
 
-void TexSubImageBenchmark::drawBenchmark()
+void TextureUploadCPUBenchmark::drawBenchmark()
 {
     // Set the viewport
     glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
@@ -258,43 +258,43 @@ void TexSubImageBenchmark::drawBenchmark()
     ASSERT_GL_NO_ERROR();
 }
 
-TexSubImageParams D3D11Params()
+TextureUploadCPUParams TextureUploadCPUD3D11Params()
 {
-    TexSubImageParams params;
+    TextureUploadCPUParams params;
     params.eglParameters = egl_platform::D3D11();
     return params;
 }
 
-TexSubImageParams D3D9Params()
+TextureUploadCPUParams TextureUploadCPUD3D9Params()
 {
-    TexSubImageParams params;
+    TextureUploadCPUParams params;
     params.eglParameters = egl_platform::D3D9();
     return params;
 }
 
-TexSubImageParams OpenGLOrGLESParams()
+TextureUploadCPUParams TextureUploadCPUOpenGLOrGLESParams()
 {
-    TexSubImageParams params;
+    TextureUploadCPUParams params;
     params.eglParameters = egl_platform::OPENGL_OR_GLES(false);
     return params;
 }
 
-TexSubImageParams VulkanParams()
+TextureUploadCPUParams TextureUploadCPUVulkanParams()
 {
-    TexSubImageParams params;
+    TextureUploadCPUParams params;
     params.eglParameters = egl_platform::VULKAN();
     return params;
 }
 
 }  // namespace
 
-TEST_P(TexSubImageBenchmark, Run)
+TEST_P(TextureUploadCPUBenchmark, Run)
 {
     run();
 }
 
-ANGLE_INSTANTIATE_TEST(TexSubImageBenchmark,
-                       D3D11Params(),
-                       D3D9Params(),
-                       OpenGLOrGLESParams(),
-                       VulkanParams());
+ANGLE_INSTANTIATE_TEST(TextureUploadCPUBenchmark,
+                       TextureUploadCPUD3D11Params(),
+                       TextureUploadCPUD3D9Params(),
+                       TextureUploadCPUOpenGLOrGLESParams(),
+                       TextureUploadCPUVulkanParams());
