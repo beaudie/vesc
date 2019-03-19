@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f9cc759_9d5438d1",
+        "filename": "src/gpu_info_util/SystemInfo_android.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-19T14:16:01Z",
+      "side": 1,
+      "message": "It probably doesn\u0027t matter much here, but just remember the short-circuit behavior of boolean operators. If `x` is false, then `x \u0026\u0026 y` doesn\u0027t evaluate `y` at all. So, if you have:\n\n    x \u003d y;\n    x \u003d x \u0026\u0026 z;\n    x \u003d x \u0026\u0026 w;\n\nand `y` is false, then `z` and `w` are not evaluated. If you want all three to always run, you would need to do:\n\n    x \u003d y;\n    x \u003d z \u0026\u0026 x;\n    x \u003d w \u0026\u0026 x;\n\nThis pitfall is probably the reason why many people use the arithmetic `\u0026\u003d` and `|\u003d` operators instead of the boolean `\u0026\u0026` and `||`.",
+      "revId": "6887169a96a685af0cd041d9165ad3cca6b54ff2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
