@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8342fc5_5001ac37",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-19T20:54:39Z",
+      "side": 1,
+      "message": "I\u0027m not that familiar with GL, do you know if all mip levels will be uploaded, or do you actually need to use them in the shader somehow?",
+      "range": {
+        "startLine": 153,
+        "startChar": 22,
+        "endLine": 153,
+        "endChar": 34
+      },
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37ceab79_8c213939",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-19T20:54:39Z",
+      "side": 1,
+      "message": "Maybe check that params.mipCount \u003c\u003d log2(params.baseSize) somewhere?",
+      "range": {
+        "startLine": 156,
+        "startChar": 32,
+        "endLine": 156,
+        "endChar": 54
+      },
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
