@@ -79,6 +79,7 @@ bool IsNativeConfigSupported(const PlatformParameters &param, OSWindow *osWindow
 
 bool IsAndroid()
 {
+    return true;
 #if defined(ANGLE_PLATFORM_ANDROID)
     return true;
 #else
