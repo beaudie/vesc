@@ -144,6 +144,8 @@ TEST_F(ShCompileTest, DecimalSepLocale)
 
     int testedLocales = 0;
 
+    std::locale originalLocale = std::locale();
+
     for (const std::string &locale : availableLocales)
     {
         // If the locale doesn't exist on the testing platform, the locale constructor will fail,
@@ -176,4 +178,6 @@ TEST_F(ShCompileTest, DecimalSepLocale)
             testedLocales++;
         }
     }
+
+    std::locale::global(originalLocale);
 }
