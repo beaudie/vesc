@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "97ce1c3f_440c80f0",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T17:38:30Z",
+      "side": 1,
+      "message": "OSWindow constructor.",
+      "range": {
+        "startLine": 358,
+        "startChar": 36,
+        "endLine": 358,
+        "endChar": 53
+      },
+      "revId": "663cbd7fef0a57cadbce34efa1192d9c0f7c7b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f0dfcc7c_4df74e60",
         "filename": "src/tests/test_utils/ANGLETest.cpp",
         "patchSetId": 30
@@ -13,6 +36,30 @@
       "writtenOn": "2019-03-20T17:32:33Z",
       "side": 1,
       "message": "But isn\u0027t this the same window as in the call above?\nSo this doesn\u0027t workaround a bug in the NVIDIA WGL implementation anymore?\nI don\u0027t understand where is the OSWindow constructor you\u0027ve mentioned called.",
+      "range": {
+        "startLine": 459,
+        "startChar": 59,
+        "endLine": 459,
+        "endChar": 85
+      },
+      "revId": "663cbd7fef0a57cadbce34efa1192d9c0f7c7b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95ef0778_a46d88cd",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T17:38:30Z",
+      "side": 1,
+      "message": "I re-linked the OSWindow constructor above.\n\nThis does not workaround anything in WGL anymore. I removed all WGL tests from angle_end2end_tests.",
+      "parentUuid": "f0dfcc7c_4df74e60",
       "range": {
         "startLine": 459,
         "startChar": 59,
@@ -48,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "fa400b3e_c82e0865",
+        "filename": "src/tests/test_utils/ANGLETest.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T17:38:30Z",
+      "side": 1,
+      "message": "I prefer positive assertions. I think it\u0027s better the way it is now. If you feel differently I can change it.",
+      "parentUuid": "b972b0e6_daf21e76",
+      "range": {
+        "startLine": 433,
+        "startChar": 9,
+        "endLine": 433,
+        "endChar": 31
+      },
+      "revId": "663cbd7fef0a57cadbce34efa1192d9c0f7c7b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b05fdf0e_23ae27c5",
         "filename": "src/tests/test_utils/ANGLETest.h",
         "patchSetId": 30
@@ -59,6 +130,30 @@
       "writtenOn": "2019-03-20T17:32:33Z",
       "side": 1,
       "message": "Could you enforce this being a singleton?\nHowever, I think sharing different contexts in one window is not allowed, so maybe we need a window per config regardless of whether display is reused or not?",
+      "range": {
+        "startLine": 438,
+        "startChar": 21,
+        "endLine": 438,
+        "endChar": 30
+      },
+      "revId": "663cbd7fef0a57cadbce34efa1192d9c0f7c7b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3ed8b03_04942630",
+        "filename": "src/tests/test_utils/ANGLETest.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T17:38:30Z",
+      "side": 1,
+      "message": "What do you mean \"can you enforce this being a singleton\"? How can I improve it?\n\nr.e. your second point. No, we can use a single window for everything. That\u0027s how it works prior to this CL.",
+      "parentUuid": "b05fdf0e_23ae27c5",
       "range": {
         "startLine": 438,
         "startChar": 21,
