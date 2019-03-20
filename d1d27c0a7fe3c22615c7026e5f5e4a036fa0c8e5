@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "11d29718_532802f8",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T15:18:08Z",
+      "side": 1,
+      "message": "The TexSubImage measures wall clock time which includes CPU and GPU performance. I think they have a more in common than not. But if you don\u0027t want to merge them maybe leave the names as they were and I can merge them myself later when I have some time.",
+      "parentUuid": "f6fb5c73_c8b38a88",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 20
+      },
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b8342fc5_5001ac37",
         "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
         "patchSetId": 2
@@ -219,6 +243,24 @@
       "side": 1,
       "message": "I\u0027m also not an expert on OpenGL, but I think the attributes take a default value when not specified. @Jamie, am I right?",
       "parentUuid": "52936c5d_5f7c97a8",
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c729029_9f404011",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T15:18:08Z",
+      "side": 1,
+      "message": "Yeah, they will all have the same value. The TexSubImage benchmark defines attributes and we should eventually do the same thing for both tests. But it\u0027s probably okay without for now.",
+      "parentUuid": "1edabb3f_5c3cbc7e",
       "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
