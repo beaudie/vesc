@@ -28,6 +28,9 @@ class ProgramBinaryTest : public ANGLETest
         setConfigGreenBits(8);
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
+
+        // Test flakiness was noticed when reusing displays.
+        forceNewDisplay();
     }
 
     void SetUp() override
@@ -53,6 +56,8 @@ class ProgramBinaryTest : public ANGLETest
         glDeleteProgram(mProgram);
         glDeleteBuffers(1, &mBuffer);
 
+        // Test flakiness was noticed when reusing displays.
+        forceNewDisplay();
         ANGLETest::TearDown();
     }
 
@@ -259,7 +264,20 @@ ANGLE_INSTANTIATE_TEST(ProgramBinaryTest,
 class ProgramBinaryES3Test : public ANGLETest
 {
   protected:
+    ProgramBinaryES3Test()
+    {
+        // Test flakiness was noticed when reusing displays.
+        forceNewDisplay();
+        ANGLETest::TearDown();
+    }
+
     void testBinaryAndUBOBlockIndexes(bool drawWithProgramFirst);
+    void TearDown() override
+    {
+        // Test flakiness was noticed when reusing displays.
+        forceNewDisplay();
+        ANGLETest::TearDown();
+    }
 };
 
 void ProgramBinaryES3Test::testBinaryAndUBOBlockIndexes(bool drawWithProgramFirst)
@@ -368,6 +386,16 @@ class ProgramBinaryES31Test : public ANGLETest
         setConfigGreenBits(8);
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
+
+        // Test flakiness was noticed when reusing displays.
+        forceNewDisplay();
+    }
+
+    void TearDown() override
+    {
+        // Test flakiness was noticed when reusing displays.
+        forceNewDisplay();
+        ANGLETest::TearDown();
     }
 };
 
