@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c588c60_76449ea7",
+        "filename": "util/EGLWindow.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-20T14:35:53Z",
+      "side": 1,
+      "message": "You could do `*this \u003d ConfigParameters();` so the constructor and `reset()` are always in sync.",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 39
+      },
+      "revId": "23c2daf63c53b794d75c5bd7e5c06a36bb941f4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
