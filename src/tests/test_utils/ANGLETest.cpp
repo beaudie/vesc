@@ -344,11 +344,6 @@ ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
     windowNameStream << "ANGLE Tests - " << params;
     std::string windowName = windowNameStream.str();
 
-    if (mAlwaysForceNewDisplay)
-    {
-        mCurrentPlatform->osWindow = mOSWindowSingleton;
-    }
-
     if (!mCurrentPlatform->osWindow)
     {
         mCurrentPlatform->osWindow = OSWindow::New();
@@ -356,8 +351,6 @@ ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
         {
             std::cerr << "Failed to initialize OS Window.";
         }
-
-        mOSWindowSingleton = mCurrentPlatform->osWindow;
     }
 
     // On Linux we must keep the test windows visible. On Windows it doesn't seem to need it.
@@ -1288,7 +1281,6 @@ ANGLETestBase::ScopedIgnorePlatformMessages::~ScopedIgnorePlatformMessages()
     gPlatformContext.ignoreMessages = false;
 }
 
-OSWindow *ANGLETestBase::mOSWindowSingleton = nullptr;
 std::map<angle::PlatformParameters, ANGLETestBase::Platform> ANGLETestBase::gPlatforms;
 Optional<EGLint> ANGLETestBase::mLastRendererType;
 

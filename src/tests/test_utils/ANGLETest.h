@@ -432,11 +432,6 @@ class ANGLETestBase
     bool mAlwaysForceNewDisplay;
     bool mForceNewDisplay;
 
-    // On most systems we force a new display on every test instance. For these configs we can
-    // share a single OSWindow instance. With display reuse we need a separate OSWindow for each
-    // different config. This OSWindow sharing seemed to lead to driver bugs on some platforms.
-    static OSWindow *mOSWindowSingleton;
-
     static std::map<angle::PlatformParameters, Platform> gPlatforms;
     Platform *mCurrentPlatform;
 
