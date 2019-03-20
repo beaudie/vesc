@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5fe89ebd_e4a8bb42",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2806,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T16:44:04Z",
+      "side": 1,
+      "message": "A single sampler objects can be bound to multiple shared contexts. With the code as it stands we\u0027ll miss the updates in other Contexts. We should probably use notifications like the gl::Texture class does. Isn\u0027t GL wonderful? \n\nYou can look for how the Texture class works as an example.",
+      "range": {
+        "startLine": 2806,
+        "startChar": 3,
+        "endLine": 2806,
+        "endChar": 35
+      },
+      "revId": "af40fdf24d81da3e8860a6f0a334ef57190f0c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26e504f0_c0a1356d",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T16:44:04Z",
+      "side": 1,
+      "message": "this is a bit slow as it needs to iterate the whole array. Maybe we should keep a mapping from sampler -\u003e texture units that have this sampler bound. We can update it on bind sampler.\n\nSee mBoundAttributesMask in gl::VertexBinding for a similar example.",
+      "range": {
+        "startLine": 1193,
+        "startChar": 0,
+        "endLine": 1199,
+        "endChar": 5
+      },
+      "revId": "af40fdf24d81da3e8860a6f0a334ef57190f0c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe923906_ca140e0e",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T16:44:04Z",
+      "side": 1,
+      "message": "you should initialize this in the constructor.",
+      "range": {
+        "startLine": 206,
+        "startChar": 19,
+        "endLine": 206,
+        "endChar": 44
+      },
+      "revId": "af40fdf24d81da3e8860a6f0a334ef57190f0c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
