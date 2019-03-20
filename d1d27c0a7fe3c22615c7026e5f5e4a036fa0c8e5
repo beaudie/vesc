@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "49e02fc4_175c765f",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-20T15:25:50Z",
+      "side": 1,
+      "message": "Ok, I\u0027ll look into merging them.",
+      "parentUuid": "11d29718_532802f8",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 20
+      },
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b8342fc5_5001ac37",
         "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
         "patchSetId": 2
@@ -261,6 +285,24 @@
       "side": 1,
       "message": "Yeah, they will all have the same value. The TexSubImage benchmark defines attributes and we should eventually do the same thing for both tests. But it\u0027s probably okay without for now.",
       "parentUuid": "1edabb3f_5c3cbc7e",
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75611a42_6892a47e",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-20T15:25:50Z",
+      "side": 1,
+      "message": "Thanks for verifying it. My idea here was to reduce the draw time as much as possible (in this case, a single pixel is drawn, if at all).",
+      "parentUuid": "4c729029_9f404011",
       "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
