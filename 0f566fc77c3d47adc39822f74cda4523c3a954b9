@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19c5bc3e_753f2657",
+        "filename": "src/tests/gl_tests/InstancingTest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T18:42:54Z",
+      "side": 0,
+      "message": "This CL should have affected only Intel and NVIDIA, so why did this start failing?",
+      "range": {
+        "startLine": 118,
+        "startChar": 46,
+        "endLine": 118,
+        "endChar": 67
+      },
+      "revId": "0f566fc77c3d47adc39822f74cda4523c3a954b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

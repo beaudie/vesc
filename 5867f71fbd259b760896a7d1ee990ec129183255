@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc32d064_27b27fd1",
+        "filename": "src/tests/egl_tests/EGLBlobCacheTest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T18:42:54Z",
+      "side": 1,
+      "message": "Is it OK not to force a new display at tear-down, i.e. will the tests following this one be OK?",
+      "range": {
+        "startLine": 84,
+        "startChar": 8,
+        "endLine": 84,
+        "endChar": 23
+      },
+      "revId": "5867f71fbd259b760896a7d1ee990ec129183255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a852b2b4_74f0f364",
+        "filename": "src/tests/egl_tests/EGLProgramCacheControlTest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T18:42:54Z",
+      "side": 1,
+      "message": "Could you open a bug to track this flakiness and link it where you call forceNewDisplay()?",
+      "range": {
+        "startLine": 36,
+        "startChar": 8,
+        "endLine": 36,
+        "endChar": 60
+      },
+      "revId": "5867f71fbd259b760896a7d1ee990ec129183255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74a71f5b_0fb5e82f",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T18:42:54Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 271,
+        "startChar": 0,
+        "endLine": 271,
+        "endChar": 30
+      },
+      "revId": "5867f71fbd259b760896a7d1ee990ec129183255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53a3150e_6bfefa80",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 1603,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T18:42:54Z",
+      "side": 1,
+      "message": "anglebug link?",
+      "range": {
+        "startLine": 1603,
+        "startChar": 0,
+        "endLine": 1603,
+        "endChar": 82
+      },
+      "revId": "5867f71fbd259b760896a7d1ee990ec129183255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c767d18c_17f8d6c8",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T18:42:54Z",
+      "side": 1,
+      "message": "I think this check can be removed.",
+      "range": {
+        "startLine": 347,
+        "startChar": 30,
+        "endLine": 347,
+        "endChar": 43
+      },
+      "revId": "5867f71fbd259b760896a7d1ee990ec129183255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15f31d92_8a47d4a4",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T18:42:54Z",
+      "side": 1,
+      "message": "This seems significant enough to mention in commit message.",
+      "range": {
+        "startLine": 440,
+        "startChar": 0,
+        "endLine": 444,
+        "endChar": 5
+      },
+      "revId": "5867f71fbd259b760896a7d1ee990ec129183255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b74aa44_27e2d641",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T18:42:54Z",
+      "side": 1,
+      "message": "You\u0027ve missed my question about whether to check mAlwaysForceNewDisplay here as well.",
+      "range": {
+        "startLine": 447,
+        "startChar": 12,
+        "endLine": 447,
+        "endChar": 28
+      },
+      "revId": "5867f71fbd259b760896a7d1ee990ec129183255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0bc5a9d_ba9c4616",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T18:42:54Z",
+      "side": 1,
+      "message": "When you force new display, I think you almost always do this both in test constructor and in TearDown. Maybe just set it in constructor, don\u0027t reset it here, and then reset in TearDown?\nThere was one test where you had it inside a test, and then I\u0027ve mentioned that TearDown already does it and you removed it, this change would break it. But if you force new display in SetUp instead of constructor, that would still work.",
+      "range": {
+        "startLine": 451,
+        "startChar": 0,
+        "endLine": 451,
+        "endChar": 37
+      },
+      "revId": "5867f71fbd259b760896a7d1ee990ec129183255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e5f225b_bd4d4114",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T18:42:54Z",
+      "side": 1,
+      "message": "Is it safe to call this both in SetUp and TearDown?\nMaybe it\u0027s possible to optimize to do this only once?\nNot sure.",
+      "range": {
+        "startLine": 452,
+        "startChar": 41,
+        "endLine": 452,
+        "endChar": 50
+      },
+      "revId": "5867f71fbd259b760896a7d1ee990ec129183255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6561f0ac_7302678a",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T18:42:54Z",
+      "side": 1,
+      "message": "This seems significant enough to mention in commit message.",
+      "range": {
+        "startLine": 498,
+        "startChar": 0,
+        "endLine": 498,
+        "endChar": 15
+      },
+      "revId": "5867f71fbd259b760896a7d1ee990ec129183255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dd9a55e_876409f3",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T18:42:54Z",
+      "side": 1,
+      "message": "could just add it to the if below.",
+      "range": {
+        "startLine": 506,
+        "startChar": 8,
+        "endLine": 506,
+        "endChar": 30
+      },
+      "revId": "5867f71fbd259b760896a7d1ee990ec129183255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d809f4c_220ad719",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T18:42:54Z",
+      "side": 1,
+      "message": "Is it OK to change the order of destroyGL and messageLoop here?\nI think the intention of the original code was to wait until the window settles down before destroying GL. Not sure, though.",
+      "range": {
+        "startLine": 523,
+        "startChar": 0,
+        "endLine": 523,
+        "endChar": 46
+      },
+      "revId": "5867f71fbd259b760896a7d1ee990ec129183255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
