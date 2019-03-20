@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "f6424f0c_6e3f9009",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T15:27:04Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "49e02fc4_175c765f",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 20
+      },
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b8342fc5_5001ac37",
         "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
         "patchSetId": 2
@@ -303,6 +327,24 @@
       "side": 1,
       "message": "Thanks for verifying it. My idea here was to reduce the draw time as much as possible (in this case, a single pixel is drawn, if at all).",
       "parentUuid": "4c729029_9f404011",
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b57e92a_091c5a56",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T15:27:04Z",
+      "side": 1,
+      "message": "That\u0027s a valid point. Maybe the TexSubImage should do the same thing.",
+      "parentUuid": "75611a42_6892a47e",
       "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
