@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5f26b2d_61e07327",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-20T13:15:20Z",
+      "side": 1,
+      "message": "It\u0027s obvious, but it\u0027s nicer if the ordering of this comment matches up (AMD or NVIDIA .... AMD Switchable or Optimus)",
+      "revId": "d35e3f652b1575eee68a2eedcc6f1f1e1c044e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41afac43_20b0bc75",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-20T13:15:20Z",
+      "side": 1,
+      "message": "Is there any reason not to just do this singleton stuff in GetSystemInfo?",
+      "revId": "d35e3f652b1575eee68a2eedcc6f1f1e1c044e5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
