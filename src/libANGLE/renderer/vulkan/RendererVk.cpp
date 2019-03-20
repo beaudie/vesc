@@ -958,6 +958,10 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         enabledDeviceExtensions.push_back(VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
     }
 
+    if (getFeatures().supportsAndroidHardwareBuffer || getFeatures().supportsExternalMemoryFd)
+    {
+        enabledDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME);
+    }
 #if defined(ANGLE_PLATFORM_ANDROID)
     if (getFeatures().supportsAndroidHardwareBuffer)
     {
@@ -968,6 +972,29 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     }
 #else
     ASSERT(!getFeatures().supportsAndroidHardwareBuffer);
+#endif
+
+#if defined(ANGLE_PLATFORM_LINUX)
+    if (getFeatures().supportsExternalMemoryFd)
+    {
+        enabledDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME);
+    }
+#else
+    ASSERT(!getFeatures().supportsExternalMemoryFd);
+#endif
+
+    if (getFeatures().supportsExternalSemaphoreFd)
+    {
+        enabledDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
+    }
+
+#if defined(ANGLE_PLATFORM_LINUX)
+    if (getFeatures().supportsExternalSemaphoreFd)
+    {
+        enabledDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
+    }
+#else
+    ASSERT(!getFeatures().supportsExternalSemaphoreFd);
 #endif
 
     std::sort(enabledDeviceExtensions.begin(), enabledDeviceExtensions.end(), StrLess);
@@ -1235,6 +1262,17 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
         ExtensionFound(VK_ANDROID_EXTERNAL_MEMORY_ANDROID_HARDWARE_BUFFER_EXTENSION_NAME,
                        deviceExtensionNames) &&
         ExtensionFound(VK_EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME, deviceExtensionNames);
+#endif
+
+#if defined(ANGLE_PLATFORM_LINUX)
+    if (ExtensionFound(VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME, deviceExtensionNames))
+    {
+        mFeatures.supportsExternalMemoryFd = true;
+    }
+    if (ExtensionFound(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME, deviceExtensionNames))
+    {
+        mFeatures.supportsExternalSemaphoreFd = true;
+    }
 #endif
 
     if (IsLinux() && IsIntel(mPhysicalDeviceProperties.vendorID))
