@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0dfcc7c_4df74e60",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T17:32:33Z",
+      "side": 1,
+      "message": "But isn\u0027t this the same window as in the call above?\nSo this doesn\u0027t workaround a bug in the NVIDIA WGL implementation anymore?\nI don\u0027t understand where is the OSWindow constructor you\u0027ve mentioned called.",
+      "range": {
+        "startLine": 459,
+        "startChar": 59,
+        "endLine": 459,
+        "endChar": 85
+      },
+      "revId": "663cbd7fef0a57cadbce34efa1192d9c0f7c7b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b972b0e6_daf21e76",
+        "filename": "src/tests/test_utils/ANGLETest.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T17:32:33Z",
+      "side": 1,
+      "message": "What do you think of mDisableDisplayReuse?\nThis seems to better convey the intended usage to me.",
+      "range": {
+        "startLine": 433,
+        "startChar": 9,
+        "endLine": 433,
+        "endChar": 31
+      },
+      "revId": "663cbd7fef0a57cadbce34efa1192d9c0f7c7b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b05fdf0e_23ae27c5",
+        "filename": "src/tests/test_utils/ANGLETest.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T17:32:33Z",
+      "side": 1,
+      "message": "Could you enforce this being a singleton?\nHowever, I think sharing different contexts in one window is not allowed, so maybe we need a window per config regardless of whether display is reused or not?",
+      "range": {
+        "startLine": 438,
+        "startChar": 21,
+        "endLine": 438,
+        "endChar": 30
+      },
+      "revId": "663cbd7fef0a57cadbce34efa1192d9c0f7c7b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
