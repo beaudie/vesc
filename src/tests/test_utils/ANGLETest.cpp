@@ -494,7 +494,6 @@ void ANGLETestBase::ANGLETestTearDown()
     const testing::TestInfo *info = testing::UnitTest::GetInstance()->current_test_info();
     angle::WriteDebugMessage("Exiting %s.%s\n", info->test_case_name(), info->name());
 
-    glFinish();
     swapBuffers();
     mCurrentPlatform->osWindow->messageLoop();
 
