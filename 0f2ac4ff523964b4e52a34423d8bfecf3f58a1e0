@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cfe0c05f_1a2f11ac",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-03-20T23:04:32Z",
+      "side": 1,
+      "message": "Nit: arouns --\u003e around.",
+      "range": {
+        "startLine": 26,
+        "startChar": 43,
+        "endLine": 26,
+        "endChar": 49
+      },
+      "revId": "0f2ac4ff523964b4e52a34423d8bfecf3f58a1e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
