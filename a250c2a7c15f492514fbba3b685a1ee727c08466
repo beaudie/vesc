@@ -37,6 +37,75 @@
     },
     {
       "key": {
+        "uuid": "8d9c5316_21e066e9",
+        "filename": "src/tests/egl_tests/EGLProgramCacheControlTest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T16:47:39Z",
+      "side": 1,
+      "message": "It is not trivial that setContextProgramCacheEnabled must be called before ANGLETest::SetUp.\nCan we have config overrides be a parameter to SetUp?\nAnd then remember to restore things in TearDown?",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 0
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cb5058a_95a752e6",
+        "filename": "src/tests/egl_tests/EGLProgramCacheControlTest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T16:47:39Z",
+      "side": 1,
+      "message": "I think TearDown and SetUp already do this?",
+      "range": {
+        "startLine": 224,
+        "startChar": 4,
+        "endLine": 224,
+        "endChar": 19
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c251e4b_c017a928",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T16:47:39Z",
+      "side": 1,
+      "message": "Is it possible to file a bug so that the driver will get fixed?",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 37
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d504521_c64c8931",
         "filename": "src/tests/test_utils/ANGLETest.cpp",
         "patchSetId": 27
@@ -84,6 +153,144 @@
     },
     {
       "key": {
+        "uuid": "776cca54_ccbad408",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T16:47:39Z",
+      "side": 1,
+      "message": "Can this be part of reset(), so you don\u0027t do it in two places?",
+      "range": {
+        "startLine": 329,
+        "startChar": 8,
+        "endLine": 329,
+        "endChar": 65
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a794d8f3_6aaf80f3",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T16:47:39Z",
+      "side": 1,
+      "message": "It would make more sense to me if this was !alwaysForceNewDisplay(), otherwise, I don\u0027t follow this logic.",
+      "range": {
+        "startLine": 341,
+        "startChar": 8,
+        "endLine": 341,
+        "endChar": 29
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff2dde7c_3f7daf10",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T16:47:39Z",
+      "side": 1,
+      "message": "I need a comment regarding what mOSWindow means now.\nLast created OSWindow?\nBut this has the potential of sharing OpenGL and Vulkan contexts, unless alwaysForceNewDisplay() prevents it.",
+      "range": {
+        "startLine": 343,
+        "startChar": 37,
+        "endLine": 343,
+        "endChar": 46
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d875b349_e222f0fa",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T16:47:39Z",
+      "side": 1,
+      "message": "Where is new OSWindow created now?",
+      "range": {
+        "startLine": 444,
+        "startChar": 62,
+        "endLine": 444,
+        "endChar": 74
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e96b5ce_c41c978d",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T16:47:39Z",
+      "side": 1,
+      "message": "Should this also check alwaysForceNewDisplay?",
+      "range": {
+        "startLine": 462,
+        "startChar": 12,
+        "endLine": 462,
+        "endChar": 28
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce15bbe1_e6b389ab",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T16:47:39Z",
+      "side": 1,
+      "message": "I\u0027m confused. You always force new display (which is undesirable behavior, I presume) on non-Windows and Windows AMD. Is Intel a typo here?\nOr since you don\u0027t have \"!\" in the test above, the function name is wrong?",
+      "range": {
+        "startLine": 508,
+        "startChar": 33,
+        "endLine": 508,
+        "endChar": 38
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9206de58_beca614b",
         "filename": "src/tests/test_utils/ANGLETest.cpp",
         "patchSetId": 27
@@ -116,6 +323,29 @@
       "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dddf332a_11a39fa1",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T16:47:39Z",
+      "side": 1,
+      "message": "I guess this should be reuseCounter now?",
+      "range": {
+        "startLine": 528,
+        "startChar": 26,
+        "endLine": 528,
+        "endChar": 38
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
