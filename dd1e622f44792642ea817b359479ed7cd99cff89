@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "259d5e22_4054ef2b",
+        "filename": "src/tests/compiler_tests/ShCompile_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T21:27:06Z",
+      "side": 1,
+      "message": "if the ASSERT fires the function will return and the locale won\u0027t be cleared. Can you make a Scoped helper a la ScopedIgnorePlatformMessages in ANGLETest.h?",
+      "range": {
+        "startLine": 175,
+        "startChar": 12,
+        "endLine": 175,
+        "endChar": 21
+      },
+      "revId": "dd1e622f44792642ea817b359479ed7cd99cff89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
