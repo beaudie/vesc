@@ -22,6 +22,30 @@
       "revId": "f41a697f6628fbea9381983520eb1178db6d704d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13765805_69999ec3",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T15:23:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57f1acdf_06f04a71",
+      "range": {
+        "startLine": 299,
+        "startChar": 65,
+        "endLine": 299,
+        "endChar": 70
+      },
+      "revId": "f41a697f6628fbea9381983520eb1178db6d704d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
