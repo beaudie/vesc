@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f6fb5c73_c8b38a88",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-20T15:13:46Z",
+      "side": 1,
+      "message": "They have subtle differences, but most importantly that measures CPU time. I\u0027m going to rename things so they look similar, with the difference highlighted (i.e. `TextureUploadGPUPerf` and `TextureUploadCPUPerf`)",
+      "parentUuid": "4e8a91a6_1ecf6593",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 20
+      },
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b8342fc5_5001ac37",
         "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-03-19T20:54:39Z",
       "side": 1,
       "message": "I\u0027m not that familiar with GL, do you know if all mip levels will be uploaded, or do you actually need to use them in the shader somehow?",
+      "range": {
+        "startLine": 153,
+        "startChar": 22,
+        "endLine": 153,
+        "endChar": 34
+      },
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a8f8815_36952365",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-20T15:13:46Z",
+      "side": 1,
+      "message": "I can\u0027t tell if all implementations do this, but the Vulkan backend does. The reasoning is that with mips enabled, the image view that\u0027s bound covers all mips, so they should all be initialized. Unless some implementation looks at the shader and adjusts the mips based on what\u0027s actually used, but I find that unlikely.",
+      "parentUuid": "b8342fc5_5001ac37",
       "range": {
         "startLine": 153,
         "startChar": 22,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "53a9d665_a84e25ea",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-20T15:13:46Z",
+      "side": 1,
+      "message": "Done. Changed so that mip count is automatically deduced.",
+      "parentUuid": "37ceab79_8c213939",
+      "range": {
+        "startLine": 156,
+        "startChar": 32,
+        "endLine": 156,
+        "endChar": 54
+      },
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ff1b43d_2efcccd0",
         "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
         "patchSetId": 2
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "d09f11a2_b571bbc8",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-20T15:13:46Z",
+      "side": 1,
+      "message": "That conversion happens on the CPU, so it\u0027s irrelevant to the benchmark (which measures GPU time).",
+      "parentUuid": "1ff1b43d_2efcccd0",
+      "range": {
+        "startLine": 157,
+        "startChar": 45,
+        "endLine": 157,
+        "endChar": 52
+      },
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "52936c5d_5f7c97a8",
         "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
         "patchSetId": 2
@@ -105,6 +201,24 @@
       "writtenOn": "2019-03-19T20:58:41Z",
       "side": 1,
       "message": "Where are the vertices defined, or does it not matter?",
+      "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1edabb3f_5c3cbc7e",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-20T15:13:46Z",
+      "side": 1,
+      "message": "I\u0027m also not an expert on OpenGL, but I think the attributes take a default value when not specified. @Jamie, am I right?",
+      "parentUuid": "52936c5d_5f7c97a8",
       "revId": "d1d27c0a7fe3c22615c7026e5f5e4a036fa0c8e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
