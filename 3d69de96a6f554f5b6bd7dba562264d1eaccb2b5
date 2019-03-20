@@ -22,6 +22,30 @@
       "revId": "3d69de96a6f554f5b6bd7dba562264d1eaccb2b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a61bd7ee_cd2658ed",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T14:22:57Z",
+      "side": 1,
+      "message": "I think it\u0027s worth doing a flush on context destruction. It seems like a heavy operation. But open to changing this in the future.",
+      "parentUuid": "99ffb7fd_430a1f12",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "3d69de96a6f554f5b6bd7dba562264d1eaccb2b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
