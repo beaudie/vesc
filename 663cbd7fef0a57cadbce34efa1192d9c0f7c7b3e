@@ -211,6 +211,30 @@
       "revId": "663cbd7fef0a57cadbce34efa1192d9c0f7c7b3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be785671_e6b397c4",
+        "filename": "src/tests/test_utils/ANGLETest.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-20T18:00:14Z",
+      "side": 1,
+      "message": "We used different windows for OpenGL and Vulkan contexts on NVIDIA prior to this CL.\nWe still do, because we would not AlwaysForceNewDisplay on NVIDIA, so we would have a display per config.\nKen was saying that it may be wrong to share OpenGL and Vulkan contexts everywhere on ANGLE meeting before last one, but for some reason this seems to work on other platforms.\n\nAs to how to improve it, I\u0027d like a clear separation between \"reuse display + OS Window per config\" path and \"don\u0027t reuse display + single OS Window\" path.\nI guess separate classes would be best for this.\n\nIs there an advantage of sharing same OSWindow for different configs? I don\u0027t think that\u0027s an expected usage by ANGLE end-users, so it may be not worth to test it. If we always have OSWindow per config, this would decouple it from \"reuse display\" logic and make the code flow more understandable.",
+      "parentUuid": "b3ed8b03_04942630",
+      "range": {
+        "startLine": 438,
+        "startChar": 21,
+        "endLine": 438,
+        "endChar": 30
+      },
+      "revId": "663cbd7fef0a57cadbce34efa1192d9c0f7c7b3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
