@@ -29,10 +29,15 @@ class RobustBufferAccessBehaviorTest : public ANGLETest
         setConfigGreenBits(8);
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
+
+        // Work around driver crashes
+        forceNewDisplay();
     }
 
     void TearDown() override
     {
+        // Work around driver crashes
+        forceNewDisplay();
         glDeleteProgram(mProgram);
         ANGLETest::TearDown();
     }
