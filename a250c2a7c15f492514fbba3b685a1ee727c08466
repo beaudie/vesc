@@ -60,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "8895e8e7_2d6c3f22",
+        "filename": "src/tests/egl_tests/EGLProgramCacheControlTest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T17:04:21Z",
+      "side": 1,
+      "message": "I don\u0027t think this is a simple change as it would involve using a different SetUp method.\n\nI think it might be worth doing. But I would recommend we do this separately.",
+      "parentUuid": "8d9c5316_21e066e9",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 0
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0cb5058a_95a752e6",
         "filename": "src/tests/egl_tests/EGLProgramCacheControlTest.cpp",
         "patchSetId": 27
@@ -83,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "3f35d68a_fb64db35",
+        "filename": "src/tests/egl_tests/EGLProgramCacheControlTest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T17:04:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0cb5058a_95a752e6",
+      "range": {
+        "startLine": 224,
+        "startChar": 4,
+        "endLine": 224,
+        "endChar": 19
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4c251e4b_c017a928",
         "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
         "patchSetId": 27
@@ -103,6 +151,30 @@
       "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65db39fb_cf683dd3",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T17:04:21Z",
+      "side": 1,
+      "message": "Will do this as a follow-up.",
+      "parentUuid": "4c251e4b_c017a928",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 37
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -176,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "7204c4f6_2f2ceccd",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T17:04:21Z",
+      "side": 1,
+      "message": "No, because reset() is not just a part of ANGLE tests. It\u0027s also for perf tests and samples.",
+      "parentUuid": "776cca54_ccbad408",
+      "range": {
+        "startLine": 329,
+        "startChar": 8,
+        "endLine": 329,
+        "endChar": 65
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a794d8f3_6aaf80f3",
         "filename": "src/tests/test_utils/ANGLETest.cpp",
         "patchSetId": 27
@@ -196,6 +292,30 @@
       "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a8d209e_b8b970f1",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T17:04:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a794d8f3_6aaf80f3",
+      "range": {
+        "startLine": 341,
+        "startChar": 8,
+        "endLine": 341,
+        "endChar": 29
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -222,6 +342,53 @@
     },
     {
       "key": {
+        "uuid": "170ebbba_bb6d87fc",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T17:04:21Z",
+      "side": 1,
+      "message": "Done. Here it is:\n\n    // On most systems we force a new display on every test instance. For these configs we can\n    // share a single OSWindow instance. With display reuse we need a separate OSWindow for each\n    // different config. This OSWindow sharing seemed to lead to driver bugs on some platforms.",
+      "parentUuid": "ff2dde7c_3f7daf10",
+      "range": {
+        "startLine": 343,
+        "startChar": 37,
+        "endLine": 343,
+        "endChar": 46
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "95a8f2e7_fdb27061",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 348,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T17:04:21Z",
+      "side": 1,
+      "message": "OSWindow created here.",
+      "range": {
+        "startLine": 348,
+        "startChar": 36,
+        "endLine": 348,
+        "endChar": 53
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d875b349_e222f0fa",
         "filename": "src/tests/test_utils/ANGLETest.cpp",
         "patchSetId": 27
@@ -242,6 +409,30 @@
       "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8d2eb17_4b7b651c",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T17:04:21Z",
+      "side": 1,
+      "message": "In the constructor.",
+      "parentUuid": "d875b349_e222f0fa",
+      "range": {
+        "startLine": 444,
+        "startChar": 62,
+        "endLine": 444,
+        "endChar": 74
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -288,6 +479,30 @@
       "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf8ea166_6716a1b8",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T17:04:21Z",
+      "side": 1,
+      "message": "Here we go:\n\n    // We prefer to reuse config displays. This is faster and solves a driver issue where creating\n    // many displays causes crashes. However this exposes other driver bugs on many other platforms.\n    // Conservatively enable the feature only on Windows Intel and NVIDIA for now.",
+      "parentUuid": "ce15bbe1_e6b389ab",
+      "range": {
+        "startLine": 508,
+        "startChar": 33,
+        "endLine": 508,
+        "endChar": 38
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -346,6 +561,30 @@
       "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6c1163c_47e4bb05",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-20T17:04:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dddf332a_11a39fa1",
+      "range": {
+        "startLine": 528,
+        "startChar": 26,
+        "endLine": 528,
+        "endChar": 38
+      },
+      "revId": "a250c2a7c15f492514fbba3b685a1ee727c08466",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
