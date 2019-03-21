@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5067865_66a65a64",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-21T19:51:25Z",
+      "side": 1,
+      "message": "Can be simplified to:\n\n    path \u003d os.path.join(path, \"../../../../out\") # Angle base dir is up 4 levels\n    if (os.path.isdir(path)):",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 182,
+        "endChar": 30
+      },
+      "revId": "829d134a85b80b4b8269a85668b808187d4b04fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
