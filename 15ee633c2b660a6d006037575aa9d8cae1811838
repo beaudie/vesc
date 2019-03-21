@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a7b491a7_76711aac",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-21T19:06:59Z",
+      "side": 1,
+      "message": "True, I just tested out dirs in deeper locations and they don\u0027t work.. strange that it originally was scripted like this.",
+      "parentUuid": "2c189c56_48ca4ae5",
+      "range": {
+        "startLine": 181,
+        "startChar": 4,
+        "endLine": 181,
+        "endChar": 27
+      },
+      "revId": "15ee633c2b660a6d006037575aa9d8cae1811838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55135583_bc7cbb06",
         "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "15ee633c2b660a6d006037575aa9d8cae1811838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de28badd_f28363fd",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-21T19:06:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55135583_bc7cbb06",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 194,
+        "endChar": 9
+      },
+      "revId": "15ee633c2b660a6d006037575aa9d8cae1811838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
