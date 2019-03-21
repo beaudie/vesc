@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "6dd4a02d_42418e92",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-21T15:31:01Z",
+      "side": 1,
+      "message": "ID3D11Device::CreateBuffer spec says:\nThis method returns E_OUTOFMEMORY if there is insufficient memory to create the buffer.\nSo, this seems fine to me.",
+      "parentUuid": "ee9bd45d_2321ce50",
+      "range": {
+        "startLine": 27,
+        "startChar": 51,
+        "endLine": 28,
+        "endChar": 40
+      },
+      "revId": "0f2ac4ff523964b4e52a34423d8bfecf3f58a1e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "23dce670_44565855",
         "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp",
         "patchSetId": 2
@@ -76,6 +100,29 @@
       "writtenOn": "2019-03-21T08:51:02Z",
       "side": 1,
       "message": "If this encodes an expected behavior, then the other backends would need to be updated as well.\nWith this patch, D3D11 works, D3D9 crashes and VK, GL* backends fail this test.\n(Not sure if need to block this patch)",
+      "revId": "0f2ac4ff523964b4e52a34423d8bfecf3f58a1e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30b8a7f9_ec117b63",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-21T15:31:01Z",
+      "side": 1,
+      "message": "Is there a way for this test to run in the future?\nMaybe we can have slow_end2end_tests and run them on FYI but not CQ?",
+      "range": {
+        "startLine": 193,
+        "startChar": 21,
+        "endLine": 193,
+        "endChar": 30
+      },
       "revId": "0f2ac4ff523964b4e52a34423d8bfecf3f58a1e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
