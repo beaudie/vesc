@@ -599,14 +599,14 @@ class ImageHelper final : public CommandGraphResource
                              GLint samples);
     void resetImageWeakReference();
 
-    const Image &getImage() const;
-    const DeviceMemory &getDeviceMemory() const;
+    const Image &getImage() const { return mImage; }
+    const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
 
-    const gl::Extents &getExtents() const;
+    const gl::Extents &getExtents() const { return mExtents; }
     uint32_t getLayerCount() const { return mLayerCount; }
     uint32_t getLevelCount() const { return mLevelCount; }
-    const Format &getFormat() const;
-    GLint getSamples() const;
+    const Format &getFormat() const { return *mFormat; }
+    GLint getSamples() const { return mSamples; }
 
     VkImageLayout getCurrentLayout() const;
 
@@ -680,12 +680,17 @@ class ImageHelper final : public CommandGraphResource
                                         VkDeviceSize *offsetOut,
                                         bool *newBufferAllocatedOut);
 
+    // Flushes staged updates to a range of levels and layers from start to (but not including) end.
+    // Due to the nature of updates (done wholly to a VkImageSubresourceLayers), some unsolicited
+    // layers may also be updated.
     angle::Result flushStagedUpdates(Context *context,
-                                     uint32_t baseLevel,
-                                     uint32_t levelCount,
+                                     uint32_t levelStart,
+                                     uint32_t levelEnd,
+                                     uint32_t layerStart,
+                                     uint32_t layerEnd,
                                      vk::CommandBuffer *commandBuffer);
 
-    bool hasStagedUpdates() const;
+    bool hasStagedUpdates() const { return !mSubresourceUpdates.empty(); }
 
     // changeLayout automatically skips the layout change if it's unnecessary.  This function can be
     // used to prevent creating a command graph node and subsequently a command buffer for the sole
