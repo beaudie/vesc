@@ -119,10 +119,10 @@ const vk::Format &RenderTargetVk::getImageFormat() const
     return mImage->getFormat();
 }
 
-const gl::Extents &RenderTargetVk::getImageExtents() const
+gl::Extents RenderTargetVk::getImageExtents() const
 {
     ASSERT(mImage && mImage->valid());
-    return mImage->getExtents();
+    return mImage->getExtents().getMip(mLevelIndex);
 }
 
 void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image, vk::ImageView *imageView)
