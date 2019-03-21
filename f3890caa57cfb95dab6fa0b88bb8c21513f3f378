@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dfc005ce_73ea32fb",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-21T21:55:24Z",
+      "side": 1,
+      "message": "should probably remove this",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 55
+      },
+      "revId": "f3890caa57cfb95dab6fa0b88bb8c21513f3f378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
