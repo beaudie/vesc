@@ -22,6 +22,30 @@
       "revId": "829d134a85b80b4b8269a85668b808187d4b04fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10cd5a8c_9f501d93",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-21T20:14:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c5067865_66a65a64",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 182,
+        "endChar": 30
+      },
+      "revId": "829d134a85b80b4b8269a85668b808187d4b04fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
