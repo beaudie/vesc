@@ -100,7 +100,7 @@ class FramebufferVk : public FramebufferImpl
                                  RenderTargetVk *renderTarget,
                                  void *pixels);
 
-    const gl::Extents &getReadImageExtents() const;
+    gl::Extents getReadImageExtents() const;
 
     const gl::DrawBufferMask &getEmulatedAlphaAttachmentMask() const;
     RenderTargetVk *getColorReadRenderTarget() const;
@@ -124,6 +124,14 @@ class FramebufferVk : public FramebufferImpl
     FramebufferVk(RendererVk *renderer,
                   const gl::FramebufferState &state,
                   WindowSurfaceVk *backbuffer);
+
+    angle::Result startNewRenderPassImpl(ContextVk *context,
+                                         bool clearColor,
+                                         bool clearDepth,
+                                         bool clearStencil,
+                                         VkClearColorValue clearColorValue,
+                                         VkClearDepthStencilValue clearDepthStencilValue,
+                                         vk::CommandBuffer **commandBufferOut);
 
     // Helper for appendToStarted/else startNewRenderPass.
     angle::Result getCommandBufferForDraw(ContextVk *contextVk,
@@ -159,6 +167,12 @@ class FramebufferVk : public FramebufferImpl
 
     angle::Result getFramebuffer(ContextVk *contextVk, vk::Framebuffer **framebufferOut);
 
+    angle::Result clearWithRenderPassOp(ContextVk *contextVk,
+                                        bool clearColor,
+                                        bool clearDepth,
+                                        bool clearStencil,
+                                        const VkClearColorValue &clearColorValue,
+                                        const VkClearDepthStencilValue &clearDepthStencilValue);
     angle::Result clearWithClearAttachments(ContextVk *contextVk,
                                             bool clearColor,
                                             bool clearDepth,
