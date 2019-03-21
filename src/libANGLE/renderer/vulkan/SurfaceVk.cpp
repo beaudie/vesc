@@ -256,7 +256,17 @@ angle::Result OffscreenSurfaceVk::getAttachmentRenderTarget(
 angle::Result OffscreenSurfaceVk::initializeContents(const gl::Context *context,
                                                      const gl::ImageIndex &imageIndex)
 {
-    UNIMPLEMENTED();
+    if (mColorAttachment.image.valid())
+    {
+        mColorAttachment.image.stageSubresourceRobustClear(
+            imageIndex, mColorAttachment.image.getFormat().angleFormat());
+    }
+
+    if (mDepthStencilAttachment.image.valid())
+    {
+        mDepthStencilAttachment.image.stageSubresourceRobustClear(
+            imageIndex, mDepthStencilAttachment.image.getFormat().angleFormat());
+    }
     return angle::Result::Continue;
 }
 
@@ -511,12 +521,6 @@ angle::Result WindowSurfaceVk::recreateSwapchain(DisplayVk *displayVk,
     ANGLE_VK_TRY(displayVk,
                  vkGetSwapchainImagesKHR(device, mSwapchain, &imageCount, swapchainImages.data()));
 
-    VkClearColorValue transparentBlack = {};
-    transparentBlack.float32[0]        = 0.0f;
-    transparentBlack.float32[1]        = 0.0f;
-    transparentBlack.float32[2]        = 0.0f;
-    transparentBlack.float32[3]        = 0.0f;
-
     mSwapchainImages.resize(imageCount);
     ANGLE_TRY(resizeSwapHistory(displayVk, imageCount));
 
@@ -528,13 +532,6 @@ angle::Result WindowSurfaceVk::recreateSwapchain(DisplayVk *displayVk,
         ANGLE_TRY(member.image.initImageView(displayVk, gl::TextureType::_2D,
                                              VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(),
                                              &member.imageView, 0, 1));
-
-        // Allocate a command buffer for clearing our images to black.
-        vk::CommandBuffer *commandBuffer = nullptr;
-        ANGLE_TRY(member.image.recordCommands(displayVk, &commandBuffer));
-
-        // Set transfer dest layout, and clear the image to black.
-        member.image.clearColor(transparentBlack, 0, 1, commandBuffer);
     }
 
     // Initialize depth/stencil if requested.
@@ -550,13 +547,6 @@ angle::Result WindowSurfaceVk::recreateSwapchain(DisplayVk *displayVk,
                                                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
         const VkImageAspectFlags aspect = vk::GetDepthStencilAspectFlags(dsFormat.textureFormat());
-        VkClearDepthStencilValue depthStencilClearValue = {1.0f, 0};
-
-        // Clear the image.
-        vk::CommandBuffer *commandBuffer = nullptr;
-        ANGLE_TRY(mDepthStencilImage.recordCommands(displayVk, &commandBuffer));
-        mDepthStencilImage.clearDepthStencil(aspect, aspect, depthStencilClearValue, commandBuffer);
-
         ANGLE_TRY(mDepthStencilImage.initImageView(displayVk, gl::TextureType::_2D, aspect,
                                                    gl::SwizzleState(), &mDepthStencilImageView, 0,
                                                    1));
@@ -1038,7 +1028,18 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(vk::Context *context,
 angle::Result WindowSurfaceVk::initializeContents(const gl::Context *context,
                                                   const gl::ImageIndex &imageIndex)
 {
-    UNIMPLEMENTED();
+    ASSERT(mSwapchainImages.size() > 0);
+    ASSERT(mCurrentSwapchainImageIndex < mSwapchainImages.size());
+
+    vk::ImageHelper *image = &mSwapchainImages[mCurrentSwapchainImageIndex].image;
+    image->stageSubresourceRobustClear(imageIndex, image->getFormat().angleFormat());
+
+    if (mDepthStencilImage.valid())
+    {
+        mDepthStencilImage.stageSubresourceRobustClear(
+            gl::ImageIndex::Make2D(0), mDepthStencilImage.getFormat().angleFormat());
+    }
+
     return angle::Result::Continue;
 }
 

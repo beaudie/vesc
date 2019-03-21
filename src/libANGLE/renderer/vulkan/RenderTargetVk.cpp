@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
 
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
+#include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
@@ -182,9 +183,14 @@ angle::Result RenderTargetVk::ensureImageInitialized(ContextVk *contextVk)
 {
     if (mOwner)
     {
+        // If the render target source is a texture, make sure the image is initialized and its
+        // staged updates flushed.
         return mOwner->ensureImageInitialized(contextVk);
     }
-    return angle::Result::Continue;
+
+    // If the source is anything else (such as a surface), the image is already initialized, so
+    // just flush staged updates if any.
+    return mImage->flushAllStagedUpdates(contextVk);
 }
 
 }  // namespace rx
