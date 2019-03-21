@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dddd8d4c_ee6e6b1c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-21T21:04:22Z",
+      "side": 1,
+      "message": "I went with the safe option here, as a cursory read didn\u0027t answer this question, but if render pass loadOp respects scissor, that would simplify a lot in this function.",
+      "range": {
+        "startLine": 222,
+        "startChar": 47,
+        "endLine": 222,
+        "endChar": 81
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
