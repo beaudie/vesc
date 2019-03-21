@@ -171,6 +171,9 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     VkResult end();
     VkResult reset();
 
+    void memoryBarrier(VkPipelineStageFlags srcStageMask,
+                       VkPipelineStageFlags dstStageMask,
+                       const VkMemoryBarrier *memoryBarrier);
     void pipelineBarrier(VkPipelineStageFlags srcStageMask,
                          VkPipelineStageFlags dstStageMask,
                          VkDependencyFlags dependencyFlags,
@@ -182,7 +185,7 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                          const VkImageMemoryBarrier *imageMemoryBarriers);
     void imageBarrier(VkPipelineStageFlags srcStageMask,
                       VkPipelineStageFlags dstStageMask,
-                      VkImageMemoryBarrier *imageMemoryBarrier);
+                      const VkImageMemoryBarrier *imageMemoryBarrier);
     void clearColorImage(const Image &image,
                          VkImageLayout imageLayout,
                          const VkClearColorValue &color,
@@ -250,19 +253,16 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                            const VkDeviceSize *offsets);
 
     void bindIndexBuffer(const Buffer &buffer, VkDeviceSize offset, VkIndexType indexType);
-    void bindDescriptorSets(VkPipelineBindPoint bindPoint,
-                            const PipelineLayout &layout,
-                            uint32_t firstSet,
-                            uint32_t descriptorSetCount,
-                            const VkDescriptorSet *descriptorSets,
-                            uint32_t dynamicOffsetCount,
-                            const uint32_t *dynamicOffsets);
+    void bindComputeDescriptorSets(const PipelineLayout &layout,
+                                   const VkDescriptorSet *descriptorSets);
+    void bindGraphicsDescriptorSets(const PipelineLayout &layout,
+                                    uint32_t firstSet,
+                                    uint32_t descriptorSetCount,
+                                    const VkDescriptorSet *descriptorSets,
+                                    uint32_t dynamicOffsetCount,
+                                    const uint32_t *dynamicOffsets);
 
     void executeCommands(uint32_t commandBufferCount, const CommandBuffer *commandBuffers);
-    void updateBuffer(const Buffer &buffer,
-                      VkDeviceSize dstOffset,
-                      VkDeviceSize dataSize,
-                      const void *data);
     void pushConstants(const PipelineLayout &layout,
                        VkShaderStageFlags flag,
                        uint32_t offset,
@@ -288,9 +288,6 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     void writeTimestamp(VkPipelineStageFlagBits pipelineStage,
                         VkQueryPool queryPool,
                         uint32_t query);
-
-    void setViewport(uint32_t firstViewport, uint32_t viewportCount, const VkViewport *viewports);
-    void setScissor(uint32_t firstScissor, uint32_t scissorCount, const VkRect2D *scissors);
 };
 
 class Image final : public WrappedObject<Image, VkImage>
@@ -542,8 +539,9 @@ ANGLE_INLINE void CommandBuffer::blitImage(const Image &srcImage,
                                            VkFilter filter)
 {
     ASSERT(valid() && srcImage.valid() && dstImage.valid());
+    ASSERT(regionCount == 1);
     vkCmdBlitImage(mHandle, srcImage.getHandle(), srcImageLayout, dstImage.getHandle(),
-                   dstImageLayout, regionCount, pRegions, filter);
+                   dstImageLayout, 1, pRegions, filter);
 }
 
 ANGLE_INLINE VkResult CommandBuffer::begin(const VkCommandBufferBeginInfo &info)
@@ -564,6 +562,14 @@ ANGLE_INLINE VkResult CommandBuffer::reset()
     return vkResetCommandBuffer(mHandle, 0);
 }
 
+ANGLE_INLINE void CommandBuffer::memoryBarrier(VkPipelineStageFlags srcStageMask,
+                                               VkPipelineStageFlags dstStageMask,
+                                               const VkMemoryBarrier *memoryBarrier)
+{
+    ASSERT(valid());
+    vkCmdPipelineBarrier(mHandle, srcStageMask, dstStageMask, 0, 1, memoryBarrier, 0, nullptr, 1,
+                         nullptr);
+}
 ANGLE_INLINE void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask,
                                                  VkPipelineStageFlags dstStageMask,
                                                  VkDependencyFlags dependencyFlags,
@@ -582,7 +588,7 @@ ANGLE_INLINE void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMa
 
 ANGLE_INLINE void CommandBuffer::imageBarrier(VkPipelineStageFlags srcStageMask,
                                               VkPipelineStageFlags dstStageMask,
-                                              VkImageMemoryBarrier *imageMemoryBarrier)
+                                              const VkImageMemoryBarrier *imageMemoryBarrier)
 {
     ASSERT(valid());
     vkCmdPipelineBarrier(mHandle, srcStageMask, dstStageMask, 0, 0, nullptr, 0, nullptr, 1,
@@ -621,8 +627,8 @@ ANGLE_INLINE void CommandBuffer::copyBufferToImage(VkBuffer srcBuffer,
 {
     ASSERT(valid() && dstImage.valid());
     ASSERT(srcBuffer != VK_NULL_HANDLE);
-    vkCmdCopyBufferToImage(mHandle, srcBuffer, dstImage.getHandle(), dstImageLayout, regionCount,
-                           regions);
+    ASSERT(regionCount == 1);
+    vkCmdCopyBufferToImage(mHandle, srcBuffer, dstImage.getHandle(), dstImageLayout, 1, regions);
 }
 
 ANGLE_INLINE void CommandBuffer::copyImageToBuffer(const Image &srcImage,
@@ -633,8 +639,8 @@ ANGLE_INLINE void CommandBuffer::copyImageToBuffer(const Image &srcImage,
 {
     ASSERT(valid() && srcImage.valid());
     ASSERT(dstBuffer != VK_NULL_HANDLE);
-    vkCmdCopyImageToBuffer(mHandle, srcImage.getHandle(), srcImageLayout, dstBuffer, regionCount,
-                           regions);
+    ASSERT(regionCount == 1);
+    vkCmdCopyImageToBuffer(mHandle, srcImage.getHandle(), srcImageLayout, dstBuffer, 1, regions);
 }
 
 ANGLE_INLINE void CommandBuffer::clearColorImage(const Image &image,
@@ -644,7 +650,8 @@ ANGLE_INLINE void CommandBuffer::clearColorImage(const Image &image,
                                                  const VkImageSubresourceRange *ranges)
 {
     ASSERT(valid());
-    vkCmdClearColorImage(mHandle, image.getHandle(), imageLayout, &color, rangeCount, ranges);
+    ASSERT(rangeCount == 1);
+    vkCmdClearColorImage(mHandle, image.getHandle(), imageLayout, &color, 1, ranges);
 }
 
 ANGLE_INLINE void CommandBuffer::clearDepthStencilImage(
@@ -665,7 +672,8 @@ ANGLE_INLINE void CommandBuffer::clearAttachments(uint32_t attachmentCount,
                                                   const VkClearRect *rects)
 {
     ASSERT(valid());
-    vkCmdClearAttachments(mHandle, attachmentCount, attachments, rectCount, rects);
+    ASSERT(rectCount == 1);
+    vkCmdClearAttachments(mHandle, attachmentCount, attachments, 1, rects);
 }
 
 ANGLE_INLINE void CommandBuffer::copyImage(const Image &srcImage,
@@ -676,6 +684,7 @@ ANGLE_INLINE void CommandBuffer::copyImage(const Image &srcImage,
                                            const VkImageCopy *regions)
 {
     ASSERT(valid() && srcImage.valid() && dstImage.valid());
+    ASSERT(regionCount == 1);
     vkCmdCopyImage(mHandle, srcImage.getHandle(), srcImageLayout, dstImage.getHandle(),
                    dstImageLayout, 1, regions);
 }
@@ -701,17 +710,24 @@ ANGLE_INLINE void CommandBuffer::bindIndexBuffer(const Buffer &buffer,
     vkCmdBindIndexBuffer(mHandle, buffer.getHandle(), offset, indexType);
 }
 
-ANGLE_INLINE void CommandBuffer::bindDescriptorSets(VkPipelineBindPoint bindPoint,
-                                                    const PipelineLayout &layout,
-                                                    uint32_t firstSet,
-                                                    uint32_t descriptorSetCount,
-                                                    const VkDescriptorSet *descriptorSets,
-                                                    uint32_t dynamicOffsetCount,
-                                                    const uint32_t *dynamicOffsets)
+ANGLE_INLINE void CommandBuffer::bindComputeDescriptorSets(const PipelineLayout &layout,
+                                                           const VkDescriptorSet *descriptorSets)
 {
     ASSERT(valid() && layout.valid());
-    vkCmdBindDescriptorSets(mHandle, bindPoint, layout.getHandle(), firstSet, descriptorSetCount,
-                            descriptorSets, dynamicOffsetCount, dynamicOffsets);
+    vkCmdBindDescriptorSets(mHandle, VK_PIPELINE_BIND_POINT_COMPUTE, layout.getHandle(), 0, 1,
+                            descriptorSets, 0, nullptr);
+}
+
+ANGLE_INLINE void CommandBuffer::bindGraphicsDescriptorSets(const PipelineLayout &layout,
+                                                            uint32_t firstSet,
+                                                            uint32_t descriptorSetCount,
+                                                            const VkDescriptorSet *descriptorSets,
+                                                            uint32_t dynamicOffsetCount,
+                                                            const uint32_t *dynamicOffsets)
+{
+    ASSERT(valid() && layout.valid());
+    vkCmdBindDescriptorSets(mHandle, VK_PIPELINE_BIND_POINT_GRAPHICS, layout.getHandle(), firstSet,
+                            descriptorSetCount, descriptorSets, dynamicOffsetCount, dynamicOffsets);
 }
 
 ANGLE_INLINE void CommandBuffer::executeCommands(uint32_t commandBufferCount,
@@ -721,15 +737,6 @@ ANGLE_INLINE void CommandBuffer::executeCommands(uint32_t commandBufferCount,
     vkCmdExecuteCommands(mHandle, commandBufferCount, commandBuffers[0].ptr());
 }
 
-ANGLE_INLINE void CommandBuffer::updateBuffer(const Buffer &buffer,
-                                              VkDeviceSize dstOffset,
-                                              VkDeviceSize dataSize,
-                                              const void *data)
-{
-    ASSERT(valid() && buffer.valid());
-    vkCmdUpdateBuffer(mHandle, buffer.getHandle(), dstOffset, dataSize, data);
-}
-
 ANGLE_INLINE void CommandBuffer::pushConstants(const PipelineLayout &layout,
                                                VkShaderStageFlags flag,
                                                uint32_t offset,
@@ -737,7 +744,8 @@ ANGLE_INLINE void CommandBuffer::pushConstants(const PipelineLayout &layout,
                                                const void *data)
 {
     ASSERT(valid() && layout.valid());
-    vkCmdPushConstants(mHandle, layout.getHandle(), flag, offset, size, data);
+    ASSERT(offset == 0);
+    vkCmdPushConstants(mHandle, layout.getHandle(), flag, 0, size, data);
 }
 
 ANGLE_INLINE void CommandBuffer::setEvent(VkEvent event, VkPipelineStageFlags stageMask)
@@ -799,22 +807,6 @@ ANGLE_INLINE void CommandBuffer::writeTimestamp(VkPipelineStageFlagBits pipeline
     vkCmdWriteTimestamp(mHandle, pipelineStage, queryPool, query);
 }
 
-ANGLE_INLINE void CommandBuffer::setViewport(uint32_t firstViewport,
-                                             uint32_t viewportCount,
-                                             const VkViewport *viewports)
-{
-    ASSERT(valid());
-    vkCmdSetViewport(mHandle, firstViewport, viewportCount, viewports);
-}
-
-ANGLE_INLINE void CommandBuffer::setScissor(uint32_t firstScissor,
-                                            uint32_t scissorCount,
-                                            const VkRect2D *scissors)
-{
-    ASSERT(valid());
-    vkCmdSetScissor(mHandle, firstScissor, scissorCount, scissors);
-}
-
 ANGLE_INLINE void CommandBuffer::draw(uint32_t vertexCount,
                                       uint32_t instanceCount,
                                       uint32_t firstVertex,
@@ -865,7 +857,9 @@ ANGLE_INLINE void CommandBuffer::dispatch(uint32_t groupCountX,
                                           uint32_t groupCountZ)
 {
     ASSERT(valid());
-    vkCmdDispatch(mHandle, groupCountX, groupCountY, groupCountZ);
+    ASSERT(groupCountY == 1);
+    ASSERT(groupCountZ == 1);
+    vkCmdDispatch(mHandle, groupCountX, 1, 1);
 }
 
 ANGLE_INLINE void CommandBuffer::bindPipeline(VkPipelineBindPoint pipelineBindPoint,

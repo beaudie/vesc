@@ -13,6 +13,7 @@
 #include "libANGLE/renderer/vulkan/SecondaryCommandBuffer.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
+#define ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS 1
 #if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
 using CommandBufferT = rx::vk::SecondaryCommandBuffer;
 #else
