@@ -22,6 +22,9 @@ namespace rx
 namespace vk
 {
 
+namespace priv
+{
+
 enum class CommandID
 {
     // State update cmds
@@ -465,6 +468,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     uint8_t *mPtrCmdData;
 };
 
+}  // namespace priv
 }  // namespace vk
 }  // namespace rx
 
