@@ -14,6 +14,8 @@ namespace rx
 {
 namespace vk
 {
+namespace priv
+{
 
 // Allocate/initialize memory for the command and return pointer to Cmd Header
 template <class StructType>
@@ -670,5 +672,6 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
     }
 }
 
+}  // namespace priv
 }  // namespace vk
 }  // namespace rx
