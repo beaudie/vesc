@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f00cd8e8_1161e7d8",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-21T17:24:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfe0c05f_1a2f11ac",
+      "range": {
+        "startLine": 26,
+        "startChar": 43,
+        "endLine": 26,
+        "endChar": 49
+      },
+      "revId": "0f2ac4ff523964b4e52a34423d8bfecf3f58a1e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ee9bd45d_2321ce50",
         "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp",
         "patchSetId": 2
@@ -96,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "72c38f3c_fa35babc",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-21T17:24:35Z",
+      "side": 1,
+      "message": "Driver issue has been reported. It\u0027s a serious enough bug to warrant a workaround. Especially as it\u0027s very hard to ensure a new driver fix is distributed. To be clear this is not a spec limitation. Just a workaround.",
+      "parentUuid": "dfcbdefa_59dfdd97",
+      "range": {
+        "startLine": 27,
+        "startChar": 51,
+        "endLine": 28,
+        "endChar": 40
+      },
+      "revId": "0f2ac4ff523964b4e52a34423d8bfecf3f58a1e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "23dce670_44565855",
         "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp",
         "patchSetId": 2
@@ -110,6 +158,24 @@
       "revId": "0f2ac4ff523964b4e52a34423d8bfecf3f58a1e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06c37c16_f4ac0ae9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-21T17:24:35Z",
+      "side": 1,
+      "message": "Thanks for the tip, implemented the same workaround.",
+      "parentUuid": "23dce670_44565855",
+      "revId": "0f2ac4ff523964b4e52a34423d8bfecf3f58a1e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -147,6 +213,48 @@
         "endLine": 193,
         "endChar": 30
       },
+      "revId": "0f2ac4ff523964b4e52a34423d8bfecf3f58a1e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "133f8c9f_69c6b600",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-21T17:24:35Z",
+      "side": 1,
+      "message": "The test can run okay but I wasn\u0027t sure how to encode the behaviour. Literally any response after glDrawArrays other than crashing is okay.",
+      "parentUuid": "30b8a7f9_ec117b63",
+      "range": {
+        "startLine": 193,
+        "startChar": 21,
+        "endLine": 193,
+        "endChar": 30
+      },
+      "revId": "0f2ac4ff523964b4e52a34423d8bfecf3f58a1e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0fc83b3_87ddf2ed",
+        "filename": "src/tests/gl_tests/LineLoopTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-21T17:24:35Z",
+      "side": 1,
+      "message": "Failing the test I think is okay. I wasn\u0027t sure if we should enable the test because it isn\u0027t standard behaviour.",
+      "parentUuid": "d9544758_d018ae63",
       "revId": "0f2ac4ff523964b4e52a34423d8bfecf3f58a1e0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
