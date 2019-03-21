@@ -36,6 +36,13 @@ constexpr VkImageUsageFlags kTransferStagingImageFlags =
 constexpr VkFormatFeatureFlags kBlitFeatureFlags =
     VK_FORMAT_FEATURE_BLIT_SRC_BIT | VK_FORMAT_FEATURE_BLIT_DST_BIT;
 
+// WebGL requires color textures to be initialized to transparent black.
+constexpr VkClearColorValue kWebGLInitColorValue = {};
+// When emulating a texture, we want the emulated channels to be 0, with alpha 1.
+constexpr VkClearColorValue kEmulatedInitColorValue = {{0, 0, 0, 1.0f}};
+// WebGL requires depth/stencil textures to be initialized to depth=1, stencil=0.
+constexpr VkClearDepthStencilValue kWebGLInitDepthStencilValue = {1.0f, 0};
+
 bool CanCopyWithTransfer(RendererVk *renderer,
                          const vk::Format &srcFormat,
                          const vk::Format &destFormat)
@@ -1006,7 +1013,8 @@ angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
 
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
-    return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), getLevelCount(),
+    return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), mImage->getLevelCount(),
+                                      getNativeImageLayer(0), mImage->getLayerCount(),
                                       commandBuffer);
 }
 
@@ -1017,7 +1025,7 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
     // Some data is pending, or the image has not been defined at all yet
     if (!mImage->valid())
     {
-        // lets initialize the image so we can generate the next levels.
+        // Let's initialize the image so we can generate the next levels.
         if (mImage->hasStagedUpdates())
         {
             ANGLE_TRY(ensureImageInitialized(contextVk));
@@ -1132,6 +1140,7 @@ angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
     {
         return angle::Result::Continue;
     }
+
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
 
@@ -1140,7 +1149,9 @@ angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
         ANGLE_TRY(initImage(contextVk, format, baseLevelExtents, levelCount, commandBuffer));
     }
 
-    return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), levelCount, commandBuffer);
+    return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), mImage->getLevelCount(),
+                                      getNativeImageLayer(0), mImage->getLayerCount(),
+                                      commandBuffer);
 }
 
 angle::Result TextureVk::initCubeMapRenderTargets(ContextVk *contextVk)
@@ -1219,7 +1230,46 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
 angle::Result TextureVk::initializeContents(const gl::Context *context,
                                             const gl::ImageIndex &imageIndex)
 {
-    UNIMPLEMENTED();
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    // Make sure image is created.  Don't flush staged updates as they need to be done after the
+    // clear.
+    const gl::ImageDesc &baseLevelDesc  = mState.getBaseLevelDesc();
+    const gl::Extents &baseLevelExtents = baseLevelDesc.size;
+    const uint32_t levelCount           = getLevelCount();
+
+    const vk::Format &format =
+        contextVk->getRenderer()->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
+
+    if (!mImage->valid())
+    {
+        ANGLE_TRY(initImage(contextVk, format, baseLevelExtents, levelCount, commandBuffer));
+    }
+
+    // Clear the given index.
+    uint32_t level      = imageIndex.getLevelIndex();
+    uint32_t baseLayer  = imageIndex.hasLayer() ? imageIndex.getLayerIndex() : 0;
+    uint32_t layerCount = imageIndex.getLayerCount();
+
+    const angle::Format &angleFormat = mImage->getFormat().angleFormat();
+    bool isDepthStencil              = angleFormat.depthBits > 0 || angleFormat.stencilBits > 0;
+
+    if (isDepthStencil)
+    {
+        ASSERT(level == 0 && baseLayer == 0 && layerCount == 0);
+        const VkImageAspectFlags aspect =
+            vk::GetDepthStencilAspectFlags(mImage->getFormat().textureFormat());
+        mImage->clearDepthStencil(aspect, aspect, kWebGLInitDepthStencilValue, commandBuffer);
+    }
+    else
+    {
+        mImage->clearColorLayer(kWebGLInitColorValue, level, 1, baseLayer, layerCount,
+                                commandBuffer);
+    }
+
     return angle::Result::Continue;
 }
 
@@ -1292,14 +1342,14 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
                                    const uint32_t levelCount,
                                    vk::CommandBuffer *commandBuffer)
 {
-    const RendererVk *renderer       = contextVk->getRenderer();
-    const angle::Format &angleFormat = format.textureFormat();
+    const RendererVk *renderer         = contextVk->getRenderer();
+    const angle::Format &textureFormat = format.textureFormat();
 
     VkImageUsageFlags imageUsageFlags = VK_IMAGE_USAGE_TRANSFER_DST_BIT |
                                         VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
                                         VK_IMAGE_USAGE_SAMPLED_BIT;
 
-    if (!angleFormat.isBlock)
+    if (!textureFormat.isBlock)
     {
         imageUsageFlags |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     }
@@ -1314,13 +1364,25 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
 
     ANGLE_TRY(initImageViews(contextVk, format, levelCount));
 
-    if (!angleFormat.isBlock)
+    // If the image has an emulated channel, always clear it.  These channels will be masked out in
+    // future writes, and shouldn't contain uninitialized values.
+    if (format.hasEmulatedChannels())
     {
-        // TODO(jmadill): Fold this into the RenderPass load/store ops if possible, or defer to
-        // first use.  This is only necessary if robustness is required.  http://anglebug.com/2361
-        VkClearColorValue black = {{0, 0, 0, 1.0f}};
-        mImage->clearColor(black, 0, levelCount, commandBuffer);
+        bool isDepthStencil = textureFormat.depthBits > 0 || textureFormat.stencilBits > 0;
+        if (isDepthStencil)
+        {
+            ASSERT(mImage->getLevelCount() == 1 && mImage->getLayerCount() == 1);
+            const VkImageAspectFlags aspect =
+                vk::GetDepthStencilAspectFlags(mImage->getFormat().textureFormat());
+            mImage->clearDepthStencil(aspect, aspect, kWebGLInitDepthStencilValue, commandBuffer);
+        }
+        else
+        {
+            mImage->clearColorLayer(kEmulatedInitColorValue, 0, mImage->getLevelCount(), 0,
+                                    mImage->getLayerCount(), commandBuffer);
+        }
     }
+
     return angle::Result::Continue;
 }
 

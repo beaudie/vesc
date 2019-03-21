@@ -549,8 +549,8 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         VkVertexInputAttributeDescription &attribDesc = attributeDescs[vertexAttribCount];
         const PackedAttribDesc &packedAttrib          = mVertexInputAttribs.attribs[attribIndex];
 
-        bindingDesc.binding   = attribIndex;
-        bindingDesc.stride    = static_cast<uint32_t>(packedAttrib.stride);
+        bindingDesc.binding = attribIndex;
+        bindingDesc.stride  = static_cast<uint32_t>(packedAttrib.stride);
         if (packedAttrib.divisor != 0)
         {
             bindingDesc.inputRate = static_cast<VkVertexInputRate>(VK_VERTEX_INPUT_RATE_INSTANCE);
