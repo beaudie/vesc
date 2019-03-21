@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "ee9bd45d_2321ce50",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-21T14:12:23Z",
+      "side": 1,
+      "message": "How was the issue first discovered? (I don\u0027t have access to view the bug!) Fuzzer?\n\nWhy not fix the driver so they won\u0027t have this issue to begin with? As the spec doesn\u0027t specify a limit, I\u0027d rather we didn\u0027t introduce undocumented artificial ones if we can.",
+      "range": {
+        "startLine": 27,
+        "startChar": 51,
+        "endLine": 28,
+        "endChar": 40
+      },
+      "revId": "0f2ac4ff523964b4e52a34423d8bfecf3f58a1e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "23dce670_44565855",
         "filename": "src/libANGLE/renderer/d3d/d3d11/ResourceManager11.cpp",
         "patchSetId": 2
