@@ -22,6 +22,30 @@
       "revId": "f3890caa57cfb95dab6fa0b88bb8c21513f3f378",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d86d8eee_3e964ec2",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-22T14:27:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfc005ce_73ea32fb",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 55
+      },
+      "revId": "f3890caa57cfb95dab6fa0b88bb8c21513f3f378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
