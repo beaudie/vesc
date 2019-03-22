@@ -289,9 +289,6 @@ namespace
 {
 angle::PlatformMethods gDefaultPlatformMethods;
 TestPlatformContext gPlatformContext;
-
-// After a fixed number of iterations we reset the test window. This works around some driver bugs.
-constexpr uint32_t kWindowReuseLimit = 50;
 }  // anonymous namespace
 
 // static
@@ -502,9 +499,8 @@ void ANGLETestBase::ANGLETestTearDown()
         checkD3D11SDKLayersMessages();
     }
 
-    if (mCurrentPlatform->reuseCounter++ >= kWindowReuseLimit || mForceNewDisplay)
+    if (mForceNewDisplay)
     {
-        mCurrentPlatform->reuseCounter = 0;
         getGLWindow()->destroyGL();
     }
     else

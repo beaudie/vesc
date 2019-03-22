@@ -412,7 +412,6 @@ class ANGLETestBase
         WGLWindow *wglWindow = nullptr;
         OSWindow *osWindow   = nullptr;
         ConfigParameters configParams;
-        uint32_t reuseCounter = 0;
     };
 
     int mWidth;
