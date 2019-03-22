@@ -358,6 +358,7 @@ void SecondaryCommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMask,
         CommandID::PipelinBarrier, memBarrierSize + buffBarrierSize + imgBarrierSize);
     paramStruct->srcStageMask             = srcStageMask;
     paramStruct->dstStageMask             = dstStageMask;
+    paramStruct->dependencyFlags          = dependencyFlags;
     paramStruct->memoryBarrierCount       = memoryBarrierCount;
     paramStruct->bufferMemoryBarrierCount = bufferMemoryBarrierCount;
     paramStruct->imageMemoryBarrierCount  = imageMemoryBarrierCount;
