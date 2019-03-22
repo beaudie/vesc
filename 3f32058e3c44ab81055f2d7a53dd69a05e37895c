@@ -46,6 +46,30 @@
       "revId": "3f32058e3c44ab81055f2d7a53dd69a05e37895c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47fb59a0_02105e40",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-22T14:10:08Z",
+      "side": 1,
+      "message": "The ES 3.0 stuff gets more complicated for framebuffers. Because we can have multiple versions of an Image existing at the same time. See issue http://crbug.com/2998 . I\u0027d like to take a crack at that when I finish a couple of my current tasks. No action needed on your part to accommodate for that right now.",
+      "parentUuid": "9801b86b_fa615560",
+      "range": {
+        "startLine": 1241,
+        "startChar": 0,
+        "endLine": 1251,
+        "endChar": 47
+      },
+      "revId": "3f32058e3c44ab81055f2d7a53dd69a05e37895c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
