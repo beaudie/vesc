@@ -22,6 +22,30 @@
       "revId": "3f32058e3c44ab81055f2d7a53dd69a05e37895c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9801b86b_fa615560",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1251,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-22T02:16:11Z",
+      "side": 1,
+      "message": "That\u0027s a precondition I didn\u0027t know about. Before I do that though, could you tell me what could get complicated in ES 3.0? Since we are starting off that work, I might as well do the right thing already if not too complicated.",
+      "parentUuid": "dddfe771_c51ef47b",
+      "range": {
+        "startLine": 1241,
+        "startChar": 0,
+        "endLine": 1251,
+        "endChar": 47
+      },
+      "revId": "3f32058e3c44ab81055f2d7a53dd69a05e37895c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
