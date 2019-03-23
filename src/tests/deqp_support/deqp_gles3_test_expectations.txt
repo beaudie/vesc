@@ -82,6 +82,9 @@
 1436 WIN D3D11 : dEQP-GLES3.functional.shaders.texture_functions.textureprojgradoffset.sampler2dshadow_vertex = FAIL
 1436 WIN D3D11 : dEQP-GLES3.functional.shaders.texture_functions.textureprojgradoffset.sampler2dshadow_fragment = FAIL
 
+// DrawBuffers test failing on D3D11.
+3298 WIN D3D11 : dEQP-GLES3.functional.shaders.fragdata.draw_buffers = FAIL
+
 // TODO(jmadill, cwallez): triage the failures below into permanent and temporary failures
 
 // Quadro P400
@@ -97,6 +100,10 @@
 
 // Failing everywhere
 2322 DEBUG RELEASE : dEQP-GLES3.functional.shaders.metamorphic.* = FAIL
+
+// Bind aliasing is not working currently
+3252 DEBUG RELEASE : dEQP-GLES3.functional.attribute_location.bind_aliasing.cond* = FAIL
+3252 DEBUG RELEASE : dEQP-GLES3.functional.attribute_location.bind_aliasing.max_cond* = FAIL
 
 // Windows and Linux failures
 1095 WIN LINUX : dEQP-GLES3.functional.texture.mipmap.2d.projected.* = FAIL
@@ -170,6 +177,19 @@
 
 // Very small threshold issue. Could upstream a higher tolerance to dEQP.
 2323 WIN D3D11 : dEQP-GLES3.functional.texture.units.2_units.only_cube.7 = FAIL
+
+// Blit related failures on D3D11
+3297 WIN D3D11 : dEQP-GLES3.functional.fbo.blit.rect.nearest_consistency_out_of_bounds_mag_reverse_dst_x = FAIL
+3297 WIN D3D11 : dEQP-GLES3.functional.fbo.blit.rect.nearest_consistency_out_of_bounds_mag_reverse_dst_y = FAIL
+3297 WIN D3D11 : dEQP-GLES3.functional.fbo.blit.rect.nearest_consistency_out_of_bounds_mag_reverse_src_x = FAIL
+3297 WIN D3D11 : dEQP-GLES3.functional.fbo.blit.rect.nearest_consistency_out_of_bounds_mag_reverse_src_y = FAIL
+3297 WIN D3D11 : dEQP-GLES3.functional.fbo.blit.rect.out_of_bounds_linear = FAIL
+3297 WIN D3D11 : dEQP-GLES3.functional.fbo.blit.rect.out_of_bounds_reverse_dst_x_linear = FAIL
+3297 WIN D3D11 : dEQP-GLES3.functional.fbo.blit.rect.out_of_bounds_reverse_dst_y_linear = FAIL
+3297 WIN D3D11 : dEQP-GLES3.functional.fbo.blit.rect.out_of_bounds_reverse_src_dst_x_linear = FAIL
+3297 WIN D3D11 : dEQP-GLES3.functional.fbo.blit.rect.out_of_bounds_reverse_src_dst_y_linear = FAIL
+3297 WIN D3D11 : dEQP-GLES3.functional.fbo.blit.rect.out_of_bounds_reverse_src_x_linear = FAIL
+3297 WIN D3D11 : dEQP-GLES3.functional.fbo.blit.rect.out_of_bounds_reverse_src_y_linear = FAIL
 
 // Windows AMD specific failures
 1633 WIN D3D11 AMD : dEQP-GLES3.functional.fbo.blit.depth_stencil.depth24_stencil8_scale = FAIL
