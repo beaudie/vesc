@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3433242e_5f56575a",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-23T02:12:56Z",
+      "side": 1,
+      "message": "Did you mean to remove this and leave `VkImageSubresourceRange range;`?",
+      "range": {
+        "startLine": 170,
+        "startChar": 4,
+        "endLine": 170,
+        "endChar": 24
+      },
+      "revId": "55dd302e78e26d78e84ecb86bb9d0e94df69463b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9f57120_b3c9507a",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-23T02:12:56Z",
+      "side": 1,
+      "message": "Should be made similar to `clearColorImage`",
+      "range": {
+        "startLine": 717,
+        "startChar": 0,
+        "endLine": 719,
+        "endChar": 50
+      },
+      "revId": "55dd302e78e26d78e84ecb86bb9d0e94df69463b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b365d73e_148807aa",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-23T02:12:56Z",
+      "side": 1,
+      "message": "I wouldn\u0027t do this. Yes, currently dispatch is used in very few places, but as soon as compute is implemented all three parameters are necessary (and while not implemented, this function is not incurring any cost).",
+      "range": {
+        "startLine": 787,
+        "startChar": 1,
+        "endLine": 790,
+        "endChar": 46
+      },
+      "revId": "55dd302e78e26d78e84ecb86bb9d0e94df69463b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
