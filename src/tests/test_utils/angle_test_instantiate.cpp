@@ -78,6 +78,9 @@ SystemInfo *GetTestSystemInfo()
         {
             std::cerr << "Warning: incomplete system info collection.\n";
         }
+
+        // Print complete system info when available.
+        PrintSystemInfo(*sSystemInfo);
     }
     return sSystemInfo;
 }
