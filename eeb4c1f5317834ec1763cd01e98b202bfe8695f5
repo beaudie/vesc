@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ae2ad54_c19f2e04",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-25T21:06:05Z",
+      "side": 1,
+      "message": "ES?",
+      "range": {
+        "startLine": 180,
+        "startChar": 87,
+        "endLine": 180,
+        "endChar": 89
+      },
+      "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "982efeca_52dc8b80",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-25T21:06:05Z",
+      "side": 1,
+      "message": "Can you also mention --gtest-filter-file for multiple flags?\nCopying from ANGLE chat:\nFWIW, I\u0027ve created test_flags.txt having\n--use-angle\u003dvulkan --gtest_filter\u003ddEQP.GLES2/functional_fragment_ops_interaction_basic_shader_35\nThen:\nadb push test_flags.txt /sdcard/chromium_tests_root\nadb shell am start -a android.intent.action.MAIN -n org.chromium.native_test/.NativeUnitTestNativeActivity -e org.chromium.native_test.NativeTest.StdoutFile /sdcard/chromium_tests_root/out.txt -e org.chromium.native_test.NativeTest.CommandLineFlags --gtest-filter-file\u003d/sdcard/chromium_tests_root/test_flags.txt\nThat seemed to work.",
+      "range": {
+        "startLine": 229,
+        "startChar": 143,
+        "endLine": 229,
+        "endChar": 169
+      },
+      "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
