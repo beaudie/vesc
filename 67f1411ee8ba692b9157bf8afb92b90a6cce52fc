@@ -261,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "907dc2de_c12b0f1a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T21:39:52Z",
+      "side": 1,
+      "message": "Maybe I don\u0027t understand what you were asking. You want to ignore the scissor region when using a load op it seems? Or do you want your clear to be restricted to the scissor region? The load op will not clear the region outside the scissor.",
+      "parentUuid": "35652745_29762402",
+      "range": {
+        "startLine": 222,
+        "startChar": 47,
+        "endLine": 222,
+        "endChar": 81
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b17f4654_b2b18928",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 21
@@ -531,6 +555,30 @@
       "side": 1,
       "message": "It\u0027s a bug that was unveiled in this work. I would rather rename the function to `getExtents` rather than `getImageLevelExtents`. The reason is that this returns the extents of the render target, and the user shouldn\u0027t need to care about the fact that the render target is viewing a certain level of an image. Would that be ok with you?",
       "parentUuid": "f8d99db6_0015f440",
+      "range": {
+        "startLine": 125,
+        "startChar": 20,
+        "endLine": 125,
+        "endChar": 51
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a3825e2_11a0a88a",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T21:39:52Z",
+      "side": 1,
+      "message": "That\u0027s fine. You could split this into a separate CL if you like.",
+      "parentUuid": "65f802e5_63a76908",
       "range": {
         "startLine": 125,
         "startChar": 20,
