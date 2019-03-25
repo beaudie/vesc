@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "ff8a9c4c_06e4db88",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "can we remove the TODO now?",
+      "range": {
+        "startLine": 223,
+        "startChar": 4,
+        "endLine": 223,
+        "endChar": 81
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c7c1668_ac2a14d6",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "nit: consider rephrasing to something like \"We can use render pass load ops if clearing depth/stencil or unmasked color.\"",
+      "range": {
+        "startLine": 214,
+        "startChar": 52,
+        "endLine": 214,
+        "endChar": 95
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53593fff_e528130b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "nit: ops",
+      "range": {
+        "startLine": 214,
+        "startChar": 35,
+        "endLine": 214,
+        "endChar": 38
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f042693_a7377cc0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "maybe add the clearColor check in here? seems to always be included in the test, and can use short circuiting.",
+      "range": {
+        "startLine": 219,
+        "startChar": 9,
+        "endLine": 219,
+        "endChar": 31
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dddd8d4c_ee6e6b1c",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 21
@@ -18,6 +110,168 @@
         "startChar": 47,
         "endLine": 222,
         "endChar": 81
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd67b79c_bbc81df9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "\u003e VK_ATTACHMENT_LOAD_OP_CLEAR specifies that the contents within the render area will be cleared\n\u003e to a uniform value, which is specified when a render pass instance is begun.\n\n\u003e renderArea is the render area that is affected by the render pass instance. The effects of\n\u003e attachment load, store and multisample resolve operations are restricted to the pixels whose\n\u003e x and y coordinates fall within the render area on all attachments. The render area extends\n\u003e to all layers of framebuffer. The application must ensure (using scissor if necessary) that\n\u003e all rendering is contained within the render area. The render area must be contained within\n\u003e the framebuffer dimensions.\n\nSeems pretty clear that the scissor test does affect load ops.",
+      "parentUuid": "dddd8d4c_ee6e6b1c",
+      "range": {
+        "startLine": 222,
+        "startChar": 47,
+        "endLine": 222,
+        "endChar": 81
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b17f4654_b2b18928",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "In the future for ES 3.0 clear functionality/MRT we could use an append-like function to save starting a new rp every clear. but can do that as a follow-up.",
+      "range": {
+        "startLine": 921,
+        "startChar": 5,
+        "endLine": 922,
+        "endChar": 74
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4c1ad93_f0450f75",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "nit: would extract into a temporary for clarity",
+      "range": {
+        "startLine": 1126,
+        "startChar": 12,
+        "endLine": 1126,
+        "endChar": 81
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06075922_9ba07c68",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "same for the ?: here",
+      "range": {
+        "startLine": 1149,
+        "startChar": 13,
+        "endLine": 1151,
+        "endChar": 83
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8d06f0f_3969aa39",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "these are fairly big structs. should probably be const \u0026",
+      "range": {
+        "startLine": 132,
+        "startChar": 41,
+        "endLine": 132,
+        "endChar": 59
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd85b446_4e350ece",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 133,
+        "startChar": 41,
+        "endLine": 133,
+        "endChar": 66
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8d99db6_0015f440",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "same question as before. is this an unrelated fix?",
+      "range": {
+        "startLine": 125,
+        "startChar": 20,
+        "endLine": 125,
+        "endChar": 51
       },
       "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",

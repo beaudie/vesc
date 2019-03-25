@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0e22e188_8b31128c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1145,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "can you make separate setters for load and store ops?",
+      "range": {
+        "startLine": 1145,
+        "startChar": 32,
+        "endLine": 1145,
+        "endChar": 37
+      },
+      "revId": "7ff01cab0396a89da4334fd67e916cc413b5f142",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "105db34d_91589d95",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1148,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "nit: can you pull this out into a temporary?",
+      "range": {
+        "startLine": 1148,
+        "startChar": 13,
+        "endLine": 1148,
+        "endChar": 95
+      },
+      "revId": "7ff01cab0396a89da4334fd67e916cc413b5f142",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "058d17fe_f2695657",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "same suggestions here",
+      "range": {
+        "startLine": 1174,
+        "startChar": 8,
+        "endLine": 1179,
+        "endChar": 53
+      },
+      "revId": "7ff01cab0396a89da4334fd67e916cc413b5f142",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59d6be99_ec9cb058",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T13:45:41Z",
+      "side": 1,
+      "message": "is this a separable fix? Also should probably rename it to getImageSubresourceExtents or getImageLevelExtents",
+      "range": {
+        "startLine": 75,
+        "startChar": 4,
+        "endLine": 75,
+        "endChar": 34
+      },
+      "revId": "7ff01cab0396a89da4334fd67e916cc413b5f142",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
