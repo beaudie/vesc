@@ -29,10 +29,11 @@ class SampleApplication
     SampleApplication(std::string name,
                       int argc,
                       char **argv,
-                      EGLint glesMajorVersion = 2,
-                      EGLint glesMinorVersion = 0,
-                      size_t width            = 1280,
-                      size_t height           = 720);
+                      EGLint glesMajorVersion         = 2,
+                      EGLint glesMinorVersion         = 0,
+                      size_t width                    = 1280,
+                      size_t height                   = 720,
+                      EGLint multiviewWindowViewCount = 0);
     virtual ~SampleApplication();
 
     virtual bool initialize();

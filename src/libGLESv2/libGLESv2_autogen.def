@@ -604,6 +604,11 @@ EXPORTS
     glFlushMappedBufferRangeEXT
     glMapBufferRangeEXT
 
+    ; GL_EXT_multiview_draw_buffers
+    glDrawBuffersIndexedEXTContextANGLE
+    glGetIntegeri_vEXTContextANGLE
+    glReadBufferIndexedEXTContextANGLE
+
     ; GL_EXT_occlusion_query_boolean
 
     ; GL_EXT_robustness
@@ -850,6 +855,7 @@ EXPORTS
     glDrawArraysInstancedEXTContextANGLE
     glDrawBuffersContextANGLE
     glDrawBuffersEXTContextANGLE
+    glDrawBuffersIndexedEXTContextANGLEContextANGLE
     glDrawElementsContextANGLE
     glDrawElementsIndirectContextANGLE
     glDrawElementsInstancedContextANGLE
@@ -951,6 +957,7 @@ EXPORTS
     glGetInteger64vContextANGLE
     glGetInteger64vRobustANGLEContextANGLE
     glGetIntegeri_vContextANGLE
+    glGetIntegeri_vEXTContextANGLEContextANGLE
     glGetIntegeri_vRobustANGLEContextANGLE
     glGetIntegervContextANGLE
     glGetIntegervRobustANGLEContextANGLE
@@ -1192,6 +1199,7 @@ EXPORTS
     glQueryCounterEXTContextANGLE
     glQueryMatrixxOESContextANGLE
     glReadBufferContextANGLE
+    glReadBufferIndexedEXTContextANGLEContextANGLE
     glReadPixelsContextANGLE
     glReadPixelsRobustANGLEContextANGLE
     glReadnPixelsEXTContextANGLE

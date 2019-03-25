@@ -1127,6 +1127,22 @@ Error ValidateCreateContext(Display *display,
                 }
                 break;
 
+            case EGL_MULTIVIEW_VIEW_COUNT_EXT:
+                if (!display->getExtensions().multiviewWindow)
+                {
+                    return EglBadAttribute() << "Attribute EGL_MULTIVIEW_VIEW_COUNT_EXT requires "
+                                                "EGL_EXT_multiview_window.";
+                }
+                {
+                    const EGLint viewCount = static_cast<EGLint>(value);
+                    if (viewCount < 1)
+                    {
+                        return EglBadParameter()
+                               << "EGL_MULTIVIEW_VIEW_COUNT_EXT must be at least 1.";
+                    }
+                }
+                break;
+
             default:
                 return EglBadAttribute() << "Unknown attribute.";
         }
@@ -3379,6 +3395,7 @@ Error ValidateQuerySurface(const Display *display,
         case EGL_MIPMAP_TEXTURE:
         case EGL_MIPMAP_LEVEL:
         case EGL_MULTISAMPLE_RESOLVE:
+        case EGL_MULTIVIEW_VIEW_COUNT_EXT:
         case EGL_PIXEL_ASPECT_RATIO:
         case EGL_RENDER_BUFFER:
         case EGL_SWAP_BEHAVIOR:
@@ -3467,6 +3484,7 @@ Error ValidateQueryContext(const Display *display,
         case EGL_CONFIG_ID:
         case EGL_CONTEXT_CLIENT_TYPE:
         case EGL_CONTEXT_CLIENT_VERSION:
+        case EGL_MULTIVIEW_VIEW_COUNT_EXT:
         case EGL_RENDER_BUFFER:
             break;
 

@@ -147,6 +147,8 @@ class DisplayWGL : public DisplayGL
 
     bool mHasWorkerContexts;
     bool mUseARBShare;
+
+    bool mStereo;
 };
 
 }  // namespace rx

@@ -244,4 +244,10 @@ bool WindowSurfaceGLX::getWindowDimensions(Window window,
     return XGetGeometry(mDisplay, window, &root, &x, &y, width, height, &border, &depth) != 0;
 }
 
+EGLint WindowSurfaceGLX::getCreatedMultiviewViewCount() const
+{
+    bool isStereo = mGLXDisplay->getGLXFBConfigAttrib(mFBConfig, GLX_STEREO) == True;
+    return isStereo ? 2 : 1;
+}
+
 }  // namespace rx

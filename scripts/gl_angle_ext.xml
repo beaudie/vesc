@@ -1081,5 +1081,12 @@
                 <command name="glProvokingVertexANGLE"/>
             </require>
         </extension>
+        <extension name="GL_EXT_multiview_draw_buffers" supported='gles2'>
+            <require>
+                <command name="glDrawBuffersIndexedEXTContextANGLE"/>
+                <command name="glGetIntegeri_vEXTContextANGLE"/>
+                <command name="glReadBufferIndexedEXTContextANGLE"/>
+            </require>
+        </extension>
     </extensions>
 </registry>

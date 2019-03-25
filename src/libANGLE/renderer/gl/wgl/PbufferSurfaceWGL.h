@@ -56,6 +56,8 @@ class PbufferSurfaceWGL : public SurfaceWGL
 
     HDC getDC() const override;
 
+    EGLint getCreatedMultiviewViewCount() const override;
+
   private:
     EGLint mWidth;
     EGLint mHeight;
