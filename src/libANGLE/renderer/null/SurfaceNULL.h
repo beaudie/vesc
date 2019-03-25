@@ -44,6 +44,7 @@ class SurfaceNULL : public SurfaceImpl
 
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
+    EGLint getCreatedMultiviewViewCount() const override;
 
     angle::Result initializeContents(const gl::Context *context,
                                      const gl::ImageIndex &imageIndex) override;

@@ -54,6 +54,8 @@ class PbufferSurfaceCGL : public SurfaceGL
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
 
+    EGLint getCreatedMultiviewViewCount() const override;
+
   private:
     unsigned mWidth;
     unsigned mHeight;

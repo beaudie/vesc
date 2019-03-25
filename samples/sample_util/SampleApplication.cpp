@@ -48,13 +48,15 @@ SampleApplication::SampleApplication(std::string name,
                                      EGLint glesMajorVersion,
                                      EGLint glesMinorVersion,
                                      size_t width,
-                                     size_t height)
+                                     size_t height,
+                                     EGLint multiviewWindowViewCount)
     : mName(std::move(name)),
       mWidth(width),
       mHeight(height),
       mRunning(false),
       mEGLWindow(nullptr),
-      mOSWindow(nullptr)
+      mOSWindow(nullptr),
+      mMultiviewWindowViewCount(multiviewWindowViewCount)
 {
     EGLint requestedRenderer = EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE;
 
@@ -135,6 +137,9 @@ int SampleApplication::run()
     configParams.alphaBits   = 8;
     configParams.depthBits   = 24;
     configParams.stencilBits = 8;
+
+    // Enable stereo.
+    configParams.multiviewWindowViewCount = mMultiviewWindowViewCount;
 
     // Disable vsync
     configParams.swapInterval = 0;

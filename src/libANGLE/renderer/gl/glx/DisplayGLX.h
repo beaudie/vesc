@@ -100,6 +100,8 @@ class DisplayGLX : public DisplayGL
 
     WorkerContext *createWorkerContext(std::string *infoLog);
 
+    int getGLXFBConfigAttrib(glx::FBConfig config, int attrib) const;
+
   private:
     egl::Error initializeContext(glx::FBConfig config,
                                  const egl::AttributeMap &eglAttributes,
@@ -110,7 +112,6 @@ class DisplayGLX : public DisplayGL
 
     egl::Error makeCurrentSurfaceless(gl::Context *context) override;
 
-    int getGLXFBConfigAttrib(glx::FBConfig config, int attrib) const;
     egl::Error createContextAttribs(glx::FBConfig,
                                     const Optional<gl::Version> &version,
                                     int profileMask,
@@ -156,6 +157,7 @@ class DisplayGLX : public DisplayGL
     FunctionsGLX mGLX;
     Display *mXDisplay;
     egl::Display *mEGLDisplay;
+    bool mStereo;
 };
 
 }  // namespace rx

@@ -2408,11 +2408,6 @@ void DispatchTableGL::initProcsGLES(const gl::Version &version,
         ASSIGN("glRenderbufferStorageMultisampleEXT", renderbufferStorageMultisample);
     }
 
-    if (extensions.count("GL_EXT_multiview_draw_buffers") != 0)
-    {
-        ASSIGN("glGetIntegeri_vEXT", getIntegeri_v);
-    }
-
     if (extensions.count("GL_EXT_occlusion_query_boolean") != 0)
     {
         ASSIGN("glBeginQueryEXT", beginQuery);
@@ -2653,6 +2648,13 @@ void DispatchTableGL::initProcsSharedExtensions(const std::set<std::string> &ext
     {
         ASSIGN("glMultiDrawArraysEXT", multiDrawArrays);
         ASSIGN("glMultiDrawElementsEXT", multiDrawElements);
+    }
+
+    if (true || extensions.count("GL_EXT_multiview_draw_buffers") != 0)
+    {
+        ASSIGN("glDrawBuffersIndexedEXT", drawBuffersIndexedEXT);
+        ASSIGN("glGetIntegeri_vEXT", getIntegeri_v);
+        ASSIGN("glReadBufferIndexedEXT", readBufferIndexedEXT);
     }
 
     if (extensions.count("GL_EXT_separate_shader_objects") != 0)
@@ -5138,11 +5140,6 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
         renderbufferStorageMultisample = &glRenderbufferStorageMultisampleNULL;
     }
 
-    if (extensions.count("GL_EXT_multiview_draw_buffers") != 0)
-    {
-        getIntegeri_v = &glGetIntegeri_vNULL;
-    }
-
     if (extensions.count("GL_EXT_occlusion_query_boolean") != 0)
     {
         beginQuery        = &glBeginQueryNULL;
@@ -5383,6 +5380,13 @@ void DispatchTableGL::initProcsSharedExtensionsNULL(const std::set<std::string> 
     {
         multiDrawArrays   = &glMultiDrawArraysNULL;
         multiDrawElements = &glMultiDrawElementsNULL;
+    }
+
+    if (extensions.count("GL_EXT_multiview_draw_buffers") != 0)
+    {
+        drawBuffersIndexedEXT = &glDrawBuffersIndexedEXTNULL;
+        getIntegeri_v         = &glGetIntegeri_vNULL;
+        readBufferIndexedEXT  = &glReadBufferIndexedEXTNULL;
     }
 
     if (extensions.count("GL_EXT_separate_shader_objects") != 0)

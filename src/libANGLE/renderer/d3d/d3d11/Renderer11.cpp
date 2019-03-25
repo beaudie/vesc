@@ -1179,6 +1179,9 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
     {
         outExtensions->windowsUIComposition = true;
     }
+
+    // No multiview window yet.
+    outExtensions->multiviewWindow = false;
 }
 
 angle::Result Renderer11::flush(Context11 *context11)
@@ -1393,10 +1396,12 @@ SwapChainD3D *Renderer11::createSwapChain(NativeWindowD3D *nativeWindow,
                                           GLenum backBufferFormat,
                                           GLenum depthBufferFormat,
                                           EGLint orientation,
-                                          EGLint samples)
+                                          EGLint samples,
+                                          EGLint multiviewCount)
 {
     return new SwapChain11(this, GetAs<NativeWindow11>(nativeWindow), shareHandle, d3dTexture,
-                           backBufferFormat, depthBufferFormat, orientation, samples);
+                           backBufferFormat, depthBufferFormat, orientation, samples,
+                           multiviewCount);
 }
 
 void *Renderer11::getD3DDevice()
@@ -3749,8 +3754,8 @@ angle::Result Renderer11::dispatchCompute(const gl::Context *context,
 }
 angle::Result Renderer11::dispatchComputeIndirect(const gl::Context *context, GLintptr indirect)
 {
-    const auto &glState          = context->getState();
-    const gl::Program *program   = glState.getProgram();
+    const auto &glState        = context->getState();
+    const gl::Program *program = glState.getProgram();
     if (program->getActiveShaderStorageBlockCount() > 0 ||
         program->getActiveAtomicCounterBufferCount() > 0)
     {

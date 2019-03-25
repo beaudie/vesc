@@ -100,10 +100,13 @@ class Renderbuffer final : public RefCountObject, public egl::ImageSibling, publ
 
     // FramebufferAttachmentObject Impl
     Extents getAttachmentSize(const ImageIndex &imageIndex) const override;
-    Format getAttachmentFormat(GLenum binding, const ImageIndex &imageIndex) const override;
+    Format getAttachmentFormat(GLenum bindingLocation,
+                               GLint bindingIndex,
+                               const ImageIndex &imageIndex) const override;
     GLsizei getAttachmentSamples(const ImageIndex &imageIndex) const override;
     bool isRenderable(const Context *context,
-                      GLenum binding,
+                      GLenum bindingLocation,
+                      GLint bindingIndex,
                       const ImageIndex &imageIndex) const override;
 
     void onAttach(const Context *context) override;

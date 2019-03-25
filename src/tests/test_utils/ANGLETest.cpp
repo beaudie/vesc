@@ -1059,6 +1059,11 @@ void ANGLETestBase::setSamples(EGLint samples)
     mCurrentPlatform->configParams.samples = samples;
 }
 
+void ANGLETestBase::setMultiviewWindowViewCount(EGLint numViews)
+{
+    mCurrentPlatform->configParams.multiviewWindowViewCount = numViews;
+}
+
 void ANGLETestBase::setDebugEnabled(bool enabled)
 {
     mCurrentPlatform->configParams.debug = enabled;
