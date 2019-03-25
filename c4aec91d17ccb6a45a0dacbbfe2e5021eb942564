@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdb7e42c_0b789f68",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-25T17:25:46Z",
+      "side": 1,
+      "message": "Add detailedDriverVersion",
+      "revId": "c4aec91d17ccb6a45a0dacbbfe2e5021eb942564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "905a4d67_f4df47c2",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-25T17:25:46Z",
+      "side": 1,
+      "message": "Should probably print/check machineModelName and machineModelVersion separately, because only name is available on Android.",
+      "revId": "c4aec91d17ccb6a45a0dacbbfe2e5021eb942564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3723b8b6_542f7a5d",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-25T17:25:46Z",
+      "side": 1,
+      "message": "Add machineManufacturer",
+      "revId": "c4aec91d17ccb6a45a0dacbbfe2e5021eb942564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be7231e5_e914e64a",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-25T17:25:46Z",
+      "side": 1,
+      "message": "I assume this is failing on Nexus 5X because GetSystemInfo fails to find a vulkan instance: https://cs.chromium.org/chromium/src/third_party/angle/src/gpu_info_util/SystemInfo_android.cpp?sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d146\n\nDoes it also fail on Pixel/others?\nWe could also potentially change the way GetSystemInfo returns errors on Android.",
+      "revId": "c4aec91d17ccb6a45a0dacbbfe2e5021eb942564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
