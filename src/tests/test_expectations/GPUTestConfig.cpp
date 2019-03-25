@@ -1,24 +1,27 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
+//#if
+
+// Copyright 2019 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+//
 
-#include "gpu_test_config.h"
+#include "GPUTestConfig.h"
 
 #include <stddef.h>
 #include <stdint.h>
 
-#include "gpu_info.h"
-#include "gpu_test_expectations_parser.h"
+#include "GPUInfo.h"
+#include "GPUTestExpectationsParser.h"
 
-#if defined(OS_MACOSX)
-#    include "gpu_test_config_mac.h"
+#if defined(ANGLE_PLATFORM_APPLE)
+#    include "GPUTestConfig_mac.h"
 #endif
 
-#if !defined(OS_ANDROID)
+#if !defined(ANGLE_PLATFORM_ANDROID)
 #    include "gpu_info_util/SystemInfo.h"
 #endif
 
-#if defined(OS_WIN)
+#if defined(ANGLE_PLATFORM_WINDOWS)
 
 namespace base
 {
@@ -51,9 +54,9 @@ void SysInfo::OperatingSystemVersionNumbers(int32_t *major_version,
 }  // anonymous namespace
 }  // namespace base
 
-#endif  // defined(OS_WIN)
+#endif  // defined(ANGLE_PLATFORM_WINDOWS)
 
-namespace gpu
+namespace angle
 {
 
 namespace
@@ -61,11 +64,9 @@ namespace
 
 GPUTestConfig::OS GetCurrentOS()
 {
-#if defined(OS_CHROMEOS)
-    return GPUTestConfig::kOsChromeOS;
-#elif defined(OS_LINUX) || defined(OS_OPENBSD)
+#if defined(ANGLE_PLATFORM_LINUX)
     return GPUTestConfig::kOsLinux;
-#elif defined(OS_WIN)
+#elif defined(ANGLE_PLATFORM_WINDOWS)
     int32_t major_version  = 0;
     int32_t minor_version  = 0;
     int32_t bugfix_version = 0;
@@ -80,7 +81,7 @@ GPUTestConfig::OS GetCurrentOS()
         return GPUTestConfig::kOsWin8;
     if (major_version == 10)
         return GPUTestConfig::kOsWin10;
-#elif defined(OS_MACOSX)
+#elif defined(ANGLE_PLATFORM_APPLE)
     int32_t major_version  = 0;
     int32_t minor_version  = 0;
     int32_t bugfix_version = 0;
@@ -111,15 +112,15 @@ GPUTestConfig::OS GetCurrentOS()
                 return GPUTestConfig::kOsMacMojave;
         }
     }
-#elif defined(OS_ANDROID)
+#elif defined(ANGLE_PLATFORM_ANDROID)
     return GPUTestConfig::kOsAndroid;
-#elif defined(OS_FUCHSIA)
+#elif defined(ANGLE_PLATFORM_FUCHSIA)
     return GPUTestConfig::kOsFuchsia;
 #endif
     return GPUTestConfig::kOsUnknown;
 }
 
-#if !defined(OS_ANDROID)
+#if !defined(ANGLE_PLATFORM_ANDROID)
 bool CollectBasicGraphicsInfo(GPUInfo *gpu_info)
 {
     angle::SystemInfo info;
@@ -141,7 +142,7 @@ bool CollectBasicGraphicsInfo(GPUInfo *gpu_info)
     gpu_info->gpu.active = true;
     return false;
 }
-#endif  // defined(OS_ANDROID)
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
 }  // namespace
 
 GPUTestConfig::GPUTestConfig()
@@ -158,7 +159,7 @@ GPUTestConfig::~GPUTestConfig() = default;
 
 void GPUTestConfig::set_os(int32_t os)
 {
-    DCHECK_EQ(0, os & ~(kOsAndroid | kOsWin | kOsMac | kOsLinux | kOsChromeOS | kOsFuchsia));
+    DCHECK_EQ(0, os & ~(kOsAndroid | kOsWin | kOsMac | kOsLinux | kOsFuchsia));
     os_ = os;
 }
 
@@ -279,7 +280,6 @@ bool GPUTestBotConfig::IsValid() const
         case kOsMacHighSierra:
         case kOsMacMojave:
         case kOsLinux:
-        case kOsChromeOS:
         case kOsAndroid:
         case kOsFuchsia:
             break;
@@ -407,4 +407,4 @@ bool GPUTestBotConfig::GpuBlacklistedOnBot()
     return false;
 }
 
-}  // namespace gpu
+}  // namespace angle
