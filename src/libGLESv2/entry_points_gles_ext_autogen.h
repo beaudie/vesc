@@ -706,6 +706,8 @@ ANGLE_EXPORT void *GL_APIENTRY MapBufferRangeEXT(GLenum target,
                                                  GLsizeiptr length,
                                                  GLbitfield access);
 
+// GL_EXT_multiview_draw_buffers
+
 // GL_EXT_occlusion_query_boolean
 
 // GL_EXT_robustness

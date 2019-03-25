@@ -48,7 +48,8 @@ SampleApplication::SampleApplication(std::string name,
                                      EGLint glesMajorVersion,
                                      EGLint glesMinorVersion,
                                      size_t width,
-                                     size_t height)
+                                     size_t height,
+                                     EGLint multiviewWindowViewCoun)
     : mName(std::move(name)),
       mWidth(width),
       mHeight(height),
@@ -68,6 +69,7 @@ SampleApplication::SampleApplication(std::string name,
 
     mEGLWindow = EGLWindow::New(glesMajorVersion, glesMinorVersion,
                                 EGLPlatformParameters(requestedRenderer));
+    mEGLWindow->setMultiviewWindowViewCount(multiviewWindowViewCount);
     mTimer.reset(CreateTimer());
     mOSWindow = OSWindow::New();
 }

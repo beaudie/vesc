@@ -62,7 +62,8 @@ class FramebufferAttachment final
 
     FramebufferAttachment(const Context *context,
                           GLenum type,
-                          GLenum binding,
+                          GLenum bindingLocation,
+                          GLint bindingIndex,
                           const ImageIndex &textureIndex,
                           FramebufferAttachmentObject *resource);
 
@@ -74,7 +75,8 @@ class FramebufferAttachment final
     void detach(const Context *context);
     void attach(const Context *context,
                 GLenum type,
-                GLenum binding,
+                GLenum bindingLocation,
+                GLint bindingIndex,
                 const ImageIndex &textureIndex,
                 FramebufferAttachmentObject *resource,
                 GLsizei numViews,
@@ -101,7 +103,8 @@ class FramebufferAttachment final
         return mType == GL_RENDERBUFFER && id() == renderbufferId;
     }
 
-    GLenum getBinding() const { return mTarget.binding(); }
+    GLenum getBindingLocation() const { return mTarget.bindingLocation(); }
+    GLint getBindingIndex() const { return mTarget.bindingIndex(); }
     GLuint id() const;
 
     // These methods are only legal to call on Texture attachments
@@ -168,15 +171,17 @@ class FramebufferAttachment final
     {
       public:
         Target();
-        Target(GLenum binding, const ImageIndex &imageIndex);
+        Target(GLenum bindingLocation, GLint bindingIndex, const ImageIndex &imageIndex);
         Target(const Target &other);
         Target &operator=(const Target &other);
 
-        GLenum binding() const { return mBinding; }
+        GLenum bindingLocation() const { return mBindingLocation; }
+        GLint bindingIndex() const { return mBindingIndex; }
         const ImageIndex &textureIndex() const { return mTextureIndex; }
 
       private:
-        GLenum mBinding;
+        GLenum mBindingLocation;
+        GLint mBindingIndex;
         ImageIndex mTextureIndex;
     };
 
@@ -197,10 +202,13 @@ class FramebufferAttachmentObject : public angle::Subject
     ~FramebufferAttachmentObject() override;
 
     virtual Extents getAttachmentSize(const ImageIndex &imageIndex) const                  = 0;
-    virtual Format getAttachmentFormat(GLenum binding, const ImageIndex &imageIndex) const = 0;
+    virtual Format getAttachmentFormat(GLenum bindingLocation,
+                                       GLint bindingIndex,
+                                       const ImageIndex &imageIndex) const                 = 0;
     virtual GLsizei getAttachmentSamples(const ImageIndex &imageIndex) const               = 0;
     virtual bool isRenderable(const Context *context,
-                              GLenum binding,
+                              GLenum bindingLocation,
+                              GLint bindingIndex,
                               const ImageIndex &imageIndex) const                          = 0;
 
     virtual void onAttach(const Context *context) = 0;
@@ -212,7 +220,8 @@ class FramebufferAttachmentObject : public angle::Subject
     virtual void setInitState(const ImageIndex &imageIndex, InitState initState) = 0;
 
     angle::Result getAttachmentRenderTarget(const Context *context,
-                                            GLenum binding,
+                                            GLenum bindingLocation,
+                                            GLint bindingIndex,
                                             const ImageIndex &imageIndex,
                                             rx::FramebufferAttachmentRenderTarget **rtOut) const;
 
@@ -231,7 +240,8 @@ inline Extents FramebufferAttachment::getSize() const
 inline Format FramebufferAttachment::getFormat() const
 {
     ASSERT(mResource);
-    return mResource->getAttachmentFormat(mTarget.binding(), mTarget.textureIndex());
+    return mResource->getAttachmentFormat(mTarget.bindingLocation(), mTarget.bindingIndex(),
+                                          mTarget.textureIndex());
 }
 
 inline GLsizei FramebufferAttachment::getSamples() const
@@ -245,14 +255,15 @@ inline angle::Result FramebufferAttachment::getRenderTargetImpl(
     rx::FramebufferAttachmentRenderTarget **rtOut) const
 {
     ASSERT(mResource);
-    return mResource->getAttachmentRenderTarget(context, mTarget.binding(), mTarget.textureIndex(),
-                                                rtOut);
+    return mResource->getAttachmentRenderTarget(
+        context, mTarget.bindingLocation(), mTarget.bindingIndex(), mTarget.textureIndex(), rtOut);
 }
 
 inline bool FramebufferAttachment::isRenderable(const Context *context) const
 {
     ASSERT(mResource);
-    return mResource->isRenderable(context, mTarget.binding(), mTarget.textureIndex());
+    return mResource->isRenderable(context, mTarget.bindingLocation(), mTarget.bindingIndex(),
+                                   mTarget.textureIndex());
 }
 
 }  // namespace gl

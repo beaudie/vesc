@@ -1864,6 +1864,12 @@ typedef void(INTERNAL_GL_APIENTRY *PFNGLMAXSHADERCOMPILERTHREADSKHRPROC)(GLuint 
 // ARB_parallel_shader_compile
 typedef void(INTERNAL_GL_APIENTRY *PFNGLMAXSHADERCOMPILERTHREADSARBPROC)(GLuint count);
 
+// GL_EXT_multiview_draw_buffers
+typedef void(INTERNAL_GL_APIENTRY *PFNGLDRAWBUFFERSINDEXEDEXTPROC)(GLint n,
+                                                                   const GLenum *location,
+                                                                   const GLint *indices);
+typedef void(INTERNAL_GL_APIENTRY *PFNGLREADBUFFERINDEXEDEXTPROC)(GLenum src, GLint index);
+
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_GL_FUNCTIONSGLTYPEDEFS_H_

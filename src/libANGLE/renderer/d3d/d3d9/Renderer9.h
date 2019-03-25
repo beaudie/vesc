@@ -93,7 +93,8 @@ class Renderer9 : public RendererD3D
                                   GLenum backBufferFormat,
                                   GLenum depthBufferFormat,
                                   EGLint orientation,
-                                  EGLint samples) override;
+                                  EGLint samples,
+                                  EGLint multiviewCount) override;
     egl::Error getD3DTextureInfo(const egl::Config *configuration,
                                  IUnknown *d3dTexture,
                                  EGLint *width,

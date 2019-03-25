@@ -3242,6 +3242,8 @@ void *GL_APIENTRY MapBufferRangeEXT(GLenum target,
     return GetDefaultReturnValue<EntryPoint::MapBufferRangeEXT, void *>();
 }
 
+// GL_EXT_multiview_draw_buffers
+
 // GL_EXT_occlusion_query_boolean
 // BeginQueryEXT is already defined.
 

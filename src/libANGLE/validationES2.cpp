@@ -2665,6 +2665,134 @@ bool ValidateDrawBuffersEXT(Context *context, GLsizei n, const GLenum *bufs)
     return ValidateDrawBuffersBase(context, n, bufs);
 }
 
+bool ValidateDrawBuffersIndexedEXT(Context *context,
+                                   GLint n,
+                                   const GLenum *location,
+                                   const GLint *indices)
+{
+    if (!context->getExtensions().multiviewDrawBuffers)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotSupported);
+        return false;
+    }
+
+    if (n < 0)
+    {
+        context->validationError(GL_INVALID_VALUE, kInvalidNegativeNumber);
+        return false;
+    }
+
+    Framebuffer *framebuffer = context->getState().getDrawFramebuffer();
+    GLuint frameBufferId     = framebuffer->id();
+
+    for (GLint i = 0; i < n; i++)
+    {
+        switch (location[i])
+        {
+            case GL_MULTIVIEW_EXT:
+                if (frameBufferId == 0)
+                {
+                    if (indices[i] < 0 || indices[i] >= framebuffer->getMultiviewViewCount())
+                    {
+                        context->validationError(GL_INVALID_OPERATION, kInvalidIndexRangeMultiview);
+                        return false;
+                    }
+                }
+                else
+                {
+                    context->validationError(GL_INVALID_ENUM, kInvalidLocationColorAttach);
+                    return false;
+                }
+                break;
+
+            case GL_COLOR_ATTACHMENT_EXT:
+                if (frameBufferId == 0)
+                {
+                    context->validationError(GL_INVALID_ENUM, kInvalidLocationMultiview);
+                    return false;
+                }
+                else
+                {
+                    if (indices[i] < 0 ||
+                        indices[i] >= (GLint)context->getCaps().maxColorAttachments)
+                    {
+                        context->validationError(GL_INVALID_OPERATION,
+                                                 kInvalidIndexRangeColorAttach);
+                        return false;
+                    }
+                }
+                break;
+
+            case GL_NONE:
+                break;
+        }
+    }
+    return true;
+}
+
+bool ValidateReadBufferIndexedEXT(Context *context, GLenum src, GLint index)
+{
+    if (!context->getExtensions().multiviewDrawBuffers)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotSupported);
+        return false;
+    }
+
+    gl::Framebuffer *framebuffer = context->getState().getDrawFramebuffer();
+    GLuint frameBufferId         = framebuffer->id();
+
+    switch (src)
+    {
+        case GL_MULTIVIEW_EXT:
+            if (frameBufferId == 0)
+            {
+                if (index < 0 || index >= framebuffer->getMultiviewViewCount())
+                {
+                    context->validationError(GL_INVALID_OPERATION, kInvalidIndexRangeMultiview);
+                    return false;
+                }
+            }
+            else
+            {
+                context->validationError(GL_INVALID_ENUM, kInvalidLocationColorAttach);
+                return false;
+            }
+            break;
+
+        case GL_COLOR_ATTACHMENT_EXT:
+            if (frameBufferId == 0)
+            {
+                context->validationError(GL_INVALID_ENUM, kInvalidLocationMultiview);
+                return false;
+            }
+            else
+            {
+                if (index < 0 || index >= (GLint)context->getCaps().maxColorAttachments)
+                {
+                    context->validationError(GL_INVALID_OPERATION, kInvalidIndexRangeColorAttach);
+                    return false;
+                }
+            }
+            break;
+
+        case GL_NONE:
+            break;
+    }
+
+    return true;
+}
+
+bool ValidateGetIntegeri_vEXT(Context *context, GLenum target, GLuint index, GLint *data)
+{
+    if (!context->getExtensions().multiviewDrawBuffers)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotSupported);
+        return false;
+    }
+
+    return ValidateIndexedStateQuery(context, target, index, nullptr);
+}
+
 bool ValidateTexImage2D(Context *context,
                         TextureTarget target,
                         GLint level,

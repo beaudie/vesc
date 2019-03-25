@@ -809,6 +809,8 @@ bool ValidateMapBufferRangeEXT(Context *context,
                                GLsizeiptr length,
                                GLbitfield access);
 
+// GL_EXT_multiview_draw_buffers
+
 // GL_EXT_occlusion_query_boolean
 
 // GL_EXT_robustness

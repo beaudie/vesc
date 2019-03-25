@@ -741,6 +741,10 @@ class DispatchTableGL : angle::NonCopyable
     // GL_EXT_discard_framebuffer
     PFNGLDISCARDFRAMEBUFFEREXTPROC discardFramebufferEXT = nullptr;
 
+    // GL_EXT_multiview_draw_buffers
+    PFNGLDRAWBUFFERSINDEXEDEXTPROC drawBuffersIndexedEXT = nullptr;
+    PFNGLREADBUFFERINDEXEDEXTPROC readBufferIndexedEXT   = nullptr;
+
     // GL_KHR_parallel_shader_compile
     PFNGLMAXSHADERCOMPILERTHREADSKHRPROC maxShaderCompilerThreadsKHR = nullptr;
 

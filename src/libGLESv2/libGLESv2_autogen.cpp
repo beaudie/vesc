@@ -3673,6 +3673,8 @@ void *GL_APIENTRY glMapBufferRangeEXT(GLenum target,
     return gl::MapBufferRangeEXT(target, offset, length, access);
 }
 
+// GL_EXT_multiview_draw_buffers
+
 // GL_EXT_occlusion_query_boolean
 
 // GL_EXT_robustness

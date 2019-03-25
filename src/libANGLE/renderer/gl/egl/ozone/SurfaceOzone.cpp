@@ -99,4 +99,10 @@ EGLint SurfaceOzone::getSwapBehavior() const
 {
     return EGL_BUFFER_PRESERVED;
 }
+
+EGLint SurfaceOzone::getCreatedMultiviewViewCount() const
+{
+    return 1;
+}
+
 }  // namespace rx

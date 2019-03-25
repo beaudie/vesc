@@ -661,6 +661,26 @@ size_t GetMaximumVertexUniformBlocks(D3D_FEATURE_LEVEL featureLevel)
     }
 }
 
+bool IsMultiviewDrawBuffersSupported(D3D_FEATURE_LEVEL featureLevel)
+{
+    switch (featureLevel)
+    {
+        case D3D_FEATURE_LEVEL_11_1:
+            // Return false for now.
+            return false;
+        case D3D_FEATURE_LEVEL_11_0:
+        case D3D_FEATURE_LEVEL_10_1:
+        case D3D_FEATURE_LEVEL_10_0:
+        case D3D_FEATURE_LEVEL_9_3:
+        case D3D_FEATURE_LEVEL_9_2:
+        case D3D_FEATURE_LEVEL_9_1:
+            return false;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
 size_t GetReservedVertexOutputVectors(D3D_FEATURE_LEVEL featureLevel)
 {
     // According to The OpenGL ES Shading Language specifications
@@ -1649,6 +1669,7 @@ void GenerateCaps(ID3D11Device *device,
     extensions->textureBorderClamp = true;
     extensions->textureMultisample = true;
     extensions->provokingVertex    = true;
+    extensions->multiviewDrawBuffers = IsMultiviewDrawBuffersSupported(featureLevel);
 
     // D3D11 Feature Level 10_0+ uses SV_IsFrontFace in HLSL to emulate gl_FrontFacing.
     // D3D11 Feature Level 9_3 doesn't support SV_IsFrontFace, and has no equivalent, so can't
