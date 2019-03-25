@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2b787562_1dcef570",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T22:39:12Z",
+      "side": 1,
+      "message": "It looks like \"driverVersion\" is already a nicely formatted version of \"detailedDriverVersion\". See SystemInfo_android.cpp.",
+      "parentUuid": "cdb7e42c_0b789f68",
+      "revId": "c4aec91d17ccb6a45a0dacbbfe2e5021eb942564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "905a4d67_f4df47c2",
         "filename": "src/gpu_info_util/SystemInfo.cpp",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "c4aec91d17ccb6a45a0dacbbfe2e5021eb942564",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "483bb6e5_3a04fd06",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T22:39:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "905a4d67_f4df47c2",
+      "revId": "c4aec91d17ccb6a45a0dacbbfe2e5021eb942564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "dd29edd8_66803b26",
+        "filename": "src/gpu_info_util/SystemInfo.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T22:39:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3723b8b6_542f7a5d",
+      "revId": "c4aec91d17ccb6a45a0dacbbfe2e5021eb942564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "be7231e5_e914e64a",
         "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2019-03-25T17:25:46Z",
       "side": 1,
       "message": "I assume this is failing on Nexus 5X because GetSystemInfo fails to find a vulkan instance: https://cs.chromium.org/chromium/src/third_party/angle/src/gpu_info_util/SystemInfo_android.cpp?sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d146\n\nDoes it also fail on Pixel/others?\nWe could also potentially change the way GetSystemInfo returns errors on Android.",
+      "revId": "c4aec91d17ccb6a45a0dacbbfe2e5021eb942564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeae1b9b_6cf36fa9",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T22:39:12Z",
+      "side": 1,
+      "message": "It was failing on Pixel 2 after successfully gathering and printing the system info. Somehow the test harness thought the output messages were part of an incomplete test. The harness would cause the step to fail after trying some strangely named tests like \"0:DeviceID\". If you want to help dig into it that would be cool. Maybe just editing the output to not confuse the test harness would do the trick.",
+      "parentUuid": "be7231e5_e914e64a",
       "revId": "c4aec91d17ccb6a45a0dacbbfe2e5021eb942564",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
