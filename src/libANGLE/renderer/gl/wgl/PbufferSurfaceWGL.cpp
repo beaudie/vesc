@@ -211,4 +211,10 @@ HDC PbufferSurfaceWGL::getDC() const
 {
     return mPbufferDeviceContext;
 }
+
+EGLint PbufferSurfaceWGL::getCreatedMultiviewViewCount() const
+{
+    return 1;
+}
+
 }  // namespace rx

@@ -460,6 +460,9 @@ void INTERNAL_GL_APIENTRY glDrawArraysInstancedBaseInstanceNULL(GLenum mode,
                                                                 GLuint baseinstance);
 void INTERNAL_GL_APIENTRY glDrawBufferNULL(GLenum buf);
 void INTERNAL_GL_APIENTRY glDrawBuffersNULL(GLsizei n, const GLenum *bufs);
+void INTERNAL_GL_APIENTRY glDrawBuffersIndexedEXTNULL(GLint n,
+                                                      const GLenum *location,
+                                                      const GLint *indices);
 void INTERNAL_GL_APIENTRY glDrawElementsNULL(GLenum mode,
                                              GLsizei count,
                                              GLenum type,
@@ -695,6 +698,7 @@ GLenum INTERNAL_GL_APIENTRY glGetGraphicsResetStatusNULL();
 void INTERNAL_GL_APIENTRY glGetInteger64i_vNULL(GLenum target, GLuint index, GLint64 *data);
 void INTERNAL_GL_APIENTRY glGetInteger64vNULL(GLenum pname, GLint64 *data);
 void INTERNAL_GL_APIENTRY glGetIntegeri_vNULL(GLenum target, GLuint index, GLint *data);
+void INTERNAL_GL_APIENTRY glGetIntegeri_vEXTNULL(GLenum target, GLuint index, GLint *data);
 void INTERNAL_GL_APIENTRY glGetIntegervNULL(GLenum pname, GLint *data);
 void INTERNAL_GL_APIENTRY glGetInternalformatSampleivNVNULL(GLenum target,
                                                             GLenum internalformat,
@@ -1362,6 +1366,7 @@ void INTERNAL_GL_APIENTRY glPushDebugGroupNULL(GLenum source,
 void INTERNAL_GL_APIENTRY glPushGroupMarkerEXTNULL(GLsizei length, const GLchar *marker);
 void INTERNAL_GL_APIENTRY glQueryCounterNULL(GLuint id, GLenum target);
 void INTERNAL_GL_APIENTRY glReadBufferNULL(GLenum src);
+void INTERNAL_GL_APIENTRY glReadBufferIndexedEXTNULL(GLenum src, GLint index);
 void INTERNAL_GL_APIENTRY glReadPixelsNULL(GLint x,
                                            GLint y,
                                            GLsizei width,

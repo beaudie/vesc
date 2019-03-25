@@ -1130,7 +1130,7 @@ void GenerateCaps(const FunctionsGL *functions,
                                        functions->isAtLeastGLES(gl::Version(3, 0)) ||
                                        functions->hasGLESExtension("GL_EXT_instanced_arrays");
     extensions->instancedArraysEXT = extensions->instancedArraysANGLE;
-    extensions->unpackSubimage = functions->standard == STANDARD_GL_DESKTOP ||
+    extensions->unpackSubimage     = functions->standard == STANDARD_GL_DESKTOP ||
                                  functions->isAtLeastGLES(gl::Version(3, 0)) ||
                                  functions->hasGLESExtension("GL_EXT_unpack_subimage");
     extensions->packSubimage = functions->standard == STANDARD_GL_DESKTOP ||
@@ -1205,6 +1205,9 @@ void GenerateCaps(const FunctionsGL *functions,
 
     extensions->textureMultisample = functions->isAtLeastGL(gl::Version(3, 2)) ||
                                      functions->hasGLExtension("GL_ARB_texture_multisample");
+
+    extensions->multiviewDrawBuffers =
+        functions->isAtLeastGL(gl::Version(2, 0)) && functions->drawBuffers;
 
     // NV_path_rendering
     // We also need interface query which is available in
@@ -1514,6 +1517,50 @@ bool SupportsNativeRendering(const FunctionsGL *functions,
             nativegl::GetInternalFormatInfo(internalFormat, functions->standard);
         return nativegl_gl::MeetsRequirements(functions, nativeInfo.textureAttachment);
     }
+}
+
+bool SupportsMultiviewWindow(const FunctionsGL *functions)
+{
+    using nativegl_gl::QuerySingleGLInt;
+    // See if glDrawBuffers on the back right buffer works. Some GPU drivers allow a stereo pixel
+    // format, but don't allow using stereo buffers.  This checks for that, and returns whether
+    // multiview draw buffers are expected to work.
+
+    // Clear any errors
+    while (functions->getError() != GL_NO_ERROR)
+        ;
+
+    // Save existing state.
+    GLint oldFramebufferBinding = QuerySingleGLInt(functions, GL_FRAMEBUFFER_BINDING);
+
+    // Bind the default framebuffer.
+    functions->bindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // Save the draw buffers of the default framebuffer.
+    GLint maxDrawBuffers = QuerySingleGLInt(functions, GL_MAX_DRAW_BUFFERS);
+    std::vector<GLenum> oldBufferBindings(maxDrawBuffers);
+    for (GLint i = 0; i < maxDrawBuffers; ++i)
+    {
+        oldBufferBindings[i] = QuerySingleGLInt(functions, GL_DRAW_BUFFER0 + i);
+    }
+
+    // Try to set the back right buffer.
+    GLenum buffer = GL_BACK_RIGHT;
+    functions->drawBuffers(1, &buffer);
+    GLenum err = functions->getError();
+
+    // Reset the previous draw buffer state.
+    if (oldBufferBindings[0] == GL_BACK)
+    {
+        functions->drawBuffers(1, oldBufferBindings.data());
+    }
+    else
+    {
+        functions->drawBuffers(maxDrawBuffers, oldBufferBindings.data());
+    }
+    functions->bindFramebuffer(GL_FRAMEBUFFER, oldFramebufferBinding);
+
+    return functions->isAtLeastGL(gl::Version(2, 0)) && err == GL_NO_ERROR;
 }
 
 bool UseTexImage2D(gl::TextureType textureType)

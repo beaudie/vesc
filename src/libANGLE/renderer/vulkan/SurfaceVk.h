@@ -51,9 +51,11 @@ class OffscreenSurfaceVk : public SurfaceImpl
 
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
+    EGLint getCreatedMultiviewViewCount() const override;
 
     angle::Result getAttachmentRenderTarget(const gl::Context *context,
-                                            GLenum binding,
+                                            GLenum bindingLocation,
+                                            GLint bindingIndex,
                                             const gl::ImageIndex &imageIndex,
                                             FramebufferAttachmentRenderTarget **rtOut) override;
 
@@ -124,8 +126,11 @@ class WindowSurfaceVk : public SurfaceImpl
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
 
+    EGLint getCreatedMultiviewViewCount() const override;
+
     angle::Result getAttachmentRenderTarget(const gl::Context *context,
-                                            GLenum binding,
+                                            GLenum bindingLocation,
+                                            GLint bindingIndex,
                                             const gl::ImageIndex &imageIndex,
                                             FramebufferAttachmentRenderTarget **rtOut) override;
 
@@ -146,7 +151,7 @@ class WindowSurfaceVk : public SurfaceImpl
     VkInstance mInstance;
 
   private:
-    virtual angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut) = 0;
+    virtual angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut)      = 0;
     virtual angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) = 0;
 
     angle::Result initializeImpl(DisplayVk *displayVk);

@@ -809,6 +809,14 @@ bool ValidateMapBufferRangeEXT(Context *context,
                                GLsizeiptr length,
                                GLbitfield access);
 
+// GL_EXT_multiview_draw_buffers
+bool ValidateDrawBuffersIndexedEXT(Context *context,
+                                   GLint n,
+                                   const GLenum *location,
+                                   const GLint *indices);
+bool ValidateGetIntegeri_vEXT(Context *context, GLenum target, GLuint index, GLint *data);
+bool ValidateReadBufferIndexedEXT(Context *context, GLenum src, GLint index);
+
 // GL_EXT_occlusion_query_boolean
 
 // GL_EXT_robustness

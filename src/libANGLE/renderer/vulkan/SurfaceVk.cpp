@@ -234,19 +234,26 @@ EGLint OffscreenSurfaceVk::getSwapBehavior() const
     return EGL_BUFFER_DESTROYED;
 }
 
+EGLint OffscreenSurfaceVk::getCreatedMultiviewViewCount() const
+{
+    return 1;
+}
+
 angle::Result OffscreenSurfaceVk::getAttachmentRenderTarget(
     const gl::Context *context,
-    GLenum binding,
+    GLenum bindingLocation,
+    GLint /*bindingIndex*/,
     const gl::ImageIndex &imageIndex,
     FramebufferAttachmentRenderTarget **rtOut)
 {
-    if (binding == GL_BACK)
+    if (bindingLocation == GL_BACK)
     {
         *rtOut = &mColorAttachment.renderTarget;
     }
     else
     {
-        ASSERT(binding == GL_DEPTH || binding == GL_STENCIL || binding == GL_DEPTH_STENCIL);
+        ASSERT(bindingLocation == GL_DEPTH || bindingLocation == GL_STENCIL ||
+               bindingLocation == GL_DEPTH_STENCIL);
         *rtOut = &mDepthStencilAttachment.renderTarget;
     }
 
@@ -739,10 +746,10 @@ angle::Result WindowSurfaceVk::present(DisplayVk *displayVk,
     presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
     presentInfo.waitSemaphoreCount = 1;
     presentInfo.pWaitSemaphores    = mFlushSemaphoreChain.back().ptr();
-    presentInfo.swapchainCount = 1;
-    presentInfo.pSwapchains    = &mSwapchain;
-    presentInfo.pImageIndices  = &mCurrentSwapchainImageIndex;
-    presentInfo.pResults       = nullptr;
+    presentInfo.swapchainCount     = 1;
+    presentInfo.pSwapchains        = &mSwapchain;
+    presentInfo.pImageIndices      = &mCurrentSwapchainImageIndex;
+    presentInfo.pResults           = nullptr;
 
     VkPresentRegionKHR presentRegion   = {};
     VkPresentRegionsKHR presentRegions = {};
@@ -822,7 +829,7 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk, EGLint *rects, EGL
 
 angle::Result WindowSurfaceVk::nextSwapchainImage(DisplayVk *displayVk)
 {
-    VkDevice device      = displayVk->getDevice();
+    VkDevice device = displayVk->getDevice();
 
     vk::Semaphore aquireImageSemaphore;
     ANGLE_VK_TRY(displayVk, aquireImageSemaphore.init(device));
@@ -1014,18 +1021,25 @@ EGLint WindowSurfaceVk::getSwapBehavior() const
     return EGL_BUFFER_DESTROYED;
 }
 
+EGLint WindowSurfaceVk::getCreatedMultiviewViewCount() const
+{
+    return 1;
+}
+
 angle::Result WindowSurfaceVk::getAttachmentRenderTarget(const gl::Context *context,
-                                                         GLenum binding,
+                                                         GLenum bindingLocation,
+                                                         GLint /*bindingIndex*/,
                                                          const gl::ImageIndex &imageIndex,
                                                          FramebufferAttachmentRenderTarget **rtOut)
 {
-    if (binding == GL_BACK)
+    if (bindingLocation == GL_BACK)
     {
         *rtOut = &mColorRenderTarget;
     }
     else
     {
-        ASSERT(binding == GL_DEPTH || binding == GL_STENCIL || binding == GL_DEPTH_STENCIL);
+        ASSERT(bindingLocation == GL_DEPTH || bindingLocation == GL_STENCIL ||
+               bindingLocation == GL_DEPTH_STENCIL);
         *rtOut = &mDepthStencilRenderTarget;
     }
 

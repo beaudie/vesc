@@ -235,4 +235,9 @@ egl::Error SurfaceEGL::getFrameTimestamps(EGLuint64KHR frameId,
     return egl::NoError();
 }
 
+EGLint SurfaceEGL::getCreatedMultiviewViewCount() const
+{
+    return 1;
+}
+
 }  // namespace rx

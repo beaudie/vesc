@@ -177,7 +177,10 @@ def get_output_path(name):
 def find_build_path():
     path = sys.path[0] # Directory of this script
     out = os.path.join(path, "../../../../out") # Out is in angle base dir
-    if (os.path.isdir(out)):
+    if not os.path.isdir(out):
+        # Handle case where ANGLE is in a chromium source tree.
+        out = os.path.join(path, "../../../../../../out")
+    if os.path.isdir(out):
         # Prefer release directories.
         for pattern in ['elease', '']:
             for o in os.listdir(out):

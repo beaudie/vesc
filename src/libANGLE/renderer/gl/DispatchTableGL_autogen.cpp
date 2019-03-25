@@ -2410,7 +2410,10 @@ void DispatchTableGL::initProcsGLES(const gl::Version &version,
 
     if (extensions.count("GL_EXT_multiview_draw_buffers") != 0)
     {
+        ASSIGN("glDrawBuffersIndexedEXT", drawBuffersIndexedEXT);
         ASSIGN("glGetIntegeri_vEXT", getIntegeri_v);
+        ASSIGN("glGetIntegeri_vEXT", getIntegeri_vEXT);
+        ASSIGN("glReadBufferIndexedEXT", readBufferIndexedEXT);
     }
 
     if (extensions.count("GL_EXT_occlusion_query_boolean") != 0)
@@ -5140,7 +5143,10 @@ void DispatchTableGL::initProcsGLESNULL(const gl::Version &version,
 
     if (extensions.count("GL_EXT_multiview_draw_buffers") != 0)
     {
-        getIntegeri_v = &glGetIntegeri_vNULL;
+        drawBuffersIndexedEXT = &glDrawBuffersIndexedEXTNULL;
+        getIntegeri_v         = &glGetIntegeri_vNULL;
+        getIntegeri_vEXT      = &glGetIntegeri_vEXTNULL;
+        readBufferIndexedEXT  = &glReadBufferIndexedEXTNULL;
     }
 
     if (extensions.count("GL_EXT_occlusion_query_boolean") != 0)

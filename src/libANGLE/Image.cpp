@@ -122,7 +122,8 @@ void ImageSibling::setSourceEGLImageInitState(gl::InitState initState) const
 }
 
 bool ImageSibling::isRenderable(const gl::Context *context,
-                                GLenum binding,
+                                GLenum bindingLocation,
+                                GLint bindingIndex,
                                 const gl::ImageIndex &imageIndex) const
 {
     ASSERT(isEGLImageTarget());
@@ -154,7 +155,8 @@ gl::Extents ExternalImageSibling::getAttachmentSize(const gl::ImageIndex &imageI
     return mImplementation->getSize();
 }
 
-gl::Format ExternalImageSibling::getAttachmentFormat(GLenum binding,
+gl::Format ExternalImageSibling::getAttachmentFormat(GLenum bindingLocation,
+                                                     GLint bindingIndex,
                                                      const gl::ImageIndex &imageIndex) const
 {
     return mImplementation->getFormat();
@@ -166,7 +168,8 @@ GLsizei ExternalImageSibling::getAttachmentSamples(const gl::ImageIndex &imageIn
 }
 
 bool ExternalImageSibling::isRenderable(const gl::Context *context,
-                                        GLenum binding,
+                                        GLenum bindingLocation,
+                                        GLint bindingIndex,
                                         const gl::ImageIndex &imageIndex) const
 {
     return mImplementation->isRenderable(context);
@@ -325,7 +328,7 @@ bool Image::isRenderable(const gl::Context *context) const
     else if (IsExternalImageTarget(mState.sourceType))
     {
         ASSERT(mState.source != nullptr);
-        return mState.source->isRenderable(context, GL_NONE, gl::ImageIndex());
+        return mState.source->isRenderable(context, GL_NONE, 0, gl::ImageIndex());
     }
 
     UNREACHABLE();
@@ -380,7 +383,7 @@ Error Image::initialize(const Display *display)
         ANGLE_TRY(rx::GetAs<ExternalImageSibling>(mState.source)->initialize(display));
     }
 
-    mState.format  = mState.source->getAttachmentFormat(GL_NONE, mState.imageIndex);
+    mState.format  = mState.source->getAttachmentFormat(GL_NONE, 0, mState.imageIndex);
     mState.size    = mState.source->getAttachmentSize(mState.imageIndex);
     mState.samples = mState.source->getAttachmentSamples(mState.imageIndex);
 

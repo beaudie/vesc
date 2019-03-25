@@ -244,6 +244,11 @@ bool IOSurfaceSurfaceCGL::validateAttributes(EGLClientBuffer buffer,
     return true;
 }
 
+EGLint IOSurfaceSurfaceCGL::getCreatedMultiviewViewCount() const
+{
+    return 1;
+}
+
 // Wraps a FramebufferGL to hook the destroy function to delete the texture associated with the
 // framebuffer.
 class IOSurfaceFramebuffer : public FramebufferGL

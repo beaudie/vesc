@@ -86,6 +86,8 @@ class WindowSurfaceCGL : public SurfaceGL
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
 
+    EGLint getCreatedMultiviewViewCount() const override;
+
   private:
     SwapLayer *mSwapLayer;
     SharedSwapState mSwapState;

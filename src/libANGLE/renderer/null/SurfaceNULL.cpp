@@ -11,6 +11,8 @@
 
 #include "common/debug.h"
 
+#include "libANGLE/Config.h"
+#include "libANGLE/Surface.h"
 #include "libANGLE/renderer/null/FramebufferNULL.h"
 
 namespace rx
@@ -91,6 +93,12 @@ EGLint SurfaceNULL::isPostSubBufferSupported() const
 EGLint SurfaceNULL::getSwapBehavior() const
 {
     return EGL_BUFFER_PRESERVED;
+}
+
+EGLint SurfaceNULL::getCreatedMultiviewViewCount() const
+{
+    ASSERT(mState.config);
+    return mState.config->multiviewViewCount;
 }
 
 angle::Result SurfaceNULL::initializeContents(const gl::Context *context,

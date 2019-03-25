@@ -64,6 +64,8 @@ class IOSurfaceSurfaceCGL : public SurfaceGL
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
 
+    EGLint getCreatedMultiviewViewCount() const override;
+
   private:
     CGLContextObj mCGLContext;
     IOSurfaceRef mIOSurface;

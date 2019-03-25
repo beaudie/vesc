@@ -52,14 +52,16 @@ class TextureCapsMap;
 class FramebufferState final : angle::NonCopyable
 {
   public:
-    FramebufferState();
-    explicit FramebufferState(const Caps &caps, GLuint id);
+    explicit FramebufferState(EGLint multiviewViewCount);
+    explicit FramebufferState(const Caps &caps, GLuint id, EGLint multiviewViewCount);
     ~FramebufferState();
 
     const std::string &getLabel();
     size_t getReadIndex() const;
 
-    const FramebufferAttachment *getAttachment(const Context *context, GLenum attachment) const;
+    const FramebufferAttachment *getAttachment(const Context *context,
+                                               GLenum attachment,
+                                               GLint index) const;
     const FramebufferAttachment *getReadAttachment() const;
     const FramebufferAttachment *getFirstNonNullAttachment() const;
     const FramebufferAttachment *getFirstColorAttachment() const;
@@ -70,9 +72,14 @@ class FramebufferState final : angle::NonCopyable
     const FramebufferAttachment *getStencilAttachment() const;
     const FramebufferAttachment *getDepthStencilAttachment() const;
 
-    const std::vector<GLenum> &getDrawBufferStates() const { return mDrawBufferStates; }
+    const std::vector<GLenum> &getDrawBufferStateLocations() const
+    {
+        return mDrawBufferStateLocations;
+    }
+    const std::vector<GLint> &getDrawBufferStateIndices() const { return mDrawBufferStateIndices; }
     DrawBufferMask getEnabledDrawBuffers() const { return mEnabledDrawBuffers; }
-    GLenum getReadBufferState() const { return mReadBufferState; }
+    GLenum getReadBufferStateLocation() const { return mReadBufferStateLocation; }
+    GLint getReadBufferStateIndex() const { return mReadBufferStateIndex; }
     const std::vector<FramebufferAttachment> &getColorAttachments() const
     {
         return mColorAttachments;
@@ -109,6 +116,8 @@ class FramebufferState final : angle::NonCopyable
 
     const std::vector<Offset> *getViewportOffsets() const;
     GLint getBaseViewIndex() const;
+    EGLint getMultiviewViewCount() const { return mMultiviewViewCount; }
+    EGLint getColorAttachmentCount() const { return mColorAttachments.size(); }
 
     GLuint id() const { return mId; }
 
@@ -128,8 +137,16 @@ class FramebufferState final : angle::NonCopyable
 
     std::vector<GLenum> mDrawBufferStates;
     GLenum mReadBufferState;
+    // Draw buffer locations and indices are kept in separate, but equally sized, arrays to allow
+    // the locations array to be directly passed to glDrawBuffers() in GL/GLES back ends that do
+    // not support indexed draw buffers.
+    std::vector<GLenum> mDrawBufferStateLocations;
+    std::vector<GLint> mDrawBufferStateIndices;
+    GLenum mReadBufferStateLocation;
+    GLint mReadBufferStateIndex;
     DrawBufferMask mEnabledDrawBuffers;
     ComponentTypeMask mDrawBufferTypeMask;
+    EGLint mMultiviewViewCount;
 
     GLint mDefaultWidth;
     GLint mDefaultHeight;
@@ -170,9 +187,13 @@ class Framebuffer final : public angle::ObserverInterface,
 
     GLuint id() const { return mState.mId; }
 
+    EGLint getMultiviewViewCount() const { return mState.getMultiviewViewCount(); }
+    EGLint getColorAttachmentCount() const { return mState.getColorAttachmentCount(); }
+
     void setAttachment(const Context *context,
                        GLenum type,
-                       GLenum binding,
+                       GLenum bindingLocation,
+                       GLint bindingIndex,
                        const ImageIndex &textureIndex,
                        FramebufferAttachmentObject *resource);
     void setAttachmentMultiviewLayered(const Context *context,
@@ -189,7 +210,7 @@ class Framebuffer final : public angle::ObserverInterface,
                                           FramebufferAttachmentObject *resource,
                                           GLsizei numViews,
                                           const GLint *viewportOffsets);
-    void resetAttachment(const Context *context, GLenum binding);
+    void resetAttachment(const Context *context, GLenum bindingLocation, GLint bindingIndex);
 
     bool detachTexture(const Context *context, GLuint texture);
     bool detachRenderbuffer(const Context *context, GLuint renderbuffer);
@@ -206,6 +227,9 @@ class Framebuffer final : public angle::ObserverInterface,
     const FramebufferAttachment *getFirstNonNullAttachment() const;
 
     const FramebufferAttachment *getAttachment(const Context *context, GLenum attachment) const;
+    const FramebufferAttachment *getAttachment(const Context *context,
+                                               GLenum location,
+                                               GLint index) const;
     GLenum getMultiviewLayout() const;
     bool readDisallowedByMultiview() const;
     GLsizei getNumViews() const;
@@ -213,17 +237,25 @@ class Framebuffer final : public angle::ObserverInterface,
     const std::vector<Offset> *getViewportOffsets() const;
 
     size_t getDrawbufferStateCount() const;
-    GLenum getDrawBufferState(size_t drawBuffer) const;
-    const std::vector<GLenum> &getDrawBufferStates() const;
+    GLenum getDrawBufferStateLocation(size_t drawBuffer) const;
+    GLint getDrawBufferStateIndex(size_t drawBuffer) const;
+    const std::vector<GLenum> &getDrawBufferStateLocations() const;
+    const std::vector<GLint> &getDrawBufferStateIndices() const;
     void setDrawBuffers(size_t count, const GLenum *buffers);
+    void setDrawBuffersIndexed(const Context *context,
+                               size_t count,
+                               const GLenum *locations,
+                               const GLint *indices);
     const FramebufferAttachment *getDrawBuffer(size_t drawBuffer) const;
     ComponentType getDrawbufferWriteType(size_t drawBuffer) const;
     ComponentTypeMask getDrawBufferTypeMask() const;
     DrawBufferMask getDrawBufferMask() const;
     bool hasEnabledDrawBuffer() const;
 
-    GLenum getReadBufferState() const;
+    GLenum getReadBufferStateLocation() const;
+    GLint getReadBufferStateIndex() const;
     void setReadBuffer(GLenum buffer);
+    void setReadBufferIndexed(const Context *context, GLenum location, GLint index);
 
     size_t getNumColorBuffers() const;
     bool hasDepth() const;
@@ -374,7 +406,8 @@ class Framebuffer final : public angle::ObserverInterface,
     GLenum checkStatusImpl(const Context *context);
     void setAttachment(const Context *context,
                        GLenum type,
-                       GLenum binding,
+                       GLenum bindingLocation,
+                       GLint bindingIndex,
                        const ImageIndex &textureIndex,
                        FramebufferAttachmentObject *resource,
                        GLsizei numViews,
@@ -388,7 +421,8 @@ class Framebuffer final : public angle::ObserverInterface,
                                               const GLint *viewportOffsets);
     void setAttachmentImpl(const Context *context,
                            GLenum type,
-                           GLenum binding,
+                           GLenum bindingLocation,
+                           GLint bindingIndex,
                            const ImageIndex &textureIndex,
                            FramebufferAttachmentObject *resource,
                            GLsizei numViews,
@@ -400,7 +434,8 @@ class Framebuffer final : public angle::ObserverInterface,
                           size_t dirtyBit,
                           angle::ObserverBinding *onDirtyBinding,
                           GLenum type,
-                          GLenum binding,
+                          GLenum bindingLocation,
+                          GLint bindingIndex,
                           const ImageIndex &textureIndex,
                           FramebufferAttachmentObject *resource,
                           GLsizei numViews,

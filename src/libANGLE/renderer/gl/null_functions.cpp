@@ -674,6 +674,11 @@ void INTERNAL_GL_APIENTRY glDrawBufferNULL(GLenum buf) {}
 
 void INTERNAL_GL_APIENTRY glDrawBuffersNULL(GLsizei n, const GLenum *bufs) {}
 
+void INTERNAL_GL_APIENTRY glDrawBuffersIndexedEXTNULL(GLint n,
+                                                      const GLenum *location,
+                                                      const GLint *indices)
+{}
+
 void INTERNAL_GL_APIENTRY glDrawElementsNULL(GLenum mode,
                                              GLsizei count,
                                              GLenum type,
@@ -1052,6 +1057,8 @@ void INTERNAL_GL_APIENTRY glGetInteger64i_vNULL(GLenum target, GLuint index, GLi
 void INTERNAL_GL_APIENTRY glGetInteger64vNULL(GLenum pname, GLint64 *data) {}
 
 void INTERNAL_GL_APIENTRY glGetIntegeri_vNULL(GLenum target, GLuint index, GLint *data) {}
+
+void INTERNAL_GL_APIENTRY glGetIntegeri_vEXTNULL(GLenum target, GLuint index, GLint *data) {}
 
 void INTERNAL_GL_APIENTRY glGetIntegervNULL(GLenum pname, GLint *data) {}
 
@@ -2162,6 +2169,8 @@ void INTERNAL_GL_APIENTRY glPushGroupMarkerEXTNULL(GLsizei length, const GLchar 
 void INTERNAL_GL_APIENTRY glQueryCounterNULL(GLuint id, GLenum target) {}
 
 void INTERNAL_GL_APIENTRY glReadBufferNULL(GLenum src) {}
+
+void INTERNAL_GL_APIENTRY glReadBufferIndexedEXTNULL(GLenum src, GLint index) {}
 
 void INTERNAL_GL_APIENTRY glReadPixelsNULL(GLint x,
                                            GLint y,

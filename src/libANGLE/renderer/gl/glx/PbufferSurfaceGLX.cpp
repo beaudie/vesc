@@ -137,4 +137,9 @@ glx::Drawable PbufferSurfaceGLX::getDrawable() const
     return mPbuffer;
 }
 
+EGLint PbufferSurfaceGLX::getCreatedMultiviewViewCount() const
+{
+    return 1;
+}
+
 }  // namespace rx

@@ -84,7 +84,8 @@ DisplayGLX::DisplayGLX(const egl::DisplayState &state)
       mCurrentSwapInterval(-1),
       mCurrentDrawable(0),
       mXDisplay(nullptr),
-      mEGLDisplay(nullptr)
+      mEGLDisplay(nullptr),
+      mStereo(false)
 {}
 
 DisplayGLX::~DisplayGLX() {}
@@ -157,6 +158,9 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
         mMinSwapInterval = 1;
     }
 
+    const auto &eglAttributes = display->getAttributeMap();
+    bool requestStereo        = eglAttributes.get(EGL_MULTIVIEW_VIEW_COUNT_EXT, 1) > 1;
+
     if (attribMap.contains(EGL_X11_VISUAL_ID_ANGLE))
     {
         mRequestedVisual = static_cast<EGLint>(attribMap.get(EGL_X11_VISUAL_ID_ANGLE, -1));
@@ -206,7 +210,9 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
                             // All of these must be supported for full EGL support
                             GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT | GLX_PBUFFER_BIT | GLX_PIXMAP_BIT,
                             // This makes sure the config have an associated visual Id
-                            GLX_X_RENDERABLE, True, GLX_CONFIG_CAVEAT, GLX_NONE, None};
+                            GLX_X_RENDERABLE, True, GLX_CONFIG_CAVEAT, GLX_NONE,
+                            // Request stereo if needed.
+                            GLX_STEREO, requestStereo ? True : False, None};
         glx::FBConfig *candidates = mGLX.chooseFBConfig(attribList, &nConfigs);
         if (nConfigs == 0)
         {
@@ -215,10 +221,10 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
                    << "Could not find a decent GLX FBConfig to create the context.";
         }
         mContextConfig = candidates[0];
+        mStereo        = requestStereo;
         XFree(candidates);
     }
 
-    const auto &eglAttributes = display->getAttributeMap();
     if (mHasARBCreateContext)
     {
         egl::Error error = initializeContext(mContextConfig, eglAttributes, &mContext);
@@ -547,8 +553,18 @@ egl::ConfigSet DisplayGLX::generateConfigs()
     int contextAccumBlueSize  = getGLXFBConfigAttrib(mContextConfig, GLX_ACCUM_BLUE_SIZE);
     int contextAccumAlphaSize = getGLXFBConfigAttrib(mContextConfig, GLX_ACCUM_ALPHA_SIZE);
 
+    bool contextStereo = getGLXFBConfigAttrib(mContextConfig, GLX_STEREO);
+
     int attribList[] = {
-        GLX_RENDER_TYPE, GLX_RGBA_BIT, GLX_X_RENDERABLE, True, GLX_DOUBLEBUFFER, True, None,
+        GLX_RENDER_TYPE,
+        GLX_RGBA_BIT,
+        GLX_X_RENDERABLE,
+        True,
+        GLX_DOUBLEBUFFER,
+        True,
+        GLX_STEREO,
+        mStereo ? True : False,
+        None,
     };
 
     int glxConfigCount;
@@ -623,6 +639,15 @@ egl::ConfigSet DisplayGLX::generateConfigs()
 
         config.samples       = samples;
         config.sampleBuffers = sampleBuffers;
+
+        // Stereo
+        int stereo = getGLXFBConfigAttrib(glxConfig, GLX_STEREO);
+        if (stereo != contextStereo)
+        {
+            continue;
+        }
+
+        config.multiviewViewCount = stereo ? 2 : 1;
 
         // Transparency
         if (getGLXFBConfigAttrib(glxConfig, GLX_TRANSPARENT_TYPE) == GLX_TRANSPARENT_RGB)
@@ -838,6 +863,9 @@ void DisplayGLX::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->displayTextureShareGroup = true;
 
     outExtensions->surfacelessContext = true;
+
+    outExtensions->multiviewWindow =
+        mStereo && nativegl::SupportsMultiviewWindow(mRenderer->getFunctions());
 
     DisplayGL::generateExtensions(outExtensions);
 }
