@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8dfd7ff1_7d87e512",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-25T21:22:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff8a9c4c_06e4db88",
+      "range": {
+        "startLine": 223,
+        "startChar": 4,
+        "endLine": 223,
+        "endChar": 81
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4c7c1668_ac2a14d6",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 21
@@ -71,6 +95,54 @@
     },
     {
       "key": {
+        "uuid": "697de692_4884a5ea",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-25T21:22:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c7c1668_ac2a14d6",
+      "range": {
+        "startLine": 214,
+        "startChar": 52,
+        "endLine": 214,
+        "endChar": 95
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "425302eb_bccee315",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-25T21:22:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53593fff_e528130b",
+      "range": {
+        "startLine": 214,
+        "startChar": 35,
+        "endLine": 214,
+        "endChar": 38
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f042693_a7377cc0",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 21
@@ -91,6 +163,30 @@
       "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7303fe4d_119019bf",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-25T21:22:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f042693_a7377cc0",
+      "range": {
+        "startLine": 219,
+        "startChar": 9,
+        "endLine": 219,
+        "endChar": 31
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -141,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "35652745_29762402",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-25T21:22:48Z",
+      "side": 1,
+      "message": "Your quote actually tells me the opposite. That the \"render area\" controls load op, and that it\u0027s up to the application to ensure writes are actually contained within the render area (using scissor). In other words, render area affects load op, scissor affects fragment-shaded pixels.\n\nWhich also makes sense, given that the scissor can change inside the render pass.",
+      "parentUuid": "fd67b79c_bbc81df9",
+      "range": {
+        "startLine": 222,
+        "startChar": 47,
+        "endLine": 222,
+        "endChar": 81
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b17f4654_b2b18928",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 21
@@ -161,6 +281,30 @@
       "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75317390_048410c1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-25T21:22:48Z",
+      "side": 1,
+      "message": "Yes I\u0027ve noticed that. That\u0027s the plan, and would be done in a future CL.",
+      "parentUuid": "b17f4654_b2b18928",
+      "range": {
+        "startLine": 921,
+        "startChar": 5,
+        "endLine": 922,
+        "endChar": 74
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -187,6 +331,30 @@
     },
     {
       "key": {
+        "uuid": "894a1fff_3ed0d12f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-25T21:22:48Z",
+      "side": 1,
+      "message": "Done. Duplicate comment from PS 17.",
+      "parentUuid": "b4c1ad93_f0450f75",
+      "range": {
+        "startLine": 1126,
+        "startChar": 12,
+        "endLine": 1126,
+        "endChar": 81
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "06075922_9ba07c68",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 21
@@ -207,6 +375,30 @@
       "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9729161_01537c5c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-25T21:22:48Z",
+      "side": 1,
+      "message": "Done. Duplicate comment from PS 17.",
+      "parentUuid": "06075922_9ba07c68",
+      "range": {
+        "startLine": 1149,
+        "startChar": 13,
+        "endLine": 1151,
+        "endChar": 83
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -233,6 +425,30 @@
     },
     {
       "key": {
+        "uuid": "a815eb20_eae66f96",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-25T21:22:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8d06f0f_3969aa39",
+      "range": {
+        "startLine": 132,
+        "startChar": 41,
+        "endLine": 132,
+        "endChar": 59
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bd85b446_4e350ece",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
         "patchSetId": 21
@@ -256,6 +472,30 @@
     },
     {
       "key": {
+        "uuid": "491ea60e_321df573",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-25T21:22:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd85b446_4e350ece",
+      "range": {
+        "startLine": 133,
+        "startChar": 41,
+        "endLine": 133,
+        "endChar": 66
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f8d99db6_0015f440",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 21
@@ -267,6 +507,30 @@
       "writtenOn": "2019-03-25T13:45:41Z",
       "side": 1,
       "message": "same question as before. is this an unrelated fix?",
+      "range": {
+        "startLine": 125,
+        "startChar": 20,
+        "endLine": 125,
+        "endChar": 51
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65f802e5_63a76908",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-25T21:22:48Z",
+      "side": 1,
+      "message": "It\u0027s a bug that was unveiled in this work. I would rather rename the function to `getExtents` rather than `getImageLevelExtents`. The reason is that this returns the extents of the render target, and the user shouldn\u0027t need to care about the fact that the render target is viewing a certain level of an image. Would that be ok with you?",
+      "parentUuid": "f8d99db6_0015f440",
       "range": {
         "startLine": 125,
         "startChar": 20,
