@@ -800,5 +800,12 @@
     "GL_KHR_parallel_shader_compile":
     [
         "MaxShaderCompilerThreadsKHR"
+    ],
+
+    "GL_EXT_multiview_draw_buffers":
+    [
+        "DrawBuffersIndexedEXT",
+        "GetIntegeri_vEXT",
+        "ReadBufferIndexedEXT"
     ]
 }

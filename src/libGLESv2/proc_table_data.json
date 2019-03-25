@@ -957,5 +957,12 @@
     "angle::Platform related entry points": [
         "ANGLEGetDisplayPlatform",
         "ANGLEResetDisplayPlatform"
+    ],
+
+    "GL_EXT_multiview_draw_buffers":
+    [
+        "glDrawBuffersIndexedEXT",
+        "glGetIntegeri_vEXT",
+        "glReadBufferIndexedEXT"
     ]
 }

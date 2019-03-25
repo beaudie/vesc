@@ -365,6 +365,8 @@ ProcEntry g_procTable[] = {
     {"glDrawBuffersContextANGLE", P(gl::DrawBuffersContextANGLE)},
     {"glDrawBuffersEXT", P(gl::DrawBuffersEXT)},
     {"glDrawBuffersEXTContextANGLE", P(gl::DrawBuffersEXTContextANGLE)},
+    {"glDrawBuffersIndexedEXT", P(gl::DrawBuffersIndexedEXT)},
+    {"glDrawBuffersIndexedEXTContextANGLE", P(gl::DrawBuffersIndexedEXTContextANGLE)},
     {"glDrawElements", P(gl::DrawElements)},
     {"glDrawElementsContextANGLE", P(gl::DrawElementsContextANGLE)},
     {"glDrawElementsIndirect", P(gl::DrawElementsIndirect)},
@@ -566,6 +568,8 @@ ProcEntry g_procTable[] = {
     {"glGetInteger64vRobustANGLEContextANGLE", P(gl::GetInteger64vRobustANGLEContextANGLE)},
     {"glGetIntegeri_v", P(gl::GetIntegeri_v)},
     {"glGetIntegeri_vContextANGLE", P(gl::GetIntegeri_vContextANGLE)},
+    {"glGetIntegeri_vEXT", P(gl::GetIntegeri_vEXT)},
+    {"glGetIntegeri_vEXTContextANGLE", P(gl::GetIntegeri_vEXTContextANGLE)},
     {"glGetIntegeri_vRobustANGLE", P(gl::GetIntegeri_vRobustANGLE)},
     {"glGetIntegeri_vRobustANGLEContextANGLE", P(gl::GetIntegeri_vRobustANGLEContextANGLE)},
     {"glGetIntegerv", P(gl::GetIntegerv)},
@@ -1059,6 +1063,8 @@ ProcEntry g_procTable[] = {
     {"glQueryMatrixxOESContextANGLE", P(gl::QueryMatrixxOESContextANGLE)},
     {"glReadBuffer", P(gl::ReadBuffer)},
     {"glReadBufferContextANGLE", P(gl::ReadBufferContextANGLE)},
+    {"glReadBufferIndexedEXT", P(gl::ReadBufferIndexedEXT)},
+    {"glReadBufferIndexedEXTContextANGLE", P(gl::ReadBufferIndexedEXTContextANGLE)},
     {"glReadPixels", P(gl::ReadPixels)},
     {"glReadPixelsContextANGLE", P(gl::ReadPixelsContextANGLE)},
     {"glReadPixelsRobustANGLE", P(gl::ReadPixelsRobustANGLE)},
@@ -1374,5 +1380,5 @@ ProcEntry g_procTable[] = {
     {"glWeightPointerOES", P(gl::WeightPointerOES)},
     {"glWeightPointerOESContextANGLE", P(gl::WeightPointerOESContextANGLE)}};
 
-size_t g_numProcs = 1290;
+size_t g_numProcs = 1296;
 }  // namespace egl

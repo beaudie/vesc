@@ -983,7 +983,8 @@ void QueryFramebufferAttachmentParameteriv(const Context *context,
 {
     ASSERT(framebuffer);
 
-    const FramebufferAttachment *attachmentObject = framebuffer->getAttachment(context, attachment);
+    const FramebufferAttachment *attachmentObject =
+        framebuffer->getAttachment(context, attachment, 0);
 
     if (attachmentObject == nullptr)
     {
@@ -1104,6 +1105,18 @@ void QueryFramebufferAttachmentParameteriv(const Context *context,
             *params = attachmentObject->isLayered();
             break;
 
+        case EGL_MULTIVIEW_VIEW_COUNT_EXT:
+            // The EGL_EXT_multiview_window spec states that value is not written if the surface
+            // is a pbuffer or pixmap surface
+            {
+                egl::Surface *surface = context->getCurrentDrawSurface();
+                if ((surface->getType() != EGL_PBUFFER_BIT) &&
+                    (surface->getType() != EGL_PIXMAP_BIT))
+                {
+                    *params = surface->getCreatedMultiviewViewCount();
+                }
+            }
+            break;
         default:
             UNREACHABLE();
             break;
@@ -2895,6 +2908,18 @@ void QueryContextAttrib(const gl::Context *context, EGLint attribute, EGLint *va
         case EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE:
             *value = context->isRobustResourceInitEnabled();
             break;
+        case EGL_MULTIVIEW_VIEW_COUNT_EXT:
+            // The EGL_EXT_multiview_window spec states that value is not written if the surface
+            // is a pbuffer or pixmap surface
+            {
+                egl::Surface *surface = context->getCurrentDrawSurface();
+                if (surface && (surface->getType() != EGL_PBUFFER_BIT) &&
+                    (surface->getType() != EGL_PIXMAP_BIT))
+                {
+                    *value = surface->getCreatedMultiviewViewCount();
+                }
+            }
+            break;
         default:
             UNREACHABLE();
             break;
@@ -2975,6 +3000,15 @@ void QuerySurfaceAttrib(const Surface *surface, EGLint attribute, EGLint *value)
             break;
         case EGL_WIDTH:
             *value = surface->getWidth();
+            break;
+        case EGL_MULTIVIEW_VIEW_COUNT_EXT:
+            // The EGL_EXT_multiview_window spec states that value is not written if the surface
+            // is a pbuffer or pixmap surface
+            if (surface && (surface->getType() != EGL_PBUFFER_BIT) &&
+                (surface->getType() != EGL_PIXMAP_BIT))
+            {
+                *value = surface->getCreatedMultiviewViewCount();
+            }
             break;
         case EGL_POST_SUB_BUFFER_SUPPORTED_NV:
             *value = surface->isPostSubBufferSupported();

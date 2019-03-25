@@ -46,6 +46,7 @@ Config::Config()
       maxPBufferPixels(0),
       maxSwapInterval(0),
       minSwapInterval(0),
+      multiviewViewCount(1),
       nativeRenderable(EGL_FALSE),
       nativeVisualID(0),
       nativeVisualType(0),
@@ -173,6 +174,7 @@ class ConfigSorter
         SORT(alphaMaskSize);
         SORT(nativeVisualType);
         SORT(configID);
+        SORT(multiviewViewCount);
 
 #undef SORT
 
@@ -359,6 +361,9 @@ std::vector<const Config *> ConfigSet::filter(const AttributeMap &attributeMap) 
                     break;
                 case EGL_RECORDABLE_ANDROID:
                     match = config.recordable == static_cast<EGLBoolean>(attributeValue);
+                    break;
+                case EGL_MULTIVIEW_VIEW_COUNT_EXT:
+                    match = config.multiviewViewCount == attributeValue;
                     break;
                 default:
                     UNREACHABLE();

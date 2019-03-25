@@ -105,6 +105,10 @@ def any_hash_dirty(name, filenames, new_hashes, old_hashes):
     found_dirty_hash = False
     for filename in filenames:
         key = name + ":" + filename
+        # Handle paths that are relative from the src root, rather than
+        # third_party/angle.
+        if not os.path.isfile(filename):
+            filename = os.path.join('..', os.path.join('..', filename))
         if not os.path.isfile(filename):
             found_dirty_hash = True
         else:

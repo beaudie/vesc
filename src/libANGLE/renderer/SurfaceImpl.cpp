@@ -83,4 +83,10 @@ egl::Error SurfaceImpl::getFrameTimestamps(EGLuint64KHR frameId,
     return egl::EglBadDisplay();
 }
 
+EGLint SurfaceImpl::getCreatedMultiviewViewCount() const
+{
+    UNREACHABLE();
+    return 1;
+}
+
 }  // namespace rx

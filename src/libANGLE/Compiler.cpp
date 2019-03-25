@@ -89,8 +89,9 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const State &state)
     mResources.ANGLE_multi_draw          = extensions.multiDraw;
 
     // TODO: use shader precision caps to determine if high precision is supported?
-    mResources.FragmentPrecisionHigh = 1;
-    mResources.EXT_frag_depth        = extensions.fragDepth;
+    mResources.FragmentPrecisionHigh      = 1;
+    mResources.EXT_frag_depth             = extensions.fragDepth;
+    mResources.EXT_multiview_draw_buffers = extensions.multiviewDrawBuffers;
 
     // OVR_multiview state
     mResources.OVR_multiview = extensions.multiview;

@@ -706,6 +706,13 @@ ANGLE_EXPORT void *GL_APIENTRY MapBufferRangeEXT(GLenum target,
                                                  GLsizeiptr length,
                                                  GLbitfield access);
 
+// GL_EXT_multiview_draw_buffers
+ANGLE_EXPORT void GL_APIENTRY DrawBuffersIndexedEXT(GLint n,
+                                                    const GLenum *location,
+                                                    const GLint *indices);
+ANGLE_EXPORT void GL_APIENTRY GetIntegeri_vEXT(GLenum target, GLuint index, GLint *data);
+ANGLE_EXPORT void GL_APIENTRY ReadBufferIndexedEXT(GLenum src, GLint index);
+
 // GL_EXT_occlusion_query_boolean
 
 // GL_EXT_robustness
@@ -1302,6 +1309,10 @@ ANGLE_EXPORT void GL_APIENTRY DrawBuffersContextANGLE(GLeglContext ctx,
 ANGLE_EXPORT void GL_APIENTRY DrawBuffersEXTContextANGLE(GLeglContext ctx,
                                                          GLsizei n,
                                                          const GLenum *bufs);
+ANGLE_EXPORT void GL_APIENTRY DrawBuffersIndexedEXTContextANGLE(GLeglContext ctx,
+                                                                GLint n,
+                                                                const GLenum *location,
+                                                                const GLint *indices);
 ANGLE_EXPORT void GL_APIENTRY DrawElementsContextANGLE(GLeglContext ctx,
                                                        GLenum mode,
                                                        GLsizei count,
@@ -1602,6 +1613,10 @@ ANGLE_EXPORT void GL_APIENTRY GetIntegeri_vContextANGLE(GLeglContext ctx,
                                                         GLenum target,
                                                         GLuint index,
                                                         GLint *data);
+ANGLE_EXPORT void GL_APIENTRY GetIntegeri_vEXTContextANGLE(GLeglContext ctx,
+                                                           GLenum target,
+                                                           GLuint index,
+                                                           GLint *data);
 ANGLE_EXPORT void GL_APIENTRY GetIntegervContextANGLE(GLeglContext ctx, GLenum pname, GLint *data);
 ANGLE_EXPORT void GL_APIENTRY GetInternalformativContextANGLE(GLeglContext ctx,
                                                               GLenum target,
@@ -2309,6 +2324,9 @@ ANGLE_EXPORT GLbitfield GL_APIENTRY QueryMatrixxOESContextANGLE(GLeglContext ctx
                                                                 GLfixed *mantissa,
                                                                 GLint *exponent);
 ANGLE_EXPORT void GL_APIENTRY ReadBufferContextANGLE(GLeglContext ctx, GLenum src);
+ANGLE_EXPORT void GL_APIENTRY ReadBufferIndexedEXTContextANGLE(GLeglContext ctx,
+                                                               GLenum src,
+                                                               GLint index);
 ANGLE_EXPORT void GL_APIENTRY ReadPixelsContextANGLE(GLeglContext ctx,
                                                      GLint x,
                                                      GLint y,

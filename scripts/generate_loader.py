@@ -248,7 +248,7 @@ using GenericProc = void (*)();
 using LoadProc = GenericProc (KHRONOS_APIENTRY *)(const char *);
 {export}void Load{api_upper}(LoadProc loadProc);
 }}  // namespace angle
-    
+
 #endif  // {lib}_{api_upper}_LOADER_AUTOGEN_H_
 """
 
