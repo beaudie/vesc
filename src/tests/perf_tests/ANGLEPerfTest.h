@@ -139,7 +139,7 @@ class ANGLERenderTest : public ANGLEPerfTest
     virtual void overrideWorkaroundsD3D(angle::WorkaroundsD3D *workaroundsD3D) {}
 
   protected:
-    const RenderTestParams &mTestParams;
+    RenderTestParams mTestParams;
 
     void setWebGLCompatibilityEnabled(bool webglCompatibility);
     void setRobustResourceInit(bool enabled);

@@ -383,6 +383,20 @@ ANGLERenderTest::ANGLERenderTest(const std::string &name, const RenderTestParams
             mSkipTest = true;
             break;
     }
+
+    if (mTestParams.trackGpuTime)
+    {
+        switch (mTestParams.getRenderer())
+        {
+            case EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE:
+            case EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE:
+                // TODO: On D3D, tracking GPU time causes crashes.  http://anglebug.com/3310
+                mTestParams.trackGpuTime = false;
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 ANGLERenderTest::~ANGLERenderTest()
