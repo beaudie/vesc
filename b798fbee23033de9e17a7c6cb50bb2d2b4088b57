@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f57ed1da_35589684",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T21:31:23Z",
+      "side": 1,
+      "message": "I believe the tests don\u0027t fail if the data dir is missing. They run but output incorrect images. That might be related to the visual issues Cody was seeing. They should output error messages. But I\u0027m not sure how your stdout capturing might interfere with printing error messages.",
+      "parentUuid": "fdda9cc7_2aea3515",
+      "revId": "b798fbee23033de9e17a7c6cb50bb2d2b4088b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6e3feb20_7849709a",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2019-03-25T20:24:21Z",
       "side": 1,
       "message": "Missing `Bug:` tag.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 10
+      },
+      "revId": "b798fbee23033de9e17a7c6cb50bb2d2b4088b57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b6acfdf_50cdb8ee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-25T21:31:23Z",
+      "side": 1,
+      "message": "+1. You can use issue 3125 or issue 3139",
+      "parentUuid": "6e3feb20_7849709a",
       "range": {
         "startLine": 14,
         "startChar": 0,
