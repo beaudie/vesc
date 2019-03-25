@@ -1,9 +1,11 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
+//
+// Copyright 2019 The ANGLE Project Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+//
 
-#ifndef ANGLE_GPU_CONFIG_GPU_TEST_CONFIG_H_
-#define ANGLE_GPU_CONFIG_GPU_TEST_CONFIG_H_
+#ifndef TEST_EXPECTATIONS_GPU_TEST_CONFIG_H_
+#define TEST_EXPECTATIONS_GPU_TEST_CONFIG_H_
 
 #include <stdint.h>
 #include <iostream>
@@ -20,24 +22,6 @@
 #define DVLOG(X) std::cerr
 #define LOG(X) std::cerr
 
-#define GPU_EXPORT
-
-// Shim Chromium's types by importing symbols in the correct namespaces
-namespace base
-{
-using angle::HexStringToUInt;
-using angle::KEEP_WHITESPACE;
-using angle::kWhitespaceASCII;
-using angle::ReadFileToString;
-using angle::SPLIT_WANT_ALL;
-using angle::SPLIT_WANT_NONEMPTY;
-using angle::SplitString;
-using angle::SplitStringAlongWhitespace;
-using angle::TRIM_WHITESPACE;
-
-using TimeDelta = int;
-}  // namespace base
-
 namespace gfx
 {
 class Size
@@ -52,29 +36,12 @@ class Size
 struct DxDiagNode
 {};
 
-// TODO(jmadill): other platforms
-// clang-format off
-#if defined(_WIN32) || defined(_WIN64)
-#    define OS_WIN
-#elif defined(ANDROID)
-#    define OS_ANDROID
-#elif defined(__linux__)
-#    define OS_LINUX
-#elif defined(__APPLE__)
-#    define OS_MACOSX
-#elif defined(__Fuchsia__)
-#    define OS_FUCHSIA
-#else
-#    error "Unsupported platform"
-#endif
-// clang-format on
-
-namespace gpu
+namespace angle
 {
 
 struct GPUInfo;
 
-class GPU_EXPORT GPUTestConfig
+class GPUTestConfig
 {
   public:
     enum OS
@@ -174,7 +141,7 @@ class GPU_EXPORT GPUTestConfig
     int32_t api_;
 };
 
-class GPU_EXPORT GPUTestBotConfig : public GPUTestConfig
+class GPUTestBotConfig : public GPUTestConfig
 {
   public:
     GPUTestBotConfig() = default;
@@ -208,6 +175,6 @@ class GPU_EXPORT GPUTestBotConfig : public GPUTestConfig
     static bool GpuBlacklistedOnBot();
 };
 
-}  // namespace gpu
+}  // namespace angle
 
-#endif  // ANGLE_GPU_CONFIG_GPU_TEST_CONFIG_H_
+#endif  // TEST_EXPECTATIONS_GPU_TEST_CONFIG_H_
