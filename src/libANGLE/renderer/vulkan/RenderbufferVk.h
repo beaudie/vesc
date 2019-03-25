@@ -37,7 +37,8 @@ class RenderbufferVk : public RenderbufferImpl
     angle::Result setStorageEGLImageTarget(const gl::Context *context, egl::Image *image) override;
 
     angle::Result getAttachmentRenderTarget(const gl::Context *context,
-                                            GLenum binding,
+                                            GLenum bindingLocation,
+                                            GLint bindingIndex,
                                             const gl::ImageIndex &imageIndex,
                                             FramebufferAttachmentRenderTarget **rtOut) override;
 

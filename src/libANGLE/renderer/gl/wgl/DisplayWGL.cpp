@@ -106,7 +106,8 @@ DisplayWGL::DisplayWGL(const egl::DisplayState &state)
       mD3d11Module(nullptr),
       mD3D11DeviceHandle(nullptr),
       mD3D11Device(nullptr),
-      mUseARBShare(true)
+      mUseARBShare(true),
+      mStereo(false)
 {}
 
 DisplayWGL::~DisplayWGL() {}
@@ -182,13 +183,24 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
                << "Failed to get the device context of the dummy OpenGL window.";
     }
 
-    const PIXELFORMATDESCRIPTOR pixelFormatDescriptor = wgl::GetDefaultPixelFormatDescriptor();
+    bool requestStereo = mDisplayAttributes.contains(EGL_MULTIVIEW_VIEW_COUNT_EXT);
+    const PIXELFORMATDESCRIPTOR pixelFormatDescriptor =
+        wgl::GetDefaultPixelFormatDescriptor(requestStereo);
 
     int dummyPixelFormat = ChoosePixelFormat(dummyDeviceContext, &pixelFormatDescriptor);
     if (dummyPixelFormat == 0)
     {
-        return egl::EglNotInitialized()
-               << "Could not find a compatible pixel format for the dummy OpenGL window.";
+        pixelFormatDescriptor = wgl::GetDefaultPixelFormatDescriptor(false);
+        dummyPixelFormat      = ChoosePixelFormat(dummyDeviceContext, &pixelFormatDescriptor);
+        if (dummyPixelFormat == 0)
+        {
+            return egl::EglNotInitialized()
+                   << "Could not find a compatible pixel format for the dummy OpenGL window.";
+        }
+    }
+    else
+    {
+        mStereo = requestStereo;
     }
 
     if (!SetPixelFormat(dummyDeviceContext, dummyPixelFormat, &pixelFormatDescriptor))
@@ -251,11 +263,21 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
 
     if (mFunctionsWGL->choosePixelFormatARB)
     {
-        std::vector<int> attribs = wgl::GetDefaultPixelFormatAttributes(false);
+        std::vector<int> attribs = wgl::GetDefaultPixelFormatAttributes(false, requestStereo);
 
         UINT matchingFormats = 0;
         mFunctionsWGL->choosePixelFormatARB(mDeviceContext, &attribs[0], nullptr, 1u, &mPixelFormat,
                                             &matchingFormats);
+        if (mPixelFormat == 0)
+        {
+            attribs = wgl::GetDefaultPixelFormatAttributes(false, false);
+            mFunctionsWGL->choosePixelFormatARB(mDeviceContext, &attribs[0], nullptr, 1u,
+                                                &mPixelFormat, &matchingFormats);
+        }
+        else
+        {
+            mStereo = requestStereo;
+        }
     }
 
     if (mPixelFormat == 0)
@@ -510,33 +532,34 @@ egl::ConfigSet DisplayWGL::generateConfigs()
     config.renderTargetFormat = GL_RGBA8;  // TODO: use the bit counts to determine the format
     config.depthStencilFormat =
         GL_DEPTH24_STENCIL8;  // TODO: use the bit counts to determine the format
-    config.bufferSize        = pixelFormatDescriptor.cColorBits;
-    config.redSize           = pixelFormatDescriptor.cRedBits;
-    config.greenSize         = pixelFormatDescriptor.cGreenBits;
-    config.blueSize          = pixelFormatDescriptor.cBlueBits;
-    config.luminanceSize     = 0;
-    config.alphaSize         = pixelFormatDescriptor.cAlphaBits;
-    config.alphaMaskSize     = 0;
-    config.bindToTextureRGB  = (getAttrib(WGL_BIND_TO_TEXTURE_RGB_ARB) == TRUE);
-    config.bindToTextureRGBA = (getAttrib(WGL_BIND_TO_TEXTURE_RGBA_ARB) == TRUE);
-    config.colorBufferType   = EGL_RGB_BUFFER;
-    config.configCaveat      = EGL_NONE;
-    config.conformant        = EGL_OPENGL_ES2_BIT | (supportsES3 ? EGL_OPENGL_ES3_BIT_KHR : 0);
-    config.depthSize         = pixelFormatDescriptor.cDepthBits;
-    config.level             = 0;
-    config.matchNativePixmap = EGL_NONE;
-    config.maxPBufferWidth   = getAttrib(WGL_MAX_PBUFFER_WIDTH_ARB);
-    config.maxPBufferHeight  = getAttrib(WGL_MAX_PBUFFER_HEIGHT_ARB);
-    config.maxPBufferPixels  = getAttrib(WGL_MAX_PBUFFER_PIXELS_ARB);
-    config.maxSwapInterval   = maxSwapInterval;
-    config.minSwapInterval   = minSwapInterval;
-    config.nativeRenderable  = EGL_TRUE;  // Direct rendering
-    config.nativeVisualID    = 0;
-    config.nativeVisualType  = EGL_NONE;
-    config.renderableType    = EGL_OPENGL_ES2_BIT | (supportsES3 ? EGL_OPENGL_ES3_BIT_KHR : 0);
-    config.sampleBuffers     = 0;  // FIXME: enumerate multi-sampling
-    config.samples           = 0;
-    config.stencilSize       = pixelFormatDescriptor.cStencilBits;
+    config.bufferSize         = pixelFormatDescriptor.cColorBits;
+    config.redSize            = pixelFormatDescriptor.cRedBits;
+    config.greenSize          = pixelFormatDescriptor.cGreenBits;
+    config.blueSize           = pixelFormatDescriptor.cBlueBits;
+    config.luminanceSize      = 0;
+    config.alphaSize          = pixelFormatDescriptor.cAlphaBits;
+    config.alphaMaskSize      = 0;
+    config.bindToTextureRGB   = (getAttrib(WGL_BIND_TO_TEXTURE_RGB_ARB) == TRUE);
+    config.bindToTextureRGBA  = (getAttrib(WGL_BIND_TO_TEXTURE_RGBA_ARB) == TRUE);
+    config.colorBufferType    = EGL_RGB_BUFFER;
+    config.configCaveat       = EGL_NONE;
+    config.conformant         = EGL_OPENGL_ES2_BIT | (supportsES3 ? EGL_OPENGL_ES3_BIT_KHR : 0);
+    config.depthSize          = pixelFormatDescriptor.cDepthBits;
+    config.level              = 0;
+    config.matchNativePixmap  = EGL_NONE;
+    config.maxPBufferWidth    = getAttrib(WGL_MAX_PBUFFER_WIDTH_ARB);
+    config.maxPBufferHeight   = getAttrib(WGL_MAX_PBUFFER_HEIGHT_ARB);
+    config.maxPBufferPixels   = getAttrib(WGL_MAX_PBUFFER_PIXELS_ARB);
+    config.maxSwapInterval    = maxSwapInterval;
+    config.minSwapInterval    = minSwapInterval;
+    config.multiviewViewCount = (getAttrib(WGL_STEREO) == TRUE) ? 2 : 1;
+    config.nativeRenderable   = EGL_TRUE;  // Direct rendering
+    config.nativeVisualID     = 0;
+    config.nativeVisualType   = EGL_NONE;
+    config.renderableType     = EGL_OPENGL_ES2_BIT | (supportsES3 ? EGL_OPENGL_ES3_BIT_KHR : 0);
+    config.sampleBuffers      = 0;  // FIXME: enumerate multi-sampling
+    config.samples            = 0;
+    config.stencilSize        = pixelFormatDescriptor.cStencilBits;
     config.surfaceType =
         ((pixelFormatDescriptor.dwFlags & PFD_DRAW_TO_WINDOW) ? EGL_WINDOW_BIT : 0) |
         ((getAttrib(WGL_DRAW_TO_PBUFFER_ARB) == TRUE) ? EGL_PBUFFER_BIT : 0) |
@@ -655,6 +678,8 @@ void DisplayWGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->displayTextureShareGroup = true;
 
     outExtensions->surfacelessContext = true;
+
+    outExtensions->multiviewWindow = mStereo && nativegl::SupportsMultivewWindow(mFunctionsWGL);
 
     DisplayGL::generateExtensions(outExtensions);
 }

@@ -45,7 +45,8 @@ class ImageSibling : public gl::FramebufferAttachmentObject
     void setSourceEGLImageInitState(gl::InitState initState) const;
 
     bool isRenderable(const gl::Context *context,
-                      GLenum binding,
+                      GLenum bindingLocation,
+                      GLint bindingIndex,
                       const gl::ImageIndex &imageIndex) const override;
 
   protected:
@@ -85,10 +86,13 @@ class ExternalImageSibling : public ImageSibling
     Error initialize(const Display *display);
 
     gl::Extents getAttachmentSize(const gl::ImageIndex &imageIndex) const override;
-    gl::Format getAttachmentFormat(GLenum binding, const gl::ImageIndex &imageIndex) const override;
+    gl::Format getAttachmentFormat(GLenum bindingLocation,
+                                   GLint bindingIndex,
+                                   const gl::ImageIndex &imageIndex) const override;
     GLsizei getAttachmentSamples(const gl::ImageIndex &imageIndex) const override;
     bool isRenderable(const gl::Context *context,
-                      GLenum binding,
+                      GLenum bindingLocation,
+                      GLint bindingIndex,
                       const gl::ImageIndex &imageIndex) const override;
     bool isTextureable(const gl::Context *context) const;
 

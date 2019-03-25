@@ -55,6 +55,7 @@ struct Config
     EGLint maxPBufferPixels;       // Maximum size of pbuffer
     EGLint maxSwapInterval;        // Maximum swap interval
     EGLint minSwapInterval;        // Minimum swap interval
+    EGLint multiviewViewCount;     // Number of views.
     EGLBoolean nativeRenderable;   // EGL_TRUE if native rendering APIs can render to surface
     EGLint nativeVisualID;         // Handle of corresponding native visual
     EGLint nativeVisualType;       // Native visual type of the associated visual

@@ -1924,6 +1924,22 @@ void StateManager11::deinitialize()
     mPointSpriteIndexBuffer.reset();
 }
 
+size_t StateManager11::getAttachmentIndex(size_t location, size_t index)
+{
+    size_t attachmentIndex       = 0;
+    const auto &drawStateIndices = mFramebuffer11->getState().getDrawBufferStateIndices();
+
+    if (location == GL_MULTIVIEW_EXT || location == GL_COLOR_ATTACHMENT_EXT)
+    {
+        attachmentIndex = drawStateIndices[index];
+    }
+    else
+    {
+        attachmentIndex = index;
+    }
+    return attachmentIndex;
+}
+
 // Applies the render target surface, depth stencil surface, viewport rectangle and
 // scissor rectangle to the renderer
 angle::Result StateManager11::syncFramebuffer(const gl::Context *context)
@@ -1944,20 +1960,26 @@ angle::Result StateManager11::syncFramebuffer(const gl::Context *context)
     RTVArray framebufferRTVs = {{}};
     const auto &colorRTs     = mFramebuffer11->getCachedColorRenderTargets();
 
-    size_t appliedRTIndex                   = 0;
-    bool skipInactiveRTs                    = mRenderer->getWorkarounds().mrtPerfWorkaround;
-    const auto &drawStates                  = mFramebuffer11->getState().getDrawBufferStates();
+    size_t appliedRTIndex          = 0;
+    bool skipInactiveRTs           = mRenderer->getWorkarounds().mrtPerfWorkaround;
+    const auto &drawStateLocations = mFramebuffer11->getState().getDrawBufferStateLocations();
+    const auto &drawStateIndices   = mFramebuffer11->getState().getDrawBufferStateIndices();
     gl::DrawBufferMask activeProgramOutputs = mProgramD3D->getState().getActiveOutputVariables();
     UINT maxExistingRT                      = 0;
     const auto &colorAttachments            = mFramebuffer11->getState().getColorAttachments();
 
+    ASSERT(colorRTs.size() >= drawStateLocations.size());
     for (size_t rtIndex = 0; rtIndex < colorRTs.size(); ++rtIndex)
     {
-        const RenderTarget11 *renderTarget = colorRTs[rtIndex];
+        ASSERT(rtIndex < drawStateIndices.size());
+        size_t rtLocation      = drawStateLocations[rtIndex];
+        size_t attachmentIndex = getAttachmentIndex(rtLocation, rtIndex);
+
+        const RenderTarget11 *renderTarget = colorRTs[attachmentIndex];
 
         // Skip inactive rendertargets if the workaround is enabled.
         if (skipInactiveRTs &&
-            (!renderTarget || drawStates[rtIndex] == GL_NONE || !activeProgramOutputs[rtIndex]))
+            (!renderTarget || rtLocation == GL_NONE || !activeProgramOutputs[rtIndex]))
         {
             continue;
         }
@@ -1969,7 +1991,7 @@ angle::Result StateManager11::syncFramebuffer(const gl::Context *context)
             maxExistingRT = static_cast<UINT>(appliedRTIndex) + 1;
 
             // Unset conflicting texture SRVs
-            const gl::FramebufferAttachment &attachment = colorAttachments[rtIndex];
+            const gl::FramebufferAttachment &attachment = colorAttachments[attachmentIndex];
             ASSERT(attachment.isAttached());
             unsetConflictingAttachmentResources(attachment, renderTarget->getTexture().get());
         }

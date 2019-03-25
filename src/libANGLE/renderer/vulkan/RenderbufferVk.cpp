@@ -160,7 +160,8 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
 }
 
 angle::Result RenderbufferVk::getAttachmentRenderTarget(const gl::Context *context,
-                                                        GLenum binding,
+                                                        GLenum /*bindingLocation*/,
+                                                        GLint /*bindingIndex*/,
                                                         const gl::ImageIndex &imageIndex,
                                                         FramebufferAttachmentRenderTarget **rtOut)
 {

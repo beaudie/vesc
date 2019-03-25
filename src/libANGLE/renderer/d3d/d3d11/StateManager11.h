@@ -415,6 +415,8 @@ class StateManager11 final : angle::NonCopyable
                                    gl::DrawElementsType indexType,
                                    const void *indices);
 
+    size_t getAttachmentIndex(size_t location, size_t index);
+
     enum DirtyBitType
     {
         DIRTY_BIT_RENDER_TARGET,
