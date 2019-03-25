@@ -25,6 +25,63 @@
     },
     {
       "key": {
+        "uuid": "2d45d8c5_884dbc54",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-03-25T21:25:07Z",
+      "side": 1,
+      "message": "This is due to the ABI of the layer being loaded, which must match exactly to the application running.  It isn\u0027t RenderDoc alone that must install multiple packages.  You can probably omit this comment and simply provide that installation commands.",
+      "range": {
+        "startLine": 209,
+        "startChar": 9,
+        "endLine": 209,
+        "endChar": 18
+      },
+      "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f63a119b_1a09438d",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-03-25T21:25:07Z",
+      "side": 1,
+      "message": "Might be worth including a link to Android build instructions for Linux, in case anyone needs to use the interceptor-lib build.  The build is difficult to get going, but is what RenderDoc ships with:\nhttps://github.com/baldurk/renderdoc/blob/v1.x/docs/CONTRIBUTING/Compiling.md#android",
+      "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb7e0bfc_aaf1ec90",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-03-25T21:25:07Z",
+      "side": 1,
+      "message": "Not sure the right way to approach this, but these steps are similar to what we\u0027ll be shipping in Android-Q.  Maybe we can come back and update this to clarify that the end2end tests here won\u0027t use the built-in ANGLE libs.",
+      "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "982efeca_52dc8b80",
         "filename": "doc/DebuggingTips.md",
         "patchSetId": 1
