@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3017227b_34d976b4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T20:26:26Z",
+      "side": 1,
+      "message": "Can\u0027t get any information in this case, but at least we would see which of outside RP and inside RP command buffers have commands.",
+      "revId": "72fc5a520a9022f8d1bf32b5518c1e6cd6b011ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6705ea3c_b9273563",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T20:26:26Z",
+      "side": 1,
+      "message": "Didn\u0027t make this a table in case we want to dump the arguments in each case too in the future.",
+      "revId": "72fc5a520a9022f8d1bf32b5518c1e6cd6b011ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
