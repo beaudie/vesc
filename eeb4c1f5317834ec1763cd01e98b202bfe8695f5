@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "08d76f59_079427b4",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T02:44:04Z",
+      "side": 1,
+      "message": "Nope, desktop GL.",
+      "parentUuid": "5ae2ad54_c19f2e04",
+      "range": {
+        "startLine": 180,
+        "startChar": 87,
+        "endLine": 180,
+        "endChar": 89
+      },
+      "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2d45d8c5_884dbc54",
         "filename": "doc/DebuggingTips.md",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "479bb22e_75ce19fe",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T02:44:04Z",
+      "side": 1,
+      "message": "Not sure I understood. Pixel2 is arm64, the package to be run is also arm64. I don\u0027t think arm32 should be involved at all, but it looks like RenderDoc looks inside `build-android/` and `build-android-arm32/` for an arm32 build just to tell if RenderDoc can run on Android, then chooses the correct architecture.\n\nSo if I understand correctly, the quirk is that the sanity check for Android only checks for arm32, which is what I called a quirk.\n\nI nevertheless removed the comment. It was not informative.",
+      "parentUuid": "2d45d8c5_884dbc54",
+      "range": {
+        "startLine": 209,
+        "startChar": 9,
+        "endLine": 209,
+        "endChar": 18
+      },
+      "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f63a119b_1a09438d",
         "filename": "doc/DebuggingTips.md",
         "patchSetId": 1
@@ -62,6 +110,24 @@
       "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff9be69c_93d48788",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T02:44:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f63a119b_1a09438d",
+      "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -82,6 +148,24 @@
     },
     {
       "key": {
+        "uuid": "6a5951fc_9cbfad3b",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T02:44:04Z",
+      "side": 1,
+      "message": "So, Q will also have the _ANGLE suffix? I can change the example suffix to something else.",
+      "parentUuid": "fb7e0bfc_aaf1ec90",
+      "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "982efeca_52dc8b80",
         "filename": "doc/DebuggingTips.md",
         "patchSetId": 1
@@ -93,6 +177,30 @@
       "writtenOn": "2019-03-25T21:06:05Z",
       "side": 1,
       "message": "Can you also mention --gtest-filter-file for multiple flags?\nCopying from ANGLE chat:\nFWIW, I\u0027ve created test_flags.txt having\n--use-angle\u003dvulkan --gtest_filter\u003ddEQP.GLES2/functional_fragment_ops_interaction_basic_shader_35\nThen:\nadb push test_flags.txt /sdcard/chromium_tests_root\nadb shell am start -a android.intent.action.MAIN -n org.chromium.native_test/.NativeUnitTestNativeActivity -e org.chromium.native_test.NativeTest.StdoutFile /sdcard/chromium_tests_root/out.txt -e org.chromium.native_test.NativeTest.CommandLineFlags --gtest-filter-file\u003d/sdcard/chromium_tests_root/test_flags.txt\nThat seemed to work.",
+      "range": {
+        "startLine": 229,
+        "startChar": 143,
+        "endLine": 229,
+        "endChar": 169
+      },
+      "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2e682e9_e11f796c",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T02:44:04Z",
+      "side": 1,
+      "message": "I tried that with `./bin/run_...` and it didn\u0027t work for me. I tried it with RenderDoc too, to no avail. I moved on to debugging the actual issue, at which point I stopped experimenting with this. Feel free to compliment the document if you had success with RenderDoc :)",
+      "parentUuid": "982efeca_52dc8b80",
       "range": {
         "startLine": 229,
         "startChar": 143,
