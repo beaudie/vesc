@@ -325,6 +325,7 @@ ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
       mForceNewDisplay(mAlwaysForceNewDisplay),
       mCurrentPlatform(nullptr)
 {
+    forceNewDisplay();
     auto iter = gPlatforms.find(params);
     if (iter != gPlatforms.end())
     {
