@@ -285,6 +285,30 @@
     },
     {
       "key": {
+        "uuid": "9e49eb15_4d84b31f",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T04:02:37Z",
+      "side": 1,
+      "message": "I was speculating whether we can contain the effect of loadOp to the scissor region.\n\nMy understanding of the spec is the opposite of yours. What I understand is that if you have this situation:\n\nRenderArea \u003d (0, 0, W, H)\nScissor \u003d (W/4, H/4, W/2, H/2)\nloadOp \u003d Clear\n\nThen the whole of (0, 0, W, H) is cleared regardless of the scissor. The scissor is just there to ensure no actual \"rendering\" is done outside the render area:\n\n\u003e The effects of attachment load ... are restricted to the pixels whose x and y coordinates fall within the render area ...\n\n---\n\nThat by the way means that we could always do the clear with renderpass loadOp if we limit the render area to the current scissor, but then we would have to restart the render pass if on a subsequent draw the scissor grows beyond the current one.\n\nThat just actually gave me the idea to enable this path if the current scissor size is the same as the framebuffer size.",
+      "parentUuid": "907dc2de_c12b0f1a",
+      "range": {
+        "startLine": 222,
+        "startChar": 47,
+        "endLine": 222,
+        "endChar": 81
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b17f4654_b2b18928",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 21
@@ -588,6 +612,30 @@
       "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eac612f1_146ed42d",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T04:02:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a3825e2_11a0a88a",
+      "range": {
+        "startLine": 125,
+        "startChar": 20,
+        "endLine": 125,
+        "endChar": 51
+      },
+      "revId": "67f1411ee8ba692b9157bf8afb92b90a6cce52fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
