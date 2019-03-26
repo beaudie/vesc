@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a464b31_b732814d",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f304fda_4770021c",
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac8a305e_103edd3e",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 18
@@ -39,6 +57,30 @@
       "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "599c56a8_5e49ac33",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2898,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac8a305e_103edd3e",
+      "range": {
+        "startLine": 2897,
+        "startChar": 20,
+        "endLine": 2898,
+        "endChar": 58
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "6232e1ae_21eedc16",
+        "filename": "src/libANGLE/renderer/d3d/RendererD3D.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "Removed from here, 9, and 11.",
+      "parentUuid": "4611c3c9_2b65586d",
+      "range": {
+        "startLine": 386,
+        "startChar": 4,
+        "endLine": 386,
+        "endChar": 61
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67fe35bd_599996ad",
         "filename": "src/libANGLE/renderer/d3d/SwapChainD3D.cpp",
         "patchSetId": 18
@@ -79,6 +145,24 @@
       "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77a325cf_01c2de6f",
+        "filename": "src/libANGLE/renderer/d3d/SwapChainD3D.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67fe35bd_599996ad",
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "bfd9002c_d739a38b",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebeac203_a66a960f",
+      "range": {
+        "startLine": 670,
+        "startChar": 24,
+        "endLine": 674,
+        "endChar": 25
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6ad2ff6e_8d58aa31",
         "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
         "patchSetId": 18
@@ -128,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "d847cd0b_470b614b",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ad2ff6e_8d58aa31",
+      "range": {
+        "startLine": 667,
+        "startChar": 20,
+        "endLine": 682,
+        "endChar": 21
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef848950_915cdfde",
         "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
         "patchSetId": 18
@@ -142,6 +274,24 @@
       "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2711e0d5_b25419a1",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef848950_915cdfde",
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -168,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "dc7845aa_56beb63f",
+        "filename": "src/libANGLE/renderer/gl/gl_bindings_data.json",
+        "patchSetId": 18
+      },
+      "lineNbr": 795,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "886cdbf1_7253a5a9",
+      "range": {
+        "startLine": 795,
+        "startChar": 36,
+        "endLine": 795,
+        "endChar": 37
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "427dfcca_318ec928",
         "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
         "patchSetId": 18
@@ -188,6 +362,30 @@
       "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72198ff0_565bb3be",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "I\u0027ve moved this into an auxiliary function that WGL and GLX now call.  Let me know if this isn\u0027t what you meant.",
+      "parentUuid": "427dfcca_318ec928",
+      "range": {
+        "startLine": 1060,
+        "startChar": 0,
+        "endLine": 1063,
+        "endChar": 58
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -214,6 +412,30 @@
     },
     {
       "key": {
+        "uuid": "bb2c94e7_fd17a7a9",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8811c958_88df34d6",
+      "range": {
+        "startLine": 1064,
+        "startChar": 8,
+        "endLine": 1064,
+        "endChar": 30
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9e6b3391_b29b9209",
         "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
         "patchSetId": 18
@@ -234,6 +456,30 @@
       "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72104509_f23b897f",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e6b3391_b29b9209",
+      "range": {
+        "startLine": 1066,
+        "startChar": 0,
+        "endLine": 1067,
+        "endChar": 46
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -260,6 +506,30 @@
     },
     {
       "key": {
+        "uuid": "482a2163_5a17d37b",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "Now binding framebuffer 0.",
+      "parentUuid": "fb5ac326_95b45db1",
+      "range": {
+        "startLine": 1071,
+        "startChar": 8,
+        "endLine": 1071,
+        "endChar": 43
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b0ece30_c2a14d10",
         "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
         "patchSetId": 18
@@ -280,6 +550,30 @@
       "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41d28874_03c0fb1c",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b0ece30_c2a14d10",
+      "range": {
+        "startLine": 1075,
+        "startChar": 8,
+        "endLine": 1076,
+        "endChar": 43
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -306,6 +600,30 @@
     },
     {
       "key": {
+        "uuid": "e82089f9_fcf68846",
+        "filename": "src/libANGLE/renderer/null/SurfaceNULL.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1a3857f_cc7d3eba",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 13
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "be67ab1b_fa5a3da8",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 18
@@ -326,6 +644,30 @@
       "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8b1c66e_1c8d2eff",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2692,
+      "author": {
+        "id": 1247585
+      },
+      "writtenOn": "2019-03-26T09:00:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be67ab1b_fa5a3da8",
+      "range": {
+        "startLine": 2692,
+        "startChar": 24,
+        "endLine": 2692,
+        "endChar": 32
+      },
+      "revId": "7a55c262f65a279d61b19d95f8d5310577b13bd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
