@@ -22,6 +22,30 @@
       "revId": "3af13c600056c36a46d317b9f9b22aa6ceaf198f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52c364ad_8a285b4d",
+        "filename": "src/tests/test_expectations/GPUInfo.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-26T14:20:31Z",
+      "side": 1,
+      "message": "Looks like base::TimeDelta is constructed from an int64_t. Updated this and took out the \"F\" from the function name",
+      "parentUuid": "d74bc5c2_3d2aaa6d",
+      "range": {
+        "startLine": 234,
+        "startChar": 8,
+        "endLine": 234,
+        "endChar": 11
+      },
+      "revId": "3af13c600056c36a46d317b9f9b22aa6ceaf198f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
