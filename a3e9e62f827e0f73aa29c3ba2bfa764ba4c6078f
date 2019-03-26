@@ -22,6 +22,30 @@
       "revId": "a3e9e62f827e0f73aa29c3ba2bfa764ba4c6078f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a9e47a2_3bda86d1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T19:09:08Z",
+      "side": 1,
+      "message": "Oops, habit!",
+      "parentUuid": "d99515f3_054fc6bc",
+      "range": {
+        "startLine": 12,
+        "startChar": 5,
+        "endLine": 12,
+        "endChar": 17
+      },
+      "revId": "a3e9e62f827e0f73aa29c3ba2bfa764ba4c6078f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
