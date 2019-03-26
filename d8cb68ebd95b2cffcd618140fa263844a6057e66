@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "89cdd76b_c8028cd9",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-03-26T21:29:34Z",
+      "side": 1,
+      "message": "Yes, the \u0027depth\u0027 in gl::Extents is used to be the \u0027depth\u0027 of a 3D texture or layer count of an array texture.  The layer in the ImageIndex is a bit different because the ImageIndex is used to iterate over mips and layers so it needs to be able to represent a single layer of a mip level.  I think that this function is ambiguous and we could be more specific on where the conversion from a 2D array texture to a slice of a 2D array texture happens.",
+      "parentUuid": "9a7192c1_b4461e6d",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 72
+      },
+      "revId": "d8cb68ebd95b2cffcd618140fa263844a6057e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5641c642_53b0c886",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 2
@@ -108,6 +132,30 @@
       "side": 1,
       "message": "I could do that, but could you clarify why you would need to know the texture type? I was hoping the helper in `gl::Extents` would end up being useful elsewhere too.",
       "parentUuid": "5641c642_53b0c886",
+      "range": {
+        "startLine": 125,
+        "startChar": 11,
+        "endLine": 125,
+        "endChar": 52
+      },
+      "revId": "d8cb68ebd95b2cffcd618140fa263844a6057e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "713e3e48_d41246d4",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-03-26T21:29:34Z",
+      "side": 1,
+      "message": "I think it could be turned into a helper function that took an Extents object, texture type and mip level and transformed it.\n\nFor this particular function, we may want to even pass the layer index in.  Since only a single layer of 2D array or 3D textures are bound to framebuffers, we want to make sure the returned depth is 1.",
+      "parentUuid": "579a5652_93255302",
       "range": {
         "startLine": 125,
         "startChar": 11,
