@@ -22,6 +22,30 @@
       "revId": "6fadb2946b85fcd31e18aae6cb4d74662a444953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1401ffd0_fb7498c9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-03-26T14:34:32Z",
+      "side": 1,
+      "message": "WebGL unfortunately breaks these rules.  When OES_texture_float is enabled unsized FLOAT + RGBA should be renderable.  The same for OES_texture_half_float.\n\nChrome works around this by converting unsized FLOAT + RGBA to the sized RGBA32F and uses the GL_CHROMIUM_color_buffer_float_rgba extension.\n\nFirefox also does not use ANGLE in WebGL comparability mode.",
+      "parentUuid": "341276b6_b2e47f7b",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "6fadb2946b85fcd31e18aae6cb4d74662a444953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
