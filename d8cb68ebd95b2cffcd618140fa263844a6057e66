@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4478efb5_7c1b0f59",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T20:34:18Z",
+      "side": 1,
+      "message": "Wouldn\u0027t 2D array textures have depth 1? This would return 1 for all mips in that case.",
+      "parentUuid": "1ff147f1_2913f40d",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 72
+      },
+      "revId": "d8cb68ebd95b2cffcd618140fa263844a6057e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5641c642_53b0c886",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-03-26T20:10:52Z",
       "side": 1,
       "message": "Instead of this, could you just add a new method to ImageHelper that gets the extents for a specific mip level?  Extents won\u0027t know the texture type on its own.",
+      "range": {
+        "startLine": 125,
+        "startChar": 11,
+        "endLine": 125,
+        "endChar": 52
+      },
+      "revId": "d8cb68ebd95b2cffcd618140fa263844a6057e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "579a5652_93255302",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T20:34:18Z",
+      "side": 1,
+      "message": "I could do that, but could you clarify why you would need to know the texture type? I was hoping the helper in `gl::Extents` would end up being useful elsewhere too.",
+      "parentUuid": "5641c642_53b0c886",
       "range": {
         "startLine": 125,
         "startChar": 11,
