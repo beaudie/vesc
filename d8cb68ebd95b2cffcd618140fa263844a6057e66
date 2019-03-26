@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9a7192c1_b4461e6d",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T20:37:36Z",
+      "side": 1,
+      "message": "Ok sorry, I know OpenGL uses \"depth\" as the \"layers\" for 2D array textures, but does `gl::Extents` use the same convention? Since we communicate layers through `gl::ImageIndex`, I figured `gl::Extents` should be the actual extents of a single layer.",
+      "parentUuid": "4478efb5_7c1b0f59",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 72
+      },
+      "revId": "d8cb68ebd95b2cffcd618140fa263844a6057e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5641c642_53b0c886",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 2
