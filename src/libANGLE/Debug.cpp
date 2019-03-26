@@ -366,6 +366,9 @@ void Debug::insertMessage(EGLenum error,
                           const std::string &message) const
 {
     // TODO(geofflang): Lock before checking the callback. http://anglebug.com/2464
+    std::cerr << "command: " << command;
+    std::cerr << "messageType: " << messageType;
+    std::cerr << "message: " << message;
     if (mCallback && isMessageTypeEnabled(messageType))
     {
         mCallback(error, command, egl::ToEGLenum(messageType), threadLabel, objectLabel,
