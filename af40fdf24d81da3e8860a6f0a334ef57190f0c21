@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7890e035_e5f8945e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2806,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-03-26T21:31:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fe89ebd_e4a8bb42",
+      "range": {
+        "startLine": 2806,
+        "startChar": 3,
+        "endLine": 2806,
+        "endChar": 35
+      },
+      "revId": "af40fdf24d81da3e8860a6f0a334ef57190f0c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "26e504f0_c0a1356d",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "6c8566e0_5c770453",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1199,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-03-26T21:31:58Z",
+      "side": 1,
+      "message": "This is no longer necessary with the notification approach.",
+      "parentUuid": "26e504f0_c0a1356d",
+      "range": {
+        "startLine": 1193,
+        "startChar": 0,
+        "endLine": 1199,
+        "endChar": 5
+      },
+      "revId": "af40fdf24d81da3e8860a6f0a334ef57190f0c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe923906_ca140e0e",
         "filename": "src/libANGLE/Texture.h",
         "patchSetId": 4
@@ -68,6 +116,30 @@
       "revId": "af40fdf24d81da3e8860a6f0a334ef57190f0c21",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca97ff07_730c79d5",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-03-26T21:31:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe923906_ca140e0e",
+      "range": {
+        "startLine": 206,
+        "startChar": 19,
+        "endLine": 206,
+        "endChar": 44
+      },
+      "revId": "af40fdf24d81da3e8860a6f0a334ef57190f0c21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
