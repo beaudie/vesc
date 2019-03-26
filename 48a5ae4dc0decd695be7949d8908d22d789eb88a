@@ -116,6 +116,30 @@
       "revId": "48a5ae4dc0decd695be7949d8908d22d789eb88a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffb13746_0309090f",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-03-26T22:44:11Z",
+      "side": 1,
+      "message": "Accroding to Jeff\u0027s coment https://github.com/KhronosGroup/WebGL/pull/2780#issuecomment-476880813\nSeems like instead of doing the special case here, we should instead modify the shader compiling part to implicitly declares `(location \u003d 0) out lowp vec4 gl_FragColor;`?",
+      "parentUuid": "d0d175e7_7a82e2ba",
+      "range": {
+        "startLine": 373,
+        "startChar": 11,
+        "endLine": 373,
+        "endChar": 35
+      },
+      "revId": "48a5ae4dc0decd695be7949d8908d22d789eb88a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
