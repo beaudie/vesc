@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ff147f1_2913f40d",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-03-26T20:10:52Z",
+      "side": 1,
+      "message": "2D array textures don\u0027t change depth with mip level.",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 72
+      },
+      "revId": "d8cb68ebd95b2cffcd618140fa263844a6057e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5641c642_53b0c886",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-03-26T20:10:52Z",
+      "side": 1,
+      "message": "Instead of this, could you just add a new method to ImageHelper that gets the extents for a specific mip level?  Extents won\u0027t know the texture type on its own.",
+      "range": {
+        "startLine": 125,
+        "startChar": 11,
+        "endLine": 125,
+        "endChar": 52
+      },
+      "revId": "d8cb68ebd95b2cffcd618140fa263844a6057e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
