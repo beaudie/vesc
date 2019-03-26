@@ -268,6 +268,24 @@
     },
     {
       "key": {
+        "uuid": "64e7fc3b_fa8a8ec4",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-26T17:43:45Z",
+      "side": 1,
+      "message": "Doesn\u0027t really matter, IMO. The library from test APK should be loaded first, according to Android rules. And I expect ANGLE over ANGLE is going to fail anyway.",
+      "parentUuid": "c4e41941_8b8dcf8e",
+      "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "982efeca_52dc8b80",
         "filename": "doc/DebuggingTips.md",
         "patchSetId": 1
