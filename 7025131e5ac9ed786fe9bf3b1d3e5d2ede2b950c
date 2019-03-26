@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e2c2ebb4_a61e9f93",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-03-26T15:31:14Z",
+      "side": 1,
+      "message": "I\u0027ve found it more helpful to put supporting links at the end of the steps, rather than at the beginning.  Otherwise it is unclear if a user should go off and follow all the outside instructions before continuing with what you have below.",
+      "revId": "7025131e5ac9ed786fe9bf3b1d3e5d2ede2b950c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
