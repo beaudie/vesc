@@ -612,6 +612,122 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
     }
 }
 
+std::string SecondaryCommandBuffer::dumpCommands(const char *separator) const
+{
+    std::string result;
+    for (const CommandHeader *command : mCommands)
+    {
+        for (const CommandHeader *currentCommand                      = command;
+             currentCommand->id != CommandID::Invalid; currentCommand = NextCommand(currentCommand))
+        {
+            result += separator;
+            switch (currentCommand->id)
+            {
+                case CommandID::BeginQuery:
+                    result += "BeginQuery";
+                    break;
+                case CommandID::BindComputePipeline:
+                    result += "BindComputePipeline";
+                    break;
+                case CommandID::BindDescriptorSets:
+                    result += "BindDescriptorSets";
+                    break;
+                case CommandID::BindGraphicsPipeline:
+                    result += "BindGraphicsPipeline";
+                    break;
+                case CommandID::BindIndexBuffer:
+                    result += "BindIndexBuffer";
+                    break;
+                case CommandID::BindVertexBuffers:
+                    result += "BindVertexBuffers";
+                    break;
+                case CommandID::BlitImage:
+                    result += "BlitImage";
+                    break;
+                case CommandID::ClearAttachments:
+                    result += "ClearAttachments";
+                    break;
+                case CommandID::ClearColorImage:
+                    result += "ClearColorImage";
+                    break;
+                case CommandID::ClearDepthStencilImage:
+                    result += "ClearDepthStencilImage";
+                    break;
+                case CommandID::CopyBuffer:
+                    result += "CopyBuffer";
+                    break;
+                case CommandID::CopyBufferToImage:
+                    result += "CopyBufferToImage";
+                    break;
+                case CommandID::CopyImage:
+                    result += "CopyImage";
+                    break;
+                case CommandID::CopyImageToBuffer:
+                    result += "CopyImageToBuffer";
+                    break;
+                case CommandID::Dispatch:
+                    result += "Dispatch";
+                    break;
+                case CommandID::Draw:
+                    result += "Draw";
+                    break;
+                case CommandID::DrawIndexed:
+                    result += "DrawIndexed";
+                    break;
+                case CommandID::DrawIndexedInstanced:
+                    result += "DrawIndexedInstanced";
+                    break;
+                case CommandID::DrawInstanced:
+                    result += "DrawInstanced";
+                    break;
+                case CommandID::EndQuery:
+                    result += "EndQuery";
+                    break;
+                case CommandID::ImageBarrier:
+                    result += "ImageBarrier";
+                    break;
+                case CommandID::PipelineBarrier:
+                    result += "PipelineBarrier";
+                    break;
+                case CommandID::PushConstants:
+                    result += "PushConstants";
+                    break;
+                case CommandID::ResetEvent:
+                    result += "ResetEvent";
+                    break;
+                case CommandID::ResetQueryPool:
+                    result += "ResetQueryPool";
+                    break;
+                case CommandID::SetEvent:
+                    result += "SetEvent";
+                    break;
+                case CommandID::SetScissor:
+                    result += "SetScissor";
+                    break;
+                case CommandID::SetViewport:
+                    result += "SetViewport";
+                    break;
+                case CommandID::UpdateBuffer:
+                    result += "UpdateBuffer";
+                    break;
+                case CommandID::WaitEvents:
+                    result += "WaitEvents";
+                    break;
+                case CommandID::WriteTimestamp:
+                    result += "WriteTimestamp";
+                    break;
+                default:
+                {
+                    UNREACHABLE();
+                    result += "--invalid--";
+                    break;
+                }
+            }
+        }
+    }
+    return result;
+}
+
 }  // namespace priv
 }  // namespace vk
 }  // namespace rx

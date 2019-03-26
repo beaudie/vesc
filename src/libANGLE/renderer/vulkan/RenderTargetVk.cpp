@@ -63,11 +63,11 @@ void RenderTargetVk::onColorDraw(rx::ContextVk *contextVk,
     // Store the attachment info in the renderPassDesc.
     renderPassDesc->packAttachment(mImage->getFormat());
 
+    ensureImageInitialized(contextVk);
+
     // TODO(jmadill): Use automatic layout transition. http://anglebug.com/2361
     mImage->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorAttachment,
                          commandBuffer);
-
-    ensureImageInitialized(contextVk);
 
     // Set up dependencies between the RT resource and the Framebuffer.
     mImage->addWriteDependency(framebufferVk);
@@ -88,9 +88,9 @@ void RenderTargetVk::onDepthStencilDraw(rx::ContextVk *contextVk,
     const angle::Format &format    = mImage->getFormat().textureFormat();
     VkImageAspectFlags aspectFlags = vk::GetDepthStencilAspectFlags(format);
 
-    mImage->changeLayout(aspectFlags, vk::ImageLayout::DepthStencilAttachment, commandBuffer);
-
     ensureImageInitialized(contextVk);
+
+    mImage->changeLayout(aspectFlags, vk::ImageLayout::DepthStencilAttachment, commandBuffer);
 
     // Set up dependencies between the RT resource and the Framebuffer.
     mImage->addWriteDependency(framebufferVk);
