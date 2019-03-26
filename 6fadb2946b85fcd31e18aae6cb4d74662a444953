@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "341276b6_b2e47f7b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-26T02:19:45Z",
+      "side": 1,
+      "message": "It only can do half-float.\nHere is what EXT_color_buffer_half_float spec says:\n    If OES_texture_half_float is supported, textures created with:\n    \n        \u003cinternalformat\u003e \u003d RGBA\n        \u003cformat\u003e \u003d RGBA\n        \u003ctype\u003e \u003d HALF_FLOAT_OES\n        \n    are renderable.\nNo other format/type combinations are mentioned as renderable.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "6fadb2946b85fcd31e18aae6cb4d74662a444953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
