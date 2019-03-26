@@ -264,6 +264,7 @@ void main() {
         GLTexture fbTexture;
         mFBData.toTexture2D(GL_TEXTURE_2D, fbTexture);
         drawQuad(mProgram, "a_position", 0.0f, 1.0f, true);
+        ASSERT_GL_NO_ERROR();
     }
 
     void TearDown() override
