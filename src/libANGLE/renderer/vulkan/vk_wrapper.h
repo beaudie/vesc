@@ -178,6 +178,11 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                    VkFilter filter);
     using WrappedObject::operator=;
 
+    static bool supportsQueries(const VkPhysicalDeviceFeatures &features)
+    {
+        return features.inheritedQueries;
+    }
+
     VkResult begin(const VkCommandBufferBeginInfo &info);
 
     VkResult end();

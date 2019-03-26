@@ -363,6 +363,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     SecondaryCommandBuffer();
     ~SecondaryCommandBuffer();
 
+    static bool supportsQueries(const VkPhysicalDeviceFeatures &features) { return true; }
+
     // Add commands
     void bindDescriptorSets(VkPipelineBindPoint bindPoint,
                             const PipelineLayout &layout,
