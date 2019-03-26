@@ -92,6 +92,30 @@
       "revId": "48a5ae4dc0decd695be7949d8908d22d789eb88a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0d175e7_7a82e2ba",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-26T22:10:58Z",
+      "side": 1,
+      "message": "Could we get clarification on that from Jeff Gilbert? Just by my reading the spec doesn\u0027t seem to have any special case for \"no outputs\" though I might have missed it.\n\nFWIW the default framebuffer (back buffer) usually has a color attachment.",
+      "parentUuid": "b6802d07_0f3b2510",
+      "range": {
+        "startLine": 373,
+        "startChar": 11,
+        "endLine": 373,
+        "endChar": 35
+      },
+      "revId": "48a5ae4dc0decd695be7949d8908d22d789eb88a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
