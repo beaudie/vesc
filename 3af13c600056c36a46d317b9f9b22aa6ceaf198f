@@ -46,6 +46,30 @@
       "revId": "3af13c600056c36a46d317b9f9b22aa6ceaf198f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fde86639_5cd7ddab",
+        "filename": "src/tests/test_expectations/GPUInfo.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-26T14:22:29Z",
+      "side": 1,
+      "message": "It was working before with just int, FYI: https://cs.chromium.org/chromium/src/third_party/angle/src/tests/test_expectations/gpu_test_config.h?type\u003dcs\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d38",
+      "parentUuid": "52c364ad_8a285b4d",
+      "range": {
+        "startLine": 234,
+        "startChar": 8,
+        "endLine": 234,
+        "endChar": 11
+      },
+      "revId": "3af13c600056c36a46d317b9f9b22aa6ceaf198f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
