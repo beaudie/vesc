@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d74bc5c2_3d2aaa6d",
+        "filename": "src/tests/test_expectations/GPUInfo.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T03:05:31Z",
+      "side": 1,
+      "message": "Was `base::TimeDelta` really `int`? The function says `AddTimeDeltaInSecondsF` which makes it sound like the type should be `float`. If we are at liberty of changing this type, I would at least prefer `int64_t`.",
+      "range": {
+        "startLine": 234,
+        "startChar": 8,
+        "endLine": 234,
+        "endChar": 11
+      },
+      "revId": "3af13c600056c36a46d317b9f9b22aa6ceaf198f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

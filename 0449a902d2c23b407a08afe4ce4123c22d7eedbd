@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22c07452_ab92870b",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T03:05:31Z",
+      "side": 0,
+      "message": "Does it cause an issue leaving this? That\u0027s _eventually_ going to be supported.",
+      "revId": "0449a902d2c23b407a08afe4ce4123c22d7eedbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
