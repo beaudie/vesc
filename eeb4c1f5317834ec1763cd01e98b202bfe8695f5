@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "139a5cce_7dff7c8e",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T17:31:09Z",
+      "side": 1,
+      "message": "RenderDoc installs the package perfectly fine. I just didn\u0027t expect it to require an arm32 build before running an arm64 application.\n\nEither way, I\u0027ve removed the snarky remark ;)",
+      "parentUuid": "44457f12_00b5ae41",
+      "range": {
+        "startLine": 209,
+        "startChar": 9,
+        "endLine": 209,
+        "endChar": 18
+      },
+      "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f63a119b_1a09438d",
         "filename": "doc/DebuggingTips.md",
         "patchSetId": 1
@@ -202,6 +226,24 @@
       "side": 1,
       "message": "We\u0027re using lower case \"_angle\" as our suffix, so there shouldn\u0027t be a collision.  It is just complex and potentially confusing to have ANGLE present in multiple layers of Android.",
       "parentUuid": "6a5951fc_9cbfad3b",
+      "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "944ae7bf_c05b22bc",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-26T17:31:09Z",
+      "side": 1,
+      "message": "I see. I\u0027m open to suggestions. How about `_ANGLE_DEV`?",
+      "parentUuid": "17bb82e3_787bdafb",
       "revId": "eeb4c1f5317834ec1763cd01e98b202bfe8695f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
