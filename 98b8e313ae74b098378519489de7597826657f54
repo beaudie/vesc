@@ -45,6 +45,30 @@
       "revId": "98b8e313ae74b098378519489de7597826657f54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d9478de_23255a1a",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-03-27T20:07:37Z",
+      "side": 1,
+      "message": "For the sub-image case, I think you\u0027re right.  Tim, let me know if that doesn\u0027t work or you have questions.",
+      "parentUuid": "7f7fb574_1d534337",
+      "range": {
+        "startLine": 1237,
+        "startChar": 0,
+        "endLine": 1247,
+        "endChar": 6
+      },
+      "revId": "98b8e313ae74b098378519489de7597826657f54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
