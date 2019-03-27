@@ -52,15 +52,18 @@ void RenderTargetVk::reset()
     mOwner      = nullptr;
 }
 
-void RenderTargetVk::onColorDraw(vk::FramebufferHelper *framebufferVk,
-                                 vk::CommandBuffer *commandBuffer,
-                                 vk::RenderPassDesc *renderPassDesc)
+angle::Result RenderTargetVk::onColorDraw(ContextVk *contextVk,
+                                          vk::FramebufferHelper *framebufferVk,
+                                          vk::CommandBuffer *commandBuffer,
+                                          vk::RenderPassDesc *renderPassDesc)
 {
     ASSERT(commandBuffer->valid());
     ASSERT(!mImage->getFormat().textureFormat().hasDepthOrStencilBits());
 
     // Store the attachment info in the renderPassDesc.
     renderPassDesc->packAttachment(mImage->getFormat());
+
+    ANGLE_TRY(ensureImageInitialized(contextVk));
 
     // TODO(jmadill): Use automatic layout transition. http://anglebug.com/2361
     mImage->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorAttachment,
@@ -70,9 +73,10 @@ void RenderTargetVk::onColorDraw(vk::FramebufferHelper *framebufferVk,
     mImage->addWriteDependency(framebufferVk);
 }
 
-void RenderTargetVk::onDepthStencilDraw(vk::FramebufferHelper *framebufferVk,
-                                        vk::CommandBuffer *commandBuffer,
-                                        vk::RenderPassDesc *renderPassDesc)
+angle::Result RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk,
+                                                 vk::FramebufferHelper *framebufferVk,
+                                                 vk::CommandBuffer *commandBuffer,
+                                                 vk::RenderPassDesc *renderPassDesc)
 {
     ASSERT(commandBuffer->valid());
     ASSERT(mImage->getFormat().textureFormat().hasDepthOrStencilBits());
@@ -83,6 +87,8 @@ void RenderTargetVk::onDepthStencilDraw(vk::FramebufferHelper *framebufferVk,
     // TODO(jmadill): Use automatic layout transition. http://anglebug.com/2361
     const angle::Format &format    = mImage->getFormat().textureFormat();
     VkImageAspectFlags aspectFlags = vk::GetDepthStencilAspectFlags(format);
+
+    ANGLE_TRY(ensureImageInitialized(contextVk));
 
     mImage->changeLayout(aspectFlags, vk::ImageLayout::DepthStencilAttachment, commandBuffer);
 
