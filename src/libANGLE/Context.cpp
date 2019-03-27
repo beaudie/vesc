@@ -4490,7 +4490,17 @@ void Context::activeTexture(GLenum texture)
 
 void Context::blendColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 {
-    mState.setBlendColor(clamp01(red), clamp01(green), clamp01(blue), clamp01(alpha));
+    const auto &exts            = mState.mExtensions;
+    const bool hasFloatBlending = exts.colorBufferFloat || exts.colorBufferHalfFloat ||
+                                  exts.colorBufferFloatRGB || exts.colorBufferFloatRGBA;
+    if (!hasFloatBlending)
+    {
+        red   = clamp01(red);
+        green = clamp01(green);
+        blue  = clamp01(blue);
+        alpha = clamp01(alpha);
+    }
+    mState.setBlendColor(red, green, blue, alpha);
 }
 
 void Context::blendEquation(GLenum mode)
