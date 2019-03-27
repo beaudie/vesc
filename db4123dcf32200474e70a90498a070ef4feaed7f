@@ -22,6 +22,30 @@
       "revId": "db4123dcf32200474e70a90498a070ef4feaed7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "520a1619_20555311",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-03-27T19:36:42Z",
+      "side": 1,
+      "message": "Maybe this wasn\u0027t the exact problem then.  I\u0027d have to debug.  Seemed similar enough on the surface to other issues we\u0027ve had with tests creating/destroying displays.",
+      "parentUuid": "84c18206_64c8a936",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 23
+      },
+      "revId": "db4123dcf32200474e70a90498a070ef4feaed7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
