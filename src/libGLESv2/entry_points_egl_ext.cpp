@@ -897,7 +897,7 @@ ANGLE_EXPORT EGLSync EGLAPIENTRY EGL_CreateSyncKHR(EGLDisplay dpy,
         "eglCreateSync", GetDisplayIfValid(display), EGL_NO_SYNC);
 
     egl::Sync *syncObject = nullptr;
-    ANGLE_EGL_TRY_RETURN(thread, display->createSync(type, attributes, &syncObject),
+    ANGLE_EGL_TRY_RETURN(thread, display->createSync(currentContext, type, attributes, &syncObject),
                          "eglCreateSync", GetDisplayIfValid(display), EGL_NO_SYNC);
 
     thread->setSuccess();
@@ -941,9 +941,11 @@ ANGLE_EXPORT EGLint EGLAPIENTRY EGL_ClientWaitSyncKHR(EGLDisplay dpy,
     ANGLE_EGL_TRY_RETURN(thread, ValidateClientWaitSync(display, syncObject, flags, timeout),
                          "eglClientWaitSync", GetDisplayIfValid(display), EGL_FALSE);
 
+    gl::Context *currentContext = thread->getContext();
     EGLint syncStatus = EGL_FALSE;
-    ANGLE_EGL_TRY_RETURN(thread, display->clientWaitSync(syncObject, flags, timeout, &syncStatus),
-                         "eglClientWaitSync", GetDisplayIfValid(display), EGL_FALSE);
+    ANGLE_EGL_TRY_RETURN(
+        thread, display->clientWaitSync(syncObject, currentContext, flags, timeout, &syncStatus),
+        "eglClientWaitSync", GetDisplayIfValid(display), EGL_FALSE);
 
     thread->setSuccess();
     return syncStatus;
@@ -990,8 +992,9 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_WaitSyncKHR(EGLDisplay dpy, EGLSync sync
     ANGLE_EGL_TRY_RETURN(thread, ValidateWaitSync(display, context, syncObject, flags),
                          "eglWaitSync", GetDisplayIfValid(display), EGL_FALSE);
 
-    ANGLE_EGL_TRY_RETURN(thread, display->waitSync(syncObject, flags), "eglWaitSync",
-                         GetDisplayIfValid(display), EGL_FALSE);
+    gl::Context *currentContext = thread->getContext();
+    ANGLE_EGL_TRY_RETURN(thread, display->waitSync(syncObject, currentContext, flags),
+                         "eglWaitSync", GetDisplayIfValid(display), EGL_FALSE);
 
     thread->setSuccess();
     return EGL_TRUE;

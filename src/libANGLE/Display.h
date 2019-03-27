@@ -109,7 +109,10 @@ class Display final : public LabeledObject, angle::NonCopyable
                         const AttributeMap &attribs,
                         gl::Context **outContext);
 
-    Error createSync(EGLenum type, const AttributeMap &attribs, Sync **outSync);
+    Error createSync(const gl::Context *currentContext,
+                     EGLenum type,
+                     const AttributeMap &attribs,
+                     Sync **outSync);
 
     Error makeCurrent(Surface *drawSurface, Surface *readSurface, gl::Context *context);
 
@@ -170,8 +173,12 @@ class Display final : public LabeledObject, angle::NonCopyable
                                EGLint binarysize);
     EGLint programCacheResize(EGLint limit, EGLenum mode);
 
-    Error clientWaitSync(Sync *sync, EGLint flags, EGLTime timeout, EGLint *outResult);
-    Error waitSync(Sync *sync, EGLint flags);
+    Error clientWaitSync(Sync *sync,
+                         const gl::Context *currentContext,
+                         EGLint flags,
+                         EGLTime timeout,
+                         EGLint *outResult);
+    Error waitSync(Sync *sync, const gl::Context *currentContext, EGLint flags);
 
     const AttributeMap &getAttributeMap() const { return mAttributeMap; }
     EGLNativeDisplayType getNativeDisplayId() const { return mDisplayId; }

@@ -896,7 +896,10 @@ Error Display::createContext(const Config *configuration,
     return NoError();
 }
 
-Error Display::createSync(EGLenum type, const AttributeMap &attribs, Sync **outSync)
+Error Display::createSync(const gl::Context *currentContext,
+                          EGLenum type,
+                          const AttributeMap &attribs,
+                          Sync **outSync)
 {
     ASSERT(isInitialized());
 
@@ -908,7 +911,7 @@ Error Display::createSync(EGLenum type, const AttributeMap &attribs, Sync **outS
     angle::UniqueObjectPointer<egl::Sync, Display> syncPtr(new Sync(mImplementation, type, attribs),
                                                            this);
 
-    ANGLE_TRY(syncPtr->initialize(this));
+    ANGLE_TRY(syncPtr->initialize(this, currentContext));
 
     Sync *sync = syncPtr.release();
 
@@ -1427,14 +1430,18 @@ EGLint Display::programCacheResize(EGLint limit, EGLenum mode)
     }
 }
 
-Error Display::clientWaitSync(Sync *sync, EGLint flags, EGLTime timeout, EGLint *outResult)
+Error Display::clientWaitSync(Sync *sync,
+                              const gl::Context *currentContext,
+                              EGLint flags,
+                              EGLTime timeout,
+                              EGLint *outResult)
 {
-    return sync->clientWait(this, flags, timeout, outResult);
+    return sync->clientWait(this, currentContext, flags, timeout, outResult);
 }
 
-Error Display::waitSync(Sync *sync, EGLint flags)
+Error Display::waitSync(Sync *sync, const gl::Context *currentContext, EGLint flags)
 {
-    return sync->serverWait(this, flags);
+    return sync->serverWait(this, currentContext, flags);
 }
 
 }  // namespace egl
