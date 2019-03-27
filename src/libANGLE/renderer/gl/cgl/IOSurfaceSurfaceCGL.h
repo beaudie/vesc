@@ -34,11 +34,13 @@ class IOSurfaceSurfaceCGL : public SurfaceGL
     IOSurfaceSurfaceCGL(const egl::SurfaceState &state,
                         CGLContextObj cglContext,
                         EGLClientBuffer buffer,
-                        const egl::AttributeMap &attribs);
+                        const egl::AttributeMap &attribs,
+                        const FunctionsGL *functionsGL);
     ~IOSurfaceSurfaceCGL() override;
 
     egl::Error initialize(const egl::Display *display) override;
-    egl::Error makeCurrent() override;
+    egl::Error makeCurrent(const gl::Context *context) override;
+    egl::Error unMakeCurrent() override;
 
     egl::Error swap(const gl::Context *context) override;
     egl::Error postSubBuffer(const gl::Context *context,
@@ -60,10 +62,13 @@ class IOSurfaceSurfaceCGL : public SurfaceGL
     EGLint getSwapBehavior() const override;
 
     static bool validateAttributes(EGLClientBuffer buffer, const egl::AttributeMap &attribs);
+    FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
+                                              const gl::FramebufferState &state) override;
 
   private:
     CGLContextObj mCGLContext;
     IOSurfaceRef mIOSurface;
+    const gl::Context *mCurrentContext;
     int mWidth;
     int mHeight;
     int mPlane;

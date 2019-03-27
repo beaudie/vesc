@@ -144,7 +144,8 @@ SurfaceImpl *DisplayCGL::createPbufferFromClientBuffer(const egl::SurfaceState &
 {
     ASSERT(buftype == EGL_IOSURFACE_ANGLE);
 
-    return new IOSurfaceSurfaceCGL(state, mContext, clientBuffer, attribs);
+    return new IOSurfaceSurfaceCGL(state, mContext, clientBuffer, attribs,
+                                   mRenderer->getFunctions());
 }
 
 SurfaceImpl *DisplayCGL::createPixmapSurface(const egl::SurfaceState &state,
