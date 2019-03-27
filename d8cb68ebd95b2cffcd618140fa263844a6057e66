@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "2cdf314c_f237ec0d",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-27T02:24:45Z",
+      "side": 1,
+      "message": "Thanks for the explanation. Removed these helpers altogether.",
+      "parentUuid": "89cdd76b_c8028cd9",
+      "range": {
+        "startLine": 89,
+        "startChar": 4,
+        "endLine": 89,
+        "endChar": 72
+      },
+      "revId": "d8cb68ebd95b2cffcd618140fa263844a6057e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5641c642_53b0c886",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 2
@@ -165,6 +189,30 @@
       "revId": "d8cb68ebd95b2cffcd618140fa263844a6057e66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a2a9677_48a38998",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-27T02:24:45Z",
+      "side": 1,
+      "message": "I ended up implementing a less generic function in ImageHelper, `getLevelExtents2D(uint32_t level)`, where depth is always 1. If getting the mip extents of a 3d texture vs a 2d array ever becomes an issue, we can implement the necessary helper then.",
+      "parentUuid": "713e3e48_d41246d4",
+      "range": {
+        "startLine": 125,
+        "startChar": 11,
+        "endLine": 125,
+        "endChar": 52
+      },
+      "revId": "d8cb68ebd95b2cffcd618140fa263844a6057e66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
