@@ -1075,14 +1075,15 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndex];
         ASSERT(colorRenderTarget);
 
-        colorRenderTarget->onColorDraw(&mFramebuffer, writeCommands, &renderPassDesc);
+        colorRenderTarget->onColorDraw(contextVk, &mFramebuffer, writeCommands, &renderPassDesc);
         attachmentClearValues.emplace_back(contextVk->getClearColorValue());
     }
 
     RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
     if (depthStencilRenderTarget)
     {
-        depthStencilRenderTarget->onDepthStencilDraw(&mFramebuffer, writeCommands, &renderPassDesc);
+        depthStencilRenderTarget->onDepthStencilDraw(contextVk, &mFramebuffer, writeCommands,
+                                                     &renderPassDesc);
         attachmentClearValues.emplace_back(contextVk->getClearDepthStencilValue());
     }
 
