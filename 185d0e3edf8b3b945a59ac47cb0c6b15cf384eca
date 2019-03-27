@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "723f5f66_8acbf910",
+        "filename": "samples/sample_util/SampleApplication.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-03-27T00:21:57Z",
+      "side": 1,
+      "message": "typo: Coun -\u003e Count\n\nWas this sample application tested with the recent changes?",
+      "revId": "185d0e3edf8b3b945a59ac47cb0c6b15cf384eca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
