@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "540ceaa9_3e3c4b67",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-03-27T22:50:39Z",
+      "side": 1,
+      "message": "For both of these functions, is it safe to do this after you\u0027ve already accessed mImage for other information?   Will this change any values that you\u0027ve already grabbed and plan to use (format, flags, etc.)?",
+      "revId": "abd2eb85a0ccc80819cbdc02a4a29379c963e284",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
