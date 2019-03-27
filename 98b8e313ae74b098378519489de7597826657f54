@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db22f47f_9d553d88",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-27T19:47:59Z",
+      "side": 1,
+      "message": "I\u0027d suggest passing the \"vk\" format here. Not a GL object.",
+      "range": {
+        "startLine": 253,
+        "startChar": 12,
+        "endLine": 253,
+        "endChar": 44
+      },
+      "revId": "98b8e313ae74b098378519489de7597826657f54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f7fb574_1d534337",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-27T19:47:59Z",
+      "side": 1,
+      "message": "I suspect the validation we want to be doing is just format \u003d\u003d textureInternalFormat.format. Geoff can you work with Tim to figure out the right call here?",
+      "range": {
+        "startLine": 1237,
+        "startChar": 0,
+        "endLine": 1247,
+        "endChar": 6
+      },
+      "revId": "98b8e313ae74b098378519489de7597826657f54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
