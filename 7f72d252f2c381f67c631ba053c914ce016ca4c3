@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bbed2dfd_29b3dab4",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-03-27T21:22:18Z",
+      "side": 1,
+      "message": "Turns out I could delete these functions entirely because they forwarded to the sync object which the entry point had access to already.",
+      "parentUuid": "ed754ce9_ba8f0d8a",
+      "range": {
+        "startLine": 177,
+        "startChar": 35,
+        "endLine": 181,
+        "endChar": 66
+      },
+      "revId": "7f72d252f2c381f67c631ba053c914ce016ca4c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cca3d578_7defc60a",
         "filename": "src/libANGLE/EGLSync.h",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-03-27T21:03:20Z",
       "side": 1,
       "message": "nit: Display is redundant, can remove it. (context-\u003egetCurrentDisplay)",
+      "range": {
+        "startLine": 40,
+        "startChar": 30,
+        "endLine": 46,
+        "endChar": 52
+      },
+      "revId": "7f72d252f2c381f67c631ba053c914ce016ca4c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed36dd2d_66d02d4c",
+        "filename": "src/libANGLE/EGLSync.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-03-27T21:22:18Z",
+      "side": 1,
+      "message": "Unfortunately they are needed because they can be null (except in the initialize case).",
+      "parentUuid": "cca3d578_7defc60a",
       "range": {
         "startLine": 40,
         "startChar": 30,
