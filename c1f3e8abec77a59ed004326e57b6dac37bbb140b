@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "61f77b7c_4ed5cd75",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-27T19:34:29Z",
+      "side": 1,
+      "message": "can you update the variable naming style while you\u0027re at it?",
+      "range": {
+        "startLine": 720,
+        "startChar": 32,
+        "endLine": 720,
+        "endChar": 40
+      },
+      "revId": "c1f3e8abec77a59ed004326e57b6dac37bbb140b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec5a2e9b_3e5f4255",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-27T19:34:29Z",
+      "side": 1,
+      "message": "ditto here",
+      "range": {
+        "startLine": 726,
+        "startChar": 16,
+        "endLine": 726,
+        "endChar": 37
+      },
+      "revId": "c1f3e8abec77a59ed004326e57b6dac37bbb140b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "18763ad0_626bf743",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 2
