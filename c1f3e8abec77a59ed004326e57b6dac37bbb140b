@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18763ad0_626bf743",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-27T19:32:19Z",
+      "side": 1,
+      "message": "New validation error",
+      "revId": "c1f3e8abec77a59ed004326e57b6dac37bbb140b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
