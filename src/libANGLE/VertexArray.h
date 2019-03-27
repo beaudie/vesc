@@ -116,7 +116,9 @@ class VertexArray final : public angle::ObserverInterface,
         return mState.getBindingFromAttribIndex(attribIndex);
     }
 
-    void detachBuffer(const Context *context, GLuint bufferName);
+    // Returns true if there was any detached buffer.
+    bool detachBuffer(const Context *context, GLuint bufferName);
+
     void setVertexAttribDivisor(const Context *context, size_t index, GLuint divisor);
     void enableAttribute(size_t attribIndex, bool enabledState);
 
