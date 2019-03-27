@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2c90237_03385490",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-27T21:17:38Z",
+      "side": 1,
+      "message": "My reading of https://chromium.googlesource.com/chromium/src/gpu/+/master/GLES2/extensions/CHROMIUM/CHROMIUM_color_buffer_float_rgba.txt\nis:\n\"This extension enables rendering to floating point RGBA textures.\"\nFor renderbuffer support you still need https://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_color_buffer_float.txt",
+      "range": {
+        "startLine": 287,
+        "startChar": 54,
+        "endLine": 287,
+        "endChar": 74
+      },
+      "revId": "5665c7fa19fa44243b59d0c162f2f9e963b4245c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
