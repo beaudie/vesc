@@ -69,6 +69,30 @@
       "revId": "98b8e313ae74b098378519489de7597826657f54",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb98b245_cad0d631",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-03-27T20:08:47Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s what I\u0027m trying right now based on the spec:\n\nGL_INVALID_OPERATION is generated if the texture array has not been defined by a previous glTexImage2D or glCopyTexImage2D operation whose internalformat matches the format of glTexSubImage2D.\n\nI\u0027m hitting issues with other tests in stageSubresourceUpdate() though when doing normal glTexImage2D() due to mState.getBaseLevelDesc().format not being initialized that I\u0027m trying to work through.",
+      "parentUuid": "8d9478de_23255a1a",
+      "range": {
+        "startLine": 1237,
+        "startChar": 0,
+        "endLine": 1247,
+        "endChar": 6
+      },
+      "revId": "98b8e313ae74b098378519489de7597826657f54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
