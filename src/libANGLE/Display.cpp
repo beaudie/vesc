@@ -896,7 +896,10 @@ Error Display::createContext(const Config *configuration,
     return NoError();
 }
 
-Error Display::createSync(EGLenum type, const AttributeMap &attribs, Sync **outSync)
+Error Display::createSync(const gl::Context *currentContext,
+                          EGLenum type,
+                          const AttributeMap &attribs,
+                          Sync **outSync)
 {
     ASSERT(isInitialized());
 
@@ -908,7 +911,7 @@ Error Display::createSync(EGLenum type, const AttributeMap &attribs, Sync **outS
     angle::UniqueObjectPointer<egl::Sync, Display> syncPtr(new Sync(mImplementation, type, attribs),
                                                            this);
 
-    ANGLE_TRY(syncPtr->initialize(this));
+    ANGLE_TRY(syncPtr->initialize(this, currentContext));
 
     Sync *sync = syncPtr.release();
 
@@ -1425,16 +1428,6 @@ EGLint Display::programCacheResize(EGLint limit, EGLenum mode)
             UNREACHABLE();
             return 0;
     }
-}
-
-Error Display::clientWaitSync(Sync *sync, EGLint flags, EGLTime timeout, EGLint *outResult)
-{
-    return sync->clientWait(this, flags, timeout, outResult);
-}
-
-Error Display::waitSync(Sync *sync, EGLint flags)
-{
-    return sync->serverWait(this, flags);
 }
 
 }  // namespace egl
