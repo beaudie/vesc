@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c82ea82a_680cd935",
+        "filename": "src/libANGLE/VertexArray.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-03-27T18:43:40Z",
+      "side": 1,
+      "message": "From my perspective of not understanding much in general yet, this is unclear whether you mean to say \"true if there was already a detached buffer\" or \"true if any buffer was detached by this call\"",
+      "revId": "8016ba823701a6fad538cf732f6cf7217385066c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
