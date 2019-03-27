@@ -136,6 +136,10 @@ class WindowSurfaceVk : public SurfaceImpl
                                         const vk::RenderPass &compatibleRenderPass,
                                         vk::Framebuffer **framebufferOut);
 
+    angle::Result generateWaitAndSignalSemaphores(vk::Context *context,
+                                                  const vk::Semaphore **outWaitSemaphore,
+                                                  const vk::Semaphore **outSignalSempahore);
+
   protected:
     EGLNativeWindowType mNativeWindowType;
     VkSurfaceKHR mSurface;
@@ -186,6 +190,9 @@ class WindowSurfaceVk : public SurfaceImpl
         vk::ImageHelper image;
         vk::ImageView imageView;
         vk::Framebuffer framebuffer;
+
+        // Chain of semaphores to wait on before reading from this image.
+        std::vector<vk::Semaphore> semaphores;
     };
 
     std::vector<SwapchainImage> mSwapchainImages;
@@ -193,9 +200,17 @@ class WindowSurfaceVk : public SurfaceImpl
     // A circular buffer, with the same size as mSwapchainImages (N), that stores the serial of the
     // renderer on every swap.  The CPU is throttled by waiting for the Nth previous serial to
     // finish.  Old swapchains are scheduled to be destroyed at the same time.
-    struct SwapHistory
+    struct SwapHistory : angle::NonCopyable
     {
+        SwapHistory();
+        SwapHistory(SwapHistory &&other);
+        SwapHistory &operator=(SwapHistory &&other);
+        ~SwapHistory();
+
+        void destroy(VkDevice device);
+
         Serial serial;
+        std::vector<vk::Semaphore> semaphores;
         VkSwapchainKHR swapchain = VK_NULL_HANDLE;
     };
     std::vector<SwapHistory> mSwapHistory;
