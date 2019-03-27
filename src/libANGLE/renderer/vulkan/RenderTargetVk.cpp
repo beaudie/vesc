@@ -52,7 +52,8 @@ void RenderTargetVk::reset()
     mOwner      = nullptr;
 }
 
-void RenderTargetVk::onColorDraw(vk::FramebufferHelper *framebufferVk,
+void RenderTargetVk::onColorDraw(rx::ContextVk *contextVk,
+                                 vk::FramebufferHelper *framebufferVk,
                                  vk::CommandBuffer *commandBuffer,
                                  vk::RenderPassDesc *renderPassDesc)
 {
@@ -66,11 +67,14 @@ void RenderTargetVk::onColorDraw(vk::FramebufferHelper *framebufferVk,
     mImage->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorAttachment,
                          commandBuffer);
 
+    ensureImageInitialized(contextVk);
+
     // Set up dependencies between the RT resource and the Framebuffer.
     mImage->addWriteDependency(framebufferVk);
 }
 
-void RenderTargetVk::onDepthStencilDraw(vk::FramebufferHelper *framebufferVk,
+void RenderTargetVk::onDepthStencilDraw(rx::ContextVk *contextVk,
+                                        vk::FramebufferHelper *framebufferVk,
                                         vk::CommandBuffer *commandBuffer,
                                         vk::RenderPassDesc *renderPassDesc)
 {
@@ -85,6 +89,8 @@ void RenderTargetVk::onDepthStencilDraw(vk::FramebufferHelper *framebufferVk,
     VkImageAspectFlags aspectFlags = vk::GetDepthStencilAspectFlags(format);
 
     mImage->changeLayout(aspectFlags, vk::ImageLayout::DepthStencilAttachment, commandBuffer);
+
+    ensureImageInitialized(contextVk);
 
     // Set up dependencies between the RT resource and the Framebuffer.
     mImage->addWriteDependency(framebufferVk);
