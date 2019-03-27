@@ -1123,15 +1123,16 @@ void State::detachTexture(const Context *context, const TextureMap &zeroTextures
     for (TextureType type : angle::AllEnums<TextureType>())
     {
         TextureBindingVector &textureVector = mSamplerTextures[type];
-        for (BindingPointer<Texture> &binding : textureVector)
+
+        for (size_t bindingIndex = 0; bindingIndex < textureVector.size(); ++bindingIndex)
         {
+            BindingPointer<Texture> &binding = textureVector[bindingIndex];
             if (binding.id() == texture)
             {
+                // Zero textures are the "default" textures instead of NULL
                 Texture *zeroTexture = zeroTextures[type].get();
                 ASSERT(zeroTexture != nullptr);
-                // Zero textures are the "default" textures instead of NULL
-                binding.set(context, zeroTexture);
-                mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
+                updateActiveTexture(context, bindingIndex, zeroTexture);
             }
         }
     }
