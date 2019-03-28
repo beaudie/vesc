@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5282d2e8_1545a5d6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-03-28T02:46:04Z",
+      "side": 1,
+      "message": "I think this can be moved out of `SwapchainImage `and kept alongside `mSwapchainImages`. Of all swapchain images, only one can have a non empty vector here at any time.",
+      "range": {
+        "startLine": 195,
+        "startChar": 8,
+        "endLine": 195,
+        "endChar": 46
+      },
+      "revId": "d1576c570fdd7b6de25c1bd0ab68825804ee4c98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
