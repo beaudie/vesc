@@ -167,9 +167,7 @@
 2715 LINUX VULKAN : dEQP-EGL.functional.query_surface.simple.pbuffer.rgb888_depth_stencil = FAIL
 2715 LINUX VULKAN : dEQP-EGL.functional.query_surface.simple.pbuffer.rgb888_no_depth_no_stencil = FAIL
 2635 LINUX VULKAN : dEQP-EGL.functional.resize.surface_size.grow = FAIL
-2635 LINUX VULKAN : dEQP-EGL.functional.resize.surface_size.shrink = FAIL
 2635 LINUX VULKAN : dEQP-EGL.functional.resize.surface_size.stretch_height = FAIL
-2635 LINUX VULKAN : dEQP-EGL.functional.resize.surface_size.stretch_width = FAIL
 2716 LINUX VULKAN : dEQP-EGL.functional.preserve_swap.no_preserve.* = FAIL
 
 // Mac failures
@@ -242,3 +240,11 @@
 2330 DEBUG RELEASE : dEQP-EGL.functional.robustness.create_context.lose_context_on_reset = SKIP
 2330 DEBUG RELEASE : dEQP-EGL.functional.robustness.reset_context.fixed_function_pipeline.reset_status.index_buffer_out_of_bounds = SKIP
 2330 DEBUG RELEASE : dEQP-EGL.functional.robustness.reset_context.fixed_function_pipeline.reset_status.vertex_buffer_out_of_bounds = SKIP
+
+// Tests were being hidden by flakiness (anglebug.com/3271)
+3325 WIN MAC LINUX : dEQP-EGL.functional.fence_sync.invalid.create_invalid_display = SKIP
+3325 WIN MAC LINUX : dEQP-EGL.functional.fence_sync.invalid.destroy_invalid_display = SKIP
+3326 WIN MAC LINUX : dEQP-EGL.functional.get_proc_address.extension.egl_android_blob_cache = SKIP
+3326 WIN MAC LINUX : dEQP-EGL.functional.get_proc_address.extension.egl_android_presentation_time = SKIP
+3327 MAC LINUX : dEQP-EGL.functional.resize.surface_size.shrink = SKIP
+3327 MAC LINUX : dEQP-EGL.functional.resize.surface_size.stretch_width = SKIP
