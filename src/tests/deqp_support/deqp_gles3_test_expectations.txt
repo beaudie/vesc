@@ -697,3 +697,8 @@
 2950 VULKAN : dEQP-GLES3.functional.state_query.shader.program_active_uniform_blocks = FAIL
 2950 VULKAN : dEQP-GLES3.functional.state_query.shader.uniform_value_uint = FAIL
 2950 VULKAN : dEQP-GLES3.functional.lifetime.* = SKIP
+
+// Tests were being hidden by flakiness (anglebug.com/3271)
+3329 WIN : dEQP-GLES3.functional.transform_feedback.basic_types.interleaved.triangles.highp_ivec3 = FAIL
+3329 WIN : dEQP-GLES3.functional.transform_feedback.basic_types.interleaved.triangles.mediump_ivec4 = FAIL
+3329 WIN : dEQP-GLES3.functional.transform_feedback.basic_types.separate.triangles.mediump_ivec4 = FAIL
