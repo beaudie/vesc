@@ -402,3 +402,32 @@
 
 // Failures on newer NVIDIA drivers (411.95) and passes on older drivers (388.16).
 2976 VULKAN NVIDIA : dEQP-GLES2.functional.shaders.invariance.* = FAIL
+
+// Tests were being hidden by flakiness (anglebug.com/3271)
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.shaders.swizzles.vector_swizzles.mediump_vec4_qqqt_vertex = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.equation_src_func_dst_func.add_constant_alpha_dst_alpha = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.equation_src_func_dst_func.add_constant_color_one = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.equation_src_func_dst_func.add_dst_color_dst_color = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.equation_src_func_dst_func.add_one_minus_src_color_one_minus_constant_alpha = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.equation_src_func_dst_func.reverse_subtract_dst_color_constant_alpha = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.equation_src_func_dst_func.reverse_subtract_one_minus_constant_alpha_src_color = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.equation_src_func_dst_func.reverse_subtract_one_minus_src_color_src_alpha = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.equation_src_func_dst_func.reverse_subtract_src_alpha_saturate_constant_alpha = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.equation_src_func_dst_func.subtract_dst_alpha_constant_color = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.equation_src_func_dst_func.subtract_one_minus_constant_alpha_constant_alpha = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.equation_src_func_dst_func.subtract_one_minus_src_color_one_minus_dst_alpha = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.equation_src_func_dst_func.subtract_src_alpha_saturate_constant_color = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.rgb_func_alpha_func.src.one_minus_dst_alpha_src_alpha_saturate = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.rgb_func_alpha_func.src.one_minus_dst_alpha_src_color = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.rgb_func_alpha_func.src.one_minus_src_alpha_zero = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.rgb_func_alpha_func.src.zero_one_minus_constant_color = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.blend.rgb_func_alpha_func.src.zero_src_color = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.depth_stencil.stencil_ops.decr_decr_invert = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.depth_stencil.stencil_ops.decr_incr_wrap_decr_wrap = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.depth_stencil.stencil_ops.decr_wrap_zero_replace = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.depth_stencil.stencil_ops.incr_incr_incr_wrap = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.depth_stencil.stencil_ops.incr_replace_zero = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.depth_stencil.stencil_ops.incr_wrap_decr_wrap_incr_wrap = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.depth_stencil.stencil_ops.replace_keep_incr = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.scissor.outside_render_line = SKIP
+3328 VULKAN WIN NVIDIA : dEQP-GLES2.functional.fragment_ops.stencil.incr_wrap_stencil_fail = SKIP
