@@ -102,7 +102,6 @@
 1340 WIN : dEQP-EGL.functional.resize.pixel_density.* = SKIP
 
 // Windows OpenGL failures
-2546 WIN : dEQP-EGL.functional.resize.surface_size.shrink = SKIP
 2546 WIN : dEQP-EGL.functional.reusable_sync.invalid.* = SKIP
 2546 WIN : dEQP-EGL.functional.color_clears.multi_thread.* = FAIL
 2546 WIN : dEQP-EGL.functional.query_surface.simple.pbuffer.rgba8888_depth_stencil = FAIL
@@ -122,7 +121,6 @@
 2715 WIN VULKAN : dEQP-EGL.functional.query_surface.simple.pbuffer.rgba8888_no_depth_no_stencil = FAIL
 2635 WIN VULKAN : dEQP-EGL.functional.resize.surface_size.grow = FAIL
 2635 WIN VULKAN : dEQP-EGL.functional.resize.surface_size.stretch_height = FAIL
-2635 WIN VULKAN : dEQP-EGL.functional.resize.surface_size.stretch_width = FAIL
 2635 WIN VULKAN : dEQP-EGL.functional.wide_color.pbuffer_8888_colorspace_default = FAIL
 2716 WIN VULKAN : dEQP-EGL.functional.preserve_swap.no_preserve.* = FAIL
 
@@ -167,9 +165,7 @@
 2715 LINUX VULKAN : dEQP-EGL.functional.query_surface.simple.pbuffer.rgb888_depth_stencil = FAIL
 2715 LINUX VULKAN : dEQP-EGL.functional.query_surface.simple.pbuffer.rgb888_no_depth_no_stencil = FAIL
 2635 LINUX VULKAN : dEQP-EGL.functional.resize.surface_size.grow = FAIL
-2635 LINUX VULKAN : dEQP-EGL.functional.resize.surface_size.shrink = FAIL
 2635 LINUX VULKAN : dEQP-EGL.functional.resize.surface_size.stretch_height = FAIL
-2635 LINUX VULKAN : dEQP-EGL.functional.resize.surface_size.stretch_width = FAIL
 2716 LINUX VULKAN : dEQP-EGL.functional.preserve_swap.no_preserve.* = FAIL
 
 // Mac failures
@@ -242,3 +238,15 @@
 2330 DEBUG RELEASE : dEQP-EGL.functional.robustness.create_context.lose_context_on_reset = SKIP
 2330 DEBUG RELEASE : dEQP-EGL.functional.robustness.reset_context.fixed_function_pipeline.reset_status.index_buffer_out_of_bounds = SKIP
 2330 DEBUG RELEASE : dEQP-EGL.functional.robustness.reset_context.fixed_function_pipeline.reset_status.vertex_buffer_out_of_bounds = SKIP
+
+// Tests were being hidden by flakiness (anglebug.com/3271)
+3325 WIN MAC LINUX : dEQP-EGL.functional.fence_sync.invalid.create_invalid_display = SKIP
+3325 WIN MAC LINUX : dEQP-EGL.functional.fence_sync.invalid.destroy_invalid_display = SKIP
+3326 WIN MAC LINUX : dEQP-EGL.functional.get_proc_address.extension.egl_android_blob_cache = SKIP
+3326 WIN MAC LINUX : dEQP-EGL.functional.get_proc_address.extension.egl_android_presentation_time = SKIP
+3327 MAC LINUX : dEQP-EGL.functional.resize.surface_size.shrink = SKIP
+3327 MAC LINUX : dEQP-EGL.functional.resize.surface_size.stretch_width = SKIP
+3328 WIN VULKAN : dEQP-GLES2.functional.shaders.swizzles.vector_swizzles.mediump_vec4_qqqt_vertex = SKIP
+3329 WIN : dEQP-GLES3.functional.transform_feedback.basic_types.interleaved.triangles.highp_ivec3 = FAIL
+3329 WIN : dEQP-GLES3.functional.transform_feedback.basic_types.interleaved.triangles.mediump_ivec4 = FAIL
+3329 WIN : dEQP-GLES3.functional.transform_feedback.basic_types.separate.triangles.mediump_ivec4 = FAIL
