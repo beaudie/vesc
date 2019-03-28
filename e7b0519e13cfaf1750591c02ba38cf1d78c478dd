@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a96374df_f5e4832b",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-28T12:12:41Z",
+      "side": 1,
+      "message": "what\u0027s up with this? We should do something else if you need this.",
+      "range": {
+        "startLine": 132,
+        "startChar": 3,
+        "endLine": 132,
+        "endChar": 21
+      },
+      "revId": "e7b0519e13cfaf1750591c02ba38cf1d78c478dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d2ddf36_457a86b3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-28T12:12:41Z",
+      "side": 1,
+      "message": "try    \n\nconst gl::ImageDesc \u0026levelDesc \u003d mState.getImageDesc(index);\nconst vk::Format \u0026format \u003d\n        contextVk-\u003egetRenderer()-\u003egetFormat(levelDesc.format.info-\u003esizedInternalFormat);\n\nand pass the vk::Format to stage.",
+      "range": {
+        "startLine": 250,
+        "startChar": 0,
+        "endLine": 252,
+        "endChar": 48
+      },
+      "revId": "e7b0519e13cfaf1750591c02ba38cf1d78c478dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
