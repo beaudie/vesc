@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e15012c_7b72d55e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-03-28T16:32:19Z",
+      "side": 1,
+      "message": "you might get compiler warnings here on some platforms (msvc?). Also you might want to clamp to std::numeric_limits\u003cuint8_t\u003e::max() just for completeness.",
+      "revId": "39e056a83e39795369a9bd73d6389ad83645e6d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
