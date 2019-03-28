@@ -493,7 +493,96 @@ TEST_P(ClearTest, MaskedClearThenDrawWithUniform)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
-// Requires ES3
+// Test that clearing multiple attachments in the presence of a color mask, scissor or both
+// correctly clears all the attachments.
+TEST_P(ClearTestES3, MaskedScissoredClearMultipleAttachments)
+{
+    constexpr uint32_t kSize            = 16;
+    constexpr uint32_t kAttachmentCount = 2;
+    std::vector<unsigned char> pixelData(kSize * kSize * 4, 255);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, mFBOs[0]);
+
+    GLTexture textures[kAttachmentCount];
+    GLenum drawBuffers[kAttachmentCount];
+
+    for (uint32_t i = 0; i < kAttachmentCount; ++i)
+    {
+        glBindTexture(GL_TEXTURE_2D, textures[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     pixelData.data());
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, textures[i],
+                               0);
+        drawBuffers[i] = GL_COLOR_ATTACHMENT0 + i;
+    }
+
+    glDrawBuffers(kAttachmentCount, drawBuffers);
+
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_EQ(0, 0, 255, 255, 255, 255);
+
+    // Masked clear
+    glColorMask(GL_TRUE, GL_TRUE, GL_FALSE, GL_TRUE);
+    glClearColor(0, 0.25f, 0.5f, 0.75f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    // All attachments should be cleared, with the blue channel untouched
+    for (uint32_t i = 0; i < kAttachmentCount; ++i)
+    {
+        glReadBuffer(GL_COLOR_ATTACHMENT0 + i);
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_NEAR(0, 0, 0, 63, 255, 191, 1);
+        EXPECT_PIXEL_NEAR(0, kSize - 1, 0, 63, 255, 191, 1);
+        EXPECT_PIXEL_NEAR(kSize - 1, 0, 0, 63, 255, 191, 1);
+        EXPECT_PIXEL_NEAR(kSize - 1, kSize - 1, 0, 63, 255, 191, 1);
+        EXPECT_PIXEL_NEAR(kSize / 2, kSize / 2, 0, 63, 255, 191, 1);
+    }
+
+    // Masked scissored clear
+    glClearColor(0.25f, 0.5f, 0.75f, 0);
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(kSize / 4, kSize / 4, kSize / 2, kSize / 2);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    // The corners should keep the previous value while the center is cleared, except its blue
+    // channel.
+    for (uint32_t i = 0; i < kAttachmentCount; ++i)
+    {
+        glReadBuffer(GL_COLOR_ATTACHMENT0 + i);
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_NEAR(0, 0, 0, 63, 255, 191, 1);
+        EXPECT_PIXEL_NEAR(0, kSize - 1, 0, 63, 255, 191, 1);
+        EXPECT_PIXEL_NEAR(kSize - 1, 0, 0, 63, 255, 191, 1);
+        EXPECT_PIXEL_NEAR(kSize - 1, kSize - 1, 0, 63, 255, 191, 1);
+
+        EXPECT_PIXEL_NEAR(kSize / 2, kSize / 2, 63, 127, 255, 0, 1);
+    }
+
+    // Scissored clear
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glClearColor(0.5f, 0.75f, 0, 0.25f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    // The corners should keep the old value while all channels of the center are cleared.
+    for (uint32_t i = 0; i < kAttachmentCount; ++i)
+    {
+        glReadBuffer(GL_COLOR_ATTACHMENT0 + i);
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_NEAR(0, 0, 0, 63, 255, 191, 1);
+        EXPECT_PIXEL_NEAR(0, kSize - 1, 0, 63, 255, 191, 1);
+        EXPECT_PIXEL_NEAR(kSize - 1, 0, 0, 63, 255, 191, 1);
+        EXPECT_PIXEL_NEAR(kSize - 1, kSize - 1, 0, 63, 255, 191, 1);
+
+        EXPECT_PIXEL_NEAR(kSize / 2, kSize / 2, 127, 191, 0, 63, 1);
+    }
+}
+
 // This tests a bug where in a masked clear when calling "ClearBuffer", we would
 // mistakenly clear every channel (including the masked-out ones)
 TEST_P(ClearTestES3, MaskedClearBufferBug)
