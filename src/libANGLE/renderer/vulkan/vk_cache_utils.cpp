@@ -904,7 +904,7 @@ void GraphicsPipelineDesc::updateStencilFrontFuncs(GraphicsPipelineTransitionBit
                                                    GLint ref,
                                                    const gl::DepthStencilState &depthStencilState)
 {
-    mDepthStencilStateInfo.frontStencilReference = static_cast<uint8_t>(ref);
+    mDepthStencilStateInfo.frontStencilReference = gl::clamp(ref, 0, 255);
     mDepthStencilStateInfo.front.ops.compare     = PackGLCompareFunc(depthStencilState.stencilFunc);
     mDepthStencilStateInfo.front.compareMask = static_cast<uint8_t>(depthStencilState.stencilMask);
     transition->set(ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, front));
@@ -915,7 +915,7 @@ void GraphicsPipelineDesc::updateStencilBackFuncs(GraphicsPipelineTransitionBits
                                                   GLint ref,
                                                   const gl::DepthStencilState &depthStencilState)
 {
-    mDepthStencilStateInfo.backStencilReference = static_cast<uint8_t>(ref);
+    mDepthStencilStateInfo.backStencilReference = gl::clamp(ref, 0, 255);
     mDepthStencilStateInfo.back.ops.compare = PackGLCompareFunc(depthStencilState.stencilBackFunc);
     mDepthStencilStateInfo.back.compareMask =
         static_cast<uint8_t>(depthStencilState.stencilBackMask);
