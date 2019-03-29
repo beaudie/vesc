@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eba45273_0294d693",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-29T01:26:08Z",
+      "side": 1,
+      "message": "nit: Could have went into 3322, no need to open a new bug for a follow-up",
+      "range": {
+        "startLine": 9,
+        "startChar": 18,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "70837a7a6a7f80970d826afeba9c7c5889145cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2cca7d1_82b44ef3",
+        "filename": "scripts/run_code_generation_hashes.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-03-29T01:26:08Z",
+      "side": 1,
+      "message": "This is an old hash from before https://chromium-review.googlesource.com/c/angle/angle/+/1541719",
+      "range": {
+        "startLine": 317,
+        "startChar": 5,
+        "endLine": 317,
+        "endChar": 37
+      },
+      "revId": "70837a7a6a7f80970d826afeba9c7c5889145cf7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
