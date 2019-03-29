@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5335316a_5189f156",
+        "filename": "src/libANGLE/renderer/gl/cgl/IOSurfaceSurfaceCGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-03-29T22:49:19Z",
+      "side": 1,
+      "message": "Please add a TODO here about choosing the correct internalformat. The WebGL 2.0 spec guarantees that if you allocate a no-alpha context, that you can blit from an RGB format renderbuffer to the back buffer. This won\u0027t work without more mechanism.",
+      "revId": "e47da6e96ad9d96e80c1baa614755c5ca9adc519",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
