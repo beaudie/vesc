@@ -493,6 +493,73 @@ TEST_P(ClearTest, MaskedClearThenDrawWithUniform)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Test that clearing all buffers through glClearColor followed by a clear of a specific buffer
+// clears to the correct values.
+TEST_P(ClearTestES3, ClearMultipleAttachmentsFollowedBySpecificOne)
+{
+    constexpr uint32_t kSize            = 16;
+    constexpr uint32_t kAttachmentCount = 2;
+    std::vector<unsigned char> pixelData(kSize * kSize * 4, 255);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, mFBOs[0]);
+
+    GLTexture textures[kAttachmentCount];
+    GLenum drawBuffers[kAttachmentCount];
+    float clearValues[kAttachmentCount][4];
+
+    for (uint32_t i = 0; i < kAttachmentCount; ++i)
+    {
+        glBindTexture(GL_TEXTURE_2D, textures[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     pixelData.data());
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, textures[i],
+                               0);
+        drawBuffers[i] = GL_COLOR_ATTACHMENT0 + i;
+
+        clearValues[i][0] = 0.01f + i * 0.1f;
+        clearValues[i][1] = 0.12f + i * 0.1f;
+        clearValues[i][2] = 0.23f + i * 0.1f;
+        clearValues[i][3] = 0.34f + i * 0.1f;
+    }
+
+    glDrawBuffers(kAttachmentCount, drawBuffers);
+
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_EQ(0, 0, 255, 255, 255, 255);
+
+    // Clear all targets.
+    glClearColor(clearValues[0][0], clearValues[0][1], clearValues[0][2], clearValues[0][3]);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    // Clear odd targets individually.
+    for (uint32_t i = 1; i < kAttachmentCount; i += 2)
+    {
+        glClearBufferfv(GL_COLOR, i, clearValues[i]);
+    }
+
+    // Even attachments should be cleared to color 0, while odd attachments are cleared to their
+    // respective color.
+    for (uint32_t i = 0; i < kAttachmentCount; ++i)
+    {
+        glReadBuffer(GL_COLOR_ATTACHMENT0 + i);
+        ASSERT_GL_NO_ERROR();
+
+        uint32_t clearIndex = i % 2 == 0 ? 0 : i;
+        uint32_t expect[4]  = {
+            static_cast<uint32_t>(clearValues[clearIndex][0] * 255),
+            static_cast<uint32_t>(clearValues[clearIndex][1] * 255),
+            static_cast<uint32_t>(clearValues[clearIndex][2] * 255),
+            static_cast<uint32_t>(clearValues[clearIndex][3] * 255),
+        };
+
+        EXPECT_PIXEL_NEAR(0, 0, expect[0], expect[1], expect[2], expect[3], 1);
+        EXPECT_PIXEL_NEAR(0, kSize - 1, expect[0], expect[1], expect[2], expect[3], 1);
+        EXPECT_PIXEL_NEAR(kSize - 1, 0, expect[0], expect[1], expect[2], expect[3], 1);
+        EXPECT_PIXEL_NEAR(kSize - 1, kSize - 1, expect[0], expect[1], expect[2], expect[3], 1);
+    }
+}
+
 // Test that clearing multiple attachments in the presence of a color mask, scissor or both
 // correctly clears all the attachments.
 TEST_P(ClearTestES3, MaskedScissoredClearMultipleAttachments)
