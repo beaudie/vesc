@@ -848,6 +848,14 @@ void GraphicsPipelineDesc::setColorWriteMask(VkColorComponentFlags colorComponen
     }
 }
 
+void GraphicsPipelineDesc::setSingleColorWriteMask(uint32_t colorIndex,
+                                                   VkColorComponentFlags colorComponentFlags)
+{
+    PackedInputAssemblyAndColorBlendStateInfo &inputAndBlend = mInputAssemblyAndColorBlendStateInfo;
+    uint8_t colorMask = static_cast<uint8_t>(colorComponentFlags);
+    Int4Array_Set(inputAndBlend.colorWriteMaskBits, colorIndex, colorMask);
+}
+
 void GraphicsPipelineDesc::updateColorWriteMask(GraphicsPipelineTransitionBits *transition,
                                                 VkColorComponentFlags colorComponentFlags,
                                                 const gl::DrawBufferMask &alphaMask)
