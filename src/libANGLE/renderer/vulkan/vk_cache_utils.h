@@ -367,6 +367,7 @@ class GraphicsPipelineDesc final
                               const gl::BlendState &blendState);
     void setColorWriteMask(VkColorComponentFlags colorComponentFlags,
                            const gl::DrawBufferMask &alphaMask);
+    void setSingleColorWriteMask(uint32_t colorIndex, VkColorComponentFlags colorComponentFlags);
     void updateColorWriteMask(GraphicsPipelineTransitionBits *transition,
                               VkColorComponentFlags colorComponentFlags,
                               const gl::DrawBufferMask &alphaMask);

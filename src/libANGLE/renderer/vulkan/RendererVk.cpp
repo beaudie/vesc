@@ -949,9 +949,12 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     // Select additional features to be enabled
     VkPhysicalDeviceFeatures2KHR enabledFeatures = {};
     enabledFeatures.sType                        = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
-    enabledFeatures.features.inheritedQueries    = mPhysicalDeviceFeatures.inheritedQueries;
+    enabledFeatures.features.independentBlend    = mPhysicalDeviceFeatures.independentBlend;
     enabledFeatures.features.robustBufferAccess  = mPhysicalDeviceFeatures.robustBufferAccess;
     enabledFeatures.features.samplerAnisotropy   = mPhysicalDeviceFeatures.samplerAnisotropy;
+#if !ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+    enabledFeatures.features.inheritedQueries = mPhysicalDeviceFeatures.inheritedQueries;
+#endif
 
     VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT divisorFeatures = {};
     divisorFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_FEATURES_EXT;
@@ -1143,6 +1146,13 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
 
     // If the command buffer doesn't support queries, we can't support ES3.
     if (!vk::CommandBuffer::SupportsQueries(mPhysicalDeviceFeatures))
+    {
+        maxVersion = std::max(maxVersion, gl::Version(2, 0));
+    }
+
+    // If independentBlend is not supported, we can't perform masked clears of multiple render
+    // targets.
+    if (!mPhysicalDeviceFeatures.independentBlend)
     {
         maxVersion = std::max(maxVersion, gl::Version(2, 0));
     }
