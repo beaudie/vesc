@@ -367,11 +367,13 @@ class GraphicsPipelineDesc final
                               const gl::BlendState &blendState);
     void setColorWriteMask(VkColorComponentFlags colorComponentFlags,
                            const gl::DrawBufferMask &alphaMask);
+    void setSingleColorWriteMask(uint32_t colorIndex, VkColorComponentFlags colorComponentFlags);
     void updateColorWriteMask(GraphicsPipelineTransitionBits *transition,
                               VkColorComponentFlags colorComponentFlags,
                               const gl::DrawBufferMask &alphaMask);
 
     // Depth/stencil states.
+    void setDepthTestEnabled(bool enabled);
     void updateDepthTestEnabled(GraphicsPipelineTransitionBits *transition,
                                 const gl::DepthStencilState &depthStencilState,
                                 const gl::Framebuffer *drawFramebuffer);
@@ -380,6 +382,7 @@ class GraphicsPipelineDesc final
     void updateDepthWriteEnabled(GraphicsPipelineTransitionBits *transition,
                                  const gl::DepthStencilState &depthStencilState,
                                  const gl::Framebuffer *drawFramebuffer);
+    void setStencilTestEnabled(bool enabled);
     void updateStencilTestEnabled(GraphicsPipelineTransitionBits *transition,
                                   const gl::DepthStencilState &depthStencilState,
                                   const gl::Framebuffer *drawFramebuffer);

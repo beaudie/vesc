@@ -848,6 +848,14 @@ void GraphicsPipelineDesc::setColorWriteMask(VkColorComponentFlags colorComponen
     }
 }
 
+void GraphicsPipelineDesc::setSingleColorWriteMask(uint32_t colorIndex,
+                                                   VkColorComponentFlags colorComponentFlags)
+{
+    PackedInputAssemblyAndColorBlendStateInfo &inputAndBlend = mInputAssemblyAndColorBlendStateInfo;
+    uint8_t colorMask = static_cast<uint8_t>(colorComponentFlags);
+    Int4Array_Set(inputAndBlend.colorWriteMaskBits, colorIndex, colorMask);
+}
+
 void GraphicsPipelineDesc::updateColorWriteMask(GraphicsPipelineTransitionBits *transition,
                                                 VkColorComponentFlags colorComponentFlags,
                                                 const gl::DrawBufferMask &alphaMask)
@@ -859,6 +867,11 @@ void GraphicsPipelineDesc::updateColorWriteMask(GraphicsPipelineTransitionBits *
         transition->set(ANGLE_GET_INDEXED_TRANSITION_BIT(mInputAssemblyAndColorBlendStateInfo,
                                                          colorWriteMaskBits, colorIndex, 4));
     }
+}
+
+void GraphicsPipelineDesc::setDepthTestEnabled(bool enabled)
+{
+    mDepthStencilStateInfo.enable.depthTest = enabled;
 }
 
 void GraphicsPipelineDesc::updateDepthTestEnabled(GraphicsPipelineTransitionBits *transition,
@@ -887,6 +900,11 @@ void GraphicsPipelineDesc::updateDepthWriteEnabled(GraphicsPipelineTransitionBit
     mDepthStencilStateInfo.enable.depthWrite =
         static_cast<uint8_t>(drawFramebuffer->hasDepth() ? depthStencilState.depthMask : 0);
     transition->set(ANGLE_GET_TRANSITION_BIT(mDepthStencilStateInfo, enable));
+}
+
+void GraphicsPipelineDesc::setStencilTestEnabled(bool enabled)
+{
+    mDepthStencilStateInfo.enable.stencilTest = enabled;
 }
 
 void GraphicsPipelineDesc::updateStencilTestEnabled(GraphicsPipelineTransitionBits *transition,
