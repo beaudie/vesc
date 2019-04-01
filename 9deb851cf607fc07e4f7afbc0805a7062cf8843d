@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "486973c0_0954ecb0",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T20:53:56Z",
+      "side": 1,
+      "message": "I still think this should be unnecessary and in fact incorrect. Asked Jeff for clarification here.",
+      "range": {
+        "startLine": 373,
+        "startChar": 11,
+        "endLine": 373,
+        "endChar": 35
+      },
+      "revId": "9deb851cf607fc07e4f7afbc0805a7062cf8843d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
