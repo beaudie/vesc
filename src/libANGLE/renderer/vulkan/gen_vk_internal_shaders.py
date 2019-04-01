@@ -173,19 +173,25 @@ def get_shader_id(shader):
 def get_output_path(name):
     return os.path.join('shaders', 'gen', name + ".inc")
 
+def path_rglob(base, name):
+    for root, dirs, files in os.walk(base):
+        for f in files:
+            if f == name:
+                yield os.path.join(root, f)
+
 # Finds a path to GN's out directory
 def find_build_path():
     path = sys.path[0] # Directory of this script
     out = os.path.join(path, "../../../../out") # Out is in angle base dir
     if (os.path.isdir(out)):
+        args_gn_list = list(path_rglob(out, 'args.gn'))
         # Prefer release directories.
         for pattern in ['elease', '']:
-            for o in os.listdir(out):
-                subdir = os.path.join(out, o)
-                if os.path.isdir(subdir) and pattern in o:
-                    argsgn = os.path.join(subdir, "args.gn")
-                    if os.path.isfile(argsgn):
-                        return subdir
+            for o in args_gn_list:
+                if pattern in o:
+                    o = os.path.normpath(os.path.dirname(o))
+                    print 'Found args.gn:', o
+                    return o
 
     # If we reached this point, there was no build directory in the angle repo
     raise Exception("Could not find GN out directory")
@@ -479,7 +485,7 @@ def main():
         print("Using glslang_validator from '" + build_path + "'")
         result = subprocess.call(['ninja', '-C', build_path, 'glslang_validator'])
         if result != 0:
-            raise Exception("Error building glslang_validator")
+            raise Exception("Error building glslang_validator. Does args.gn include `angle_enable_vulkan = true`?")
 
         glslang_binary = 'glslang_validator'
         if os.name == 'nt':
