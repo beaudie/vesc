@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca3c7f27_3c921750",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-01T17:45:08Z",
+      "side": 1,
+      "message": "Just curious:\nDoesn\u0027t this include the other two tests?\nOr the codeflow can diverge if there are both mask and scissor?",
+      "range": {
+        "startLine": 546,
+        "startChar": 7,
+        "endLine": 546,
+        "endChar": 29
+      },
+      "revId": "6c752ace7fb78050f85874b847aeb02d71e53313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
