@@ -140,6 +140,30 @@
       "revId": "48a5ae4dc0decd695be7949d8908d22d789eb88a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7b7fd07_392d64b2",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-04-01T20:49:22Z",
+      "side": 1,
+      "message": "Seems to me if we agree on Jeff\u0027s latest comment https://github.com/KhronosGroup/WebGL/pull/2780#issuecomment-478719596\n\nThe current patch seems to be okay?",
+      "parentUuid": "ffb13746_0309090f",
+      "range": {
+        "startLine": 373,
+        "startChar": 11,
+        "endLine": 373,
+        "endChar": 35
+      },
+      "revId": "48a5ae4dc0decd695be7949d8908d22d789eb88a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
