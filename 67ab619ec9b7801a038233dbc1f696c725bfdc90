@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "465f9e60_e2e5dc71",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T20:41:32Z",
+      "side": 1,
+      "message": "you\u0027ll need to merge in the build / buildtools / testing roll Shabi started here:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1545125",
+      "range": {
+        "startLine": 280,
+        "startChar": 10,
+        "endLine": 280,
+        "endChar": 12
+      },
+      "revId": "67ab619ec9b7801a038233dbc1f696c725bfdc90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
