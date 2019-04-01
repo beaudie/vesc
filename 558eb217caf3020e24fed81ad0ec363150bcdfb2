@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "db11fea5_418f1303",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T18:36:49Z",
+      "side": 1,
+      "message": "nit: clearColorBuffers.any()",
+      "range": {
+        "startLine": 210,
+        "startChar": 21,
+        "endLine": 210,
+        "endChar": 51
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fce21b7f_91d967da",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T18:36:49Z",
+      "side": 1,
+      "message": "this code is a bit hard to follow. If you can think of any simplification that would help. but I trust it\u0027s doing the right thing.",
+      "range": {
+        "startLine": 279,
+        "startChar": 0,
+        "endLine": 283,
+        "endChar": 9
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19dc7de4_a7be7534",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T18:36:49Z",
+      "side": 1,
+      "message": "looks like you are minding the gaps here.",
+      "range": {
+        "startLine": 371,
+        "startChar": 4,
+        "endLine": 371,
+        "endChar": 77
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ac77e56d_8001ed67",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
@@ -13,6 +82,47 @@
       "writtenOn": "2019-04-01T16:47:44Z",
       "side": 1,
       "message": "It looks like this block is unnecessary:\n\nvk::FramebufferHelper *getFramebuffer() { return \u0026mFramebuffer; }\n\nThe next line uses mFramebuffer directly, so having 2 copies of that pointer doesn\u0027t really help anything.   It doesn\u0027t look like you\u0027re using \u0027framebuffer\u0027 anywhere either.",
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6d67c1d_d4f24ef4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T18:36:49Z",
+      "side": 1,
+      "message": "I can see mFramebuffer needing an init, but I don\u0027t know how mFramebuffer would be invalid after this call. So at the very least you can change the mFramebuffer.valid() check to an ASSERT.",
+      "parentUuid": "ac77e56d_8001ed67",
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9792a58c_694331a4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1055,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T18:36:49Z",
+      "side": 1,
+      "message": "can put in the TODO about gaps here. You can just leave a bug tag, not sure the ldap is any help.",
+      "range": {
+        "startLine": 1055,
+        "startChar": 11,
+        "endLine": 1055,
+        "endChar": 27
+      },
       "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -65,6 +175,29 @@
     },
     {
       "key": {
+        "uuid": "6d9a176b_4837f058",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T18:36:49Z",
+      "side": 1,
+      "message": "again can use any()",
+      "range": {
+        "startLine": 1138,
+        "startChar": 8,
+        "endLine": 1138,
+        "endChar": 37
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0a637a38_3c7d9154",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
@@ -76,6 +209,29 @@
       "writtenOn": "2019-04-01T16:47:44Z",
       "side": 1,
       "message": "Same as above.   This block can go.",
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa6eb397_06b63d22",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1257,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T18:36:49Z",
+      "side": 1,
+      "message": "constexpr if possible. The brightest shade of pink is probably the most strand-out color I can think of.",
+      "range": {
+        "startLine": 1257,
+        "startChar": 39,
+        "endLine": 1257,
+        "endChar": 73
+      },
       "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
