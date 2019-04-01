@@ -106,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "69a28f65_dd1a8729",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-04-01T18:58:14Z",
+      "side": 1,
+      "message": "Ah, wrong function call (I need to get more used to overloading).\n\nLooking again, the intent with this call isn\u0027t to actually get anything; we\u0027re actually interested in initializing mFramebuffer.   That\u0027s another pattern I\u0027ll need to get use to, where getters/setters potentially do a lot of work beyond just getting/setting.",
+      "parentUuid": "c6d67c1d_d4f24ef4",
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9792a58c_694331a4",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
@@ -215,6 +233,24 @@
     },
     {
       "key": {
+        "uuid": "a24f77e9_5d290263",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-04-01T18:58:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0a637a38_3c7d9154",
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6eb397_06b63d22",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
@@ -226,6 +262,30 @@
       "writtenOn": "2019-04-01T18:36:49Z",
       "side": 1,
       "message": "constexpr if possible. The brightest shade of pink is probably the most strand-out color I can think of.",
+      "range": {
+        "startLine": 1257,
+        "startChar": 39,
+        "endLine": 1257,
+        "endChar": 73
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8036a3e3_7874b9a0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1257,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-04-01T18:58:14Z",
+      "side": 1,
+      "message": "Are there multiple ways a known bad color value can indicate problems?   If so, is there a good way to make them unique and/or grep-able so it can be easier to know which bad value got used and where it came from?",
+      "parentUuid": "fa6eb397_06b63d22",
       "range": {
         "startLine": 1257,
         "startChar": 39,
