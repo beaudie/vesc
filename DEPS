@@ -36,17 +36,17 @@ vars = {
 deps = {
 
   '{angle_root}/build': {
-    'url': '{chromium_git}/chromium/src/build.git@16bafea184ed656b9ec19c0dd18447d08464bd53',
+    'url': '{chromium_git}/chromium/src/build.git@a660b0b9174e3a808f620222017566e8d1b2669b',
     'condition': 'not build_with_chromium',
   },
 
   '{angle_root}/buildtools': {
-    'url': '{chromium_git}/chromium/src/buildtools.git@62f9eb0d64d6bf48f620b8233d9f7a1dc07f8414',
+    'url': '{chromium_git}/chromium/src/buildtools.git@459baaf66bee809f6eb288e0215cf524f4d2429a',
     'condition': 'not build_with_chromium',
   },
 
   '{angle_root}/testing': {
-    'url': '{chromium_git}/chromium/src/testing@71baa9533c1d21f99dfa8c9e6ca5c1db5f9566bd',
+    'url': '{chromium_git}/chromium/src/testing@083d633e752e7a57cbe62a468a06e51e28c49ee9',
     'condition': 'not build_with_chromium',
   },
 
@@ -215,43 +215,6 @@ hooks = [
                 '--no_auth',
                 '--bucket', 'chromium-clang-format',
                 '-s', '{angle_root}/buildtools/linux64/clang-format.sha1',
-    ],
-  },
-  # Pull GN binaries using checked-in hashes.
-  {
-    'name': 'gn_win',
-    'pattern': '.',
-    'condition': 'host_os == "win" and not build_with_chromium',
-    'action': [ 'download_from_google_storage',
-                '--no_resume',
-                '--platform=win32',
-                '--no_auth',
-                '--bucket', 'chromium-gn',
-                '-s', '{angle_root}/buildtools/win/gn.exe.sha1',
-    ],
-  },
-  {
-    'name': 'gn_mac',
-    'pattern': '.',
-    'condition': 'host_os == "mac" and not build_with_chromium',
-    'action': [ 'download_from_google_storage',
-                '--no_resume',
-                '--platform=darwin',
-                '--no_auth',
-                '--bucket', 'chromium-gn',
-                '-s', '{angle_root}/buildtools/mac/gn.sha1',
-    ],
-  },
-  {
-    'name': 'gn_linux64',
-    'pattern': '.',
-    'condition': 'host_os == "linux" and not build_with_chromium',
-    'action': [ 'download_from_google_storage',
-                '--no_resume',
-                '--platform=linux*',
-                '--no_auth',
-                '--bucket', 'chromium-gn',
-                '-s', '{angle_root}/buildtools/linux64/gn.sha1',
     ],
   },
   {
