@@ -77,6 +77,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mProgram(nullptr),
       mLastIndexBufferOffset(0),
       mCurrentDrawElementsType(gl::DrawElementsType::InvalidEnum),
+      mPreviousClearStencilValue(0),
       mClearColorMask(kAllColorChannelsMask),
       mFlipYForCurrentSurface(false),
       mDriverUniformsBuffer(VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, sizeof(DriverUniforms) * 16, true),
@@ -1147,6 +1148,16 @@ const VkClearValue &ContextVk::getClearColorValue() const
 const VkClearValue &ContextVk::getClearDepthStencilValue() const
 {
     return mClearDepthStencilValue;
+}
+
+const uint32_t &ContextVk::getPreviousClearStencilValue() const
+{
+    return mPreviousClearStencilValue;
+}
+
+void ContextVk::setPreviousClearStencilValue(uint32_t stencilClearValue)
+{
+    mPreviousClearStencilValue = stencilClearValue;
 }
 
 VkColorComponentFlags ContextVk::getClearColorMask() const

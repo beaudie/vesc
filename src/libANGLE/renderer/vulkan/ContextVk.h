@@ -195,6 +195,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
 
     const VkClearValue &getClearColorValue() const;
     const VkClearValue &getClearDepthStencilValue() const;
+    const uint32_t &getPreviousClearStencilValue() const;
+    void setPreviousClearStencilValue(uint32_t stencilClearValue);
     VkColorComponentFlags getClearColorMask() const;
     angle::Result getIncompleteTexture(const gl::Context *context,
                                        gl::TextureType type,
@@ -319,6 +321,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     // Cached clear value/mask for color and depth/stencil.
     VkClearValue mClearColorValue;
     VkClearValue mClearDepthStencilValue;
+    uint32_t mPreviousClearStencilValue;
     VkColorComponentFlags mClearColorMask;
 
     IncompleteTextureSet mIncompleteTextures;

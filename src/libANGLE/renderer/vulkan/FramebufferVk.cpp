@@ -193,7 +193,10 @@ angle::Result FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
         contextVk->getClearDepthStencilValue().depthStencil;
 
     // Apply the stencil mask to the clear value.
-    clearDepthStencilValue.stencil &= contextVk->getState().getDepthStencilState().stencilWritemask;
+    auto swm = contextVk->getState().getDepthStencilState().stencilWritemask;
+    // Preserve previous clear value for any bits that are masked 0 (write-protected)
+    clearDepthStencilValue.stencil = ((~swm & contextVk->getPreviousClearStencilValue()) |
+                                      (swm & clearDepthStencilValue.stencil));
 
     // If the depth or stencil is being cleared, and the image was originally requested to have a
     // single aspect, but it's emulated with a depth/stencil format, clear both aspects, setting the
@@ -215,6 +218,8 @@ angle::Result FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
             clearDepth                   = true;
             clearDepthStencilValue.depth = 0;
         }
+        // Save clearStencil value
+        contextVk->setPreviousClearStencilValue(clearDepthStencilValue.stencil);
     }
 
     // If scissor is enabled, but covers the whole of framebuffer, it can be considered disabled for
