@@ -238,6 +238,13 @@ hooks = [
     'condition': 'checkout_win and not build_with_chromium',
     'action': ['python', '{angle_root}/build/vs_toolchain.py', 'update', '--force'],
   },
+  {
+    # Update the Mac toolchain if necessary.
+    'name': 'mac_toolchain',
+    'pattern': '.',
+    'condition': 'checkout_ios or checkout_mac',
+    'action': ['python', 'build/mac_toolchain.py'],
+  },
 
   {
     # Note: On Win, this should run after win_toolchain, as it may use it.
