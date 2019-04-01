@@ -22,6 +22,30 @@
       "revId": "6264c16a01bb00e5fb82337c9db3b3ac3252af15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed95606c_2563f779",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-01T16:53:24Z",
+      "side": 1,
+      "message": "Done regarding using GLColor, good suggestion.\n\nI\u0027d rather avoid named colors though, as they overlap in some channel or the other (as every channel is either 0 or 255). That makes it less robust to make sure the right channel is cleared / masked. I use distinct values to make absolute sure everything is as expected.\n\nKilled EXPECT_PIXEL_NEAR though.",
+      "parentUuid": "097c95e3_d8ed9335",
+      "range": {
+        "startLine": 508,
+        "startChar": 4,
+        "endLine": 508,
+        "endChar": 9
+      },
+      "revId": "6264c16a01bb00e5fb82337c9db3b3ac3252af15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
