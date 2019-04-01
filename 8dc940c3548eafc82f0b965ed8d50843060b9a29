@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f39c4151_2ba6f515",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-01T21:46:53Z",
+      "side": 1,
+      "message": "Maybe you could add the exact steps needed to DevSetup.md and point to the exact paragraph here?\nRight now the info is there only for initial set up and is a bit different from getting angle from Chromium checkout.\nI think we need something like:\n1. cd third_party/angle\n2. git fetch \u0026\u0026 git rebase -ff\n3. python scripts/bootstrap.py\n4. gclient sync\n5. (optional if generated files are being touched) gn gen out/Release\n6. \"python ./scripts/run_code_generation.py\" or \"git cl presubmit\"",
+      "range": {
+        "startLine": 28,
+        "startChar": 21,
+        "endLine": 31,
+        "endChar": 78
+      },
+      "revId": "8dc940c3548eafc82f0b965ed8d50843060b9a29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
