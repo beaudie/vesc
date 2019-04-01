@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac77e56d_8001ed67",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-04-01T16:47:44Z",
+      "side": 1,
+      "message": "It looks like this block is unnecessary:\n\nvk::FramebufferHelper *getFramebuffer() { return \u0026mFramebuffer; }\n\nThe next line uses mFramebuffer directly, so having 2 copies of that pointer doesn\u0027t really help anything.   It doesn\u0027t look like you\u0027re using \u0027framebuffer\u0027 anywhere either.",
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f4e2fba_1e470023",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-04-01T16:47:44Z",
+      "side": 1,
+      "message": "How do you know to use the float32 value here rather than int32 or uint32?",
+      "range": {
+        "startLine": 1067,
+        "startChar": 22,
+        "endLine": 1067,
+        "endChar": 29
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c5a707f_99af1060",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-04-01T16:47:44Z",
+      "side": 1,
+      "message": "Are there definitions for magic numbers like this?",
+      "range": {
+        "startLine": 1067,
+        "startChar": 30,
+        "endLine": 1067,
+        "endChar": 31
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a637a38_3c7d9154",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-04-01T16:47:44Z",
+      "side": 1,
+      "message": "Same as above.   This block can go.",
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84a8e89f_2a6897bc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-04-01T16:47:44Z",
+      "side": 1,
+      "message": "Should this be an UNREACHABLE() or output a WARN() or something, so that no one relies on this actually returning something useful?",
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "948f6ae5_54565d2f",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-04-01T16:47:44Z",
+      "side": 1,
+      "message": "Should there be an anglebug referenced here?",
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
