@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a86723b8_a9afd725",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-01T16:49:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e873e7e3_76b33ad7",
+      "range": {
+        "startLine": 522,
+        "startChar": 4,
+        "endLine": 522,
+        "endChar": 46
+      },
+      "revId": "a3e0c610af9d5a8c93a4718e278015bd22cdb2f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2fd68fd7_cb6747c3",
         "filename": "src/tests/gl_tests/ClearTest.cpp",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-04-01T14:56:31Z",
       "side": 1,
       "message": "generally I have found using readable color names is more helpful for tests. So red/green/blue/yellow/magenta/cyan. Then you can use the above named colors. And forgo the use of fuzzy checks.",
+      "range": {
+        "startLine": 526,
+        "startChar": 4,
+        "endLine": 526,
+        "endChar": 40
+      },
+      "revId": "a3e0c610af9d5a8c93a4718e278015bd22cdb2f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee152986_ed1b783d",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-01T16:49:44Z",
+      "side": 1,
+      "message": "All those colors have some channel that\u0027s 1.0f. Since the original FB data is also white, it can get confusing whether a channel is 1.0f because it\u0027s cleared or not. I find having distinct non-default values to be the most robust.\n\nI do agree it\u0027s got a bit ugly to read. I\u0027ll refactor it to use a color variable and avoid retyping the same numbers.",
+      "parentUuid": "2fd68fd7_cb6747c3",
       "range": {
         "startLine": 526,
         "startChar": 4,
