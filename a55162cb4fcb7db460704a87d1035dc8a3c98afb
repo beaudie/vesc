@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1167fb4_5bdce248",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T18:16:02Z",
+      "side": 1,
+      "message": "nit: can you call these flushImpl and finishImpl as we do in TextureVk and other classes? To avoid overloading and clarify that you\u0027re calling the \"Vulkan\" version.",
+      "range": {
+        "startLine": 42,
+        "startChar": 18,
+        "endLine": 42,
+        "endChar": 23
+      },
+      "revId": "a55162cb4fcb7db460704a87d1035dc8a3c98afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf01bf68_315eb72e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T18:16:02Z",
+      "side": 1,
+      "message": "can you assert !mSemaphores.empty()",
+      "range": {
+        "startLine": 731,
+        "startChar": 37,
+        "endLine": 731,
+        "endChar": 48
+      },
+      "revId": "a55162cb4fcb7db460704a87d1035dc8a3c98afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a71a039_c2a95fc0",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T18:16:02Z",
+      "side": 1,
+      "message": "nit: should be able to use emplace_back",
+      "range": {
+        "startLine": 825,
+        "startChar": 16,
+        "endLine": 825,
+        "endChar": 25
+      },
+      "revId": "a55162cb4fcb7db460704a87d1035dc8a3c98afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c68c08c9_5a894b5e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T18:16:02Z",
+      "side": 1,
+      "message": "nit: you should be able to use emplace_back",
+      "range": {
+        "startLine": 1071,
+        "startChar": 16,
+        "endLine": 1071,
+        "endChar": 25
+      },
+      "revId": "a55162cb4fcb7db460704a87d1035dc8a3c98afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acb53fee_7d0d374f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T18:16:02Z",
+      "side": 1,
+      "message": "This is a bit sneaky but I like it. The ASSERTs are really what clarify the usage. I think you should add some comments so future readers in place of myself can understand. The acquire semaphore starts the semaphore chain and then every subsequent semaphore is added via this generate. I would comment near the two or more ASSERTs about the mSemaphore contents.\n\nTwo other clarification suggestions: call this mSemaphoreChain or mCurrentSemaphoreChain. And rename this method to getSemaphoresForFlush or something that clarifies the wait semaphore isn\u0027t being generated.",
+      "range": {
+        "startLine": 1073,
+        "startChar": 0,
+        "endLine": 1074,
+        "endChar": 63
+      },
+      "revId": "a55162cb4fcb7db460704a87d1035dc8a3c98afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
