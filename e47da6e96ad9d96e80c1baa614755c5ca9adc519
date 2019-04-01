@@ -34,6 +34,24 @@
       "revId": "e47da6e96ad9d96e80c1baa614755c5ca9adc519",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a2175dfb_5ad977aa",
+        "filename": "src/libANGLE/renderer/gl/cgl/IOSurfaceSurfaceCGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-04-01T23:39:57Z",
+      "side": 1,
+      "message": "I see. Thanks for clarifying this and filing the follow-on bug.",
+      "parentUuid": "6763cae0_9fe559d5",
+      "revId": "e47da6e96ad9d96e80c1baa614755c5ca9adc519",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
