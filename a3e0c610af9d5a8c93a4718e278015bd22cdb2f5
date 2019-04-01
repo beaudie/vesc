@@ -93,6 +93,30 @@
       "revId": "a3e0c610af9d5a8c93a4718e278015bd22cdb2f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c18024e_47d70446",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T16:59:36Z",
+      "side": 1,
+      "message": "Sure. Sorry, I don\u0027t follow, what\u0027s wrong with using a constant 1.0 alpha value? The other channels should be distinct.",
+      "parentUuid": "ee152986_ed1b783d",
+      "range": {
+        "startLine": 526,
+        "startChar": 4,
+        "endLine": 526,
+        "endChar": 40
+      },
+      "revId": "a3e0c610af9d5a8c93a4718e278015bd22cdb2f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
