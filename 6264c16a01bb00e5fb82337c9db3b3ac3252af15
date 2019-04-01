@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "097c95e3_d8ed9335",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-01T15:00:54Z",
+      "side": 1,
+      "message": "I\u0027d suggest you use GLColor here. And use GLColor.toNormalizedVector() to get the right args to pass to glClearColor.\n\nAlso minor thing but I\u0027d suggest you just use a list like red/green/blue/yellow/etc up to kAttachmentCount rather than using incremental values. The test output will convert these special colors to readable names. And you can use EXPECT_PIXEL_COLOR_EQ instead of EXPECT_PIXEL_NEAR.",
+      "range": {
+        "startLine": 508,
+        "startChar": 4,
+        "endLine": 508,
+        "endChar": 9
+      },
+      "revId": "6264c16a01bb00e5fb82337c9db3b3ac3252af15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
