@@ -1253,10 +1253,12 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
         mFeatures.disableFifoPresentMode = true;
     }
 
+#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
     if (IsAndroid() && IsQualcomm(mPhysicalDeviceProperties.vendorID))
     {
-        mFeatures.disableClearWithRenderPassLoadOp = true;
+        mFeatures.disallowInlineCommandsWithRenderPassLoadOpClear = true;
     }
+#endif
 }
 
 void RendererVk::initPipelineCacheVkKey()
