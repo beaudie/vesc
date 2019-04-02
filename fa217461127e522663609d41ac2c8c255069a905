@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bfc73ee4_e99b5829",
+        "filename": "src/tests/perf_tests/ClearPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T20:30:14Z",
+      "side": 1,
+      "message": "Platform macros normally available with tests that link with ANGLETest.cpp aren\u0027t available to perf tests.",
+      "revId": "fa217461127e522663609d41ac2c8c255069a905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
