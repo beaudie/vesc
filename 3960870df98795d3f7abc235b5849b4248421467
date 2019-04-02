@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c1ebf55_9bae8911",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-04-02T14:35:49Z",
+      "side": 1,
+      "message": "const?",
+      "revId": "3960870df98795d3f7abc235b5849b4248421467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
