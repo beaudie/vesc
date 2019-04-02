@@ -22,6 +22,30 @@
       "revId": "6c752ace7fb78050f85874b847aeb02d71e53313",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1631a2f6_1547b417",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T02:24:31Z",
+      "side": 1,
+      "message": "Masked-only has a different path from Scissored-only. Masked-Scissored uses the Masked-only path (with the addition of scissoring). I wrote the end2end test without assuming such a thing, but nevertheless it does exercise a slightly different path.",
+      "parentUuid": "ca3c7f27_3c921750",
+      "range": {
+        "startLine": 546,
+        "startChar": 7,
+        "endLine": 546,
+        "endChar": 29
+      },
+      "revId": "6c752ace7fb78050f85874b847aeb02d71e53313",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

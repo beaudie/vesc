@@ -117,6 +117,30 @@
       "revId": "a3e0c610af9d5a8c93a4718e278015bd22cdb2f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "502d0361_9a610f4a",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T02:24:31Z",
+      "side": 1,
+      "message": "Alpha is already initialized to 1.0. If the clear color has alpha 1.0 too, you can\u0027t tell if it was mistakenly masked during clear or not.\n\nAlpha is just a channel like the others, I don\u0027t see why it should get special treatment (and be 1.0)",
+      "parentUuid": "1c18024e_47d70446",
+      "range": {
+        "startLine": 526,
+        "startChar": 4,
+        "endLine": 526,
+        "endChar": 40
+      },
+      "revId": "a3e0c610af9d5a8c93a4718e278015bd22cdb2f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
