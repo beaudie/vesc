@@ -16,6 +16,47 @@
       "revId": "fa217461127e522663609d41ac2c8c255069a905",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40442cf0_4e3d16be",
+        "filename": "src/tests/perf_tests/ClearPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-02T20:58:44Z",
+      "side": 1,
+      "message": "That\u0027s okay. This is good. But can you put this in the test constructor and set mSkipTest \u003d true? Just as a style consistency thing.",
+      "parentUuid": "bfc73ee4_e99b5829",
+      "revId": "fa217461127e522663609d41ac2c8c255069a905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b61724cc_1ace4ba8",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-02T20:58:44Z",
+      "side": 1,
+      "message": "same comment.",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 0
+      },
+      "revId": "fa217461127e522663609d41ac2c8c255069a905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
