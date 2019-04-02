@@ -995,12 +995,18 @@ void Display::destroyStream(egl::Stream *stream)
 Error Display::destroyContext(const Thread *thread, gl::Context *context)
 {
     gl::Context *currentContext   = thread->getContext();
+    Surface *currentDrawSurface   = thread->getCurrentDrawSurface();
+    Surface *currentReadSurface   = thread->getCurrentReadSurface();
     bool changeContextForDeletion = context != currentContext;
 
     // Make the context being deleted current during it's deletion.  This allows it to delete any
     // resources it's holding.
     if (changeContextForDeletion)
     {
+        if (currentContext)
+        {
+            ANGLE_TRY(currentContext->unMakeCurrent(this));
+        }
         ANGLE_TRY(makeCurrent(nullptr, nullptr, context));
     }
 
@@ -1024,8 +1030,7 @@ Error Display::destroyContext(const Thread *thread, gl::Context *context)
     // Set the previous context back to current
     if (changeContextForDeletion)
     {
-        ANGLE_TRY(makeCurrent(thread->getCurrentDrawSurface(), thread->getCurrentReadSurface(),
-                              currentContext));
+        ANGLE_TRY(makeCurrent(currentDrawSurface, currentReadSurface, currentContext));
     }
 
     return NoError();
