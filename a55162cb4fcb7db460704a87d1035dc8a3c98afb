@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e0383917_453eef4f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-02T14:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1167fb4_5bdce248",
+      "range": {
+        "startLine": 42,
+        "startChar": 18,
+        "endLine": 42,
+        "endChar": 23
+      },
+      "revId": "a55162cb4fcb7db460704a87d1035dc8a3c98afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf01bf68_315eb72e",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "a55162cb4fcb7db460704a87d1035dc8a3c98afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdb433aa_5f26cbab",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-02T14:45:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf01bf68_315eb72e",
+      "range": {
+        "startLine": 731,
+        "startChar": 37,
+        "endLine": 731,
+        "endChar": 48
+      },
+      "revId": "a55162cb4fcb7db460704a87d1035dc8a3c98afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "faecee30_f06109fb",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 825,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-02T14:45:06Z",
+      "side": 1,
+      "message": "They are the same in this case, emplace_back is for constructing the object right in the emplace_back call because it takes the variadic arguments.",
+      "parentUuid": "2a71a039_c2a95fc0",
+      "range": {
+        "startLine": 825,
+        "startChar": 16,
+        "endLine": 825,
+        "endChar": 25
+      },
+      "revId": "a55162cb4fcb7db460704a87d1035dc8a3c98afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c68c08c9_5a894b5e",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 7
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "7faea35c_7d8a39d6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1071,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-02T14:45:06Z",
+      "side": 1,
+      "message": "Same as above.",
+      "parentUuid": "c68c08c9_5a894b5e",
+      "range": {
+        "startLine": 1071,
+        "startChar": 16,
+        "endLine": 1071,
+        "endChar": 25
+      },
+      "revId": "a55162cb4fcb7db460704a87d1035dc8a3c98afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "acb53fee_7d0d374f",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 7
@@ -114,6 +210,30 @@
       "revId": "a55162cb4fcb7db460704a87d1035dc8a3c98afb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c6dd436_d54cccda",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1074,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-02T14:45:06Z",
+      "side": 1,
+      "message": "Done, added a bunch of comments including a large one in the header.\n\nRenamed to generateSemaphoresForFlush to make it clear that the function is doing allocations.  Renamed the member to mFlushSemaphoreChain.",
+      "parentUuid": "acb53fee_7d0d374f",
+      "range": {
+        "startLine": 1073,
+        "startChar": 0,
+        "endLine": 1074,
+        "endChar": 63
+      },
+      "revId": "a55162cb4fcb7db460704a87d1035dc8a3c98afb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
