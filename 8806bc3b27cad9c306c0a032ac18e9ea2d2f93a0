@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a128bee5_95ea7f29",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-02T20:03:45Z",
+      "side": 1,
+      "message": "This is interesting. We might have to spark a conversation over this if it\u0027s not available on some devices. Looks like it\u0027s only missing on some weirder Android setups:\n\nhttps://vulkan.gpuinfo.org/listreports.php?feature\u003dindependentBlend\u0026option\u003dnot",
+      "range": {
+        "startLine": 952,
+        "startChar": 29,
+        "endLine": 952,
+        "endChar": 49
+      },
+      "revId": "8806bc3b27cad9c306c0a032ac18e9ea2d2f93a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
