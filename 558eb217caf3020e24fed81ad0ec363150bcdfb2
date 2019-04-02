@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7a7375ea_ad1408b1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T03:18:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db11fea5_418f1303",
+      "range": {
+        "startLine": 210,
+        "startChar": 21,
+        "endLine": 210,
+        "endChar": 51
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fce21b7f_91d967da",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "23a77f76_a474a35a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T03:18:54Z",
+      "side": 1,
+      "message": "Yes, there are many ifs and buts. I added more comments to hopefully make it clear. This particular `if` is basically saying \"clear colors if you can with render pass op, otherwise don\u0027t clear colors\" (default value of gl::DrawBufferMask being all zeros).",
+      "parentUuid": "fce21b7f_91d967da",
+      "range": {
+        "startLine": 279,
+        "startChar": 0,
+        "endLine": 283,
+        "endChar": 9
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "19dc7de4_a7be7534",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
@@ -59,6 +107,30 @@
       "writtenOn": "2019-04-01T18:36:49Z",
       "side": 1,
       "message": "looks like you are minding the gaps here.",
+      "range": {
+        "startLine": 371,
+        "startChar": 4,
+        "endLine": 371,
+        "endChar": 77
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d22dd9f5_990aeab4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T03:18:54Z",
+      "side": 1,
+      "message": "So previously you were minding the gaps too? Because clearColorBuffers is a subset of `mState.getEnabledDrawBuffers()`. I haven\u0027t yet looked into what happens when there\u0027s a gap.\n\nAnyway, in two patchsets, this code is deleted.",
+      "parentUuid": "19dc7de4_a7be7534",
       "range": {
         "startLine": 371,
         "startChar": 4,
@@ -142,6 +214,24 @@
     },
     {
       "key": {
+        "uuid": "2b96079c_284b45b4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T03:18:54Z",
+      "side": 1,
+      "message": "The framebuffer could be invalid if it corresponds to the surface\u0027s. `getFramebuffer` doesn\u0027t initialize `mFramebuffer` in that case.\n\nLooking at it now, I could probably delete the above two lines (that was there before I had to add the `valid()` test)",
+      "parentUuid": "78f163d7_42f1a48e",
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9792a58c_694331a4",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
@@ -162,6 +252,30 @@
       "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba2d8bfe_ef1eb964",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1055,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T03:18:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9792a58c_694331a4",
+      "range": {
+        "startLine": 1055,
+        "startChar": 11,
+        "endLine": 1055,
+        "endChar": 27
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -211,6 +325,54 @@
     },
     {
       "key": {
+        "uuid": "58c24610_8febe330",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T03:18:54Z",
+      "side": 1,
+      "message": "No, I\u0027ll add one.",
+      "parentUuid": "4c5a707f_99af1060",
+      "range": {
+        "startLine": 1067,
+        "startChar": 30,
+        "endLine": 1067,
+        "endChar": 31
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b92ba7a4_5af991ab",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1067,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T03:18:54Z",
+      "side": 1,
+      "message": "Good catch!",
+      "parentUuid": "4f4e2fba_1e470023",
+      "range": {
+        "startLine": 1067,
+        "startChar": 22,
+        "endLine": 1067,
+        "endChar": 29
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6d9a176b_4837f058",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 6
@@ -231,6 +393,30 @@
       "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07592656_7bca77da",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T03:18:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d9a176b_4837f058",
+      "range": {
+        "startLine": 1138,
+        "startChar": 8,
+        "endLine": 1138,
+        "endChar": 37
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -340,6 +526,30 @@
     },
     {
       "key": {
+        "uuid": "f1f2cbe7_57dda7ab",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T03:18:54Z",
+      "side": 1,
+      "message": "I set the color to near-brightest-pink (0.95, 0.05, 0.95, 0.95), that definitely makes it visually clearer. I didn\u0027t use 0 and 1 so the values won\u0027t get mistaken for real test values (often setting to 0, 1, etc), i.e. they would stand out in a call dump as well (and be better greppable).",
+      "parentUuid": "cf9dd41c_331e4a0c",
+      "range": {
+        "startLine": 1257,
+        "startChar": 39,
+        "endLine": 1257,
+        "endChar": 73
+      },
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84a8e89f_2a6897bc",
         "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
         "patchSetId": 6
@@ -351,6 +561,24 @@
       "writtenOn": "2019-04-01T16:47:44Z",
       "side": 1,
       "message": "Should this be an UNREACHABLE() or output a WARN() or something, so that no one relies on this actually returning something useful?",
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2655e70_965b5455",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T03:18:54Z",
+      "side": 1,
+      "message": "No this is as intended. This lets us support the current path without any errors if using native secondary command buffers. The difference would be that multiple render pass clears won\u0027t coalesce into one, but otherwise there\u0027s no harm done.",
+      "parentUuid": "84a8e89f_2a6897bc",
       "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -371,6 +599,24 @@
       "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0df649d_d4e8e6ae",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 764,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T03:18:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "948f6ae5_54565d2f",
+      "revId": "558eb217caf3020e24fed81ad0ec363150bcdfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
