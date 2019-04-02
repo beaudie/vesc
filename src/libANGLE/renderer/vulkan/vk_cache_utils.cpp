@@ -879,9 +879,75 @@ void GraphicsPipelineDesc::updateColorWriteMask(GraphicsPipelineTransitionBits *
     }
 }
 
+void GraphicsPipelineDesc::setDepthTestEnabled(bool enabled)
+{
+    mDepthStencilStateInfo.enable.depthTest = enabled;
+}
+
 void GraphicsPipelineDesc::setDepthWriteEnabled(bool enabled)
 {
     mDepthStencilStateInfo.enable.depthWrite = enabled;
+}
+
+void GraphicsPipelineDesc::setDepthFunc(VkCompareOp op)
+{
+    SetBitField(mDepthStencilStateInfo.depthCompareOp, op);
+}
+
+void GraphicsPipelineDesc::setDepthClampEnabled(bool enabled)
+{
+    mRasterizationAndMultisampleStateInfo.bits.depthClampEnable = enabled;
+}
+
+void GraphicsPipelineDesc::setStencilTestEnabled(bool enabled)
+{
+    mDepthStencilStateInfo.enable.stencilTest = enabled;
+}
+
+void GraphicsPipelineDesc::setStencilFrontFuncs(uint8_t reference,
+                                                VkCompareOp compareOp,
+                                                uint8_t compareMask)
+{
+    mDepthStencilStateInfo.frontStencilReference = reference;
+    mDepthStencilStateInfo.front.compareMask     = compareMask;
+    SetBitField(mDepthStencilStateInfo.front.ops.compare, compareOp);
+}
+
+void GraphicsPipelineDesc::setStencilBackFuncs(uint8_t reference,
+                                               VkCompareOp compareOp,
+                                               uint8_t compareMask)
+{
+    mDepthStencilStateInfo.backStencilReference = reference;
+    mDepthStencilStateInfo.back.compareMask     = compareMask;
+    SetBitField(mDepthStencilStateInfo.back.ops.compare, compareOp);
+}
+
+void GraphicsPipelineDesc::setStencilFrontOps(VkStencilOp failOp,
+                                              VkStencilOp passOp,
+                                              VkStencilOp depthFailOp)
+{
+    SetBitField(mDepthStencilStateInfo.front.ops.fail, failOp);
+    SetBitField(mDepthStencilStateInfo.front.ops.pass, passOp);
+    SetBitField(mDepthStencilStateInfo.front.ops.depthFail, depthFailOp);
+}
+
+void GraphicsPipelineDesc::setStencilBackOps(VkStencilOp failOp,
+                                             VkStencilOp passOp,
+                                             VkStencilOp depthFailOp)
+{
+    SetBitField(mDepthStencilStateInfo.back.ops.fail, failOp);
+    SetBitField(mDepthStencilStateInfo.back.ops.pass, passOp);
+    SetBitField(mDepthStencilStateInfo.back.ops.depthFail, depthFailOp);
+}
+
+void GraphicsPipelineDesc::setStencilFrontWriteMask(uint8_t mask)
+{
+    mDepthStencilStateInfo.front.writeMask = mask;
+}
+
+void GraphicsPipelineDesc::setStencilBackWriteMask(uint8_t mask)
+{
+    mDepthStencilStateInfo.back.writeMask = mask;
 }
 
 void GraphicsPipelineDesc::updateDepthTestEnabled(GraphicsPipelineTransitionBits *transition,
