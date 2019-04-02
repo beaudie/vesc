@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58db5a9f_ccd466b2",
+        "filename": "src/libANGLE/renderer/d3d/VertexDataManager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-02T21:36:41Z",
+      "side": 1,
+      "message": "Could you assert(elementCount \u003e 0)?",
+      "range": {
+        "startLine": 49,
+        "startChar": 56,
+        "endLine": 49,
+        "endChar": 59
+      },
+      "revId": "6deb1d499259598a0f5977fa268d2272cc006060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8bfa55b_7a456084",
+        "filename": "src/libANGLE/renderer/d3d/VertexDataManager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-02T21:36:41Z",
+      "side": 1,
+      "message": "nit: I think this applies to GetMaxAttributeByteOffsetForDraw as well?",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 100
+      },
+      "revId": "6deb1d499259598a0f5977fa268d2272cc006060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b505875_f5264c9f",
+        "filename": "src/libANGLE/renderer/d3d/VertexDataManager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-02T21:36:41Z",
+      "side": 1,
+      "message": "Looking at \"Size cannot be larger than a GLsizei\" comment in ElementsInBuffer(), shouldn\u0027t this be GLsizei?",
+      "range": {
+        "startLine": 508,
+        "startChar": 79,
+        "endLine": 508,
+        "endChar": 86
+      },
+      "revId": "6deb1d499259598a0f5977fa268d2272cc006060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
