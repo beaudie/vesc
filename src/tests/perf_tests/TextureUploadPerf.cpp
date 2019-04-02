@@ -16,7 +16,9 @@
 #include "test_utils/gl_raii.h"
 #include "util/shader_utils.h"
 
-namespace angle
+using namespace angle;
+
+namespace
 {
 constexpr unsigned int kIterationsPerStep = 64;
 
@@ -225,7 +227,7 @@ void TextureUploadFullMipBenchmark::drawBenchmark()
     ASSERT_GL_NO_ERROR();
 }
 
-TextureUploadParams TextureUploadD3D11Params(bool webglCompat)
+TextureUploadParams D3D11Params(bool webglCompat)
 {
     TextureUploadParams params;
     params.eglParameters = egl_platform::D3D11();
@@ -233,7 +235,7 @@ TextureUploadParams TextureUploadD3D11Params(bool webglCompat)
     return params;
 }
 
-TextureUploadParams TextureUploadOpenGLOrGLESParams(bool webglCompat)
+TextureUploadParams OpenGLOrGLESParams(bool webglCompat)
 {
     TextureUploadParams params;
     params.eglParameters = egl_platform::OPENGL_OR_GLES(false);
@@ -241,7 +243,7 @@ TextureUploadParams TextureUploadOpenGLOrGLESParams(bool webglCompat)
     return params;
 }
 
-TextureUploadParams TextureUploadVulkanParams(bool webglCompat)
+TextureUploadParams VulkanParams(bool webglCompat)
 {
     TextureUploadParams params;
     params.eglParameters = egl_platform::VULKAN();
@@ -249,29 +251,42 @@ TextureUploadParams TextureUploadVulkanParams(bool webglCompat)
     return params;
 }
 
+}  // anonymous namespace
+
 TEST_P(TextureUploadSubImageBenchmark, Run)
 {
+    // Crashes on nvidia. http://crbug.com/945415
+    if (GetParam().getRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
+    {
+        return;
+    }
+
     run();
 }
 
 TEST_P(TextureUploadFullMipBenchmark, Run)
 {
+    // Crashes on nvidia. http://crbug.com/945415
+    if (GetParam().getRenderer() == EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE)
+    {
+        return;
+    }
+
     run();
 }
 
 ANGLE_INSTANTIATE_TEST(TextureUploadSubImageBenchmark,
-                       TextureUploadD3D11Params(false),
-                       TextureUploadD3D11Params(true),
-                       TextureUploadOpenGLOrGLESParams(false),
-                       TextureUploadOpenGLOrGLESParams(true),
-                       TextureUploadVulkanParams(false),
-                       TextureUploadVulkanParams(true));
+                       D3D11Params(false),
+                       D3D11Params(true),
+                       OpenGLOrGLESParams(false),
+                       OpenGLOrGLESParams(true),
+                       VulkanParams(false),
+                       VulkanParams(true));
 
 ANGLE_INSTANTIATE_TEST(TextureUploadFullMipBenchmark,
-                       TextureUploadD3D11Params(false),
-                       TextureUploadD3D11Params(true),
-                       TextureUploadOpenGLOrGLESParams(false),
-                       TextureUploadOpenGLOrGLESParams(true),
-                       TextureUploadVulkanParams(false),
-                       TextureUploadVulkanParams(true));
-}  // namespace angle
+                       D3D11Params(false),
+                       D3D11Params(true),
+                       OpenGLOrGLESParams(false),
+                       OpenGLOrGLESParams(true),
+                       VulkanParams(false),
+                       VulkanParams(true));
