@@ -22,6 +22,30 @@
       "revId": "8806bc3b27cad9c306c0a032ac18e9ea2d2f93a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1db3785a_e581b828",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 952,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-02T20:24:49Z",
+      "side": 1,
+      "message": "Yes, I checked that. If you look at the supported list, you\u0027ll see Qualcomm there too, but with higher Vulkan version support. My suspicion is that they implemented this at some point and the not-supported list is just older drivers.",
+      "parentUuid": "a128bee5_95ea7f29",
+      "range": {
+        "startLine": 952,
+        "startChar": 29,
+        "endLine": 952,
+        "endChar": 49
+      },
+      "revId": "8806bc3b27cad9c306c0a032ac18e9ea2d2f93a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
