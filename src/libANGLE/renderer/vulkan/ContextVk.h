@@ -108,6 +108,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
 
     // Context switching
     angle::Result onMakeCurrent(const gl::Context *context) override;
+    angle::Result onUnMakeCurrent(const gl::Context *context) override;
 
     // Native capabilities, unmodified by gl::Context.
     gl::Caps getNativeCaps() const override;

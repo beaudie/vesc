@@ -449,9 +449,9 @@ EGLBoolean EGLAPIENTRY EGL_MakeCurrent(EGLDisplay dpy,
     {
         // Release the surface from the previously-current context, to allow
         // destroyed surfaces to delete themselves.
-        if (previousContext != nullptr && context != previousContext)
+        if (previousContext != nullptr)
         {
-            ANGLE_EGL_TRY_RETURN(thread, previousContext->releaseSurface(display), "eglMakeCurrent",
+            ANGLE_EGL_TRY_RETURN(thread, previousContext->unMakeCurrent(display), "eglMakeCurrent",
                                  GetContextIfValid(display, context), EGL_FALSE);
         }
 
@@ -789,7 +789,7 @@ EGLBoolean EGLAPIENTRY EGL_ReleaseThread(void)
         // destroyed surfaces to delete themselves.
         if (previousContext != nullptr && previousDisplay != EGL_NO_DISPLAY)
         {
-            ANGLE_EGL_TRY_RETURN(thread, previousContext->releaseSurface(previousDisplay),
+            ANGLE_EGL_TRY_RETURN(thread, previousContext->unMakeCurrent(previousDisplay),
                                  "eglReleaseThread", nullptr, EGL_FALSE);
         }
 
