@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53782b36_0b91c3d2",
+        "filename": "src/libANGLE/renderer/gl/cgl/IOSurfaceSurfaceCGL.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-02T20:05:52Z",
+      "side": 1,
+      "message": "nit: possible to use an explicit type here?",
+      "range": {
+        "startLine": 278,
+        "startChar": 4,
+        "endLine": 278,
+        "endChar": 9
+      },
+      "revId": "cd6d199d4bbf749c6f1ff18f1bddebdb47fe3894",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
