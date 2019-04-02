@@ -1824,6 +1824,32 @@ TEST_P(RobustResourceInitTestES31, Multisample2DTextureArray)
     }
 }
 
+TEST_P(RobustResourceInitTestES3, TestTest)
+{
+    constexpr char kVS[] = R"(attribute mat3 a_v5;
+uniform vec3 u_v9;
+void main () {
+u_v9 * a_v5;
+})";
+
+    constexpr char kFS[] = "void main() {}";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program);
+
+    GLint a_v5 = glGetAttribLocation(program, "a_v5");
+    ASSERT_NE(-1, a_v5);
+
+    glVertexAttribDivisor(a_v5, 201);
+    glEnableVertexAttribArray(a_v5);
+    GLBuffer gl_v161;
+    glBindBuffer(GL_ARRAY_BUFFER, gl_v161);
+    glVertexAttribPointer(a_v5, 3, GL_BYTE, GL_FALSE, 164, reinterpret_cast<const void *>(867));
+    glBufferData(GL_ARRAY_BUFFER, 415, nullptr, GL_DYNAMIC_DRAW);
+    glDrawArraysInstanced(GL_LINE_LOOP, 483, 946, 138);
+    ASSERT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST(RobustResourceInitTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
