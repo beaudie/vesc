@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d91cd6a_969584e8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-04-02T15:08:49Z",
+      "side": 1,
+      "message": "So this is necessary because CommandGraph.cpp has:\n\n#if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS\nconstexpr VkSubpassContents kRenderPassContents \u003d VK_SUBPASS_CONTENTS_INLINE;\n#else\n\nIs there a way to try and tie these together a little better or do we think the ifdef is good enough?   Unfortunately it looks like you need to know disallowInlineCommandsWithRenderPassLoadOpClear \u003d true before you make it far enough to see kRenderPassContents \u003d VK_SUBPASS_CONTENTS_INLINE and then return immediately or something.\n\nOr maybe this stuff has solidified a bit more and the custom command buffers will be inlined for long enough that it doesn\u0027t matter.\n\nMy concern is that it\u0027s hard to keep track of why each block is under the same ifdef and then trying to figure out what happens when you change it in 2 years.   The comment for disallowInlineCommandsWithRenderPassLoadOpClear is probably good enough, especially for people that are a bit more familiar with this stuff.",
+      "revId": "c150fc4a17b407c1a62df796ad5248fef03f0825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
