@@ -16,6 +16,24 @@
       "revId": "c150fc4a17b407c1a62df796ad5248fef03f0825",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c0bba74_4965797e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-03T21:00:17Z",
+      "side": 1,
+      "message": "You\u0027re right, I\u0027ll clean this up to be more robust.",
+      "parentUuid": "5d91cd6a_969584e8",
+      "revId": "c150fc4a17b407c1a62df796ad5248fef03f0825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
