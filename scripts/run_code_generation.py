@@ -115,12 +115,17 @@ def any_hash_dirty(name, filenames, new_hashes, old_hashes):
 
 
 def any_old_hash_missing(new_hashes, old_hashes):
+    print(new_hashes)
+    count = 0
     for name, _ in old_hashes.iteritems():
         if name not in new_hashes:
             script, file = name.split(':')
             print('%s missing from generated hashes.' % file)
-            return True
-    return False
+            count = count + 1
+            if count > 10:
+                print('More than 10 old hashes missing, exiting.')
+                return True
+    return count > 0
 
 
 def update_output_hashes(script, outputs, new_hashes):
