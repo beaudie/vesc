@@ -8,14 +8,14 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_LINUX_MEMORYOBJECTVKFD_H_
 #define LIBANGLE_RENDERER_VULKAN_LINUX_MEMORYOBJECTVKFD_H_
 
-#include "libANGLE/renderer/MemoryObjectImpl.h"
+#include "libANGLE/renderer/vulkan/MemoryObjectVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_wrapper.h"
 
 namespace rx
 {
 
-class MemoryObjectVkFd : public MemoryObjectImpl
+class MemoryObjectVkFd : public MemoryObjectVk
 {
   public:
     MemoryObjectVkFd();
@@ -27,6 +27,14 @@ class MemoryObjectVkFd : public MemoryObjectImpl
                                  GLuint64 size,
                                  GLenum handleType,
                                  GLint fd) override;
+
+    angle::Result initImage(const gl::Context *context,
+                            gl::TextureType type,
+                            size_t levels,
+                            GLenum internalFormat,
+                            const gl::Extents &size,
+                            GLuint64 offset,
+                            vk::ImageHelper *image) override;
 
   private:
     angle::Result importMemoryOpaqueFd(gl::Context *context, GLuint64 size, GLint fd);
