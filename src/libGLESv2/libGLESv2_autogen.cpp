@@ -2866,6 +2866,15 @@ void GL_APIENTRY glVertexAttribDivisorANGLE(GLuint index, GLuint divisor)
     return gl::VertexAttribDivisorANGLE(index, divisor);
 }
 
+// GL_ANGLE_memory_object_zircon_handle
+void GL_APIENTRY glImportMemoryZirconHandleANGLE(GLuint memory,
+                                                 GLuint64 size,
+                                                 GLenum handleType,
+                                                 GLuint handle)
+{
+    return gl::ImportMemoryZirconHandleANGLE(memory, size, handleType, handle);
+}
+
 // GL_ANGLE_multi_draw
 void GL_APIENTRY glMultiDrawArraysANGLE(GLenum mode,
                                         const GLint *firsts,
@@ -3561,6 +3570,14 @@ void GL_APIENTRY glGetQueryObjectui64vRobustANGLE(GLuint id,
                                                   GLuint64 *params)
 {
     return gl::GetQueryObjectui64vRobustANGLE(id, pname, bufSize, length, params);
+}
+
+// GL_ANGLE_semaphore_zircon_handle
+void GL_APIENTRY glImportSemaphoreZirconHandleANGLE(GLuint semaphore,
+                                                    GLenum handleType,
+                                                    GLuint handle)
+{
+    return gl::ImportSemaphoreZirconHandleANGLE(semaphore, handleType, handle);
 }
 
 // GL_ANGLE_texture_external_update
@@ -7401,12 +7418,29 @@ void GL_APIENTRY glImportMemoryFdEXTContextANGLE(GLeglContext ctx,
     return gl::ImportMemoryFdEXTContextANGLE(ctx, memory, size, handleType, fd);
 }
 
+void GL_APIENTRY glImportMemoryZirconHandleANGLEContextANGLE(GLeglContext ctx,
+                                                             GLuint memory,
+                                                             GLuint64 size,
+                                                             GLenum handleType,
+                                                             GLuint handle)
+{
+    return gl::ImportMemoryZirconHandleANGLEContextANGLE(ctx, memory, size, handleType, handle);
+}
+
 void GL_APIENTRY glImportSemaphoreFdEXTContextANGLE(GLeglContext ctx,
                                                     GLuint semaphore,
                                                     GLenum handleType,
                                                     GLint fd)
 {
     return gl::ImportSemaphoreFdEXTContextANGLE(ctx, semaphore, handleType, fd);
+}
+
+void GL_APIENTRY glImportSemaphoreZirconHandleANGLEContextANGLE(GLeglContext ctx,
+                                                                GLuint semaphore,
+                                                                GLenum handleType,
+                                                                GLuint handle)
+{
+    return gl::ImportSemaphoreZirconHandleANGLEContextANGLE(ctx, semaphore, handleType, handle);
 }
 
 void GL_APIENTRY glInsertEventMarkerEXTContextANGLE(GLeglContext ctx,

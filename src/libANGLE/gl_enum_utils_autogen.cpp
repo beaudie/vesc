@@ -1902,6 +1902,10 @@ const char *GLenumToString(GLenumGroup enumGroup, unsigned int value)
             {
                 case 0x9586:
                     return "GL_HANDLE_TYPE_OPAQUE_FD_EXT";
+                case 0xA0C5:
+                    return "GL_HANDLE_TYPE_ZIRCON_VMO_ANGLE";
+                case 0xA0C6:
+                    return "GL_HANDLE_TYPE_ZIRCON_EVENT_ANGLE";
                 default:
                     return kUnknownGLenumString;
             }
