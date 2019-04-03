@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "36b99611_5e2a8620",
+        "filename": "src/tests/perf_tests/ClearPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-03T16:08:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40442cf0_4e3d16be",
+      "revId": "fa217461127e522663609d41ac2c8c255069a905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b61724cc_1ace4ba8",
         "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
         "patchSetId": 1
@@ -57,6 +75,30 @@
       "revId": "fa217461127e522663609d41ac2c8c255069a905",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "766ee649_f227c6be",
+        "filename": "src/tests/perf_tests/TextureUploadPerf.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-03T16:08:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b61724cc_1ace4ba8",
+      "range": {
+        "startLine": 259,
+        "startChar": 0,
+        "endLine": 263,
+        "endChar": 0
+      },
+      "revId": "fa217461127e522663609d41ac2c8c255069a905",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
