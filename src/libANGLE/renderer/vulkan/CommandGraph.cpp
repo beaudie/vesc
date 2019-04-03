@@ -510,7 +510,7 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
                 ExecuteCommands(primaryCommandBuffer, &mOutsideRenderPassCommands);
             }
 
-            if (mInsideRenderPassCommands.valid())
+            if (!mInsideRenderPassCommands.empty())
             {
                 // Pull a RenderPass from the cache.
                 // TODO(jmadill): Insert layout transitions.

@@ -170,8 +170,8 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
 
     VkResult init(VkDevice device, const VkCommandBufferAllocateInfo &createInfo);
 
-    // There is no way to know if the command buffer contains any commands.
-    bool empty() const { return false; }
+    // An invalid cmd buffer is empty, otherwise must assume that cmd buffer not empty.
+    bool empty() const { return !valid(); }
 
     using WrappedObject::operator=;
 
