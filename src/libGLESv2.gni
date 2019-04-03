@@ -780,6 +780,7 @@ libangle_vulkan_sources = [
   "src/libANGLE/renderer/vulkan/GlslangWrapper.h",
   "src/libANGLE/renderer/vulkan/ImageVk.cpp",
   "src/libANGLE/renderer/vulkan/ImageVk.h",
+  "src/libANGLE/renderer/vulkan/MemoryObjectVk.h",
   "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
   "src/libANGLE/renderer/vulkan/ProgramVk.h",
   "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
@@ -843,7 +844,9 @@ libangle_vulkan_win32_sources = [
   "src/libANGLE/renderer/vulkan/win32/WindowSurfaceVkWin32.h",
 ]
 
-libangle_vulkan_xcb_sources = [
+libangle_vulkan_linux_sources = [
+  "src/libANGLE/renderer/vulkan/linux/MemoryObjectVkFd.cpp",
+  "src/libANGLE/renderer/vulkan/linux/MemoryObjectVkFd.h",
   "src/libANGLE/renderer/vulkan/xcb/DisplayVkXcb.cpp",
   "src/libANGLE/renderer/vulkan/xcb/DisplayVkXcb.h",
   "src/libANGLE/renderer/vulkan/xcb/WindowSurfaceVkXcb.cpp",

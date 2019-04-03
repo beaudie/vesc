@@ -33,6 +33,10 @@
 #include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
 
+#if defined(ANGLE_PLATFORM_LINUX)
+#    include "libANGLE/renderer/vulkan/linux/MemoryObjectVkFd.h"
+#endif
+
 #include "third_party/trace_event/trace_event.h"
 
 namespace rx
@@ -1114,8 +1118,12 @@ std::vector<PathImpl *> ContextVk::createPaths(GLsizei)
 
 MemoryObjectImpl *ContextVk::createMemoryObject()
 {
-    UNIMPLEMENTED();
+#if defined(ANGLE_PLATFORM_LINUX)
+    return new MemoryObjectVkFd();
+#else
+    UNREACHABLE();
     return nullptr;
+#endif
 }
 
 void ContextVk::invalidateCurrentTextures()

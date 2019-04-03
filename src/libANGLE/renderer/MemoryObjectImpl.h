@@ -27,6 +27,11 @@ class MemoryObjectImpl : angle::NonCopyable
     virtual ~MemoryObjectImpl() {}
 
     virtual void onDestroy(const gl::Context *context) = 0;
+
+    virtual angle::Result importMemoryFd(gl::Context *context,
+                                         GLuint64 size,
+                                         GLenum handleType,
+                                         GLint fd) = 0;
 };
 
 }  // namespace rx

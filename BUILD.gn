@@ -638,7 +638,7 @@ angle_static_library("libANGLE") {
       sources += libangle_vulkan_win32_sources
     }
     if (is_linux) {
-      sources += libangle_vulkan_xcb_sources
+      sources += libangle_vulkan_linux_sources
     }
     if (is_fuchsia) {
       sources += libangle_vulkan_fuchsia_sources
