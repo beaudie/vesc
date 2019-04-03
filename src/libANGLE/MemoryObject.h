@@ -21,12 +21,15 @@ class MemoryObjectImpl;
 
 namespace gl
 {
+class Context;
 
 class MemoryObject final : public RefCountObject
 {
   public:
     MemoryObject(rx::GLImplFactory *factory, GLuint id);
     ~MemoryObject() override;
+
+    angle::Result importMemoryFd(Context *context, GLuint64 size, GLenum handleType, GLint fd);
 
   private:
     rx::MemoryObjectImpl *mMemoryObject;
