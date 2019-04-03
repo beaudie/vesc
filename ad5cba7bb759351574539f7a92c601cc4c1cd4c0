@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc44ed4e_af7d753a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-03T17:00:20Z",
+      "side": 1,
+      "message": "This is not sufficient. If a render pass loadOp is used to clear something, this could be empty. You could perhaps add a test that checks `mRenderPassAttachmentOps` doesn\u0027t have any clears.\n\nI would like to know under which condition you\u0027ve seen this though (with `SecondaryCommandBuffer`), and maybe there would be a better optimization (in the very least, we wouldn\u0027t allocate a block for the command buffer and then not store any commands in it).",
+      "revId": "ad5cba7bb759351574539f7a92c601cc4c1cd4c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
