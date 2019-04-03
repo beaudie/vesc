@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8aae45b8_4b6bd066",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 982,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-03T21:03:09Z",
+      "side": 1,
+      "message": "Using this was a simpler change, but I realize it\u0027s an issue. The next CL gets rid of this.",
+      "revId": "a8972246f3876e845cd0ee17d1c44e7a2bd42d30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ff4ba3e_cb28e4de",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-03T21:03:09Z",
+      "side": 1,
+      "message": "In 2 CLs, I rework this file to use `ANGLE_INSTANTIATE_TEST_COMBINE_*` to not only get rid of this ugliness, but also test more variations.",
+      "revId": "a8972246f3876e845cd0ee17d1c44e7a2bd42d30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
