@@ -9,6 +9,7 @@
 
 # TODO(jmadill): Should be part of entry point generation.
 
+import os.path
 import sys
 from datetime import date
 
@@ -92,7 +93,7 @@ def main():
 
     with open(out_file_name, 'w') as out_file:
         output_cpp = template_cpp.format(
-            script_name = sys.argv[0],
+            script_name = os.path.basename(sys.argv[0]),
             data_source_name = data_source_name,
             copyright_year = date.today().year,
             proc_data = ",\n".join(proc_data),
