@@ -23,4 +23,12 @@ MemoryObject::~MemoryObject()
     SafeDelete(mMemoryObject);
 }
 
+angle::Result MemoryObject::importMemoryFd(Context *context,
+                                           GLuint64 size,
+                                           GLenum handleType,
+                                           GLint fd)
+{
+    return mMemoryObject->importMemoryFd(context, size, handleType, fd);
+}
+
 }  // namespace gl
