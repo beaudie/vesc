@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "792e0456_446828db",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4496,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-03T17:19:27Z",
+      "side": 1,
+      "message": "can you include a link to the issue and a comment this is a bit of a hack fix? And needs to be expanded in the back-end or clamping?",
+      "revId": "4679803a3de9d5b2401c2306657d3beed97ef729",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0589cc86_fa3742a6",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3169,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-03T17:19:27Z",
+      "side": 1,
+      "message": "nit: can you comment before each new test?",
+      "range": {
+        "startLine": 3169,
+        "startChar": 0,
+        "endLine": 3169,
+        "endChar": 6
+      },
+      "revId": "4679803a3de9d5b2401c2306657d3beed97ef729",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
