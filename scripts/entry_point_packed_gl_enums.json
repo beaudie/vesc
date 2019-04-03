@@ -268,7 +268,13 @@
     "glImportMemoryFdEXT": {
         "handleType": "HandleType"
     },
+    "glImportMemoryZirconHandleANGLE": {
+        "handleType": "HandleType"
+    },
     "glImportSemaphoreFdEXT": {
+        "handleType": "HandleType"
+    },
+    "glImportSemaphoreZirconHandleANGLE": {
         "handleType": "HandleType"
     },
     "glInvalidateTextureANGLE": {

@@ -62,6 +62,7 @@ class Framebuffer;
 class GLES1Renderer;
 class MemoryProgramCache;
 class MemoryObject;
+class Semaphore;
 class Program;
 class ProgramPipeline;
 class Query;

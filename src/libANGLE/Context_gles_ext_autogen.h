@@ -267,6 +267,9 @@
     /* GL_ANGLE_framebuffer_blit */                                                                \
     /* GL_ANGLE_framebuffer_multisample */                                                         \
     /* GL_ANGLE_instanced_arrays */                                                                \
+    /* GL_ANGLE_memory_object_zircon_handle */                                                     \
+    void importMemoryZirconHandle(GLuint memory, GLuint64 size, HandleType handleTypePacked,       \
+                                  GLuint handle);                                                  \
     /* GL_ANGLE_multi_draw */                                                                      \
     void multiDrawArrays(PrimitiveMode modePacked, const GLint *firsts, const GLsizei *counts,     \
                          GLsizei drawcount);                                                       \
@@ -281,6 +284,9 @@
                                     const GLsizei *instanceCounts, GLsizei drawcount);             \
     /* GL_ANGLE_provoking_vertex */                                                                \
     void provokingVertex(ProvokingVertex modePacked);                                              \
+    /* GL_ANGLE_semaphore_zircon_handle */                                                         \
+    void importSemaphoreZirconHandle(GLuint semaphore, HandleType handleTypePacked,                \
+                                     GLuint handle);                                               \
     /* GL_ANGLE_texture_multisample */                                                             \
     /* GL_ANGLE_translated_shader_source */                                                        \
     void getTranslatedShaderSource(GLuint shader, GLsizei bufsize, GLsizei *length,                \

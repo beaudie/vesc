@@ -350,11 +350,17 @@ struct Extensions
     // GL_EXT_memory_object_fd
     bool memoryObjectFd;
 
+    // GL_ANGLE_memory_object_zircon_handle
+    bool memoryObjectZirconHandle;
+
     // GL_EXT_semaphore
     bool semaphore;
 
     // GL_EXT_semaphore_fd
     bool semaphoreFd;
+
+    // GL_ANGLE_semaphore_zircon_handle
+    bool semaphoreZirconHandle;
 
     // NV_EGL_stream_consumer_external
     bool eglStreamConsumerExternal;

@@ -3309,6 +3309,22 @@ bool ValidateImportMemoryFdEXT(Context *context,
     return true;
 }
 
+bool ValidateImportMemoryZirconHandleANGLE(Context *context,
+                                           GLuint memory,
+                                           GLuint64 size,
+                                           HandleType handleType,
+                                           GLuint handle)
+{
+    if (!context->getExtensions().memoryObjectZirconHandle)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    UNIMPLEMENTED();
+    return false;
+}
+
 bool ValidateDeleteSemaphoresEXT(Context *context, GLsizei n, const GLuint *semaphores)
 {
     if (!context->getExtensions().semaphore)
@@ -3445,6 +3461,21 @@ bool ValidateImportSemaphoreFdEXT(Context *context,
     }
 
     return true;
+}
+
+bool ValidateImportSemaphoreZirconHandleANGLE(Context *context,
+                                              GLuint semaphore,
+                                              HandleType handleTypePacked,
+                                              GLuint handle)
+{
+    if (!context->getExtensions().semaphoreZirconHandle)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    UNIMPLEMENTED();
+    return false;
 }
 
 bool ValidateMapBufferBase(Context *context, BufferBinding target)
