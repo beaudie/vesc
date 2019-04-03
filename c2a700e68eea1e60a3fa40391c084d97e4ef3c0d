@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "529a268c_a9b5adc3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-03T17:37:11Z",
+      "side": 1,
+      "message": "you can use an angle::FixedVector here to simplify the adding of stages.",
+      "range": {
+        "startLine": 501,
+        "startChar": 4,
+        "endLine": 501,
+        "endChar": 35
+      },
+      "revId": "c2a700e68eea1e60a3fa40391c084d97e4ef3c0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
