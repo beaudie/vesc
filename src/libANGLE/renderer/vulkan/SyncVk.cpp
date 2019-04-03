@@ -55,7 +55,7 @@ angle::Result FenceSyncVk::initialize(ContextVk *contextVk)
 
     ANGLE_TRY(contextVk->getNextSubmitFence(&mFence));
 
-    mEvent        = event.release();
+    mEvent = event.release();
 
     contextVk->getCommandGraph()->setFenceSync(mEvent);
     return angle::Result::Continue;

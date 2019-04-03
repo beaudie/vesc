@@ -163,10 +163,12 @@ GLenum ToGLenum(GraphicsResetStatus from);
 
 enum class HandleType : uint8_t
 {
-    OpaqueFd = 0,
+    OpaqueFd    = 0,
+    ZirconVmo   = 1,
+    ZirconEvent = 2,
 
-    InvalidEnum = 1,
-    EnumCount   = 1,
+    InvalidEnum = 3,
+    EnumCount   = 3,
 };
 
 template <>

@@ -54,6 +54,7 @@ class Framebuffer;
 class GLES1Renderer;
 class MemoryProgramCache;
 class MemoryObject;
+class Semaphore;
 class Program;
 class ProgramPipeline;
 class Query;
@@ -403,6 +404,12 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     // GL_EXT_memory_object_fd
     void importMemoryFd(GLuint memory, GLuint64 size, HandleType handleType, GLint fd);
 
+    // GL_ANGLE_memory_object_zircon_handle
+    void importMemoryZirconHandle(GLuint memory,
+                                  GLuint64 size,
+                                  HandleType handleType,
+                                  GLuint handle);
+
     // GL_EXT_semaphore
     void genSemaphores(GLsizei n, GLuint *semaphores);
     void deleteSemaphores(GLsizei n, const GLuint *semaphores);
@@ -424,6 +431,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     // GL_EXT_semaphore_fd
     void importSemaphoreFd(GLuint semaphore, HandleType handleType, GLint fd);
+
+    // GL_ANGLE_semaphore_zircon_handle
+    void importSemaphoreZirconHandle(GLuint semaphore, HandleType handleType, GLuint handle);
 
     // GLES1 emulation: Interface to entry points
     ANGLE_GLES1_CONTEXT_API
