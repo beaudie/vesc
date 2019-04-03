@@ -133,7 +133,7 @@ std::vector<PathImpl *> Context9::createPaths(GLsizei)
     return std::vector<PathImpl *>();
 }
 
-MemoryObjectImpl *Context9::createMemoryObject()
+SemaphoreImpl *Context9::createSemaphore()
 {
     UNREACHABLE();
     return nullptr;

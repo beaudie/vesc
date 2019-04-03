@@ -83,6 +83,13 @@ bool ValidateDrawElementsInstancedANGLE(Context *context,
                                         GLsizei primcount);
 bool ValidateVertexAttribDivisorANGLE(Context *context, GLuint index, GLuint divisor);
 
+// GL_ANGLE_memory_object_zircon_handle
+bool ValidateImportMemoryZirconHandleANGLE(Context *context,
+                                           GLuint memory,
+                                           GLuint64 size,
+                                           HandleType handleTypePacked,
+                                           GLuint handle);
+
 // GL_ANGLE_multi_draw
 bool ValidateMultiDrawArraysANGLE(Context *context,
                                   PrimitiveMode modePacked,
@@ -549,6 +556,12 @@ bool ValidateGetQueryObjectui64vRobustANGLE(Context *context,
                                             GLsizei bufSize,
                                             GLsizei *length,
                                             GLuint64 *params);
+
+// GL_ANGLE_semaphore_zircon_handle
+bool ValidateImportSemaphoreZirconHandleANGLE(Context *context,
+                                              GLuint semaphore,
+                                              HandleType handleTypePacked,
+                                              GLuint handle);
 
 // GL_ANGLE_texture_multisample
 bool ValidateTexStorage2DMultisampleANGLE(Context *context,

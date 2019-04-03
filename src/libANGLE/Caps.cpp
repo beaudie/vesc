@@ -894,8 +894,10 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_OES_EGL_sync"] = esOnlyExtension(&Extensions::eglSync);
         map["GL_EXT_memory_object"] = enableableExtension(&Extensions::memoryObject);
         map["GL_EXT_memory_object_fd"] = enableableExtension(&Extensions::memoryObjectFd);
+        map["GL_ANGLE_memory_object_zircon_handle"] = enableableExtension(&Extensions::memoryObjectZirconHandle);
         map["GL_EXT_semaphore"] = enableableExtension(&Extensions::semaphore);
         map["GL_EXT_semaphore_fd"] = enableableExtension(&Extensions::semaphoreFd);
+        map["GL_ANGLE_semaphore_zircon_handle"] = enableableExtension(&Extensions::semaphoreZirconHandle);
         map["GL_NV_EGL_stream_consumer_external"] = enableableExtension(&Extensions::eglStreamConsumerExternal);
         map["GL_EXT_unpack_subimage"] = enableableExtension(&Extensions::unpackSubimage);
         map["GL_NV_pack_subimage"] = enableableExtension(&Extensions::packSubimage);
