@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f80865a1_3e550733",
+        "filename": "src/libANGLE/renderer/d3d/VertexDataManager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-03T17:29:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58db5a9f_ccd466b2",
+      "range": {
+        "startLine": 49,
+        "startChar": 56,
+        "endLine": 49,
+        "endChar": 59
+      },
+      "revId": "6deb1d499259598a0f5977fa268d2272cc006060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e8bfa55b_7a456084",
         "filename": "src/libANGLE/renderer/d3d/VertexDataManager.cpp",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "4e5ec751_89366d95",
+        "filename": "src/libANGLE/renderer/d3d/VertexDataManager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-03T17:29:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8bfa55b_7a456084",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 100
+      },
+      "revId": "6deb1d499259598a0f5977fa268d2272cc006060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b505875_f5264c9f",
         "filename": "src/libANGLE/renderer/d3d/VertexDataManager.cpp",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "6deb1d499259598a0f5977fa268d2272cc006060",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5abf2d1e_21471c90",
+        "filename": "src/libANGLE/renderer/d3d/VertexDataManager.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-03T17:29:06Z",
+      "side": 1,
+      "message": "I don\u0027t think so. Even if elements is less than GLsizei max the number of bytes can be greater than GLsizei max. Because the byte count is element count multiplied by stride.",
+      "parentUuid": "5b505875_f5264c9f",
+      "range": {
+        "startLine": 508,
+        "startChar": 79,
+        "endLine": 508,
+        "endChar": 86
+      },
+      "revId": "6deb1d499259598a0f5977fa268d2272cc006060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
