@@ -494,8 +494,8 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     const RenderPass &compatibleRenderPass,
     const PipelineLayout &pipelineLayout,
     const gl::AttributesMask &activeAttribLocationsMask,
-    const ShaderModule &vertexModule,
-    const ShaderModule &fragmentModule,
+    const ShaderModule *vertexModule,
+    const ShaderModule *fragmentModule,
     Pipeline *pipelineOut) const
 {
     VkPipelineShaderStageCreateInfo shaderStages[2]           = {};
@@ -510,19 +510,27 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     VkPipelineColorBlendStateCreateInfo blendState = {};
     VkGraphicsPipelineCreateInfo createInfo        = {};
 
+    // Vertex shader is always expected to be present.
+    ASSERT(vertexModule != nullptr);
+    uint32_t shaderStageCount           = 1;
     shaderStages[0].sType               = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     shaderStages[0].flags               = 0;
     shaderStages[0].stage               = VK_SHADER_STAGE_VERTEX_BIT;
-    shaderStages[0].module              = vertexModule.getHandle();
+    shaderStages[0].module              = vertexModule->getHandle();
     shaderStages[0].pName               = "main";
     shaderStages[0].pSpecializationInfo = nullptr;
 
-    shaderStages[1].sType               = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-    shaderStages[1].flags               = 0;
-    shaderStages[1].stage               = VK_SHADER_STAGE_FRAGMENT_BIT;
-    shaderStages[1].module              = fragmentModule.getHandle();
-    shaderStages[1].pName               = "main";
-    shaderStages[1].pSpecializationInfo = nullptr;
+    // Fragment shader is optional.
+    if (fragmentModule)
+    {
+        shaderStages[shaderStageCount].sType  = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+        shaderStages[shaderStageCount].flags  = 0;
+        shaderStages[shaderStageCount].stage  = VK_SHADER_STAGE_FRAGMENT_BIT;
+        shaderStages[shaderStageCount].module = fragmentModule->getHandle();
+        shaderStages[shaderStageCount].pName  = "main";
+        shaderStages[shaderStageCount].pSpecializationInfo = nullptr;
+        ++shaderStageCount;
+    }
 
     // TODO(jmadill): Possibly use different path for ES 3.1 split bindings/attribs.
     gl::AttribArray<VkVertexInputBindingDescription> bindingDescs;
@@ -683,7 +691,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
 
     createInfo.sType               = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
     createInfo.flags               = 0;
-    createInfo.stageCount          = 2;
+    createInfo.stageCount          = shaderStageCount;
     createInfo.pStages             = shaderStages;
     createInfo.pVertexInputState   = &vertexInputState;
     createInfo.pInputAssemblyState = &inputAssemblyState;
@@ -1367,8 +1375,8 @@ angle::Result GraphicsPipelineCache::insertPipeline(
     const vk::RenderPass &compatibleRenderPass,
     const vk::PipelineLayout &pipelineLayout,
     const gl::AttributesMask &activeAttribLocationsMask,
-    const vk::ShaderModule &vertexModule,
-    const vk::ShaderModule &fragmentModule,
+    const vk::ShaderModule *vertexModule,
+    const vk::ShaderModule *fragmentModule,
     const vk::GraphicsPipelineDesc &desc,
     const vk::GraphicsPipelineDesc **descPtrOut,
     vk::PipelineHelper **pipelineOut)
