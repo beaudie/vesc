@@ -106,6 +106,7 @@ def any_hash_dirty(name, filenames, new_hashes, old_hashes):
     for filename in filenames:
         key = name + ":" + filename
         if not os.path.isfile(filename):
+            print('Could not find %s for %s' % (filename, name))
             found_dirty_hash = True
         else:
             new_hashes[key] = md5(filename)
@@ -115,12 +116,13 @@ def any_hash_dirty(name, filenames, new_hashes, old_hashes):
 
 
 def any_old_hash_missing(new_hashes, old_hashes):
+    result = False
     for name, _ in old_hashes.iteritems():
         if name not in new_hashes:
             script, file = name.split(':')
-            print('%s missing from generated hashes.' % file)
-            return True
-    return False
+            print('%s missing from generated hashes for %s.' % (file, script))
+            result = True
+    return result
 
 
 def update_output_hashes(script, outputs, new_hashes):
@@ -131,9 +133,20 @@ def update_output_hashes(script, outputs, new_hashes):
         key = script + ":" + output
         new_hashes[key] = md5(output)
 
+def dumpdir():
+    for r, d, f in os.walk('.'):
+        for direct in d:
+            print('dir: %s' % direct)
+    for r, d, f in os.walk('./third_party/glslang/src'):
+        for direct in d:
+            print('glslang dir: %s' % direct)
+
 
 def main():
     os.chdir(script_dir)
+
+    dumpdir()
+
     old_hashes = json.load(open(hash_fname))
     new_hashes = {}
     any_dirty = False
