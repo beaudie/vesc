@@ -16,6 +16,24 @@
       "revId": "ad5cba7bb759351574539f7a92c601cc4c1cd4c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3d61c65_f93b943d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-03T17:20:36Z",
+      "side": 1,
+      "message": "Yeah, maybe we can \"kill\" the empty buffers where they get created.",
+      "parentUuid": "dc44ed4e_af7d753a",
+      "revId": "ad5cba7bb759351574539f7a92c601cc4c1cd4c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
