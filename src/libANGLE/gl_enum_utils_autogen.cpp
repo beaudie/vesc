@@ -1784,6 +1784,10 @@ const char *GLenumToString(GLenumGroup enumGroup, unsigned int value)
                     return "GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_BASE_VIEW_INDEX_OVR";
                 case 0x9633:
                     return "GL_FRAMEBUFFER_INCOMPLETE_VIEW_TARGETS_OVR";
+                case 0xA0C5:
+                    return "GL_HANDLE_TYPE_ZIRCON_VMO_ANGLE";
+                case 0xA0C6:
+                    return "GL_HANDLE_TYPE_ZIRCON_EVENT_ANGLE";
                 default:
                     return kUnknownGLenumString;
             }
