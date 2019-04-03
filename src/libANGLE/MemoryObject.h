@@ -29,6 +29,8 @@ class MemoryObject final : public RefCountObject
     MemoryObject(rx::GLImplFactory *factory, GLuint id);
     ~MemoryObject() override;
 
+    rx::MemoryObjectImpl *getImplementation() const { return mMemoryObject; }
+
     angle::Result importMemoryFd(Context *context, GLuint64 size, GLenum handleType, GLint fd);
 
   private:
