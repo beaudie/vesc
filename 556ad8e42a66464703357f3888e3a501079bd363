@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "16124646_f1e48f2b",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1343,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-04T15:04:47Z",
+      "side": 1,
+      "message": "Is the memory object expected to have data in it already?  This will cause it to be cleared on first use.",
+      "range": {
+        "startLine": 1343,
+        "startChar": 32,
+        "endLine": 1343,
+        "endChar": 53
+      },
+      "revId": "556ad8e42a66464703357f3888e3a501079bd363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "941f70e5_8ed43d93",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-04T15:04:47Z",
+      "side": 1,
+      "message": "Add MemoryObject to this list: https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/vk_utils.h?l\u003d24 and use vk::GetImpl(memoryObject) instead.",
+      "range": {
+        "startLine": 776,
+        "startChar": 37,
+        "endLine": 776,
+        "endChar": 77
+      },
+      "revId": "556ad8e42a66464703357f3888e3a501079bd363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "696b2c52_8a7ab77f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-04T15:04:47Z",
+      "side": 1,
+      "message": "I think it would be cleaner if we turned it around and had MemoryObjectVk create the image and initialize it instead of passing it an image to initialize.",
+      "range": {
+        "startLine": 782,
+        "startChar": 28,
+        "endLine": 782,
+        "endChar": 50
+      },
+      "revId": "556ad8e42a66464703357f3888e3a501079bd363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd0e929b_8cd63e24",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3163,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-04T15:04:47Z",
+      "side": 1,
+      "message": "remove this line.",
+      "range": {
+        "startLine": 3163,
+        "startChar": 0,
+        "endLine": 3163,
+        "endChar": 16
+      },
+      "revId": "556ad8e42a66464703357f3888e3a501079bd363",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
