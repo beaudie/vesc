@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04cc4b3f_2985e6ec",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/FullScreenQuad.vert",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-04-04T23:02:32Z",
+      "side": 1,
+      "message": "cool, good comment",
+      "revId": "af9b005e44e3c71436207dd1b801972fc57e8a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fb785ce_4b737068",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/FullScreenQuad.vert",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-04-04T23:02:32Z",
+      "side": 1,
+      "message": "Is this a spec restriction? Quick spec search seems to indicate pushConstant must have 4-byte alignment so curious if this is driven from spec or something else.",
+      "revId": "af9b005e44e3c71436207dd1b801972fc57e8a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
