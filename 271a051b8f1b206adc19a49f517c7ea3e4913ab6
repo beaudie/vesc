@@ -22,6 +22,75 @@
       "revId": "271a051b8f1b206adc19a49f517c7ea3e4913ab6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bd713a5_bb653f9a",
+        "filename": "src/libGLESv2/gen_proc_table.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T14:17:42Z",
+      "side": 1,
+      "message": "note this comment here.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 76
+      },
+      "revId": "271a051b8f1b206adc19a49f517c7ea3e4913ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6c2f7b1_201a195f",
+        "filename": "src/libGLESv2/gen_proc_table.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T14:17:42Z",
+      "side": 1,
+      "message": "nit: you can omit this if you use sys.path[0]",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "271a051b8f1b206adc19a49f517c7ea3e4913ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a356f8ce_2c9ad5b6",
+        "filename": "src/libGLESv2/gen_proc_table.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T14:17:42Z",
+      "side": 1,
+      "message": "this could be sys.path[0]",
+      "range": {
+        "startLine": 96,
+        "startChar": 26,
+        "endLine": 96,
+        "endChar": 56
+      },
+      "revId": "271a051b8f1b206adc19a49f517c7ea3e4913ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
