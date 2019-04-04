@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a22c6849_b6f752a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T14:02:12Z",
+      "side": 1,
+      "message": "could comment on what the implementation uses? (one sentence)",
+      "range": {
+        "startLine": 10,
+        "startChar": 27,
+        "endLine": 12,
+        "endChar": 0
+      },
+      "revId": "cc43a9ba26f6097ad733c20fe3367dbfe834ba9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39365356_84728d54",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T14:02:12Z",
+      "side": 1,
+      "message": "wording clarity suggestion, feel free to adapt: \n\n- the clear is effective. An effective clear changes at least one pixel. If color/depth/stencil masks make the clear ineffective we skip it altogether.\n\nThe term effective does seem to make sense as it implies \"has side effects\" vs \"has no side effects\".",
+      "range": {
+        "startLine": 240,
+        "startChar": 21,
+        "endLine": 240,
+        "endChar": 39
+      },
+      "revId": "cc43a9ba26f6097ad733c20fe3367dbfe834ba9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b7aae87_678c72a6",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T14:02:12Z",
+      "side": 1,
+      "message": "we could consider moving this to Framebuffer.cpp. but maybe better here, not sure.",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 250,
+        "endChar": 5
+      },
+      "revId": "cc43a9ba26f6097ad733c20fe3367dbfe834ba9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13b4a9e5_10765ef5",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T14:02:12Z",
+      "side": 1,
+      "message": "same with these.",
+      "range": {
+        "startLine": 264,
+        "startChar": 0,
+        "endLine": 271,
+        "endChar": 0
+      },
+      "revId": "cc43a9ba26f6097ad733c20fe3367dbfe834ba9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c92623b0_97c6d502",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T14:02:12Z",
+      "side": 1,
+      "message": "Yuly had requested to me that the update functions call the set methods internally. Can you do this for consistency?",
+      "range": {
+        "startLine": 899,
+        "startChar": 4,
+        "endLine": 899,
+        "endChar": 41
+      },
+      "revId": "cc43a9ba26f6097ad733c20fe3367dbfe834ba9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
