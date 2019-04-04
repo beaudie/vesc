@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8bc88ba5_f527c129",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7205,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-04T14:48:23Z",
+      "side": 1,
+      "message": "Even though there is only one enum so far, this would be a good enum to use an internal enum for if you want to try.  You can add it to packed_gl_enums.json and entry_point_packed_enums.json.",
+      "range": {
+        "startLine": 7205,
+        "startChar": 59,
+        "endLine": 7205,
+        "endChar": 76
+      },
+      "revId": "e57d75c6e11adc4a85880331358496dd75a65a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2217b446_06a2acc8",
+        "filename": "src/libANGLE/MemoryObject.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-04T14:48:23Z",
+      "side": 1,
+      "message": "nit: Let\u0027s call this just importFd, the memory part is implied at this point.",
+      "range": {
+        "startLine": 32,
+        "startChar": 18,
+        "endLine": 32,
+        "endChar": 32
+      },
+      "revId": "e57d75c6e11adc4a85880331358496dd75a65a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "941e64bd_726eda2c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-04T14:48:23Z",
+      "side": 1,
+      "message": "We wouldn\u0027t have different impl types for each memory object type because it\u0027s not possible to predict at this time.\n\nI would suggest that you defer the creation of the gl::MemoryObject until an import call is made but it looks like it has other state that can be set before then.\n\nYou will need a MemoryObjectVk and it will either have to handle any import command or instantiate abstract classes internally depending on the memory type.  I have a feeling that it won\u0027t be too difficult to have MemoryObjectVk handle any import command, it all ends up as an import of VK memory anyways.",
+      "range": {
+        "startLine": 1121,
+        "startChar": 0,
+        "endLine": 1126,
+        "endChar": 6
+      },
+      "revId": "e57d75c6e11adc4a85880331358496dd75a65a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8993cb3_2da4247d",
+        "filename": "src/libANGLE/renderer/vulkan/linux/MemoryObjectVkFd.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-04T14:48:23Z",
+      "side": 1,
+      "message": "This should be a constant.",
+      "range": {
+        "startLine": 21,
+        "startChar": 53,
+        "endLine": 21,
+        "endChar": 55
+      },
+      "revId": "e57d75c6e11adc4a85880331358496dd75a65a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0162cd96_da0c292d",
+        "filename": "src/libANGLE/renderer/vulkan/linux/MemoryObjectVkFd.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-04T14:48:23Z",
+      "side": 1,
+      "message": "Does this file only compile on linux?  If it can compile anywhere, we might as well move it up a directory and not gate it on platform defines.",
+      "revId": "e57d75c6e11adc4a85880331358496dd75a65a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
