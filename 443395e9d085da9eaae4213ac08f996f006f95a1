@@ -22,6 +22,30 @@
       "revId": "443395e9d085da9eaae4213ac08f996f006f95a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28180265_9b7c0bfa",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1140,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-04T16:04:20Z",
+      "side": 0,
+      "message": "You\u0027re right, looks like this is still failing on Android (on Pixel 2 now) so the comment (and the bug) need updating.",
+      "parentUuid": "87864a99_23de7bc6",
+      "range": {
+        "startLine": 1140,
+        "startChar": 47,
+        "endLine": 1140,
+        "endChar": 71
+      },
+      "revId": "443395e9d085da9eaae4213ac08f996f006f95a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
