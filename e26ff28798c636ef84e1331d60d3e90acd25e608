@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "572f8e48_da85415b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T14:21:19Z",
+      "side": 1,
+      "message": "angle uses chromium.googlesource.com so by default bug tags will be chromium bugs. we need to use Bug: angleproject:3289 to pick the ANGLE issue tracker.",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 9
+      },
+      "revId": "e26ff28798c636ef84e1331d60d3e90acd25e608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bde565b_002155f3",
+        "filename": "src/libANGLE/MemoryObject.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T14:21:19Z",
+      "side": 1,
+      "message": "you might want to add the onDestroy hook as well.",
+      "range": {
+        "startLine": 25,
+        "startChar": 6,
+        "endLine": 25,
+        "endChar": 18
+      },
+      "revId": "e26ff28798c636ef84e1331d60d3e90acd25e608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bc772f29_6997f53e",
         "filename": "src/libANGLE/MemoryObject.h",
         "patchSetId": 2
@@ -35,6 +81,52 @@
         "startChar": 4,
         "endLine": 32,
         "endChar": 40
+      },
+      "revId": "e26ff28798c636ef84e1331d60d3e90acd25e608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "519cf5d4_5805d44a",
+        "filename": "src/libANGLE/MemoryObject.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T14:21:19Z",
+      "side": 1,
+      "message": "nit: mImplementation. Also you can use unique_ptr.",
+      "range": {
+        "startLine": 32,
+        "startChar": 26,
+        "endLine": 32,
+        "endChar": 39
+      },
+      "revId": "e26ff28798c636ef84e1331d60d3e90acd25e608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39adac87_177b5175",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3121,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T14:21:19Z",
+      "side": 1,
+      "message": "leave a TODO?",
+      "range": {
+        "startLine": 3121,
+        "startChar": 11,
+        "endLine": 3121,
+        "endChar": 15
       },
       "revId": "e26ff28798c636ef84e1331d60d3e90acd25e608",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
