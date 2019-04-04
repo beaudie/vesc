@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b9265efc_4c265155",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-04T19:37:09Z",
+      "side": 1,
+      "message": "Renamed to `restartRenderPassAfterLoadOpClear`",
+      "parentUuid": "ca40d384_7430cc59",
+      "range": {
+        "startLine": 77,
+        "startChar": 9,
+        "endLine": 77,
+        "endChar": 56
+      },
+      "revId": "b764c8f233748800378f5ccb160f9e7dd1bb21e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d85c4bd5_ac785751",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 11
@@ -36,6 +60,30 @@
       "writtenOn": "2019-04-04T13:48:52Z",
       "side": 1,
       "message": "maybe link to a bug so that we can track removing the workaround when possible?",
+      "range": {
+        "startLine": 319,
+        "startChar": 44,
+        "endLine": 319,
+        "endChar": 55
+      },
+      "revId": "b764c8f233748800378f5ccb160f9e7dd1bb21e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24d01a90_42c20de3",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-04T19:37:09Z",
+      "side": 1,
+      "message": "Done (There\u0027s one where the workaround is defined though)",
+      "parentUuid": "d85c4bd5_ac785751",
       "range": {
         "startLine": 319,
         "startChar": 44,
