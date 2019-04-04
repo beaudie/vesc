@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f7c22218_0263c21b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-04-04T21:20:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "572f8e48_da85415b",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 9
+      },
+      "revId": "e26ff28798c636ef84e1331d60d3e90acd25e608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5bde565b_002155f3",
         "filename": "src/libANGLE/MemoryObject.h",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "739a2266_b1a1c15f",
+        "filename": "src/libANGLE/MemoryObject.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-04-04T21:20:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bde565b_002155f3",
+      "range": {
+        "startLine": 25,
+        "startChar": 6,
+        "endLine": 25,
+        "endChar": 18
+      },
+      "revId": "e26ff28798c636ef84e1331d60d3e90acd25e608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bc772f29_6997f53e",
         "filename": "src/libANGLE/MemoryObject.h",
         "patchSetId": 2
@@ -62,6 +110,24 @@
       "revId": "e26ff28798c636ef84e1331d60d3e90acd25e608",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15297104_a1cc8149",
+        "filename": "src/libANGLE/MemoryObject.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-04-04T21:20:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc772f29_6997f53e",
+      "revId": "e26ff28798c636ef84e1331d60d3e90acd25e608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +177,54 @@
     },
     {
       "key": {
+        "uuid": "27fd220e_c60ebe4c",
+        "filename": "src/libANGLE/MemoryObject.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-04-04T21:20:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "519cf5d4_5805d44a",
+      "range": {
+        "startLine": 32,
+        "startChar": 26,
+        "endLine": 32,
+        "endChar": 39
+      },
+      "revId": "e26ff28798c636ef84e1331d60d3e90acd25e608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "93a67c19_f4951149",
+        "filename": "src/libANGLE/MemoryObject.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-04-04T21:20:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad687e0a_65ca30b3",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 40
+      },
+      "revId": "e26ff28798c636ef84e1331d60d3e90acd25e608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39adac87_177b5175",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 2
@@ -122,6 +236,30 @@
       "writtenOn": "2019-04-04T14:21:19Z",
       "side": 1,
       "message": "leave a TODO?",
+      "range": {
+        "startLine": 3121,
+        "startChar": 11,
+        "endLine": 3121,
+        "endChar": 15
+      },
+      "revId": "e26ff28798c636ef84e1331d60d3e90acd25e608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "044da0a9_bbc2b384",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3121,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-04-04T21:20:22Z",
+      "side": 1,
+      "message": "Is there anything left to do? Just going by other IsThing() functions, it\u0027s valid to query whether any possible integer is a valid handle.",
+      "parentUuid": "39adac87_177b5175",
       "range": {
         "startLine": 3121,
         "startChar": 11,
