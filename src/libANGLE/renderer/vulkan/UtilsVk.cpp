@@ -668,10 +668,13 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
 
     ANGLE_TRY(ensureImageClearResourcesInitialized(contextVk));
 
+    gl::Rectangle scissoredRenderArea = gl_vk::GetRectangle(params.clearArea);
+
     vk::CommandBuffer *commandBuffer;
-    if (!framebuffer->appendToStartedRenderPass(renderer->getCurrentQueueSerial(), &commandBuffer))
+    if (!framebuffer->appendToStartedRenderPass(renderer->getCurrentQueueSerial(),
+                                                scissoredRenderArea, &commandBuffer))
     {
-        ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, &commandBuffer));
+        ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, scissoredRenderArea, &commandBuffer));
     }
 
     FullScreenQuadParams vsParams;
@@ -716,17 +719,14 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
         pipelineDesc.setStencilBackWriteMask(params.stencilMask);
     }
 
-    const gl::Rectangle &renderArea = framebuffer->getFramebuffer()->getRenderPassRenderArea();
-    bool invertViewport             = contextVk->isViewportFlipEnabledForDrawFBO();
-
     VkViewport viewport;
-    gl_vk::GetViewport(renderArea, 0.0f, 1.0f, invertViewport, params.renderAreaHeight, &viewport);
+    gl::Rectangle completeRenderArea = framebuffer->getCompleteRenderArea();
+    bool invertViewport              = contextVk->isViewportFlipEnabledForDrawFBO();
+    gl_vk::GetViewport(completeRenderArea, 0.0f, 1.0f, invertViewport, params.renderAreaHeight,
+                       &viewport);
     pipelineDesc.setViewport(viewport);
 
-    VkRect2D scissor;
-    const gl::State &glState = contextVk->getState();
-    gl_vk::GetScissor(glState, invertViewport, renderArea, &scissor);
-    pipelineDesc.setScissor(scissor);
+    pipelineDesc.setScissor(params.clearArea);
 
     vk::ShaderLibrary &shaderLibrary                    = renderer->getShaderLibrary();
     vk::RefCounted<vk::ShaderAndSerial> *vertexShader   = nullptr;

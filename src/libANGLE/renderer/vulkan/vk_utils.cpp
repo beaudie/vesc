@@ -33,11 +33,6 @@ VkImageUsageFlags GetStagingBufferUsageFlags(rx::vk::StagingUsage usage)
             return 0;
     }
 }
-
-constexpr gl::Rectangle kMaxSizedScissor(0,
-                                         0,
-                                         std::numeric_limits<int>::max(),
-                                         std::numeric_limits<int>::max());
 }  // anonymous namespace
 
 namespace angle
@@ -636,6 +631,12 @@ VkRect2D GetRect(const gl::Rectangle &source)
             {static_cast<uint32_t>(source.width), static_cast<uint32_t>(source.height)}};
 }
 
+gl::Rectangle GetRectangle(const VkRect2D &source)
+{
+    return gl::Rectangle(source.offset.x, source.offset.y, source.extent.width,
+                         source.extent.height);
+}
+
 VkPrimitiveTopology GetPrimitiveTopology(gl::PrimitiveMode mode)
 {
     switch (mode)
@@ -848,10 +849,8 @@ void GetScissor(const gl::State &glState,
     }
     else
     {
-        // If the scissor test isn't enabled, we can simply use a really big scissor that's
-        // certainly larger than the current surface using the maximum size of a 2D texture
-        // for the width and height.
-        *scissorOut = gl_vk::GetRect(kMaxSizedScissor);
+        // If the scissor test isn't enabled, we can simply set the scissor to the render area.
+        *scissorOut = gl_vk::GetRect(renderArea);
     }
 }
 }  // namespace gl_vk

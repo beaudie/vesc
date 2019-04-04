@@ -63,6 +63,7 @@ class UtilsVk : angle::NonCopyable
     {
         const vk::RenderPassDesc *renderPassDesc;
         GLint renderAreaHeight;
+        VkRect2D clearArea;
 
         bool clearColor;
         bool clearDepth;

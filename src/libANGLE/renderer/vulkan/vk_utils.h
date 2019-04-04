@@ -502,6 +502,7 @@ void InitExternalMemoryHardwareBufferANDROIDFunctions(VkInstance instance);
 namespace gl_vk
 {
 VkRect2D GetRect(const gl::Rectangle &source);
+gl::Rectangle GetRectangle(const VkRect2D &source);
 VkFilter GetFilter(const GLenum filter);
 VkSamplerMipmapMode GetSamplerMipmapMode(const GLenum filter);
 VkSamplerAddressMode GetSamplerAddressMode(const GLenum wrap);
