@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "575cf7b2_18d6be73",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-04T02:46:12Z",
+      "side": 1,
+      "message": "Please reserve the first line of the commit message for the summary of the change, as shown in `git log --pretty\u003doneline`. Put the `Bug:` tag at the end of the message where all the other tags are.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 0
+      },
+      "revId": "9ccd21d457307d63ccfb85f7be08fad8d5a3ee19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
