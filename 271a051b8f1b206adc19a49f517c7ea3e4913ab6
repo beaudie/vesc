@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e7bc914_6f7a346a",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-04T14:12:39Z",
+      "side": 1,
+      "message": "Make sure these are initialized in the Caps constructor and have an entry in GetExtensionInfoMap.",
+      "range": {
+        "startLine": 336,
+        "startChar": 0,
+        "endLine": 340,
+        "endChar": 19
+      },
+      "revId": "271a051b8f1b206adc19a49f517c7ea3e4913ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
