@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc772f29_6997f53e",
+        "filename": "src/libANGLE/MemoryObject.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-04T14:20:31Z",
+      "side": 1,
+      "message": "Recommend overriding the \"void onDestroy(const ContextType *context)\" method and forwarding it to the impl.  It\u0027s the best way for many of our backends to get access to device objects when destroying.",
+      "revId": "e26ff28798c636ef84e1331d60d3e90acd25e608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad687e0a_65ca30b3",
+        "filename": "src/libANGLE/MemoryObject.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-04T14:20:31Z",
+      "side": 1,
+      "message": "nit: use std::unique_ptr",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 40
+      },
+      "revId": "e26ff28798c636ef84e1331d60d3e90acd25e608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
