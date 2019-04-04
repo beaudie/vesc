@@ -60,6 +60,23 @@
     },
     {
       "key": {
+        "uuid": "2536eaca_edf04a00",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T21:07:11Z",
+      "side": 1,
+      "message": "how would this happen exactly? a viewport or attachment change? I suspect there\u0027s a slightly lazier way of getting this effect.",
+      "revId": "b0b3290527b290377bdb5e56740b9f910eaf874d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5aaa0e2c_e7c2a2f8",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
         "patchSetId": 1
