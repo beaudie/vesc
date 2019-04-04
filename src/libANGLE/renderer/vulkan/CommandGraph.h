@@ -157,7 +157,7 @@ class CommandGraphNode final : angle::NonCopyable
     uintptr_t getResourceIDForDiagnostics() const { return mResourceID; }
     std::string dumpCommandsForDiagnostics(const char *separator) const;
 
-    const gl::Rectangle &getRenderPassRenderArea() const;
+    const gl::Rectangle &getRenderPassRenderArea() const { return mRenderPassRenderArea; }
 
     CommandGraphNodeFunction getFunction() const { return mFunction; }
 
@@ -292,21 +292,23 @@ class CommandGraphResource : angle::NonCopyable
                                   const std::vector<VkClearValue> &clearValues,
                                   CommandBuffer **commandBufferOut);
 
-    // Checks if we're in a RenderPass, returning true if so. Updates serial internally.
-    // Returns the started command buffer in commandBufferOut.
+    // Checks if we're in a RenderPass that encompasses renderArea, returning true if so. Updates
+    // serial internally. Returns the started command buffer in commandBufferOut.
     ANGLE_INLINE bool appendToStartedRenderPass(Serial currentQueueSerial,
+                                                const gl::Rectangle &renderArea,
                                                 CommandBuffer **commandBufferOut)
     {
         updateQueueSerial(currentQueueSerial);
         if (hasStartedRenderPass())
         {
-            *commandBufferOut = mCurrentWritingNode->getInsideRenderPassCommands();
-            return true;
+            if (mCurrentWritingNode->getRenderPassRenderArea().encloses(renderArea))
+            {
+                *commandBufferOut = mCurrentWritingNode->getInsideRenderPassCommands();
+                return true;
+            }
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     // Returns true if the render pass is started, but there are no commands yet recorded in it.
@@ -315,6 +317,15 @@ class CommandGraphResource : angle::NonCopyable
     {
         return hasStartedRenderPass() &&
                mCurrentWritingNode->getInsideRenderPassCommands()->empty();
+    }
+
+    // Returns true if the render pass is started, but its render area does not enclose the new
+    // render area.  This can happen if a render pass is started for scissored clear, then the
+    // scissor is removed, thus requiring a new render pass with a larger render area.
+    bool renderPassStartedButTooSmall(const gl::Rectangle &newRenderArea) const
+    {
+        return hasStartedRenderPass() &&
+               !mCurrentWritingNode->getRenderPassRenderArea().encloses(newRenderArea);
     }
 
     void clearRenderPassColorAttachment(size_t attachmentIndex, const VkClearColorValue &clearValue)
@@ -336,7 +347,11 @@ class CommandGraphResource : angle::NonCopyable
     }
 
     // Accessor for RenderPass RenderArea.
-    const gl::Rectangle &getRenderPassRenderArea() const;
+    const gl::Rectangle &getRenderPassRenderArea() const
+    {
+        ASSERT(hasStartedRenderPass());
+        return mCurrentWritingNode->getRenderPassRenderArea();
+    }
 
     // Called when 'this' object changes, but we'd like to start a new command buffer later.
     void finishCurrentCommands(RendererVk *renderer);
