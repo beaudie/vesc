@@ -73,7 +73,6 @@
 1028 DEBUG RELEASE : dEQP-GLES2.functional.fbo.completeness.renderable.texture.depth.srgb8 = FAIL
 
 // Bind aliasing is not working currently
-3252 DEBUG RELEASE : dEQP-GLES2.functional.attribute_location.bind_aliasing.cond* = FAIL
 3252 DEBUG RELEASE : dEQP-GLES2.functional.attribute_location.bind_aliasing.max_cond* = FAIL
 
 // Half float OES either has an implementation bug or a dEQP bug.
