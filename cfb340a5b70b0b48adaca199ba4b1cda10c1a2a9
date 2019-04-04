@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fa8a03a_e666b15d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T14:29:20Z",
+      "side": 1,
+      "message": "What is the risk of enabling these for any driver that exposes the Vulkan extensions?",
+      "range": {
+        "startLine": 977,
+        "startChar": 12,
+        "endLine": 977,
+        "endChar": 32
+      },
+      "revId": "cfb340a5b70b0b48adaca199ba4b1cda10c1a2a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
