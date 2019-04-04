@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c2b04c5e_5621efc3",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-04-04T21:08:23Z",
+      "side": 1,
+      "message": "Oops, done.",
+      "parentUuid": "1e7bc914_6f7a346a",
+      "range": {
+        "startLine": 336,
+        "startChar": 0,
+        "endLine": 340,
+        "endChar": 19
+      },
+      "revId": "271a051b8f1b206adc19a49f517c7ea3e4913ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2bd713a5_bb653f9a",
         "filename": "src/libGLESv2/gen_proc_table.py",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "271a051b8f1b206adc19a49f517c7ea3e4913ab6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "417d6626_b4d33297",
+        "filename": "src/libGLESv2/gen_proc_table.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-04-04T21:08:23Z",
+      "side": 1,
+      "message": "Thanks. I figured that out once the presubmit failed.",
+      "parentUuid": "2bd713a5_bb653f9a",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 76
+      },
+      "revId": "271a051b8f1b206adc19a49f517c7ea3e4913ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "ca7a6de0_5580534d",
+        "filename": "src/libGLESv2/gen_proc_table.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-04-04T21:08:23Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e6c2f7b1_201a195f",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 14
+      },
+      "revId": "271a051b8f1b206adc19a49f517c7ea3e4913ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a356f8ce_2c9ad5b6",
         "filename": "src/libGLESv2/gen_proc_table.py",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "271a051b8f1b206adc19a49f517c7ea3e4913ab6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ca03918_ecbc16fe",
+        "filename": "src/libGLESv2/gen_proc_table.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-04-04T21:08:23Z",
+      "side": 1,
+      "message": "That seems to the directory. Anyway, dropped changes to this file now that I know how to run code generation the right way.",
+      "parentUuid": "a356f8ce_2c9ad5b6",
+      "range": {
+        "startLine": 96,
+        "startChar": 26,
+        "endLine": 96,
+        "endChar": 56
+      },
+      "revId": "271a051b8f1b206adc19a49f517c7ea3e4913ab6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
