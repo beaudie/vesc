@@ -830,6 +830,29 @@ void State::setScissorParams(GLint x, GLint y, GLsizei width, GLsizei height)
     mDirtyBits.set(DIRTY_BIT_SCISSOR);
 }
 
+Rectangle State::getScissoredRenderArea(bool invertViewport, const gl::Rectangle &renderArea) const
+{
+    if (isScissorTestEnabled())
+    {
+        gl::Rectangle clippedRect;
+        if (!gl::ClipRectangle(getScissor(), renderArea, &clippedRect))
+        {
+            return gl::Rectangle();
+        }
+
+        if (invertViewport)
+        {
+            clippedRect.y = renderArea.height - clippedRect.y - clippedRect.height;
+        }
+
+        return clippedRect;
+    }
+
+    // If the scissor test isn't enabled, assume it has infinite size.  Its intersection with the
+    // render area would be the render area itself.
+    return renderArea;
+}
+
 void State::setDither(bool enabled)
 {
     mBlend.dither = enabled;

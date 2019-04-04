@@ -188,6 +188,10 @@ class State : angle::NonCopyable
     void setScissorParams(GLint x, GLint y, GLsizei width, GLsizei height);
     const Rectangle &getScissor() const { return mScissor; }
 
+    // Helper to calculate the intersection of the scissor (if enabled) and the framebuffer render
+    // area.
+    Rectangle getScissoredRenderArea(bool invertViewport, const gl::Rectangle &renderArea) const;
+
     // Dither state toggle & query
     bool isDitherEnabled() const { return mBlend.dither; }
     void setDither(bool enabled);
