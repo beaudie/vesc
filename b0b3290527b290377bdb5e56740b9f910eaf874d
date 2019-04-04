@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e975dc0f_b419869c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T19:32:30Z",
+      "side": 1,
+      "message": "finishCurrentCommands should probably be something the framebuffer only has access to for itself. Could you make this a method like \"onScissorChange\" or something to notify the FB? Then you can keep hasStartedRenderPass private as well.",
+      "range": {
+        "startLine": 694,
+        "startChar": 0,
+        "endLine": 706,
+        "endChar": 5
+      },
+      "revId": "b0b3290527b290377bdb5e56740b9f910eaf874d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "379e6dcf_9f62215f",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 1
@@ -13,6 +36,70 @@
       "writtenOn": "2019-04-04T19:20:47Z",
       "side": 1,
       "message": "I\u0027ll cleanup the comment for the next round of review. In a follow up CL, I\u0027ll rip the ability to clear depth out of clearWithDraw.",
+      "revId": "b0b3290527b290377bdb5e56740b9f910eaf874d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed29aa37_39769281",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T19:32:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "379e6dcf_9f62215f",
+      "revId": "b0b3290527b290377bdb5e56740b9f910eaf874d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aaa0e2c_e7c2a2f8",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T19:32:30Z",
+      "side": 1,
+      "message": "how would this happen exactly? a viewport or attachment change? I suspect there\u0027s a slightly lazier way of getting this effect.",
+      "range": {
+        "startLine": 995,
+        "startChar": 8,
+        "endLine": 995,
+        "endChar": 59
+      },
+      "revId": "b0b3290527b290377bdb5e56740b9f910eaf874d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9270d84b_1064f5ab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-04T19:32:30Z",
+      "side": 1,
+      "message": "by convention this would go in a vk_gl:: namespace. But by design I\u0027ve tried to avoid needing to convert gl-\u003evk-\u003egl as this is inelegant and slower. Can you shuffle the code in a nice way to avoid the double convert?",
+      "range": {
+        "startLine": 505,
+        "startChar": 27,
+        "endLine": 505,
+        "endChar": 33
+      },
       "revId": "b0b3290527b290377bdb5e56740b9f910eaf874d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
