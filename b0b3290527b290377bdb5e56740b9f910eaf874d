@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "387e58a7_198936c5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T16:05:26Z",
+      "side": 1,
+      "message": "Good suggestion. Done.\n\nThough FramebufferVk doesn\u0027t have access to `hasStartedRenderPass` either, so made a public helper to do this part: `framebuffer-\u003ehasStartedRenderPass() \u0026\u0026 !framebuffer-\u003egetRenderPassRenderArea().encloses(scissoredRenderArea)`",
+      "parentUuid": "e975dc0f_b419869c",
+      "range": {
+        "startLine": 694,
+        "startChar": 0,
+        "endLine": 706,
+        "endChar": 5
+      },
+      "revId": "b0b3290527b290377bdb5e56740b9f910eaf874d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "379e6dcf_9f62215f",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 1
@@ -77,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "3ace15bd_75e09c2c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T16:05:26Z",
+      "side": 1,
+      "message": "Updated comment based on our discussion offline.",
+      "parentUuid": "2536eaca_edf04a00",
+      "revId": "b0b3290527b290377bdb5e56740b9f910eaf874d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5aaa0e2c_e7c2a2f8",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
         "patchSetId": 1
@@ -120,6 +162,30 @@
       "revId": "b0b3290527b290377bdb5e56740b9f910eaf874d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "021fc17b_0d4e89d1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T16:05:26Z",
+      "side": 1,
+      "message": "Nicer way would be for `GetScissor` to return a `gl::Rectangle`. I did that and moved it to namespace gl.",
+      "parentUuid": "9270d84b_1064f5ab",
+      "range": {
+        "startLine": 505,
+        "startChar": 27,
+        "endLine": 505,
+        "endChar": 33
+      },
+      "revId": "b0b3290527b290377bdb5e56740b9f910eaf874d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

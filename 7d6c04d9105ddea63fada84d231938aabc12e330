@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ae915ba_b17b70de",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T16:05:26Z",
+      "side": 1,
+      "message": "This feels wrong, but don\u0027t really know where I could put it.",
+      "revId": "7d6c04d9105ddea63fada84d231938aabc12e330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c94c1946_641ef95e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T16:05:26Z",
+      "side": 1,
+      "message": "Not really happy with the name, open to suggestions.\n\nThe name needs to either say:\n\n- Render pass started but it won\u0027t encompass the new area\n- Either render pass is not started, or if it is it encompasses the new area",
+      "range": {
+        "startLine": 325,
+        "startChar": 9,
+        "endLine": 325,
+        "endChar": 37
+      },
+      "revId": "7d6c04d9105ddea63fada84d231938aabc12e330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
