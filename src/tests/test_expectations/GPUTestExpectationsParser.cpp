@@ -10,6 +10,10 @@
 #include <stdint.h>
 
 #include "common/angleutils.h"
+#include "common/debug.h"
+#include "common/string_utils.h"
+
+#include "GPUTestConfig.h"
 
 namespace base
 {
@@ -90,7 +94,7 @@ enum Token
     kConfigChromeOS,
     kConfigAndroid,
     // gpu vendor
-    kConfigNVidia,
+    kConfigNVIDIA,
     kConfigAMD,
     kConfigIntel,
     kConfigVMWare,
@@ -103,6 +107,11 @@ enum Token
     kConfigGLDesktop,
     kConfigGLES,
     kConfigVulkan,
+    // Android devices
+    kConfigNexus5X,
+    kConfigPixel2,
+    // GPU devices
+    kConfigNVIDIAQuadroP400,
     // expectation
     kExpectationPass,
     kExpectationFail,
@@ -116,56 +125,73 @@ enum Token
     kNumberOfExactMatchTokens,
 
     // others
-    kConfigGPUDeviceID,
     kTokenComment,
     kTokenWord,
+
+    kNumberOfTokens,
 };
 
 struct TokenInfo
 {
     const char *name;
-    int32_t flag;
+    GPUTestConfig::Condition condition;
+    GPUTestExpectationsParser::GPUTestExpectation expectation;
 };
 
-const TokenInfo kTokenData[] = {
-    {"xp", GPUTestConfig::kOsWinXP},
-    {"vista", GPUTestConfig::kOsWinVista},
-    {"win7", GPUTestConfig::kOsWin7},
-    {"win8", GPUTestConfig::kOsWin8},
-    {"win10", GPUTestConfig::kOsWin10},
-    {"win", GPUTestConfig::kOsWin},
-    {"leopard", GPUTestConfig::kOsMacLeopard},
-    {"snowleopard", GPUTestConfig::kOsMacSnowLeopard},
-    {"lion", GPUTestConfig::kOsMacLion},
-    {"mountainlion", GPUTestConfig::kOsMacMountainLion},
-    {"mavericks", GPUTestConfig::kOsMacMavericks},
-    {"yosemite", GPUTestConfig::kOsMacYosemite},
-    {"elcapitan", GPUTestConfig::kOsMacElCapitan},
-    {"sierra", GPUTestConfig::kOsMacSierra},
-    {"highsierra", GPUTestConfig::kOsMacHighSierra},
-    {"mojave", GPUTestConfig::kOsMacMojave},
-    {"mac", GPUTestConfig::kOsMac},
-    {"linux", GPUTestConfig::kOsLinux},
-    {"chromeos", GPUTestConfig::kOsChromeOS},
-    {"android", GPUTestConfig::kOsAndroid},
-    {"nvidia", 0x10DE},
-    {"amd", 0x1002},
-    {"intel", 0x8086},
-    {"vmware", 0x15ad},
-    {"release", GPUTestConfig::kBuildTypeRelease},
-    {"debug", GPUTestConfig::kBuildTypeDebug},
-    {"d3d9", GPUTestConfig::kAPID3D9},
-    {"d3d11", GPUTestConfig::kAPID3D11},
-    {"opengl", GPUTestConfig::kAPIGLDesktop},
-    {"gles", GPUTestConfig::kAPIGLES},
-    {"vulkan", GPUTestConfig::kAPIVulkan},
-    {"pass", GPUTestExpectationsParser::kGpuTestPass},
-    {"fail", GPUTestExpectationsParser::kGpuTestFail},
-    {"flaky", GPUTestExpectationsParser::kGpuTestFlaky},
-    {"timeout", GPUTestExpectationsParser::kGpuTestTimeout},
-    {"skip", GPUTestExpectationsParser::kGpuTestSkip},
-    {":", 0},
-    {"=", 0},
+const TokenInfo kTokenData[kNumberOfTokens] = {
+    [kConfigWinXP]          = {.name = "xp", .condition = GPUTestConfig::kConditionWinXP},
+    [kConfigWinVista]       = {.name = "vista", .condition = GPUTestConfig::kConditionWinVista},
+    [kConfigWin7]           = {.name = "win7", .condition = GPUTestConfig::kConditionWin7},
+    [kConfigWin8]           = {.name = "win8", .condition = GPUTestConfig::kConditionWin8},
+    [kConfigWin10]          = {.name = "win10", .condition = GPUTestConfig::kConditionWin10},
+    [kConfigWin]            = {.name = "win", .condition = GPUTestConfig::kConditionWin},
+    [kConfigMacLeopard]     = {.name = "leopard", .condition = GPUTestConfig::kConditionMacLeopard},
+    [kConfigMacSnowLeopard] = {.name      = "snowleopard",
+                               .condition = GPUTestConfig::kConditionMacSnowLeopard},
+    [kConfigMacLion]        = {.name = "lion", .condition = GPUTestConfig::kConditionMacLion},
+    [kConfigMacMountainLion] = {.name      = "mountainlion",
+                                .condition = GPUTestConfig::kConditionMacMountainLion},
+    [kConfigMacMavericks]    = {.name      = "mavericks",
+                             .condition = GPUTestConfig::kConditionMacMavericks},
+    [kConfigMacYosemite]  = {.name = "yosemite", .condition = GPUTestConfig::kConditionMacYosemite},
+    [kConfigMacElCapitan] = {.name      = "elcapitan",
+                             .condition = GPUTestConfig::kConditionMacElCapitan},
+    [kConfigMacSierra]    = {.name = "sierra", .condition = GPUTestConfig::kConditionMacSierra},
+    [kConfigMacHighSierra] = {.name      = "highsierra",
+                              .condition = GPUTestConfig::kConditionMacHighSierra},
+    [kConfigMacMojave]     = {.name = "mojave", .condition = GPUTestConfig::kConditionMacMojave},
+    [kConfigMac]           = {.name = "mac", .condition = GPUTestConfig::kConditionMac},
+    [kConfigLinux]         = {.name = "linux", .condition = GPUTestConfig::kConditionLinux},
+    // ChromeOS not supported yet
+    [kConfigChromeOS]         = {.name = "chromeos"},
+    [kConfigAndroid]          = {.name = "android", .condition = GPUTestConfig::kConditionAndroid},
+    [kConfigNVIDIA]           = {.name = "nvidia", .condition = GPUTestConfig::kConditionNVIDIA},
+    [kConfigAMD]              = {.name = "amd", .condition = GPUTestConfig::kConditionAMD},
+    [kConfigIntel]            = {.name = "intel", .condition = GPUTestConfig::kConditionIntel},
+    [kConfigVMWare]           = {.name = "vmware", .condition = GPUTestConfig::kConditionVMWare},
+    [kConfigRelease]          = {.name = "release", .condition = GPUTestConfig::kConditionRelease},
+    [kConfigDebug]            = {.name = "debug", .condition = GPUTestConfig::kConditionDebug},
+    [kConfigD3D9]             = {.name = "d3d9", .condition = GPUTestConfig::kConditionD3D9},
+    [kConfigD3D11]            = {.name = "d3d11", .condition = GPUTestConfig::kConditionD3D11},
+    [kConfigGLDesktop]        = {.name = "opengl", .condition = GPUTestConfig::kConditionGLDesktop},
+    [kConfigGLES]             = {.name = "gles", .condition = GPUTestConfig::kConditionGLES},
+    [kConfigVulkan]           = {.name = "vulkan", .condition = GPUTestConfig::kConditionVulkan},
+    [kConfigNexus5X]          = {.name = "nexus5x", .condition = GPUTestConfig::kConditionNexus5X},
+    [kConfigPixel2]           = {.name = "pixel2", .condition = GPUTestConfig::kConditionPixel2},
+    [kConfigNVIDIAQuadroP400] = {.name      = "quadrop400",
+                                 .condition = GPUTestConfig::kConditionNVIDIAQuadroP400},
+    [kExpectationPass]  = {.name = "pass", .expectation = GPUTestExpectationsParser::kGpuTestPass},
+    [kExpectationFail]  = {.name = "fail", .expectation = GPUTestExpectationsParser::kGpuTestFail},
+    [kExpectationFlaky] = {.name        = "flaky",
+                           .expectation = GPUTestExpectationsParser::kGpuTestFlaky},
+    [kExpectationTimeout] = {.name        = "timeout",
+                             .expectation = GPUTestExpectationsParser::kGpuTestTimeout},
+    [kExpectationSkip] = {.name = "skip", .expectation = GPUTestExpectationsParser::kGpuTestSkip},
+    [kSeparatorColon]  = {.name = ":"},
+    [kSeparatorEqual]  = {.name = "="},
+    [kNumberOfExactMatchTokens] = {},
+    [kTokenComment]             = {},
+    [kTokenWord]                = {},
 };
 
 enum ErrorType
@@ -173,36 +199,24 @@ enum ErrorType
     kErrorFileIO = 0,
     kErrorIllegalEntry,
     kErrorInvalidEntry,
-    kErrorEntryWithOsConflicts,
-    kErrorEntryWithGpuVendorConflicts,
-    kErrorEntryWithBuildTypeConflicts,
-    kErrorEntryWithAPIConflicts,
-    kErrorEntryWithGpuDeviceIdConflicts,
     kErrorEntryWithExpectationConflicts,
     kErrorEntriesOverlap,
 
     kNumberOfErrors,
 };
 
-const char *kErrorMessage[] = {
-    "file IO failed",
-    "entry with wrong format",
-    "entry invalid, likely wrong modifiers combination",
-    "entry with OS modifier conflicts",
-    "entry with GPU vendor modifier conflicts",
-    "entry with GPU build type conflicts",
-    "entry with GPU API conflicts",
-    "entry with GPU device id conflicts or malformat",
-    "entry with expectation modifier conflicts",
-    "two entries' configs overlap",
+const char *kErrorMessage[kNumberOfErrors] = {
+    [kErrorFileIO]                        = "file IO failed",
+    [kErrorIllegalEntry]                  = "entry with wrong format",
+    [kErrorInvalidEntry]                  = "entry invalid, likely unimplemented modifiers",
+    [kErrorEntryWithExpectationConflicts] = "entry with expectation modifier conflicts",
+    [kErrorEntriesOverlap]                = "two entries' configs overlap",
 };
 
 Token ParseToken(const std::string &word)
 {
     if (base::StartsWithASCII(word, "//", false))
         return kTokenComment;
-    if (base::StartsWithASCII(word, "0x", false))
-        return kConfigGPUDeviceID;
 
     for (int32_t i = 0; i < kNumberOfExactMatchTokens; ++i)
     {
@@ -232,7 +246,7 @@ bool NamesMatching(const std::string &ref, const std::string &test_name)
 GPUTestExpectationsParser::GPUTestExpectationsParser()
 {
     // Some sanity check.
-    ASSERT((static_cast<unsigned int>(kNumberOfExactMatchTokens)) ==
+    ASSERT((static_cast<unsigned int>(kNumberOfTokens)) ==
            (sizeof(kTokenData) / sizeof(kTokenData[0])));
     ASSERT((static_cast<unsigned int>(kNumberOfErrors)) ==
            (sizeof(kErrorMessage) / sizeof(kErrorMessage[0])));
@@ -240,7 +254,8 @@ GPUTestExpectationsParser::GPUTestExpectationsParser()
 
 GPUTestExpectationsParser::~GPUTestExpectationsParser() = default;
 
-bool GPUTestExpectationsParser::LoadTestExpectations(const std::string &data)
+bool GPUTestExpectationsParser::LoadTestExpectations(const GPUTestConfig &config,
+                                                     const std::string &data)
 {
     entries_.clear();
     error_messages_.clear();
@@ -249,7 +264,7 @@ bool GPUTestExpectationsParser::LoadTestExpectations(const std::string &data)
     bool rt                        = true;
     for (size_t i = 0; i < lines.size(); ++i)
     {
-        if (!ParseLine(lines[i], i + 1))
+        if (!ParseLine(config, lines[i], i + 1))
             rt = false;
     }
     if (DetectConflictsBetweenEntries())
@@ -261,7 +276,8 @@ bool GPUTestExpectationsParser::LoadTestExpectations(const std::string &data)
     return rt;
 }
 
-bool GPUTestExpectationsParser::LoadTestExpectationsFromFile(const std::string &path)
+bool GPUTestExpectationsParser::LoadTestExpectationsFromFile(const GPUTestConfig &config,
+                                                             const std::string &path)
 {
     entries_.clear();
     error_messages_.clear();
@@ -272,16 +288,14 @@ bool GPUTestExpectationsParser::LoadTestExpectationsFromFile(const std::string &
         error_messages_.push_back(kErrorMessage[kErrorFileIO]);
         return false;
     }
-    return LoadTestExpectations(data);
+    return LoadTestExpectations(config, data);
 }
 
-int32_t GPUTestExpectationsParser::GetTestExpectation(const std::string &test_name,
-                                                      const GPUTestBotConfig &bot_config) const
+int32_t GPUTestExpectationsParser::GetTestExpectation(const std::string &test_name) const
 {
     for (size_t i = 0; i < entries_.size(); ++i)
     {
-        if (NamesMatching(entries_[i].test_name, test_name) &&
-            bot_config.Matches(entries_[i].test_config))
+        if (NamesMatching(entries_[i].test_name, test_name))
             return entries_[i].test_expectation;
     }
     return kGpuTestPass;
@@ -292,83 +306,23 @@ const std::vector<std::string> &GPUTestExpectationsParser::GetErrorMessages() co
     return error_messages_;
 }
 
-bool GPUTestExpectationsParser::ParseConfig(const std::string &config_data, GPUTestConfig *config)
-{
-    ASSERT(config);
-    std::vector<std::string> tokens =
-        SplitString(config_data, kWhitespaceASCII, KEEP_WHITESPACE, SPLIT_WANT_NONEMPTY);
-
-    for (size_t i = 0; i < tokens.size(); ++i)
-    {
-        Token token = ParseToken(tokens[i]);
-        switch (token)
-        {
-            case kConfigWinXP:
-            case kConfigWinVista:
-            case kConfigWin7:
-            case kConfigWin8:
-            case kConfigWin10:
-            case kConfigWin:
-            case kConfigMacLeopard:
-            case kConfigMacSnowLeopard:
-            case kConfigMacLion:
-            case kConfigMacMountainLion:
-            case kConfigMacMavericks:
-            case kConfigMacYosemite:
-            case kConfigMacElCapitan:
-            case kConfigMacSierra:
-            case kConfigMacHighSierra:
-            case kConfigMacMojave:
-            case kConfigMac:
-            case kConfigLinux:
-            case kConfigChromeOS:
-            case kConfigAndroid:
-            case kConfigNVidia:
-            case kConfigAMD:
-            case kConfigIntel:
-            case kConfigVMWare:
-            case kConfigRelease:
-            case kConfigDebug:
-            case kConfigD3D9:
-            case kConfigD3D11:
-            case kConfigGLDesktop:
-            case kConfigGLES:
-            case kConfigVulkan:
-            case kConfigGPUDeviceID:
-                if (token == kConfigGPUDeviceID)
-                {
-                    if (!UpdateTestConfig(config, tokens[i], 0))
-                        return false;
-                }
-                else
-                {
-                    if (!UpdateTestConfig(config, token, 0))
-                        return false;
-                }
-                break;
-            default:
-                return false;
-        }
-    }
-    return true;
-}
-
-bool GPUTestExpectationsParser::ParseLine(const std::string &line_data, size_t line_number)
+bool GPUTestExpectationsParser::ParseLine(const GPUTestConfig &config,
+                                          const std::string &line_data,
+                                          size_t line_number)
 {
     std::vector<std::string> tokens =
         SplitString(line_data, kWhitespaceASCII, KEEP_WHITESPACE, SPLIT_WANT_NONEMPTY);
     int32_t stage = kLineParserBegin;
     GPUTestExpectationEntry entry;
     entry.line_number         = line_number;
-    GPUTestConfig &config     = entry.test_config;
-    bool comments_encountered = false;
-    for (size_t i = 0; i < tokens.size() && !comments_encountered; ++i)
+    bool skip_line            = false;
+    for (size_t i = 0; i < tokens.size() && !skip_line; ++i)
     {
         Token token = ParseToken(tokens[i]);
         switch (token)
         {
             case kTokenComment:
-                comments_encountered = true;
+                skip_line = true;
                 break;
             case kConfigWinXP:
             case kConfigWinVista:
@@ -390,7 +344,7 @@ bool GPUTestExpectationsParser::ParseLine(const std::string &line_data, size_t l
             case kConfigLinux:
             case kConfigChromeOS:
             case kConfigAndroid:
-            case kConfigNVidia:
+            case kConfigNVIDIA:
             case kConfigAMD:
             case kConfigIntel:
             case kConfigVMWare:
@@ -401,28 +355,32 @@ bool GPUTestExpectationsParser::ParseLine(const std::string &line_data, size_t l
             case kConfigGLDesktop:
             case kConfigGLES:
             case kConfigVulkan:
-            case kConfigGPUDeviceID:
-                // MODIFIERS, could be in any order, need at least one.
+            case kConfigNexus5X:
+            case kConfigPixel2:
+            case kConfigNVIDIAQuadroP400:
+                // MODIFIERS, check each condition and add accordingly.
                 if (stage != kLineParserConfigs && stage != kLineParserBugID)
                 {
                     PushErrorMessage(kErrorMessage[kErrorIllegalEntry], line_number);
                     return false;
                 }
-                if (token == kConfigGPUDeviceID)
+                if (!CheckTokenCondition(config, token, line_number))
                 {
-                    if (!UpdateTestConfig(&config, tokens[i], line_number))
-                        return false;
+                    skip_line = true;  // Move to the next line without adding this one.
                 }
-                else
-                {
-                    if (!UpdateTestConfig(&config, token, line_number))
-                        return false;
-                }
+
                 if (stage == kLineParserBugID)
+                {
                     stage++;
+                }
                 break;
             case kSeparatorColon:
                 // :
+                // If there are no modifiers, move straight to separator colon
+                if (stage == kLineParserBugID)
+                {
+                    stage++;
+                }
                 if (stage != kLineParserConfigs)
                 {
                     PushErrorMessage(kErrorMessage[kErrorIllegalEntry], line_number);
@@ -467,13 +425,13 @@ bool GPUTestExpectationsParser::ParseLine(const std::string &line_data, size_t l
                     PushErrorMessage(kErrorMessage[kErrorIllegalEntry], line_number);
                     return false;
                 }
-                if ((kTokenData[token].flag & entry.test_expectation) != 0)
+                if (entry.test_expectation != 0)
                 {
                     PushErrorMessage(kErrorMessage[kErrorEntryWithExpectationConflicts],
                                      line_number);
                     return false;
                 }
-                entry.test_expectation = (kTokenData[token].flag | entry.test_expectation);
+                entry.test_expectation = kTokenData[token].expectation;
                 if (stage == kLineParserEqual)
                     stage++;
                 break;
@@ -482,18 +440,13 @@ bool GPUTestExpectationsParser::ParseLine(const std::string &line_data, size_t l
                 break;
         }
     }
-    if (stage == kLineParserBegin)
+    if (stage == kLineParserBegin || skip_line)
     {
         // The whole line is empty or all comments
         return true;
     }
     if (stage == kLineParserExpectations)
     {
-        if (!config.IsValid())
-        {
-            PushErrorMessage(kErrorMessage[kErrorInvalidEntry], line_number);
-            return false;
-        }
         entries_.push_back(entry);
         return true;
     }
@@ -501,99 +454,25 @@ bool GPUTestExpectationsParser::ParseLine(const std::string &line_data, size_t l
     return false;
 }
 
-bool GPUTestExpectationsParser::UpdateTestConfig(GPUTestConfig *config,
-                                                 int32_t token,
-                                                 size_t line_number)
+bool GPUTestExpectationsParser::CheckTokenCondition(const GPUTestConfig &config,
+                                                    int32_t token,
+                                                    size_t line_number)
 {
-    ASSERT(config);
-    switch (token)
+    if (token >= kNumberOfTokens)
     {
-        case kConfigWinXP:
-        case kConfigWinVista:
-        case kConfigWin7:
-        case kConfigWin8:
-        case kConfigWin10:
-        case kConfigWin:
-        case kConfigMacLeopard:
-        case kConfigMacSnowLeopard:
-        case kConfigMacLion:
-        case kConfigMacMountainLion:
-        case kConfigMacMavericks:
-        case kConfigMacYosemite:
-        case kConfigMacElCapitan:
-        case kConfigMacSierra:
-        case kConfigMacHighSierra:
-        case kConfigMacMojave:
-        case kConfigMac:
-        case kConfigLinux:
-        case kConfigChromeOS:
-        case kConfigAndroid:
-            if ((config->os() & kTokenData[token].flag) != 0)
-            {
-                PushErrorMessage(kErrorMessage[kErrorEntryWithOsConflicts], line_number);
-                return false;
-            }
-            config->set_os(config->os() | kTokenData[token].flag);
-            break;
-        case kConfigNVidia:
-        case kConfigAMD:
-        case kConfigIntel:
-        case kConfigVMWare:
-        {
-            uint32_t gpu_vendor = static_cast<uint32_t>(kTokenData[token].flag);
-            for (size_t i = 0; i < config->gpu_vendor().size(); ++i)
-            {
-                if (config->gpu_vendor()[i] == gpu_vendor)
-                {
-                    PushErrorMessage(kErrorMessage[kErrorEntryWithGpuVendorConflicts], line_number);
-                    return false;
-                }
-            }
-            config->AddGPUVendor(gpu_vendor);
-        }
-        break;
-        case kConfigRelease:
-        case kConfigDebug:
-            if ((config->build_type() & kTokenData[token].flag) != 0)
-            {
-                PushErrorMessage(kErrorMessage[kErrorEntryWithBuildTypeConflicts], line_number);
-                return false;
-            }
-            config->set_build_type(config->build_type() | kTokenData[token].flag);
-            break;
-        case kConfigD3D9:
-        case kConfigD3D11:
-        case kConfigGLDesktop:
-        case kConfigGLES:
-        case kConfigVulkan:
-            if ((config->api() & kTokenData[token].flag) != 0)
-            {
-                PushErrorMessage(kErrorMessage[kErrorEntryWithAPIConflicts], line_number);
-                return false;
-            }
-            config->set_api(config->api() | kTokenData[token].flag);
-            break;
-        default:
-            ASSERT(false);
-            break;
-    }
-    return true;
-}
-
-bool GPUTestExpectationsParser::UpdateTestConfig(GPUTestConfig *config,
-                                                 const std::string &gpu_device_id,
-                                                 size_t line_number)
-{
-    ASSERT(config);
-    uint32_t device_id = 0;
-    if (config->gpu_device_id() != 0 || !HexStringToUInt(gpu_device_id, &device_id) ||
-        device_id == 0)
-    {
-        PushErrorMessage(kErrorMessage[kErrorEntryWithGpuDeviceIdConflicts], line_number);
+        PushErrorMessage(kErrorMessage[kErrorIllegalEntry], line_number);
         return false;
     }
-    config->set_gpu_device_id(device_id);
-    return true;
+
+    if (kTokenData[token].condition == GPUTestConfig::kConditionNone ||
+        kTokenData[token].condition >= GPUTestConfig::kNumberOfConditions)
+    {
+        PushErrorMessage(kErrorMessage[kErrorInvalidEntry], line_number);
+        // pass any unsupported conditions by default
+        return true;
+    }
+
+    return config.GetConditions()[kTokenData[token].condition];
 }
 
 bool GPUTestExpectationsParser::DetectConflictsBetweenEntries()
@@ -603,8 +482,7 @@ bool GPUTestExpectationsParser::DetectConflictsBetweenEntries()
     {
         for (size_t j = i + 1; j < entries_.size(); ++j)
         {
-            if (entries_[i].test_name == entries_[j].test_name &&
-                entries_[i].test_config.OverlapsWith(entries_[j].test_config))
+            if (entries_[i].test_name == entries_[j].test_name)
             {
                 PushErrorMessage(kErrorMessage[kErrorEntriesOverlap], entries_[i].line_number,
                                  entries_[j].line_number);

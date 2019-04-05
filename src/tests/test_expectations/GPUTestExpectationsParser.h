@@ -13,10 +13,10 @@
 #include <string>
 #include <vector>
 
-#include "GPUTestConfig.h"
-
 namespace angle
 {
+
+struct GPUTestConfig;
 
 class GPUTestExpectationsParser
 {
@@ -36,19 +36,14 @@ class GPUTestExpectationsParser
     // Parse the text expectations, and if no error is encountered,
     // save all the entries. Otherwise, generate error messages.
     // Return true if parsing succeeds.
-    bool LoadTestExpectations(const std::string &data);
-    bool LoadTestExpectationsFromFile(const std::string &path);
+    bool LoadTestExpectations(const GPUTestConfig &config, const std::string &data);
+    bool LoadTestExpectationsFromFile(const GPUTestConfig &config, const std::string &path);
 
     // Query error messages from the last LoadTestExpectations() call.
     const std::vector<std::string> &GetErrorMessages() const;
 
     // Get the test expectation of a given test on a given bot.
-    int32_t GetTestExpectation(const std::string &test_name,
-                               const GPUTestBotConfig &bot_config) const;
-
-    // Parse a list of config modifiers. If we have a valid entry with no
-    // conflicts, | config | stores it, and the function returns true.
-    bool ParseConfig(const std::string &config_data, GPUTestConfig *config);
+    int32_t GetTestExpectation(const std::string &test_name) const;
 
   private:
     struct GPUTestExpectationEntry
@@ -56,22 +51,16 @@ class GPUTestExpectationsParser
         GPUTestExpectationEntry();
 
         std::string test_name;
-        GPUTestConfig test_config;
         int32_t test_expectation;
         size_t line_number;
     };
 
     // Parse a line of text. If we have a valid entry, save it; otherwise,
     // generate error messages.
-    bool ParseLine(const std::string &line_data, size_t line_number);
+    bool ParseLine(const GPUTestConfig &config, const std::string &line_data, size_t line_number);
 
-    // Update OS/GPUVendor/BuildType modifiers. May generate an error message.
-    bool UpdateTestConfig(GPUTestConfig *config, int32_t token, size_t line_number);
-
-    // Update GPUDeviceID modifier. May generate an error message.
-    bool UpdateTestConfig(GPUTestConfig *config,
-                          const std::string &gpu_device_id,
-                          size_t line_number);
+    // Check a the condition assigned to a particular token.
+    bool CheckTokenCondition(const GPUTestConfig &config, int32_t token, size_t line_number);
 
     // Check if two entries' config overlap with each other. May generate an
     // error message.
