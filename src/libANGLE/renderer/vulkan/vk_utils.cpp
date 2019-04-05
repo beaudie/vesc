@@ -34,10 +34,129 @@ VkImageUsageFlags GetStagingBufferUsageFlags(rx::vk::StagingUsage usage)
     }
 }
 
-constexpr gl::Rectangle kMaxSizedScissor(0,
-                                         0,
-                                         std::numeric_limits<int>::max(),
-                                         std::numeric_limits<int>::max());
+#if 0
+void mergeScissorAndViewport(const gl::Rectangle &glScissor,
+                             const gl::Rectangle &viewport,
+                             VkRect2D *outScissor)
+{
+    int vx2 = viewport.x + viewport.width;
+    int sx2 = glScissor.x + glScissor.width;
+
+    if (glScissor.x >= viewport.x)
+    {
+        // glScissor's left edge is to the right of the viewport's left edge
+        if (glScissor.x >= vx2)
+        {
+            // glScissor's left edge is to the right of viewport's right edge (i.e. there's
+            // NO OVERLAP in the x dimension)
+            memset(outScissor, 0, sizeof(VkRect2D));
+            return;
+        }
+        // glScissor overlaps with the viewport, and the merged rectangle's left edge is the
+        // glScissor's left edge)
+        outScissor->offset.x = glScissor.x;
+        // Now, determine the merged rectangle's right edge
+        if (sx2 >= vx2)
+        {
+            // glScissor's right edge is to the right of the viewport's right edge (i.e. the
+            // merged rectangle's right edge is the viewport's right edge)
+            outScissor->extent.width = vx2 - glScissor.x;
+        }
+        else
+        {
+            // glScissor's right edge is to the left of the viewport's right edge (i.e. the
+            // merged rectangle's right edge is the glScissor's right edge)
+            outScissor->extent.width = glScissor.width;
+        }
+    }
+    else
+    {
+        // viewport's left edge is to the right of the glScissor's left edge
+        if (viewport.x >= sx2)
+        {
+            // viewport's left edge is to the right of glScissor's right edge (i.e. there's
+            // NO OVERLAP in the x dimension)
+            memset(outScissor, 0, sizeof(VkRect2D));
+            return;
+        }
+        // viewport overlaps with the glScissor, and the merged rectangle's left edge is the
+        // viewport's left edge)
+        outScissor->offset.x = viewport.x;
+        // Now, determine the merged rectangle's right edge
+        if (vx2 >= sx2)
+        {
+            // viewport's right edge is to the right of the glScissor's right edge (i.e. the
+            // merged rectangle's right edge is the glScissor's right edge)
+            outScissor->extent.width = sx2 - viewport.x;
+        }
+        else
+        {
+            // viewport's right edge is to the left of the glScissor's right edge (i.e. the
+            // merged rectangle's right edge is the viewport's right edge)
+            outScissor->extent.width = viewport.width;
+        }
+    }
+
+    int vy2 = viewport.y + viewport.height;
+    int sy2 = glScissor.y + glScissor.height;
+
+    if (glScissor.y >= viewport.y)
+    {
+        // glScissor's top edge is to the bottom of the viewport's top edge
+        if (glScissor.y >= vy2)
+        {
+            // glScissor's top edge is to the bottom of viewport's bottom edge (i.e. there's
+            // NO OVERLAP in the y dimension)
+            memset(outScissor, 0, sizeof(VkRect2D));
+            return;
+        }
+        // glScissor overlaps with the viewport, and the merged rectangle's top edge is the
+        // glScissor's top edge)
+        outScissor->offset.y = glScissor.y;
+        // Now, determine the merged rectangle's bottom edge
+        if (sy2 >= vy2)
+        {
+            // glScissor's bottom edge is to the bottom of the viewport's bottom edge (i.e. the
+            // merged rectangle's bottom edge is the viewport's bottom edge)
+            outScissor->extent.height = vy2 - glScissor.y;
+        }
+        else
+        {
+            // glScissor's bottom edge is to the top of the viewport's bottom edge (i.e. the
+            // merged rectangle's bottom edge is the glScissor's bottom edge)
+            outScissor->extent.height = glScissor.height;
+        }
+    }
+    else
+    {
+        // viewport's top edge is to the bottom of the glScissor's top edge
+        if (viewport.y >= sy2)
+        {
+            // viewport's top edge is to the bottom of glScissor's bottom edge (i.e. there's
+            // NO OVERLAP in the y dimension)
+            memset(outScissor, 0, sizeof(VkRect2D));
+            return;
+        }
+        // viewport overlaps with the glScissor, and the merged rectangle's top edge is the
+        // viewport's top edge)
+        outScissor->offset.y = viewport.y;
+        // Now, determine the merged rectangle's bottom edge
+        if (vy2 >= sy2)
+        {
+            // viewport's bottom edge is to the bottom of the glScissor's bottom edge (i.e. the
+            // merged rectangle's bottom edge is the glScissor's bottom edge)
+            outScissor->extent.height = sy2 - viewport.y;
+        }
+        else
+        {
+            // viewport's bottom edge is to the top of the glScissor's bottom edge (i.e. the
+            // merged rectangle's bottom edge is the viewport's bottom edge)
+            outScissor->extent.height = viewport.height;
+        }
+    }
+}
+#endif
+
 }  // anonymous namespace
 
 namespace angle
@@ -848,10 +967,15 @@ void GetScissor(const gl::State &glState,
     }
     else
     {
-        // If the scissor test isn't enabled, we can simply use a really big scissor that's
-        // certainly larger than the current surface using the maximum size of a 2D texture
-        // for the width and height.
-        *scissorOut = gl_vk::GetRect(kMaxSizedScissor);
+        // If the GLES scissor test isn't enabled, simply set the scissor to the viewport, so
+        // that rendering is clipped to the viewport.
+        *scissorOut = gl_vk::GetRect(glState.getViewport());
+
+        if (invertViewport)
+        {
+            scissorOut->offset.y =
+                renderArea.height - scissorOut->offset.y - scissorOut->extent.height;
+        }
     }
 }
 }  // namespace gl_vk
