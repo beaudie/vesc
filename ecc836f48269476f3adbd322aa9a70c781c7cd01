@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c72d658_5da684c2",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1870,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-05T13:06:14Z",
+      "side": 1,
+      "message": "you can remove State \u0026state from the arguments. You can get that from context-\u003egetGLState().",
+      "range": {
+        "startLine": 1870,
+        "startChar": 71,
+        "endLine": 1870,
+        "endChar": 91
+      },
+      "revId": "ecc836f48269476f3adbd322aa9a70c781c7cd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09855553_faef4777",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1892,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-05T13:06:14Z",
+      "side": 1,
+      "message": "You can optimize and simplify this loop using two other state vars:\n\nconst gl::ActiveTextureMask \u0026activeTextures    \u003d program-\u003egetActiveSamplersMask();\nconst gl::ActiveTexturePointerArray \u0026textures  \u003d state.getActiveTexturesCache();\n\nfor (size_t textureUnit : activeTextures)\n{\n    gl::Texture *texture        \u003d textures[textureUnit];\n    // Null textures represent incomplete textures.\n    if (texture !\u003d nullptr) { ... }\n}",
+      "range": {
+        "startLine": 1888,
+        "startChar": 4,
+        "endLine": 1892,
+        "endChar": 9
+      },
+      "revId": "ecc836f48269476f3adbd322aa9a70c781c7cd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98535bb6_4cbfb614",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-05T13:06:14Z",
+      "side": 1,
+      "message": "I would recommend in this case to use a DrawBufferMask and keep a bitset instead of a max. You can update it in setAttachmentImpl as well I believe. Where mEnabledDrawBuffers gets updated.",
+      "range": {
+        "startLine": 466,
+        "startChar": 10,
+        "endLine": 466,
+        "endChar": 33
+      },
+      "revId": "ecc836f48269476f3adbd322aa9a70c781c7cd01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
