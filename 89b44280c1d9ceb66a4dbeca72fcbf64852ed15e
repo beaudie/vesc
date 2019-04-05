@@ -96,6 +96,24 @@
       "revId": "89b44280c1d9ceb66a4dbeca72fcbf64852ed15e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0037d87_c9873b3f",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-05T19:46:22Z",
+      "side": 1,
+      "message": "The input deps needs to have both entries. One binary for Linux one for Windows. So it runs code_generation if either changes. It does lead to some situations where one could be behind the other like Yuly said. But I\u0027d prefer to have the script do most of the work and split updates into two CLs. One per platform.",
+      "parentUuid": "0787e900_ee6959c6",
+      "revId": "89b44280c1d9ceb66a4dbeca72fcbf64852ed15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
