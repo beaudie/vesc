@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "10f8c7a2_b733ed42",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/FullScreenQuad.vert",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T14:48:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "04cc4b3f_2985e6ec",
+      "revId": "af9b005e44e3c71436207dd1b801972fc57e8a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4fb785ce_4b737068",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/FullScreenQuad.vert",
         "patchSetId": 6
@@ -33,6 +51,24 @@
       "revId": "af9b005e44e3c71436207dd1b801972fc57e8a8a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85306e7e_229e8e44",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/FullScreenQuad.vert",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T14:48:40Z",
+      "side": 1,
+      "message": "No. 16 came from a fragment shader used with this vertex shader whose push constants start with vec4, requiring 16-byte alignment. I\u0027ll remove the padding and update the comment above to specify the real reason behind this.",
+      "parentUuid": "4fb785ce_4b737068",
+      "revId": "af9b005e44e3c71436207dd1b801972fc57e8a8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
