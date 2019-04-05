@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ba43a070_f2e30fc7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T21:07:57Z",
+      "side": 1,
+      "message": "Oops",
+      "parentUuid": "941fc46e_59e56c5a",
+      "range": {
+        "startLine": 11,
+        "startChar": 5,
+        "endLine": 11,
+        "endChar": 9
+      },
+      "revId": "eacc7bd3e552dfe01d4ff57c268c419cdd32a016",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b2ac6fbf_823bf7d0",
         "filename": "scripts/run_code_generation_hashes.json",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "cc600644_57780a0b",
+        "filename": "scripts/run_code_generation_hashes.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T21:07:57Z",
+      "side": 1,
+      "message": "Yeap.",
+      "parentUuid": "b2ac6fbf_823bf7d0",
+      "range": {
+        "startLine": 352,
+        "startChar": 0,
+        "endLine": 355,
+        "endChar": 39
+      },
+      "revId": "eacc7bd3e552dfe01d4ff57c268c419cdd32a016",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d76225f_e610042e",
         "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2019-04-05T20:54:43Z",
       "side": 1,
       "message": "Windows is weird, why not just keep the concatenation code and avoid potential issues?",
+      "range": {
+        "startLine": 182,
+        "startChar": 12,
+        "endLine": 182,
+        "endChar": 55
+      },
+      "revId": "eacc7bd3e552dfe01d4ff57c268c419cdd32a016",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cd512e7_6552d39b",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T21:07:57Z",
+      "side": 1,
+      "message": "Harder to read, and requires extra care after to change \\ back to /? Windows _is_ weird, but it\u0027s been a long time they\u0027ve accepted / like a normal OS does.",
+      "parentUuid": "3d76225f_e610042e",
       "range": {
         "startLine": 182,
         "startChar": 12,
