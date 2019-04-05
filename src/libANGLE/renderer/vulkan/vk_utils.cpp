@@ -34,10 +34,6 @@ VkImageUsageFlags GetStagingBufferUsageFlags(rx::vk::StagingUsage usage)
     }
 }
 
-constexpr gl::Rectangle kMaxSizedScissor(0,
-                                         0,
-                                         std::numeric_limits<int>::max(),
-                                         std::numeric_limits<int>::max());
 }  // anonymous namespace
 
 namespace angle
@@ -834,24 +830,41 @@ void GetScissor(const gl::State &glState,
         gl::Rectangle clippedRect;
         if (!gl::ClipRectangle(glState.getScissor(), renderArea, &clippedRect))
         {
-            memset(scissorOut, 0, sizeof(VkRect2D));
+            // There is no overlap between the app-set scissor and the renderArea.  Some Vulkan
+            // drivers treat a (0,0,0,0) scissor as no scissor.  Instead, set the scissor to
+            // just outside of the renderArea.
+            scissorOut->offset.x      = renderArea.x;
+            scissorOut->offset.y      = renderArea.y;
+            scissorOut->extent.width  = 1;
+            scissorOut->extent.height = 1;
             return;
         }
 
-        *scissorOut = gl_vk::GetRect(clippedRect);
-
-        if (invertViewport)
+        // Now, clip (again) to the viewport
+        gl::Rectangle clippedToViewportRect;
+        if (!gl::ClipRectangle(clippedRect, glState.getViewport(), &clippedToViewportRect))
         {
-            scissorOut->offset.y =
-                renderArea.height - scissorOut->offset.y - scissorOut->extent.height;
+            // There is no overlap between the app-set viewport and clippedRect.  Some Vulkan
+            // drivers treat a (0,0,0,0) scissor as no scissor.  Instead, set the scissor to
+            // just outside of the renderArea.
+            scissorOut->offset.x      = renderArea.x;
+            scissorOut->offset.y      = renderArea.y;
+            scissorOut->extent.width  = 1;
+            scissorOut->extent.height = 1;
+            return;
         }
+        *scissorOut = gl_vk::GetRect(clippedToViewportRect);
     }
     else
     {
-        // If the scissor test isn't enabled, we can simply use a really big scissor that's
-        // certainly larger than the current surface using the maximum size of a 2D texture
-        // for the width and height.
-        *scissorOut = gl_vk::GetRect(kMaxSizedScissor);
+        // If the GLES scissor test isn't enabled, simply set the scissor to the viewport, so
+        // that rendering is clipped to the viewport.
+        *scissorOut = gl_vk::GetRect(glState.getViewport());
+    }
+
+    if (invertViewport)
+    {
+        scissorOut->offset.y = renderArea.height - scissorOut->offset.y - scissorOut->extent.height;
     }
 }
 }  // namespace gl_vk
