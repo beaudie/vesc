@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bf78e989_f0d42aa2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T14:39:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a22c6849_b6f752a9",
+      "range": {
+        "startLine": 10,
+        "startChar": 27,
+        "endLine": 12,
+        "endChar": 0
+      },
+      "revId": "cc43a9ba26f6097ad733c20fe3367dbfe834ba9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "39365356_84728d54",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "cc43a9ba26f6097ad733c20fe3367dbfe834ba9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79622668_03b6b217",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T14:39:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39365356_84728d54",
+      "range": {
+        "startLine": 240,
+        "startChar": 21,
+        "endLine": 240,
+        "endChar": 39
+      },
+      "revId": "cc43a9ba26f6097ad733c20fe3367dbfe834ba9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "bc837449_1f5022ee",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T14:39:59Z",
+      "side": 1,
+      "message": "Moved to `Framebuffer.cpp`, that would make the optimization apply to all backends.",
+      "parentUuid": "2b7aae87_678c72a6",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 250,
+        "endChar": 5
+      },
+      "revId": "cc43a9ba26f6097ad733c20fe3367dbfe834ba9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13b4a9e5_10765ef5",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 7
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "785e64ae_0354748d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T14:39:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13b4a9e5_10765ef5",
+      "range": {
+        "startLine": 264,
+        "startChar": 0,
+        "endLine": 271,
+        "endChar": 0
+      },
+      "revId": "cc43a9ba26f6097ad733c20fe3367dbfe834ba9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c92623b0_97c6d502",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 7
@@ -114,6 +210,30 @@
       "revId": "cc43a9ba26f6097ad733c20fe3367dbfe834ba9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e36f9aa_7e343170",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T14:39:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c92623b0_97c6d502",
+      "range": {
+        "startLine": 899,
+        "startChar": 4,
+        "endLine": 899,
+        "endChar": 41
+      },
+      "revId": "cc43a9ba26f6097ad733c20fe3367dbfe834ba9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
