@@ -211,6 +211,24 @@
       "revId": "40b8ff5bf646ca9718eaf302c7c8ee51d78b58e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82d1f586_9875f16b",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1931,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-05T21:14:36Z",
+      "side": 1,
+      "message": "Here\u0027s how the ES 3.0 spec defines a rendering feedback loop:\n\n* The current DRAW_FRAMEBUFFER_BINDING names a framebuffer object F.\n* The texture is attached to one of the attachment points, A, of framebuffer object F.\n* The value of TEXTURE_MIN_FILTER is NEAREST or LINEAR, and the value of FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL for attachment point A is equal to the value of levelbase\n\n-or-\n\n* The value of TEXTURE_MIN_FILTER is NEAREST_MIPMAP_NEAREST, NEAREST_MIPMAP_LINEAR, LINEAR_MIPMAP_NEAREST, or LINEAR_-MIPMAP_LINEAR, and the value of FRAMEBUFFER_ATTACHMENT_-TEXTURE_LEVEL for attachment point A is within the inclusive range from levelbase to q (see below).",
+      "parentUuid": "3f1d9acb_d7b77151",
+      "revId": "40b8ff5bf646ca9718eaf302c7c8ee51d78b58e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
