@@ -1760,10 +1760,12 @@ void Framebuffer::setAttachmentImpl(const Context *context,
 
             if (!resource)
             {
+                updateLastColorAttachmentIdOnDetach(colorIndex);
                 mFloat32ColorAttachmentBits.reset(colorIndex);
             }
             else
             {
+                updateLastColorAttachmentIdOnAttach(colorIndex);
                 updateFloat32ColorAttachmentBits(
                     colorIndex, resource->getAttachmentFormat(binding, textureIndex).info);
             }
@@ -1865,7 +1867,7 @@ FramebufferAttachment *Framebuffer::getAttachmentFromSubjectIndex(angle::Subject
     }
 }
 
-bool Framebuffer::formsRenderingFeedbackLoopWith(const State &state) const
+bool Framebuffer::formsRenderingFeedbackLoopWith(const Context *context, const State &state) const
 {
     const Program *program = state.getProgram();
 
@@ -1875,40 +1877,54 @@ bool Framebuffer::formsRenderingFeedbackLoopWith(const State &state) const
         return false;
     }
 
-    // The bitset will skip inactive draw buffers.
-    for (size_t drawIndex : mState.mEnabledDrawBuffers)
-    {
-        const FramebufferAttachment &attachment = mState.mColorAttachments[drawIndex];
-        ASSERT(attachment.isAttached());
-        if (attachment.type() == GL_TEXTURE)
-        {
-            // Validate the feedback loop.
-            if (program->samplesFromTexture(state, attachment.id()))
-            {
-                return true;
-            }
-        }
-    }
-
-    // Validate depth-stencil feedback loop. This is independent of Depth/Stencil state.
-    const FramebufferAttachment *depth = getDepthbuffer();
-    if (depth && depth->type() == GL_TEXTURE)
-    {
-        if (program->samplesFromTexture(state, depth->id()))
-        {
-            return true;
-        }
-    }
-
+    const FramebufferAttachment *depth   = getDepthbuffer();
     const FramebufferAttachment *stencil = getStencilbuffer();
-    if (stencil && stencil->type() == GL_TEXTURE)
+
+    const bool checkDepth = depth && depth->type() == GL_TEXTURE;
+    // Skip the feedback loop check for stencil if depth/stencil point to the same resource.
+    const bool checkStencil =
+        (stencil && stencil->type() == GL_TEXTURE) && (!depth || *stencil != *depth);
+
+    for (const auto &binding : program->getSamplerBindings())
     {
-        // Skip the feedback loop check if depth/stencil point to the same resource.
-        if (!depth || *stencil != *depth)
+        TextureType textureType = binding.textureType;
+        for (const auto &unit : binding.boundTextureUnits)
         {
-            if (program->samplesFromTexture(state, stencil->id()))
+            GLenum programTextureID = state.getSamplerTextureId(unit, textureType);
+            Texture *tex            = state.getSamplerTexture(unit, textureType);
+
+            // Depth and stencil attachment form feedback loops
+            // Regardless of if enabled or masked.
+            if (checkDepth)
             {
-                return true;
+                if (programTextureID == depth->id())
+                {
+                    return true;
+                }
+            }
+
+            if (checkStencil)
+            {
+                if (programTextureID == stencil->id())
+                {
+                    return true;
+                }
+            }
+
+            // Check if any color attachment forms a feedback loop.
+            if (tex->isSamplerComplete(context, state.getSampler(unit)))
+            {
+                for (GLint drawIndex = 0; drawIndex <= mLastColorAttachmentId; drawIndex++)
+                {
+                    const FramebufferAttachment &attachment = mState.mColorAttachments[drawIndex];
+                    ASSERT(attachment.isAttached());
+
+                    if (programTextureID == attachment.id())
+                    {
+                        // TODO(jmadill): Check for appropriate overlap.
+                        return true;
+                    }
+                }
             }
         }
     }
