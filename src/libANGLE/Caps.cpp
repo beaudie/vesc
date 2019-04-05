@@ -1089,8 +1089,9 @@ Caps::Caps()
       minSmoothPointSize(0),
       maxSmoothPointSize(0),
       minSmoothLineWidth(0),
-      maxSmoothLineWidth(0)
+      maxSmoothLineWidth(0),
 
+      subPixelBits(4)
 {
     for (size_t i = 0; i < 3; ++i)
     {

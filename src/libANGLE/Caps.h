@@ -705,6 +705,8 @@ struct Caps
     GLfloat maxSmoothPointSize;
     GLfloat minSmoothLineWidth;
     GLfloat maxSmoothLineWidth;
+
+    GLuint subPixelBits;
 };
 
 Caps GenerateMinimumCaps(const Version &clientVersion, const Extensions &extensions);
