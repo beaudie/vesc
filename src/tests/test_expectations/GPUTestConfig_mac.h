@@ -3,12 +3,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// GPUTestConfig_mac.h:
-//   Helper functions for GPUTestConfig that have to be compiled in ObjectiveC++
+// GPUTestInfo_mac.h:
+//   Helper functions for GPUTestInfo that have to be compiled in ObjectiveC++
 //
 
-#ifndef TEST_EXPECTATIONS_GPU_TEST_CONFIG_MAC_H_
-#define TEST_EXPECTATIONS_GPU_TEST_CONFIG_MAC_H_
+#ifndef TEST_EXPECTATIONS_GPU_TEST_INFO_MAC_H_
+#define TEST_EXPECTATIONS_GPU_TEST_INFO_MAC_H_
 
 #include "GPUInfo.h"
 
@@ -21,4 +21,4 @@ void GetOperatingSystemVersionNumbers(int32_t *major_version,
 
 }  // namespace angle
 
-#endif  // TEST_EXPECTATIONS_GPU_TEST_CONFIG_MAC_H_
+#endif  // TEST_EXPECTATIONS_GPU_TEST_INFO_MAC_H_
