@@ -351,7 +351,7 @@ class Framebuffer final : public angle::ObserverInterface,
                               angle::SubjectIndex index,
                               angle::SubjectMessage message) override;
 
-    bool formsRenderingFeedbackLoopWith(const State &state) const;
+    bool formsRenderingFeedbackLoopWith(const Context *context, const State &state) const;
     bool formsCopyingFeedbackLoopWith(GLuint copyTextureID,
                                       GLint copyTextureLevel,
                                       GLint copyTextureLayer) const;
@@ -429,6 +429,29 @@ class Framebuffer final : public angle::ObserverInterface,
         mFloat32ColorAttachmentBits.set(index, format->type == GL_FLOAT);
     }
 
+    void updateLastColorAttachmentIdOnAttach(GLint colorIndex)
+    {
+        if (colorIndex > mLastColorAttachmentId)
+        {
+            mLastColorAttachmentId = colorIndex;
+        }
+    }
+
+    void updateLastColorAttachmentIdOnDetach(GLint colorIndex)
+    {
+        if (colorIndex == mLastColorAttachmentId)
+        {
+            mLastColorAttachmentId--;
+            for (; mLastColorAttachmentId >= 0; mLastColorAttachmentId--)
+            {
+                if (mState.mDrawBufferStates[mLastColorAttachmentId] != GL_NONE)
+                {
+                    break;
+                }
+            }
+        }
+    }
+
     FramebufferState mState;
     rx::FramebufferImpl *mImpl;
 
@@ -439,6 +462,8 @@ class Framebuffer final : public angle::ObserverInterface,
 
     DirtyBits mDirtyBits;
     DrawBufferMask mFloat32ColorAttachmentBits;
+
+    GLint mLastColorAttachmentId = -1;
 
     // The dirty bits guard is checked when we get a dependent state change message. We verify that
     // we don't set a dirty bit that isn't already set, when inside the dirty bits syncState.
