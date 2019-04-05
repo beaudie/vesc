@@ -34,10 +34,6 @@ VkImageUsageFlags GetStagingBufferUsageFlags(rx::vk::StagingUsage usage)
     }
 }
 
-constexpr gl::Rectangle kMaxSizedScissor(0,
-                                         0,
-                                         std::numeric_limits<int>::max(),
-                                         std::numeric_limits<int>::max());
 }  // anonymous namespace
 
 namespace angle
@@ -838,7 +834,14 @@ void GetScissor(const gl::State &glState,
             return;
         }
 
-        *scissorOut = gl_vk::GetRect(clippedRect);
+        // Now, clip (again) to the viewport
+        gl::Rectangle clippedAgainRect;
+        if (!gl::ClipRectangle(clippedRect, glState.getViewport(), &clippedAgainRect))
+        {
+            memset(scissorOut, 0, sizeof(VkRect2D));
+            return;
+        }
+        *scissorOut = gl_vk::GetRect(clippedAgainRect);
 
         if (invertViewport)
         {
@@ -848,10 +851,15 @@ void GetScissor(const gl::State &glState,
     }
     else
     {
-        // If the scissor test isn't enabled, we can simply use a really big scissor that's
-        // certainly larger than the current surface using the maximum size of a 2D texture
-        // for the width and height.
-        *scissorOut = gl_vk::GetRect(kMaxSizedScissor);
+        // If the GLES scissor test isn't enabled, simply set the scissor to the viewport, so
+        // that rendering is clipped to the viewport.
+        *scissorOut = gl_vk::GetRect(glState.getViewport());
+
+        if (invertViewport)
+        {
+            scissorOut->offset.y =
+                renderArea.height - scissorOut->offset.y - scissorOut->extent.height;
+        }
     }
 }
 }  // namespace gl_vk
