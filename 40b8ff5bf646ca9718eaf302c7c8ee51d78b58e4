@@ -103,6 +103,24 @@
       "revId": "40b8ff5bf646ca9718eaf302c7c8ee51d78b58e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afa41bdb_672cec98",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1931,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-05T20:07:07Z",
+      "side": 1,
+      "message": "Right right. It\u0027s suggesting that we eventually might want to check mip level ranges I believe.",
+      "parentUuid": "dd0e7565_74c2f2cf",
+      "revId": "40b8ff5bf646ca9718eaf302c7c8ee51d78b58e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
