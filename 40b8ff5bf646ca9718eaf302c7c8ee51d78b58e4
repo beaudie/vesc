@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5236d35_f1601477",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1901,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-05T19:56:13Z",
+      "side": 1,
+      "message": "I think you can just use texture-\u003eid here.",
+      "range": {
+        "startLine": 1901,
+        "startChar": 7,
+        "endLine": 1901,
+        "endChar": 93
+      },
+      "revId": "40b8ff5bf646ca9718eaf302c7c8ee51d78b58e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1f708d5_360310e4",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1922,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-05T19:56:13Z",
+      "side": 1,
+      "message": "we don\u0027t need to check this. We know the texture is sampler complete because it is not nullptr.",
+      "range": {
+        "startLine": 1922,
+        "startChar": 8,
+        "endLine": 1922,
+        "endChar": 79
+      },
+      "revId": "40b8ff5bf646ca9718eaf302c7c8ee51d78b58e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eab85246_c44c32c3",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1929,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-05T19:56:13Z",
+      "side": 1,
+      "message": "attachment.isTextureWithId(texture-\u003eid());",
+      "range": {
+        "startLine": 1929,
+        "startChar": 16,
+        "endLine": 1929,
+        "endChar": 91
+      },
+      "revId": "40b8ff5bf646ca9718eaf302c7c8ee51d78b58e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af4c7b85_f980ec07",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1931,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-05T19:56:13Z",
+      "side": 1,
+      "message": "what\u0027s this todo from?",
+      "revId": "40b8ff5bf646ca9718eaf302c7c8ee51d78b58e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
