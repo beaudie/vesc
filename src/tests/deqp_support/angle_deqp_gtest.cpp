@@ -21,6 +21,7 @@
 #include "common/string_utils.h"
 #include "platform/Platform.h"
 #include "tests/test_expectations/GPUTestExpectationsParser.h"
+#include "tests/test_expectations/GPUTestInfo.h"
 #include "util/system_utils.h"
 
 namespace angle
@@ -85,15 +86,12 @@ const char *gTestExpectationsFiles[] = {
     "deqp_egl_test_expectations.txt",
 };
 
-using APIInfo = std::pair<const char *, angle::GPUTestConfig::API>;
+using APIInfo = std::pair<const char *, angle::API>;
 
 const APIInfo gEGLDisplayAPIs[] = {
-    {"angle-d3d9", angle::GPUTestConfig::kAPID3D9},
-    {"angle-d3d11", angle::GPUTestConfig::kAPID3D11},
-    {"angle-gl", angle::GPUTestConfig::kAPIGLDesktop},
-    {"angle-gles", angle::GPUTestConfig::kAPIGLES},
-    {"angle-null", angle::GPUTestConfig::kAPIUnknown},
-    {"angle-vulkan", angle::GPUTestConfig::kAPIVulkan},
+    {"angle-d3d9", angle::kAPID3D9},    {"angle-d3d11", angle::kAPID3D11},
+    {"angle-gl", angle::kAPIGLDesktop}, {"angle-gles", angle::kAPIGLES},
+    {"angle-null", angle::kAPIUnknown}, {"angle-vulkan", angle::kAPIVulkan},
 };
 
 const char *gdEQPEGLString  = "--deqp-egl-display-type=";
@@ -218,7 +216,6 @@ class dEQPCaseList
   private:
     std::vector<CaseInfo> mCaseInfoList;
     angle::GPUTestExpectationsParser mTestExpectationsParser;
-    angle::GPUTestBotConfig mTestConfig;
     size_t mTestModuleIndex;
     bool mInitialized;
 };
@@ -252,6 +249,19 @@ void dEQPCaseList::initialize()
         Die();
     }
 
+    angle::API api = GetDefaultAPIInfo()->second;
+    // Set the API from the command line, or using the default platform API.
+    if (gInitAPI)
+    {
+        api = gInitAPI->second;
+    }
+
+    if (!LoadCurrentConfig(api))
+    {
+        std::cerr << "Failed to load test configuration." << std::endl;
+        Die();
+    }
+
     if (!mTestExpectationsParser.LoadTestExpectationsFromFile(testExpectationsPath.value()))
     {
         std::stringstream errorMsgStream;
@@ -262,22 +272,6 @@ void dEQPCaseList::initialize()
 
         std::cerr << "Failed to load test expectations." << errorMsgStream.str() << std::endl;
         Die();
-    }
-
-    if (!mTestConfig.LoadCurrentConfig(nullptr))
-    {
-        std::cerr << "Failed to load test configuration." << std::endl;
-        Die();
-    }
-
-    // Set the API from the command line, or using the default platform API.
-    if (gInitAPI)
-    {
-        mTestConfig.set_api(gInitAPI->second);
-    }
-    else
-    {
-        mTestConfig.set_api(GetDefaultAPIInfo()->second);
     }
 
     std::ifstream caseListStream(caseListPath.value());
@@ -299,7 +293,7 @@ void dEQPCaseList::initialize()
         if (gTestName.empty())
             continue;
 
-        int expectation = mTestExpectationsParser.GetTestExpectation(dEQPName, mTestConfig);
+        int expectation = mTestExpectationsParser.GetTestExpectation(dEQPName);
         if (expectation != angle::GPUTestExpectationsParser::kGpuTestSkip)
         {
             mCaseInfoList.push_back(CaseInfo(dEQPName, gTestName, expectation));
