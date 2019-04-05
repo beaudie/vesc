@@ -848,10 +848,9 @@ void GetScissor(const gl::State &glState,
     }
     else
     {
-        // If the scissor test isn't enabled, we can simply use a really big scissor that's
-        // certainly larger than the current surface using the maximum size of a 2D texture
-        // for the width and height.
-        *scissorOut = gl_vk::GetRect(kMaxSizedScissor);
+        // If the GLES scissor test isn't enabled, simply set the scissor to the viewport, so
+        // that rendering is clipped to the viewport.
+        *scissorOut = gl_vk::GetRect(glState.getViewport());
     }
 }
 }  // namespace gl_vk
