@@ -20,6 +20,7 @@
 #include "common/platform.h"
 #include "common/string_utils.h"
 #include "platform/Platform.h"
+#include "tests/test_expectations/GPUTestConfig.h"
 #include "tests/test_expectations/GPUTestExpectationsParser.h"
 #include "util/system_utils.h"
 
@@ -218,7 +219,6 @@ class dEQPCaseList
   private:
     std::vector<CaseInfo> mCaseInfoList;
     angle::GPUTestExpectationsParser mTestExpectationsParser;
-    angle::GPUTestBotConfig mTestConfig;
     size_t mTestModuleIndex;
     bool mInitialized;
 };
@@ -252,7 +252,17 @@ void dEQPCaseList::initialize()
         Die();
     }
 
-    if (!mTestExpectationsParser.LoadTestExpectationsFromFile(testExpectationsPath.value()))
+    angle::GPUTestConfig::API api = GetDefaultAPIInfo()->second;
+    // Set the API from the command line, or using the default platform API.
+    if (gInitAPI)
+    {
+        api = gInitAPI->second;
+    }
+
+    angle::GPUTestConfig testConfig = angle::GPUTestConfig(api);
+
+    if (!mTestExpectationsParser.LoadTestExpectationsFromFile(testConfig,
+                                                              testExpectationsPath.value()))
     {
         std::stringstream errorMsgStream;
         for (const auto &message : mTestExpectationsParser.GetErrorMessages())
@@ -262,22 +272,6 @@ void dEQPCaseList::initialize()
 
         std::cerr << "Failed to load test expectations." << errorMsgStream.str() << std::endl;
         Die();
-    }
-
-    if (!mTestConfig.LoadCurrentConfig(nullptr))
-    {
-        std::cerr << "Failed to load test configuration." << std::endl;
-        Die();
-    }
-
-    // Set the API from the command line, or using the default platform API.
-    if (gInitAPI)
-    {
-        mTestConfig.set_api(gInitAPI->second);
-    }
-    else
-    {
-        mTestConfig.set_api(GetDefaultAPIInfo()->second);
     }
 
     std::ifstream caseListStream(caseListPath.value());
@@ -299,7 +293,7 @@ void dEQPCaseList::initialize()
         if (gTestName.empty())
             continue;
 
-        int expectation = mTestExpectationsParser.GetTestExpectation(dEQPName, mTestConfig);
+        int expectation = mTestExpectationsParser.GetTestExpectation(dEQPName);
         if (expectation != angle::GPUTestExpectationsParser::kGpuTestSkip)
         {
             mCaseInfoList.push_back(CaseInfo(dEQPName, gTestName, expectation));
