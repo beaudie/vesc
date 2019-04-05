@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59f3ebe9_d1e3edea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-05T15:40:53Z",
+      "side": 1,
+      "message": "this bug is closed, maybe you meant to use a different one?",
+      "range": {
+        "startLine": 13,
+        "startChar": 18,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "e78f47be208405968e0a56483b864ec90a3c3a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9f1fc7c_c0b2e5dc",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 709,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-05T15:40:53Z",
+      "side": 1,
+      "message": "can you move this into the section for GLES 3.0?",
+      "range": {
+        "startLine": 709,
+        "startChar": 4,
+        "endLine": 709,
+        "endChar": 24
+      },
+      "revId": "e78f47be208405968e0a56483b864ec90a3c3a02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
