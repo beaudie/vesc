@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "941fc46e_59e56c5a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-05T20:54:43Z",
+      "side": 1,
+      "message": "angleproject:",
+      "range": {
+        "startLine": 11,
+        "startChar": 5,
+        "endLine": 11,
+        "endChar": 9
+      },
+      "revId": "eacc7bd3e552dfe01d4ff57c268c419cdd32a016",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2ac6fbf_823bf7d0",
+        "filename": "scripts/run_code_generation_hashes.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-05T20:54:43Z",
+      "side": 1,
+      "message": "So, how does this work? If either one of these changes, presubmit will say that I need to run code generation?",
+      "range": {
+        "startLine": 352,
+        "startChar": 0,
+        "endLine": 355,
+        "endChar": 39
+      },
+      "revId": "eacc7bd3e552dfe01d4ff57c268c419cdd32a016",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d76225f_e610042e",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-05T20:54:43Z",
+      "side": 1,
+      "message": "Windows is weird, why not just keep the concatenation code and avoid potential issues?",
+      "range": {
+        "startLine": 182,
+        "startChar": 12,
+        "endLine": 182,
+        "endChar": 55
+      },
+      "revId": "eacc7bd3e552dfe01d4ff57c268c419cdd32a016",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
