@@ -151,6 +151,7 @@ if (is_win || is_linux || is_mac || is_android || is_fuchsia) {
     ]
 
     deps = [
+      ":angle_deqp_test_expectations",
       ":angle_end2end_tests_main",
       "${angle_root}:angle_gpu_info_util",
       "${angle_root}:angle_image_util",
@@ -667,6 +668,7 @@ if (build_angle_deqp_tests && !is_fuchsia) {
     public_configs += [ ":angle_deqp_test_expectations_config" ]
     public_deps = [
       "${angle_root}:angle_common",
+      "${angle_root}:angle_gpu_info_util",
       "${angle_root}:angle_util",
     ]
     sources = deqp_test_expectations_sources
@@ -687,10 +689,6 @@ if (build_angle_deqp_tests && !is_fuchsia) {
     ]
 
     libs = []
-
-    if (!is_android) {
-      public_deps += [ "${angle_root}:angle_gpu_info_util" ]
-    }
   }
 
   api_names = [
