@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "32771741_3a5aec92",
+        "filename": "DEPS",
+        "patchSetId": 6
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T19:35:15Z",
+      "side": 1,
+      "message": "Where does the platform come from? Does gcs detect this based on upload platform? File type?",
+      "revId": "89b44280c1d9ceb66a4dbeca72fcbf64852ed15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fa734220_690507de",
         "filename": "scripts/run_code_generation_hashes.json",
         "patchSetId": 6
@@ -42,6 +59,40 @@
         "endLine": 352,
         "endChar": 75
       },
+      "revId": "89b44280c1d9ceb66a4dbeca72fcbf64852ed15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58262d1a_d55cc551",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T19:35:15Z",
+      "side": 1,
+      "message": "I suggest simply returning `../../../../tools/glslang/glslang_validator`. Windows is ok with /, and you won\u0027t need the `.replace(\u0027\\\\\u0027, \u0027/\u0027)` below.",
+      "revId": "89b44280c1d9ceb66a4dbeca72fcbf64852ed15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0787e900_ee6959c6",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-05T19:35:15Z",
+      "side": 1,
+      "message": "If you use `get_glslang_exe_path()`, it\u0027s automatically cross platform. We can always add a suffix for mac so all three are distinguishable.",
       "revId": "89b44280c1d9ceb66a4dbeca72fcbf64852ed15e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
