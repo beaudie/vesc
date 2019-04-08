@@ -196,7 +196,7 @@ void TSymbolTable::addInvariantVarying(const TVariable &variable)
 bool TSymbolTable::isVaryingInvariant(const TVariable &variable) const
 {
     ASSERT(atGlobalLevel());
-    if (mGlobalInvariant)
+    if (mGlobalInvariant && (variable.getType().getQualifier() != EvqVaryingIn))
     {
         return true;
     }
