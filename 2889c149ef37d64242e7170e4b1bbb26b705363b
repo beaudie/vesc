@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "be77a93a_1165432c",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-08T20:35:06Z",
+      "side": 1,
+      "message": "Added a note.\n\nThis might not end up being a real issue though. The pipeline includes the shaders, that is except very generic shaders (like copy, clear, blit etc), the pipeline is very tied to a model that\u0027s being rendered. It\u0027s probably going to be unlikely to have an application render the same \"thing\" with the same pipeline to two different framebuffers.",
+      "parentUuid": "4641be95_b2f4118f",
+      "range": {
+        "startLine": 851,
+        "startChar": 0,
+        "endLine": 853,
+        "endChar": 22
+      },
+      "revId": "2889c149ef37d64242e7170e4b1bbb26b705363b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e0870225_6cd0159a",
         "filename": "src/libANGLE/State.h",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "2889c149ef37d64242e7170e4b1bbb26b705363b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "199f749d_eca8fbfd",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-08T20:35:06Z",
+      "side": 1,
+      "message": "Done. I looked all over `src/libANGLE/` and didn\u0027t find anywhere that felt right. `renderer_utils.h` sounds good.",
+      "parentUuid": "e0870225_6cd0159a",
+      "range": {
+        "startLine": 193,
+        "startChar": 14,
+        "endLine": 193,
+        "endChar": 36
+      },
+      "revId": "2889c149ef37d64242e7170e4b1bbb26b705363b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
