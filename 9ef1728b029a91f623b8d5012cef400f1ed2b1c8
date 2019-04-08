@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4fc7ff3a_702cb8d2",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-04-08T15:05:33Z",
+      "side": 1,
+      "message": "Noticed a typo here. destinatoin-\u003edestination\nNot related to this change but would be good to sneak in.",
+      "revId": "9ef1728b029a91f623b8d5012cef400f1ed2b1c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
