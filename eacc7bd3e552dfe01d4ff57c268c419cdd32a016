@@ -140,6 +140,30 @@
       "revId": "eacc7bd3e552dfe01d4ff57c268c419cdd32a016",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93bb6ccd_10e136c5",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T14:08:58Z",
+      "side": 1,
+      "message": "I changed this in the prior CL. Not a strong preference so will defer to Shabi\u0027s request.",
+      "parentUuid": "1cd512e7_6552d39b",
+      "range": {
+        "startLine": 182,
+        "startChar": 12,
+        "endLine": 182,
+        "endChar": 55
+      },
+      "revId": "eacc7bd3e552dfe01d4ff57c268c419cdd32a016",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
