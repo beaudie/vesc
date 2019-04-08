@@ -2464,7 +2464,8 @@ TIntermDeclaration *TParseContext::parseSingleDeclaration(
         // 3. Inputs in ESSL 1.00 fragment shaders (EvqVaryingIn). This is somewhat in violation of
         // the specification, but there are desktop OpenGL drivers that expect that this is the
         // behavior of the #pragma when specified in ESSL 1.00 fragment shaders.
-        if (qualifier == EvqVaryingOut || qualifier == EvqVertexOut || qualifier == EvqVaryingIn)
+        if ((mCompileOptions & SH_DONT_REMOVE_INVARIANT_FOR_FRAGMENT_INPUT) &&
+            (qualifier == EvqVaryingOut || qualifier == EvqVertexOut || qualifier == EvqVaryingIn))
         {
             type->setInvariant(true);
         }
