@@ -65,6 +65,24 @@
     },
     {
       "key": {
+        "uuid": "cc0840e8_2ddce773",
+        "filename": "DEPS",
+        "patchSetId": 6
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T14:06:18Z",
+      "side": 1,
+      "message": "We use multiple hooks. One for each platform. The \u0027condition\u0027 setting filters the hooks so only one will actually run. We\u0027ll need a new hook for Linux.",
+      "parentUuid": "32771741_3a5aec92",
+      "revId": "89b44280c1d9ceb66a4dbeca72fcbf64852ed15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fa734220_690507de",
         "filename": "scripts/run_code_generation_hashes.json",
         "patchSetId": 6
@@ -105,6 +123,24 @@
     },
     {
       "key": {
+        "uuid": "0c84377e_3e69ce0b",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T14:06:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58262d1a_d55cc551",
+      "revId": "89b44280c1d9ceb66a4dbeca72fcbf64852ed15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0787e900_ee6959c6",
         "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
         "patchSetId": 6
@@ -137,6 +173,24 @@
       "revId": "89b44280c1d9ceb66a4dbeca72fcbf64852ed15e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "729b76a5_d8ace465",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T14:06:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0037d87_c9873b3f",
+      "revId": "89b44280c1d9ceb66a4dbeca72fcbf64852ed15e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
