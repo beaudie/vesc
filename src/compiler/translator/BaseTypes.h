@@ -690,6 +690,15 @@ inline bool IsQualifierUnspecified(TQualifier qualifier)
     return (qualifier == EvqTemporary || qualifier == EvqGlobal);
 }
 
+inline bool IsShaderOutputQualifier(TQualifier qualifier)
+{
+    return (qualifier == EvqVaryingOut || qualifier == EvqFragmentOut ||
+            qualifier == EvqVertexOut || qualifier == EvqSmoothOut || qualifier == EvqFlatOut ||
+            qualifier == EvqCentroidOut || qualifier == EvqGeometryOut ||
+            qualifier == EvqPosition || qualifier == EvqPointSize || qualifier == EvqFragColor ||
+            qualifier == EvqFragData);
+}
+
 enum TLayoutImageInternalFormat
 {
     EiifUnspecified,

@@ -196,7 +196,7 @@ void TSymbolTable::addInvariantVarying(const TVariable &variable)
 bool TSymbolTable::isVaryingInvariant(const TVariable &variable) const
 {
     ASSERT(atGlobalLevel());
-    if (mGlobalInvariant)
+    if (mGlobalInvariant && (IsShaderOutputQualifier(variable.getType().getQualifier())))
     {
         return true;
     }
