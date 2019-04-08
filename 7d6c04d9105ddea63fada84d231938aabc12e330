@@ -63,6 +63,30 @@
       "revId": "7d6c04d9105ddea63fada84d231938aabc12e330",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee32eee1_e6ced2ce",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-08T18:26:50Z",
+      "side": 1,
+      "message": "It was previously like that. Only reason I put a function here was to keep `hasStartedRenderPass()` private per your suggestion, but looks like it\u0027s just cleaner to make that public.",
+      "parentUuid": "a97915ed_34f45d07",
+      "range": {
+        "startLine": 325,
+        "startChar": 9,
+        "endLine": 325,
+        "endChar": 37
+      },
+      "revId": "7d6c04d9105ddea63fada84d231938aabc12e330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
