@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8c566c0b_ac2dce4c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T20:18:15Z",
+      "side": 1,
+      "message": "I think this link might be pointing to another document. It\u0027s discussing flaky retries. Maybe use bit.ly/chromium-test-list-format ?",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 78
+      },
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "449efa72_664f7259",
         "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
         "patchSetId": 11
@@ -18,6 +41,53 @@
         "startChar": 0,
         "endLine": 41,
         "endChar": 61
+      },
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "318866de_9751a877",
+        "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T20:18:15Z",
+      "side": 1,
+      "message": "Agree. Maybe no tag is the best?",
+      "parentUuid": "449efa72_664f7259",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 61
+      },
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cbd52452_b66d9562",
+        "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T20:18:15Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 261,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 55
       },
       "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -94,6 +164,30 @@
     },
     {
       "key": {
+        "uuid": "d7669dc5_c423a30b",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T20:18:15Z",
+      "side": 1,
+      "message": "+1.\n\nMaybe we can de-duplicate these with the ANGLETEst versions at some point.",
+      "parentUuid": "ca2f0840_08f60401",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 13
+      },
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cd2bef71_4b869d4b",
         "filename": "src/tests/test_expectations/GPUTestConfig.h",
         "patchSetId": 11
@@ -110,6 +204,76 @@
         "startChar": 10,
         "endLine": 71,
         "endChar": 47
+      },
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8a0ae3f_b8c35a61",
+        "filename": "src/tests/test_expectations/GPUTestConfig.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T20:18:15Z",
+      "side": 1,
+      "message": "How about using angle::PackedEnumBitSet? If you make the above enums strongly typed.",
+      "parentUuid": "cd2bef71_4b869d4b",
+      "range": {
+        "startLine": 71,
+        "startChar": 10,
+        "endLine": 71,
+        "endChar": 47
+      },
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d5d0ed3_d29a9f1b",
+        "filename": "src/tests/test_expectations/GPUTestConfig_mac.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T20:18:15Z",
+      "side": 1,
+      "message": "hah, Gerrit really hates Objective-C.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 6
+      },
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2d1dc2d4_ba614a00",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T20:18:15Z",
+      "side": 1,
+      "message": "minor nit, but could you use an anonymous namespace block instead of \u0027static\u0027 when possible?",
+      "range": {
+        "startLine": 181,
+        "startChar": 0,
+        "endLine": 181,
+        "endChar": 7
       },
       "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -146,6 +310,24 @@
       "side": 1,
       "message": "I think errors on unexpected conditions is best.  Makes sure that our expectations are always valid and without typos.",
       "parentUuid": "88be11bc_56c5a310",
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "781b755d_907b5f0a",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T20:18:15Z",
+      "side": 1,
+      "message": "Agree 100%.",
+      "parentUuid": "3febb088_7c85b220",
       "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
