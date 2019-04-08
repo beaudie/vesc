@@ -247,6 +247,7 @@ struct TransformFeedbackVarying : public sh::Varying
         *thisVar                    = field;
         interpolation               = parent.interpolation;
         isInvariant                 = parent.isInvariant;
+        isPragmaInvariant           = parent.isPragmaInvariant;
         name                        = parent.name + "." + name;
     }
 
@@ -900,7 +901,7 @@ class Program final : angle::NonCopyable, public LabeledObject
                              bool webglCompatibility,
                              InfoLog &infoLog,
                              GLuint *combinedShaderStorageBlocksCount);
-    bool linkVaryings(InfoLog &infoLog) const;
+    bool linkVaryings(bool webglCompatibility, InfoLog &infoLog) const;
 
     bool linkUniforms(const Caps &caps,
                       InfoLog &infoLog,
@@ -912,13 +913,15 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     void updateLinkedShaderStages();
 
-    static LinkMismatchError LinkValidateVaryings(const sh::Varying &outputVarying,
+    static LinkMismatchError LinkValidateVaryings(bool webglCompatibility,
+                                                  const sh::Varying &outputVarying,
                                                   const sh::Varying &inputVarying,
                                                   int shaderVersion,
                                                   bool validateGeometryShaderInputVarying,
                                                   std::string *mismatchedStructFieldName);
 
-    bool linkValidateShaderInterfaceMatching(Shader *generatingShader,
+    bool linkValidateShaderInterfaceMatching(bool webglCompatibility,
+                                             Shader *generatingShader,
                                              Shader *consumingShader,
                                              InfoLog &infoLog) const;
 
