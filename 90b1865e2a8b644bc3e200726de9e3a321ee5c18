@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "caab5637_4bf073c0",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T19:01:23Z",
+      "side": 0,
+      "message": "Nice. Maybe do a quick grep for 2722 and check if there are any other outstanding TODOs.",
+      "range": {
+        "startLine": 177,
+        "startChar": 40,
+        "endLine": 177,
+        "endChar": 64
+      },
+      "revId": "90b1865e2a8b644bc3e200726de9e3a321ee5c18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
