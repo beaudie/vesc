@@ -396,14 +396,17 @@ bool InterfaceBlockField::isSameInterfaceBlockFieldAtLinkTime(
     return (ShaderVariable::isSameVariableAtLinkTime(other, true, true));
 }
 
-Varying::Varying() : interpolation(INTERPOLATION_SMOOTH), isInvariant(false) {}
+Varying::Varying()
+    : interpolation(INTERPOLATION_SMOOTH), isInvariant(false), isPragmaInvariant(false)
+{}
 
 Varying::~Varying() {}
 
 Varying::Varying(const Varying &other)
     : VariableWithLocation(other),
       interpolation(other.interpolation),
-      isInvariant(other.isInvariant)
+      isInvariant(other.isInvariant),
+      isPragmaInvariant(other.isPragmaInvariant)
 {}
 
 Varying &Varying::operator=(const Varying &other)
@@ -411,13 +414,14 @@ Varying &Varying::operator=(const Varying &other)
     VariableWithLocation::operator=(other);
     interpolation                 = other.interpolation;
     isInvariant                   = other.isInvariant;
+    isPragmaInvariant             = other.isPragmaInvariant;
     return *this;
 }
 
 bool Varying::operator==(const Varying &other) const
 {
     return (VariableWithLocation::operator==(other) && interpolation == other.interpolation &&
-            isInvariant == other.isInvariant);
+            isInvariant == other.isInvariant && isPragmaInvariant == other.isPragmaInvariant);
 }
 
 bool Varying::isSameVaryingAtLinkTime(const Varying &other) const

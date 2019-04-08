@@ -259,6 +259,9 @@ struct Varying : public VariableWithLocation
 
     InterpolationType interpolation;
     bool isInvariant;
+    // This is used to workaround spec issue where pragma invariant(all) originally
+    //  only applied to output varyings, but should have applied to FS inputs
+    bool isPragmaInvariant;
 };
 
 struct InterfaceBlock
