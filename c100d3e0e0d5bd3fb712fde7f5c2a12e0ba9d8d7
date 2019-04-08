@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "367423ee_0baca62d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 958,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-08T20:47:26Z",
+      "side": 1,
+      "message": "Wouldn\u0027t `gl::ClipRectangle(clippedRect, glState.getViewport(), \u0026clippedAgainRect)` basically achieve this?\n\nFYI, see here for the upcoming changes to this function: https://chromium-review.googlesource.com/c/angle/angle/+/1553740/5/src/libANGLE/renderer/renderer_utils.cpp\n\nAfter that change lands, we would have to pass the viewport in as well, clip `renderArea` and `viewport` together and then proceed with the `if (scissor enabled)`.",
+      "revId": "c100d3e0e0d5bd3fb712fde7f5c2a12e0ba9d8d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
