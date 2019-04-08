@@ -11,9 +11,10 @@ struct TPragma
 {
     struct STDGL
     {
-        STDGL() : invariantAll(false) {}
+        STDGL() : invariantAll(false), invariantAllOut(false) {}
 
         bool invariantAll;
+        bool invariantAllOut;
     };
 
     // By default optimization is turned on and debug is turned off.

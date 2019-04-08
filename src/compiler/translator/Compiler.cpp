@@ -452,6 +452,7 @@ void TCompiler::setASTMetadata(const TParseContext &parseContext)
 
     mPragma = parseContext.pragma();
     mSymbolTable.setGlobalInvariant(mPragma.stdgl.invariantAll);
+    mSymbolTable.setGlobalInvariantOut(mPragma.stdgl.invariantAllOut);
 
     mComputeShaderLocalSizeDeclared = parseContext.isComputeShaderLocalSizeDeclared();
     mComputeShaderLocalSize         = parseContext.getComputeShaderLocalSize();
@@ -1347,7 +1348,7 @@ void TCompiler::writePragma(ShCompileOptions compileOptions)
     if (!(compileOptions & SH_FLATTEN_PRAGMA_STDGL_INVARIANT_ALL))
     {
         TInfoSinkBase &sink = mInfoSink.obj;
-        if (mPragma.stdgl.invariantAll)
+        if (mPragma.stdgl.invariantAll || mPragma.stdgl.invariantAllOut)
             sink << "#pragma STDGL invariant(all)\n";
     }
 }

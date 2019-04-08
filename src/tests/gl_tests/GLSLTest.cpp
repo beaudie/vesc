@@ -982,7 +982,7 @@ TEST_P(GLSLTest, InvariantAllBoth)
     constexpr char kFS[] =
         "#pragma STDGL invariant(all)\n"
         "precision mediump float;\n"
-        "varying float v_varying;\n"
+        "invariant varying float v_varying;\n"
         "void main() { gl_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
 
     constexpr char kVS[] =
@@ -1151,13 +1151,12 @@ TEST_P(GLSLTest_ES3, InvariantAllBoth)
     EXPECT_EQ(0u, program);
 }
 
-// Verify that using invariant(all) only in fragment shader fails in ESSL 1.00.
+// Verify that mismatched invariant v_varying between FS & VS fails in ESSL 1.00.
 TEST_P(GLSLTest, InvariantAllIn)
 {
     constexpr char kFS[] =
-        "#pragma STDGL invariant(all)\n"
         "precision mediump float;\n"
-        "varying float v_varying;\n"
+        "invariant varying float v_varying;\n"
         "void main() { gl_FragColor = vec4(v_varying, 0, 0, 1.0); }\n";
 
     constexpr char kVS[] =

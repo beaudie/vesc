@@ -134,6 +134,7 @@ class TSymbolTable : angle::NonCopyable, TSymbolTableBase
     bool isVaryingInvariant(const TVariable &variable) const;
 
     void setGlobalInvariant(bool invariant);
+    void setGlobalInvariantOut(bool invariant);
 
     const TSymbolUniqueId nextUniqueId() { return TSymbolUniqueId(this); }
 
@@ -177,6 +178,7 @@ class TSymbolTable : angle::NonCopyable, TSymbolTableBase
     std::vector<std::unique_ptr<PrecisionStackLevel>> mPrecisionStack;
 
     bool mGlobalInvariant;
+    bool mGlobalInvariantOut;
 
     int mUniqueIdCounter;
 

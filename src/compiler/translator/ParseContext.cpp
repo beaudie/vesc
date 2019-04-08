@@ -2444,7 +2444,8 @@ TIntermDeclaration *TParseContext::parseSingleDeclaration(
 {
     TType *type = new TType(publicType);
     if ((mCompileOptions & SH_FLATTEN_PRAGMA_STDGL_INVARIANT_ALL) &&
-        mDirectiveHandler.pragma().stdgl.invariantAll)
+        (mDirectiveHandler.pragma().stdgl.invariantAll ||
+         mDirectiveHandler.pragma().stdgl.invariantAllOut))
     {
         TQualifier qualifier = type->getQualifier();
 

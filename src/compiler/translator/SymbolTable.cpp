@@ -17,6 +17,7 @@
 #include "compiler/translator/ImmutableString.h"
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/StaticType.h"
+#include "compiler/translator/util.h"
 
 namespace sh
 {
@@ -66,6 +67,7 @@ TSymbol *TSymbolTable::TSymbolTableLevel::find(const ImmutableString &name) cons
 
 TSymbolTable::TSymbolTable()
     : mGlobalInvariant(false),
+      mGlobalInvariantOut(false),
       mUniqueIdCounter(0),
       mShaderType(GL_FRAGMENT_SHADER),
       mGlInVariableWithArraySize(nullptr)
@@ -196,7 +198,8 @@ void TSymbolTable::addInvariantVarying(const TVariable &variable)
 bool TSymbolTable::isVaryingInvariant(const TVariable &variable) const
 {
     ASSERT(atGlobalLevel());
-    if (mGlobalInvariant)
+    if (mGlobalInvariant ||
+        (mGlobalInvariantOut && IsShaderOutput(variable.getType().getQualifier())))
     {
         return true;
     }
@@ -209,6 +212,12 @@ void TSymbolTable::setGlobalInvariant(bool invariant)
 {
     ASSERT(atGlobalLevel());
     mGlobalInvariant = invariant;
+}
+
+void TSymbolTable::setGlobalInvariantOut(bool invariant)
+{
+    ASSERT(atGlobalLevel());
+    mGlobalInvariantOut = invariant;
 }
 
 const TSymbol *TSymbolTable::find(const ImmutableString &name, int shaderVersion) const
@@ -313,6 +322,7 @@ TPrecision TSymbolTable::getDefaultPrecision(TBasicType type) const
 void TSymbolTable::clearCompilationResults()
 {
     mGlobalInvariant = false;
+    mGlobalInvariantOut = false;
     mUniqueIdCounter = kLastBuiltInId + 1;
     mVariableMetadata.clear();
     mGlInVariableWithArraySize = nullptr;

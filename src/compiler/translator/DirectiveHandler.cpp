@@ -72,7 +72,14 @@ void TDirectiveHandler::handlePragma(const angle::pp::SourceLocation &loc,
                     loc, "#pragma STDGL invariant(all) can not be used in fragment shader",
                     name.c_str());
             }
-            mPragma.stdgl.invariantAll = true;
+            if (mShaderVersion == 100)
+            {
+                mPragma.stdgl.invariantAllOut = true;
+            }
+            else
+            {
+                mPragma.stdgl.invariantAll = true;
+            }
         }
         // The STDGL pragma is used to reserve pragmas for use by future
         // revisions of GLSL.  Do not generate an error on unexpected
