@@ -247,6 +247,7 @@ struct TransformFeedbackVarying : public sh::Varying
         *thisVar                    = field;
         interpolation               = parent.interpolation;
         isInvariant                 = parent.isInvariant;
+        isPragmaInvariant           = parent.isPragmaInvariant;
         name                        = parent.name + "." + name;
     }
 
