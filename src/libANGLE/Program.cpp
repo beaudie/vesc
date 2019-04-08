@@ -3419,8 +3419,10 @@ LinkMismatchError Program::LinkValidateVaryings(const sh::Varying &outputVarying
     {
         return LinkMismatchError::INTERPOLATION_TYPE_MISMATCH;
     }
-
-    if (shaderVersion == 100 && outputVarying.isInvariant != inputVarying.isInvariant)
+    // Allow pragma invariant(all) mismatch due to spec inconsistency. 1.00 spec said the
+    //  pragma only applied to outputs, but this doesn't make sense for FS and was changed.
+    if (shaderVersion == 100 && !inputVarying.isPragmaInvariant &&
+        (outputVarying.isInvariant != inputVarying.isInvariant))
     {
         return LinkMismatchError::INVARIANCE_MISMATCH;
     }

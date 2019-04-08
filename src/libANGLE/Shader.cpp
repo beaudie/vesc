@@ -332,6 +332,7 @@ void Shader::compile(const Context *context)
         options |= SH_LIMIT_EXPRESSION_COMPLEXITY;
         options |= SH_ENFORCE_PACKING_RESTRICTIONS;
         options |= SH_INIT_SHARED_VARIABLES;
+        options |= SH_DONT_REMOVE_INVARIANT_FOR_FRAGMENT_INPUT;
     }
 
     // Some targets (eg D3D11 Feature Level 9_3 and below) do not support non-constant loop
