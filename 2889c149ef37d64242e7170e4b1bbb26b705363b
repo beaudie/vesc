@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4641be95_b2f4118f",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T14:31:21Z",
+      "side": 1,
+      "message": "looks like this will still mean we\u0027ll always need a new pipeline for framebuffer attachment changes. or different framebuffers. This is a bit of a downside as it means less pipeline reuse. Could you leave a comment here that this could lead to more pipelines on Vulkan? And that might have to investigate this?",
+      "range": {
+        "startLine": 851,
+        "startChar": 0,
+        "endLine": 853,
+        "endChar": 22
+      },
+      "revId": "2889c149ef37d64242e7170e4b1bbb26b705363b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0870225_6cd0159a",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T14:31:21Z",
+      "side": 1,
+      "message": "We should be careful about mixing Vulkan-isms (render area) with the GL world. How about we call this clipRectToScissor() and make it a helper function renderer_utils.h that also takes a gl::State?",
+      "range": {
+        "startLine": 193,
+        "startChar": 14,
+        "endLine": 193,
+        "endChar": 36
+      },
+      "revId": "2889c149ef37d64242e7170e4b1bbb26b705363b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

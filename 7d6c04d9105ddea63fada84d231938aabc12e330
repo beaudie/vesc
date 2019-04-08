@@ -39,6 +39,30 @@
       "revId": "7d6c04d9105ddea63fada84d231938aabc12e330",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a97915ed_34f45d07",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T14:31:21Z",
+      "side": 1,
+      "message": "How many places do you need this check? If it\u0027s only one place I would suggest a refactor. Make this function \"renderPassAreaEncloses(newRenderArea)\". And make the call site (mFramebuffer-\u003ehasStartedRenderPass() \u0026\u0026 !renderPassAreaEncloses(newRenderArea).\n\nIf that works I would change hasStartedRenderPass to be an ASSERT in this method.",
+      "parentUuid": "c94c1946_641ef95e",
+      "range": {
+        "startLine": 325,
+        "startChar": 9,
+        "endLine": 325,
+        "endChar": 37
+      },
+      "revId": "7d6c04d9105ddea63fada84d231938aabc12e330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
