@@ -676,6 +676,7 @@ Varying CollectVariablesTraverser::recordVarying(const TIntermSymbol &variable) 
             if (mSymbolTable->isVaryingInvariant(variable.variable()) || type.isInvariant())
             {
                 varying.isInvariant = true;
+                varying.isPragmaInvariant = mSymbolTable->isGlobalInvariant();
             }
             break;
         default:
