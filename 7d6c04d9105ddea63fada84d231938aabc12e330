@@ -87,6 +87,30 @@
       "revId": "7d6c04d9105ddea63fada84d231938aabc12e330",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c53a1348_24464b80",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-08T18:35:04Z",
+      "side": 1,
+      "message": "SGTM. hasStarted seems to be ok to be public I think.",
+      "parentUuid": "ee32eee1_e6ced2ce",
+      "range": {
+        "startLine": 325,
+        "startChar": 9,
+        "endLine": 325,
+        "endChar": 37
+      },
+      "revId": "7d6c04d9105ddea63fada84d231938aabc12e330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
