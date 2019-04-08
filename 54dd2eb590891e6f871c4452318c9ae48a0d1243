@@ -2,6 +2,121 @@
   "comments": [
     {
       "key": {
+        "uuid": "449efa72_664f7259",
+        "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-08T19:58:11Z",
+      "side": 1,
+      "message": "I think we can expect these to fail on all platforms.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 61
+      },
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5654cefe_3e892b36",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-08T19:58:11Z",
+      "side": 1,
+      "message": "These should keep the GLES condition.",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 270,
+        "endChar": 65
+      },
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0068245_2cbe9afb",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-08T19:58:11Z",
+      "side": 1,
+      "message": "GLES condition should stay.",
+      "range": {
+        "startLine": 513,
+        "startChar": 0,
+        "endLine": 517,
+        "endChar": 94
+      },
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca2f0840_08f60401",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-08T19:58:11Z",
+      "side": 1,
+      "message": "Any reason for the forward declarations? Can they be defined here?\n\nAlso, can these be in the anonymous namespace?",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 13
+      },
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd2bef71_4b869d4b",
+        "filename": "src/tests/test_expectations/GPUTestConfig.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-08T19:58:11Z",
+      "side": 1,
+      "message": "nit: typedef this to something like ConditionArray",
+      "range": {
+        "startLine": 71,
+        "startChar": 10,
+        "endLine": 71,
+        "endChar": 47
+      },
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "88be11bc_56c5a310",
         "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
         "patchSetId": 11
@@ -13,6 +128,24 @@
       "writtenOn": "2019-04-08T18:38:59Z",
       "side": 1,
       "message": "PTAL -- thoughts on this? Right now you could pass a token like CHROMEOS which doesn\u0027t point to an actual condition, and it will push a warning but still evaluate the condition as true. Should it evaluate as false? Could also just error if there is an unimplemented condition.",
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3febb088_7c85b220",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-08T19:58:11Z",
+      "side": 1,
+      "message": "I think errors on unexpected conditions is best.  Makes sure that our expectations are always valid and without typos.",
+      "parentUuid": "88be11bc_56c5a310",
       "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
