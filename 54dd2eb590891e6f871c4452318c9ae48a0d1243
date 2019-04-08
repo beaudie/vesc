@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88be11bc_56c5a310",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-08T18:38:59Z",
+      "side": 1,
+      "message": "PTAL -- thoughts on this? Right now you could pass a token like CHROMEOS which doesn\u0027t point to an actual condition, and it will push a warning but still evaluate the condition as true. Should it evaluate as false? Could also just error if there is an unimplemented condition.",
+      "revId": "54dd2eb590891e6f871c4452318c9ae48a0d1243",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
