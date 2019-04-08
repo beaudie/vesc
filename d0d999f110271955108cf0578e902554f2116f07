@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "68b18316_88e3c6ac",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-08T19:23:07Z",
+      "side": 1,
+      "message": "Yes! Done.",
+      "parentUuid": "bfdcd887_38db31ec",
+      "range": {
+        "startLine": 399,
+        "startChar": 27,
+        "endLine": 399,
+        "endChar": 31
+      },
+      "revId": "d0d999f110271955108cf0578e902554f2116f07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "da7368bb_4586e820",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 12
@@ -36,6 +60,30 @@
       "writtenOn": "2019-04-08T19:01:23Z",
       "side": 1,
       "message": "tiny request: could you make these look more symmetrical? I somehow got confused until I realized they were the same thing. But one for level and one for layer.",
+      "range": {
+        "startLine": 2144,
+        "startChar": 0,
+        "endLine": 2160,
+        "endChar": 0
+      },
+      "revId": "d0d999f110271955108cf0578e902554f2116f07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dd08697_d5d94589",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2160,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-08T19:23:07Z",
+      "side": 1,
+      "message": "Do you have something specific in mind? One is doing a point-in-range test, and the other is doing a range-intersection test. I\u0027m going to merge the two ifs in one, and give names to the expressions, which should hopefully be clearer.",
+      "parentUuid": "da7368bb_4586e820",
       "range": {
         "startLine": 2144,
         "startChar": 0,
