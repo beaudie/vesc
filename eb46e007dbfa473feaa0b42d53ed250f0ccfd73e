@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d5e363a_cdd25de9",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-08T18:49:31Z",
+      "side": 1,
+      "message": "Would have been great if `makeCurrent()` could automatically take care of this. If you pass `currentContext` to `makeCurrent` too, perhaps that would make things safer. It would probably also clean up the entry points a bit.",
+      "range": {
+        "startLine": 1006,
+        "startChar": 0,
+        "endLine": 1009,
+        "endChar": 9
+      },
+      "revId": "eb46e007dbfa473feaa0b42d53ed250f0ccfd73e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
