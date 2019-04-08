@@ -1321,7 +1321,7 @@ angle::Result Program::link(const Context *context)
             return angle::Result::Continue;
         }
 
-        if (!linkVaryings(mInfoLog))
+        if (!linkVaryings(context, mInfoLog))
         {
             return angle::Result::Continue;
         }
@@ -2817,7 +2817,7 @@ void Program::setDrawIDUniform(GLint drawid)
     mProgram->setUniform1iv(mState.mDrawIDLocation, 1, &drawid);
 }
 
-bool Program::linkVaryings(InfoLog &infoLog) const
+bool Program::linkVaryings(const Context *context, InfoLog &infoLog) const
 {
     Shader *previousShader = nullptr;
     for (ShaderType shaderType : kAllGraphicsShaderTypes)
@@ -2830,7 +2830,8 @@ bool Program::linkVaryings(InfoLog &infoLog) const
 
         if (previousShader)
         {
-            if (!linkValidateShaderInterfaceMatching(previousShader, currentShader, infoLog))
+            if (!linkValidateShaderInterfaceMatching(context, previousShader, currentShader,
+                                                     infoLog))
             {
                 return false;
             }
@@ -2853,7 +2854,8 @@ bool Program::linkVaryings(InfoLog &infoLog) const
 
 // [OpenGL ES 3.1] Chapter 7.4.1 "Shader Interface Matchining" Page 91
 // TODO(jiawei.shao@intel.com): add validation on input/output blocks matching
-bool Program::linkValidateShaderInterfaceMatching(gl::Shader *generatingShader,
+bool Program::linkValidateShaderInterfaceMatching(const Context *context,
+                                                  gl::Shader *generatingShader,
                                                   gl::Shader *consumingShader,
                                                   gl::InfoLog &infoLog) const
 {
@@ -2881,9 +2883,9 @@ bool Program::linkValidateShaderInterfaceMatching(gl::Shader *generatingShader,
                 ASSERT(!output.isBuiltIn());
 
                 std::string mismatchedStructFieldName;
-                LinkMismatchError linkError =
-                    LinkValidateVaryings(output, input, generatingShader->getShaderVersion(),
-                                         validateGeometryShaderInputs, &mismatchedStructFieldName);
+                LinkMismatchError linkError = LinkValidateVaryings(
+                    context, output, input, generatingShader->getShaderVersion(),
+                    validateGeometryShaderInputs, &mismatchedStructFieldName);
                 if (linkError != LinkMismatchError::NO_MISMATCH)
                 {
                     LogLinkMismatch(infoLog, input.name, "varying", linkError,
@@ -3379,7 +3381,8 @@ LinkMismatchError Program::LinkValidateVariablesBase(const sh::ShaderVariable &v
     return LinkMismatchError::NO_MISMATCH;
 }
 
-LinkMismatchError Program::LinkValidateVaryings(const sh::Varying &outputVarying,
+LinkMismatchError Program::LinkValidateVaryings(const Context *context,
+                                                const sh::Varying &outputVarying,
                                                 const sh::Varying &inputVarying,
                                                 int shaderVersion,
                                                 bool validateGeometryShaderInputVarying,
@@ -3419,8 +3422,10 @@ LinkMismatchError Program::LinkValidateVaryings(const sh::Varying &outputVarying
     {
         return LinkMismatchError::INTERPOLATION_TYPE_MISMATCH;
     }
-
-    if (shaderVersion == 100 && outputVarying.isInvariant != inputVarying.isInvariant)
+    // Allow pragma invariant(all) mismatch due to spec inconsistency. 1.00 spec said the
+    //  pragma only applied to outputs, but this doesn't make sense for FS and was changed.
+    //  However, this doesn't apply to webGL so skip WA in that case.
+    if (shaderVersion == 100 && outputVarying.isInvariant != inputVarying.isInvariant && (!inputVarying.isPragmaInvariant || context->getExtensions().webglCompatibility)
     {
         return LinkMismatchError::INVARIANCE_MISMATCH;
     }

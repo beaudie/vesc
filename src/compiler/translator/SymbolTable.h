@@ -134,6 +134,7 @@ class TSymbolTable : angle::NonCopyable, TSymbolTableBase
     bool isVaryingInvariant(const TVariable &variable) const;
 
     void setGlobalInvariant(bool invariant);
+    bool isGlobalInvariant() { return mGlobalInvariant; }
 
     const TSymbolUniqueId nextUniqueId() { return TSymbolUniqueId(this); }
 
