@@ -22,6 +22,30 @@
       "revId": "d885ab9c2317c6f34946f20b1f1ff59706096a70",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ad024eb_4ab0a3c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-08T18:23:08Z",
+      "side": 1,
+      "message": "No, more like a cleanup + preemptive security fix (as stack contents would be visible in a trace)",
+      "parentUuid": "f92961b1_a07b8833",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 72
+      },
+      "revId": "d885ab9c2317c6f34946f20b1f1ff59706096a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
