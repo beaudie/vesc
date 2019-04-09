@@ -228,7 +228,9 @@ class WindowSurfaceVk : public SurfaceImpl
 
         void destroy(VkDevice device);
 
-        Serial serial;
+        angle::Result waitFence(ContextVk *context);
+
+        vk::Shared<vk::Fence> fence;
         std::vector<vk::Semaphore> semaphores;
         VkSwapchainKHR swapchain = VK_NULL_HANDLE;
     };
