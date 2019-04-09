@@ -820,7 +820,7 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     AddCompressedFormat(&map, GL_COMPRESSED_RGBA8_ETC2_EAC,                 4, 4, 128, 4, false, RequireESOrExtOrExt<3, 0, &Extensions::compressedTextureETC, &Extensions::compressedETC2RGBA8Texture>,                   AlwaysSupported, NeverSupported,      NeverSupported);
     AddCompressedFormat(&map, GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC,          4, 4, 128, 4, true,  RequireESOrExtOrExt<3, 0, &Extensions::compressedTextureETC, &Extensions::compressedETC2sRGB8Alpha8Texture>,             AlwaysSupported, NeverSupported,      NeverSupported);
 
-    // From GL_EXT_texture_compression_dxt1
+    // From GL_ANGLE_texture_compression_dxt1
     //                       | Internal format                   |W |H | BS |CC| SRGB | Texture supported                                 | Filterable     | Texture attachment | Renderbuffer |
     AddCompressedFormat(&map, GL_COMPRESSED_RGB_S3TC_DXT1_EXT,    4, 4,  64, 3, false, RequireExt<&Extensions::textureCompressionDXT1>,    AlwaysSupported, NeverSupported,      NeverSupported);
     AddCompressedFormat(&map, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,   4, 4,  64, 4, false, RequireExt<&Extensions::textureCompressionDXT1>,    AlwaysSupported, NeverSupported,      NeverSupported);

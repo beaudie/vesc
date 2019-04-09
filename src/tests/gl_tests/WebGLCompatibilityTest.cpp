@@ -2582,12 +2582,7 @@ void main()
 // Test dimension and image size validation of compressed textures
 TEST_P(WebGLCompatibilityTest, CompressedTextureS3TC)
 {
-    if (extensionRequestable("GL_EXT_texture_compression_dxt1"))
-    {
-        glRequestExtensionANGLE("GL_EXT_texture_compression_dxt1");
-    }
-
-    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_texture_compression_dxt1"));
+    ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_ANGLE_texture_compression_dxt1"));
 
     constexpr uint8_t CompressedImageDXT1[] = {0x00, 0xf8, 0x00, 0xf8, 0xaa, 0xaa, 0xaa, 0xaa};
 
@@ -4433,18 +4428,18 @@ void WebGLCompatibilityTest::validateCompressedTexImageExtensionFormat(GLenum fo
     }
 }
 
-// Test enabling GL_EXT_texture_compression_dxt1 for GL_COMPRESSED_RGB_S3TC_DXT1_EXT
+// Test enabling GL_ANGLE_texture_compression_dxt1 for GL_COMPRESSED_RGB_S3TC_DXT1_EXT
 TEST_P(WebGLCompatibilityTest, EnableCompressedTextureExtensionDXT1RGB)
 {
     validateCompressedTexImageExtensionFormat(GL_COMPRESSED_RGB_S3TC_DXT1_EXT, 4, 4, 8,
-                                              "GL_EXT_texture_compression_dxt1", true);
+                                              "GL_ANGLE_texture_compression_dxt1", true);
 }
 
-// Test enabling GL_EXT_texture_compression_dxt1 for GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
+// Test enabling GL_ANGLE_texture_compression_dxt1 for GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
 TEST_P(WebGLCompatibilityTest, EnableCompressedTextureExtensionDXT1RGBA)
 {
     validateCompressedTexImageExtensionFormat(GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, 4, 4, 8,
-                                              "GL_EXT_texture_compression_dxt1", true);
+                                              "GL_ANGLE_texture_compression_dxt1", true);
 }
 
 // Test enabling GL_ANGLE_texture_compression_dxt3
