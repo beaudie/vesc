@@ -16,6 +16,24 @@
       "revId": "b9952ad993e3e2ed587f2277262596a5d4ddb041",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cb9b9f3_bdb88ec3",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-09T19:35:07Z",
+      "side": 1,
+      "message": "Also seems to be causing bot failures",
+      "parentUuid": "145d150b_083c9478",
+      "revId": "b9952ad993e3e2ed587f2277262596a5d4ddb041",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
