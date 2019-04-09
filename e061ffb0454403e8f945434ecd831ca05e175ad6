@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1e212361_b8df5afd",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-09T15:49:52Z",
+      "side": 1,
+      "message": "I think just discard the error (or log it) but don\u0027t assert.  This will probably cause assertion failures in ANGLE if the user gives us bad data from the blob get function.",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 26
+      },
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d5d7415c_5fb21cbd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -31,6 +54,23 @@
       "side": 1,
       "message": "Imagine there\u0027s an application that\u0027s in loading stage. Say it takes 5 seconds to load all the shaders. This would write the cache 5 times in the meantime. I suggest at least having this value correspond to 1 minute of execution (i.e. 60*60). My reasoning is that:\n\n- if the application is short-lived, it\u0027s likely not heavy on shaders, so if the pipeline cache is not flushed, it\u0027s not a big deal\n- if the application is heavy, like a game, the user will interact with it for many minutes, which means there is enough time to wait for the cache to fill up before flushing it.\n\nWhat do you think?",
       "parentUuid": "d5d7415c_5fb21cbd",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f22d2eb5_ab791ec7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-09T15:49:52Z",
+      "side": 1,
+      "message": "Can you add a comment here explaining that this is creating a new cache because there are new functions set, reading it any pipelines from it and merging it with the existing pipeline cache?",
       "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -88,6 +128,29 @@
       "writtenOn": "2019-04-09T14:20:42Z",
       "side": 1,
       "message": "Minor: Please put this after `displayVk-\u003egetBlobCache()-\u003eputApplication`, as logically that\u0027s where the pipeline cache is really no longer dirty (if anything fails in the mean time, `ANGLE_*TRY` would return before the cache is dumped).",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4b49a06_20e36bc7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-09T15:49:52Z",
+      "side": 1,
+      "message": "Let\u0027s call this onBlobCacheFuncs to make it clear it\u0027s in response to them being set.",
+      "range": {
+        "startLine": 216,
+        "startChar": 18,
+        "endLine": 216,
+        "endChar": 36
+      },
       "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
