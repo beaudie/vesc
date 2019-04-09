@@ -154,9 +154,6 @@ Extensions::Extensions()
       textureFloat(false),
       textureFloatLinear(false),
       textureRG(false),
-      textureCompressionDXT1(false),
-      textureCompressionDXT3(false),
-      textureCompressionDXT5(false),
       textureCompressionS3TCsRGB(false),
       textureCompressionASTCHDR(false),
       textureCompressionASTCLDR(false),
@@ -459,7 +456,7 @@ static bool DetermineRGTextureSupport(const TextureCapsMap &textureCaps,
     return GetFormatSupport(textureCaps, requiredFormats, true, true, true, true);
 }
 
-// Check for GL_EXT_texture_compression_dxt1
+// Check for GL_ANGLE_texture_compression_dxt1
 static bool DetermineDXT1TextureSupport(const TextureCapsMap &textureCaps)
 {
     constexpr GLenum requiredFormats[] = {
@@ -763,9 +760,9 @@ void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
     textureFloatLinear     = textureFloat && DetermineFloatTextureFilteringSupport(textureCaps);
     textureRG              = DetermineRGTextureSupport(textureCaps, textureHalfFloat, textureFloat);
     colorBufferHalfFloat   = textureHalfFloat && DetermineColorBufferHalfFloatSupport(textureCaps);
-    textureCompressionDXT1 = DetermineDXT1TextureSupport(textureCaps);
-    textureCompressionDXT3 = DetermineDXT3TextureSupport(textureCaps);
-    textureCompressionDXT5 = DetermineDXT5TextureSupport(textureCaps);
+    textureCompressionDXT1ANGLE = DetermineDXT1TextureSupport(textureCaps);
+    textureCompressionDXT3ANGLE = DetermineDXT3TextureSupport(textureCaps);
+    textureCompressionDXT5ANGLE = DetermineDXT5TextureSupport(textureCaps);
     textureCompressionS3TCsRGB = DetermineS3TCsRGBTextureSupport(textureCaps);
     textureCompressionASTCHDR  = DetermineASTCTextureSupport(textureCaps);
     textureCompressionASTCLDR  = textureCompressionASTCHDR;
@@ -825,9 +822,9 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_OES_texture_float"] = enableableExtension(&Extensions::textureFloat);
         map["GL_OES_texture_float_linear"] = enableableExtension(&Extensions::textureFloatLinear);
         map["GL_EXT_texture_rg"] = enableableExtension(&Extensions::textureRG);
-        map["GL_EXT_texture_compression_dxt1"] = enableableExtension(&Extensions::textureCompressionDXT1);
-        map["GL_ANGLE_texture_compression_dxt3"] = enableableExtension(&Extensions::textureCompressionDXT3);
-        map["GL_ANGLE_texture_compression_dxt5"] = enableableExtension(&Extensions::textureCompressionDXT5);
+        map["GL_ANGLE_texture_compression_dxt1"] = enableableExtension(&Extensions::textureCompressionDXT1ANGLE);
+        map["GL_ANGLE_texture_compression_dxt3"] = enableableExtension(&Extensions::textureCompressionDXT3ANGLE);
+        map["GL_ANGLE_texture_compression_dxt5"] = enableableExtension(&Extensions::textureCompressionDXT5ANGLE);
         map["GL_EXT_texture_compression_s3tc_srgb"] = enableableExtension(&Extensions::textureCompressionS3TCsRGB);
         map["GL_KHR_texture_compression_astc_hdr"] = enableableExtension(&Extensions::textureCompressionASTCHDR);
         map["GL_KHR_texture_compression_astc_ldr"] = enableableExtension(&Extensions::textureCompressionASTCLDR);

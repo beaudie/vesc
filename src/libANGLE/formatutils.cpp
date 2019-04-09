@@ -821,18 +821,18 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     AddCompressedFormat(&map, GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC,          4, 4, 128, 4, true,  RequireESOrExtOrExt<3, 0, &Extensions::compressedTextureETC, &Extensions::compressedETC2sRGB8Alpha8Texture>,             AlwaysSupported, NeverSupported,      NeverSupported);
 
     // From GL_EXT_texture_compression_dxt1
-    //                       | Internal format                   |W |H | BS |CC| SRGB | Texture supported                                 | Filterable     | Texture attachment | Renderbuffer |
-    AddCompressedFormat(&map, GL_COMPRESSED_RGB_S3TC_DXT1_EXT,    4, 4,  64, 3, false, RequireExt<&Extensions::textureCompressionDXT1>,    AlwaysSupported, NeverSupported,      NeverSupported);
-    AddCompressedFormat(&map, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,   4, 4,  64, 4, false, RequireExt<&Extensions::textureCompressionDXT1>,    AlwaysSupported, NeverSupported,      NeverSupported);
+    //                       | Internal format                   |W |H | BS |CC| SRGB | Texture supported                                   | Filterable     | Texture attachment | Renderbuffer |
+    AddCompressedFormat(&map, GL_COMPRESSED_RGB_S3TC_DXT1_EXT,    4, 4,  64, 3, false, RequireExt<&Extensions::textureCompressionDXT1ANGLE>, AlwaysSupported, NeverSupported,      NeverSupported);
+    AddCompressedFormat(&map, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT,   4, 4,  64, 4, false, RequireExt<&Extensions::textureCompressionDXT1ANGLE>, AlwaysSupported, NeverSupported,      NeverSupported);
 
     // From GL_ANGLE_texture_compression_dxt3
-    AddCompressedFormat(&map, GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE, 4, 4, 128, 4, false, RequireExt<&Extensions::textureCompressionDXT3>,    AlwaysSupported, NeverSupported,      NeverSupported);
+    AddCompressedFormat(&map, GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE, 4, 4, 128, 4, false, RequireExt<&Extensions::textureCompressionDXT3ANGLE>, AlwaysSupported, NeverSupported,      NeverSupported);
 
     // From GL_ANGLE_texture_compression_dxt5
-    AddCompressedFormat(&map, GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE, 4, 4, 128, 4, false, RequireExt<&Extensions::textureCompressionDXT5>,    AlwaysSupported, NeverSupported,      NeverSupported);
+    AddCompressedFormat(&map, GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE, 4, 4, 128, 4, false, RequireExt<&Extensions::textureCompressionDXT5ANGLE>, AlwaysSupported, NeverSupported,      NeverSupported);
 
     // From GL_OES_compressed_ETC1_RGB8_texture
-    AddCompressedFormat(&map, GL_ETC1_RGB8_OES,                   4, 4,  64, 3, false, RequireExt<&Extensions::compressedETC1RGB8Texture>, AlwaysSupported, NeverSupported,      NeverSupported);
+    AddCompressedFormat(&map, GL_ETC1_RGB8_OES,                   4, 4,  64, 3, false, RequireExt<&Extensions::compressedETC1RGB8Texture>,   AlwaysSupported, NeverSupported,      NeverSupported);
 
     // From GL_EXT_texture_compression_s3tc_srgb
     //                       | Internal format                       |W |H | BS |CC|SRGB | Texture supported                                 | Filterable     | Texture attachment | Renderbuffer |

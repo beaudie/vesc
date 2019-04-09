@@ -664,7 +664,7 @@ bool ValidateES2CopyTexImageParameters(Context *context,
                 break;
             case GL_COMPRESSED_RGB_S3TC_DXT1_EXT:
             case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
-                if (context->getExtensions().textureCompressionDXT1)
+                if (context->getExtensions().textureCompressionDXT1ANGLE)
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -676,7 +676,7 @@ bool ValidateES2CopyTexImageParameters(Context *context,
                 }
                 break;
             case GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE:
-                if (context->getExtensions().textureCompressionDXT3)
+                if (context->getExtensions().textureCompressionDXT3ANGLE)
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -688,7 +688,7 @@ bool ValidateES2CopyTexImageParameters(Context *context,
                 }
                 break;
             case GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE:
-                if (context->getExtensions().textureCompressionDXT5)
+                if (context->getExtensions().textureCompressionDXT5ANGLE)
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -1432,7 +1432,7 @@ bool ValidateES2TexImageParameters(Context *context,
         {
             case GL_COMPRESSED_RGB_S3TC_DXT1_EXT:
             case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
-                if (context->getExtensions().textureCompressionDXT1)
+                if (context->getExtensions().textureCompressionDXT1ANGLE)
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -1444,7 +1444,7 @@ bool ValidateES2TexImageParameters(Context *context,
                 }
                 break;
             case GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE:
-                if (context->getExtensions().textureCompressionDXT3)
+                if (context->getExtensions().textureCompressionDXT3ANGLE)
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -1456,7 +1456,7 @@ bool ValidateES2TexImageParameters(Context *context,
                 }
                 break;
             case GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE:
-                if (context->getExtensions().textureCompressionDXT5)
+                if (context->getExtensions().textureCompressionDXT5ANGLE)
                 {
                     context->validationError(GL_INVALID_OPERATION, kInvalidFormat);
                     return false;
@@ -1797,21 +1797,21 @@ bool ValidateES2TexStorageParameters(Context *context,
     {
         case GL_COMPRESSED_RGB_S3TC_DXT1_EXT:
         case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
-            if (!context->getExtensions().textureCompressionDXT1)
+            if (!context->getExtensions().textureCompressionDXT1ANGLE)
             {
                 context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
                 return false;
             }
             break;
         case GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE:
-            if (!context->getExtensions().textureCompressionDXT3)
+            if (!context->getExtensions().textureCompressionDXT3ANGLE)
             {
                 context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
                 return false;
             }
             break;
         case GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE:
-            if (!context->getExtensions().textureCompressionDXT5)
+            if (!context->getExtensions().textureCompressionDXT5ANGLE)
             {
                 context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
                 return false;

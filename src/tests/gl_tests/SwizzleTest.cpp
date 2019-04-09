@@ -390,7 +390,9 @@ TEST_P(SwizzleTest, LA32F_2D)
 
 TEST_P(SwizzleTest, CompressedDXT_2D)
 {
-    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_texture_compression_dxt1"));
+    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_texture_compression_dxt1") &&
+                       !extensionEnabled("GL_ANGLE_texture_compression_dxt1") &&
+                       !extensionEnabled("GL_EXT_texture_compression_s3tc"));
 
     init2DCompressedTexture(GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, pixel_0_width, pixel_0_height,
                             pixel_0_size, pixel_0_data);

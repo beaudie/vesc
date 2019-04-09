@@ -1600,7 +1600,9 @@ TEST_P(RobustResourceInitTestES3, Texture2DArray)
 TEST_P(RobustResourceInitTestES3, CompressedSubImage)
 {
     ANGLE_SKIP_TEST_IF(!hasGLExtension());
-    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_texture_compression_dxt1"));
+    ANGLE_SKIP_TEST_IF(!extensionEnabled("GL_EXT_texture_compression_dxt1") &&
+                       !extensionEnabled("GL_ANGLE_texture_compression_dxt1") &&
+                       !extensionEnabled("GL_EXT_texture_compression_s3tc"));
 
     constexpr int width     = 8;
     constexpr int height    = 8;
