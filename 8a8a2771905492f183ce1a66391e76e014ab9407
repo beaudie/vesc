@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a4473a0_f9954c79",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T15:36:36Z",
+      "side": 1,
+      "message": "I can attest that I\u0027ve been bitten by this kind of variance when it comes to position output, so it looks good to me that things other than `EvqVaryingOut` are also affected by this.",
+      "range": {
+        "startLine": 698,
+        "startChar": 25,
+        "endLine": 698,
+        "endChar": 36
+      },
+      "revId": "8a8a2771905492f183ce1a66391e76e014ab9407",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
