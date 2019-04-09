@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43bcd96b_4e9acf29",
+        "filename": "src/compiler/translator/SymbolTable.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T01:50:35Z",
+      "side": 1,
+      "message": "If it should only apply to output varying, maybe then put `\u003d\u003d EvqVaryingOut` to be clear. [optional:] A comment could be helpful.",
+      "range": {
+        "startLine": 199,
+        "startChar": 63,
+        "endLine": 199,
+        "endChar": 78
+      },
+      "revId": "1b5210760ce77db3a944aaeaef7ab9b998a0fa45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
