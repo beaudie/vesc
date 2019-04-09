@@ -70,6 +70,30 @@
       "revId": "cfb340a5b70b0b48adaca199ba4b1cda10c1a2a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d29c0ae_ffc31382",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T19:51:38Z",
+      "side": 1,
+      "message": "Where does the dup get pulled in? I don\u0027t see it in this CL.",
+      "parentUuid": "486930dd_1cb9defa",
+      "range": {
+        "startLine": 977,
+        "startChar": 12,
+        "endLine": 977,
+        "endChar": 32
+      },
+      "revId": "cfb340a5b70b0b48adaca199ba4b1cda10c1a2a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
