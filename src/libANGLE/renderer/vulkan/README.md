@@ -63,3 +63,32 @@ Note that the current design of the transition table stores transitions in an un
 applications map from one state to many this will slow down the transition time. This could be
 improved in the future using a faster look up. For instance we could keep a sorted transition table
 or use a small hash map for transitions.
+
+### Shader Module Compilation
+
+ANGLE uses two compilation passes to convert application shaders into Vulkan
+[VkShaderModules][VkShaderModule]:
+
+1. **ANGLE Internal Translation**: The [shader translator][translator] converts
+application shaders into Vulkan-compatible GLSL. Vulkan-compatible GLSL matches
+the [GL_KHR_vulkan_glsl][GL_KHR_vulkan_glsl] extension spec with some additional
+workarounds and emulation. We emulate OpenGL's different depth range, viewport y
+flipping, default uniforms, and OpenGL line segment rasterization. For more info
+see [TranslatorVulkan.cpp][TranslatorVulkan.cpp].
+
+2. **glslang To SPIR-V**: We then use Khronos' [glslang][glslang] to convert the
+Vulkan-compatible GLSL into SPIR-V. The SPIR-V is then compiled into
+`VkShaderModules`. For details please see
+[GlslangWrapper.cpp][GlslangWrapper.cpp].
+
+The `VkShaderModules` are then used by `VkPipelines`. Note that we currently
+don't use [SPIRV-Tools][SPIRV-Tools] to perform any SPIR-V optimization. This
+could be something to improve on in the future.
+
+[VkShaderModule]: https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderModule.html
+[translator]: https://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/compiler/translator/
+[GL_KHR_vulkan_glsl]: https://github.com/KhronosGroup/GLSL/blob/master/extensions/khr/GL_KHR_vulkan_glsl.txt
+[TranslatorVulkan.cpp]: https://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/compiler/translator/TranslatorVulkan.cpp
+[glslang]: https://github.com/KhronosGroup/glslang
+[GlslangWrapper.cpp]: https://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/renderer/vulkan/GlslangWrapper.cpp
+[SPIRV-Tools]: https://github.com/KhronosGroup/SPIRV-Tools
