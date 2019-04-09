@@ -22,6 +22,30 @@
       "revId": "cfb340a5b70b0b48adaca199ba4b1cda10c1a2a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "961a4064_dc8c49ac",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-04-09T19:48:27Z",
+      "side": 1,
+      "message": "I added this condition because I believe this will not compile on Windows due to using dup() from \u003cunistd.h\u003e.\n\nI could move ifdef to the dup() call, would that be better?",
+      "parentUuid": "8fa8a03a_e666b15d",
+      "range": {
+        "startLine": 977,
+        "startChar": 12,
+        "endLine": 977,
+        "endChar": 32
+      },
+      "revId": "cfb340a5b70b0b48adaca199ba4b1cda10c1a2a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
