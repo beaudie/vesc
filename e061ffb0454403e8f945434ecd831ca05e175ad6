@@ -143,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "8b2edf50_084ab1cc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T17:29:26Z",
+      "side": 1,
+      "message": "Sorry, I maybe forgot to say that I still would do the check once per swap. Just the trigger would be X pipelines instead of X swaps.",
+      "parentUuid": "562f2c45_c419ca8f",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f22d2eb5_ab791ec7",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
