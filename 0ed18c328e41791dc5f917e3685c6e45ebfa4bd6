@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e3dbb6e9_b2a75ea8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-09T21:04:10Z",
+      "side": 1,
+      "message": ", angleproject:2950",
+      "range": {
+        "startLine": 15,
+        "startChar": 18,
+        "endLine": 15,
+        "endChar": 22
+      },
+      "revId": "0ed18c328e41791dc5f917e3685c6e45ebfa4bd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d2afbee_5b55ba72",
+        "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-09T21:04:10Z",
+      "side": 1,
+      "message": "Is this because they crash on Vulkan and you can\u0027t have different expectations on Vulkan and GLES? Can you mention this in commit message?",
+      "range": {
+        "startLine": 183,
+        "startChar": 66,
+        "endLine": 183,
+        "endChar": 70
+      },
+      "revId": "0ed18c328e41791dc5f917e3685c6e45ebfa4bd6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
