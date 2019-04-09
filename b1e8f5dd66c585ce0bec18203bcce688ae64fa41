@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5971ac77_65e75027",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T20:32:05Z",
+      "side": 1,
+      "message": "Ouch! I thought glslang was doing the optimization automatically",
+      "revId": "b1e8f5dd66c585ce0bec18203bcce688ae64fa41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
