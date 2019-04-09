@@ -450,6 +450,8 @@ class Shared final : angle::NonCopyable
         return mRefCounted != nullptr;
     }
 
+    operator bool() const { return isReferenced(); }
+
     T &get()
     {
         ASSERT(mRefCounted && mRefCounted->isReferenced());
@@ -460,6 +462,9 @@ class Shared final : angle::NonCopyable
         ASSERT(mRefCounted && mRefCounted->isReferenced());
         return mRefCounted->get();
     }
+
+    T *operator->() { return &get(); }
+    const T *operator->() const { return &get(); }
 
   private:
     RefCounted<T> *mRefCounted;
