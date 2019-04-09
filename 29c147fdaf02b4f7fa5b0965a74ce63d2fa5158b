@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "837a6447_cd3a6a2d",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T15:15:48Z",
+      "side": 1,
+      "message": "Done. Renamed `PostProcess` to `AppendPreprocessorOutput` to be explicit about what is done. Changed `proprocess_args` to `preprocessor_args`.",
+      "parentUuid": "d8aed832_57953e9b",
+      "range": {
+        "startLine": 299,
+        "startChar": 42,
+        "endLine": 299,
+        "endChar": 87
+      },
+      "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2aada91_cefae9e8",
         "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d4bd2cb_2738ea25",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T15:15:48Z",
+      "side": 1,
+      "message": "There is a lot of I/O going on, so if anything this can be increased!",
+      "parentUuid": "d2aada91_cefae9e8",
+      "range": {
+        "startLine": 312,
+        "startChar": 44,
+        "endLine": 312,
+        "endChar": 53
+      },
+      "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d74c2a44_aafebe7e",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T15:15:48Z",
+      "side": 1,
+      "message": "Right, I thought it was `__`.",
+      "parentUuid": "d0cf96f5_33e24496",
+      "range": {
+        "startLine": 314,
+        "startChar": 8,
+        "endLine": 314,
+        "endChar": 20
+      },
+      "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8326a4ed_d3fd9011",
         "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
         "patchSetId": 2
@@ -91,6 +163,30 @@
       "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae0933dc_21e9b44a",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T15:15:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8326a4ed_d3fd9011",
+      "range": {
+        "startLine": 332,
+        "startChar": 8,
+        "endLine": 332,
+        "endChar": 18
+      },
+      "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -141,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "e31691b6_3b4899ca",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T15:15:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ce681a2_452821b4",
+      "range": {
+        "startLine": 358,
+        "startChar": 8,
+        "endLine": 358,
+        "endChar": 17
+      },
+      "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8284fd5f_70133e64",
         "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
         "patchSetId": 2
@@ -161,6 +281,30 @@
       "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29f1697b_37a86b8b",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T15:15:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8284fd5f_70133e64",
+      "range": {
+        "startLine": 364,
+        "startChar": 0,
+        "endLine": 364,
+        "endChar": 30
+      },
+      "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
