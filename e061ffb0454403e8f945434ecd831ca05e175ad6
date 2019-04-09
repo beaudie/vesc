@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d5d7415c_5fb21cbd",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-04-09T08:12:09Z",
+      "side": 1,
+      "message": "This value can be tuned.",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4efbb68_49835ece",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1663,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-04-09T08:12:09Z",
+      "side": 1,
+      "message": "Only write the cache data to disk if there\u0027s new pipeline created in the past 60 frames.\nIt\u0027s a trade-off of saving as more cache data as possible and in the meanwhile reducing the times of cache data write.",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
