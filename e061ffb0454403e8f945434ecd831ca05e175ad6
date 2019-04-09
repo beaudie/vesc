@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "04b370d6_8d35af7a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T17:10:46Z",
+      "side": 1,
+      "message": "For the bot to pick this up you will need to use the syntax:\n\nBug: angleproject:3318\n\nNot upper-case.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 3
+      },
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1e212361_b8df5afd",
         "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
         "patchSetId": 1
@@ -13,6 +36,30 @@
       "writtenOn": "2019-04-09T15:49:52Z",
       "side": 1,
       "message": "I think just discard the error (or log it) but don\u0027t assert.  This will probably cause assertion failures in ANGLE if the user gives us bad data from the blob get function.",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 26
+      },
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7b2f825_b593eb48",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T17:10:46Z",
+      "side": 1,
+      "message": "We should probably return an error if it is possible to generate an error here.",
+      "parentUuid": "1e212361_b8df5afd",
       "range": {
         "startLine": 87,
         "startChar": 4,
@@ -60,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "f81ff9e9_83d68192",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T17:10:46Z",
+      "side": 1,
+      "message": "Maybe instead of using a time based policy we should use a count of new pipelines check? I.E. if we have greater than X new pipelines added to the cache since the last swap. Then we would write out the pipelines. X could potentially be zero.",
+      "parentUuid": "ff8c7e99_5972f7f6",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f22d2eb5_ab791ec7",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -77,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "9b92db16_a4ebf819",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T17:10:46Z",
+      "side": 1,
+      "message": "Also, what happens if mPipelineCache is invalid? Can you ASSERT it is valid?",
+      "parentUuid": "f22d2eb5_ab791ec7",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "11adaf30_9bb63ada",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -88,6 +171,30 @@
       "writtenOn": "2019-04-09T14:20:42Z",
       "side": 1,
       "message": "You can remove `src` and use `pipelineCache.ptr()` here.",
+      "range": {
+        "startLine": 1312,
+        "startChar": 87,
+        "endLine": 1312,
+        "endChar": 90
+      },
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae851f11_338a07d3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T17:10:46Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "11adaf30_9bb63ada",
       "range": {
         "startLine": 1312,
         "startChar": 87,
@@ -174,6 +281,24 @@
     },
     {
       "key": {
+        "uuid": "1dfca157_730752d8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T17:10:46Z",
+      "side": 1,
+      "message": "I also don\u0027t think you need a getter here.",
+      "parentUuid": "c321cc44_ad812f74",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "87adef8a_5028ce32",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 1
@@ -190,6 +315,75 @@
         "startChar": 9,
         "endLine": 310,
         "endChar": 29
+      },
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0521ca68_8a2ae5e8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1450,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T17:10:46Z",
+      "side": 1,
+      "message": "how about onNewGraphicsPipeline()",
+      "range": {
+        "startLine": 1450,
+        "startChar": 32,
+        "endLine": 1450,
+        "endChar": 54
+      },
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5792eee_27977c65",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T17:10:46Z",
+      "side": 1,
+      "message": "nit: prefer using non-p prefixed variable names to match ANGLE style. So srcCaches.",
+      "range": {
+        "startLine": 459,
+        "startChar": 36,
+        "endLine": 459,
+        "endChar": 46
+      },
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f1b6327_7707e804",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T17:10:46Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 1189,
+        "startChar": 60,
+        "endLine": 1189,
+        "endChar": 70
       },
       "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
