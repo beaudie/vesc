@@ -48,6 +48,52 @@
     },
     {
       "key": {
+        "uuid": "d0cf96f5_33e24496",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T14:09:46Z",
+      "side": 1,
+      "message": "I think normally in python they use a single underscore for private methods. Unless this is some kind of special name.",
+      "range": {
+        "startLine": 314,
+        "startChar": 8,
+        "endLine": 314,
+        "endChar": 20
+      },
+      "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8326a4ed_d3fd9011",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T14:09:46Z",
+      "side": 1,
+      "message": "I think normally in python they use a single underscore for private methods. Unless this is some kind of special name.",
+      "range": {
+        "startLine": 332,
+        "startChar": 8,
+        "endLine": 332,
+        "endChar": 18
+      },
+      "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b81e1a87_37ce4d95",
         "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
         "patchSetId": 2
@@ -64,6 +110,53 @@
         "startChar": 8,
         "endLine": 358,
         "endChar": 17
+      },
+      "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ce681a2_452821b4",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T14:09:46Z",
+      "side": 1,
+      "message": "finish or join sounds good to me.",
+      "parentUuid": "b81e1a87_37ce4d95",
+      "range": {
+        "startLine": 358,
+        "startChar": 8,
+        "endLine": 358,
+        "endChar": 17
+      },
+      "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8284fd5f_70133e64",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T14:09:46Z",
+      "side": 1,
+      "message": "can you move this into def main() and pass it around as necessary? Instead of using a global.",
+      "range": {
+        "startLine": 364,
+        "startChar": 0,
+        "endLine": 364,
+        "endChar": 30
       },
       "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
