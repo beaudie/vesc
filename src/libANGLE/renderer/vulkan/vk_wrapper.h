@@ -453,6 +453,10 @@ class PipelineCache final : public WrappedObject<PipelineCache, VkPipelineCache>
 
     VkResult init(VkDevice device, const VkPipelineCacheCreateInfo &createInfo);
     VkResult getCacheData(VkDevice device, size_t *cacheSize, void *cacheData);
+    VkResult merge(VkDevice device,
+                   VkPipelineCache dstCache,
+                   uint32_t srcCacheCount,
+                   VkPipelineCache *srcCaches);
 };
 
 class DescriptorSetLayout final : public WrappedObject<DescriptorSetLayout, VkDescriptorSetLayout>
@@ -1177,6 +1181,15 @@ ANGLE_INLINE VkResult PipelineCache::init(VkDevice device,
     // Note: if we are concerned with memory usage of this cache, we should give it custom
     // allocators.  Also, failure of this function is of little importance.
     return vkCreatePipelineCache(device, &createInfo, nullptr, &mHandle);
+}
+
+ANGLE_INLINE VkResult PipelineCache::merge(VkDevice device,
+                                           VkPipelineCache dstCache,
+                                           uint32_t srcCacheCount,
+                                           VkPipelineCache *srcCaches)
+{
+    ASSERT(valid());
+    return vkMergePipelineCaches(device, dstCache, srcCacheCount, srcCaches);
 }
 
 ANGLE_INLINE VkResult PipelineCache::getCacheData(VkDevice device,
