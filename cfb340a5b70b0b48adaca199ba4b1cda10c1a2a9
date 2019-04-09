@@ -46,6 +46,30 @@
       "revId": "cfb340a5b70b0b48adaca199ba4b1cda10c1a2a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "486930dd_1cb9defa",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-09T19:50:34Z",
+      "side": 1,
+      "message": "Windows does have a _dup that you could redefine to dup with a macro. I have a preference for compiling the code everywhere if it\u0027s reasonable.",
+      "parentUuid": "961a4064_dc8c49ac",
+      "range": {
+        "startLine": 977,
+        "startChar": 12,
+        "endLine": 977,
+        "endChar": 32
+      },
+      "revId": "cfb340a5b70b0b48adaca199ba4b1cda10c1a2a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
