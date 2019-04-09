@@ -106,7 +106,7 @@ struct Extensions
     // GL_OES_texture_half_float, GL_OES_texture_half_float_linear
     // GL_OES_texture_float, GL_OES_texture_float_linear
     // GL_EXT_texture_rg
-    // GL_EXT_texture_compression_dxt1, GL_ANGLE_texture_compression_dxt3,
+    // GL_ANGLE_texture_compression_dxt1, GL_ANGLE_texture_compression_dxt3,
     // GL_ANGLE_texture_compression_dxt5
     // GL_KHR_texture_compression_astc_hdr, GL_KHR_texture_compression_astc_ldr
     // GL_OES_compressed_ETC1_RGB8_texture
@@ -168,13 +168,13 @@ struct Extensions
     // floating point extensions are also present) exist
     bool textureRG;
 
-    // GL_EXT_texture_compression_dxt1, GL_ANGLE_texture_compression_dxt3 and
+    // GL_ANGLE_texture_compression_dxt1, GL_ANGLE_texture_compression_dxt3 and
     // GL_ANGLE_texture_compression_dxt5 Implies that TextureCaps exist for
     // GL_COMPRESSED_RGB_S3TC_DXT1_EXT, GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
     // GL_COMPRESSED_RGBA_S3TC_DXT3_ANGLE and GL_COMPRESSED_RGBA_S3TC_DXT5_ANGLE
-    bool textureCompressionDXT1;
-    bool textureCompressionDXT3;
-    bool textureCompressionDXT5;
+    bool textureCompressionDXT1ANGLE = false;
+    bool textureCompressionDXT3ANGLE = false;
+    bool textureCompressionDXT5ANGLE = false;
 
     // GL_EXT_texture_compression_s3tc_srgb
     // Implies that TextureCaps exist for GL_COMPRESSED_SRGB_S3TC_DXT1_EXT,
