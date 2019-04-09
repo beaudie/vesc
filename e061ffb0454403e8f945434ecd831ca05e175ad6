@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "562f2c45_c419ca8f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T17:25:28Z",
+      "side": 1,
+      "message": "In a real application with hundreds if not thousands of pipelines, sending the pipeline cache through the blob cache on every change may end up having a noticeable effect. I don\u0027t think doing dump-per-X-pipelines is a bad idea, but I would keep X somewhat large, and pair it with a timeout as we do (so if we don\u0027t reach X, we still dump every now and then)",
+      "parentUuid": "f81ff9e9_83d68192",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f22d2eb5_ab791ec7",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
