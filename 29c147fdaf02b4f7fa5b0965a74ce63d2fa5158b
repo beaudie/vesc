@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8aed832_57953e9b",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-09T13:46:13Z",
+      "side": 1,
+      "message": "PostProcess vs preprocess confuses me.\nMaybe preprocessor?",
+      "range": {
+        "startLine": 299,
+        "startChar": 42,
+        "endLine": 299,
+        "endChar": 87
+      },
+      "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2aada91_cefae9e8",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-09T13:46:13Z",
+      "side": 1,
+      "message": "Maybe -1, to keep one cpu for the main thread?",
+      "range": {
+        "startLine": 312,
+        "startChar": 44,
+        "endLine": 312,
+        "endChar": 53
+      },
+      "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b81e1a87_37ce4d95",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 358,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-09T13:46:13Z",
+      "side": 1,
+      "message": "I\u0027d expect \"terminate\" to kill stuff.\nHow about \"finish\"?",
+      "range": {
+        "startLine": 358,
+        "startChar": 8,
+        "endLine": 358,
+        "endChar": 17
+      },
+      "revId": "29c147fdaf02b4f7fa5b0965a74ce63d2fa5158b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
