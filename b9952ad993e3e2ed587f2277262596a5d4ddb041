@@ -34,6 +34,139 @@
       "revId": "b9952ad993e3e2ed587f2277262596a5d4ddb041",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f712210_31030e30",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 12
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T19:48:41Z",
+      "side": 1,
+      "message": "I agree with the renaming idea. You will also need to move it out of the angle_build_deqp_tests block to get it to compile on the main Chromium builders.",
+      "parentUuid": "8cb9b9f3_bdb88ec3",
+      "revId": "b9952ad993e3e2ed587f2277262596a5d4ddb041",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "426a94b4_1a53e3c0",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T19:48:41Z",
+      "side": 1,
+      "message": "nit: 2019",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "b9952ad993e3e2ed587f2277262596a5d4ddb041",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36d7ff9e_96e6a2df",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T19:48:41Z",
+      "side": 1,
+      "message": "you could use EXPECT_EQ(..., IsIntel()), etc.",
+      "range": {
+        "startLine": 75,
+        "startChar": 12,
+        "endLine": 75,
+        "endChar": 23
+      },
+      "revId": "b9952ad993e3e2ed587f2277262596a5d4ddb041",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96cbf5e2_9461e2e8",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T19:48:41Z",
+      "side": 1,
+      "message": "just a reminder that we should comment before tests. If you want to do one comment per block of similar tests that\u0027s fine too.",
+      "range": {
+        "startLine": 166,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 6
+      },
+      "revId": "b9952ad993e3e2ed587f2277262596a5d4ddb041",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d4a24f6_34092cbb",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T19:48:41Z",
+      "side": 1,
+      "message": "You could split these tests into two sets. One set verifies the ANGLETest IsIntel(), IsD3D11(), etc work correctly. Another set verifies the parser works correctly.\n\nSince the parser tests are hardware-independent for the most part you can put them in angle_unittests. You could define a new test set GPUTestExpectationsParser_unittest.cpp and put the non-hardware-specific tests in there.\n\nAlso eventually we should probably remove ANGLETest\u0027s versions of IsIntel() etc. And just use the test expectations version.",
+      "range": {
+        "startLine": 202,
+        "startChar": 32,
+        "endLine": 202,
+        "endChar": 61
+      },
+      "revId": "b9952ad993e3e2ed587f2277262596a5d4ddb041",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a0c61ba_d9bde3ec",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T19:48:41Z",
+      "side": 1,
+      "message": "Adding the tests is a very good idea, nice work!",
+      "range": {
+        "startLine": 481,
+        "startChar": 0,
+        "endLine": 493,
+        "endChar": 1
+      },
+      "revId": "b9952ad993e3e2ed587f2277262596a5d4ddb041",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
