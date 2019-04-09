@@ -22,6 +22,30 @@
       "revId": "1b5210760ce77db3a944aaeaef7ab9b998a0fa45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed141502_ebe09765",
+        "filename": "src/compiler/translator/SymbolTable.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-04-09T14:24:12Z",
+      "side": 1,
+      "message": "For the test in question this code was hit through the following switch statement:\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/compiler/translator/CollectVariables.cpp#676\n\nAll of the qualifiers in that case are outputs except for EvqVaryingIn so I excepted that case.\n\nThe spec says:\nTo force all output variables to be invariant, use the pragma\n       #pragma STDGL invariant(all)\nbefore all declarations in a shader.\n\nThere are a number of *Out TQualifier values, some of which aren\u0027t included in that original switch statement. I\u0027m thinking I\u0027ll rework this by adding a utility function \"isOutput(TQualifier)\" that returns true for all of the output types. Seems more correct.",
+      "parentUuid": "43bcd96b_4e9acf29",
+      "range": {
+        "startLine": 199,
+        "startChar": 63,
+        "endLine": 199,
+        "endChar": 78
+      },
+      "revId": "1b5210760ce77db3a944aaeaef7ab9b998a0fa45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
