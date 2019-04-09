@@ -52,8 +52,8 @@ namespace
 // We currently only allocate 2 uniform buffer per descriptor set, one for the fragment shader and
 // one for the vertex shader.
 constexpr size_t kUniformBufferDescriptorsPerDescriptorSet = 2;
-// Update the pipeline cache every this many swaps (if 60fps, this means every 10 minutes)
-constexpr uint32_t kPipelineCacheVkUpdatePeriod = 10 * 60 * 60;
+// Update the pipeline cache every this many swaps.
+constexpr uint32_t kPipelineCacheVkUpdatePeriod = 60;
 // Wait a maximum of 10s.  If that times out, we declare it a failure.
 constexpr uint64_t kMaxFenceWaitTimeNs = 10'000'000'000llu;
 // Per the Vulkan specification, as long as Vulkan 1.1+ is returned by vkEnumerateInstanceVersion,
@@ -534,6 +534,7 @@ RendererVk::RendererVk()
       mCurrentQueueSerial(mQueueSerialFactory.generate()),
       mDeviceLost(false),
       mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
+      mUpdatePipelineCache(false),
       mPoolAllocator(kDefaultPoolAllocatorPageSize, 1),
       mCommandGraph(kEnableCommandGraphDiagnostics, &mPoolAllocator),
       mGpuEventsEnabled(false),
@@ -1049,7 +1050,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     ANGLE_VK_TRY(displayVk, mCommandPool.init(mDevice, commandPoolInfo));
 
     // Initialize the vulkan pipeline cache.
-    ANGLE_TRY(initPipelineCache(displayVk));
+    ANGLE_TRY(initPipelineCache(displayVk, &mPipelineCache));
 
 #if ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
@@ -1282,7 +1283,7 @@ void RendererVk::initPipelineCacheVkKey()
                                hashString.length(), mPipelineCacheVkBlobKey.data());
 }
 
-angle::Result RendererVk::initPipelineCache(DisplayVk *display)
+angle::Result RendererVk::initPipelineCache(DisplayVk *display, vk::PipelineCache *pipelineCache)
 {
     initPipelineCacheVkKey();
 
@@ -1297,7 +1298,20 @@ angle::Result RendererVk::initPipelineCache(DisplayVk *display)
     pipelineCacheCreateInfo.initialDataSize = success ? initialData.size() : 0;
     pipelineCacheCreateInfo.pInitialData    = success ? initialData.data() : nullptr;
 
-    ANGLE_VK_TRY(display, mPipelineCache.init(mDevice, pipelineCacheCreateInfo));
+    ANGLE_VK_TRY(display, pipelineCache->init(mDevice, pipelineCacheCreateInfo));
+    return angle::Result::Continue;
+}
+
+angle::Result RendererVk::mergePipelineCache(DisplayVk *display)
+{
+    vk::PipelineCache pipelineCache;
+    ANGLE_TRY(initPipelineCache(display, &pipelineCache));
+
+    VkPipelineCache src[1];
+    src[0] = pipelineCache.getHandle();
+    ANGLE_VK_TRY(display, mPipelineCache.merge(mDevice, mPipelineCache.getHandle(), 1, src));
+
+    pipelineCache.destroy(mDevice);
     return angle::Result::Continue;
 }
 
@@ -1646,8 +1660,14 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)
     {
         return angle::Result::Continue;
     }
+    else if (!getPipelineCacheUpdate())
+    {
+        mPipelineCacheVkUpdateTimeout = kPipelineCacheVkUpdatePeriod;
+        return angle::Result::Continue;
+    }
 
     mPipelineCacheVkUpdateTimeout = kPipelineCacheVkUpdatePeriod;
+    setPipelineCacheUpdate(false);
 
     // Get the size of the cache.
     size_t pipelineCacheSize = 0;

@@ -81,6 +81,12 @@ DeviceImpl *DisplayVk::createDevice()
     return nullptr;
 }
 
+void DisplayVk::setBlobCacheFuncs(EGLSetBlobFuncANDROID set, EGLGetBlobFuncANDROID get)
+{
+    angle::Result res = mRenderer->mergePipelineCache(this);
+    ASSERT(!IsError(res));
+}
+
 egl::Error DisplayVk::waitClient(const gl::Context *context)
 {
     TRACE_EVENT0("gpu.angle", "DisplayVk::waitClient");
