@@ -19,6 +19,47 @@
     },
     {
       "key": {
+        "uuid": "ff8c7e99_5972f7f6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T14:20:42Z",
+      "side": 1,
+      "message": "Imagine there\u0027s an application that\u0027s in loading stage. Say it takes 5 seconds to load all the shaders. This would write the cache 5 times in the meantime. I suggest at least having this value correspond to 1 minute of execution (i.e. 60*60). My reasoning is that:\n\n- if the application is short-lived, it\u0027s likely not heavy on shaders, so if the pipeline cache is not flushed, it\u0027s not a big deal\n- if the application is heavy, like a game, the user will interact with it for many minutes, which means there is enough time to wait for the cache to fill up before flushing it.\n\nWhat do you think?",
+      "parentUuid": "d5d7415c_5fb21cbd",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11adaf30_9bb63ada",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T14:20:42Z",
+      "side": 1,
+      "message": "You can remove `src` and use `pipelineCache.ptr()` here.",
+      "range": {
+        "startLine": 1312,
+        "startChar": 87,
+        "endLine": 1312,
+        "endChar": 90
+      },
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f4efbb68_49835ece",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -30,6 +71,63 @@
       "writtenOn": "2019-04-09T08:12:09Z",
       "side": 1,
       "message": "Only write the cache data to disk if there\u0027s new pipeline created in the past 60 frames.\nIt\u0027s a trade-off of saving as more cache data as possible and in the meanwhile reducing the times of cache data write.",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f2b4c31_736f6afa",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1670,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T14:20:42Z",
+      "side": 1,
+      "message": "Minor: Please put this after `displayVk-\u003egetBlobCache()-\u003eputApplication`, as logically that\u0027s where the pipeline cache is really no longer dirty (if anything fails in the mean time, `ANGLE_*TRY` would return before the cache is dumped).",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c321cc44_ad812f74",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T14:20:42Z",
+      "side": 1,
+      "message": "See below regarding the variable name. This could in turn be changed to `[gs]etPipelineCacheDirty`",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87adef8a_5028ce32",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-09T14:20:42Z",
+      "side": 1,
+      "message": "I would name this to reflect \"what happened\" rather than \"what needs to be done\". My suggestion would be `mPipelineCacheDirty`.",
+      "range": {
+        "startLine": 310,
+        "startChar": 9,
+        "endLine": 310,
+        "endChar": 29
+      },
       "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
