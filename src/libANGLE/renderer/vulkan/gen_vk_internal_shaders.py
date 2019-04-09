@@ -12,6 +12,7 @@
 from datetime import date
 import io
 import json
+import multiprocessing
 import os
 import platform
 import re
@@ -252,6 +253,115 @@ compact_newlines_regex = re.compile(r"\n\s*\n", re.MULTILINE)
 def cleanup_preprocessed_shader(shader_text):
     return compact_newlines_regex.sub('\n\n', shader_text.strip())
 
+class CompileQueue:
+    class PostProcess:
+        def __init__(self, shader_file, preprocess_args, output_path):
+            # Asynchronously launch the preprocess job.
+            self.process = subprocess.Popen(preprocess_args,
+                                            stdout=subprocess.PIPE,
+                                            stderr=subprocess.PIPE)
+            # Store the file name for output to be appended to.
+            self.output_path = output_path
+            # Store info for error description.
+            self.shader_file = shader_file
+
+        def wait(self, queue):
+            (out, err) = self.process.communicate()
+            if self.process.returncode == 0:
+                # Append preprocessor output to the output file.
+                with open(self.output_path, 'ab') as incfile:
+                    incfile.write('\n\n#if 0  // Generated from:\n')
+                    incfile.write(cleanup_preprocessed_shader(out.replace('\r\n', '\n')))
+                    incfile.write('\n#endif  // Preprocessed code\n')
+                out = None
+            return (out, err, self.process.returncode, None,
+                    "Error running preprocessor on " + self.shader_file)
+
+    class CompileToSPIRV:
+        def __init__(self, shader_file, shader_basename, variation_string, output_path,
+                     compile_args, preprocess_args):
+            # Asynchronously launch the compile job.
+            self.process = subprocess.Popen(compile_args,
+                                            stdout=subprocess.PIPE,
+                                            stderr=subprocess.PIPE)
+            # Store info for post-process launch.
+            self.preprocess_args = preprocess_args
+            self.output_path = output_path
+            # Store info for job and error description.
+            self.shader_file = shader_file
+            self.shader_basename = shader_basename
+            self.variation_string = variation_string
+
+        def wait(self, queue):
+            (out, err) = self.process.communicate()
+            if self.process.returncode == 0:
+                # Insert the post-process job in the queue.
+                queue.append(CompileQueue.PostProcess(self.shader_file, self.preprocess_args,
+                             self.output_path))
+            # If all the output says is the source file name, don't bother printing it.
+            if out.strip() == self.shader_file:
+                out = None
+            description = self.output_path + ': ' + self.shader_basename + self.variation_string
+            return (out, err, self.process.returncode, description,
+                    "Error compiling " + self.shader_file)
+
+    def __init__(self):
+        # Compile with as many CPU threads are detected.  Once a shader is compiled, a post-process
+        # job is automatically added to the queue.
+        self.queue = []
+        self.thread_count = multiprocessing.cpu_count()
+
+    def __wait_first(self, ignore_output=False):
+        (out, err, returncode, description, exception_description) = self.queue[0].wait(self.queue)
+        self.queue.pop(0)
+        if not ignore_output:
+            if description:
+                print description
+            if out and out.strip():
+                print out.strip()
+            if err and err.strip():
+                print err
+            if returncode != 0:
+                return exception_description
+        return None
+
+    # Wait for all pending tasks.  If called after error is detected, ignore_output can be used to
+    # make sure errors in later jobs are suppressed to avoid cluttering the output.  This is
+    # because the same compile error is likely present in other variations of the same shader and
+    # outputting the same error multiple times is not useful.
+    def __wait_all(self, ignore_output=False):
+        exception_description = None
+        while len(self.queue) > 0:
+            this_job_exception = self.__wait_first(ignore_output)
+            # If encountered an error, keep it to be raised, ignoring errors from following jobs.
+            if this_job_exception and not ignore_output:
+                exception_description = this_job_exception
+                ignore_output = True
+
+        return exception_description
+
+    def add_job(self, shader_file, shader_basename, variation_string, output_path,
+                compile_args, preprocess_args):
+        # If the queue is full, wait until there is at least one slot available.
+        while len(self.queue) >= self.thread_count:
+            exception = self.__wait_first(False)
+            # If encountered an exception, cleanup following jobs and raise it.
+            if exception:
+                self.__wait_all(True)
+                raise Exception(exception)
+
+        # Add a compile job
+        self.queue.append(CompileQueue.CompileToSPIRV(shader_file, shader_basename, variation_string,
+                                         output_path, compile_args, preprocess_args))
+
+    def terminate(self):
+        exception = self.__wait_all(False)
+        # If encountered an exception, cleanup following jobs and raise it.
+        if exception is not None:
+            raise Exception(exception)
+
+compile_queue = CompileQueue()
+
 def compile_variation(glslang_path, shader_file, shader_basename, flags, enums,
         flags_active, enum_indices, flags_bits, enum_bits, output_shaders):
 
@@ -295,17 +405,8 @@ def compile_variation(glslang_path, shader_file, shader_basename, flags, enums,
         glslang_args += ['-o', output_path]                            # Output file
         glslang_args.append(shader_file)                               # Input GLSL shader
 
-        print output_path + ': ' + shader_basename + variation_string
-        result = subprocess.call(glslang_args)
-        if result != 0:
-            raise Exception("Error compiling " + shader_file)
-
-        with open(output_path, 'ab') as incfile:
-            shader_text = subprocess.check_output(glslang_preprocessor_output_args)
-
-            incfile.write('\n\n#if 0  // Generated from:\n')
-            incfile.write(cleanup_preprocessed_shader(shader_text.replace('\r\n', '\n')))
-            incfile.write('\n#endif  // Preprocessed code\n')
+        compile_queue.add_job(shader_file, shader_basename, variation_string, output_path,
+                              glslang_args, glslang_preprocessor_output_args)
 
 class ShaderAndVariations:
     def __init__(self, shader_file):
@@ -513,6 +614,8 @@ def main():
     if print_outputs:
         print(','.join(outputs))
         return 0
+
+    compile_queue.terminate()
 
     # STEP 2: Consolidate the .inc files into an auto-generated cpp/h library.
     with open(out_file_cpp, 'w') as outfile:
