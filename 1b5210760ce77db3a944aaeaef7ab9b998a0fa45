@@ -70,6 +70,30 @@
       "revId": "1b5210760ce77db3a944aaeaef7ab9b998a0fa45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b1be445_71e961d1",
+        "filename": "src/compiler/translator/SymbolTable.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-04-09T15:10:40Z",
+      "side": 1,
+      "message": "Looking at all of the *Out qualifiers here: https://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/compiler/translator/BaseTypes.h#593\n\nAs well as 6 built-in vars that are in that list and specified as \"written.\"\n\nMakes sense that EvqOut should NOT be included. All of the other *Out qualifiers appear to be written by various types of shaders, which I believe means the invariant pragma should apply to them.",
+      "parentUuid": "a7ca6bed_643817c0",
+      "range": {
+        "startLine": 199,
+        "startChar": 63,
+        "endLine": 199,
+        "endChar": 78
+      },
+      "revId": "1b5210760ce77db3a944aaeaef7ab9b998a0fa45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
