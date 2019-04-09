@@ -46,6 +46,30 @@
       "revId": "1b5210760ce77db3a944aaeaef7ab9b998a0fa45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7ca6bed_643817c0",
+        "filename": "src/compiler/translator/SymbolTable.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T14:43:41Z",
+      "side": 1,
+      "message": "\u003e There are a number of *Out TQualifier values\n\nWhich ones are you looking at? EvqVaryingIn is a TStorageQualifier. You really only care about EvqVaryingOut I believe. EvqOut is for output parameters.",
+      "parentUuid": "ed141502_ebe09765",
+      "range": {
+        "startLine": 199,
+        "startChar": 63,
+        "endLine": 199,
+        "endChar": 78
+      },
+      "revId": "1b5210760ce77db3a944aaeaef7ab9b998a0fa45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
