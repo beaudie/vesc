@@ -299,7 +299,7 @@ WindowSurfaceVk::SwapHistory::SwapHistory(SwapHistory &&other)
 
 WindowSurfaceVk::SwapHistory &WindowSurfaceVk::SwapHistory::operator=(SwapHistory &&other)
 {
-    std::swap(serial, other.serial);
+    std::swap(fence, other.fence);
     std::swap(semaphores, other.semaphores);
     std::swap(swapchain, other.swapchain);
     return *this;
@@ -315,11 +315,23 @@ void WindowSurfaceVk::SwapHistory::destroy(VkDevice device)
         swapchain = VK_NULL_HANDLE;
     }
 
+    fence.reset(device);
+
     for (vk::Semaphore &semaphore : semaphores)
     {
         semaphore.destroy(device);
     }
     semaphores.clear();
+}
+
+angle::Result WindowSurfaceVk::SwapHistory::waitFence(DisplayVk *displayVk)
+{
+    if (fence)
+    {
+        ANGLE_VK_TRY(displayVk,
+                     fence->wait(displayVk->getDevice(), std::numeric_limits<uint64_t>::max()));
+    }
+    return angle::Result::Continue;
 }
 
 WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
@@ -710,8 +722,8 @@ angle::Result WindowSurfaceVk::present(DisplayVk *displayVk,
     SwapHistory &swap = mSwapHistory[mCurrentSwapHistoryIndex];
     {
         TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present: Throttle CPU");
-        ANGLE_TRY(renderer->finishToSerial(displayVk, swap.serial));
-        swap.destroy(renderer->getDevice());
+        ANGLE_TRY(swap.waitFence(displayVk));
+        swap.destroy(displayVk->getDevice());
     }
 
     SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
@@ -727,6 +739,9 @@ angle::Result WindowSurfaceVk::present(DisplayVk *displayVk,
     {
         ANGLE_TRY(generateSemaphoresForFlush(displayVk, &waitSemaphore, &signalSemaphore));
     }
+
+    // Grab the fence used for the last flush to know when the work to render this frame is done.
+    ANGLE_TRY(renderer->getSubmitFence(displayVk, &swap.fence));
 
     ANGLE_TRY(renderer->flush(displayVk, waitSemaphore, signalSemaphore));
 
@@ -776,7 +791,6 @@ angle::Result WindowSurfaceVk::present(DisplayVk *displayVk,
     }
 
     // Update the swap history for this presentation
-    swap.serial     = renderer->getLastSubmittedQueueSerial();
     swap.semaphores = std::move(mFlushSemaphoreChain);
     ++mCurrentSwapHistoryIndex;
     mCurrentSwapHistoryIndex =
