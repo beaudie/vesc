@@ -213,6 +213,9 @@ class RendererVk : angle::NonCopyable
     static constexpr size_t kMaxExtensionNames = 200;
     using ExtensionNameList = angle::FixedVector<const char *, kMaxExtensionNames>;
 
+    angle::Result onSetBlobCacheFuncs(DisplayVk *display);
+    void onNewGraphicsPipeline() { mPipelineCacheDirty = true; }
+
   private:
     // Number of semaphores for external entities to renderer to issue a wait, such as surface's
     // image acquire.
@@ -230,7 +233,7 @@ class RendererVk : angle::NonCopyable
     angle::Result flushCommandGraph(vk::Context *context, vk::PrimaryCommandBuffer *commandBatch);
     void initFeatures(const ExtensionNameList &extensions);
     void initPipelineCacheVkKey();
-    angle::Result initPipelineCache(DisplayVk *display);
+    angle::Result initPipelineCache(DisplayVk *display, vk::PipelineCache *pipelineCache);
 
     angle::Result synchronizeCpuGpuTime(vk::Context *context,
                                         const vk::Semaphore *waitSemaphore,
@@ -303,6 +306,7 @@ class RendererVk : angle::NonCopyable
     vk::PipelineCache mPipelineCache;
     egl::BlobCache::Key mPipelineCacheVkBlobKey;
     uint32_t mPipelineCacheVkUpdateTimeout;
+    bool mPipelineCacheDirty;
 
     // A cache of VkFormatProperties as queried from the device over time.
     std::array<VkFormatProperties, vk::kNumVkFormats> mFormatProperties;
