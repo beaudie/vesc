@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "52de6e2c_9823ea0c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-09T20:55:07Z",
+      "side": 1,
+      "message": "on Android",
+      "revId": "8f187c75cbd8b8e4b51dcad887f73505bc8b84b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
