@@ -296,7 +296,7 @@ WindowSurfaceVk::SwapHistory::SwapHistory(SwapHistory &&other)
 
 WindowSurfaceVk::SwapHistory &WindowSurfaceVk::SwapHistory::operator=(SwapHistory &&other)
 {
-    std::swap(serial, other.serial);
+    std::swap(fence, other.fence);
     std::swap(semaphores, other.semaphores);
     std::swap(swapchain, other.swapchain);
     return *this;
@@ -312,11 +312,23 @@ void WindowSurfaceVk::SwapHistory::destroy(VkDevice device)
         swapchain = VK_NULL_HANDLE;
     }
 
+    fence.reset(device);
+
     for (vk::Semaphore &semaphore : semaphores)
     {
         semaphore.destroy(device);
     }
     semaphores.clear();
+}
+
+angle::Result WindowSurfaceVk::SwapHistory::waitFence(ContextVk *context)
+{
+    if (fence)
+    {
+        ANGLE_VK_TRY(context,
+                     fence->wait(context->getDevice(), std::numeric_limits<uint64_t>::max()));
+    }
+    return angle::Result::Continue;
 }
 
 WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
@@ -739,10 +751,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     // Throttle the submissions to avoid getting too far ahead of the GPU.
     SwapHistory &swap = mSwapHistory[mCurrentSwapHistoryIndex];
     {
-        // TODO: Can't finishToSerial on a serial from another context that this surface may have
-        // swapped with.  Need to use fences.
         TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present: Throttle CPU");
-        ANGLE_TRY(contextVk->finishToSerial(swap.serial));
+        ANGLE_TRY(swap.waitFence(contextVk));
         swap.destroy(contextVk->getDevice());
     }
 
@@ -752,6 +762,9 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     ANGLE_TRY(image.image.recordCommands(contextVk, &swapCommands));
 
     image.image.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::Present, swapCommands);
+
+    // Grab the fence used for the last flush to know when the work to render this frame is done.
+    ANGLE_TRY(contextVk->getSubmitFence(&swap.fence));
 
     ANGLE_TRY(contextVk->flushImpl());
 
@@ -801,7 +814,6 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     }
 
     // Update the swap history for this presentation
-    swap.serial     = contextVk->getLastSubmittedQueueSerial();
     swap.semaphores = std::move(mFlushSemaphoreChain);
 
     ++mCurrentSwapHistoryIndex;
