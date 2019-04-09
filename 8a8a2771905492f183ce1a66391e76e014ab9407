@@ -22,6 +22,29 @@
       "revId": "8a8a2771905492f183ce1a66391e76e014ab9407",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32cee460_52254419",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T17:01:30Z",
+      "side": 1,
+      "message": "can you move this to util.h/cpp and make it return IsVaryingOut() || IsBuiltinOutputVariable()?\n\nAlso if you could call it IsShaderOutput() to match the style of the existing functions.",
+      "range": {
+        "startLine": 692,
+        "startChar": 0,
+        "endLine": 701,
+        "endChar": 0
+      },
+      "revId": "8a8a2771905492f183ce1a66391e76e014ab9407",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

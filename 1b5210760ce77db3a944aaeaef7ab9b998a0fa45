@@ -94,6 +94,30 @@
       "revId": "1b5210760ce77db3a944aaeaef7ab9b998a0fa45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "432dcc1f_244ae729",
+        "filename": "src/compiler/translator/SymbolTable.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-09T17:01:30Z",
+      "side": 1,
+      "message": "Drat. I was looking at the glslang copy instead of ANGLE\u0027s. You\u0027re right. I added a comment to your new method.",
+      "parentUuid": "5b1be445_71e961d1",
+      "range": {
+        "startLine": 199,
+        "startChar": 63,
+        "endLine": 199,
+        "endChar": 78
+      },
+      "revId": "1b5210760ce77db3a944aaeaef7ab9b998a0fa45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
