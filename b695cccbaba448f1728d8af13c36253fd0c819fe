@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "538c73fd_0baa85ab",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-10T19:49:37Z",
+      "side": 1,
+      "message": "I was reluctant to make the change in these instances because these parameters mirror the names of parameters in gl.xml. And at some point we might auto-generate the declarations for these functions. Although it is a bit confusing.",
+      "parentUuid": "56c78525_0dda966b",
+      "revId": "b695cccbaba448f1728d8af13c36253fd0c819fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "143ba104_c2223a26",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 5
