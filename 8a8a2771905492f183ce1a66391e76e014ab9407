@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d69f7523_a2256035",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-10T14:09:48Z",
+      "side": 1,
+      "message": "My latest conclusion on this is: the earlier specs are wrong.\nThey fixed the spec when they made FS input invariance implicit.\nBut what should shader writers have done in earlier versions when they used the pragma in VS?\nMark every FS input invariant explicitly?\nThis doesn\u0027t seem realistic.\nMore realistic seems to use the pragma in FS as well, and expect that it will make the inputs invariant.\nAnd from WebGL testing, looks like this is the behavior that drivers implemented.\n\nAlso, using the pragma in FS to make outputs invariant doesn\u0027t make sense, since there are no programmable pipeline stages after FS.\nThis was fixed in the spec versions that disallow the pragma in FS.\n\nThus, my final conclusion is: if the spec allows the pragma in FS, it should make FS inputs invariant.\nThat\u0027s what I\u0027ve realized in https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d1293#c33",
+      "parentUuid": "2e12633f_6a0209db",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 70
+      },
+      "revId": "8a8a2771905492f183ce1a66391e76e014ab9407",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9a4473a0_f9954c79",
         "filename": "src/compiler/translator/BaseTypes.h",
         "patchSetId": 2
