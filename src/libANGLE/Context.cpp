@@ -138,7 +138,13 @@ EGLint GetClientMinorVersion(const egl::AttributeMap &attribs)
 
 Version GetClientVersion(const egl::AttributeMap &attribs)
 {
-    return Version(GetClientMajorVersion(attribs), GetClientMinorVersion(attribs));
+    EGLint major = GetClientMajorVersion(attribs);
+    EGLint minor = GetClientMinorVersion(attribs);
+    if (major == 2 && minor == 0)
+    {
+        major = 3;
+    }
+    return Version(major, minor);
 }
 
 GLenum GetResetStrategy(const egl::AttributeMap &attribs)
