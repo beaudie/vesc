@@ -486,6 +486,28 @@ void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
     }
 }
 
+angle::Result WaitFences(vk::Context *context,
+                         std::vector<vk::Shared<vk::Fence>> *fences,
+                         uint64_t timeout)
+{
+    // Iterate backwards over the fences, removing them from the list in constant time when they are
+    // complete.
+    while (!fences->empty())
+    {
+        VkResult result = fences->back()->wait(context->getDevice(), timeout);
+        if (result == VK_TIMEOUT)
+        {
+            return angle::Result::Continue;
+        }
+        ANGLE_VK_TRY(context, result);
+
+        fences->back().reset(context->getDevice());
+        fences->pop_back();
+    }
+
+    return angle::Result::Continue;
+}
+
 // Initially dumping the command graphs is disabled.
 constexpr bool kEnableCommandGraphDiagnostics = false;
 
@@ -544,11 +566,15 @@ RendererVk::RendererVk()
     mFormatProperties.fill(invalid);
 }
 
-RendererVk::~RendererVk() {}
+RendererVk::~RendererVk()
+{
+    ASSERT(mGarbage.empty());
+    ASSERT(mFencedGarbage.empty());
+}
 
 void RendererVk::onDestroy(vk::Context *context)
 {
-    if (!mInFlightCommands.empty() || !mGarbage.empty())
+    if (!mInFlightCommands.empty() || !mGarbage.empty() || !mFencedGarbage.empty())
     {
         // TODO(jmadill): Not nice to pass nullptr here, but shouldn't be a problem.
         (void)finish(context, nullptr, nullptr);
@@ -1392,6 +1418,9 @@ angle::Result RendererVk::finish(vk::Context *context,
     ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueue));
     freeAllInFlightResources();
 
+    ANGLE_TRY(checkFencedGarbage(context, 0));
+    ASSERT(mFencedGarbage.empty());
+
     if (mGpuEventsEnabled)
     {
         // This loop should in practice execute once since the queue is already idle.
@@ -1472,6 +1501,8 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
     {
         mGarbage.erase(mGarbage.begin(), mGarbage.begin() + freeIndex);
     }
+
+    ANGLE_TRY(checkFencedGarbage(context, 0));
 
     return angle::Result::Continue;
 }
@@ -1724,6 +1755,17 @@ angle::Result RendererVk::getSubmitFence(vk::Context *context,
 
     sharedFenceOut->copy(mDevice, mSubmitFence);
     return angle::Result::Continue;
+}
+
+vk::Shared<vk::Fence> RendererVk::getLastSubmittedFence() const
+{
+    vk::Shared<vk::Fence> fence;
+    if (!mInFlightCommands.empty())
+    {
+        fence.copy(getDevice(), mInFlightCommands.back().fence);
+    }
+
+    return fence;
 }
 
 angle::Result RendererVk::getTimestamp(vk::Context *context, uint64_t *timestampOut)
@@ -2070,6 +2112,8 @@ angle::Result RendererVk::synchronizeCpuGpuTime(vk::Context *context,
     mGpuClockSync.gpuTimestampS = TgpuS;
     mGpuClockSync.cpuTimestampS = TcpuS;
 
+    ANGLE_TRY(checkFencedGarbage(context, 0));
+
     return angle::Result::Continue;
 }
 
@@ -2193,6 +2237,20 @@ void RendererVk::flushGpuEvents(double nextSyncGpuTimestampS, double nextSyncCpu
     mGpuEvents.clear();
 }
 
+void RendererVk::addGarbage(vk::Shared<vk::Fence> &&fence,
+                            std::vector<vk::GarbageObjectBase> &&garbage)
+{
+    std::vector<vk::Shared<vk::Fence>> fences;
+    fences.push_back(std::move(fence));
+    addGarbage(std::move(fences), std::move(garbage));
+}
+
+void RendererVk::addGarbage(std::vector<vk::Shared<vk::Fence>> &&fences,
+                            std::vector<vk::GarbageObjectBase> &&garbage)
+{
+    mFencedGarbage.emplace_back(std::move(fences), std::move(garbage));
+}
+
 template <VkFormatFeatureFlags VkFormatProperties::*features>
 VkFormatFeatureFlags RendererVk::getFormatFeatureBits(VkFormat format,
                                                       const VkFormatFeatureFlags featureBits)
@@ -2221,6 +2279,29 @@ template <VkFormatFeatureFlags VkFormatProperties::*features>
 bool RendererVk::hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits)
 {
     return IsMaskFlagSet(getFormatFeatureBits<features>(format, featureBits), featureBits);
+}
+
+angle::Result RendererVk::checkFencedGarbage(vk::Context *context, uint64_t waitTimeout)
+{
+    auto garbageIter = mFencedGarbage.begin();
+    while (garbageIter != mFencedGarbage.end())
+    {
+        ANGLE_TRY(WaitFences(context, &garbageIter->first, waitTimeout));
+        if (garbageIter->first.empty())
+        {
+            for (vk::GarbageObjectBase &garbageObject : garbageIter->second)
+            {
+                garbageObject.destroy(mDevice);
+            }
+            garbageIter = mFencedGarbage.erase(garbageIter);
+        }
+        else
+        {
+            garbageIter++;
+        }
+    }
+
+    return angle::Result::Continue;
 }
 
 uint32_t GetUniformBufferDescriptorCount()
