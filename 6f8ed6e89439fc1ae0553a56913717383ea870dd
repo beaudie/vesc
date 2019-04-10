@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc21d914_8711ea25",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-10T16:46:46Z",
+      "side": 1,
+      "message": "You should be able to do: `[ANGLE auto-rollers](#task-3_the-auto_rollers)` which would avoid reloading the page.",
+      "revId": "6f8ed6e89439fc1ae0553a56913717383ea870dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
