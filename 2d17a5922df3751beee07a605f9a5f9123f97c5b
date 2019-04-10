@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5b6414f6_9d90ab3d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2019-04-10T09:57:30Z",
+      "side": 1,
+      "message": "Shall we just remove this variable and use mCurrentElementArrayBufferOffset instead?",
+      "range": {
+        "startLine": 324,
+        "startChar": 23,
+        "endLine": 324,
+        "endChar": 45
+      },
+      "revId": "2d17a5922df3751beee07a605f9a5f9123f97c5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
