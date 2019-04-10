@@ -454,6 +454,28 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
     vkGetPhysicalDeviceProperties(*physicalDeviceOut, physicalDevicePropertiesOut);
 }
 
+angle::Result WaitFences(vk::Context *context,
+                         std::vector<vk::Shared<vk::Fence>> *fences,
+                         uint64_t timeout)
+{
+    // Iterate backwards over the fences, removing them from the list in constant time when they are
+    // complete.
+    while (!fences->empty())
+    {
+        VkResult result = fences->back()->wait(context->getDevice(), timeout);
+        if (result == VK_TIMEOUT)
+        {
+            return angle::Result::Continue;
+        }
+        ANGLE_VK_TRY(context, result);
+
+        fences->back().reset(context->getDevice());
+        fences->pop_back();
+    }
+
+    return angle::Result::Continue;
+}
+
 }  // anonymous namespace
 
 // RendererVk implementation.
@@ -478,10 +500,15 @@ RendererVk::RendererVk()
     mFormatProperties.fill(invalid);
 }
 
-RendererVk::~RendererVk() {}
+RendererVk::~RendererVk()
+{
+    ASSERT(mGarbage.empty());
+}
 
 void RendererVk::onDestroy(vk::Context *context)
 {
+    (void)checkGarbage(context, std::numeric_limits<uint64_t>::max());
+
     mPipelineCache.destroy(mDevice);
 
     GlslangWrapper::Release();
@@ -1320,6 +1347,8 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
     // TODO: synchronize queue access
     ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, fence.getHandle()));
 
+    ANGLE_TRY(checkGarbage(context, 0));
+
     return angle::Result::Continue;
 }
 
@@ -1327,6 +1356,9 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context)
 {
     // TODO: synchronize queue access
     ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueue));
+
+    ANGLE_TRY(checkGarbage(context, 0));
+
     return angle::Result::Continue;
 }
 
@@ -1339,6 +1371,20 @@ VkResult RendererVk::queuePresent(const VkPresentInfoKHR &presentInfo)
 Serial RendererVk::nextSerial()
 {
     return mQueueSerialFactory.generate();
+}
+
+void RendererVk::addGarbage(vk::Shared<vk::Fence> &&fence,
+                            std::vector<vk::GarbageObjectBase> &&garbage)
+{
+    std::vector<vk::Shared<vk::Fence>> fences;
+    fences.push_back(std::move(fence));
+    addGarbage(std::move(fences), std::move(garbage));
+}
+
+void RendererVk::addGarbage(std::vector<vk::Shared<vk::Fence>> &&fences,
+                            std::vector<vk::GarbageObjectBase> &&garbage)
+{
+    mGarbage.emplace_back(std::move(fences), std::move(garbage));
 }
 
 template <VkFormatFeatureFlags VkFormatProperties::*features>
@@ -1369,6 +1415,29 @@ template <VkFormatFeatureFlags VkFormatProperties::*features>
 bool RendererVk::hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits)
 {
     return IsMaskFlagSet(getFormatFeatureBits<features>(format, featureBits), featureBits);
+}
+
+angle::Result RendererVk::checkGarbage(vk::Context *context, uint64_t waitTimeout)
+{
+    auto garbageIter = mGarbage.begin();
+    while (garbageIter != mGarbage.end())
+    {
+        ANGLE_TRY(WaitFences(context, &garbageIter->first, waitTimeout));
+        if (garbageIter->first.empty())
+        {
+            for (vk::GarbageObjectBase &garbageObject : garbageIter->second)
+            {
+                garbageObject.destroy(mDevice);
+            }
+            garbageIter = mGarbage.erase(garbageIter);
+        }
+        else
+        {
+            garbageIter++;
+        }
+    }
+
+    return angle::Result::Continue;
 }
 
 uint32_t GetUniformBufferDescriptorCount()
