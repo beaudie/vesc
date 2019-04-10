@@ -415,27 +415,11 @@ angle::Result InitShaderAndSerial(Context *context,
     return angle::Result::Continue;
 }
 
-// GarbageObject implementation.
-GarbageObject::GarbageObject()
-    : mSerial(), mHandleType(HandleType::Invalid), mHandle(VK_NULL_HANDLE)
+GarbageObjectBase::GarbageObjectBase() : mHandleType(HandleType::Invalid), mHandle(VK_NULL_HANDLE)
 {}
 
-GarbageObject::GarbageObject(const GarbageObject &other) = default;
-
-GarbageObject &GarbageObject::operator=(const GarbageObject &other) = default;
-
-bool GarbageObject::destroyIfComplete(VkDevice device, Serial completedSerial)
-{
-    if (completedSerial >= mSerial)
-    {
-        destroy(device);
-        return true;
-    }
-
-    return false;
-}
-
-void GarbageObject::destroy(VkDevice device)
+// GarbageObjectBase implementation
+void GarbageObjectBase::destroy(VkDevice device)
 {
     switch (mHandleType)
     {
@@ -503,6 +487,84 @@ void GarbageObject::destroy(VkDevice device)
             break;
     }
 }
+
+// GarbageObject implementation.
+GarbageObject::GarbageObject() : mSerial() {}
+
+GarbageObject::GarbageObject(const GarbageObject &other) = default;
+
+GarbageObject &GarbageObject::operator=(const GarbageObject &other) = default;
+
+bool GarbageObject::destroyIfComplete(VkDevice device, Serial completedSerial)
+{
+    if (completedSerial >= mSerial)
+    {
+        destroy(device);
+        return true;
+    }
+
+    return false;
+}
+
+/*
+FencedGarbageObject::FencedGarbageObject(FencedGarbageObject &&moveFrom)
+{
+    *this = std::move(moveFrom);
+}
+
+FencedGarbageObject& FencedGarbageObject::operator=(FencedGarbageObject&& moveFrom)
+{
+    mFences = std::move(moveFrom.mFences);
+    mHandleType = std::move(moveFrom.mHandleType);
+    mHandle = std::move(moveFrom.mHandle);
+
+    return *this;
+}
+
+bool FencedGarbageObject::destroyIfComplete(VkDevice device)
+{
+    if (!waitFences(device, 0))
+    {
+        return false;
+    }
+
+    destroy(device);
+    return true;
+}
+
+void FencedGarbageObject::waitAndDestroy(VkDevice device)
+{
+    bool fencesFinished = waitFences(device, std::numeric_limits<uint64_t>::max());
+    ASSERT(fencesFinished);
+
+    destroy(device);
+}
+
+void FencedGarbageObject::destroy(VkDevice device)
+{
+    DestroyObjectByType(device, mHandleType, mHandle);
+}
+
+bool FencedGarbageObject::waitFences(VkDevice device, uint64_t timeout)
+{
+    // Iterate backwards over the fences, removing them from the list in constant time when they are
+complete. while (!mFences.empty())
+    {
+        if (mFences.back()->wait(device, timeout) == VK_TIMEOUT)
+        {
+            return false;
+        }
+
+        mFences.back().reset(device);
+        mFences.pop_back();
+
+    }
+
+    return true;
+}
+
+FencedGarbageObject::~FencedGarbageObject() = default;
+*/
 }  // namespace vk
 
 // VK_EXT_debug_utils
