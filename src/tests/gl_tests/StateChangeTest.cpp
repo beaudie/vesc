@@ -1184,7 +1184,7 @@ TEST_P(LineLoopStateChangeTest, DrawElementsThenDrawArrays)
 
     // We expect to draw a square with these 4 vertices with a drawArray call.
     std::vector<Vector3> vertices;
-    CreatePixelCenterWindowCoords({{8, 8}, {8, 24}, {24, 8}, {24, 24}}, getWindowWidth(),
+    CreatePixelCenterWindowCoords({{8, 8}, {8, 24}, {24, 24}, {24, 8}}, getWindowWidth(),
                                   getWindowHeight(), &vertices);
 
     // If we use these indices to draw however, we should be drawing an hourglass.
@@ -1225,7 +1225,7 @@ TEST_P(LineLoopStateChangeTest, DrawArraysThenDrawElements)
 
     // We expect to draw a square with these 4 vertices with a drawArray call.
     std::vector<Vector3> vertices;
-    CreatePixelCenterWindowCoords({{8, 8}, {8, 24}, {24, 8}, {24, 24}}, getWindowWidth(),
+    CreatePixelCenterWindowCoords({{8, 8}, {8, 24}, {24, 24}, {24, 8}}, getWindowWidth(),
                                   getWindowHeight(), &vertices);
 
     // If we use these indices to draw however, we should be drawing an hourglass.
