@@ -33,10 +33,10 @@ void FenceSyncVk::onDestroy(ContextVk *contextVk)
 
 void FenceSyncVk::onDestroy(vk::Context *context)
 {
-    // TODO:Garbage collect the fence in the renderer
-    (void)context->getRenderer()->queueWaitIdle(context);
-    mEvent.destroy(context->getDevice());
-    mFence.reset(context->getDevice());
+    std::vector<vk::GarbageObjectBase> garbage;
+    mEvent.dumpResources(&garbage);
+
+    context->getRenderer()->addGarbage(std::move(mFence), std::move(garbage));
 }
 
 angle::Result FenceSyncVk::initialize(ContextVk *contextVk)
