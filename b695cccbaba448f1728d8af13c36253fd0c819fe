@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "e156c0ae_7d779c4d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-10T20:29:06Z",
+      "side": 1,
+      "message": "Ah I see. I was only saying this because my original instinct when reading this code was to require an extra TextureTargetToType() wrapped around it.\nA kinda dumb solution is to reinstantiate a new copy \"type\" with a comment explaining.\nBut I have a feeling I was only prompted to think this way because I\u0027m scrolling through the CL and the change before this has TextureTargetToType(target) highlighted in green. Up to you!",
+      "parentUuid": "538c73fd_0baa85ab",
+      "revId": "b695cccbaba448f1728d8af13c36253fd0c819fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "143ba104_c2223a26",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 5
