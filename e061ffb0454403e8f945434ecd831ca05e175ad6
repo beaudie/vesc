@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "838fb20a_14046913",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-10T12:04:09Z",
+      "side": 1,
+      "message": "We should percolate the error up. There\u0027s two places it ends up being called. EGL_SetBlobCacheFuncsANDROID (which can handle an EGL error) and Display::terminate (which also handles an EGL error).",
+      "parentUuid": "92d10fff_d81df255",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 26
+      },
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d5d7415c_5fb21cbd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -197,6 +221,24 @@
       "side": 1,
       "message": "Thank you for the inputs here.\n1. I think kPipelineCacheVkUpdatePeriod can not be too large, imagine it\u0027s a benchmark, like T-Rex, it even don\u0027t need 1 minute to finish the running. I mean, we should consider short-running, but heavy shaders cases. And another scenario is, as we defer the pipeline creation, we can never cache it if it\u0027s created in the last \"kPipelineCacheVkUpdatePeriod - 1\" frames.\n2. I don\u0027t think using a count of new pipelines check is a good idea, as we will always miss to cache the last X-1 pipelines. And the number X is hard to decide.\n\nSo my current proposal is a trade-off of caching as more data as possible(by using a relevant small number of kPipelineCacheVkUpdatePeriod) and in the meanwhile reducing the times of cache data write(by also check if there\u0027s any new pipeline has been created since last write).\n\nHow do you think?",
       "parentUuid": "8b2edf50_084ab1cc",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af444cdf_7e9860df",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-10T12:04:09Z",
+      "side": 1,
+      "message": "Why not just use X \u003d 0? Update the cache on swap if there are any new pipelines. How slow is the cache update?",
+      "parentUuid": "184e976a_b02b583b",
       "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
