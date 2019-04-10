@@ -16,6 +16,24 @@
       "revId": "6f8ed6e89439fc1ae0553a56913717383ea870dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f760d10e_01fb9f4b",
+        "filename": "infra/ANGLEWrangling.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-10T17:09:25Z",
+      "side": 1,
+      "message": "Thanks! That works.",
+      "parentUuid": "cc21d914_8711ea25",
+      "revId": "6f8ed6e89439fc1ae0553a56913717383ea870dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
