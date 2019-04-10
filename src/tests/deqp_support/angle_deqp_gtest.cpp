@@ -215,17 +215,18 @@ class dEQPCaseList
         return mCaseInfoList.size();
     }
 
+    uint32_t getSkippedCount() const { return mSkippedCount; }
+
   private:
     std::vector<CaseInfo> mCaseInfoList;
     angle::GPUTestExpectationsParser mTestExpectationsParser;
     angle::GPUTestBotConfig mTestConfig;
     size_t mTestModuleIndex;
-    bool mInitialized;
+    bool mInitialized      = false;
+    uint32_t mSkippedCount = 0;
 };
 
-dEQPCaseList::dEQPCaseList(size_t testModuleIndex)
-    : mTestModuleIndex(testModuleIndex), mInitialized(false)
-{}
+dEQPCaseList::dEQPCaseList(size_t testModuleIndex) : mTestModuleIndex(testModuleIndex) {}
 
 void dEQPCaseList::initialize()
 {
@@ -304,23 +305,10 @@ void dEQPCaseList::initialize()
         {
             mCaseInfoList.push_back(CaseInfo(dEQPName, gTestName, expectation));
         }
-    }
-}
-
-bool TestPassed(TestResult result)
-{
-    switch (result)
-    {
-        case TestResult::Pass:
-            return true;
-        case TestResult::Fail:
-            return false;
-        case TestResult::NotSupported:
-            return true;
-        case TestResult::Exception:
-            return false;
-        default:
-            return false;
+        else
+        {
+            mSkippedCount++;
+        }
     }
 }
 
@@ -364,59 +352,116 @@ class dEQPTest : public testing::TestWithParam<size_t>
         gExpectError = (caseInfo.mExpectation != angle::GPUTestExpectationsParser::kGpuTestPass);
         TestResult result = deqp_libtester_run(caseInfo.mDEQPName.c_str());
 
-        bool testPassed = TestPassed(result);
+        bool testSucceeded = countTestResultAndReturnSuccess(result);
 
         // Check the global error flag for unexpected platform errors.
         if (gGlobalError)
         {
-            testPassed   = false;
-            gGlobalError = false;
+            testSucceeded = false;
+            gGlobalError  = false;
         }
 
         if (caseInfo.mExpectation == angle::GPUTestExpectationsParser::kGpuTestPass)
         {
-            EXPECT_TRUE(testPassed);
-            sPasses += (testPassed ? 1u : 0u);
-            sFails += (!testPassed ? 1u : 0u);
+            EXPECT_TRUE(testSucceeded);
+
+            if (!testSucceeded)
+            {
+                sUnexpectedFailed.push_back(caseInfo.mDEQPName);
+            }
         }
-        else if (testPassed)
+        else if (testSucceeded)
         {
             std::cout << "Test expected to fail but passed!" << std::endl;
-            sUnexpectedPasses++;
-        }
-        else
-        {
-            sFails++;
-        }
-
-        if (result == TestResult::Exception)
-        {
-            sExceptions++;
+            sUnexpectedPasses.push_back(caseInfo.mDEQPName);
         }
     }
 
-    static unsigned int sPasses;
-    static unsigned int sFails;
-    static unsigned int sUnexpectedPasses;
-    static unsigned int sExceptions;
+    bool countTestResultAndReturnSuccess(TestResult result) const
+    {
+        switch (result)
+        {
+            case TestResult::Pass:
+                sPasses++;
+                return true;
+            case TestResult::Fail:
+                sFails++;
+                return false;
+            case TestResult::NotSupported:
+                sNotSupported++;
+                return true;
+            case TestResult::Exception:
+                sExceptions++;
+                return false;
+            default:
+                std::cerr << "Unexpected test result code: " << static_cast<int>(result) << "\n";
+                return false;
+        }
+    }
+
+    static void PrintTestStats()
+    {
+        uint32_t skips = GetCaseList().getSkippedCount();
+        uint32_t total = sPasses + sFails + skips + sExceptions + sNotSupported;
+
+        std::cout << "Total: " << total << " tests.\n";
+        std::cout << "Passed: " << sPasses << " tests.\n";
+        std::cout << "Failed: " << sFails << " tests.\n";
+        std::cout << "Skipped: " << skips << " tests.\n";
+        std::cout << "Not Supported: " << sNotSupported << " tests.\n";
+        std::cout << "Exception: " << sExceptions << " tests.\n";
+
+        if (!sUnexpectedPasses.empty())
+        {
+            std::cout << "\nSome tests unexpectedly passed:\n";
+            for (const std::string &testName : sUnexpectedPasses)
+            {
+                std::cout << testName << " unexpectedly passed.\n";
+            }
+        }
+
+        if (!sUnexpectedFailed.empty())
+        {
+            std::cout << "\nSome tests unexpectedly failed:\n";
+            for (const std::string &testName : sUnexpectedFailed)
+            {
+                std::cout << testName << " unexpectedly failed.\n";
+            }
+        }
+    }
+
+    static uint32_t sPasses;
+    static uint32_t sFails;
+    static uint32_t sExceptions;
+    static uint32_t sNotSupported;
+
+    static std::vector<std::string> sUnexpectedFailed;
+    static std::vector<std::string> sUnexpectedPasses;
 };
 
 template <size_t TestModuleIndex>
-unsigned int dEQPTest<TestModuleIndex>::sPasses = 0;
+uint32_t dEQPTest<TestModuleIndex>::sPasses = 0;
 template <size_t TestModuleIndex>
-unsigned int dEQPTest<TestModuleIndex>::sFails = 0;
+uint32_t dEQPTest<TestModuleIndex>::sFails = 0;
 template <size_t TestModuleIndex>
-unsigned int dEQPTest<TestModuleIndex>::sUnexpectedPasses = 0;
+uint32_t dEQPTest<TestModuleIndex>::sExceptions = 0;
 template <size_t TestModuleIndex>
-unsigned int dEQPTest<TestModuleIndex>::sExceptions = 0;
+uint32_t dEQPTest<TestModuleIndex>::sNotSupported = 0;
+
+template <size_t TestModuleIndex>
+std::vector<std::string> dEQPTest<TestModuleIndex>::sUnexpectedFailed;
+template <size_t TestModuleIndex>
+std::vector<std::string> dEQPTest<TestModuleIndex>::sUnexpectedPasses;
 
 // static
 template <size_t TestModuleIndex>
 void dEQPTest<TestModuleIndex>::SetUpTestCase()
 {
-    sPasses           = 0;
-    sFails            = 0;
-    sUnexpectedPasses = 0;
+    sPasses       = 0;
+    sFails        = 0;
+    sNotSupported = 0;
+    sExceptions   = 0;
+    sUnexpectedPasses.clear();
 
     std::vector<const char *> argv;
 
@@ -446,21 +491,7 @@ void dEQPTest<TestModuleIndex>::SetUpTestCase()
 template <size_t TestModuleIndex>
 void dEQPTest<TestModuleIndex>::TearDownTestCase()
 {
-    unsigned int total = sPasses + sFails;
-    float passFrac     = static_cast<float>(sPasses) / static_cast<float>(total) * 100.0f;
-    float failFrac     = static_cast<float>(sFails) / static_cast<float>(total) * 100.0f;
-    std::cout << "Passed: " << sPasses << "/" << total << " tests. (" << passFrac << "%)"
-              << std::endl;
-    if (sFails > 0)
-    {
-        std::cout << "Failed: " << sFails << "/" << total << " tests. (" << failFrac << "%)"
-                  << std::endl;
-    }
-    if (sUnexpectedPasses > 0)
-    {
-        std::cout << sUnexpectedPasses << " tests unexpectedly passed." << std::endl;
-    }
-
+    PrintTestStats();
     deqp_libtester_shutdown_platform();
 }
 
