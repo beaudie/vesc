@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d8d0080b_16d4694d",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 985,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-10T15:57:20Z",
+      "side": 1,
+      "message": "This makes the test meaningless, would be better to remove the test entirely.",
+      "range": {
+        "startLine": 985,
+        "startChar": 9,
+        "endLine": 985,
+        "endChar": 18
+      },
+      "revId": "855e940e8397999318f5053634bf1483b4cf2902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25cc2f72_d5bcb27e",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-10T15:57:20Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 1159,
+        "startChar": 9,
+        "endLine": 1159,
+        "endChar": 18
+      },
+      "revId": "855e940e8397999318f5053634bf1483b4cf2902",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
