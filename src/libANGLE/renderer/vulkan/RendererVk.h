@@ -129,6 +129,10 @@ class RendererVk : angle::NonCopyable
 
     Serial nextSerial();
 
+    void addGarbage(vk::Shared<vk::Fence> &&fence, std::vector<vk::GarbageObjectBase> &&garbage);
+    void addGarbage(std::vector<vk::Shared<vk::Fence>> &&fences,
+                    std::vector<vk::GarbageObjectBase> &&garbage);
+
     static constexpr size_t kMaxExtensionNames = 200;
     using ExtensionNameList = angle::FixedVector<const char *, kMaxExtensionNames>;
 
@@ -146,6 +150,8 @@ class RendererVk : angle::NonCopyable
 
     template <VkFormatFeatureFlags VkFormatProperties::*features>
     bool hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
+
+    angle::Result checkGarbage(vk::Context *context, uint64_t waitTimeout);
 
     egl::Display *mDisplay;
 
@@ -185,6 +191,11 @@ class RendererVk : angle::NonCopyable
 
     // A cache of VkFormatProperties as queried from the device over time.
     std::array<VkFormatProperties, vk::kNumVkFormats> mFormatProperties;
+
+    // Pending garbage
+    using PendingGarbage =
+        std::pair<std::vector<vk::Shared<vk::Fence>>, std::vector<vk::GarbageObjectBase>>;
+    std::vector<PendingGarbage> mGarbage;
 };
 
 uint32_t GetUniformBufferDescriptorCount();
