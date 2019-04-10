@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60cc0185_f7dd7664",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-04-10T23:21:02Z",
+      "side": 1,
+      "message": "Should this say \"into [Vulkan] SPIR-V\" or something of that nature. Translation something \"into Vulkan\" doesn\u0027t make sense to me.",
+      "revId": "8aa131e449c514cd8b0c311089795fa5fc508855",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f0f3fc7_aefbb8e2",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-04-10T23:21:02Z",
+      "side": 1,
+      "message": "Maybe put a little ASCI flow diagram here as a nice summary. Here\u0027s a quick stab at it, but Shabi\u0027s better w/ ASCI art than me:\n\nSo the high-level flow is:\ninput shader-\u003eVK GLSL-\u003eSPIR-V-\u003eGPU native shader in PSO",
+      "revId": "8aa131e449c514cd8b0c311089795fa5fc508855",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
