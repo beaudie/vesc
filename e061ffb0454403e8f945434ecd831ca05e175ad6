@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "92d10fff_d81df255",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-04-10T02:55:11Z",
+      "side": 1,
+      "message": "This function\u0027s callers are all void functions, so I prefer to log the error here.",
+      "parentUuid": "f7b2f825_b593eb48",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 26
+      },
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d5d7415c_5fb21cbd",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -161,6 +185,24 @@
     },
     {
       "key": {
+        "uuid": "184e976a_b02b583b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-04-10T02:55:11Z",
+      "side": 1,
+      "message": "Thank you for the inputs here.\n1. I think kPipelineCacheVkUpdatePeriod can not be too large, imagine it\u0027s a benchmark, like T-Rex, it even don\u0027t need 1 minute to finish the running. I mean, we should consider short-running, but heavy shaders cases. And another scenario is, as we defer the pipeline creation, we can never cache it if it\u0027s created in the last \"kPipelineCacheVkUpdatePeriod - 1\" frames.\n2. I don\u0027t think using a count of new pipelines check is a good idea, as we will always miss to cache the last X-1 pipelines. And the number X is hard to decide.\n\nSo my current proposal is a trade-off of caching as more data as possible(by using a relevant small number of kPipelineCacheVkUpdatePeriod) and in the meanwhile reducing the times of cache data write(by also check if there\u0027s any new pipeline has been created since last write).\n\nHow do you think?",
+      "parentUuid": "8b2edf50_084ab1cc",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f22d2eb5_ab791ec7",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
@@ -190,6 +232,24 @@
       "side": 1,
       "message": "Also, what happens if mPipelineCache is invalid? Can you ASSERT it is valid?",
       "parentUuid": "f22d2eb5_ab791ec7",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54a1b26b_94f5fe5a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-04-10T02:55:11Z",
+      "side": 1,
+      "message": "I have call the ASSERT(valid()) inside merge().",
+      "parentUuid": "9b92db16_a4ebf819",
       "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -381,6 +441,30 @@
     },
     {
       "key": {
+        "uuid": "f267a0ce_af159561",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1450,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-04-10T02:55:11Z",
+      "side": 1,
+      "message": "how about setPipelineCacheDirty() ?",
+      "parentUuid": "0521ca68_8a2ae5e8",
+      "range": {
+        "startLine": 1450,
+        "startChar": 32,
+        "endLine": 1450,
+        "endChar": 54
+      },
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f5792eee_27977c65",
         "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
         "patchSetId": 1
@@ -392,6 +476,30 @@
       "writtenOn": "2019-04-09T17:10:46Z",
       "side": 1,
       "message": "nit: prefer using non-p prefixed variable names to match ANGLE style. So srcCaches.",
+      "range": {
+        "startLine": 459,
+        "startChar": 36,
+        "endLine": 459,
+        "endChar": 46
+      },
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90daa98b_82d84f5e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-04-10T02:55:11Z",
+      "side": 1,
+      "message": "Right.",
+      "parentUuid": "f5792eee_27977c65",
       "range": {
         "startLine": 459,
         "startChar": 36,
