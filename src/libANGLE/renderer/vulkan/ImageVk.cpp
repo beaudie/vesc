@@ -31,14 +31,34 @@ void ImageVk::onDestroy(const egl::Display *display)
 {
     DisplayVk *displayVk = vk::GetImpl(display);
 
+    std::vector<vk::GarbageObjectBase> garbage;
+
     if (mImage != nullptr && mOwnsImage)
     {
-        // TODO(geofflang): Figure out when it is safe to destroy this image.
-        mImage->destroyImage(displayVk);
-        mImage->destroyStagingBuffer(displayVk);
+        mImage->releaseImage(displayVk, &garbage);
+        mImage->releaseStagingBuffer(displayVk, &garbage);
         delete mImage;
     }
+    else if (egl::IsExternalImageTarget(mState.target))
+    {
+        ASSERT(mState.source != nullptr);
+        ExternalImageSiblingVk *externalImageSibling =
+            GetImplAs<ExternalImageSiblingVk>(GetAs<egl::ExternalImageSibling>(mState.source));
+        externalImageSibling->release(displayVk, &garbage);
+    }
     mImage = nullptr;
+
+    if (!garbage.empty())
+    {
+        displayVk->getRenderer()->addGarbage(std::move(mImageLastUseFences), std::move(garbage));
+    }
+    else
+    {
+        for (vk::Shared<vk::Fence> &fence : mImageLastUseFences)
+        {
+            fence.reset(displayVk->getDevice());
+        }
+    }
 }
 
 egl::Error ImageVk::initialize(const egl::Display *display)
@@ -127,6 +147,19 @@ angle::Result ImageVk::orphan(const gl::Context *context, egl::ImageSibling *sib
             ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
             return angle::Result::Stop;
         }
+    }
+
+    // Grab a fence from the releasing context to know when the image is no longer used
+    ASSERT(mContext != nullptr);
+    ContextVk *contextVk = vk::GetImpl(mContext);
+
+    // Flush the context to make sure the fence has been submitted.
+    ANGLE_TRY(contextVk->flushImpl());
+
+    vk::Shared<vk::Fence> fence = contextVk->getLastSubmittedFence();
+    if (fence)
+    {
+        mImageLastUseFences.push_back(std::move(fence));
     }
 
     return angle::Result::Continue;

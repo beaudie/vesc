@@ -2079,6 +2079,17 @@ angle::Result ContextVk::getSubmitFence(vk::Shared<vk::Fence> *sharedFenceOut)
     return angle::Result::Continue;
 }
 
+vk::Shared<vk::Fence> ContextVk::getLastSubmittedFence() const
+{
+    vk::Shared<vk::Fence> fence;
+    if (!mInFlightCommands.empty())
+    {
+        fence.copy(getDevice(), mInFlightCommands.back().fence);
+    }
+
+    return fence;
+}
+
 vk::CommandGraph *ContextVk::getCommandGraph()
 {
     return &mCommandGraph;
