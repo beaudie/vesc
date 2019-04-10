@@ -225,6 +225,7 @@ void ContextVk::onDestroy(const gl::Context *context)
 
     mRenderPassCache.destroy(device);
     mSubmitSemaphorePool.destroy(device);
+    mSubmitFence.reset(device);
     mShaderLibrary.destroy(device);
     mGpuEventQueryPool.destroy(device);
 
@@ -2153,6 +2154,17 @@ angle::Result ContextVk::getSubmitFence(vk::Shared<vk::Fence> *sharedFenceOut)
     }
     sharedFenceOut->copy(device, mSubmitFence);
     return angle::Result::Continue;
+}
+
+vk::Shared<vk::Fence> ContextVk::getLastSubmittedFence() const
+{
+    vk::Shared<vk::Fence> fence;
+    if (!mInFlightCommands.empty())
+    {
+        fence.copy(getDevice(), mInFlightCommands.back().fence);
+    }
+
+    return fence;
 }
 
 vk::CommandGraph *ContextVk::getCommandGraph()

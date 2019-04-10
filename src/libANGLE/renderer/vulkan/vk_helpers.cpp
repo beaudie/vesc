@@ -376,6 +376,21 @@ void DynamicBuffer::release(ContextVk *context)
     }
 }
 
+void DynamicBuffer::release(DisplayVk *display, std::vector<GarbageObjectBase> *garbageQueue)
+{
+    reset();
+    releaseRetainedBuffers(display, garbageQueue);
+
+    if (mBuffer)
+    {
+        mBuffer->unmap(display->getDevice());
+
+        mBuffer->release(display, garbageQueue);
+        delete mBuffer;
+        mBuffer = nullptr;
+    }
+}
+
 void DynamicBuffer::releaseRetainedBuffers(ContextVk *context)
 {
     for (BufferHelper *toFree : mRetainedBuffers)
@@ -383,6 +398,18 @@ void DynamicBuffer::releaseRetainedBuffers(ContextVk *context)
         // See note in release().
         toFree->updateQueueSerial(context->getCurrentQueueSerial());
         toFree->release(context);
+        delete toFree;
+    }
+
+    mRetainedBuffers.clear();
+}
+
+void DynamicBuffer::releaseRetainedBuffers(DisplayVk *display,
+                                           std::vector<GarbageObjectBase> *garbageQueue)
+{
+    for (BufferHelper *toFree : mRetainedBuffers)
+    {
+        toFree->release(display, garbageQueue);
         delete toFree;
     }
 
@@ -1116,6 +1143,17 @@ void BufferHelper::release(ContextVk *context)
     context->releaseObject(getStoredQueueSerial(), &mDeviceMemory);
 }
 
+void BufferHelper::release(DisplayVk *display, std::vector<GarbageObjectBase> *garbageQueue)
+{
+    unmap(display->getDevice());
+    mSize       = 0;
+    mViewFormat = nullptr;
+
+    mBuffer.dumpResources(garbageQueue);
+    mBufferView.dumpResources(garbageQueue);
+    mDeviceMemory.dumpResources(garbageQueue);
+}
+
 void BufferHelper::onWrite(VkAccessFlagBits writeAccessType)
 {
     if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
@@ -1347,6 +1385,12 @@ void ImageHelper::releaseImage(ContextVk *context)
     context->releaseObject(getStoredQueueSerial(), &mDeviceMemory);
 }
 
+void ImageHelper::releaseImage(DisplayVk *display, std::vector<GarbageObjectBase> *garbageQueue)
+{
+    mImage.dumpResources(garbageQueue);
+    mDeviceMemory.dumpResources(garbageQueue);
+}
+
 void ImageHelper::destroyImage(DisplayVk *display)
 {
     mImage.destroy(display->getDevice());
@@ -1361,6 +1405,18 @@ void ImageHelper::releaseStagingBuffer(ContextVk *context)
         update.release(context);
     }
     mStagingBuffer.release(context);
+    mSubresourceUpdates.clear();
+}
+
+void ImageHelper::releaseStagingBuffer(DisplayVk *display,
+                                       std::vector<GarbageObjectBase> *garbageQueue)
+{
+    // Remove updates that never made it to the texture.
+    for (SubresourceUpdate &update : mSubresourceUpdates)
+    {
+        update.release(display, garbageQueue);
+    }
+    mStagingBuffer.release(display, garbageQueue);
     mSubresourceUpdates.clear();
 }
 
@@ -2276,6 +2332,17 @@ void ImageHelper::SubresourceUpdate::release(ContextVk *context)
     {
         image.image->releaseImage(context);
         image.image->releaseStagingBuffer(context);
+        SafeDelete(image.image);
+    }
+}
+
+void ImageHelper::SubresourceUpdate::release(DisplayVk *display,
+                                             std::vector<GarbageObjectBase> *garbageQueue)
+{
+    if (updateSource == UpdateSource::Image)
+    {
+        image.image->releaseImage(display, garbageQueue);
+        image.image->releaseStagingBuffer(display, garbageQueue);
         SafeDelete(image.image);
     }
 }
