@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1c1a6c3d_b2b58036",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-10T14:12:14Z",
+      "side": 1,
+      "message": "Minor request, but to fit with ANGLE style could can you please edit your commit message to use a single short phrase for the commit title like \"Vulkan: Fix dirty UINT_8 element array buffer updates.\"\n\nfollowed by a longer description wrapped to 71 characters?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 0
+      },
+      "revId": "2d17a5922df3751beee07a605f9a5f9123f97c5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5b6414f6_9d90ab3d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
@@ -13,6 +36,30 @@
       "writtenOn": "2019-04-10T09:57:30Z",
       "side": 1,
       "message": "Shall we just remove this variable and use mCurrentElementArrayBufferOffset instead?",
+      "range": {
+        "startLine": 324,
+        "startChar": 23,
+        "endLine": 324,
+        "endChar": 45
+      },
+      "revId": "2d17a5922df3751beee07a605f9a5f9123f97c5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0c7d1d2_9b7a6ad0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-10T14:12:14Z",
+      "side": 1,
+      "message": "Thanks for figuring out the location of the bug. Could you please make a small reproduction test and add it to angle_end2end_tests in StateChangeTest.cpp? I recommend using SimpleStateChangeTest as a fixture.\n\nThe current element array buffer offset is related to the \"indices\" offset but it isn\u0027t the same thing. The current offset is used in index translation. There could be some corner cases if we try to compare them.\n\nInstead I would recommend we call contextVk-\u003esetIndexBufferDirty(); in case gl::VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER_DATA in VertexArrayVk.cpp. This could be optimized in the future by keeping a separate dirty bit for the index translation. But for now it\u0027s the cleanest and simplest solution.",
+      "parentUuid": "5b6414f6_9d90ab3d",
       "range": {
         "startLine": 324,
         "startChar": 23,
