@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56c78525_0dda966b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-10T19:31:05Z",
+      "side": 1,
+      "message": "param TextureType target should be TextureType type\n\nSame goes in all other instances",
+      "revId": "b695cccbaba448f1728d8af13c36253fd0c819fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "143ba104_c2223a26",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5088,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-10T19:31:05Z",
+      "side": 1,
+      "message": "Should probably be renamed to type here too (and others in this file)",
+      "revId": "b695cccbaba448f1728d8af13c36253fd0c819fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
