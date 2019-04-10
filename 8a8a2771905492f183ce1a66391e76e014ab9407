@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "a425d5e3_5a56b88d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-10T14:16:38Z",
+      "side": 1,
+      "message": "Maybe we should get confirmation with Khronos if this is what drivers indeed do.\n\nCould you look through the Khronos bug archives to see if there\u0027s anything related to this for the GLSL specs? If not can you open an issue with a small GLSL ES 1.00 program to get clarification?",
+      "parentUuid": "d69f7523_a2256035",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 70
+      },
+      "revId": "8a8a2771905492f183ce1a66391e76e014ab9407",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9a4473a0_f9954c79",
         "filename": "src/compiler/translator/BaseTypes.h",
         "patchSetId": 2
