@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2e12633f_6a0209db",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-04-10T13:48:01Z",
+      "side": 1,
+      "message": "Hi Yuly, please see your later comment on that same issue:\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d1293#c24\n\nAt that point in time you said \"I\u0027m re-reading the spec, and I think that I misunderstood it before.\n\"#pragma STDGL invariant(all)\" should apply only to output varyings.\"\n\nDo you know of a version of the GLSL spec that says that the pragma should also apply to input varyings? I have not yet seen that, but have only looked at 3 GLSL specs thus far.",
+      "parentUuid": "bdc9fcd3_e989b416",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 70
+      },
+      "revId": "8a8a2771905492f183ce1a66391e76e014ab9407",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9a4473a0_f9954c79",
         "filename": "src/compiler/translator/BaseTypes.h",
         "patchSetId": 2
