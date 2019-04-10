@@ -1254,6 +1254,70 @@ TEST_P(LineLoopStateChangeTest, DrawArraysThenDrawElements)
     validateSquareAndHourglass();
 }
 
+// Draw a triangle with a drawElements call and a non-zero offset and draw the same
+// triangle with the same offset again followed by a line loop with drawElements.
+TEST_P(LineLoopStateChangeTest, DrawElementsThenDrawElements)
+{
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+
+    glUseProgram(program);
+
+    // Background Red color
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // We expect to draw a triangle with the last three points on the bottom right,
+    // draw with LineLoop, and then draw a triangle with the same non-zero offset.
+    auto vertices = std::vector<Vector3>{
+        {-1.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {1.0f, -1.0f, 0.0f}, {-1.0f, -1.0f, 0.0f}};
+
+    auto indices = std::vector<GLushort>{0, 1, 2, 1, 2, 3};
+
+    GLint positionLocation = glGetAttribLocation(program, essl1_shaders::PositionAttrib());
+    ASSERT_NE(-1, positionLocation);
+
+    GLBuffer indexBuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLushort), &indices[0],
+                 GL_STATIC_DRAW);
+
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
+                 GL_STATIC_DRAW);
+
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+
+    // Draw a triangle with a non-zero offset on the bottom right.
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, (void *)(3 * sizeof(GLushort)));
+
+    // Draw with LineLoop.
+    glDrawElements(GL_LINE_LOOP, 3, GL_UNSIGNED_SHORT, nullptr);
+
+    // Draw the triangle again with the same offset.
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, (void *)(3 * sizeof(GLushort)));
+
+    glDisableVertexAttribArray(positionLocation);
+
+    ASSERT_GL_NO_ERROR();
+
+    int quarterWidth  = getWindowWidth() / 4;
+    int quarterHeight = getWindowHeight() / 4;
+
+    // Validate the top left point's color.
+    EXPECT_PIXEL_COLOR_EQ(0, getWindowHeight() - 1, GLColor::blue);
+
+    // Validate the triangle is drawn on the bottom right.
+    EXPECT_PIXEL_COLOR_EQ(quarterWidth * 2, quarterHeight, GLColor::blue);
+
+    // Validate the triangle is NOT on the top left part.
+    EXPECT_PIXEL_COLOR_EQ(quarterWidth * 2, quarterHeight * 3, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(quarterWidth, quarterHeight * 2, GLColor::red);
+}
+
 // Simple state change tests, primarily focused on basic object lifetime and dependency management
 // with back-ends that don't support that automatically (i.e. Vulkan).
 class SimpleStateChangeTest : public ANGLETest
@@ -1435,6 +1499,66 @@ TEST_P(SimpleStateChangeTest, DrawArraysThenDrawElements)
 
     // Validate triangle to the right
     EXPECT_PIXEL_COLOR_EQ((quarterWidth * 3), halfHeight, GLColor::blue);
+}
+
+// Draw a triangle with drawElements and a non-zero offset and draw the same
+// triangle with the same offset followed by binding the same element buffer.
+TEST_P(SimpleStateChangeTest, DrawElementsThenDrawElements)
+{
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+
+    glUseProgram(program);
+
+    // Background Red color
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // We expect to draw the triangle with the last three points on the bottom right, and
+    // rebind the same element buffer and draw with the same indices.
+    auto vertices = std::vector<Vector3>{
+        {-1.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, {1.0f, -1.0f, 0.0f}, {-1.0f, -1.0f, 0.0f}};
+
+    auto indices = std::vector<GLushort>{0, 1, 2, 1, 2, 3};
+
+    GLint positionLocation = glGetAttribLocation(program, essl1_shaders::PositionAttrib());
+    ASSERT_NE(-1, positionLocation);
+
+    GLBuffer indexBuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLushort), &indices[0],
+                 GL_STATIC_DRAW);
+
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(),
+                 GL_STATIC_DRAW);
+
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(positionLocation);
+
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, (void *)(3 * sizeof(GLushort)));
+
+    // Rebind the same element buffer.
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+
+    // Draw the triangle again with the same offset.
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, (void *)(3 * sizeof(GLushort)));
+
+    glDisableVertexAttribArray(positionLocation);
+
+    ASSERT_GL_NO_ERROR();
+
+    int quarterWidth  = getWindowWidth() / 4;
+    int quarterHeight = getWindowHeight() / 4;
+
+    // Validate the triangle is drawn on the bottom right.
+    EXPECT_PIXEL_COLOR_EQ(quarterWidth * 2, quarterHeight, GLColor::blue);
+
+    // Validate the triangle is NOT on the top left part.
+    EXPECT_PIXEL_COLOR_EQ(quarterWidth * 2, quarterHeight * 3, GLColor::red);
+    EXPECT_PIXEL_COLOR_EQ(quarterWidth, quarterHeight * 2, GLColor::red);
 }
 
 // Handles deleting a Buffer when it's being used.
