@@ -335,7 +335,6 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
                     mCurrentElementArrayBuffer = nullptr;
                 }
 
-                mCurrentElementArrayBufferOffset = 0;
                 mLineLoopBufferFirstIndex.reset();
                 mLineLoopBufferLastIndex.reset();
                 contextVk->setIndexBufferDirty();
