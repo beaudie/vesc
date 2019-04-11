@@ -3420,10 +3420,10 @@ LinkMismatchError Program::LinkValidateVaryings(const sh::Varying &outputVarying
         return LinkMismatchError::INTERPOLATION_TYPE_MISMATCH;
     }
 
-    if (shaderVersion == 100 && outputVarying.isInvariant != inputVarying.isInvariant)
-    {
-        return LinkMismatchError::INVARIANCE_MISMATCH;
-    }
+    // if (shaderVersion == 100 && outputVarying.isInvariant != inputVarying.isInvariant)
+    //{
+    //    return LinkMismatchError::INVARIANCE_MISMATCH;
+    //}
 
     return LinkMismatchError::NO_MISMATCH;
 }
