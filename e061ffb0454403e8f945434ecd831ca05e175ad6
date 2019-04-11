@@ -263,6 +263,24 @@
     },
     {
       "key": {
+        "uuid": "07b597f4_76f89a2a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-04-11T01:49:29Z",
+      "side": 1,
+      "message": "I think we can only save the cache once just before the application exits.\nCurrently Display::~Display is never called, probably we can add a global variable to store the display list, and define a function to destroy them, like:\n\nrx::DisplayImpl *m_global_display_list;\nstatic void __attribute__((destructor)) destruc_func()\n{\n    for (m_global_display_list)\n    {\n        delete display;\n    }\n}\n\nBut this change may affect other backends.\nOr can we just save the cache once in DisplayVk::terminate, but if app doesn\u0027t call eglTerminate, the cache will not be saved.",
+      "parentUuid": "184e976a_b02b583b",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f22d2eb5_ab791ec7",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
