@@ -281,6 +281,24 @@
     },
     {
       "key": {
+        "uuid": "169e8ac7_0714ca3f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-11T17:40:39Z",
+      "side": 1,
+      "message": "Unfortunately I don\u0027t know if we can guarantee the application always returns control of the code to ANGLE when it exits. It might even be platform dependent.\n\nYou\u0027re right your proposal is pretty close to X \u003d 0 . I was suggesting the update period also be zero (every frame) just to keep it simple. If applications don\u0027t continually generate new pipelines. We can reconsider this in the future. LGTM either way for now.",
+      "parentUuid": "07b597f4_76f89a2a",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f22d2eb5_ab791ec7",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1

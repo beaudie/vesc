@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e45b48be_842ac676",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1305,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-11T17:40:39Z",
+      "side": 1,
+      "message": "nit: onSetBlobCacheFuncs",
+      "range": {
+        "startLine": 1305,
+        "startChar": 26,
+        "endLine": 1305,
+        "endChar": 42
+      },
+      "revId": "ba33224a8bfed0e55927b4521347896f7e163fdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25951734_b1b61352",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-11T17:40:39Z",
+      "side": 1,
+      "message": "remove this.",
+      "range": {
+        "startLine": 218,
+        "startChar": 9,
+        "endLine": 218,
+        "endChar": 27
+      },
+      "revId": "ba33224a8bfed0e55927b4521347896f7e163fdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1730689e_d650b872",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1450,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-11T17:40:39Z",
+      "side": 1,
+      "message": "still prefer onNewGraphicsPipeline as it would generalize to my counting method.",
+      "range": {
+        "startLine": 1450,
+        "startChar": 32,
+        "endLine": 1450,
+        "endChar": 53
+      },
+      "revId": "ba33224a8bfed0e55927b4521347896f7e163fdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
