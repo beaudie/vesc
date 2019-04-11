@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bd897c6c_38866bf4",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-11T19:18:33Z",
+      "side": 1,
+      "message": "It\u0027s into Vulkan [VkShaderModules]. You would see it more naturally when viewing the HTML output instead of the markdown source. I reworded this.",
+      "parentUuid": "60cc0185_f7dd7664",
+      "revId": "8aa131e449c514cd8b0c311089795fa5fc508855",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6f0f3fc7_aefbb8e2",
         "filename": "src/libANGLE/renderer/vulkan/README.md",
         "patchSetId": 4
@@ -48,6 +66,24 @@
       "side": 1,
       "message": "By all means, an SVG image would be much better in the documentations (that are visible on the web)! In case you didn\u0027t know: https://inkscape.org !",
       "parentUuid": "6f0f3fc7_aefbb8e2",
+      "revId": "8aa131e449c514cd8b0c311089795fa5fc508855",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3dc83df2_636c2380",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-11T19:18:33Z",
+      "side": 1,
+      "message": "You wanted it you got it. You can\u0027t view what I added in Gitiles until it lands, so I mirrored the SVG diagram here:\n\nhttps://svgur.com/s/CQF\n\nPTAL",
+      "parentUuid": "820b5f39_60b04082",
       "revId": "8aa131e449c514cd8b0c311089795fa5fc508855",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
