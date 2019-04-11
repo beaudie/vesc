@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b664f30_55922268",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-11T20:28:57Z",
+      "side": 1,
+      "message": "Remove",
+      "range": {
+        "startLine": 180,
+        "startChar": 45,
+        "endLine": 180,
+        "endChar": 48
+      },
+      "revId": "1cbb729c95a73a537bb45f8b901c3a0021394cc7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
