@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "206f3a7f_57bae94c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-11T13:59:00Z",
+      "side": 1,
+      "message": "can you add an ASSERT here that mode !\u003d PrimitiveType::LineLoop ? We shouldn\u0027t be in this function if we\u0027re drawing with a Line Loop.\n\nThere is also a bug with DrawElements and LineLoops that was not caught. Would you be able to help fixing the bug? You would need to add a test (using LineLoopStateChangeTest) that:\n\n1. DrawElements with Triangles and a non-zero offset\n2. DrawElements with LineLoop\n3. DrawElements with Triangles and the same non-zero offset as 1.\n\nThe offset would be incorrect with the current code.",
+      "range": {
+        "startLine": 319,
+        "startChar": 5,
+        "endLine": 320,
+        "endChar": 8
+      },
+      "revId": "2d17a5922df3751beee07a605f9a5f9123f97c5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5b6414f6_9d90ab3d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
@@ -108,6 +131,30 @@
       "side": 1,
       "message": "Your new test is passing for me on Windows NVIDIA. Is it expected to fail?",
       "parentUuid": "7aeaa60c_adb43259",
+      "range": {
+        "startLine": 324,
+        "startChar": 23,
+        "endLine": 324,
+        "endChar": 45
+      },
+      "revId": "2d17a5922df3751beee07a605f9a5f9123f97c5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "193e5b0d_4d97a03c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-11T13:59:00Z",
+      "side": 1,
+      "message": "Ah, I got it. Thanks for the test. I think the fix as proposed will force a re-translation of UINT8 index data each draw call. The \u0027indices\u0027 offset will never match the translated index offset in the VertexArrayVk. So it will always mark the data as dirty.\n\nInstead I would recommend removing mCurrentElementArrayBufferOffset \u003d 0; in VertexArrayVk::syncState (DIRTY_BIT_ELEMENT_ARRAY_BUFFER). And trying that on the bots.\n\nTo solve the above line loop problem you could set mLastIndexBufferOffset to numeric_limits::max() in setupLineLoopDraw.",
+      "parentUuid": "45b54ca6_5754fbdc",
       "range": {
         "startLine": 324,
         "startChar": 23,
