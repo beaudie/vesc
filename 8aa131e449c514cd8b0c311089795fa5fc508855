@@ -33,6 +33,24 @@
       "revId": "8aa131e449c514cd8b0c311089795fa5fc508855",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "820b5f39_60b04082",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-11T17:47:23Z",
+      "side": 1,
+      "message": "By all means, an SVG image would be much better in the documentations (that are visible on the web)! In case you didn\u0027t know: https://inkscape.org !",
+      "parentUuid": "6f0f3fc7_aefbb8e2",
+      "revId": "8aa131e449c514cd8b0c311089795fa5fc508855",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
