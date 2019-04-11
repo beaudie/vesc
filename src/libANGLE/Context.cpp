@@ -47,6 +47,8 @@
 #include "libANGLE/renderer/Format.h"
 #include "libANGLE/validationES.h"
 
+// comment one
+
 namespace gl
 {
 namespace
