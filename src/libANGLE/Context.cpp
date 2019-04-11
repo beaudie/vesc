@@ -48,6 +48,7 @@
 #include "libANGLE/validationES.h"
 
 // comment one
+// comment two
 
 namespace gl
 {
