@@ -30,8 +30,6 @@
 //  91531 NEXUS5X GLES : conformance_more_* = SKIP
 
 // Don't run these tests for faster turnover
-998 : dEQP-GLES3.performance.* = SKIP
-998 : dEQP-GLES3.stress.* = SKIP
 1101 : dEQP-GLES3.functional.flush_finish.* = SKIP
 
 // Figure out why this caused this regression in Chrome:
@@ -274,12 +272,6 @@
 1323 LINUX OPENGL : dEQP-GLES3.functional.fbo.depth.depth_write_clamp.depth_component32f = FAIL
 1323 LINUX OPENGL : dEQP-GLES3.functional.fbo.depth.depth_write_clamp.depth32f_stencil8 = FAIL
 1323 LINUX OPENGL : dEQP-GLES3.functional.rasterization.fbo.rbo_multisample_max.primitives.points = FAIL
-1323 LINUX OPENGL : dEQP-GLES3.functional.texture.mipmap.2d.projected.linear_linear_clamp = FAIL
-1323 LINUX OPENGL : dEQP-GLES3.functional.texture.mipmap.2d.projected.linear_linear_mirror = FAIL
-1323 LINUX OPENGL : dEQP-GLES3.functional.texture.mipmap.2d.projected.linear_linear_repeat = FAIL
-1323 LINUX OPENGL : dEQP-GLES3.functional.texture.mipmap.2d.projected.nearest_linear_clamp = FAIL
-1323 LINUX OPENGL : dEQP-GLES3.functional.texture.mipmap.2d.projected.nearest_linear_mirror = FAIL
-1323 LINUX OPENGL : dEQP-GLES3.functional.texture.mipmap.2d.projected.nearest_linear_repeat = FAIL
 
 // While loops with 'continue' seem flaky on Linux. (Possibly all GL renderers)
 1324 LINUX OPENGL : dEQP-GLES3.functional.shaders.loops.while_constant_iterations.conditional_continue_vertex = FAIL
