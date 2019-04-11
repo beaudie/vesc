@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f09f45ae_ffa5719b",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1452,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-11T18:09:36Z",
+      "side": 1,
+      "message": "Looks like the draw is actually to the \"bottom right\"",
+      "range": {
+        "startLine": 1452,
+        "startChar": 72,
+        "endLine": 1452,
+        "endChar": 83
+      },
+      "revId": "f2f1240bf71264104e85d590616fb4108a14d0b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3274cae_4795ca6b",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1488,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-11T18:09:36Z",
+      "side": 1,
+      "message": "The top left point would be `0, h-1`. Also, please validate a few other locations to ensure the draw was done at the right place.",
+      "revId": "f2f1240bf71264104e85d590616fb4108a14d0b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
