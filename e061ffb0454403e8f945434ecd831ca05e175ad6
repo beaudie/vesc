@@ -245,6 +245,24 @@
     },
     {
       "key": {
+        "uuid": "a1d1981b_e1a106b4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-04-11T00:44:53Z",
+      "side": 1,
+      "message": "But my current proposal is indeed equivalent to \"X\u003d0\", isn\u0027t it?\nThe different part is, I will update the cache on every \"kPipelineCacheVkUpdatePeriod\" swaps, instead of every swap.\nI don\u0027t have data how slow the update is, but from the code, it\u0027s definitely not a trivial overhead.\nIt\u0027s really not necessary to update every swap. The ideal way is, we can only update the cache once when app exits, but the problem is, we don\u0027t know when. So, as I mentioned previously, the value \"kPipelineCacheVkUpdatePeriod\" is some kind of a trade-off.",
+      "parentUuid": "af444cdf_7e9860df",
+      "revId": "e061ffb0454403e8f945434ecd831ca05e175ad6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f22d2eb5_ab791ec7",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 1
