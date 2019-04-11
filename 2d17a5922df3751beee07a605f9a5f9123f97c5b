@@ -93,6 +93,30 @@
       "revId": "2d17a5922df3751beee07a605f9a5f9123f97c5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45b54ca6_5754fbdc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-11T12:43:56Z",
+      "side": 1,
+      "message": "Your new test is passing for me on Windows NVIDIA. Is it expected to fail?",
+      "parentUuid": "7aeaa60c_adb43259",
+      "range": {
+        "startLine": 324,
+        "startChar": 23,
+        "endLine": 324,
+        "endChar": 45
+      },
+      "revId": "2d17a5922df3751beee07a605f9a5f9123f97c5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
