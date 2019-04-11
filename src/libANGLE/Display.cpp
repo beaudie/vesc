@@ -539,13 +539,14 @@ Error Display::initialize()
         return EglNotInitialized();
     }
 
-    // OpenGL ES1 is implemented in the frontend, explicitly add ES1 support to all configs
     for (auto &config : mConfigSet)
     {
-        // TODO(geofflang): Enable the conformant bit once we pass enough tests
-        // config.second.conformant |= EGL_OPENGL_ES_BIT;
+        config.second.conformant |= EGL_OPENGL_ES_BIT;
+        config.second.conformant |= EGL_OPENGL_ES2_BIT;
 
+        // OpenGL ES1 is implemented in the frontend, explicitly add ES1 support to all configs
         config.second.renderableType |= EGL_OPENGL_ES_BIT;
+        config.second.renderableType |= EGL_OPENGL_ES2_BIT;
     }
 
     initDisplayExtensions();
