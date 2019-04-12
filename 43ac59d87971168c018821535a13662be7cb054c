@@ -93,6 +93,30 @@
       "revId": "43ac59d87971168c018821535a13662be7cb054c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50ec9201_449e4236",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-12T21:41:37Z",
+      "side": 1,
+      "message": "These are info_collection_tests. The don\u0027t print primary GPU, though.\nActually, angle_end2end_tests print primary GPU.\nCould you please check if they print what\u0027s expected on all the bots.\nI\u0027m OK with this change if they do.\nAnd the function name is fixed.",
+      "parentUuid": "da89ab32_c2735c62",
+      "range": {
+        "startLine": 347,
+        "startChar": 20,
+        "endLine": 347,
+        "endChar": 35
+      },
+      "revId": "43ac59d87971168c018821535a13662be7cb054c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
