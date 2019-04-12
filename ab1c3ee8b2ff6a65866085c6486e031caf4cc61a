@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8060154c_a5ed05c9",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-12T21:25:58Z",
+      "side": 1,
+      "message": "tabs -\u003e spaces",
+      "range": {
+        "startLine": 683,
+        "startChar": 0,
+        "endLine": 683,
+        "endChar": 1
+      },
+      "revId": "ab1c3ee8b2ff6a65866085c6486e031caf4cc61a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
