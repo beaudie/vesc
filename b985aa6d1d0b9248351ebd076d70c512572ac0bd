@@ -22,6 +22,30 @@
       "revId": "b985aa6d1d0b9248351ebd076d70c512572ac0bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fa59c34_79924ebd",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-12T18:16:42Z",
+      "side": 1,
+      "message": "Did you one better. Moved the skipped test detection into the test loop. So now we\u0027ll output the names of skipped tests and a message that they\u0027ve been skipped in the test output.",
+      "parentUuid": "416938ac_2ff030cf",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 350,
+        "endChar": 21
+      },
+      "revId": "b985aa6d1d0b9248351ebd076d70c512572ac0bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
