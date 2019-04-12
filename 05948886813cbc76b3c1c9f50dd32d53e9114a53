@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c261661a_bdd8660c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-12T16:17:42Z",
+      "side": 1,
+      "message": "Please also add \"Vulkan: \" in front.",
+      "revId": "05948886813cbc76b3c1c9f50dd32d53e9114a53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
