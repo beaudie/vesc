@@ -7210,7 +7210,7 @@ void Context::bufferStorageMem(TextureType target, GLsizeiptr size, GLuint memor
     UNIMPLEMENTED();
 }
 
-void Context::importMemoryFd(GLuint memory, GLuint64 size, GLenum handleType, GLint fd)
+void Context::importMemoryFd(GLuint memory, GLuint64 size, HandleType handleType, GLint fd)
 {
     UNIMPLEMENTED();
 }
@@ -7261,7 +7261,7 @@ void Context::signalSemaphore(GLuint semaphore,
     UNIMPLEMENTED();
 }
 
-void Context::importSemaphoreFd(GLuint semaphore, GLenum handleType, GLint fd)
+void Context::importSemaphoreFd(GLuint semaphore, HandleType handleType, GLint fd)
 {
     UNIMPLEMENTED();
 }

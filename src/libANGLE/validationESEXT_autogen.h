@@ -869,7 +869,7 @@ bool ValidateTexStorageMem3DMultisampleEXT(Context *context,
 bool ValidateImportMemoryFdEXT(Context *context,
                                GLuint memory,
                                GLuint64 size,
-                               GLenum handleType,
+                               HandleType handleTypePacked,
                                GLint fd);
 
 // GL_EXT_occlusion_query_boolean
@@ -924,7 +924,10 @@ bool ValidateWaitSemaphoreEXT(Context *context,
                               const GLenum *srcLayouts);
 
 // GL_EXT_semaphore_fd
-bool ValidateImportSemaphoreFdEXT(Context *context, GLuint semaphore, GLenum handleType, GLint fd);
+bool ValidateImportSemaphoreFdEXT(Context *context,
+                                  GLuint semaphore,
+                                  HandleType handleTypePacked,
+                                  GLint fd);
 
 // GL_EXT_texture_storage
 bool ValidateTexStorage1DEXT(Context *context,
