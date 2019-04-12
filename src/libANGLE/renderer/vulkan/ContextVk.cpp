@@ -100,6 +100,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mNewCommandBufferDirtyBits.set(DIRTY_BIT_TEXTURES);
     mNewCommandBufferDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
     mNewCommandBufferDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
+    mNewCommandBufferDirtyBits.set(DIRTY_BIT_UNIFORM_BUFFERS);
     mNewCommandBufferDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
 
     mDirtyBitHandlers[DIRTY_BIT_DEFAULT_ATTRIBS] = &ContextVk::handleDirtyDefaultAttribs;
@@ -108,6 +109,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mDirtyBitHandlers[DIRTY_BIT_VERTEX_BUFFERS]  = &ContextVk::handleDirtyVertexBuffers;
     mDirtyBitHandlers[DIRTY_BIT_INDEX_BUFFER]    = &ContextVk::handleDirtyIndexBuffer;
     mDirtyBitHandlers[DIRTY_BIT_DRIVER_UNIFORMS] = &ContextVk::handleDirtyDriverUniforms;
+    mDirtyBitHandlers[DIRTY_BIT_UNIFORM_BUFFERS] = &ContextVk::handleDirtyUniformBuffers;
     mDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] = &ContextVk::handleDirtyDescriptorSets;
 
     mDirtyBits = mNewCommandBufferDirtyBits;
@@ -279,7 +281,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
 
     if (mProgram->dirtyUniforms())
     {
-        ANGLE_TRY(mProgram->updateUniforms(this));
+        ANGLE_TRY(mProgram->updateUniforms(this, mDrawFramebuffer->getFramebuffer()));
         mDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     }
 
@@ -459,6 +461,17 @@ angle::Result ContextVk::handleDirtyIndexBuffer(const gl::Context *context,
     vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
     elementArrayBuffer->onRead(framebuffer, VK_ACCESS_INDEX_READ_BIT);
 
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyUniformBuffers(const gl::Context *context,
+                                                   vk::CommandBuffer *commandBuffer)
+{
+    if (mProgram->hasUniformBuffers())
+    {
+        ANGLE_TRY(
+            mProgram->updateUniformBuffersDescriptorSet(this, mDrawFramebuffer->getFramebuffer()));
+    }
     return angle::Result::Continue;
 }
 
@@ -935,6 +948,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING:
                 break;
             case gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS:
+                invalidateCurrentUniformBuffers();
                 break;
             case gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING:
                 break;
@@ -1130,6 +1144,16 @@ void ContextVk::invalidateCurrentTextures()
     }
 }
 
+void ContextVk::invalidateCurrentUniformBuffers()
+{
+    ASSERT(mProgram);
+    if (mProgram->hasUniformBuffers())
+    {
+        mDirtyBits.set(DIRTY_BIT_UNIFORM_BUFFERS);
+        mDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+    }
+}
+
 void ContextVk::invalidateDriverUniforms()
 {
     mDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS);
@@ -1238,7 +1262,8 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
     if (!mDriverUniformsSetLayout.valid())
     {
         vk::DescriptorSetLayoutDesc desc;
-        desc.update(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1);
+        desc.update(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1,
+                    VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 
         ANGLE_TRY(mRenderer->getDescriptorSetLayout(this, desc, &mDriverUniformsSetLayout));
     }

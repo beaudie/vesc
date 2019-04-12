@@ -225,6 +225,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
         DIRTY_BIT_VERTEX_BUFFERS,
         DIRTY_BIT_INDEX_BUFFER,
         DIRTY_BIT_DRIVER_UNIFORMS,
+        DIRTY_BIT_UNIFORM_BUFFERS,
         DIRTY_BIT_DESCRIPTOR_SETS,
         DIRTY_BIT_MAX,
     };
@@ -276,6 +277,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     ANGLE_INLINE void invalidateCurrentPipeline() { mDirtyBits.set(DIRTY_BIT_PIPELINE); }
 
     void invalidateCurrentTextures();
+    void invalidateCurrentUniformBuffers();
     void invalidateDriverUniforms();
 
     angle::Result handleDirtyDefaultAttribs(const gl::Context *context,
@@ -287,6 +289,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     angle::Result handleDirtyIndexBuffer(const gl::Context *context,
                                          vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyDriverUniforms(const gl::Context *context,
+                                            vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyUniformBuffers(const gl::Context *context,
                                             vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyDescriptorSets(const gl::Context *context,
                                             vk::CommandBuffer *commandBuffer);

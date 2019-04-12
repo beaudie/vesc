@@ -104,9 +104,11 @@ class ProgramVk : public ProgramImpl
 
     // Also initializes the pipeline layout, descriptor set layouts, and used descriptor ranges.
 
-    angle::Result updateUniforms(ContextVk *contextVk);
+    angle::Result updateUniforms(ContextVk *contextVk, vk::FramebufferHelper *framebuffer);
     angle::Result updateTexturesDescriptorSet(ContextVk *contextVk,
                                               vk::FramebufferHelper *framebuffer);
+    angle::Result updateUniformBuffersDescriptorSet(ContextVk *contextVk,
+                                                    vk::FramebufferHelper *framebuffer);
 
     angle::Result updateDescriptorSets(ContextVk *contextVk, vk::CommandBuffer *commandBuffer);
 
@@ -116,6 +118,7 @@ class ProgramVk : public ProgramImpl
     const vk::PipelineLayout &getPipelineLayout() const { return mPipelineLayout.get(); }
 
     bool hasTextures() const { return !mState.getSamplerBindings().empty(); }
+    bool hasUniformBuffers() const { return !mState.getUniformBlocks().empty(); }
 
     bool dirtyUniforms() const { return mDefaultUniformBlocksDirty.any(); }
 
@@ -147,7 +150,8 @@ class ProgramVk : public ProgramImpl
     angle::Result allocateDescriptorSet(ContextVk *contextVk, uint32_t descriptorSetIndex);
     angle::Result initDefaultUniformBlocks(const gl::Context *glContext);
 
-    angle::Result updateDefaultUniformsDescriptorSet(ContextVk *contextVk);
+    angle::Result updateUniformsDescriptorSet(ContextVk *contextVk,
+                                              vk::FramebufferHelper *framebuffer);
 
     template <class T>
     void getUniformImpl(GLint location, T *v, GLenum entryPointType) const;
@@ -157,6 +161,7 @@ class ProgramVk : public ProgramImpl
     angle::Result linkImpl(const gl::Context *glContext,
                            const gl::ProgramLinkedResources &resources,
                            gl::InfoLog &infoLog);
+    void linkResources(const gl::ProgramLinkedResources &resources);
 
     ANGLE_INLINE angle::Result initShaders(ContextVk *contextVk,
                                            gl::PrimitiveMode mode,
@@ -206,7 +211,7 @@ class ProgramVk : public ProgramImpl
 
     gl::ShaderMap<DefaultUniformBlock> mDefaultUniformBlocks;
     gl::ShaderBitSet mDefaultUniformBlocksDirty;
-    gl::ShaderMap<uint32_t> mUniformBlocksOffsets;
+    gl::UniformBuffersArray<uint32_t> mUniformBlocksOffsets;
 
     // This is a special "empty" placeholder buffer for when a shader has no uniforms.
     // It is necessary because we want to keep a compatible pipeline layout in all cases,

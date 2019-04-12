@@ -402,6 +402,7 @@ class BufferHelper final : public CommandGraphResource
     bool valid() const { return mBuffer.valid(); }
     const Buffer &getBuffer() const { return mBuffer; }
     const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
+    VkDeviceSize getSize() const { return mSize; }
 
     // Helpers for setting the graph dependencies *and* setting the appropriate barrier.
     ANGLE_INLINE void onRead(CommandGraphResource *reader, VkAccessFlagBits readAccessType)

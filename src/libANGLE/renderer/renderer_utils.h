@@ -29,6 +29,8 @@ namespace gl
 struct FormatType;
 struct InternalFormat;
 class State;
+struct ProgramLinkedResources;
+class ProgramState;
 }  // namespace gl
 
 namespace egl
@@ -255,6 +257,23 @@ class IncompleteTextureSet final : angle::NonCopyable
 
   private:
     gl::TextureMap mIncompleteTextures;
+};
+
+// Used by the backends in Program*::linkResources to parse interface blocks and provide
+// information to ProgramLinkedResources' linkers.
+class ProgramLinkedResourcesLinker final : angle::NonCopyable
+{
+  public:
+    ProgramLinkedResourcesLinker(bool allowHLSLEncoder) : mAllowHLSLEncoder(allowHLSLEncoder) {}
+
+    void linkResources(const gl::ProgramState &programState,
+                       const gl::ProgramLinkedResources &resources) const;
+
+  private:
+    void getAtomicCounterBufferSizeMap(const gl::ProgramState &programState,
+                                       std::map<int, unsigned int> &sizeMapOut) const;
+
+    bool mAllowHLSLEncoder;
 };
 
 // The return value indicate if the data was updated or not.
