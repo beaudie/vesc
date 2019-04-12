@@ -538,7 +538,7 @@ void GL_APIENTRY GetProgramivRobustANGLE(GLuint program,
         "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
         program, pname, bufSize, (uintptr_t)length, (uintptr_t)params);
 
-    Context *context = GetValidGlobalContext();
+    Context *context = GetGlobalContext();
     if (context)
     {
         if (context->skipValidation() ||
@@ -581,7 +581,7 @@ GetShaderivRobustANGLE(GLuint shader, GLenum pname, GLsizei bufSize, GLsizei *le
         "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
         shader, pname, bufSize, (uintptr_t)length, (uintptr_t)params);
 
-    Context *context = GetValidGlobalContext();
+    Context *context = GetGlobalContext();
     if (context)
     {
         if (context->skipValidation() ||
@@ -1942,7 +1942,7 @@ void GL_APIENTRY GetQueryObjectivRobustANGLE(GLuint id,
         "0x%016" PRIxPTR ", GLint * params = 0x%016" PRIxPTR ")",
         id, pname, bufSize, (uintptr_t)length, (uintptr_t)params);
 
-    Context *context = GetValidGlobalContext();
+    Context *context = GetGlobalContext();
     if (context)
     {
         if (context->skipValidation() ||
@@ -1965,7 +1965,7 @@ void GL_APIENTRY GetQueryObjecti64vRobustANGLE(GLuint id,
         "0x%016" PRIxPTR ", GLint64 * params = 0x%016" PRIxPTR ")",
         id, pname, bufSize, (uintptr_t)length, (uintptr_t)params);
 
-    Context *context = GetValidGlobalContext();
+    Context *context = GetGlobalContext();
     if (context)
     {
         if (context->skipValidation() ||
@@ -3010,7 +3010,7 @@ void GL_APIENTRY GetQueryObjecti64vEXT(GLuint id, GLenum pname, GLint64 *params)
     EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLint64 *params = 0x%016" PRIxPTR ")", id, pname,
           (uintptr_t)params);
 
-    Context *context = GetValidGlobalContext();
+    Context *context = GetGlobalContext();
     if (context)
     {
         if (context->skipValidation() || ValidateGetQueryObjecti64vEXT(context, id, pname, params))
@@ -3026,7 +3026,7 @@ void GL_APIENTRY GetQueryObjectivEXT(GLuint id, GLenum pname, GLint *params)
     EVENT("(GLuint id = %u, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")", id, pname,
           (uintptr_t)params);
 
-    Context *context = GetValidGlobalContext();
+    Context *context = GetGlobalContext();
     if (context)
     {
         if (context->skipValidation() || ValidateGetQueryObjectivEXT(context, id, pname, params))
@@ -8974,7 +8974,7 @@ GLenum GL_APIENTRY GetErrorContextANGLE(GLeglContext ctx)
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("()");
 
-    Context *context = GetGlobalContext();
+    Context *context = static_cast<gl::Context *>(ctx);
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -9155,7 +9155,7 @@ GLenum GL_APIENTRY GetGraphicsResetStatusEXTContextANGLE(GLeglContext ctx)
     ANGLE_SCOPED_GLOBAL_LOCK();
     EVENT("()");
 
-    Context *context = GetGlobalContext();
+    Context *context = static_cast<gl::Context *>(ctx);
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
