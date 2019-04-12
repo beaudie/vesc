@@ -69,6 +69,30 @@
       "revId": "43ac59d87971168c018821535a13662be7cb054c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da89ab32_c2735c62",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-12T21:36:33Z",
+      "side": 1,
+      "message": "Well, on my Intel/NVIDIA laptop it always returns Intel.\nI think it does it based on what GPU the display is connected to, and not on which one is used for 3D graphics.\n\nYes, false FAIL expectations are not a so good thing, since this will not allow us to catch regressions on platforms where the test is passing. (Though this still would be better than red bots).\n\nMaybe would could check if primaryGPUIndex returns what we expect on the bots that we have on the waterfall. I recall Corentin had gpu_info_tests or something running on the bots.",
+      "parentUuid": "68d21173_5e6b12a7",
+      "range": {
+        "startLine": 347,
+        "startChar": 20,
+        "endLine": 347,
+        "endChar": 35
+      },
+      "revId": "43ac59d87971168c018821535a13662be7cb054c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
