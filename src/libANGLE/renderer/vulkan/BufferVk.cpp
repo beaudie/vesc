@@ -28,7 +28,7 @@ namespace
 constexpr size_t kBufferSizeGranularity = 4;
 }  // namespace
 
-BufferVk::BufferVk(const gl::BufferState &state) : BufferImpl(state) {}
+BufferVk::BufferVk(const gl::BufferState &state) : BufferImpl(state), mDataWriteAccessFlags(0) {}
 
 BufferVk::~BufferVk() {}
 
@@ -63,7 +63,8 @@ angle::Result BufferVk::setData(const gl::Context *context,
         const VkImageUsageFlags usageFlags =
             VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
             VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
-            VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT;
+            VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
+            VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT;
 
         VkBufferCreateInfo createInfo    = {};
         createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -154,8 +155,22 @@ angle::Result BufferVk::unmapImpl(ContextVk *contextVk)
     ASSERT(mBuffer.valid());
 
     mBuffer.getDeviceMemory().unmap(contextVk->getDevice());
+    mDataWriteAccessFlags = VK_ACCESS_HOST_WRITE_BIT;
 
     return angle::Result::Continue;
+}
+
+void BufferVk::onRead(vk::CommandGraphResource *reader, VkAccessFlagBits readAccessType)
+{
+    mBuffer.onRead(reader, readAccessType);
+
+    // Now that the buffer helper is part of the command graph, make sure its data write barrier is
+    // executed.
+    if (mDataWriteAccessFlags != 0)
+    {
+        mBuffer.onWrite(VK_ACCESS_HOST_WRITE_BIT);
+        mDataWriteAccessFlags = 0;
+    }
 }
 
 angle::Result BufferVk::getIndexRange(const gl::Context *context,
@@ -221,7 +236,8 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
 
         // Enqueue a copy command on the GPU.
         VkBufferCopy copyRegion = {0, offset, size};
-        ANGLE_TRY(mBuffer.copyFromBuffer(contextVk, stagingBuffer.getBuffer(), copyRegion));
+        ANGLE_TRY(mBuffer.copyFromBuffer(contextVk, stagingBuffer.getBuffer(),
+                                         VK_ACCESS_HOST_WRITE_BIT, copyRegion));
 
         // Immediately release staging buffer. We should probably be using a DynamicBuffer here.
         renderer->releaseObject(renderer->getCurrentQueueSerial(), &stagingBuffer);
@@ -236,6 +252,7 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
         memcpy(mapPointer, data, size);
 
         mBuffer.getDeviceMemory().unmap(device);
+        mDataWriteAccessFlags = VK_ACCESS_HOST_WRITE_BIT;
     }
 
     return angle::Result::Continue;
