@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "633fff60_554dc35b",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1001629
+      },
+      "writtenOn": "2019-04-12T02:17:16Z",
+      "side": 1,
+      "message": "I\u0027d recommend not passing this flag as well. There\u0027s -Wdelete-non-virtual-dtor which warns if a class has virtual methods, no virtual dtor _and is the target of a delete statement_. That\u0027s a much better, lower-noise warning and it\u0027s hence on by default already. -Wnon-virtual-dtor in practice shouldn\u0027t give you any additional protection while causing more busywork in some cases.",
+      "revId": "3fbaacb0330a79255d53a7270c075fea5e6797cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
