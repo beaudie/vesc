@@ -47,6 +47,21 @@ TEST_P(MemoryObjectTest, MemoryObjectShouldBeMemoryObject)
     EXPECT_GL_NO_ERROR();
 }
 
+TEST_P(MemoryObjectTest, ShouldFailValidationOnImportFdUnsupportedHandleType)
+{
+    ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_EXT_memory_object_fd"));
+
+    {
+        GLMemoryObject memoryObject;
+        GLsizei deviceMemorySize = 1;
+        int fd                   = 1;
+        glImportMemoryFdEXT(memoryObject, deviceMemorySize, GL_HANDLE_TYPE_OPAQUE_WIN32_EXT, fd);
+        EXPECT_GL_ERROR(GL_INVALID_ENUM);
+    }
+
+    EXPECT_GL_NO_ERROR();
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(MemoryObjectTest,
