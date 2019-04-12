@@ -513,7 +513,7 @@ Renderer11::Renderer11(egl::Display *display)
                 UNREACHABLE();
         }
 
-        mCreateDebugDevice = false;
+        mCreateDebugDevice = true;
     }
     else if (mDisplay->getPlatform() == EGL_PLATFORM_DEVICE_EXT)
     {
@@ -1326,6 +1326,7 @@ egl::Error Renderer11::getD3DTextureInfo(const egl::Config *configuration,
         case DXGI_FORMAT_B8G8R8A8_TYPELESS:
         case DXGI_FORMAT_R16G16B16A16_FLOAT:
         case DXGI_FORMAT_R32G32B32A32_FLOAT:
+        case DXGI_FORMAT_R10G10B10A2_UNORM:
             break;
 
         default:
