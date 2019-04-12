@@ -45,6 +45,30 @@
       "revId": "43ac59d87971168c018821535a13662be7cb054c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68d21173_5e6b12a7",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-12T21:05:00Z",
+      "side": 1,
+      "message": "I think that could be a good idea. But in this case the Mac AMD tester has both AMD and Intel GPUs, and these tests pass on Mac Intel, so we\u0027d get some false FAIL expectations.\n\nWhat do you mean primary GPU detection is broken on windows? It seems to work for the windows dEQP testers.",
+      "parentUuid": "fd000bda_11632a74",
+      "range": {
+        "startLine": 347,
+        "startChar": 20,
+        "endLine": 347,
+        "endChar": 35
+      },
+      "revId": "43ac59d87971168c018821535a13662be7cb054c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
