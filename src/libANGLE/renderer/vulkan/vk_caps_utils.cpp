@@ -117,6 +117,10 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxDrawBuffers =
         std::min<uint32_t>(mPhysicalDeviceProperties.limits.maxColorAttachments,
                            mPhysicalDeviceProperties.limits.maxFragmentOutputAttachments);
+    if (mNativeCaps.maxDrawBuffers > 1)
+    {
+        mNativeExtensions.drawBuffers = true;
+    }
     mNativeCaps.maxFramebufferWidth  = mPhysicalDeviceProperties.limits.maxFramebufferWidth;
     mNativeCaps.maxFramebufferHeight = mPhysicalDeviceProperties.limits.maxFramebufferHeight;
     mNativeCaps.maxColorAttachments  = mPhysicalDeviceProperties.limits.maxColorAttachments;
