@@ -341,16 +341,17 @@ inline bool GetActiveGPU(GPUDeviceInfo **devInfo)
     {
         return false;
     }
+    // Default to the first index
     uint32_t index = 0;
-    // See if the activeGPUIndex was set first
-    if (systemInfo->activeGPUIndex != -1)
-    {
-        index = systemInfo->activeGPUIndex;
-    }
-    // Else fallback to the primaryGPUIndex
-    else if (systemInfo->primaryGPUIndex != -1)
+    // See if the primaryGPUIndex was set first
+    if (systemInfo->primaryGPUIndex != -1)
     {
         index = systemInfo->primaryGPUIndex;
+    }
+    // Else fallback to the activeGPUIndex
+    else if (systemInfo->activeGPUIndex != -1)
+    {
+        index = systemInfo->activeGPUIndex;
     }
     ASSERT(index < systemInfo->gpus.size());
     *devInfo = &(systemInfo->gpus[index]);
