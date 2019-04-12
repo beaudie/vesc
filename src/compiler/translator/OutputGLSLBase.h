@@ -77,7 +77,7 @@ class TOutputGLSLBase : public TIntermTraverser
     virtual ImmutableString translateTextureFunction(const ImmutableString &name) { return name; }
 
     void declareStruct(const TStructure *structure);
-    virtual void writeQualifier(TQualifier qualifier, const TSymbol *symbol);
+    virtual void writeQualifier(TQualifier qualifier, const TType &type, const TSymbol *symbol);
     bool structDeclared(const TStructure *structure) const;
 
   private:
