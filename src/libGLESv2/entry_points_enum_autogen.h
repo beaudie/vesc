@@ -405,6 +405,7 @@ enum class EntryPoint
     LoadMatrixx,
     LoadPaletteFromModelViewMatrixOES,
     LogicOp,
+    LoseContextCHROMIUM,
     MapBufferOES,
     MapBufferRange,
     MapBufferRangeEXT,
