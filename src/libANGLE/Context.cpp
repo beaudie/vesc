@@ -7212,7 +7212,9 @@ void Context::bufferStorageMem(TextureType target, GLsizeiptr size, GLuint memor
 
 void Context::importMemoryFd(GLuint memory, GLuint64 size, GLenum handleType, GLint fd)
 {
-    UNIMPLEMENTED();
+    MemoryObject *memoryObject = getMemoryObject(memory);
+    ASSERT(memoryObject != nullptr);
+    ANGLE_CONTEXT_TRY(memoryObject->importFd(this, size, handleType, fd));
 }
 
 void Context::genSemaphores(GLsizei n, GLuint *semaphores)

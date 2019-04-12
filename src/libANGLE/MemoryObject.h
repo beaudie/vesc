@@ -21,6 +21,7 @@ class MemoryObjectImpl;
 
 namespace gl
 {
+class Context;
 
 class MemoryObject final : public RefCountObject
 {
@@ -29,6 +30,8 @@ class MemoryObject final : public RefCountObject
     ~MemoryObject() override;
 
     void onDestroy(const Context *context) override;
+
+    angle::Result importFd(Context *context, GLuint64 size, GLenum handleType, GLint fd);
 
   private:
     std::unique_ptr<rx::MemoryObjectImpl> mImplementation;
