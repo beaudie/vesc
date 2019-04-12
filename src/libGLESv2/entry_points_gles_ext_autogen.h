@@ -554,6 +554,9 @@ ANGLE_EXPORT void GL_APIENTRY CoverageModulationCHROMIUM(GLenum components);
 ANGLE_EXPORT void GL_APIENTRY MatrixLoadfCHROMIUM(GLenum matrixMode, const GLfloat *matrix);
 ANGLE_EXPORT void GL_APIENTRY MatrixLoadIdentityCHROMIUM(GLenum matrixMode);
 
+// GL_CHROMIUM_lose_context
+ANGLE_EXPORT void GL_APIENTRY LoseContextCHROMIUM(GLenum current, GLenum other);
+
 // GL_CHROMIUM_path_rendering
 ANGLE_EXPORT GLuint GL_APIENTRY GenPathsCHROMIUM(GLsizei range);
 ANGLE_EXPORT void GL_APIENTRY DeletePathsCHROMIUM(GLuint first, GLsizei range);
@@ -3736,6 +3739,9 @@ ANGLE_EXPORT void GL_APIENTRY SampleMaskiANGLEContextANGLE(GLeglContext ctx,
                                                            GLuint maskNumber,
                                                            GLbitfield mask);
 ANGLE_EXPORT void GL_APIENTRY ProvokingVertexANGLEContextANGLE(GLeglContext ctx, GLenum mode);
+ANGLE_EXPORT void GL_APIENTRY LoseContextCHROMIUMContextANGLE(GLeglContext ctx,
+                                                              GLenum current,
+                                                              GLenum other);
 }  // namespace gl
 
 #endif  // LIBGLESV2_ENTRY_POINTS_GLES_EXT_AUTOGEN_H_
