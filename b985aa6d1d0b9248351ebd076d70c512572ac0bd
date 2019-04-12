@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "416938ac_2ff030cf",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-12T17:51:55Z",
+      "side": 1,
+      "message": "Could we do this when generating the tests (next to mSkippedCount++)?",
+      "range": {
+        "startLine": 348,
+        "startChar": 0,
+        "endLine": 350,
+        "endChar": 21
+      },
+      "revId": "b985aa6d1d0b9248351ebd076d70c512572ac0bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
