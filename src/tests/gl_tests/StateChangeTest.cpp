@@ -3474,7 +3474,22 @@ TEST_P(SimpleStateChangeTest, DeleteTextureThenDraw)
     glBindTexture(GL_TEXTURE_2D, tex);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, red.data());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glUniform1i(loc, 1);
+    glUniform1i(loc, 0);
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Deleting TEXTURE_CUBE_MAP[0] should not affect TEXTURE_2D[0].
+    GLTexture tex2;
+    glBindTexture(GL_TEXTURE_CUBE_MAP, tex2);
+    tex2.reset();
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Deleting TEXTURE_2D[0] should start "sampling" from the default/zero texture.
     tex.reset();
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -3496,7 +3511,7 @@ ANGLE_INSTANTIATE_TEST(StateChangeRenderTest,
                        ES2_D3D11_FL9_3(),
                        ES2_VULKAN());
 ANGLE_INSTANTIATE_TEST(StateChangeTestES3, ES3_D3D11(), ES3_OPENGL());
-ANGLE_INSTANTIATE_TEST(SimpleStateChangeTest, ES2_VULKAN(), ES2_OPENGL());
+ANGLE_INSTANTIATE_TEST(SimpleStateChangeTest, ES2_D3D11(), ES2_VULKAN(), ES2_OPENGL());
 ANGLE_INSTANTIATE_TEST(SimpleStateChangeTestES3, ES3_OPENGL(), ES3_D3D11());
 ANGLE_INSTANTIATE_TEST(SimpleStateChangeTestES31, ES31_OPENGL(), ES31_D3D11());
 ANGLE_INSTANTIATE_TEST(ValidationStateChangeTest, ES3_D3D11(), ES3_OPENGL());
