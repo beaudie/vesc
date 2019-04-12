@@ -656,6 +656,9 @@
 
 // Misc unimplemented:
 
+// GL_EXT_draw_buffers / GLES 3.0 multiple draw buffers
+2394 VULKAN : dEQP.GLES3.functional_negative_api_buffer_draw_buffers
+
 // - FramebufferVk::clearBuffer*:
 2950 VULKAN : dEQP-GLES3.functional.fbo.render.resize.* = SKIP
 2950 VULKAN : dEQP-GLES3.functional.fbo.render.recreate_color.* = SKIP

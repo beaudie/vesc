@@ -114,9 +114,13 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.minAliasedLineWidth = 1.0f;
     mNativeCaps.maxAliasedLineWidth = 1.0f;
 
-    mNativeCaps.maxDrawBuffers =
-        std::min<uint32_t>(mPhysicalDeviceProperties.limits.maxColorAttachments,
-                           mPhysicalDeviceProperties.limits.maxFragmentOutputAttachments);
+    // TODO: (courtneygo) use below once GL_EXT_draw_buffers is suppored
+    // mNativeCaps.maxDrawBuffers =
+    //     std::min<uint32_t>(mPhysicalDeviceProperties.limits.maxColorAttachments,
+    //     mPhysicalDeviceProperties.limits.maxFragmentOutputAttachments);
+    // http://anglebug.com/2394
+    mNativeCaps.maxDrawBuffers = 1;
+
     mNativeCaps.maxFramebufferWidth  = mPhysicalDeviceProperties.limits.maxFramebufferWidth;
     mNativeCaps.maxFramebufferHeight = mPhysicalDeviceProperties.limits.maxFramebufferHeight;
     mNativeCaps.maxColorAttachments  = mPhysicalDeviceProperties.limits.maxColorAttachments;
