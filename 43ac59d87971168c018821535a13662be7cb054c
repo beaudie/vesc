@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "025cbd3b_47c5f6d8",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-12T18:37:34Z",
+      "side": 1,
+      "message": "This doesn\u0027t match the implementation now.",
+      "range": {
+        "startLine": 334,
+        "startChar": 0,
+        "endLine": 337,
+        "endChar": 0
+      },
+      "revId": "43ac59d87971168c018821535a13662be7cb054c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd000bda_11632a74",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-12T18:37:34Z",
+      "side": 1,
+      "message": "I\u0027m not sure how activeGPU is determined, but I know that primaryGPU detection is broken, at least on Windows.\nWhen I had to make an NVIDIA-specific change, I\u0027ve checked whether any of the GPUs is NVIDIA.\nSee in SystemInfo:\n    bool hasNVIDIAGPU() const;\n    bool hasIntelGPU() const;\n    bool hasAMDGPU() const;\n\nWhat do you think if we make the expectations apply if any of the GPUs matches the expectation?",
+      "range": {
+        "startLine": 347,
+        "startChar": 20,
+        "endLine": 347,
+        "endChar": 35
+      },
+      "revId": "43ac59d87971168c018821535a13662be7cb054c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
