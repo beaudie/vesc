@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c2e2c18_161fd904",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-12T18:12:13Z",
+      "side": 1,
+      "message": "Can you tag this with Bug: angleproject:3356?",
+      "revId": "1736ba810b83ce3e3b052afdb92128244efc3b58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
