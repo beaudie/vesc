@@ -27,17 +27,19 @@ ANGLE_REENABLE_EXTRA_SEMI_WARNING
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/ProgramLinkedResources.h"
+#include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
 namespace rx
 {
 namespace
 {
-constexpr char kQualifierMarkerBegin[] = "@@ QUALIFIER-";
-constexpr char kLayoutMarkerBegin[]    = "@@ LAYOUT-";
-constexpr char kMarkerEnd[]            = " @@";
-constexpr char kUniformQualifier[]     = "uniform";
-constexpr char kVersionDefine[]        = "#version 450 core\n";
-constexpr char kLineRasterDefine[]     = R"(#version 450 core
+constexpr char kQualifierMarkerBegin[]  = "@@ QUALIFIER-";
+constexpr char kLayoutMarkerBegin[]     = "@@ LAYOUT-";
+constexpr char kSetBindingMarkerBegin[] = "@@ SET-BINDING-";
+constexpr char kMarkerEnd[]             = " @@";
+constexpr char kUniformQualifier[]      = "uniform";
+constexpr char kVersionDefine[]         = "#version 450 core\n";
+constexpr char kLineRasterDefine[]      = R"(#version 450 core
 
 #define ANGLE_ENABLE_LINE_SEGMENT_RASTERIZATION
 )";
@@ -103,12 +105,34 @@ void InsertQualifierSpecifierString(std::string *shaderString,
     angle::ReplaceSubstring(shaderString, searchString, replacementString);
 }
 
+void InsertSetBindingSpecifierString(std::string *shaderString,
+                                     const std::string &variableName,
+                                     const std::string &setBindingString)
+{
+    // The set and binding specifier either substitutes a @@ LAYOUT-X @@ macro wholly, or just a
+    // @@ SET-BINDING-X @@ macro within a pre-existing `layout()` specifier.
+    InsertLayoutSpecifierString(shaderString, variableName, setBindingString);
+
+    std::stringstream searchStringBuilder;
+    searchStringBuilder << kSetBindingMarkerBegin << variableName << kMarkerEnd;
+    std::string searchString = searchStringBuilder.str();
+
+    if (!setBindingString.empty())
+    {
+        angle::ReplaceSubstring(shaderString, searchString, ", " + setBindingString);
+    }
+    else
+    {
+        angle::ReplaceSubstring(shaderString, searchString, setBindingString);
+    }
+}
+
 void EraseLayoutAndQualifierStrings(std::string *vertexSource,
                                     std::string *fragmentSource,
                                     const std::string &uniformName)
 {
-    InsertLayoutSpecifierString(vertexSource, uniformName, "");
-    InsertLayoutSpecifierString(fragmentSource, uniformName, "");
+    InsertSetBindingSpecifierString(vertexSource, uniformName, "");
+    InsertSetBindingSpecifierString(fragmentSource, uniformName, "");
 
     InsertQualifierSpecifierString(vertexSource, uniformName, "");
     InsertQualifierSpecifierString(fragmentSource, uniformName, "");
@@ -236,23 +260,50 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
         EraseLayoutAndQualifierStrings(&vertexSource, &fragmentSource, varyingName);
     }
 
+    // Assign uniform locations
+
     // Bind the default uniforms for vertex and fragment shaders.
     // See corresponding code in OutputVulkanGLSL.cpp.
-    std::string uniformsSearchString("@@ DEFAULT-UNIFORMS-SET-BINDING @@");
+    const std::string uniformsSearchString("@@ DEFAULT-UNIFORMS-SET-BINDING @@");
 
-    std::string vertexDefaultUniformsBinding   = "set = 0, binding = 0";
-    std::string fragmentDefaultUniformsBinding = "set = 0, binding = 1";
+    const std::string driverUniformsDescriptorSet =
+        "set = " + Str(kDriverUniformsDescriptorSetIndex);
+    const std::string uniformsDescriptorSet      = "set = " + Str(kUniformsDescriptorSetIndex);
+    const std::string uniformBlocksDescriptorSet = "set = " + Str(kUniformBlockDescriptorSetIndex);
+    const std::string texturesDescriptorSet      = "set = " + Str(kTextureDescriptorSetIndex);
+
+    const std::string vertexDefaultUniformsBinding =
+        uniformsDescriptorSet + ", binding = " + Str(kVertexUniformsBindingIndex);
+    const std::string fragmentDefaultUniformsBinding =
+        uniformsDescriptorSet + ", binding = " + Str(kFragmentUniformsBindingIndex);
 
     angle::ReplaceSubstring(&vertexSource, uniformsSearchString, vertexDefaultUniformsBinding);
     angle::ReplaceSubstring(&fragmentSource, uniformsSearchString, fragmentDefaultUniformsBinding);
 
+    // Assign uniform blocks to a descriptor set and binding.
+    const auto &uniformBlocks    = programState.getUniformBlocks();
+    uint32_t uniformBlockBinding = 0;
+    for (const gl::InterfaceBlock &uniformBlock : uniformBlocks)
+    {
+        const std::string setBindingString =
+            uniformBlocksDescriptorSet + ", binding = " + Str(uniformBlockBinding);
+
+        InsertSetBindingSpecifierString(&vertexSource, uniformBlock.name, setBindingString);
+        InsertQualifierSpecifierString(&vertexSource, uniformBlock.name, kUniformQualifier);
+        InsertSetBindingSpecifierString(&fragmentSource, uniformBlock.name, setBindingString);
+        InsertQualifierSpecifierString(&fragmentSource, uniformBlock.name, kUniformQualifier);
+
+        ++uniformBlockBinding;
+    }
+
     // Assign textures to a descriptor set and binding.
-    int textureCount     = 0;
+    uint32_t textureBinding = 0;
     const auto &uniforms = programState.getUniforms();
     for (unsigned int uniformIndex : programState.getSamplerUniformRange())
     {
         const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
-        std::string setBindingString            = "set = 1, binding = " + Str(textureCount);
+        const std::string setBindingString =
+            texturesDescriptorSet + ", binding = " + Str(textureBinding);
 
         // Samplers in structs are extracted and renamed.
         const std::string samplerName = GetMappedSamplerName(samplerUniform.name);
@@ -261,21 +312,23 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
                samplerUniform.isActive(gl::ShaderType::Fragment));
         if (samplerUniform.isActive(gl::ShaderType::Vertex))
         {
-            InsertLayoutSpecifierString(&vertexSource, samplerName, setBindingString);
+            InsertSetBindingSpecifierString(&vertexSource, samplerName, setBindingString);
         }
         InsertQualifierSpecifierString(&vertexSource, samplerName, kUniformQualifier);
 
         if (samplerUniform.isActive(gl::ShaderType::Fragment))
         {
-            InsertLayoutSpecifierString(&fragmentSource, samplerName, setBindingString);
+            InsertSetBindingSpecifierString(&fragmentSource, samplerName, setBindingString);
         }
         InsertQualifierSpecifierString(&fragmentSource, samplerName, kUniformQualifier);
 
-        textureCount++;
+        textureBinding++;
     }
 
-    // Start the unused sampler bindings at something ridiculously high.
-    constexpr int kBaseUnusedSamplerBinding = 100;
+    // Place the unused uniforms in the driver uniforms descriptor set, which has a fixed number of
+    // bindings.  This avoids any possible index collision between uniform bindings set in the
+    // shader and the ones assigned here to the unused ones.
+    constexpr int kBaseUnusedSamplerBinding = 1;
     int unusedSamplerBinding                = kBaseUnusedSamplerBinding;
 
     for (const gl::UnusedUniform &unusedUniform : resources.unusedUniforms)
@@ -287,7 +340,8 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
 
             std::stringstream layoutStringStream;
 
-            layoutStringStream << "set = 0, binding = " << unusedSamplerBinding++;
+            layoutStringStream << driverUniformsDescriptorSet + ", binding = "
+                               << unusedSamplerBinding++;
 
             std::string layoutString = layoutStringStream.str();
 
@@ -304,10 +358,10 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
     }
 
     // Substitute layout and qualifier strings for the driver uniforms block.
-    constexpr char kDriverBlockLayoutString[] = "set = 2, binding = 0";
-    constexpr char kDriverBlockName[]         = "ANGLEUniforms";
-    InsertLayoutSpecifierString(&vertexSource, kDriverBlockName, kDriverBlockLayoutString);
-    InsertLayoutSpecifierString(&fragmentSource, kDriverBlockName, kDriverBlockLayoutString);
+    const std::string driverBlockLayoutString = driverUniformsDescriptorSet + ", binding = 0";
+    constexpr char kDriverBlockName[]         = "ANGLEUniformBlock";
+    InsertLayoutSpecifierString(&vertexSource, kDriverBlockName, driverBlockLayoutString);
+    InsertLayoutSpecifierString(&fragmentSource, kDriverBlockName, driverBlockLayoutString);
 
     InsertQualifierSpecifierString(&vertexSource, kDriverBlockName, kUniformQualifier);
     InsertQualifierSpecifierString(&fragmentSource, kDriverBlockName, kUniformQualifier);
