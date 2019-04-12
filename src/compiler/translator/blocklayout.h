@@ -79,6 +79,9 @@ class BlockLayoutEncoder
     BlockLayoutEncoder();
     virtual ~BlockLayoutEncoder() {}
 
+    // Reset the encoder and prepare for reuse.
+    virtual void reset();
+
     BlockMemberInfo encodeType(GLenum type,
                                const std::vector<unsigned int> &arraySizes,
                                bool isRowMajorMatrix);

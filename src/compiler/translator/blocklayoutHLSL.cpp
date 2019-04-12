@@ -19,6 +19,11 @@ HLSLBlockEncoder::HLSLBlockEncoder(HLSLBlockEncoderStrategy strategy, bool trans
     : mEncoderStrategy(strategy), mTransposeMatrices(transposeMatrices)
 {}
 
+void HLSLBlockEncoder::reset()
+{
+    mCurrentOffset = 0;
+}
+
 void HLSLBlockEncoder::enterAggregateType(const ShaderVariable &structVar)
 {
     align(kComponentsPerRegister);

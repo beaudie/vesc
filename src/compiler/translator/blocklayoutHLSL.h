@@ -35,6 +35,8 @@ class HLSLBlockEncoder : public BlockLayoutEncoder
 
     HLSLBlockEncoder(HLSLBlockEncoderStrategy strategy, bool transposeMatrices);
 
+    void reset() override;
+
     void enterAggregateType(const ShaderVariable &structVar) override;
     void exitAggregateType(const ShaderVariable &structVar) override;
     void skipRegisters(unsigned int numRegisters);

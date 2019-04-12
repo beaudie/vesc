@@ -169,6 +169,12 @@ class BaseAlignmentVisitor : public ShaderVariableVisitor
 // BlockLayoutEncoder implementation.
 BlockLayoutEncoder::BlockLayoutEncoder() : mCurrentOffset(0) {}
 
+void BlockLayoutEncoder::reset()
+{
+    // Unused and unimplemented in some encoders.
+    UNREACHABLE();
+}
+
 BlockMemberInfo BlockLayoutEncoder::encodeType(GLenum type,
                                                const std::vector<unsigned int> &arraySizes,
                                                bool isRowMajorMatrix)
