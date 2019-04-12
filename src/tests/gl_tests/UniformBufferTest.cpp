@@ -1522,7 +1522,8 @@ ANGLE_INSTANTIATE_TEST(UniformBufferTest,
                        ES3_D3D11(),
                        ES3_D3D11_FL11_1(),
                        ES3_OPENGL(),
-                       ES3_OPENGLES());
+                       ES3_OPENGLES(),
+                       ES3_VULKAN());
 ANGLE_INSTANTIATE_TEST(UniformBufferTest31, ES31_D3D11(), ES31_OPENGL(), ES31_OPENGLES());
 
 }  // namespace
