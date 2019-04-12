@@ -229,7 +229,7 @@ void TOutputGLSLBase::writeLayoutQualifier(TIntermTyped *variable)
     out << ") ";
 }
 
-void TOutputGLSLBase::writeQualifier(TQualifier qualifier, const TSymbol *symbol)
+void TOutputGLSLBase::writeQualifier(TQualifier qualifier, const TType &type, const TSymbol *symbol)
 {
     const char *result = mapQualifierToString(qualifier);
     if (result && result[0] != '\0')
@@ -284,7 +284,7 @@ void TOutputGLSLBase::writeVariableType(const TType &type, const TSymbol *symbol
     }
     if (qualifier != EvqTemporary && qualifier != EvqGlobal)
     {
-        writeQualifier(qualifier, symbol);
+        writeQualifier(qualifier, type, symbol);
     }
 
     const TMemoryQualifier &memoryQualifier = type.getMemoryQualifier();

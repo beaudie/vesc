@@ -61,9 +61,57 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermTyped *variable)
     TIntermSymbol *symbol = variable->getAsSymbolNode();
     ASSERT(symbol);
 
+    ImmutableString name = symbol->getName();
+    // TODO(syoussefi): This is incomplete.  All layout qualifiers that are originally mentioned in
+    // layout() should be preserved.  http://anglebug.com/3199
+    bool hasAnyQualifiers     = false;
+    const char *blockStorage  = nullptr;
+    const char *matrixPacking = nullptr;
+
+    // For interface blocks, use the block name instead.  When the layout qualifier is being
+    // replaced in the backend, that would be the name that's available.
+    if (type.isInterfaceBlock())
+    {
+        const TInterfaceBlock *interfaceBlock = type.getInterfaceBlock();
+        name                                  = interfaceBlock->name();
+        // For now, only memory layout qualifiers are handled.
+        if (interfaceBlock->blockStorage() != EbsUnspecified)
+        {
+            hasAnyQualifiers = true;
+            blockStorage     = getBlockStorageString(interfaceBlock->blockStorage());
+        }
+    }
+
+    if (layoutQualifier.matrixPacking != EmpUnspecified)
+    {
+        hasAnyQualifiers = true;
+        matrixPacking    = getMatrixPackingString(layoutQualifier.matrixPacking);
+    }
+
     if (needsCustomLayout)
     {
-        out << "@@ LAYOUT-" << symbol->getName() << " @@";
+        if (hasAnyQualifiers)
+        {
+            out << "layout(";
+            const char *separator = "";
+            if (blockStorage)
+            {
+                out << separator << blockStorage;
+                separator = ", ";
+            }
+            if (matrixPacking)
+            {
+                out << separator << matrixPacking;
+                separator = ", ";
+            }
+            // SET-BINDING would either be substituted with nothing, or `, set=?, binding=?`.
+            out << "@@ SET-BINDING-" << name << " @@";
+        }
+        else
+        {
+            // LAYOUT would either be substituted with nothing, or `layout(set=?, binding=?)`
+            out << "@@ LAYOUT-" << name << " @@";
+        }
     }
     else
     {
@@ -72,21 +120,24 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermTyped *variable)
 
     if (IsImage(type.getBasicType()) && layoutQualifier.imageInternalFormat != EiifUnspecified)
     {
+        ASSERT(!needsCustomLayout);
         ASSERT(type.getQualifier() == EvqTemporary || type.getQualifier() == EvqUniform);
         out << getImageInternalFormatString(layoutQualifier.imageInternalFormat);
     }
 
-    if (!needsCustomLayout)
+    if (!needsCustomLayout || hasAnyQualifiers)
     {
         out << ") ";
     }
 }
 
-void TOutputVulkanGLSL::writeQualifier(TQualifier qualifier, const TSymbol *symbol)
+void TOutputVulkanGLSL::writeQualifier(TQualifier qualifier,
+                                       const TType &type,
+                                       const TSymbol *symbol)
 {
     if (qualifier != EvqUniform && qualifier != EvqAttribute && !sh::IsVarying(qualifier))
     {
-        TOutputGLSLBase::writeQualifier(qualifier, symbol);
+        TOutputGLSLBase::writeQualifier(qualifier, type, symbol);
         return;
     }
 
@@ -95,8 +146,17 @@ void TOutputVulkanGLSL::writeQualifier(TQualifier qualifier, const TSymbol *symb
         return;
     }
 
+    ImmutableString name = symbol->name();
+
+    // For interface blocks, use the block name instead.  When the qualifier is being replaced in
+    // the backend, that would be the name that's available.
+    if (type.isInterfaceBlock())
+    {
+        name = type.getInterfaceBlock()->name();
+    }
+
     TInfoSinkBase &out = objSink();
-    out << "@@ QUALIFIER-" << symbol->name().data() << " @@ ";
+    out << "@@ QUALIFIER-" << name.data() << " @@ ";
 }
 
 void TOutputVulkanGLSL::writeVariableType(const TType &type, const TSymbol *symbol)
