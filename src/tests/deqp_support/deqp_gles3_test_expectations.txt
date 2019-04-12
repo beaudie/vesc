@@ -612,9 +612,6 @@
 2950 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.color0.rgba32f = FAIL
 2950 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component_unsigned_int = FAIL
 
-// UBO:
-2950 VULKAN : dEQP-GLES3.functional.ubo.* = SKIP
-
 // PBO:
 2950 VULKAN : dEQP-GLES3.functional.pbo.* = SKIP
 

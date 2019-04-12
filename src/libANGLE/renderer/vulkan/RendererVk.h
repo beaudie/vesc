@@ -90,6 +90,7 @@ class RendererVk : angle::NonCopyable
     const gl::TextureCapsMap &getNativeTextureCaps() const;
     const gl::Extensions &getNativeExtensions() const;
     const gl::Limitations &getNativeLimitations() const;
+    uint32_t getMaxUniformBlocks();
     uint32_t getMaxActiveTextures();
 
     Serial getCurrentQueueSerial() const { return mCurrentQueueSerial; }
