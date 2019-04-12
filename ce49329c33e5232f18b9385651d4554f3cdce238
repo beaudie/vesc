@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cde66287_02011367",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-12T17:53:03Z",
+      "side": 1,
+      "message": "nit: Prefix with \"Vulkan:\"",
+      "revId": "ce49329c33e5232f18b9385651d4554f3cdce238",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
