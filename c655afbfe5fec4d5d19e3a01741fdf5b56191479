@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c96b2f6_bcdc0c2a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-12T18:50:54Z",
+      "side": 1,
+      "message": "can you remove the tab character?",
+      "range": {
+        "startLine": 120,
+        "startChar": 5,
+        "endLine": 120,
+        "endChar": 7
+      },
+      "revId": "c655afbfe5fec4d5d19e3a01741fdf5b56191479",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
