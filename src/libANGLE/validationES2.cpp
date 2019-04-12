@@ -3193,8 +3193,16 @@ bool ValidateImportMemoryFdEXT(Context *context,
         return false;
     }
 
-    UNIMPLEMENTED();
-    return false;
+    switch (handleType)
+    {
+        case GL_HANDLE_TYPE_OPAQUE_FD_EXT:
+            break;
+        default:
+            context->validationError(GL_INVALID_ENUM, kInvalidHandleType);
+            return false;
+    }
+
+    return true;
 }
 
 bool ValidateDeleteSemaphoresEXT(Context *context, GLsizei n, const GLuint *semaphores)

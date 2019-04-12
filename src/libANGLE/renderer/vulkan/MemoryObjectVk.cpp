@@ -7,13 +7,59 @@
 
 #include "libANGLE/renderer/vulkan/MemoryObjectVk.h"
 
+#include <unistd.h>
+#include <vulkan/vulkan.h>
+
+#include "common/debug.h"
+#include "libANGLE/Context.h"
+#include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/RendererVk.h"
+
 namespace rx
 {
 
-MemoryObjectVk::MemoryObjectVk() {}
+namespace
+{
+
+constexpr int kInvalidFd = -1;
+
+}  // namespace
+
+MemoryObjectVk::MemoryObjectVk() : mSize(0), mFd(kInvalidFd) {}
 
 MemoryObjectVk::~MemoryObjectVk() = default;
 
-void MemoryObjectVk::onDestroy(const gl::Context *context) {}
+void MemoryObjectVk::onDestroy(const gl::Context *context)
+{
+    if (mFd != kInvalidFd)
+    {
+        close(mFd);
+        mFd = kInvalidFd;
+    }
+}
+
+angle::Result MemoryObjectVk::importFd(gl::Context *context,
+                                       GLuint64 size,
+                                       GLenum handleType,
+                                       GLint fd)
+{
+    switch (handleType)
+    {
+        case GL_HANDLE_TYPE_OPAQUE_FD_EXT:
+            return importOpaqueFd(context, size, fd);
+
+        default:
+            UNREACHABLE();
+            return angle::Result::Stop;
+    }
+}
+
+angle::Result MemoryObjectVk::importOpaqueFd(gl::Context *context, GLuint64 size, GLint fd)
+{
+    ASSERT(mFd == kInvalidFd);
+    mFd   = fd;
+    mSize = size;
+    return angle::Result::Continue;
+}
 
 }  // namespace rx
