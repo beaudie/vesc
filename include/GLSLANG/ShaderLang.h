@@ -281,6 +281,12 @@ const ShCompileOptions SH_INIT_SHARED_VARIABLES = UINT64_C(1) << 41;
 // http://anglebug.com/3246
 const ShCompileOptions SH_FORCE_ATOMIC_VALUE_RESOLUTION = UINT64_C(1) << 42;
 
+// Change interface block layout qualifiers to std140 for any layout that is not explicitly set to
+// std430.  This is to comply with GL_KHR_vulkan_glsl where shared and packed are not allowed (and
+// std140 could be used instead) and unspecified layouts can assume either std140 or std430 (and we
+// choose std140 as std430 is not yet universally supported).
+const ShCompileOptions SH_REDEFINE_INTERFACE_LAYOUT_QUALIFIERS_WITH_STD = UINT64_C(1) << 43;
+
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy
 {
