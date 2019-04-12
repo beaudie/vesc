@@ -13,8 +13,9 @@
 #include <dlfcn.h>
 
 #include "common/debug.h"
+#include "gpu_info_util/SystemInfo.h"
 #include "libANGLE/Display.h"
-#include "libANGLE/renderer/gl/ContextGL.h"
+#include "libANGLE/renderer/gl/cgl/ContextCGL.h"
 #include "libANGLE/renderer/gl/cgl/IOSurfaceSurfaceCGL.h"
 #include "libANGLE/renderer/gl/cgl/PbufferSurfaceCGL.h"
 #include "libANGLE/renderer/gl/cgl/RendererCGL.h"
@@ -49,7 +50,13 @@ class FunctionsGLCGL : public FunctionsGL
 };
 
 DisplayCGL::DisplayCGL(const egl::DisplayState &state)
-    : DisplayGL(state), mEGLDisplay(nullptr), mContext(nullptr), mPixelFormat(nullptr)
+    : DisplayGL(state),
+      mEGLDisplay(nullptr),
+      mContext(nullptr),
+      mPixelFormat(nullptr),
+      mSupportsGPUSwitching(false),
+      mDiscreteGPUPixelFormat(nullptr),
+      mDiscreteGPURefs(0)
 {}
 
 DisplayCGL::~DisplayCGL() {}
@@ -58,13 +65,35 @@ egl::Error DisplayCGL::initialize(egl::Display *display)
 {
     mEGLDisplay = display;
 
+    // Query SystemInfo and figure out whether this is a dual-GPU system.
+    // TODO(kbr): this code was ported over from Chromium, and its correctness
+    // could be improved - need to use Mac-specific APIs to determine whether
+    // offline renderers are allowed, and whether these two GPUs are really the
+    // integrated/discrete GPUs in a laptop.
+    angle::SystemInfo info;
+    if (!angle::GetSystemInfo(&info))
+    {
+        return egl::EglNotInitialized() << "Unable to query ANGLE's SystemInfo.";
+    }
+    if (info.gpus.size() == 2 &&
+        ((angle::IsIntel(info.gpus[0].vendorId) && !angle::IsIntel(info.gpus[1].vendorId)) ||
+         (!angle::IsIntel(info.gpus[0].vendorId) && angle::IsIntel(info.gpus[1].vendorId))))
+    {
+        mSupportsGPUSwitching = true;
+    }
+
     {
         // TODO(cwallez) investigate which pixel format we want
-        CGLPixelFormatAttribute attribs[] = {
-            kCGLPFAOpenGLProfile, static_cast<CGLPixelFormatAttribute>(kCGLOGLPVersion_3_2_Core),
-            static_cast<CGLPixelFormatAttribute>(0)};
+        std::vector<CGLPixelFormatAttribute> attribs;
+        attribs.push_back(kCGLPFAOpenGLProfile);
+        attribs.push_back(static_cast<CGLPixelFormatAttribute>(kCGLOGLPVersion_3_2_Core));
+        if (mSupportsGPUSwitching)
+        {
+            attribs.push_back(kCGLPFAAllowOfflineRenderers);
+        }
+        attribs.push_back(static_cast<CGLPixelFormatAttribute>(0));
         GLint nVirtualScreens = 0;
-        CGLChoosePixelFormat(attribs, &mPixelFormat, &nVirtualScreens);
+        CGLChoosePixelFormat(attribs.data(), &mPixelFormat, &nVirtualScreens);
 
         if (mPixelFormat == nullptr)
         {
@@ -161,7 +190,30 @@ ContextImpl *DisplayCGL::createContext(const gl::State &state,
                                        const gl::Context *shareContext,
                                        const egl::AttributeMap &attribs)
 {
-    return new ContextGL(state, errorSet, mRenderer);
+    bool usesDiscreteGPU = false;
+
+    if (attribs.get(EGL_POWER_PREFERENCE_ANGLE, EGL_LOW_POWER_ANGLE) == EGL_HIGH_POWER_ANGLE)
+    {
+        // Should have been rejected by validation if not supported.
+        ASSERT(mSupportsGPUSwitching);
+        // Create discrete pixel format if necessary.
+        if (!mDiscreteGPUPixelFormat)
+        {
+            std::vector<CGLPixelFormatAttribute> discreteAttribs;
+            discreteAttribs.push_back((CGLPixelFormatAttribute)0);
+            GLint numPixelFormats = 0;
+            if (CGLChoosePixelFormat(&discreteAttribs.front(), &mDiscreteGPUPixelFormat,
+                                     &numPixelFormats) != kCGLNoError)
+            {
+                ERR() << "Error choosing discrete pixel format.";
+                return nullptr;
+            }
+        }
+        ++mDiscreteGPURefs;
+        usesDiscreteGPU = true;
+    }
+
+    return new ContextCGL(state, errorSet, mRenderer, usesDiscreteGPU);
 }
 
 DeviceImpl *DisplayCGL::createDevice()
@@ -288,6 +340,11 @@ void DisplayCGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
     // Contexts are virtualized so textures can be shared globally
     outExtensions->displayTextureShareGroup = true;
 
+    if (mSupportsGPUSwitching)
+    {
+        outExtensions->powerPreference = true;
+    }
+
     DisplayGL::generateExtensions(outExtensions);
 }
 
@@ -369,5 +426,15 @@ WorkerContext *DisplayCGL::createWorkerContext(std::string *infoLog)
     }
 
     return new WorkerContextCGL(context);
+}
+
+void DisplayCGL::unreferenceDiscreteGPU()
+{
+    ASSERT(mDiscreteGPURefs > 0);
+    if (--mDiscreteGPURefs == 0)
+    {
+        CGLDestroyPixelFormat(mDiscreteGPUPixelFormat);
+        mDiscreteGPUPixelFormat = nullptr;
+    }
 }
 }
