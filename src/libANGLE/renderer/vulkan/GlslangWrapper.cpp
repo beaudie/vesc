@@ -156,7 +156,6 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
 
     // Parse attribute locations and replace them in the vertex shader.
     // See corresponding code in OutputVulkanGLSL.cpp.
-    // TODO(jmadill): Also do the same for ESSL 3 fragment outputs.
     for (const sh::Attribute &attribute : programState.getAttributes())
     {
         // Warning: If we endup supporting ES 3.0 shaders and up, Program::linkAttributes is going
@@ -180,6 +179,35 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
 
         InsertLayoutSpecifierString(&vertexSource, attribute.name, "");
         InsertQualifierSpecifierString(&vertexSource, attribute.name, "");
+    }
+
+    // Parse output locations and replace them in the fragment shader.
+    // See corresponding code in OutputVulkanGLSL.cpp.
+    // TODO(syoussefi): Add support for EXT_blend_func_extended.  http://anglebug.com/1085
+    const auto &outputLocations = programState.getOutputLocations();
+    const auto &outputVariables = programState.getOutputVariables();
+    for (size_t outputLocationIndex = 0u; outputLocationIndex < outputLocations.size();
+         ++outputLocationIndex)
+    {
+        const gl::VariableLocation &outputLocation = outputLocations[outputLocationIndex];
+        if (outputLocation.arrayIndex == 0 && outputLocation.used() && !outputLocation.ignored)
+        {
+            const sh::OutputVariable &outputVar = outputVariables[outputLocation.index];
+
+            std::string locationString;
+            if (outputVar.location != -1)
+            {
+                locationString = "location = " + Str(outputVar.location);
+            }
+            else
+            {
+                // If there is only one output, it is allowed not to have a location qualifier, in
+                // which case it defaults to 0.  GLSL ES 3.00 spec, section 4.3.8.2.
+                locationString = "location = 0";
+            }
+
+            InsertLayoutSpecifierString(&fragmentSource, outputVar.name, locationString);
+        }
     }
 
     // Assign varying locations.
