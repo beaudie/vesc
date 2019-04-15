@@ -246,12 +246,14 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
             locationString += ", component = " + Str(varyingReg.registerColumn);
         }
 
-        InsertLayoutSpecifierString(&vertexSource, varying.varying->name, locationString);
-        InsertLayoutSpecifierString(&fragmentSource, varying.varying->name, locationString);
+        const std::string &name =
+            varying.parentStructName != "" ? varying.parentStructName : varying.varying->name;
+        InsertLayoutSpecifierString(&vertexSource, name, locationString);
+        InsertLayoutSpecifierString(&fragmentSource, name, locationString);
 
         ASSERT(varying.interpolation == sh::INTERPOLATION_SMOOTH);
-        InsertQualifierSpecifierString(&vertexSource, varying.varying->name, "out");
-        InsertQualifierSpecifierString(&fragmentSource, varying.varying->name, "in");
+        InsertQualifierSpecifierString(&vertexSource, name, "out");
+        InsertQualifierSpecifierString(&fragmentSource, name, "in");
     }
 
     // Remove all the markers for unused varyings.
