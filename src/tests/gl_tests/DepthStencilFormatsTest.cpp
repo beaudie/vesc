@@ -19,10 +19,6 @@ class DepthStencilFormatsTestBase : public ANGLETest
     {
         setWindowWidth(128);
         setWindowHeight(128);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     bool checkTexImageFormatSupport(GLenum format, GLenum type)
@@ -260,10 +256,6 @@ class TinyDepthStencilWorkaroundTest : public ANGLETest
     {
         setWindowWidth(512);
         setWindowHeight(512);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     // Override the workarounds to enable "tiny" depth/stencil textures.

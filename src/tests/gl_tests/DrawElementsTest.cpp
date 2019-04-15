@@ -22,8 +22,6 @@ class DrawElementsTest : public ANGLETest
     {
         setWindowWidth(64);
         setWindowHeight(64);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
     }
 
     ~DrawElementsTest()

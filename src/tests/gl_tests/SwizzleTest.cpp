@@ -20,10 +20,6 @@ class SwizzleTest : public ANGLETest
     {
         setWindowWidth(128);
         setWindowHeight(128);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
 
         constexpr GLenum swizzles[] = {
             GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA, GL_ZERO, GL_ONE,

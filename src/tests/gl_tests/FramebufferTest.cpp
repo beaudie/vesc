@@ -31,10 +31,6 @@ class FramebufferFormatsTest : public ANGLETest
     {
         setWindowWidth(128);
         setWindowHeight(128);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     void checkBitCount(GLuint fbo, GLenum channel, GLint minBits)
@@ -920,10 +916,6 @@ class AddDummyTextureNoRenderTargetTest : public ANGLETest
     {
         setWindowWidth(512);
         setWindowHeight(512);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) override

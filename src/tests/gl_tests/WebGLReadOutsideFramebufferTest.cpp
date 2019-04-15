@@ -224,10 +224,6 @@ class WebGLReadOutsideFramebufferTest : public ANGLETest
     {
         setWindowWidth(kFbWidth);
         setWindowHeight(kFbHeight);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
         setWebGLCompatibilityEnabled(true);
     }
 

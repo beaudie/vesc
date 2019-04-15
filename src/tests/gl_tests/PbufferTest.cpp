@@ -17,10 +17,6 @@ class PbufferTest : public ANGLETest
     {
         setWindowWidth(512);
         setWindowHeight(512);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     virtual void SetUp()
