@@ -62,12 +62,12 @@ bool HasSrcAndDstBlitProperties(RendererVk *renderer,
                                 RenderTargetVk *srcRenderTarget,
                                 RenderTargetVk *dstRenderTarget)
 {
-    const VkFormat srcFormat = srcRenderTarget->getImageFormat().vkTextureFormat;
-    const VkFormat dstFormat = dstRenderTarget->getImageFormat().vkTextureFormat;
+    const VkFormat srcFormat = srcRenderTarget->getImageFormat().vkImageFormat;
+    const VkFormat dstFormat = dstRenderTarget->getImageFormat().vkImageFormat;
 
     // Verifies if the draw and read images have the necessary prerequisites for blitting.
-    return renderer->hasTextureFormatFeatureBits(srcFormat, VK_FORMAT_FEATURE_BLIT_SRC_BIT) &&
-           renderer->hasTextureFormatFeatureBits(dstFormat, VK_FORMAT_FEATURE_BLIT_DST_BIT);
+    return renderer->hasImageFormatFeatureBits(srcFormat, VK_FORMAT_FEATURE_BLIT_SRC_BIT) &&
+           renderer->hasImageFormatFeatureBits(dstFormat, VK_FORMAT_FEATURE_BLIT_DST_BIT);
 }
 
 // Special rules apply to VkBufferImageCopy with depth/stencil. The components are tightly packed
