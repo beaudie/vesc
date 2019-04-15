@@ -23,10 +23,6 @@ class StateChangeTest : public ANGLETest
     {
         setWindowWidth(64);
         setWindowHeight(64);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
 
         // Enable the no error extension to avoid syncing the FBO state on validation.
         setNoErrorEnabled(true);
@@ -1140,10 +1136,6 @@ class LineLoopStateChangeTest : public StateChangeTest
     {
         setWindowWidth(32);
         setWindowHeight(32);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     void validateSquareAndHourglass() const
@@ -1263,10 +1255,6 @@ class SimpleStateChangeTest : public ANGLETest
     {
         setWindowWidth(kWindowSize);
         setWindowHeight(kWindowSize);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     void simpleDrawWithBuffer(GLBuffer *buffer);
@@ -2545,10 +2533,6 @@ class ValidationStateChangeTest : public ANGLETest
     {
         setWindowWidth(64);
         setWindowHeight(64);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 };
 

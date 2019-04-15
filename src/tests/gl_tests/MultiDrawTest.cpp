@@ -96,10 +96,6 @@ class MultiDrawTest : public ANGLETestBase, public ::testing::TestWithParam<Mult
     {
         setWindowWidth(kWidth);
         setWindowHeight(kHeight);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     void SetUp() override { ANGLETestBase::ANGLETestSetUp(); }

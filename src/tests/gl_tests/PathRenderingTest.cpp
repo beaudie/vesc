@@ -67,12 +67,6 @@ class CHROMIUMPathRenderingTest : public ANGLETest
     {
         setWindowWidth(kResolution);
         setWindowHeight(kResolution);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(24);
-        setConfigStencilBits(8);
     }
 
     bool isApplicable() const { return extensionEnabled("GL_CHROMIUM_path_rendering"); }
@@ -692,12 +686,6 @@ class CHROMIUMPathRenderingDrawTest : public ANGLETest
     {
         setWindowWidth(kResolution);
         setWindowHeight(kResolution);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(24);
-        setConfigStencilBits(8);
     }
 
     bool isApplicable() const { return extensionEnabled("GL_CHROMIUM_path_rendering"); }
@@ -1045,12 +1033,6 @@ class CHROMIUMPathRenderingWithTexturingTest : public ANGLETest
     {
         setWindowWidth(kResolution);
         setWindowHeight(kResolution);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(24);
-        setConfigStencilBits(8);
     }
 
     bool isApplicable() const { return extensionEnabled("GL_CHROMIUM_path_rendering"); }

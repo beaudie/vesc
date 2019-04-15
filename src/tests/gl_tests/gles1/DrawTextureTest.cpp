@@ -21,11 +21,6 @@ class DrawTextureTest : public ANGLETest
     {
         setWindowWidth(32);
         setWindowHeight(32);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(24);
     }
 
     void SetUp() override
