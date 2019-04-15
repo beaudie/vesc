@@ -3339,24 +3339,44 @@ TEST_P(GLSLTest_ES3, VaryingStructNotDeclaredInFragmentShader)
     ANGLE_GL_PROGRAM(program, kVS, kFS);
 }
 
-// Test that a varying struct that gets used in the fragment shader works.
-TEST_P(GLSLTest_ES3, VaryingStructUsedInFragmentShader)
+// Test that a varying struct that's not declared in the vertex shader links successfully.
+TEST_P(GLSLTest_ES3, VaryingStructNotDeclaredInVertexShader)
 {
-    // TODO(syoussefi): missing ES3 shader feature support.
-    // http://anglebug.com/3199
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     constexpr char kVS[] =
         "#version 300 es\n"
-        "in vec4 inputAttribute;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vec4(1.0);\n"
+        "}\n";
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "struct S {\n"
+        "    vec4 field;\n"
+        "};\n"
+        "in S varStruct;\n"
+        "void main()\n"
+        "{\n"
+        "    col = vec4(1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+}
+
+// Test that a varying struct that's not initialized in the vertex shader links successfully.
+TEST_P(GLSLTest_ES3, VaryingStructNotInitializedInVertexShader)
+{
+    constexpr char kVS[] =
+        "#version 300 es\n"
         "struct S {\n"
         "    vec4 field;\n"
         "};\n"
         "out S varStruct;\n"
         "void main()\n"
         "{\n"
-        "    gl_Position = inputAttribute;\n"
-        "    varStruct.field = vec4(0.0, 1.0, 0.0, 1.0);\n"
+        "    gl_Position = vec4(1.0);\n"
         "}\n";
 
     constexpr char kFS[] =
@@ -3373,8 +3393,163 @@ TEST_P(GLSLTest_ES3, VaryingStructUsedInFragmentShader)
         "}\n";
 
     ANGLE_GL_PROGRAM(program, kVS, kFS);
+}
+
+// Test that a varying struct that gets used in the fragment shader works.
+TEST_P(GLSLTest_ES3, VaryingStructUsedInFragmentShader)
+{
+    constexpr char kVS[] =
+        "#version 300 es\n"
+        "in vec4 inputAttribute;\n"
+        "struct S {\n"
+        "    vec4 field;\n"
+        "};\n"
+        "out S varStruct;\n"
+        "out S varStruct2;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = inputAttribute;\n"
+        "    varStruct.field = vec4(0.0, 0.5, 0.0, 1.0);\n"
+        "    varStruct2.field = vec4(0.0, 0.5, 0.0, 1.0);\n"
+        "}\n";
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "struct S {\n"
+        "    vec4 field;\n"
+        "};\n"
+        "in S varStruct;\n"
+        "in S varStruct2;\n"
+        "void main()\n"
+        "{\n"
+        "    col = varStruct.field + varStruct2.field;\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
     drawQuad(program.get(), "inputAttribute", 0.5f);
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that multiple multi-field varying structs that get used in the fragment shader work.
+TEST_P(GLSLTest_ES3, ComplexVaryingStructsUsedInFragmentShader)
+{
+    constexpr char kVS[] =
+        "#version 300 es\n"
+        "in vec4 inputAttribute;\n"
+        "struct S {\n"
+        "    vec4 field1;\n"
+        "    vec4 field2;\n"
+        "};\n"
+        "out S varStruct;\n"
+        "out S varStruct2;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = inputAttribute;\n"
+        "    varStruct.field1 = vec4(0.0, 0.5, 0.0, 1.0);\n"
+        "    varStruct.field2 = vec4(0.0, 0.5, 0.0, 1.0);\n"
+        "    varStruct2.field1 = vec4(0.0, 0.5, 0.0, 1.0);\n"
+        "    varStruct2.field2 = vec4(0.0, 0.5, 0.0, 1.0);\n"
+        "}\n";
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "struct S {\n"
+        "    vec4 field1;\n"
+        "    vec4 field2;\n"
+        "};\n"
+        "in S varStruct;\n"
+        "in S varStruct2;\n"
+        "void main()\n"
+        "{\n"
+        "    col = varStruct.field1 + varStruct2.field2;\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that an inactive varying struct that doesn't get used in the fragment shader works.
+TEST_P(GLSLTest_ES3, InactiveVaryingStructUnusedInFragmentShader)
+{
+    // TODO(syoussefi): http://anglebug.com/3412
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    constexpr char kVS[] =
+        "#version 300 es\n"
+        "in vec4 inputAttribute;\n"
+        "struct S {\n"
+        "    vec4 field;\n"
+        "};\n"
+        "out S varStruct;\n"
+        "out S varStruct2;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = inputAttribute;\n"
+        "    varStruct.field = vec4(0.0, 1.0, 0.0, 1.0);\n"
+        "    varStruct2.field = vec4(0.0, 1.0, 0.0, 1.0);\n"
+        "}\n";
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "struct S {\n"
+        "    vec4 field;\n"
+        "};\n"
+        "in S varStruct;\n"
+        "in S varStruct2;\n"
+        "void main()\n"
+        "{\n"
+        "    col = varStruct.field;\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that multiple varying matrices that get used in the fragment shader work.
+TEST_P(GLSLTest_ES3, VaryingMatrices)
+{
+    constexpr char kVS[] =
+        "#version 300 es\n"
+        "in vec4 inputAttribute;\n"
+        "out mat2x2 varMat;\n"
+        "out mat2x2 varMat2;\n"
+        "out mat4x3 varMat3;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = inputAttribute;\n"
+        "    varMat[0] = vec2(1, 1);\n"
+        "    varMat[1] = vec2(1, 1);\n"
+        "    varMat2[0] = vec2(0.5, 0.5);\n"
+        "    varMat2[1] = vec2(0.5, 0.5);\n"
+        "    varMat3[0] = vec3(0.75, 0.75, 0.75);\n"
+        "    varMat3[1] = vec3(0.75, 0.75, 0.75);\n"
+        "    varMat3[2] = vec3(0.75, 0.75, 0.75);\n"
+        "    varMat3[3] = vec3(0.75, 0.75, 0.75);\n"
+        "}\n";
+
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision mediump float;\n"
+        "out vec4 col;\n"
+        "in mat2x2 varMat;\n"
+        "in mat2x2 varMat2;\n"
+        "in mat4x3 varMat3;\n"
+        "void main()\n"
+        "{\n"
+        "    col = vec4(varMat[0].x, varMat2[1].y, varMat3[2].z, 1);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(255, 127, 191, 255), 1);
 }
 
 // This test covers passing a struct containing a sampler as a function argument.
