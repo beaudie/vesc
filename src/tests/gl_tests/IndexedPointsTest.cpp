@@ -16,11 +16,6 @@ class IndexedPointsTest : public ANGLETest
     {
         setWindowWidth(128);
         setWindowHeight(128);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(24);
     }
 
     float getIndexPositionX(size_t idx) { return (idx == 0 || idx == 3) ? -0.5f : 0.5f; }

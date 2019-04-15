@@ -20,10 +20,6 @@ class MemoryObjectTest : public ANGLETest
     {
         setWindowWidth(1);
         setWindowHeight(1);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 };
 

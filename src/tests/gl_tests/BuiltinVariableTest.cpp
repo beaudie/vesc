@@ -19,11 +19,6 @@ class BuiltinVariableVertexIdTest : public ANGLETest
     {
         setWindowWidth(64);
         setWindowHeight(64);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(24);
     }
 
     void SetUp() override

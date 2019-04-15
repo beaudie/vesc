@@ -234,10 +234,6 @@ class AttributeLayoutTest : public ANGLETest
     {
         setWindowWidth(128);
         setWindowHeight(128);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     void GetTestCases(void);
@@ -246,7 +242,7 @@ class AttributeLayoutTest : public ANGLETest
     {
         ANGLETest::SetUp();
 
-        glClearColor(.2f, .2f, .2f, .0f);
+        glClearColor(.2f, .2f, .2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glDisable(GL_DEPTH_TEST);
@@ -265,7 +261,7 @@ class AttributeLayoutTest : public ANGLETest
             "varying mediump vec3 vcolor;\n"
             "void main(void)\n"
             "{\n"
-            "    gl_FragColor = vec4(vcolor, 0);\n"
+            "    gl_FragColor = vec4(vcolor, 1);\n"
             "}\n";
 
         mProgram = CompileProgram(kVS, kFS);
@@ -319,15 +315,16 @@ class AttributeLayoutTest : public ANGLETest
             int h = getWindowHeight() / 4;
             if (drawFirstTriangle)
             {
-                EXPECT_PIXEL_EQ(w * 2, h * 3, 255, 255, 0, 0) << testCase << i;
+                EXPECT_PIXEL_COLOR_EQ(w * 2, h * 3, GLColor::yellow) << testCase << i;
             }
             else
             {
-                EXPECT_PIXEL_EQ(w * 2, h * 3, 51, 51, 51, 0) << testCase << i;
+                const GLColor kExpected(51, 51, 51, 255);
+                EXPECT_PIXEL_COLOR_EQ(w * 2, h * 3, kExpected) << testCase << i;
             }
-            EXPECT_PIXEL_EQ(w * 3, h * 2, 0, 255, 0, 0) << testCase << i;
-            EXPECT_PIXEL_EQ(w * 2, h * 1, 0, 255, 255, 0) << testCase << i;
-            EXPECT_PIXEL_EQ(w * 1, h * 2, 255, 0, 255, 0) << testCase << i;
+            EXPECT_PIXEL_COLOR_EQ(w * 3, h * 2, GLColor::green) << testCase << i;
+            EXPECT_PIXEL_COLOR_EQ(w * 2, h * 1, GLColor::cyan) << testCase << i;
+            EXPECT_PIXEL_COLOR_EQ(w * 1, h * 2, GLColor::magenta) << testCase << i;
         }
     }
 

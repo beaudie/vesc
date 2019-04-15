@@ -42,12 +42,6 @@ class ClearTestBase : public ANGLETest
     {
         setWindowWidth(128);
         setWindowHeight(128);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(24);
-        setConfigStencilBits(8);
     }
 
     void SetUp() override
@@ -130,9 +124,6 @@ class ClearTestRGB : public ANGLETest
     {
         setWindowWidth(128);
         setWindowHeight(128);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
     }
 };
 
@@ -231,12 +222,6 @@ class MaskedScissoredClearTestBase
     {
         setWindowWidth(128);
         setWindowHeight(128);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(24);
-        setConfigStencilBits(8);
     }
 
     void MaskedScissoredColorDepthStencilClear(

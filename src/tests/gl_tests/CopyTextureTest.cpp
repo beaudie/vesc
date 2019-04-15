@@ -20,10 +20,6 @@ class CopyTextureTest : public ANGLETest
     {
         setWindowWidth(256);
         setWindowHeight(256);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     void SetUp() override
@@ -204,10 +200,6 @@ class CopyTextureVariationsTest : public ANGLETestWithParam<CopyTextureVariation
     {
         setWindowWidth(256);
         setWindowHeight(256);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     void SetUp() override

@@ -120,12 +120,6 @@ class GLES1ConformanceTest : public ANGLETest
     {
         setWindowWidth(48);
         setWindowHeight(48);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(24);
-        setConfigStencilBits(8);
     }
 
     void SetUp() override

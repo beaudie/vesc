@@ -97,10 +97,6 @@ class EXTBlendFuncExtendedDrawTest : public ANGLETest
     {
         setWindowWidth(kWidth);
         setWindowHeight(kHeight);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     void SetUp() override

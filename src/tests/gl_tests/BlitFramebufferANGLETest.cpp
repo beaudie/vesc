@@ -16,12 +16,6 @@ class BlitFramebufferANGLETest : public ANGLETest
     {
         setWindowWidth(32);
         setWindowHeight(32);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(24);
-        setConfigStencilBits(8);
 
         mCheckerProgram = 0;
         mBlueProgram    = 0;
@@ -1121,12 +1115,6 @@ class BlitFramebufferTest : public ANGLETest
     {
         setWindowWidth(256);
         setWindowHeight(256);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(24);
-        setConfigStencilBits(8);
     }
 
     void initColorFBO(GLFramebuffer *fbo,
