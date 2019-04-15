@@ -3342,10 +3342,6 @@ TEST_P(GLSLTest_ES3, VaryingStructNotDeclaredInFragmentShader)
 // Test that a varying struct that gets used in the fragment shader works.
 TEST_P(GLSLTest_ES3, VaryingStructUsedInFragmentShader)
 {
-    // TODO(syoussefi): missing ES3 shader feature support.
-    // http://anglebug.com/3199
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     constexpr char kVS[] =
         "#version 300 es\n"
         "in vec4 inputAttribute;\n"
