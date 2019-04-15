@@ -29,13 +29,15 @@ using ProgramMergedVaryings = std::map<std::string, ProgramVaryingRef>;
 struct PackedVarying
 {
     PackedVarying(const sh::ShaderVariable &varyingIn, sh::InterpolationType interpolationIn)
-        : PackedVarying(varyingIn, interpolationIn, "")
+        : PackedVarying(varyingIn, interpolationIn, "", false)
     {}
     PackedVarying(const sh::ShaderVariable &varyingIn,
                   sh::InterpolationType interpolationIn,
-                  const std::string &parentStructNameIn)
+                  const std::string &parentStructNameIn,
+                  bool isFirstStructFieldIn)
         : varying(&varyingIn),
           vertexOnly(false),
+          isFirstStructField(isFirstStructFieldIn),
           interpolation(interpolationIn),
           parentStructName(parentStructNameIn),
           arrayIndex(GL_INVALID_INDEX)
@@ -65,6 +67,10 @@ struct PackedVarying
 
     // Transform feedback varyings can be only referenced in the VS.
     bool vertexOnly;
+
+    // Whether this is the first field in the struct.  In Vulkan, this is used to assign a
+    // struct-typed varying location to the location of its first field.
+    bool isFirstStructField;
 
     // Cached so we can store sh::ShaderVariable to point to varying fields.
     sh::InterpolationType interpolation;
@@ -171,7 +177,10 @@ class VaryingPacking final : angle::NonCopyable
         return static_cast<unsigned int>(mRegisterList.size());
     }
 
-    const std::vector<std::string> &getInactiveVaryingNames() const;
+    const std::vector<std::string> &getInactiveVaryingNames() const
+    {
+        return mInactiveVaryingNames;
+    }
 
   private:
     bool packVarying(const PackedVarying &packedVarying);
