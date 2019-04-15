@@ -17,10 +17,6 @@ class LineLoopTest : public ANGLETest
     {
         setWindowWidth(256);
         setWindowHeight(256);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     virtual void SetUp()

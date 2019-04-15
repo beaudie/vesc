@@ -20,11 +20,6 @@ class BufferDataTest : public ANGLETest
     {
         setWindowWidth(16);
         setWindowHeight(16);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(24);
 
         mBuffer         = 0;
         mProgram        = 0;
@@ -226,11 +221,6 @@ class IndexedBufferCopyTest : public ANGLETest
     {
         setWindowWidth(16);
         setWindowHeight(16);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(24);
     }
 
     void SetUp() override

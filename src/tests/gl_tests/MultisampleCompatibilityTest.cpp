@@ -27,9 +27,6 @@ class EXTMultisampleCompatibilityTest : public ANGLETest
     {
         setWindowWidth(64);
         setWindowHeight(64);
-        setConfigRedBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     void SetUp() override
@@ -292,9 +289,6 @@ class MultisampleCompatibilityTest : public ANGLETest
     {
         setWindowWidth(64);
         setWindowHeight(64);
-        setConfigRedBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     void prepareForDraw(GLsizei numSamples)

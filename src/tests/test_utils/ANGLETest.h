@@ -352,12 +352,6 @@ class ANGLETestBase
 
     void setWindowWidth(int width);
     void setWindowHeight(int height);
-    void setConfigRedBits(int bits);
-    void setConfigGreenBits(int bits);
-    void setConfigBlueBits(int bits);
-    void setConfigAlphaBits(int bits);
-    void setConfigDepthBits(int bits);
-    void setConfigStencilBits(int bits);
     void setConfigComponentType(EGLenum componentType);
     void setMultisampleEnabled(bool enabled);
     void setSamples(EGLint samples);
@@ -418,6 +412,13 @@ class ANGLETestBase
                   bool useVertexBuffer,
                   bool useInstancedDrawCalls,
                   GLuint numInstances);
+
+    void setConfigRedBits(int bits);
+    void setConfigGreenBits(int bits);
+    void setConfigBlueBits(int bits);
+    void setConfigAlphaBits(int bits);
+    void setConfigDepthBits(int bits);
+    void setConfigStencilBits(int bits);
 
     struct Platform
     {
@@ -502,7 +503,7 @@ class ANGLETestEnvironment : public testing::Environment
 };
 
 // This base fixture loads the EGL entry points.
-class EGLTest : public testing::Test
+class EGLTest : public testing::TestWithParam<angle::PlatformParameters>
 {
   public:
     EGLTest();

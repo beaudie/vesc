@@ -66,10 +66,6 @@ class MipmapTest : public BaseMipmapTest
     {
         setWindowWidth(128);
         setWindowHeight(128);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     void setUp2DProgram()
@@ -235,10 +231,6 @@ class MipmapTestES3 : public BaseMipmapTest
     {
         setWindowWidth(128);
         setWindowHeight(128);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     const char *vertexShaderSource()

@@ -22,10 +22,6 @@ class RobustClientMemoryTest : public ANGLETest
     {
         setWindowWidth(kWindowSize);
         setWindowHeight(kWindowSize);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
     }
 
     bool extensionsPresent() const

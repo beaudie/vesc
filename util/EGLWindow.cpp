@@ -331,6 +331,11 @@ bool EGLWindow::initializeSurface(OSWindow *osWindow,
     eglGetConfigAttrib(mDisplay, mConfig, EGL_STENCIL_SIZE, &mConfigParams.stencilBits);
     eglGetConfigAttrib(mDisplay, mConfig, EGL_SAMPLES, &mConfigParams.samples);
 
+    std::cout << "Using Surface config with R" << mConfigParams.redBits << "G"
+              << mConfigParams.greenBits << "B" << mConfigParams.blueBits << "A"
+              << mConfigParams.alphaBits << " D" << mConfigParams.depthBits << "S"
+              << mConfigParams.stencilBits << "\n";
+
     std::vector<EGLint> surfaceAttributes;
     if (strstr(displayExtensions, "EGL_NV_post_sub_buffer") != nullptr)
     {

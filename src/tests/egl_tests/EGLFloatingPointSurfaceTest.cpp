@@ -3,12 +3,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-
-// FloatingPointSurfaceTest.cpp : Test functionality of the EGL_EXT_pixel_format_float extension.
+// EGLFloatingPointSurfaceTest.cpp:
+//   Test functionality of the EGL_EXT_pixel_format_float extension.
 
 #include "test_utils/ANGLETest.h"
 
 using namespace angle;
+
+// FIXME: should use a custom EGLSurface and MakeCurrent with it. Probably make this an EGL test.
 
 class FloatingPointSurfaceTest : public ANGLETest
 {
@@ -17,11 +19,6 @@ class FloatingPointSurfaceTest : public ANGLETest
     {
         setWindowWidth(512);
         setWindowHeight(512);
-        setConfigRedBits(16);
-        setConfigGreenBits(16);
-        setConfigBlueBits(16);
-        setConfigAlphaBits(16);
-        setConfigComponentType(EGL_COLOR_COMPONENT_TYPE_FLOAT_EXT);
     }
 
     void SetUp() override
@@ -49,10 +46,11 @@ class FloatingPointSurfaceTest : public ANGLETest
     }
 
     GLuint mProgram;
+    EGLSurface mFloatingPointSurface;
 };
 
 // Test clearing and checking the color is correct
-TEST_P(FloatingPointSurfaceTest, Clearing)
+TEST_P(FloatingPointSurfaceTest, DISABLED_Clearing)
 {
     GLColor32F clearColor(0.0f, 1.0f, 2.0f, 3.0f);
     glClearColor(clearColor.R, clearColor.G, clearColor.B, clearColor.A);
@@ -63,7 +61,7 @@ TEST_P(FloatingPointSurfaceTest, Clearing)
 }
 
 // Test drawing and checking the color is correct
-TEST_P(FloatingPointSurfaceTest, Drawing)
+TEST_P(FloatingPointSurfaceTest, DISABLED_Drawing)
 {
     glUseProgram(mProgram);
     drawQuad(mProgram, essl1_shaders::PositionAttrib(), 0.5f);
