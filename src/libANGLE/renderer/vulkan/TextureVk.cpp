@@ -43,9 +43,9 @@ bool CanCopyWithTransfer(RendererVk *renderer,
     // NOTE(syoussefi): technically, you can transfer between formats as long as they have the same
     // size and are compatible, but for now, let's just support same-format copies with transfer.
     return srcFormat.internalFormat == destFormat.internalFormat &&
-           renderer->hasTextureFormatFeatureBits(srcFormat.vkTextureFormat,
+           renderer->hasTextureFormatFeatureBits(srcFormat.vkImageFormat,
                                                  VK_FORMAT_FEATURE_TRANSFER_SRC_BIT) &&
-           renderer->hasTextureFormatFeatureBits(destFormat.vkTextureFormat,
+           renderer->hasTextureFormatFeatureBits(destFormat.vkImageFormat,
                                                  VK_FORMAT_FEATURE_TRANSFER_DST_BIT);
 }
 
@@ -53,9 +53,9 @@ bool CanCopyWithDraw(RendererVk *renderer,
                      const vk::Format &srcFormat,
                      const vk::Format &destFormat)
 {
-    return renderer->hasTextureFormatFeatureBits(srcFormat.vkTextureFormat,
+    return renderer->hasTextureFormatFeatureBits(srcFormat.vkImageFormat,
                                                  VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT) &&
-           renderer->hasTextureFormatFeatureBits(destFormat.vkTextureFormat,
+           renderer->hasTextureFormatFeatureBits(destFormat.vkImageFormat,
                                                  VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT);
 }
 
@@ -1052,8 +1052,7 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
 
     // Check if the image supports blit. If it does, we can do the mipmap generation on the gpu
     // only.
-    if (renderer->hasTextureFormatFeatureBits(mImage->getFormat().vkTextureFormat,
-                                              kBlitFeatureFlags))
+    if (renderer->hasTextureFormatFeatureBits(mImage->getFormat().vkImageFormat, kBlitFeatureFlags))
     {
         ANGLE_TRY(ensureImageInitialized(contextVk));
         ANGLE_TRY(mImage->generateMipmapsWithBlit(contextVk, mState.getMipmapMaxLevel()));
@@ -1342,7 +1341,7 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
 
     // If the image has an emulated channel, always clear it.  These channels will be masked out in
     // future writes, and shouldn't contain uninitialized values.
-    if (format.hasEmulatedChannels())
+    if (format.hasEmulatedImageChannels())
     {
         uint32_t levelCount = mImage->getLevelCount();
         uint32_t layerCount = mImage->getLayerCount();

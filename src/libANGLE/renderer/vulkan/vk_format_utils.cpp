@@ -103,11 +103,11 @@ namespace vk
 Format::Format()
     : angleFormatID(angle::FormatID::NONE),
       internalFormat(GL_NONE),
-      textureFormatID(angle::FormatID::NONE),
-      vkTextureFormat(VK_FORMAT_UNDEFINED),
+      imageFormatID(angle::FormatID::NONE),
+      vkImageFormat(VK_FORMAT_UNDEFINED),
       bufferFormatID(angle::FormatID::NONE),
       vkBufferFormat(VK_FORMAT_UNDEFINED),
-      textureInitializerFunction(nullptr),
+      imageInitializerFunction(nullptr),
       textureLoadFunctions(),
       vertexLoadRequiresConversion(false),
       vkBufferFormatIsPacked(false),
@@ -116,17 +116,15 @@ Format::Format()
       vkFormatIsUnsigned(false)
 {}
 
-void Format::initTextureFallback(RendererVk *renderer,
-                                 const TextureFormatInitInfo *info,
-                                 int numInfo)
+void Format::initImageFallback(RendererVk *renderer, const ImageFormatInitInfo *info, int numInfo)
 {
     size_t skip = renderer->getFeatures().forceFallbackFormat ? 1 : 0;
     int i = FindSupportedFormat(renderer, info + skip, numInfo - skip, HasFullTextureFormatSupport);
     i += skip;
 
-    textureFormatID            = info[i].format;
-    vkTextureFormat            = info[i].vkFormat;
-    textureInitializerFunction = info[i].initializer;
+    imageFormatID            = info[i].format;
+    vkImageFormat            = info[i].vkFormat;
+    imageInitializerFunction = info[i].initializer;
 }
 
 void Format::initBufferFallback(RendererVk *renderer, const BufferFormatInitInfo *info, int numInfo)
@@ -178,7 +176,7 @@ size_t Format::getImageCopyBufferAlignment() const
     return alignment;
 }
 
-bool Format::hasEmulatedChannels() const
+bool Format::hasEmulatedImageChannels() const
 {
     const angle::Format &angleFmt   = angleFormat();
     const angle::Format &textureFmt = textureFormat();
@@ -228,13 +226,12 @@ void FormatTable::initialize(RendererVk *renderer,
             format.vkBufferFormat, VK_FORMAT_FEATURE_STORAGE_TEXEL_BUFFER_BIT);
 
         gl::TextureCaps textureCaps;
-        FillTextureFormatCaps(renderer, format.vkTextureFormat, &textureCaps);
+        FillTextureFormatCaps(renderer, format.vkImageFormat, &textureCaps);
         outTextureCapsMap->set(formatID, textureCaps);
 
         if (textureCaps.texturable)
         {
-            format.textureLoadFunctions =
-                GetLoadFunctionsMap(internalFormat, format.textureFormatID);
+            format.textureLoadFunctions = GetLoadFunctionsMap(internalFormat, format.imageFormatID);
         }
 
         if (angleFormat.isBlock)
