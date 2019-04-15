@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb08ae9b_16b28054",
+        "filename": "src/tests/gl_tests/MultiviewDrawTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-04-15T19:51:20Z",
+      "side": 1,
+      "message": "Why does tex2DArr need to be initialized twice?  The previous version of the test didn\u0027t seem to need this behavior.",
+      "range": {
+        "startLine": 805,
+        "startChar": 4,
+        "endLine": 805,
+        "endChar": 53
+      },
+      "revId": "b08e0961ad036b8aeeccb9fde584cf4de445a673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "129bb7ae_7220d9ba",
+        "filename": "src/tests/perf_tests/MultiviewPerf.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-04-15T19:51:20Z",
+      "side": 1,
+      "message": "You should be able to use the same member variables (mColorTexture and mDepthTexture) for both the \"no acceleration\" and multiview codepaths.",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 192,
+        "endChar": 84
+      },
+      "revId": "b08e0961ad036b8aeeccb9fde584cf4de445a673",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
