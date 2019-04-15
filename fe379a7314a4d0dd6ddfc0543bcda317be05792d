@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "74fa4678_51a0ef35",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-15T14:16:21Z",
+      "side": 1,
+      "message": "nit: can you file a new bug for Vulkan-specific EXT_blend_func_extended?",
+      "range": {
+        "startLine": 186,
+        "startChar": 86,
+        "endLine": 186,
+        "endChar": 90
+      },
+      "revId": "fe379a7314a4d0dd6ddfc0543bcda317be05792d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "845bc333_fbef7b4d",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 1
@@ -18,6 +41,53 @@
         "startChar": 4,
         "endLine": 190,
         "endChar": 31
+      },
+      "revId": "fe379a7314a4d0dd6ddfc0543bcda317be05792d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fb669e2_f8cde730",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-15T14:16:21Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "845bc333_fbef7b4d",
+      "range": {
+        "startLine": 189,
+        "startChar": 4,
+        "endLine": 190,
+        "endChar": 31
+      },
+      "revId": "fe379a7314a4d0dd6ddfc0543bcda317be05792d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f32adfa9_e6963adc",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-15T14:16:21Z",
+      "side": 1,
+      "message": "can you ASSERT the size of the output vars is one here?",
+      "range": {
+        "startLine": 204,
+        "startChar": 16,
+        "endLine": 205,
+        "endChar": 84
       },
       "revId": "fe379a7314a4d0dd6ddfc0543bcda317be05792d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
