@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "845bc333_fbef7b4d",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-15T13:34:52Z",
+      "side": 1,
+      "message": "nit: I think this could be a for-each loop, the index isn\u0027t used.",
+      "range": {
+        "startLine": 189,
+        "startChar": 4,
+        "endLine": 190,
+        "endChar": 31
+      },
+      "revId": "fe379a7314a4d0dd6ddfc0543bcda317be05792d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
