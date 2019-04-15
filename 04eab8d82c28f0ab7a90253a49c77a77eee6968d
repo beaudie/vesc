@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "2a89f8bc_b31e1e89",
+        "filename": "src/tests/gl_tests/MemoryObjectTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-15T14:03:14Z",
+      "side": 1,
+      "message": "Maybe only enter this block if !extensionEnabled(\"GL_EXT_external_objects_win32\") to be future proof",
+      "range": {
+        "startLine": 54,
+        "startChar": 4,
+        "endLine": 54,
+        "endChar": 5
+      },
+      "revId": "04eab8d82c28f0ab7a90253a49c77a77eee6968d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d740050f_3a529c7b",
         "filename": "src/tests/gl_tests/VulkanExternalImageTest.cpp",
         "patchSetId": 8
