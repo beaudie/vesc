@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e23340d4_5a15df67",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-15T20:45:50Z",
+      "side": 1,
+      "message": "this error message doesn\u0027t seem like it fits the code",
+      "range": {
+        "startLine": 309,
+        "startChar": 22,
+        "endLine": 309,
+        "endChar": 54
+      },
+      "revId": "2567f9f8bf5ad44d1e11aaf7bc999bff69e14791",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65b38c9b_28fcc0c9",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-15T20:45:50Z",
+      "side": 1,
+      "message": "is this reliable? Maybe we should leave it out?",
+      "range": {
+        "startLine": 305,
+        "startChar": 0,
+        "endLine": 318,
+        "endChar": 0
+      },
+      "revId": "2567f9f8bf5ad44d1e11aaf7bc999bff69e14791",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
