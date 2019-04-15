@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "390510d7_50b59686",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5261,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-15T14:34:32Z",
+      "side": 1,
+      "message": "Can you assert here that only `GL_SYNC_STATUS` is possible if context lost? The code looks a bit fragile as is, since `syncObject` could be nullptr, but only one possible enum value really handles that.",
+      "revId": "f1f6050ffc7a1416124ab70a089d857de79a1a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12cf0487_4a0c7c0e",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1830,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-15T14:34:32Z",
+      "side": 1,
+      "message": "the",
+      "range": {
+        "startLine": 1830,
+        "startChar": 56,
+        "endLine": 1830,
+        "endChar": 63
+      },
+      "revId": "f1f6050ffc7a1416124ab70a089d857de79a1a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "684a7b52_748cbc83",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4194,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-15T14:34:32Z",
+      "side": 1,
+      "message": "the",
+      "range": {
+        "startLine": 4194,
+        "startChar": 56,
+        "endLine": 4194,
+        "endChar": 63
+      },
+      "revId": "f1f6050ffc7a1416124ab70a089d857de79a1a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0ad0abe_9dcfe102",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5078,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-15T14:34:32Z",
+      "side": 1,
+      "message": "the",
+      "range": {
+        "startLine": 5078,
+        "startChar": 56,
+        "endLine": 5078,
+        "endChar": 63
+      },
+      "revId": "f1f6050ffc7a1416124ab70a089d857de79a1a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0657906_6771c19e",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3057,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-15T14:34:32Z",
+      "side": 1,
+      "message": "the",
+      "range": {
+        "startLine": 3057,
+        "startChar": 56,
+        "endLine": 3057,
+        "endChar": 63
+      },
+      "revId": "f1f6050ffc7a1416124ab70a089d857de79a1a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25fbf5cb_7c7f2d4b",
+        "filename": "src/tests/gl_tests/ContextLostTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-15T14:34:32Z",
+      "side": 1,
+      "message": "It would be great if you added a couple other calls with other enums and make sure they fail (to test the validation code). Same with the next test.",
+      "revId": "f1f6050ffc7a1416124ab70a089d857de79a1a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
