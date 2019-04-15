@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2ec300cd_27f912dd",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-15T17:04:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c1bb5de_5f1ed8d4",
+      "range": {
+        "startLine": 335,
+        "startChar": 0,
+        "endLine": 335,
+        "endChar": 77
+      },
+      "revId": "38719a2fbf7824c4259c1e26bf6334bf5125146d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f663aca7_21a18a24",
         "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "38719a2fbf7824c4259c1e26bf6334bf5125146d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73e346dc_bcf12654",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-15T17:04:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f663aca7_21a18a24",
+      "range": {
+        "startLine": 386,
+        "startChar": 21,
+        "endLine": 386,
+        "endChar": 27
+      },
+      "revId": "38719a2fbf7824c4259c1e26bf6334bf5125146d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
