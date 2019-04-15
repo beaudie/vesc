@@ -464,7 +464,7 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
                                                       surfaceFormats.data()));
 
     const vk::Format &format = renderer->getFormat(mState.config->renderTargetFormat);
-    VkFormat nativeFormat    = format.vkTextureFormat;
+    VkFormat nativeFormat    = format.vkImageFormat;
 
     if (surfaceFormatCount == 1u && surfaceFormats[0].format == VK_FORMAT_UNDEFINED)
     {
@@ -522,7 +522,7 @@ angle::Result WindowSurfaceVk::recreateSwapchain(DisplayVk *displayVk,
     releaseSwapchainImages(renderer);
 
     const vk::Format &format = renderer->getFormat(mState.config->renderTargetFormat);
-    VkFormat nativeFormat    = format.vkTextureFormat;
+    VkFormat nativeFormat    = format.vkImageFormat;
 
     // We need transfer src for reading back from the backbuffer.
     constexpr VkImageUsageFlags kImageUsageFlags = kSurfaceVKColorImageUsageFlags;
@@ -742,10 +742,10 @@ angle::Result WindowSurfaceVk::present(DisplayVk *displayVk,
     presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
     presentInfo.waitSemaphoreCount = 1;
     presentInfo.pWaitSemaphores    = mFlushSemaphoreChain.back().ptr();
-    presentInfo.swapchainCount = 1;
-    presentInfo.pSwapchains    = &mSwapchain;
-    presentInfo.pImageIndices  = &mCurrentSwapchainImageIndex;
-    presentInfo.pResults       = nullptr;
+    presentInfo.swapchainCount     = 1;
+    presentInfo.pSwapchains        = &mSwapchain;
+    presentInfo.pImageIndices      = &mCurrentSwapchainImageIndex;
+    presentInfo.pResults           = nullptr;
 
     VkPresentRegionKHR presentRegion   = {};
     VkPresentRegionsKHR presentRegions = {};
@@ -825,7 +825,7 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk, EGLint *rects, EGL
 
 angle::Result WindowSurfaceVk::nextSwapchainImage(DisplayVk *displayVk)
 {
-    VkDevice device      = displayVk->getDevice();
+    VkDevice device = displayVk->getDevice();
 
     vk::Semaphore aquireImageSemaphore;
     ANGLE_VK_TRY(displayVk, aquireImageSemaphore.init(device));
