@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d740050f_3a529c7b",
+        "filename": "src/tests/gl_tests/VulkanExternalImageTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-15T13:17:03Z",
+      "side": 1,
+      "message": "nit: for constexpr variables use kFormats naming",
+      "range": {
+        "startLine": 25,
+        "startChar": 30,
+        "endLine": 25,
+        "endChar": 37
+      },
+      "revId": "04eab8d82c28f0ab7a90253a49c77a77eee6968d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6c81b63_d86bd9d1",
+        "filename": "src/tests/gl_tests/VulkanExternalImageTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-15T13:17:03Z",
+      "side": 1,
+      "message": "nit: please comment before each new unit test",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 6
+      },
+      "revId": "04eab8d82c28f0ab7a90253a49c77a77eee6968d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe75f071_e21bbc70",
+        "filename": "src/tests/gl_tests/VulkanExternalImageTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-15T13:17:03Z",
+      "side": 1,
+      "message": "you can omit FL9_3 from your tests. it\u0027s no longer supported.",
+      "range": {
+        "startLine": 96,
+        "startChar": 9,
+        "endLine": 96,
+        "endChar": 41
+      },
+      "revId": "04eab8d82c28f0ab7a90253a49c77a77eee6968d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d65422f_2b77a6d0",
+        "filename": "src/tests/test_utils/VulkanExternalHelper.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-15T13:17:03Z",
+      "side": 1,
+      "message": "nit: for consistency prefer explicit types for simple types like const char *",
+      "range": {
+        "startLine": 92,
+        "startChar": 15,
+        "endLine": 92,
+        "endChar": 20
+      },
+      "revId": "04eab8d82c28f0ab7a90253a49c77a77eee6968d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
