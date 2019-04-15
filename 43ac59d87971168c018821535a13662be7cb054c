@@ -189,6 +189,30 @@
       "revId": "43ac59d87971168c018821535a13662be7cb054c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c7f61847_178f87eb",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-15T16:58:50Z",
+      "side": 1,
+      "message": "That heuristic gets overridden in https://cs.chromium.org/chromium/src/third_party/angle/src/gpu_info_util/SystemInfo_win.cpp?sq\u003dpackage:chromium\u0026dr\u003dC\u0026g\u003d0\u0026l\u003d238.\n\nBut if this works on all the bots, this is a good solution.",
+      "parentUuid": "723090f1_406c3f93",
+      "range": {
+        "startLine": 347,
+        "startChar": 20,
+        "endLine": 347,
+        "endChar": 35
+      },
+      "revId": "43ac59d87971168c018821535a13662be7cb054c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
