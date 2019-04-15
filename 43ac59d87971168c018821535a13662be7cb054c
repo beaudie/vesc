@@ -117,6 +117,30 @@
       "revId": "43ac59d87971168c018821535a13662be7cb054c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce81d907_9e8e2d06",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-15T12:57:54Z",
+      "side": 1,
+      "message": "end2end_tests and white box tests both print system info. According to correspondence from Kimmo from NVIDIA checking D3D11 descriptors is the only reliable way to detect the active/primary GPU on Windows. But Windows is kind of a separate problem from this CL.",
+      "parentUuid": "50ec9201_449e4236",
+      "range": {
+        "startLine": 347,
+        "startChar": 20,
+        "endLine": 347,
+        "endChar": 35
+      },
+      "revId": "43ac59d87971168c018821535a13662be7cb054c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
