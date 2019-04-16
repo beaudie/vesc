@@ -16,6 +16,24 @@
       "revId": "e02ad4d36458b5db194cf590d769d6e6252c31ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d701d257_d3a40e68",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-16T21:28:43Z",
+      "side": 0,
+      "message": "Also I don\u0027t know how to set this up so it automatically logs in with \u0027bb auth-login\u0027",
+      "parentUuid": "74c2db00_f54d42a5",
+      "revId": "e02ad4d36458b5db194cf590d769d6e6252c31ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
