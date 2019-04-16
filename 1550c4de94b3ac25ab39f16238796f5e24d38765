@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fcb1de2_3faece0b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-16T12:10:01Z",
+      "side": 1,
+      "message": "could you amend this commit message to\n\n * only have one Change-Id\n * put the Bug: angleproject:3366 tag underneath the commit message\n * update the commit message to reflect the code contents?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 0
+      },
+      "revId": "1550c4de94b3ac25ab39f16238796f5e24d38765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b76871ce_c288e26e",
+        "filename": "CONTRIBUTORS",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-16T12:10:01Z",
+      "side": 1,
+      "message": "could you add your name under this company category?",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 144,
+        "endChar": 13
+      },
+      "revId": "1550c4de94b3ac25ab39f16238796f5e24d38765",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
