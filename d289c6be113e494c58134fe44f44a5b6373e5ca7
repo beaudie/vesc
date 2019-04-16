@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f880c662_2e52ef49",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-16T20:30:58Z",
+      "side": 1,
+      "message": "nit: const unnecessary if is not a reference.",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 9
+      },
+      "revId": "d289c6be113e494c58134fe44f44a5b6373e5ca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70915026_f362bc11",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-16T20:30:58Z",
+      "side": 1,
+      "message": "same comment.",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 77,
+        "endChar": 9
+      },
+      "revId": "d289c6be113e494c58134fe44f44a5b6373e5ca7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
