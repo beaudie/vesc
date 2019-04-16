@@ -190,23 +190,19 @@ struct ANGLEPlatformDisplay
     EGLAttrib displayKey{0};
 };
 
-inline bool operator==(const ANGLEPlatformDisplay &a, const ANGLEPlatformDisplay &b)
+inline bool operator<(const ANGLEPlatformDisplay &a, const ANGLEPlatformDisplay &b)
 {
-    return a.tie() == b.tie();
+    return a.tie() < b.tie();
 }
 
-static constexpr size_t kANGLEPlatformDisplayMapSize = 9;
-typedef angle::FlatUnorderedMap<ANGLEPlatformDisplay, Display *, kANGLEPlatformDisplayMapSize>
-    ANGLEPlatformDisplayMap;
+using ANGLEPlatformDisplayMap = std::map<ANGLEPlatformDisplay, std::unique_ptr<Display>>;
 static ANGLEPlatformDisplayMap *GetANGLEPlatformDisplayMap()
 {
     static angle::base::NoDestructor<ANGLEPlatformDisplayMap> displays;
     return displays.get();
 }
 
-static constexpr size_t kDevicePlatformDisplayMapSize = 8;
-typedef angle::FlatUnorderedMap<Device *, Display *, kDevicePlatformDisplayMapSize>
-    DevicePlatformDisplayMap;
+using DevicePlatformDisplayMap = std::map<Device *, std::unique_ptr<Display>>;
 static DevicePlatformDisplayMap *GetDevicePlatformDisplayMap()
 {
     static angle::base::NoDestructor<DevicePlatformDisplayMap> displays;
@@ -715,7 +711,7 @@ Display *Display::GetDisplayFromNativeDisplay(EGLenum platform,
     const auto &iter = displays->find(combinedDisplayKey);
     if (iter != displays->end())
     {
-        display = iter->second;
+        display = iter->second.get();
     }
 
     if (display == nullptr)
@@ -772,7 +768,7 @@ Display *Display::GetExistingDisplayFromNativeDisplay(EGLNativeDisplayType nativ
         return nullptr;
     }
 
-    return iter->second;
+    return iter->second.get();
 }
 
 // static
@@ -788,7 +784,7 @@ Display *Display::GetDisplayFromDevice(Device *device, const AttributeMap &attri
     // First see if this eglDevice is in use by a Display created using ANGLE platform
     for (auto &displayMapEntry : *anglePlatformDisplays)
     {
-        egl::Display *iterDisplay = displayMapEntry.second;
+        egl::Display *iterDisplay = displayMapEntry.second.get();
         if (iterDisplay->getDevice() == device)
         {
             display = iterDisplay;
@@ -801,7 +797,7 @@ Display *Display::GetDisplayFromDevice(Device *device, const AttributeMap &attri
         const auto &iter = devicePlatformDisplays->find(device);
         if (iter != devicePlatformDisplays->end())
         {
-            display = iter->second;
+            display = iter->second.get();
         }
     }
 
@@ -831,14 +827,14 @@ Display::EglDisplaySet Display::GetEglDisplaySet()
     ANGLEPlatformDisplayMap *anglePlatformDisplays   = GetANGLEPlatformDisplayMap();
     DevicePlatformDisplayMap *devicePlatformDisplays = GetDevicePlatformDisplayMap();
 
-    for (auto anglePlatformDisplayMapEntry : *anglePlatformDisplays)
+    for (const auto &anglePlatformDisplayMapEntry : *anglePlatformDisplays)
     {
-        displays.insert(anglePlatformDisplayMapEntry.second);
+        displays.insert(anglePlatformDisplayMapEntry.second.get());
     }
 
-    for (auto devicePlatformDisplayMapEntry : *devicePlatformDisplays)
+    for (const auto &devicePlatformDisplayMapEntry : *devicePlatformDisplays)
     {
-        displays.insert(devicePlatformDisplayMapEntry.second);
+        displays.insert(devicePlatformDisplayMapEntry.second.get());
     }
 
     return displays;
@@ -882,43 +878,6 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
 
 Display::~Display()
 {
-    switch (mPlatform)
-    {
-        case EGL_PLATFORM_ANGLE_ANGLE:
-        case EGL_PLATFORM_GBM_KHR:
-        case EGL_PLATFORM_WAYLAND_EXT:
-        {
-            ANGLEPlatformDisplayMap *displays      = GetANGLEPlatformDisplayMap();
-            ANGLEPlatformDisplayMap::iterator iter = displays->find(ANGLEPlatformDisplay(
-                mState.displayId,
-                mAttributeMap.get(EGL_POWER_PREFERENCE_ANGLE, EGL_LOW_POWER_ANGLE),
-                mAttributeMap.get(EGL_PLATFORM_ANGLE_TYPE_ANGLE,
-                                  EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE),
-                mAttributeMap.get(EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE, 0),
-                mAttributeMap.get(EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE, 0),
-                mAttributeMap.get(EGL_PLATFORM_ANGLE_DISPLAY_KEY_ANGLE, 0)));
-            if (iter != displays->end())
-            {
-                displays->erase(iter);
-            }
-            break;
-        }
-        case EGL_PLATFORM_DEVICE_EXT:
-        {
-            DevicePlatformDisplayMap *displays      = GetDevicePlatformDisplayMap();
-            DevicePlatformDisplayMap::iterator iter = displays->find(mDevice);
-            if (iter != displays->end())
-            {
-                displays->erase(iter);
-            }
-            break;
-        }
-        default:
-        {
-            UNREACHABLE();
-        }
-    }
-
     SafeDelete(mDevice);
     SafeDelete(mImplementation);
 }
@@ -2215,7 +2174,7 @@ bool Display::isValidDisplay(const egl::Display *display)
     const ANGLEPlatformDisplayMap *anglePlatformDisplayMap = GetANGLEPlatformDisplayMap();
     for (const auto &displayPair : *anglePlatformDisplayMap)
     {
-        if (displayPair.second == display)
+        if (displayPair.second.get() == display)
         {
             return true;
         }
@@ -2224,7 +2183,7 @@ bool Display::isValidDisplay(const egl::Display *display)
     const DevicePlatformDisplayMap *devicePlatformDisplayMap = GetDevicePlatformDisplayMap();
     for (const auto &displayPair : *devicePlatformDisplayMap)
     {
-        if (displayPair.second == display)
+        if (displayPair.second.get() == display)
         {
             return true;
         }
