@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5caffe09_36c86f0e",
+        "filename": "src/tests/gl_tests/ContextLostTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-16T13:56:53Z",
+      "side": 1,
+      "message": "Done, had to pipe a bit more to context creation.",
+      "parentUuid": "ad97b17f_5a034417",
+      "revId": "cda4b8bb2a9da076a98ed2afe41cfc4e31b16295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "47d80f97_aea11811",
         "filename": "src/tests/gl_tests/ContextLostTest.cpp",
         "patchSetId": 1
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "2560bfa3_e5dc03e8",
+        "filename": "src/tests/gl_tests/ContextLostTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-16T13:56:53Z",
+      "side": 1,
+      "message": "Yea, the error ends up getting generated here: https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/Thread.cpp?l\u003d102\n\nI have a feeling we should be generating GL_CONTEXT_LOST errors but I don\u0027t want to mess with that behaviour yet.",
+      "parentUuid": "47d80f97_aea11811",
+      "range": {
+        "startLine": 34,
+        "startChar": 20,
+        "endLine": 34,
+        "endChar": 36
+      },
+      "revId": "cda4b8bb2a9da076a98ed2afe41cfc4e31b16295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f747baf_d3c4734f",
         "filename": "src/tests/gl_tests/ContextLostTest.cpp",
         "patchSetId": 1
@@ -62,6 +104,30 @@
       "revId": "cda4b8bb2a9da076a98ed2afe41cfc4e31b16295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2912674b_5b834808",
+        "filename": "src/tests/gl_tests/ContextLostTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-16T13:56:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f747baf_d3c4734f",
+      "range": {
+        "startLine": 49,
+        "startChar": 23,
+        "endLine": 49,
+        "endChar": 35
+      },
+      "revId": "cda4b8bb2a9da076a98ed2afe41cfc4e31b16295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
