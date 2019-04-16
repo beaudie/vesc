@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3d8b36f1_0f58fc89",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-16T21:49:58Z",
+      "side": 1,
+      "message": "Would it be hard to add a list of unexpected passing tests to the info?",
+      "revId": "fbfdd750489c8b81b090f8058c8f830f4f22cb76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1528a6a6_ffec32ec",
         "filename": "scripts/generate_deqp_stats.py",
         "patchSetId": 1
@@ -13,6 +30,47 @@
       "writtenOn": "2019-04-16T21:24:56Z",
       "side": 1,
       "message": "Since this is just parsing stdout, we could potentially put any keys in here and run on any tests. I think it\u0027s worth it to pick slightly more obscure names to mitigate collisions with unrelated lines:\n\u0027ANGLETestInfo-Total\u0027 or something\n\nThat way we can parse keys directly from stdout and don\u0027t need to iterate them in this file.",
+      "revId": "fbfdd750489c8b81b090f8058c8f830f4f22cb76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd3335cd_ae9eeecb",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-16T21:49:58Z",
+      "side": 1,
+      "message": "hm, a good thought. We could use something like the perf results output format.",
+      "parentUuid": "1528a6a6_ffec32ec",
+      "revId": "fbfdd750489c8b81b090f8058c8f830f4f22cb76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a864ab6e_8f965f8a",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-16T21:49:58Z",
+      "side": 1,
+      "message": "nit: can you ensure you\u0027re wrapped to 100 chars?",
+      "range": {
+        "startLine": 24,
+        "startChar": 90,
+        "endLine": 24,
+        "endChar": 100
+      },
       "revId": "fbfdd750489c8b81b090f8058c8f830f4f22cb76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -36,6 +94,24 @@
     },
     {
       "key": {
+        "uuid": "65a0db69_5d0ac422",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-16T21:49:58Z",
+      "side": 1,
+      "message": "I feel like it\u0027s better to do it all in Python. Make it more portable. Windows doesn\u0027t necessarily have the other tools.",
+      "parentUuid": "45a9072c_f3c75dbb",
+      "revId": "fbfdd750489c8b81b090f8058c8f830f4f22cb76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "063d5919_cf021058",
         "filename": "scripts/generate_deqp_stats.py",
         "patchSetId": 1
@@ -47,6 +123,70 @@
       "writtenOn": "2019-04-16T21:24:56Z",
       "side": 1,
       "message": "I\u0027m just taking any step that starts with \u0027angle_\u0027, which returns all the deqp tests on this bot. We could be more precise but I was wondering if we want to add any info to parse from other tests (angle_end2end, etc)",
+      "revId": "fbfdd750489c8b81b090f8058c8f830f4f22cb76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e550a108_c36fe6bd",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-16T21:49:58Z",
+      "side": 1,
+      "message": "Reasonable.",
+      "parentUuid": "063d5919_cf021058",
+      "revId": "fbfdd750489c8b81b090f8058c8f830f4f22cb76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "761f9923_fbf3492b",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-16T21:49:58Z",
+      "side": 1,
+      "message": "maybe you can use a python list comprehension here.",
+      "range": {
+        "startLine": 45,
+        "startChar": 4,
+        "endLine": 45,
+        "endChar": 162
+      },
+      "revId": "fbfdd750489c8b81b090f8058c8f830f4f22cb76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02ff00ef_bbb2bcff",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-16T21:49:58Z",
+      "side": 1,
+      "message": "maybe raise an exception?",
+      "range": {
+        "startLine": 47,
+        "startChar": 12,
+        "endLine": 47,
+        "endChar": 18
+      },
       "revId": "fbfdd750489c8b81b090f8058c8f830f4f22cb76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +210,24 @@
     },
     {
       "key": {
+        "uuid": "63caba3b_e2bcd7c4",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-16T21:49:58Z",
+      "side": 1,
+      "message": "Could you embed the bot list in the script? You can build the list by inspection of the gpu.fyi waterfall. We\u0027ll also probably embed the spreadsheet name once we get the google docs api working.",
+      "parentUuid": "3f5b0549_6c36f68e",
+      "revId": "fbfdd750489c8b81b090f8058c8f830f4f22cb76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "179689cb_58cabd2e",
         "filename": "scripts/generate_deqp_stats.py",
         "patchSetId": 1
@@ -81,6 +239,24 @@
       "writtenOn": "2019-04-16T21:24:56Z",
       "side": 1,
       "message": "Example output:\n\npython scripts/generate_deqp_stats.py \u0027chromium/ci/Win10 FYI dEQP Release (NVIDIA)\u0027 \n{\u0027chromium/ci/Win10 FYI dEQP Release (NVIDIA)/26450\u0027: {\u0027angle_deqp_egl_gl_tests on (nvidia-quadro-p400-win10-stable) GPU on Windows on Windows-10\u0027: {\u0027Exception\u0027: 0, \u0027Skipped\u0027: 0, \u0027Crashed\u0027: 1480, \u0027Not Supported\u0027: 1808, \u0027Failed\u0027: 5, \u0027Passed\u0027: 390, \u0027Total\u0027: 3683}, \u0027angle_deqp_gles2_vulkan_tests on (nvidia-quadro-p400-win10-stable) GPU on Windows on Windows-10\u0027: {\u0027Exception\u0027: 0, \u0027Skipped\u0027: 0, \u0027Crashed\u0027: 6, \u0027Not Supported\u0027: 262, \u0027Failed\u0027: 57, \u0027Passed\u0027: 16842, \u0027Total\u0027: 17167}, \u0027angle_deqp_gles2_d3d11_tests on (nvidia-quadro-p400-win10-stable) GPU on Windows on Windows-10\u0027: {\u0027Exception\u0027: 0, \u0027Skipped\u0027: 0, \u0027Crashed\u0027: 5, \u0027Not Supported\u0027: 153, \u0027Failed\u0027: 890, \u0027Passed\u0027: 16119, \u0027Total\u0027: 17167}, \u0027angle_deqp_egl_vulkan_tests on (nvidia-quadro-p400-win10-stable) GPU on Windows on Windows-10\u0027: {\u0027Exception\u0027: 0, \u0027Skipped\u0027: 0, \u0027Crashed\u0027: 1486, \u0027Not Supported\u0027: 1569, \u0027Failed\u0027: 6, \u0027Passed\u0027: 622, \u0027Total\u0027: 3683}, \u0027angle_deqp_gles31_gl_tests on (nvidia-quadro-p400-win10-stable) GPU on Windows on Windows-10\u0027: {\u0027Exception\u0027: 0, \u0027Skipped\u0027: 0, \u0027Crashed\u0027: 766, \u0027Not Supported\u0027: 22588, \u0027Failed\u0027: 1022, \u0027Passed\u0027: 13491, \u0027Total\u0027: 37867}, \u0027angle_deqp_gles3_vulkan_tests on (nvidia-quadro-p400-win10-stable) GPU on Windows on Windows-10\u0027: {\u0027Exception\u0027: 0, \u0027Skipped\u0027: 0, \u0027Crashed\u0027: 40128, \u0027Not Supported\u0027: 647, \u0027Failed\u0027: 738, \u0027Passed\u0027: 2625, \u0027Total\u0027: 44138}, \u0027angle_deqp_gles3_gl_tests on (nvidia-quadro-p400-win10-stable) GPU on Windows on Windows-10\u0027: {\u0027Exception\u0027: 0, \u0027Skipped\u0027: 0, \u0027Crashed\u0027: 5, \u0027Not Supported\u0027: 2255, \u0027Failed\u0027: 29, \u0027Passed\u0027: 41849, \u0027Total\u0027: 44138}, \u0027angle_deqp_gles2_gl_tests on (nvidia-quadro-p400-win10-stable) GPU on Windows on Windows-10\u0027: {\u0027Exception\u0027: 0, \u0027Skipped\u0027: 0, \u0027Crashed\u0027: 5, \u0027Not Supported\u0027: 136, \u0027Failed\u0027: 28, \u0027Passed\u0027: 16998, \u0027Total\u0027: 17167}, \u0027angle_deqp_gles31_d3d11_tests on (nvidia-quadro-p400-win10-stable) GPU on Windows on Windows-10\u0027: {\u0027Exception\u0027: 0, \u0027Skipped\u0027: 0, \u0027Crashed\u0027: 5952, \u0027Not Supported\u0027: 21879, \u0027Failed\u0027: 444, \u0027Passed\u0027: 9592, \u0027Total\u0027: 37867}, \u0027angle_deqp_gles3_d3d11_tests on (nvidia-quadro-p400-win10-stable) GPU on Windows on Windows-10\u0027: {\u0027Exception\u0027: 0, \u0027Skipped\u0027: 0, \u0027Crashed\u0027: 12, \u0027Not Supported\u0027: 2211, \u0027Failed\u0027: 929, \u0027Passed\u0027: 40986, \u0027Total\u0027: 44138}, \u0027angle_deqp_egl_d3d11_tests on (nvidia-quadro-p400-win10-stable) GPU on Windows on Windows-10\u0027: {\u0027Exception\u0027: 0, \u0027Skipped\u0027: 0, \u0027Crashed\u0027: 1480, \u0027Not Supported\u0027: 1270, \u0027Failed\u0027: 17, \u0027Passed\u0027: 916, \u0027Total\u0027: 3683}}}",
+      "revId": "fbfdd750489c8b81b090f8058c8f830f4f22cb76",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "971eb681_527df239",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-16T21:49:58Z",
+      "side": 1,
+      "message": "Nice!",
+      "parentUuid": "179689cb_58cabd2e",
       "revId": "fbfdd750489c8b81b090f8058c8f830f4f22cb76",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false

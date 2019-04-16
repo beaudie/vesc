@@ -34,6 +34,24 @@
       "revId": "e02ad4d36458b5db194cf590d769d6e6252c31ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee2da0a9_28d91bc9",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-16T21:49:58Z",
+      "side": 0,
+      "message": "I don\u0027t think you can make login automated. My thinking is an ANGLE project member would run the script as a cron job on their local logged in always-on Linux machine.",
+      "parentUuid": "d701d257_d3a40e68",
+      "revId": "e02ad4d36458b5db194cf590d769d6e6252c31ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
