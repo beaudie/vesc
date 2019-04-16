@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "258e9132_48fb6f7d",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-04-16T17:59:42Z",
+      "side": 1,
+      "message": "I\u0027m really not sure if this should go in. It basically just copy values getting reset in unlink and copy them back to ProgramState before return if linkValidateShaders failed. (Need to restore the value as well in other failures like linkOutputVariables). \nThis is more like a temp workaround rather than a fix. But it did pass the program-test.html conformance test.",
+      "revId": "82ab287b07697b2359859546235a06d67e0a6288",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
