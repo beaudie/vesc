@@ -171,6 +171,7 @@ class Display final : public LabeledObject,
 
     using EglDisplaySet = angle::HashSet<Display *>;
     static EglDisplaySet GetEglDisplaySet();
+    static void CleanupDisplays();
 
     static const ClientExtensions &GetClientExtensions();
     static const std::string &GetClientExtensionString();

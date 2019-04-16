@@ -11,6 +11,7 @@
 #include "common/debug.h"
 #include "common/platform.h"
 #include "common/system_utils.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/ErrorStrings.h"
 #include "libANGLE/Thread.h"
 #include "libGLESv2/resource.h"
@@ -291,6 +292,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID)
             break;
 
         case DLL_PROCESS_DETACH:
+            egl::Display::CleanupDisplays();
             egl::TerminateProcess();
             break;
     }
