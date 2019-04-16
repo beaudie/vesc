@@ -34,6 +34,24 @@
       "revId": "82ab287b07697b2359859546235a06d67e0a6288",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24396cd9_82fbd307",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-16T19:56:32Z",
+      "side": 1,
+      "message": "Definitely separate. This is a conflict with the ES spec. I think there might be misinterpretation.",
+      "parentUuid": "35fe8407_d3a186be",
+      "revId": "82ab287b07697b2359859546235a06d67e0a6288",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
