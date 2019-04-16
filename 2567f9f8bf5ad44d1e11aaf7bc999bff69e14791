@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dc5c2ccb_7de5846f",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-16T16:08:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e23340d4_5a15df67",
+      "range": {
+        "startLine": 309,
+        "startChar": 22,
+        "endLine": 309,
+        "endChar": 54
+      },
+      "revId": "2567f9f8bf5ad44d1e11aaf7bc999bff69e14791",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "65b38c9b_28fcc0c9",
         "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2019-04-15T20:45:50Z",
       "side": 1,
       "message": "is this reliable? Maybe we should leave it out?",
+      "range": {
+        "startLine": 305,
+        "startChar": 0,
+        "endLine": 318,
+        "endChar": 0
+      },
+      "revId": "2567f9f8bf5ad44d1e11aaf7bc999bff69e14791",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e987aa94_a12351d3",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-16T16:08:25Z",
+      "side": 1,
+      "message": "I\u0027m not sure what you mean reliable? It\u0027s not the issue I was talking to you about yesterday, that was about finding lines that are overridden by other lines\nEg. there are a lot of cases like the following, where we could get rid of the first line:\n// commit 1, Apr 15:\n100 WIN : dEQP.test.fails.on.windows \u003d FAIL\n// commit 2, week later, for all platforms\n101 : dEQP.test.fails.* \u003d FAIL\n\n\nBut this CL is just about finding lines where tests don\u0027t exist anymore or they are misspelled, or otherwise unused.",
+      "parentUuid": "65b38c9b_28fcc0c9",
       "range": {
         "startLine": 305,
         "startChar": 0,
