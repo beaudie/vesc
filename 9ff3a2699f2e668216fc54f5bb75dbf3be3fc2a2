@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5499d9f1_c6804974",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-17T16:46:03Z",
+      "side": 1,
+      "message": "I propose we use the string \"*RESULT\" to match what the perf tests use for key results:\n\nhttps://chromium-swarm.appspot.com/task?id\u003d444453657e547410\n\nAlso you can use constexpr char kInfoTag[] \u003d ...",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 43
+      },
+      "revId": "9ff3a2699f2e668216fc54f5bb75dbf3be3fc2a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7124f460_e7964625",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-17T16:46:03Z",
+      "side": 1,
+      "message": "nit: prefer \\n to std::endl here. endl will force a flush on every instance.\n\nhttps://en.cppreference.com/w/cpp/io/manip/endl",
+      "range": {
+        "startLine": 411,
+        "startChar": 77,
+        "endLine": 411,
+        "endChar": 86
+      },
+      "revId": "9ff3a2699f2e668216fc54f5bb75dbf3be3fc2a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
