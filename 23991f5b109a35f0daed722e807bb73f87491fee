@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a9ef267_6599fe4d",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-17T20:34:30Z",
+      "side": 1,
+      "message": "nit: can you associate this TODO with a link to a bug tracker?",
+      "range": {
+        "startLine": 96,
+        "startChar": 7,
+        "endLine": 96,
+        "endChar": 11
+      },
+      "revId": "23991f5b109a35f0daed722e807bb73f87491fee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30d95a3d_5339c9d8",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-17T20:34:30Z",
+      "side": 1,
+      "message": "please use ANGLE_VK_TRY here and return angle::Result from this function. You will need to pass the VkImage as an output pointer or pointer-to-pointer. You might not need unique_ptr in this case. All this is for consistency and to ensure errors are propagated to the application layer.",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 5
+      },
+      "revId": "23991f5b109a35f0daed722e807bb73f87491fee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bcb1be2_e9757e4a",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-17T20:34:30Z",
+      "side": 1,
+      "message": "can you call vk::Image::getMemoryRequirements here? (from image-\u003egetImage())",
+      "range": {
+        "startLine": 113,
+        "startChar": 4,
+        "endLine": 113,
+        "endChar": 32
+      },
+      "revId": "23991f5b109a35f0daed722e807bb73f87491fee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06689e50_09c7f647",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-17T20:34:30Z",
+      "side": 1,
+      "message": "same comment about ANGLE_VK_TRY",
+      "range": {
+        "startLine": 127,
+        "startChar": 15,
+        "endLine": 127,
+        "endChar": 33
+      },
+      "revId": "23991f5b109a35f0daed722e807bb73f87491fee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4975dd2_9288bd29",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-17T20:34:30Z",
+      "side": 1,
+      "message": "I would recommend you ASSERT(image). And use ANGLE_TRY for createImage to work with the angle::Result returned by createImage as requested earlier.",
+      "range": {
+        "startLine": 801,
+        "startChar": 0,
+        "endLine": 804,
+        "endChar": 5
+      },
+      "revId": "23991f5b109a35f0daed722e807bb73f87491fee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7833f161_f4061a37",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-17T20:34:30Z",
+      "side": 1,
+      "message": "can you also please include bug links in your other todos?",
+      "range": {
+        "startLine": 810,
+        "startChar": 7,
+        "endLine": 810,
+        "endChar": 11
+      },
+      "revId": "23991f5b109a35f0daed722e807bb73f87491fee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
