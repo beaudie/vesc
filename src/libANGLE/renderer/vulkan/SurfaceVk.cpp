@@ -109,6 +109,13 @@ angle::Result OffscreenSurfaceVk::AttachmentImage::initialize(DisplayVk *display
     ANGLE_TRY(image.initImageView(displayVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
                                   &imageView, 0, 1));
 
+    // Clear the image if it has emulated channels.
+    if (vkFormat.hasEmulatedChannels())
+    {
+        image.stageSubresourceEmulatedClear(gl::ImageIndex::Make2D(0), vkFormat.angleFormat());
+        ANGLE_TRY(image.flushAllStagedUpdates(displayVk));
+    }
+
     return angle::Result::Continue;
 }
 
@@ -568,6 +575,14 @@ angle::Result WindowSurfaceVk::recreateSwapchain(DisplayVk *displayVk,
         ANGLE_TRY(member.image.initImageView(displayVk, gl::TextureType::_2D,
                                              VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(),
                                              &member.imageView, 0, 1));
+
+        // Clear the image if it has emulated channels.
+        if (format.hasEmulatedChannels())
+        {
+            member.image.stageSubresourceEmulatedClear(gl::ImageIndex::Make2D(0),
+                                                       format.angleFormat());
+            ANGLE_TRY(member.image.flushAllStagedUpdates(displayVk));
+        }
     }
 
     // Initialize depth/stencil if requested.
@@ -588,6 +603,14 @@ angle::Result WindowSurfaceVk::recreateSwapchain(DisplayVk *displayVk,
                                                    1));
 
         // We will need to pass depth/stencil image views to the RenderTargetVk in the future.
+
+        // Clear the image if it has emulated channels.
+        if (dsFormat.hasEmulatedChannels())
+        {
+            mDepthStencilImage.stageSubresourceEmulatedClear(gl::ImageIndex::Make2D(0),
+                                                             dsFormat.angleFormat());
+            ANGLE_TRY(mDepthStencilImage.flushAllStagedUpdates(displayVk));
+        }
     }
 
     return angle::Result::Continue;
