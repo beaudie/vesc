@@ -547,6 +547,9 @@ struct Limitations
 
     // D3D does not support having multiple transform feedback outputs go to the same buffer.
     bool noDoubleBoundTransformFeedbackBuffers;
+
+    // D3D does not support vertex attribute aliasing
+    bool noVertexAttributeAliasing;
 };
 
 struct TypePrecision
