@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7418c391_b24d21e0",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2019-04-17T06:59:58Z",
+      "side": 1,
+      "message": "nit: this vector is constant sized, we could use a stack allocated variable and pass a pointer to it to CGLChoosePixelFormat.",
+      "revId": "8a398d19d349b8eca73be8a8b3c2d6c16226b79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "163cf5f0_135b7cc6",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2019-04-17T06:59:58Z",
+      "side": 1,
+      "message": "Geoff: with the recent multithreading work, any concern with the refcounting not being thread-safe or is the display supposed to be externally synchronized?",
+      "revId": "8a398d19d349b8eca73be8a8b3c2d6c16226b79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
