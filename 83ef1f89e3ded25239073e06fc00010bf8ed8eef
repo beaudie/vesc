@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4a06bfdd_003b7daf",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-17T18:29:52Z",
+      "side": 1,
+      "message": "also 64",
+      "range": {
+        "startLine": 24,
+        "startChar": 17,
+        "endLine": 24,
+        "endChar": 20
+      },
+      "revId": "83ef1f89e3ded25239073e06fc00010bf8ed8eef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b66fa5da_f6a0864f",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-17T18:29:52Z",
+      "side": 1,
+      "message": "space",
+      "range": {
+        "startLine": 48,
+        "startChar": 53,
+        "endLine": 48,
+        "endChar": 61
+      },
+      "revId": "83ef1f89e3ded25239073e06fc00010bf8ed8eef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
