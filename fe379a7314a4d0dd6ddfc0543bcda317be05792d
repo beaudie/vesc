@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b4ad1175_e51dce46",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-17T02:55:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74fa4678_51a0ef35",
+      "range": {
+        "startLine": 186,
+        "startChar": 86,
+        "endLine": 186,
+        "endChar": 90
+      },
+      "revId": "fe379a7314a4d0dd6ddfc0543bcda317be05792d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "845bc333_fbef7b4d",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 1
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "455d9ef2_9c49b2ce",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-17T02:55:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fb669e2_f8cde730",
+      "range": {
+        "startLine": 189,
+        "startChar": 4,
+        "endLine": 190,
+        "endChar": 31
+      },
+      "revId": "fe379a7314a4d0dd6ddfc0543bcda317be05792d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f32adfa9_e6963adc",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 1
@@ -92,6 +140,30 @@
       "revId": "fe379a7314a4d0dd6ddfc0543bcda317be05792d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f67c674c_ab35e4d4",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-17T02:55:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f32adfa9_e6963adc",
+      "range": {
+        "startLine": 204,
+        "startChar": 16,
+        "endLine": 205,
+        "endChar": 84
+      },
+      "revId": "fe379a7314a4d0dd6ddfc0543bcda317be05792d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
