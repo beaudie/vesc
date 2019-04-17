@@ -3104,13 +3104,6 @@ bool Program::linkAttributes(const Caps &caps, InfoLog &infoLog, bool webglCompa
     }
     GLuint maxAttribs = caps.maxVertexAttributes;
 
-    // TODO(jmadill): handle aliasing robustly
-    if (mState.mAttributes.size() > maxAttribs)
-    {
-        infoLog << "Too many vertex attributes.";
-        return false;
-    }
-
     std::vector<sh::Attribute *> usedAttribMap(maxAttribs, nullptr);
 
     // Assign locations to attributes that have a binding location and check for attribute aliasing.
