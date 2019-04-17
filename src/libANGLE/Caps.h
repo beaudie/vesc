@@ -706,6 +706,7 @@ struct Caps
     GLuint maxGeometryShaderInvocations;
 
     GLuint subPixelBits;
+    GLboolean supportsAliasedAttributes;
 
     // GLES1 emulation: Caps for ES 1.1. Taken from Table 6.20 / 6.22 in the OpenGL ES 1.1 spec.
     GLuint maxMultitextureUnits;

@@ -1097,6 +1097,7 @@ Caps::Caps()
       maxGeometryShaderInvocations(0),
 
       subPixelBits(4),
+      supportsAliasedAttributes(true),
 
       // GLES1 emulation: Table 6.20 / 6.22 (ES 1.1 spec)
       maxMultitextureUnits(0),
