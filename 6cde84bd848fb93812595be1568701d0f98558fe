@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e9c32f9_3dc0da47",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-17T19:43:27Z",
+      "side": 1,
+      "message": "can you pick this up dynamically from the script now?",
+      "range": {
+        "startLine": 97,
+        "startChar": 10,
+        "endLine": 97,
+        "endChar": 76
+      },
+      "revId": "6cde84bd848fb93812595be1568701d0f98558fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
