@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "025b2430_5e1b6176",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-04-17T13:59:38Z",
+      "side": 1,
+      "message": "I\u0027d like to do that as a follow up, as these tests aren\u0027t mustpass for ES2 on CTS 3.2.5.x:\n\nhttps://github.com/KhronosGroup/VK-GL-CTS/blob/master/external/openglcts/data/mustpass/gles/aosp_mustpass/3.2.5.x/gles2-master.txt\n\nThey are listed in master and ES3 mustpass though, so we can look at it today while I\u0027ve got it running on Windows.  I\u0027ll update the comment here.",
+      "parentUuid": "23bd2196_f367e1c5",
+      "range": {
+        "startLine": 81,
+        "startChar": 73,
+        "endLine": 81,
+        "endChar": 88
+      },
+      "revId": "19529eac2faeffff38d9cc1ee2c87821ff52847f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60fe514f_08dd287b",
         "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "19529eac2faeffff38d9cc1ee2c87821ff52847f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b392ec64_4162256b",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-04-17T13:59:38Z",
+      "side": 1,
+      "message": "Done, along with the ES3 expectations.",
+      "parentUuid": "60fe514f_08dd287b",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 5
+      },
+      "revId": "19529eac2faeffff38d9cc1ee2c87821ff52847f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
