@@ -78,10 +78,6 @@
 1028 : dEQP-GLES2.functional.fbo.completeness.renderable.texture.stencil.srgb8 = FAIL
 1028 : dEQP-GLES2.functional.fbo.completeness.renderable.texture.depth.srgb8 = FAIL
 
-// Bind aliasing max_cond crashes on Windows, fails on other platforms.
-// TODO(cnorthrop): Narrow skip list or fix the test
-3252 : dEQP-GLES2.functional.attribute_location.bind_aliasing.max_cond* = SKIP
-
 // Half float OES either has an implementation bug or a dEQP bug.
 3283 : dEQP-GLES2.functional.fbo.completeness.renderable.texture.color0.rgba_half_float_oes = FAIL
 

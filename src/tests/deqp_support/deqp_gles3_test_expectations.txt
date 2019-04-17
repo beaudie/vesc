@@ -112,10 +112,6 @@
 // Failing everywhere
 2322 : dEQP-GLES3.functional.shaders.metamorphic.* = FAIL
 
-// Bind aliasing max_cond crashes on Windows, fails on other platforms.
-// TODO(cnorthrop): Narrow skip list or fix the test
-3252 : dEQP-GLES3.functional.attribute_location.bind_aliasing.max_cond* = SKIP
-
 // Windows and Linux failures
 1095 WIN : dEQP-GLES3.functional.texture.mipmap.2d.projected.* = FAIL
 1095 LINUX : dEQP-GLES3.functional.texture.mipmap.2d.projected.* = FAIL
