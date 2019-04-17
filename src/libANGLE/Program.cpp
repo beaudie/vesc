@@ -1364,7 +1364,7 @@ angle::Result Program::link(const Context *context)
             data.getCaps().maxVaryingVectors, packMode, &mState.mUniformBlocks, &mState.mUniforms,
             &mState.mShaderStorageBlocks, &mState.mBufferVariables, &mState.mAtomicCounterBuffers));
 
-        if (!linkAttributes(context->getCaps(), mInfoLog,
+        if (!linkAttributes(context->getCaps(), context->getLimitations(), mInfoLog,
                             context->getExtensions().webglCompatibility))
         {
             return angle::Result::Continue;
@@ -3133,7 +3133,10 @@ bool Program::linkAtomicCounterBuffers()
 }
 
 // Assigns locations to all attributes from the bindings and program locations.
-bool Program::linkAttributes(const Caps &caps, InfoLog &infoLog, bool webglCompatibility)
+bool Program::linkAttributes(const Caps &caps,
+                             const Limitations &limitations,
+                             InfoLog &infoLog,
+                             bool webglCompatibility)
 {
     Shader *vertexShader = mState.getAttachedShader(ShaderType::Vertex);
 
@@ -3152,13 +3155,6 @@ bool Program::linkAttributes(const Caps &caps, InfoLog &infoLog, bool webglCompa
         mState.mAttributes = vertexShader->getActiveAttributes();
     }
     GLuint maxAttribs = caps.maxVertexAttributes;
-
-    // TODO(jmadill): handle aliasing robustly
-    if (mState.mAttributes.size() > maxAttribs)
-    {
-        infoLog << "Too many vertex attributes.";
-        return false;
-    }
 
     std::vector<sh::Attribute *> usedAttribMap(maxAttribs, nullptr);
 
@@ -3200,7 +3196,8 @@ bool Program::linkAttributes(const Caps &caps, InfoLog &infoLog, bool webglCompa
                 // TODO: Remaining failures: http://anglebug.com/3252
                 if (linkedAttribute)
                 {
-                    if (shaderVersion >= 300 || webglCompatibility)
+                    if (shaderVersion >= 300 || webglCompatibility ||
+                        limitations.noVertexAttributeAliasing)
                     {
                         infoLog << "Attribute '" << attribute.name << "' aliases attribute '"
                                 << linkedAttribute->name << "' at location " << regLocation;

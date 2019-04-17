@@ -48,6 +48,7 @@ class Context;
 struct Extensions;
 class Framebuffer;
 class InfoLog;
+struct Limitations;
 class Shader;
 class ShaderProgramManager;
 class State;
@@ -910,7 +911,10 @@ class Program final : angle::NonCopyable, public LabeledObject
     void deleteSelf(const Context *context);
 
     bool linkValidateShaders(InfoLog &infoLog);
-    bool linkAttributes(const Caps &caps, InfoLog &infoLog, bool webglCompatibility);
+    bool linkAttributes(const Caps &caps,
+                        const Limitations &limitations,
+                        InfoLog &infoLog,
+                        bool webglCompatibility);
     bool linkInterfaceBlocks(const Caps &caps,
                              const Version &version,
                              bool webglCompatibility,
