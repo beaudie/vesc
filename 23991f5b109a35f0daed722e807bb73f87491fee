@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "94b2ad76_4b9a4a06",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-04-17T23:42:15Z",
+      "side": 1,
+      "message": "I looked more into it and I was mixing up vkGetPhysicalDeviceFormatProperties, which doesn\u0027t vary per handle type, with vkGetPhysicalDeviceImageFormatProperties2, which does.\n\nSo I don\u0027t think usages are a function of handle type of all, and so we can just calculate them from the format properties cache we already have.",
+      "parentUuid": "9cc92579_adf930ac",
+      "range": {
+        "startLine": 96,
+        "startChar": 7,
+        "endLine": 96,
+        "endChar": 11
+      },
+      "revId": "23991f5b109a35f0daed722e807bb73f87491fee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "30d95a3d_5339c9d8",
         "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
         "patchSetId": 7
