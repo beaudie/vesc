@@ -12,6 +12,13 @@ import datetime
 import os
 import subprocess
 import sys
+import argparse
+import pickle
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 BOT_NAMES = [
     'Win10 FYI dEQP Release (NVIDIA)',
@@ -34,7 +41,7 @@ INFO_TAG = '*RESULT'
 
 
 # Returns a struct with info about the latest successful build given a bot name
-# Info contains the build_name, time, date, and angle_revision, if available.
+# Info contains the build_name, time, date, angle_revision, and chrome revision
 # Uses: bb ls '<botname>' -n 1 -status success -A
 def get_latest_success_build_info(bot_name):
   bb = subprocess.Popen(
@@ -60,6 +67,8 @@ def get_latest_success_build_info(bot_name):
       info['date'] = datetime.datetime.now().strftime('%y/%m/%d')
     if 'parent_got_angle_revision' in line:
       info['angle_revision'] = filter(str.isalnum, line.split(':')[1])
+    if '"revision"' in line:
+      info['revision'] = filter(str.isalnum, line.split(':')[1])
   if 'build_name' not in info:
     raise ValueError("Could not find build_name from bot '" + bot_name + "'")
   return info
@@ -152,15 +161,193 @@ def get_bot_info(bot_name):
   return info
 
 
+def get_sheets_service(auth_path):
+  credentials_path = auth_path + '/credentials.json'
+  token_path = auth_path + '/token.pickle'
+  creds = None
+  if os.path.exists(token_path):
+    with open(token_path, 'rb') as token:
+      creds = pickle.load(token)
+  if not creds or not creds.valid:
+    if creds and creds.expired and creds.refresh_token:
+      creds.refresh(Request())
+    else:
+      flow = InstalledAppFlow.from_client_secrets_file(credentials_path, SCOPES)
+      creds = flow.run_local_server()
+    with open(token_path, 'wb') as token:
+      pickle.dump(creds, token)
+  service = build('sheets', 'v4', credentials=creds)
+  sheets = service.spreadsheets()
+  return sheets
+
+
+def get_spreadsheet(service, spreadsheet_id):
+  request = service.get(spreadsheetId=spreadsheet_id)
+  return request.execute()
+
+
+def sheet_exists(spreadsheet, step_name):
+  for sheet in spreadsheet['sheets']:
+    if sheet['properties']['title'] == step_name:
+      return True
+  return False
+
+
+def create_sheet(service, spreadsheet_id, step_name):
+  batch_update_values_request_body = {
+      'requests': [{
+          'addSheet': {
+              'properties': {
+                  'title': step_name,
+              }
+          }
+      }]
+  }
+  request = service.batchUpdate(
+      spreadsheetId=spreadsheet_id, body=batch_update_values_request_body)
+  request.execute()
+
+
+def update_headers(service, spreadsheet_id, step_name, headers):
+  header_range = step_name + '!A1:Z'
+  batch_update_values_request_body = {
+      'valueInputOption': 'RAW',
+      'includeValuesInResponse': True,
+      'data': [{
+          'range': header_range,
+          'values': [headers]
+      }],
+  }
+  request = service.values().batchUpdate(
+      spreadsheetId=spreadsheet_id, body=batch_update_values_request_body)
+  return request.execute()['responses'][0]['updatedData']['values'][0]
+
+
+def get_headers(service, spreadsheet_id, step_name, keys):
+  header_range = step_name + '!A1:Z'
+  request = service.values().get(
+      spreadsheetId=spreadsheet_id, range=header_range)
+  response = request.execute()
+  headers = []
+  if 'values' in response:
+    headers = request.execute()['values'][0]
+  headers_stale = False
+  if 'build_name' not in headers:
+    headers_stale = True
+    headers.append('build_name')
+  if 'time' not in headers:
+    headers_stale = True
+    headers.append('time')
+  if 'date' not in headers:
+    headers_stale = True
+    headers.append('date')
+  if 'revision' not in headers:
+    headers_stale = True
+    headers.append('revision')
+  if 'angle_revision' not in headers:
+    headers_stale = True
+    headers.append('angle_revision')
+  for key in keys:
+    if key not in headers:
+      headers_stale = True
+      headers.append(key)
+  if headers_stale:
+    headers = update_headers(service, spreadsheet_id, step_name, headers)
+  return headers
+
+
+def get_values(info, headers, bot_name, step_name):
+  values = []
+  for key in headers:
+    if key in info[bot_name]:
+      values.append(info[bot_name][key])
+    elif key in info[bot_name][step_name]:
+      values.append(info[bot_name][step_name][key])
+    else:
+      values.append('')
+  return values
+
+
+def append_values(service, spreadsheet_id, step_name, values):
+  header_range = step_name + '!A1:Z'
+  insert_data_option = 'INSERT_ROWS'
+  value_input_option = 'RAW'
+  batch_append_values_request_body = {
+      'range': header_range,
+      'majorDimension': 'ROWS',
+      'values': [values,],
+  }
+  request = service.values().append(
+      spreadsheetId=spreadsheet_id,
+      body=batch_append_values_request_body,
+      range=header_range,
+      insertDataOption=insert_data_option,
+      valueInputOption=value_input_option)
+  request.execute()
+
+
+def update_sheets(service, spreadsheet_id, info):
+  spreadsheet = get_spreadsheet(service, spreadsheet_id)
+  for bot_name in info:
+    for step_name in info[bot_name]['step_names']:
+      if not sheet_exists(spreadsheet, step_name):
+        create_sheet(service, spreadsheet_id, step_name)
+        spreadsheet = get_spreadsheet(service, spreadsheet_id)
+      headers = get_headers(service, spreadsheet_id, step_name,
+                            info[bot_name][step_name].keys())
+      values = get_values(info, headers, bot_name, step_name)
+      append_values(service, spreadsheet_id, step_name, values)
+
+
+def test(service, spreadsheet):
+  spreadsheet_id = spreadsheet  # TODO: Update placeholder value.
+
+  batch_update_values_request_body = {
+      # How the input data should be interpreted.
+      'value_input_option': 'RAW',  # TODO: Update placeholder value.
+
+      # The new values to apply to the spreadsheet.
+      'data': [{
+          'range': 'Sheet2!A1:Z',
+          'values': [[1, 2, 3]]
+      }],  # TODO: Update placeholder value.
+
+      # TODO: Add desired entries to the request body.
+  }
+
+  request = service.values().batchUpdate(
+      spreadsheetId=spreadsheet_id, body=batch_update_values_request_body)
+  return request.execute()
+
+
+def parse_args():
+  parser = argparse.ArgumentParser(os.path.basename(sys.argv[0]))
+  parser.add_argument(
+      'auth_path',
+      default='~/.angle_auth',
+      help='path to directory containing authorization data. (credentials.json and token.pickle)'
+  )
+  parser.add_argument(
+      'spreadsheet',
+      default='1D6Yh7dAPP-aYLbX3HHQD8WubJV9XPuxvkKowmn2qhIw',
+      nargs='?',
+      help='ID of the spreadsheet to write stats to.')
+  return parser.parse_args()
+
+
 def main():
+  args = parse_args()
+  auth_path = args.auth_path.replace('\\', '/')
+  service = get_sheets_service(auth_path)
+  if not service:
+    raise Exception('Unable to connect to Sheets API')
   info = {}
   for bot_name in BOT_NAMES:
     try:
       info[bot_name] = get_bot_info(BOT_NAME_PREFIX + bot_name)
     except Exception as error:
       sys.stderr.write('ERROR: %s\n' % str(error))
-
-  print(str(info))
+  update_sheets(service, args.spreadsheet, info)
 
 
 if __name__ == '__main__':
