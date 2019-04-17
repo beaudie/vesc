@@ -24,6 +24,7 @@
 .cipd
 .gclient
 .gclient_entries
+.auth/
 /src/tests/third_party/gles_conformance_tests
 /testing
 /tools/glslang/glslang_validator
