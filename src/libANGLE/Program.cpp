@@ -3152,9 +3152,9 @@ bool Program::linkAttributes(const Caps &caps, InfoLog &infoLog, bool webglCompa
         mState.mAttributes = vertexShader->getActiveAttributes();
     }
     GLuint maxAttribs = caps.maxVertexAttributes;
+    bool strictLimits = caps.strictAttributeLimit;
 
-    // TODO(jmadill): handle aliasing robustly
-    if (mState.mAttributes.size() > maxAttribs)
+    if (mState.mAttributes.size() > maxAttribs && strictLimits)
     {
         infoLog << "Too many vertex attributes.";
         return false;
