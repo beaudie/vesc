@@ -126,7 +126,9 @@ class RendererVk : angle::NonCopyable
     // TODO(jmadill): We could pass angle::FormatID here.
     const vk::Format &getFormat(GLenum internalFormat) const
     {
-        return mFormatTable[internalFormat];
+        // Note: this only works for angleFormat, that's what mFormatTable is initialized with.
+        angle::FormatID destFormatID = angle::Format::InternalFormatToID(internalFormat);
+        return mFormatTable[destFormatID];
     }
 
     const vk::Format &getFormat(angle::FormatID formatID) const { return mFormatTable[formatID]; }
