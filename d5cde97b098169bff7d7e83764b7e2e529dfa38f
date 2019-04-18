@@ -1,0 +1,481 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "681a6927_92db7796",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "make sure to increment the version when you make changes visible to this file.",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9f3d72a_c5a7cc1d",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "you could limit this to the Vulkan back-end. Otherwise it might have uses for other compiler clients. you could mention this.",
+      "range": {
+        "startLine": 285,
+        "startChar": 12,
+        "endLine": 286,
+        "endChar": 33
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12855d5a_47067875",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "std430 should be supported. Were you thinking of a particular use case?",
+      "range": {
+        "startLine": 287,
+        "startChar": 20,
+        "endLine": 287,
+        "endChar": 59
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3e39b6f_ca6de037",
+        "filename": "src/compiler.gni",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "will have to see why you moved these files. Ideally we could keep them in the HLSL section.",
+      "range": {
+        "startLine": 106,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 46
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77ca00b0_9f53eb43",
+        "filename": "src/compiler/translator/OutputVulkanGLSL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "I think I see why you made the decision about set binding and layout qualifiers. It would be better I think to update InterfaceBlockLinker::defineInterfaceBlock to store the extra block layout information in gl::InterfaceBlock. These values are available to us we just didn\u0027t bother passing through through to the linking stage. Because we haven\u0027t needed them yet.\n\nThis will allow you to recreate the layout qualifier in GlslangWrapper. That\u0027s the intent of the @@ LAYOUT-xxx @@ stuff. Instead of writing the layout qualifier in the shader compilation step we\u0027d write it in the linking step.\n\nSuper long term it would be cool if we could move the linking step into the translator. But that\u0027s far off.",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 115,
+        "endChar": 5
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "220d737b_87126194",
+        "filename": "src/compiler/translator/OutputVulkanGLSL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "This is a similar situation. You could store the sh::InterfaceBlock\u0027s instanceName in InterfaceBlockLinker::defineInterfaceBlock. And then in GlslangWrapper you could replace via the instance name.",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 158,
+        "endChar": 0
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82e0c1df_644a2140",
+        "filename": "src/compiler/translator/tree_ops/RedefineInterfaceBlockLayoutQualifiersWithStd.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "This is a good first pass. But any existing references in the tree to the interface block will point to the old type. For instance if you reference the uniform in an expression. The type of the TIntermSymbol node (or whatever it ends up being) will be pointing to the TInterfaceBlock with the old type. This will leave the tree in an inconsistent state. Even if the Vulkan translation currently works correctly. It might mess up future tree transformation. You probably need to use ReplaceVariable or something similar. It could be fine to do this as a follow-up. But it\u0027s important to keep track of.",
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac17ae47_e999247f",
+        "filename": "src/compiler/translator/tree_ops/RedefineInterfaceBlockLayoutQualifiersWithStd.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "nit: maybe use an oldType alias just to make this clearer",
+      "range": {
+        "startLine": 34,
+        "startChar": 47,
+        "endLine": 34,
+        "endChar": 54
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6781adf2_f6f0652f",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "I believe this class\u0027 implementation can be in the anonymous namespace block.",
+      "range": {
+        "startLine": 482,
+        "startChar": 6,
+        "endLine": 482,
+        "endChar": 25
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca1af31d_48e8c17f",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "I see why you moved the HLSL encoder. Can you restructure this to instead abstract the HLSL specifics out of this class? Then in the D3D11 back-end pass a pointer to an encoder factory or something like that. The factory could generate a new packed HLSL encoder. And for Vulkan the factory could be null. Funtionally like mAllowHLSLEncoder \u003d\u003d false.",
+      "range": {
+        "startLine": 524,
+        "startChar": 4,
+        "endLine": 524,
+        "endChar": 81
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b3c84b3_7bef83ed",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand why you had to separate the set from the layout qualifier. The set binding is part of the layout qualifier. Is it something to do with how you want to separate vertex and fragment shader uniforms? Unless I misunderstand something it might be possible to restore it to the simpler way it was before.",
+      "range": {
+        "startLine": 135,
+        "startChar": 4,
+        "endLine": 135,
+        "endChar": 35
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1aee32a8_5b66fbcd",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "q: these types are guaranteed to be the same bit-width and signedness? if not might want to make a safer cast.",
+      "range": {
+        "startLine": 912,
+        "startChar": 11,
+        "endLine": 912,
+        "endChar": 61
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4806fd48_1924aab3",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "it\u0027s unfortunate we have to do this math here. but looking at the robustBufferAccess feature:\n\n\u003e robustBufferAccess specifies that accesses to buffers are bounds-checked against the range of\n\u003e the buffer descriptor (as determined by VkDescriptorBufferInfo::range,\n\u003e VkBufferViewCreateInfo::range, or the size of the buffer).\n\nSeems like we don\u0027t have a choice.",
+      "range": {
+        "startLine": 918,
+        "startChar": 11,
+        "endLine": 921,
+        "endChar": 45
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "37a12b3e_518ac058",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "nit: prefer explicit bool check -\u003e size !\u003d 0 or size \u003d\u003d 0. style/consistency thing.",
+      "range": {
+        "startLine": 922,
+        "startChar": 28,
+        "endLine": 922,
+        "endChar": 33
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd480361_4d7aebe0",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "to avoid needing to call GetUniformBlockArraySize could you please try flattening the array updates into individual VkWriteDescriptorSets?",
+      "range": {
+        "startLine": 935,
+        "startChar": 18,
+        "endLine": 935,
+        "endChar": 35
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "194cdf44_cb9c0586",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "nit: maybe make this into a constant so the expression is a bit more parseable.",
+      "range": {
+        "startLine": 1057,
+        "startChar": 55,
+        "endLine": 1057,
+        "endChar": 90
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f46535f6_ec139bf2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1351,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "can be const, and the below.",
+      "range": {
+        "startLine": 1351,
+        "startChar": 21,
+        "endLine": 1351,
+        "endChar": 40
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01659623_c9837278",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "Let\u0027s keep the stages out unless it\u0027s necessary for correctness. I\u0027d prefer if we could use a single mapping for both stages. It\u0027s not going to impact program behaviour at first. If we need to change this later we can. For now let\u0027s keep it as simple as possible.",
+      "range": {
+        "startLine": 469,
+        "startChar": 15,
+        "endLine": 469,
+        "endChar": 41
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c13e66d8_a4278930",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "Seems better to keep them updated in different cadences. Can probably leave this out.",
+      "range": {
+        "startLine": 822,
+        "startChar": 30,
+        "endLine": 822,
+        "endChar": 94
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03b5a9f9_cd811727",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "nit: maybe make kReservedUniformBufferCount in case this changes.",
+      "range": {
+        "startLine": 186,
+        "startChar": 74,
+        "endLine": 186,
+        "endChar": 75
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52afbe8c_29015fd3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T19:30:05Z",
+      "side": 1,
+      "message": "nit: save into a local constant temporary, and iterate over AllGrahphicsShaderTypes?",
+      "range": {
+        "startLine": 200,
+        "startChar": 8,
+        "endLine": 200,
+        "endChar": 48
+      },
+      "revId": "d5cde97b098169bff7d7e83764b7e2e529dfa38f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
