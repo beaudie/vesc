@@ -674,6 +674,7 @@ void GenerateCaps(IDirect3D9 *d3d9,
         if (IsAMD(adapterId.VendorId))
         {
             extensions->depthTexturesANGLE = false;
+            extensions->depthTextureOES    = false;
         }
     }
     else
