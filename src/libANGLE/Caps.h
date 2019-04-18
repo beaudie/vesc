@@ -238,7 +238,13 @@ struct Extensions
     bool sRGB;
 
     // GL_ANGLE_depth_texture
-    bool depthTexturesANGLE;
+    bool depthTextureANGLE;
+
+    // OES_depth_texture
+    bool depthTextureOES;
+
+    // indicate if any depth texture extension is available
+    bool depthTextureANY;
 
     // GL_OES_depth32
     // Allows DEPTH_COMPONENT32_OES as a valid Renderbuffer format.
