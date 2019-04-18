@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9bf9b3b8_866ecc38",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-18T19:47:54Z",
+      "side": 0,
+      "message": "Example sheet: https://docs.google.com/spreadsheets/d/1D6Yh7dAPP-aYLbX3HHQD8WubJV9XPuxvkKowmn2qhIw/edit#gid\u003d1276209071",
+      "revId": "e3c7134c2717443e925adf37ed6de21eb0187cf2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
