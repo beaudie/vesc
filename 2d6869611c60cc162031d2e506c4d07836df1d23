@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "6c949fd3_ad600155",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T20:05:25Z",
+      "side": 1,
+      "message": "Maybe include a --debug option to toggle the extra debug info? Or verbosity? So it can be run with a bit less output when needed?",
+      "parentUuid": "95704ad7_132c77aa",
+      "revId": "2d6869611c60cc162031d2e506c4d07836df1d23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ff8771a_27790d04",
         "filename": "scripts/generate_deqp_stats.py",
         "patchSetId": 2
@@ -36,6 +54,29 @@
     },
     {
       "key": {
+        "uuid": "a5710253_53b5edc0",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T20:05:25Z",
+      "side": 1,
+      "message": "offline chat:\n\nwe can probably make this a vpython script to automate the pip install part of the setup process:\n\nhttps://chromium.googlesource.com/infra/infra/+/master/doc/users/vpython.md#Walkthrough-Simple-Script",
+      "range": {
+        "startLine": 31,
+        "startChar": 5,
+        "endLine": 31,
+        "endChar": 30
+      },
+      "revId": "2d6869611c60cc162031d2e506c4d07836df1d23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ee83306a_d9d120a6",
         "filename": "scripts/generate_deqp_stats.py",
         "patchSetId": 2
@@ -47,6 +88,52 @@
       "writtenOn": "2019-04-18T19:51:24Z",
       "side": 1,
       "message": "Remove these commented lines",
+      "revId": "2d6869611c60cc162031d2e506c4d07836df1d23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "965288ec_a084c53c",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T20:05:25Z",
+      "side": 1,
+      "message": "maybe let\u0027s give a more readable name?\n\nlike\n\nGLES 2.0 Vulkan Windows NVIDIA\nGLES 3.0 OpenGL Mac AMD \nGLES 3.1 D3D11 Windows Intel\n\nSomething like that.",
+      "range": {
+        "startLine": 217,
+        "startChar": 0,
+        "endLine": 224,
+        "endChar": 35
+      },
+      "revId": "2d6869611c60cc162031d2e506c4d07836df1d23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45a04153_6da2d430",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T20:05:25Z",
+      "side": 1,
+      "message": "spoke offline: would recommend using the home directory.\n\nhttps://stackoverflow.com/questions/4028904/how-to-get-the-home-directory-in-python \n\none solution above.",
+      "range": {
+        "startLine": 448,
+        "startChar": 14,
+        "endLine": 448,
+        "endChar": 23
+      },
       "revId": "2d6869611c60cc162031d2e506c4d07836df1d23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
