@@ -205,6 +205,7 @@ class RendererVk : angle::NonCopyable
     bool hasLinearTextureFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
     bool hasTextureFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
     bool hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);
+    VkImageUsageFlags getMaximalImageUsage(VkFormat format);
 
     void insertDebugMarker(GLenum source, GLuint id, std::string &&marker);
     void pushDebugMarker(GLenum source, GLuint id, std::string &&marker);
@@ -241,6 +242,10 @@ class RendererVk : angle::NonCopyable
                                     const char *name);
     angle::Result checkCompletedGpuEvents(vk::Context *context);
     void flushGpuEvents(double nextSyncGpuTimestampS, double nextSyncCpuTimestampS);
+
+    template <VkFormatFeatureFlags VkFormatProperties::*features>
+    VkFormatFeatureFlags getFormatFeatureBits(VkFormat format,
+                                              const VkFormatFeatureFlags featureBits);
 
     template <VkFormatFeatureFlags VkFormatProperties::*features>
     bool hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits);

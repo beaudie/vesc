@@ -1835,6 +1835,32 @@ bool RendererVk::hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatu
     return hasFormatFeatureBits<&VkFormatProperties::bufferFeatures>(format, featureBits);
 }
 
+VkImageUsageFlags RendererVk::getMaximalImageUsage(VkFormat format)
+{
+    constexpr VkFormatFeatureFlags kImageUsageFeatureBits =
+        VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT |
+        VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT | VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT |
+        VK_FORMAT_FEATURE_TRANSFER_SRC_BIT | VK_FORMAT_FEATURE_TRANSFER_DST_BIT;
+    VkFormatFeatureFlags featureBits =
+        getFormatFeatureBits<&VkFormatProperties::optimalTilingFeatures>(format,
+                                                                         kImageUsageFeatureBits);
+    VkImageUsageFlags imageUsageFlags = 0;
+    if (featureBits & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT)
+        imageUsageFlags |= VK_IMAGE_USAGE_SAMPLED_BIT;
+    if (featureBits & VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT)
+        imageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
+    if (featureBits & VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT)
+        imageUsageFlags |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    if (featureBits & VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT)
+        imageUsageFlags |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+    if (featureBits & VK_FORMAT_FEATURE_TRANSFER_SRC_BIT)
+        imageUsageFlags |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+    if (featureBits & VK_FORMAT_FEATURE_TRANSFER_DST_BIT)
+        imageUsageFlags |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+    imageUsageFlags |= VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT;
+    return imageUsageFlags;
+}
+
 void RendererVk::insertDebugMarker(GLenum source, GLuint id, std::string &&marker)
 {
     mCommandGraph.insertDebugMarker(source, std::move(marker));
@@ -2189,7 +2215,8 @@ void RendererVk::flushGpuEvents(double nextSyncGpuTimestampS, double nextSyncCpu
 }
 
 template <VkFormatFeatureFlags VkFormatProperties::*features>
-bool RendererVk::hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits)
+VkFormatFeatureFlags RendererVk::getFormatFeatureBits(VkFormat format,
+                                                      const VkFormatFeatureFlags featureBits)
 {
     ASSERT(static_cast<uint32_t>(format) < vk::kNumVkFormats);
     VkFormatProperties &deviceProperties = mFormatProperties[format];
@@ -2201,14 +2228,20 @@ bool RendererVk::hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlag
         const VkFormatProperties &mandatoryProperties = vk::GetMandatoryFormatSupport(format);
         if (IsMaskFlagSet(mandatoryProperties.*features, featureBits))
         {
-            return true;
+            return featureBits;
         }
 
         // Otherwise query the format features and cache it.
         vkGetPhysicalDeviceFormatProperties(mPhysicalDevice, format, &deviceProperties);
     }
 
-    return IsMaskFlagSet(deviceProperties.*features, featureBits);
+    return deviceProperties.*features & featureBits;
+}
+
+template <VkFormatFeatureFlags VkFormatProperties::*features>
+bool RendererVk::hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlags featureBits)
+{
+    return IsMaskFlagSet(getFormatFeatureBits<features>(format, featureBits), featureBits);
 }
 
 uint32_t GetUniformBufferDescriptorCount()
