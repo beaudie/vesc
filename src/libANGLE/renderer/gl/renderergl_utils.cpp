@@ -714,15 +714,8 @@ void GenerateCaps(const FunctionsGL *functions,
         caps->maxUniformBlockSize = QuerySingleGLInt64(functions, GL_MAX_UNIFORM_BLOCK_SIZE);
         caps->uniformBufferOffsetAlignment =
             QuerySingleGLInt(functions, GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT);
-
-        GLuint maxCombinedUniformBlocks =
+        caps->maxCombinedUniformBlocks =
             QuerySingleGLInt(functions, GL_MAX_COMBINED_UNIFORM_BLOCKS);
-        // The real cap contains the limits for shader types that are not available to ES, so limit
-        // the cap to the sum of vertex+fragment shader caps.
-        caps->maxCombinedUniformBlocks = std::min(
-            maxCombinedUniformBlocks, caps->maxShaderUniformBlocks[gl::ShaderType::Vertex] +
-                                          caps->maxShaderUniformBlocks[gl::ShaderType::Fragment]);
-
         caps->maxCombinedShaderUniformComponents[gl::ShaderType::Vertex] =
             QuerySingleGLInt64(functions, GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS);
         caps->maxCombinedShaderUniformComponents[gl::ShaderType::Fragment] =
@@ -770,8 +763,8 @@ void GenerateCaps(const FunctionsGL *functions,
     // Determine the max combined texture image units by adding the vertex and fragment limits.  If
     // the real cap is queried, it would contain the limits for shader types that are not available
     // to ES.
-    caps->maxCombinedTextureImageUnits = caps->maxShaderTextureImageUnits[gl::ShaderType::Vertex] +
-                                         caps->maxShaderTextureImageUnits[gl::ShaderType::Fragment];
+    caps->maxCombinedTextureImageUnits =
+        QuerySingleGLInt(functions, GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS);
 
     // Table 6.34, implementation dependent transform feedback limits
     if (functions->isAtLeastGL(gl::Version(4, 0)) ||
@@ -1330,6 +1323,37 @@ void GenerateCaps(const FunctionsGL *functions,
         caps->maxShaderStorageBlocks[gl::ShaderType::Geometry] =
             QuerySingleGLInt(functions, GL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS_EXT);
     }
+
+    // The real combined caps contain limits for shader types that are not available to ES, so limit
+    // the caps to the sum of vertex+fragment+geometry shader caps.
+    caps->maxCombinedUniformBlocks = std::min(
+        caps->maxCombinedUniformBlocks, caps->maxShaderUniformBlocks[gl::ShaderType::Vertex] +
+                                            caps->maxShaderUniformBlocks[gl::ShaderType::Fragment] +
+                                            caps->maxShaderUniformBlocks[gl::ShaderType::Geometry]);
+    caps->maxCombinedTextureImageUnits =
+        std::min(caps->maxCombinedTextureImageUnits,
+                 caps->maxShaderTextureImageUnits[gl::ShaderType::Vertex] +
+                     caps->maxShaderTextureImageUnits[gl::ShaderType::Fragment] +
+                     caps->maxShaderTextureImageUnits[gl::ShaderType::Geometry]);
+    caps->maxCombinedShaderStorageBlocks =
+        std::min(caps->maxCombinedShaderStorageBlocks,
+                 caps->maxShaderStorageBlocks[gl::ShaderType::Vertex] +
+                     caps->maxShaderStorageBlocks[gl::ShaderType::Fragment] +
+                     caps->maxShaderStorageBlocks[gl::ShaderType::Geometry]);
+    caps->maxCombinedImageUniforms = std::min(
+        caps->maxCombinedImageUniforms, caps->maxShaderImageUniforms[gl::ShaderType::Vertex] +
+                                            caps->maxShaderImageUniforms[gl::ShaderType::Fragment] +
+                                            caps->maxShaderImageUniforms[gl::ShaderType::Geometry]);
+    caps->maxCombinedAtomicCounterBuffers =
+        std::min(caps->maxCombinedAtomicCounterBuffers,
+                 caps->maxShaderAtomicCounterBuffers[gl::ShaderType::Vertex] +
+                     caps->maxShaderAtomicCounterBuffers[gl::ShaderType::Fragment] +
+                     caps->maxShaderAtomicCounterBuffers[gl::ShaderType::Geometry]);
+    caps->maxCombinedAtomicCounters =
+        std::min(caps->maxCombinedAtomicCounters,
+                 caps->maxShaderAtomicCounters[gl::ShaderType::Vertex] +
+                     caps->maxShaderAtomicCounters[gl::ShaderType::Fragment] +
+                     caps->maxShaderAtomicCounters[gl::ShaderType::Geometry]);
 
     // EXT_blend_func_extended.
     // Note that this could be implemented also on top of native EXT_blend_func_extended, but it's
