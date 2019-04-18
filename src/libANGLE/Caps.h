@@ -240,6 +240,12 @@ struct Extensions
     // GL_ANGLE_depth_texture
     bool depthTextureANGLE;
 
+    // OES_depth_texture
+    bool depthTextureOES;
+
+    // indicate if any depth texture extension is available
+    bool depthTextureAny() const { return (depthTextureANGLE || depthTextureOES); }
+
     // GL_OES_depth32
     // Allows DEPTH_COMPONENT32_OES as a valid Renderbuffer format.
     bool depth32;
