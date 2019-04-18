@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "5116108c_0b00930a",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-04-18T17:57:39Z",
+      "side": 1,
+      "message": "Ah, of course we do. I will keep that in mind in the future instead of reaching for std::unique_ptr.",
+      "parentUuid": "a48d335d_3e6bc732",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 5
+      },
+      "revId": "23991f5b109a35f0daed722e807bb73f87491fee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6bcb1be2_e9757e4a",
         "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
         "patchSetId": 7
