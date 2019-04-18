@@ -357,6 +357,53 @@ class Texture2DTestES3 : public Texture2DTest
     }
 };
 
+class IntegerTexture2DTestES3 : public Texture2DTestES3
+{
+  protected:
+    IntegerTexture2DTestES3() : Texture2DTestES3(), mTexture2D(0), mTexture2DUniformLocation(-1) {}
+
+    const char *getFragmentShaderSource() override
+    {
+        return R"(#version 300 es
+precision highp float;
+precision mediump usampler2D;
+uniform usampler2D tex;
+in vec2 texcoord;
+out vec4 outputColor;
+
+void main()
+{
+    outputColor = vec4(texture(tex, texcoord));
+})";
+    }
+
+    const char *getTextureUniformName() { return "tex"; }
+
+    void setUpProgram() override
+    {
+        TexCoordDrawTest::setUpProgram();
+        mTexture2DUniformLocation = glGetUniformLocation(mProgram, getTextureUniformName());
+        ASSERT_NE(-1, mTexture2DUniformLocation);
+    }
+
+    void SetUp() override
+    {
+        TexCoordDrawTest::SetUp();
+        mTexture2D = create2DTexture();
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void TearDown() override
+    {
+        glDeleteTextures(1, &mTexture2D);
+        TexCoordDrawTest::TearDown();
+    }
+
+    GLuint mTexture2D;
+    GLint mTexture2DUniformLocation;
+};
+
 class Texture2DIntegerAlpha1TestES3 : public Texture2DTest
 {
   protected:
@@ -4440,15 +4487,42 @@ TEST_P(Texture2DTestES3, MinificationWithSamplerNoMipmapping)
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, angle::GLColor::white);
 }
 
+TEST_P(IntegerTexture2DTestES3, IntegerTextureNonZeroBaseLevel)
+{
+    int width  = getWindowWidth();
+    int height = getWindowHeight();
+
+    GLuint tex2D;
+    glGenTextures(1, &tex2D);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex2D);
+
+    GLColor color = GLColor::red;
+    std::vector<GLColor> pixels(width * height, color);
+
+    GLint baseLevel = 1;
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, baseLevel);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, baseLevel, GL_RGBA8UI, width, height, 0, GL_RGBA_INTEGER,
+                 GL_UNSIGNED_BYTE, pixels.data());
+
+    setUpProgram();
+    glUseProgram(mProgram);
+    glUniform1i(mTexture2DUniformLocation, 0);
+    drawQuad(mProgram, "position", 0.5f);
+
+    glDeleteTextures(1, &tex2D);
+
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, color);
+    EXPECT_PIXEL_COLOR_EQ(width - 1, height - 1, color);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST(Texture2DTest,
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES2_D3D11_FL9_3(),
-                       ES2_OPENGL(),
-                       ES2_OPENGLES(),
-                       ES2_VULKAN());
+ANGLE_INSTANTIATE_TEST(IntegerTexture2DTestES3, ES3_D3D11(), ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(Texture2DTest, ES3_D3D11(), ES3_OPENGL());
 ANGLE_INSTANTIATE_TEST(TextureCubeTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
