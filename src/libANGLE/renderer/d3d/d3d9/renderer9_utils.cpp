@@ -657,6 +657,7 @@ void GenerateCaps(IDirect3D9 *d3d9,
     extensions->pixelBufferObject = false;
     extensions->mapBuffer         = false;
     extensions->mapBufferRange    = false;
+    extensions->depthTextureOES   = false;
 
     // textureRG is emulated and not performant.
     extensions->textureRG = false;
@@ -673,7 +674,9 @@ void GenerateCaps(IDirect3D9 *d3d9,
         // Disable depth texture support on AMD cards (See ANGLE issue 839)
         if (IsAMD(adapterId.VendorId))
         {
-            extensions->depthTexturesANGLE = false;
+            extensions->depthTextureANGLE = false;
+            extensions->depthTextureOES   = false;
+            extensions->depthTextureANY   = false;
         }
     }
     else
