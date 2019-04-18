@@ -785,6 +785,8 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     AddRGBAFormat(&map, GL_RGB32F,        true, 32, 32, 32,  0, 0, GL_RGB,  GL_FLOAT,          GL_FLOAT,        false, SizedFloatRGBSupport,       RequireExt<&Extensions::textureFloatLinear>, RequireExt<&Extensions::colorBufferFloatRGB>, NeverSupported                           );
     AddRGBAFormat(&map, GL_RGBA32F,       true, 32, 32, 32, 32, 0, GL_RGBA, GL_FLOAT,          GL_FLOAT,        false, SizedFloatRGBASupport,      RequireExt<&Extensions::textureFloatLinear>, SizedFloatRGBARenderableSupport,              SizedFloatRGBARenderableSupport          );
 
+	// TODO: Add appropriate formats for OES_depth_texture extension. This should be unsized(?) formats.
+	// NOTE: OES_depth_texture and ANGLE_depth_texture are not the same.
     // Depth stencil formats
     //                         | Internal format         |sized| D |S | X | Format            | Type                             | Component type        | Texture supported                                                | Filterable                                      | Texture attachment                                                                   | Renderbuffer                                                                         |
     AddDepthStencilFormat(&map, GL_DEPTH_COMPONENT16,     true, 16, 0,  0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT,                 GL_UNSIGNED_NORMALIZED, RequireES<1, 0>,                                                   RequireESOrExt<3, 0, &Extensions::depthTexturesANGLE>, RequireES<1, 0>,                                                                        RequireES<1, 0>                                                                       );

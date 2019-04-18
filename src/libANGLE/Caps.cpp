@@ -655,6 +655,9 @@ static bool DetermineSRGBTextureSupport(const TextureCapsMap &textureCaps)
 // Check for GL_ANGLE_depth_texture
 static bool DetermineDepthTextureSupport(const TextureCapsMap &textureCaps)
 {
+    // TODO: Need to make sure required formats for OES_depth_texture are the same as
+    // ANGLE_depth_texture below. May need a separate DetermineDepthTextureOESSupport for the
+    // OES_depth_texture
     constexpr GLenum requiredFormats[] = {
         GL_DEPTH_COMPONENT16,
         GL_DEPTH_COMPONENT32_OES,
