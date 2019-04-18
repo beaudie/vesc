@@ -1357,14 +1357,18 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
                                    const uint32_t levelCount,
                                    vk::CommandBuffer *commandBuffer)
 {
-    const RendererVk *renderer         = contextVk->getRenderer();
-    const angle::Format &textureFormat = format.imageFormat();
+    RendererVk *renderer = contextVk->getRenderer();
 
     VkImageUsageFlags imageUsageFlags = VK_IMAGE_USAGE_TRANSFER_DST_BIT |
                                         VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
                                         VK_IMAGE_USAGE_SAMPLED_BIT;
-
-    if (!textureFormat.isBlock)
+    if (renderer->hasImageFormatFeatureBits(format.vkImageFormat,
+                                            VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT))
+    {
+        imageUsageFlags |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+    }
+    else if (renderer->hasImageFormatFeatureBits(format.vkImageFormat,
+                                                 VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT))
     {
         imageUsageFlags |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     }
@@ -1410,16 +1414,17 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
     uint32_t baseLevel  = getNativeImageLevel(0);
     uint32_t baseLayer  = getNativeImageLayer(0);
     uint32_t layerCount = mState.getType() == gl::TextureType::CubeMap ? gl::kCubeFaceCount : 1;
+    const VkImageAspectFlags aspectFlags = vk::GetFormatAspectFlags(format.angleFormat());
 
-    ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
-                                         mappedSwizzle, &mReadMipmapImageView, baseLevel,
-                                         levelCount, baseLayer, layerCount));
-    ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
-                                         mappedSwizzle, &mReadBaseLevelImageView, baseLevel, 1,
-                                         baseLayer, layerCount));
+    ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), aspectFlags, mappedSwizzle,
+                                         &mReadMipmapImageView, baseLevel, levelCount, baseLayer,
+                                         layerCount));
+    ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), aspectFlags, mappedSwizzle,
+                                         &mReadBaseLevelImageView, baseLevel, 1, baseLayer,
+                                         layerCount));
     if (!format.imageFormat().isBlock)
     {
-        ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
+        ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), aspectFlags,
                                              gl::SwizzleState(), &mDrawBaseLevelImageView,
                                              baseLevel, 1, baseLayer, layerCount));
     }
