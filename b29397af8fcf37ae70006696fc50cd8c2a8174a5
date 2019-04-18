@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d293e3f_4c87391a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1838,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T12:14:37Z",
+      "side": 1,
+      "message": "can you make this a non-member helper function in vk_format_utils.h?",
+      "range": {
+        "startLine": 1838,
+        "startChar": 30,
+        "endLine": 1838,
+        "endChar": 50
+      },
+      "revId": "b29397af8fcf37ae70006696fc50cd8c2a8174a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
