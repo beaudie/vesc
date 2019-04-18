@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "577f990a_d725c678",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-04-18T00:01:35Z",
+      "side": 1,
+      "message": "Er, that change introduced a leak. I forgot that setImageHelper moved to after the call.\n\nI changed it back to my first solution which is patterned after ensureImageAllocated().\n\nIt seems we\u0027d need larger changes to have MemoryObjectVk allocate the ImageHelper. ImageHelper cannot clean up after itself automatically, and the ANGLE_TRY() pseudo-exceptions eliminate any opportunity to do it manually.",
+      "parentUuid": "9477af4a_2112fda9",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 5
+      },
+      "revId": "23991f5b109a35f0daed722e807bb73f87491fee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6bcb1be2_e9757e4a",
         "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
         "patchSetId": 7
