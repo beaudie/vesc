@@ -16,6 +16,23 @@
       "revId": "2d6869611c60cc162031d2e506c4d07836df1d23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ff8771a_27790d04",
+        "filename": "scripts/generate_deqp_stats.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-18T19:48:40Z",
+      "side": 1,
+      "message": "Add defaults here",
+      "revId": "2d6869611c60cc162031d2e506c4d07836df1d23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
