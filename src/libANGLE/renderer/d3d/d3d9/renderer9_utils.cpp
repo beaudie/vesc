@@ -657,6 +657,7 @@ void GenerateCaps(IDirect3D9 *d3d9,
     extensions->pixelBufferObject = false;
     extensions->mapBuffer         = false;
     extensions->mapBufferRange    = false;
+    extensions->depthTextureOES   = false;
 
     // textureRG is emulated and not performant.
     extensions->textureRG = false;
