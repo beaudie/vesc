@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "a48d335d_3e6bc732",
+        "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T12:01:53Z",
+      "side": 1,
+      "message": "We have a vk::Scoped pattern for cleaning up automatically. But to me the code you have now looks fine.",
+      "parentUuid": "577f990a_d725c678",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 5
+      },
+      "revId": "23991f5b109a35f0daed722e807bb73f87491fee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6bcb1be2_e9757e4a",
         "filename": "src/libANGLE/renderer/vulkan/MemoryObjectVk.cpp",
         "patchSetId": 7
