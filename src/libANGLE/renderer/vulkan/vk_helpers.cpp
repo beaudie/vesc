@@ -1625,6 +1625,10 @@ void ImageHelper::clearColor(const VkClearColorValue &color,
 void ImageHelper::clearDepthStencil(VkImageAspectFlags imageAspectFlags,
                                     VkImageAspectFlags clearAspectFlags,
                                     const VkClearDepthStencilValue &depthStencil,
+                                    uint32_t baseMipLevel,
+                                    uint32_t levelCount,
+                                    uint32_t baseArrayLayer,
+                                    uint32_t layerCount,
                                     vk::CommandBuffer *commandBuffer)
 {
     ASSERT(valid());
@@ -1633,10 +1637,10 @@ void ImageHelper::clearDepthStencil(VkImageAspectFlags imageAspectFlags,
 
     VkImageSubresourceRange clearRange = {
         /*aspectMask*/ clearAspectFlags,
-        /*baseMipLevel*/ 0,
-        /*levelCount*/ 1,
-        /*baseArrayLayer*/ 0,
-        /*layerCount*/ 1,
+        /*baseMipLevel*/ baseMipLevel,
+        /*levelCount*/ levelCount,
+        /*baseArrayLayer*/ baseArrayLayer,
+        /*layerCount*/ layerCount,
     };
 
     commandBuffer->clearDepthStencilImage(mImage, getCurrentLayout(), depthStencil, 1, &clearRange);
@@ -1653,9 +1657,9 @@ void ImageHelper::clear(const VkClearValue &value,
 
     if (isDepthStencil)
     {
-        ASSERT(mipLevel == 0 && baseArrayLayer == 0 && layerCount == 1);
         const VkImageAspectFlags aspect = vk::GetDepthStencilAspectFlags(mFormat->imageFormat());
-        clearDepthStencil(aspect, aspect, value.depthStencil, commandBuffer);
+        clearDepthStencil(aspect, aspect, value.depthStencil, mipLevel, 1, baseArrayLayer,
+                          layerCount, commandBuffer);
     }
     else
     {
