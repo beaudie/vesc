@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22bf2bc1_c29b8efc",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1332,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-18T16:41:52Z",
+      "side": 1,
+      "message": "maybe we should use a range-for over the maxShaderUniformBlocks array for the new shaders types? Maybe make a helper that takes ShaderMap of GLuint and clamps a value to the values in the map. You can optionally use gl::AllGraphicsShaderTypes if you\u0027re worried about compute. can use this pattern for all these clamps.",
+      "range": {
+        "startLine": 1329,
+        "startChar": 3,
+        "endLine": 1332,
+        "endChar": 99
+      },
+      "revId": "a506ababdb16e020e043609988889cb2a0dd0b24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
