@@ -321,15 +321,26 @@ void MapSwizzleState(const vk::Format &format,
             swizzleStateOut->swizzleAlpha = swizzleState.swizzleRed;
             break;
         default:
-            // Set any missing channel to default in case the emulated format has that channel.
-            swizzleStateOut->swizzleRed =
-                angleFormat.redBits > 0 ? swizzleState.swizzleRed : GL_ZERO;
-            swizzleStateOut->swizzleGreen =
-                angleFormat.greenBits > 0 ? swizzleState.swizzleGreen : GL_ZERO;
-            swizzleStateOut->swizzleBlue =
-                angleFormat.blueBits > 0 ? swizzleState.swizzleBlue : GL_ZERO;
-            swizzleStateOut->swizzleAlpha =
-                angleFormat.alphaBits > 0 ? swizzleState.swizzleAlpha : GL_ONE;
+            if (angleFormat.hasDepthOrStencilBits())
+            {
+                swizzleStateOut->swizzleRed =
+                    angleFormat.depthBits > 0 ? swizzleState.swizzleRed : GL_ZERO;
+                swizzleStateOut->swizzleGreen = GL_ZERO;
+                swizzleStateOut->swizzleBlue  = GL_ZERO;
+                swizzleStateOut->swizzleAlpha = GL_ZERO;
+            }
+            else
+            {
+                // Set any missing channel to default in case the emulated format has that channel.
+                swizzleStateOut->swizzleRed =
+                    angleFormat.redBits > 0 ? swizzleState.swizzleRed : GL_ZERO;
+                swizzleStateOut->swizzleGreen =
+                    angleFormat.greenBits > 0 ? swizzleState.swizzleGreen : GL_ZERO;
+                swizzleStateOut->swizzleBlue =
+                    angleFormat.blueBits > 0 ? swizzleState.swizzleBlue : GL_ZERO;
+                swizzleStateOut->swizzleAlpha =
+                    angleFormat.alphaBits > 0 ? swizzleState.swizzleAlpha : GL_ONE;
+            }
             break;
     }
 }
