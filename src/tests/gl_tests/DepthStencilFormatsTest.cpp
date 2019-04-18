@@ -121,7 +121,9 @@ class DepthStencilFormatsTestES3 : public DepthStencilFormatsTestBase
 
 TEST_P(DepthStencilFormatsTest, DepthTexture)
 {
-    bool shouldHaveTextureSupport = IsGLExtensionEnabled("GL_ANGLE_depth_texture");
+    bool shouldHaveTextureSupport = (IsGLExtensionEnabled("GL_ANGLE_depth_texture") ||
+                                     IsGLExtensionEnabled("GL_OES_depth_texture"));
+
     EXPECT_EQ(shouldHaveTextureSupport,
               checkTexImageFormatSupport(GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT));
     EXPECT_EQ(shouldHaveTextureSupport,
@@ -144,14 +146,18 @@ TEST_P(DepthStencilFormatsTest, PackedDepthStencil)
     EXPECT_EQ(shouldHaveRenderbufferSupport,
               checkRenderbufferFormatSupport(GL_DEPTH24_STENCIL8_OES));
 
-    bool shouldHaveTextureSupport = IsGLExtensionEnabled("GL_OES_packed_depth_stencil") &&
+    bool shouldHaveTextureSupport = (IsGLExtensionEnabled("GL_OES_packed_depth_stencil") &&
+                                     IsGLExtensionEnabled("GL_OES_depth_texture")) ||
                                     IsGLExtensionEnabled("GL_ANGLE_depth_texture");
     EXPECT_EQ(shouldHaveTextureSupport,
               checkTexImageFormatSupport(GL_DEPTH_STENCIL_OES, GL_UNSIGNED_INT_24_8_OES));
 
     if (IsGLExtensionEnabled("GL_EXT_texture_storage"))
     {
-        EXPECT_EQ(shouldHaveTextureSupport, checkTexStorageFormatSupport(GL_DEPTH24_STENCIL8_OES));
+        bool shouldHaveTexStorageSupport = IsGLExtensionEnabled("GL_OES_packed_depth_stencil") ||
+                                           IsGLExtensionEnabled("GL_ANGLE_depth_texture");
+        EXPECT_EQ(shouldHaveTexStorageSupport,
+                  checkTexStorageFormatSupport(GL_DEPTH24_STENCIL8_OES));
     }
 }
 
