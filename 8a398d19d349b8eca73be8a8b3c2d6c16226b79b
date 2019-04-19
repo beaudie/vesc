@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "22b21d9a_133b8f37",
+        "filename": "extensions/EGL_ANGLE_power_preference.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-04-19T00:39:19Z",
+      "side": 1,
+      "message": "I\u0027d prefer to avoid adding more undefined behavior to the system. If you feel strongly about this I\u0027ll be happy to do a follow up.",
+      "parentUuid": "73e9a13c_1e0c4515",
+      "range": {
+        "startLine": 71,
+        "startChar": 25,
+        "endLine": 71,
+        "endChar": 44
+      },
+      "revId": "8a398d19d349b8eca73be8a8b3c2d6c16226b79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7eafdec8_06a7cdcd",
         "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c0c2d865_f7e7e15e",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-04-19T00:39:19Z",
+      "side": 1,
+      "message": "Thanks for the suggestion. Done.",
+      "parentUuid": "7eafdec8_06a7cdcd",
+      "range": {
+        "startLine": 78,
+        "startChar": 4,
+        "endLine": 83,
+        "endChar": 5
+      },
+      "revId": "8a398d19d349b8eca73be8a8b3c2d6c16226b79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7418c391_b24d21e0",
         "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
         "patchSetId": 2
@@ -62,6 +110,24 @@
       "revId": "8a398d19d349b8eca73be8a8b3c2d6c16226b79b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eccaebe5_7afbef42",
+        "filename": "src/libANGLE/renderer/gl/cgl/DisplayCGL.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-04-19T00:39:19Z",
+      "side": 1,
+      "message": "Yes, thanks, should have made that simplification when bringing the code over from Chromium. Done.",
+      "parentUuid": "7418c391_b24d21e0",
+      "revId": "8a398d19d349b8eca73be8a8b3c2d6c16226b79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
