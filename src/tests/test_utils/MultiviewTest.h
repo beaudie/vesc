@@ -17,7 +17,7 @@ namespace angle
 
 // Creates a simple program that passes through two-dimensional vertices and renders green
 // fragments.
-GLuint CreateSimplePassthroughProgram(int numViews);
+GLuint CreateSimplePassthroughProgram(int numViews, bool multiviewExtension);
 
 // Create a 2D texture array to use for multiview rendering. Texture ids should be
 // created beforehand. If depthTexture or stencilTexture is 0, it will not be initialized.
@@ -60,17 +60,26 @@ struct MultiviewImplementationParams : public PlatformParameters
     MultiviewImplementationParams(GLint majorVersion,
                                   GLint minorVersion,
                                   bool forceUseGeometryShaderOnD3D,
-                                  const EGLPlatformParameters &eglPlatformParameters)
+                                  const EGLPlatformParameters &eglPlatformParameters,
+                                  bool multiviewExtension)
         : PlatformParameters(majorVersion, minorVersion, eglPlatformParameters),
-          mForceUseGeometryShaderOnD3D(forceUseGeometryShaderOnD3D)
+          mForceUseGeometryShaderOnD3D(forceUseGeometryShaderOnD3D),
+          mMultiviewExtension(multiviewExtension)
     {}
     bool mForceUseGeometryShaderOnD3D;
+    bool mMultiviewExtension;
 };
 std::ostream &operator<<(std::ostream &os, const MultiviewImplementationParams &params);
 
-MultiviewImplementationParams VertexShaderOpenGL(GLint majorVersion, GLint minorVersion);
-MultiviewImplementationParams VertexShaderD3D11(GLint majorVersion, GLint minorVersion);
-MultiviewImplementationParams GeomShaderD3D11(GLint majorVersion, GLint minorVersion);
+MultiviewImplementationParams VertexShaderOpenGL(GLint majorVersion,
+                                                 GLint minorVersion,
+                                                 bool multiviewExtension);
+MultiviewImplementationParams VertexShaderD3D11(GLint majorVersion,
+                                                GLint minorVersion,
+                                                bool multiviewExtension);
+MultiviewImplementationParams GeomShaderD3D11(GLint majorVersion,
+                                              GLint minorVersion,
+                                              bool multiviewExtension);
 
 class MultiviewTestBase : public ANGLETestBase
 {
@@ -93,17 +102,31 @@ class MultiviewTestBase : public ANGLETestBase
 
     void MultiviewTestBaseTearDown() { ANGLETestBase::ANGLETestTearDown(); }
 
-    // Requests the OVR_multiview2 extension and returns true if the operation succeeds.
+    PFNGLREQUESTEXTENSIONANGLEPROC glRequestExtensionANGLE = nullptr;
+};
+
+// Base class for multiview tests that don't need specific helper functions.
+class MultiviewTest : public MultiviewTestBase,
+                      public ::testing::TestWithParam<MultiviewImplementationParams>
+{
+  protected:
+    MultiviewTest() : MultiviewTestBase(GetParam()) {}
+    void SetUp() override { MultiviewTestBase::MultiviewTestBaseSetUp(); }
+    void TearDown() override { MultiviewTestBase::MultiviewTestBaseTearDown(); }
+
+    void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) final;
+
+    // Requests the OVR_multiview(2) extension and returns true if the operation succeeds.
     bool requestMultiviewExtension(bool requireMultiviewMultisample)
     {
-        if (extensionRequestable("GL_OVR_multiview2"))
+        if (extensionRequestable(extensionName()))
         {
-            glRequestExtensionANGLE("GL_OVR_multiview2");
+            glRequestExtensionANGLE(extensionName().c_str());
         }
 
-        if (!extensionEnabled("GL_OVR_multiview2"))
+        if (!extensionEnabled(extensionName()))
         {
-            std::cout << "Test skipped due to missing GL_OVR_multiview2." << std::endl;
+            std::cout << "Test skipped due to missing " << extensionName() << "." << std::endl;
             return false;
         }
 
@@ -130,19 +153,10 @@ class MultiviewTestBase : public ANGLETestBase
 
     bool requestMultiviewExtension() { return requestMultiviewExtension(false); }
 
-    PFNGLREQUESTEXTENSIONANGLEPROC glRequestExtensionANGLE = nullptr;
-};
-
-// Base class for multiview tests that don't need specific helper functions.
-class MultiviewTest : public MultiviewTestBase,
-                      public ::testing::TestWithParam<MultiviewImplementationParams>
-{
-  protected:
-    MultiviewTest() : MultiviewTestBase(GetParam()) {}
-    void SetUp() override { MultiviewTestBase::MultiviewTestBaseSetUp(); }
-    void TearDown() override { MultiviewTestBase::MultiviewTestBaseTearDown(); }
-
-    void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) final;
+    std::string extensionName()
+    {
+        return GetParam().mMultiviewExtension ? "GL_OVR_multiview" : "GL_OVR_multiview2";
+    }
 };
 
 }  // namespace angle
