@@ -23,19 +23,23 @@ using namespace angle;
 namespace
 {
 
-std::string GetShaderExtensionHeader(bool usesMultiview, int numViews, GLenum shaderType)
+std::string GetShaderExtensionHeader(bool usesMultiview,
+                                     int numViews,
+                                     GLenum shaderType,
+                                     bool multiviewExtension)
 {
     if (!usesMultiview)
     {
         return "";
     }
+    std::string extension = multiviewExtension ? "GL_OVR_multiview" : "GL_OVR_multiview2";
 
     if (shaderType == GL_VERTEX_SHADER)
     {
-        return "#extension GL_OVR_multiview2 : require\nlayout(num_views = " + ToString(numViews) +
+        return "#extension " + extension + " : require\nlayout(num_views = " + ToString(numViews) +
                ") in;\n";
     }
-    return "#extension GL_OVR_multiview2 : require\n";
+    return "#extension " + extension + " : require\n";
 }
 
 struct Vertex
@@ -59,16 +63,18 @@ struct MultiviewPerfParams final : public RenderTestParams
 {
     MultiviewPerfParams(const EGLPlatformParameters &platformParametersIn,
                         const MultiviewPerfWorkload &workloadIn,
-                        MultiviewOption multiviewOptionIn)
+                        MultiviewOption multiviewOptionIn,
+                        bool multiviewExtensionIn)
     {
-        iterationsPerStep = 1;
-        majorVersion      = 3;
-        minorVersion      = 0;
-        eglParameters     = platformParametersIn;
-        windowWidth       = workloadIn.first;
-        windowHeight      = workloadIn.second;
-        multiviewOption   = multiviewOptionIn;
-        numViews          = 2;
+        iterationsPerStep  = 1;
+        majorVersion       = 3;
+        minorVersion       = 0;
+        eglParameters      = platformParametersIn;
+        windowWidth        = workloadIn.first;
+        windowHeight       = workloadIn.second;
+        multiviewOption    = multiviewOptionIn;
+        numViews           = 2;
+        multiviewExtension = multiviewExtensionIn;
     }
 
     std::string suffix() const override
@@ -89,12 +95,15 @@ struct MultiviewPerfParams final : public RenderTestParams
                 name += "_error";
                 break;
         }
+        std::string ext = multiviewExtension ? "multiview" : "multiview2";
+        name += "_" + ext;
         name += "_" + ToString(numViews) + "_views";
         return name;
     }
 
     MultiviewOption multiviewOption;
     int numViews;
+    bool multiviewExtension;
 };
 
 std::ostream &operator<<(std::ostream &os, const MultiviewPerfParams &params)
@@ -110,7 +119,14 @@ class MultiviewBenchmark : public ANGLERenderTest,
     MultiviewBenchmark(const std::string &testName)
         : ANGLERenderTest(testName, GetParam()), mProgram(0)
     {
-        addExtensionPrerequisite("GL_OVR_multiview2");
+        if (GetParam().multiviewExtension)
+        {
+            addExtensionPrerequisite("GL_OVR_multiview");
+        }
+        else
+        {
+            addExtensionPrerequisite("GL_OVR_multiview2");
+        }
     }
 
     virtual ~MultiviewBenchmark()
@@ -267,21 +283,22 @@ void MultiviewCPUBoundBenchmark::initializeBenchmark()
     const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&mTestParams);
     const bool usesMultiview = (params->multiviewOption != MultiviewOption::NoAcceleration);
 
-    const std::string vs =
-        "#version 300 es\n" +
-        GetShaderExtensionHeader(usesMultiview, params->numViews, GL_VERTEX_SHADER) +
-        "layout(location=0) in vec4 vPosition;\n"
-        "uniform vec2 uOffset;\n"
-        "void main()\n"
-        "{\n"
-        "   vec4 v = vPosition;\n"
-        "   v.xy += uOffset;\n"
-        "	gl_Position = v;\n"
-        "}\n";
+    const std::string vs = "#version 300 es\n" +
+                           GetShaderExtensionHeader(usesMultiview, params->numViews,
+                                                    GL_VERTEX_SHADER, params->multiviewExtension) +
+                           "layout(location=0) in vec4 vPosition;\n"
+                           "uniform vec2 uOffset;\n"
+                           "void main()\n"
+                           "{\n"
+                           "   vec4 v = vPosition;\n"
+                           "   v.xy += uOffset;\n"
+                           "	gl_Position = v;\n"
+                           "}\n";
 
     const std::string fs =
         "#version 300 es\n" +
-        GetShaderExtensionHeader(usesMultiview, params->numViews, GL_FRAGMENT_SHADER) +
+        GetShaderExtensionHeader(usesMultiview, params->numViews, GL_FRAGMENT_SHADER,
+                                 params->multiviewExtension) +
         "precision mediump float;\n"
         "out vec4 col;\n"
         "uniform float uColor;\n"
@@ -350,36 +367,37 @@ void MultiviewGPUBoundBenchmark::initializeBenchmark()
     const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&mTestParams);
     const bool usesMultiview = (params->multiviewOption != MultiviewOption::NoAcceleration);
 
-    const std::string &vs =
-        "#version 300 es\n" +
-        GetShaderExtensionHeader(usesMultiview, params->numViews, GL_VERTEX_SHADER) +
-        "layout(location=0) in vec4 vPosition;\n"
-        "layout(location=1) in vec4 vert_Col0;\n"
-        "layout(location=2) in vec4 vert_Col1;\n"
-        "layout(location=3) in vec4 vert_Col2;\n"
-        "layout(location=4) in vec4 vert_Col3;\n"
-        "layout(location=5) in vec4 vert_Col4;\n"
-        "layout(location=6) in vec4 vert_Col5;\n"
-        "out vec4 frag_Col0;\n"
-        "out vec4 frag_Col1;\n"
-        "out vec4 frag_Col2;\n"
-        "out vec4 frag_Col3;\n"
-        "out vec4 frag_Col4;\n"
-        "out vec4 frag_Col5;\n"
-        "void main()\n"
-        "{\n"
-        "   frag_Col0 = vert_Col0;\n"
-        "   frag_Col1 = vert_Col1;\n"
-        "   frag_Col2 = vert_Col2;\n"
-        "   frag_Col3 = vert_Col3;\n"
-        "   frag_Col4 = vert_Col4;\n"
-        "   frag_Col5 = vert_Col5;\n"
-        "	gl_Position = vPosition;\n"
-        "}\n";
+    const std::string &vs = "#version 300 es\n" +
+                            GetShaderExtensionHeader(usesMultiview, params->numViews,
+                                                     GL_VERTEX_SHADER, params->multiviewExtension) +
+                            "layout(location=0) in vec4 vPosition;\n"
+                            "layout(location=1) in vec4 vert_Col0;\n"
+                            "layout(location=2) in vec4 vert_Col1;\n"
+                            "layout(location=3) in vec4 vert_Col2;\n"
+                            "layout(location=4) in vec4 vert_Col3;\n"
+                            "layout(location=5) in vec4 vert_Col4;\n"
+                            "layout(location=6) in vec4 vert_Col5;\n"
+                            "out vec4 frag_Col0;\n"
+                            "out vec4 frag_Col1;\n"
+                            "out vec4 frag_Col2;\n"
+                            "out vec4 frag_Col3;\n"
+                            "out vec4 frag_Col4;\n"
+                            "out vec4 frag_Col5;\n"
+                            "void main()\n"
+                            "{\n"
+                            "   frag_Col0 = vert_Col0;\n"
+                            "   frag_Col1 = vert_Col1;\n"
+                            "   frag_Col2 = vert_Col2;\n"
+                            "   frag_Col3 = vert_Col3;\n"
+                            "   frag_Col4 = vert_Col4;\n"
+                            "   frag_Col5 = vert_Col5;\n"
+                            "	gl_Position = vPosition;\n"
+                            "}\n";
 
     const std::string &fs =
         "#version 300 es\n" +
-        GetShaderExtensionHeader(usesMultiview, params->numViews, GL_FRAGMENT_SHADER) +
+        GetShaderExtensionHeader(usesMultiview, params->numViews, GL_FRAGMENT_SHADER,
+                                 params->multiviewExtension) +
         "precision mediump float;\n"
         "in vec4 frag_Col0;\n"
         "in vec4 frag_Col1;\n"
@@ -492,22 +510,28 @@ MultiviewPerfWorkload BigWorkload()
 }
 
 MultiviewPerfParams NoAcceleration(const EGLPlatformParameters &eglParameters,
-                                   const MultiviewPerfWorkload &workload)
+                                   const MultiviewPerfWorkload &workload,
+                                   bool multiviewExtensionIn)
 {
-    return MultiviewPerfParams(eglParameters, workload, MultiviewOption::NoAcceleration);
+    return MultiviewPerfParams(eglParameters, workload, MultiviewOption::NoAcceleration,
+                               multiviewExtensionIn);
 }
 
-MultiviewPerfParams SelectViewInGeometryShader(const MultiviewPerfWorkload &workload)
+MultiviewPerfParams SelectViewInGeometryShader(const MultiviewPerfWorkload &workload,
+                                               bool multiviewExtensionIn)
 {
     return MultiviewPerfParams(egl_platform::D3D11(), workload,
-                               MultiviewOption::InstancedMultiviewGeometryShader);
+                               MultiviewOption::InstancedMultiviewGeometryShader,
+                               multiviewExtensionIn);
 }
 
 MultiviewPerfParams SelectViewInVertexShader(const EGLPlatformParameters &eglParameters,
-                                             const MultiviewPerfWorkload &workload)
+                                             const MultiviewPerfWorkload &workload,
+                                             bool multiviewExtensionIn)
 {
     return MultiviewPerfParams(eglParameters, workload,
-                               MultiviewOption::InstancedMultiviewVertexShader);
+                               MultiviewOption::InstancedMultiviewVertexShader,
+                               multiviewExtensionIn);
 }
 }  // namespace
 
@@ -516,24 +540,35 @@ TEST_P(MultiviewCPUBoundBenchmark, Run)
     run();
 }
 
-ANGLE_INSTANTIATE_TEST(MultiviewCPUBoundBenchmark,
-                       NoAcceleration(egl_platform::OPENGL_OR_GLES(false), SmallWorkload()),
-                       NoAcceleration(egl_platform::D3D11(), SmallWorkload()),
-                       SelectViewInGeometryShader(SmallWorkload()),
-                       SelectViewInVertexShader(egl_platform::OPENGL_OR_GLES(false),
-                                                SmallWorkload()),
-                       SelectViewInVertexShader(egl_platform::D3D11(), SmallWorkload()));
+ANGLE_INSTANTIATE_TEST(
+    MultiviewCPUBoundBenchmark,
+    NoAcceleration(egl_platform::OPENGL_OR_GLES(false), SmallWorkload(), true),
+    NoAcceleration(egl_platform::D3D11(), SmallWorkload(), true),
+    SelectViewInGeometryShader(SmallWorkload(), true),
+    SelectViewInVertexShader(egl_platform::OPENGL_OR_GLES(false), SmallWorkload(), true),
+    SelectViewInVertexShader(egl_platform::D3D11(), SmallWorkload(), true),
+    NoAcceleration(egl_platform::OPENGL_OR_GLES(false), SmallWorkload(), false),
+    NoAcceleration(egl_platform::D3D11(), SmallWorkload(), false),
+    SelectViewInGeometryShader(SmallWorkload(), false),
+    SelectViewInVertexShader(egl_platform::OPENGL_OR_GLES(false), SmallWorkload(), false),
+    SelectViewInVertexShader(egl_platform::D3D11(), SmallWorkload(), false));
 
 TEST_P(MultiviewGPUBoundBenchmark, Run)
 {
     run();
 }
 
-ANGLE_INSTANTIATE_TEST(MultiviewGPUBoundBenchmark,
-                       NoAcceleration(egl_platform::OPENGL_OR_GLES(false), BigWorkload()),
-                       NoAcceleration(egl_platform::D3D11(), BigWorkload()),
-                       SelectViewInGeometryShader(BigWorkload()),
-                       SelectViewInVertexShader(egl_platform::OPENGL_OR_GLES(false), BigWorkload()),
-                       SelectViewInVertexShader(egl_platform::D3D11(), BigWorkload()));
+ANGLE_INSTANTIATE_TEST(
+    MultiviewGPUBoundBenchmark,
+    NoAcceleration(egl_platform::OPENGL_OR_GLES(false), BigWorkload(), true),
+    NoAcceleration(egl_platform::D3D11(), BigWorkload(), true),
+    SelectViewInGeometryShader(BigWorkload(), true),
+    SelectViewInVertexShader(egl_platform::OPENGL_OR_GLES(false), BigWorkload(), true),
+    SelectViewInVertexShader(egl_platform::D3D11(), BigWorkload(), true),
+    NoAcceleration(egl_platform::OPENGL_OR_GLES(false), BigWorkload(), false),
+    NoAcceleration(egl_platform::D3D11(), BigWorkload(), false),
+    SelectViewInGeometryShader(BigWorkload(), false),
+    SelectViewInVertexShader(egl_platform::OPENGL_OR_GLES(false), BigWorkload(), false),
+    SelectViewInVertexShader(egl_platform::D3D11(), BigWorkload(), false));
 
 }  // anonymous namespace

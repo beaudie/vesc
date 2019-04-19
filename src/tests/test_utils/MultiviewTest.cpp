@@ -14,11 +14,15 @@
 namespace angle
 {
 
-GLuint CreateSimplePassthroughProgram(int numViews)
+GLuint CreateSimplePassthroughProgram(int numViews, bool multiviewExtension)
 {
+    std::string ext = multiviewExtension ? "GL_OVR_multiview" : "GL_OVR_multiview2";
+
     const std::string vsSource =
         "#version 300 es\n"
-        "#extension GL_OVR_multiview2 : require\n"
+        "#extension " +
+        ext +
+        " : require\n"
         "layout(num_views = " +
         ToString(numViews) +
         ") in;\n"
@@ -29,16 +33,18 @@ GLuint CreateSimplePassthroughProgram(int numViews)
         "   gl_Position = vec4(vPosition.xy, 0.0, 1.0);\n"
         "}\n";
 
-    constexpr char kFS[] =
+    const std::string fsSource =
         "#version 300 es\n"
-        "#extension GL_OVR_multiview2 : require\n"
+        "#extension " +
+        ext +
+        " : require\n"
         "precision mediump float;\n"
         "out vec4 col;\n"
         "void main()\n"
         "{\n"
         "   col = vec4(0,1,0,1);\n"
         "}\n";
-    return CompileProgram(vsSource.c_str(), kFS);
+    return CompileProgram(vsSource.c_str(), fsSource.c_str());
 }
 
 void CreateMultiviewBackingTextures(int samples,
@@ -210,22 +216,39 @@ std::ostream &operator<<(std::ostream &os, const MultiviewImplementationParams &
     {
         os << "_vertex_shader";
     }
+    if (params.mMultiviewExtension)
+    {
+        os << "_multiview";
+    }
+    else
+    {
+        os << "_multiview2";
+    }
     return os;
 }
 
-MultiviewImplementationParams VertexShaderOpenGL(GLint majorVersion, GLint minorVersion)
+MultiviewImplementationParams VertexShaderOpenGL(GLint majorVersion,
+                                                 GLint minorVersion,
+                                                 bool multiviewExtension)
 {
-    return MultiviewImplementationParams(majorVersion, minorVersion, false, egl_platform::OPENGL());
+    return MultiviewImplementationParams(majorVersion, minorVersion, false, egl_platform::OPENGL(),
+                                         multiviewExtension);
 }
 
-MultiviewImplementationParams VertexShaderD3D11(GLint majorVersion, GLint minorVersion)
+MultiviewImplementationParams VertexShaderD3D11(GLint majorVersion,
+                                                GLint minorVersion,
+                                                bool multiviewExtension)
 {
-    return MultiviewImplementationParams(majorVersion, minorVersion, false, egl_platform::D3D11());
+    return MultiviewImplementationParams(majorVersion, minorVersion, false, egl_platform::D3D11(),
+                                         multiviewExtension);
 }
 
-MultiviewImplementationParams GeomShaderD3D11(GLint majorVersion, GLint minorVersion)
+MultiviewImplementationParams GeomShaderD3D11(GLint majorVersion,
+                                              GLint minorVersion,
+                                              bool multiviewExtension)
 {
-    return MultiviewImplementationParams(majorVersion, minorVersion, true, egl_platform::D3D11());
+    return MultiviewImplementationParams(majorVersion, minorVersion, true, egl_platform::D3D11(),
+                                         multiviewExtension);
 }
 
 void MultiviewTest::overrideWorkaroundsD3D(WorkaroundsD3D *workarounds)
