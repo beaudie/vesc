@@ -360,11 +360,9 @@ class ANGLETestBase
     void setExtensionsEnabled(bool extensionsEnabled);
     void setRobustAccess(bool enabled);
     void setBindGeneratesResource(bool bindGeneratesResource);
-    void setDebugLayersEnabled(bool enabled);
     void setClientArraysEnabled(bool enabled);
     void setRobustResourceInit(bool enabled);
     void setContextProgramCacheEnabled(bool enabled, angle::CacheProgramFunc cacheProgramFunc);
-    void setContextVirtualization(bool enabled);
     void setContextResetStrategy(EGLenum resetStrategy);
     void forceNewDisplay();
 
@@ -447,6 +445,7 @@ class ANGLETestBase
     static OSWindow *mOSWindowSingleton;
 
     static std::map<angle::PlatformParameters, Platform> gPlatforms;
+    const angle::PlatformParameters *mCurrentParams;
     Platform *mCurrentPlatform;
 
     // Workaround for NVIDIA not being able to share a window with OpenGL and Vulkan.
