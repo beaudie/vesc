@@ -323,21 +323,24 @@ ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
       mDeferContextInit(false),
       mAlwaysForceNewDisplay(angle::ShouldAlwaysForceNewDisplay()),
       mForceNewDisplay(mAlwaysForceNewDisplay),
+      mCurrentParams(nullptr),
       mCurrentPlatform(nullptr)
 {
-    auto iter = gPlatforms.find(params);
+    // Override the default platform methods with the ANGLE test methods pointer.
+    angle::PlatformParameters withMethods     = params;
+    withMethods.eglParameters.platformMethods = &gDefaultPlatformMethods;
+
+    auto iter = gPlatforms.find(withMethods);
     if (iter != gPlatforms.end())
     {
+        mCurrentParams   = &iter->first;
         mCurrentPlatform = &iter->second;
-        mCurrentPlatform->configParams.reset();
-
-        // Default debug layers to enabled in tests.
-        mCurrentPlatform->configParams.debugLayersEnabled = true;
         return;
     }
 
     Platform platform;
-    auto insertIter  = gPlatforms.emplace(params, platform);
+    auto insertIter  = gPlatforms.emplace(withMethods, platform);
+    mCurrentParams   = &insertIter.first->first;
     mCurrentPlatform = &insertIter.first->second;
 
     std::stringstream windowNameStream;
@@ -367,8 +370,7 @@ ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
     {
         case angle::GLESDriverType::AngleEGL:
         {
-            mCurrentPlatform->eglWindow =
-                EGLWindow::New(params.majorVersion, params.minorVersion, params.eglParameters);
+            mCurrentPlatform->eglWindow = EGLWindow::New(params.majorVersion, params.minorVersion);
             break;
         }
 
@@ -385,9 +387,6 @@ ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
             break;
         }
     }
-
-    // Default debug layers to enabled in tests.
-    mCurrentPlatform->configParams.debugLayersEnabled = true;
 }
 
 ANGLETestBase::~ANGLETestBase()
@@ -418,7 +417,6 @@ void ANGLETestBase::ANGLETestSetUp()
     gDefaultPlatformMethods.logWarning             = angle::TestPlatform_logWarning;
     gDefaultPlatformMethods.logInfo                = angle::TestPlatform_logInfo;
     gDefaultPlatformMethods.context                = &gPlatformContext;
-    mCurrentPlatform->configParams.platformMethods = &gDefaultPlatformMethods;
 
     gPlatformContext.ignoreMessages   = false;
     gPlatformContext.warningsAsErrors = false;
@@ -444,17 +442,19 @@ void ANGLETestBase::ANGLETestSetUp()
     }
     else
     {
-        if (mForceNewDisplay || !mCurrentPlatform->eglWindow->isDisplayInitialized() ||
-            !ConfigParameters::CanShareDisplay(mCurrentPlatform->configParams,
-                                               mCurrentPlatform->eglWindow->getConfigParams()))
+        if (mForceNewDisplay || !mCurrentPlatform->eglWindow->isDisplayInitialized())
         {
             mCurrentPlatform->eglWindow->destroyGL();
             if (!mCurrentPlatform->eglWindow->initializeDisplay(
                     mCurrentPlatform->osWindow, ANGLETestEnvironment::GetEGLLibrary(),
-                    mCurrentPlatform->configParams))
+                    mCurrentParams->eglParameters))
             {
-                FAIL() << "egl display init failed.";
+                FAIL() << "EGL Display init failed.";
             }
+        }
+        else if (mCurrentParams->eglParameters != mCurrentPlatform->eglWindow->getPlatform())
+        {
+            FAIL() << "Internal parameter conflict error.";
         }
 
         if (!mCurrentPlatform->eglWindow->initializeSurface(mCurrentPlatform->osWindow,
@@ -1049,11 +1049,6 @@ void ANGLETestBase::setBindGeneratesResource(bool bindGeneratesResource)
     mCurrentPlatform->configParams.bindGeneratesResource = bindGeneratesResource;
 }
 
-void ANGLETestBase::setDebugLayersEnabled(bool enabled)
-{
-    mCurrentPlatform->configParams.debugLayersEnabled = enabled;
-}
-
 void ANGLETestBase::setClientArraysEnabled(bool enabled)
 {
     mCurrentPlatform->configParams.clientArraysEnabled = enabled;
@@ -1069,11 +1064,6 @@ void ANGLETestBase::setContextProgramCacheEnabled(bool enabled,
 {
     mCurrentPlatform->configParams.contextProgramCacheEnabled = enabled;
     gDefaultPlatformMethods.cacheProgram                      = cacheProgramFunc;
-}
-
-void ANGLETestBase::setContextVirtualization(bool enabled)
-{
-    mCurrentPlatform->configParams.contextVirtualization = enabled;
 }
 
 void ANGLETestBase::setContextResetStrategy(EGLenum resetStrategy)
