@@ -61,7 +61,7 @@ TEST_P(D3D11FormatTablesTest, TestFormatSupport)
         if (internalFormatInfo.depthBits == 0 && internalFormatInfo.stencilBits == 0)
         {
             texSupportMask |= D3D11_FORMAT_SUPPORT_TEXTURECUBE;
-            if (GetParam().majorVersion > 2)
+            if (GetParam().context.majorVersion > 2)
             {
                 texSupportMask |= D3D11_FORMAT_SUPPORT_TEXTURE3D;
             }

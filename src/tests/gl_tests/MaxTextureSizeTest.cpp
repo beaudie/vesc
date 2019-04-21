@@ -294,5 +294,4 @@ TEST_P(MaxTextureSizeTest, RenderToTexture)
 ANGLE_INSTANTIATE_TEST(MaxTextureSizeTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
-                       ES2_D3D11_FL9_3(),
                        ES2_VULKAN());
