@@ -893,6 +893,22 @@ unsigned int ElementTypeSize(GLenum elementType)
     }
 }
 
+PipelineType GetPipelineType(ShaderType type)
+{
+    switch (type)
+    {
+        case gl::ShaderType::Vertex:
+        case gl::ShaderType::Fragment:
+        case gl::ShaderType::Geometry:
+            return gl::PipelineType::RenderPipeline;
+        case gl::ShaderType::Compute:
+            return gl::PipelineType::ComputePipeline;
+        default:
+            UNREACHABLE();
+            return gl::PipelineType::RenderPipeline;
+    }
+}
+
 }  // namespace gl
 
 namespace egl
