@@ -296,10 +296,14 @@ class StateManager11 final : angle::NonCopyable
                                         UINT resourceSlot,
                                         const UAVType *uav);
 
-    bool unsetConflictingView(ID3D11View *view);
-    bool unsetConflictingSRVs(gl::ShaderType shaderType,
+    void unsetConflictingView(ID3D11View *view);
+    void unsetConflictingSRVs(gl::ShaderType conflictShaderType,
                               uintptr_t resource,
                               const gl::ImageIndex *index);
+    void unsetConflictingUAVs(gl::ShaderType conflictShaderType,
+                              uintptr_t resource,
+                              const gl::ImageIndex *index);
+
     void unsetConflictingAttachmentResources(const gl::FramebufferAttachment &attachment,
                                              ID3D11Resource *resource);
 
@@ -429,6 +433,8 @@ class StateManager11 final : angle::NonCopyable
         // DIRTY_BIT_PROGRAM_UNIFORM_BUFFERS for update image layers.
         DIRTY_BIT_SHADERS,
         DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE,
+        DIRTY_BIT_RENDER_SRVUAV_STATE,
+        DIRTY_BIT_COMPUTE_SRVUAV_STATE,
         DIRTY_BIT_PROGRAM_UNIFORMS,
         DIRTY_BIT_DRIVER_UNIFORMS,
         DIRTY_BIT_PROGRAM_UNIFORM_BUFFERS,

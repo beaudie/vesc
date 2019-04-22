@@ -188,6 +188,7 @@ T GetClampedVertexCount(size_t vertexCount)
     static constexpr size_t kMax = static_cast<size_t>(std::numeric_limits<T>::max());
     return static_cast<T>(vertexCount > kMax ? kMax : vertexCount);
 }
+
 }  // namespace gl
 
 namespace egl
