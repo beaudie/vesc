@@ -2752,6 +2752,68 @@ void main()
     EXPECT_EQ(expectedValue, outputValues);
 }
 
+// Test that storing data to texture, then sampling texture and drawing.
+TEST_P(ComputeShaderTest, DispatchComputeThenDrawArrays)
+{
+    const char kCSSource[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(rgba32f, binding = 0) writeonly uniform highp image2D image;
+void main()
+{
+    imageStore(image, ivec2(gl_LocalInvocationID.xy), vec4(0.0, 0.0, 1.0, 1.0));
+})";
+
+    const char kVSSource[] = R"(#version 310 es
+layout (location = 0) in vec2 pos;
+out vec2 texCoord;
+void main(void) {
+    texCoord = 0.5*pos + 0.5;
+    gl_Position = vec4(pos, 0.0, 1.0);
+})";
+
+    const char kFSSource[] = R"(#version 310 es
+precision highp float;
+uniform sampler2D tex;
+in vec2 texCoord;
+out vec4 fragColor;
+void main(void) {
+    fragColor = texture(tex, texCoord);
+})";
+
+    GLuint aPosLoc = 0;
+    ANGLE_GL_PROGRAM(program, kVSSource, kFSSource);
+    glBindAttribLocation(program, aPosLoc, "pos");
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    GLfloat vertices[] = {-1, -1, 1, -1, -1, 1, 1, 1};
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 8, vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer(aPosLoc, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(aPosLoc);
+
+    constexpr GLfloat kInputValues[4] = {1.0, 0.0, 0.0, 1.0};
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA32F, 1, 1);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGBA, GL_FLOAT, kInputValues);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    EXPECT_GL_NO_ERROR();
+
+    ANGLE_GL_COMPUTE_PROGRAM(csProgram, kCSSource);
+    glUseProgram(csProgram);
+
+    glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
+
+    glDispatchCompute(1, 1, 1);
+    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    EXPECT_GL_NO_ERROR();
+
+    glUseProgram(program);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    EXPECT_PIXEL_COLOR_EQ(1, 1, GLColor::blue);
+}
+
 // Test that invalid memory barrier will produce an error.
 TEST_P(ComputeShaderTest, InvalidMemoryBarrier)
 {

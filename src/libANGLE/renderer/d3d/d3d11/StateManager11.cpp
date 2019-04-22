@@ -700,6 +700,7 @@ StateManager11::StateManager11(Renderer11 *renderer)
     mComputeDirtyBitsMask.set(DIRTY_BIT_PROGRAM_ATOMIC_COUNTER_BUFFERS);
     mComputeDirtyBitsMask.set(DIRTY_BIT_PROGRAM_SHADER_STORAGE_BUFFERS);
     mComputeDirtyBitsMask.set(DIRTY_BIT_SHADERS);
+    mComputeDirtyBitsMask.set(DIRTY_BIT_CS_UAV_BOUND);
 
     // Initially all current value attributes must be updated on first use.
     mDirtyCurrentValueAttribs.set();
@@ -724,12 +725,21 @@ void StateManager11::setShaderResourceInternal(gl::ShaderType shaderType,
     {
         ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
         ID3D11ShaderResourceView *srvPtr   = srv ? srv->get() : nullptr;
+
         switch (shaderType)
         {
             case gl::ShaderType::Vertex:
+                if (srvPtr && unsetConflictingUAVs(srvPtr))
+                {
+                    mInternalDirtyBits.set(DIRTY_BIT_CS_UAV_BOUND);
+                }
                 deviceContext->VSSetShaderResources(resourceSlot, 1, &srvPtr);
                 break;
             case gl::ShaderType::Fragment:
+                if (srvPtr && unsetConflictingUAVs(srvPtr))
+                {
+                    mInternalDirtyBits.set(DIRTY_BIT_CS_UAV_BOUND);
+                }
                 deviceContext->PSSetShaderResources(resourceSlot, 1, &srvPtr);
                 break;
             case gl::ShaderType::Compute:
@@ -836,6 +846,7 @@ angle::Result StateManager11::updateStateForCompute(const gl::Context *context,
         switch (dirtyBit)
         {
             case DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE:
+            case DIRTY_BIT_CS_UAV_BOUND:
                 ANGLE_TRY(syncTexturesForCompute(context));
                 break;
             case DIRTY_BIT_PROGRAM_UNIFORMS:
@@ -1812,6 +1823,27 @@ bool StateManager11::unsetConflictingSRVs(gl::ShaderType shaderType,
     return foundOne;
 }
 
+bool StateManager11::unsetConflictingUAVs(ID3D11View *view)
+{
+    bool foundOne = false;
+
+    ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+    uintptr_t resource                 = reinterpret_cast<uintptr_t>(GetViewResource(view));
+    for (size_t resourceIndex = 0; resourceIndex < mCurComputeUAVs.size(); ++resourceIndex)
+    {
+        auto &record = mCurComputeUAVs[resourceIndex];
+
+        if (record.view && record.resource == resource)
+        {
+            deviceContext->CSSetUnorderedAccessViews(resourceIndex, 1, &mNullUAVs[0], nullptr);
+            mCurComputeUAVs.update(resourceIndex, nullptr);
+            foundOne = true;
+        }
+    }
+
+    return foundOne;
+}
+
 void StateManager11::unsetConflictingAttachmentResources(
     const gl::FramebufferAttachment &attachment,
     ID3D11Resource *resource)
@@ -2178,7 +2210,15 @@ angle::Result StateManager11::updateState(const gl::Context *context,
     }
 
     auto dirtyBitsCopy = mInternalDirtyBits;
-    mInternalDirtyBits.reset();
+    if (mInternalDirtyBits.test(DIRTY_BIT_CS_UAV_BOUND))
+    {
+        dirtyBitsCopy.reset(DIRTY_BIT_CS_UAV_BOUND);
+        mInternalDirtyBits.set(DIRTY_BIT_CS_UAV_BOUND);
+    }
+    else
+    {
+        mInternalDirtyBits.reset();
+    }
 
     for (auto dirtyBit : dirtyBitsCopy)
     {
@@ -2247,7 +2287,7 @@ angle::Result StateManager11::updateState(const gl::Context *context,
     }
 
     // Check that we haven't set any dirty bits in the flushing of the dirty bits loop.
-    ASSERT(mInternalDirtyBits.none());
+    ASSERT(mInternalDirtyBits.none() || mInternalDirtyBits.test(DIRTY_BIT_CS_UAV_BOUND));
 
     return angle::Result::Continue;
 }

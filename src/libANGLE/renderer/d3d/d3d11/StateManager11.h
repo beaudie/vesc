@@ -302,6 +302,7 @@ class StateManager11 final : angle::NonCopyable
                               const gl::ImageIndex *index);
     void unsetConflictingAttachmentResources(const gl::FramebufferAttachment &attachment,
                                              ID3D11Resource *resource);
+    bool unsetConflictingUAVs(ID3D11View *view);
 
     angle::Result syncBlendState(const gl::Context *context,
                                  const gl::BlendState &blendState,
@@ -438,6 +439,7 @@ class StateManager11 final : angle::NonCopyable
         DIRTY_BIT_TRANSFORM_FEEDBACK,
         DIRTY_BIT_VERTEX_BUFFERS_AND_INPUT_LAYOUT,
         DIRTY_BIT_PRIMITIVE_TOPOLOGY,
+        DIRTY_BIT_CS_UAV_BOUND,
         DIRTY_BIT_INVALID,
         DIRTY_BIT_MAX = DIRTY_BIT_INVALID,
     };
