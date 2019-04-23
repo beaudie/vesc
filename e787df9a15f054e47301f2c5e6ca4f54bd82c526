@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "2c3b0f60_ff6aec02",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-04-23T20:57:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa9cad80_4100ecba",
+      "range": {
+        "startLine": 1103,
+        "startChar": 13,
+        "endLine": 1103,
+        "endChar": 21
+      },
+      "revId": "e787df9a15f054e47301f2c5e6ca4f54bd82c526",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "525c5259_ecb63eec",
         "filename": "BUILD.gn",
         "patchSetId": 1
@@ -69,6 +93,30 @@
       "revId": "e787df9a15f054e47301f2c5e6ca4f54bd82c526",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cec6a3fe_c7c018aa",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-04-23T20:57:41Z",
+      "side": 1,
+      "message": "Cleaned this up, maintaining what the builder looks for (angle_apks).",
+      "parentUuid": "525c5259_ecb63eec",
+      "range": {
+        "startLine": 1108,
+        "startChar": 0,
+        "endLine": 1119,
+        "endChar": 3
+      },
+      "revId": "e787df9a15f054e47301f2c5e6ca4f54bd82c526",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
