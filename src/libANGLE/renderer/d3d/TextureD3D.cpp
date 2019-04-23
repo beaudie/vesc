@@ -601,8 +601,40 @@ bool TextureD3D::canCreateRenderTargetForImage(const gl::ImageIndex &index) cons
 
     ImageD3D *image = getImage(index);
     ASSERT(image);
-    bool levelsComplete = (isImageComplete(index) && isImageComplete(getImageIndex(0, 0)));
-    return (image->isRenderableFormat() && levelsComplete);
+    if (!image->isRenderableFormat())
+    {
+        return false;
+    }
+
+    if (!isImageComplete(getImageIndex(0, 0)))
+    {
+        return false;
+    }
+
+    if (index.getType() == gl::TextureType::CubeMap)
+    {
+        // All faces need to be checked, the render target can't be created if some faces have
+        // different sizes or formats
+        for (angle::EnumIterator<gl::TextureTarget> face = gl::kCubeMapTextureTargetMin;
+             face != gl::kAfterCubeMapTextureTargetMax; ++face)
+        {
+            gl::ImageIndex faceIndex =
+                gl::ImageIndex::MakeCubeMapFace(*face, index.getLevelIndex());
+            if (!isImageComplete(faceIndex))
+            {
+                return false;
+            }
+        }
+    }
+    else
+    {
+        if (!isImageComplete(index))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 angle::Result TextureD3D::commitRegion(const gl::Context *context,
