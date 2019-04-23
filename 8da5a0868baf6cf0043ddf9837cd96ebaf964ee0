@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ebb39a40_2bc54cf2",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-04-23T02:43:34Z",
+      "side": 1,
+      "message": "Move below checking to here and add a comments. I think it should be common.\n    if (srvPtr \u0026\u0026 unsetConflictingUAVs(srvPtr))\n    {\n        mInternalDirtyBits.set(DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE);\n    }\n\nPlease reuse \u0027DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE\u0027 to simple this patch. In a follow up, I think maybe we can split SRV dirty bit and UVA dirty bit to refine it. How do you think?",
+      "revId": "8da5a0868baf6cf0043ddf9837cd96ebaf964ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3b70a51_9b02ba28",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2787,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-04-23T02:43:34Z",
+      "side": 1,
+      "message": "Use GLBuffer buffer;",
+      "range": {
+        "startLine": 2786,
+        "startChar": 0,
+        "endLine": 2787,
+        "endChar": 29
+      },
+      "revId": "8da5a0868baf6cf0043ddf9837cd96ebaf964ee0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
