@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6c225b6_a297495c",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1108,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-23T21:06:43Z",
+      "side": 1,
+      "message": "Do we plan to build multiple APKs in the future?\nI was hoping we could get back to the original state when it was just a single \"angle_apk\" target.\n(Not necessarily in this CL).",
+      "range": {
+        "startLine": 1108,
+        "startChar": 9,
+        "endLine": 1108,
+        "endChar": 19
+      },
+      "revId": "8b4de6fd3832f49ef328ef2034cf8604fc8e4e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
