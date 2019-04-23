@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bcbd8b67_007c26c8",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2793,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-04-23T08:08:04Z",
+      "side": 1,
+      "message": "GLBuffer buffer;\nPlease change all the places in your tests.",
+      "range": {
+        "startLine": 2792,
+        "startChar": 0,
+        "endLine": 2793,
+        "endChar": 29
+      },
+      "revId": "27d39b15365554c9c817988a503d8dfe1587072d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
