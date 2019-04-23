@@ -22,6 +22,53 @@
       "revId": "e787df9a15f054e47301f2c5e6ca4f54bd82c526",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa9cad80_4100ecba",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-23T20:32:05Z",
+      "side": 1,
+      "message": "Should have angle in there to avoid confusing with the real Chromium APK.",
+      "parentUuid": "0b6ba48a_420b3f61",
+      "range": {
+        "startLine": 1103,
+        "startChar": 13,
+        "endLine": 1103,
+        "endChar": 21
+      },
+      "revId": "e787df9a15f054e47301f2c5e6ca4f54bd82c526",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "525c5259_ecb63eec",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-23T20:32:05Z",
+      "side": 1,
+      "message": "Can this be simplified (i.e. removed), too, please?\nMaybe you\u0027ll need to change the builder to build the right target first.\nOr, you can rename aosp_apk to angle_apk instead of chromium_apk.\nOr whatever target the builder builds now.",
+      "range": {
+        "startLine": 1108,
+        "startChar": 0,
+        "endLine": 1119,
+        "endChar": 3
+      },
+      "revId": "e787df9a15f054e47301f2c5e6ca4f54bd82c526",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
