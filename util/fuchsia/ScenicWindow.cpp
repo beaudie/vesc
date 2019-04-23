@@ -9,6 +9,8 @@
 
 #include "util/fuchsia/ScenicWindow.h"
 
+#include <fuchsia/images/cpp/fidl.h>
+#include <fuchsia/ui/views/cpp/fidl.h>
 #include <lib/async-loop/cpp/loop.h>
 #include <lib/fdio/directory.h>
 #include <lib/fidl/cpp/interface_ptr.h>
@@ -77,9 +79,9 @@ bool ScenicWindow::initialize(const std::string &name, size_t width, size_t heig
     mShape.SetShape(scenic::Rectangle(&mScenicSession, width, height));
     mShape.SetMaterial(mMaterial);
 
-    fuchsia::ui::views::ViewToken viewToken;
-    fuchsia::ui::views::ViewHolderToken viewHolderToken;
-    std::tie(viewToken, viewHolderToken) = scenic::NewViewTokenPair();
+    //    fuchsia::ui::views::ViewToken viewToken;
+    //    fuchsia::ui::views::ViewHolderToken viewHolderToken;
+    auto [viewToken, viewHolderToken] = scenic::NewViewTokenPair();
 
     // Create view.
     mView = std::make_unique<scenic::View>(&mScenicSession, std::move(viewToken), name);
