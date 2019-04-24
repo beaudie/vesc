@@ -214,6 +214,8 @@ angle::Result Image9::CopyImage(const gl::Context *context,
     destSurface->UnlockRect();
     sourceSurface->UnlockRect();
 
+    dest->markDirty();
+
     return angle::Result::Continue;
 }
 

@@ -69,6 +69,8 @@ void ClipChannelsRGB(gl::ColorF *color)
 
 void ClipChannelsLuminance(gl::ColorF *color)
 {
+    color->green = color->red;
+    color->blue  = color->red;
     color->alpha = 1.0f;
 }
 
@@ -77,6 +79,12 @@ void ClipChannelsAlpha(gl::ColorF *color)
     color->red   = 0.0f;
     color->green = 0.0f;
     color->blue  = 0.0f;
+}
+
+void ClipChannelsLuminanceAlpha(gl::ColorF *color)
+{
+    color->green = color->red;
+    color->blue  = color->red;
 }
 
 void ClipChannelsNoOp(gl::ColorF *color) {}
@@ -348,6 +356,9 @@ void CopyImageCHROMIUM(const uint8_t *sourceData,
             break;
         case GL_ALPHA:
             clipChannelsFunction = ClipChannelsAlpha;
+            break;
+        case GL_LUMINANCE_ALPHA:
+            clipChannelsFunction = ClipChannelsLuminanceAlpha;
             break;
     }
 
