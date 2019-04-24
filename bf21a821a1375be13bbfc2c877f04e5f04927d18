@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da63a8fc_74022791",
+        "filename": "src/compiler/translator/glslang_lex.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3898,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-24T14:45:42Z",
+      "side": 1,
+      "message": "nit: extra whitespace snuck in, does \u0027git cl format\u0027 not cover this file?",
+      "range": {
+        "startLine": 3898,
+        "startChar": 44,
+        "endLine": 3898,
+        "endChar": 45
+      },
+      "revId": "bf21a821a1375be13bbfc2c877f04e5f04927d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5e6f7a4_e3b9e2d2",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-24T14:45:42Z",
+      "side": 1,
+      "message": "nit: move this up to group it with OVR_multiview.",
+      "range": {
+        "startLine": 309,
+        "startChar": 4,
+        "endLine": 309,
+        "endChar": 20
+      },
+      "revId": "bf21a821a1375be13bbfc2c877f04e5f04927d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1a7413e_55cad29b",
+        "filename": "src/libGLESv2/proc_table_data.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-24T14:45:42Z",
+      "side": 1,
+      "message": "nit: whitespace",
+      "range": {
+        "startLine": 584,
+        "startChar": 0,
+        "endLine": 584,
+        "endChar": 4
+      },
+      "revId": "bf21a821a1375be13bbfc2c877f04e5f04927d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86642327_4b70a1c5",
+        "filename": "src/tests/gl_tests/MultiviewDrawTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-24T14:45:42Z",
+      "side": 1,
+      "message": "We have an ensureExtensionEnabled function that does this pattern, I think it can be used a few times here.",
+      "range": {
+        "startLine": 188,
+        "startChar": 8,
+        "endLine": 197,
+        "endChar": 9
+      },
+      "revId": "bf21a821a1375be13bbfc2c877f04e5f04927d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1cb9ba1_d09bb52c",
+        "filename": "src/tests/test_utils/MultiviewTest.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-24T14:45:42Z",
+      "side": 1,
+      "message": "Using a bool to switch between multiview1 and multiview2 is not very clear, without looking at the code you can\u0027t tell which is which.\n\nCan you use an enum?",
+      "range": {
+        "startLine": 64,
+        "startChar": 34,
+        "endLine": 64,
+        "endChar": 57
+      },
+      "revId": "bf21a821a1375be13bbfc2c877f04e5f04927d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
