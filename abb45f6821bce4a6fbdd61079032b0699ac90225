@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "30a78412_28fb14a2",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-04-24T17:17:21Z",
+      "side": 1,
+      "message": "If I require all three cannot support ANGLE_depth_texture or OES_depth_texture on \"any\" device (at least not any that I have). None appear to support a 32bit depth format in Vulkan.\nAnd, in the spec, it mentions that an application can\u0027t tell what the depth format actually used is. That makes me think that this requirement is just a validation requirement, glTexImage2D must accept a type of UNSIGNED_SHORT and UNSIGNED_INT, actual implementation is up to the device.",
+      "parentUuid": "a7aaa5fd_9f78930e",
+      "range": {
+        "startLine": 659,
+        "startChar": 0,
+        "endLine": 669,
+        "endChar": 75
+      },
+      "revId": "abb45f6821bce4a6fbdd61079032b0699ac90225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f1cd9643_5658c31f",
         "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
         "patchSetId": 6
@@ -59,6 +83,30 @@
       "writtenOn": "2019-04-24T15:49:41Z",
       "side": 1,
       "message": "Is it possible to check VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT?",
+      "range": {
+        "startLine": 1370,
+        "startChar": 13,
+        "endLine": 1370,
+        "endChar": 42
+      },
+      "revId": "abb45f6821bce4a6fbdd61079032b0699ac90225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0955402_13aebbce",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-04-24T17:17:21Z",
+      "side": 1,
+      "message": "Sure, it wasn\u0027t clear to me that would cover all the cases. !isBlock covers more than just VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT so was worried we might be missing cases that worked before.",
+      "parentUuid": "547609d5_cad10d9b",
       "range": {
         "startLine": 1370,
         "startChar": 13,
