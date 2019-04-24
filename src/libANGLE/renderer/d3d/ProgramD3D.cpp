@@ -75,8 +75,19 @@ void GetDefaultOutputLayoutFromShader(
 
     if (!shaderOutputVars.empty())
     {
-        outputLayoutOut->push_back(GL_COLOR_ATTACHMENT0 +
-                                   static_cast<unsigned int>(shaderOutputVars[0].outputIndex));
+        size_t location = shaderOutputVars[0].outputLocation;
+        size_t maxIndex = shaderOutputVars[0].outputIndex;
+        for (unsigned int i = 1; i < shaderOutputVars.size(); ++i)
+        {
+            if (shaderOutputVars[i].outputLocation == location)
+            {
+                maxIndex = std::max(maxIndex, shaderOutputVars[i].outputIndex);
+            }
+        }
+        for (size_t layoutIndex = 0; layoutIndex <= maxIndex; ++layoutIndex)
+        {
+            outputLayoutOut->push_back(GL_COLOR_ATTACHMENT0 + static_cast<unsigned int>(location));
+        }
     }
 }
 
@@ -1166,6 +1177,7 @@ std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
         stream->readInt(&mPixelShaderKey[pixelShaderKeyIndex].type);
         stream->readString(&mPixelShaderKey[pixelShaderKeyIndex].name);
         stream->readString(&mPixelShaderKey[pixelShaderKeyIndex].source);
+        stream->readInt(&mPixelShaderKey[pixelShaderKeyIndex].outputLocation);
         stream->readInt(&mPixelShaderKey[pixelShaderKeyIndex].outputIndex);
     }
 
@@ -1449,6 +1461,7 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
         stream->writeInt(variable.type);
         stream->writeString(variable.name);
         stream->writeString(variable.source);
+        stream->writeInt(variable.outputLocation);
         stream->writeInt(variable.outputIndex);
     }
 
@@ -3049,6 +3062,13 @@ void ProgramD3D::updateCachedOutputLayout(const gl::Context *context,
             auto binding = colorbuffer->getBinding() == GL_BACK ? GL_COLOR_ATTACHMENT0
                                                                 : colorbuffer->getBinding();
             mPixelShaderOutputLayoutCache.push_back(binding);
+
+            if (binding >= GL_COLOR_ATTACHMENT0 &&
+                binding - GL_COLOR_ATTACHMENT0 < mState.getSecondaryOutputLocations().size() &&
+                mState.getSecondaryOutputLocations()[binding - GL_COLOR_ATTACHMENT0].used())
+            {
+                mPixelShaderOutputLayoutCache.push_back(binding);
+            }
         }
         else
         {
