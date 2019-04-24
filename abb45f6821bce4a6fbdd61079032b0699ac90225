@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7aaa5fd_9f78930e",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-24T15:49:41Z",
+      "side": 1,
+      "message": "Why do we now only require one of the 3 instead of all 3?",
+      "range": {
+        "startLine": 659,
+        "startChar": 0,
+        "endLine": 669,
+        "endChar": 75
+      },
+      "revId": "abb45f6821bce4a6fbdd61079032b0699ac90225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1cd9643_5658c31f",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-24T15:49:41Z",
+      "side": 1,
+      "message": "I think we need to always disable OES_depth_texture on D3D9 and D3D11.  ANGLE_depth_texture has an additional limitations that we can implement easily on top of those APIs:\n\n         - does not support loading pre-baked depth stencil data via\n           TexImage2D or TexSubImage2D.\n         - allows variability in w-component of the sample results from\n           depth textures.\n         - only supports one level textures.",
+      "range": {
+        "startLine": 677,
+        "startChar": 12,
+        "endLine": 677,
+        "endChar": 51
+      },
+      "revId": "abb45f6821bce4a6fbdd61079032b0699ac90225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "547609d5_cad10d9b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-24T15:49:41Z",
+      "side": 1,
+      "message": "Is it possible to check VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT?",
+      "range": {
+        "startLine": 1370,
+        "startChar": 13,
+        "endLine": 1370,
+        "endChar": 42
+      },
+      "revId": "abb45f6821bce4a6fbdd61079032b0699ac90225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
