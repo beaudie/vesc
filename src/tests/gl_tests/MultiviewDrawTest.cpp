@@ -1720,6 +1720,8 @@ TEST_P(MultiviewRenderPrimitiveTest, LineLoop)
     {
         return;
     }
+    // Only this subtest fails on intel-hd-630-ubuntu-stable.
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsLinux());
 
     GLuint program = CreateSimplePassthroughProgram(2, GetParam().mMultiviewExtension);
     ASSERT_NE(program, 0u);
