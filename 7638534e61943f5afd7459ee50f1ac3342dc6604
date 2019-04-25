@@ -22,6 +22,30 @@
       "revId": "7638534e61943f5afd7459ee50f1ac3342dc6604",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2feadc8b_53a5f22c",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-04-25T13:46:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7b311d0_44e61eb4",
+      "range": {
+        "startLine": 970,
+        "startChar": 10,
+        "endLine": 970,
+        "endChar": 15
+      },
+      "revId": "7638534e61943f5afd7459ee50f1ac3342dc6604",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
