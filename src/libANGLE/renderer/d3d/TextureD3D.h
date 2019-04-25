@@ -94,6 +94,7 @@ class TextureD3D : public TextureImpl
                                    const egl::Stream::GLTextureDescription &desc) override;
     angle::Result generateMipmap(const gl::Context *context) override;
     TextureStorage *getStorage();
+    ImageD3D *getZeroLevelImage() const;
     ImageD3D *getBaseLevelImage() const;
 
     angle::Result getAttachmentRenderTarget(const gl::Context *context,
@@ -146,9 +147,10 @@ class TextureD3D : public TextureImpl
                                    GLenum type,
                                    RenderTargetD3D *destRenderTarget);
 
+    gl::Extents getZeroLevelSize() const;
     GLint getLevelZeroWidth() const;
     GLint getLevelZeroHeight() const;
-    virtual GLint getLevelZeroDepth() const;
+    GLint getLevelZeroDepth() const;
 
     GLint creationLevels(GLsizei width, GLsizei height, GLsizei depth) const;
     virtual angle::Result initMipmapImages(const gl::Context *context) = 0;
@@ -557,7 +559,6 @@ class TextureD3D_3D : public TextureD3D
 
   protected:
     void markAllImagesDirty() override;
-    GLint getLevelZeroDepth() const override;
 
   private:
     angle::Result initializeStorage(const gl::Context *context, bool renderTarget) override;
