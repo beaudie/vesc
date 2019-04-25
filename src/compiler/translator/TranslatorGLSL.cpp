@@ -243,6 +243,33 @@ void TranslatorGLSL::writeVersion(TIntermNode *root)
     }
 }
 
+void EmitMultiviewGLSL(const ShCompileOptions &compileOptions,
+                       const bool isVertexShader,
+                       const int numViews,
+                       TInfoSinkBase &sink)
+{
+    if ((compileOptions & SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER) != 0u)
+    {
+        // Emit the NV_viewport_array2 extension in a vertex shader if the
+        // SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER option is set and the
+        // OVR_multiview(2) extension is requested.
+        if (isVertexShader)
+        {
+            sink << "#extension GL_NV_viewport_array2 : require\n";
+        }
+    }
+    else
+    {
+        // Non-emulated.
+        sink << "#extension GL_OVR_multiview2 : require\n";
+
+        if (isVertexShader && numViews != -1)
+        {
+            sink << "layout(num_views=" << numViews << ") in;\n";
+        }
+    }
+}
+
 void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root, ShCompileOptions compileOptions)
 {
     TInfoSinkBase &sink                   = getInfoSink().obj;
@@ -277,14 +304,10 @@ void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root, ShCompileOptions 
             }
         }
 
-        const bool isMultiview = (iter.first == TExtension::OVR_multiview2);
-        if (isMultiview && getShaderType() == GL_VERTEX_SHADER &&
-            (compileOptions & SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER) != 0u)
+        if (iter.first == TExtension::OVR_multiview2)
         {
-            // Emit the NV_viewport_array2 extension in a vertex shader if the
-            // SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER option is set and the OVR_multiview2(2)
-            // extension is requested.
-            sink << "#extension GL_NV_viewport_array2 : require\n";
+            const bool isVertexShader = (getShaderType() == GL_VERTEX_SHADER);
+            EmitMultiviewGLSL(compileOptions, isVertexShader, getNumViews(), sink);
         }
 
         // Support ANGLE_texture_multisample extension on GLSL300
