@@ -243,6 +243,52 @@ void TranslatorGLSL::writeVersion(TIntermNode *root)
     }
 }
 
+void EmitMultiviewGLSL(const TCompiler &compiler,
+                       const ShCompileOptions &compileOptions,
+                       TExtension extension,
+                       TBehavior behavior,
+                       TInfoSinkBase &sink)
+{
+    ASSERT(behavior != EBhUndefined);
+    if (behavior == EBhDisable)
+        return;
+
+    const bool isVertexShader = (compiler.getShaderType() == GL_VERTEX_SHADER);
+    const auto fnDeclareExt   = [&](const char *const name) {
+        sink << "#extension " << name << " : " << GetBehaviorString(behavior) << "\n";
+    };
+    if (compileOptions & SH_INITIALIZE_BUILTINS_FOR_INSTANCED_MULTIVIEW)
+    {
+        // Emit the NV_viewport_array2 extension in a vertex shader if the
+        // SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER option is set and the
+        // OVR_multiview(2) extension is requested.
+        if (isVertexShader && (compileOptions & SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER))
+        {
+            fnDeclareExt("GL_NV_viewport_array2");
+        }
+    }
+    else
+    {
+        if (extension == TExtension::OVR_multiview)
+        {
+            fnDeclareExt("GL_OVR_multiview");
+        }
+        else
+        {
+            ASSERT(extension == TExtension::OVR_multiview2);
+            fnDeclareExt("GL_OVR_multiview2");
+        }
+
+        const auto &numViews = compiler.getNumViews();
+        if (isVertexShader && numViews != -1)
+        {
+            sink << "#if defined(GL_OVR_multiview) || defined(GL_OVR_multiview2)\n"
+                 << "layout(num_views=" << numViews << ") in;\n"
+                 << "#endif\n";
+        }
+    }
+}
+
 void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root, ShCompileOptions compileOptions)
 {
     TInfoSinkBase &sink                   = getInfoSink().obj;
@@ -277,15 +323,9 @@ void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root, ShCompileOptions 
             }
         }
 
-        const bool isMultiview =
-            (iter.first == TExtension::OVR_multiview) || (iter.first == TExtension::OVR_multiview2);
-        if (isMultiview && getShaderType() == GL_VERTEX_SHADER &&
-            (compileOptions & SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER) != 0u)
+        if (iter.first == TExtension::OVR_multiview || iter.first == TExtension::OVR_multiview2)
         {
-            // Emit the NV_viewport_array2 extension in a vertex shader if the
-            // SH_SELECT_VIEW_IN_NV_GLSL_VERTEX_SHADER option is set and the OVR_multiview2(2)
-            // extension is requested.
-            sink << "#extension GL_NV_viewport_array2 : require\n";
+            EmitMultiviewGLSL(*this, compileOptions, iter.first, iter.second, sink);
         }
 
         // Support ANGLE_texture_multisample extension on GLSL300
