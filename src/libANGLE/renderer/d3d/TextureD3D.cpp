@@ -121,19 +121,17 @@ angle::Result TextureD3D::getImageAndSyncFromStorage(const gl::Context *context,
 
 GLint TextureD3D::getLevelZeroWidth() const
 {
-    ASSERT(gl::CountLeadingZeros(static_cast<uint32_t>(getBaseLevelWidth())) > getBaseLevel());
-    return getBaseLevelWidth() << mBaseLevel;
+    return mState.getImageDesc(gl::ImageIndex::MakeFromType(mState.getType(), 0)).size.width;
 }
 
 GLint TextureD3D::getLevelZeroHeight() const
 {
-    ASSERT(gl::CountLeadingZeros(static_cast<uint32_t>(getBaseLevelHeight())) > getBaseLevel());
-    return getBaseLevelHeight() << mBaseLevel;
+    return mState.getImageDesc(gl::ImageIndex::MakeFromType(mState.getType(), 0)).size.height;
 }
 
 GLint TextureD3D::getLevelZeroDepth() const
 {
-    return getBaseLevelDepth();
+    return mState.getImageDesc(gl::ImageIndex::MakeFromType(mState.getType(), 0)).size.depth;
 }
 
 GLint TextureD3D::getBaseLevelWidth() const
@@ -2947,12 +2945,6 @@ void TextureD3D_3D::markAllImagesDirty()
         mImageArray[i]->markDirty();
     }
     mDirtyImages = true;
-}
-
-GLint TextureD3D_3D::getLevelZeroDepth() const
-{
-    ASSERT(gl::CountLeadingZeros(static_cast<uint32_t>(getBaseLevelDepth())) > getBaseLevel());
-    return getBaseLevelDepth() << getBaseLevel();
 }
 
 TextureD3D_2DArray::TextureD3D_2DArray(const gl::TextureState &state, RendererD3D *renderer)
