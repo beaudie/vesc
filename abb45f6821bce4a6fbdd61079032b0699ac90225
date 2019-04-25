@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "ebdf6d70_74c31db3",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-04-25T16:41:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30a78412_28fb14a2",
+      "range": {
+        "startLine": 659,
+        "startChar": 0,
+        "endLine": 669,
+        "endChar": 75
+      },
+      "revId": "abb45f6821bce4a6fbdd61079032b0699ac90225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f1cd9643_5658c31f",
         "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
         "patchSetId": 6
@@ -69,6 +93,30 @@
       "revId": "abb45f6821bce4a6fbdd61079032b0699ac90225",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f72e0019_7b82161a",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-04-25T16:41:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1cd9643_5658c31f",
+      "range": {
+        "startLine": 677,
+        "startChar": 12,
+        "endLine": 677,
+        "endChar": 51
+      },
+      "revId": "abb45f6821bce4a6fbdd61079032b0699ac90225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -116,6 +164,30 @@
       "revId": "abb45f6821bce4a6fbdd61079032b0699ac90225",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "682418a3_959ce94d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-04-25T16:41:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0955402_13aebbce",
+      "range": {
+        "startLine": 1370,
+        "startChar": 13,
+        "endLine": 1370,
+        "endChar": 42
+      },
+      "revId": "abb45f6821bce4a6fbdd61079032b0699ac90225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
