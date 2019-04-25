@@ -14,18 +14,14 @@
 // Windows.h needs to be included first
 #include <windows.h>
 
-#if defined(GPU_INFO_USE_SETUPAPI)
 // Remove parts of commctrl.h that have compile errors
 #    define NOTOOLBAR
 #    define NOTOOLTIPS
 #    include <cfgmgr32.h>
 #    include <setupapi.h>
-#elif defined(GPU_INFO_USE_DXGI)
+
 #    include <d3d10.h>
 #    include <dxgi.h>
-#else
-#    error "SystemInfo_win needs at least GPU_INFO_USE_SETUPAPI or GPU_INFO_USE_DXGI defined"
-#endif
 
 #include <array>
 #include <sstream>
@@ -52,8 +48,6 @@ std::string GetPrimaryDisplayDeviceId()
 
     return "";
 }
-
-#if defined(GPU_INFO_USE_SETUPAPI)
 
 std::string GetRegistryStringValue(HKEY key, const char *valueName)
 {
@@ -138,8 +132,6 @@ bool GetDevicesFromRegistry(std::vector<GPUDeviceInfo> *devices)
     return true;
 }
 
-#elif defined(GPU_INFO_USE_DXGI)
-
 bool GetDevicesFromDXGI(std::vector<GPUDeviceInfo> *devices)
 {
     IDXGIFactory *factory;
@@ -185,32 +177,39 @@ bool GetDevicesFromDXGI(std::vector<GPUDeviceInfo> *devices)
 
     factory->Release();
 
+    if (i == 0)
+    {
+        return false;
+    }
+
     return true;
 }
-
-#else
-#    error
-#endif
 
 }  // anonymous namespace
 
 bool GetSystemInfo(SystemInfo *info)
 {
+#if 0
+	// The DXGI method of retrieving primary GPU is unused for the time being.
+	ANGLE_UNUSED_VARIABLE(GetDevicesFromDXGI);
+
     // Get the CM device ID first so that it is returned even in error cases.
     info->primaryDisplayDeviceId = GetPrimaryDisplayDeviceId();
 
-#if defined(GPU_INFO_USE_SETUPAPI)
     if (!GetDevicesFromRegistry(&info->gpus))
     {
         return false;
     }
-#elif defined(GPU_INFO_USE_DXGI)
+#else
+    ANGLE_UNUSED_VARIABLE(GetPrimaryDisplayDeviceId);
+    ANGLE_UNUSED_VARIABLE(GetDevicesFromRegistry);
+
     if (!GetDevicesFromDXGI(&info->gpus))
     {
         return false;
     }
-#else
-#    error
+
+    info->primaryDisplayDeviceId = info->gpus[0].deviceId;
 #endif
 
     if (info->gpus.size() == 0)
@@ -220,7 +219,8 @@ bool GetSystemInfo(SystemInfo *info)
 
     FindPrimaryGPU(info);
 
-    // Override the primary GPU index with what we gathered from EnumDisplayDevices
+#if 0
+    // Override the primary GPU index with what we gathered from EnumDisplayDevices or EnumAdapters
     uint32_t primaryVendorId = 0;
     uint32_t primaryDeviceId = 0;
 
@@ -240,6 +240,10 @@ bool GetSystemInfo(SystemInfo *info)
         }
     }
     ASSERT(foundPrimary);
+#else
+    // Override the primary GPU index. The first index returned by EnumAdapters is the primary GPU.
+    info->primaryGPUIndex = 0;
+#endif
 
     // nvd3d9wrap.dll is loaded into all processes when Optimus is enabled.
     HMODULE nvd3d9wrap = GetModuleHandleW(L"nvd3d9wrap.dll");
