@@ -36,6 +36,8 @@ namespace angle
 namespace
 {
 
+#if defined(GPU_INFO_USE_SETUPAPI)
+
 // Returns the CM device ID of the primary GPU.
 std::string GetPrimaryDisplayDeviceId()
 {
@@ -52,8 +54,6 @@ std::string GetPrimaryDisplayDeviceId()
 
     return "";
 }
-
-#if defined(GPU_INFO_USE_SETUPAPI)
 
 std::string GetRegistryStringValue(HKEY key, const char *valueName)
 {
@@ -185,6 +185,11 @@ bool GetDevicesFromDXGI(std::vector<GPUDeviceInfo> *devices)
 
     factory->Release();
 
+    if (i == 0)
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -196,10 +201,10 @@ bool GetDevicesFromDXGI(std::vector<GPUDeviceInfo> *devices)
 
 bool GetSystemInfo(SystemInfo *info)
 {
+#if defined(GPU_INFO_USE_SETUPAPI)
     // Get the CM device ID first so that it is returned even in error cases.
     info->primaryDisplayDeviceId = GetPrimaryDisplayDeviceId();
 
-#if defined(GPU_INFO_USE_SETUPAPI)
     if (!GetDevicesFromRegistry(&info->gpus))
     {
         return false;
@@ -209,6 +214,9 @@ bool GetSystemInfo(SystemInfo *info)
     {
         return false;
     }
+
+    // The first device returned by EnumAdapters
+    info->primaryDisplayDeviceId = info->gpus[0].deviceId;
 #else
 #    error
 #endif
@@ -220,7 +228,7 @@ bool GetSystemInfo(SystemInfo *info)
 
     FindPrimaryGPU(info);
 
-    // Override the primary GPU index with what we gathered from EnumDisplayDevices
+    // Override the primary GPU index with what we gathered from EnumDisplayDevices or EnumAdapters
     uint32_t primaryVendorId = 0;
     uint32_t primaryDeviceId = 0;
 
