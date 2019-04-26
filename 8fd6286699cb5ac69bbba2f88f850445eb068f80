@@ -46,6 +46,30 @@
       "revId": "8fd6286699cb5ac69bbba2f88f850445eb068f80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "951b80b6_512686b5",
+        "filename": "scripts/generate_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-26T21:21:53Z",
+      "side": 1,
+      "message": "Looks like \"git cl format\" failed to fix this :(",
+      "parentUuid": "0cd2094d_d3b425aa",
+      "range": {
+        "startLine": 236,
+        "startChar": 0,
+        "endLine": 237,
+        "endChar": 12
+      },
+      "revId": "8fd6286699cb5ac69bbba2f88f850445eb068f80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
