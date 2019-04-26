@@ -821,5 +821,60 @@ void GetViewport(const gl::Rectangle &viewport,
         viewportOut->height = -viewportOut->height;
     }
 }
+
+void GetScissor(const gl::State &glState,
+                bool invertViewport,
+                const gl::Rectangle &renderArea,
+                VkRect2D *scissorOut)
+{
+    if (glState.isScissorTestEnabled())
+    {
+        gl::Rectangle clippedRect;
+        if (!gl::ClipRectangle(glState.getScissor(), renderArea, &clippedRect))
+        {
+#ifdef DO_WORKAROUND_HERE  // TODO/FIXME--PORT THIS WORKAROUND PER Shabi's ADVICE
+            // There is no overlap between the app-set viewport and clippedRect.  Some Vulkan
+            // drivers treat a (0,0,0,0) scissor as no scissor.  Instead, set the scissor to
+            // just outside of the renderArea.
+            scissorOut->offset.x      = renderArea.x;
+            scissorOut->offset.y      = renderArea.y;
+            scissorOut->extent.width  = 1;
+            scissorOut->extent.height = 1;
+#else   // DO_WORKAROUND_HERE
+            memset(scissorOut, 0, sizeof(VkRect2D));
+#endif  // DO_WORKAROUND_HERE
+        }
+
+        // Now, clip (again) to the viewport
+        gl::Rectangle clippedToViewportRect;
+        if (!gl::ClipRectangle(clippedRect, glState.getViewport(), &clippedToViewportRect))
+        {
+#ifdef DO_WORKAROUND_HERE  // TODO/FIXME--PORT THIS WORKAROUND PER Shabi's ADVICE
+            // There is no overlap between the app-set viewport and clippedRect.  Some Vulkan
+            // drivers treat a (0,0,0,0) scissor as no scissor.  Instead, set the scissor to
+            // just outside of the renderArea.
+            scissorOut->offset.x      = renderArea.x;
+            scissorOut->offset.y      = renderArea.y;
+            scissorOut->extent.width  = 1;
+            scissorOut->extent.height = 1;
+#else   // DO_WORKAROUND_HERE
+            memset(scissorOut, 0, sizeof(VkRect2D));
+#endif  // DO_WORKAROUND_HERE
+            return;
+        }
+        *scissorOut = gl_vk::GetRect(clippedToViewportRect);
+    }
+    else
+    {
+        // If the GLES scissor test isn't enabled, simply set the scissor to the viewport, so
+        // that rendering is clipped to the viewport.
+        *scissorOut = gl_vk::GetRect(glState.getViewport());
+    }
+
+    if (invertViewport)
+    {
+        scissorOut->offset.y = renderArea.height - scissorOut->offset.y - scissorOut->extent.height;
+    }
+}
 }  // namespace gl_vk
 }  // namespace rx
