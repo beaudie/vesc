@@ -22,6 +22,30 @@
       "revId": "8fd6286699cb5ac69bbba2f88f850445eb068f80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cd2094d_d3b425aa",
+        "filename": "scripts/generate_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-26T20:04:16Z",
+      "side": 1,
+      "message": "I\u0027m using pyformat to clean up the code, I couldn\u0027t find a setting for line length. It\u0027s a lot easier to rely on pyformat than manually format the file.",
+      "parentUuid": "2c71990d_a8b498af",
+      "range": {
+        "startLine": 236,
+        "startChar": 0,
+        "endLine": 237,
+        "endChar": 12
+      },
+      "revId": "8fd6286699cb5ac69bbba2f88f850445eb068f80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
