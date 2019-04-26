@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c71990d_a8b498af",
+        "filename": "scripts/generate_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-26T18:55:36Z",
+      "side": 1,
+      "message": "nit: ANGLE code style allows 100 char lines",
+      "range": {
+        "startLine": 236,
+        "startChar": 0,
+        "endLine": 237,
+        "endChar": 12
+      },
+      "revId": "8fd6286699cb5ac69bbba2f88f850445eb068f80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
