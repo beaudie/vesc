@@ -50,8 +50,13 @@ class TextureD3D : public TextureImpl
                                              ImageD3D **outImage);
 
     GLint getBaseLevelWidth() const;
+    GLint getBaseLevelWidth(GLuint baseLevel) const;
     GLint getBaseLevelHeight() const;
+    GLint getBaseLevelHeight(GLuint baseLevel) const;
+    GLint getBaseLevelDepth() const;
+    GLint getBaseLevelDepth(GLuint baseLevel) const;
     GLenum getBaseLevelInternalFormat() const;
+    GLenum getBaseLevelInternalFormat(GLuint baseLevel) const;
 
     angle::Result setStorage(const gl::Context *context,
                              gl::TextureType type,
@@ -94,7 +99,7 @@ class TextureD3D : public TextureImpl
                                    const egl::Stream::GLTextureDescription &desc) override;
     angle::Result generateMipmap(const gl::Context *context) override;
     TextureStorage *getStorage();
-    ImageD3D *getBaseLevelImage() const;
+    ImageD3D *getBaseLevelImage(GLuint baseLevel) const;
 
     angle::Result getAttachmentRenderTarget(const gl::Context *context,
                                             GLenum binding,
@@ -147,8 +152,11 @@ class TextureD3D : public TextureImpl
                                    RenderTargetD3D *destRenderTarget);
 
     GLint getLevelZeroWidth() const;
+    GLint getLevelZeroWidth(GLuint baseLevel) const;
     GLint getLevelZeroHeight() const;
-    virtual GLint getLevelZeroDepth() const;
+    GLint getLevelZeroHeight(GLuint baseLevel) const;
+    GLint getLevelZeroDepth() const;
+    virtual GLint getLevelZeroDepth(GLuint baseLevel) const;
 
     GLint creationLevels(GLsizei width, GLsizei height, GLsizei depth) const;
     virtual angle::Result initMipmapImages(const gl::Context *context) = 0;
@@ -172,8 +180,6 @@ class TextureD3D : public TextureImpl
 
     virtual void markAllImagesDirty() = 0;
 
-    GLint getBaseLevelDepth() const;
-
     RendererD3D *mRenderer;
 
     bool mDirtyImages;
@@ -185,6 +191,7 @@ class TextureD3D : public TextureImpl
     virtual angle::Result initializeStorage(const gl::Context *context, bool renderTarget) = 0;
 
     virtual angle::Result updateStorage(const gl::Context *context) = 0;
+    virtual angle::Result copyStorageToImages(const gl::Context *context) = 0;
 
     bool shouldUseSetData(const ImageD3D *image) const;
 
@@ -307,6 +314,8 @@ class TextureD3D_2D : public TextureD3D
                                         TextureStorage *newCompleteTexStorage) override;
 
     angle::Result updateStorage(const gl::Context *context) override;
+    angle::Result copyStorageToImages(const gl::Context *context) override;
+
     angle::Result initMipmapImages(const gl::Context *context) override;
 
     bool isValidLevel(int level) const;
@@ -435,6 +444,7 @@ class TextureD3D_Cube : public TextureD3D
                                         TextureStorage *newCompleteTexStorage) override;
 
     angle::Result updateStorage(const gl::Context *context) override;
+    angle::Result copyStorageToImages(const gl::Context *context) override;
     angle::Result initMipmapImages(const gl::Context *context) override;
 
     bool isValidFaceLevel(int faceIndex, int level) const;
@@ -557,7 +567,7 @@ class TextureD3D_3D : public TextureD3D
 
   protected:
     void markAllImagesDirty() override;
-    GLint getLevelZeroDepth() const override;
+    GLint getLevelZeroDepth(GLuint baseLevel) const override;
 
   private:
     angle::Result initializeStorage(const gl::Context *context, bool renderTarget) override;
@@ -567,6 +577,7 @@ class TextureD3D_3D : public TextureD3D
                                         TextureStorage *newCompleteTexStorage) override;
 
     angle::Result updateStorage(const gl::Context *context) override;
+    angle::Result copyStorageToImages(const gl::Context *context) override;
     angle::Result initMipmapImages(const gl::Context *context) override;
 
     bool isValidLevel(int level) const;
@@ -694,6 +705,7 @@ class TextureD3D_2DArray : public TextureD3D
                                         TextureStorage *newCompleteTexStorage) override;
 
     angle::Result updateStorage(const gl::Context *context) override;
+    angle::Result copyStorageToImages(const gl::Context *context) override;
     angle::Result initMipmapImages(const gl::Context *context) override;
 
     bool isValidLevel(int level) const;
@@ -809,6 +821,7 @@ class TextureD3D_External : public TextureD3DImmutableBase
                                         TextureStorage *newCompleteTexStorage) override;
 
     angle::Result updateStorage(const gl::Context *context) override;
+    angle::Result copyStorageToImages(const gl::Context *context) override;
     angle::Result initMipmapImages(const gl::Context *context) override;
 
     bool isImageComplete(const gl::ImageIndex &index) const override;
@@ -848,6 +861,7 @@ class TextureD3D_2DMultisample : public TextureD3DImmutableBase
                                         TextureStorage *newCompleteTexStorage) override;
 
     angle::Result updateStorage(const gl::Context *context) override;
+    angle::Result copyStorageToImages(const gl::Context *context) override;
 
   private:
     angle::Result initializeStorage(const gl::Context *context, bool renderTarget) override;
@@ -892,6 +906,7 @@ class TextureD3D_2DMultisampleArray : public TextureD3DImmutableBase
                                         TextureStorage *newCompleteTexStorage) override;
 
     angle::Result updateStorage(const gl::Context *context) override;
+    angle::Result copyStorageToImages(const gl::Context *context) override;
 
   private:
     angle::Result initializeStorage(const gl::Context *context, bool renderTarget) override;
