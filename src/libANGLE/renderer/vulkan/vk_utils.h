@@ -530,6 +530,10 @@ void GetViewport(const gl::Rectangle &viewport,
                  bool invertViewport,
                  GLint renderAreaHeight,
                  VkViewport *viewportOut);
+bool GetScissor(const gl::State &glState,
+                bool invertViewport,
+                const gl::Rectangle &renderArea,
+                VkRect2D *scissorOut);
 }  // namespace gl_vk
 
 }  // namespace rx

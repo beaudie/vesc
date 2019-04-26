@@ -821,5 +821,41 @@ void GetViewport(const gl::Rectangle &viewport,
         viewportOut->height = -viewportOut->height;
     }
 }
+
+bool GetScissor(const gl::State &glState,
+                bool invertViewport,
+                const gl::Rectangle &renderArea,
+                VkRect2D *scissorOut)
+{
+    if (glState.isScissorTestEnabled())
+    {
+        gl::Rectangle clippedRect;
+        if (!gl::ClipRectangle(glState.getScissor(), renderArea, &clippedRect))
+        {
+            memset(scissorOut, 0, sizeof(VkRect2D));
+            return false;
+        }
+
+        // Now, clip (again) to the viewport
+        gl::Rectangle clippedToViewportRect;
+        if (!gl::ClipRectangle(clippedRect, glState.getViewport(), &clippedToViewportRect))
+        {
+            return false;
+        }
+        *scissorOut = gl_vk::GetRect(clippedToViewportRect);
+    }
+    else
+    {
+        // If the GLES scissor test isn't enabled, simply set the scissor to the viewport, so
+        // that rendering is clipped to the viewport.
+        *scissorOut = gl_vk::GetRect(glState.getViewport());
+    }
+
+    if (invertViewport)
+    {
+        scissorOut->offset.y = renderArea.height - scissorOut->offset.y - scissorOut->extent.height;
+    }
+    return true;
+}
 }  // namespace gl_vk
 }  // namespace rx
