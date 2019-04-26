@@ -1284,6 +1284,11 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
             mFeatures.restartRenderPassAfterLoadOpClear = true;
         }
     }
+
+    if (IsWindows() && IsIntel(mPhysicalDeviceProperties.vendorID))
+    {
+        mFeatures.forceNonZeroScissor = true;
+    }
 }
 
 void RendererVk::initPipelineCacheVkKey()
