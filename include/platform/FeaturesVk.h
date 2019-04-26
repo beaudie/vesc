@@ -83,6 +83,11 @@ struct FeaturesVk
     // On Qualcomm, a bug is preventing us from using loadOp=Clear with inline commands in the
     // render pass.  http://anglebug.com/2361
     bool restartRenderPassAfterLoadOpClear = false;
+
+    // When the scissor is (0,0,0,0) on Windows Intel, the driver acts as if the scissor was
+    // disabled.  Work-around this by setting the scissor to just outside of the render area
+    // (e.g. (renderArea.x, renderArea.y, 1, 1)). http://anglebug.com/3153
+    bool forceNonZeroScissor = false;
 };
 
 inline FeaturesVk::FeaturesVk() = default;
