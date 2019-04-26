@@ -121,36 +121,66 @@ angle::Result TextureD3D::getImageAndSyncFromStorage(const gl::Context *context,
 
 GLint TextureD3D::getLevelZeroWidth() const
 {
-    ASSERT(gl::CountLeadingZeros(static_cast<uint32_t>(getBaseLevelWidth())) > getBaseLevel());
-    return getBaseLevelWidth() << mBaseLevel;
+    return getLevelZeroWidth(mBaseLevel);
+}
+
+GLint TextureD3D::getLevelZeroWidth(GLuint baseLevel) const
+{
+    ASSERT(gl::CountLeadingZeros(static_cast<uint32_t>(getBaseLevelWidth(baseLevel))) > baseLevel);
+    return getBaseLevelWidth(baseLevel) << baseLevel;
 }
 
 GLint TextureD3D::getLevelZeroHeight() const
 {
-    ASSERT(gl::CountLeadingZeros(static_cast<uint32_t>(getBaseLevelHeight())) > getBaseLevel());
-    return getBaseLevelHeight() << mBaseLevel;
+    return getLevelZeroHeight(mBaseLevel);
+}
+
+GLint TextureD3D::getLevelZeroHeight(GLuint baseLevel) const
+{
+    ASSERT(gl::CountLeadingZeros(static_cast<uint32_t>(getBaseLevelHeight(baseLevel))) > baseLevel);
+    return getBaseLevelHeight(baseLevel) << baseLevel;
 }
 
 GLint TextureD3D::getLevelZeroDepth() const
 {
-    return getBaseLevelDepth();
+    return getLevelZeroDepth(mBaseLevel);
+}
+
+GLint TextureD3D::getLevelZeroDepth(GLuint baseLevel) const
+{
+    return getBaseLevelDepth(baseLevel);
 }
 
 GLint TextureD3D::getBaseLevelWidth() const
 {
-    const ImageD3D *baseImage = getBaseLevelImage();
+    return getBaseLevelWidth(mBaseLevel);
+}
+
+GLint TextureD3D::getBaseLevelWidth(GLuint baseLevel) const
+{
+    const ImageD3D *baseImage = getBaseLevelImage(baseLevel);
     return (baseImage ? baseImage->getWidth() : 0);
 }
 
 GLint TextureD3D::getBaseLevelHeight() const
 {
-    const ImageD3D *baseImage = getBaseLevelImage();
+    return getBaseLevelHeight(mBaseLevel);
+}
+
+GLint TextureD3D::getBaseLevelHeight(GLuint baseLevel) const
+{
+    const ImageD3D *baseImage = getBaseLevelImage(baseLevel);
     return (baseImage ? baseImage->getHeight() : 0);
 }
 
 GLint TextureD3D::getBaseLevelDepth() const
 {
-    const ImageD3D *baseImage = getBaseLevelImage();
+    return getBaseLevelDepth(mBaseLevel);
+}
+
+GLint TextureD3D::getBaseLevelDepth(GLuint baseLevel) const
+{
+    const ImageD3D *baseImage = getBaseLevelImage(baseLevel);
     return (baseImage ? baseImage->getDepth() : 0);
 }
 
@@ -159,7 +189,12 @@ GLint TextureD3D::getBaseLevelDepth() const
 // the base level image for anything except querying texture format and size.
 GLenum TextureD3D::getBaseLevelInternalFormat() const
 {
-    const ImageD3D *baseImage = getBaseLevelImage();
+    return getBaseLevelInternalFormat(mBaseLevel);
+}
+
+GLenum TextureD3D::getBaseLevelInternalFormat(GLuint baseLevel) const
+{
+    const ImageD3D *baseImage = getBaseLevelImage(baseLevel);
     return (baseImage ? baseImage->getInternalFormat() : GL_NONE);
 }
 
@@ -193,6 +228,11 @@ angle::Result TextureD3D::setStorageExternalMemory(const gl::Context *context,
                                                    GLuint64 offset)
 {
     ANGLE_HR_UNREACHABLE(GetImplAs<ContextD3D>(context));
+    return angle::Result::Continue;
+}
+
+angle::Result TextureD3D::copyStorageToImages(const gl::Context *context)
+{
     return angle::Result::Continue;
 }
 
@@ -413,13 +453,13 @@ TextureStorage *TextureD3D::getStorage()
     return mTexStorage;
 }
 
-ImageD3D *TextureD3D::getBaseLevelImage() const
+ImageD3D *TextureD3D::getBaseLevelImage(GLuint baseLevel) const
 {
-    if (mBaseLevel >= gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS)
+    if (baseLevel >= gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS)
     {
         return nullptr;
     }
-    return getImage(getImageIndex(mBaseLevel, 0));
+    return getImage(getImageIndex(baseLevel, 0));
 }
 
 angle::Result TextureD3D::setImageExternal(const gl::Context *context,
@@ -538,7 +578,7 @@ angle::Result TextureD3D::generateMipmapUsingImages(const gl::Context *context,
 
 bool TextureD3D::isBaseImageZeroSize() const
 {
-    ImageD3D *baseImage = getBaseLevelImage();
+    ImageD3D *baseImage = getBaseLevelImage(mBaseLevel);
 
     if (!baseImage || baseImage->getWidth() <= 0 || baseImage->getHeight() <= 0)
     {
@@ -633,18 +673,17 @@ angle::Result TextureD3D::getAttachmentRenderTarget(const gl::Context *context,
 
 angle::Result TextureD3D::setBaseLevel(const gl::Context *context, GLuint baseLevel)
 {
-    const int oldStorageWidth  = std::max(1, getLevelZeroWidth());
-    const int oldStorageHeight = std::max(1, getLevelZeroHeight());
-    const int oldStorageDepth  = std::max(1, getLevelZeroDepth());
-    const int oldStorageFormat = getBaseLevelInternalFormat();
-    mBaseLevel                 = baseLevel;
+    const int oldStorageWidth  = std::max(1, getLevelZeroWidth(mBaseLevel));
+    const int oldStorageHeight = std::max(1, getLevelZeroHeight(mBaseLevel));
+    const int oldStorageDepth  = std::max(1, getLevelZeroDepth(mBaseLevel));
+    const int oldStorageFormat = getBaseLevelInternalFormat(mBaseLevel);
 
     // When the base level changes, the texture storage might not be valid anymore, since it could
     // have been created based on the dimensions of the previous specified level range.
-    const int newStorageWidth  = std::max(1, getLevelZeroWidth());
-    const int newStorageHeight = std::max(1, getLevelZeroHeight());
-    const int newStorageDepth  = std::max(1, getLevelZeroDepth());
-    const int newStorageFormat = getBaseLevelInternalFormat();
+    const int newStorageWidth  = std::max(1, getLevelZeroWidth(baseLevel));
+    const int newStorageHeight = std::max(1, getLevelZeroHeight(baseLevel));
+    const int newStorageDepth  = std::max(1, getLevelZeroDepth(baseLevel));
+    const int newStorageFormat = getBaseLevelInternalFormat(baseLevel);
     if (mTexStorage &&
         (newStorageWidth != oldStorageWidth || newStorageHeight != oldStorageHeight ||
          newStorageDepth != oldStorageDepth || newStorageFormat != oldStorageFormat))
@@ -652,6 +691,8 @@ angle::Result TextureD3D::setBaseLevel(const gl::Context *context, GLuint baseLe
         markAllImagesDirty();
         ANGLE_TRY(releaseTexStorage(context));
     }
+
+    mBaseLevel = baseLevel;
 
     return angle::Result::Continue;
 }
@@ -669,6 +710,8 @@ angle::Result TextureD3D::releaseTexStorage(const gl::Context *context)
     {
         return angle::Result::Continue;
     }
+
+    ANGLE_TRY(copyStorageToImages(context));
 
     auto err = mTexStorage->onDestroy(context);
     SafeDelete(mTexStorage);
@@ -1480,13 +1523,33 @@ angle::Result TextureD3D_2D::updateStorage(const gl::Context *context)
     GLint storageLevels = mTexStorage->getLevelCount();
     for (int level = 0; level < storageLevels; level++)
     {
-        if (mImageArray[level]->isDirty() && isLevelComplete(level))
+        if (isLevelComplete(level))
         {
-            ANGLE_TRY(updateStorageLevel(context, level));
+            if (mImageArray[level]->isDirty())
+            {
+                ANGLE_TRY(updateStorageLevel(context, level));
+            }
         }
     }
 
     mDirtyImages = false;
+    return angle::Result::Continue;
+}
+
+angle::Result TextureD3D_2D::copyStorageToImages(const gl::Context *context)
+{
+    ASSERT(mTexStorage != nullptr);
+    GLint storageLevels = mTexStorage->getLevelCount();
+    for (int level = 0; level < storageLevels; level++)
+    {
+        if (mImageArray[level] && isLevelComplete(level))
+        {
+            ANGLE_TRY(mImageArray[level]->copyFromTexStorage(context, gl::ImageIndex::Make2D(level),
+                                                             mTexStorage));
+        }
+    }
+
+    mDirtyImages = true;
     return angle::Result::Continue;
 }
 
@@ -2153,6 +2216,28 @@ angle::Result TextureD3D_Cube::updateStorage(const gl::Context *context)
     return angle::Result::Continue;
 }
 
+angle::Result TextureD3D_Cube::copyStorageToImages(const gl::Context *context)
+{
+    ASSERT(mTexStorage != nullptr);
+    GLint storageLevels = mTexStorage->getLevelCount();
+    for (size_t face = 0; face < gl::kCubeFaceCount; face++)
+    {
+        for (int level = 0; level < storageLevels; level++)
+        {
+            if (mImageArray[face][level] && isFaceLevelComplete(face, level))
+            {
+                gl::ImageIndex index =
+                    gl::ImageIndex::MakeCubeMapFace(gl::CubeFaceIndexToTextureTarget(face), level);
+                ANGLE_TRY(
+                    mImageArray[face][level]->copyFromTexStorage(context, index, mTexStorage));
+            }
+        }
+    }
+
+    mDirtyImages = false;
+    return angle::Result::Continue;
+}
+
 bool TextureD3D_Cube::isValidFaceLevel(int faceIndex, int level) const
 {
     return (mTexStorage ? (level >= 0 && level < mTexStorage->getLevelCount()) : 0);
@@ -2704,7 +2789,7 @@ angle::Result TextureD3D_3D::initMipmapImages(const gl::Context *context)
     {
         gl::Extents levelSize(std::max(getLevelZeroWidth() >> level, 1),
                               std::max(getLevelZeroHeight() >> level, 1),
-                              std::max(getLevelZeroDepth() >> level, 1));
+                              std::max(TextureD3D::getLevelZeroDepth() >> level, 1));
         ANGLE_TRY(redefineImage(context, level, getBaseLevelInternalFormat(), levelSize, false));
     }
 
@@ -2765,7 +2850,7 @@ angle::Result TextureD3D_3D::createCompleteStorage(bool renderTarget,
 {
     GLsizei width         = getLevelZeroWidth();
     GLsizei height        = getLevelZeroHeight();
-    GLsizei depth         = getLevelZeroDepth();
+    GLsizei depth         = TextureD3D::getLevelZeroDepth();
     GLenum internalFormat = getBaseLevelInternalFormat();
 
     ASSERT(width > 0 && height > 0 && depth > 0);
@@ -2815,6 +2900,23 @@ angle::Result TextureD3D_3D::updateStorage(const gl::Context *context)
     return angle::Result::Continue;
 }
 
+angle::Result TextureD3D_3D::copyStorageToImages(const gl::Context *context)
+{
+    ASSERT(mTexStorage != nullptr);
+    GLint storageLevels = mTexStorage->getLevelCount();
+    for (int level = 0; level < storageLevels; level++)
+    {
+        if (mImageArray[level] && isLevelComplete(level))
+        {
+            gl::ImageIndex index = gl::ImageIndex::Make3D(level);
+            ANGLE_TRY(mImageArray[level]->copyFromTexStorage(context, index, mTexStorage));
+        }
+    }
+
+    mDirtyImages = true;
+    return angle::Result::Continue;
+}
+
 bool TextureD3D_3D::isValidLevel(int level) const
 {
     return (mTexStorage ? (level >= 0 && level < mTexStorage->getLevelCount()) : 0);
@@ -2832,7 +2934,7 @@ bool TextureD3D_3D::isLevelComplete(int level) const
 
     GLsizei width  = getLevelZeroWidth();
     GLsizei height = getLevelZeroHeight();
-    GLsizei depth  = getLevelZeroDepth();
+    GLsizei depth  = TextureD3D::getLevelZeroDepth();
 
     if (width <= 0 || height <= 0 || depth <= 0)
     {
@@ -2899,7 +3001,7 @@ angle::Result TextureD3D_3D::redefineImage(const gl::Context *context,
     // If there currently is a corresponding storage texture image, it has these parameters
     const int storageWidth     = std::max(1, getLevelZeroWidth() >> level);
     const int storageHeight    = std::max(1, getLevelZeroHeight() >> level);
-    const int storageDepth     = std::max(1, getLevelZeroDepth() >> level);
+    const int storageDepth     = std::max(1, TextureD3D::getLevelZeroDepth() >> level);
     const GLenum storageFormat = getBaseLevelInternalFormat();
 
     mImageArray[level]->redefine(gl::TextureType::_3D, internalformat, size, forceRelease);
@@ -2949,10 +3051,10 @@ void TextureD3D_3D::markAllImagesDirty()
     mDirtyImages = true;
 }
 
-GLint TextureD3D_3D::getLevelZeroDepth() const
+GLint TextureD3D_3D::getLevelZeroDepth(GLuint baseLevel) const
 {
-    ASSERT(gl::CountLeadingZeros(static_cast<uint32_t>(getBaseLevelDepth())) > getBaseLevel());
-    return getBaseLevelDepth() << getBaseLevel();
+    ASSERT(gl::CountLeadingZeros(static_cast<uint32_t>(getBaseLevelDepth(baseLevel))) > baseLevel);
+    return getBaseLevelDepth(baseLevel) << baseLevel;
 }
 
 TextureD3D_2DArray::TextureD3D_2DArray(const gl::TextureState &state, RendererD3D *renderer)
@@ -3539,6 +3641,30 @@ angle::Result TextureD3D_2DArray::updateStorage(const gl::Context *context)
     return angle::Result::Continue;
 }
 
+angle::Result TextureD3D_2DArray::copyStorageToImages(const gl::Context *context)
+{
+    ASSERT(mTexStorage != nullptr);
+    GLint storageLevels = mTexStorage->getLevelCount();
+    for (int level = 0; level < storageLevels; level++)
+    {
+        if (isLevelComplete(level))
+        {
+            for (int layer = 0; layer < mLayerCounts[level]; layer++)
+            {
+                if (mImageArray[level][layer])
+                {
+                    gl::ImageIndex index = gl::ImageIndex::Make2DArray(level, layer);
+                    ANGLE_TRY(
+                        mImageArray[level][layer]->copyFromTexStorage(context, index, mTexStorage));
+                }
+            }
+        }
+    }
+
+    mDirtyImages = true;
+    return angle::Result::Continue;
+}
+
 bool TextureD3D_2DArray::isValidLevel(int level) const
 {
     return (mTexStorage ? (level >= 0 && level < mTexStorage->getLevelCount()) : 0);
@@ -3930,6 +4056,11 @@ angle::Result TextureD3D_External::updateStorage(const gl::Context *context)
     return angle::Result::Continue;
 }
 
+angle::Result TextureD3D_External::copyStorageToImages(const gl::Context *context)
+{
+    return angle::Result::Continue;
+}
+
 gl::ImageIndexIterator TextureD3D_External::imageIterator() const
 {
     return gl::ImageIndexIterator::Make2D(0, mTexStorage->getLevelCount());
@@ -4057,6 +4188,11 @@ angle::Result TextureD3D_2DMultisample::updateStorage(const gl::Context *context
     return angle::Result::Continue;
 }
 
+angle::Result TextureD3D_2DMultisample::copyStorageToImages(const gl::Context *context)
+{
+    return angle::Result::Continue;
+}
+
 angle::Result TextureD3D_2DMultisample::initMipmapImages(const gl::Context *context)
 {
     UNREACHABLE();
@@ -4169,6 +4305,11 @@ angle::Result TextureD3D_2DMultisampleArray::setCompleteTexStorage(
 }
 
 angle::Result TextureD3D_2DMultisampleArray::updateStorage(const gl::Context *context)
+{
+    return angle::Result::Continue;
+}
+
+angle::Result TextureD3D_2DMultisampleArray::copyStorageToImages(const gl::Context *context)
 {
     return angle::Result::Continue;
 }
