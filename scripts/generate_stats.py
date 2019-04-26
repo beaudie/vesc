@@ -223,6 +223,7 @@ def get_step_info(build_name, step_name):
   # *RESULT: Crashed: 0
   # *RESULT: Unexpected Passed: 12
   # ...
+  append_errors = []
   for line in out.splitlines():
     if INFO_TAG not in line:
       continue
@@ -232,13 +233,36 @@ def get_step_info(build_name, step_name):
       LOGGER.warning("Line improperly formatted: '" + line + "'\n")
       continue
     key = line_columns[1].strip()
-    if key not in step_info:
-      step_info[key] = 0
-    val = int(filter(str.isdigit, line_columns[2]))
-    if val is not None:
-      step_info[key] += val
+    # If the value is clearly an int, sum it. Otherwise, concatenate it as a
+    # string
+    isInt = False
+    intVal = 0
+    try:
+      intVal = int(line_columns[2])
+      if intVal is not None:
+        isInt = True
+    except Exception as error:
+      isInt = False
+
+    if isInt:
+      if key not in step_info:
+        step_info[key] = 0
+      step_info[key] += intVal
     else:
-      step_info[key] += ', ' + line_columns[2]
+      if key not in step_info:
+        step_info[key] = line_columns[2].strip()
+      else:
+        append_string = '\n' + line_columns[2].strip()
+        # Sheets has a limit of 50000 characters per cell, so make sure to
+        # stop appending below this limit
+        if len(step_info[key]) + len(append_string) < 50000:
+          step_info[key] += append_string
+        else:
+          if key not in append_errors:
+            append_errors.append(key)
+            LOGGER.warning("Too many characters in column '" + key 
+              + "'. Output capped.")
+
   if validate_step_info(step_info, build_name, step_name):
     return step_info
   return None
@@ -472,7 +496,10 @@ def update_values(service, spreadsheet_id, headers, info):
         else:
           values.append('')
       LOGGER.info("Appending new rows to sheet '" + sheet_name + "'...")
-      append_values(service, spreadsheet_id, sheet_name, values)
+      try:
+        append_values(service, spreadsheet_id, sheet_name, values)
+      except Exception as error:
+        LOGGER.warning('%s\n' % str(error))
 
 
 # Updates the given spreadsheed_id with the info struct passed in.
