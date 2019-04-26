@@ -689,8 +689,11 @@ void ContextVk::updateDepthRange(float nearPlane, float farPlane)
 void ContextVk::updateScissor(const gl::State &glState)
 {
     FramebufferVk *framebufferVk      = vk::GetImpl(glState.getDrawFramebuffer());
-    gl::Rectangle scissoredRenderArea = framebufferVk->getScissoredRenderArea(this);
-    VkRect2D scissor                  = gl_vk::GetRect(scissoredRenderArea);
+    gl::Box dimensions                = framebufferVk->getState().getDimensions();
+    gl::Rectangle renderArea(0, 0, dimensions.width, dimensions.height);
+
+    VkRect2D scissor;
+    gl_vk::GetScissor(glState, isViewportFlipEnabledForDrawFBO(), renderArea, &scissor);
     mGraphicsPipelineDesc->updateScissor(&mGraphicsPipelineTransition, scissor);
 
     framebufferVk->onScissorChange(this);
@@ -720,6 +723,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 FramebufferVk *framebufferVk = vk::GetImpl(glState.getDrawFramebuffer());
                 updateViewport(framebufferVk, glState.getViewport(), glState.getNearPlane(),
                                glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
+                // Update the scissor, which will be constrained to the viewport
+                updateScissor(glState);
                 break;
             }
             case gl::State::DIRTY_BIT_DEPTH_RANGE:
