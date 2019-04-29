@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b065b23_f72ffa48",
+        "filename": "doc/dEQP Charts.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-29T22:52:36Z",
+      "side": 1,
+      "message": "nit: extra space",
+      "range": {
+        "startLine": 9,
+        "startChar": 235,
+        "endLine": 9,
+        "endChar": 236
+      },
+      "revId": "7262b744d0377a4dbf18db3bf95c864e2404f1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "194e0736_e9bd16c2",
+        "filename": "doc/dEQP Charts.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-29T22:52:36Z",
+      "side": 1,
+      "message": "nit: could you order these in: EGL, GLES2.0, GLES3.0, GLES3.1? Maybe EGL in the end.\nMaybe also put Win10/Win7, x86/x64, AMD/Intel/NVIDIA side-by-side.\nSame for other backends.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 0
+      },
+      "revId": "7262b744d0377a4dbf18db3bf95c864e2404f1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b462e505_f8817c92",
+        "filename": "doc/dEQP Charts.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-29T22:52:36Z",
+      "side": 1,
+      "message": "What does this do?\nCurrently all sheet names are shown, is it because of this?\nWhen I open just https://docs.google.com/spreadsheets/d/e/2PACX-1vSVry_ITbQWPOeDkQcnwGAceB-9uwDY43edtgwa8yS48muFZSddlPKfuLC6v85DpF1xFZivWpslUZFv/pubhtml?gid\u003d1601780303\u0026single\u003dtrue I only see one sheet.\nWhich is currently empty. We don\u0027t have anything unexpected, or something doesn\u0027t work right?",
+      "range": {
+        "startLine": 138,
+        "startChar": 184,
+        "endLine": 138,
+        "endChar": 195
+      },
+      "revId": "7262b744d0377a4dbf18db3bf95c864e2404f1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
