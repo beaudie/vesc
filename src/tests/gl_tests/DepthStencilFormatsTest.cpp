@@ -117,6 +117,31 @@ class DepthStencilFormatsTestES3 : public DepthStencilFormatsTestBase
 
 TEST_P(DepthStencilFormatsTest, DepthTexture)
 {
+    if (IsGLExtensionEnabled("GL_OES_packed_depth_stencil"))
+    {
+        std::cerr << "GL_OES_packed_depth_stencil present" << std::endl;
+    }
+    else
+    {
+        std::cerr << "GL_OES_packed_depth_stencil missing" << std::endl;
+    }
+    if (IsGLExtensionEnabled("GL_ANGLE_depth_texture"))
+    {
+        std::cerr << "GL_ANGLE_depth_texture present" << std::endl;
+    }
+    else
+    {
+        std::cerr << "GL_ANGLE_depth_texture missing" << std::endl;
+    }
+    if (IsGLExtensionEnabled("GL_OES_depth_texture"))
+    {
+        std::cerr << "GL_OES_depth_texture present" << std::endl;
+    }
+    else
+    {
+        std::cerr << "GL_OES_depth_texture missing" << std::endl;
+    }
+
     bool shouldHaveTextureSupport = (IsGLExtensionEnabled("GL_ANGLE_depth_texture") ||
                                      IsGLExtensionEnabled("GL_OES_depth_texture"));
 
@@ -142,9 +167,35 @@ TEST_P(DepthStencilFormatsTest, PackedDepthStencil)
     EXPECT_EQ(shouldHaveRenderbufferSupport,
               checkRenderbufferFormatSupport(GL_DEPTH24_STENCIL8_OES));
 
+    if (IsGLExtensionEnabled("GL_OES_packed_depth_stencil"))
+    {
+        std::cerr << "GL_OES_packed_depth_stencil present" << std::endl;
+    }
+    else
+    {
+        std::cerr << "GL_OES_packed_depth_stencil missing" << std::endl;
+    }
+    if (IsGLExtensionEnabled("GL_ANGLE_depth_texture"))
+    {
+        std::cerr << "GL_ANGLE_depth_texture present" << std::endl;
+    }
+    else
+    {
+        std::cerr << "GL_ANGLE_depth_texture missing" << std::endl;
+    }
+    if (IsGLExtensionEnabled("GL_OES_depth_texture"))
+    {
+        std::cerr << "GL_OES_depth_texture present" << std::endl;
+    }
+    else
+    {
+        std::cerr << "GL_OES_depth_texture missing" << std::endl;
+    }
+
     bool shouldHaveTextureSupport = (IsGLExtensionEnabled("GL_OES_packed_depth_stencil") &&
                                      IsGLExtensionEnabled("GL_OES_depth_texture")) ||
                                     IsGLExtensionEnabled("GL_ANGLE_depth_texture");
+
     EXPECT_EQ(shouldHaveTextureSupport,
               checkTexImageFormatSupport(GL_DEPTH_STENCIL_OES, GL_UNSIGNED_INT_24_8_OES));
 
