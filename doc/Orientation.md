@@ -144,3 +144,6 @@ and the [Vulkan Docs](https://github.com/KhronosGroup/Vulkan-Docs) repositories 
 - Join angle-team@ for access to many important emails and shared documents.
 
 - We have a Hangouts Chat channel. Ask for an invite.
+
+
+<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSVry_ITbQWPOeDkQcnwGAceB-9uwDY43edtgwa8yS48muFZSddlPKfuLC6v85DpF1xFZivWpslUZFv/pubhtml?gid=594707611&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
