@@ -68,6 +68,30 @@
       "revId": "7262b744d0377a4dbf18db3bf95c864e2404f1f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2033b0e_7bb9bdd0",
+        "filename": "doc/dEQP Charts.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-29T22:56:00Z",
+      "side": 1,
+      "message": "Looks like single\u003dtrue is not applied for some reason.",
+      "parentUuid": "b462e505_f8817c92",
+      "range": {
+        "startLine": 138,
+        "startChar": 184,
+        "endLine": 138,
+        "endChar": 195
+      },
+      "revId": "7262b744d0377a4dbf18db3bf95c864e2404f1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
