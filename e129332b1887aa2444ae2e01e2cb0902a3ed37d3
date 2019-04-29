@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "420cf8e0_198b5790",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-29T21:56:59Z",
+      "side": 1,
+      "message": "Here is what SystemInfo.h says:\n    // Index of the primary GPU (the discrete one on dual GPU systems) in `gpus`.\n    // Will never be -1 after a successful GetSystemInfo.\n    int primaryGPUIndex \u003d -1;\n    // Index of the currently active GPU in `gpus`, can be -1 if the active GPU could not be\n    // detected.\n    int activeGPUIndex \u003d -1;\n\nI believe (based on my testing) that the new code detects the \"active\" GPU.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 70
+      },
+      "revId": "e129332b1887aa2444ae2e01e2cb0902a3ed37d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8400e8a3_b3fe91e2",
+        "filename": "src/gpu_info_util/SystemInfo_win.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-29T21:56:59Z",
+      "side": 1,
+      "message": "I\u0027d rather remove these functions if you\u0027re not going to use them.\nHowever, I think they ARE useful for primary GPU detection.",
+      "range": {
+        "startLine": 192,
+        "startChar": 0,
+        "endLine": 193,
+        "endChar": 51
+      },
+      "revId": "e129332b1887aa2444ae2e01e2cb0902a3ed37d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb37d9ba_e2d8f53e",
+        "filename": "src/gpu_info_util/SystemInfo_win.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-29T21:56:59Z",
+      "side": 0,
+      "message": "The comment says: \"Only available on Windows, set even on failure.\"\nIf we\u0027re not setting it, I\u0027d remove this member entirely.",
+      "range": {
+        "startLine": 200,
+        "startChar": 10,
+        "endLine": 200,
+        "endChar": 32
+      },
+      "revId": "1ad7a07212b28ef9b74b24f4d76d06641cafaec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31a16a84_61bd587c",
+        "filename": "src/gpu_info_util/SystemInfo_win.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-04-29T21:56:59Z",
+      "side": 0,
+      "message": "This + \"On dual-GPU systems we assume the non-Intel GPU is the primary one.\" heuristic in FindPrimaryGPU() was able to detect the primary GPU pretty well, I think.",
+      "range": {
+        "startLine": 203,
+        "startChar": 9,
+        "endLine": 203,
+        "endChar": 31
+      },
+      "revId": "1ad7a07212b28ef9b74b24f4d76d06641cafaec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
