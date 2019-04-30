@@ -19,14 +19,14 @@ class ContextLostTest : public ANGLETest
 // GL_CHROMIUM_lose_context is implemented in the frontend
 TEST_P(ContextLostTest, ExtensionStringExposed)
 {
-    EXPECT_TRUE(ensureExtensionEnabled("GL_CHROMIUM_lose_context"));
+    EXPECT_TRUE(EnsureGLExtensionEnabled("GL_CHROMIUM_lose_context"));
 }
 
 // Use GL_CHROMIUM_lose_context to lose a context and verify
 TEST_P(ContextLostTest, BasicUsage)
 {
-    ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_CHROMIUM_lose_context"));
-    ANGLE_SKIP_TEST_IF(!ensureExtensionEnabled("GL_EXT_robustness"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_CHROMIUM_lose_context"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_robustness"));
 
     glLoseContextCHROMIUM(GL_GUILTY_CONTEXT_RESET, GL_INNOCENT_CONTEXT_RESET);
     EXPECT_GL_NO_ERROR();
