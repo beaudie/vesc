@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "494a1f9c_36da5b43",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1653,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-30T16:52:07Z",
+      "side": 1,
+      "message": "Is this a workaround of some kind? You should leave a comment and potentially file an anglebug issue to track this if there\u0027s a bug in the D3D11 back-end.",
+      "range": {
+        "startLine": 1653,
+        "startChar": 4,
+        "endLine": 1653,
+        "endChar": 40
+      },
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc6ea11e_80ec047c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-30T16:52:07Z",
+      "side": 1,
+      "message": "nit: you can remove the operator[] overload in vk_format_utils.h if this is the only place we need to convert GLenum -\u003e vk::Format. Otherwise I\u0027d leave this out.",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 42
+      },
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
