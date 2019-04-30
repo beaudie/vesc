@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c20c129_6e7b5937",
+        "filename": "src/libANGLE/VaryingPacking.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-30T20:22:30Z",
+      "side": 1,
+      "message": "I could have alternatively just kept a \"fieldIndex\" field here, but that would come at the expense of making this struct larger everywhere.",
+      "revId": "392f290aeb8b7bc49b76d7e2e8dd53d25a41406e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d3b82d6_d2a37bbb",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3480,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-30T20:22:30Z",
+      "side": 1,
+      "message": "Strangely enough, the inactive varying in `VaryingStructNotStaticallyUsedInFragmentShader` is also not decorated with a location after the preprocessing done in Vulkan, but glslang doesn\u0027t complain about that. The difference is likely that the other test\u0027s varying is inactive in both VS and FS (despite the test name), while this test includes a varying that\u0027s only inactive in FS.",
+      "revId": "392f290aeb8b7bc49b76d7e2e8dd53d25a41406e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
