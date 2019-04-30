@@ -509,6 +509,9 @@ void RendererVk::onDestroy(vk::Context *context)
 {
     (void)checkGarbage(context, std::numeric_limits<uint64_t>::max());
 
+    mPipelineLayoutCache.destroy(mDevice);
+    mDescriptorSetLayoutCache.destroy(mDevice);
+
     mPipelineCache.destroy(mDevice);
 
     GlslangWrapper::Release();
@@ -1263,6 +1266,26 @@ uint32_t RendererVk::getMaxActiveTextures()
     // TODO(lucferron): expose this limitation to GL in Context Caps
     return std::min<uint32_t>(mPhysicalDeviceProperties.limits.maxPerStageDescriptorSamplers,
                               gl::IMPLEMENTATION_MAX_ACTIVE_TEXTURES);
+}
+
+angle::Result RendererVk::getDescriptorSetLayout(
+    vk::Context *context,
+    const vk::DescriptorSetLayoutDesc &desc,
+    vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
+{
+    // TODO(geofflang): Synchronize access to the descriptor set layout cache
+    return mDescriptorSetLayoutCache.getDescriptorSetLayout(context, desc, descriptorSetLayoutOut);
+}
+
+angle::Result RendererVk::getPipelineLayout(
+    vk::Context *context,
+    const vk::PipelineLayoutDesc &desc,
+    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
+    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
+{
+    // TODO(geofflang): Synchronize access to the pipeline layout cache
+    return mPipelineLayoutCache.getPipelineLayout(context, desc, descriptorSetLayouts,
+                                                  pipelineLayoutOut);
 }
 
 angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)
