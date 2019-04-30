@@ -279,8 +279,8 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
     uniformsSetDesc.update(kFragmentUniformsBindingIndex, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
                            1);
 
-    ANGLE_TRY(contextVk->getDescriptorSetLayout(
-        uniformsSetDesc, &mDescriptorSetLayouts[kUniformsDescriptorSetIndex]));
+    ANGLE_TRY(contextVk->getRenderer()->getDescriptorSetLayout(
+        contextVk, uniformsSetDesc, &mDescriptorSetLayouts[kUniformsDescriptorSetIndex]));
 
     vk::DescriptorSetLayoutDesc texturesSetDesc;
 
@@ -294,13 +294,14 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
         texturesSetDesc.update(textureIndex, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, count);
     }
 
-    ANGLE_TRY(contextVk->getDescriptorSetLayout(
-        texturesSetDesc, &mDescriptorSetLayouts[kTextureDescriptorSetIndex]));
+    ANGLE_TRY(contextVk->getRenderer()->getDescriptorSetLayout(
+        contextVk, texturesSetDesc, &mDescriptorSetLayouts[kTextureDescriptorSetIndex]));
 
     vk::DescriptorSetLayoutDesc driverUniformsSetDesc;
     driverUniformsSetDesc.update(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1);
-    ANGLE_TRY(contextVk->getDescriptorSetLayout(
-        driverUniformsSetDesc, &mDescriptorSetLayouts[kDriverUniformsDescriptorSetIndex]));
+    ANGLE_TRY(contextVk->getRenderer()->getDescriptorSetLayout(
+        contextVk, driverUniformsSetDesc,
+        &mDescriptorSetLayouts[kDriverUniformsDescriptorSetIndex]));
 
     vk::PipelineLayoutDesc pipelineLayoutDesc;
     pipelineLayoutDesc.updateDescriptorSetLayout(kUniformsDescriptorSetIndex, uniformsSetDesc);
@@ -308,8 +309,8 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
     pipelineLayoutDesc.updateDescriptorSetLayout(kDriverUniformsDescriptorSetIndex,
                                                  driverUniformsSetDesc);
 
-    ANGLE_TRY(
-        contextVk->getPipelineLayout(pipelineLayoutDesc, mDescriptorSetLayouts, &mPipelineLayout));
+    ANGLE_TRY(contextVk->getRenderer()->getPipelineLayout(contextVk, pipelineLayoutDesc,
+                                                          mDescriptorSetLayouts, &mPipelineLayout));
 
     if (!mState.getUniforms().empty())
     {

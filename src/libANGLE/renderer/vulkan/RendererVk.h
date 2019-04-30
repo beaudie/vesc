@@ -97,6 +97,18 @@ class RendererVk : angle::NonCopyable
 
     const vk::Format &getFormat(angle::FormatID formatID) const { return mFormatTable[formatID]; }
 
+    // Queries the descriptor set layout cache. Creates the layout if not present.
+    angle::Result getDescriptorSetLayout(
+        vk::Context *context,
+        const vk::DescriptorSetLayoutDesc &desc,
+        vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut);
+
+    // Queries the pipeline layout cache. Creates the layout if not present.
+    angle::Result getPipelineLayout(vk::Context *context,
+                                    const vk::PipelineLayoutDesc &desc,
+                                    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
+                                    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
+
     angle::Result syncPipelineCacheVk(DisplayVk *displayVk);
 
     // Issues a new serial for linked shader modules. Used in the pipeline cache.
@@ -191,6 +203,12 @@ class RendererVk : angle::NonCopyable
 
     // A cache of VkFormatProperties as queried from the device over time.
     std::array<VkFormatProperties, vk::kNumVkFormats> mFormatProperties;
+
+    // ANGLE uses a PipelineLayout cache to store compatible pipeline layouts.
+    PipelineLayoutCache mPipelineLayoutCache;
+
+    // DescriptorSetLayouts are also managed in a cache.
+    DescriptorSetLayoutCache mDescriptorSetLayoutCache;
 
     // Pending garbage
     using PendingGarbage =

@@ -254,16 +254,6 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
                                        const vk::AttachmentOpsArray &ops,
                                        vk::RenderPass **renderPassOut);
 
-    // Queries the descriptor set layout cache. Creates the layout if not present.
-    angle::Result getDescriptorSetLayout(
-        const vk::DescriptorSetLayoutDesc &desc,
-        vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut);
-
-    // Queries the pipeline layout cache. Creates the layout if not present.
-    angle::Result getPipelineLayout(const vk::PipelineLayoutDesc &desc,
-                                    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
-                                    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
-
     vk::DynamicSemaphorePool *getDynamicSemaphorePool() { return &mSubmitSemaphorePool; }
 
     // Request a semaphore, that is expected to be signaled externally.  The next submission will
@@ -530,12 +520,6 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
 
     // See CommandGraph.h for a desription of the Command Graph.
     vk::CommandGraph mCommandGraph;
-
-    // ANGLE uses a PipelineLayout cache to store compatible pipeline layouts.
-    PipelineLayoutCache mPipelineLayoutCache;
-
-    // DescriptorSetLayouts are also managed in a cache.
-    DescriptorSetLayoutCache mDescriptorSetLayoutCache;
 
     // Internal shader library.
     vk::ShaderLibrary mShaderLibrary;

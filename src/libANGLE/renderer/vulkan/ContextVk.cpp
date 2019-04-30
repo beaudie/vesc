@@ -220,9 +220,6 @@ void ContextVk::onDestroy(const gl::Context *context)
 
     mUtils.destroy(device);
 
-    mPipelineLayoutCache.destroy(device);
-    mDescriptorSetLayoutCache.destroy(device);
-
     mRenderPassCache.destroy(device);
     mSubmitSemaphorePool.destroy(device);
     mSubmitFence.reset(device);
@@ -1820,7 +1817,7 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
         vk::DescriptorSetLayoutDesc desc;
         desc.update(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1);
 
-        ANGLE_TRY(getDescriptorSetLayout(desc, &mDriverUniformsSetLayout));
+        ANGLE_TRY(getRenderer()->getDescriptorSetLayout(this, desc, &mDriverUniformsSetLayout));
     }
 
     // Allocate a new descriptor set.
@@ -2097,22 +2094,6 @@ angle::Result ContextVk::getRenderPassWithOps(const vk::RenderPassDesc &desc,
 {
     return mRenderPassCache.getRenderPassWithOps(this, mCurrentQueueSerial, desc, ops,
                                                  renderPassOut);
-}
-
-angle::Result ContextVk::getDescriptorSetLayout(
-    const vk::DescriptorSetLayoutDesc &desc,
-    vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
-{
-    return mDescriptorSetLayoutCache.getDescriptorSetLayout(this, desc, descriptorSetLayoutOut);
-}
-
-angle::Result ContextVk::getPipelineLayout(
-    const vk::PipelineLayoutDesc &desc,
-    const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
-    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
-{
-    return mPipelineLayoutCache.getPipelineLayout(this, desc, descriptorSetLayouts,
-                                                  pipelineLayoutOut);
 }
 
 angle::Result ContextVk::allocateSubmitWaitSemaphore(const vk::Semaphore **outSemaphore)
