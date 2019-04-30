@@ -18,6 +18,7 @@ PlatformParameters::PlatformParameters(EGLint majorVersion,
                                        EGLint minorVersion,
                                        const EGLPlatformParameters &eglPlatformParameters)
     : driver(GLESDriverType::AngleEGL),
+      justLoadEntryPoints(false),
       eglParameters(eglPlatformParameters),
       majorVersion(majorVersion),
       minorVersion(minorVersion)
@@ -28,7 +29,10 @@ PlatformParameters::PlatformParameters(EGLint majorVersion,
 PlatformParameters::PlatformParameters(EGLint majorVersion,
                                        EGLint minorVersion,
                                        GLESDriverType driver)
-    : driver(driver), majorVersion(majorVersion), minorVersion(minorVersion)
+    : driver(driver),
+      justLoadEntryPoints(false),
+      majorVersion(majorVersion),
+      minorVersion(minorVersion)
 {
     initDefaultParameters();
 }

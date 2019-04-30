@@ -30,8 +30,7 @@ using namespace angle;
 namespace
 {
 
-class EGLSurfaceTest : public EGLTest,
-                       public ::testing::WithParamInterface<angle::PlatformParameters>
+class EGLSurfaceTest : public ANGLETest
 {
   protected:
     EGLSurfaceTest()
@@ -45,7 +44,7 @@ class EGLSurfaceTest : public EGLTest,
 
     void SetUp() override
     {
-        EGLTest::SetUp();
+        ANGLETest::SetUp();
 
         mOSWindow = OSWindow::New();
         mOSWindow->initialize("EGLSurfaceTest", 64, 64);
@@ -746,14 +745,14 @@ TEST_P(EGLSurfaceTestD3D11, CreateSurfaceWithMSAA)
 }  // anonymous namespace
 
 ANGLE_INSTANTIATE_TEST(EGLSurfaceTest,
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES3_D3D11(),
-                       ES2_OPENGL(),
-                       ES3_OPENGL(),
-                       ES2_OPENGLES(),
-                       ES3_OPENGLES(),
-                       ES2_VULKAN());
+                       WithNoSetup(ES2_D3D9()),
+                       WithNoSetup(ES2_D3D11()),
+                       WithNoSetup(ES3_D3D11()),
+                       WithNoSetup(ES2_OPENGL()),
+                       WithNoSetup(ES3_OPENGL()),
+                       WithNoSetup(ES2_OPENGLES()),
+                       WithNoSetup(ES3_OPENGLES()),
+                       WithNoSetup(ES2_VULKAN()));
 
 #if defined(ANGLE_ENABLE_D3D11)
 ANGLE_INSTANTIATE_TEST(EGLSurfaceTestD3D11, ES2_D3D11(), ES3_D3D11());
