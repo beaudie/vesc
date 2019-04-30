@@ -50,6 +50,7 @@ struct PlatformParameters
     auto tie() const { return std::tie(driver, eglParameters, majorVersion, minorVersion); }
 
     GLESDriverType driver;
+    bool justLoadEntryPoints;
     EGLPlatformParameters eglParameters;
     EGLint majorVersion;
     EGLint minorVersion;
@@ -184,6 +185,12 @@ inline PlatformParameters WithNoVirtualContexts(const PlatformParameters &params
     return withNoVirtualContexts;
 }
 
+inline PlatformParameters WithNoSetup(const PlatformParameters &params)
+{
+    PlatformParameters withNoSetup  = params;
+    withNoSetup.justLoadEntryPoints = true;
+    return withNoSetup;
+}
 }  // namespace angle
 
 #endif  // ANGLE_TEST_CONFIGS_H_
