@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4025546c_9b8850c9",
+        "filename": "doc/dEQP Charts.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-30T14:40:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b065b23_f72ffa48",
+      "range": {
+        "startLine": 9,
+        "startChar": 235,
+        "endLine": 9,
+        "endChar": 236
+      },
+      "revId": "7262b744d0377a4dbf18db3bf95c864e2404f1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "194e0736_e9bd16c2",
         "filename": "doc/dEQP Charts.md",
         "patchSetId": 11
@@ -45,6 +69,30 @@
       "revId": "7262b744d0377a4dbf18db3bf95c864e2404f1f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6907d293_62f910b7",
+        "filename": "doc/dEQP Charts.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-30T14:40:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "194e0736_e9bd16c2",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 0
+      },
+      "revId": "7262b744d0377a4dbf18db3bf95c864e2404f1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -92,6 +140,30 @@
       "revId": "7262b744d0377a4dbf18db3bf95c864e2404f1f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a23d90c1_97e434d2",
+        "filename": "doc/dEQP Charts.md",
+        "patchSetId": 11
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-04-30T14:40:33Z",
+      "side": 1,
+      "message": "It was caused by the formatting \u0026amp; which Sheets gave me for some reason.\n\nThe lists were empty because I was pointing to an old version of the tables, good catch.",
+      "parentUuid": "c2033b0e_7bb9bdd0",
+      "range": {
+        "startLine": 138,
+        "startChar": 184,
+        "endLine": 138,
+        "endChar": 195
+      },
+      "revId": "7262b744d0377a4dbf18db3bf95c864e2404f1f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
