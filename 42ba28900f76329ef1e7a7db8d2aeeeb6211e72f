@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea3ecc2b_bfe56008",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-30T18:58:42Z",
+      "side": 1,
+      "message": "nit: please increment this counter.",
+      "range": {
+        "startLine": 29,
+        "startChar": 8,
+        "endLine": 29,
+        "endChar": 25
+      },
+      "revId": "42ba28900f76329ef1e7a7db8d2aeeeb6211e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "142fcf7b_a078bc91",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4631,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-30T18:58:42Z",
+      "side": 1,
+      "message": "maybe we should make this a helper function?",
+      "range": {
+        "startLine": 4630,
+        "startChar": 42,
+        "endLine": 4631,
+        "endChar": 87
+      },
+      "revId": "42ba28900f76329ef1e7a7db8d2aeeeb6211e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6065cef_f22a579f",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-30T18:58:42Z",
+      "side": 1,
+      "message": "nit: remove extra trailing whitespace.",
+      "range": {
+        "startLine": 871,
+        "startChar": 0,
+        "endLine": 871,
+        "endChar": 20
+      },
+      "revId": "42ba28900f76329ef1e7a7db8d2aeeeb6211e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f37bbe67_5d497a99",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/VertexArray11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-30T18:58:42Z",
+      "side": 1,
+      "message": "don\u0027t follow this entirely. a comment could help.",
+      "range": {
+        "startLine": 337,
+        "startChar": 8,
+        "endLine": 337,
+        "endChar": 72
+      },
+      "revId": "42ba28900f76329ef1e7a7db8d2aeeeb6211e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ded982ae_4d3e4447",
+        "filename": "src/tests/compiler_tests/OVR_multiview_test.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-04-30T18:58:42Z",
+      "side": 1,
+      "message": "can omit (c) and use 2019",
+      "range": {
+        "startLine": 2,
+        "startChar": 14,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "42ba28900f76329ef1e7a7db8d2aeeeb6211e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
