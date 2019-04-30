@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00ce7af3_54b17ca1",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3369,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-04-30T21:03:19Z",
+      "side": 1,
+      "message": "There are failures here in various opengl drivers. The spec for both 100 and 300 GLSL ES versions say that this is allowed but produces undefined values.\n\nSee section 9.1 in https://www.khronos.org/registry/OpenGL/specs/es/3.2/GLSL_ES_Specification_3.20.pdf\n\nOr section 4.3.5 in https://www.khronos.org/files/opengles_shading_language.pdf\n\nNot sure how useful the test really is, so an option could be to not add such a problematic test.",
+      "revId": "7a3417e8d89f07e54f95b666ae821bad2ba81330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
