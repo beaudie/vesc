@@ -67,9 +67,12 @@ bool IsNativeConfigSupported(const PlatformParameters &param, OSWindow *osWindow
     // Not yet implemented.
     return false;
 }
+
+std::map<PlatformParameters, bool> gParamAvailabilityCache;
 }  // namespace
 
 std::string gSelectedConfig;
+bool gSeparateProcessPerConfig = false;
 
 SystemInfo *GetTestSystemInfo()
 {
@@ -408,48 +411,75 @@ bool IsPlatformAvailable(const PlatformParameters &param)
             return false;
     }
 
-    static std::map<PlatformParameters, bool> paramAvailabilityCache;
-    auto iter = paramAvailabilityCache.find(param);
-    if (iter != paramAvailabilityCache.end())
-    {
-        return iter->second;
-    }
-
     bool result = false;
 
-    if (!gSelectedConfig.empty())
+    auto iter = gParamAvailabilityCache.find(param);
+    if (iter != gParamAvailabilityCache.end())
     {
-        std::stringstream strstr;
-        strstr << param;
-        if (strstr.str() == gSelectedConfig)
-        {
-            result = true;
-        }
+        result = iter->second;
     }
     else
     {
-        const SystemInfo *systemInfo = GetTestSystemInfo();
-
-        if (systemInfo)
+        if (!gSelectedConfig.empty())
         {
-            result = IsConfigWhitelisted(*systemInfo, param);
+            std::stringstream strstr;
+            strstr << param;
+            if (strstr.str() == gSelectedConfig)
+            {
+                result = true;
+            }
         }
         else
         {
-            result = IsConfigSupported(param);
+            const SystemInfo *systemInfo = GetTestSystemInfo();
+
+            if (systemInfo)
+            {
+                result = IsConfigWhitelisted(*systemInfo, param);
+            }
+            else
+            {
+                result = IsConfigSupported(param);
+            }
+        }
+
+        gParamAvailabilityCache[param] = result;
+
+        if (!result)
+        {
+            std::cout << "Skipping tests using configuration " << param
+                      << " because it is not available." << std::endl;
+        }
+
+        // Uncomment this to print available platforms.
+        // std::cout << "Platform: " << param << " (" << paramAvailabilityCache.size() << ")\n";
+    }
+
+    // Disable all tests in the parent process when running child processes.
+    if (gSeparateProcessPerConfig)
+    {
+        return false;
+    }
+    return result;
+}
+
+std::vector<std::string> GetAvailableTestPlatformNames()
+{
+    std::vector<std::string> platformNames;
+
+    for (const auto &iter : gParamAvailabilityCache)
+    {
+        if (iter.second)
+        {
+            std::stringstream strstr;
+            strstr << iter.first;
+            platformNames.push_back(strstr.str());
         }
     }
 
-    paramAvailabilityCache[param] = result;
+    // Keep the list sorted.
+    std::sort(platformNames.begin(), platformNames.end());
 
-    if (!result)
-    {
-        std::cout << "Skipping tests using configuration " << param
-                  << " because it is not available." << std::endl;
-    }
-
-    // Uncomment this to print available platforms.
-    // std::cout << "Platform: " << param << " (" << paramAvailabilityCache.size() << ")\n";
-    return result;
+    return platformNames;
 }
 }  // namespace angle
