@@ -285,36 +285,81 @@ GLColor32F ReadColor32F(GLint x, GLint y)
 }
 }  // namespace angle
 
+using namespace angle;
+
 namespace
 {
-angle::PlatformMethods gDefaultPlatformMethods;
+PlatformMethods gDefaultPlatformMethods;
 TestPlatformContext gPlatformContext;
 
 // After a fixed number of iterations we reset the test window. This works around some driver bugs.
 constexpr uint32_t kWindowReuseLimit = 50;
 
-constexpr char kUseConfig[] = "--use-config=";
+constexpr char kUseConfig[]                = "--use-config=";
+constexpr char kSeparateProcessPerConfig[] = "--separate-process-per-config";
+
+void RunSeparateProcessesForEachConfig(int *argc, char *argv[])
+{
+    // Force GoogleTest init so we can gather a list of configs.
+    testing::InitGoogleTest(argc, argv);
+
+    std::vector<std::string> configNames = GetAvailableTestPlatformNames();
+
+    std::vector<const char *> commonArgs;
+    for (int argIndex = 0; argIndex < *argc; ++argIndex)
+    {
+        if (strncmp(argv[argIndex], kSeparateProcessPerConfig, strlen(kSeparateProcessPerConfig)) !=
+            0)
+        {
+            commonArgs.push_back(argv[argIndex]);
+        }
+    }
+
+    for (const std::string &config : configNames)
+    {
+        std::cout << "Running test config " << config << " in child process.\n";
+
+        std::stringstream strstr;
+        strstr << kUseConfig << config;
+
+        std::string configStr = strstr.str();
+
+        std::vector<const char *> childArgs = commonArgs;
+        childArgs.push_back(configStr.c_str());
+
+        int exitCode = 0;
+        if (!RunApp(childArgs, nullptr, nullptr, &exitCode))
+        {
+            std::cerr << "Launching child config " << config << " failed.\n";
+        }
+        else if (exitCode != 0)
+        {
+            std::cerr << "Child config " << config << " failed with exit code " << exitCode
+                      << ".\n";
+        }
+    }
+}
 }  // anonymous namespace
 
 // static
-std::array<angle::Vector3, 6> ANGLETestBase::GetQuadVertices()
+std::array<Vector3, 6> ANGLETestBase::GetQuadVertices()
 {
-    return angle::kQuadVertices;
+    return kQuadVertices;
 }
 
 // static
 std::array<GLushort, 6> ANGLETestBase::GetQuadIndices()
 {
-    return angle::kIndexedQuadIndices;
+    return kIndexedQuadIndices;
 }
 
 // static
-std::array<angle::Vector3, 4> ANGLETestBase::GetIndexedQuadVertices()
+std::array<Vector3, 4> ANGLETestBase::GetIndexedQuadVertices()
 {
-    return angle::kIndexedQuadVertices;
+    return kIndexedQuadVertices;
 }
 
-ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
+ANGLETestBase::ANGLETestBase(const PlatformParameters &params)
     : mWidth(16),
       mHeight(16),
       mIgnoreD3D11SDKLayersWarnings(false),
@@ -323,13 +368,13 @@ ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
       m2DTexturedQuadProgram(0),
       m3DTexturedQuadProgram(0),
       mDeferContextInit(false),
-      mAlwaysForceNewDisplay(angle::ShouldAlwaysForceNewDisplay()),
+      mAlwaysForceNewDisplay(ShouldAlwaysForceNewDisplay()),
       mForceNewDisplay(mAlwaysForceNewDisplay),
       mCurrentParams(nullptr),
       mCurrentPlatform(nullptr)
 {
     // Override the default platform methods with the ANGLE test methods pointer.
-    angle::PlatformParameters withMethods     = params;
+    PlatformParameters withMethods            = params;
     withMethods.eglParameters.platformMethods = &gDefaultPlatformMethods;
 
     auto iter = gPlatforms.find(withMethods);
@@ -375,24 +420,24 @@ void ANGLETestBase::initOSWindow()
     }
 
     // On Linux we must keep the test windows visible. On Windows it doesn't seem to need it.
-    mCurrentPlatform->osWindow->setVisible(!angle::IsWindows());
+    mCurrentPlatform->osWindow->setVisible(!IsWindows());
 
     switch (mCurrentParams->driver)
     {
-        case angle::GLESDriverType::AngleEGL:
+        case GLESDriverType::AngleEGL:
         {
             mCurrentPlatform->eglWindow =
                 EGLWindow::New(mCurrentParams->majorVersion, mCurrentParams->minorVersion);
             break;
         }
 
-        case angle::GLESDriverType::SystemEGL:
+        case GLESDriverType::SystemEGL:
         {
             std::cerr << "Unsupported driver." << std::endl;
             break;
         }
 
-        case angle::GLESDriverType::SystemWGL:
+        case GLESDriverType::SystemWGL:
         {
             // WGL tests are currently disabled.
             std::cerr << "Unsupported driver." << std::endl;
@@ -423,11 +468,11 @@ ANGLETestBase::~ANGLETestBase()
 
 void ANGLETestBase::ANGLETestSetUp()
 {
-    gDefaultPlatformMethods.overrideWorkaroundsD3D = angle::TestPlatform_overrideWorkaroundsD3D;
-    gDefaultPlatformMethods.overrideFeaturesVk     = angle::TestPlatform_overrideFeaturesVk;
-    gDefaultPlatformMethods.logError               = angle::TestPlatform_logError;
-    gDefaultPlatformMethods.logWarning             = angle::TestPlatform_logWarning;
-    gDefaultPlatformMethods.logInfo                = angle::TestPlatform_logInfo;
+    gDefaultPlatformMethods.overrideWorkaroundsD3D = TestPlatform_overrideWorkaroundsD3D;
+    gDefaultPlatformMethods.overrideFeaturesVk     = TestPlatform_overrideFeaturesVk;
+    gDefaultPlatformMethods.logError               = TestPlatform_logError;
+    gDefaultPlatformMethods.logWarning             = TestPlatform_logWarning;
+    gDefaultPlatformMethods.logInfo                = TestPlatform_logInfo;
     gDefaultPlatformMethods.context                = &gPlatformContext;
 
     gPlatformContext.ignoreMessages   = false;
@@ -441,8 +486,8 @@ void ANGLETestBase::ANGLETestSetUp()
         ANGLETestEnvironment::GetEGLLibrary()->getAs("eglGetProcAddress", &getProcAddress);
         ASSERT_NE(nullptr, getProcAddress);
 
-        angle::LoadEGL(getProcAddress);
-        angle::LoadGLES(getProcAddress);
+        LoadEGL(getProcAddress);
+        LoadGLES(getProcAddress);
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
         return;
     }
@@ -509,7 +554,7 @@ void ANGLETestBase::ANGLETestSetUp()
     glViewport(0, 0, mWidth, mHeight);
 
     const auto &info = testing::UnitTest::GetInstance()->current_test_info();
-    angle::WriteDebugMessage("Entering %s.%s\n", info->test_case_name(), info->name());
+    WriteDebugMessage("Entering %s.%s\n", info->test_case_name(), info->name());
 }
 
 void ANGLETestBase::ANGLETestTearDown()
@@ -522,7 +567,7 @@ void ANGLETestBase::ANGLETestTearDown()
     }
 
     const testing::TestInfo *info = testing::UnitTest::GetInstance()->current_test_info();
-    angle::WriteDebugMessage("Exiting %s.%s\n", info->test_case_name(), info->name());
+    WriteDebugMessage("Exiting %s.%s\n", info->test_case_name(), info->name());
 
     swapBuffers();
     mCurrentPlatform->osWindow->messageLoop();
@@ -575,7 +620,7 @@ void ANGLETestBase::setupQuadVertexBuffer(GLfloat positionAttribZ, GLfloat posit
     }
 
     auto quadVertices = GetQuadVertices();
-    for (angle::Vector3 &vertex : quadVertices)
+    for (Vector3 &vertex : quadVertices)
     {
         vertex.x() *= positionAttribXYScale;
         vertex.y() *= positionAttribXYScale;
@@ -594,8 +639,8 @@ void ANGLETestBase::setupIndexedQuadVertexBuffer(GLfloat positionAttribZ,
         glGenBuffers(1, &mQuadVertexBuffer);
     }
 
-    auto quadVertices = angle::kIndexedQuadVertices;
-    for (angle::Vector3 &vertex : quadVertices)
+    auto quadVertices = kIndexedQuadVertices;
+    for (Vector3 &vertex : quadVertices)
     {
         vertex.x() *= positionAttribXYScale;
         vertex.y() *= positionAttribXYScale;
@@ -614,8 +659,8 @@ void ANGLETestBase::setupIndexedQuadIndexBuffer()
     }
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mQuadIndexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(angle::kIndexedQuadIndices),
-                 angle::kIndexedQuadIndices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(kIndexedQuadIndices), kIndexedQuadIndices.data(),
+                 GL_STATIC_DRAW);
 }
 
 // static
@@ -676,7 +721,7 @@ void ANGLETestBase::drawQuad(GLuint program,
 
     GLint positionLocation = glGetAttribLocation(program, positionAttribName.c_str());
 
-    std::array<angle::Vector3, 6> quadVertices;
+    std::array<Vector3, 6> quadVertices;
 
     if (useVertexBuffer)
     {
@@ -687,7 +732,7 @@ void ANGLETestBase::drawQuad(GLuint program,
     else
     {
         quadVertices = GetQuadVertices();
-        for (angle::Vector3 &vertex : quadVertices)
+        for (Vector3 &vertex : quadVertices)
         {
             vertex.x() *= positionAttribXYScale;
             vertex.y() *= positionAttribXYScale;
@@ -786,7 +831,7 @@ void ANGLETestBase::drawIndexedQuad(GLuint program,
     }
     else
     {
-        indices = angle::kIndexedQuadIndices.data();
+        indices = kIndexedQuadIndices.data();
     }
 
     if (!restrictedRange)
@@ -1089,8 +1134,7 @@ void ANGLETestBase::setRobustResourceInit(bool enabled)
     mCurrentPlatform->configParams.robustResourceInit = enabled;
 }
 
-void ANGLETestBase::setContextProgramCacheEnabled(bool enabled,
-                                                  angle::CacheProgramFunc cacheProgramFunc)
+void ANGLETestBase::setContextProgramCacheEnabled(bool enabled, CacheProgramFunc cacheProgramFunc)
 {
     mCurrentPlatform->configParams.contextProgramCacheEnabled = enabled;
     gDefaultPlatformMethods.cacheProgram                      = cacheProgramFunc;
@@ -1274,33 +1318,33 @@ ANGLETestBase::ScopedIgnorePlatformMessages::~ScopedIgnorePlatformMessages()
 }
 
 OSWindow *ANGLETestBase::mOSWindowSingleton = nullptr;
-std::map<angle::PlatformParameters, ANGLETestBase::Platform> ANGLETestBase::gPlatforms;
+std::map<PlatformParameters, ANGLETestBase::Platform> ANGLETestBase::gPlatforms;
 Optional<EGLint> ANGLETestBase::mLastRendererType;
 
-std::unique_ptr<angle::Library> ANGLETestEnvironment::gEGLLibrary;
-std::unique_ptr<angle::Library> ANGLETestEnvironment::gWGLLibrary;
+std::unique_ptr<Library> ANGLETestEnvironment::gEGLLibrary;
+std::unique_ptr<Library> ANGLETestEnvironment::gWGLLibrary;
 
 void ANGLETestEnvironment::SetUp() {}
 
 void ANGLETestEnvironment::TearDown() {}
 
-angle::Library *ANGLETestEnvironment::GetEGLLibrary()
+Library *ANGLETestEnvironment::GetEGLLibrary()
 {
 #if defined(ANGLE_USE_UTIL_LOADER)
     if (!gEGLLibrary)
     {
-        gEGLLibrary.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
+        gEGLLibrary.reset(OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
     }
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
     return gEGLLibrary.get();
 }
 
-angle::Library *ANGLETestEnvironment::GetWGLLibrary()
+Library *ANGLETestEnvironment::GetWGLLibrary()
 {
 #if defined(ANGLE_USE_UTIL_LOADER) && defined(ANGLE_PLATFORM_WINDOWS)
     if (!gWGLLibrary)
     {
-        gWGLLibrary.reset(angle::OpenSharedLibrary("opengl32"));
+        gWGLLibrary.reset(OpenSharedLibrary("opengl32"));
     }
 #endif  // defined(ANGLE_USE_UTIL_LOADER) && defined(ANGLE_PLATFORM_WINDOWS)
     return gWGLLibrary.get();
@@ -1314,8 +1358,25 @@ void ANGLEProcessTestArgs(int *argc, char *argv[])
     {
         if (strncmp(argv[argIndex], kUseConfig, strlen(kUseConfig)) == 0)
         {
-            angle::gSelectedConfig = std::string(argv[argIndex] + strlen(kUseConfig));
+            gSelectedConfig = std::string(argv[argIndex] + strlen(kUseConfig));
+            DeleteArg(argc, argIndex, argv);
         }
+        if (strncmp(argv[argIndex], kSeparateProcessPerConfig, strlen(kSeparateProcessPerConfig)) ==
+            0)
+        {
+            gSeparateProcessPerConfig = true;
+        }
+    }
+
+    if (gSeparateProcessPerConfig)
+    {
+        if (!gSelectedConfig.empty())
+        {
+            std::cout << "Cannot use both a single test config and separate processes.\n";
+            exit(1);
+        }
+
+        RunSeparateProcessesForEachConfig(argc, argv);
     }
 }
 
