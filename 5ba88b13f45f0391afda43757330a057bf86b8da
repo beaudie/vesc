@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f9c32d0_2a890edc",
+        "filename": "src/compiler/translator/OutputVulkanGLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-01T12:23:23Z",
+      "side": 1,
+      "message": "nit: you can use sh::IsVarying to catch several other cases.",
+      "range": {
+        "startLine": 88,
+        "startChar": 36,
+        "endLine": 88,
+        "endChar": 92
+      },
+      "revId": "5ba88b13f45f0391afda43757330a057bf86b8da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
