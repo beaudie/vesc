@@ -5,21 +5,32 @@
 //
 
 // EGLRobustnessTest.cpp: tests for EGL_EXT_create_context_robustness
+//
+// Tests causing GPU resets are disabled, use the following args to run them:
+// --gtest_also_run_disabled_tests --gtest_filter=EGLRobustnessTest\*
 
 #include <gtest/gtest.h>
 
 #include "test_utils/ANGLETest.h"
 #include "util/OSWindow.h"
 
+// Note that on Windows the OpenGL driver fails hard (popup that closes the application)
+// if there was a TDR caused by D3D so we don't run D3D tests at the same time as the OpenGL tests.
+
+#if defined(ANGLE_PLATFORM_WINDOWS)
+#    define D3D_HAS_PRIORITY 1
+#else
+#    define D3D_HAS_PRIORITY 0
+#endif  // defined(ANGLE_PLATFORM_WINDOWS)
+
 using namespace angle;
 
-class EGLRobustnessTest : public EGLTest,
-                          public ::testing::WithParamInterface<angle::PlatformParameters>
+class EGLRobustnessTest : public ANGLETest
 {
   public:
     void SetUp() override
     {
-        EGLTest::SetUp();
+        ANGLETest::SetUp();
 
         mOSWindow = OSWindow::New();
         mOSWindow->initialize("EGLRobustnessTest", 500, 500);
@@ -154,21 +165,15 @@ class EGLRobustnessTest : public EGLTest,
 // Check glGetGraphicsResetStatusEXT returns GL_NO_ERROR if we did nothing
 TEST_P(EGLRobustnessTest, NoErrorByDefault)
 {
-    if (!mInitialized)
-    {
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(D3D_HAS_PRIORITY && IsOpenGL());
+    ANGLE_SKIP_TEST_IF(!mInitialized);
     ASSERT_TRUE(glGetGraphicsResetStatusEXT() == GL_NO_ERROR);
 }
 
 // Checks that the application gets no loss with NO_RESET_NOTIFICATION
 TEST_P(EGLRobustnessTest, DISABLED_NoResetNotification)
 {
-    if (!mInitialized)
-    {
-        return;
-    }
-
+    ANGLE_SKIP_TEST_IF(!mInitialized);
     createContext(EGL_NO_RESET_NOTIFICATION_EXT);
 
     if (!IsWindows())
@@ -190,10 +195,8 @@ TEST_P(EGLRobustnessTest, DISABLED_NoResetNotification)
 // the computer is rebooted.
 TEST_P(EGLRobustnessTest, DISABLED_ResettingDisplayWorks)
 {
-    if (!mInitialized)
-    {
-        return;
-    }
+    ANGLE_SKIP_TEST_IF(D3D_HAS_PRIORITY && IsOpenGL());
+    ANGLE_SKIP_TEST_IF(!mInitialized);
 
     createContext(EGL_LOSE_CONTEXT_ON_RESET_EXT);
 
@@ -213,14 +216,8 @@ TEST_P(EGLRobustnessTest, DISABLED_ResettingDisplayWorks)
     ASSERT_TRUE(glGetGraphicsResetStatusEXT() == GL_NO_ERROR);
 }
 
-// Tests causing GPU resets are disabled, use the following args to run them:
-// --gtest_also_run_disabled_tests --gtest_filter=EGLRobustnessTest\*
-
-// Note that on Windows the OpenGL driver fails hard (popup that closes the application)
-// if there was a TDR caused by D3D so we don't run D3D tests at the same time as the OpenGL tests.
-#define D3D_HAS_PRIORITY 1
-#if D3D_HAS_PRIORITY && (defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11))
-ANGLE_INSTANTIATE_TEST(EGLRobustnessTest, ES2_VULKAN(), ES2_D3D9(), ES2_D3D11());
-#else
-ANGLE_INSTANTIATE_TEST(EGLRobustnessTest, ES2_VULKAN(), ES2_OPENGL());
-#endif
+ANGLE_INSTANTIATE_TEST(EGLRobustnessTest,
+                       WithNoSetup(ES2_VULKAN()),
+                       WithNoSetup(ES2_D3D9()),
+                       WithNoSetup(ES2_D3D11()),
+                       WithNoSetup(ES2_OPENGL()));

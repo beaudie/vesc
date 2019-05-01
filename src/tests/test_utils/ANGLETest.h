@@ -410,6 +410,8 @@ class ANGLETestBase
                   bool useInstancedDrawCalls,
                   GLuint numInstances);
 
+    void initOSWindow();
+
     struct Platform
     {
         Platform();
@@ -491,16 +493,6 @@ class ANGLETestEnvironment : public testing::Environment
     // For loading entry points.
     static std::unique_ptr<angle::Library> gEGLLibrary;
     static std::unique_ptr<angle::Library> gWGLLibrary;
-};
-
-// This base fixture loads the EGL entry points.
-class EGLTest : public testing::Test
-{
-  public:
-    EGLTest();
-    ~EGLTest();
-
-    void SetUp() override;
 };
 
 // Driver vendors

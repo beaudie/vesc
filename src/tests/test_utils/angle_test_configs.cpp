@@ -18,6 +18,7 @@ PlatformParameters::PlatformParameters(EGLint majorVersion,
                                        EGLint minorVersion,
                                        const EGLPlatformParameters &eglPlatformParameters)
     : driver(GLESDriverType::AngleEGL),
+      justLoadEntryPoints(false),
       eglParameters(eglPlatformParameters),
       majorVersion(majorVersion),
       minorVersion(minorVersion)
@@ -28,7 +29,10 @@ PlatformParameters::PlatformParameters(EGLint majorVersion,
 PlatformParameters::PlatformParameters(EGLint majorVersion,
                                        EGLint minorVersion,
                                        GLESDriverType driver)
-    : driver(driver), majorVersion(majorVersion), minorVersion(minorVersion)
+    : driver(driver),
+      justLoadEntryPoints(false),
+      majorVersion(majorVersion),
+      minorVersion(minorVersion)
 {
     initDefaultParameters();
 }
@@ -162,6 +166,11 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
         default:
             stream << "_Error";
             break;
+    }
+
+    if (pp.justLoadEntryPoints)
+    {
+        stream << "_NoSetup";
     }
 
     if (pp.eglParameters.contextVirtualization == EGL_FALSE)
