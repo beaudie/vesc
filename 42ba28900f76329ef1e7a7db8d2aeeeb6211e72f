@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9e61ffa8_930d593b",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-05-01T01:22:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea3ecc2b_bfe56008",
+      "range": {
+        "startLine": 29,
+        "startChar": 8,
+        "endLine": 29,
+        "endChar": 25
+      },
+      "revId": "42ba28900f76329ef1e7a7db8d2aeeeb6211e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "142fcf7b_a078bc91",
         "filename": "src/compiler/translator/ParseContext.cpp",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "42ba28900f76329ef1e7a7db8d2aeeeb6211e72f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bbe128e_c63ca584",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4631,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-05-01T01:22:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "142fcf7b_a078bc91",
+      "range": {
+        "startLine": 4630,
+        "startChar": 42,
+        "endLine": 4631,
+        "endChar": 87
+      },
+      "revId": "42ba28900f76329ef1e7a7db8d2aeeeb6211e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "4dec6e7a_e092d1aa",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-05-01T01:22:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6065cef_f22a579f",
+      "range": {
+        "startLine": 871,
+        "startChar": 0,
+        "endLine": 871,
+        "endChar": 20
+      },
+      "revId": "42ba28900f76329ef1e7a7db8d2aeeeb6211e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f37bbe67_5d497a99",
         "filename": "src/libANGLE/renderer/d3d/d3d11/VertexArray11.cpp",
         "patchSetId": 9
@@ -82,6 +154,30 @@
       "writtenOn": "2019-04-30T18:58:42Z",
       "side": 1,
       "message": "don\u0027t follow this entirely. a comment could help.",
+      "range": {
+        "startLine": 337,
+        "startChar": 8,
+        "endLine": 337,
+        "endChar": 72
+      },
+      "revId": "42ba28900f76329ef1e7a7db8d2aeeeb6211e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2eeff592_53a7a0e6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/VertexArray11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-05-01T01:22:18Z",
+      "side": 1,
+      "message": "I\u0027ve debugged the dEQP error and this is what I found :\n\nIn the dEQP.GLES3/functional_fbo_multiview_samples_1 test\n1) In Context::prepareForDraw ANGLE_TRY(syncDirtyObjects(mDirtyObjects)) leads us to\n\n2) VertexArray11.cpp updateVertexAttribStorage()line 222 where we separate attribs that are DYNAMIC and everything else. (at this point mAttribsToTranslate is set to 0 and mDynamicAttribsMask is set to 1)\n\n3) going back out to prepareForDraw, the next thing is Context::syncDirtyBits() which then calls into StateManager11::syncState()\n\n4) which has DIRTY_BIT_PROGRAM_EXECUTABLE:\n            case gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE:\n            {\n                mInternalDirtyBits.set(DIRTY_BIT_PRIMITIVE_TOPOLOGY);\n                invalidateShaders();\n                invalidateVertexBuffer();\n                invalidateRenderTarget();\n                invalidateTexturesAndSamplers();\n                invalidateProgramUniforms();\n                invalidateProgramUniformBuffers();\n                invalidateProgramAtomicCounterBuffers();\n                invalidateProgramShaderStorageBuffers();\n                invalidateDriverUniforms();\n                // If OVR_multiview2 is enabled, the attribute divisor has to be updated for each\n                // binding. When using compute, there could be no vertex array.\n                if (mIsMultiviewEnabled \u0026\u0026 mVertexArray11)\n                {\n                    ASSERT(mProgramD3D);\n                    const gl::ProgramState \u0026programState \u003d mProgramD3D-\u003egetState();\n                    int numViews \u003d programState.usesMultiview() ? programState.getNumViews() : 1;\n                    mVertexArray11-\u003emarkAllAttributeDivisorsForAdjustment(numViews);\n                }\n                break;\n            }\n5) mVertexArray11-\u003emarkAllAttributeDivisorsForAdjustment(numViews); -\u003e sets mAttribsToTranslate to be all dirty. (mBits \u003d 65535 -\u003e 1111111111111111)\nThis means that even the dynamic attribute is now set to be dirty so when it gets to the resolution in VertexArray11::updateDirtyAttribs\n        switch (mAttributeStorageTypes[dirtyAttribIndex])\n        {\n            case VertexStorageType::DIRECT:\n                VertexDataManager::StoreDirectAttrib(context, translatedAttrib);\n                break;\n            case VertexStorageType::STATIC:\n            {\n                ANGLE_TRY(VertexDataManager::StoreStaticAttrib(context, translatedAttrib));\n                break;\n            }\n            case VertexStorageType::CURRENT_VALUE:\n                // Current value attribs are managed by the StateManager11.\n                break;\n            default:\n                UNREACHABLE();\n                break;\n        }\nthis will hit the default case and error out. \nI\u0027ve fixed it for this test case by xor-ing the mAttribsToTranslate with the dyanmic mask (locally).\nIs this a proper fix? Should I include it in this CL? \nvoid VertexArray11::markAllAttributeDivisorsForAdjustment(int numViews)\n{\n    if (mAppliedNumViewsToDivisor !\u003d numViews)\n    {\n        mAppliedNumViewsToDivisor \u003d numViews;\n        mAttribsToTranslate.set();\n        mAttribsToTranslate \u003d mAttribsToTranslate ^ mDynamicAttribsMask;\n    }\n}",
+      "parentUuid": "f37bbe67_5d497a99",
       "range": {
         "startLine": 337,
         "startChar": 8,
@@ -114,6 +210,30 @@
       "revId": "42ba28900f76329ef1e7a7db8d2aeeeb6211e72f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36e5857f_6c1f18ed",
+        "filename": "src/tests/compiler_tests/OVR_multiview_test.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-05-01T01:22:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ded982ae_4d3e4447",
+      "range": {
+        "startLine": 2,
+        "startChar": 14,
+        "endLine": 2,
+        "endChar": 21
+      },
+      "revId": "42ba28900f76329ef1e7a7db8d2aeeeb6211e72f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
