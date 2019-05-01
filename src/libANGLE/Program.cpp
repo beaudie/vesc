@@ -862,13 +862,37 @@ ProgramBindings::~ProgramBindings() {}
 
 void ProgramBindings::bindLocation(GLuint index, const std::string &name)
 {
-    mBindings[name] = index;
+    // Normalize array bindings so that "name" and "name[0]" map to the same entry.
+    if (angle::EndsWith(name, "[0]"))
+    {
+        std::string baseName = name.substr(0u, name.length() - 3u);
+        mBindings[baseName]  = index;
+    }
+    else
+    {
+        mBindings[name] = index;
+    }
 }
 
 int ProgramBindings::getBinding(const std::string &name) const
 {
     auto iter = mBindings.find(name);
     return (iter != mBindings.end()) ? iter->second : -1;
+}
+
+int ProgramBindings::getBinding(const sh::VariableWithLocation &variable) const
+{
+    const std::string &name = variable.name;
+    // Check with the normalized array name if applicable.
+    if (variable.isArray() && angle::EndsWith(name, "[0]"))
+    {
+        std::string baseName = name.substr(0u, name.length() - 3u);
+        return getBinding(baseName);
+    }
+    else
+    {
+        return getBinding(name);
+    }
 }
 
 ProgramBindings::const_iterator ProgramBindings::begin() const
@@ -1539,6 +1563,7 @@ void Program::unlink()
     mState.mAtomicCounterBuffers.clear();
     mState.mOutputVariables.clear();
     mState.mOutputLocations.clear();
+    mState.mSecondaryOutputLocations.clear();
     mState.mOutputVariableTypes.clear();
     mState.mDrawBufferTypeMask.reset();
     mState.mActiveOutputVariables.reset();
@@ -2929,7 +2954,7 @@ bool Program::linkValidateFragmentInputBindings(gl::InfoLog &infoLog) const
             continue;
         }
 
-        const auto inputBinding = mFragmentInputBindings.getBinding(input.name);
+        const auto inputBinding = mFragmentInputBindings.getBinding(input);
         if (inputBinding == -1)
             continue;
 
@@ -3120,7 +3145,7 @@ bool Program::linkAttributes(const Caps &caps, InfoLog &infoLog)
         // for each member/element (unlike uniforms for example).
         ASSERT(!attribute.isArray() && !attribute.isStruct());
 
-        int bindingLocation = mAttributeBindings.getBinding(attribute.name);
+        int bindingLocation = mAttributeBindings.getBinding(attribute);
         if (attribute.location == -1 && bindingLocation != -1)
         {
             attribute.location = bindingLocation;
@@ -3708,7 +3733,7 @@ int Program::getOutputLocationForLink(const sh::OutputVariable &outputVariable) 
     {
         return outputVariable.location;
     }
-    int apiLocation = mFragmentOutputLocations.getBinding(outputVariable.name);
+    int apiLocation = mFragmentOutputLocations.getBinding(outputVariable);
     if (apiLocation != -1)
     {
         return apiLocation;
@@ -3723,7 +3748,7 @@ bool Program::isOutputSecondaryForLink(const sh::OutputVariable &outputVariable)
         ASSERT(outputVariable.index == 0 || outputVariable.index == 1);
         return (outputVariable.index == 1);
     }
-    int apiIndex = mFragmentOutputIndexes.getBinding(outputVariable.name);
+    int apiIndex = mFragmentOutputIndexes.getBinding(outputVariable);
     if (apiIndex != -1)
     {
         // Index layout qualifier from the shader takes precedence, so the index from the API is
