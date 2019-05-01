@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5158e3eb_af48c93a",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-01T19:56:18Z",
+      "side": 0,
+      "message": "Checking my understanding.\nThis can be omitted, since now we have a Display per PlatformParameters, which include  EGLPlatformParameters.\nSo now we never try to share display for different EGLPlatformParameters.\nRight?",
+      "range": {
+        "startLine": 448,
+        "startChar": 31,
+        "endLine": 448,
+        "endChar": 46
+      },
+      "revId": "fc0be0494ee791c1fa914dcd260e1d64c4b726e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd5da3b4_d011136a",
+        "filename": "util/EGLPlatformParameters.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-01T19:56:18Z",
+      "side": 0,
+      "message": "I\u0027m surprised this can be omitted when angle_utils is an .so\nIs this because all the code is in the header?",
+      "range": {
+        "startLine": 15,
+        "startChar": 7,
+        "endLine": 15,
+        "endChar": 24
+      },
+      "revId": "fc0be0494ee791c1fa914dcd260e1d64c4b726e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
