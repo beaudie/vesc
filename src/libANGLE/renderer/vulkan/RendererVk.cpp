@@ -1273,7 +1273,7 @@ angle::Result RendererVk::getDescriptorSetLayout(
     const vk::DescriptorSetLayoutDesc &desc,
     vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
 {
-    // TODO(geofflang): Synchronize access to the descriptor set layout cache
+    std::lock_guard<decltype(mDescriptorSetLayoutCacheMutex)> lock(mDescriptorSetLayoutCacheMutex);
     return mDescriptorSetLayoutCache.getDescriptorSetLayout(context, desc, descriptorSetLayoutOut);
 }
 
@@ -1283,7 +1283,7 @@ angle::Result RendererVk::getPipelineLayout(
     const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
 {
-    // TODO(geofflang): Synchronize access to the pipeline layout cache
+    std::lock_guard<decltype(mPipelineLayoutCacheMutex)> lock(mPipelineLayoutCacheMutex);
     return mPipelineLayoutCache.getPipelineLayout(context, desc, descriptorSetLayouts,
                                                   pipelineLayoutOut);
 }
@@ -1367,8 +1367,10 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
                                       const VkSubmitInfo &submitInfo,
                                       const vk::Fence &fence)
 {
-    // TODO: synchronize queue access
-    ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, fence.getHandle()));
+    {
+        std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
+        ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, fence.getHandle()));
+    }
 
     ANGLE_TRY(checkGarbage(context, 0));
 
@@ -1377,8 +1379,10 @@ angle::Result RendererVk::queueSubmit(vk::Context *context,
 
 angle::Result RendererVk::queueWaitIdle(vk::Context *context)
 {
-    // TODO: synchronize queue access
-    ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueue));
+    {
+        std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
+        ANGLE_VK_TRY(context, vkQueueWaitIdle(mQueue));
+    }
 
     ANGLE_TRY(checkGarbage(context, 0));
 
@@ -1387,7 +1391,7 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context)
 
 VkResult RendererVk::queuePresent(const VkPresentInfoKHR &presentInfo)
 {
-    // TODO: synchronize queue access
+    std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
     return vkQueuePresentKHR(mQueue, &presentInfo);
 }
 
@@ -1407,6 +1411,7 @@ void RendererVk::addGarbage(vk::Shared<vk::Fence> &&fence,
 void RendererVk::addGarbage(std::vector<vk::Shared<vk::Fence>> &&fences,
                             std::vector<vk::GarbageObjectBase> &&garbage)
 {
+    std::lock_guard<decltype(mGarbageMutex)> lock(mGarbageMutex);
     mGarbage.emplace_back(std::move(fences), std::move(garbage));
 }
 
@@ -1442,6 +1447,8 @@ bool RendererVk::hasFormatFeatureBits(VkFormat format, const VkFormatFeatureFlag
 
 angle::Result RendererVk::checkGarbage(vk::Context *context, uint64_t waitTimeout)
 {
+    std::lock_guard<decltype(mGarbageMutex)> lock(mGarbageMutex);
+
     auto garbageIter = mGarbage.begin();
     while (garbageIter != mGarbage.end())
     {
