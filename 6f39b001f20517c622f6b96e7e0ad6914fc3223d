@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "99ef543b_64b80264",
+        "filename": "src/gpu_info_util/SystemInfo_win.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-01T20:54:00Z",
+      "side": 1,
+      "message": "Are these still needed after GPU_INFO_USE_SETUPAPI path is removed?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 22,
+        "endChar": 0
+      },
+      "revId": "6f39b001f20517c622f6b96e7e0ad6914fc3223d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
