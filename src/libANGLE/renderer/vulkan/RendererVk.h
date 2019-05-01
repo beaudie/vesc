@@ -12,6 +12,7 @@
 
 #include <vulkan/vulkan.h>
 #include <memory>
+#include <mutex>
 
 #include "common/PoolAlloc.h"
 #include "common/angleutils.h"
@@ -70,7 +71,6 @@ class RendererVk : angle::NonCopyable
     {
         return mPhysicalDeviceFeatures;
     }
-    VkQueue getQueue() const { return mQueue; }
     VkDevice getDevice() const { return mDevice; }
 
     angle::Result selectPresentQueueForSurface(DisplayVk *displayVk,
@@ -183,6 +183,7 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceProperties mPhysicalDeviceProperties;
     VkPhysicalDeviceFeatures mPhysicalDeviceFeatures;
     std::vector<VkQueueFamilyProperties> mQueueFamilyProperties;
+    std::mutex mQueueMutex;
     VkQueue mQueue;
     uint32_t mCurrentQueueFamilyIndex;
     uint32_t mMaxVertexAttribDivisor;
@@ -193,6 +194,7 @@ class RendererVk : angle::NonCopyable
 
     bool mDeviceLost;
 
+    std::mutex mGarbageMutex;
     using FencedGarbage =
         std::pair<std::vector<vk::Shared<vk::Fence>>, std::vector<vk::GarbageObjectBase>>;
     std::vector<FencedGarbage> mFencedGarbage;
@@ -208,9 +210,11 @@ class RendererVk : angle::NonCopyable
     std::array<VkFormatProperties, vk::kNumVkFormats> mFormatProperties;
 
     // ANGLE uses a PipelineLayout cache to store compatible pipeline layouts.
+    std::mutex mPipelineLayoutCacheMutex;
     PipelineLayoutCache mPipelineLayoutCache;
 
     // DescriptorSetLayouts are also managed in a cache.
+    std::mutex mDescriptorSetLayoutCacheMutex;
     DescriptorSetLayoutCache mDescriptorSetLayoutCache;
 };
 
