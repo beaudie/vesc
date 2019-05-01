@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30f76008_d657b41f",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-01T19:18:16Z",
+      "side": 1,
+      "message": "nit: you can omit this.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 43
+      },
+      "revId": "df149841ed90cfb8b0081b1870650aa624654546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3601a6c5_70811b8c",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-01T19:18:16Z",
+      "side": 1,
+      "message": "I\u0027m not sure if it makes sense to do a backwards compatible check. The relation is symmetric: if A shares with B, the B shares with A. If you agree then I\u0027d recommend we just remove the check.",
+      "range": {
+        "startLine": 1207,
+        "startChar": 0,
+        "endLine": 1217,
+        "endChar": 9
+      },
+      "revId": "df149841ed90cfb8b0081b1870650aa624654546",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
