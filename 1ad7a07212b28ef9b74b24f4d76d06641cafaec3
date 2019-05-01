@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dbcf2be0_7f7579ac",
+        "filename": "src/gpu_info_util/SystemInfo_win.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-01T22:13:40Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "bb37d9ba_e2d8f53e",
+      "range": {
+        "startLine": 200,
+        "startChar": 10,
+        "endLine": 200,
+        "endChar": 32
+      },
+      "revId": "1ad7a07212b28ef9b74b24f4d76d06641cafaec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "31a16a84_61bd587c",
         "filename": "src/gpu_info_util/SystemInfo_win.cpp",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "1ad7a07212b28ef9b74b24f4d76d06641cafaec3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27e6b706_1816e31e",
+        "filename": "src/gpu_info_util/SystemInfo_win.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-01T22:13:40Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "31a16a84_61bd587c",
+      "range": {
+        "startLine": 203,
+        "startChar": 9,
+        "endLine": 203,
+        "endChar": 31
+      },
+      "revId": "1ad7a07212b28ef9b74b24f4d76d06641cafaec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
