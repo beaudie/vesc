@@ -22,6 +22,30 @@
       "revId": "6ad215912f29e6a7cccfca4164d47bbcd5a3c33c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d0a3287_4f0141c5",
+        "filename": "util/windows/WGLWindow.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-01T12:17:46Z",
+      "side": 1,
+      "message": "https://www.geeksforgeeks.org/avoid-using-stdendl/",
+      "parentUuid": "cb418d8a_152ac159",
+      "range": {
+        "startLine": 224,
+        "startChar": 47,
+        "endLine": 224,
+        "endChar": 49
+      },
+      "revId": "6ad215912f29e6a7cccfca4164d47bbcd5a3c33c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
