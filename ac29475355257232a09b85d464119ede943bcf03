@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "05c4e3cd_2f406dcd",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-01T18:52:15Z",
+      "side": 1,
+      "message": "DONE",
+      "parentUuid": "5605c031_6d7e2d4a",
+      "range": {
+        "startLine": 671,
+        "startChar": 0,
+        "endLine": 676,
+        "endChar": 6
+      },
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0cd7f3f5_874c9aa7",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 14
@@ -39,6 +63,24 @@
       "revId": "ac29475355257232a09b85d464119ede943bcf03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9e60bf3_4c7d53ce",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-01T18:52:15Z",
+      "side": 1,
+      "message": "Yes, that\u0027s right. I had to take advantage of that in the implementation.\nI\u0027ll remove that comment, it doesn\u0027t help anything.",
+      "parentUuid": "0cd7f3f5_874c9aa7",
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "4500d556_1a68da9a",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-01T18:52:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48613bfd_9ea62a3e",
+      "range": {
+        "startLine": 801,
+        "startChar": 226,
+        "endLine": 801,
+        "endChar": 241
+      },
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "494a1f9c_36da5b43",
         "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
         "patchSetId": 14
@@ -76,6 +142,30 @@
       "writtenOn": "2019-04-30T16:52:07Z",
       "side": 1,
       "message": "Is this a workaround of some kind? You should leave a comment and potentially file an anglebug issue to track this if there\u0027s a bug in the D3D11 back-end.",
+      "range": {
+        "startLine": 1653,
+        "startChar": 4,
+        "endLine": 1653,
+        "endChar": 40
+      },
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e38e0f29_467f2ac6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1653,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-01T18:52:15Z",
+      "side": 1,
+      "message": "I believe I got this from Geoff while we were chatting about this extension last week.\nI don\u0027t remember the exact reason, Goeff?",
+      "parentUuid": "494a1f9c_36da5b43",
       "range": {
         "startLine": 1653,
         "startChar": 4,
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "80ce8f9d_61a27d16",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-01T18:52:15Z",
+      "side": 1,
+      "message": "Oops, I didn\u0027t see the operator overload.\nRemoved.",
+      "parentUuid": "fc6ea11e_80ec047c",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 42
+      },
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d05593ff_5763ed9c",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 14
@@ -134,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "ec0fef61_946765b7",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-01T18:52:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d05593ff_5763ed9c",
+      "range": {
+        "startLine": 1541,
+        "startChar": 20,
+        "endLine": 1543,
+        "endChar": 66
+      },
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27aa3e13_7cfd1fff",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 14
@@ -154,6 +292,30 @@
       "revId": "ac29475355257232a09b85d464119ede943bcf03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cde8fed6_9d2bf486",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-01T18:52:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27aa3e13_7cfd1fff",
+      "range": {
+        "startLine": 1646,
+        "startChar": 51,
+        "endLine": 1646,
+        "endChar": 66
+      },
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
