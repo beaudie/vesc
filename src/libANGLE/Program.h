@@ -481,6 +481,7 @@ class ProgramBindings final : angle::NonCopyable
 
     void bindLocation(GLuint index, const std::string &name);
     int getBinding(const std::string &name) const;
+    int getBinding(const sh::VariableWithLocation &variable) const;
 
     using const_iterator = std::unordered_map<std::string, GLuint>::const_iterator;
     const_iterator begin() const;

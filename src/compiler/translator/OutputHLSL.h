@@ -207,6 +207,7 @@ class OutputHLSL : public TIntermTraverser
     bool mUsesNestedBreak;
     bool mRequiresIEEEStrictCompiling;
     mutable bool mUseZeroArray;
+    bool mUsesSecondaryColor;
 
     int mNumRenderTargets;
 
