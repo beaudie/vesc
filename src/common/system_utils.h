@@ -49,6 +49,8 @@ class Library : angle::NonCopyable
 };
 
 Library *OpenSharedLibrary(const char *libraryName);
+
+void DeleteArg(int *argc, int argIndex, char **argv);
 }  // namespace angle
 
 #endif  // COMMON_SYSTEM_UTILS_H_
