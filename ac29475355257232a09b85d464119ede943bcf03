@@ -2,6 +2,69 @@
   "comments": [
     {
       "key": {
+        "uuid": "5605c031_6d7e2d4a",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-01T14:55:48Z",
+      "side": 1,
+      "message": "Since the requested capabilities are identical, you can just use one array here:\n\n    constexpr GLenum formats[] \u003d {\n        GL_DEPTH_COMPONENT16,\n        GL_DEPTH_COMPONENT32_OES,\n    };\n\nAlso, where did you get these two formats from? Why not GL_DEPTH_COMPONENT24_OES for example?",
+      "range": {
+        "startLine": 671,
+        "startChar": 0,
+        "endLine": 676,
+        "endChar": 6
+      },
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cd7f3f5_874c9aa7",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-01T14:55:48Z",
+      "side": 1,
+      "message": "It looks to me like they only support \"uploading\" 16- or 32-bit data, but otherwise the implementation is free to use a 24-bit format:\n\n\u003e As per the OpenGL ES spec, there is no guarantee that the OpenGL ES implementation \n\u003e will use the \u003ctype\u003e to determine how to store the depth texture internally.  \n\u003e It may choose to downsample the 32-bit depth values to 16-bit or even 24-bit.\n\u003e There is currently no way for the application to know or find out how the\n\u003e depth texture (or any texture) will be stored internally by the OpenGL ES implementation.",
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48613bfd_9ea62a3e",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-01T14:55:48Z",
+      "side": 1,
+      "message": "DEPTH24_STENCIL8 is introduced by `OES_packed_depth_stencil`, not `OES_depth_texture`.",
+      "range": {
+        "startLine": 801,
+        "startChar": 226,
+        "endLine": 801,
+        "endChar": 241
+      },
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "494a1f9c_36da5b43",
         "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
         "patchSetId": 14
@@ -41,6 +104,52 @@
         "startChar": 0,
         "endLine": 131,
         "endChar": 42
+      },
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d05593ff_5763ed9c",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1543,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-01T14:55:48Z",
+      "side": 1,
+      "message": "Seems incorrect. Supposedly, only supporting `depthTexturesANGLE` should be enough here.\n\nYou could use the same logic as a previous case and simplify this:\n\n                if (!(context-\u003egetExtensions().depthTexturesANGLE ||\n                      context-\u003egetExtensions().packedDepthStencil))\n\n---\n\nAlso, given that most of the code here is duplicate (except for the `if` logic), you can merge them back and use this kind of `if`:\n\n    if (!(context-\u003egetExtensions().depthTexturesANGLE ||\n        (format \u003d\u003d GL_DEPTH_COMPONENT \u0026\u0026 context-\u003egetExtensions().packedDepthStencil) ||\n        (format \u003d\u003d GL_DEPTH_STENCIL_OES \u0026\u0026 context-\u003egetExtensions().depthTextureOES)))",
+      "range": {
+        "startLine": 1541,
+        "startChar": 20,
+        "endLine": 1543,
+        "endChar": 66
+      },
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27aa3e13_7cfd1fff",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1646,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-01T14:55:48Z",
+      "side": 1,
+      "message": "Should be `packedDepthStencil`",
+      "range": {
+        "startLine": 1646,
+        "startChar": 51,
+        "endLine": 1646,
+        "endChar": 66
       },
       "revId": "ac29475355257232a09b85d464119ede943bcf03",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
