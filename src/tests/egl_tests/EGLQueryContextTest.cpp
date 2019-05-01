@@ -10,12 +10,12 @@
 
 using namespace angle;
 
-class EGLQueryContextTest : public EGLTest, public testing::WithParamInterface<PlatformParameters>
+class EGLQueryContextTest : public ANGLETest
 {
   public:
     void SetUp() override
     {
-        EGLTest::SetUp();
+        ANGLETest::SetUp();
 
         int clientVersion = GetParam().majorVersion;
 
@@ -145,9 +145,9 @@ TEST_P(EGLQueryContextTest, BadAttribute)
 }
 
 ANGLE_INSTANTIATE_TEST(EGLQueryContextTest,
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES2_OPENGL(),
-                       ES2_VULKAN(),
-                       ES3_D3D11(),
-                       ES3_OPENGL());
+                       WithNoSetup(ES2_D3D9()),
+                       WithNoSetup(ES2_D3D11()),
+                       WithNoSetup(ES2_OPENGL()),
+                       WithNoSetup(ES2_VULKAN()),
+                       WithNoSetup(ES3_D3D11()),
+                       WithNoSetup(ES3_OPENGL()));
