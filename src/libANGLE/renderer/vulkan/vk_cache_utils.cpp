@@ -1214,7 +1214,10 @@ bool DescriptorSetLayoutDesc::operator==(const DescriptorSetLayoutDesc &other) c
                    sizeof(mPackedDescriptorSetLayout)) == 0);
 }
 
-void DescriptorSetLayoutDesc::update(uint32_t bindingIndex, VkDescriptorType type, uint32_t count)
+void DescriptorSetLayoutDesc::update(uint32_t bindingIndex,
+                                     VkDescriptorType type,
+                                     uint32_t count,
+                                     VkShaderStageFlags stages)
 {
     ASSERT(static_cast<size_t>(type) < std::numeric_limits<uint16_t>::max());
     ASSERT(count < std::numeric_limits<uint16_t>::max());
@@ -1223,6 +1226,8 @@ void DescriptorSetLayoutDesc::update(uint32_t bindingIndex, VkDescriptorType typ
 
     SetBitField(packedBinding.type, type);
     SetBitField(packedBinding.count, count);
+    SetBitField(packedBinding.unused, 0);
+    SetBitField(packedBinding.stages, stages);
 }
 
 void DescriptorSetLayoutDesc::unpackBindings(DescriptorSetLayoutBindingVector *bindings) const
@@ -1237,7 +1242,7 @@ void DescriptorSetLayoutDesc::unpackBindings(DescriptorSetLayoutBindingVector *b
         binding.binding                      = bindingIndex;
         binding.descriptorCount              = packedBinding.count;
         binding.descriptorType               = static_cast<VkDescriptorType>(packedBinding.type);
-        binding.stageFlags                   = VK_SHADER_STAGE_ALL;
+        binding.stageFlags         = static_cast<VkShaderStageFlags>(packedBinding.stages);
         binding.pImmutableSamplers = nullptr;
 
         bindings->push_back(binding);

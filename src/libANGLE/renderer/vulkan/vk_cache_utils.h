@@ -463,15 +463,20 @@ class DescriptorSetLayoutDesc final
     size_t hash() const;
     bool operator==(const DescriptorSetLayoutDesc &other) const;
 
-    void update(uint32_t bindingIndex, VkDescriptorType type, uint32_t count);
+    void update(uint32_t bindingIndex,
+                VkDescriptorType type,
+                uint32_t count,
+                VkShaderStageFlags stages);
 
     void unpackBindings(DescriptorSetLayoutBindingVector *bindings) const;
 
   private:
     struct PackedDescriptorSetBinding
     {
-        uint16_t type;   // Stores a packed VkDescriptorType descriptorType.
-        uint16_t count;  // Stores a packed uint32_t descriptorCount.
+        uint16_t type : 4;    // Stores a packed VkDescriptorType descriptorType.
+        uint16_t stages : 6;  // Stores a packed VkShaderStageFlags.
+        uint16_t unused : 6;  // Available bits for future use.
+        uint16_t count;       // Stores a packed uint32_t descriptorCount.
     };
 
     static_assert(sizeof(PackedDescriptorSetBinding) == sizeof(uint32_t), "Unexpected size");
