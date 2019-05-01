@@ -20,6 +20,7 @@
 #include "libANGLE/Texture.h"
 #include "libANGLE/Thread.h"
 #include "libANGLE/formatutils.h"
+#include "libANGLE/renderer/driver_utils.h"
 
 #include <EGL/eglext.h>
 
@@ -1203,10 +1204,26 @@ Error ValidateCreateContext(Display *display,
             return EglBadMatch();
         }
 
-        if (shareContext->getClientMajorVersion() != clientMajorVersion ||
-            shareContext->getClientMinorVersion() != clientMinorVersion)
+        gl::Version sharedVersion =
+            gl::Version(static_cast<unsigned int>(shareContext->getClientMajorVersion()),
+                        static_cast<unsigned int>(shareContext->getClientMinorVersion()));
+        gl::Version thisVersion = gl::Version(static_cast<unsigned int>(clientMajorVersion),
+                                              static_cast<unsigned int>(clientMinorVersion));
+
+        if (rx::IsAndroid())
         {
-            return EglBadContext();
+            // Each GL version is backwards compatible.
+            if (sharedVersion < thisVersion)
+            {
+                return EglBadContext();
+            }
+        }
+        else
+        {
+            if (sharedVersion != thisVersion)
+            {
+                return EglBadContext();
+            }
         }
     }
 
