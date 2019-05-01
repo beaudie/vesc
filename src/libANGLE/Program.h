@@ -473,6 +473,15 @@ class ProgramState final : angle::NonCopyable
     ActiveTextureMask mActiveImagesMask;
 };
 
+struct ProgramBinding
+{
+    ProgramBinding(GLuint index = GL_INVALID_INDEX) : location(index), aliased(false) {}
+
+    GLuint location;
+    // Whether another binding was set that may potentially alias this.
+    bool aliased;
+};
+
 class ProgramBindings final : angle::NonCopyable
 {
   public:
@@ -481,13 +490,14 @@ class ProgramBindings final : angle::NonCopyable
 
     void bindLocation(GLuint index, const std::string &name);
     int getBinding(const std::string &name) const;
+    int getBinding(const sh::VariableWithLocation &variable) const;
 
-    using const_iterator = std::unordered_map<std::string, GLuint>::const_iterator;
+    using const_iterator = std::unordered_map<std::string, ProgramBinding>::const_iterator;
     const_iterator begin() const;
     const_iterator end() const;
 
   private:
-    std::unordered_map<std::string, GLuint> mBindings;
+    std::unordered_map<std::string, ProgramBinding> mBindings;
 };
 
 struct ProgramVaryingRef
