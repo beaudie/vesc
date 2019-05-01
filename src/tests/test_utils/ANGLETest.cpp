@@ -292,6 +292,8 @@ TestPlatformContext gPlatformContext;
 
 // After a fixed number of iterations we reset the test window. This works around some driver bugs.
 constexpr uint32_t kWindowReuseLimit = 50;
+
+constexpr char kUseConfig[] = "--use-config=";
 }  // anonymous namespace
 
 // static
@@ -1302,6 +1304,14 @@ angle::Library *ANGLETestEnvironment::GetWGLLibrary()
 void ANGLEProcessTestArgs(int *argc, char *argv[])
 {
     testing::AddGlobalTestEnvironment(new ANGLETestEnvironment());
+
+    for (int argIndex = 1; argIndex < *argc; argIndex++)
+    {
+        if (strncmp(argv[argIndex], kUseConfig, strlen(kUseConfig)) == 0)
+        {
+            angle::gSelectedConfig = std::string(argv[argIndex] + strlen(kUseConfig));
+        }
+    }
 }
 
 bool EnsureGLExtensionEnabled(const std::string &extName)

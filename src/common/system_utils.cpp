@@ -30,4 +30,12 @@ bool PrependPathToEnvironmentVar(const char *variableName, const char *path)
     return SetEnvironmentVar(variableName, newValue);
 }
 
+void DeleteArg(int *argc, int argIndex, char **argv)
+{
+    (*argc)--;
+    for (int moveIndex = argIndex; moveIndex < *argc; ++moveIndex)
+    {
+        argv[moveIndex] = argv[moveIndex + 1];
+    }
+}
 }  // namespace angle
