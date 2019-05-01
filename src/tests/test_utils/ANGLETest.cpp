@@ -344,8 +344,16 @@ ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
     mCurrentParams   = &insertIter.first->first;
     mCurrentPlatform = &insertIter.first->second;
 
+    if (!params.justLoadEntryPoints)
+    {
+        initOSWindow();
+    }
+}
+
+void ANGLETestBase::initOSWindow()
+{
     std::stringstream windowNameStream;
-    windowNameStream << "ANGLE Tests - " << params;
+    windowNameStream << "ANGLE Tests - " << *mCurrentParams;
     std::string windowName = windowNameStream.str();
 
     if (mAlwaysForceNewDisplay)
@@ -367,11 +375,12 @@ ANGLETestBase::ANGLETestBase(const angle::PlatformParameters &params)
     // On Linux we must keep the test windows visible. On Windows it doesn't seem to need it.
     mCurrentPlatform->osWindow->setVisible(!angle::IsWindows());
 
-    switch (params.driver)
+    switch (mCurrentParams->driver)
     {
         case angle::GLESDriverType::AngleEGL:
         {
-            mCurrentPlatform->eglWindow = EGLWindow::New(params.majorVersion, params.minorVersion);
+            mCurrentPlatform->eglWindow =
+                EGLWindow::New(mCurrentParams->majorVersion, mCurrentParams->minorVersion);
             break;
         }
 
@@ -422,6 +431,19 @@ void ANGLETestBase::ANGLETestSetUp()
     gPlatformContext.ignoreMessages   = false;
     gPlatformContext.warningsAsErrors = false;
     gPlatformContext.currentTest      = this;
+
+    if (mCurrentParams->justLoadEntryPoints)
+    {
+#if defined(ANGLE_USE_UTIL_LOADER)
+        PFNEGLGETPROCADDRESSPROC getProcAddress;
+        ANGLETestEnvironment::GetEGLLibrary()->getAs("eglGetProcAddress", &getProcAddress);
+        ASSERT_NE(nullptr, getProcAddress);
+
+        angle::LoadEGL(getProcAddress);
+        angle::LoadGLES(getProcAddress);
+#endif  // defined(ANGLE_USE_UTIL_LOADER)
+        return;
+    }
 
     // Resize the window before creating the context so that the first make current
     // sets the viewport and scissor box to the right size.
@@ -1280,22 +1302,6 @@ angle::Library *ANGLETestEnvironment::GetWGLLibrary()
 void ANGLEProcessTestArgs(int *argc, char *argv[])
 {
     testing::AddGlobalTestEnvironment(new ANGLETestEnvironment());
-}
-
-EGLTest::EGLTest() = default;
-
-EGLTest::~EGLTest() = default;
-
-void EGLTest::SetUp()
-{
-#if defined(ANGLE_USE_UTIL_LOADER)
-    PFNEGLGETPROCADDRESSPROC getProcAddress;
-    ANGLETestEnvironment::GetEGLLibrary()->getAs("eglGetProcAddress", &getProcAddress);
-    ASSERT_NE(nullptr, getProcAddress);
-
-    angle::LoadEGL(getProcAddress);
-    angle::LoadGLES(getProcAddress);
-#endif  // defined(ANGLE_USE_UTIL_LOADER)
 }
 
 bool EnsureGLExtensionEnabled(const std::string &extName)
