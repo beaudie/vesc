@@ -20,6 +20,7 @@
 #include "libANGLE/Texture.h"
 #include "libANGLE/Thread.h"
 #include "libANGLE/formatutils.h"
+#include "libANGLE/renderer/driver_utils.h"
 
 #include <EGL/eglext.h>
 
@@ -1201,12 +1202,6 @@ Error ValidateCreateContext(Display *display,
         if (shareContext->isResetNotificationEnabled() != resetNotification)
         {
             return EglBadMatch();
-        }
-
-        if (shareContext->getClientMajorVersion() != clientMajorVersion ||
-            shareContext->getClientMinorVersion() != clientMinorVersion)
-        {
-            return EglBadContext();
         }
     }
 
