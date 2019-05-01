@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d41a3a87_e7e74c69",
+        "filename": "src/tests/test_utils/angle_test_configs.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-01T20:48:24Z",
+      "side": 1,
+      "message": "Not presently. I left them in because it could be useful for local testing. Or future support.",
+      "parentUuid": "d800e954_68054cb4",
+      "range": {
+        "startLine": 139,
+        "startChar": 13,
+        "endLine": 139,
+        "endChar": 58
+      },
+      "revId": "e320419b4c441a201d1bcda0e725c2840d860512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "44168042_be8c5b90",
         "filename": "src/tests/test_utils/angle_test_configs.cpp",
         "patchSetId": 13
@@ -36,6 +60,30 @@
       "writtenOn": "2019-05-01T20:38:44Z",
       "side": 1,
       "message": "And this one?",
+      "range": {
+        "startLine": 150,
+        "startChar": 13,
+        "endLine": 150,
+        "endChar": 53
+      },
+      "revId": "e320419b4c441a201d1bcda0e725c2840d860512",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "230a395c_9fd5d5d3",
+        "filename": "src/tests/test_utils/angle_test_configs.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-01T20:48:24Z",
+      "side": 1,
+      "message": "Not presently but since FAST is supported I left this in as well.",
+      "parentUuid": "44168042_be8c5b90",
       "range": {
         "startLine": 150,
         "startChar": 13,
