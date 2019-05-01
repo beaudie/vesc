@@ -592,15 +592,6 @@ void HandleCaseName(const char *caseString, int *argc, int argIndex, char **argv
 
     argv[argIndex] = gCaseStringBuffer.data();
 }
-
-void DeleteArg(int *argc, int argIndex, char **argv)
-{
-    (*argc)--;
-    for (int moveIndex = argIndex; moveIndex < *argc; ++moveIndex)
-    {
-        argv[moveIndex] = argv[moveIndex + 1];
-    }
-}
 }  // anonymous namespace
 
 // Called from main() to process command-line arguments.
