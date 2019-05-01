@@ -32,9 +32,12 @@ namespace rx
 {
 namespace
 {
+constexpr char kMarkerStart[]          = "@@ ";
 constexpr char kQualifierMarkerBegin[] = "@@ QUALIFIER-";
 constexpr char kLayoutMarkerBegin[]    = "@@ LAYOUT-";
 constexpr char kMarkerEnd[]            = " @@";
+constexpr char kLayoutParamsBegin      = '(';
+constexpr char kLayoutParamsEnd        = ')';
 constexpr char kUniformQualifier[]     = "uniform";
 constexpr char kVersionDefine[]        = "#version 450 core\n";
 constexpr char kLineRasterDefine[]     = R"(#version 450 core
@@ -73,6 +76,157 @@ void GetBuiltInResourcesFromCaps(const gl::Caps &caps, TBuiltInResource *outBuil
     outBuiltInResources->maxVertexAttribs                 = caps.maxVertexAttributes;
     outBuiltInResources->maxVertexOutputComponents        = caps.maxVertexOutputComponents;
     outBuiltInResources->maxVertexUniformVectors          = caps.maxVertexUniformVectors;
+}
+
+class IntermediateShaderSource final : angle::NonCopyable
+{
+    IntermediateShaderSource(const std::string &source);
+
+    // Find @@ LAYOUT-name(extra, args) @@ and replace it with:
+    //
+    //     layout(specifier, extra, args)
+    //
+    // or if specifier is empty,
+    //
+    //     layout(extra, args)
+    //
+    void insertLayoutSpecifier(const std::string &name, const std::string &specifier);
+    // Remove @@ LAYOUT-name(extra, args) @@ altogether.
+    void removeLayoutSpecifier(const std::string &name);
+
+    // Find @@ QUALIFIER-name @@ and replace it with `specifier`.
+    void insertQualifierSpecifier(const std::string &name, const std::string &specifier);
+    void removeQualifierSpecifier(const std::string &name);
+
+    // Get the transformed shader source as one string.
+    std::string &&getShaderSource();
+
+  private:
+    enum class SourceBlockType
+    {
+        // A piece of shader source code.
+        Text,
+        // Block corresponding to @@ QUALIFIER-abc @@
+        Qualifier,
+        // Block corresponding to @@ LAYOUT-abc(extra, args) @@
+        Layout,
+    };
+
+    struct SourceBlock
+    {
+        SourceBlockType type;
+        // `text` contains some shader code if Text, or the id of macro (`abc` in examples above)
+        // being replaced if Qualifier or Layout.
+        std::string text;
+        // If Layout, this contains extra parameters passed in parentheses, if any.
+        std::string args;
+    };
+
+    std::string::size_type getCount(std::string::size_type start, std::string::size_type end);
+
+    void addTextBlock(const std::string &source,
+                      std::string::size_type start,
+                      std::string::size_type end);
+    void addLayoutBlock(const std::string &source,
+                        std::string::size_type nameStart,
+                        std::string::size_type nameEnd,
+                        std::string::size_type argsStart,
+                        std::string::size_type argsEnd);
+    void addQualifierBlock(const std::string &source,
+                           std::string::size_type nameStart,
+                           std::string::size_type nameEnd);
+
+    std::vector<SourceBlock> mSourceBlocks;
+};
+
+std::string::size_type IntermediateShaderSource::getCount(std::string::size_type start,
+                                                          std::string::size_type end)
+{
+    if (end == std::string::npos)
+    {
+        return end;
+    }
+
+    return end - start;
+}
+
+void IntermediateShaderSource::addTextBlock(const std::string &source,
+                                            std::string::size_type start,
+                                            std::string::size_type end)
+{
+    if (start == end)
+    {
+        return;
+    }
+
+    SourceBlock textBlock = {
+        SourceBlockType::Text,
+        {source, start, getCount(start, end)},
+        "",
+    };
+    mSourceBlocks.push_back(std::move(textBlock));
+}
+
+void IntermediateShaderSource::addLayoutBlock(const std::string &source,
+                                              std::string::size_type nameStart,
+                                              std::string::size_type nameEnd,
+                                              std::string::size_type argsStart,
+                                              std::string::size_type argsEnd)
+{
+    ASSERT(nameStart != nameEnd);
+
+    SourceBlock layoutBlock = {
+        SourceBlockType::Layout,
+        {source, nameStart, getCount(nameStart, nameEnd)},
+        {source, argsStart, getCount(argsStart, argsEnd)},
+    };
+    mSourceBlocks.push_back(std::move(textBlock));
+}
+
+void IntermediateShaderSource::addQualifierBlock(const std::string &source,
+                                                 std::string::size_type nameStart,
+                                                 std::string::size_type nameEnd)
+{
+    ASSERT(nameStart != nameEnd);
+
+    SourceBlock qualifierBlock = {
+        SourceBlockType::Qualifier,
+        {source, start, getCount(nameStart, nameEnd)},
+        "",
+    };
+    mSourceBlocks.push_back(std::move(qualifierBlock));
+}
+
+IntermediateShaderSource::IntermediateShaderSource(const std::string &source)
+{
+    std::string::size_type cur = 0;
+
+    while (cur != std::string::npos)
+    {
+        // Find the next marker.
+        std::string::size_type nextMarker = source.find(kMarkerStart, cur);
+
+        // Create a Text block for the code up to the marker.
+        addTextBlock(source, cur, nextMarker);
+
+        if (nextMarker != std::string::npos)
+        {
+            if (source.compare(nextMarker, sizeof(kQualifierMarkerBegin), kQualifierMarkerBegin) ==
+                0)
+            {
+                // TODO: addQualifierBlock
+            }
+            else if (source.compare(nextMarker, sizeof(kLayoutMarkerBegin), kLayoutMarkerBegin) ==
+                     0)
+            {
+                // TODO: parse args
+                // TODO: addLayoutBlock
+            }
+        }
+
+        // TODO: set to after the end marker.
+        cur = nextMarker;
+    }
 }
 
 void InsertLayoutSpecifierString(std::string *shaderString,
