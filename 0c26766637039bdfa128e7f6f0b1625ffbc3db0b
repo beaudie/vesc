@@ -46,6 +46,30 @@
       "revId": "0c26766637039bdfa128e7f6f0b1625ffbc3db0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c5ac6ee_bc2312c9",
+        "filename": "src/common/debug.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-02T18:38:25Z",
+      "side": 1,
+      "message": "No, `clang` is the compiler. But they defined `__GNUC__` so that they could replace gcc easily (they also adopted gcc command line arguments, builtin constructs and language extensions). Basically they wanted to be a drop-in replacement).\n\nBasically gcc defines `__GNUC__` and clang defines both `__GNUC__` and `__clang__`, so checking for `__GNUC__` covers both. No harm in leaving the `|| defined(__clang__)` though.",
+      "parentUuid": "a0d1e2f4_31539192",
+      "range": {
+        "startLine": 251,
+        "startChar": 21,
+        "endLine": 251,
+        "endChar": 43
+      },
+      "revId": "0c26766637039bdfa128e7f6f0b1625ffbc3db0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
