@@ -837,6 +837,9 @@ angle::Result WindowSurfaceVk::nextSwapchainImage(DisplayVk *displayVk)
 
     SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
 
+    // This swap chain image is new, reset any dependency information it has.
+    image.image.resetQueueSerial();
+
     // Update RenderTarget pointers.
     mColorRenderTarget.updateSwapchainImage(&image.image, &image.imageView);
 
