@@ -1,0 +1,259 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64289552_10c03bda",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "explain in title for which platform drivers",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6b7a870_f0c1ff14",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "Explain which drivers this targets (NVIDIA d3d11)",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01d00ddd_a9b8b0da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "add\nBug: chromium:\u003cnumber\u003e",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e48684b6_4db94f53",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "use consistent naming (Texture2DIntegerTestES3)\nuse consistent inheritance (other specific tests inherit simply from Texture2DTest, you are not getting anything by inherinting for from Texture2DTestES3)\n \nMaybe it\u0027d be nice to add this as the last of the test fixtures, not as the first test fixture after the base class. Maybe the new fixtures are always added to last of the list. Like you add your actual test as the last one, not in the middle.",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "330954e1_b59487c6",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "use consistent string format",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44d1c66a_70d56a06",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "check: use consistent precision if possible",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e07c5eca_7e92451c",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "use consistent naming inside the shader",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2ec39ef_18913c92",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "don\u0027t override unless overriding (you duplicate the original iiuc)\nif overriding, specifify override",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7a72efb_fe73c3b9",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "Check if this is doing anything that the superclass function does not do?\nDon\u0027t introduce variables with the same name as superclass function?\nDon\u0027t slice the immediate superclass from the callchain",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b04d4261_7ec2fb5e",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "Is this doing anything that the superclass does not do?",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "357564c6_de681c89",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "this you are not using (and you\u0027re duplicating base class variable?)",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1426161_9d52b02c",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "probably this is in the base class also?",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90fc3e80_f0014021",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "Your test fixture should probably look like this class.",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a4cd130_43f8eec7",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4495,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "I think your test fixture already creates a texture for you and destroys it after the test.",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16177c1f_a0c8c0ff",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4500,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-02T11:22:11Z",
+      "side": 1,
+      "message": "Maybe don\u0027t use color red as color for success if yiou can choose, it\u0027s sometimes used for failure.",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
