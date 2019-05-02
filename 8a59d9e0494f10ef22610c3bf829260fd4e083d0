@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85f6c47a_33eff30c",
+        "filename": "src/tests/gl_tests/TextureUploadFormatTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-02T20:45:30Z",
+      "side": 0,
+      "message": "Do we have similar unittests for image_util?",
+      "range": {
+        "startLine": 256,
+        "startChar": 0,
+        "endLine": 283,
+        "endChar": 0
+      },
+      "revId": "8a59d9e0494f10ef22610c3bf829260fd4e083d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
