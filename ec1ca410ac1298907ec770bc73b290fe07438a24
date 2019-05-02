@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80d5bdb4_96588335",
+        "filename": "src/libANGLE/VaryingPacking.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-02T15:28:53Z",
+      "side": 1,
+      "message": "maybe just store the struct field index. to be consistent.",
+      "range": {
+        "startLine": 73,
+        "startChar": 9,
+        "endLine": 73,
+        "endChar": 27
+      },
+      "revId": "ec1ca410ac1298907ec770bc73b290fe07438a24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
