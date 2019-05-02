@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "0d0350d8_76e96f4a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-02T20:31:13Z",
+      "side": 1,
+      "message": "are",
+      "range": {
+        "startLine": 16,
+        "startChar": 68,
+        "endLine": 16,
+        "endChar": 70
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ecde0bc1_1bc5e99a",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 4
@@ -18,6 +41,29 @@
         "startChar": 33,
         "endLine": 50,
         "endChar": 39
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e1564e4_31cfccd1",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-02T20:31:13Z",
+      "side": 1,
+      "message": "maybe also static_assert(N\u003e0)?",
+      "range": {
+        "startLine": 56,
+        "startChar": 11,
+        "endLine": 56,
+        "endChar": 16
       },
       "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -174,6 +220,30 @@
       "writtenOn": "2019-05-02T17:45:31Z",
       "side": 1,
       "message": "What about the idea of splitting the string along @@ with angle::SplitString? \"@@\" is not a symbol that\u0027s valid in the source file. And all comments are stripped. See string_utils.h. If there\u0027s any way to abstract the string functionality out of this file into simple string utils I would recommend keeping this file a bit simpler.",
+      "range": {
+        "startLine": 233,
+        "startChar": 51,
+        "endLine": 233,
+        "endChar": 55
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fca8d967_22f76589",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-02T20:31:13Z",
+      "side": 1,
+      "message": "+1\nI guess another option would be bison/flex?\nI also wonder if SPIRV-Tools can provide the functionality ANGLE uses here?",
+      "parentUuid": "600165e1_3835eef4",
       "range": {
         "startLine": 233,
         "startChar": 51,
