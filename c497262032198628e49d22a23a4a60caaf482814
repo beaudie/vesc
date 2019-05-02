@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0bc0aead_53e3391e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-02T20:33:37Z",
+      "side": 1,
+      "message": "I believe the linker is smart enough to optimize out unused non-exported functions.\n\nAnyway this was a bit lazy. I removed the helper entirely and used the common image utils library to get the encoding/decoding the test needs.",
+      "parentUuid": "35da70d7_3fcbed7e",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 36
+      },
+      "revId": "c497262032198628e49d22a23a4a60caaf482814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bcc62af0_2e43908c",
         "filename": "src/common/SizedFloat.h",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "c497262032198628e49d22a23a4a60caaf482814",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9aa771b_699f8d63",
+        "filename": "src/common/SizedFloat.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-02T20:33:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bcc62af0_2e43908c",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "c497262032198628e49d22a23a4a60caaf482814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
