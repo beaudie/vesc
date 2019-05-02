@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d1202c23_d5edd1c7",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-02T17:08:11Z",
+      "side": 1,
+      "message": "OES_depth_texture only defines 16bit and 32bit depth components.",
+      "parentUuid": "05c4e3cd_2f406dcd",
+      "range": {
+        "startLine": 671,
+        "startChar": 0,
+        "endLine": 676,
+        "endChar": 6
+      },
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0cd7f3f5_874c9aa7",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 14
