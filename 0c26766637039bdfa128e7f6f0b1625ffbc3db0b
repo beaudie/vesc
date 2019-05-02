@@ -22,6 +22,30 @@
       "revId": "0c26766637039bdfa128e7f6f0b1625ffbc3db0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0d1e2f4_31539192",
+        "filename": "src/common/debug.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1158749
+      },
+      "writtenOn": "2019-05-02T17:28:27Z",
+      "side": 1,
+      "message": "so clang means c language? so if it\u0027s gnuc then it\u0027s also clang?",
+      "parentUuid": "ddb49950_cd8e5d09",
+      "range": {
+        "startLine": 251,
+        "startChar": 21,
+        "endLine": 251,
+        "endChar": 43
+      },
+      "revId": "0c26766637039bdfa128e7f6f0b1625ffbc3db0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
