@@ -22,6 +22,30 @@
       "revId": "99c6af0c2379b0dc43cd88633c668f4c8a56052f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf323a4b_27af35b5",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-02T20:34:20Z",
+      "side": 1,
+      "message": "Talked offline. It\u0027s based on your idea. But has somewhat of a more detailed implementation.",
+      "parentUuid": "6eed5648_6e6e4c24",
+      "range": {
+        "startLine": 420,
+        "startChar": 0,
+        "endLine": 428,
+        "endChar": 5
+      },
+      "revId": "99c6af0c2379b0dc43cd88633c668f4c8a56052f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
