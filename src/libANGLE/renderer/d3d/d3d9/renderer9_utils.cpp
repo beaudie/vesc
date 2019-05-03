@@ -791,21 +791,18 @@ void MakeValidSize(bool isImage,
     *levelOffset = upsampleCount;
 }
 
-angle::WorkaroundsD3D GenerateWorkarounds()
+void GenerateWorkarounds(angle::WorkaroundsD3D *workarounds)
 {
-    angle::WorkaroundsD3D workarounds;
-    workarounds.mrtPerfWorkaround                = true;
-    workarounds.setDataFasterThanImageUpload     = false;
-    workarounds.useInstancedPointSpriteEmulation = false;
+    workarounds->mrtPerfWorkaround.applied                = true;
+    workarounds->setDataFasterThanImageUpload.applied     = false;
+    workarounds->useInstancedPointSpriteEmulation.applied = false;
 
     // TODO(jmadill): Disable workaround when we have a fixed compiler DLL.
-    workarounds.expandIntegerPowExpressions = true;
+    workarounds->expandIntegerPowExpressions.applied = true;
 
     // Call platform hooks for testing overrides.
     auto *platform = ANGLEPlatformCurrent();
-    platform->overrideWorkaroundsD3D(platform, &workarounds);
-
-    return workarounds;
+    platform->overrideWorkaroundsD3D(platform, workarounds);
 }
 
 }  // namespace d3d9
