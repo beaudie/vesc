@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e4d958e_b7784801",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T19:00:13Z",
+      "side": 1,
+      "message": "There\u0027s a bug here. If there are no commands to flush, you would be storing a fence that would be submitted with a future flush, if there ever is any.\n\nYou would need to get \"the last submitted fence\", which would basically be the fence in `mInFlightCommands.last()`, if any, after the flush call (basically where `swap.serial \u003d renderer-\u003egetLastSubmittedQueueSerial();` was).\n\nThe reason SyncVk calls `getSubmitFence` is precisely because it wants to get a fence for the next submission, no matter when that happens. The logic here is the reverse; you want the last submitted fence (after the `flush` call, which can be no-op).",
+      "range": {
+        "startLine": 743,
+        "startChar": 0,
+        "endLine": 746,
+        "endChar": 74
+      },
+      "revId": "f3b7692fe1715eb1d86a3eeebe3c29c125adba6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
