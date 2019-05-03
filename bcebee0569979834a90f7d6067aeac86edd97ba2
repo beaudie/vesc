@@ -22,6 +22,30 @@
       "revId": "bcebee0569979834a90f7d6067aeac86edd97ba2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2514f7df_0d4ba061",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T19:59:44Z",
+      "side": 1,
+      "message": "--gtest_list_tests works but looks a little different:\n\nout/Clang_Debug_x64/angle_end2end_tests.exe --gtest_filter\u003dSimpleOperation*ES2_Vulkan --separate-process-per-config --gtest_list_tests\n\n\u003csnip\u003e\nTest Config: ES2_OpenGLES_NoVirtual\nTest Config: ES2_OpenGL_NoFixture\nTest Config: ES2_OpenGL_NoVirtual\nTest Config: ES2_Vulkan\nSimpleOperationTest.\n  CullFaceEnabledState/ES2_Vulkan  # GetParam() \u003d ES2_Vulkan\n  CullFaceFrontEnabledState/ES2_Vulkan  # GetParam() \u003d ES2_Vulkan\n  BlendingRenderState/ES2_Vulkan  # GetParam() \u003d ES2_Vulkan\n  CompileVertexShader/ES2_Vulkan  # GetParam() \u003d ES2_Vulkan\n  CompileFragmentShaderSingleVaryingInput/ES2_Vulkan  # GetParam() \u003d ES2_Vulkan\n  ClearAndSwap/ES2_Vulkan  # GetParam() \u003d ES2_Vulkan\n  ScissorTest/ES2_Vulkan  # GetParam() \u003d ES2_Vulkan\n\n\u003csnip\u003e\n\nI elaborated on my comment about the InitGoogleTest. It\u0027s so we can gather config names.",
+      "parentUuid": "3dbea0f4_2ef1716b",
+      "range": {
+        "startLine": 458,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 5
+      },
+      "revId": "bcebee0569979834a90f7d6067aeac86edd97ba2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
