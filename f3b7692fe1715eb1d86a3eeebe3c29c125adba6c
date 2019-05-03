@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "8b3f53f1_254779de",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T19:31:28Z",
+      "side": 1,
+      "message": "That wouldn\u0027t be valid either. If there\u0027s a `glFlush()` before the swap for example, you can get in this situation, yet you still need to know the fence that was used for that `glFlush()` at this point.",
+      "parentUuid": "e27575f6_69f87dec",
+      "range": {
+        "startLine": 743,
+        "startChar": 0,
+        "endLine": 746,
+        "endChar": 74
+      },
+      "revId": "f3b7692fe1715eb1d86a3eeebe3c29c125adba6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f902eae0_5966f13f",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 11
