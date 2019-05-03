@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0de94938_8a47284c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T16:41:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d0350d8_76e96f4a",
+      "range": {
+        "startLine": 16,
+        "startChar": 68,
+        "endLine": 16,
+        "endChar": 70
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ecde0bc1_1bc5e99a",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18e2752f_f435ac5d",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T16:41:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecde0bc1_1bc5e99a",
+      "range": {
+        "startLine": 50,
+        "startChar": 33,
+        "endLine": 50,
+        "endChar": 39
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "91f1549b_38b8bb7f",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T16:41:47Z",
+      "side": 1,
+      "message": "`Type (\u0026)[0]` is an illegal declaration in C++. From C++11, section 8.3.4, regarding a declaration `D1 [expression]`:\n\n\u003e The expression is erroneous if:\n\u003e — its value before converting to std::size_t or, in the case of an expression of class type, before application of the second standard conversion (13.3.3.1.2) is less than or equal to zero;\n\nAdded the static_assert anyway though.",
+      "parentUuid": "4e1564e4_31cfccd1",
+      "range": {
+        "startLine": 56,
+        "startChar": 11,
+        "endLine": 56,
+        "endChar": 16
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f37b9b48_0805d654",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 4
@@ -91,6 +163,30 @@
       "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29021e16_a2ce4252",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T16:41:47Z",
+      "side": 1,
+      "message": "Done, and will do from now on.",
+      "parentUuid": "f37b9b48_0805d654",
+      "range": {
+        "startLine": 107,
+        "startChar": 53,
+        "endLine": 107,
+        "endChar": 64
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "062cb36e_19a8ef1c",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T16:41:47Z",
+      "side": 1,
+      "message": "Yes, I was contemplating doing the same. Done",
+      "parentUuid": "57c2a739_0dc971ef",
+      "range": {
+        "startLine": 113,
+        "startChar": 18,
+        "endLine": 113,
+        "endChar": 46
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3975e8a7_58b00c5f",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 4
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "1f94e2cb_35c8a9df",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T16:41:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3975e8a7_58b00c5f",
+      "range": {
+        "startLine": 120,
+        "startChar": 15,
+        "endLine": 120,
+        "endChar": 30
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aad65275_aa706b3b",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 4
@@ -160,6 +304,30 @@
       "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeb41896_f1118b5e",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T16:41:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aad65275_aa706b3b",
+      "range": {
+        "startLine": 132,
+        "startChar": 11,
+        "endLine": 132,
+        "endChar": 22
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -206,6 +374,54 @@
       "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a15568ec_cf87889b",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T16:41:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e0dfc59_69068fb8",
+      "range": {
+        "startLine": 158,
+        "startChar": 38,
+        "endLine": 158,
+        "endChar": 60
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32e24818_3a381b81",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T16:41:47Z",
+      "side": 1,
+      "message": "Should have been `GetSomethingUsableAsTheCountArgumentToTheConstructorOfStdString`! Function removed in refactoring.",
+      "parentUuid": "9807bf24_b163a6da",
+      "range": {
+        "startLine": 158,
+        "startChar": 23,
+        "endLine": 158,
+        "endChar": 37
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -256,6 +472,30 @@
     },
     {
       "key": {
+        "uuid": "90f3488c_d1111331",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T16:41:47Z",
+      "side": 1,
+      "message": "@Yuly, a full fledged lexer would be overkill here (at least since it does regex matching).\n\n@Jamie, angle::SplitString can end up being awkward as I still need to tokenize what\u0027s inside () too (and change @@ to @ to be a single char, though that\u0027s no biggie). I opted instead to add a new utility to get the prefix of a string up to the first match of something, and have this code still process the string in a single pass.",
+      "parentUuid": "fca8d967_22f76589",
+      "range": {
+        "startLine": 233,
+        "startChar": 51,
+        "endLine": 233,
+        "endChar": 55
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "12c4f12f_944c0993",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 4
@@ -267,6 +507,30 @@
       "writtenOn": "2019-05-02T17:45:31Z",
       "side": 1,
       "message": "this is nice, that it doesn\u0027t change the way the code works in these places!",
+      "range": {
+        "startLine": 590,
+        "startChar": 4,
+        "endLine": 590,
+        "endChar": 16
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f4fd09ca_0ba4a183",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T16:41:47Z",
+      "side": 1,
+      "message": "Yeap! That was intentional.",
+      "parentUuid": "12c4f12f_944c0993",
       "range": {
         "startLine": 590,
         "startChar": 4,
