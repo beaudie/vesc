@@ -90,7 +90,7 @@ class DepthStencilTest : public ANGLETest
     // depth/stencil format
     void overrideFeaturesVk(FeaturesVk *featuresVk) override
     {
-        featuresVk->forceFallbackFormat = true;
+        featuresVk->forceFeatureEnabled("force_fallback_format", true);
     }
 
     void prepareSingleEmulatedWithPacked();

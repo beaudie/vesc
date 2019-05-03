@@ -987,7 +987,7 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
     // surface is flipped.
     egl::Surface *drawSurface = context->getCurrentDrawSurface();
     mFlipYForCurrentSurface =
-        drawSurface != nullptr && mRenderer->getFeatures().flipViewportY &&
+        drawSurface != nullptr && mRenderer->getFeatures().flipViewportY.enabled &&
         !IsMaskFlagSet(drawSurface->getOrientation(), EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE);
 
     if (drawSurface && drawSurface->getType() == EGL_WINDOW_BIT)
@@ -1018,14 +1018,14 @@ void ContextVk::updateFlipViewportDrawFramebuffer(const gl::State &glState)
 {
     gl::Framebuffer *drawFramebuffer = glState.getDrawFramebuffer();
     mFlipViewportForDrawFramebuffer =
-        drawFramebuffer->isDefault() && mRenderer->getFeatures().flipViewportY;
+        drawFramebuffer->isDefault() && mRenderer->getFeatures().flipViewportY.enabled;
 }
 
 void ContextVk::updateFlipViewportReadFramebuffer(const gl::State &glState)
 {
     gl::Framebuffer *readFramebuffer = glState.getReadFramebuffer();
     mFlipViewportForReadFramebuffer =
-        readFramebuffer->isDefault() && mRenderer->getFeatures().flipViewportY;
+        readFramebuffer->isDefault() && mRenderer->getFeatures().flipViewportY.enabled;
 }
 
 gl::Caps ContextVk::getNativeCaps() const
