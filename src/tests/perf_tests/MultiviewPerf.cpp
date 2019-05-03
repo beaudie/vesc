@@ -126,7 +126,7 @@ class MultiviewBenchmark : public ANGLERenderTest,
 
     void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) override
     {
-        workarounds->selectViewInGeometryShader =
+        workarounds->selectViewInGeometryShader.applied =
             (GetParam().multiviewOption == MultiviewOption::InstancedMultiviewGeometryShader);
     }
 

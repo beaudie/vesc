@@ -269,7 +269,7 @@ class TinyDepthStencilWorkaroundTest : public ANGLETest
     // Override the workarounds to enable "tiny" depth/stencil textures.
     void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) override
     {
-        workarounds->emulateTinyStencilTextures = true;
+        workarounds->emulateTinyStencilTextures.applied = true;
     }
 };
 

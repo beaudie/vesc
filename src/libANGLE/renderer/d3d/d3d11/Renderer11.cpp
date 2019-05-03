@@ -2823,7 +2823,7 @@ angle::Result Renderer11::compileToExecutable(d3d::Context *context,
         flags |= D3DCOMPILE_DEBUG;
     }
 
-    if (workarounds.enableIEEEStrictness)
+    if (workarounds.enableIEEEStrictness.applied)
         flags |= D3DCOMPILE_IEEE_STRICTNESS;
 
     // Sometimes D3DCompile will fail with the default compilation flags for complicated shaders

@@ -2645,11 +2645,11 @@ angle::Result Renderer9::compileToExecutable(d3d::Context *context,
 
     UINT flags = ANGLE_COMPILE_OPTIMIZATION_LEVEL;
 
-    if (workarounds.skipOptimization)
+    if (workarounds.skipOptimization.applied)
     {
         flags = D3DCOMPILE_SKIP_OPTIMIZATION;
     }
-    else if (workarounds.useMaxOptimization)
+    else if (workarounds.useMaxOptimization.applied)
     {
         flags = D3DCOMPILE_OPTIMIZATION_LEVEL3;
     }

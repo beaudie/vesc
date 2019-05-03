@@ -1907,7 +1907,7 @@ angle::Result StateManager11::syncFramebuffer(const gl::Context *context)
     const auto &colorRTs     = mFramebuffer11->getCachedColorRenderTargets();
 
     size_t appliedRTIndex                   = 0;
-    bool skipInactiveRTs                    = mRenderer->getWorkarounds().mrtPerfWorkaround;
+    bool skipInactiveRTs                    = mRenderer->getWorkarounds().mrtPerfWorkaround.applied;
     const auto &drawStates                  = mFramebuffer11->getState().getDrawBufferStates();
     gl::DrawBufferMask activeProgramOutputs = mProgramD3D->getState().getActiveOutputVariables();
     UINT maxExistingRT                      = 0;
@@ -3803,7 +3803,8 @@ void StateManager11::syncPrimitiveTopology(const gl::State &glState,
 
             // If instanced pointsprites are enabled and the shader uses gl_PointSize, the topology
             // must be D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST.
-            if (usesPointSize && mRenderer->getWorkarounds().useInstancedPointSpriteEmulation)
+            if (usesPointSize &&
+                mRenderer->getWorkarounds().useInstancedPointSpriteEmulation.applied)
             {
                 primitiveTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
             }

@@ -9,12 +9,15 @@
 #ifndef LIBANGLE_RENDERER_GL_WORKAROUNDSGL_H_
 #define LIBANGLE_RENDERER_GL_WORKAROUNDSGL_H_
 
+#include "libANGLE/workaround.h"
+
 namespace rx
 {
 
 struct WorkaroundsGL
 {
     WorkaroundsGL();
+    ~WorkaroundsGL();
 
     // When writing a float to a normalized integer framebuffer, desktop OpenGL is allowed to write
     // one of the two closest normalized integer representations (although round to nearest is
@@ -23,18 +26,34 @@ struct WorkaroundsGL
     // section 2.1.2 of the OpenGL ES 2.0.25 spec).  This issue only shows up on Intel and AMD
     // drivers on framebuffer formats that have 1-bit alpha, work around this by using higher
     // precision formats instead.
-    bool avoid1BitAlphaTextureFormats = false;
+    angle::Workaround avoid1BitAlphaTextureFormats =
+        angle::Workaround("avoid_1_bit_alpha_texture_formats",
+                          "OpenGL workarounds",
+                          "Issue on Intel and AMD drivers with 1-bit alpha framebuffer formats",
+                          0,
+                          0);
 
     // On some older Intel drivers, GL_RGBA4 is not color renderable, glCheckFramebufferStatus
     // returns GL_FRAMEBUFFER_UNSUPPORTED. Work around this by using a known color-renderable
     // format.
-    bool rgba4IsNotSupportedForColorRendering = false;
+    angle::Workaround rgba4IsNotSupportedForColorRendering =
+        angle::Workaround("rgba4_is_not_supported_for_color_rendering",
+                          "OpenGL workarounds",
+                          "Issue on older Intel drivers, GL_RGBA4 is not color renderable",
+                          0,
+                          0);
 
     // When clearing a framebuffer on Intel or AMD drivers, when GL_FRAMEBUFFER_SRGB is enabled, the
     // driver clears to the linearized clear color despite the framebuffer not supporting SRGB
     // blending.  It only seems to do this when the framebuffer has only linear attachments, mixed
     // attachments appear to get the correct clear color.
-    bool doesSRGBClearsOnLinearFramebufferAttachments = false;
+    angle::Workaround doesSRGBClearsOnLinearFramebufferAttachments =
+        angle::Workaround("does_srgb_clears_on_linear_framebuffer_attachments",
+                          "OpenGL workarounds",
+                          "Issue clearing framebuffers with linear attachments on Indel or AMD "
+                          "drivers when GL_FRAMEBUFFER_SRGB is enabled",
+                          0,
+                          0);
 
     // On Mac some GLSL constructs involving do-while loops cause GPU hangs, such as the following:
     //  int i = 1;
@@ -43,34 +62,75 @@ struct WorkaroundsGL
     //      continue;
     //  } while (i > 0)
     // Work around this by rewriting the do-while to use another GLSL construct (block + while)
-    bool doWhileGLSLCausesGPUHang = false;
+    angle::Workaround doWhileGLSLCausesGPUHang =
+        angle::Workaround("do_while_glsl_causes_gpu_hang",
+                          "OpenGL workarounds",
+                          "On Mac some GLSL constructs involving do-while loops cause GPU hangs",
+                          0,
+                          0);
 
     // Calling glFinish doesn't cause all queries to report that the result is available on some
     // (NVIDIA) drivers.  It was found that enabling GL_DEBUG_OUTPUT_SYNCHRONOUS before the finish
     // causes it to fully finish.
-    bool finishDoesNotCauseQueriesToBeAvailable = false;
+    angle::Workaround finishDoesNotCauseQueriesToBeAvailable = angle::Workaround(
+        "finish_does_not_cause_queries_to_be_available",
+        "OpenGL workarounds",
+        "On some NVIDIA drivers, glFinish doesn't cause all queries to report available result",
+        0,
+        0);
 
     // Always call useProgram after a successful link to avoid a driver bug.
     // This workaround is meant to reproduce the use_current_program_after_successful_link
     // workaround in Chromium (http://crbug.com/110263). It has been shown that this workaround is
     // not necessary for MacOSX 10.9 and higher (http://crrev.com/39eb535b).
-    bool alwaysCallUseProgramAfterLink = false;
+    angle::Workaround alwaysCallUseProgramAfterLink =
+        angle::Workaround("always_call_use_program_after_link",
+                          "OpenGL workarounds",
+                          "Always call useProgram after a successful link to avoid a driver bug",
+                          0,
+                          0);
 
     // In the case of unpacking from a pixel unpack buffer, unpack overlapping rows row by row.
-    bool unpackOverlappingRowsSeparatelyUnpackBuffer = false;
+    angle::Workaround unpackOverlappingRowsSeparatelyUnpackBuffer = angle::Workaround(
+        "unpack_overlapping_rows_separately_unpack_buffer",
+        "OpenGL workarounds",
+        "In the case of unpacking from a pixel unpack buffer, unpack overlapping rows row by row",
+        0,
+        0);
+
     // In the case of packing to a pixel pack buffer, pack overlapping rows row by row.
-    bool packOverlappingRowsSeparatelyPackBuffer = false;
+    angle::Workaround packOverlappingRowsSeparatelyPackBuffer = angle::Workaround(
+        "pack_overlapping_rows_separately_pack_buffer",
+        "OpenGL workarounds",
+        "In the case of packing to a pixel pack buffer, pack overlapping rows row by row",
+        0,
+        0);
 
     // During initialization, assign the current vertex attributes to the spec-mandated defaults.
-    bool initializeCurrentVertexAttributes = false;
+    angle::Workaround initializeCurrentVertexAttributes = angle::Workaround(
+        "initialize_current_vertex_attributes",
+        "OpenGL workarounds",
+        "During initialization, assign the current vertex attributes to the spec-mandated defaults",
+        0,
+        0);
 
     // abs(i) where i is an integer returns unexpected result on Intel Mac.
     // Emulate abs(i) with i * sign(i).
-    bool emulateAbsIntFunction = false;
+    angle::Workaround emulateAbsIntFunction =
+        angle::Workaround("emulate_abs_int_function",
+                          "OpenGL workarounds",
+                          "On Intel mac, abs(i) where i is an integer returns unexpected result",
+                          0,
+                          0);
 
     // On Intel Mac, calculation of loop conditions in for and while loop has bug.
     // Add "&& true" to the end of the condition expression to work around the bug.
-    bool addAndTrueToLoopCondition = false;
+    angle::Workaround addAndTrueToLoopCondition = angle::Workaround(
+        "add_and_true_to_loop_condition",
+        "OpenGL workarounds",
+        "On Intel Mac, calculation of loop conditions in for and while loop has bug",
+        0,
+        0);
 
     // When uploading textures from an unpack buffer, some drivers count an extra row padding when
     // checking if the pixel unpack buffer is big enough. Tracking bug: http://anglebug.com/1512
@@ -84,101 +144,350 @@ struct WorkaroundsGL
     //     +-------A--B
     // The last pixel read will be A, but the driver will think it is B, causing it to generate an
     // error when the pixel buffer is just big enough.
-    bool unpackLastRowSeparatelyForPaddingInclusion = false;
+    angle::Workaround unpackLastRowSeparatelyForPaddingInclusion = angle::Workaround(
+        "unpack_last_row_separately_for_padding_inclusion",
+        "OpenGL workarounds",
+        "When uploading textures from an unpack buffer, some drivers count an extra row padding",
+        0,
+        0);
 
     // Equivalent workaround when uploading data from a pixel pack buffer.
-    bool packLastRowSeparatelyForPaddingInclusion = false;
+    angle::Workaround packLastRowSeparatelyForPaddingInclusion = angle::Workaround(
+        "pack_last_row_separately_for_padding_inclusion",
+        "OpenGL workarounds",
+        "When uploading textures from an pack buffer, some drivers count an extra row padding",
+        0,
+        0);
 
     // On some Intel drivers, using isnan() on highp float will get wrong answer. To work around
     // this bug, we use an expression to emulate function isnan().
     // Tracking bug: http://crbug.com/650547
-    bool emulateIsnanFloat = false;
+    angle::Workaround emulateIsnanFloat = angle::Workaround(
+        "emulate_isnan_float",
+        "OpenGL workarounds",
+        "On some Intel drivers, using isnan() on highp float will get wrong answer",
+        0,
+        0);
 
     // On Mac with OpenGL version 4.1, unused std140 or shared uniform blocks will be
     // treated as inactive which is not consistent with WebGL2.0 spec. Reference all members in a
     // unused std140 or shared uniform block at the beginning of main to work around it.
     // Also used on Linux AMD.
-    bool useUnusedBlocksWithStandardOrSharedLayout = false;
+    angle::Workaround useUnusedBlocksWithStandardOrSharedLayout =
+        angle::Workaround("use_unused_blocks_with_standard_or_shared_layout",
+                          "OpenGL workarounds",
+                          "On Mac with OpenGL version 4.1, unused std140 or shared uniform blocks "
+                          "will be treated as inactive",
+                          0,
+                          0);
 
     // This flag will keep invariant declaration for input in fragment shader for GLSL >=4.20
     // on AMD.
-    bool dontRemoveInvariantForFragmentInput = false;
+    angle::Workaround dontRemoveInvariantForFragmentInput = angle::Workaround(
+        "dont_remove_invariant_for_fragment_input",
+        "OpenGL workarounds",
+        "On AMD GLSL >=4.20, keep invariant declaration for input in fragment shader",
+        0,
+        0);
 
     // This flag is used to fix spec difference between GLSL 4.1 or lower and ESSL3.
-    bool removeInvariantAndCentroidForESSL3 = false;
+    angle::Workaround removeInvariantAndCentroidForESSL3 =
+        angle::Workaround("remove_invarient_and_centroid_for_essl3",
+                          "OpenGL workarounds",
+                          "Fix spec difference between GLSL 4.1 or lower and ESSL3",
+                          0,
+                          0);
 
     // On Intel Mac OSX 10.11 driver, using "-float" will get wrong answer. Use "0.0 - float" to
     // replace "-float".
     // Tracking bug: http://crbug.com/308366
-    bool rewriteFloatUnaryMinusOperator = false;
+    angle::Workaround rewriteFloatUnaryMinusOperator =
+        angle::Workaround("rewrite_float_unary_minus_operator",
+                          "OpenGL workarounds",
+                          "On Intel Mac OSX 10.11 driver, using '-<float>' will get wrong answer",
+                          308366,
+                          0);
 
     // On NVIDIA drivers, atan(y, x) may return a wrong answer.
     // Tracking bug: http://crbug.com/672380
-    bool emulateAtan2Float = false;
+    angle::Workaround emulateAtan2Float =
+        angle::Workaround("emulate_atan_2_float",
+                          "OpenGL workarounds",
+                          "On NVIDIA drivers, atan(y, x) may return a wrong answer",
+                          672380,
+                          0);
 
     // Some drivers seem to forget about UBO bindings when using program binaries. Work around
     // this by re-applying the bindings after the program binary is loaded or saved.
     // This only seems to affect AMD OpenGL drivers, and some Android devices.
     // http://anglebug.com/1637
-    bool reapplyUBOBindingsAfterUsingBinaryProgram = false;
+    angle::Workaround reapplyUBOBindingsAfterUsingBinaryProgram =
+        angle::Workaround("reapply_ubo_bindings_after_using_binary_program",
+                          "OpenGL workarounds",
+                          "Some AMD OpenGL drivers and Android devices forget about UBO bindings "
+                          "when using program binaries",
+                          0,
+                          1637);
 
     // Some OpenGL drivers return 0 when we query MAX_VERTEX_ATTRIB_STRIDE in an OpenGL 4.4 or
     // higher context.
     // This only seems to affect AMD OpenGL drivers.
     // Tracking bug: http://anglebug.com/1936
-    bool emulateMaxVertexAttribStride = false;
+    angle::Workaround emulateMaxVertexAttribStride = angle::Workaround(
+        "emulate_max_vertex_attrib_stride",
+        "OpenGL workarounds",
+        "Some AMD OpenGL >= 4.4 drivers return 0 when MAX_VERTEX_ATTRIB_STRIED queried",
+        0,
+        1936);
 
     // Initializing uninitialized locals caused odd behavior on Mac in a few WebGL 2 tests.
     // Tracking bug: http://anglebug/2041
-    bool dontInitializeUninitializedLocals = false;
+    angle::Workaround dontInitializeUninitializedLocals = angle::Workaround(
+        "dont_initialize_uninitialized_locals",
+        "OpenGL workarounds",
+        "On Mac initializing uninitialized locals caused odd behavior in a few WebGL 2 tests",
+        0,
+        2041);
 
     // On some NVIDIA drivers the point size range reported from the API is inconsistent with the
     // actual behavior. Clamp the point size to the value from the API to fix this.
-    bool clampPointSize = false;
+    angle::Workaround clampPointSize =
+        angle::Workaround("clamp_point_size",
+                          "OpenGL workarounds",
+                          "On some NVIDIA drivers the point size range reported from the API is "
+                          "inconsistent with the actual behavior",
+                          0,
+                          0);
 
     // On some NVIDIA drivers certain types of GLSL arithmetic ops mixing vectors and scalars may be
     // executed incorrectly. Change them in the shader translator. Tracking bug:
     // http://crbug.com/772651
-    bool rewriteVectorScalarArithmetic = false;
+    angle::Workaround rewriteVectorScalarArithmetic =
+        angle::Workaround("rewrite_vector_scalar_arithmetic",
+                          "OpenGL workarounds",
+                          "On some NVIDIA drivers certain types of GLSL arithmetic ops mixing "
+                          "vectors and scalars may be executed incorrectly",
+                          772651,
+                          0);
 
     // On some Android devices for loops used to initialize variables hit native GLSL compiler bugs.
-    bool dontUseLoopsToInitializeVariables = false;
-
+    angle::Workaround dontUseLoopsToInitializeVariables =
+        angle::Workaround("dont_use_loops_to_initialize_variables",
+                          "OpenGL workarounds",
+                          "On some Android devices for loops used to initialize variables hit "
+                          "native GLSL compiler bugs",
+                          0,
+                          0);
     // On some NVIDIA drivers gl_FragDepth is not clamped correctly when rendering to a floating
     // point depth buffer. Clamp it in the translated shader to fix this.
-    bool clampFragDepth = false;
+    angle::Workaround clampFragDepth =
+        angle::Workaround("clamp_frag_depth",
+                          "OpenGL workarounds",
+                          "On some NVIDIA drivers gl_FragDepth is not clamped correctly when "
+                          "rendering to a floating point depth buffer",
+                          0,
+                          0);
 
     // On some NVIDIA drivers before version 397.31 repeated assignment to swizzled values inside a
     // GLSL user-defined function have incorrect results. Rewrite this type of statements to fix
     // this.
-    bool rewriteRepeatedAssignToSwizzled = false;
-
+    angle::Workaround rewriteRepeatedAssignToSwizzled =
+        angle::Workaround("rewrite_repeated_assign_to_swizzled",
+                          "OpenGL workarounds",
+                          "On some NVIDIA drivers < v397.31, repeated assignment to swizzled "
+                          "values inside a GLSL user-defined function have incorrect results",
+                          0,
+                          0);
     // On some AMD and Intel GL drivers ARB_blend_func_extended does not pass the tests.
     // It might be possible to work around the Intel bug by rewriting *FragData to *FragColor
     // instead of disabling the functionality entirely. The AMD bug looked like incorrect blending,
     // not sure if a workaround is feasible. http://anglebug.com/1085
-    bool disableBlendFuncExtended = false;
+    angle::Workaround disableBlendFuncExtended = angle::Workaround(
+        "disable_blend_func_extended",
+        "OpenGL workarounds",
+        "On some AMD and Intel GL drivers ARB_blend_func_extended does not pass the tests",
+        0,
+        1085);
 
     // Qualcomm drivers returns raw sRGB values instead of linearized values when calling
     // glReadPixels on unsized sRGB texture formats. http://crbug.com/550292 and
     // http://crbug.com/565179
-    bool unsizedsRGBReadPixelsDoesntTransform = false;
+    angle::Workaround unsizedsRGBReadPixelsDoesntTransform =
+        angle::Workaround("unsized_srgb_read_pixels_doesnt_transform",
+                          "OpenGL workarounds",
+                          "Qualcomm drivers returns raw sRGB values instead of linearized values "
+                          "when calling glReadPixels on unsized sRGB texture formats",
+                          565179,
+                          0);
 
     // Older Qualcomm drivers generate errors when querying the number of bits in timer queries, ex:
     // GetQueryivEXT(GL_TIME_ELAPSED, GL_QUERY_COUNTER_BITS).  http://anglebug.com/3027
-    bool queryCounterBitsGeneratesErrors = false;
+    angle::Workaround queryCounterBitsGeneratesErrors = angle::Workaround(
+        "query_counter_bits_generates_errors",
+        "OpenGL workarounds",
+        "Older Qualcomm drivers generate errors when querying the number of bits in timer queries",
+        0,
+        3027);
 
     // Re-linking a program in parallel is buggy on some Intel Windows OpenGL drivers and Android
     // platforms.
     // http://anglebug.com/3045
-    bool dontRelinkProgramsInParallel = false;
+    angle::Workaround dontRelinkProgramsInParallel =
+        angle::Workaround("query_counter_bits_generates_errors",
+                          "OpenGL workarounds",
+                          "On some Intel Windows OpenGL drivers and Android, relinking a program "
+                          "in parallel is buggy",
+                          0,
+                          3045);
 
     // Some tests have been seen to fail using worker contexts, this switch allows worker contexts
     // to be disabled for some platforms. http://crbug.com/849576
-    bool disableWorkerContexts = false;
+    angle::Workaround disableWorkerContexts =
+        angle::Workaround("disable_worker_contexts",
+                          "OpenGL workarounds",
+                          "Some tests have been seen to fail using worker contexts",
+                          849576,
+                          0);
+
+    void forceWorkaround(const std::string &name, const bool applied)
+    {
+        if (name == avoid1BitAlphaTextureFormats.name)
+        {
+            avoid1BitAlphaTextureFormats.applied = applied;
+        }
+        else if (name == rgba4IsNotSupportedForColorRendering.name)
+        {
+            rgba4IsNotSupportedForColorRendering.applied = applied;
+        }
+        else if (name == doesSRGBClearsOnLinearFramebufferAttachments.name)
+        {
+            doesSRGBClearsOnLinearFramebufferAttachments.applied = applied;
+        }
+        else if (name == doWhileGLSLCausesGPUHang.name)
+        {
+            doWhileGLSLCausesGPUHang.applied = applied;
+        }
+        else if (name == finishDoesNotCauseQueriesToBeAvailable.name)
+        {
+            finishDoesNotCauseQueriesToBeAvailable.applied = applied;
+        }
+        else if (name == alwaysCallUseProgramAfterLink.name)
+        {
+            alwaysCallUseProgramAfterLink.applied = applied;
+        }
+        else if (name == unpackOverlappingRowsSeparatelyUnpackBuffer.name)
+        {
+            unpackOverlappingRowsSeparatelyUnpackBuffer.applied = applied;
+        }
+        else if (name == packOverlappingRowsSeparatelyPackBuffer.name)
+        {
+            packOverlappingRowsSeparatelyPackBuffer.applied = applied;
+        }
+        else if (name == initializeCurrentVertexAttributes.name)
+        {
+            initializeCurrentVertexAttributes.applied = applied;
+        }
+        else if (name == emulateAbsIntFunction.name)
+        {
+            emulateAbsIntFunction.applied = applied;
+        }
+        else if (name == addAndTrueToLoopCondition.name)
+        {
+            addAndTrueToLoopCondition.applied = applied;
+        }
+        else if (name == unpackLastRowSeparatelyForPaddingInclusion.name)
+        {
+            unpackLastRowSeparatelyForPaddingInclusion.applied = applied;
+        }
+        else if (name == packLastRowSeparatelyForPaddingInclusion.name)
+        {
+            packLastRowSeparatelyForPaddingInclusion.applied = applied;
+        }
+        else if (name == emulateIsnanFloat.name)
+        {
+            emulateIsnanFloat.applied = applied;
+        }
+        else if (name == useUnusedBlocksWithStandardOrSharedLayout.name)
+        {
+            useUnusedBlocksWithStandardOrSharedLayout.applied = applied;
+        }
+        else if (name == dontRemoveInvariantForFragmentInput.name)
+        {
+            dontRemoveInvariantForFragmentInput.applied = applied;
+        }
+        else if (name == removeInvariantAndCentroidForESSL3.name)
+        {
+            removeInvariantAndCentroidForESSL3.applied = applied;
+        }
+        else if (name == rewriteFloatUnaryMinusOperator.name)
+        {
+            rewriteFloatUnaryMinusOperator.applied = applied;
+        }
+        else if (name == emulateAtan2Float.name)
+        {
+            emulateAtan2Float.applied = applied;
+        }
+        else if (name == reapplyUBOBindingsAfterUsingBinaryProgram.name)
+        {
+            reapplyUBOBindingsAfterUsingBinaryProgram.applied = applied;
+        }
+        else if (name == emulateMaxVertexAttribStride.name)
+        {
+            emulateMaxVertexAttribStride.applied = applied;
+        }
+        else if (name == dontInitializeUninitializedLocals.name)
+        {
+            dontInitializeUninitializedLocals.applied = applied;
+        }
+        else if (name == clampPointSize.name)
+        {
+            clampPointSize.applied = applied;
+        }
+        else if (name == rewriteVectorScalarArithmetic.name)
+        {
+            rewriteVectorScalarArithmetic.applied = applied;
+        }
+        else if (name == dontUseLoopsToInitializeVariables.name)
+        {
+            dontUseLoopsToInitializeVariables.applied = applied;
+        }
+        else if (name == clampFragDepth.name)
+        {
+            clampFragDepth.applied = applied;
+        }
+        else if (name == rewriteRepeatedAssignToSwizzled.name)
+        {
+            rewriteRepeatedAssignToSwizzled.applied = applied;
+        }
+        else if (name == disableBlendFuncExtended.name)
+        {
+            disableBlendFuncExtended.applied = applied;
+        }
+        else if (name == unsizedsRGBReadPixelsDoesntTransform.name)
+        {
+            unsizedsRGBReadPixelsDoesntTransform.applied = applied;
+        }
+        else if (name == queryCounterBitsGeneratesErrors.name)
+        {
+            queryCounterBitsGeneratesErrors.applied = applied;
+        }
+        else if (name == dontRelinkProgramsInParallel.name)
+        {
+            dontRelinkProgramsInParallel.applied = applied;
+        }
+        else if (name == disableWorkerContexts.name)
+        {
+            disableWorkerContexts.applied = applied;
+        }
+        else
+        {
+            // error?
+        }
+    }
 };
 
 inline WorkaroundsGL::WorkaroundsGL() = default;
+inline WorkaroundsGL::~WorkaroundsGL() = default;
 
 }  // namespace rx
 

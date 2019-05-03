@@ -230,7 +230,7 @@ MultiviewImplementationParams GeomShaderD3D11(GLint majorVersion, GLint minorVer
 
 void MultiviewTest::overrideWorkaroundsD3D(WorkaroundsD3D *workarounds)
 {
-    workarounds->selectViewInGeometryShader = GetParam().mForceUseGeometryShaderOnD3D;
+    workarounds->selectViewInGeometryShader.applied = GetParam().mForceUseGeometryShaderOnD3D;
 }
 
 }  // namespace angle
