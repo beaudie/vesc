@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8fa49af0_b4137a28",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-03T19:04:37Z",
+      "side": 1,
+      "message": "The old release calls like this one that take a RendererVk* will be updated to take a ContextVk* in the next patch.",
+      "range": {
+        "startLine": 60,
+        "startChar": 4,
+        "endLine": 60,
+        "endChar": 39
+      },
+      "revId": "e84ec0fd30bf648b27f90d5cc30d31bd81f14dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
