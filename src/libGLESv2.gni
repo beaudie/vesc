@@ -271,6 +271,7 @@ libangle_sources = [
   "src/libANGLE/angletypes.h",
   "src/libANGLE/angletypes.inl",
   "src/libANGLE/es3_copy_conversion_table_autogen.cpp",
+  "src/libANGLE/Feature.h",
   "src/libANGLE/features.h",
   "src/libANGLE/format_map_autogen.cpp",
   "src/libANGLE/formatutils.cpp",
