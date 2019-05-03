@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cef1110d_4cdc9b54",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64289552_10c03bda",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6b7a870_f0c1ff14",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1e6cad7_ee7b9c8a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "I added the info you requested.\n\nHowever, some thoughts:\nI was thinking that this patch is vendor-independent -- it\u0027s just a \"GetDimensions workaround\". It would apply just as well if some other vendor would suddenly get the same bug. So to my mind, there is no nvidia logic in this patch itself. Rather, the nvidia logic belongs in the activation logic for the workaround, which is already present.",
+      "parentUuid": "d6b7a870_f0c1ff14",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "04daf84e_4a8140ef",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01d00ddd_a9b8b0da",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e48684b6_4db94f53",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a7c76ce_eda60512",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "I was getting a getVertexShaderSource that returns a valid ES 3 vertex shader from Texture2DTestES3. (The one from Texture2DTest is not ES 3 so the link step fails if I try to link it with the ES 3 fragment shader from Texture2DIntegerTestES3.)\n\nIn any case, I will make Texture2DIntegerTestES3 inherit from Texture2DTest and copy the ES 3 getVertexShaderSource instead since I think that makes things clearer.\n\nI moved test class, body and instantiation to be last in their respective lists.",
+      "parentUuid": "e48684b6_4db94f53",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "6515d97b_15e79468",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "Consistent with what? This file mixes raw and non-raw string literals.\nI\u0027ll change to non-raw.",
+      "parentUuid": "330954e1_b59487c6",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "44d1c66a_70d56a06",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 1
@@ -101,6 +191,24 @@
       "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a137851_5e616c34",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "I\u0027ll change the mediump to highp.",
+      "parentUuid": "44d1c66a_70d56a06",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "8ad876d0_740d61ec",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "I changed to fragColor. (\u0027color\u0027 is also used a lot.)",
+      "parentUuid": "e07c5eca_7e92451c",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2ec39ef_18913c92",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 1
@@ -135,6 +261,24 @@
       "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9489448a_caffa10e",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "Removed the function.",
+      "parentUuid": "d2ec39ef_18913c92",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "c13c6100_0ef0afc2",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "d7a72efb_fe73c3b9",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b04d4261_7ec2fb5e",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 1
@@ -169,6 +331,24 @@
       "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2b13102_3ce147aa",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "b04d4261_7ec2fb5e",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "d72b2b1a_eb87d713",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "Yes. Removed.",
+      "parentUuid": "357564c6_de681c89",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1426161_9d52b02c",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 1
@@ -203,6 +401,24 @@
       "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c951e451_63cb3df3",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "Yes. Removed.",
+      "parentUuid": "c1426161_9d52b02c",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -223,6 +439,24 @@
     },
     {
       "key": {
+        "uuid": "0431891c_cf880faa",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "Yeah, after above changes it\u0027s now quite similar: just override the shaders.",
+      "parentUuid": "90fc3e80_f0014021",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a4cd130_43f8eec7",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 1
@@ -234,6 +468,24 @@
       "writtenOn": "2019-05-02T11:22:11Z",
       "side": 1,
       "message": "I think your test fixture already creates a texture for you and destroys it after the test.",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37ac2c1c_bab987d4",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4495,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "Yeah that\u0027s right, this is now being run.:\n\n    // Returns the created texture ID.\n    GLuint TexCoordDrawTest::create2DTexture()\n    {\n        GLuint texture2D;\n        glGenTextures(1, \u0026texture2D);\n        glBindTexture(GL_TEXTURE_2D, texture2D);\n        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);\n        EXPECT_GL_NO_ERROR();\n        return texture2D;\n    }\n\nHowever I can\u0027t use this texture because it specifies the wrong internalFormat and format.\nIt\u0027s ugly that this is happening, but it\u0027s similar to what TEST_P(Texture2DTest, TexStorage) does.",
+      "parentUuid": "6a4cd130_43f8eec7",
       "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -254,6 +506,41 @@
       "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f94c9b32_3c5128f1",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4500,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "Changed to green.",
+      "parentUuid": "16177c1f_a0c8c0ff",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "53720636_f62db235",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4525,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T06:58:01Z",
+      "side": 1,
+      "message": "Just noticed I accidentally change this instantiation by removing a bunch of API tests. Should not do that.",
+      "revId": "d96bcac93a67c3c64cf90a93feee6714ecec9d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
