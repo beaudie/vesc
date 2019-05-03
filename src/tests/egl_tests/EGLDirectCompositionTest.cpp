@@ -39,7 +39,7 @@ class EGLDirectCompositionTest : public ANGLETest
   protected:
     EGLDirectCompositionTest() : mOSWindow(nullptr) {}
 
-    void SetUp() override
+    void testSetUp() override
     {
         if (!mRoHelper.SupportedWindowsRelease())
         {
@@ -192,7 +192,7 @@ class EGLDirectCompositionTest : public ANGLETest
         ASSERT_TRUE(eglMakeCurrent(mEglDisplay, surface, surface, mEglContext) != EGL_FALSE);
     }
 
-    void TearDown() override
+    void testTearDown() override
     {
         if (!mRoHelper.SupportedWindowsRelease())
         {
