@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3dbea0f4_2ef1716b",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-03T18:21:36Z",
+      "side": 1,
+      "message": "I\u0027m not sure how --gtest_list_tests works, but I\"m worried this might break it.\nI did notice you\u0027ve added \"testing::InitGoogleTest(argc, argv);\" in RunSeparateProcessesForEachConfig(), but I don\u0027t understand how it helps.\nCould you please elaborate?",
+      "range": {
+        "startLine": 458,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 5
+      },
+      "revId": "bcebee0569979834a90f7d6067aeac86edd97ba2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
