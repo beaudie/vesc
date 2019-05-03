@@ -248,6 +248,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
                             vk::CommandBuffer **commandBufferOut);
     angle::Result setupIndexedDraw(const gl::Context *context,
                                    gl::PrimitiveMode mode,
+                                   GLint firstVertex,
                                    GLsizei indexCount,
                                    GLsizei instanceCount,
                                    gl::DrawElementsType indexType,
