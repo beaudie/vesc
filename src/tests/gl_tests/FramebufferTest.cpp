@@ -930,7 +930,7 @@ class AddDummyTextureNoRenderTargetTest : public ANGLETest
 
     void overrideWorkaroundsD3D(WorkaroundsD3D *workarounds) override
     {
-        workarounds->addDummyTextureNoRenderTarget = true;
+        workarounds->forceFeatureApplied("add_dummy_texture_no_render_target", true);
     }
 };
 

@@ -1467,7 +1467,7 @@ void GenerateCaps(ID3D11Device *device,
     caps->maxVertexAttributes = static_cast<GLuint>(GetMaximumVertexInputSlots(featureLevel));
     caps->maxVertexUniformVectors =
         static_cast<GLuint>(GetMaximumVertexUniformVectors(featureLevel));
-    if (workarounds.skipVSConstantRegisterZero)
+    if (workarounds.skipVSConstantRegisterZero.applied)
     {
         caps->maxVertexUniformVectors -= 1;
     }
@@ -2355,10 +2355,10 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
     bool is9_3 = (deviceCaps.featureLevel <= D3D_FEATURE_LEVEL_9_3);
 
     angle::WorkaroundsD3D workarounds;
-    workarounds.mrtPerfWorkaround                = true;
-    workarounds.setDataFasterThanImageUpload     = true;
-    workarounds.zeroMaxLodWorkaround             = is9_3;
-    workarounds.useInstancedPointSpriteEmulation = is9_3;
+    workarounds.mrtPerfWorkaround.applied                = true;
+    workarounds.setDataFasterThanImageUpload.applied     = true;
+    workarounds.zeroMaxLodWorkaround.applied             = is9_3;
+    workarounds.useInstancedPointSpriteEmulation.applied = is9_3;
 
     // TODO(jmadill): Narrow problematic driver range.
     if (IsNvidia(adapterDesc.VendorId))
@@ -2369,43 +2369,43 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
             WORD part2 = LOWORD(deviceCaps.driverVersion.value().LowPart);
 
             // Disable the workaround to fix a second driver bug on newer NVIDIA.
-            workarounds.depthStencilBlitExtraCopy = (part1 <= 13u && part2 < 6881);
+            workarounds.depthStencilBlitExtraCopy.applied = (part1 <= 13u && part2 < 6881);
         }
         else
         {
-            workarounds.depthStencilBlitExtraCopy = true;
+            workarounds.depthStencilBlitExtraCopy.applied = true;
         }
     }
 
     // TODO(jmadill): Disable workaround when we have a fixed compiler DLL.
-    workarounds.expandIntegerPowExpressions = true;
+    workarounds.expandIntegerPowExpressions.applied = true;
 
-    workarounds.flushAfterEndingTransformFeedback = IsNvidia(adapterDesc.VendorId);
-    workarounds.getDimensionsIgnoresBaseLevel     = IsNvidia(adapterDesc.VendorId);
-    workarounds.skipVSConstantRegisterZero        = IsNvidia(adapterDesc.VendorId);
-    workarounds.forceAtomicValueResolution        = IsNvidia(adapterDesc.VendorId);
+    workarounds.flushAfterEndingTransformFeedback.applied = IsNvidia(adapterDesc.VendorId);
+    workarounds.getDimensionsIgnoresBaseLevel.applied     = IsNvidia(adapterDesc.VendorId);
+    workarounds.skipVSConstantRegisterZero.applied        = IsNvidia(adapterDesc.VendorId);
+    workarounds.forceAtomicValueResolution.applied        = IsNvidia(adapterDesc.VendorId);
 
     if (IsIntel(adapterDesc.VendorId))
     {
         IntelDriverVersion capsVersion = d3d11_gl::GetIntelDriverVersion(deviceCaps.driverVersion);
 
-        workarounds.preAddTexelFetchOffsets           = true;
-        workarounds.useSystemMemoryForConstantBuffers = true;
-        workarounds.disableB5G6R5Support              = capsVersion < IntelDriverVersion(4539);
-        workarounds.addDummyTextureNoRenderTarget     = capsVersion < IntelDriverVersion(4815);
+        workarounds.preAddTexelFetchOffsets.applied           = true;
+        workarounds.useSystemMemoryForConstantBuffers.applied = true;
+        workarounds.disableB5G6R5Support.applied          = capsVersion < IntelDriverVersion(4539);
+        workarounds.addDummyTextureNoRenderTarget.applied = capsVersion < IntelDriverVersion(4815);
         if (IsSkylake(adapterDesc.DeviceId))
         {
-            workarounds.callClearTwice    = capsVersion < IntelDriverVersion(4771);
-            workarounds.emulateIsnanFloat = capsVersion < IntelDriverVersion(4542);
+            workarounds.callClearTwice.applied    = capsVersion < IntelDriverVersion(4771);
+            workarounds.emulateIsnanFloat.applied = capsVersion < IntelDriverVersion(4542);
         }
         else if (IsBroadwell(adapterDesc.DeviceId) || IsHaswell(adapterDesc.DeviceId))
         {
-            workarounds.rewriteUnaryMinusOperator = capsVersion < IntelDriverVersion(4624);
+            workarounds.rewriteUnaryMinusOperator.applied = capsVersion < IntelDriverVersion(4624);
         }
     }
 
     // TODO(jmadill): Disable when we have a fixed driver version.
-    workarounds.emulateTinyStencilTextures = IsAMD(adapterDesc.VendorId);
+    workarounds.emulateTinyStencilTextures.applied = IsAMD(adapterDesc.VendorId);
 
     // The tiny stencil texture workaround involves using CopySubresource or UpdateSubresource on a
     // depth stencil texture.  This is not allowed until feature level 10.1 but since it is not
@@ -2413,12 +2413,12 @@ angle::WorkaroundsD3D GenerateWorkarounds(const Renderer11DeviceCaps &deviceCaps
     // (anglebug.com/1572).
     if (deviceCaps.featureLevel < D3D_FEATURE_LEVEL_10_1)
     {
-        workarounds.emulateTinyStencilTextures = false;
+        workarounds.emulateTinyStencilTextures.applied = false;
     }
 
     // If the VPAndRTArrayIndexFromAnyShaderFeedingRasterizer feature is not available, we have to
     // select the viewport / RT array index in the geometry shader.
-    workarounds.selectViewInGeometryShader =
+    workarounds.selectViewInGeometryShader.applied =
         (deviceCaps.supportsVpRtIndexWriteFromVertexShader == false);
 
     // Call platform hooks for testing overrides.

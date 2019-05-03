@@ -794,12 +794,12 @@ void MakeValidSize(bool isImage,
 angle::WorkaroundsD3D GenerateWorkarounds()
 {
     angle::WorkaroundsD3D workarounds;
-    workarounds.mrtPerfWorkaround                = true;
-    workarounds.setDataFasterThanImageUpload     = false;
-    workarounds.useInstancedPointSpriteEmulation = false;
+    workarounds.mrtPerfWorkaround.applied                = true;
+    workarounds.setDataFasterThanImageUpload.applied     = false;
+    workarounds.useInstancedPointSpriteEmulation.applied = false;
 
     // TODO(jmadill): Disable workaround when we have a fixed compiler DLL.
-    workarounds.expandIntegerPowExpressions = true;
+    workarounds.expandIntegerPowExpressions.applied = true;
 
     // Call platform hooks for testing overrides.
     auto *platform = ANGLEPlatformCurrent();

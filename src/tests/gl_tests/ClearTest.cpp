@@ -307,7 +307,7 @@ class VulkanClearTest : public MaskedScissoredClearTestBase
     // depth/stencil format
     void overrideFeaturesVk(FeaturesVk *featuresVk) override
     {
-        featuresVk->forceFallbackFormat = true;
+        featuresVk->forceFeatureApplied("force_fallback_format", true);
     }
 
   private:
