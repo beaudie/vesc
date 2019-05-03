@@ -441,7 +441,7 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
     // Select appropriate present mode based on vsync parameter.  Default to 1 (FIFO), though it
     // will get clamped to the min/max values specified at display creation time.
-    setSwapInterval(renderer->getFeatures().disableFifoPresentMode ? 0 : 1);
+    setSwapInterval(renderer->getFeatures().disableFifoPresentMode.applied ? 0 : 1);
 
     // Default to identity transform.
     mPreTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
@@ -746,7 +746,7 @@ angle::Result WindowSurfaceVk::present(DisplayVk *displayVk,
     VkPresentRegionKHR presentRegion   = {};
     VkPresentRegionsKHR presentRegions = {};
     std::vector<VkRectLayerKHR> vkRects;
-    if (renderer->getFeatures().supportsIncrementalPresent && (n_rects > 0))
+    if (renderer->getFeatures().supportsIncrementalPresent.applied && (n_rects > 0))
     {
         EGLint width  = getWidth();
         EGLint height = getHeight();

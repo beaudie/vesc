@@ -264,6 +264,7 @@ libangle_sources = [
   "src/libANGLE/VertexAttribute.cpp",
   "src/libANGLE/VertexAttribute.h",
   "src/libANGLE/VertexAttribute.inl",
+  "src/libANGLE/workaround.h",
   "src/libANGLE/Workarounds.h",
   "src/libANGLE/WorkerThread.cpp",
   "src/libANGLE/WorkerThread.h",

@@ -355,13 +355,13 @@ static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
         // even if the provided type is GL_FLOAT.
         result = internalFormat.sizedInternalFormat;
 
-        if (workarounds.avoid1BitAlphaTextureFormats && internalFormat.alphaBits == 1)
+        if (workarounds.avoid1BitAlphaTextureFormats.applied && internalFormat.alphaBits == 1)
         {
             // Use an 8-bit format instead
             result = GL_RGBA8;
         }
 
-        if (workarounds.rgba4IsNotSupportedForColorRendering &&
+        if (workarounds.rgba4IsNotSupportedForColorRendering.applied &&
             internalFormat.sizedInternalFormat == GL_RGBA4)
         {
             // Use an 8-bit format instead
@@ -413,7 +413,7 @@ static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
             // Workaround Adreno driver not supporting unsized EXT_texture_rg formats
             result = internalFormat.sizedInternalFormat;
         }
-        else if (workarounds.unsizedsRGBReadPixelsDoesntTransform &&
+        else if (workarounds.unsizedsRGBReadPixelsDoesntTransform.applied &&
                  internalFormat.colorEncoding == GL_SRGB)
         {
             // Work around some Adreno driver bugs that don't read back SRGB data correctly when
@@ -462,7 +462,7 @@ static GLenum GetNativeFormat(const FunctionsGL *functions,
     }
     else if (functions->isAtLeastGLES(gl::Version(3, 0)))
     {
-        if (workarounds.unsizedsRGBReadPixelsDoesntTransform)
+        if (workarounds.unsizedsRGBReadPixelsDoesntTransform.applied)
         {
             if (format == GL_SRGB)
             {

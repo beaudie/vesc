@@ -10,25 +10,59 @@
 #ifndef LIBANGLE_WORKAROUNDS_H_
 #define LIBANGLE_WORKAROUNDS_H_
 
+#include "libANGLE/workaround.h"
+
 namespace gl
 {
 
 struct Workarounds
 {
+    Workarounds();
+    ~Workarounds();
+
+    std::map<std::string, angle::Workaround *> members =
+        std::map<std::string, angle::Workaround *>();
+
     // Force the context to be lost (via KHR_robustness) if a GL_OUT_OF_MEMORY error occurs. The
     // driver may be in an inconsistent state if this happens, and some users of ANGLE rely on this
     // notification to prevent further execution.
-    bool loseContextOnOutOfMemory = false;
+    angle::Workaround loseContextOnOutOfMemory =
+        angle::Workaround("lose_context_on_out_of_memory",
+                          "ANGLE workarounds",
+                          "Some users rely on a lost context notification if a GL_OUT_OF_MEMORY "
+                          "error occurs",
+                          &members);
 
     // Program binaries don't contain transform feedback varyings on Qualcomm GPUs.
     // Work around this by disabling the program cache for programs with transform feedback.
-    bool disableProgramCachingForTransformFeedback = false;
+    angle::Workaround disableProgramCachingForTransformFeedback = angle::Workaround(
+        "disable_program_caching_for_transform_feedback",
+        "ANGLE workarounds",
+        "On Qualcomm GPUs, program binaries don't contain transform feedback varyings",
+        &members);
 
     // On Windows Intel OpenGL drivers TexImage sometimes seems to interact with the Framebuffer.
     // Flaky crashes can occur unless we sync the Framebuffer bindings. The workaround is to add
     // Framebuffer binding dirty bits to TexImage updates. See http://anglebug.com/2906
-    bool syncFramebufferBindingsOnTexImage = false;
+    angle::Workaround syncFramebufferBindingsOnTexImage =
+        angle::Workaround("sync_framebuffer_bindings_on_tex_image",
+                          "ANGLE workarounds",
+                          "On Windows Intel OpenGL drivers TexImage sometimes seems to interact "
+                          "with the Framebuffer",
+                          &members);
+
+    void forceWorkaround(const std::string &name, const bool applied)
+    {
+        if (members.find(name) != members.end())
+        {
+            members[name]->applied = applied;
+        }
+    }
 };
+
+inline Workarounds::Workarounds()  = default;
+inline Workarounds::~Workarounds() = default;
+
 }  // namespace gl
 
 #endif  // LIBANGLE_WORKAROUNDS_H_

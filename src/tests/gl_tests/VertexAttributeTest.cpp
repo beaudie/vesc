@@ -211,7 +211,7 @@ class VertexAttributeTest : public ANGLETest
     // Override a feature to force emulation of attribute formats.
     void overrideFeaturesVk(FeaturesVk *featuresVk) override
     {
-        featuresVk->forceFallbackFormat = true;
+        featuresVk->forceWorkaround("force_fallback_format", true);
     }
 
     GLuint compileMultiAttribProgram(GLint attribCount)
