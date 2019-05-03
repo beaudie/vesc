@@ -496,6 +496,30 @@
     },
     {
       "key": {
+        "uuid": "04af9c6d_79db5da5",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T17:01:07Z",
+      "side": 1,
+      "message": "How about...\n\n- We add a method similar to angle::SplitString that splits by a substring instead of a single char.\n- Instead of using () for the layout payload you use a single split delimiter. Everything after that delimiter is the substitution string (with whitespace trimmed)\n- You call the new SplitBySubString method twice - one at the top level to split by @@ and once in the inner scope to split by the payload delimiter.\n\nAll that to say it would be nice if the string handling logic was separated from GlslangWrapper and put in string_utils.h.",
+      "parentUuid": "90f3488c_d1111331",
+      "range": {
+        "startLine": 233,
+        "startChar": 51,
+        "endLine": 233,
+        "endChar": 55
+      },
+      "revId": "f1808ac86feb23aabffc09936d24a7dcd27e7649",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "12c4f12f_944c0993",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 4
