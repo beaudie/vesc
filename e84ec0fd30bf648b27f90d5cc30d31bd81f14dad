@@ -2,6 +2,115 @@
   "comments": [
     {
       "key": {
+        "uuid": "ce48117d_49a42ce5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T20:37:55Z",
+      "side": 1,
+      "message": "Not a big deal, but this timeout is not really doing what the timeout in `WaitFences` was supposed to mean. For example, if you have N fences to wait on, this function can potentially wait N*timeout instead.\n\nYou could turn the `timeout` parameter into a flag that would result in `? 0 : kMaxFenceWaitTimeNs` here, but probably not worth the hassle.",
+      "range": {
+        "startLine": 497,
+        "startChar": 69,
+        "endLine": 497,
+        "endChar": 76
+      },
+      "revId": "e84ec0fd30bf648b27f90d5cc30d31bd81f14dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "600b4890_3a2472ae",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T20:37:55Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be `kMaxFenceWaitTimeNs`?",
+      "range": {
+        "startLine": 1421,
+        "startChar": 42,
+        "endLine": 1421,
+        "endChar": 43
+      },
+      "revId": "e84ec0fd30bf648b27f90d5cc30d31bd81f14dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1587998_028ceb2f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2115,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T20:37:55Z",
+      "side": 1,
+      "message": "Not really necessary here. `finishToSerial` above does this through `checkCompletedCommands`.",
+      "revId": "e84ec0fd30bf648b27f90d5cc30d31bd81f14dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fac05c0_6a149d0e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2244,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T20:37:55Z",
+      "side": 1,
+      "message": "\u003d {std::move(fence)};",
+      "range": {
+        "startLine": 2243,
+        "startChar": 45,
+        "endLine": 2244,
+        "endChar": 38
+      },
+      "revId": "e84ec0fd30bf648b27f90d5cc30d31bd81f14dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89680ae5_368bbdd9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T20:37:55Z",
+      "side": 1,
+      "message": "Minor nit, but the name feels kind of awkward to me. How about `cleanupFencedGarbage`? Ideally, when it\u0027s moved to ContextVk it can just be named `cleanupGarbage`.",
+      "range": {
+        "startLine": 261,
+        "startChar": 18,
+        "endLine": 261,
+        "endChar": 36
+      },
+      "revId": "e84ec0fd30bf648b27f90d5cc30d31bd81f14dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8fa49af0_b4137a28",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 14
