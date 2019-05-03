@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f714f6f0_1b72fd8e",
+        "filename": "src/tests/egl_tests/EGLContextCompatibilityTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-03T00:32:30Z",
+      "side": 1,
+      "message": "ANGLETest::TearDown();",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 5
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42670598_4a6955bb",
+        "filename": "src/tests/egl_tests/EGLDeviceTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-03T00:32:30Z",
+      "side": 1,
+      "message": "Does this mean \"run on all backends\"?\nThese tests seems to D3D-specific, so maybe limit them to D3D9 and D3D11?",
+      "range": {
+        "startLine": 539,
+        "startChar": 60,
+        "endLine": 539,
+        "endChar": 80
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0e3beee_fc1cb242",
+        "filename": "src/tests/egl_tests/EGLPresentPathD3D11Test.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-03T00:32:30Z",
+      "side": 1,
+      "message": "ANGLETest::TearDown();",
+      "range": {
+        "startLine": 173,
+        "startChar": 4,
+        "endLine": 173,
+        "endChar": 5
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89df4881_8f21107f",
+        "filename": "src/tests/egl_tests/EGLQueryContextTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-03T00:32:30Z",
+      "side": 1,
+      "message": "ANGLETest::TearDown();",
+      "range": {
+        "startLine": 62,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "599bc43b_01a8eb81",
+        "filename": "src/tests/egl_tests/EGLQueryContextTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-03T00:32:30Z",
+      "side": 1,
+      "message": "Would this run the same code for ES3_D3D11 as for ES2_D3D11?\nMaybe we need EGL_D3D11, etc.?",
+      "range": {
+        "startLine": 152,
+        "startChar": 37,
+        "endLine": 152,
+        "endChar": 46
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72feac2a_26ddc09c",
+        "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-03T00:32:30Z",
+      "side": 1,
+      "message": "ANGLETest::TearDown();",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 5
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3efaf46d_03cf6bce",
+        "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-03T00:32:30Z",
+      "side": 1,
+      "message": "Would it be possible to remove this once we have the \"separate process\" working?\nMaybe leave a TODO?",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 59
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3207986d_f2e4dfe4",
+        "filename": "src/tests/egl_tests/EGLSurfacelessContextTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-03T00:32:30Z",
+      "side": 1,
+      "message": "ANGLETest::TearDown();",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 5
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c18bbe86_bbc3c7c8",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-03T00:32:30Z",
+      "side": 1,
+      "message": "redundant",
+      "range": {
+        "startLine": 335,
+        "startChar": 0,
+        "endLine": 335,
+        "endChar": 23
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34f1dd89_55a2436b",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-03T00:32:30Z",
+      "side": 1,
+      "message": "nit: Would be nice to print this and the \"Exiting\" message for EGL tests as well, I think.",
+      "range": {
+        "startLine": 516,
+        "startChar": 11,
+        "endLine": 516,
+        "endChar": 28
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
