@@ -16,6 +16,24 @@
       "revId": "eb2ff0a46c9591f4c1e14619c4c4423cc2f0855b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65e58eae_4e8afc26",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4480,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-03T10:03:46Z",
+      "side": 1,
+      "message": "Ok, it seems they do glTexImage2D twice for the same texture then.\nI suppose there are no issues with that besides being a bit confusing (to me).\n(Could have separate virtual functions for gen, specify and delete: then I could just override specify.)\n\nI\u0027ll do it as the test you mentioned does it.",
+      "parentUuid": "a72aa3ab_7a313609",
+      "revId": "eb2ff0a46c9591f4c1e14619c4c4423cc2f0855b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
