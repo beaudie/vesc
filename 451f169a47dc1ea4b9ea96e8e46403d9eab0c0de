@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb5bf5c9_fa0f2186",
+        "filename": "src/gpu_info_util/SystemInfo_win.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-03T18:49:22Z",
+      "side": 1,
+      "message": "nit: return i \u003e 0;",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 16
+      },
+      "revId": "451f169a47dc1ea4b9ea96e8e46403d9eab0c0de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
