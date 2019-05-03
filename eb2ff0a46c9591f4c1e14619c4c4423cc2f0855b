@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a72aa3ab_7a313609",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4480,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-03T08:38:10Z",
+      "side": 1,
+      "message": "Still, it should be possilbe to use the mTexture2D, see: TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB8IImplicitAlpha1)",
+      "revId": "eb2ff0a46c9591f4c1e14619c4c4423cc2f0855b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
