@@ -38,11 +38,9 @@ class EGLProgramCacheControlTest : public ANGLETest
         setDeferContextInit(true);
     }
 
-    void SetUp() override
+    void testSetUp() override
     {
         setContextProgramCacheEnabled(true, &TestCacheProgram);
-
-        ANGLETest::SetUp();
 
         if (extensionAvailable())
         {
@@ -54,10 +52,9 @@ class EGLProgramCacheControlTest : public ANGLETest
         ASSERT_TRUE(getEGLWindow()->initializeContext());
     }
 
-    void TearDown() override
+    void testTearDown() override
     {
         setContextProgramCacheEnabled(false, angle::DefaultCacheProgram);
-        ANGLETest::TearDown();
     }
 
     bool extensionAvailable()
@@ -221,8 +218,7 @@ TEST_P(EGLProgramCacheControlTest, SaveAndReload)
     EXPECT_EQ(mCachedBinary, binaryBuffer);
 
     // Restart EGL and GL.
-    TearDown();
-    SetUp();
+    recreateTestFixture();
 
     // Warm up the cache.
     EGLint newCacheSize = eglProgramCacheGetAttribANGLE(display, EGL_PROGRAM_CACHE_SIZE_ANGLE);
