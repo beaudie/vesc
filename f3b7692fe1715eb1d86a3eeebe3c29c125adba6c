@@ -22,6 +22,99 @@
       "revId": "f3b7692fe1715eb1d86a3eeebe3c29c125adba6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e27575f6_69f87dec",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T19:07:01Z",
+      "side": 1,
+      "message": "Can\u0027t we just no-op in the case where there no commands? Is it possible to test this?",
+      "parentUuid": "4e4d958e_b7784801",
+      "range": {
+        "startLine": 743,
+        "startChar": 0,
+        "endLine": 746,
+        "endChar": 74
+      },
+      "revId": "f3b7692fe1715eb1d86a3eeebe3c29c125adba6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f902eae0_5966f13f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T19:07:01Z",
+      "side": 1,
+      "message": "nit: can you call this sharedFence? And comment as to when it\u0027s shared?",
+      "range": {
+        "startLine": 228,
+        "startChar": 30,
+        "endLine": 228,
+        "endChar": 35
+      },
+      "revId": "f3b7692fe1715eb1d86a3eeebe3c29c125adba6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36a6aeb5_4edb1b48",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T19:07:01Z",
+      "side": 1,
+      "message": "nit: would like to avoid using operator bool for these if possible. It leads to shenanigans with implicit casting. Can you use the explicit \u0027isReferenced\u0027?",
+      "range": {
+        "startLine": 454,
+        "startChar": 3,
+        "endLine": 454,
+        "endChar": 52
+      },
+      "revId": "f3b7692fe1715eb1d86a3eeebe3c29c125adba6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e49e4ada_fc0b9348",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T19:07:01Z",
+      "side": 1,
+      "message": "nit: again for consistency I would like to keep all references consistent and use .get(). Even if it\u0027s a bit more verbose.",
+      "range": {
+        "startLine": 467,
+        "startChar": 0,
+        "endLine": 468,
+        "endChar": 50
+      },
+      "revId": "f3b7692fe1715eb1d86a3eeebe3c29c125adba6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
