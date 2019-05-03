@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ed485380_b3b865e6",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 4475,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T13:53:30Z",
+      "side": 1,
+      "message": "nit: can you add a small comment before new tests",
+      "range": {
+        "startLine": 4475,
+        "startChar": 0,
+        "endLine": 4475,
+        "endChar": 6
+      },
+      "revId": "f2a249da1617883a48ae75858d88ce02c9147c86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
