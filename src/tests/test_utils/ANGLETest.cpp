@@ -370,6 +370,8 @@ ANGLETestBase::ANGLETestBase(const PlatformParameters &params)
       mDeferContextInit(false),
       mAlwaysForceNewDisplay(ShouldAlwaysForceNewDisplay()),
       mForceNewDisplay(mAlwaysForceNewDisplay),
+      mSetUpCalled(false),
+      mTearDownCalled(false),
       mCurrentParams(nullptr),
       mFixture(nullptr)
 {
@@ -468,10 +470,22 @@ ANGLETestBase::~ANGLETestBase()
     {
         glDeleteProgram(m3DTexturedQuadProgram);
     }
+
+    if (!mSetUpCalled)
+    {
+        GTEST_NONFATAL_FAILURE_("SetUp not called.");
+    }
+
+    if (!mTearDownCalled)
+    {
+        GTEST_NONFATAL_FAILURE_("TearDown not called.");
+    }
 }
 
 void ANGLETestBase::ANGLETestSetUp()
 {
+    mSetUpCalled = true;
+
     gDefaultPlatformMethods.overrideWorkaroundsD3D = TestPlatform_overrideWorkaroundsD3D;
     gDefaultPlatformMethods.overrideFeaturesVk     = TestPlatform_overrideFeaturesVk;
     gDefaultPlatformMethods.logError               = TestPlatform_logError;
@@ -564,6 +578,7 @@ void ANGLETestBase::ANGLETestSetUp()
 
 void ANGLETestBase::ANGLETestTearDown()
 {
+    mTearDownCalled              = true;
     gPlatformContext.currentTest = nullptr;
 
     if (IsWindows())
