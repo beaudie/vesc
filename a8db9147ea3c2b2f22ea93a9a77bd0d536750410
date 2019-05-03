@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4c10a367_d563465e",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3942,
+      "author": {
+        "id": 1343370
+      },
+      "writtenOn": "2019-05-03T21:28:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83a97127_21b620a2",
+      "revId": "a8db9147ea3c2b2f22ea93a9a77bd0d536750410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0f8f3f7e_c8552556",
         "filename": "src/libANGLE/Program.h",
         "patchSetId": 21
@@ -33,6 +51,24 @@
       "revId": "a8db9147ea3c2b2f22ea93a9a77bd0d536750410",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a601c639_bbcb3d73",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1343370
+      },
+      "writtenOn": "2019-05-03T21:28:16Z",
+      "side": 1,
+      "message": "This is necessary to pass the unit tests. The spec requires that \"name[0]\" and \"name\" refer to the same resources if \"name\" identifies an array, and the unit tests explicitly test this by binding \"name\" and \"name[0]\" in various orders to make sure they do in fact alias. I commented this in ::bindLocation() now.",
+      "parentUuid": "0f8f3f7e_c8552556",
+      "revId": "a8db9147ea3c2b2f22ea93a9a77bd0d536750410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
