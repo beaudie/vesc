@@ -22,6 +22,30 @@
       "revId": "451f169a47dc1ea4b9ea96e8e46403d9eab0c0de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78f22350_677c25b9",
+        "filename": "src/gpu_info_util/SystemInfo_win.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-03T20:28:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb5bf5c9_fa0f2186",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 79,
+        "endChar": 16
+      },
+      "revId": "451f169a47dc1ea4b9ea96e8e46403d9eab0c0de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
