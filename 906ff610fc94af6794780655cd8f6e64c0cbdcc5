@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e059fd75_811f8407",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-03T23:21:13Z",
+      "side": 1,
+      "message": "glBeginTransformFeedback() returns GL_INVALID_VALUE, causing these tests to fail.",
+      "range": {
+        "startLine": 652,
+        "startChar": 0,
+        "endLine": 653,
+        "endChar": 109
+      },
+      "revId": "906ff610fc94af6794780655cd8f6e64c0cbdcc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
