@@ -135,7 +135,11 @@ angle::Result GetQueryObjectParameter(const Context *context, Query *query, GLen
 // Attribute map queries.
 EGLint GetClientMajorVersion(const egl::AttributeMap &attribs)
 {
+#if 0  // TIMTIM
     return static_cast<EGLint>(attribs.get(EGL_CONTEXT_CLIENT_VERSION, 1));
+#else
+    return 3;
+#endif
 }
 
 EGLint GetClientMinorVersion(const egl::AttributeMap &attribs)
@@ -145,7 +149,13 @@ EGLint GetClientMinorVersion(const egl::AttributeMap &attribs)
 
 Version GetClientVersion(const egl::AttributeMap &attribs)
 {
-    return Version(GetClientMajorVersion(attribs), GetClientMinorVersion(attribs));
+    EGLint major = GetClientMajorVersion(attribs);
+    EGLint minor = GetClientMinorVersion(attribs);
+    if (major == 2 && minor == 0)
+    {
+        major = 3;
+    }
+    return Version(major, minor);
 }
 
 GLenum GetResetStrategy(const egl::AttributeMap &attribs)

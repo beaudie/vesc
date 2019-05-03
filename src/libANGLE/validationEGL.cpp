@@ -1866,6 +1866,19 @@ Error ValidateCreateImageKHR(const Display *display,
                 }
                 break;
 
+            case EGL_PROTECTED_CONTENT_EXT:
+                switch (value)
+                {
+                    case EGL_TRUE:
+                    case EGL_FALSE:
+                        break;
+
+                    default:
+                        return EglBadParameter()
+                               << "EGL_PROTECTED_CONTENT_EXT must be EGL_TRUE or EGL_FALSE.";
+                }
+                break;
+
             default:
                 return EglBadParameter()
                        << "invalid attribute: 0x" << std::hex << std::uppercase << attribute;
