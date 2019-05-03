@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83a97127_21b620a2",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3942,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T18:33:20Z",
+      "side": 1,
+      "message": "I would like to see this comment turned into a \"Spec says X, we presume it also means Y because Z\", i.e. without mentioning someone by a first name or the comment looking like a message out of conversation between two people.",
+      "revId": "a8db9147ea3c2b2f22ea93a9a77bd0d536750410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f8f3f7e_c8552556",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T18:33:20Z",
+      "side": 1,
+      "message": "If I understand correctly, this extension is already supported in the GL backend without the need to know about aliases. Was that implementation incomplete? In other words, can you give a GLSL example of code where this variable comes in handy?",
+      "revId": "a8db9147ea3c2b2f22ea93a9a77bd0d536750410",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

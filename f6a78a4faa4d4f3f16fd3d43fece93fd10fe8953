@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "f202864e_8b23cee7",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T18:33:20Z",
+      "side": 1,
+      "message": "Looks like this came from `ProgramLinkedResources.cpp` in the now deleted `GetUniformLocationBinding`. I can\u0027t say I understand the logic though (as in why name[0] is allowed anywhere but not name[1] or name[0][0])",
+      "parentUuid": "26a710cc_4a94420d",
+      "range": {
+        "startLine": 871,
+        "startChar": 4,
+        "endLine": 871,
+        "endChar": 37
+      },
+      "revId": "f6a78a4faa4d4f3f16fd3d43fece93fd10fe8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c51a39b_79e5cd76",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 19
@@ -269,6 +293,29 @@
       "revId": "f6a78a4faa4d4f3f16fd3d43fece93fd10fe8953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e9d894b_0f5c3a83",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 3954,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T18:33:20Z",
+      "side": 1,
+      "message": "unallocated",
+      "range": {
+        "startLine": 3954,
+        "startChar": 32,
+        "endLine": 3954,
+        "endChar": 41
+      },
+      "revId": "f6a78a4faa4d4f3f16fd3d43fece93fd10fe8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
@@ -410,6 +457,57 @@
       "revId": "f6a78a4faa4d4f3f16fd3d43fece93fd10fe8953",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "467fd498_c7bb80c1",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T18:33:20Z",
+      "side": 1,
+      "message": "Is this correct? `layoutIndex` is not used inside the loop. If so, you can use `std::vector::insert(.., maxIndex, ..)` instead of the loop.",
+      "revId": "f6a78a4faa4d4f3f16fd3d43fece93fd10fe8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3b62e8b_e9115363",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1476,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T18:33:20Z",
+      "side": 1,
+      "message": "Is there a version or something that\u0027s output to the stream? If so, that needs to be updated.",
+      "revId": "f6a78a4faa4d4f3f16fd3d43fece93fd10fe8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4be2af2_e6a665df",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 3081,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T18:33:20Z",
+      "side": 1,
+      "message": "Similar point about `std::vector::insert` here.",
+      "revId": "f6a78a4faa4d4f3f16fd3d43fece93fd10fe8953",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
