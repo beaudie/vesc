@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dff411e4_ec843bca",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1516,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T20:45:35Z",
+      "side": 1,
+      "message": "Sorry I made a mistake here, `GL_DEPTH_COMPONENT \u0026\u0026 ...depthTextureOES` and `DEPTH_STENCIL_OES \u0026\u0026 ...packedDepthStencil`.",
+      "range": {
+        "startLine": 1514,
+        "startChar": 23,
+        "endLine": 1516,
+        "endChar": 96
+      },
+      "revId": "d4d9f9e108188e18f5e707aae187c7d64a39718c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

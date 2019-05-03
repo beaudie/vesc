@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "d30d5681_40954ed7",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-03T20:45:35Z",
+      "side": 1,
+      "message": "My understanding is that it doesn\u0027t actually require any specific size. If you are referring to this:\n\n\u003e 3.  How should 24-bit depth texture data be represented when specified in TexImage2D and TexSubImage2D?\n\u003e     Resolution:  This is currently not supported.  Depth textures can be specified with 16-bit depth values i.e. \u003ctype\u003e \u003d UNSIGNED_SHORT or 32-bit depth values i.e. \u003ctype\u003e \u003d UNSIGNED_INT.\n\nThat\u0027s talking about the upload data format, not the actual texture format. The spec later on says:\n\n\u003e As per the OpenGL ES spec, there is no guarantee that the OpenGL ES implementation will use the \u003ctype\u003e to determine how to store the depth texture internally.  It may choose to downsample the 32-bit depth values to 16-bit or even 24-bit.\n\nThat basically means that the implementation is for example free to always use 16-bit depth. That means `GL_DEPTH_COMPONENT16` would be enough to declare support for that extension.\n\nIn other words, as long as any depth format can fallback to another (whether its 16 to 32, 32 to 24 etc), any single one of the three (16-, 24- or 32-bit depth) can enable this extension.\n\n---\n\nAlso, I just realized that my original comment here was wrong, since you were correctly doing `||` on the supported formats, while my suggestion would turn that into `\u0026\u0026` (so at least revert that)",
+      "parentUuid": "d1202c23_d5edd1c7",
+      "range": {
+        "startLine": 671,
+        "startChar": 0,
+        "endLine": 676,
+        "endChar": 6
+      },
+      "revId": "ac29475355257232a09b85d464119ede943bcf03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0cd7f3f5_874c9aa7",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 14
