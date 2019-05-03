@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e03e6de6_5e8d370c",
+        "filename": "src/libANGLE/renderer/gl/WorkaroundsGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-03T20:24:16Z",
+      "side": 1,
+      "message": "Are there any ways to initialize this that are nice to write? specifically, the angle bug ID vs chromium bug ID just depending on ordering",
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "979f3647_19c4b649",
+        "filename": "src/libANGLE/renderer/gl/WorkaroundsGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-03T20:24:16Z",
+      "side": 1,
+      "message": "I started writing this with ifs, but it\u0027s really difficult to maintain. any ideas?",
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a35c0df_63d12e96",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-03T20:24:16Z",
+      "side": 1,
+      "message": "I\u0027m not sure where to put this struct",
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "400271d1_28e38db3",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-03T20:24:16Z",
+      "side": 1,
+      "message": "Will add as comments, but just to explain:\n\n\"set\" will contain the name of the \"workaround set\" since we have some workarounds from the frontend, some from backends, some that are named the same on different backends, etc. Also, some of the descriptions don\u0027t explicitly mention the backend so this way it\u0027s always obvious.",
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb480358_72253a3c",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-03T20:24:16Z",
+      "side": 1,
+      "message": "Split into two so when printing it\u0027s easy to link to either crbug.com or anglebug.com",
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
