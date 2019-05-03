@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "ce2995a5_e80a6724",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-03T20:53:16Z",
+      "side": 1,
+      "message": "Done.  Moved the getLastSubmitFence function from the next patch to this one.",
+      "parentUuid": "8b3f53f1_254779de",
+      "range": {
+        "startLine": 743,
+        "startChar": 0,
+        "endLine": 746,
+        "endChar": 74
+      },
+      "revId": "f3b7692fe1715eb1d86a3eeebe3c29c125adba6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f902eae0_5966f13f",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 11
@@ -93,6 +117,30 @@
       "revId": "f3b7692fe1715eb1d86a3eeebe3c29c125adba6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f4df54d_5ae40c41",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-03T20:53:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f902eae0_5966f13f",
+      "range": {
+        "startLine": 228,
+        "startChar": 30,
+        "endLine": 228,
+        "endChar": 35
+      },
+      "revId": "f3b7692fe1715eb1d86a3eeebe3c29c125adba6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -119,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "75ba5613_954c125f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-03T20:53:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36a6aeb5_4edb1b48",
+      "range": {
+        "startLine": 454,
+        "startChar": 3,
+        "endLine": 454,
+        "endChar": 52
+      },
+      "revId": "f3b7692fe1715eb1d86a3eeebe3c29c125adba6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e49e4ada_fc0b9348",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 11
@@ -139,6 +211,30 @@
       "revId": "f3b7692fe1715eb1d86a3eeebe3c29c125adba6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3a2279b_60cb57bc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-03T20:53:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e49e4ada_fc0b9348",
+      "range": {
+        "startLine": 467,
+        "startChar": 0,
+        "endLine": 468,
+        "endChar": 50
+      },
+      "revId": "f3b7692fe1715eb1d86a3eeebe3c29c125adba6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
