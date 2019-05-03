@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "43150e03_08bacb34",
+        "filename": "src/tests/egl_tests/EGLContextCompatibilityTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T16:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f714f6f0_1b72fd8e",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 5
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42670598_4a6955bb",
         "filename": "src/tests/egl_tests/EGLDeviceTest.cpp",
         "patchSetId": 16
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "88edb073_e6c2443d",
+        "filename": "src/tests/egl_tests/EGLDeviceTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T16:55:49Z",
+      "side": 1,
+      "message": "It meant use the default configuration parameters. But I followed your suggestion for D3D11. Done.",
+      "parentUuid": "42670598_4a6955bb",
+      "range": {
+        "startLine": 539,
+        "startChar": 60,
+        "endLine": 539,
+        "endChar": 80
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b0e3beee_fc1cb242",
         "filename": "src/tests/egl_tests/EGLPresentPathD3D11Test.cpp",
         "patchSetId": 16
@@ -64,6 +112,53 @@
         "startChar": 4,
         "endLine": 173,
         "endChar": 5
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac847294_e8ec3fe7",
+        "filename": "src/tests/egl_tests/EGLPresentPathD3D11Test.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T16:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0e3beee_fc1cb242",
+      "range": {
+        "startLine": 173,
+        "startChar": 4,
+        "endLine": 173,
+        "endChar": 5
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4aebc0b1_3f5c98f7",
+        "filename": "src/tests/egl_tests/EGLQueryContextTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T16:55:49Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 20,
+        "startChar": 7,
+        "endLine": 20,
+        "endChar": 52
       },
       "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -94,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "89eb442d_abf54809",
+        "filename": "src/tests/egl_tests/EGLQueryContextTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T16:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89df4881_8f21107f",
+      "range": {
+        "startLine": 62,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "599bc43b_01a8eb81",
         "filename": "src/tests/egl_tests/EGLQueryContextTest.cpp",
         "patchSetId": 16
@@ -114,6 +233,30 @@
       "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "855a8773_abfc72e7",
+        "filename": "src/tests/egl_tests/EGLQueryContextTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T16:55:49Z",
+      "side": 1,
+      "message": "They use a different test setup based on the config parameter. See ref.",
+      "parentUuid": "599bc43b_01a8eb81",
+      "range": {
+        "startLine": 152,
+        "startChar": 37,
+        "endLine": 152,
+        "endChar": 46
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "a5f924e1_2d7737e4",
+        "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T16:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca47f930_16598bd9",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 42
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "72feac2a_26ddc09c",
         "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
         "patchSetId": 16
@@ -160,6 +327,30 @@
       "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a04bca5_03a5c68f",
+        "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T16:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72feac2a_26ddc09c",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 5
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -186,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "91581fc6_19bf5f95",
+        "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T16:55:49Z",
+      "side": 1,
+      "message": "This is a bit finicky and it\u0027s on a disabled test. I\u0027m not sure on the history here. I added a comment.",
+      "parentUuid": "3efaf46d_03cf6bce",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 59
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3207986d_f2e4dfe4",
         "filename": "src/tests/egl_tests/EGLSurfacelessContextTest.cpp",
         "patchSetId": 16
@@ -206,6 +421,30 @@
       "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e62c39df_c0fc1fac",
+        "filename": "src/tests/egl_tests/EGLSurfacelessContextTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T16:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3207986d_f2e4dfe4",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 5
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -232,6 +471,30 @@
     },
     {
       "key": {
+        "uuid": "73c2dc0d_cd2b1a7c",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T16:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c18bbe86_bbc3c7c8",
+      "range": {
+        "startLine": 335,
+        "startChar": 0,
+        "endLine": 335,
+        "endChar": 23
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "34f1dd89_55a2436b",
         "filename": "src/tests/test_utils/ANGLETest.cpp",
         "patchSetId": 16
@@ -248,6 +511,53 @@
         "startChar": 11,
         "endLine": 516,
         "endChar": 28
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "195d36e5_752a4546",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T16:55:49Z",
+      "side": 1,
+      "message": "Done. But I made this Windows-only as it is totally not useful on Linux.",
+      "parentUuid": "34f1dd89_55a2436b",
+      "range": {
+        "startLine": 516,
+        "startChar": 11,
+        "endLine": 516,
+        "endChar": 28
+      },
+      "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d8f06ef1_eed294c8",
+        "filename": "src/tests/test_utils/ANGLETest.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-03T16:55:49Z",
+      "side": 1,
+      "message": "fix before landing.",
+      "range": {
+        "startLine": 455,
+        "startChar": 60,
+        "endLine": 455,
+        "endChar": 70
       },
       "revId": "dd1b041f9ca21415b927a59ba63afe91cc3ea7e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
