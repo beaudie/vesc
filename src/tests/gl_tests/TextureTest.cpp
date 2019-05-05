@@ -4182,7 +4182,6 @@ TEST_P(Texture2DTest, CopySubImageFloat_RGB_RGB)
 {
     // TODO(cwallez): Fix on Linux Intel drivers (http://anglebug.com/40096350)
     ANGLE_SKIP_TEST_IF(IsIntel() && IsLinux() && IsOpenGL());
-
     testFloatCopySubImage(3, 3);
 }
 
