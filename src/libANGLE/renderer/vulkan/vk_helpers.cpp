@@ -1892,11 +1892,11 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
                               inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
 
     VkBufferImageCopy copy = {};
+    VkImageAspectFlags aspectFlags = GetFormatAspectFlags(vkFormat.imageFormat());
 
     copy.bufferOffset                    = stagingOffset;
     copy.bufferRowLength                 = bufferRowLength;
     copy.bufferImageHeight               = bufferImageHeight;
-    copy.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
     copy.imageSubresource.mipLevel       = index.getLevelIndex();
     copy.imageSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;
     copy.imageSubresource.layerCount     = index.getLayerCount();
@@ -1904,7 +1904,19 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     gl_vk::GetOffset(offset, &copy.imageOffset);
     gl_vk::GetExtent(extents, &copy.imageExtent);
 
-    mSubresourceUpdates.emplace_back(bufferHandle, copy);
+    if (aspectFlags & VK_IMAGE_ASPECT_STENCIL_BIT)
+    {
+        copy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+        mSubresourceUpdates.emplace_back(bufferHandle, copy);
+
+        aspectFlags &= ~VK_IMAGE_ASPECT_STENCIL_BIT;
+    }
+
+    if (aspectFlags)
+    {
+        copy.imageSubresource.aspectMask = aspectFlags;
+        mSubresourceUpdates.emplace_back(bufferHandle, copy);
+    }
 
     return angle::Result::Continue;
 }
@@ -1925,7 +1937,7 @@ angle::Result ImageHelper::stageSubresourceUpdateAndGetData(ContextVk *contextVk
     copy.bufferOffset                    = stagingOffset;
     copy.bufferRowLength                 = extents.width;
     copy.bufferImageHeight               = extents.height;
-    copy.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    copy.imageSubresource.aspectMask     = getAspectFlags();
     copy.imageSubresource.mipLevel       = imageIndex.getLevelIndex();
     copy.imageSubresource.baseArrayLayer = imageIndex.hasLayer() ? imageIndex.getLayerIndex() : 0;
     copy.imageSubresource.layerCount     = imageIndex.getLayerCount();

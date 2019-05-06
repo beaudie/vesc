@@ -161,7 +161,316 @@ TEST_P(DepthStencilFormatsTest, PackedDepthStencil)
     }
 }
 
+TEST_P(DepthStencilFormatsTest, WebGLDepthTextureTest)
+{
+    constexpr char kVS[] = R"(attribute vec4 a_position;
+void main()
+{
+    gl_Position = a_position;
+})";
+
+    constexpr char kFS[] = R"(precision mediump float;
+uniform sampler2D u_texture;
+uniform vec2 u_resolution;
+void main()
+{
+    vec2 texcoord = (gl_FragCoord.xy - vec2(0.5)) / (u_resolution - vec2(1.0));
+    gl_FragColor = texture2D(u_texture, texcoord);
+})";
+
+    const int res     = 2;
+    const int destRes = 4;
+    GLuint program, resolution;
+
+    program = CompileProgram(kVS, kFS);
+    if (program == 0)
+    {
+        FAIL() << "shader compilation failed.";
+    }
+
+    glUseProgram(program);
+    resolution = glGetUniformLocation(program, "u_resolution");
+    glUniform2f(resolution, (float)destRes, (float)destRes);
+
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    float verts[] = {
+        1, 1, 1, -1, 1, 0, -1, -1, -1, 1, 1, 1, -1, -1, -1, 1, -1, 0,
+    };
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+
+    // OpenGL ES does not have a FLIPY PixelStore attribute
+    // glPixelStorei(GL_UNPACK_FLIP)
+
+    enum ObjType
+    {
+        GL,
+        EXT
+    };
+    struct TypeInfo
+    {
+        ObjType obj;
+        GLuint attachment;
+        GLuint format;
+        GLuint type;
+        void *data;
+        int depthBits;
+        int stencilBits;
+    };
+
+    GLuint fakeData[10];
+
+    std::vector<TypeInfo> types = {
+        {ObjType::GL, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, fakeData, 16, 0},
+        {ObjType::GL, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, fakeData, 16, 0},
+        {ObjType::EXT, GL_DEPTH_STENCIL_ATTACHMENT, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8_OES,
+         fakeData, 24, 8},
+    };
+
+    for (auto const &type : types)
+    {
+        GLuint cubeTex = 0;
+        glGenTextures(1, &cubeTex);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTex);
+        EXPECT_EQ(GL_NO_ERROR, glGetError());
+
+        std::vector<GLuint> targets{GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+                                    GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+                                    GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z};
+
+        for (auto const &target : targets)
+        {
+            glTexImage2D(target, 0, type.format, 1, 1, 0, type.format, type.type, nullptr);
+            EXPECT_EQ(GL_INVALID_OPERATION, glGetError());
+        }
+
+        glDeleteTextures(1, &cubeTex);
+
+        std::vector<GLuint> filterModes = {GL_LINEAR, GL_NEAREST};
+
+        const bool supportPackedDepthStencilFramebuffer =
+            getClientMajorVersion() >= 3 ||
+            IsGLExtensionEnabled("EGL_ANGLE_create_context_webgl_compatibility");
+
+        for (auto const &filterMode : filterModes)
+        {
+            GLuint tex = 0;
+            glGenTextures(1, &tex);
+            glBindTexture(GL_TEXTURE_2D, tex);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterMode);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterMode);
+
+            // test level > 0
+            glTexImage2D(GL_TEXTURE_2D, 1, type.format, 1, 1, 0, type.format, type.type, nullptr);
+            if (IsGLExtensionEnabled("GL_OES_depth_texture"))
+            {
+                EXPECT_EQ(GL_NO_ERROR, glGetError());
+            }
+            else
+            {
+                EXPECT_EQ(GL_INVALID_OPERATION, glGetError());
+            }
+
+            // test with data
+            glTexImage2D(GL_TEXTURE_2D, 0, type.format, 1, 1, 0, type.format, type.type, type.data);
+            if (IsGLExtensionEnabled("GL_OES_depth_texture"))
+            {
+                EXPECT_EQ(GL_NO_ERROR, glGetError());
+            }
+            else
+            {
+                EXPECT_EQ(GL_INVALID_OPERATION, glGetError());
+            }
+
+            // test copyTexImage2D
+            glCopyTexImage2D(GL_TEXTURE_2D, 0, type.format, 0, 0, 1, 1, 0);
+            GLuint error = glGetError();
+            if (error != GL_INVALID_ENUM && error != GL_INVALID_OPERATION)
+            {
+                FAIL() << "glCopyTexImage2D did not return valid error: " << error;
+            }
+
+            // test real thing
+            glTexImage2D(GL_TEXTURE_2D, 0, type.format, res, res, 0, type.format, type.type,
+                         nullptr);
+            EXPECT_EQ(GL_NO_ERROR, glGetError());
+
+            // test texSubImage2D
+            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, type.format, type.type, type.data);
+            if (IsGLExtensionEnabled("GL_OES_depth_texture"))
+            {
+                EXPECT_EQ(GL_NO_ERROR, glGetError());
+            }
+            else
+            {
+                EXPECT_EQ(GL_INVALID_OPERATION, glGetError());
+            }
+
+            // test copyTexSubImage2D
+            glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 1, 1);
+            EXPECT_EQ(GL_INVALID_OPERATION, glGetError());
+
+            // test generateMipmap
+            glGenerateMipmap(GL_TEXTURE_2D);
+            EXPECT_EQ(GL_INVALID_OPERATION, glGetError());
+
+            GLuint fbo = 0;
+            glGenFramebuffers(1, &fbo);
+            glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+            if (type.depthBits > 0 && type.stencilBits > 0 && !supportPackedDepthStencilFramebuffer)
+            {
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex, 0);
+                EXPECT_EQ(GL_NO_ERROR, glGetError());
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, tex,
+                                       0);
+                EXPECT_EQ(GL_NO_ERROR, glGetError());
+            }
+            else
+            {
+                glFramebufferTexture2D(GL_FRAMEBUFFER, type.attachment, GL_TEXTURE_2D, tex, 0);
+                EXPECT_EQ(GL_NO_ERROR, glGetError());
+            }
+
+            // Ensure DEPTH_BITS returns >= 16 bits for UNSIGNED_SHORT and UNSIGNED_INT, >= 24
+            // UNSIGNED_INT_24_8_WEBGL. If there is stencil, ensure STENCIL_BITS reports >= 8 for
+            // UNSIGNED_INT_24_8_WEBGL.
+
+            GLint depthBits = 0;
+            glGetIntegerv(GL_DEPTH_BITS, &depthBits);
+            EXPECT_GE(depthBits, type.depthBits);
+
+            GLint stencilBits = 0;
+            glGetIntegerv(GL_STENCIL_BITS, &stencilBits);
+            EXPECT_GE(stencilBits, type.stencilBits);
+
+            // TODO: remove this check if the spec is updated to require these combinations to work.
+            if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+            {
+                // try adding a color buffer.
+                GLuint colorTex = 0;
+                glGenTextures(1, &colorTex);
+                glBindTexture(GL_TEXTURE_2D, colorTex);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, res, res, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                             nullptr);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                       colorTex, 0);
+                EXPECT_EQ(GL_FRAMEBUFFER_COMPLETE, glGetError());
+            }
+
+            EXPECT_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+            // Note: If test stops here I will see validation errors when using Vulkan backend.
+
+            // use the default texture to render with while we return to the depth texture.
+            glBindTexture(GL_TEXTURE_2D, 0);
+
+            /* Setup 2x2 depth texture:
+             * 1 0.6 0.8
+             * |
+             * 0 0.2 0.4
+             *    0---1
+             */
+            const GLfloat d00 = 0.2;
+            const GLfloat d01 = 0.4;
+            const GLfloat d10 = 0.6;
+            const GLfloat d11 = 0.8;
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(0, 0, 1, 1);
+            glClearDepthf(d00);
+            glClear(GL_DEPTH_BUFFER_BIT);
+            glScissor(1, 0, 1, 1);
+            glClearDepthf(d10);
+            glClear(GL_DEPTH_BUFFER_BIT);
+            glScissor(0, 1, 1, 1);
+            glClearDepthf(d01);
+            glClear(GL_DEPTH_BUFFER_BIT);
+            glScissor(1, 1, 1, 1);
+            glClearDepthf(d11);
+            glClear(GL_DEPTH_BUFFER_BIT);
+            glDisable(GL_SCISSOR_TEST);
+
+            // render the depth texture.
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glViewport(0, 0, destRes, destRes);
+            glBindTexture(GL_TEXTURE_2D, tex);
+            glDisable(GL_DITHER);
+            glEnable(GL_DEPTH_TEST);
+            glClearColor(1, 0, 0, 1);
+            glClearDepthf(1.0);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+
+            GLubyte actualPixels[destRes * destRes * 4];
+            glReadPixels(0, 0, destRes, destRes, GL_RGBA, GL_UNSIGNED_BYTE, actualPixels);
+            const GLfloat eps = 0.002;
+            std::vector<GLfloat> expectedMin;
+            std::vector<GLfloat> expectedMax;
+            if (filterMode == GL_NEAREST)
+            {
+                GLfloat init[] = {d00, d00, d10, d10, d00, d00, d10, d10,
+                                  d01, d01, d11, d11, d01, d01, d11, d11};
+                expectedMin.insert(expectedMin.begin(), init, init + 16);
+                expectedMax.insert(expectedMax.begin(), init, init + 16);
+
+                for (int i = 0; i < 16; i++)
+                {
+                    expectedMin[i] = expectedMin[i] - eps;
+                    expectedMax[i] = expectedMax[i] + eps;
+                }
+            }
+            else
+            {
+                GLfloat initMin[] = {
+                    d00 - eps, d00, d00, d10 - eps, d00,       d00, d00, d10,
+                    d00,       d00, d00, d10,       d01 - eps, d01, d01, d11 - eps,
+                };
+                GLfloat initMax[] = {
+                    d00 + eps, d10, d10, d10 + eps, d01,       d11, d11, d11,
+                    d01,       d11, d11, d11,       d01 + eps, d11, d11, d11 + eps,
+                };
+                expectedMin.insert(expectedMin.begin(), initMin, initMin + 16);
+                expectedMax.insert(expectedMax.begin(), initMax, initMax + 16);
+            }
+            for (int yy = 0; yy < destRes; ++yy)
+            {
+                for (int xx = 0; xx < destRes; ++xx)
+                {
+                    const int t        = xx + destRes * yy;
+                    const GLfloat was  = (GLfloat)(actualPixels[4 * t] / 255.0);  // 4bpp
+                    const GLfloat eMin = expectedMin[t];
+                    const GLfloat eMax = expectedMax[t];
+                    EXPECT_TRUE(was >= eMin && was <= eMax)
+                        << "At " << xx << ", " << yy << ", expected within [" << eMin << ", "
+                        << eMax << "] was " << was;
+                }
+            }
+
+#if 0
+			// check limitations
+			gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+			gl.framebufferTexture2D(gl.FRAMEBUFFER, gl[typeInfo.attachment], gl.TEXTURE_2D, null, 0);
+			var badAttachment = typeInfo.attachment == 'DEPTH_ATTACHMENT' ? 'DEPTH_STENCIL_ATTACHMENT' : 'DEPTH_ATTACHMENT';
+			wtu.shouldGenerateGLError(gl, gl.NO_ERROR, 'gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.' + badAttachment + ', gl.TEXTURE_2D, tex, 0)');
+			shouldNotBe('gl.checkFramebufferStatus(gl.FRAMEBUFFER)', 'gl.FRAMEBUFFER_COMPLETE');
+			wtu.shouldGenerateGLError(gl, gl.INVALID_FRAMEBUFFER_OPERATION, 'gl.clear(gl.DEPTH_BUFFER_BIT)');
+			gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+			shouldBe('gl.getError()', 'gl.NO_ERROR');
+#endif
+        }
+    }
+}
+
 TEST_P(DepthStencilFormatsTestES3, DrawWithDepthStencil)
+
 {
     GLushort data[16];
     for (unsigned int i = 0; i < 16; i++)

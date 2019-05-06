@@ -865,8 +865,15 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
                 vk::CommandBuffer *srcLayoutChange;
                 ANGLE_TRY(image.recordCommands(contextVk, &srcLayoutChange));
 
-                image.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT,
-                                   vk::ImageLayout::FragmentShaderReadOnly, srcLayoutChange);
+                // For depth/stencil aspectFlag will have depth and stencil bits set, can only have
+                // one so mask to get depth or color if we have a color image.
+                VkImageAspectFlags aspectFlags =
+                    image.getAspectFlags() &
+                    (VK_IMAGE_ASPECT_COLOR_BIT | VK_IMAGE_ASPECT_DEPTH_BIT);
+                // VkImageAspectFlags aspectFlags = image.getAspectFlags();
+                ASSERT(aspectFlags != 0);
+                image.changeLayout(aspectFlags, vk::ImageLayout::FragmentShaderReadOnly,
+                                   srcLayoutChange);
             }
 
             image.addReadDependency(framebuffer);

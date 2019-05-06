@@ -1340,7 +1340,7 @@ angle::Result TextureVk::getLayerLevelDrawImageView(vk::Context *context,
     // Lazily allocate the image view itself.
     // Note that these views are specifically made to be used as color attachments, and therefore
     // don't have swizzle.
-    return mImage->initLayerImageView(context, mState.getType(), VK_IMAGE_ASPECT_COLOR_BIT,
+    return mImage->initLayerImageView(context, mState.getType(), mImage->getAspectFlags(),
                                       gl::SwizzleState(), *imageViewOut, getNativeImageLevel(level),
                                       1, getNativeImageLayer(layer), 1);
 }
