@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "20c42c1c_14bcefcf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T14:49:27Z",
+      "side": 1,
+      "message": "looks like we forgot to plan this when we scoped out ES 3.0. Could you file a new issue for this blocking 2950 and also add a tracking work row in the angle progress spreadsheet 3.0 tab with yourself as owner?",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "906ff610fc94af6794780655cd8f6e64c0cbdcc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43e6b10a_993fb81f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -25,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "1b361d72_11d1bbdf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T14:49:27Z",
+      "side": 1,
+      "message": "+1, not sure if there are tests that cover this. spec:\n\n\u003e mode, count, type, and indices match the corresponding arguments to DrawElements, with the \n\u003e additional constraint that all index values identified by indices must lie between start and \n\u003e end inclusive\n\nDifferent from the first vertex parameter.",
+      "parentUuid": "43e6b10a_993fb81f",
+      "range": {
+        "startLine": 579,
+        "startChar": 50,
+        "endLine": 579,
+        "endChar": 55
+      },
+      "revId": "906ff610fc94af6794780655cd8f6e64c0cbdcc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e059fd75_811f8407",
         "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
         "patchSetId": 2
@@ -36,6 +83,30 @@
       "writtenOn": "2019-05-03T23:21:13Z",
       "side": 1,
       "message": "glBeginTransformFeedback() returns GL_INVALID_VALUE, causing these tests to fail.",
+      "range": {
+        "startLine": 652,
+        "startChar": 0,
+        "endLine": 653,
+        "endChar": 109
+      },
+      "revId": "906ff610fc94af6794780655cd8f6e64c0cbdcc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9389b20_5ccaf963",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T14:49:27Z",
+      "side": 1,
+      "message": "That\u0027s okay. We can leave them disabled as long as we have an issue open to track them.",
+      "parentUuid": "e059fd75_811f8407",
       "range": {
         "startLine": 652,
         "startChar": 0,
