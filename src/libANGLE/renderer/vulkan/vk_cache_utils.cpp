@@ -183,35 +183,70 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
                                            const AttachmentOpsArray &ops,
                                            RenderPass *renderPass)
 {
-    size_t attachmentCount = desc.attachmentCount();
-
     // Unpack the packed and split representation into the format required by Vulkan.
     gl::DrawBuffersVector<VkAttachmentReference> colorAttachmentRefs;
     VkAttachmentReference depthStencilAttachmentRef = {VK_ATTACHMENT_UNUSED};
     gl::AttachmentArray<VkAttachmentDescription> attachmentDescs;
-    for (uint32_t attachmentIndex = 0; attachmentIndex < attachmentCount; ++attachmentIndex)
+
+    uint32_t colorAttachmentCount = 0;
+    uint32_t attachmentCount      = 0;
+    for (uint32_t colorIndexGL = 0; colorIndexGL < desc.colorAttachmentRange(); ++colorIndexGL)
     {
-        angle::FormatID formatID = desc[attachmentIndex];
+        // Vulkan says:
+        //
+        // > Each element of the pColorAttachments array corresponds to an output location in the
+        // > shader, i.e. if the shader declares an output variable decorated with a Location value
+        // > of X, then it uses the attachment provided in pColorAttachments[X].
+        //
+        // This means that colorAttachmentRefs is indexed by colorIndexGL.  Where the color
+        // attachment is disabled, a reference with VK_ATTACHMENT_UNUSED is given.
+
+        if (!desc.isColorAttachmentEnabled(colorIndexGL))
+        {
+            VkAttachmentReference colorRef;
+            colorRef.attachment = VK_ATTACHMENT_UNUSED;
+            colorRef.layout     = VK_IMAGE_LAYOUT_UNDEFINED;
+            colorAttachmentRefs.push_back(colorRef);
+
+            continue;
+        }
+
+        uint32_t colorIndexVk    = colorAttachmentCount++;
+        angle::FormatID formatID = desc[colorIndexGL];
         ASSERT(formatID != angle::FormatID::NONE);
         const vk::Format &format = context->getRenderer()->getFormat(formatID);
 
-        if (!format.angleFormat().hasDepthOrStencilBits())
-        {
-            VkAttachmentReference colorRef = colorAttachmentRefs[attachmentIndex];
-            colorRef.attachment            = attachmentIndex;
-            colorRef.layout                = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+        VkAttachmentReference colorRef;
+        colorRef.attachment = colorIndexVk;
+        colorRef.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-            colorAttachmentRefs.push_back(colorRef);
-        }
-        else
-        {
-            ASSERT(depthStencilAttachmentRef.attachment == VK_ATTACHMENT_UNUSED);
-            depthStencilAttachmentRef.attachment = attachmentIndex;
-            depthStencilAttachmentRef.layout     = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-        }
+        colorAttachmentRefs.push_back(colorRef);
 
-        UnpackAttachmentDesc(&attachmentDescs[attachmentIndex], format, desc.samples(),
-                             ops[attachmentIndex]);
+        UnpackAttachmentDesc(&attachmentDescs[colorIndexVk], format, desc.samples(),
+                             ops[colorIndexVk]);
+
+        ++attachmentCount;
+    }
+
+    for (uint32_t depthStencilIndex = desc.depthStencilAttachmentIndex();
+         depthStencilIndex < desc.attachmentRange(); ++depthStencilIndex)
+    {
+        uint32_t depthStencilIndexVk =
+            depthStencilIndex - desc.depthStencilAttachmentIndex() + colorAttachmentCount;
+
+        angle::FormatID formatID = desc[depthStencilIndex];
+        ASSERT(formatID != angle::FormatID::NONE);
+        const vk::Format &format = context->getRenderer()->getFormat(formatID);
+
+        // Only one depth stencil attachment is expected.
+        ASSERT(depthStencilIndexVk == colorAttachmentCount);
+        depthStencilAttachmentRef.attachment = depthStencilIndexVk;
+        depthStencilAttachmentRef.layout     = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+
+        UnpackAttachmentDesc(&attachmentDescs[depthStencilIndexVk], format, desc.samples(),
+                             ops[depthStencilIndexVk]);
+
+        ++attachmentCount;
     }
 
     VkSubpassDescription subpassDesc = {};
@@ -317,39 +352,44 @@ RenderPassDesc::RenderPassDesc(const RenderPassDesc &other)
     memcpy(this, &other, sizeof(RenderPassDesc));
 }
 
-size_t RenderPassDesc::colorAttachmentCount() const
-{
-    return mColorAttachmentCount;
-}
-
-size_t RenderPassDesc::attachmentCount() const
-{
-    return mColorAttachmentCount + mDepthStencilAttachmentCount;
-}
-
 void RenderPassDesc::setSamples(GLint samples)
 {
     ASSERT(samples < std::numeric_limits<uint8_t>::max());
     mSamples = static_cast<uint8_t>(samples);
 }
 
-void RenderPassDesc::packAttachment(const Format &format)
+void RenderPassDesc::packColorAttachment(size_t colorIndexGL, angle::FormatID formatID)
 {
-    ASSERT(attachmentCount() < mAttachmentFormats.size() - 1);
+    ASSERT(colorIndexGL < mAttachmentFormats.size());
     static_assert(angle::kNumANGLEFormats < std::numeric_limits<uint8_t>::max(),
                   "Too many ANGLE formats to fit in uint8_t");
-    uint8_t &packedFormat = mAttachmentFormats[attachmentCount()];
-    SetBitField(packedFormat, format.angleFormatID);
-    if (format.angleFormat().hasDepthOrStencilBits())
+    uint8_t &packedFormat = mAttachmentFormats[colorIndexGL];
+    SetBitField(packedFormat, formatID);
+
+    // Force the user to pack the depth/stencil attachment last.
+    ASSERT(mDepthStencilAttachmentRange == 0);
+
+    // Set color attachment count such that it covers the range from index 0 through last
+    // active index.  This is the reason why we need depth/stencil to be packed last.
+    if (formatID != angle::FormatID::NONE)
     {
-        mDepthStencilAttachmentCount++;
+        mColorAttachmentRange =
+            std::max<uint8_t>(mColorAttachmentRange, static_cast<uint8_t>(colorIndexGL) + 1);
     }
-    else
-    {
-        // Force the user to pack the depth/stencil attachment last.
-        ASSERT(mDepthStencilAttachmentCount == 0);
-        mColorAttachmentCount++;
-    }
+}
+
+void RenderPassDesc::packDepthStencilAttachment(angle::FormatID formatID)
+{
+    // Though written as Count, there is only ever a single depth/stencil attachment.
+    ASSERT(mDepthStencilAttachmentRange == 0);
+
+    size_t index = depthStencilAttachmentIndex() + mDepthStencilAttachmentRange;
+    ASSERT(index < mAttachmentFormats.size());
+
+    uint8_t &packedFormat = mAttachmentFormats[index];
+    SetBitField(packedFormat, formatID);
+
+    mDepthStencilAttachmentRange++;
 }
 
 RenderPassDesc &RenderPassDesc::operator=(const RenderPassDesc &other)
@@ -361,6 +401,25 @@ RenderPassDesc &RenderPassDesc::operator=(const RenderPassDesc &other)
 size_t RenderPassDesc::hash() const
 {
     return angle::ComputeGenericHash(*this);
+}
+
+bool RenderPassDesc::isColorAttachmentEnabled(size_t colorIndexGL) const
+{
+    angle::FormatID formatID = operator[](colorIndexGL);
+    return formatID != angle::FormatID::NONE;
+}
+
+size_t RenderPassDesc::attachmentCount() const
+{
+    size_t colorAttachmentCount = 0;
+    for (size_t i = 0; i < mColorAttachmentRange; ++i)
+    {
+        colorAttachmentCount += isColorAttachmentEnabled(i);
+    }
+
+    // Note that there are no gaps in depth/stencil attachments.  In fact there is a maximum of 1 of
+    // it.
+    return colorAttachmentCount + mDepthStencilAttachmentRange;
 }
 
 bool operator==(const RenderPassDesc &lhs, const RenderPassDesc &rhs)
@@ -467,9 +526,10 @@ void GraphicsPipelineDesc::initDefaults()
     VkFlags allColorBits = (VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT |
                             VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT);
 
-    for (uint32_t colorIndex = 0; colorIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; ++colorIndex)
+    for (uint32_t colorIndexGL = 0; colorIndexGL < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
+         ++colorIndexGL)
     {
-        Int4Array_Set(inputAndBlend.colorWriteMaskBits, colorIndex, allColorBits);
+        Int4Array_Set(inputAndBlend.colorWriteMaskBits, colorIndexGL, allColorBits);
     }
 
     PackedColorBlendAttachmentState blendAttachmentState;
@@ -669,7 +729,7 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     blendState.flags           = 0;
     blendState.logicOpEnable   = static_cast<VkBool32>(inputAndBlend.logic.opEnable);
     blendState.logicOp         = static_cast<VkLogicOp>(inputAndBlend.logic.op);
-    blendState.attachmentCount = mRenderPassDesc.colorAttachmentCount();
+    blendState.attachmentCount = mRenderPassDesc.colorAttachmentRange();
     blendState.pAttachments    = blendAttachmentState.data();
 
     for (int i = 0; i < 4; i++)
@@ -679,14 +739,14 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
 
     const gl::DrawBufferMask blendEnableMask(inputAndBlend.blendEnableMask);
 
-    for (uint32_t colorIndex = 0; colorIndex < blendState.attachmentCount; ++colorIndex)
+    for (uint32_t colorIndexGL = 0; colorIndexGL < blendState.attachmentCount; ++colorIndexGL)
     {
-        VkPipelineColorBlendAttachmentState &state = blendAttachmentState[colorIndex];
+        VkPipelineColorBlendAttachmentState &state = blendAttachmentState[colorIndexGL];
 
-        state.blendEnable = blendEnableMask[colorIndex] ? VK_TRUE : VK_FALSE;
+        state.blendEnable = blendEnableMask[colorIndexGL] ? VK_TRUE : VK_FALSE;
         state.colorWriteMask =
-            Int4Array_Get<VkColorComponentFlags>(inputAndBlend.colorWriteMaskBits, colorIndex);
-        UnpackBlendAttachmentState(inputAndBlend.attachments[colorIndex], &state);
+            Int4Array_Get<VkColorComponentFlags>(inputAndBlend.colorWriteMaskBits, colorIndexGL);
+        UnpackBlendAttachmentState(inputAndBlend.attachments[colorIndexGL], &state);
     }
 
     // We would define dynamic state here if it were to be used.
@@ -851,19 +911,21 @@ void GraphicsPipelineDesc::setColorWriteMask(VkColorComponentFlags colorComponen
     PackedInputAssemblyAndColorBlendStateInfo &inputAndBlend = mInputAssemblyAndColorBlendStateInfo;
     uint8_t colorMask = static_cast<uint8_t>(colorComponentFlags);
 
-    for (size_t colorIndex = 0; colorIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; colorIndex++)
+    for (size_t colorIndexGL = 0; colorIndexGL < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
+         colorIndexGL++)
     {
-        uint8_t mask = alphaMask[colorIndex] ? (colorMask & ~VK_COLOR_COMPONENT_A_BIT) : colorMask;
-        Int4Array_Set(inputAndBlend.colorWriteMaskBits, colorIndex, mask);
+        uint8_t mask =
+            alphaMask[colorIndexGL] ? (colorMask & ~VK_COLOR_COMPONENT_A_BIT) : colorMask;
+        Int4Array_Set(inputAndBlend.colorWriteMaskBits, colorIndexGL, mask);
     }
 }
 
-void GraphicsPipelineDesc::setSingleColorWriteMask(uint32_t colorIndex,
+void GraphicsPipelineDesc::setSingleColorWriteMask(uint32_t colorIndexGL,
                                                    VkColorComponentFlags colorComponentFlags)
 {
     PackedInputAssemblyAndColorBlendStateInfo &inputAndBlend = mInputAssemblyAndColorBlendStateInfo;
     uint8_t colorMask = static_cast<uint8_t>(colorComponentFlags);
-    Int4Array_Set(inputAndBlend.colorWriteMaskBits, colorIndex, colorMask);
+    Int4Array_Set(inputAndBlend.colorWriteMaskBits, colorIndexGL, colorMask);
 }
 
 void GraphicsPipelineDesc::updateColorWriteMask(GraphicsPipelineTransitionBits *transition,
@@ -872,10 +934,11 @@ void GraphicsPipelineDesc::updateColorWriteMask(GraphicsPipelineTransitionBits *
 {
     setColorWriteMask(colorComponentFlags, alphaMask);
 
-    for (size_t colorIndex = 0; colorIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; colorIndex++)
+    for (size_t colorIndexGL = 0; colorIndexGL < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
+         colorIndexGL++)
     {
         transition->set(ANGLE_GET_INDEXED_TRANSITION_BIT(mInputAssemblyAndColorBlendStateInfo,
-                                                         colorWriteMaskBits, colorIndex, 4));
+                                                         colorWriteMaskBits, colorIndexGL, 4));
     }
 }
 
@@ -1339,21 +1402,26 @@ angle::Result RenderPassCache::addRenderPass(vk::Context *context,
     // It would be nice to pre-populate the cache in the Renderer so we rarely miss here.
     vk::AttachmentOpsArray ops;
 
-    for (uint32_t attachmentIndex = 0; attachmentIndex < desc.attachmentCount(); ++attachmentIndex)
+    uint32_t colorAttachmentCount = 0;
+    for (uint32_t colorIndexGL = 0; colorIndexGL < desc.colorAttachmentRange(); ++colorIndexGL)
     {
-        angle::FormatID formatID = desc[attachmentIndex];
-        ASSERT(formatID != angle::FormatID::NONE);
-        const vk::Format &format = context->getRenderer()->getFormat(formatID);
-        if (!format.angleFormat().hasDepthOrStencilBits())
+        if (!desc.isColorAttachmentEnabled(colorIndexGL))
         {
-            ops.initDummyOp(attachmentIndex, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-                            VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+            continue;
         }
-        else
-        {
-            ops.initDummyOp(attachmentIndex, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-                            VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
-        }
+
+        uint32_t colorIndexVk = colorAttachmentCount++;
+        ops.initDummyOp(colorIndexVk, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                        VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+    }
+
+    for (uint32_t depthStencilIndex = desc.depthStencilAttachmentIndex();
+         depthStencilIndex < desc.attachmentRange(); ++depthStencilIndex)
+    {
+        uint32_t depthStencilIndexVk =
+            depthStencilIndex - desc.depthStencilAttachmentIndex() + colorAttachmentCount;
+        ops.initDummyOp(depthStencilIndexVk, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+                        VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
     }
 
     return getRenderPassWithOps(context, serial, desc, ops, renderPassOut);
