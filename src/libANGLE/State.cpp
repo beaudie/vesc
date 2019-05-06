@@ -620,6 +620,14 @@ void State::setColorMask(bool red, bool green, bool blue, bool alpha)
     mDirtyBits.set(DIRTY_BIT_COLOR_MASK);
 }
 
+void State::getColorMask(bool *red, bool *green, bool *blue, bool *alpha) const
+{
+    *red   = mBlend.colorMaskRed;
+    *green = mBlend.colorMaskGreen;
+    *blue  = mBlend.colorMaskBlue;
+    *alpha = mBlend.colorMaskAlpha;
+}
+
 void State::setDepthMask(bool mask)
 {
     mDepthStencil.depthMask = mask;
