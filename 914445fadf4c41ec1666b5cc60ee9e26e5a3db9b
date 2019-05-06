@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7db3d22b_463107e6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T15:19:20Z",
+      "side": 1,
+      "message": "nit: \u0027block\u0027 would probably be clearer since the function is called wait.",
+      "range": {
+        "startLine": 491,
+        "startChar": 30,
+        "endLine": 491,
+        "endChar": 34
+      },
+      "revId": "914445fadf4c41ec1666b5cc60ee9e26e5a3db9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a831349_2785ca28",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T15:19:20Z",
+      "side": 1,
+      "message": "where do all these new release methods get called from? I might have missed it. Or is that a future patch?",
+      "range": {
+        "startLine": 201,
+        "startChar": 42,
+        "endLine": 201,
+        "endChar": 49
+      },
+      "revId": "914445fadf4c41ec1666b5cc60ee9e26e5a3db9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
