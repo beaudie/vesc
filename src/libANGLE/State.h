@@ -103,6 +103,7 @@ class State : angle::NonCopyable
 
     // Write mask manipulation
     void setColorMask(bool red, bool green, bool blue, bool alpha);
+    void getColorMask(bool *red, bool *green, bool *blue, bool *alpha) const;
     void setDepthMask(bool mask);
 
     // Discard toggle & query
