@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc0d781f_8f4d62ae",
+        "filename": "src/libANGLE/Workarounds.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-06T17:40:43Z",
+      "side": 1,
+      "message": "We could typedef this in workaround.h",
+      "range": {
+        "startLine": 23,
+        "startChar": 4,
+        "endLine": 23,
+        "endChar": 47
+      },
+      "revId": "ce314a826ae07a5ee41e5de3132385366188cd48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9be3e9cc_71be8bee",
+        "filename": "src/libANGLE/Workarounds.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-06T17:40:43Z",
+      "side": 1,
+      "message": "This could be a global function in workaround.h that takes the members map as a parameter.",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 5
+      },
+      "revId": "ce314a826ae07a5ee41e5de3132385366188cd48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
