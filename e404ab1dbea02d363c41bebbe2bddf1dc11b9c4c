@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "034f57b5_25000664",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-06T14:20:35Z",
+      "side": 1,
+      "message": "Might be worthwhile to rename this to `getNextSubmitFence` at some point to make sure there\u0027s no confusion.",
+      "range": {
+        "startLine": 165,
+        "startChar": 18,
+        "endLine": 165,
+        "endChar": 32
+      },
+      "revId": "e404ab1dbea02d363c41bebbe2bddf1dc11b9c4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
