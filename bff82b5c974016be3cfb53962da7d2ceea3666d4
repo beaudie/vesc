@@ -16,6 +16,24 @@
       "revId": "bff82b5c974016be3cfb53962da7d2ceea3666d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a560f044_8afe71c8",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-06T10:24:10Z",
+      "side": 1,
+      "message": "Done. I left the base class alone instead.",
+      "parentUuid": "1103414c_49a65c5f",
+      "revId": "bff82b5c974016be3cfb53962da7d2ceea3666d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
