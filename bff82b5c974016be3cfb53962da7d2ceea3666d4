@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1103414c_49a65c5f",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1444,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-05-06T08:40:27Z",
+      "side": 1,
+      "message": "There\u0027s still some uses of old baseclass.\n\nYou could try to ensure that no change of behavior is expected to the existing tests.\n\nYou could make it easy for the reviewer to have confidence that this is indeed the case.",
+      "revId": "bff82b5c974016be3cfb53962da7d2ceea3666d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
