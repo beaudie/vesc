@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "4545bf0a_beb3b5cb",
+        "filename": "src/libANGLE/renderer/gl/WorkaroundsGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T18:30:23Z",
+      "side": 1,
+      "message": "Agree on making it a string.\n\nYou could try \"Designated initializers\" but they probably won\u0027t compile on all platforms since they\u0027re C++20. Otherwise I would just use aggregate syntax:\n\nangle::Workaround avoid1BitAlphaTextureFormats \u003d { ... };\n\nhttps://en.cppreference.com/w/cpp/language/aggregate_initialization",
+      "parentUuid": "a038783e_775d990b",
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "979f3647_19c4b649",
         "filename": "src/libANGLE/renderer/gl/WorkaroundsGL.h",
         "patchSetId": 1
@@ -83,6 +101,93 @@
       "writtenOn": "2019-05-03T20:24:16Z",
       "side": 1,
       "message": "I\u0027m not sure where to put this struct",
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0bfc9a9c_6fc9a983",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T18:30:23Z",
+      "side": 1,
+      "message": "Probably src/include/platform next to WorkaroundsD3D.h. We could make this directory for non-GL exported ANGLE headers.",
+      "parentUuid": "5a35c0df_63d12e96",
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e52ee72f_621b3f6f",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T18:30:23Z",
+      "side": 1,
+      "message": "nit: you can omit (c) from all future copyright notices.",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "861a782f_c3855ed4",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T18:30:23Z",
+      "side": 1,
+      "message": "nit: please include a file-level comment.",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 2
+      },
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5269d76_1ec748e7",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T18:30:23Z",
+      "side": 1,
+      "message": "maybe ANGLE_WORKAROUND_H since it won\u0027t just be a part of libANGLE.",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 30
+      },
       "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -156,6 +261,75 @@
       "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a20a9e69_30327896",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T18:30:23Z",
+      "side": 1,
+      "message": "I\u0027d make this an enum and use a EnumBlahToString function. also would call it category to disambiguate with std::set and the concept of a set.",
+      "range": {
+        "startLine": 37,
+        "startChar": 49,
+        "endLine": 37,
+        "endChar": 52
+      },
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9d559c0_6ac6b889",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T18:30:23Z",
+      "side": 1,
+      "message": "I\u0027d change this to a string http link as you suggested in another comment.",
+      "range": {
+        "startLine": 39,
+        "startChar": 30,
+        "endLine": 40,
+        "endChar": 50
+      },
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41519170_75616b87",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T18:30:23Z",
+      "side": 1,
+      "message": "I\u0027d probably call this enabled. Applied suggests that the workaround is already active somehow.",
+      "range": {
+        "startLine": 46,
+        "startChar": 6,
+        "endLine": 46,
+        "endChar": 13
+      },
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
