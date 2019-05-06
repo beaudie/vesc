@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a038783e_775d990b",
+        "filename": "src/libANGLE/renderer/gl/WorkaroundsGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-06T17:16:36Z",
+      "side": 1,
+      "message": "Bug ID doesn\u0027t need to be an int anyway. Just an optional string to link to the bug.",
+      "parentUuid": "e03e6de6_5e8d370c",
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "979f3647_19c4b649",
         "filename": "src/libANGLE/renderer/gl/WorkaroundsGL.h",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0ea54b8_63c611eb",
+        "filename": "src/libANGLE/renderer/gl/WorkaroundsGL.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-06T17:16:36Z",
+      "side": 1,
+      "message": "Using map",
+      "parentUuid": "979f3647_19c4b649",
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "38648c1f_70127e52",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-06T17:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "400271d1_28e38db3",
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fb480358_72253a3c",
         "filename": "src/libANGLE/workaround.h",
         "patchSetId": 1
@@ -84,6 +138,24 @@
       "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acc0b493_f9f9ce48",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-06T17:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb480358_72253a3c",
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
