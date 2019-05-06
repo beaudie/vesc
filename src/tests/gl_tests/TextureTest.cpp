@@ -509,11 +509,56 @@ class TextureCubeTest : public TexCoordDrawTest
   protected:
     TextureCubeTest()
         : TexCoordDrawTest(),
-          mTexture2D(0),
           mTextureCube(0),
-          mTexture2DUniformLocation(-1),
           mTextureCubeUniformLocation(-1)
     {}
+
+    const char *getFragmentShaderSource() override
+    {
+        return
+            R"(precision highp float;
+            uniform samplerCube texCube;
+            varying vec2 texcoord;
+
+            void main()
+            {
+                gl_FragColor = textureCube(texCube, vec3(texcoord, 0));
+            })";
+    }
+
+    void SetUp() override
+    {
+        TexCoordDrawTest::SetUp();
+
+        glGenTextures(1, &mTextureCube);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCube);
+        for (GLenum face = 0; face < 6; face++)
+        {
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_RGBA, 1, 1, 0, GL_RGBA,
+                         GL_UNSIGNED_BYTE, nullptr);
+        }
+        EXPECT_GL_NO_ERROR();
+
+        setUpProgram();
+
+        mTextureCubeUniformLocation = glGetUniformLocation(mProgram, "texCube");
+        ASSERT_NE(-1, mTextureCubeUniformLocation);
+    }
+
+    void TearDown() override
+    {
+        glDeleteTextures(1, &mTextureCube);
+        TexCoordDrawTest::TearDown();
+    }
+
+    GLuint mTextureCube;
+    GLint mTextureCubeUniformLocation;
+};
+
+class TextureCubeAnd2DTest : public TextureCubeTest
+{
+  protected:
+    TextureCubeAnd2DTest() : TextureCubeTest(), mTexture2D(0), mTexture2DUniformLocation(-1) {}
 
     const char *getFragmentShaderSource() override
     {
@@ -532,37 +577,22 @@ class TextureCubeTest : public TexCoordDrawTest
 
     void SetUp() override
     {
-        TexCoordDrawTest::SetUp();
-
-        glGenTextures(1, &mTextureCube);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCube);
-        for (GLenum face = 0; face < 6; face++)
-        {
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, GL_RGBA, 1, 1, 0, GL_RGBA,
-                         GL_UNSIGNED_BYTE, nullptr);
-        }
-        EXPECT_GL_NO_ERROR();
-
+        TextureCubeTest::SetUp();
         mTexture2D = create2DTexture();
-
         setUpProgram();
 
         mTexture2DUniformLocation = glGetUniformLocation(mProgram, "tex2D");
         ASSERT_NE(-1, mTexture2DUniformLocation);
-        mTextureCubeUniformLocation = glGetUniformLocation(mProgram, "texCube");
-        ASSERT_NE(-1, mTextureCubeUniformLocation);
     }
 
     void TearDown() override
     {
-        glDeleteTextures(1, &mTextureCube);
-        TexCoordDrawTest::TearDown();
+        glDeleteTextures(1, &mTexture2D);
+        TextureCubeTest::TearDown();
     }
 
     GLuint mTexture2D;
-    GLuint mTextureCube;
     GLint mTexture2DUniformLocation;
-    GLint mTextureCubeUniformLocation;
 };
 
 class TextureCubeTestES3 : public ANGLETest
@@ -1184,6 +1214,38 @@ class Texture2DIntegerTestES3 : public Texture2DTest
     }
 };
 
+class TextureCubeIntegerTestES3 : public TextureCubeTest
+{
+  protected:
+    TextureCubeIntegerTestES3() : TextureCubeTest() {}
+
+    const char *getVertexShaderSource() override
+    {
+        return "#version 300 es\n"
+               "out vec2 texcoord;\n"
+               "in vec4 position;\n"
+               "void main()\n"
+               "{\n"
+               "    gl_Position = vec4(position.xy, 0.0, 1.0);\n"
+               "    texcoord = (position.xy * 0.5) + 0.5;\n"
+               "}\n";
+    }
+
+    const char *getFragmentShaderSource() override
+    {
+        return "#version 300 es\n"
+               "precision highp float;\n"
+               "precision highp usamplerCube;\n"
+               "uniform usamplerCube texCube;\n"
+               "in vec2 texcoord;\n"
+               "out vec4 fragColor;\n"
+               "void main()\n"
+               "{\n"
+               "    fragColor = vec4(texture(texCube, vec3(texcoord, 0)));\n"
+               "}\n";
+    }
+};
+
 TEST_P(Texture2DTest, NegativeAPISubImage)
 {
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -1255,7 +1317,7 @@ TEST_P(Texture2DTest, ZeroSizedUploads)
 }
 
 // Test drawing with two texture types, to trigger an ANGLE bug in validation
-TEST_P(TextureCubeTest, CubeMapBug)
+TEST_P(TextureCubeAnd2DTest, CubeMapBug)
 {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -1272,7 +1334,7 @@ TEST_P(TextureCubeTest, CubeMapBug)
 
 // Test drawing with two texture types accessed from the same shader and check that the result of
 // drawing is correct.
-TEST_P(TextureCubeTest, CubeMapDraw)
+TEST_P(TextureCubeAnd2DTest, CubeMapDraw)
 {
     GLubyte texData[4];
     texData[0] = 0;
@@ -4472,7 +4534,7 @@ TEST_P(Texture2DTestES3, MinificationWithSamplerNoMipmapping)
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, angle::GLColor::white);
 }
 
-// Draw a quad with an integer texture with a non-zero base level, and test that the color of the
+// Draw a quad with an integer 2D texture with a non-zero base level, and test that the color of the
 // texture is output.
 TEST_P(Texture2DIntegerTestES3, IntegerTextureNonZeroBaseLevel)
 {
@@ -4499,6 +4561,37 @@ TEST_P(Texture2DIntegerTestES3, IntegerTextureNonZeroBaseLevel)
     EXPECT_PIXEL_COLOR_EQ(width - 1, height - 1, color);
 }
 
+// Draw a quad with an integer cube texture with a non-zero base level, and test that the color of
+// the texture is output.
+TEST_P(TextureCubeIntegerTestES3, IntegerCubeTextureNonZeroBaseLevel)
+{
+    glActiveTexture(GL_TEXTURE0);
+
+    glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCube);
+    GLint baseLevel = 1;
+    int width       = getWindowWidth();
+    int height      = getWindowHeight();
+    GLColor color   = GLColor::green;
+    std::vector<GLColor> pixels(width * height, color);
+    for (GLenum faceIndex = 0; faceIndex < 6; faceIndex++)
+    {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + faceIndex, baseLevel, GL_RGBA8UI, width,
+                     height, 0, GL_RGBA_INTEGER, GL_UNSIGNED_BYTE, pixels.data());
+        EXPECT_GL_NO_ERROR();
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, baseLevel);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glUseProgram(mProgram);
+    glUniform1i(mTextureCubeUniformLocation, 0);
+    drawQuad(mProgram, "position", 0.5f);
+
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, color);
+    EXPECT_PIXEL_COLOR_EQ(width - 1, height - 1, color);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(Texture2DTest,
@@ -4508,6 +4601,12 @@ ANGLE_INSTANTIATE_TEST(Texture2DTest,
                        ES2_OPENGLES(),
                        ES2_VULKAN());
 ANGLE_INSTANTIATE_TEST(TextureCubeTest,
+                       ES2_D3D9(),
+                       ES2_D3D11(),
+                       ES2_OPENGL(),
+                       ES2_OPENGLES(),
+                       ES2_VULKAN());
+ANGLE_INSTANTIATE_TEST(TextureCubeAnd2DTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
                        ES2_OPENGL(),
@@ -4599,5 +4698,6 @@ ANGLE_INSTANTIATE_TEST(TextureLimitsTest, ES2_D3D11(), ES2_OPENGL(), ES2_OPENGLE
 ANGLE_INSTANTIATE_TEST(Texture2DNorm16TestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 ANGLE_INSTANTIATE_TEST(TextureCubeTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 ANGLE_INSTANTIATE_TEST(Texture2DIntegerTestES3, ES3_D3D11(), ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(TextureCubeIntegerTestES3, ES3_D3D11(), ES3_OPENGL());
 
 }  // anonymous namespace
