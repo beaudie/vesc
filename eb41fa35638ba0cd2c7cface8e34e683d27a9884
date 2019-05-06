@@ -516,6 +516,30 @@
       "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fb21f2d5_c37371c5",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-06T21:02:41Z",
+      "side": 1,
+      "message": "Ok, will do once I clean up the code that copies these structs all around and fix build issues",
+      "parentUuid": "3119c9cd_46344588",
+      "range": {
+        "startLine": 46,
+        "startChar": 6,
+        "endLine": 46,
+        "endChar": 13
+      },
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
