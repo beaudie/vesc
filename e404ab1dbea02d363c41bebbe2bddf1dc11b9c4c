@@ -22,6 +22,30 @@
       "revId": "e404ab1dbea02d363c41bebbe2bddf1dc11b9c4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92bbc673_0f85bb1e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-06T14:36:49Z",
+      "side": 1,
+      "message": "Adding it to the end of the patch chain to minimize rebase hell.",
+      "parentUuid": "034f57b5_25000664",
+      "range": {
+        "startLine": 165,
+        "startChar": 18,
+        "endLine": 165,
+        "endChar": 32
+      },
+      "revId": "e404ab1dbea02d363c41bebbe2bddf1dc11b9c4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
