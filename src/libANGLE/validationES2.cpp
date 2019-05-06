@@ -1513,7 +1513,8 @@ bool ValidateES2TexImageParameters(Context *context,
                 if (!(context->getExtensions().depthTextureANGLE ||
                       (format == GL_DEPTH_COMPONENT &&
                        context->getExtensions().packedDepthStencil) ||
-                      (format == GL_DEPTH_STENCIL_OES && context->getExtensions().packedDepthStencil)))
+                      (format == GL_DEPTH_STENCIL_OES &&
+                       context->getExtensions().packedDepthStencil)))
                 {
                     context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
                     return false;
