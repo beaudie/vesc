@@ -211,7 +211,7 @@ void UtilsVk::destroy(VkDevice device)
     }
 }
 
-angle::Result UtilsVk::ensureResourcesInitialized(vk::Context *context,
+angle::Result UtilsVk::ensureResourcesInitialized(ContextVk *context,
                                                   Function function,
                                                   VkDescriptorPoolSize *setSizes,
                                                   size_t setSizesCount,
@@ -252,7 +252,7 @@ angle::Result UtilsVk::ensureResourcesInitialized(vk::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result UtilsVk::ensureBufferClearResourcesInitialized(vk::Context *context)
+angle::Result UtilsVk::ensureBufferClearResourcesInitialized(ContextVk *context)
 {
     if (mPipelineLayouts[Function::BufferClear].valid())
     {
@@ -267,7 +267,7 @@ angle::Result UtilsVk::ensureBufferClearResourcesInitialized(vk::Context *contex
                                       sizeof(BufferUtilsShaderParams));
 }
 
-angle::Result UtilsVk::ensureBufferCopyResourcesInitialized(vk::Context *context)
+angle::Result UtilsVk::ensureBufferCopyResourcesInitialized(ContextVk *context)
 {
     if (mPipelineLayouts[Function::BufferCopy].valid())
     {
@@ -283,7 +283,7 @@ angle::Result UtilsVk::ensureBufferCopyResourcesInitialized(vk::Context *context
                                       sizeof(BufferUtilsShaderParams));
 }
 
-angle::Result UtilsVk::ensureConvertVertexResourcesInitialized(vk::Context *context)
+angle::Result UtilsVk::ensureConvertVertexResourcesInitialized(ContextVk *context)
 {
     if (mPipelineLayouts[Function::ConvertVertexBuffer].valid())
     {
@@ -299,7 +299,7 @@ angle::Result UtilsVk::ensureConvertVertexResourcesInitialized(vk::Context *cont
                                       ArraySize(setSizes), sizeof(ConvertVertexShaderParams));
 }
 
-angle::Result UtilsVk::ensureImageClearResourcesInitialized(vk::Context *context)
+angle::Result UtilsVk::ensureImageClearResourcesInitialized(ContextVk *context)
 {
     if (mPipelineLayouts[Function::ImageClear].valid())
     {
@@ -311,7 +311,7 @@ angle::Result UtilsVk::ensureImageClearResourcesInitialized(vk::Context *context
                                       sizeof(ImageClearShaderParams));
 }
 
-angle::Result UtilsVk::ensureImageCopyResourcesInitialized(vk::Context *context)
+angle::Result UtilsVk::ensureImageCopyResourcesInitialized(ContextVk *context)
 {
     if (mPipelineLayouts[Function::ImageCopy].valid())
     {
@@ -326,7 +326,7 @@ angle::Result UtilsVk::ensureImageCopyResourcesInitialized(vk::Context *context)
                                       sizeof(ImageCopyShaderParams));
 }
 
-angle::Result UtilsVk::setupProgram(vk::Context *context,
+angle::Result UtilsVk::setupProgram(ContextVk *context,
                                     Function function,
                                     vk::RefCounted<vk::ShaderAndSerial> *fsCsShader,
                                     vk::RefCounted<vk::ShaderAndSerial> *vsShader,
@@ -349,7 +349,7 @@ angle::Result UtilsVk::setupProgram(vk::Context *context,
 
     const vk::BindingPointer<vk::PipelineLayout> &pipelineLayout = mPipelineLayouts[function];
 
-    Serial serial = renderer->getCurrentQueueSerial();
+    Serial serial = context->getCurrentQueueSerial();
 
     if (isCompute)
     {
@@ -376,7 +376,7 @@ angle::Result UtilsVk::setupProgram(vk::Context *context,
         vk::PipelineHelper *helper;
 
         ANGLE_TRY(program->getGraphicsPipeline(
-            context, &renderer->getRenderPassCache(), renderer->getPipelineCache(), serial,
+            context, &context->getRenderPassCache(), renderer->getPipelineCache(), serial,
             pipelineLayout.get(), *pipelineDesc, gl::AttributesMask(), &descPtr, &helper));
         helper->updateSerial(serial);
         commandBuffer->bindGraphicsPipeline(helper->getPipeline());
@@ -393,12 +393,10 @@ angle::Result UtilsVk::setupProgram(vk::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result UtilsVk::clearBuffer(vk::Context *context,
+angle::Result UtilsVk::clearBuffer(ContextVk *context,
                                    vk::BufferHelper *dest,
                                    const ClearParameters &params)
 {
-    RendererVk *renderer = context->getRenderer();
-
     ANGLE_TRY(ensureBufferClearResourcesInitialized(context));
 
     vk::CommandBuffer *commandBuffer;
@@ -421,7 +419,7 @@ angle::Result UtilsVk::clearBuffer(vk::Context *context,
     ANGLE_TRY(mDescriptorPools[Function::BufferClear].allocateSets(
         context, mDescriptorSetLayouts[Function::BufferClear][kSetIndex].get().ptr(), 1,
         &descriptorPoolBinding, &descriptorSet));
-    descriptorPoolBinding.get().updateSerial(context->getRenderer()->getCurrentQueueSerial());
+    descriptorPoolBinding.get().updateSerial(context->getCurrentQueueSerial());
 
     VkWriteDescriptorSet writeInfo = {};
 
@@ -435,7 +433,7 @@ angle::Result UtilsVk::clearBuffer(vk::Context *context,
     vkUpdateDescriptorSets(context->getDevice(), 1, &writeInfo, 0, nullptr);
 
     vk::RefCounted<vk::ShaderAndSerial> *shader = nullptr;
-    ANGLE_TRY(renderer->getShaderLibrary().getBufferUtils_comp(context, flags, &shader));
+    ANGLE_TRY(context->getShaderLibrary().getBufferUtils_comp(context, flags, &shader));
 
     ANGLE_TRY(setupProgram(context, Function::BufferClear, shader, nullptr,
                            &mBufferUtilsPrograms[flags], nullptr, descriptorSet, &shaderParams,
@@ -448,13 +446,11 @@ angle::Result UtilsVk::clearBuffer(vk::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result UtilsVk::copyBuffer(vk::Context *context,
+angle::Result UtilsVk::copyBuffer(ContextVk *context,
                                   vk::BufferHelper *dest,
                                   vk::BufferHelper *src,
                                   const CopyParameters &params)
 {
-    RendererVk *renderer = context->getRenderer();
-
     ANGLE_TRY(ensureBufferCopyResourcesInitialized(context));
 
     vk::CommandBuffer *commandBuffer;
@@ -483,7 +479,7 @@ angle::Result UtilsVk::copyBuffer(vk::Context *context,
     ANGLE_TRY(mDescriptorPools[Function::BufferCopy].allocateSets(
         context, mDescriptorSetLayouts[Function::BufferCopy][kSetIndex].get().ptr(), 1,
         &descriptorPoolBinding, &descriptorSet));
-    descriptorPoolBinding.get().updateSerial(context->getRenderer()->getCurrentQueueSerial());
+    descriptorPoolBinding.get().updateSerial(context->getCurrentQueueSerial());
 
     VkWriteDescriptorSet writeInfo[2] = {};
 
@@ -504,7 +500,7 @@ angle::Result UtilsVk::copyBuffer(vk::Context *context,
     vkUpdateDescriptorSets(context->getDevice(), 2, writeInfo, 0, nullptr);
 
     vk::RefCounted<vk::ShaderAndSerial> *shader = nullptr;
-    ANGLE_TRY(renderer->getShaderLibrary().getBufferUtils_comp(context, flags, &shader));
+    ANGLE_TRY(context->getShaderLibrary().getBufferUtils_comp(context, flags, &shader));
 
     ANGLE_TRY(setupProgram(context, Function::BufferCopy, shader, nullptr,
                            &mBufferUtilsPrograms[flags], nullptr, descriptorSet, &shaderParams,
@@ -517,13 +513,11 @@ angle::Result UtilsVk::copyBuffer(vk::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result UtilsVk::convertVertexBuffer(vk::Context *context,
+angle::Result UtilsVk::convertVertexBuffer(ContextVk *context,
                                            vk::BufferHelper *dest,
                                            vk::BufferHelper *src,
                                            const ConvertVertexParameters &params)
 {
-    RendererVk *renderer = context->getRenderer();
-
     ANGLE_TRY(ensureConvertVertexResourcesInitialized(context));
 
     vk::CommandBuffer *commandBuffer;
@@ -566,7 +560,7 @@ angle::Result UtilsVk::convertVertexBuffer(vk::Context *context,
     ANGLE_TRY(mDescriptorPools[Function::ConvertVertexBuffer].allocateSets(
         context, mDescriptorSetLayouts[Function::ConvertVertexBuffer][kSetIndex].get().ptr(), 1,
         &descriptorPoolBinding, &descriptorSet));
-    descriptorPoolBinding.get().updateSerial(context->getRenderer()->getCurrentQueueSerial());
+    descriptorPoolBinding.get().updateSerial(context->getCurrentQueueSerial());
 
     VkWriteDescriptorSet writeInfo    = {};
     VkDescriptorBufferInfo buffers[2] = {
@@ -586,7 +580,7 @@ angle::Result UtilsVk::convertVertexBuffer(vk::Context *context,
     vkUpdateDescriptorSets(context->getDevice(), 1, &writeInfo, 0, nullptr);
 
     vk::RefCounted<vk::ShaderAndSerial> *shader = nullptr;
-    ANGLE_TRY(renderer->getShaderLibrary().getConvertVertex_comp(context, flags, &shader));
+    ANGLE_TRY(context->getShaderLibrary().getConvertVertex_comp(context, flags, &shader));
 
     ANGLE_TRY(setupProgram(context, Function::ConvertVertexBuffer, shader, nullptr,
                            &mConvertVertexPrograms[flags], nullptr, descriptorSet, &shaderParams,
@@ -606,10 +600,8 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
                                        const gl::Rectangle &renderArea,
                                        vk::CommandBuffer **commandBufferOut)
 {
-    RendererVk *renderer = contextVk->getRenderer();
-
     vk::RenderPass *compatibleRenderPass = nullptr;
-    ANGLE_TRY(renderer->getCompatibleRenderPass(contextVk, renderPassDesc, &compatibleRenderPass));
+    ANGLE_TRY(contextVk->getCompatibleRenderPass(renderPassDesc, &compatibleRenderPass));
 
     VkFramebufferCreateInfo framebufferInfo = {};
 
@@ -636,7 +628,7 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
     ANGLE_TRY(image->beginRenderPass(contextVk, framebuffer, renderArea, renderPassDesc,
                                      renderPassAttachmentOps, clearValues, commandBufferOut));
 
-    renderer->releaseObject(renderer->getCurrentQueueSerial(), &framebuffer);
+    contextVk->releaseObject(contextVk->getCurrentQueueSerial(), &framebuffer);
 
     return angle::Result::Continue;
 }
@@ -645,14 +637,12 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
                                         FramebufferVk *framebuffer,
                                         const ClearFramebufferParameters &params)
 {
-    RendererVk *renderer = contextVk->getRenderer();
-
     ANGLE_TRY(ensureImageClearResourcesInitialized(contextVk));
 
     const gl::Rectangle &scissoredRenderArea = params.clearArea;
 
     vk::CommandBuffer *commandBuffer;
-    if (!framebuffer->appendToStartedRenderPass(renderer->getCurrentQueueSerial(),
+    if (!framebuffer->appendToStartedRenderPass(contextVk->getCurrentQueueSerial(),
                                                 scissoredRenderArea, &commandBuffer))
     {
         ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, scissoredRenderArea, &commandBuffer));
@@ -696,7 +686,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
 
     pipelineDesc.setScissor(gl_vk::GetRect(params.clearArea));
 
-    vk::ShaderLibrary &shaderLibrary                    = renderer->getShaderLibrary();
+    vk::ShaderLibrary &shaderLibrary                    = contextVk->getShaderLibrary();
     vk::RefCounted<vk::ShaderAndSerial> *vertexShader   = nullptr;
     vk::RefCounted<vk::ShaderAndSerial> *fragmentShader = nullptr;
     vk::ShaderProgramHelper *imageClearProgram          = &mImageClearProgramVSOnly;
@@ -723,8 +713,6 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
                                  const vk::ImageView *srcView,
                                  const CopyImageParameters &params)
 {
-    RendererVk *renderer = contextVk->getRenderer();
-
     ANGLE_TRY(ensureImageCopyResourcesInitialized(contextVk));
 
     const vk::Format &srcFormat  = src->getFormat();
@@ -767,7 +755,7 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     ANGLE_TRY(mDescriptorPools[Function::ImageCopy].allocateSets(
         contextVk, mDescriptorSetLayouts[Function::ImageCopy][kSetIndex].get().ptr(), 1,
         &descriptorPoolBinding, &descriptorSet));
-    descriptorPoolBinding.get().updateSerial(contextVk->getRenderer()->getCurrentQueueSerial());
+    descriptorPoolBinding.get().updateSerial(contextVk->getCurrentQueueSerial());
 
     vk::RenderPassDesc renderPassDesc;
     renderPassDesc.setSamples(dest->getSamples());
@@ -827,7 +815,7 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
 
     vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
 
-    vk::ShaderLibrary &shaderLibrary                    = renderer->getShaderLibrary();
+    vk::ShaderLibrary &shaderLibrary                    = contextVk->getShaderLibrary();
     vk::RefCounted<vk::ShaderAndSerial> *vertexShader   = nullptr;
     vk::RefCounted<vk::ShaderAndSerial> *fragmentShader = nullptr;
     ANGLE_TRY(shaderLibrary.getFullScreenQuad_vert(contextVk, 0, &vertexShader));
