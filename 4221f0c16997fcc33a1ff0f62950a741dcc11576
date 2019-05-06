@@ -16,6 +16,24 @@
       "revId": "4221f0c16997fcc33a1ff0f62950a741dcc11576",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2ed1fd6_d862c590",
+        "filename": "src/libANGLE/VertexAttribute.inl",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T20:53:46Z",
+      "side": 1,
+      "message": "Spec. The alpha channel defaults to 1.0 in this case. You can look around the section on vertex shaders and vertex data to find it.",
+      "parentUuid": "603be115_e4651155",
+      "revId": "4221f0c16997fcc33a1ff0f62950a741dcc11576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
