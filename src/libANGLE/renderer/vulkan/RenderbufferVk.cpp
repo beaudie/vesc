@@ -26,8 +26,7 @@ RenderbufferVk::~RenderbufferVk() {}
 void RenderbufferVk::onDestroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
-    releaseAndDeleteImage(context, renderer);
+    releaseAndDeleteImage(contextVk);
 }
 
 angle::Result RenderbufferVk::setStorage(const gl::Context *context,
@@ -41,7 +40,7 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
 
     if (!mOwnsImage)
     {
-        releaseAndDeleteImage(context, renderer);
+        releaseAndDeleteImage(contextVk);
     }
 
     if (mImage != nullptr && mImage->valid())
@@ -51,7 +50,7 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
             static_cast<GLsizei>(width) != mState.getWidth() ||
             static_cast<GLsizei>(height) != mState.getHeight())
         {
-            releaseImage(context, renderer);
+            releaseImage(contextVk);
         }
     }
 
@@ -85,8 +84,7 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
                                         &mImageView, 0, 1));
 
         // Clear the renderbuffer if it has emulated channels.
-        ANGLE_TRY(mImage->clearIfEmulatedFormat(vk::GetImpl(context), gl::ImageIndex::Make2D(0),
-                                                vkFormat));
+        ANGLE_TRY(mImage->stageClearIfEmulatedFormat(gl::ImageIndex::Make2D(0), vkFormat));
 
         mRenderTarget.init(mImage, &mImageView, 0, 0);
     }
@@ -110,7 +108,7 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    releaseAndDeleteImage(context, renderer);
+    releaseAndDeleteImage(contextVk);
 
     ImageVk *imageVk = vk::GetImpl(image);
     mImage           = imageVk->getImage();
@@ -160,31 +158,30 @@ angle::Result RenderbufferVk::initializeContents(const gl::Context *context,
 void RenderbufferVk::releaseOwnershipOfImage(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
 
     mOwnsImage = false;
-    releaseAndDeleteImage(context, renderer);
+    releaseAndDeleteImage(contextVk);
 }
 
-void RenderbufferVk::releaseAndDeleteImage(const gl::Context *context, RendererVk *renderer)
+void RenderbufferVk::releaseAndDeleteImage(ContextVk *contextVk)
 {
-    releaseImage(context, renderer);
+    releaseImage(contextVk);
     SafeDelete(mImage);
 }
 
-void RenderbufferVk::releaseImage(const gl::Context *context, RendererVk *renderer)
+void RenderbufferVk::releaseImage(ContextVk *contextVk)
 {
     if (mImage && mOwnsImage)
     {
-        mImage->releaseImage(renderer);
-        mImage->releaseStagingBuffer(renderer);
+        mImage->releaseImage(contextVk);
+        mImage->releaseStagingBuffer(contextVk);
     }
     else
     {
         mImage = nullptr;
     }
 
-    renderer->releaseObject(renderer->getCurrentQueueSerial(), &mImageView);
+    contextVk->releaseObject(contextVk->getCurrentQueueSerial(), &mImageView);
 }
 
 }  // namespace rx
