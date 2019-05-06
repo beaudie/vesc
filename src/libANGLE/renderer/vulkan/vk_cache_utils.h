@@ -56,12 +56,23 @@ class alignas(4) RenderPassDesc final
     RenderPassDesc(const RenderPassDesc &other);
     RenderPassDesc &operator=(const RenderPassDesc &other);
 
-    // The caller must pack the depth/stencil attachment last.
-    void packAttachment(const Format &format);
+    // If a color attachment is not enabled, NONE is expected for format.
+    void packColorAttachment(size_t colorIndexGL, angle::FormatID formatID);
+    // The caller must pack the depth/stencil attachment last, which is packed right after the color
+    // attachments (including gaps), i.e. with an index starting from |colorAttachmentRange()|.
+    void packDepthStencilAttachment(angle::FormatID angleFormatID);
 
     size_t hash() const;
 
-    size_t colorAttachmentCount() const;
+    // Attachments are in [0, *attachmentRange()), with possible gaps.
+    size_t colorAttachmentRange() const { return mColorAttachmentRange; }
+    size_t attachmentRange() const { return mColorAttachmentRange + mDepthStencilAttachmentRange; }
+    size_t depthStencilAttachmentIndex() const { return colorAttachmentRange(); }
+
+    bool isColorAttachmentEnabled(size_t colorIndexGL) const;
+
+    // Get the number of attachments in the Vulkan render pass, i.e. after removing disabled render
+    // targets.
     size_t attachmentCount() const;
 
     void setSamples(GLint samples);
@@ -76,8 +87,28 @@ class alignas(4) RenderPassDesc final
 
   private:
     uint8_t mSamples;
-    uint8_t mColorAttachmentCount : 4;
-    uint8_t mDepthStencilAttachmentCount : 4;
+    uint8_t mColorAttachmentRange : 4;
+    uint8_t mDepthStencilAttachmentRange : 4;
+    // Color attachment formats are stored with their GL attachment indices.  The depth/stencil
+    // attachment formats follow the last enabled color attachment.  When creating a render pass,
+    // the disabled attachments are removed and the resulting attachments are packed.
+    //
+    // The attachment indices provided as input to various functions in this file are thus GL
+    // attachment indices.  These indices are marked as such, e.g. colorIndexGL.  The render pass
+    // (and corresponding framebuffer object) lists the packed attachments, with the corresponding
+    // indices marked with Vk, e.g. colorIndexVk.  The subpass attachment references create the
+    // link between the two index spaces.  The subpass declares attachment references with GL
+    // indices (which corresponds to the location decoration of shader outputs).  The attachment
+    // references then contain the Vulkan indices or VK_ATTACHMENT_UNUSED.
+    //
+    // For example, if GL uses color attachments 0 and 3, then there are two render pass
+    // attachments (indexed 0 and 1) and 4 subpass attachments:
+    //
+    //  - Subpass attachment 0 -> Renderpass attachment 0
+    //  - Subpass attachment 1 -> VK_ATTACHMENT_UNUSED
+    //  - Subpass attachment 2 -> VK_ATTACHMENT_UNUSED
+    //  - Subpass attachment 3 -> Renderpass attachment 1
+    //
     gl::AttachmentArray<uint8_t> mAttachmentFormats;
 };
 
@@ -367,7 +398,7 @@ class GraphicsPipelineDesc final
                               const gl::BlendState &blendState);
     void setColorWriteMask(VkColorComponentFlags colorComponentFlags,
                            const gl::DrawBufferMask &alphaMask);
-    void setSingleColorWriteMask(uint32_t colorIndex, VkColorComponentFlags colorComponentFlags);
+    void setSingleColorWriteMask(uint32_t colorIndexGL, VkColorComponentFlags colorComponentFlags);
     void updateColorWriteMask(GraphicsPipelineTransitionBits *transition,
                               VkColorComponentFlags colorComponentFlags,
                               const gl::DrawBufferMask &alphaMask);
