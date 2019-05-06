@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1200072c_59a19d29",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-06T17:01:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7db3d22b_463107e6",
+      "range": {
+        "startLine": 491,
+        "startChar": 30,
+        "endLine": 491,
+        "endChar": 34
+      },
+      "revId": "914445fadf4c41ec1666b5cc60ee9e26e5a3db9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a831349_2785ca28",
         "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
         "patchSetId": 17
@@ -45,6 +69,30 @@
       "revId": "914445fadf4c41ec1666b5cc60ee9e26e5a3db9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6666d860_abe336db",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-06T17:01:07Z",
+      "side": 1,
+      "message": "This one in particular is called from: https://chromium-review.googlesource.com/c/angle/angle/+/1562522/17/src/libANGLE/renderer/vulkan/ImageVk.cpp#48\n\nThe others for image, buffer, etc are called from:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1562522/17/src/libANGLE/renderer/vulkan/ImageVk.cpp#39",
+      "parentUuid": "9a831349_2785ca28",
+      "range": {
+        "startLine": 201,
+        "startChar": 42,
+        "endLine": 201,
+        "endChar": 49
+      },
+      "revId": "914445fadf4c41ec1666b5cc60ee9e26e5a3db9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
