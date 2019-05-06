@@ -492,6 +492,30 @@
       "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3119c9cd_46344588",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-06T20:55:52Z",
+      "side": 1,
+      "message": "Ok, I see. Could we still call it enabled? For FeaturesVk like \u0027supportsAndroidHardwareBuffer\u0027 it makes more sence to called \u0027enabled\u0027 than \u0027applied\u0027. We could update Chromium\u0027s naming if you like as I don\u0027t think they have a strong intention there.",
+      "parentUuid": "8ffa74fd_d9752f82",
+      "range": {
+        "startLine": 46,
+        "startChar": 6,
+        "endLine": 46,
+        "endChar": 13
+      },
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
