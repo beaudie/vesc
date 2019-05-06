@@ -233,6 +233,7 @@ class StateCache final : angle::NonCopyable
     void onQueryChange(Context *context);
     void onActiveTransformFeedbackChange(Context *context);
     void onUniformBufferStateChange(Context *context);
+    void onColorMaskChange(Context *context);
     void onBufferBindingChange(Context *context);
 
   private:
