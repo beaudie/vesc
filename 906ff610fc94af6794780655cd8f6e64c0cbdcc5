@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2aeafb47_6ad228c1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-06T19:48:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20c42c1c_14bcefcf",
+      "range": {
+        "startLine": 13,
+        "startChar": 5,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "906ff610fc94af6794780655cd8f6e64c0cbdcc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "43e6b10a_993fb81f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 2
@@ -60,6 +84,30 @@
       "side": 1,
       "message": "+1, not sure if there are tests that cover this. spec:\n\n\u003e mode, count, type, and indices match the corresponding arguments to DrawElements, with the \n\u003e additional constraint that all index values identified by indices must lie between start and \n\u003e end inclusive\n\nDifferent from the first vertex parameter.",
       "parentUuid": "43e6b10a_993fb81f",
+      "range": {
+        "startLine": 579,
+        "startChar": 50,
+        "endLine": 579,
+        "endChar": 55
+      },
+      "revId": "906ff610fc94af6794780655cd8f6e64c0cbdcc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6859405_d64bf307",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-06T19:48:18Z",
+      "side": 1,
+      "message": "Ah, ok.   It sounds like I can just call drawElements() with the full range then and still be correct.   We can look at trying to optimize based on what\u0027s passed in, but I\u0027m not seeing much that indicates people really expect this from drivers.\n\n\u003d\u003d\n\nI believe the negative_api.vertex_array.draw_range_elements* tests should be covering the parameter checks, but unfortunately they can\u0027t be enabled until we have better transform feedback support.",
+      "parentUuid": "1b361d72_11d1bbdf",
       "range": {
         "startLine": 579,
         "startChar": 50,

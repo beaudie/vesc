@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "603be115_e4651155",
+        "filename": "src/libANGLE/VertexAttribute.inl",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-06T19:48:18Z",
+      "side": 1,
+      "message": "Since Values can hold several types (float, int, uint), I would have preferred doing the following to just zero out the union entirely:\n\n    memset(\u0026Values, 0, sizeof(((VertexAttribCurrentValueData*)0)-\u003eValues));\n\nHowever, setting \u0027alpha \u003d 1.0\u0027 here is being enforced by the end2end test VulkanExternalImageTest.ShouldClearOpaqueFdRGBA8/ES2_Vulkan:\n\n    // Restore primary context\n    eglMakeCurrent(display, surface, surface, context1);\n    // ReadPixels to ensure context is switched\n    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);\n\n...which results in:\n\nExpected equality of these values:\n  GLColor::black\n    Which is: Black\n  angle::ReadColor(0, 0)\n    Which is: Transparent Black\n\nIs this something enforced by the spec or just something we are enforcing for ourselves?",
+      "revId": "4221f0c16997fcc33a1ff0f62950a741dcc11576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
