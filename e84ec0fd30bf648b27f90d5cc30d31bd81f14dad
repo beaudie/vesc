@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "79bb6e2b_769437ec",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-06T14:20:19Z",
+      "side": 1,
+      "message": "Good point, done.",
+      "parentUuid": "ce48117d_49a42ce5",
+      "range": {
+        "startLine": 497,
+        "startChar": 69,
+        "endLine": 497,
+        "endChar": 76
+      },
+      "revId": "e84ec0fd30bf648b27f90d5cc30d31bd81f14dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "600b4890_3a2472ae",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 14
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "110d05c8_7c7d58e9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-06T14:20:19Z",
+      "side": 1,
+      "message": "I think either is fine.  The finish has already happened so the fences should all be complete.",
+      "parentUuid": "600b4890_3a2472ae",
+      "range": {
+        "startLine": 1421,
+        "startChar": 42,
+        "endLine": 1421,
+        "endChar": 43
+      },
+      "revId": "e84ec0fd30bf648b27f90d5cc30d31bd81f14dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b1587998_028ceb2f",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 14
@@ -62,6 +110,24 @@
       "revId": "e84ec0fd30bf648b27f90d5cc30d31bd81f14dad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02efd4a6_53587156",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2115,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-06T14:20:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1587998_028ceb2f",
+      "revId": "e84ec0fd30bf648b27f90d5cc30d31bd81f14dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "474ada77_2403ab50",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2244,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-06T14:20:19Z",
+      "side": 1,
+      "message": "I tried this and the initializer_list constructor of the vector references the copy constructor of vk::Shared for some reason.",
+      "parentUuid": "4fac05c0_6a149d0e",
+      "range": {
+        "startLine": 2243,
+        "startChar": 45,
+        "endLine": 2244,
+        "endChar": 38
+      },
+      "revId": "e84ec0fd30bf648b27f90d5cc30d31bd81f14dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "89680ae5_368bbdd9",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 14
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "76e51c5b_d35131ce",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-06T14:20:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89680ae5_368bbdd9",
+      "range": {
+        "startLine": 261,
+        "startChar": 18,
+        "endLine": 261,
+        "endChar": 36
+      },
+      "revId": "e84ec0fd30bf648b27f90d5cc30d31bd81f14dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8fa49af0_b4137a28",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 14
@@ -131,6 +245,30 @@
       "revId": "e84ec0fd30bf648b27f90d5cc30d31bd81f14dad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ce2d76e_9c12d74a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-06T14:20:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fa49af0_b4137a28",
+      "range": {
+        "startLine": 60,
+        "startChar": 4,
+        "endLine": 60,
+        "endChar": 39
+      },
+      "revId": "e84ec0fd30bf648b27f90d5cc30d31bd81f14dad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
