@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "617d0efd_050f1863",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-06T19:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bfc9a9c_6fc9a983",
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e52ee72f_621b3f6f",
         "filename": "src/libANGLE/workaround.h",
         "patchSetId": 1
@@ -145,6 +163,30 @@
       "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9472299f_71d0a3a1",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-06T19:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e52ee72f_621b3f6f",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -171,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "2ff166d6_dc8940f4",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-06T19:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "861a782f_c3855ed4",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 2
+      },
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a5269d76_1ec748e7",
         "filename": "src/libANGLE/workaround.h",
         "patchSetId": 1
@@ -191,6 +257,30 @@
       "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a706af9_4d2ba7c9",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-06T19:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5269d76_1ec748e7",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 30
+      },
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -287,6 +377,30 @@
     },
     {
       "key": {
+        "uuid": "8f940f8f_4e6c8951",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-06T19:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a20a9e69_30327896",
+      "range": {
+        "startLine": 37,
+        "startChar": 49,
+        "endLine": 37,
+        "endChar": 52
+      },
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9d559c0_6ac6b889",
         "filename": "src/libANGLE/workaround.h",
         "patchSetId": 1
@@ -310,6 +424,30 @@
     },
     {
       "key": {
+        "uuid": "8b3f245d_b3c06d06",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-06T19:27:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9d559c0_6ac6b889",
+      "range": {
+        "startLine": 39,
+        "startChar": 30,
+        "endLine": 40,
+        "endChar": 50
+      },
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41519170_75616b87",
         "filename": "src/libANGLE/workaround.h",
         "patchSetId": 1
@@ -330,6 +468,30 @@
       "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ffa74fd_d9752f82",
+        "filename": "src/libANGLE/workaround.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-06T19:27:55Z",
+      "side": 1,
+      "message": "I called it applied because that\u0027s the language of chrome://gpu/",
+      "parentUuid": "41519170_75616b87",
+      "range": {
+        "startLine": 46,
+        "startChar": 6,
+        "endLine": 46,
+        "endChar": 13
+      },
+      "revId": "eb41fa35638ba0cd2c7cface8e34e683d27a9884",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
