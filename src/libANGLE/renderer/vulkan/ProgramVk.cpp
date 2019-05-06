@@ -120,7 +120,7 @@ angle::Result SyncDefaultUniformBlock(ContextVk *contextVk,
                                       uint32_t *outOffset,
                                       bool *outBufferModified)
 {
-    dynamicBuffer->releaseRetainedBuffers(contextVk->getRenderer());
+    dynamicBuffer->releaseRetainedBuffers(contextVk);
 
     ASSERT(!bufferData.empty());
     uint8_t *data       = nullptr;
@@ -202,13 +202,13 @@ angle::Result ProgramVk::ShaderInfo::initShaders(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-void ProgramVk::ShaderInfo::release(RendererVk *renderer)
+void ProgramVk::ShaderInfo::release(ContextVk *contextVk)
 {
-    mProgramHelper.release(renderer);
+    mProgramHelper.release(contextVk);
 
     for (vk::RefCounted<vk::ShaderAndSerial> &shader : mShaders)
     {
-        shader.get().destroy(renderer->getDevice());
+        shader.get().destroy(contextVk->getDevice());
     }
 }
 
@@ -230,10 +230,10 @@ ProgramVk::~ProgramVk() = default;
 void ProgramVk::destroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
-    reset(contextVk->getRenderer());
+    reset(contextVk);
 }
 
-void ProgramVk::reset(RendererVk *renderer)
+void ProgramVk::reset(ContextVk *contextVk)
 {
     for (auto &descriptorSetLayout : mDescriptorSetLayouts)
     {
@@ -243,13 +243,13 @@ void ProgramVk::reset(RendererVk *renderer)
 
     for (auto &uniformBlock : mDefaultUniformBlocks)
     {
-        uniformBlock.storage.release(renderer);
+        uniformBlock.storage.release(contextVk);
     }
 
-    mDefaultShaderInfo.release(renderer);
-    mLineRasterShaderInfo.release(renderer);
+    mDefaultShaderInfo.release(contextVk);
+    mLineRasterShaderInfo.release(contextVk);
 
-    mEmptyUniformBlockStorage.release(renderer);
+    mEmptyUniformBlockStorage.release(contextVk);
 
     mDescriptorSets.clear();
     mEmptyDescriptorSets.fill(VK_NULL_HANDLE);
@@ -299,7 +299,7 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
     ContextVk *contextVk = vk::GetImpl(glContext);
     RendererVk *renderer = contextVk->getRenderer();
 
-    reset(renderer);
+    reset(contextVk);
 
     // Link resources before calling GetShaderSource to make sure they are ready for the set/binding
     // assignment done in that function.
