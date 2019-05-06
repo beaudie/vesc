@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "43e6b10a_993fb81f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-06T14:45:10Z",
+      "side": 1,
+      "message": "I don\u0027t think this is correct. `start` and `end` specify a hint to the driver to know offhand what\u0027s the range of **values** in `indices`. The draw call is still drawing from the first index.\n\n(same comment with `setupLineLoopDraw` above)",
+      "range": {
+        "startLine": 579,
+        "startChar": 50,
+        "endLine": 579,
+        "endChar": 55
+      },
+      "revId": "906ff610fc94af6794780655cd8f6e64c0cbdcc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e059fd75_811f8407",
         "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
         "patchSetId": 2
