@@ -70,6 +70,30 @@
       "revId": "0f4d72e63b920036fd3800d26a3b7bd202e40759",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1dcfda8b_4e6365c6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-07T20:36:27Z",
+      "side": 0,
+      "message": "Oh, right. OK this one\u0027s on me to fix using dirty bits properly. I thought that we might ensure the image is flushed before rendering to it in FramebufferVk::syncState.",
+      "parentUuid": "945f61d4_53247c48",
+      "range": {
+        "startLine": 112,
+        "startChar": 4,
+        "endLine": 113,
+        "endChar": 91
+      },
+      "revId": "0f4d72e63b920036fd3800d26a3b7bd202e40759",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
