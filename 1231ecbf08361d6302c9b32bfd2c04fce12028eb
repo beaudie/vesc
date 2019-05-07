@@ -45,6 +45,30 @@
       "revId": "1231ecbf08361d6302c9b32bfd2c04fce12028eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "739e6291_2e3d676b",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-05-07T15:03:30Z",
+      "side": 1,
+      "message": "Double check: you want me to inline my helper function ValidateColorMaskFullyDisabled, not getBlendState, is that correct?",
+      "parentUuid": "8eef7d2f_ad1125b2",
+      "range": {
+        "startLine": 622,
+        "startChar": 0,
+        "endLine": 629,
+        "endChar": 1
+      },
+      "revId": "1231ecbf08361d6302c9b32bfd2c04fce12028eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
