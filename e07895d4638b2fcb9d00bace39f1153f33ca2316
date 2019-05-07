@@ -25,6 +25,53 @@
     },
     {
       "key": {
+        "uuid": "b2115f53_654057d3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-07T20:02:36Z",
+      "side": 1,
+      "message": "You could try taking it out now that you have this design. If you have tests that exercise the multi context stuff that\u0027s already more testing than I had for this fix.",
+      "parentUuid": "f1717110_c39b3f40",
+      "range": {
+        "startLine": 582,
+        "startChar": 4,
+        "endLine": 582,
+        "endChar": 34
+      },
+      "revId": "e07895d4638b2fcb9d00bace39f1153f33ca2316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c72a3df_0e9d4411",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-07T20:02:36Z",
+      "side": 1,
+      "message": "you can take this out. I think with Tobin\u0027s design we successfully worked around this.",
+      "range": {
+        "startLine": 620,
+        "startChar": 4,
+        "endLine": 620,
+        "endChar": 53
+      },
+      "revId": "e07895d4638b2fcb9d00bace39f1153f33ca2316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "111568e4_dc15e318",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 22
@@ -36,6 +83,30 @@
       "writtenOn": "2019-05-07T16:57:27Z",
       "side": 1,
       "message": "The comment is contradictory?",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 125,
+        "endChar": 47
+      },
+      "revId": "e07895d4638b2fcb9d00bace39f1153f33ca2316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaa9af60_b82d8ae5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-07T20:02:36Z",
+      "side": 1,
+      "message": "maybe could just clarify, like, \".. If it were not, we could track...\"",
+      "parentUuid": "111568e4_dc15e318",
       "range": {
         "startLine": 123,
         "startChar": 4,
