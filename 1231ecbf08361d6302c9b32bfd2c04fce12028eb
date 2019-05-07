@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8eef7d2f_ad1125b2",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-07T13:51:51Z",
+      "side": 1,
+      "message": "Let\u0027s optimize this a bit. Can you instead just inline getBlendState and make your helper function check blendState.allChannelsMasked?",
+      "range": {
+        "startLine": 622,
+        "startChar": 0,
+        "endLine": 629,
+        "endChar": 1
+      },
+      "revId": "1231ecbf08361d6302c9b32bfd2c04fce12028eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
