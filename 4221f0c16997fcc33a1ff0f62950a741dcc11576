@@ -34,6 +34,29 @@
       "revId": "4221f0c16997fcc33a1ff0f62950a741dcc11576",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "25b38aab_d879bbe4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-07T02:34:47Z",
+      "side": 1,
+      "message": "`sizeof(gl::VertexAttribCurrentValueData::Values)` should work.",
+      "range": {
+        "startLine": 62,
+        "startChar": 37,
+        "endLine": 62,
+        "endChar": 92
+      },
+      "revId": "4221f0c16997fcc33a1ff0f62950a741dcc11576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
