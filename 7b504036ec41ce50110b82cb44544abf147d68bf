@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5aaa617_27e93678",
+        "filename": "src/tests/gl_tests/DrawBuffersTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-05-07T22:51:26Z",
+      "side": 1,
+      "message": "Would you like to also test (as in your revised WebGL conformance test) that having one of the channels of the color mask set to true also produces GL_INVALID_OPERATION?",
+      "revId": "7b504036ec41ce50110b82cb44544abf147d68bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2863c932_f577d812",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3043,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-05-07T22:51:26Z",
+      "side": 1,
+      "message": "Same comment as above.",
+      "revId": "7b504036ec41ce50110b82cb44544abf147d68bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
