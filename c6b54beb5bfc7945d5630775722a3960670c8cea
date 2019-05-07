@@ -2,6 +2,144 @@
   "comments": [
     {
       "key": {
+        "uuid": "1b62cdf9_e43cd514",
+        "filename": "include/platform/Feature.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-07T23:40:47Z",
+      "side": 1,
+      "message": "nit: possible to use enum class and use CamelCase names?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 2
+      },
+      "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7df729a7_bd971588",
+        "filename": "include/platform/Feature.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-07T23:40:47Z",
+      "side": 1,
+      "message": "nit: prefer the modern \u0027using\u0027 syntax to the old \u0027typedef\u0027",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 7
+      },
+      "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f020789d_0e913cb7",
+        "filename": "include/platform/Feature.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-07T23:40:47Z",
+      "side": 1,
+      "message": "maybe \"FeatureSet\" is probably clearer than \"FeaturesStruct\". Even \"FeatureSetBase\".",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 21
+      },
+      "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbee43d2_34b0ca32",
+        "filename": "include/platform/Feature.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-07T23:40:47Z",
+      "side": 1,
+      "message": "nit: can be private?",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 68
+      },
+      "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4272a00a_f88a034d",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-07T23:40:47Z",
+      "side": 1,
+      "message": "can you try using aggregate init? basicGL... \u003d { \"basic_gl\", ... }",
+      "range": {
+        "startLine": 27,
+        "startChar": 9,
+        "endLine": 27,
+        "endChar": 22
+      },
+      "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82881217_2e91851d",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-07T23:40:47Z",
+      "side": 1,
+      "message": "maybe having an operator bool is desirable here? It would save a lot of diff and make it a bit more concise. I\u0027m normally against operator bool but it might be warranted.",
+      "range": {
+        "startLine": 1485,
+        "startChar": 24,
+        "endLine": 1485,
+        "endChar": 65
+      },
+      "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c759e042_5562557d",
         "filename": "src/tests/gl_tests/MultiviewDrawTest.cpp",
         "patchSetId": 8
