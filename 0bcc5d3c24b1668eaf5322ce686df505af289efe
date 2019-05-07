@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cba48fb1_5e81c0da",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-07T23:11:44Z",
+      "side": 1,
+      "message": "This assert means this loop can ever only iterate at most once.   Can this just be a conditional on the size of desc.attachmentRange() and assert if \u003e1?",
+      "revId": "0bcc5d3c24b1668eaf5322ce686df505af289efe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
