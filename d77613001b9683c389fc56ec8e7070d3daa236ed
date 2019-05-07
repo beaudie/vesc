@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d166eba_05690dc0",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-07T23:31:40Z",
+      "side": 1,
+      "message": "can you also include onColorMaskChange in this list?",
+      "range": {
+        "startLine": 130,
+        "startChar": 31,
+        "endLine": 130,
+        "endChar": 57
+      },
+      "revId": "d77613001b9683c389fc56ec8e7070d3daa236ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "feb44cd4_d8576cc2",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-07T23:31:40Z",
+      "side": 1,
+      "message": "nit: you can probably inline this in the if statement.",
+      "range": {
+        "startLine": 364,
+        "startChar": 0,
+        "endLine": 369,
+        "endChar": 0
+      },
+      "revId": "d77613001b9683c389fc56ec8e7070d3daa236ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
