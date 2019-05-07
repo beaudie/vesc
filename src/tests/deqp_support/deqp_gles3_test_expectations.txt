@@ -619,33 +619,12 @@
 3219 VULKAN : dEQP-GLES3.functional.rasterization.flatshading.* = SKIP
 3219 VULKAN : dEQP-GLES3.functional.negative_api.shader.link_program = FAIL
 3219 VULKAN : dEQP-GLES3.functional.negative_api.shader.use_program = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.constants.* = FAIL
 3219 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.* = SKIP
 3219 VULKAN : dEQP-GLES3.functional.shaders.conversions.* = SKIP
 3219 VULKAN : dEQP-GLES3.functional.shaders.functions.datatypes.* = SKIP
 3219 VULKAN : dEQP-GLES3.functional.shaders.qualification_order.variables.valid.* = SKIP
 3219 VULKAN : dEQP-GLES3.functional.shaders.matrix.* = SKIP
-3219 VULKAN : dEQP-GLES3.functional.shaders.loops.while_dynamic_iterations.infinite_with_unconditional_break_first_vertex = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.loops.while_dynamic_iterations.infinite_with_unconditional_break_last_vertex = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.loops.do_while_dynamic_iterations.infinite_with_unconditional_break_first_vertex = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.loops.do_while_dynamic_iterations.infinite_with_unconditional_break_last_vertex = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.loops.for_dynamic_iterations.infinite_with_unconditional_break_first_vertex = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.loops.for_dynamic_iterations.infinite_with_unconditional_break_last_vertex = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.arrays.length.float_vertex = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.arrays.length.int_vertex = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.arrays.length.bool_vertex = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.arrays.length.struct_vertex = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.builtin* = SKIP
-3219 VULKAN : dEQP-GLES3.functional.shaders.constant_expressions.builtin* = SKIP
-3219 VULKAN : dEQP-GLES3.functional.shaders.indexing.uniform_array.* = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.invariance.* = FAIL
 3219 VULKAN : dEQP-GLES3.functional.shaders.precision.* = SKIP
-3219 VULKAN : dEQP-GLES3.functional.shaders.random.conditionals.* = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.random.all_features.* = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.struct.local.parameter_* = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.struct.local.array_member_equality_vertex = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.struct.uniform.* = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.operator.sequence.no_side_effects.* = FAIL
 
 // New vertex attribute formats:
 3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.strides.int2_10_10_10.* = SKIP
