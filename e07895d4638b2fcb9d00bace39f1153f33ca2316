@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f1717110_c39b3f40",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-07T16:57:27Z",
+      "side": 1,
+      "message": "@Jamie",
+      "range": {
+        "startLine": 582,
+        "startChar": 4,
+        "endLine": 582,
+        "endChar": 34
+      },
+      "revId": "e07895d4638b2fcb9d00bace39f1153f33ca2316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "111568e4_dc15e318",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-07T16:57:27Z",
+      "side": 1,
+      "message": "The comment is contradictory?",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 125,
+        "endChar": 47
+      },
+      "revId": "e07895d4638b2fcb9d00bace39f1153f33ca2316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae188ee7_57766e77",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-07T16:57:27Z",
+      "side": 1,
+      "message": "Done already",
+      "range": {
+        "startLine": 769,
+        "startChar": 8,
+        "endLine": 770,
+        "endChar": 45
+      },
+      "revId": "e07895d4638b2fcb9d00bace39f1153f33ca2316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
