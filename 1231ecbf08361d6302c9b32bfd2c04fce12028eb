@@ -69,6 +69,30 @@
       "revId": "1231ecbf08361d6302c9b32bfd2c04fce12028eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b8f5ccc_2de1615b",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-07T15:07:10Z",
+      "side": 1,
+      "message": "no, inline getBlendState.",
+      "parentUuid": "739e6291_2e3d676b",
+      "range": {
+        "startLine": 622,
+        "startChar": 0,
+        "endLine": 629,
+        "endChar": 1
+      },
+      "revId": "1231ecbf08361d6302c9b32bfd2c04fce12028eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
