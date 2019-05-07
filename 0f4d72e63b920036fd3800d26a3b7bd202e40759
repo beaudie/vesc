@@ -46,6 +46,30 @@
       "revId": "0f4d72e63b920036fd3800d26a3b7bd202e40759",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "945f61d4_53247c48",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-07T20:23:54Z",
+      "side": 0,
+      "message": "Only problem is that currently it\u0027s only `TextureVk` that ever makes an effort to flush pending image operations, so we would need to find a good place to perform that flush (to avoid having to sprinkle it all over the place).",
+      "parentUuid": "f43a7648_45279a36",
+      "range": {
+        "startLine": 112,
+        "startChar": 4,
+        "endLine": 113,
+        "endChar": 91
+      },
+      "revId": "0f4d72e63b920036fd3800d26a3b7bd202e40759",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
