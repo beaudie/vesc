@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d5ba9896_46cf142c",
+        "filename": "include/platform/Feature.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-08T18:59:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b62cdf9_e43cd514",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 2
+      },
+      "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7df729a7_bd971588",
         "filename": "include/platform/Feature.h",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d27e6906_7fd3286f",
+        "filename": "include/platform/Feature.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-08T18:59:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7df729a7_bd971588",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 7
+      },
+      "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "e6fd31f3_74ebed9d",
+        "filename": "include/platform/Feature.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-08T18:59:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f020789d_0e913cb7",
+      "range": {
+        "startLine": 118,
+        "startChar": 0,
+        "endLine": 118,
+        "endChar": 21
+      },
+      "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fbee43d2_34b0ca32",
         "filename": "include/platform/Feature.h",
         "patchSetId": 8
@@ -91,6 +163,30 @@
       "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1be79d28_8475070c",
+        "filename": "include/platform/Feature.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-08T18:59:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbee43d2_34b0ca32",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 68
+      },
+      "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "1cbffbf5_bf6e64b8",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-08T18:59:55Z",
+      "side": 1,
+      "message": "I can\u0027t because it needs a constructor to add itself to the map.",
+      "parentUuid": "4272a00a_f88a034d",
+      "range": {
+        "startLine": 27,
+        "startChar": 9,
+        "endLine": 27,
+        "endChar": 22
+      },
+      "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82881217_2e91851d",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 8
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "f139af42_96867346",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1485,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-08T18:59:55Z",
+      "side": 1,
+      "message": "I think it\u0027s clearer to access the member directly, especially if anything changes later",
+      "parentUuid": "82881217_2e91851d",
+      "range": {
+        "startLine": 1485,
+        "startChar": 24,
+        "endLine": 1485,
+        "endChar": 65
+      },
+      "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c759e042_5562557d",
         "filename": "src/tests/gl_tests/MultiviewDrawTest.cpp",
         "patchSetId": 8
@@ -160,6 +304,30 @@
       "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5ac2f54_21cf259b",
+        "filename": "src/tests/gl_tests/MultiviewDrawTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-08T18:59:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c759e042_5562557d",
+      "range": {
+        "startLine": 453,
+        "startChar": 8,
+        "endLine": 453,
+        "endChar": 98
+      },
+      "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
