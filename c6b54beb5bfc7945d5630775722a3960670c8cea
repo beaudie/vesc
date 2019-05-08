@@ -237,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "d6b866ce_ce272894",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-08T19:02:38Z",
+      "side": 1,
+      "message": "I thought aggregate init just calls the constructor that type-matches the args? What was the specific compile error? I could be wrong, just wanted to check.",
+      "parentUuid": "1cbffbf5_bf6e64b8",
+      "range": {
+        "startLine": 27,
+        "startChar": 9,
+        "endLine": 27,
+        "endChar": 22
+      },
+      "revId": "c6b54beb5bfc7945d5630775722a3960670c8cea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82881217_2e91851d",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 8
