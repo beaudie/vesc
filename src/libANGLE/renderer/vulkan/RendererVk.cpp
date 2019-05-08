@@ -1112,11 +1112,6 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
     // Current highest supported version
     gl::Version maxVersion = gl::Version(3, 1);
 
-#if ANGLE_VULKAN_CONFORMANT_CONFIGS_ONLY
-    // TODO: Disallow ES 3.0+ until supported. http://crbug.com/angleproject/2950
-    maxVersion = gl::Version(2, 0);
-#endif
-
     // If the command buffer doesn't support queries, we can't support ES3.
     if (!vk::CommandBuffer::SupportsQueries(mPhysicalDeviceFeatures))
     {
@@ -1140,6 +1135,12 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
     }
 
     return maxVersion;
+}
+
+gl::Version RendererVk::getMaxConformantESVersion() const
+{
+    // 3.1 support is in progress.
+    return std::min(getMaxSupportedESVersion(), gl::Version(3, 0));
 }
 
 void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
