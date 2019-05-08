@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f686defc_bb8eee5f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-08T13:31:47Z",
+      "side": 1,
+      "message": "More of a description is needed. What crash? Can you add a test?\n\nAlso please file a bug and link it in the commit message.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 17
+      },
+      "revId": "0018e05f3d2e6ff1fdf8ce50ea88349d1d60ad33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ce510f0_a7036941",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-08T13:31:47Z",
+      "side": 1,
+      "message": "Why do we need to do this? The application should probably be doing this, not ANGLE.",
+      "range": {
+        "startLine": 514,
+        "startChar": 4,
+        "endLine": 514,
+        "endChar": 68
+      },
+      "revId": "0018e05f3d2e6ff1fdf8ce50ea88349d1d60ad33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d48f505_c1b42613",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/VertexDeclarationCache.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-08T13:31:47Z",
+      "side": 1,
+      "message": "This likely indicates a failure somewhere else and we shouldn\u0027t work around it by returning an error here.",
+      "range": {
+        "startLine": 162,
+        "startChar": 12,
+        "endLine": 163,
+        "endChar": 76
+      },
+      "revId": "0018e05f3d2e6ff1fdf8ce50ea88349d1d60ad33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
