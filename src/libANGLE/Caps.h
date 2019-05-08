@@ -896,6 +896,9 @@ struct DisplayExtensions
 
     // EGL_ANGLE_image_d3d11_texture
     bool imageD3D11Texture;
+
+    // EGL_ANGLE_create_context_backwards_compatible
+    bool createContextBackwardsCompatible = false;
 };
 
 struct DeviceExtensions
