@@ -1464,7 +1464,7 @@ function_definition
     : function_prototype {
         context->parseFunctionDefinitionHeader(@1, $1.function, &($1.intermFunctionPrototype));
     }
-    compound_statement_no_new_scope {
+    compound_statement_with_scope {
         $$ = context->addFunctionDefinition($1.intermFunctionPrototype, $3, @1);
     }
     ;
