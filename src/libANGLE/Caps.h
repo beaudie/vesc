@@ -902,6 +902,9 @@ struct DisplayExtensions
 
     // EGL_ANDROID_get_native_client_buffer
     bool getNativeClientBufferANDROID = false;
+
+    // EGL_ANGLE_create_context_backwards_compatible
+    bool createContextBackwardsCompatible = false;
 };
 
 struct DeviceExtensions

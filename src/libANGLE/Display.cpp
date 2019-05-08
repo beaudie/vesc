@@ -937,8 +937,8 @@ Error Display::createContext(const Config *configuration,
     }
 
     gl::Context *context =
-        new gl::Context(mImplementation, configuration, shareContext, shareTextures, cachePointer,
-                        clientType, attribs, mDisplayExtensions, GetClientExtensions());
+        new gl::Context(this, configuration, shareContext, shareTextures, cachePointer, clientType,
+                        attribs, mDisplayExtensions, GetClientExtensions());
 
     ASSERT(context != nullptr);
     mContextSet.insert(context);
@@ -1308,6 +1308,9 @@ void Display::initDisplayExtensions()
     // The EGL_ANDROID_recordable extension is provided by the ANGLE frontend, and will always say
     // that ANativeWindow is not recordable.
     mDisplayExtensions.recordable = true;
+
+    // All backends support specific context versions
+    mDisplayExtensions.createContextBackwardsCompatible = true;
 
     mDisplayExtensionString = GenerateExtensionsString(mDisplayExtensions);
 }
