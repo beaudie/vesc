@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80b085fd_24edadbe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-08T15:23:29Z",
+      "side": 1,
+      "message": "could you please open a bug with some information on the issue at http://anglebug.com/new and associate it with this CL using the tag\n\nBug: angleproject:####",
+      "revId": "bbdec29a3c20c0ecd9940daadc49c7476c86a21a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
