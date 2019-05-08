@@ -511,6 +511,7 @@ EGLint SwapChain11::resize(DisplayD3D *displayD3D, EGLint backbufferWidth, EGLin
     ID3D11Texture2D *backbufferTexture = nullptr;
     hr                                 = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
                                reinterpret_cast<void **>(&backbufferTexture));
+    ::InvalidateRect(mNativeWindow->getNativeWindow(), NULL, FALSE);
     ASSERT(SUCCEEDED(hr));
     if (SUCCEEDED(hr))
     {
@@ -634,6 +635,7 @@ EGLint SwapChain11::reset(DisplayD3D *displayD3D,
         ID3D11Texture2D *backbufferTex = nullptr;
         hr                             = mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
                                    reinterpret_cast<LPVOID *>(&backbufferTex));
+        ::InvalidateRect(mNativeWindow->getNativeWindow(), NULL, FALSE);
         ASSERT(SUCCEEDED(hr));
         const auto &format =
             d3d11::Format::Get(mOffscreenRenderTargetFormat, mRenderer->getRenderer11DeviceCaps());

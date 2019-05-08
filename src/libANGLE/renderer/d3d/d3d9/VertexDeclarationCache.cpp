@@ -159,6 +159,9 @@ angle::Result VertexDeclarationCache::applyDeclaration(
             unsigned int offset = 0;
             ANGLE_TRY(attributes[i].computeOffset(context, start, &offset));
 
+            if (!vertexBuffer)
+                return gl::Error(GL_INVALID_VALUE, "vertex buffer is NULL");
+
             if (mAppliedVBs[stream].serial != attributes[i].serial ||
                 mAppliedVBs[stream].stride != attributes[i].stride ||
                 mAppliedVBs[stream].offset != offset)
