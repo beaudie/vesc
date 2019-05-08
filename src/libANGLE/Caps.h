@@ -876,6 +876,9 @@ struct DisplayExtensions
 
     // EGL_ANGLE_power_preference
     bool powerPreference;
+
+    // EGL_ANGLE_create_context_backwards_compatible
+    bool createContextBackwardsCompatible;
 };
 
 struct DeviceExtensions
