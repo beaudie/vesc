@@ -4616,6 +4616,49 @@ TEST_P(WebGL2CompatibilityTest, UniformVariablesReturnTypes)
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 }
 
+// WebGL testing with robustness extensions enabled.
+class WebGLRobustnessTest : public WebGLCompatibilityTest
+{
+  public:
+    WebGLRobustnessTest()
+    {
+        setRobustAccess(true);
+        setRobustResourceInit(true);
+    }
+};
+
+// Test that deleting a buffer acts like it was unbound.
+TEST_P(WebGLRobustnessTest, DeletedBufferValidation)
+{
+    constexpr char kVS[] = R"(attribute vec3 av;
+void main() { gl_Position = vec4(av, 1); }
+)";
+    constexpr char kFS[] = R"(void main() {})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program);
+
+    GLint attribPos = glGetAttribLocation(program, "av");
+    ASSERT_NE(-1, attribPos);
+
+    // Draw should succeed since we're not reading from the buffer.
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    ASSERT_GL_NO_ERROR();
+
+    // Draw should succeed because of robust buffer access.
+    GLBuffer buf1;
+    glBindBuffer(GL_ARRAY_BUFFER, buf1);
+    glVertexAttribPointer(attribPos, 4, GL_UNSIGNED_SHORT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(attribPos);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    ASSERT_GL_NO_ERROR();
+
+    // Draw should fail because of being detached.
+    buf1.reset();
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(WebGLCompatibilityTest,
@@ -4629,4 +4672,6 @@ ANGLE_INSTANTIATE_TEST(WebGLCompatibilityTest,
                        ES2_VULKAN());
 
 ANGLE_INSTANTIATE_TEST(WebGL2CompatibilityTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+
+ANGLE_INSTANTIATE_TEST(WebGLRobustnessTest, ES2_D3D11(), ES2_OPENGL(), ES2_VULKAN());
 }  // namespace angle
