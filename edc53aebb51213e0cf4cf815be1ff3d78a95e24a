@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "51317264_ac2a91f0",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 17
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-08T18:28:11Z",
+      "side": 1,
+      "message": "nit: whitespace",
+      "range": {
+        "startLine": 871,
+        "startChar": 0,
+        "endLine": 871,
+        "endChar": 20
+      },
+      "revId": "edc53aebb51213e0cf4cf815be1ff3d78a95e24a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "754883f6_65838591",
+        "filename": "src/compiler/translator/glslang_lex.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 3899,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-08T18:28:11Z",
+      "side": 1,
+      "message": "This is an auto-generated file, you will have to edit glslang.l\n\nWe have some setup instructions for the dependencies for regenerating the compiler here: https://chromium.googlesource.com/angle/angle/+/master/doc/DevSetup.md#required-tools\n\nAfter that, you need to run generate_parser.sh",
+      "range": {
+        "startLine": 3899,
+        "startChar": 0,
+        "endLine": 3899,
+        "endChar": 64
+      },
+      "revId": "edc53aebb51213e0cf4cf815be1ff3d78a95e24a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
