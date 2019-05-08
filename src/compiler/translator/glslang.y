@@ -148,6 +148,12 @@ extern void yyerror(YYLTYPE* yylloc, TParseContext* context, void *scanner, cons
     }  \
 } while (0)
 
+#define ES3_OR_NEWER_OR_MULTIVIEW(TOKEN, LINE, REASON) do {  \
+    if (context->getShaderVersion() < 300 && !context->isExtensionEnabled(TExtension::OVR_multiview2)) {  \
+        context->error(LINE, REASON " supported in GLSL ES 3.00 and above only", TOKEN);  \
+    }  \
+} while (0)
+
 #define ES3_1_ONLY(TOKEN, LINE, REASON) do {  \
     if (context->getShaderVersion() != 310) {  \
         context->error(LINE, REASON " supported in GLSL ES 3.10 only", TOKEN);  \
@@ -1458,9 +1464,9 @@ function_definition
     : function_prototype {
         context->parseFunctionDefinitionHeader(@1, $1.function, &($1.intermFunctionPrototype));
     }
-    compound_statement_no_new_scope {
-        $$ = context->addFunctionDefinition($1.intermFunctionPrototype, $3, @1);
-    }
+	compound_statement_no_new_scope {
+		$$ = context->addFunctionDefinition($1.intermFunctionPrototype, $3, @1);
+	}
     ;
 
 %%
