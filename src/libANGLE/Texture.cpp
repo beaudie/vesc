@@ -995,7 +995,7 @@ void Texture::signalDirtyStorage(const Context *context, InitState initState)
     mState.mInitState = initState;
     invalidateCompletenessCache();
     mState.mCachedSamplerFormatValid = false;
-    onStateChange(context, angle::SubjectMessage::STORAGE_CHANGED);
+    onStateChange(context, angle::SubjectMessage::StorageAndContentsChanged);
 }
 
 void Texture::signalDirtyState(const Context *context, size_t dirtyBit)
@@ -1003,7 +1003,7 @@ void Texture::signalDirtyState(const Context *context, size_t dirtyBit)
     mDirtyBits.set(dirtyBit);
     invalidateCompletenessCache();
     mState.mCachedSamplerFormatValid = false;
-    onStateChange(context, angle::SubjectMessage::DEPENDENT_DIRTY_BITS);
+    onStateChange(context, angle::SubjectMessage::BackEndChanged);
 }
 
 angle::Result Texture::setImage(Context *context,
@@ -1801,7 +1801,7 @@ void Texture::onSubjectStateChange(const gl::Context *context,
                                    angle::SubjectIndex index,
                                    angle::SubjectMessage message)
 {
-    if (message == angle::SubjectMessage::DEPENDENT_DIRTY_BITS)
+    if (message == angle::SubjectMessage::BackEndChanged)
     {
         mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION);
         signalDirtyState(context, DIRTY_BIT_IMPLEMENTATION);

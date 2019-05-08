@@ -558,11 +558,11 @@ void VertexArray::onSubjectStateChange(const gl::Context *context,
 {
     switch (message)
     {
-        case angle::SubjectMessage::CONTENTS_CHANGED:
+        case angle::SubjectMessage::ContentsChanged:
             setDependentDirtyBit(context, true, index);
             break;
 
-        case angle::SubjectMessage::STORAGE_CHANGED:
+        case angle::SubjectMessage::StorageAndContentsChanged:
             if (!IsElementArrayBufferSubjectIndex(index))
             {
                 updateCachedBufferBindingSize(context, &mState.mVertexBindings[index]);
@@ -570,7 +570,7 @@ void VertexArray::onSubjectStateChange(const gl::Context *context,
             setDependentDirtyBit(context, false, index);
             break;
 
-        case angle::SubjectMessage::BINDING_CHANGED:
+        case angle::SubjectMessage::BindingChanged:
             if (!IsElementArrayBufferSubjectIndex(index))
             {
                 const Buffer *buffer = mState.mVertexBindings[index].getBuffer().get();
@@ -578,22 +578,22 @@ void VertexArray::onSubjectStateChange(const gl::Context *context,
             }
             break;
 
-        case angle::SubjectMessage::RESOURCE_MAPPED:
+        case angle::SubjectMessage::SubresourceMapped:
             if (!IsElementArrayBufferSubjectIndex(index))
             {
                 updateCachedMappedArrayBuffersBinding(mState.mVertexBindings[index]);
             }
-            onStateChange(context, angle::SubjectMessage::RESOURCE_MAPPED);
+            onStateChange(context, angle::SubjectMessage::SubresourceMapped);
             break;
 
-        case angle::SubjectMessage::RESOURCE_UNMAPPED:
+        case angle::SubjectMessage::SubresourceUnmapped:
             setDependentDirtyBit(context, true, index);
 
             if (!IsElementArrayBufferSubjectIndex(index))
             {
                 updateCachedMappedArrayBuffersBinding(mState.mVertexBindings[index]);
             }
-            onStateChange(context, angle::SubjectMessage::RESOURCE_UNMAPPED);
+            onStateChange(context, angle::SubjectMessage::SubresourceUnmapped);
             break;
 
         default:
@@ -609,7 +609,7 @@ void VertexArray::setDependentDirtyBit(const gl::Context *context,
     DirtyBitType dirtyBit = getDirtyBitFromIndex(contentsChanged, index);
     ASSERT(!mDirtyBitsGuard.valid() || mDirtyBitsGuard.value().test(dirtyBit));
     mDirtyBits.set(dirtyBit);
-    onStateChange(context, angle::SubjectMessage::CONTENTS_CHANGED);
+    onStateChange(context, angle::SubjectMessage::ContentsChanged);
 }
 
 bool VertexArray::hasTransformFeedbackBindingConflict(const gl::Context *context) const
