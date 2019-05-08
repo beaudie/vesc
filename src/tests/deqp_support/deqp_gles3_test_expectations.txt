@@ -609,16 +609,16 @@
 3194 VULKAN : dEQP-GLES3.functional.buffer.copy.* = SKIP
 
 // Shader support:
-3219 VULKAN : dEQP-GLES3.functional.rasterization.flatshading.* = SKIP
 3219 VULKAN : dEQP-GLES3.functional.negative_api.shader.link_program = FAIL
 3219 VULKAN : dEQP-GLES3.functional.negative_api.shader.use_program = FAIL
-3219 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.* = SKIP
+3219 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.basic_types.mat* = SKIP
+3219 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.struct.mat* = SKIP
+3219 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.basic_types.u* = FAIL
+3219 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.struct.u* = FAIL
+3219 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.struct.float_uvec2_vec3 = FAIL
 3219 VULKAN : dEQP-GLES3.functional.shaders.conversions.* = SKIP
 3219 VULKAN : dEQP-GLES3.functional.shaders.functions.datatypes.* = SKIP
-3219 VULKAN : dEQP-GLES3.functional.shaders.qualification_order.variables.valid.* = SKIP
 3219 VULKAN : dEQP-GLES3.functional.shaders.matrix.* = SKIP
-3219 VULKAN : dEQP-GLES3.functional.shaders.builtin* = SKIP
-3219 VULKAN : dEQP-GLES3.functional.shaders.precision.* = SKIP
 
 // New vertex attribute formats:
 3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.strides.int2_10_10_10.* = SKIP
@@ -643,6 +643,9 @@
 3193 VULKAN : dEQP-GLES3.functional.default_vertex_attrib.ivec* = SKIP
 3193 VULKAN : dEQP-GLES3.functional.default_vertex_attrib.uint.* = SKIP
 3193 VULKAN : dEQP-GLES3.functional.default_vertex_attrib.uvec* = SKIP
+
+// Vertex ID, Index ID
+3221 VULKAN : dEQP-GLES3.functional.shaders.builtin_variable.vertex_id = FAIL
 
 // Polygon offset:
 2950 VULKAN : dEQP-GLES3.functional.polygon_offset.float32_result_depth_clamp = FAIL
@@ -733,6 +736,7 @@
 2950 VULKAN : dEQP-GLES3.functional.draw.draw_elements.indices.unaligned_user_ptr.index_int = FAIL
 2950 VULKAN : dEQP-GLES3.functional.draw.draw_elements_instanced.indices.user_ptr.index_int = FAIL
 2950 VULKAN : dEQP-GLES3.functional.draw.draw_elements_instanced.indices.unaligned_user_ptr.index_int = FAIL
+2950 VULKAN : dEQP-GLES3.functional.rasterization.flatshading.* = FAIL
 
 // Android Vulkan failures
 2950 ANDROID VULKAN : dEQP-GLES3.functional.implementation_limits.max_combined_texture_image_units = FAIL
