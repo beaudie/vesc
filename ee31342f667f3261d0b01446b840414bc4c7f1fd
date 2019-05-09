@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a262a04_6ada4208",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-09T04:19:38Z",
+      "side": 1,
+      "message": "Doing `depthBits \u003e 8` and `depthBits \u003e 16` is definitely not right here. Also, since we don\u0027t yet support reading stencil from the texture, that doesn\u0027t get involved in the swizzle either. I think you can just do something like this:\n\nswizzleStateOut-\u003eswizzleRed \u003d angleFormat.depthBits \u003e 0 ? swizzleState.swizzleRed : GL_ZERO;\nswizzleStateOut-\u003eswizzleGreen \u003d GL_ZERO;\nswizzleStateOut-\u003eswizzleBlue \u003d GL_ZERO;\nswizzleStateOut-\u003eswizzleAlpha \u003d GL_ZERO;\n\nThat is assuming the depth texture is expected to give rgba\u003d(depth, 0, 0, 0).",
+      "range": {
+        "startLine": 326,
+        "startChar": 0,
+        "endLine": 333,
+        "endChar": 86
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01cb11c2_89ccbad3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-09T04:19:38Z",
+      "side": 1,
+      "message": "As a side note, I\u0027m beginning to think the logic here is flawed. For example, if `swizzleState.swizzleRed \u003d GL_TEXTURE_SWIZZLE_A` and `angleFormat.alphaBits \u003d\u003d 0`, then `swizzleStateOut-\u003eswizzleRed` should be `GL_ZERO`.\n\nIn other words, every case should be something like:\n\nswizzleStateOut-\u003eswizzleX \u003d angleFormat.YBits \u003e 0 ? swizzleState.swizzleX : GL_ZERO;\n\nwhere Y is the channel specified by `swizzleState.swizzleX`. I guess we\u0027ll get around to fixing this bug when adding support for swizzles.",
+      "range": {
+        "startLine": 338,
+        "startChar": 0,
+        "endLine": 345,
+        "endChar": 83
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2220d924_dd1d25d7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1967,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-09T04:19:38Z",
+      "side": 1,
+      "message": "Vulkan expects depth upload data or stencil upload data to be packed. That means we would need to actually create two staging buffers and de-interleave the depth/stencil data into those.\n\nAlso, the `format` parameter of `glTexImage2D` is supposed to tell whether the upload data is depth-only or depth-stencil (Looks like `formatInfo` here has that information). If upload data is depth-only, there shouldn\u0027t be a `VK_IMAGE_ASPECT_STENCIL_BIT` copy even if the texture format has stencil.\n\nI\u0027d be fine if you added a comment here and leave that as future work, though. It would be great to have an ASSERT that makes sure upload data does not include both depth and stencil.",
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94710b80_23f5b844",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1998,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-09T04:19:38Z",
+      "side": 1,
+      "message": "This can\u0027t work as `getAspectFlags()` can have both depth and stencil aspects set. It looks like we are never hitting this code path, so for now you can revert it back to `VK_IMAGE_ASPECT_COLOR_BIT` and `ASSERT(getAspectFlags() \u003d\u003d VK_IMAGE_ASPECT_COLOR_BIT)` with a comment.",
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1fa8fde_3590f932",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-09T04:19:38Z",
+      "side": 1,
+      "message": "If you are not setting the test to run in webgl mode, I wouldn\u0027t call this a `WebGL*Test`",
+      "range": {
+        "startLine": 164,
+        "startChar": 32,
+        "endLine": 164,
+        "endChar": 53
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36f3ac66_1835488c",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-09T04:19:38Z",
+      "side": 1,
+      "message": "Upload data is uninitalized!",
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "132a8092_1c422662",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-09T04:19:38Z",
+      "side": 1,
+      "message": "This probably needs updating as this test is not running on a webgl context.",
+      "range": {
+        "startLine": 256,
+        "startChar": 34,
+        "endLine": 256,
+        "endChar": 78
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
