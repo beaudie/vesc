@@ -627,8 +627,8 @@ void OutputIntegerTextureSampleFunctionComputations(
         out << "    " << textureReference
             << ".GetDimensions(baseLevel + mip, width, height, layers, levels);\n";
 
-        out << "    bool xMajor = abs(t.x) > abs(t.y) && abs(t.x) > abs(t.z);\n";
-        out << "    bool yMajor = abs(t.y) > abs(t.z) && abs(t.y) > abs(t.x);\n";
+        out << "    bool xMajor = abs(t.x) >= abs(t.y) && abs(t.x) >= abs(t.z);\n";
+        out << "    bool yMajor = abs(t.y) >= abs(t.z) && abs(t.y) > abs(t.x);\n";
         out << "    bool zMajor = abs(t.z) > abs(t.x) && abs(t.z) > abs(t.y);\n";
         out << "    bool negative = (xMajor && t.x < 0.0f) || (yMajor && t.y < 0.0f) || "
                "(zMajor && t.z < 0.0f);\n";
@@ -645,6 +645,7 @@ void OutputIntegerTextureSampleFunctionComputations(
         out << "    float v = yMajor ? t.z : (negative ? t.y : -t.y);\n";
         out << "    float m = xMajor ? t.x : (yMajor ? t.y : t.z);\n";
 
+        out << "    float3 r = any(t) ? t : float3(1, 0, 0);\n";
         out << "    t.x = (u * 0.5f / m) + 0.5f;\n";
         out << "    t.y = (v * 0.5f / m) + 0.5f;\n";
 
@@ -655,9 +656,16 @@ void OutputIntegerTextureSampleFunctionComputations(
         {
             if (textureFunction.method == TextureFunctionHLSL::TextureFunction::IMPLICIT)
             {
-                out << "    float2 tSized = float2(t.x * width, t.y * height);\n"
-                       "    float2 dx = ddx(tSized);\n"
-                       "    float2 dy = ddy(tSized);\n"
+                // Note that we're always projecting onto the positive side along the major axis.
+                // By symmetry, this will not change the values of dot(dx, dx) and dot(dy, dy), so
+                // the calculated LOD will be the same.
+                out << "    float3 ddxr = ddx(r);\n"
+                       "    float3 ddyr = ddy(r);\n"
+                       "    float2 dims = float2(width, height)/2.0;\n"
+                       "    float2 dx = dims * (xMajor ? (ddxr.yz - ddxr.x*r.yz/r.x)/r.x : yMajor "
+                       "? (ddxr.zx - ddxr.y*r.zx/r.y)/r.y : (ddxr.xy - ddxr.z*r.xy/r.z)/r.z);\n"
+                       "    float2 dy = dims * (xMajor ? (ddyr.yz - ddyr.x*r.yz/r.x)/r.x : yMajor "
+                       "? (ddyr.zx - ddyr.y*r.zx/r.y)/r.y : (ddyr.xy - ddyr.z*r.xy/r.z)/r.z);\n"
                        "    float lod = 0.5f * log2(max(dot(dx, dx), dot(dy, dy)));\n";
             }
             else if (textureFunction.method == TextureFunctionHLSL::TextureFunction::GRAD)
