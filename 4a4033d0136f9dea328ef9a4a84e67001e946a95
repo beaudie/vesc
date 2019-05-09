@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e61973ab_32303b34",
+        "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-09T10:51:54Z",
+      "side": 1,
+      "message": "Note: I just moved the old (shared) calculation down to this case. \nI haven\u0027t investigated whether this has a similar problem.",
+      "revId": "4a4033d0136f9dea328ef9a4a84e67001e946a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
