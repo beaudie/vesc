@@ -16,6 +16,40 @@
       "revId": "4a4033d0136f9dea328ef9a4a84e67001e946a95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f10a4a50_fd5efb21",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4610,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-09T11:19:59Z",
+      "side": 1,
+      "message": "I\u0027ll change the name -- It\u0027s not a \"corner\" test anymore. It tests midpoints of cube edges.\nAlso I\u0027ll add a comment.",
+      "revId": "4a4033d0136f9dea328ef9a4a84e67001e946a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8c3cac3d_3030c3b0",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4618,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-09T11:19:59Z",
+      "side": 1,
+      "message": "I\u0027ll change the colors to red, green, blue.",
+      "revId": "4a4033d0136f9dea328ef9a4a84e67001e946a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
