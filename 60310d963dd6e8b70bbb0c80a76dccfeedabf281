@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d583383_d93f9ee9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T14:22:27Z",
+      "side": 1,
+      "message": "maybe adding a one sentence description of the gaps problems you faced could help readers of the CL in the future?",
+      "revId": "60310d963dd6e8b70bbb0c80a76dccfeedabf281",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6286073_52a25f0b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 902,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T14:22:27Z",
+      "side": 1,
+      "message": "I think it would be slightly cleaner (and very slightly faster) to make a special pack function for an unwritten color attachment. Like \"addColorAttachmentGap()\"",
+      "range": {
+        "startLine": 896,
+        "startChar": 0,
+        "endLine": 902,
+        "endChar": 9
+      },
+      "revId": "60310d963dd6e8b70bbb0c80a76dccfeedabf281",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "190f5cd2_9091982b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T14:22:27Z",
+      "side": 1,
+      "message": "We know for certain there\u0027s at most one DS attachment. So you can convert this to an \u0027if\u0027. This will save a (very) slight amount of extra overhead.",
+      "range": {
+        "startLine": 231,
+        "startChar": 4,
+        "endLine": 232,
+        "endChar": 73
+      },
+      "revId": "60310d963dd6e8b70bbb0c80a76dccfeedabf281",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f643eee5_8ae914ea",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T14:22:27Z",
+      "side": 1,
+      "message": "what\u0027s with this star?",
+      "range": {
+        "startLine": 67,
+        "startChar": 30,
+        "endLine": 67,
+        "endChar": 31
+      },
+      "revId": "60310d963dd6e8b70bbb0c80a76dccfeedabf281",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
