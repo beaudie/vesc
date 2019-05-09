@@ -8120,13 +8120,13 @@ void Context::onSubjectStateChange(const Context *context,
         case kVertexArraySubjectIndex:
             switch (message)
             {
-                case angle::SubjectMessage::CONTENTS_CHANGED:
+                case angle::SubjectMessage::ContentsChanged:
                     mState.setObjectDirty(GL_VERTEX_ARRAY);
                     mStateCache.onVertexArrayBufferContentsChange(this);
                     break;
-                case angle::SubjectMessage::RESOURCE_MAPPED:
-                case angle::SubjectMessage::RESOURCE_UNMAPPED:
-                case angle::SubjectMessage::BINDING_CHANGED:
+                case angle::SubjectMessage::SubjectMapped:
+                case angle::SubjectMessage::SubjectUnmapped:
+                case angle::SubjectMessage::BindingChanged:
                     mStateCache.onVertexArrayBufferStateChange(this);
                     break;
                 default:
@@ -8135,14 +8135,14 @@ void Context::onSubjectStateChange(const Context *context,
             break;
 
         case kReadFramebufferSubjectIndex:
-            if (message == angle::SubjectMessage::STORAGE_CHANGED)
+            if (message == angle::SubjectMessage::DirtyBitsFlagged)
             {
                 mState.setObjectDirty(GL_READ_FRAMEBUFFER);
             }
             break;
 
         case kDrawFramebufferSubjectIndex:
-            if (message == angle::SubjectMessage::STORAGE_CHANGED)
+            if (message == angle::SubjectMessage::DirtyBitsFlagged)
             {
                 mState.setDrawFramebufferDirty();
             }
