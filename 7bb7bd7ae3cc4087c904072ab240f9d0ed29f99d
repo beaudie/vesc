@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f653b950_b422740d",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T17:40:06Z",
+      "side": 1,
+      "message": "see below comments",
+      "range": {
+        "startLine": 243,
+        "startChar": 12,
+        "endLine": 243,
+        "endChar": 28
+      },
+      "revId": "7bb7bd7ae3cc4087c904072ab240f9d0ed29f99d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa830ac3_6a417699",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T17:40:06Z",
+      "side": 1,
+      "message": "see below comments",
+      "range": {
+        "startLine": 308,
+        "startChar": 12,
+        "endLine": 308,
+        "endChar": 28
+      },
+      "revId": "7bb7bd7ae3cc4087c904072ab240f9d0ed29f99d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b91d40b_291ef002",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T17:40:06Z",
+      "side": 1,
+      "message": "EXPECT_GL_NO_ERROR for these cases",
+      "range": {
+        "startLine": 457,
+        "startChar": 16,
+        "endLine": 457,
+        "endChar": 32
+      },
+      "revId": "7bb7bd7ae3cc4087c904072ab240f9d0ed29f99d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "310bec1c_2e3e9033",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T17:40:06Z",
+      "side": 1,
+      "message": "EXPECT_GL_ERROR(GL_INVALID_OPERATION)",
+      "range": {
+        "startLine": 460,
+        "startChar": 16,
+        "endLine": 460,
+        "endChar": 32
+      },
+      "revId": "7bb7bd7ae3cc4087c904072ab240f9d0ed29f99d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

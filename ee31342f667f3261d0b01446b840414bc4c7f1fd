@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "9e6d5c0e_c41bf120",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T17:40:06Z",
+      "side": 1,
+      "message": "The ES extension might be a bit underspecified. But I think this is clarified in later specs:\n\nTexture lookups involving textures with depth component data generate a texture base color Cb either using depth data directly or by performing a comparison\nwith the Dref value used to perform the lookup, as described in section 3.8.15.1.\nThe resulting value Rt\nis then expanded to a color Cb \u003d (Rt\n, 0, 0, 1), and swizzling is performed as described in section 3.9.2.1,\n\nThat\u0027s from the ES 3.0 spec. You want to check with ES 3.2?",
+      "parentUuid": "bc74fef8_ae233dee",
+      "range": {
+        "startLine": 326,
+        "startChar": 0,
+        "endLine": 333,
+        "endChar": 86
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01cb11c2_89ccbad3",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 23
@@ -149,6 +173,24 @@
       "side": 1,
       "message": "Yeah, this is messy. It\u0027s possible that the aspectFlags has both depth and stencil set because it\u0027s based on the underlying framebuffer format which may not be exactly the same as what the application specified.\nE.g. if app asks for DEPTH_COMPONENT with GL_UNSIGNED_INT we will use our D24_S8 format and ignore stencil. So the aspectFlags of the buffer will have both depth and stencil set even though we should only set the depth bits.\nI\u0027ll log a bug for follow-up work and include comment here.",
       "parentUuid": "2220d924_dd1d25d7",
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d1cd61c5_ad211223",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1967,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T17:40:06Z",
+      "side": 1,
+      "message": "I\u0027m fine with doing this in a split CL, but it is part of the functionality of the extension. So I\u0027d prefer to not record the extension as done until we have all of it.",
+      "parentUuid": "8f396b38_5582e58e",
       "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -684,6 +726,30 @@
       "side": 1,
       "message": "What do you mean by \"make this a part of WebGLCompatibilityTest\"?\nI\u0027ll remove this. I can\u0027t find an extension that adds packed depth_stencil support to framebuffers.",
       "parentUuid": "f0580e07_aa96a102",
+      "range": {
+        "startLine": 256,
+        "startChar": 34,
+        "endLine": 256,
+        "endChar": 78
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "024eae9e_0387a372",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T17:40:06Z",
+      "side": 1,
+      "message": "It\u0027s a WebGL compat thing. You can probably remove it. I just meant moving the test to another group that initializes the WebGL compat extension. But that\u0027s fine to remove this.",
+      "parentUuid": "c4a04208_1ad2eec5",
       "range": {
         "startLine": 256,
         "startChar": 34,
