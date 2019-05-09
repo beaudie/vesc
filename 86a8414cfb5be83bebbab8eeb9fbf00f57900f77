@@ -22,6 +22,30 @@
       "revId": "86a8414cfb5be83bebbab8eeb9fbf00f57900f77",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f2b00f5_7e76d382",
+        "filename": "doc/DebuggingTips.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-09T19:51:56Z",
+      "side": 1,
+      "message": "I think it\u0027s the way renderdoc parses the command line and reconstructs it for adb. I\u0027ll file a bug, though in the end quotation parsing is not trivial. Ideally, renderdoc would have taken the args as a list (a la argc/argv in unix) instead of a line left for every application to parse differently (a la nt).",
+      "parentUuid": "83b60c0f_44b4788d",
+      "range": {
+        "startLine": 232,
+        "startChar": 0,
+        "endLine": 235,
+        "endChar": 74
+      },
+      "revId": "86a8414cfb5be83bebbab8eeb9fbf00f57900f77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
