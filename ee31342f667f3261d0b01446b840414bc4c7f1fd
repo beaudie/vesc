@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bc74fef8_ae233dee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "As far as I can tell, the depth component is the only thing you can read (sample). There is no alpha when sample depth (as far as I can tell.)",
+      "parentUuid": "62e833b5_33cf161b",
+      "range": {
+        "startLine": 326,
+        "startChar": 0,
+        "endLine": 333,
+        "endChar": 86
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "01cb11c2_89ccbad3",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 23
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "173e2eab_30ab9d7d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "01cb11c2_89ccbad3",
+      "range": {
+        "startLine": 338,
+        "startChar": 0,
+        "endLine": 345,
+        "endChar": 83
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2220d924_dd1d25d7",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 23
@@ -89,6 +137,24 @@
     },
     {
       "key": {
+        "uuid": "8f396b38_5582e58e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1967,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Yeah, this is messy. It\u0027s possible that the aspectFlags has both depth and stencil set because it\u0027s based on the underlying framebuffer format which may not be exactly the same as what the application specified.\nE.g. if app asks for DEPTH_COMPONENT with GL_UNSIGNED_INT we will use our D24_S8 format and ignore stencil. So the aspectFlags of the buffer will have both depth and stencil set even though we should only set the depth bits.\nI\u0027ll log a bug for follow-up work and include comment here.",
+      "parentUuid": "2220d924_dd1d25d7",
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "94710b80_23f5b844",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 23
@@ -103,6 +169,24 @@
       "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a07b9c80_aea53430",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1998,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94710b80_23f5b844",
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -153,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "35d1546e_262b3eec",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "763104e9_ed8313e5",
+      "range": {
+        "startLine": 164,
+        "startChar": 32,
+        "endLine": 164,
+        "endChar": 53
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7d7b4cd0_dde6f4c7",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 23
@@ -173,6 +281,30 @@
       "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e34dfdd7_6c17e1ef",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d7b4cd0_dde6f4c7",
+      "range": {
+        "startLine": 183,
+        "startChar": 0,
+        "endLine": 190,
+        "endChar": 0
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -199,6 +331,30 @@
     },
     {
       "key": {
+        "uuid": "3702e779_c65c20d3",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18a5f0e5_a47eb034",
+      "range": {
+        "startLine": 192,
+        "startChar": 4,
+        "endLine": 192,
+        "endChar": 15
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36f3ac66_1835488c",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 23
@@ -213,6 +369,24 @@
       "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3e11daa_ce4475f0",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36f3ac66_1835488c",
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -239,6 +413,30 @@
     },
     {
       "key": {
+        "uuid": "c3209d75_45698dc2",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e7af985_b968b654",
+      "range": {
+        "startLine": 233,
+        "startChar": 9,
+        "endLine": 233,
+        "endChar": 25
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4ae81186_72ae517a",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 23
@@ -259,6 +457,30 @@
       "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c6d5412_c4a5fc56",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ae81186_72ae517a",
+      "range": {
+        "startLine": 235,
+        "startChar": 7,
+        "endLine": 236,
+        "endChar": 35
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -285,6 +507,30 @@
     },
     {
       "key": {
+        "uuid": "cf4fcf9d_724d7494",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a11927c0_8b8f9f28",
+      "range": {
+        "startLine": 244,
+        "startChar": 13,
+        "endLine": 244,
+        "endChar": 31
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba95a333_9a4673bb",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 23
@@ -308,6 +554,30 @@
     },
     {
       "key": {
+        "uuid": "397891ca_cfb1bcf3",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba95a333_9a4673bb",
+      "range": {
+        "startLine": 247,
+        "startChar": 22,
+        "endLine": 247,
+        "endChar": 30
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d03f90f1_2809f2ce",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 23
@@ -328,6 +598,30 @@
       "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52158be1_22932071",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d03f90f1_2809f2ce",
+      "range": {
+        "startLine": 250,
+        "startChar": 8,
+        "endLine": 250,
+        "endChar": 38
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -378,6 +672,30 @@
     },
     {
       "key": {
+        "uuid": "c4a04208_1ad2eec5",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "What do you mean by \"make this a part of WebGLCompatibilityTest\"?\nI\u0027ll remove this. I can\u0027t find an extension that adds packed depth_stencil support to framebuffers.",
+      "parentUuid": "f0580e07_aa96a102",
+      "range": {
+        "startLine": 256,
+        "startChar": 34,
+        "endLine": 256,
+        "endChar": 78
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2d11ff8_1ea43742",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 23
@@ -398,6 +716,30 @@
       "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "508e78a4_3b7015f3",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2d11ff8_1ea43742",
+      "range": {
+        "startLine": 258,
+        "startChar": 13,
+        "endLine": 258,
+        "endChar": 26
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -424,6 +766,30 @@
     },
     {
       "key": {
+        "uuid": "a10156ea_84cccb79",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4d6a4d0_4fe8d6fd",
+      "range": {
+        "startLine": 260,
+        "startChar": 12,
+        "endLine": 261,
+        "endChar": 35
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fef23f70_12883525",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 23
@@ -444,6 +810,30 @@
       "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1b321a0_143f4f47",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "ANGLE_depth_texture requires level to be 0, OES_depth_texture does not.",
+      "parentUuid": "fef23f70_12883525",
+      "range": {
+        "startLine": 270,
+        "startChar": 38,
+        "endLine": 270,
+        "endChar": 58
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -470,6 +860,30 @@
     },
     {
       "key": {
+        "uuid": "16064fb3_df12e2c7",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f26febf2_c458fd54",
+      "range": {
+        "startLine": 293,
+        "startChar": 0,
+        "endLine": 296,
+        "endChar": 13
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "930f3487_42dc1765",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 23
@@ -490,6 +904,30 @@
       "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43896e88_f98227e0",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-09T17:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "930f3487_42dc1765",
+      "range": {
+        "startLine": 483,
+        "startChar": 0,
+        "endLine": 483,
+        "endChar": 0
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
