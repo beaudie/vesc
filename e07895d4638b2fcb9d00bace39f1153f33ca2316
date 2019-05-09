@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "954ca9b2_ac514bb3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-09T17:37:11Z",
+      "side": 1,
+      "message": "I decided to leave it in for now and I\u0027ll try to untangle it afterwards.",
+      "parentUuid": "b2115f53_654057d3",
+      "range": {
+        "startLine": 582,
+        "startChar": 4,
+        "endLine": 582,
+        "endChar": 34
+      },
+      "revId": "e07895d4638b2fcb9d00bace39f1153f33ca2316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c72a3df_0e9d4411",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 22
@@ -69,6 +93,30 @@
       "revId": "e07895d4638b2fcb9d00bace39f1153f33ca2316",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6131bf7_bda61dcf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-09T17:37:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c72a3df_0e9d4411",
+      "range": {
+        "startLine": 620,
+        "startChar": 4,
+        "endLine": 620,
+        "endChar": 53
+      },
+      "revId": "e07895d4638b2fcb9d00bace39f1153f33ca2316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -119,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "72b59fe5_65c08cee",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-09T17:37:11Z",
+      "side": 1,
+      "message": "Yea, my bad.  The second sentence was meant to state we have a backup if the assumption ends up being false eventually.",
+      "parentUuid": "eaa9af60_b82d8ae5",
+      "range": {
+        "startLine": 123,
+        "startChar": 4,
+        "endLine": 125,
+        "endChar": 47
+      },
+      "revId": "e07895d4638b2fcb9d00bace39f1153f33ca2316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae188ee7_57766e77",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 22
@@ -139,6 +211,30 @@
       "revId": "e07895d4638b2fcb9d00bace39f1153f33ca2316",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e913617_363e2394",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-09T17:37:11Z",
+      "side": 1,
+      "message": "whoops, bad merge.",
+      "parentUuid": "ae188ee7_57766e77",
+      "range": {
+        "startLine": 769,
+        "startChar": 8,
+        "endLine": 770,
+        "endChar": 45
+      },
+      "revId": "e07895d4638b2fcb9d00bace39f1153f33ca2316",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

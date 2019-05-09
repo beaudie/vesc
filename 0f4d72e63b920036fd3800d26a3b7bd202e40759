@@ -94,6 +94,30 @@
       "revId": "0f4d72e63b920036fd3800d26a3b7bd202e40759",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f2814d2_f5a65492",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-09T17:37:11Z",
+      "side": 0,
+      "message": "I left it as is for now.  I could either wait until Jamie\u0027s updates land or do something like clear on the first makeCurrent call.",
+      "parentUuid": "1dcfda8b_4e6365c6",
+      "range": {
+        "startLine": 112,
+        "startChar": 4,
+        "endLine": 113,
+        "endChar": 91
+      },
+      "revId": "0f4d72e63b920036fd3800d26a3b7bd202e40759",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
