@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2357a49a_9f41796c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-09T20:33:48Z",
+      "side": 1,
+      "message": "Validating formatID should probably be done before you use it (SetBitField()).\n\nIn this case, it\u0027s not really a big deal, since the ASSERT halts execution entirely and no one is using the bit field yet, but I think it\u0027s still a good idea to just stack all of these parameter validation ASSERTs as the first thing done when entering the function.",
+      "revId": "e23a3f47ac3ea2da5bac08461a4c1909dbbe6a32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c5298ce_9b9d9996",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-09T20:33:48Z",
+      "side": 1,
+      "message": "Do you want:\n\n  ASSERT(mHasDepthStencilAttachment \u003d\u003d false);\n\nhere also?",
+      "revId": "e23a3f47ac3ea2da5bac08461a4c1909dbbe6a32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
