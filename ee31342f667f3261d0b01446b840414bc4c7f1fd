@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "0702d6ae_1da8fd91",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-09T19:59:05Z",
+      "side": 1,
+      "message": "BTW, it was my suggestion not to explicitly list the depth/stencil formats in the switch. That was to avoid mistakenly missing a format now or in the future.",
+      "parentUuid": "9e6d5c0e_c41bf120",
+      "range": {
+        "startLine": 326,
+        "startChar": 0,
+        "endLine": 333,
+        "endChar": 86
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01cb11c2_89ccbad3",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 23
