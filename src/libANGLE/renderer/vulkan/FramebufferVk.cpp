@@ -810,6 +810,34 @@ bool FramebufferVk::checkStatus(const gl::Context *context) const
     return true;
 }
 
+angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context, size_t colorIndex)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    ANGLE_TRY(mRenderTargetCache.updateColorRenderTarget(context, mState, colorIndex));
+
+    // Update cached masks for masked clears.
+    RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndex];
+    if (renderTarget)
+    {
+        const angle::Format &emulatedFormat = renderTarget->getImageFormat().imageFormat();
+        updateActiveColorMasks(colorIndex, emulatedFormat.redBits > 0, emulatedFormat.greenBits > 0,
+                               emulatedFormat.blueBits > 0, emulatedFormat.alphaBits > 0);
+
+        const angle::Format &sourceFormat = renderTarget->getImageFormat().angleFormat();
+        mEmulatedAlphaAttachmentMask.set(
+            colorIndex, sourceFormat.alphaBits == 0 && emulatedFormat.alphaBits > 0);
+
+        contextVk->updateColorMask(context->getState().getBlendState());
+    }
+    else
+    {
+        updateActiveColorMasks(colorIndex, false, false, false, false);
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result FramebufferVk::syncState(const gl::Context *context,
                                        const gl::Framebuffer::DirtyBits &dirtyBits)
 {
@@ -825,6 +853,10 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
             case gl::Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT:
                 ANGLE_TRY(mRenderTargetCache.updateDepthStencilRenderTarget(context, mState));
                 break;
+            case gl::Framebuffer::DIRTY_BIT_DEPTH_BUFFER_CONTENTS:
+            case gl::Framebuffer::DIRTY_BIT_STENCIL_BUFFER_CONTENTS:
+                ANGLE_TRY(mRenderTargetCache.getDepthStencil()->flushStagedUpdates(contextVk));
+                break;
             case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
             case gl::Framebuffer::DIRTY_BIT_READ_BUFFER:
             case gl::Framebuffer::DIRTY_BIT_DEFAULT_WIDTH:
@@ -834,32 +866,21 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
                 break;
             default:
             {
-                ASSERT(gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0 == 0 &&
-                       dirtyBit < gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_MAX);
-                size_t colorIndex =
-                    static_cast<size_t>(dirtyBit - gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0);
-                ANGLE_TRY(mRenderTargetCache.updateColorRenderTarget(context, mState, colorIndex));
-
-                // Update cached masks for masked clears.
-                RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndex];
-                if (renderTarget)
+                ASSERT(gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0 == 0);
+                if (dirtyBit < gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_MAX)
                 {
-                    const angle::Format &emulatedFormat =
-                        renderTarget->getImageFormat().imageFormat();
-                    updateActiveColorMasks(
-                        colorIndex, emulatedFormat.redBits > 0, emulatedFormat.greenBits > 0,
-                        emulatedFormat.blueBits > 0, emulatedFormat.alphaBits > 0);
-
-                    const angle::Format &sourceFormat =
-                        renderTarget->getImageFormat().angleFormat();
-                    mEmulatedAlphaAttachmentMask.set(
-                        colorIndex, sourceFormat.alphaBits == 0 && emulatedFormat.alphaBits > 0);
-
-                    contextVk->updateColorMask(context->getState().getBlendState());
+                    size_t colorIndex = static_cast<size_t>(
+                        dirtyBit - gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0);
+                    ANGLE_TRY(updateColorAttachment(context, colorIndex));
                 }
                 else
                 {
-                    updateActiveColorMasks(colorIndex, false, false, false, false);
+                    ASSERT(dirtyBit >= gl::Framebuffer::DIRTY_BIT_COLOR_BUFFER_CONTENTS_0 &&
+                           dirtyBit < gl::Framebuffer::DIRTY_BIT_COLOR_BUFFER_CONTENTS_MAX);
+                    size_t colorIndex = static_cast<size_t>(
+                        dirtyBit - gl::Framebuffer::DIRTY_BIT_COLOR_BUFFER_CONTENTS_0);
+                    ANGLE_TRY(
+                        mRenderTargetCache.getColors()[colorIndex]->flushStagedUpdates(contextVk));
                 }
                 break;
             }
@@ -1166,8 +1187,6 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
                                             void *pixels)
 {
     TRACE_EVENT0("gpu.angle", "FramebufferVk::readPixelsImpl");
-
-    ANGLE_TRY(renderTarget->ensureImageInitialized(contextVk));
 
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &commandBuffer));
