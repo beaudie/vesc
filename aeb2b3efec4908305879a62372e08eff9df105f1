@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "a10d54af_3c022cbd",
+        "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-09T12:42:59Z",
+      "side": 1,
+      "message": "Yet another problem: the m used to project the sample point out to the correct side of the cube is not constant when differentiating.\nIt needs to be taken into account \"inside\" the ddx and ddy.\n\n\n\nCurrent thoughts on how to solve this problem:\n\nI calculate three projections of t. (One projection on each of the positive x, y, z sides should be enough, by symmetry.)\nThen differentiate all three projections separately and finally (in the end!) choose the length of one based on my fixed choice of major axis. That way the major axis choice is a constant for the differentiation, but I still differentiate the right thing (the projection).",
+      "revId": "aeb2b3efec4908305879a62372e08eff9df105f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c3ba39dc_3faf4de5",
         "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
         "patchSetId": 2
