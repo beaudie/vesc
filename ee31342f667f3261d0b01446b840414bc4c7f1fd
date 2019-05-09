@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "35df3d52_4d54e239",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T20:37:50Z",
+      "side": 1,
+      "message": "That\u0027s fine. It\u0027s probably a few instructions faster to check for depth bits than to list all formats.\n\nCourtney it looks like you didn\u0027t take action here. Were you still looking at something?",
+      "parentUuid": "0702d6ae_1da8fd91",
+      "range": {
+        "startLine": 326,
+        "startChar": 0,
+        "endLine": 333,
+        "endChar": 86
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01cb11c2_89ccbad3",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 23

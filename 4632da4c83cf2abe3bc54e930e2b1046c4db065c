@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c36a01c1_238e8101",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T20:37:50Z",
+      "side": 1,
+      "message": "maybe make this a helper function? It\u0027s safer than setting an extension variable. Otherwise it should be a cache variable set in the front end. And we\u0027d need to update it if the extensions are enabled/disabled with the enableable extensions extension. (That\u0027s a mouthful)\n\nAlso I\u0027d probably not upper case ANY as it\u0027s not a vendor.",
+      "range": {
+        "startLine": 245,
+        "startChar": 0,
+        "endLine": 247,
+        "endChar": 25
+      },
+      "revId": "4632da4c83cf2abe3bc54e930e2b1046c4db065c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
