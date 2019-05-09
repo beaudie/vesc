@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d49686ff_928cb39e",
+        "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-09T10:56:23Z",
+      "side": 0,
+      "message": "Note that this is essentially u/(2m) + 0.5. The sign choice logic in the u calculation are not relevant for tSized, since that would not change the length of it\u0027s derivative. The extra added term of 0.5 also does not matter because it disappeared in the derivative in either case.",
+      "revId": "416b75bc28f0b67da85245e4aeca568606c97303",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
