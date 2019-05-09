@@ -16,6 +16,23 @@
       "revId": "aeb2b3efec4908305879a62372e08eff9df105f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3ba39dc_3faf4de5",
+        "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-09T12:13:26Z",
+      "side": 1,
+      "message": "Yet another problem: this generates code that uses the t.x and t.y values to sample the 2D texture. Since I removed the calculation that centers these values (in order to correct the LOD calculation) I have messed up the texture position calculation, which was actually correct.",
+      "revId": "aeb2b3efec4908305879a62372e08eff9df105f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
