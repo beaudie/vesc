@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "62e833b5_33cf161b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "Maybe explicitly case these formats instead. I don\u0027t think a stencil-only format is allowed. You might want to double check that alpha is supposed to be zero and not 1.0 as well.",
+      "parentUuid": "6a262a04_6ada4208",
+      "range": {
+        "startLine": 326,
+        "startChar": 0,
+        "endLine": 333,
+        "endChar": 86
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01cb11c2_89ccbad3",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 23
@@ -105,6 +129,76 @@
     },
     {
       "key": {
+        "uuid": "763104e9_ed8313e5",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "Yep, agreed.",
+      "parentUuid": "c1fa8fde_3590f932",
+      "range": {
+        "startLine": 164,
+        "startChar": 32,
+        "endLine": 164,
+        "endChar": 53
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d7b4cd0_dde6f4c7",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "use \"ANGLE_GL_PROGRAM(program, kVS, kFS);\"\n\nyou won\u0027t need to check for success or declare the GLuint program.",
+      "range": {
+        "startLine": 183,
+        "startChar": 0,
+        "endLine": 190,
+        "endChar": 0
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18a5f0e5_a47eb034",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "ASSERT_NE(-1, resolution);",
+      "range": {
+        "startLine": 192,
+        "startChar": 4,
+        "endLine": 192,
+        "endChar": 15
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "36f3ac66_1835488c",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 23
@@ -116,6 +210,121 @@
       "writtenOn": "2019-05-09T04:19:38Z",
       "side": 1,
       "message": "Upload data is uninitalized!",
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e7af985_b968b654",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "const \u0026TypeInfo type : types (use explicit type for very simple types)",
+      "range": {
+        "startLine": 233,
+        "startChar": 9,
+        "endLine": 233,
+        "endChar": 25
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ae81186_72ae517a",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "GLTexture cubeTex;",
+      "range": {
+        "startLine": 235,
+        "startChar": 7,
+        "endLine": 236,
+        "endChar": 35
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a11927c0_8b8f9f28",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "GLuint target : targets",
+      "range": {
+        "startLine": 244,
+        "startChar": 13,
+        "endLine": 244,
+        "endChar": 31
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba95a333_9a4673bb",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "nit: prefer c++-style casts:\n\nhttps://google.github.io/styleguide/cppguide.html#Casting\n\nsame for the other casts you introduced.",
+      "range": {
+        "startLine": 247,
+        "startChar": 22,
+        "endLine": 247,
+        "endChar": 30
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d03f90f1_2809f2ce",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "you can omit this if you use GLTexture.",
+      "range": {
+        "startLine": 250,
+        "startChar": 8,
+        "endLine": 250,
+        "endChar": 38
+      },
       "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -138,6 +347,145 @@
         "startChar": 34,
         "endLine": 256,
         "endChar": 78
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0580e07_aa96a102",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "You could make this a part of WebGLCompatiblityTest.",
+      "parentUuid": "132a8092_1c422662",
+      "range": {
+        "startLine": 256,
+        "startChar": 34,
+        "endLine": 256,
+        "endChar": 78
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2d11ff8_1ea43742",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "same nit",
+      "range": {
+        "startLine": 258,
+        "startChar": 13,
+        "endLine": 258,
+        "endChar": 26
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4d6a4d0_4fe8d6fd",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "same nit",
+      "range": {
+        "startLine": 260,
+        "startChar": 12,
+        "endLine": 261,
+        "endChar": 35
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fef23f70_12883525",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "or ANGLE depth texture, right? Maybe you should skip the entire test if the extension isn\u0027t present. Or cache the extensions status in a bool.",
+      "range": {
+        "startLine": 270,
+        "startChar": 38,
+        "endLine": 270,
+        "endChar": 58
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f26febf2_c458fd54",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "ASSERT_TRUE(error \u003d\u003d GL_INVALID_ENUM || error \u003d\u003d GL_INVALID_OPERATION);",
+      "range": {
+        "startLine": 293,
+        "startChar": 0,
+        "endLine": 296,
+        "endChar": 13
+      },
+      "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "930f3487_42dc1765",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T13:50:06Z",
+      "side": 1,
+      "message": "nit: can probably omit this whitespace change.",
+      "range": {
+        "startLine": 483,
+        "startChar": 0,
+        "endLine": 483,
+        "endChar": 0
       },
       "revId": "ee31342f667f3261d0b01446b840414bc4c7f1fd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
