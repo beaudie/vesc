@@ -75,8 +75,7 @@ NativeT CastQueryValueToInt(GLenum pname, QueryT value)
 // clamped when returned as signed integers.
 GLint CastMaskValue(const Context *context, GLuint value)
 {
-    return (context->getClientVersion() >= Version(3, 1) ? static_cast<GLint>(value)
-                                                         : clampCast<GLint>(value));
+    return clampCast<GLint>(value);
 }
 
 template <typename QueryT, typename InternalT>
