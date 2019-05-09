@@ -627,8 +627,8 @@ void OutputIntegerTextureSampleFunctionComputations(
         out << "    " << textureReference
             << ".GetDimensions(baseLevel + mip, width, height, layers, levels);\n";
 
-        out << "    bool xMajor = abs(t.x) > abs(t.y) && abs(t.x) > abs(t.z);\n";
-        out << "    bool yMajor = abs(t.y) > abs(t.z) && abs(t.y) > abs(t.x);\n";
+        out << "    bool xMajor = abs(t.x) >= abs(t.y) && abs(t.x) >= abs(t.z);\n";
+        out << "    bool yMajor = abs(t.y) >= abs(t.z) && abs(t.y) > abs(t.x);\n";
         out << "    bool zMajor = abs(t.z) > abs(t.x) && abs(t.z) > abs(t.y);\n";
         out << "    bool negative = (xMajor && t.x < 0.0f) || (yMajor && t.y < 0.0f) || "
                "(zMajor && t.z < 0.0f);\n";
@@ -645,9 +645,6 @@ void OutputIntegerTextureSampleFunctionComputations(
         out << "    float v = yMajor ? t.z : (negative ? t.y : -t.y);\n";
         out << "    float m = xMajor ? t.x : (yMajor ? t.y : t.z);\n";
 
-        out << "    t.x = (u * 0.5f / m) + 0.5f;\n";
-        out << "    t.y = (v * 0.5f / m) + 0.5f;\n";
-
         // Mip level computation.
         if (textureFunction.method == TextureFunctionHLSL::TextureFunction::IMPLICIT ||
             textureFunction.method == TextureFunctionHLSL::TextureFunction::LOD ||
@@ -655,13 +652,18 @@ void OutputIntegerTextureSampleFunctionComputations(
         {
             if (textureFunction.method == TextureFunctionHLSL::TextureFunction::IMPLICIT)
             {
-                out << "    float2 tSized = float2(t.x * width, t.y * height);\n"
-                       "    float2 dx = ddx(tSized);\n"
-                       "    float2 dy = ddy(tSized);\n"
+                out << "    float2 dims = float2(width, height)/(2.0*m);\n"
+                       "    float2 dx = dims * (xMajor ? ddx(t.zy) : yMajor ? ddx(t.xz) : "
+                       "ddx(t.xy));\n"
+                       "    float2 dy = dims * (xMajor ? ddy(t.zy) : yMajor ? ddy(t.xz) : "
+                       "ddy(t.xy));\n"
                        "    float lod = 0.5f * log2(max(dot(dx, dx), dot(dy, dy)));\n";
             }
             else if (textureFunction.method == TextureFunctionHLSL::TextureFunction::GRAD)
             {
+                out << "    t.x = (u * 0.5f / m) + 0.5f;\n";
+                out << "    t.y = (v * 0.5f / m) + 0.5f;\n";
+
                 // ESSL 3.00.6 spec section 8.8: "For the cube version, the partial
                 // derivatives of P are assumed to be in the coordinate system used before
                 // texture coordinates are projected onto the appropriate cube face."
