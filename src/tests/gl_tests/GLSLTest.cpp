@@ -2175,17 +2175,19 @@ TEST_P(GLSLTest, IndexConstantSamplerArrayIndexing)
     EXPECT_NE(0u, program);
 }
 
-// Test that the #pragma directive is supported and doesn't trigger a compilation failure on the
-// native driver. The only pragma that gets passed to the OpenGL driver is "invariant" but we don't
-// want to test its behavior, so don't use any varyings.
-TEST_P(GLSLTest, PragmaDirective)
+// An issue existed where GLSL would not compile if a comment after a define contained any of the
+// symbols: ' " é è etc. Test is to prevent regression.
+// https://bugs.chromium.org/p/chromium/issues/detail?id=940865
+TEST_P(GLSLTest, CommentAfterDefineContainsAccents)
 {
     constexpr char kVS[] =
-        "#pragma STDGL invariant(all)\n"
+        "#define TEST 1.0 // ' or \350  or \" or \351 or \363 ...\n"
+        "precision highp float;\n"
+        "\n"
         "void main()\n"
         "{\n"
-        "    gl_Position = vec4(1.0, 0.0, 0.0, 1.0);\n"
-        "}\n";
+        "    gl_Position = vec4(TEST, 0.0, 0.0, 0.0);\n"
+        "}";
 
     GLuint program = CompileProgram(kVS, essl1_shaders::fs::Red());
     EXPECT_NE(0u, program);
