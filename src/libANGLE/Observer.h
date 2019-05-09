@@ -33,12 +33,12 @@ using SubjectIndex = size_t;
 
 enum class SubjectMessage
 {
-    CONTENTS_CHANGED,
-    STORAGE_CHANGED,
-    BINDING_CHANGED,
-    DEPENDENT_DIRTY_BITS,
-    RESOURCE_MAPPED,
-    RESOURCE_UNMAPPED,
+    BindingChanged,
+    ContentsChanged,
+    DirtyBitsFlagged,
+    SubjectChanged,
+    SubjectMapped,
+    SubjectUnmapped,
 };
 
 // The observing class inherits from this interface class.
