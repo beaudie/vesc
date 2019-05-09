@@ -22,6 +22,30 @@
       "revId": "84947af7070a6de72393b105a5519c1dbbbe5720",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c44e8087_657d28ec",
+        "filename": "src/libANGLE/Observer.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-09T21:21:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af582b4b_231632bb",
+      "range": {
+        "startLine": 40,
+        "startChar": 63,
+        "endLine": 40,
+        "endChar": 69
+      },
+      "revId": "84947af7070a6de72393b105a5519c1dbbbe5720",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
