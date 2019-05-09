@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80144ff7_dff8bdf1",
+        "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-09T11:35:00Z",
+      "side": 1,
+      "message": "There is still one issue left here in the special case where t \u003d 0. In this case m again ends up zero, so the LOD will become infinite.",
+      "revId": "aeb2b3efec4908305879a62372e08eff9df105f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
