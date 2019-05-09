@@ -955,7 +955,7 @@ void Framebuffer::invalidateCompletenessCache(const Context *context)
     if (mState.mId != 0)
     {
         mCachedStatus.reset();
-        onStateChange(context, angle::SubjectMessage::SubjectChanged);
+        onStateChange(context, angle::SubjectMessage::DirtyBitsFlagged);
     }
 }
 
@@ -1494,7 +1494,6 @@ angle::Result Framebuffer::readPixels(const Context *context,
                                       GLenum type,
                                       void *pixels)
 {
-    ANGLE_TRY(ensureReadAttachmentInitialized(context, GL_COLOR_BUFFER_BIT));
     ANGLE_TRY(mImpl->readPixels(context, area, format, type, pixels));
 
     Buffer *unpackBuffer = context->getState().getTargetBuffer(BufferBinding::PixelUnpack);
@@ -1535,12 +1534,6 @@ angle::Result Framebuffer::blit(const Context *context,
     {
         return angle::Result::Continue;
     }
-
-    auto *sourceFBO = context->getState().getReadFramebuffer();
-    ANGLE_TRY(sourceFBO->ensureReadAttachmentInitialized(context, blitMask));
-
-    // TODO(jmadill): Only clear if not the full FBO dimensions, and only specified bitmask.
-    ANGLE_TRY(ensureDrawAttachmentsInitialized(context));
 
     return mImpl->blit(context, sourceArea, destArea, blitMask, filter);
 }
@@ -1862,9 +1855,16 @@ void Framebuffer::onSubjectStateChange(const Context *context,
 
     ASSERT(!mDirtyBitsGuard.valid() || mDirtyBitsGuard.value().test(index));
     mDirtyBits.set(index);
-    onStateChange(context, angle::SubjectMessage::DirtyBitsFlagged);
 
-    invalidateCompletenessCache(context);
+    // invalidateCompletenessCache skips the state change notification for the default FBO.
+    if (mState.id() == 0)
+    {
+        onStateChange(context, angle::SubjectMessage::DirtyBitsFlagged);
+    }
+    else
+    {
+        invalidateCompletenessCache(context);
+    }
 
     FramebufferAttachment *attachment = getAttachmentFromSubjectIndex(index);
 
@@ -2153,15 +2153,16 @@ angle::Result Framebuffer::ensureDrawAttachmentsInitialized(const Context *conte
     return angle::Result::Continue;
 }
 
-angle::Result Framebuffer::ensureReadAttachmentInitialized(const Context *context,
-                                                           GLbitfield blitMask)
+angle::Result Framebuffer::ensureReadAttachmentsInitialized(const Context *context)
 {
-    if (!context->isRobustResourceInitEnabled() || mState.mResourceNeedsInit.none())
+    ASSERT(context->isRobustResourceInitEnabled());
+
+    if (mState.mResourceNeedsInit.none())
     {
         return angle::Result::Continue;
     }
 
-    if ((blitMask & GL_COLOR_BUFFER_BIT) != 0 && mState.mReadBufferState != GL_NONE)
+    if (mState.mReadBufferState != GL_NONE)
     {
         size_t readIndex = mState.getReadIndex();
         if (mState.mResourceNeedsInit[readIndex])
@@ -2171,7 +2172,8 @@ angle::Result Framebuffer::ensureReadAttachmentInitialized(const Context *contex
         }
     }
 
-    if ((blitMask & GL_DEPTH_BUFFER_BIT) != 0 && hasDepth())
+    // Conservatively init depth since it can be read by BlitFramebuffer.
+    if (hasDepth())
     {
         if (mState.mResourceNeedsInit[DIRTY_BIT_DEPTH_ATTACHMENT])
         {
@@ -2180,7 +2182,8 @@ angle::Result Framebuffer::ensureReadAttachmentInitialized(const Context *contex
         }
     }
 
-    if ((blitMask & GL_STENCIL_BUFFER_BIT) != 0 && hasStencil())
+    // Conservatively init stencil since it can be read by BlitFramebuffer.
+    if (hasStencil())
     {
         if (mState.mResourceNeedsInit[DIRTY_BIT_STENCIL_ATTACHMENT])
         {
