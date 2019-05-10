@@ -154,38 +154,6 @@ angle::Result SetClearState(StateManagerGL *stateManager,
     return angle::Result::Continue;
 }
 
-using ClearBindTargetVector = angle::FixedVector<GLenum, 3>;
-
-angle::Result PrepareForClear(StateManagerGL *stateManager,
-                              GLenum sizedInternalFormat,
-                              ClearBindTargetVector *outBindtargets,
-                              GLbitfield *outClearMask)
-{
-    const gl::InternalFormat &internalFormatInfo =
-        gl::GetSizedInternalFormatInfo(sizedInternalFormat);
-    bool bindDepth   = internalFormatInfo.depthBits > 0;
-    bool bindStencil = internalFormatInfo.stencilBits > 0;
-    bool bindColor   = !bindDepth && !bindStencil;
-
-    outBindtargets->clear();
-    if (bindColor)
-    {
-        outBindtargets->push_back(GL_COLOR_ATTACHMENT0);
-    }
-    if (bindDepth)
-    {
-        outBindtargets->push_back(GL_DEPTH_ATTACHMENT);
-    }
-    if (bindStencil)
-    {
-        outBindtargets->push_back(GL_STENCIL_ATTACHMENT);
-    }
-
-    ANGLE_TRY(SetClearState(stateManager, bindColor, bindDepth, bindStencil, outClearMask));
-
-    return angle::Result::Continue;
-}
-
 void UnbindAttachments(const FunctionsGL *functions,
                        GLenum framebufferTarget,
                        const ClearBindTargetVector &bindTargets)
@@ -245,6 +213,51 @@ BlitGL::~BlitGL()
         mStateManager->deleteVertexArray(mVAO);
         mVAO = 0;
     }
+}
+
+angle::Result BlitGL::PrepareForClear(GLenum sizedInternalFormat,
+                                      ClearBindTargetVector *outBindtargets,
+                                      GLbitfield *outClearMask)
+{
+    const gl::InternalFormat &internalFormatInfo =
+        gl::GetSizedInternalFormatInfo(sizedInternalFormat);
+    bool bindDepth   = internalFormatInfo.depthBits > 0;
+    bool bindStencil = internalFormatInfo.stencilBits > 0;
+    bool bindColor   = !bindDepth && !bindStencil;
+
+    ASSERT(mScratchFBO != 0);
+    mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
+
+    outBindtargets->clear();
+    if (bindColor)
+    {
+        outBindtargets->push_back(GL_COLOR_ATTACHMENT0);
+    }
+    else
+    {
+        mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
+    }
+    if (bindDepth)
+    {
+        outBindtargets->push_back(GL_DEPTH_ATTACHMENT);
+    }
+    else
+    {
+        mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
+    }
+    if (bindStencil)
+    {
+        outBindtargets->push_back(GL_STENCIL_ATTACHMENT);
+    }
+    else
+    {
+        mFunctions->framebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D, 0,
+                                         0);
+    }
+
+    ANGLE_TRY(SetClearState(mStateManager, bindColor, bindDepth, bindStencil, outClearMask));
+
+    return angle::Result::Continue;
 }
 
 angle::Result BlitGL::copyImageToLUMAWorkaroundTexture(const gl::Context *context,
@@ -719,9 +732,7 @@ angle::Result BlitGL::clearRenderableTexture(TextureGL *source,
 
     ClearBindTargetVector bindTargets;
     GLbitfield clearMask = 0;
-    ANGLE_TRY(PrepareForClear(mStateManager, sizedInternalFormat, &bindTargets, &clearMask));
-
-    mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
+    ANGLE_TRY(PrepareForClear(sizedInternalFormat, &bindTargets, &clearMask));
 
     if (nativegl::UseTexImage2D(source->getType()))
     {
@@ -815,9 +826,8 @@ angle::Result BlitGL::clearRenderbuffer(RenderbufferGL *source, GLenum sizedInte
 
     ClearBindTargetVector bindTargets;
     GLbitfield clearMask = 0;
-    ANGLE_TRY(PrepareForClear(mStateManager, sizedInternalFormat, &bindTargets, &clearMask));
+    ANGLE_TRY(PrepareForClear(sizedInternalFormat, &bindTargets, &clearMask));
 
-    mStateManager->bindFramebuffer(GL_FRAMEBUFFER, mScratchFBO);
     for (GLenum bindTarget : bindTargets)
     {
         mFunctions->framebufferRenderbuffer(GL_FRAMEBUFFER, bindTarget, GL_RENDERBUFFER,
