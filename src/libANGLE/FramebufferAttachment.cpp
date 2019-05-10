@@ -299,7 +299,7 @@ angle::Result FramebufferAttachmentObject::getAttachmentRenderTarget(
 angle::Result FramebufferAttachmentObject::initializeContents(const Context *context,
                                                               const ImageIndex &imageIndex)
 {
-    ASSERT(context->isRobustResourceInitEnabled());
+    ASSERT(context->isRobustResourceInitEnabled() || context->isWebGL());
 
     // Because gl::Texture cannot support tracking individual layer dirtiness, we only handle
     // initializing entire mip levels for 2D array textures.
