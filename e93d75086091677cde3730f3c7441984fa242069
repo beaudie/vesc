@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc7863ce_e55a2b19",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-10T16:57:00Z",
+      "side": 1,
+      "message": "minor request, but can we leave the code explicitly deleting markers? I like having errors when we have markers that are not explicitly dropped. Prevents some accidental code patterns from working.",
+      "range": {
+        "startLine": 257,
+        "startChar": 8,
+        "endLine": 259,
+        "endChar": 10
+      },
+      "revId": "e93d75086091677cde3730f3c7441984fa242069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "babd3d16_73206e62",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-10T16:57:00Z",
+      "side": 1,
+      "message": "is it possible to make this logic a part of the GlslangWrapper and not the IntermediateShaderSource class? Like with an explicit replacement call? It feels like it\u0027s maybe not the right place here.",
+      "range": {
+        "startLine": 271,
+        "startChar": 0,
+        "endLine": 277,
+        "endChar": 13
+      },
+      "revId": "e93d75086091677cde3730f3c7441984fa242069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
