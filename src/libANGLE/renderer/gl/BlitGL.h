@@ -32,6 +32,8 @@ class StateManagerGL;
 class TextureGL;
 struct WorkaroundsGL;
 
+using ClearBindTargetVector = angle::FixedVector<GLenum, 3>;
+
 class BlitGL : angle::NonCopyable
 {
   public:
@@ -124,6 +126,9 @@ class BlitGL : angle::NonCopyable
   private:
     void orphanScratchTextures();
     void setScratchTextureParameter(GLenum param, GLenum value);
+    angle::Result PrepareForClear(GLenum sizedInternalFormat,
+                                  ClearBindTargetVector *outBindtargets,
+                                  GLbitfield *outClearMask);
 
     const FunctionsGL *mFunctions;
     const WorkaroundsGL &mWorkarounds;

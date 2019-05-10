@@ -206,7 +206,8 @@ bool GetClientArraysEnabled(const egl::AttributeMap &attribs)
 
 bool GetRobustResourceInit(const egl::AttributeMap &attribs)
 {
-    return (attribs.get(EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE, EGL_FALSE) == EGL_TRUE);
+    return (attribs.get(EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE, EGL_FALSE) == EGL_TRUE) ||
+           GetWebGLContext(attribs);
 }
 
 std::string GetObjectLabelFromPointer(GLsizei length, const GLchar *label)
