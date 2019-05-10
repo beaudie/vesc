@@ -2064,7 +2064,8 @@ angle::Result Framebuffer::ensureClearAttachmentsInitialized(const Context *cont
                                                              GLbitfield mask)
 {
     const auto &glState = context->getState();
-    if (!context->isRobustResourceInitEnabled() || glState.isRasterizerDiscardEnabled())
+    if ((!context->isRobustResourceInitEnabled() && !context->isWebGL()) ||
+        glState.isRasterizerDiscardEnabled())
     {
         return angle::Result::Continue;
     }
@@ -2098,7 +2099,7 @@ angle::Result Framebuffer::ensureClearBufferAttachmentsInitialized(const Context
                                                                    GLenum buffer,
                                                                    GLint drawbuffer)
 {
-    if (!context->isRobustResourceInitEnabled() ||
+    if ((!context->isRobustResourceInitEnabled() && !context->isWebGL()) ||
         context->getState().isRasterizerDiscardEnabled() || IsClearBufferMaskedOut(context, buffer))
     {
         return angle::Result::Continue;
@@ -2119,7 +2120,7 @@ angle::Result Framebuffer::ensureClearBufferAttachmentsInitialized(const Context
 
 angle::Result Framebuffer::ensureDrawAttachmentsInitialized(const Context *context)
 {
-    if (!context->isRobustResourceInitEnabled())
+    if (!context->isRobustResourceInitEnabled() && !context->isWebGL())
     {
         return angle::Result::Continue;
     }
@@ -2147,7 +2148,7 @@ angle::Result Framebuffer::ensureDrawAttachmentsInitialized(const Context *conte
 
 angle::Result Framebuffer::ensureReadAttachmentsInitialized(const Context *context)
 {
-    ASSERT(context->isRobustResourceInitEnabled());
+    ASSERT(context->isRobustResourceInitEnabled() || context->isWebGL());
 
     if (mState.mResourceNeedsInit.none())
     {

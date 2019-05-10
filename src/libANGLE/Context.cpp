@@ -438,6 +438,10 @@ void Context::initialize()
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_TEXTURES);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_PROGRAM);
     mDrawDirtyObjects.set(State::DIRTY_OBJECT_SAMPLERS);
+    if (mWebGLContext)
+    {
+        mDrawDirtyObjects.set(State::DIRTY_OBJECT_DRAW_ATTACHMENTS);
+    }
 
     mPathOperationDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
     mPathOperationDirtyObjects.set(State::DIRTY_OBJECT_VERTEX_ARRAY);
@@ -475,6 +479,11 @@ void Context::initialize()
     mBlitDirtyBits.set(State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
     mBlitDirtyObjects.set(State::DIRTY_OBJECT_READ_FRAMEBUFFER);
     mBlitDirtyObjects.set(State::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+    if (mWebGLContext)
+    {
+        mBlitDirtyObjects.set(State::DIRTY_OBJECT_READ_ATTACHMENTS);
+        mBlitDirtyObjects.set(State::DIRTY_OBJECT_DRAW_ATTACHMENTS);
+    }
 
     mComputeDirtyBits.set(State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
     mComputeDirtyBits.set(State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
