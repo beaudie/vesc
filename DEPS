@@ -9,7 +9,7 @@ vars = {
   'build_with_chromium': False,
 
   # Current revision of dEQP.
-  'deqp_revision': '66a49e0a43f7af654ee1de8a3b1bcaf6c0d14aa4',
+  'deqp_revision': '39894bc13c69b22c4aea018979b7daabc8dfc602',
 
   # Current revision of glslang, the Khronos SPIRV compiler.
   'glslang_revision': '2dd4ab3a4acba413ca6fe7585dab1c149d028000',
