@@ -842,6 +842,61 @@ TEST_P(WebGLFramebufferTest, TextureAttachmentCommitBug)
     EXPECT_GL_NO_ERROR();
 }
 
+// Test to cover a bug that the depth attachment of a WebGL framebuffer are not initialized before
+// it is used as the read framebuffer in blitFramebuffer.
+// Ported from WebGL CTS:
+// conformance2/renderbuffers/multisampled-stencil-renderbuffer-initialization.html
+TEST_P(WebGLFramebufferTest, DepthInitializationBeforeBlitFramebuffer)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() == 2);
+
+    constexpr uint32_t kWidth  = 16;
+    constexpr uint32_t kHeight = 16;
+
+    GLFramebuffer drawFbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, drawFbo);
+
+    GLTexture colorTex;
+    glBindTexture(GL_TEXTURE_2D, colorTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWidth, kHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTex, 0);
+    GLRenderbuffer drawDepthRbo;
+    glBindRenderbuffer(GL_RENDERBUFFER, drawDepthRbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, kWidth, kHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, drawDepthRbo);
+
+    // Clear drawDepthRbo to 0.0f
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClearDepthf(0.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    GLFramebuffer readFbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, readFbo);
+    GLRenderbuffer readDepthRbo;
+    glBindRenderbuffer(GL_RENDERBUFFER, readDepthRbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, kWidth, kHeight);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, readDepthRbo);
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, readFbo);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFbo);
+
+    // Blit from readDepthRbo to drawDepthRbo. In WebGL context, readDepthRbo should be cleared
+    // to 1.0f by default, so the data in drawDepthRbo should also be 1.0f.
+    glBlitFramebuffer(0, 0, kWidth, kHeight, 0, 0, kWidth, kHeight, GL_DEPTH_BUFFER_BIT,
+                      GL_NEAREST);
+
+    glDepthFunc(GL_LESS);
+    glEnable(GL_DEPTH_TEST);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, drawFbo);
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+
+    // If drawDepthRbo is correctly set to 1.0f, the depth test can always pass, so the result
+    // should be green.
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Only run against WebGL 1 validation, since much was changed in 2.
 ANGLE_INSTANTIATE_TEST(WebGLFramebufferTest,
                        ES2_D3D9(),

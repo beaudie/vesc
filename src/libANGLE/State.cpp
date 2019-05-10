@@ -2588,7 +2588,7 @@ angle::Result State::syncImagesInit(const Context *context)
 angle::Result State::syncReadAttachments(const Context *context)
 {
     ASSERT(mReadFramebuffer);
-    ASSERT(mRobustResourceInit);
+    ASSERT(mRobustResourceInit || context->isWebGL());
     return mReadFramebuffer->ensureReadAttachmentsInitialized(context);
 }
 
