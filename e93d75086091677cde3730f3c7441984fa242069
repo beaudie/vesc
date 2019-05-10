@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f678848e_1dec61b5",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-10T17:31:15Z",
+      "side": 1,
+      "message": "I agree, but I had to do this for the sake of \"unused packed uniform blocks\". The linker drops those, and I didn\u0027t notice a way to iterate over them and make this replacement.",
+      "parentUuid": "cc7863ce_e55a2b19",
+      "range": {
+        "startLine": 257,
+        "startChar": 8,
+        "endLine": 259,
+        "endChar": 10
+      },
+      "revId": "e93d75086091677cde3730f3c7441984fa242069",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "babd3d16_73206e62",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 6
