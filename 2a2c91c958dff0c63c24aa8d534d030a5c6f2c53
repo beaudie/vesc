@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c48cea09_246a9b3c",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-10T19:27:51Z",
+      "side": 1,
+      "message": "Okay. I was following the example of instancedArrays...",
+      "parentUuid": "9d1a8a73_b8f8bef5",
+      "range": {
+        "startLine": 247,
+        "startChar": 9,
+        "endLine": 247,
+        "endChar": 24
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95a518a6_c2eef9f9",
         "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
         "patchSetId": 28
@@ -36,6 +60,30 @@
       "writtenOn": "2019-05-10T17:04:34Z",
       "side": 1,
       "message": "back to an old comment I had - any idea why this is necessary? a comment here would be sufficient once we know the reason. Or we could remove it if it\u0027s not necessary.",
+      "range": {
+        "startLine": 1656,
+        "startChar": 4,
+        "endLine": 1656,
+        "endChar": 5
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ac77313_9d2d75b7",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-10T19:27:51Z",
+      "side": 1,
+      "message": "I think it\u0027s because OES_depth_texture allows for more than one mip level whereas D3D does not allow that for depth textures.",
+      "parentUuid": "95a518a6_c2eef9f9",
       "range": {
         "startLine": 1656,
         "startChar": 4,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "60cd5c1b_3c1d3595",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-10T19:27:51Z",
+      "side": 1,
+      "message": "Put the link in.\nMy test uploads data. It doesn\u0027t care what\u0027s being loaded, but it does include a buffer and it does ask for packed depth_stencil texture format so it will hit the error and we probably don\u0027t want that. I guess I could remove that from the test or maybe make that bit a separate test.",
+      "parentUuid": "b77f54a5_d35991e7",
+      "range": {
+        "startLine": 1965,
+        "startChar": 12,
+        "endLine": 1965,
+        "endChar": 31
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "37924c2b_755c4b03",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 28
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "fa54a875_61ee402e",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-10T19:27:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37924c2b_755c4b03",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 6
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dda8b057_8f3d5889",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 28
@@ -137,6 +233,30 @@
       "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83c797f4_99a93c03",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-10T19:27:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dda8b057_8f3d5889",
+      "range": {
+        "startLine": 186,
+        "startChar": 28,
+        "endLine": 186,
+        "endChar": 35
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
