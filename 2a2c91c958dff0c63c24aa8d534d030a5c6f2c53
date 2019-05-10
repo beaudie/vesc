@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b17e365f_b127b076",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-10T19:45:14Z",
+      "side": 1,
+      "message": "Ah, okay. Not a big deal either way.",
+      "parentUuid": "c48cea09_246a9b3c",
+      "range": {
+        "startLine": 247,
+        "startChar": 9,
+        "endLine": 247,
+        "endChar": 24
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95a518a6_c2eef9f9",
         "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
         "patchSetId": 28
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "I think it\u0027s because OES_depth_texture allows for more than one mip level whereas D3D does not allow that for depth textures.",
       "parentUuid": "95a518a6_c2eef9f9",
+      "range": {
+        "startLine": 1656,
+        "startChar": 4,
+        "endLine": 1656,
+        "endChar": 5
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a441caba_574eb3a5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-10T19:45:14Z",
+      "side": 1,
+      "message": "That would make sense. But best to document it if possible.",
+      "parentUuid": "8ac77313_9d2d75b7",
       "range": {
         "startLine": 1656,
         "startChar": 4,
@@ -154,6 +202,30 @@
       "side": 1,
       "message": "Put the link in.\nMy test uploads data. It doesn\u0027t care what\u0027s being loaded, but it does include a buffer and it does ask for packed depth_stencil texture format so it will hit the error and we probably don\u0027t want that. I guess I could remove that from the test or maybe make that bit a separate test.",
       "parentUuid": "b77f54a5_d35991e7",
+      "range": {
+        "startLine": 1965,
+        "startChar": 12,
+        "endLine": 1965,
+        "endChar": 31
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de08a03e_05c296a5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-10T19:45:14Z",
+      "side": 1,
+      "message": "Wouldn\u0027t the test fail if it was uploading packed data?",
+      "parentUuid": "60cd5c1b_3c1d3595",
       "range": {
         "startLine": 1965,
         "startChar": 12,
