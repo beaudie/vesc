@@ -9,6 +9,7 @@
 
 #include <array>
 #include <cmath>
+#include <sstream>
 
 using namespace angle;
 
@@ -1240,6 +1241,92 @@ TEST_P(UniformTestES3, StructWithNonSquareMatrixAndBool)
 
     ASSERT_GL_NO_ERROR();
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
+}
+
+// Test that matrix uniform upload is correct.
+TEST_P(UniformTestES3, MatrixUniformUpload)
+{
+    // TODO(syoussefi): Bug in matrix uniform handling.  http://anglebug.com/3198
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    GLfloat matrixValues[16];
+
+    for (size_t i = 0; i < 16; ++i)
+    {
+        matrixValues[i] = static_cast<GLfloat>(i);
+    }
+
+    typedef void (*UniformMatrixCxRfv)(GLint, GLsizei, GLboolean, const GLfloat *);
+    UniformMatrixCxRfv uniformMatrixCxRfv[5][5] = {
+        {nullptr, nullptr, nullptr, nullptr, nullptr},
+        {nullptr, nullptr, nullptr, nullptr, nullptr},
+        {nullptr, nullptr, glUniformMatrix2fv, glUniformMatrix2x3fv, glUniformMatrix2x4fv},
+        {nullptr, nullptr, glUniformMatrix3x2fv, glUniformMatrix3fv, glUniformMatrix3x4fv},
+        {nullptr, nullptr, glUniformMatrix4x2fv, glUniformMatrix4x3fv, glUniformMatrix4fv},
+    };
+
+    for (int transpose = 0; transpose < 2; ++transpose)
+    {
+        for (size_t cols = 2; cols <= 4; ++cols)
+        {
+            for (size_t rows = 2; rows <= 4; ++rows)
+            {
+                std::ostringstream shader;
+                shader << "#version 300 es\n"
+                          "precision highp float;\n"
+                          "out highp vec4 colorOut;\n"
+                          "uniform mat"
+                       << cols << 'x' << rows
+                       << " m;\n"
+                          "void main()\n"
+                          "{\n"
+                          "  bool isCorrect =";
+
+                for (size_t col = 0; col < cols; ++col)
+                {
+                    for (size_t row = 0; row < rows; ++row)
+                    {
+                        size_t value;
+                        if (!transpose)
+                        {
+                            // Matrix data is uploaded column-major.
+                            value = col * rows + row;
+                        }
+                        else
+                        {
+                            // Matrix data is uploaded row-major.
+                            value = row * cols + col;
+                        }
+
+                        if (value != 0)
+                        {
+                            shader << "&&\n    ";
+                        }
+
+                        shader << "(m[" << col << "][" << row << "] == " << value << ".0)";
+                    }
+                }
+
+                shader << ";\n  colorOut = vec4(isCorrect);\n"
+                          "}\n";
+
+                ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), shader.str().c_str());
+
+                glUseProgram(program.get());
+
+                GLint location = glGetUniformLocation(program.get(), "m");
+                ASSERT_NE(-1, location);
+
+                uniformMatrixCxRfv[cols][rows](location, 1, transpose, matrixValues);
+                ASSERT_GL_NO_ERROR();
+
+                drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.0f);
+
+                ASSERT_GL_NO_ERROR();
+                EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::white);
+            }
+        }
+    }
 }
 
 // Test that uniforms with reserved OpenGL names that aren't reserved in GL ES 2 work correctly.
