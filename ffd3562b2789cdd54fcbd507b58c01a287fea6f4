@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7008165f_13e014a6",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 3
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-10T14:35:01Z",
+      "side": 1,
+      "message": "It\u0027s probably easier to do in ParseContext.cpp. You don\u0027t have to deal with the grammar regeneration and special syntax there. Maybe try in parseFunctionDefinition - you can either push a new scope or not depending on version. And you can keep the grammar the same.",
+      "parentUuid": "229952bc_6e22e879",
+      "revId": "ffd3562b2789cdd54fcbd507b58c01a287fea6f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e244a0df_23645b8a",
         "filename": "src/compiler/translator/tree_util/ReplaceRedefinedVariable.cpp",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2019-05-10T14:03:38Z",
       "side": 1,
       "message": "Trying to figure out how to know that a variable is defined in function body. If you know of a clear way, please share.\nAlso, if my general approach here seems jacked-up and you have recommendation for alternate approach, I\u0027m all ears.",
+      "revId": "ffd3562b2789cdd54fcbd507b58c01a287fea6f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "967da2a6_7724ed3a",
+        "filename": "src/compiler/translator/tree_util/ReplaceRedefinedVariable.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-10T14:35:01Z",
+      "side": 1,
+      "message": "I\u0027d suggest only replacing the duplicate names when they are redeclared. This will at least keep the shaders the most readable. First we handle declarations without initializers:\n\n1. Enable PreVisit+PostVisit+InVisit in your traverser\n2. In visitFunctionDefinition or vistiFunctionPrototype PreVisit iterate the parameters and record all the parameter names into a dictionary or list of some kind\n3. On PostVisit reset the list\n4. Implement visitDeclaration as InVisit. Iterate over the declarators and call getAsSymbolNode. Then if non-null this will have an associated TVariable you can get with TIntermSymbol::variable().\n5. Check the symbol name against your function prototype dict. If it is a match it\u0027s a redeclaration.\n\nNow to do the replacement:\n\n6. Use CreateTempVariable to create a copy of the replacement variable (it is simpler to replace the function parameters, so I can see why you went with that).\n7. Call sh::ReplaceVariable(root, old, new) (see tree_util/ReplaceVariable.h)\n\nNext you\u0027ll have to handle declarations with initializers. But it\u0027s just a tweak to step 4.\n\nLMK if you want to go over this a bit more.",
+      "parentUuid": "e244a0df_23645b8a",
       "revId": "ffd3562b2789cdd54fcbd507b58c01a287fea6f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
