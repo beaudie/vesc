@@ -107,9 +107,6 @@ class IntermediateShaderSource final : angle::NonCopyable
     // Find @@ QUALIFIER-name @@ and replace it with |specifier|.
     void insertQualifierSpecifier(const std::string &name, const std::string &specifier);
 
-    // Remove @@ LAYOUT-name(*) @@ and @@ QUALIFIER-name @@ altogether.
-    void eraseLayoutAndQualifierSpecifiers(const std::string &name);
-
     // Replace @@ DEFAULT-UNIFORMS-SET-BINDING @@ with |specifier|.
     void insertDefaultUniformsSpecifier(std::string &&specifier);
 
@@ -251,28 +248,34 @@ void IntermediateShaderSource::insertQualifierSpecifier(const std::string &name,
     }
 }
 
-void IntermediateShaderSource::eraseLayoutAndQualifierSpecifiers(const std::string &name)
-{
-    for (Token &block : mTokens)
-    {
-        if ((block.type == TokenType::Layout || block.type == TokenType::Qualifier) &&
-            block.text == name)
-        {
-            block.type = TokenType::Text;
-            block.text = "";
-        }
-    }
-}
-
 std::string IntermediateShaderSource::getShaderSource()
 {
     std::string shaderSource;
 
     for (Token &block : mTokens)
     {
-        // All blocks should have been replaced.
-        ASSERT(block.type == TokenType::Text);
-        shaderSource += block.text;
+        // Drop any marker that's not replaced.  They mark entities that are identified as inactive
+        // during linking:
+        //
+        // - Unused attributes,
+        // - Unused varyings,
+        // - Unused uniforms,
+        // - Unused packed uniform blocks.
+        //
+        if (block.type == TokenType::Text)
+        {
+            shaderSource += block.text;
+        }
+        else if (block.type == TokenType::Layout)
+        {
+            // As a special case, unused packed uniform blocks which are not exposed as linked
+            // resources are prefixed with "struct" to avoid a compile error due to missing
+            // "layout() uniform".
+            if (block.args.find("std140") != std::string::npos)
+            {
+                shaderSource += "struct ";
+            }
+        }
     }
 
     return shaderSource;
@@ -329,19 +332,6 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
         std::string locationString = "location = " + Str(attribute.location);
         vertexSource.insertLayoutSpecifier(attribute.name, locationString);
         vertexSource.insertQualifierSpecifier(attribute.name, "in");
-    }
-
-    // The attributes in the programState could have been filled with active attributes only
-    // depending on the shader version. If there is inactive attributes left, we have to remove
-    // their @@ QUALIFIER and @@ LAYOUT markers.
-    for (const sh::Attribute &attribute : glVertexShader->getAllAttributes())
-    {
-        if (attribute.active)
-        {
-            continue;
-        }
-
-        vertexSource.eraseLayoutAndQualifierSpecifiers(attribute.name);
     }
 
     // Parse output locations and replace them in the fragment shader.
@@ -430,13 +420,6 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
         }
         vertexSource.insertQualifierSpecifier(name, vsQualifier);
         fragmentSource.insertQualifierSpecifier(name, fsQualifier);
-    }
-
-    // Remove all the markers for unused varyings.
-    for (const std::string &varyingName : resources.varyingPacking.getInactiveVaryingNames())
-    {
-        vertexSource.eraseLayoutAndQualifierSpecifiers(varyingName);
-        fragmentSource.eraseLayoutAndQualifierSpecifiers(varyingName);
     }
 
     // Assign uniform locations
@@ -529,11 +512,6 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
 
             vertexSource.insertQualifierSpecifier(uniformName, kUniformQualifier);
             fragmentSource.insertQualifierSpecifier(uniformName, kUniformQualifier);
-        }
-        else
-        {
-            vertexSource.eraseLayoutAndQualifierSpecifiers(unusedUniform.name);
-            fragmentSource.eraseLayoutAndQualifierSpecifiers(unusedUniform.name);
         }
     }
 
