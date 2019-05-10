@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "888bdf7a_f0d377d8",
+        "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-10T07:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80144ff7_dff8bdf1",
+      "revId": "aeb2b3efec4908305879a62372e08eff9df105f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a10d54af_3c022cbd",
         "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "db87edb0_f64bbdd8",
+        "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-10T07:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a10d54af_3c022cbd",
+      "revId": "aeb2b3efec4908305879a62372e08eff9df105f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c3ba39dc_3faf4de5",
         "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
         "patchSetId": 2
@@ -50,6 +86,24 @@
       "revId": "aeb2b3efec4908305879a62372e08eff9df105f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27027ba7_d1a5e4e7",
+        "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-10T07:50:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3ba39dc_3faf4de5",
+      "revId": "aeb2b3efec4908305879a62372e08eff9df105f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
