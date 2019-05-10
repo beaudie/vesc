@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "5e6bc462_0e73c7f8",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-10T20:18:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a441caba_574eb3a5",
+      "range": {
+        "startLine": 1656,
+        "startChar": 4,
+        "endLine": 1656,
+        "endChar": 5
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68efbe25_1cadb29e",
         "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
         "patchSetId": 28
@@ -164,6 +188,30 @@
       "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d4080c9_63ecee9b",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-10T20:18:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68efbe25_1cadb29e",
+      "range": {
+        "startLine": 660,
+        "startChar": 16,
+        "endLine": 660,
+        "endChar": 34
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -249,6 +297,30 @@
       "writtenOn": "2019-05-10T19:56:26Z",
       "side": 1,
       "message": "It uploads data, then clears the buffer, so it\u0027s not using that data. When we come around to implementing this, we would definitely need to add a test that verifies the data was uploaded successfully.",
+      "parentUuid": "de08a03e_05c296a5",
+      "range": {
+        "startLine": 1965,
+        "startChar": 12,
+        "endLine": 1965,
+        "endChar": 31
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60316e0a_c6369044",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-10T20:18:19Z",
+      "side": 1,
+      "message": "The original test was checking that specifying data with glTexImage2D failed if given a non-null data pointer. ANGLE_depth_texture doesn\u0027t allow it. However, OES_depth_texture does allow it so I check for that extension and if present, check that the call completes successfully. I don\u0027t care about the actual data uploaded in this test as we are going to clobber it right after.",
       "parentUuid": "de08a03e_05c296a5",
       "range": {
         "startLine": 1965,
