@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7bec5fc3_d37d7ff6",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 3
+      },
+      "lineNbr": 1467,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-05-10T23:22:04Z",
+      "side": 1,
+      "message": "Yep, good though. Have to push() at end of parseFunctionDefinitionHeader() after header has been parsed and pop() at start of addFunctionDefintion() after body has been parsed.",
+      "parentUuid": "7008165f_13e014a6",
+      "revId": "ffd3562b2789cdd54fcbd507b58c01a287fea6f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e244a0df_23645b8a",
         "filename": "src/compiler/translator/tree_util/ReplaceRedefinedVariable.cpp",
         "patchSetId": 3
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Is `visitFunctionPrototype` necessary though? If a parameter has name X in prototype and Y in declaration, and the function body declares X, does that require a rename too Tobin?",
       "parentUuid": "967da2a6_7724ed3a",
+      "revId": "ffd3562b2789cdd54fcbd507b58c01a287fea6f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "933dd3ec_c248a99e",
+        "filename": "src/compiler/translator/tree_util/ReplaceRedefinedVariable.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-05-10T23:22:04Z",
+      "side": 1,
+      "message": "I think the prototype shouldn\u0027t matter as Shabi notes. Only need to worry about a redefinition when param in actual function definition has same name as declaration in function body.",
+      "parentUuid": "fbf0d657_c5a264ed",
       "revId": "ffd3562b2789cdd54fcbd507b58c01a287fea6f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
