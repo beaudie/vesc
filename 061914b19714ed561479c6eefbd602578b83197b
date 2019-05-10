@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9459eef2_5e5a524f",
+        "filename": "scripts/generate_stats.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-10T18:13:05Z",
+      "side": 1,
+      "message": "This was fun to write",
+      "revId": "061914b19714ed561479c6eefbd602578b83197b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
