@@ -8153,8 +8153,11 @@ void Context::onSubjectStateChange(const Context *context,
         default:
             if (index < kTextureMaxSubjectIndex)
             {
-                mState.onActiveTextureStateChange(this, index);
-                mStateCache.onActiveTextureChange(this);
+                if (message != angle::SubjectMessage::ContentsChanged)
+                {
+                    mState.onActiveTextureStateChange(this, index);
+                    mStateCache.onActiveTextureChange(this);
+                }
             }
             else if (index < kUniformBufferMaxSubjectIndex)
             {
