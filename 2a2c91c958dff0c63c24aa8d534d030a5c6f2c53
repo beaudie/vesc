@@ -334,6 +334,30 @@
     },
     {
       "key": {
+        "uuid": "21919e26_e4cdce8c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-10T20:23:06Z",
+      "side": 1,
+      "message": "Seems like it could be a split test then. Better in general to have several small tests than big monolithic ones. As they\u0027re easier to debug. But it\u0027s a pretty minor point.",
+      "parentUuid": "60316e0a_c6369044",
+      "range": {
+        "startLine": 1965,
+        "startChar": 12,
+        "endLine": 1965,
+        "endChar": 31
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "37924c2b_755c4b03",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 28
