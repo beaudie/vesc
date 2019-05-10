@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9d1a8a73_b8f8bef5",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-10T17:04:34Z",
+      "side": 1,
+      "message": "nit: the member function should be before the data members:\n\nhttps://google.github.io/styleguide/cppguide.html#Declaration_Order",
+      "range": {
+        "startLine": 247,
+        "startChar": 9,
+        "endLine": 247,
+        "endChar": 24
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95a518a6_c2eef9f9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-10T17:04:34Z",
+      "side": 1,
+      "message": "back to an old comment I had - any idea why this is necessary? a comment here would be sufficient once we know the reason. Or we could remove it if it\u0027s not necessary.",
+      "range": {
+        "startLine": 1656,
+        "startChar": 4,
+        "endLine": 1656,
+        "endChar": 5
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68efbe25_1cadb29e",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-10T17:04:34Z",
+      "side": 1,
+      "message": "same comment as for D3D11.",
+      "range": {
+        "startLine": 660,
+        "startChar": 16,
+        "endLine": 660,
+        "endChar": 34
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b77f54a5_d35991e7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-10T17:04:34Z",
+      "side": 1,
+      "message": "tiny nit: can you link the bugs directly for TODOs:\n\nhttp://anglebug.com/3437\n\nMaybe the best bet is to temporarily return an error here if the app uploads packed depth/stencil? You can use ANGLE_VK_CHECK.",
+      "range": {
+        "startLine": 1965,
+        "startChar": 12,
+        "endLine": 1965,
+        "endChar": 31
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37924c2b_755c4b03",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-10T17:04:34Z",
+      "side": 1,
+      "message": "nit: please add a comment before new tests",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 6
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dda8b057_8f3d5889",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-10T17:04:34Z",
+      "side": 1,
+      "message": "nit: prefer c++ style casts here",
+      "range": {
+        "startLine": 186,
+        "startChar": 28,
+        "endLine": 186,
+        "endChar": 35
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
