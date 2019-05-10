@@ -2147,7 +2147,7 @@ angle::Result Framebuffer::ensureDrawAttachmentsInitialized(const Context *conte
 
 angle::Result Framebuffer::ensureReadAttachmentsInitialized(const Context *context)
 {
-    ASSERT(context->isRobustResourceInitEnabled());
+    ASSERT(context->isRobustResourceInitEnabled() || context->isWebGL());
 
     if (mState.mResourceNeedsInit.none())
     {
