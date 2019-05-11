@@ -687,9 +687,6 @@ class UniformTestES3 : public ANGLETest
 // Test queries for transposed arrays of non-square matrix uniforms.
 TEST_P(UniformTestES3, TransposedMatrixArrayUniformStateQuery)
 {
-    // TODO(syoussefi): Bug in glGetUniformfv.  http://anglebug.com/3387
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     constexpr char kFS[] =
         "#version 300 es\n"
         "precision mediump float;\n"
@@ -1246,9 +1243,6 @@ TEST_P(UniformTestES3, StructWithNonSquareMatrixAndBool)
 // Test that matrix uniform upload is correct.
 TEST_P(UniformTestES3, MatrixUniformUpload)
 {
-    // TODO(syoussefi): Bug in matrix uniform handling.  http://anglebug.com/3198
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     GLfloat matrixValues[16];
 
     for (size_t i = 0; i < 16; ++i)
@@ -1275,6 +1269,9 @@ TEST_P(UniformTestES3, MatrixUniformUpload)
                 shader << "#version 300 es\n"
                           "precision highp float;\n"
                           "out highp vec4 colorOut;\n"
+                          "uniform mat"
+                       << cols << 'x' << rows
+                       << " unused;\n"
                           "uniform mat"
                        << cols << 'x' << rows
                        << " m;\n"
