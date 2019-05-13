@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54f17c95_a97625ee",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-13T16:55:21Z",
+      "side": 1,
+      "message": "This part of the comment is no longer valid. With `max(3, minImageCount)`, non-blocking mailbox already makes sense (with 2, it didn\u0027t make sense unless drivers increased it).",
+      "range": {
+        "startLine": 918,
+        "startChar": 88,
+        "endLine": 919,
+        "endChar": 50
+      },
+      "revId": "d2665638e72052b0c010e75153c4e3fc247423a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bed445db_95661039",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-13T16:55:21Z",
+      "side": 1,
+      "message": "I would replace the whole thing with this:\n\n    // - On mailbox, we need at least three images; one is being presented for the duration of v-sync,\n    //   and the application alternatingly renders to the other two, one being recorded and one ready\n    //   to be presented if v-sync happens in the meantime.\n    // - On immediate, we need at least two images; the application alternates between the two images.\n    // - On fifo, we use at least three images.  Triple-buffering allows us to present an image,\n    //   have one in the queue and record in another.  Note: on certain configurations (windows +\n    //   nvidia + windowed mode), we could get away with a smaller number.\n    //\n    // For simplicity, we always allocate at least three images.\n\n    mMinImageCount \u003d std::max(3u, mSurfaceCaps.minImageCount);\n\nThis way, only immediate mode is affected, allocating one extra image. I think we can agree that\u0027s not a big concern.\n\nFeel free to improve the comment.",
+      "range": {
+        "startLine": 918,
+        "startChar": 0,
+        "endLine": 937,
+        "endChar": 5
+      },
+      "revId": "d2665638e72052b0c010e75153c4e3fc247423a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
