@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c71d060_3ccc41bf",
+        "filename": "third_party/vulkan-validation-layers/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-13T20:17:18Z",
+      "side": 0,
+      "message": "Can you make sure the BUILD.gn file that\u0027s now in VVL has this sort of workarounds? Without such a thing, you can put the bots in a state where compilation fails for other unrelated CLs.",
+      "range": {
+        "startLine": 167,
+        "startChar": 0,
+        "endLine": 167,
+        "endChar": 79
+      },
+      "revId": "e1de1ab33d7f75d1e665004083d22cfc5fdd6b8a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
