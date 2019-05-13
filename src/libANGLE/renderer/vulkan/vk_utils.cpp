@@ -825,4 +825,20 @@ void GetViewport(const gl::Rectangle &viewport,
     }
 }
 }  // namespace gl_vk
+
+namespace vk_gl
+{
+void AddSampleCounts(VkSampleCountFlags sampleCounts, gl::SupportedSampleSet *outSet)
+{
+    // The possible bits are VK_SAMPLE_COUNT_n_BIT = n, with n = 1 << b.  At the time of this
+    // writing, b is in [0, 6], however, we test all 32 bits in case the enum is extended.
+    for (unsigned int i = 0; i < 32; ++i)
+    {
+        if ((sampleCounts & (1 << i)) != 0)
+        {
+            outSet->insert(1 << i);
+        }
+    }
+}
+}  // namespace vk_gl
 }  // namespace rx
