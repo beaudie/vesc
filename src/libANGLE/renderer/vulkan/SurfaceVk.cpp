@@ -915,8 +915,8 @@ void WindowSurfaceVk::setSwapInterval(EGLint interval)
 
     // Determine the number of swapchain images:
     //
-    // - On mailbox, we use minImageCount.  The drivers may increase the number so that non-blocking
-    //   mailbox actually makes sense.
+    // - On mailbox, we use max(3, minImageCount).  The drivers may increase the number so that
+    //   non-blocking mailbox actually makes sense.
     // - On immediate, we use max(2, minImageCount).  The vkQueuePresentKHR call immediately frees
     //   up the other image, so there is no point in having any more images.
     // - On fifo, we use max(3, minImageCount).  Triple-buffering allows us to present an image,
@@ -926,6 +926,10 @@ void WindowSurfaceVk::setSwapInterval(EGLint interval)
     if (mDesiredSwapchainPresentMode == VK_PRESENT_MODE_IMMEDIATE_KHR)
     {
         mMinImageCount = std::max(2u, mMinImageCount);
+    }
+    else if (mDesiredSwapchainPresentMode == VK_PRESENT_MODE_MAILBOX_KHR)
+    {
+        mMinImageCount = std::max(3u, mMinImageCount);
     }
     else if (mDesiredSwapchainPresentMode == VK_PRESENT_MODE_FIFO_KHR)
     {
