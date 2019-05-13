@@ -582,6 +582,7 @@ class ImageHelper final : public CommandGraphResource
     // Create a 2D[Array] for staging purposes.  Used by:
     //
     // - TextureVk::copySubImageImplWithDraw
+    // - FramebufferVk::readPixelsImpl
     //
     angle::Result init2DStaging(Context *context,
                                 const MemoryProperties &memoryProperties,

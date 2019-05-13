@@ -384,6 +384,14 @@ class GraphicsPipelineDesc final
                          bool invertFrontFace);
     void updateLineWidth(GraphicsPipelineTransitionBits *transition, float lineWidth);
 
+    // Multisample states
+    void setRasterizationSamples(uint32_t rasterizationSamples);
+    void updateAlphaToCoverageEnable(GraphicsPipelineTransitionBits *transition, bool enable);
+    void updateAlphaToOneEnable(GraphicsPipelineTransitionBits *transition, bool enable);
+    void updateSampleMask(GraphicsPipelineTransitionBits *transition,
+                          uint32_t maskNumber,
+                          uint32_t mask);
+
     // RenderPass description.
     const RenderPassDesc &getRenderPassDesc() const { return mRenderPassDesc; }
 

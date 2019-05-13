@@ -235,8 +235,14 @@ class WindowSurfaceVk : public SurfaceImpl
     std::array<SwapHistory, kSwapHistorySize> mSwapHistory;
     size_t mCurrentSwapHistoryIndex;
 
+    // Depth/stencil image.  Possibly multisampled.
     vk::ImageHelper mDepthStencilImage;
     vk::ImageView mDepthStencilImageView;
+
+    // Multisample color image, view and framebuffer, if multisampling enabled.
+    vk::ImageHelper mColorImageMS;
+    vk::ImageView mColorImageViewMS;
+    vk::Framebuffer mFramebufferMS;
 };
 
 }  // namespace rx
