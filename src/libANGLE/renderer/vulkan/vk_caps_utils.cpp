@@ -323,12 +323,30 @@ egl::ConfigSet GenerateConfigs(const GLenum *colorFormats,
                                size_t colorFormatsCount,
                                const GLenum *depthStencilFormats,
                                size_t depthStencilFormatCount,
-                               const EGLint *sampleCounts,
-                               size_t sampleCountsCount,
                                DisplayVk *display)
 {
     ASSERT(colorFormatsCount > 0);
     ASSERT(display != nullptr);
+
+    gl::SupportedSampleSet colorSampleCounts;
+    gl::SupportedSampleSet depthStencilSampleCounts;
+    gl::SupportedSampleSet sampleCounts;
+
+    const VkPhysicalDeviceLimits &limits =
+        display->getRenderer()->getPhysicalDeviceProperties().limits;
+
+    vk_gl::AddSampleCounts(limits.framebufferColorSampleCounts, &colorSampleCounts);
+    vk_gl::AddSampleCounts(
+        limits.framebufferDepthSampleCounts & limits.framebufferStencilSampleCounts,
+        &depthStencilSampleCounts);
+
+    // Always support 0 samples
+    colorSampleCounts.insert(0);
+    depthStencilSampleCounts.insert(0);
+
+    std::set_intersection(colorSampleCounts.begin(), colorSampleCounts.end(),
+                          depthStencilSampleCounts.begin(), depthStencilSampleCounts.end(),
+                          std::inserter(sampleCounts, sampleCounts.begin()));
 
     egl::ConfigSet configSet;
 
@@ -346,12 +364,17 @@ egl::ConfigSet GenerateConfigs(const GLenum *colorFormats,
             ASSERT(depthStencilFormats[depthStencilFormatIdx] == GL_NONE ||
                    depthStencilFormatInfo.sized);
 
-            for (size_t sampleCountIndex = 0; sampleCountIndex < sampleCountsCount;
-                 sampleCountIndex++)
+            bool isDepthStencilOnly = colorFormats[colorFormatIdx] == GL_NONE;
+            bool isColorOnly        = depthStencilFormats[depthStencilFormatIdx] == GL_NONE;
+
+            const gl::SupportedSampleSet &configSampleCounts =
+                isColorOnly ? depthStencilSampleCounts
+                            : isDepthStencilOnly ? colorSampleCounts : sampleCounts;
+
+            for (EGLint sampleCount : configSampleCounts)
             {
-                egl::Config config =
-                    GenerateDefaultConfig(display->getRenderer(), colorFormatInfo,
-                                          depthStencilFormatInfo, sampleCounts[sampleCountIndex]);
+                egl::Config config = GenerateDefaultConfig(display->getRenderer(), colorFormatInfo,
+                                                           depthStencilFormatInfo, sampleCount);
                 if (display->checkConfigSupport(&config))
                 {
                     configSet.add(config);

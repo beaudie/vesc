@@ -78,6 +78,7 @@ ANGLE_INSTANTIATE_TEST(RenderbufferMultisampleTest,
                        ES3_D3D11(),
                        ES3_OPENGL(),
                        ES3_OPENGLES(),
+                       ES3_VULKAN(),
                        ES31_D3D11(),
                        ES31_OPENGL(),
                        ES31_OPENGLES());
