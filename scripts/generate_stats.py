@@ -617,9 +617,9 @@ def generate_duplicate_formula(headers, filter_columns):
     for i in range(len(headers)):
         if headers[i] == filter_columns[0]:
             col = str(i + 1)
-            return "IF(INDIRECT(ADDRESS(ROW(), " + col + "))=INDIRECT(ADDRESS(ROW() - 1, " + col +
-            "))," + generate_duplicate_formula(
-                headers, filter_columns[1:]) + ",0)"
+            formula = "IF(INDIRECT(ADDRESS(ROW(), " + col + "))=INDIRECT(ADDRESS(ROW() - 1, " + \
+                col + "))," + generate_duplicate_formula(headers, filter_columns[1:]) + ",0)"
+            return formula
     # Next column not found, remove from recursion but just return whatever the next one is
     return generate_duplicate_formula(headers, filter_columns[1:])
 
