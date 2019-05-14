@@ -1254,6 +1254,7 @@ class SimpleStateChangeTest : public ANGLETest
 {
   protected:
     static constexpr int kWindowSize = 64;
+    static const GLColor kClearColor;
 
     SimpleStateChangeTest()
     {
@@ -1267,7 +1268,11 @@ class SimpleStateChangeTest : public ANGLETest
 
     void simpleDrawWithBuffer(GLBuffer *buffer);
     void simpleDrawWithColor(const GLColor &color);
+    void drawWithCulling(const GLenum face, const bool doClear, const GLColor expectedColor);
+    void drawToFboWithCulling(const GLenum face, const bool doClear, const GLColor expectedColor);
 };
+
+const GLColor SimpleStateChangeTest::kClearColor = GLColor::blue;
 
 class SimpleStateChangeTestES3 : public SimpleStateChangeTest
 {};
@@ -3528,6 +3533,116 @@ TEST_P(SimpleStateChangeTest, DeleteTextureThenDraw)
     glDrawArrays(GL_TRIANGLES, 0, 3);
     ASSERT_GL_NO_ERROR();
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
+}
+
+void SimpleStateChangeTest::drawWithCulling(const GLenum face,
+                                            const bool doClear,
+                                            const GLColor expectedColor)
+{
+    if (doClear)
+    {
+        glClearColor(kClearColor.R, kClearColor.G, kClearColor.B, kClearColor.A);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_COLOR_EQ(0, 0, kClearColor);
+    }
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(face);
+    glFrontFace(GL_CCW);
+
+    ANGLE_GL_PROGRAM(greenProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    glUseProgram(greenProgram);
+    drawQuad(greenProgram.get(), std::string(essl1_shaders::PositionAttrib()), 0.0f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, expectedColor);
+}
+
+void SimpleStateChangeTest::drawToFboWithCulling(const GLenum face,
+                                                 const bool doClear,
+                                                 const GLColor expectedColor)
+{
+    // Render to an FBO
+    GLFramebuffer fbo;
+    GLTexture texture;
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWindowWidth(), getWindowHeight(), 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    drawWithCulling(face, doClear, expectedColor);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+// Validates if culling rasterization states work with FBOs. Simply draws a quad with
+// cull face enabled with cullface front and make sure the face have not been rendered.
+TEST_P(SimpleStateChangeTest, FboCullFaceFrontEnabledCCWState)
+{
+    // TODO(timvp) anglebug.com/3465
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsIntel());
+
+    drawToFboWithCulling(GL_FRONT, false, GLColor::transparentBlack);
+}
+
+// Validates if culling rasterization states work with FBOs. Simply draws a quad with
+// cull face enabled with cullface back and make sure the face has been rendered.
+TEST_P(SimpleStateChangeTest, FboCullFaceBackEnabledCCWState)
+{
+    drawToFboWithCulling(GL_BACK, false, GLColor::green);
+}
+
+// Validates if culling rasterization states work with FBOs. Clears the texture and then draws
+// a quad with cull face enabled with cullface front and make sure the face have not
+// been rendered.
+TEST_P(SimpleStateChangeTest, ClearFboCullFaceFrontEnabledCCWState)
+{
+    drawToFboWithCulling(GL_FRONT, true, kClearColor);
+}
+
+// Validates if culling rasterization states work with FBOs. Clears the texture and then draws
+// a quad with cull face enabled with cullface back and make sure the face has
+// been rendered.
+TEST_P(SimpleStateChangeTest, ClearFboCullBackEnabledCCWState)
+{
+    drawToFboWithCulling(GL_BACK, true, GLColor::green);
+}
+
+// Validates if culling rasterization states work. Simply draws a quad with
+// cull face enabled with cullface front and make sure the face have not been rendered.
+TEST_P(SimpleStateChangeTest, CullFaceFrontEnabledCCWState)
+{
+    // TODO(timvp) anglebug.com/3465
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsNVIDIA());
+
+    drawWithCulling(GL_FRONT, false, GLColor::transparentBlack);
+}
+
+// Validates if culling rasterization states work. Simply draws a quad with
+// cull face enabled with cullface back and make sure the face has been rendered.
+TEST_P(SimpleStateChangeTest, CullFaceBackEnabledCCWState)
+{
+    drawWithCulling(GL_BACK, false, GLColor::green);
+}
+
+// Validates if culling rasterization states work. Clears the texture and then draws
+// a quad with cull face enabled with cullface front and make sure the face have not
+// been rendered.
+TEST_P(SimpleStateChangeTest, ClearCullFaceFrontEnabledCCWState)
+{
+    drawWithCulling(GL_FRONT, true, kClearColor);
+}
+
+// Validates if culling rasterization states work. Clears the texture and then draws
+// a quad with cull face enabled with cullface back and make sure the face has
+// been rendered.
+TEST_P(SimpleStateChangeTest, ClearCullBackEnabledCCWState)
+{
+    drawWithCulling(GL_BACK, true, GLColor::green);
 }
 }  // anonymous namespace
 
