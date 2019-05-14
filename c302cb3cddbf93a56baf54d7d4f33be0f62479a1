@@ -46,6 +46,30 @@
       "revId": "c302cb3cddbf93a56baf54d7d4f33be0f62479a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0e4ed8b_1a849175",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-14T15:50:16Z",
+      "side": 1,
+      "message": "Can\u0027t we work around this issue in a different place? I don\u0027t think this is correct. It could expose the extension on any device that doesn\u0027t support any kind of filtering for depth textures.",
+      "parentUuid": "bcd8122e_fba72041",
+      "range": {
+        "startLine": 677,
+        "startChar": 64,
+        "endLine": 677,
+        "endChar": 69
+      },
+      "revId": "c302cb3cddbf93a56baf54d7d4f33be0f62479a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
