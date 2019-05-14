@@ -688,9 +688,9 @@ VkFrontFace GetFrontFace(GLenum frontFace, bool invertCullFace)
     switch (frontFace)
     {
         case GL_CW:
-            return invertCullFace ? VK_FRONT_FACE_CLOCKWISE : VK_FRONT_FACE_COUNTER_CLOCKWISE;
-        case GL_CCW:
             return invertCullFace ? VK_FRONT_FACE_COUNTER_CLOCKWISE : VK_FRONT_FACE_CLOCKWISE;
+        case GL_CCW:
+            return invertCullFace ? VK_FRONT_FACE_CLOCKWISE : VK_FRONT_FACE_COUNTER_CLOCKWISE;
         default:
             UNREACHABLE();
             return VK_FRONT_FACE_CLOCKWISE;

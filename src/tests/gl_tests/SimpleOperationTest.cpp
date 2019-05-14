@@ -112,6 +112,39 @@ TEST_P(SimpleOperationTest, CullFaceFrontEnabledState)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::transparentBlack);
 }
 
+// Validates if culling rasterization states work. Simply draws a quad with
+// cull face enabled with cullface front and make sure the face have not been rendered.
+TEST_P(SimpleOperationTest, FboCullFaceFrontEnabledCCWState)
+{
+    // Render to an FBO
+    GLuint fbo                = 0;
+    GLuint textureColorBuffer = 0;
+
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    glGenTextures(1, &textureColorBuffer);
+    glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getWindowWidth(), getWindowHeight(), 0, GL_RGB,
+                 GL_UNSIGNED_BYTE, nullptr);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorBuffer,
+                           0);
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    ANGLE_GL_PROGRAM(greenProgram, kBasicVertexShader, kGreenFragmentShader);
+    glUseProgram(greenProgram);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
+    glFrontFace(GL_CW);
+
+    drawQuad(greenProgram.get(), "position", 0.0f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    glDeleteProgram(greenProgram);
+}
+
 // Validates if blending render states work. Simply draws twice and verify the color have been
 // added in the final output.
 TEST_P(SimpleOperationTest, BlendingRenderState)
