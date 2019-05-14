@@ -358,6 +358,30 @@
     },
     {
       "key": {
+        "uuid": "ac4a88e3_1f225054",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 1965,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-14T15:46:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21919e26_e4cdce8c",
+      "range": {
+        "startLine": 1965,
+        "startChar": 12,
+        "endLine": 1965,
+        "endChar": 31
+      },
+      "revId": "2a2c91c958dff0c63c24aa8d534d030a5c6f2c53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "37924c2b_755c4b03",
         "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
         "patchSetId": 28

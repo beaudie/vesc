@@ -22,6 +22,30 @@
       "revId": "c302cb3cddbf93a56baf54d7d4f33be0f62479a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcd8122e_fba72041",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 31
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-14T15:46:18Z",
+      "side": 1,
+      "message": "Without this we cannot enable OES_depth_texture on Pixel.",
+      "parentUuid": "b0682d28_b17e1ae7",
+      "range": {
+        "startLine": 677,
+        "startChar": 64,
+        "endLine": 677,
+        "endChar": 69
+      },
+      "revId": "c302cb3cddbf93a56baf54d7d4f33be0f62479a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
