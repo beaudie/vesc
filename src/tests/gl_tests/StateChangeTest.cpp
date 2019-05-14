@@ -1267,6 +1267,8 @@ class SimpleStateChangeTest : public ANGLETest
 
     void simpleDrawWithBuffer(GLBuffer *buffer);
     void simpleDrawWithColor(const GLColor &color);
+    void bindTextureToFbo(GLFramebuffer &fbo, GLTexture &texture);
+    void drawToFboWithCulling(const GLenum frontFace);
 };
 
 class SimpleStateChangeTestES3 : public SimpleStateChangeTest
@@ -3528,6 +3530,81 @@ TEST_P(SimpleStateChangeTest, DeleteTextureThenDraw)
     glDrawArrays(GL_TRIANGLES, 0, 3);
     ASSERT_GL_NO_ERROR();
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::black);
+}
+
+void SimpleStateChangeTest::bindTextureToFbo(GLFramebuffer &fbo, GLTexture &texture)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWindowWidth(), getWindowHeight(), 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+}
+
+void SimpleStateChangeTest::drawToFboWithCulling(const GLenum frontFace)
+{
+    // Render to an FBO
+    GLFramebuffer fbo1;
+    GLTexture texture1;
+
+    ANGLE_GL_PROGRAM(greenProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    ANGLE_GL_PROGRAM(textureProgram, essl1_shaders::vs::Texture(), essl1_shaders::fs::Texture());
+
+    bindTextureToFbo(fbo1, texture1);
+
+    // Clear the surface FBO to initialize it to a known value
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClearColor(GLColor::red.R, GLColor::red.G, GLColor::red.B, GLColor::red.A);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    glFlush();
+
+    // Draw to FBO 1 to initialize it to a known value
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo1);
+    glDisable(GL_CULL_FACE);
+    glUseProgram(greenProgram);
+    drawQuad(greenProgram.get(), std::string(essl1_shaders::PositionAttrib()), 0.0f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    // Draw into FBO 0 using FBO 1's texture to determine if culling is working or not
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    // Set the culling we want to test
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(frontFace);
+    glUseProgram(textureProgram);
+    drawQuad(textureProgram.get(), std::string(essl1_shaders::PositionAttrib()), 0.0f);
+    ASSERT_GL_NO_ERROR();
+
+    if (frontFace == GL_CCW)
+    {
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    }
+    else
+    {
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+// Validates if culling rasterization states work with FBOs using CCW winding.
+TEST_P(SimpleStateChangeTest, FboCullFaceBackCCWState)
+{
+    drawToFboWithCulling(GL_CCW);
+}
+
+// Validates if culling rasterization states work with FBOs using CW winding.
+TEST_P(SimpleStateChangeTest, FboCullFaceBackCWState)
+{
+    drawToFboWithCulling(GL_CW);
 }
 }  // anonymous namespace
 
