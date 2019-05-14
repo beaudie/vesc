@@ -60,10 +60,13 @@ std::string DrawElementsToGoogleTestName(const std::string &dEQPName)
 // of egl-master.txt that has the full list of tests.
 const char *gCaseListSearchPaths[] = {
     "/../../third_party/deqp/src/external/openglcts/data/mustpass/gles/aosp_mustpass/master/",
+    "/../../third_party/deqp/src/external/openglcts/data/mustpass/gles/khronos_mustpass/master/",
     "/../../third_party/angle/third_party/deqp/src/external/openglcts/data/mustpass/gles/"
     "aosp_mustpass/master/",
+    "khronos_mustpass/master/",
     "/../../sdcard/chromium_tests_root/third_party/angle/third_party/deqp/src/external/openglcts/"
     "data/mustpass/gles/aosp_mustpass/master/",
+    "data/mustpass/gles/khronos_mustpass/master/",
     "/../../third_party/deqp/src/android/cts/master/",
     "/../../third_party/angle/third_party/deqp/src/android/cts/master/",
     "/../../sdcard/chromium_tests_root/third_party/angle/third_party/deqp/src/android/cts/master/",
@@ -77,17 +80,14 @@ const char *gTestExpectationsSearchPaths[] = {
 };
 
 const char *gCaseListFiles[] = {
-    "gles2-master.txt",
-    "gles3-master.txt",
-    "gles31-master.txt",
-    "egl-master.txt",
+    "gles2-master.txt", "gles3-master.txt",     "gles31-master.txt",
+    "egl-master.txt",   "gles2-khr-master.txt",
 };
 
 const char *gTestExpectationsFiles[] = {
-    "deqp_gles2_test_expectations.txt",
-    "deqp_gles3_test_expectations.txt",
-    "deqp_gles31_test_expectations.txt",
-    "deqp_egl_test_expectations.txt",
+    "deqp_gles2_test_expectations.txt",  "deqp_gles3_test_expectations.txt",
+    "deqp_gles31_test_expectations.txt", "deqp_egl_test_expectations.txt",
+    "deqp_khr_test_expectations.txt",
 };
 
 using APIInfo = std::pair<const char *, angle::GPUTestConfig::API>;
@@ -541,6 +541,10 @@ ANGLE_INSTANTIATE_DEQP_TEST_CASE(GLES31, 2);
 
 #ifdef ANGLE_DEQP_EGL_TESTS
 ANGLE_INSTANTIATE_DEQP_TEST_CASE(EGL, 3);
+#endif
+
+#ifdef ANGLE_DEQP_KHR_TESTS
+ANGLE_INSTANTIATE_DEQP_TEST_CASE(KHR, 4);
 #endif
 
 void HandleDisplayType(const char *displayTypeString)
