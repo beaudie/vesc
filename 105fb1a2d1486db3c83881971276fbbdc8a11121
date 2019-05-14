@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "18a1ef10_6ae5989f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 1657,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-14T14:33:23Z",
+      "side": 1,
+      "message": "D3D11 is a different reason:  It can\u0027t support reading the depth texture as a luminance texture.  It treats it as a red-channel-only texture.",
+      "range": {
+        "startLine": 1656,
+        "startChar": 0,
+        "endLine": 1657,
+        "endChar": 75
+      },
+      "revId": "105fb1a2d1486db3c83881971276fbbdc8a11121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e4e44f8_d2f8571b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-14T14:33:23Z",
+      "side": 1,
+      "message": "I believe these should all sample from the red channel. From the OES_depth_texture spec:\n\n        Treat depth textures always as luminance \n        textures i.e. depth value is returned as (d, d, d, 1.0) by GLSL texture* calls in the\n        fragment and/or vertex shader.",
+      "range": {
+        "startLine": 328,
+        "startChar": 16,
+        "endLine": 329,
+        "endChar": 56
+      },
+      "revId": "105fb1a2d1486db3c83881971276fbbdc8a11121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2184854a_631b4ef0",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-14T14:33:23Z",
+      "side": 1,
+      "message": "context-\u003egetExtensions().depthTextureAny()",
+      "range": {
+        "startLine": 746,
+        "startChar": 20,
+        "endLine": 747,
+        "endChar": 63
+      },
+      "revId": "105fb1a2d1486db3c83881971276fbbdc8a11121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcf00ef6_b647ac5f",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 1517,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-14T14:33:23Z",
+      "side": 1,
+      "message": "This can be simplified to:\n\n   !context-\u003egetExtensions().depthTextureANGLE \u0026\u0026 !context-\u003egetExtensions().packedDepthStencil",
+      "range": {
+        "startLine": 1513,
+        "startChar": 20,
+        "endLine": 1517,
+        "endChar": 68
+      },
+      "revId": "105fb1a2d1486db3c83881971276fbbdc8a11121",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
