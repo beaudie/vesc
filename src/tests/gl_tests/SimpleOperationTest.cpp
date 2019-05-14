@@ -31,6 +31,27 @@ constexpr char kGreenFragmentShader[] =
     gl_FragColor = vec4(0, 1, 0, 1);
 })";
 
+constexpr char kTextureVertexShader[] =
+    R"(precision highp float;
+attribute vec4 position;
+varying vec2 texcoord;
+
+void main()
+{
+    gl_Position = vec4(position.xy, 0.0, 1.0);
+    texcoord = position.xy;
+})";
+
+constexpr char kTextureFragmentShader[] =
+    R"(precision highp float;
+uniform sampler2D tex;
+varying vec2 texcoord;
+
+void main()
+{
+    gl_FragColor = vec4(texture2D(tex, texcoord).rgb, 1.0);
+})";
+
 constexpr std::array<GLenum, 6> kCubeFaces = {
     {GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
      GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
@@ -110,6 +131,62 @@ TEST_P(SimpleOperationTest, CullFaceFrontEnabledState)
     ASSERT_GL_NO_ERROR();
 
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::transparentBlack);
+}
+
+// Validates if culling rasterization states work. Simply draws a quad with
+// cull face enabled with cullface front and make sure the face have not been rendered.
+TEST_P(SimpleOperationTest, FboCullFaceFrontEnabledCCWState)
+{
+    // Clear the surface with red
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    swapBuffers();
+
+    // Render to an FBO
+    GLuint fbo                = 0;
+    GLuint textureColorBuffer = 0;
+
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    glGenTextures(1, &textureColorBuffer);
+    glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWindowWidth(), getWindowHeight(), 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorBuffer,
+                           0);
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
+    glFrontFace(GL_CCW);
+
+    ANGLE_GL_PROGRAM(greenProgram, kBasicVertexShader, kGreenFragmentShader);
+    glUseProgram(greenProgram);
+    drawQuad(greenProgram.get(), std::string("position"), 0.0f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    glDeleteProgram(greenProgram);
+
+    // Render to the default framebuffer, so we can see it
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
+
+    ANGLE_GL_PROGRAM(textureProgram, kTextureVertexShader, kTextureFragmentShader);
+    glUseProgram(textureProgram);
+    drawQuad(textureProgram.get(), std::string("position"), 0.0f, 1.0f, true);
+    glDeleteProgram(textureProgram);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    swapBuffers();
+
+    glDeleteFramebuffers(1, &fbo);
+    glDeleteTextures(1, &textureColorBuffer);
 }
 
 // Validates if blending render states work. Simply draws twice and verify the color have been
