@@ -55,7 +55,7 @@ class VulkanExternalImageTest : public ANGLETest
 };
 
 // glImportMemoryFdEXT must be able to import a valid opaque fd.
-TEST_P(VulkanExternalImageTest, ShouldImportOpaqueFd)
+TEST_P(VulkanExternalImageTest, ShouldImportMemoryOpaqueFd)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_memory_object_fd"));
 
@@ -88,6 +88,35 @@ TEST_P(VulkanExternalImageTest, ShouldImportOpaqueFd)
 
     vkDestroyImage(helper.getDevice(), image, nullptr);
     vkFreeMemory(helper.getDevice(), deviceMemory, nullptr);
+}
+
+// glImportSemaphoreFdEXT must be able to import a valid opaque fd.
+TEST_P(VulkanExternalImageTest, ShouldImportSemaphoreOpaqueFd)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_semaphore_fd"));
+
+    VulkanExternalHelper helper;
+    helper.initialize();
+
+    ASSERT(helper.canCreateSemaphoreOpaqueFd());
+
+    VkSemaphore semaphore = VK_NULL_HANDLE;
+    VkResult result       = helper.createSemaphoreOpaqueFd(&semaphore);
+    EXPECT_EQ(result, VK_SUCCESS);
+
+    int fd = kInvalidFd;
+    result = helper.exportSemaphoreOpaqueFd(semaphore, &fd);
+    EXPECT_EQ(result, VK_SUCCESS);
+    EXPECT_NE(fd, kInvalidFd);
+
+    {
+        GLSemaphore semaphore;
+        glImportSemaphoreFdEXT(semaphore, GL_HANDLE_TYPE_OPAQUE_FD_EXT, fd);
+    }
+
+    EXPECT_GL_NO_ERROR();
+
+    vkDestroySemaphore(helper.getDevice(), semaphore, nullptr);
 }
 
 // Test creating and clearing a simple RGBA8 texture in a opaque fd.
