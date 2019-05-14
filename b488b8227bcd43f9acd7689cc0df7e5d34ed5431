@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7d1fe7c7_9ac2384e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 2294,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-14T17:35:53Z",
+      "side": 1,
+      "message": "can you encode this in FeatureVk? To make it documented as a workaround.",
+      "range": {
+        "startLine": 2287,
+        "startChar": 1,
+        "endLine": 2294,
+        "endChar": 5
+      },
+      "revId": "b488b8227bcd43f9acd7689cc0df7e5d34ed5431",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
