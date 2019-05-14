@@ -112,6 +112,55 @@ TEST_P(SimpleOperationTest, CullFaceFrontEnabledState)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::transparentBlack);
 }
 
+// Validates if culling rasterization states work. Simply draws a quad with
+// cull face enabled with cullface front and make sure the face have not been rendered.
+TEST_P(SimpleOperationTest, FboCullFaceFrontEnabledCCWState)
+{
+    // Clear the surface with red
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    swapBuffers();
+
+    // Render to an FBO
+    GLuint fbo                = 0;
+    GLuint textureColorBuffer = 0;
+
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    glGenTextures(1, &textureColorBuffer);
+    glBindTexture(GL_TEXTURE_2D, textureColorBuffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWindowWidth(), getWindowHeight(), 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorBuffer,
+                           0);
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+#if 0  // Required for culling to work
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+#endif
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
+    glFrontFace(GL_CCW);
+
+    ANGLE_GL_PROGRAM(greenProgram, kBasicVertexShader, kGreenFragmentShader);
+    glUseProgram(greenProgram);
+    drawQuad(greenProgram.get(), std::string("position"), 0.0f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::transparentBlack);  // GLColor::blue with glClear()
+    glDeleteProgram(greenProgram);
+    glDeleteFramebuffers(1, &fbo);
+    glDeleteTextures(1, &textureColorBuffer);
+}
+
 // Validates if blending render states work. Simply draws twice and verify the color have been
 // added in the final output.
 TEST_P(SimpleOperationTest, BlendingRenderState)
