@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76d43a7e_92831919",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-14T17:46:58Z",
+      "side": 1,
+      "message": "I prefer names that tell what the CL does.\nLike: \"Fix symbol compression logic\"",
+      "range": {
+        "startLine": 7,
+        "startChar": 9,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "33a7f37a0353f78d5706b046730dc845e0bb7da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a307fc49_a0b01bcf",
+        "filename": "BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-14T17:46:58Z",
+      "side": 1,
+      "message": "Can define android_strip here.",
+      "revId": "33a7f37a0353f78d5706b046730dc845e0bb7da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d910b02_d24da0b9",
+        "filename": "android/compress_symbols.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-14T17:46:58Z",
+      "side": 1,
+      "message": "I don\u0027t follow this, this file is not supposed to exist yet, it should be the output of this script.\nDoes this work from a clean checkout / clean output directory?",
+      "range": {
+        "startLine": 30,
+        "startChar": 27,
+        "endLine": 30,
+        "endChar": 43
+      },
+      "revId": "33a7f37a0353f78d5706b046730dc845e0bb7da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
