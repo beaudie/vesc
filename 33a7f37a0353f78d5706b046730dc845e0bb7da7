@@ -128,6 +128,30 @@
       "revId": "33a7f37a0353f78d5706b046730dc845e0bb7da7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "541e5a25_651bbade",
+        "filename": "android/compress_symbols.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-14T19:24:28Z",
+      "side": 1,
+      "message": "Sorry, I\u0027ve confused lib.unstripped with lib.compressed.",
+      "parentUuid": "79914ec7_49754aa4",
+      "range": {
+        "startLine": 30,
+        "startChar": 27,
+        "endLine": 30,
+        "endChar": 43
+      },
+      "revId": "33a7f37a0353f78d5706b046730dc845e0bb7da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
