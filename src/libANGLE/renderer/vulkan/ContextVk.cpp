@@ -961,8 +961,9 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 updateSampleMask(glState);
                 mGraphicsPipelineDesc->updateRasterizationSamples(&mGraphicsPipelineTransition,
                                                                   mDrawFramebuffer->getSamples());
-                mGraphicsPipelineDesc->updateCullMode(&mGraphicsPipelineTransition,
-                                                      glState.getRasterizerState());
+                mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
+                                                       glState.getRasterizerState(),
+                                                       isViewportFlipEnabledForDrawFBO());
                 updateScissor(glState);
                 mGraphicsPipelineDesc->updateDepthTestEnabled(&mGraphicsPipelineTransition,
                                                               glState.getDepthStencilState(),
