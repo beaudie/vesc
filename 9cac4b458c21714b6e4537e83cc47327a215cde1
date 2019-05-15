@@ -22,6 +22,30 @@
       "revId": "9cac4b458c21714b6e4537e83cc47327a215cde1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a51b3e21_35a70656",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-15T19:28:16Z",
+      "side": 1,
+      "message": "It doesn\u0027t need it in many cases. We need the curly braces when the variable name isn\u0027t broken up by / or \", etc.",
+      "parentUuid": "c48ebc1d_caa48f0b",
+      "range": {
+        "startLine": 740,
+        "startChar": 28,
+        "endLine": 740,
+        "endChar": 40
+      },
+      "revId": "9cac4b458c21714b6e4537e83cc47327a215cde1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
