@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12098e55_824d4902",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4522,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-15T13:23:17Z",
+      "side": 1,
+      "message": "non-blocking nit: probably leaving a comment next to suppressions helps future code readers.",
+      "range": {
+        "startLine": 4522,
+        "startChar": 4,
+        "endLine": 4522,
+        "endChar": 22
+      },
+      "revId": "f9bbc52a6329ceebd901fc98a9d7107fce39b5e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
