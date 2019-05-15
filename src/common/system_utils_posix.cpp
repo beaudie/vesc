@@ -255,4 +255,11 @@ Library *OpenSharedLibrary(const char *libraryName)
 {
     return new PosixLibrary(libraryName);
 }
+
+bool IsDirectory(const char *filename)
+{
+    struct stat st;
+    int result = stat(filename, &st);
+    return result == 0 && ((st.st_mode & S_IFDIR) == S_IFDIR);
+}
 }  // namespace angle
