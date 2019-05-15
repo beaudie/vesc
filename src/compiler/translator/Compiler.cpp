@@ -49,6 +49,7 @@
 #include "compiler/translator/tree_ops/VectorizeVectorScalarArithmetic.h"
 #include "compiler/translator/tree_util/BuiltIn_autogen.h"
 #include "compiler/translator/tree_util/IntermNodePatternMatcher.h"
+#include "compiler/translator/tree_util/ReplaceRedefinedVariable.h"
 #include "compiler/translator/util.h"
 #include "third_party/compiler/ArrayBoundsClamper.h"
 
@@ -536,6 +537,10 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         {
             return false;
         }
+    }
+    if (IsFunctionBodyNewScope(mShaderSpec, mShaderVersion))
+    {
+        ReplaceRedefinedVariable(root, &mSymbolTable);
     }
 
     if (mShaderVersion >= 310 && !ValidateVaryingLocations(root, &mDiagnostics, mShaderType))

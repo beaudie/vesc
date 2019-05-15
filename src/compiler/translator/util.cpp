@@ -818,4 +818,9 @@ GLenum GetImageInternalFormatType(TLayoutImageInternalFormat iifq)
     }
 }
 
+bool IsFunctionBodyNewScope(ShShaderSpec shaderSpec, int shaderVersion)
+{
+    return (shaderVersion == 100 && !sh::IsWebGLBasedSpec(shaderSpec));
+}
+
 }  // namespace sh
