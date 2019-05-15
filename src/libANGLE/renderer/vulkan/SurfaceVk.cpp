@@ -80,7 +80,7 @@ constexpr VkImageUsageFlags kSurfaceVKDepthStencilImageUsageFlags =
 
 OffscreenSurfaceVk::AttachmentImage::AttachmentImage()
 {
-    renderTarget.init(&image, &imageView, 0, 0, nullptr);
+    renderTarget.init(&image, &imageView, 0, 0);
 }
 
 OffscreenSurfaceVk::AttachmentImage::~AttachmentImage() = default;
@@ -351,7 +351,7 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
       mCurrentSwapchainImageIndex(0),
       mCurrentSwapHistoryIndex(0)
 {
-    mDepthStencilRenderTarget.init(&mDepthStencilImage, &mDepthStencilImageView, 0, 0, nullptr);
+    mDepthStencilRenderTarget.init(&mDepthStencilImage, &mDepthStencilImageView, 0, 0);
 }
 
 WindowSurfaceVk::~WindowSurfaceVk()
