@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "01630f94_d481ea54",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-05-15T22:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1094782_64fd9bb2",
+      "range": {
+        "startLine": 541,
+        "startChar": 8,
+        "endLine": 541,
+        "endChar": 30
+      },
+      "revId": "e510f9c38d55a69a39eff6858e8e7acf64031929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "73d0a5ea_78eb52fd",
         "filename": "src/compiler/translator/tree_util/ReplaceRedefinedVariable.cpp",
         "patchSetId": 10
@@ -36,6 +60,30 @@
       "writtenOn": "2019-05-15T21:14:29Z",
       "side": 1,
       "message": "`ReplaceVariable()` already queues for replacement. Any reason why you are queuing in a custom list, then re-queuing with `ReplaceVariable()`?",
+      "range": {
+        "startLine": 98,
+        "startChar": 20,
+        "endLine": 98,
+        "endChar": 33
+      },
+      "revId": "e510f9c38d55a69a39eff6858e8e7acf64031929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2eeaf4c1_7f3bf200",
+        "filename": "src/compiler/translator/tree_util/ReplaceRedefinedVariable.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-05-15T22:23:38Z",
+      "side": 1,
+      "message": "This is based on feedback from Jamie. Upon review we realized that ReplaceVariable() is only queueing for the scope of its own traversal. This means that since ReplaceRedefinedVariableTraverser is calling ReplaceVariable() while traversing, that the AST would be updating during traversal if ReplaceVariable were called as replacements were found, as I originally coded this. Instead we felt it was safer to avoid any potentially pathological cases by first completing the ReplaceRedefinedVariableTraverser traversal and only then performing ReplaceVariable() that will update the AST.",
+      "parentUuid": "73d0a5ea_78eb52fd",
       "range": {
         "startLine": 98,
         "startChar": 20,
@@ -68,6 +116,30 @@
       "revId": "e510f9c38d55a69a39eff6858e8e7acf64031929",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8d88c29_7630161f",
+        "filename": "src/compiler/translator/tree_util/ReplaceRedefinedVariable.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-05-15T22:23:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e205df4d_991424d6",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 27
+      },
+      "revId": "e510f9c38d55a69a39eff6858e8e7acf64031929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
