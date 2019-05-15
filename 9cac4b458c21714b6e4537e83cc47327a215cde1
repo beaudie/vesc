@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c48ebc1d_caa48f0b",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-15T19:24:12Z",
+      "side": 1,
+      "message": "Variables generally have curly braces around them, why not here?\nIs this a scope thing? E.g. config_name is local to the template whereas other variables are passed in in the environment.",
+      "range": {
+        "startLine": 740,
+        "startChar": 28,
+        "endLine": 740,
+        "endChar": 40
+      },
+      "revId": "9cac4b458c21714b6e4537e83cc47327a215cde1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
