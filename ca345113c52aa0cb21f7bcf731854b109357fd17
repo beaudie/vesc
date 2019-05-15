@@ -22,6 +22,30 @@
       "revId": "ca345113c52aa0cb21f7bcf731854b109357fd17",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2b971da_efffec94",
+        "filename": "src/tests/deqp.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-15T19:29:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d41b657_f8695faa",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 48
+      },
+      "revId": "ca345113c52aa0cb21f7bcf731854b109357fd17",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
