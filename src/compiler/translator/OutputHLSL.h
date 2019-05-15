@@ -267,7 +267,11 @@ class OutputHLSL : public TIntermTraverser
     TString generateStructMapping(const std::vector<MappedStruct> &std140Structs) const;
     ImmutableString samplerNamePrefixFromStruct(TIntermTyped *node);
     bool ancestorEvaluatesToSamplerInStruct();
+    // To pass the struct to a function or copy the struct via assignment, we need a struct mapping.
+    bool needStructMapping(TIntermTyped *node);
+
     ShaderStorageBlockOutputHLSL *mSSBOOutputHLSL;
+    bool mNeedStructMapping;
 };
 }  // namespace sh
 
