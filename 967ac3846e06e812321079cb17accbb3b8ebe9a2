@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da3b5d8d_6126b7dc",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-15T13:27:57Z",
+      "side": 1,
+      "message": "It might be slightly cleaner to make a separate traverser to find this and do it in a pre-pass in OutputHLSL setup. But it works this way it seems.",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 0
+      },
+      "revId": "967ac3846e06e812321079cb17accbb3b8ebe9a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
