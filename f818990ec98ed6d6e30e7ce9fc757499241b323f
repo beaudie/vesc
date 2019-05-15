@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9bb8811d_2fb3faad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 34
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-15T15:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c705e30_c4cf6347",
+      "revId": "f818990ec98ed6d6e30e7ce9fc757499241b323f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ea2b02ef_b23eba9c",
         "filename": "include/platform/FeaturesVk.h",
         "patchSetId": 34
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "06e27cf7_91fb09f9",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 34
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-15T15:30:06Z",
+      "side": 1,
+      "message": "I did do git cl format.",
+      "parentUuid": "ea2b02ef_b23eba9c",
+      "range": {
+        "startLine": 146,
+        "startChar": 0,
+        "endLine": 151,
+        "endChar": 14
+      },
+      "revId": "f818990ec98ed6d6e30e7ce9fc757499241b323f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "74de5b59_5fc8d72a",
         "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
         "patchSetId": 34
@@ -62,6 +104,30 @@
       "revId": "f818990ec98ed6d6e30e7ce9fc757499241b323f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d30f706_c530f347",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
+        "patchSetId": 34
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-15T15:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74de5b59_5fc8d72a",
+      "range": {
+        "startLine": 662,
+        "startChar": 41,
+        "endLine": 662,
+        "endChar": 75
+      },
+      "revId": "f818990ec98ed6d6e30e7ce9fc757499241b323f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
