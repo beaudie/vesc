@@ -22,6 +22,52 @@
       "revId": "e510f9c38d55a69a39eff6858e8e7acf64031929",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73d0a5ea_78eb52fd",
+        "filename": "src/compiler/translator/tree_util/ReplaceRedefinedVariable.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-15T21:14:29Z",
+      "side": 1,
+      "message": "`ReplaceVariable()` already queues for replacement. Any reason why you are queuing in a custom list, then re-queuing with `ReplaceVariable()`?",
+      "range": {
+        "startLine": 98,
+        "startChar": 20,
+        "endLine": 98,
+        "endChar": 33
+      },
+      "revId": "e510f9c38d55a69a39eff6858e8e7acf64031929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e205df4d_991424d6",
+        "filename": "src/compiler/translator/tree_util/ReplaceRedefinedVariable.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-15T21:14:29Z",
+      "side": 1,
+      "message": "`ReplaceShadowingVariables` would probably be more fitting. gcc/clang use this terminology for when a variable declaration hides another declaration with the same in an outer scope (-Wshadow for example as a command line argument).",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 27
+      },
+      "revId": "e510f9c38d55a69a39eff6858e8e7acf64031929",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
