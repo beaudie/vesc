@@ -521,33 +521,33 @@
 // General Vulkan failures
 
 // Limits:
-2950 VULKAN : dEQP-GLES3.functional.implementation_limits.max_elements_indices = SKIP
-2950 VULKAN : dEQP-GLES3.functional.implementation_limits.max_elements_vertices = SKIP
-2950 VULKAN : dEQP-GLES3.functional.implementation_limits.compressed_texture_formats = SKIP
-2950 VULKAN : dEQP-GLES3.functional.implementation_limits.max_fragment_input_components = SKIP
-2950 VULKAN : dEQP-GLES3.functional.implementation_limits.max_program_texel_offset = SKIP
-2950 VULKAN : dEQP-GLES3.functional.implementation_limits.min_program_texel_offset = SKIP
-2950 VULKAN : dEQP-GLES3.functional.implementation_limits.max_transform_feedback_* = SKIP
+2950 VULKAN : dEQP-GLES3.functional.implementation_limits.max_elements_indices = FAIL
+2950 VULKAN : dEQP-GLES3.functional.implementation_limits.max_elements_vertices = FAIL
+2950 VULKAN : dEQP-GLES3.functional.implementation_limits.compressed_texture_formats = FAIL
+2950 VULKAN : dEQP-GLES3.functional.implementation_limits.max_fragment_input_components = FAIL
+2950 VULKAN : dEQP-GLES3.functional.implementation_limits.max_program_texel_offset = FAIL
+2950 VULKAN : dEQP-GLES3.functional.implementation_limits.min_program_texel_offset = FAIL
+2950 VULKAN : dEQP-GLES3.functional.implementation_limits.max_transform_feedback_* = FAIL
 
 // 3D texture (anglebug.com/3188), 2D array (anglebug.com/3189):
-3189 VULKAN : dEQP-GLES3.functional.shaders.texture_functions.texturegrad.sampler2darrayshadow_vertex = SKIP
-3189 VULKAN : dEQP-GLES3.functional.fbo.completeness.layer.2darr* = SKIP
-3188 VULKAN : dEQP-GLES3.functional.fbo.completeness.layer.3d* = SKIP
-3189 VULKAN : dEQP-GLES3.functional.fbo.color.tex2darray.* = SKIP
-3188 VULKAN : dEQP-GLES3.functional.fbo.color.tex3d.* = SKIP
-3189 VULKAN : dEQP-GLES3.functional.texture.* = SKIP
-3189 VULKAN : dEQP-GLES3.functional.shaders.texture_functions.* = SKIP
+3189 VULKAN : dEQP-GLES3.functional.shaders.texture_functions.texturegrad.sampler2darrayshadow_vertex = FAIL
+3189 VULKAN : dEQP-GLES3.functional.fbo.completeness.layer.2darr* = FAIL
+3188 VULKAN : dEQP-GLES3.functional.fbo.completeness.layer.3d* = FAIL
+3189 VULKAN : dEQP-GLES3.functional.fbo.color.tex2darray.* = FAIL
+3188 VULKAN : dEQP-GLES3.functional.fbo.color.tex3d.* = FAIL
+3189 VULKAN : dEQP-GLES3.functional.texture.* = FAIL
+3189 VULKAN : dEQP-GLES3.functional.shaders.texture_functions.* = FAIL
 
 // Multisampling:
-3204 VULKAN : dEQP-GLES3.functional.fbo.completeness.samples.* = SKIP
-3204 VULKAN : dEQP-GLES3.functional.fbo.msaa.* = SKIP
-3204 VULKAN : dEQP-GLES3.functional.negative_api.buffer.read_pixels_fbo_format_mismatch = SKIP
-3204 VULKAN : dEQP-GLES3.functional.negative_api.buffer.blit_framebuffer_multisample = SKIP
-3204 VULKAN : dEQP-GLES3.functional.multisample.* = SKIP
-3204 VULKAN : dEQP-GLES3.functional.state_query.rbo.renderbuffer_samples = SKIP
-3204 VULKAN : dEQP-GLES3.functional.fragment_out.* = SKIP
-3204 VULKAN : dEQP-GLES3.functional.rasterization.fbo.rbo_multisample* = SKIP
-3204 VULKAN : dEQP-GLES3.functional.shaders.derivate.* = SKIP
+3204 VULKAN : dEQP-GLES3.functional.fbo.completeness.samples.* = FAIL
+3204 VULKAN : dEQP-GLES3.functional.fbo.msaa.* = FAIL
+3204 VULKAN : dEQP-GLES3.functional.negative_api.buffer.read_pixels_fbo_format_mismatch = FAIL
+3204 VULKAN : dEQP-GLES3.functional.negative_api.buffer.blit_framebuffer_multisample = FAIL
+3204 VULKAN : dEQP-GLES3.functional.multisample.* = FAIL
+3204 VULKAN : dEQP-GLES3.functional.state_query.rbo.renderbuffer_samples = FAIL
+3204 VULKAN : dEQP-GLES3.functional.fragment_out.* = FAIL
+3204 VULKAN : dEQP-GLES3.functional.rasterization.fbo.rbo_multisample* = FAIL
+3204 VULKAN : dEQP-GLES3.functional.shaders.derivate.* = FAIL
 
 // Formats:
 2950 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.renderbuffer.color0.rgba32f = FAIL
@@ -555,58 +555,58 @@
 
 // Depth/Stencil textures:
 2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component_unsigned_int = FAIL
-2905 VULKAN : dEQP-GLES3.functional.fbo.render.resize.tex2d_rgba8_depth_tex2d_depth_component16 = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.render.resize.tex2d_rgba8_depth_tex2d_depth_component24 = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.render.resize.tex2d_rgba8_depth_tex2d_depth_component32f = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.render.resize.tex2d_rgba8_depth_stencil_tex2d_depth24_stencil8 = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.render.resize.tex2d_rgba8_depth_stencil_tex2d_depth32f_stencil8 = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.render.recreate_depth_stencil.* = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.stencil.depth_stencil_unsigned_int_24_8 = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.stencil.depth24_stencil8 = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.stencil.depth32f_stencil8 = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component_unsigned_short = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component16 = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component24 = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_stencil_unsigned_int_24_8 = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth24_stencil8 = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component32f = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth32f_stencil8 = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.attachment_combinations.* = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.render.shared_depth_stencil.* = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.depth.* = SKIP
-2905 VULKAN : dEQP-GLES3.functional.fbo.stencil.* = SKIP
-2905 VULKAN : dEQP-GLES3.functional.state_query.fbo.framebuffer_attachment_component_type = SKIP
-2905 VULKAN : dEQP-GLES3.functional.state_query.fbo.framebuffer_attachment_x_size_texture = SKIP
+2905 VULKAN : dEQP-GLES3.functional.fbo.render.resize.tex2d_rgba8_depth_tex2d_depth_component16 = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.render.resize.tex2d_rgba8_depth_tex2d_depth_component24 = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.render.resize.tex2d_rgba8_depth_tex2d_depth_component32f = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.render.resize.tex2d_rgba8_depth_stencil_tex2d_depth24_stencil8 = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.render.resize.tex2d_rgba8_depth_stencil_tex2d_depth32f_stencil8 = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.render.recreate_depth_stencil.* = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.stencil.depth_stencil_unsigned_int_24_8 = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.stencil.depth24_stencil8 = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.stencil.depth32f_stencil8 = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component_unsigned_short = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component16 = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component24 = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_stencil_unsigned_int_24_8 = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth24_stencil8 = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth_component32f = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.texture.depth.depth32f_stencil8 = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.completeness.attachment_combinations.* = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.render.shared_depth_stencil.* = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.depth.* = FAIL
+2905 VULKAN : dEQP-GLES3.functional.fbo.stencil.* = FAIL
+2905 VULKAN : dEQP-GLES3.functional.state_query.fbo.framebuffer_attachment_component_type = FAIL
+2905 VULKAN : dEQP-GLES3.functional.state_query.fbo.framebuffer_attachment_x_size_texture = FAIL
 
 // Min/Max blending:
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.equation_src_func_dst_func.min = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.equation_src_func_dst_func.max = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.add_min = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.add_max = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.subtract_min = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.subtract_max = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.reverse_subtract_min = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.reverse_subtract_max = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.min* = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.max* = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.equation_src_func_dst_func.min = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.equation_src_func_dst_func.max = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.add_min = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.add_max = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.subtract_min = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.subtract_max = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.reverse_subtract_min = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.reverse_subtract_max = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.min* = SKIP
-2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.max* = SKIP
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.equation_src_func_dst_func.min = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.equation_src_func_dst_func.max = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.add_min = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.add_max = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.subtract_min = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.subtract_max = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.reverse_subtract_min = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.reverse_subtract_max = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.min* = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.default_framebuffer.rgb_equation_alpha_equation.max* = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.equation_src_func_dst_func.min = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.equation_src_func_dst_func.max = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.add_min = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.add_max = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.subtract_min = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.subtract_max = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.reverse_subtract_min = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.reverse_subtract_max = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.min* = FAIL
+2897 VULKAN : dEQP-GLES3.functional.fragment_ops.blend.fbo_srgb.rgb_equation_alpha_equation.max* = FAIL
 
 // Blit:
-3200 VULKAN : dEQP-GLES3.functional.fbo.blit.* = SKIP
+3200 VULKAN : dEQP-GLES3.functional.fbo.blit.* = FAIL
 3200 VULKAN : dEQP-GLES3.functional.fragment_ops.scissor.framebuffer_blit_center = FAIL
 3200 VULKAN : dEQP-GLES3.functional.fragment_ops.scissor.framebuffer_blit_corner = FAIL
 
 // Buffer copy:
-3194 VULKAN : dEQP-GLES3.functional.buffer.copy.* = SKIP
+3194 VULKAN : dEQP-GLES3.functional.buffer.copy.* = FAIL
 
 // Shader support:
 3219 VULKAN : dEQP-GLES3.functional.negative_api.shader.link_program = FAIL
@@ -614,20 +614,20 @@
 3443 VULKAN : dEQP-GLES3.functional.ubo.random.basic_arrays.10 = FAIL
 
 // New vertex attribute formats:
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.strides.int2_10_10_10.* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.unsigned_int.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.int.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.half.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.usigned_int2_10_10_10.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.int2_10_10_10.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.unsigned_int.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.int.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.half.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.usigned_int2_10_10_10.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.int2_10_10_10.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.first.int2_10_10_10* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.offset.int2_10_10_10* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_array_objects.all_attributes = SKIP
+3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.strides.int2_10_10_10.* = FAIL
+3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.unsigned_int.components* = FAIL
+3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.int.components* = FAIL
+3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.half.components* = FAIL
+3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.usigned_int2_10_10_10.components* = FAIL
+3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.int2_10_10_10.components* = FAIL
+3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.unsigned_int.components* = FAIL
+3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.int.components* = FAIL
+3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.half.components* = FAIL
+3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.usigned_int2_10_10_10.components* = FAIL
+3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.int2_10_10_10.components* = FAIL
+3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.first.int2_10_10_10* = FAIL
+3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.offset.int2_10_10_10* = FAIL
+3193 VULKAN : dEQP-GLES3.functional.vertex_array_objects.all_attributes = FAIL
 
 // Vertex ID, Index ID
 3221 VULKAN : dEQP-GLES3.functional.shaders.builtin_variable.vertex_id = FAIL
@@ -637,11 +637,11 @@
 2950 VULKAN : dEQP-GLES3.functional.polygon_offset.float32_factor_1_slope = FAIL
 
 // PBO:
-2950 VULKAN : dEQP-GLES3.functional.pbo.* = SKIP
+2950 VULKAN : dEQP-GLES3.functional.pbo.* = FAIL
 
 // Uniform API:
-3198 VULKAN : dEQP-GLES3.functional.uniform_api.value.* = SKIP
-3198 VULKAN : dEQP-GLES3.functional.uniform_api.random.* = SKIP
+3198 VULKAN : dEQP-GLES3.functional.uniform_api.value.* = FAIL
+3198 VULKAN : dEQP-GLES3.functional.uniform_api.random.* = FAIL
 
 // Transform feedback:
 3205 VULKAN : dEQP-GLES3.functional.negative_api.shader.uniform_block_binding = FAIL
@@ -668,22 +668,22 @@
 // Misc unimplemented:
 
 // - FramebufferVk::invalidate*:
-2950 VULKAN : dEQP-GLES3.functional.fbo.invalidate.* = SKIP
+2950 VULKAN : dEQP-GLES3.functional.fbo.invalidate.* = FAIL
 
 // - Primitive restart:
-2950 VULKAN : dEQP-GLES3.functional.primitive_restart.* = SKIP
+2950 VULKAN : dEQP-GLES3.functional.primitive_restart.* = FAIL
 
 // - BufferVk::copySubData:
-2950 VULKAN : dEQP-GLES3.functional.negative_api.buffer.copy_buffer_sub_data = SKIP
+2950 VULKAN : dEQP-GLES3.functional.negative_api.buffer.copy_buffer_sub_data = FAIL
 
 // - ES3 Query Types:
-2950 VULKAN : dEQP-GLES3.functional.negative_api.fragment.begin_query = SKIP
+2950 VULKAN : dEQP-GLES3.functional.negative_api.fragment.begin_query = FAIL
 
 // - TextureVk::setBaseLevel:
-2950 VULKAN : dEQP-GLES3.functional.state_query.texture.texture_2d_texture_base_level_gettexparameter* = SKIP
-2950 VULKAN : dEQP-GLES3.functional.state_query.texture.texture_3d_texture_base_level_gettexparameter* = SKIP
-2950 VULKAN : dEQP-GLES3.functional.state_query.texture.texture_2d_array_texture_base_level_gettexparameter* = SKIP
-2950 VULKAN : dEQP-GLES3.functional.state_query.texture.texture_cube_map_texture_base_level_gettexparameter* = SKIP
+2950 VULKAN : dEQP-GLES3.functional.state_query.texture.texture_2d_texture_base_level_gettexparameter* = FAIL
+2950 VULKAN : dEQP-GLES3.functional.state_query.texture.texture_3d_texture_base_level_gettexparameter* = FAIL
+2950 VULKAN : dEQP-GLES3.functional.state_query.texture.texture_2d_array_texture_base_level_gettexparameter* = FAIL
+2950 VULKAN : dEQP-GLES3.functional.state_query.texture.texture_cube_map_texture_base_level_gettexparameter* = FAIL
 
 // - ES3 State queries:
 2950 VULKAN : dEQP-GLES3.functional.state_query.integers.max_elements_indices_getfloat = FAIL
@@ -699,29 +699,29 @@
 2950 VULKAN : dEQP-GLES3.functional.state_query.fbo.framebuffer_attachment_color_encoding = FAIL
 2950 VULKAN : dEQP-GLES3.functional.state_query.rbo.renderbuffer_internal_format = FAIL
 2950 VULKAN : dEQP-GLES3.functional.state_query.rbo.renderbuffer_component_size_color = FAIL
-2950 VULKAN : dEQP-GLES3.functional.lifetime.* = SKIP
+2950 VULKAN : dEQP-GLES3.functional.lifetime.* = FAIL
 2950 VULKAN : dEQP-GLES3.functional.clipping.line.line_clip_viewport_center = FAIL
 2950 VULKAN : dEQP-GLES3.functional.clipping.line.line_clip_viewport_corner = FAIL
 2950 VULKAN : dEQP-GLES3.functional.clipping.point.wide_point_clip_viewport_center = FAIL
 2950 VULKAN : dEQP-GLES3.functional.clipping.point.wide_point_clip_viewport_corner = FAIL
 2950 VULKAN : dEQP-GLES3.functional.clipping.point.point_clip_viewport_center = FAIL
 2950 VULKAN : dEQP-GLES3.functional.clipping.point.point_clip_viewport_corner = FAIL
-2672 VULKAN : dEQP-GLES3.functional.draw.draw_arrays_instanced.line_loop.* = SKIP
-2672 VULKAN : dEQP-GLES3.functional.draw.draw_elements_instanced.line_loop.* = SKIP
-2672 VULKAN : dEQP-GLES3.functional.draw.random.* = SKIP
+2672 VULKAN : dEQP-GLES3.functional.draw.draw_arrays_instanced.line_loop.* = FAIL
+2672 VULKAN : dEQP-GLES3.functional.draw.draw_elements_instanced.line_loop.* = FAIL
+2672 VULKAN : dEQP-GLES3.functional.draw.random.* = FAIL
 
 // Failures on newer NVIDIA drivers (411.95) and passes on older drivers (388.16).
 2976 VULKAN NVIDIA : dEQP-GLES3.functional.shaders.invariance.* = FAIL
 
 // To be triaged:
-2950 VULKAN : dEQP-GLES3.functional.fragment_ops.interaction.basic_shader.* = SKIP
-2950 VULKAN : dEQP-GLES3.functional.fragment_ops.random.* = SKIP
-2950 VULKAN : dEQP-GLES3.functional.samplers.* = SKIP
-2950 VULKAN : dEQP-GLES3.functional.instanced.* = SKIP
-2950 VULKAN : dEQP-GLES3.functional.rasterizer_discard.* = SKIP
-2950 VULKAN : dEQP-GLES3.functional.negative_api.vertex_array.draw_element* = SKIP
-2950 VULKAN : dEQP-GLES3.functional.negative_api.state.get_active_unifor* = SKIP
-2950 VULKAN : dEQP-GLES3.functional.negative_api.state.get_active_attrib = SKIP
+2950 VULKAN : dEQP-GLES3.functional.fragment_ops.interaction.basic_shader.* = FAIL
+2950 VULKAN : dEQP-GLES3.functional.fragment_ops.random.* = FAIL
+2950 VULKAN : dEQP-GLES3.functional.samplers.* = FAIL
+2950 VULKAN : dEQP-GLES3.functional.instanced.* = FAIL
+2950 VULKAN : dEQP-GLES3.functional.rasterizer_discard.* = FAIL
+2950 VULKAN : dEQP-GLES3.functional.negative_api.vertex_array.draw_element* = FAIL
+2950 VULKAN : dEQP-GLES3.functional.negative_api.state.get_active_unifor* = FAIL
+2950 VULKAN : dEQP-GLES3.functional.negative_api.state.get_active_attrib = FAIL
 2950 VULKAN : dEQP-GLES3.functional.draw.draw_elements.indices.user_ptr.index_int = FAIL
 2950 VULKAN : dEQP-GLES3.functional.draw.draw_elements.indices.unaligned_user_ptr.index_int = FAIL
 2950 VULKAN : dEQP-GLES3.functional.draw.draw_elements_instanced.indices.user_ptr.index_int = FAIL
