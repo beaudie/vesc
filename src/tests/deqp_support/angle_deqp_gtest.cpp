@@ -37,7 +37,7 @@ constexpr char kInfoTag[] = "*RESULT";
 std::vector<std::string> gUnexpectedFailed;
 std::vector<std::string> gUnexpectedPasses;
 
-void HandlePlatformError(angle::PlatformMethods *platform, const char *errorMessage)
+void HandlePlatformError(PlatformMethods *platform, const char *errorMessage)
 {
     if (!gExpectError)
     {
@@ -60,10 +60,13 @@ std::string DrawElementsToGoogleTestName(const std::string &dEQPName)
 // of egl-master.txt that has the full list of tests.
 const char *gCaseListSearchPaths[] = {
     "/../../third_party/deqp/src/external/openglcts/data/mustpass/gles/aosp_mustpass/master/",
+    "/../../third_party/deqp/src/external/openglcts/data/mustpass/gles/khronos_mustpass/master/",
     "/../../third_party/angle/third_party/deqp/src/external/openglcts/data/mustpass/gles/"
     "aosp_mustpass/master/",
+    "khronos_mustpass/master/",
     "/../../sdcard/chromium_tests_root/third_party/angle/third_party/deqp/src/external/openglcts/"
     "data/mustpass/gles/aosp_mustpass/master/",
+    "data/mustpass/gles/khronos_mustpass/master/",
     "/../../third_party/deqp/src/android/cts/master/",
     "/../../third_party/angle/third_party/deqp/src/android/cts/master/",
     "/../../sdcard/chromium_tests_root/third_party/angle/third_party/deqp/src/android/cts/master/",
@@ -76,29 +79,21 @@ const char *gTestExpectationsSearchPaths[] = {
     "/../../sdcard/chromium_tests_root/third_party/angle/src/tests/deqp_support/",
 };
 
-const char *gCaseListFiles[] = {
-    "gles2-master.txt",
-    "gles3-master.txt",
-    "gles31-master.txt",
-    "egl-master.txt",
-};
+const char *gCaseListFiles[] = {"gles2-master.txt", "gles3-master.txt",     "gles31-master.txt",
+                                "egl-master.txt",   "gles2-khr-master.txt", "gles3-khr-master.txt"};
 
 const char *gTestExpectationsFiles[] = {
-    "deqp_gles2_test_expectations.txt",
-    "deqp_gles3_test_expectations.txt",
-    "deqp_gles31_test_expectations.txt",
-    "deqp_egl_test_expectations.txt",
+    "deqp_gles2_test_expectations.txt",     "deqp_gles3_test_expectations.txt",
+    "deqp_gles31_test_expectations.txt",    "deqp_egl_test_expectations.txt",
+    "deqp_khr_gles2_test_expectations.txt", "deqp_khr_gles3_test_expectations.txt",
 };
 
-using APIInfo = std::pair<const char *, angle::GPUTestConfig::API>;
+using APIInfo = std::pair<const char *, GPUTestConfig::API>;
 
 const APIInfo gEGLDisplayAPIs[] = {
-    {"angle-d3d9", angle::GPUTestConfig::kAPID3D9},
-    {"angle-d3d11", angle::GPUTestConfig::kAPID3D11},
-    {"angle-gl", angle::GPUTestConfig::kAPIGLDesktop},
-    {"angle-gles", angle::GPUTestConfig::kAPIGLES},
-    {"angle-null", angle::GPUTestConfig::kAPIUnknown},
-    {"angle-vulkan", angle::GPUTestConfig::kAPIVulkan},
+    {"angle-d3d9", GPUTestConfig::kAPID3D9},    {"angle-d3d11", GPUTestConfig::kAPID3D11},
+    {"angle-gl", GPUTestConfig::kAPIGLDesktop}, {"angle-gles", GPUTestConfig::kAPIGLES},
+    {"angle-null", GPUTestConfig::kAPIUnknown}, {"angle-vulkan", GPUTestConfig::kAPIVulkan},
 };
 
 const char *gdEQPEGLString  = "--deqp-egl-display-type=";
@@ -227,7 +222,7 @@ class dEQPCaseList
 
   private:
     std::vector<CaseInfo> mCaseInfoList;
-    angle::GPUTestExpectationsParser mTestExpectationsParser;
+    GPUTestExpectationsParser mTestExpectationsParser;
     size_t mTestModuleIndex;
     bool mInitialized = false;
 };
@@ -243,7 +238,7 @@ void dEQPCaseList::initialize()
 
     mInitialized = true;
 
-    std::string exeDir = angle::GetExecutableDirectory();
+    std::string exeDir = GetExecutableDirectory();
 
     Optional<std::string> caseListPath = FindCaseListPath(exeDir, mTestModuleIndex);
     if (!caseListPath.valid())
@@ -259,14 +254,14 @@ void dEQPCaseList::initialize()
         Die();
     }
 
-    angle::GPUTestConfig::API api = GetDefaultAPIInfo()->second;
+    GPUTestConfig::API api = GetDefaultAPIInfo()->second;
     // Set the API from the command line, or using the default platform API.
     if (gInitAPI)
     {
         api = gInitAPI->second;
     }
 
-    angle::GPUTestConfig testConfig = angle::GPUTestConfig(api);
+    GPUTestConfig testConfig = GPUTestConfig(api);
 
     if (!mTestExpectationsParser.loadTestExpectationsFromFile(testConfig,
                                                               testExpectationsPath.value()))
@@ -293,7 +288,7 @@ void dEQPCaseList::initialize()
         std::string inString;
         std::getline(caseListStream, inString);
 
-        std::string dEQPName = angle::TrimString(inString, angle::kWhitespaceASCII);
+        std::string dEQPName = TrimString(inString, kWhitespaceASCII);
         if (dEQPName.empty())
             continue;
         std::string gTestName = DrawElementsToGoogleTestName(dEQPName);
@@ -359,14 +354,14 @@ class dEQPTest : public testing::TestWithParam<size_t>
         // crashed tests we track how many tests we "tried" to run.
         sTestCount++;
 
-        if (caseInfo.mExpectation == angle::GPUTestExpectationsParser::kGpuTestSkip)
+        if (caseInfo.mExpectation == GPUTestExpectationsParser::kGpuTestSkip)
         {
             sSkippedTestCount++;
             std::cout << "Test skipped.\n";
             return;
         }
 
-        gExpectError = (caseInfo.mExpectation != angle::GPUTestExpectationsParser::kGpuTestPass);
+        gExpectError      = (caseInfo.mExpectation != GPUTestExpectationsParser::kGpuTestPass);
         TestResult result = deqp_libtester_run(caseInfo.mDEQPName.c_str());
 
         bool testSucceeded = countTestResultAndReturnSuccess(result);
@@ -378,7 +373,7 @@ class dEQPTest : public testing::TestWithParam<size_t>
             gGlobalError  = false;
         }
 
-        if (caseInfo.mExpectation == angle::GPUTestExpectationsParser::kGpuTestPass)
+        if (caseInfo.mExpectation == GPUTestExpectationsParser::kGpuTestPass)
         {
             EXPECT_TRUE(testSucceeded);
 
@@ -541,6 +536,14 @@ ANGLE_INSTANTIATE_DEQP_TEST_CASE(GLES31, 2);
 
 #ifdef ANGLE_DEQP_EGL_TESTS
 ANGLE_INSTANTIATE_DEQP_TEST_CASE(EGL, 3);
+#endif
+
+#ifdef ANGLE_DEQP_KHR_GLES2_TESTS
+ANGLE_INSTANTIATE_DEQP_TEST_CASE(KHR_GLES2, 4);
+#endif
+
+#ifdef ANGLE_DEQP_KHR_GLES3_TESTS
+ANGLE_INSTANTIATE_DEQP_TEST_CASE(KHR_GLES3, 5);
 #endif
 
 void HandleDisplayType(const char *displayTypeString)
