@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "edde735d_03dd5b2e",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3314,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-05-15T17:57:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a174a3c_8c26fd55",
+      "range": {
+        "startLine": 3314,
+        "startChar": 8,
+        "endLine": 3314,
+        "endChar": 71
+      },
+      "revId": "5d5170ff2c12032b9550a04ed89af6b6c44b13d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f0e478d_fec0417e",
         "filename": "src/compiler/translator/tree_util/ReplaceRedefinedVariable.cpp",
         "patchSetId": 8
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "45b4be76_7d32acfe",
+        "filename": "src/compiler/translator/tree_util/ReplaceRedefinedVariable.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-05-15T17:57:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f0e478d_fec0417e",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "5d5170ff2c12032b9550a04ed89af6b6c44b13d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2b9628e8_388a0fdc",
         "filename": "src/compiler/translator/tree_util/ReplaceRedefinedVariable.cpp",
         "patchSetId": 8
@@ -59,6 +107,30 @@
       "writtenOn": "2019-05-15T16:32:13Z",
       "side": 1,
       "message": "I think this character is a unicode character that MSVC has trouble with:\n\n../../src/compiler/translator/tree_util/ReplaceRedefinedVariable.cpp: warning C4828: The file contains a character starting at offset 0x1e8 that is illegal in the current source character set (codepage 65001).\n../../src/compiler/translator/tree_util/ReplaceRedefinedVariable.cpp: warning C4828: The file contains a character starting at offset 0x2f7 that is illegal in the current source character set (codepage 65001).",
+      "range": {
+        "startLine": 9,
+        "startChar": 26,
+        "endLine": 9,
+        "endChar": 27
+      },
+      "revId": "5d5170ff2c12032b9550a04ed89af6b6c44b13d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed0f4c8a_4ae1e760",
+        "filename": "src/compiler/translator/tree_util/ReplaceRedefinedVariable.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-05-15T17:57:17Z",
+      "side": 1,
+      "message": "Yep, cut and pasted this from spec as well as same char in quote below.",
+      "parentUuid": "2b9628e8_388a0fdc",
       "range": {
         "startLine": 9,
         "startChar": 26,
@@ -91,6 +163,30 @@
       "revId": "5d5170ff2c12032b9550a04ed89af6b6c44b13d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d106d53b_948f93e6",
+        "filename": "src/compiler/translator/tree_util/ReplaceRedefinedVariable.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-05-15T17:57:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b67f0aa2_fc7cd882",
+      "range": {
+        "startLine": 110,
+        "startChar": 13,
+        "endLine": 110,
+        "endChar": 17
+      },
+      "revId": "5d5170ff2c12032b9550a04ed89af6b6c44b13d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
