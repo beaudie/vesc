@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "48d27ca4_3a0c16f9",
+        "filename": "src/tests/gl_tests/SimpleOperationTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-16T00:04:56Z",
+      "side": 1,
+      "message": "The GetFrontFace() change doesn\u0027t seem to affect this test, but I\u0027ve backed it out for now to remove any confusion.\n\n\nThis is the first OpenGL code outside of a tutorial I\u0027ve written so far, so no promises on how well things are actually working here, but...\n\n\nGL_BACK, GL_CCW:\nPass\n\nGL_BACK, GL_CW:\n../../third_party/angle/src/tests/gl_tests/SimpleOperationTest.cpp:144: Failure\nExpected equality of these values:\n  GLColor::green\n    Which is: Green\n  angle::ReadColor(0, 0)\n    Which is: Black\n\n\nI think this is expected behavior so far, based on the winding order of the vertices defined by ANGLETest.cpp::kQuadVertices (CCW).",
+      "revId": "6b989e4fcb7ca2486547fba2f1bc48e7dd3da67e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
