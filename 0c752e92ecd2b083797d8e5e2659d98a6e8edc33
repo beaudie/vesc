@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d37821df_02804f62",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T20:53:16Z",
+      "side": 1,
+      "message": "please add all the affected bugs: 2392, 2394, 3199, 3219, 3423",
+      "range": {
+        "startLine": 12,
+        "startChar": 18,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "0c752e92ecd2b083797d8e5e2659d98a6e8edc33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4e19093_0581307d",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T20:53:16Z",
+      "side": 1,
+      "message": "Could you also test this on Pixel XL and restrict this to the specific devices?",
+      "range": {
+        "startLine": 990,
+        "startChar": 37,
+        "endLine": 990,
+        "endChar": 46
+      },
+      "revId": "0c752e92ecd2b083797d8e5e2659d98a6e8edc33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
