@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d78e8d00_c5418486",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T21:46:44Z",
+      "side": 1,
+      "message": "I don\u0027t think this is used anywhere now.",
+      "range": {
+        "startLine": 849,
+        "startChar": 4,
+        "endLine": 849,
+        "endChar": 17
+      },
+      "revId": "66527d119545c5e2272cdd5a327f7eaaa624b787",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b292c30_c2e9aaa0",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T21:46:44Z",
+      "side": 1,
+      "message": "Looks like we\u0027re back to having test data here and not only mustpass list.",
+      "range": {
+        "startLine": 923,
+        "startChar": 34,
+        "endLine": 923,
+        "endChar": 42
+      },
+      "revId": "66527d119545c5e2272cdd5a327f7eaaa624b787",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c695dcf7_d6849ea8",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 929,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T21:46:44Z",
+      "side": 1,
+      "message": "Maybe $deqp_data_dir?",
+      "range": {
+        "startLine": 929,
+        "startChar": 9,
+        "endLine": 929,
+        "endChar": 25
+      },
+      "revId": "66527d119545c5e2272cdd5a327f7eaaa624b787",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cef537e1_4b95c75a",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T21:46:44Z",
+      "side": 1,
+      "message": "already have this line",
+      "range": {
+        "startLine": 66,
+        "startChar": 5,
+        "endLine": 66,
+        "endChar": 89
+      },
+      "revId": "66527d119545c5e2272cdd5a327f7eaaa624b787",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7643ec04_1f2b6785",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T21:46:44Z",
+      "side": 1,
+      "message": "this, too",
+      "range": {
+        "startLine": 70,
+        "startChar": 5,
+        "endLine": 70,
+        "endChar": 97
+      },
+      "revId": "66527d119545c5e2272cdd5a327f7eaaa624b787",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
