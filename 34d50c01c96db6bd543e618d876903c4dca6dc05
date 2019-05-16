@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2e7f877d_f2f333ee",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "530c4ae4_36d54a3e",
+      "range": {
+        "startLine": 810,
+        "startChar": 26,
+        "endLine": 810,
+        "endChar": 36
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a07842e_f2dda920",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "775a0947_d1772c8e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Well, no. The two draw calls write to complimentary sets of samples.",
+      "parentUuid": "7a07842e_f2dda920",
+      "range": {
+        "startLine": 813,
+        "startChar": 90,
+        "endLine": 813,
+        "endChar": 96
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "320fd3b2_d4644dca",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "892cb47b_fbd03bfb",
+      "range": {
+        "startLine": 816,
+        "startChar": 46,
+        "endLine": 816,
+        "endChar": 51
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f6cdc59e_d5ccd4c3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 4
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "ac2ffcc7_c81b1d57",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Done. Thanks for catching this, it was left over from an earlier experiment.",
+      "parentUuid": "f6cdc59e_d5ccd4c3",
+      "range": {
+        "startLine": 962,
+        "startChar": 39,
+        "endLine": 962,
+        "endChar": 62
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa501aa3_cd5bff7d",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 4
@@ -105,6 +201,30 @@
       "writtenOn": "2019-05-16T18:38:04Z",
       "side": 1,
       "message": "(side note: You can enable or disable multisampling here. So pipeline configuration would depend on if the setting is on or off.)",
+      "range": {
+        "startLine": 1033,
+        "startChar": 19,
+        "endLine": 1033,
+        "endChar": 27
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "79d2790d_afdaed17",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1033,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "I didn\u0027t find anything that could mean \"disable multisampling\" with Vulkan pipelines though.",
+      "parentUuid": "fa501aa3_cd5bff7d",
       "range": {
         "startLine": 1033,
         "startChar": 19,
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "6e1f0a0a_76e6877c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Ack. Sad part is that then we would also need fallbacks in case we can\u0027t write to depth/stencil textures from a shader (no STORAGE_IMAGE feature for the depth/stencil format). The alternative then could be for a fragment shader that resolves and outputs depth and stencil itself (though I think outputting stencil from FS is ... problematic)",
+      "parentUuid": "65ae1b93_5b2e4764",
+      "range": {
+        "startLine": 1208,
+        "startChar": 0,
+        "endLine": 1211,
+        "endChar": 75
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33b1c430_31700423",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 4
@@ -160,6 +304,30 @@
       "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b69cc9ca_8c27f609",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1239,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Done. Made it a helper in ImageHelper itself.",
+      "parentUuid": "33b1c430_31700423",
+      "range": {
+        "startLine": 1197,
+        "startChar": 1,
+        "endLine": 1239,
+        "endChar": 5
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "4f820a0d_c0fd8530",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Done. I was originally releasing it right after creation, but only moved it here so the handle is not `NULL`ed.",
+      "parentUuid": "7106542d_7ba71b85",
+      "range": {
+        "startLine": 1263,
+        "startChar": 8,
+        "endLine": 1263,
+        "endChar": 21
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "159f6477_eb7a424a",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -206,6 +398,30 @@
       "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc3a88a9_0664af0b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Ok, yes at first I missed the validation, but upon further investigation, it\u0027s there.\n\nSimplified.",
+      "parentUuid": "159f6477_eb7a424a",
+      "range": {
+        "startLine": 173,
+        "startChar": 20,
+        "endLine": 173,
+        "endChar": 41
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -232,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "11361e03_67632ea1",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b88280e_1afb6d80",
+      "range": {
+        "startLine": 605,
+        "startChar": 20,
+        "endLine": 605,
+        "endChar": 41
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9d94e767_5123afdb",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -252,6 +492,30 @@
       "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28eb2a57_bde58516",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d94e767_5123afdb",
+      "range": {
+        "startLine": 738,
+        "startChar": 0,
+        "endLine": 746,
+        "endChar": 9
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -278,6 +542,30 @@
     },
     {
       "key": {
+        "uuid": "1e6abb57_41ae5b82",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "438aabb8_3e2ff915",
+      "range": {
+        "startLine": 812,
+        "startChar": 0,
+        "endLine": 841,
+        "endChar": 51
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4702c81_b0d3dbca",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -298,6 +586,30 @@
       "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca90604c_cd21146a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4702c81_b0d3dbca",
+      "range": {
+        "startLine": 1101,
+        "startChar": 15,
+        "endLine": 1101,
+        "endChar": 30
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -324,6 +636,30 @@
     },
     {
       "key": {
+        "uuid": "877206af_5e1be266",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Yeap. Exact same way `mDepthStencilImage` works.",
+      "parentUuid": "cdbd90dc_f0f1a74d",
+      "range": {
+        "startLine": 243,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 35
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60601c75_8627ad78",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 4
@@ -335,6 +671,30 @@
       "writtenOn": "2019-05-16T18:38:04Z",
       "side": 1,
       "message": "Nice, everything fits well.",
+      "range": {
+        "startLine": 202,
+        "startChar": 13,
+        "endLine": 202,
+        "endChar": 34
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "15a86aaf_ed226a7d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Yes. This needs only 6 bits currently too, so there are 2 extra bits for future.",
+      "parentUuid": "60601c75_8627ad78",
       "range": {
         "startLine": 202,
         "startChar": 13,
@@ -370,6 +730,30 @@
     },
     {
       "key": {
+        "uuid": "96619431_2c22de65",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b44847b2_ff6ce896",
+      "range": {
+        "startLine": 340,
+        "startChar": 8,
+        "endLine": 340,
+        "endChar": 83
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "60832e0a_63a24bf2",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 4
@@ -390,6 +774,30 @@
       "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39d8bc58_a88d80ba",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Done. Apparently for myself too as the logic here was inverted.",
+      "parentUuid": "60832e0a_63a24bf2",
+      "range": {
+        "startLine": 370,
+        "startChar": 12,
+        "endLine": 372,
+        "endChar": 84
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -416,6 +824,30 @@
     },
     {
       "key": {
+        "uuid": "af16ebf0_7e51f53e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd1879ec_ae16be9d",
+      "range": {
+        "startLine": 831,
+        "startChar": 78,
+        "endLine": 831,
+        "endChar": 84
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90805a90_34808468",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
         "patchSetId": 4
@@ -436,6 +868,30 @@
       "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4eeae59c_57654da5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T19:55:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90805a90_34808468",
+      "range": {
+        "startLine": 834,
+        "startChar": 0,
+        "endLine": 842,
+        "endChar": 1
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
