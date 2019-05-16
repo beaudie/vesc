@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "29fb3c7b_352ab01d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T22:13:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d37821df_02804f62",
+      "range": {
+        "startLine": 12,
+        "startChar": 18,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "0c752e92ecd2b083797d8e5e2659d98a6e8edc33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4e19093_0581307d",
         "filename": "src/tests/gl_tests/ClearTest.cpp",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2019-05-16T20:53:16Z",
       "side": 1,
       "message": "Could you also test this on Pixel XL and restrict this to the specific devices?",
+      "range": {
+        "startLine": 990,
+        "startChar": 37,
+        "endLine": 990,
+        "endChar": 46
+      },
+      "revId": "0c752e92ecd2b083797d8e5e2659d98a6e8edc33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b52d2a57_f382b661",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T22:13:05Z",
+      "side": 1,
+      "message": "It\u0027s a Qualcomm driver bug, so as long it\u0027s the same image on the device, the bug should be present.\n\nEdit: Tried in PS1 and I can confirm.",
+      "parentUuid": "b4e19093_0581307d",
       "range": {
         "startLine": 990,
         "startChar": 37,
