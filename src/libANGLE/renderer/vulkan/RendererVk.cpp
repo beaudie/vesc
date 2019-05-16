@@ -12,6 +12,9 @@
 // Placing this first seems to solve an intellisense bug.
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
+#include <dlfcn.h>
+#include "../../../../../renderdoc/renderdoc/api/app/renderdoc_app.h"
+
 #include <EGL/eglext.h>
 
 #include "common/debug.h"
@@ -42,6 +45,8 @@ constexpr char kMockDeviceName[]                          = "Vulkan Mock Device"
 constexpr size_t kInFlightCommandsLimit                   = 100u;
 constexpr VkFormatFeatureFlags kInvalidFormatFeatureFlags = static_cast<VkFormatFeatureFlags>(-1);
 constexpr size_t kDefaultPoolAllocatorPageSize            = 16 * 1024;
+
+RENDERDOC_API_1_4_0 *rdoc = nullptr;
 }  // anonymous namespace
 
 namespace rx
@@ -582,6 +587,11 @@ void RendererVk::onDestroy(vk::Context *context)
         (void)finish(context, nullptr, nullptr);
     }
 
+    if (rdoc)
+    {
+        rdoc->EndFrameCapture(nullptr, nullptr);
+    }
+
     mUtils.destroy(mDevice);
 
     mPipelineLayoutCache.destroy(mDevice);
@@ -649,6 +659,17 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                                      const char *wsiExtension,
                                      const char *wsiLayer)
 {
+    void *renderdocModule = dlopen("librenderdoc.so", RTLD_NOW | RTLD_NOLOAD);
+    if (renderdocModule)
+    {
+        pRENDERDOC_GetAPI RENDERDOC_GetAPI =
+            (pRENDERDOC_GetAPI)dlsym(renderdocModule, "RENDERDOC_GetAPI");
+
+        int ret = RENDERDOC_GetAPI(eRENDERDOC_API_Version_1_4_0, (void **)&rdoc);
+        if (ret != 1)
+            rdoc = nullptr;
+    }
+
     mDisplay                         = display;
     const egl::AttributeMap &attribs = mDisplay->getAttributeMap();
     ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseDebugLayers(attribs),
@@ -1117,6 +1138,11 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         ANGLE_TRY(mGpuEventQueryPool.init(displayVk, VK_QUERY_TYPE_TIMESTAMP,
                                           vk::kDefaultTimestampQueryPoolSize));
         ANGLE_TRY(synchronizeCpuGpuTime(displayVk, nullptr, nullptr));
+    }
+
+    if (rdoc)
+    {
+        rdoc->StartFrameCapture(nullptr, nullptr);
     }
 
     return angle::Result::Continue;
