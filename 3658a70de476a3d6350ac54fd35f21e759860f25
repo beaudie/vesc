@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8960f48d_8236693a",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T19:24:54Z",
+      "side": 1,
+      "message": "Fixed. Ended up needing a flush in getAttachmentRenderTarget for Surfaces and Renderbuffers.",
+      "parentUuid": "05afc11c_08ef8c38",
+      "range": {
+        "startLine": 628,
+        "startChar": 13,
+        "endLine": 628,
+        "endChar": 24
+      },
+      "revId": "3658a70de476a3d6350ac54fd35f21e759860f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "239409bd_06f8a504",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 8
