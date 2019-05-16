@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5db6e9c5_23371907",
+        "filename": "src/tests/gl_tests/SimpleOperationTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-16T23:31:03Z",
+      "side": 1,
+      "message": "With some help from Courtney, it appears that the glClear() has an effect on how culling is performed.   Here are the results of this check with and without the glClear() call:\n\n[[[... With glClear() ...]]]\n../../third_party/angle/src/tests/gl_tests/SimpleOperationTest.cpp:158: Failure\nExpected equality of these values:\n  GLColor::transparentBlack\n    Which is: Transparent Black\n  angle::ReadColor(0, 0)\n    Which is: Blue\n\n[[[... Without glClear() ...]]]\nExpected equality of these values:\n  GLColor::transparentBlack\n    Which is: Transparent Black\n  angle::ReadColor(0, 0)\n    Which is: Green\n\n\nWith the glClear() the drawQuad() has no effect, because the front-facing triangles are correctly culled.   However, without the glClear() the triangles are rendered since ReadColor() returns Green.\n\nI\u0027ve collected vulkan API dumps with and without the glClear() calls here:\nhttps://drive.google.com/open?id\u003d1b6GwHmIrUf1eu8FGl7QuRpfTvO0eTwsa\n\nYou can diff the \u0027nohex\u0027 files (all hex addresses are removed) to see the differences between the runs.   The most obvious that\u0027s related to culling is:\n\n[[[... With glClear() -- cull.clear.nohex.txt ...]]]\nfrontFace:                      VkFrontFace \u003d VK_FRONT_FACE_CLOCKWISE (1)\n\n[[[... Without glClear() -- cull.noclear.nohex.txt ...]]]\nfrontFace:                      VkFrontFace \u003d VK_FRONT_FACE_COUNTER_CLOCKWISE (0)\n\n\nI haven\u0027t gotten any further than that, but it this may also explain why certain apps behave differently.",
+      "revId": "46046ea5fb702381e486f99e92e465fc04e502d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
