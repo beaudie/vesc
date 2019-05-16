@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bca24270_1f49a745",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T12:49:32Z",
+      "side": 1,
+      "message": "nit: could you break with the consistency in this file and just pass a gl::Context? If you do want to maintain consistency you could change the other methods too.",
+      "range": {
+        "startLine": 914,
+        "startChar": 24,
+        "endLine": 917,
+        "endChar": 46
+      },
+      "revId": "0e8c70145154e5b1cdc48ef9179cb0463f3451a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
