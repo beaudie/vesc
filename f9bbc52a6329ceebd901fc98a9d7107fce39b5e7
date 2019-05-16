@@ -46,6 +46,30 @@
       "revId": "f9bbc52a6329ceebd901fc98a9d7107fce39b5e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf6e416f_dd7fb03f",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4522,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-16T04:10:27Z",
+      "side": 1,
+      "message": "Ah, yes. That is what I intended to do, of course. Apologies!",
+      "parentUuid": "5794767c_48f7c508",
+      "range": {
+        "startLine": 4522,
+        "startChar": 4,
+        "endLine": 4522,
+        "endChar": 22
+      },
+      "revId": "f9bbc52a6329ceebd901fc98a9d7107fce39b5e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
