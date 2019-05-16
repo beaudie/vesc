@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b9368591_55421494",
+        "filename": "src/tests/gl_tests/MultisampleTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T17:57:27Z",
+      "side": 1,
+      "message": "This test is quite fragile, but I\u0027d like to have some sort of test for Lines given that it has a special path.",
+      "range": {
+        "startLine": 193,
+        "startChar": 0,
+        "endLine": 197,
+        "endChar": 58
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
