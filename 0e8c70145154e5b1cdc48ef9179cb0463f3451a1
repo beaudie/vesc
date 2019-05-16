@@ -22,6 +22,30 @@
       "revId": "0e8c70145154e5b1cdc48ef9179cb0463f3451a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc5a9b6f_9fcf5e3e",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-05-16T16:03:30Z",
+      "side": 1,
+      "message": "It doesn\u0027t look out of place to send the context directly, so I switched to that (just for this function).",
+      "parentUuid": "bca24270_1f49a745",
+      "range": {
+        "startLine": 914,
+        "startChar": 24,
+        "endLine": 917,
+        "endChar": 46
+      },
+      "revId": "0e8c70145154e5b1cdc48ef9179cb0463f3451a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
