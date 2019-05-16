@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "239409bd_06f8a504",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T18:03:24Z",
+      "side": 1,
+      "message": "Missing this?\n\n    onStateChange(context, angle::SubjectMessage::ContentsChanged);",
+      "revId": "3658a70de476a3d6350ac54fd35f21e759860f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "566cabfe_0f56df98",
+        "filename": "src/libANGLE/renderer/RenderTargetCache.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T18:03:24Z",
+      "side": 1,
+      "message": "static_assert",
+      "range": {
+        "startLine": 89,
+        "startChar": 16,
+        "endLine": 89,
+        "endChar": 22
+      },
+      "revId": "3658a70de476a3d6350ac54fd35f21e759860f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53ea02e3_6c95e5b2",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T18:03:24Z",
+      "side": 1,
+      "message": "static_assert",
+      "range": {
+        "startLine": 699,
+        "startChar": 16,
+        "endLine": 699,
+        "endChar": 22
+      },
+      "revId": "3658a70de476a3d6350ac54fd35f21e759860f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "516b6ec9_0471243e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-16T18:03:24Z",
+      "side": 1,
+      "message": "static_assert",
+      "range": {
+        "startLine": 870,
+        "startChar": 16,
+        "endLine": 870,
+        "endChar": 22
+      },
+      "revId": "3658a70de476a3d6350ac54fd35f21e759860f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
