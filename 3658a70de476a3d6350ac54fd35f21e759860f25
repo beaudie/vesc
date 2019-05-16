@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "05afc11c_08ef8c38",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:48:46Z",
+      "side": 1,
+      "message": "should probably set dirty bit.",
+      "range": {
+        "startLine": 628,
+        "startChar": 13,
+        "endLine": 628,
+        "endChar": 24
+      },
+      "revId": "3658a70de476a3d6350ac54fd35f21e759860f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "239409bd_06f8a504",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 8
@@ -16,6 +39,47 @@
       "revId": "3658a70de476a3d6350ac54fd35f21e759860f25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e9821cc_9e98cd92",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:48:46Z",
+      "side": 1,
+      "message": "This is a specification command. So it calls signalDirtyStorage below which sets a \"heavier\" dirty bit that the attachment itself is dirty. Same goes for setStorage/setImage/copyImage/etc.",
+      "parentUuid": "239409bd_06f8a504",
+      "revId": "3658a70de476a3d6350ac54fd35f21e759860f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e5601b6_462dfebe",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:48:46Z",
+      "side": 1,
+      "message": "ref here",
+      "range": {
+        "startLine": 1206,
+        "startChar": 4,
+        "endLine": 1206,
+        "endChar": 22
+      },
+      "revId": "3658a70de476a3d6350ac54fd35f21e759860f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -42,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "dda0e436_3d454b80",
+        "filename": "src/libANGLE/renderer/RenderTargetCache.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:48:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "566cabfe_0f56df98",
+      "range": {
+        "startLine": 89,
+        "startChar": 16,
+        "endLine": 89,
+        "endChar": 22
+      },
+      "revId": "3658a70de476a3d6350ac54fd35f21e759860f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "53ea02e3_6c95e5b2",
         "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
         "patchSetId": 8
@@ -62,6 +150,30 @@
       "revId": "3658a70de476a3d6350ac54fd35f21e759860f25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f575fb32_46efb5bd",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:48:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53ea02e3_6c95e5b2",
+      "range": {
+        "startLine": 699,
+        "startChar": 16,
+        "endLine": 699,
+        "endChar": 22
+      },
+      "revId": "3658a70de476a3d6350ac54fd35f21e759860f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
