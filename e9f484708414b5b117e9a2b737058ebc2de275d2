@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57f75976_780b0b9e",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T23:28:46Z",
+      "side": 1,
+      "message": "missed here",
+      "range": {
+        "startLine": 867,
+        "startChar": 32,
+        "endLine": 867,
+        "endChar": 45
+      },
+      "revId": "e9f484708414b5b117e9a2b737058ebc2de275d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c18cf24d_9641b16e",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T23:28:46Z",
+      "side": 1,
+      "message": "I couldn\u0027t find where $data_dir is added to data.\nkhr_gles3 does add a subdir of it, but khr_gles2 doesn\u0027t.\nWould khr_gles2 still be able to work?",
+      "range": {
+        "startLine": 998,
+        "startChar": 0,
+        "endLine": 998,
+        "endChar": 56
+      },
+      "revId": "e9f484708414b5b117e9a2b737058ebc2de275d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8851f45_2d417781",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T23:28:46Z",
+      "side": 1,
+      "message": "Much clearer now, thanks!",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 0
+      },
+      "revId": "e9f484708414b5b117e9a2b737058ebc2de275d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
