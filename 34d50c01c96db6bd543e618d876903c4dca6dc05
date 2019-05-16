@@ -2,6 +2,460 @@
   "comments": [
     {
       "key": {
+        "uuid": "530c4ae4_36d54a3e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 810,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "yeah this is a bit weird that it\u0027s absent from Vulkan. We should bring this up next meeting to figure out. I\u0027d recommend also asking in internal Google mailing lists (Vulkan-Devs and Vulkan-Users) for advice here.",
+      "range": {
+        "startLine": 810,
+        "startChar": 26,
+        "endLine": 810,
+        "endChar": 36
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a07842e_f2dda920",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "presumably you need some kind of blending enabled for your example not to just overwrite the first draw call?",
+      "range": {
+        "startLine": 813,
+        "startChar": 90,
+        "endLine": 813,
+        "endChar": 96
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "892cb47b_fbd03bfb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "pedantic nit: GL_FALSE/GL_TRUE",
+      "range": {
+        "startLine": 816,
+        "startChar": 46,
+        "endLine": 816,
+        "endChar": 51
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6cdc59e_d5ccd4c3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "this should be via an \u0027update\u0027 function since we\u0027re transitioning OpenGL states. the \u0027set\u0027 functions are for UtilsVk which bypasses the transition cache. ping me if you need clarification.",
+      "range": {
+        "startLine": 962,
+        "startChar": 39,
+        "endLine": 962,
+        "endChar": 62
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa501aa3_cd5bff7d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1033,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "(side note: You can enable or disable multisampling here. So pipeline configuration would depend on if the setting is on or off.)",
+      "range": {
+        "startLine": 1033,
+        "startChar": 19,
+        "endLine": 1033,
+        "endChar": 27
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "65ae1b93_5b2e4764",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "Another Vulkan spec hole. Yeah a computer shader seems reasonable. We will need to implement multisample depth/stencil resolve as part of ES 3.0 BlitFramebuffer. You can use bug ID 3200.",
+      "range": {
+        "startLine": 1208,
+        "startChar": 0,
+        "endLine": 1211,
+        "endChar": 75
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33b1c430_31700423",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1239,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "maybe we can make this a helper function in vk_utils or vk_helpers?",
+      "range": {
+        "startLine": 1197,
+        "startChar": 1,
+        "endLine": 1239,
+        "endChar": 5
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7106542d_7ba71b85",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "You will need to be careful to store the |resolvedImage| helper in a vk::Scoped for the duration of it\u0027s lifetime in this file. If say one of the ANGLE_TRY lines above would fail, the ImageHelper destructor would be called without first releasing the Image.",
+      "range": {
+        "startLine": 1263,
+        "startChar": 8,
+        "endLine": 1263,
+        "endChar": 21
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "159f6477_eb7a424a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "This seems a bit over complex to me. I think if we\u0027re passing back sample counts via EGLConfigs we should always exactly match the sample counts used natively in Vulkan. Am I missing something? It should even be validated, right?",
+      "range": {
+        "startLine": 173,
+        "startChar": 20,
+        "endLine": 173,
+        "endChar": 41
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b88280e_1afb6d80",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "Again I feel like we can use an exact count here.",
+      "range": {
+        "startLine": 605,
+        "startChar": 20,
+        "endLine": 605,
+        "endChar": 41
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d94e767_5123afdb",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "nit: the valid checks aren\u0027t necessary, you can remove them. destroy is designed to be a no-op if the object isn\u0027t valid. same with dumpResources.",
+      "range": {
+        "startLine": 738,
+        "startChar": 0,
+        "endLine": 746,
+        "endChar": 9
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "438aabb8_3e2ff915",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 841,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "maybe this could use the resolve helper function I was thinking about in FramebufferVk?",
+      "range": {
+        "startLine": 812,
+        "startChar": 0,
+        "endLine": 841,
+        "endChar": 51
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4702c81_b0d3dbca",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1101,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "maybe should be a helper function in WindowSurfaceVk?",
+      "range": {
+        "startLine": 1101,
+        "startChar": 15,
+        "endLine": 1101,
+        "endChar": 30
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdbd90dc_f0f1a74d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "Do the semaphores ensure the right dependencies are obeyed when there are multiple images in flight?",
+      "range": {
+        "startLine": 243,
+        "startChar": 0,
+        "endLine": 246,
+        "endChar": 35
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60601c75_8627ad78",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "Nice, everything fits well.",
+      "range": {
+        "startLine": 202,
+        "startChar": 13,
+        "endLine": 202,
+        "endChar": 34
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b44847b2_ff6ce896",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "nit: cache this in a temporary for readability?",
+      "range": {
+        "startLine": 340,
+        "startChar": 8,
+        "endLine": 340,
+        "endChar": 83
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60832e0a_63a24bf2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "nit: make a helper function for readability? the ?: stuff is a bit harder to read for me at least.",
+      "range": {
+        "startLine": 370,
+        "startChar": 12,
+        "endLine": 372,
+        "endChar": 84
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd1879ec_ae16be9d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "tiny nit: I\u0027ve been using *Out as my naming convention for out variables in most places in the code. Nothing wrong with out* intrinsically.",
+      "range": {
+        "startLine": 831,
+        "startChar": 78,
+        "endLine": 831,
+        "endChar": 84
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90805a90_34808468",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 842,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "you can probably use for (unsigned long bit : IterableBitSet\u003cMaxN\u003e(sampleCounts)) from bitset_utils.h.\n\nwould be a neat trick possibly.",
+      "range": {
+        "startLine": 834,
+        "startChar": 0,
+        "endLine": 842,
+        "endChar": 1
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63fe808e_85ad1130",
+        "filename": "src/tests/gl_tests/MultisampleTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T18:38:04Z",
+      "side": 1,
+      "message": "Thanks for adding a test.",
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9368591_55421494",
         "filename": "src/tests/gl_tests/MultisampleTest.cpp",
         "patchSetId": 4
