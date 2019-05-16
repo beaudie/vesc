@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f4a39d7_fcb5e631",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T21:24:45Z",
+      "side": 1,
+      "message": "nit: can be const.",
+      "range": {
+        "startLine": 662,
+        "startChar": 22,
+        "endLine": 662,
+        "endChar": 36
+      },
+      "revId": "8774fb686d7a4be7e6c88144a246721ad53917fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7051938_f2319119",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 835,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T21:24:45Z",
+      "side": 1,
+      "message": "nit: actually you can use angle::BitSet32 if you know it\u0027s always 32 bits. slightly faster.",
+      "range": {
+        "startLine": 835,
+        "startChar": 36,
+        "endLine": 835,
+        "endChar": 50
+      },
+      "revId": "8774fb686d7a4be7e6c88144a246721ad53917fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

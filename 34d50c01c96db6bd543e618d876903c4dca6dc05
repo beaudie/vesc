@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "34b5be9c_4f97f434",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T21:24:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "775a0947_d1772c8e",
+      "range": {
+        "startLine": 813,
+        "startChar": 90,
+        "endLine": 813,
+        "endChar": 96
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "892cb47b_fbd03bfb",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 4
@@ -225,6 +249,30 @@
       "side": 1,
       "message": "I didn\u0027t find anything that could mean \"disable multisampling\" with Vulkan pipelines though.",
       "parentUuid": "fa501aa3_cd5bff7d",
+      "range": {
+        "startLine": 1033,
+        "startChar": 19,
+        "endLine": 1033,
+        "endChar": 27
+      },
+      "revId": "34d50c01c96db6bd543e618d876903c4dca6dc05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2575d03_0da6fbae",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1033,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-16T21:24:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "79d2790d_afdaed17",
       "range": {
         "startLine": 1033,
         "startChar": 19,
