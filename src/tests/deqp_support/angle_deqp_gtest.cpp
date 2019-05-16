@@ -63,9 +63,11 @@ const char *gCaseListSearchPaths[] = {
     "/../../third_party/deqp/src/external/openglcts/data/mustpass/gles/khronos_mustpass/master/",
     "/../../third_party/angle/third_party/deqp/src/external/openglcts/data/mustpass/gles/"
     "aosp_mustpass/master/",
+    "/../../third_party/angle/third_party/deqp/src/external/openglcts/data/mustpass/gles/"
     "khronos_mustpass/master/",
     "/../../sdcard/chromium_tests_root/third_party/angle/third_party/deqp/src/external/openglcts/"
     "data/mustpass/gles/aosp_mustpass/master/",
+    "/../../sdcard/chromium_tests_root/third_party/angle/third_party/deqp/src/external/openglcts/"
     "data/mustpass/gles/khronos_mustpass/master/",
     "/../../third_party/deqp/src/android/cts/master/",
     "/../../third_party/angle/third_party/deqp/src/android/cts/master/",
