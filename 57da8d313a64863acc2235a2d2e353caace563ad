@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12d8b8de_a6599be1",
+        "filename": "src/tests/deqp_support/angle_deqp_libtester_main.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T15:14:31Z",
+      "side": 0,
+      "message": "I wonder what this was for.\nHope we are not breaking some platform by removing this.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 0
+      },
+      "revId": "57da8d313a64863acc2235a2d2e353caace563ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

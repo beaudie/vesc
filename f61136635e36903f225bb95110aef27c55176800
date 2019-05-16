@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "781de780_03af4707",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 19
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T15:14:31Z",
+      "side": 1,
+      "message": "Looks like you\u0027ve moved data into angle_deqp_gtest.\nMaybe call this angle_deqp_gtest_with_mustpass?",
+      "range": {
+        "startLine": 927,
+        "startChar": 34,
+        "endLine": 927,
+        "endChar": 38
+      },
+      "revId": "f61136635e36903f225bb95110aef27c55176800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ba56905_d58a81b3",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 19
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T15:14:31Z",
+      "side": 1,
+      "message": "I\u0027ve suggested to name this angle_data_dir in Tobin\u0027s build_overrides CL.\nDoes it make sense to do this in this CL (or a prior CL / follow up)?\nAll the different data dirs are confusing.",
+      "range": {
+        "startLine": 996,
+        "startChar": 20,
+        "endLine": 996,
+        "endChar": 28
+      },
+      "revId": "f61136635e36903f225bb95110aef27c55176800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb3d4b31_925f679a",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 19
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T15:14:31Z",
+      "side": 1,
+      "message": "Is it only KHR GLES3 dEQP?",
+      "range": {
+        "startLine": 999,
+        "startChar": 8,
+        "endLine": 999,
+        "endChar": 16
+      },
+      "revId": "f61136635e36903f225bb95110aef27c55176800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5cec69a_b4378e6a",
+        "filename": "src/tests/deqp_support/angle_deqp_libtester_main.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-16T15:14:31Z",
+      "side": 1,
+      "message": "nit: dataDir makes more sense to me.",
+      "range": {
+        "startLine": 54,
+        "startChar": 20,
+        "endLine": 54,
+        "endChar": 30
+      },
+      "revId": "f61136635e36903f225bb95110aef27c55176800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
