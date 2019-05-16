@@ -22,6 +22,30 @@
       "revId": "967ac3846e06e812321079cb17accbb3b8ebe9a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efeec6d1_6ec04aed",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-05-16T06:18:31Z",
+      "side": 1,
+      "message": "Sorry, I am not sure I totally understand your suggestion. Currently, this function is only called when it\u0027s in a structure std140 uniform block. And check the value of uniform_access_chain is a struct or not. If yes, we will use map_* array, otherwise, use the original UBO. What do you mean \u0027do it in a pre-pass in OutputHLSL setup\u0027?\n\nI will land this patch for now. If further refactor is needed, I can do it later:)",
+      "parentUuid": "da3b5d8d_6126b7dc",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 206,
+        "endChar": 0
+      },
+      "revId": "967ac3846e06e812321079cb17accbb3b8ebe9a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
