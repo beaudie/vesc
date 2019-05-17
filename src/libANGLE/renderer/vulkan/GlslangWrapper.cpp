@@ -487,7 +487,7 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
 
     // Assign textures to a descriptor set and binding.
     uint32_t textureBinding = 0;
-    const auto &uniforms = programState.getUniforms();
+    const auto &uniforms    = programState.getUniforms();
     for (unsigned int uniformIndex : programState.getSamplerUniformRange())
     {
         const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
@@ -663,8 +663,20 @@ angle::Result GlslangWrapper::GetShaderCodeImpl(vk::Context *context,
 
     glslang::TIntermediate *vertexStage   = program.getIntermediate(EShLangVertex);
     glslang::TIntermediate *fragmentStage = program.getIntermediate(EShLangFragment);
-    glslang::GlslangToSpv(*vertexStage, *vertexCodeOut);
-    glslang::GlslangToSpv(*fragmentStage, *fragmentCodeOut);
+
+    // Enable SPIR-V optimization:
+    //
+    // - disableOptimizer is by default true.  Note that setting that to false doesn't mean
+    //   optimization is done.  That flag is really an override to disable optimization with HLSL
+    //   as it's done by default to avoid generating illegal SPIR-V.
+    // - optimizeSize needs to be set and is the only optimization option (i.e. there is no
+    //   optimizeSpeed).
+    glslang::SpvOptions spvOptions;
+    spvOptions.disableOptimizer = false;
+    spvOptions.optimizeSize     = true;
+
+    glslang::GlslangToSpv(*vertexStage, *vertexCodeOut, &spvOptions);
+    glslang::GlslangToSpv(*fragmentStage, *fragmentCodeOut, &spvOptions);
 
     return angle::Result::Continue;
 }
