@@ -16,6 +16,24 @@
       "revId": "46046ea5fb702381e486f99e92e465fc04e502d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aad65f05_0d604758",
+        "filename": "src/tests/gl_tests/SimpleOperationTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-17T02:30:58Z",
+      "side": 1,
+      "message": "In `ContextVk::syncState()`, under `gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING`, I see a call to `updateCullMode`, but not `updateFrontFace`. Maybe that\u0027s what\u0027s missing.",
+      "parentUuid": "5db6e9c5_23371907",
+      "revId": "46046ea5fb702381e486f99e92e465fc04e502d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
