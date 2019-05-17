@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd9e509c_0b41ca94",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-17T13:44:24Z",
+      "side": 1,
+      "message": "can you pack these such that we respect 8 bit boundaries? something like uint8_t type, uint8_t stages, uint16_t count. We can always change this in the future. Maybe leave a comment of how many bits each needs. But it should be faster to work with whole bytes instead of fractions.",
+      "range": {
+        "startLine": 509,
+        "startChar": 8,
+        "endLine": 512,
+        "endChar": 74
+      },
+      "revId": "2c98bd5da74fcc20984c395a2d1b6c0b11d68e75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
