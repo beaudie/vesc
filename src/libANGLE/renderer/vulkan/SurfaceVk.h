@@ -20,7 +20,23 @@ namespace rx
 {
 class RendererVk;
 
-class OffscreenSurfaceVk : public SurfaceImpl
+class SurfaceVk : public SurfaceImpl
+{
+  public:
+    angle::Result getAttachmentRenderTarget(const gl::Context *context,
+                                            GLenum binding,
+                                            const gl::ImageIndex &imageIndex,
+                                            FramebufferAttachmentRenderTarget **rtOut) override;
+
+  protected:
+    SurfaceVk(const egl::SurfaceState &surfaceState);
+    ~SurfaceVk() override;
+
+    RenderTargetVk mColorRenderTarget;
+    RenderTargetVk mDepthStencilRenderTarget;
+};
+
+class OffscreenSurfaceVk : public SurfaceVk
 {
   public:
     OffscreenSurfaceVk(const egl::SurfaceState &surfaceState, EGLint width, EGLint height);
@@ -52,11 +68,6 @@ class OffscreenSurfaceVk : public SurfaceImpl
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
 
-    angle::Result getAttachmentRenderTarget(const gl::Context *context,
-                                            GLenum binding,
-                                            const gl::ImageIndex &imageIndex,
-                                            FramebufferAttachmentRenderTarget **rtOut) override;
-
     angle::Result initializeContents(const gl::Context *context,
                                      const gl::ImageIndex &imageIndex) override;
 
@@ -76,7 +87,6 @@ class OffscreenSurfaceVk : public SurfaceImpl
 
         vk::ImageHelper image;
         vk::ImageView imageView;
-        RenderTargetVk renderTarget;
     };
 
     angle::Result initializeImpl(DisplayVk *displayVk);
@@ -88,7 +98,7 @@ class OffscreenSurfaceVk : public SurfaceImpl
     AttachmentImage mDepthStencilAttachment;
 };
 
-class WindowSurfaceVk : public SurfaceImpl
+class WindowSurfaceVk : public SurfaceVk
 {
   public:
     WindowSurfaceVk(const egl::SurfaceState &surfaceState,
@@ -124,11 +134,6 @@ class WindowSurfaceVk : public SurfaceImpl
     EGLint isPostSubBufferSupported() const override;
     EGLint getSwapBehavior() const override;
 
-    angle::Result getAttachmentRenderTarget(const gl::Context *context,
-                                            GLenum binding,
-                                            const gl::ImageIndex &imageIndex,
-                                            FramebufferAttachmentRenderTarget **rtOut) override;
-
     angle::Result initializeContents(const gl::Context *context,
                                      const gl::ImageIndex &imageIndex) override;
 
@@ -146,7 +151,7 @@ class WindowSurfaceVk : public SurfaceImpl
     VkInstance mInstance;
 
   private:
-    virtual angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut) = 0;
+    virtual angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut)      = 0;
     virtual angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) = 0;
 
     angle::Result initializeImpl(DisplayVk *displayVk);
@@ -174,9 +179,6 @@ class WindowSurfaceVk : public SurfaceImpl
     uint32_t mMinImageCount;
     VkSurfaceTransformFlagBitsKHR mPreTransform;
     VkCompositeAlphaFlagBitsKHR mCompositeAlpha;
-
-    RenderTargetVk mColorRenderTarget;
-    RenderTargetVk mDepthStencilRenderTarget;
 
     uint32_t mCurrentSwapchainImageIndex;
 
