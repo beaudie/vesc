@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "43c66145_4a4dcfac",
+        "filename": "src/tests/gl_tests/SimpleOperationTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-17T13:38:12Z",
+      "side": 1,
+      "message": "is it possible to remove the swap for the final version of the test?",
+      "range": {
+        "startLine": 124,
+        "startChar": 4,
+        "endLine": 124,
+        "endChar": 18
+      },
+      "revId": "46046ea5fb702381e486f99e92e465fc04e502d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4281c38_7c9e2b84",
+        "filename": "src/tests/gl_tests/SimpleOperationTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-17T13:38:12Z",
+      "side": 1,
+      "message": "can you use a GLFramebuffer raii type here?",
+      "range": {
+        "startLine": 127,
+        "startChar": 4,
+        "endLine": 127,
+        "endChar": 34
+      },
+      "revId": "46046ea5fb702381e486f99e92e465fc04e502d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "320ae0ac_8c2180b5",
+        "filename": "src/tests/gl_tests/SimpleOperationTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-17T13:38:12Z",
+      "side": 1,
+      "message": "here to, GLTexture",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 128,
+        "endChar": 34
+      },
+      "revId": "46046ea5fb702381e486f99e92e465fc04e502d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5db6e9c5_23371907",
         "filename": "src/tests/gl_tests/SimpleOperationTest.cpp",
         "patchSetId": 6
@@ -31,6 +100,47 @@
       "side": 1,
       "message": "In `ContextVk::syncState()`, under `gl::State::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING`, I see a call to `updateCullMode`, but not `updateFrontFace`. Maybe that\u0027s what\u0027s missing.",
       "parentUuid": "5db6e9c5_23371907",
+      "revId": "46046ea5fb702381e486f99e92e465fc04e502d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50b3a30d_41af3ba9",
+        "filename": "src/tests/gl_tests/SimpleOperationTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-17T13:38:12Z",
+      "side": 1,
+      "message": "Good thinking! And nice test to reproduce this. Analysis seems sound.\n\nMinor request but can you move this test into StateChangeTest.cpp as a SimpleStateChangeTest?",
+      "parentUuid": "aad65f05_0d604758",
+      "revId": "46046ea5fb702381e486f99e92e465fc04e502d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35d9fedc_bfd5b090",
+        "filename": "src/tests/gl_tests/SimpleOperationTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-17T13:38:12Z",
+      "side": 1,
+      "message": "with RAII types you don\u0027t need the freeing.",
+      "range": {
+        "startLine": 159,
+        "startChar": 2,
+        "endLine": 161,
+        "endChar": 45
+      },
       "revId": "46046ea5fb702381e486f99e92e465fc04e502d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
