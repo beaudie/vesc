@@ -525,7 +525,7 @@ inline DestT *SafeGetImplAs(SrcT *src)
 
 }  // namespace rx
 
-#include "angletypes.inl"
+#include "angletypes.inc"
 
 namespace angle
 {
