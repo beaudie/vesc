@@ -35,29 +35,20 @@ tcu::TestContext *g_testCtx          = nullptr;
 tcu::TestPackageRoot *g_root         = nullptr;
 tcu::RandomOrderExecutor *g_executor = nullptr;
 
-const char *gDataDirHaystack[] = {
-    "../../../third_party/deqp/src",
-    "../../sdcard/chromium_tests_root/third_party/angle/third_party/deqp/src",
-    "../../third_party/angle/third_party/deqp/src",
-    "../../third_party/deqp/src",
-    "../third_party/deqp/src",
-    ".",
-    "third_party/deqp/src",
-};
-
-bool FindDataDir(const char *needle, std::string *dataDirOut)
+bool FindDataDir(std::string *dataDirOut)
 {
-    for (const char *searchDir : gDataDirHaystack)
-    {
-        std::stringstream dirStream;
-        dirStream << angle::GetExecutableDirectory() << "/" << searchDir << "/" << needle;
-        std::string candidateDataDir = dirStream.str();
 
-        if (angle::IsDirectory(candidateDataDir.c_str()))
-        {
-            *dataDirOut = candidateDataDir;
-            return true;
-        }
+    std::stringstream dirStream;
+    dirStream << angle::GetExecutableDirectory() << "/" << ANGLE_DEQP_DATA_DIR;
+    std::string candidateDataDir = dirStream.str();
+
+    std::cout << "Data dir is " << ANGLE_DEQP_DATA_DIR << "\n";
+    std::cout << "Candidate dir is " << candidateDataDir << "\n";
+
+    if (angle::IsDirectory(candidateDataDir.c_str()))
+    {
+        *dataDirOut = candidateDataDir;
+        return true;
     }
 
     return false;
@@ -94,7 +85,7 @@ ANGLE_LIBTESTER_EXPORT bool deqp_libtester_init_platform(int argc,
         }
 
         std::string deqpDataDir;
-        if (!FindDataDir(ANGLE_DEQP_DATA_DIR, &deqpDataDir))
+        if (!FindDataDir(&deqpDataDir))
         {
             std::cout << "Failed to find dEQP data directory." << std::endl;
             return false;
