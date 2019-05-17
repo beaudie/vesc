@@ -1,122 +1,122 @@
 {
   "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py":
-    "a528a53197ea6c8eaa3bb42a7cdf0a17",
+    "05c1a44668400daabef18ddc510a7462",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000000.inc":
-    "81ec58577a603891b5778b4d393734b8",
+    "508ca0c285c1fe0a2bd8684877c440c7",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000001.inc":
-    "399562c957c0bc0ef14df973fe808b05",
+    "f82d00f775fbce8fd9e921fd2dadfefa",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000002.inc":
-    "0038d212a95f2542b17ba6e4238c0462",
+    "8e98e576538a86716872c8e51b1eb9cd",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000003.inc":
-    "67e9f1fc766486fc5f534d8a1f04a854",
+    "486411a77abc214c3a69df0e0faf0ecc",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000004.inc":
-    "dd6ffc1e9586177f730203dd5841d1d1",
+    "63094b18bbe27a74d1549d186d71ea35",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000005.inc":
-    "06a0f46b8b205ba9bb5e7bb14404b5fa",
+    "b42e67c9f123b6647d51497b741056ea",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000006.inc":
-    "75296d048ace1db3ed8e544d56b4e050",
+    "99e35d48edc39b9ee2e2004013580d62",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000007.inc":
-    "b2ae64586829e505a2dbcf8fb7a1c50b",
+    "aa6ae87e8babe83d2c809c88a3add0ff",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000008.inc":
-    "55ba68de82d8586e2f333b1486db59cc",
+    "2a7969aa1fd704b2e201dba944952337",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000009.inc":
-    "7b3743cc4bc2c6feb0b203a74db5d501",
+    "329e4df055ef226c1d6862518adff653",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.0000000A.inc":
-    "7ad6c4c137773e8ecb75e6c26e7b0990",
+    "2d67983b08b72363cba17d4bea3419d1",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.0000000B.inc":
-    "61d9743396e56e7b86dfc3c8603adec4",
+    "2a31e2b628938c86021681fc78425065",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.0000000C.inc":
-    "809ac592dd2493896de568110c812191",
+    "c61e2132170bfcaf1a0c3b40bfb4beda",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.0000000D.inc":
-    "ab6afa1fcb8e58de81f23628f008586d",
+    "d0550041c8eb41fc43bab6fa16fb70e2",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.0000000E.inc":
-    "0dcce7e7c06679abba428644e062d5c5",
+    "e0a45830584b68392813d084eccb915f",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.0000000F.inc":
-    "aa2e70847fe9fe45b88634d99a94d12a",
+    "8e067717f02074a0d197b9989a3651ca",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000010.inc":
-    "eb338d106ddf2f385984325d9e744278",
+    "e5816efd79816a8339eab6e9cf6e0cf3",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000011.inc":
-    "09c206e206f6c5e2c2c861994cc85b71",
+    "4825b2934a062e1d4803ab57adabb109",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000012.inc":
-    "1e0687860e0e953a08ffba72436a8a29",
+    "b0a3960af5a588c73dd4e47be552bfb8",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000013.inc":
-    "b63c6b7f0cbdfda46f6567992a4fe0e0",
+    "1dd7904b6da699e7487d02eda943c9a5",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000014.inc":
-    "b580482c75cc647753652ce7ad066752",
+    "030d52e9d9d21361613a3cd75eaee59c",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000015.inc":
-    "c615ec355d9490f099fd0d08d29945af",
+    "2e0283cd48561f237a90c98151f63b4c",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000016.inc":
-    "3869539b97d26bde314330c4b1e86c39",
+    "ff8a2db749b16252e3f35b87bbb572cb",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000017.inc":
-    "e1292ab693551a1fe63ddca991ba7b24",
+    "57951218751948ab5499132e9b04d457",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolveStencilNoExport.comp.00000000.inc":
-    "ca23e2bc39df49c395f04d0309f8716e",
+    "58cdc9395865d2bcecf8183d6196efd9",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolveStencilNoExport.comp.00000001.inc":
-    "b221f732a390f5324ba525a8b8126c47",
+    "21d5b38e439225978c1067d61d8e77dd",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolveStencilNoExport.comp.00000002.inc":
-    "7fba278c66982666d9a92985630ce612",
+    "6532f1798104bfb682a5599713c3967b",
   "src/libANGLE/renderer/vulkan/shaders/gen/BlitResolveStencilNoExport.comp.00000003.inc":
-    "8f775bd123c036df48521af0f0b370e7",
+    "c8e14950f2dfab14ec20a5780e1690eb",
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000000.inc":
-    "df5fdc47f0950e3eae3d9491e9c84af7",
+    "6d14ccf1371a85d08dccc4efed87ea8c",
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000001.inc":
-    "55954147482afd1201aeb37b6748eb12",
+    "896bca5a79760e16e76755c667e02e93",
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000002.inc":
-    "b46c4af8f46840fb70623fcdd804f163",
+    "c659cb32548efa2bee7cf8787629bac3",
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000003.inc":
-    "2c19d6dd6d73efa49ed462183fab1703",
+    "d6de68ab70de5f6d22b8733857e85e14",
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000004.inc":
-    "3fd69b0d2cd8e34207c2c2a913ea4afa",
+    "a2f2196be3d7272e2a6a9f54e4e04302",
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000005.inc":
-    "641eaaf8721b80837709180268bd3d9b",
+    "9f027ad283c627640dac6ac93d5a0e27",
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000006.inc":
-    "1b60e99ce75512caf42aafb0952dcccf",
+    "0c749b92cb2d264a3ee6870fbaf6c962",
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000007.inc":
-    "1aa4f50b7a57fae6bb5e454738740caa",
+    "660bc5e916022df61a92fa2d38c3031f",
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000008.inc":
-    "1219e6eda8583c222da9afaf375e3a8a",
+    "61463c2abac6faaa451d360670a1af30",
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000009.inc":
-    "23bfdd347c64d612b17965a4a625b8d2",
+    "5642a88b52361f396866685b2d566210",
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.0000000A.inc":
-    "41a4c1f28284dd9396bca79d9967704d",
+    "5ff3cdc531135f1f0597b9b7ef007eb5",
   "src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.0000000B.inc":
-    "065aaa20cdad29b5f5d2916eb3d096fc",
+    "bfebc8bd626ecd41eb5f9f8401313982",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000000.inc":
-    "7ab9d6aa6dba8271f68df9c6f5355e44",
+    "f0e3195b78e28bff2956f46e7fecdb64",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000001.inc":
-    "4726c9620a56bee224983d28d979fd39",
+    "eb564f4bc4fa32576a8f4a7a23aa46f9",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000000.inc":
-    "d4e48d64aa66fcf3c09330c4234ba349",
+    "43a4001b7b2407625a00f6ba86061514",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000001.inc":
-    "1f2edac6d7a8c2ed5547052808245309",
+    "f7792bbbc25b436070cd98b5f02fd8e8",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000002.inc":
-    "429b44e5774de85b72657c26cc12bec0",
+    "c4e52126f9b2959da66243be70cd9447",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000003.inc":
-    "fdc329bbdfcf861ef64514e996b9381b",
+    "f44c22344179e88f4183889e3e2f2f74",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000004.inc":
-    "e0c8a2fe5d0087dbacb2bbc7457c1789",
+    "6cf703eb095e0e944569cc9b42b332f9",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000005.inc":
-    "2ad61027b563e8d4eb9ac8d7139a1cd3",
+    "d8c1c27f76c2b63be19d3e77fc396a5f",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000006.inc":
-    "b2037ea0fc1651b4dff779df41701b1e",
+    "959bc9ffd03c0b7ccd87f2449fdf080b",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000007.inc":
-    "ea0041ce244d44f87f97ba7c671be723",
+    "8515c9da17e1bd1162c5462b263b8572",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000008.inc":
-    "6bfcbd2e838d0d746954de8bb8557073",
+    "de13712ff35952698100debd3094cba5",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000009.inc":
-    "7b439c9d771db466e67b5f2f6d53b9e7",
+    "fed95c9b4d96ba3c45ad2412fbac01bf",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000000A.inc":
-    "60addec54cd45b611afb6fb3477aa985",
+    "2b4f5cd0f430b078b1a64a6cb99b8488",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000000B.inc":
-    "3a3b8fb4219ef5bfaafcfe7a873c1a3d",
+    "8b6999f02b18ae0abe64f2a5dbd8222e",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000000C.inc":
-    "3c7f565202beea65b035da7c6a894e4f",
+    "3260cc5832079e5a06639d67caf0fa01",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000000D.inc":
-    "0579b05b188376e03d860e8972184eae",
+    "f1d5c1c322a380ca1d1ea9526592409c",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000000E.inc":
-    "e120c3f480cdfd3bb22d3d434d694377",
+    "51ae91008945506999f192052c51ea1b",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000000F.inc":
-    "8e20d21fbfd6d579c769384ae7412a54",
+    "769f544c55fc0c2637c80cad68c9eb79",
   "src/libANGLE/renderer/vulkan/shaders/gen/FullScreenQuad.vert.00000000.inc":
     "ddb226d9a40f950f6757ebea385b37bb",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageClear.frag.00000000.inc":
@@ -168,41 +168,41 @@
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageClear.frag.00000017.inc":
     "be221d4a2c36944ef108dc4c6cdf2387",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000000.inc":
-    "adfbfbb17805d1337484e46d7909f66b",
+    "da48d85f0ec9ec78f4b3a29378437292",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000001.inc":
-    "94fec0130dc80d5087e89983d8aed162",
+    "68928d47726dc9337f4c4c606148f39b",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000002.inc":
-    "24c6aae788c73377a88e53fa94834f87",
+    "df6eb679cea04986527e27a354c92a39",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000003.inc":
-    "03dd34fc888f5999cd57e2ef0e15fcc0",
+    "716ab8c882e4a37035492b0bf2d663d6",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000004.inc":
-    "73aa4521196a6488484801fbe128830f",
+    "4a703bc869e09b73e7384987badbecb3",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000005.inc":
-    "f911ee731f428afde5fba60b6f42f0ae",
+    "a11b50490ab300fd2a90af56f5b432db",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000008.inc":
-    "51b287a9613fc64a472c2fb980235d42",
+    "39003e06cabcbbedbbcc2a949ef2c16b",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000009.inc":
-    "88c594595030e5b11955e79cbbfedf95",
+    "907405d121052c5f0d8cb6712f84adfa",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.0000000A.inc":
-    "4925299490148631cf5c9827dc1982ee",
+    "2fd5e8e01fbb61cc20cd22080b07dfce",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.0000000B.inc":
-    "7b2e90c9df8080ca193a7f4313192249",
+    "3b068e5c8d9a97ed66cae7be689ded8a",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.0000000C.inc":
-    "f346d207deec5bb144e80778952e72cf",
+    "440c52185a886094949d81b465632b05",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.0000000D.inc":
-    "aed7cea1272169362561d4e0af19056c",
+    "6584790fe427c254ecf3741ea78472ef",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000010.inc":
-    "00da30abe9e4e41d9d1a6b36dca20302",
+    "00012f92e8c616e427479624560c285c",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000011.inc":
-    "693706c67e03467cef580f3020e0b6bb",
+    "f99929634795c17ca564c36eaca003c9",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000012.inc":
-    "4815cf07ea51b2737176079cc218b3aa",
+    "45386abdf8f368e6f174baed77fb9e09",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000013.inc":
-    "44d7d90691df23f87e25e6f0da8ad1cc",
+    "e6c7ed981a297026a85caf17a7cae518",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000014.inc":
-    "084c1b02964cf2baefcc733b7f4e4786",
+    "bcae4b9eebae5511f0c1edefa3a3277e",
   "src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000015.inc":
-    "6a2e5e10e686370f3350a96cda2441a0",
+    "ef59e8db793d6a173a4603d6619ba713",
   "src/libANGLE/renderer/vulkan/shaders/src/BlitResolve.frag":
     "a3ecba7bc86093f90b183605bed82813",
   "src/libANGLE/renderer/vulkan/shaders/src/BlitResolveStencilNoExport.comp":

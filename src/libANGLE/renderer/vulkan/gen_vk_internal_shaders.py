@@ -420,6 +420,9 @@ def compile_variation(glslang_path, compile_queue, shader_file, shader_basename,
         glslang_preprocessor_output_args.append(shader_file)  # Input GLSL shader
 
         glslang_args += ['-V']  # Output mode is Vulkan
+        # Optimize generated SPIR-V (Note: the option says optimize for size, but that's the only
+        # optimization possibility)
+        glslang_args += ['-Os']
         glslang_args += ['--variable-name', get_var_name(output_name)]  # C-style variable name
         glslang_args += ['-o', output_path]  # Output file
         glslang_args.append(shader_file)  # Input GLSL shader
