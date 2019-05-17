@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "efff2cf5_177aa6ca",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-17T13:38:34Z",
+      "side": 1,
+      "message": "also might be a good time to open a bug.",
+      "range": {
+        "startLine": 11,
+        "startChar": 5,
+        "endLine": 11,
+        "endChar": 14
+      },
+      "revId": "46046ea5fb702381e486f99e92e465fc04e502d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43c66145_4a4dcfac",
         "filename": "src/tests/gl_tests/SimpleOperationTest.cpp",
         "patchSetId": 6
