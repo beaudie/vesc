@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5fbf949f_5129793c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-05-17T14:48:41Z",
+      "side": 1,
+      "message": "Turns out there is already a bug and a fix proposed by ARM.\nanglebug/3237\nI\u0027ve uploaded patch as CL: https://chromium-review.googlesource.com/c/angle/angle/+/1617007\nThere are still some rendering issues, but overall behavior is much better.",
+      "parentUuid": "efff2cf5_177aa6ca",
+      "range": {
+        "startLine": 11,
+        "startChar": 5,
+        "endLine": 11,
+        "endChar": 14
+      },
+      "revId": "46046ea5fb702381e486f99e92e465fc04e502d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "43c66145_4a4dcfac",
         "filename": "src/tests/gl_tests/SimpleOperationTest.cpp",
         "patchSetId": 6
