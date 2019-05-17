@@ -90,10 +90,8 @@ rasterization](#opengl-line-segment-rasterization) emulation depend on draw-time
 
 1. **Draw-time SPIR-V Generation**: Once the application records a draw call we use Khronos'
 [glslang][glslang] to convert the Vulkan-compatible GLSL into SPIR-V with the correct draw-time
-defines. The SPIR-V is then compiled into `VkShaderModules`. For details please see
-[GlslangWrapper.cpp][GlslangWrapper.cpp]. The `VkShaderModules` are then used by `VkPipelines`. Note
-that we currently don't use [SPIRV-Tools][SPIRV-Tools] to perform any SPIR-V optimization. This
-could be something to improve on in the future.
+defines. The SPIR-V is then optimized with [SPIRV-Tools][SPIRV-Tools] before translating into
+`VkShaderModules`. For details please see [GlslangWrapper.cpp][GlslangWrapper.cpp].
 
 See the below diagram for a high-level view of the shader translation flow:
 
