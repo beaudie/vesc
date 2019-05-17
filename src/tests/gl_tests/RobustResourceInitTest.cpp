@@ -1853,6 +1853,86 @@ TEST_P(RobustResourceInitTest, DynamicVertexArrayOffsetOutOfBounds)
     // Either no error or invalid operation is okay.
 }
 
+// Tests bug with depth stencil robust resource init.
+TEST_P(RobustResourceInitTest, DepthTextures)
+{
+    ANGLE_SKIP_TEST_IF(!hasGLExtension());
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_depth_texture") &&
+                       !EnsureGLExtensionEnabled("OES_depth_texture"));
+
+    constexpr char kFS[] = R"(precision mediump float;
+uniform sampler2D u_texture;
+uniform vec2 u_resolution;
+void main()
+{
+    vec2 texcoord = (gl_FragCoord.xy - vec2(0.5)) / (u_resolution - vec2(1.0));
+    gl_FragColor = texture2D(u_texture, texcoord);
+})";
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), kFS);
+    glUseProgram(program);
+
+    GLint uniLoc = glGetUniformLocation(program, "u_resolution");
+    ASSERT_NE(-1, uniLoc);
+    glUniform2f(uniLoc, static_cast<float>(getWindowWidth()),
+                static_cast<float>(getWindowHeight()));
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, getWindowWidth(), getWindowHeight(), 0,
+                 GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, nullptr);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    ASSERT_GL_NO_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glEnable(GL_SCISSOR_TEST);
+
+    constexpr float d00 = 0.2;
+    constexpr float d01 = 0.4;
+    constexpr float d10 = 0.6;
+    constexpr float d11 = 0.8;
+
+    glScissor(0, 0, 1, 1);
+    glClearDepthf(d00);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    glScissor(1, 0, 1, 1);
+    glClearDepthf(d10);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    glScissor(0, 1, 1, 1);
+    glClearDepthf(d01);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    glScissor(1, 1, 1, 1);
+    glClearDepthf(d11);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    glDisable(GL_SCISSOR_TEST);
+
+    // render the depth texture.
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, tex);
+
+    glDisable(GL_DITHER);
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(1, 0, 0, 1);
+    glClearDepthf(1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    ASSERT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST(RobustResourceInitTest,
                        ES2_D3D9(),
                        ES2_D3D11(),
