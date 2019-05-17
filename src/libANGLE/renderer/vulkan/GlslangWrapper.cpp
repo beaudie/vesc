@@ -487,7 +487,7 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
 
     // Assign textures to a descriptor set and binding.
     uint32_t textureBinding = 0;
-    const auto &uniforms = programState.getUniforms();
+    const auto &uniforms    = programState.getUniforms();
     for (unsigned int uniformIndex : programState.getSamplerUniformRange())
     {
         const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
@@ -663,8 +663,13 @@ angle::Result GlslangWrapper::GetShaderCodeImpl(vk::Context *context,
 
     glslang::TIntermediate *vertexStage   = program.getIntermediate(EShLangVertex);
     glslang::TIntermediate *fragmentStage = program.getIntermediate(EShLangFragment);
-    glslang::GlslangToSpv(*vertexStage, *vertexCodeOut);
-    glslang::GlslangToSpv(*fragmentStage, *fragmentCodeOut);
+
+    glslang::SpvOptions spvOptions;
+    spvOptions.disableOptimizer = false;
+    spvOptions.optimizeSize     = true;
+
+    glslang::GlslangToSpv(*vertexStage, *vertexCodeOut, &spvOptions);
+    glslang::GlslangToSpv(*fragmentStage, *fragmentCodeOut, &spvOptions);
 
     return angle::Result::Continue;
 }
