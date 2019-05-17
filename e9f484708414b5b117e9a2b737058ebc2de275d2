@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "855b54f9_34f23177",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-17T13:34:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57f75976_780b0b9e",
+      "range": {
+        "startLine": 867,
+        "startChar": 32,
+        "endLine": 867,
+        "endChar": 45
+      },
+      "revId": "e9f484708414b5b117e9a2b737058ebc2de275d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c18cf24d_9641b16e",
         "filename": "src/tests/BUILD.gn",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "2d9de863_8cbd0e38",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 998,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-17T13:34:36Z",
+      "side": 1,
+      "message": "Probably could fail if there was no other files in angledata. To be safe I moved the copies rule.",
+      "parentUuid": "c18cf24d_9641b16e",
+      "range": {
+        "startLine": 998,
+        "startChar": 0,
+        "endLine": 998,
+        "endChar": 56
+      },
+      "revId": "e9f484708414b5b117e9a2b737058ebc2de275d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b8851f45_2d417781",
         "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "e9f484708414b5b117e9a2b737058ebc2de275d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37f3f64d_e2e4849a",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-17T13:34:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b8851f45_2d417781",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 0
+      },
+      "revId": "e9f484708414b5b117e9a2b737058ebc2de275d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
