@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc688d43_8fafc42a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-18T13:42:43Z",
+      "side": 1,
+      "message": "nit: can you re-tag this with Bug: chromium:###### ? I think it got dropped.",
+      "revId": "73256c3318f2d7741efa789e6414b80fbe99c003",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
