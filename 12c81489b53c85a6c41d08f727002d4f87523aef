@@ -22,6 +22,30 @@
       "revId": "12c81489b53c85a6c41d08f727002d4f87523aef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e19e2451_00911c03",
+        "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-20T07:39:56Z",
+      "side": 1,
+      "message": "I removed them. I added them before I fixed the too long lines I had.\nOnce I had done the length fixes they no longer had any effect.",
+      "parentUuid": "6e1763ae_0d7ca221",
+      "range": {
+        "startLine": 696,
+        "startChar": 19,
+        "endLine": 696,
+        "endChar": 35
+      },
+      "revId": "12c81489b53c85a6c41d08f727002d4f87523aef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
