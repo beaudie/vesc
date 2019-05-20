@@ -22,6 +22,30 @@
       "revId": "f675f9493f60cd5c5f5441ccd341568fd7a497c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "296c901e_2c371246",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-20T14:35:37Z",
+      "side": 1,
+      "message": "Yeah, but then the tests are named angle_deqp_gles2-khr_tests... rather just keep the extra logic.",
+      "parentUuid": "f4d94341_8a420c80",
+      "range": {
+        "startLine": 1030,
+        "startChar": 24,
+        "endLine": 1030,
+        "endChar": 33
+      },
+      "revId": "f675f9493f60cd5c5f5441ccd341568fd7a497c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
