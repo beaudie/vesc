@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4d94341_8a420c80",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-20T14:30:49Z",
+      "side": 1,
+      "message": "If you name this \"gles2-khr\", it can use the same mustpass_name logic as angle_deqp_core_gtest",
+      "range": {
+        "startLine": 1030,
+        "startChar": 24,
+        "endLine": 1030,
+        "endChar": 33
+      },
+      "revId": "f675f9493f60cd5c5f5441ccd341568fd7a497c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
