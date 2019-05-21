@@ -1975,6 +1975,37 @@ TEST_P(GLSLTest, TextureLOD)
     glDeleteShader(shader);
 }
 
+TEST_P(GLSLTest, asdf)
+{
+    constexpr char kVS[] = R"(
+  precision highp float;
+  uniform int uni;
+  uniform sampler2D texture;
+
+  vec4 A() {
+    return texture2D(texture, vec2(0.0, 0.0));
+  }
+
+  vec4 B() {
+    vec4 a;
+    for(int r=0; r<14; r++){
+      if (r < uni) return vec4(0.0);
+      a = A();
+    }
+    return a;
+  }
+
+  void main() {
+    gl_Position = B();
+  })";
+
+    constexpr char kFS[] = R"(
+void main() { gl_FragColor = vec4(gl_FragCoord.x / 640.0, gl_FragCoord.y / 480.0, 0, 1); }
+)";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+}
+
 // Test to verify the a shader can have a sampler unused in a vertex shader
 // but used in the fragment shader.
 TEST_P(GLSLTest, VerifySamplerInBothVertexAndFragmentShaders)
