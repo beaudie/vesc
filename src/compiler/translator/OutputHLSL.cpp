@@ -2156,7 +2156,7 @@ bool OutputHLSL::visitFunctionDefinition(Visit visit, TIntermFunctionDefinition 
     mCurrentFunctionMetadata = nullptr;
 
     bool needsLod0 = mASTMetadataList[index].mNeedsLod0;
-    if (needsLod0 && !mOutputLod0Function && mShaderType == GL_FRAGMENT_SHADER)
+    if (needsLod0 && !mOutputLod0Function)
     {
         ASSERT(!node->getFunction()->isMain());
         mOutputLod0Function = true;
