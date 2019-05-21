@@ -6282,7 +6282,7 @@ bool ValidateGetInternalFormativBase(Context *context,
 
 bool ValidateFramebufferNotMultisampled(Context *context, Framebuffer *framebuffer)
 {
-    if (framebuffer->getSamples(context) != 0)
+    if (framebuffer->getIntrinsicSamples(context) != 0)
     {
         context->validationError(GL_INVALID_OPERATION, kInvalidMultisampledFramebufferOperation);
         return false;
