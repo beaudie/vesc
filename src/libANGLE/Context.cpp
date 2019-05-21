@@ -3897,6 +3897,8 @@ void Context::framebufferRenderbuffer(GLenum target,
     {
         Renderbuffer *renderbufferObject = getRenderbuffer(renderbuffer);
 
+        // #TODO may need to change this to add samples into it
+        // havent really thought about renderbuffer side of things
         framebuffer->setAttachment(this, GL_RENDERBUFFER, attachment, gl::ImageIndex(),
                                    renderbufferObject);
     }
@@ -5319,6 +5321,32 @@ void Context::renderbufferStorageMultisample(GLenum target,
     Renderbuffer *renderbuffer = mState.getCurrentRenderbuffer();
     ANGLE_CONTEXT_TRY(
         renderbuffer->setStorageMultisample(this, samples, convertedInternalFormat, width, height));
+}
+
+void Context::framebufferTexture2DMultisample(GLenum target,
+                                              GLenum attachment,
+                                              GLenum textarget,
+                                              GLuint texture,
+                                              GLint level,
+                                              GLsizei samples)
+{
+    Framebuffer *framebuffer = mState.getTargetFramebuffer(target);
+    ASSERT(framebuffer);
+
+    if (texture != 0)
+    {
+        Texture *textureObj           = getTexture(texture);
+        TextureTarget textargetPacked = FromGLenum<TextureTarget>(textarget);
+        ImageIndex index              = ImageIndex::MakeFromTarget(textargetPacked, level, 1);
+        framebuffer->setAttachmentMultisample(this, GL_TEXTURE, attachment, index, textureObj,
+                                              samples);
+    }
+    else
+    {
+        framebuffer->resetAttachment(this, attachment);
+    }
+
+    mState.setObjectDirty(target);
 }
 
 void Context::getSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values)
@@ -7846,7 +7874,8 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
         {
             static_assert(GL_MAX_SAMPLES_ANGLE == GL_MAX_SAMPLES,
                           "GL_MAX_SAMPLES_ANGLE not equal to GL_MAX_SAMPLES");
-            if ((getClientMajorVersion() < 3) && !getExtensions().framebufferMultisample)
+            if ((getClientMajorVersion() < 3) && !(getExtensions().framebufferMultisample ||
+                                                   getExtensions().multisampledRenderToTexture))
             {
                 return false;
             }
@@ -8340,13 +8369,17 @@ void Context::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
             break;
 
         case kReadFramebufferSubjectIndex:
-            ASSERT(message == angle::SubjectMessage::DirtyBitsFlagged);
-            mState.setReadFramebufferDirty();
+            if (message == angle::SubjectMessage::DirtyBitsFlagged)
+            {
+                mState.setReadFramebufferDirty();
+            }
             break;
 
         case kDrawFramebufferSubjectIndex:
-            ASSERT(message == angle::SubjectMessage::DirtyBitsFlagged);
-            mState.setDrawFramebufferDirty();
+            if (message == angle::SubjectMessage::DirtyBitsFlagged)
+            {
+                mState.setDrawFramebufferDirty();
+            }
             mStateCache.onDrawFramebufferChange(this);
             break;
 
