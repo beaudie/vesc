@@ -112,6 +112,13 @@ struct FeaturesVk : angle::FeatureSetBase
         "supports_external_semaphore_fd", angle::FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_KHR_external_semaphore_fd extension", &members};
 
+    // Whether the VkDevice supports the VK_EXT_shader_stencil_export extension, which is used to
+    // perform multisampled resolve of stencil buffer.  A multi-step workaround is used instead if
+    // this extension is not available.
+    angle::Feature supportsShaderStencilExport = {
+        "supports_shader_stencil_export", angle::FeatureCategory::VulkanFeatures,
+        "VkDevice supports the VK_EXT_shader_stencil_export extension", &members};
+
     // VK_PRESENT_MODE_FIFO_KHR causes random timeouts on Linux Intel. http://anglebug.com/3153
     angle::Feature disableFifoPresentMode = {
         "disable_fifo_present_mode", angle::FeatureCategory::VulkanWorkarounds,
@@ -157,7 +164,7 @@ struct FeaturesVk : angle::FeatureSetBase
         &members, "http://anglebug.com/3452"};
 };
 
-inline FeaturesVk::FeaturesVk() = default;
+inline FeaturesVk::FeaturesVk()  = default;
 inline FeaturesVk::~FeaturesVk() = default;
 
 }  // namespace angle
