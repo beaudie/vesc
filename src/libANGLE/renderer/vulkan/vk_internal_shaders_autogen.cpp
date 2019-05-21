@@ -87,6 +87,18 @@ namespace
 #include "libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000013.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000014.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000015.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/MultisampledCopy.frag.00000000.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/MultisampledCopy.frag.00000001.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/MultisampledCopy.frag.00000002.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/MultisampledCopy.frag.00000003.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/MultisampledCopy.frag.00000004.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/MultisampledCopy.frag.00000005.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ResolveDepthStencil.frag.00000000.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ResolveDepthStencil.frag.00000001.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ResolveDepthStencil.frag.00000002.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ResolveDepthStencil.frag.00000003.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ResolveDepthStencil.frag.00000004.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ResolveDepthStencil.frag.00000005.inc"
 
 // This is SPIR-V binary blob and the size.
 struct ShaderBlob
@@ -180,6 +192,22 @@ constexpr ShaderBlob kImageCopy_frag_shaders[] = {
     {kImageCopy_frag_00000014, sizeof(kImageCopy_frag_00000014)},
     {kImageCopy_frag_00000015, sizeof(kImageCopy_frag_00000015)},
 };
+constexpr ShaderBlob kMultisampledCopy_frag_shaders[] = {
+    {kMultisampledCopy_frag_00000000, sizeof(kMultisampledCopy_frag_00000000)},
+    {kMultisampledCopy_frag_00000001, sizeof(kMultisampledCopy_frag_00000001)},
+    {kMultisampledCopy_frag_00000002, sizeof(kMultisampledCopy_frag_00000002)},
+    {kMultisampledCopy_frag_00000003, sizeof(kMultisampledCopy_frag_00000003)},
+    {kMultisampledCopy_frag_00000004, sizeof(kMultisampledCopy_frag_00000004)},
+    {kMultisampledCopy_frag_00000005, sizeof(kMultisampledCopy_frag_00000005)},
+};
+constexpr ShaderBlob kResolveDepthStencil_frag_shaders[] = {
+    {kResolveDepthStencil_frag_00000000, sizeof(kResolveDepthStencil_frag_00000000)},
+    {kResolveDepthStencil_frag_00000001, sizeof(kResolveDepthStencil_frag_00000001)},
+    {kResolveDepthStencil_frag_00000002, sizeof(kResolveDepthStencil_frag_00000002)},
+    {kResolveDepthStencil_frag_00000003, sizeof(kResolveDepthStencil_frag_00000003)},
+    {kResolveDepthStencil_frag_00000004, sizeof(kResolveDepthStencil_frag_00000004)},
+    {kResolveDepthStencil_frag_00000005, sizeof(kResolveDepthStencil_frag_00000005)},
+};
 
 angle::Result GetShader(Context *context,
                         RefCounted<ShaderAndSerial> *shaders,
@@ -231,6 +259,14 @@ void ShaderLibrary::destroy(VkDevice device)
     {
         shader.get().destroy(device);
     }
+    for (RefCounted<ShaderAndSerial> &shader : mMultisampledCopy_frag_shaders)
+    {
+        shader.get().destroy(device);
+    }
+    for (RefCounted<ShaderAndSerial> &shader : mResolveDepthStencil_frag_shaders)
+    {
+        shader.get().destroy(device);
+    }
 }
 
 angle::Result ShaderLibrary::getBufferUtils_comp(Context *context,
@@ -271,6 +307,22 @@ angle::Result ShaderLibrary::getImageCopy_frag(Context *context,
 {
     return GetShader(context, mImageCopy_frag_shaders, kImageCopy_frag_shaders,
                      ArraySize(kImageCopy_frag_shaders), shaderFlags, shaderOut);
+}
+
+angle::Result ShaderLibrary::getMultisampledCopy_frag(Context *context,
+                                                      uint32_t shaderFlags,
+                                                      RefCounted<ShaderAndSerial> **shaderOut)
+{
+    return GetShader(context, mMultisampledCopy_frag_shaders, kMultisampledCopy_frag_shaders,
+                     ArraySize(kMultisampledCopy_frag_shaders), shaderFlags, shaderOut);
+}
+
+angle::Result ShaderLibrary::getResolveDepthStencil_frag(Context *context,
+                                                         uint32_t shaderFlags,
+                                                         RefCounted<ShaderAndSerial> **shaderOut)
+{
+    return GetShader(context, mResolveDepthStencil_frag_shaders, kResolveDepthStencil_frag_shaders,
+                     ArraySize(kResolveDepthStencil_frag_shaders), shaderFlags, shaderOut);
 }
 
 }  // namespace vk
