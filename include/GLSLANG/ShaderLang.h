@@ -294,7 +294,7 @@ const ShCompileOptions SH_EMULATE_GL_BASE_VERTEX_BASE_INSTANCE = UINT64_C(1) << 
 // There are two variations of this.  One using subgroup operations where available, and another
 // that emulates those operations using dFdxFine and dFdyFine.  The latter is more universally
 // available, but is buggy on Nvidia.
-const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING = UINT64_C(1) << 44;
+const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING                  = UINT64_C(1) << 44;
 const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING_WITH_SUBGROUP_OP = UINT64_C(1) << 45;
 
 // Defines alternate strategies for implementing array index clamping.
@@ -344,6 +344,7 @@ struct ShBuiltInResources
     int ARM_shader_framebuffer_fetch;
     int OVR_multiview;
     int OVR_multiview2;
+    int EXT_multisampled_render_to_texture;
     int EXT_YUV_target;
     int EXT_geometry_shader;
     int OES_texture_storage_multisample_2d_array;
