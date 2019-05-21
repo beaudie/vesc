@@ -881,7 +881,7 @@ angle::Result WindowSurfaceVk::present(DisplayVk *displayVk,
 
     // Update the swap history for this presentation
     swap.sharedFence = renderer->getLastSubmittedFence();
-    swap.semaphores = std::move(mFlushSemaphoreChain);
+    swap.semaphores  = std::move(mFlushSemaphoreChain);
     ++mCurrentSwapHistoryIndex;
     mCurrentSwapHistoryIndex =
         mCurrentSwapHistoryIndex == mSwapHistory.size() ? 0 : mCurrentSwapHistoryIndex;

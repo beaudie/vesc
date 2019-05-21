@@ -295,6 +295,8 @@ DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         WARN() << msg;
     }
 
+    ASSERT(false);
+
     return VK_FALSE;
 }
 
@@ -743,7 +745,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     ANGLE_VK_TRY(displayVk,
                  VerifyExtensionsPresent(instanceExtensionNames, enabledInstanceExtensions));
 
-    // Enable VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME if available.
+    // Enable VK_KHR_get_physical_device_properties_2 if available.
     if (ExtensionFound(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME,
                        instanceExtensionNames))
     {
@@ -1018,6 +1020,11 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     if (getFeatures().supportsExternalSemaphoreFd.enabled)
     {
         enabledDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
+    }
+
+    if (getFeatures().supportsShaderStencilExport.enabled)
+    {
+        enabledDeviceExtensions.push_back(VK_EXT_SHADER_STENCIL_EXPORT_EXTENSION_NAME);
     }
 
     std::sort(enabledDeviceExtensions.begin(), enabledDeviceExtensions.end(), StrLess);
@@ -1300,6 +1307,11 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
     if (ExtensionFound(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME, deviceExtensionNames))
     {
         mFeatures.supportsExternalSemaphoreFd.enabled = true;
+    }
+
+    if (ExtensionFound(VK_EXT_SHADER_STENCIL_EXPORT_EXTENSION_NAME, deviceExtensionNames))
+    {
+        mFeatures.supportsShaderStencilExport.enabled = true;
     }
 
     if (IsLinux() && IsIntel(mPhysicalDeviceProperties.vendorID))
