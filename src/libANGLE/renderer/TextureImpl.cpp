@@ -108,4 +108,16 @@ GLint TextureImpl::getNativeID() const
     return 0;
 }
 
+angle::Result TextureImpl::setMultisampledTextureInfo(const gl::Context *context,
+                                                      GLsizei samples,
+                                                      size_t level)
+{
+    return angle::Result::Continue;
+}
+
+angle::Result TextureImpl::resolveAndReleaseTexture(const gl::Context *context)
+{
+    return angle::Result::Continue;
+}
+
 }  // namespace rx

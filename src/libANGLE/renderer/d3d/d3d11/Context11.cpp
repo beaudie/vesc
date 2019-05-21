@@ -680,7 +680,8 @@ angle::Result Context11::initializeMultisampleTextureToBlack(const gl::Context *
     TextureD3D *textureD3D        = GetImplAs<TextureD3D>(glTexture);
     gl::ImageIndex index          = gl::ImageIndex::Make2DMultisample();
     RenderTargetD3D *renderTarget = nullptr;
-    ANGLE_TRY(textureD3D->getRenderTarget(context, index, &renderTarget));
+    ANGLE_TRY(
+        textureD3D->getRenderTarget(context, index, &renderTarget, gl::RenderTargetUse::DRAW));
     return mRenderer->clearRenderTarget(context, renderTarget, gl::ColorF(0.0f, 0.0f, 0.0f, 1.0f),
                                         1.0f, 0);
 }

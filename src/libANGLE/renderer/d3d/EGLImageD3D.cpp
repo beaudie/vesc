@@ -60,8 +60,9 @@ angle::Result EGLImageD3D::getRenderTarget(const gl::Context *context,
     {
         ASSERT(!mRenderTarget);
         FramebufferAttachmentRenderTarget *rt = nullptr;
-        ANGLE_TRY(
-            mState.source->getAttachmentRenderTarget(context, GL_NONE, mState.imageIndex, &rt));
+        // #TODO i really have LARGE DEEP SINKING feeling this is going to break
+        ANGLE_TRY(mState.source->getAttachmentRenderTarget(context, GL_NONE, mState.imageIndex,
+                                                           gl::RenderTargetUse::READ, &rt));
         *outRT = static_cast<RenderTargetD3D *>(rt);
         return angle::Result::Continue;
     }
