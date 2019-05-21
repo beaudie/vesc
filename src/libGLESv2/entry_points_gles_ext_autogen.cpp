@@ -3975,6 +3975,61 @@ void GL_APIENTRY ImportMemoryFdEXT(GLuint memory, GLuint64 size, GLenum handleTy
     }
 }
 
+// GL_EXT_multisampled_render_to_texture
+void GL_APIENTRY FramebufferTexture2DMultisampleEXT(GLenum target,
+                                                    GLenum attachment,
+                                                    GLenum textarget,
+                                                    GLuint texture,
+                                                    GLint level,
+                                                    GLsizei samples)
+{
+    EVENT(
+        "(GLenum target = 0x%X, GLenum attachment = 0x%X, GLenum textarget = 0x%X, GLuint texture "
+        "= %u, GLint level = %d, GLsizei samples = %d)",
+        target, attachment, textarget, texture, level, samples);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        bool isCallValid = (context->skipValidation() ||
+                            ValidateFramebufferTexture2DMultisampleEXT(
+                                context, target, attachment, textarget, texture, level, samples));
+        if (isCallValid)
+        {
+            context->framebufferTexture2DMultisample(target, attachment, textarget, texture, level,
+                                                     samples);
+        }
+        ANGLE_CAPTURE(FramebufferTexture2DMultisampleEXT, isCallValid, context, target, attachment,
+                      textarget, texture, level, samples);
+    }
+}
+
+void GL_APIENTRY RenderbufferStorageMultisampleEXT(GLenum target,
+                                                   GLsizei samples,
+                                                   GLenum internalformat,
+                                                   GLsizei width,
+                                                   GLsizei height)
+{
+    EVENT(
+        "(GLenum target = 0x%X, GLsizei samples = %d, GLenum internalformat = 0x%X, GLsizei width "
+        "= %d, GLsizei height = %d)",
+        target, samples, internalformat, width, height);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        bool isCallValid = (context->skipValidation() ||
+                            ValidateRenderbufferStorageMultisampleEXT(
+                                context, target, samples, internalformat, width, height));
+        if (isCallValid)
+        {
+            context->renderbufferStorageMultisample(target, samples, internalformat, width, height);
+        }
+        ANGLE_CAPTURE(RenderbufferStorageMultisampleEXT, isCallValid, context, target, samples,
+                      internalformat, width, height);
+    }
+}
+
 // GL_EXT_occlusion_query_boolean
 // BeginQueryEXT is already defined.
 
@@ -9537,6 +9592,36 @@ void GL_APIENTRY FramebufferTexture2DContextANGLE(GLeglContext ctx,
         }
         ANGLE_CAPTURE(FramebufferTexture2D, isCallValid, context, target, attachment,
                       textargetPacked, texture, level);
+    }
+}
+
+void GL_APIENTRY FramebufferTexture2DMultisampleEXTContextANGLE(GLeglContext ctx,
+                                                                GLenum target,
+                                                                GLenum attachment,
+                                                                GLenum textarget,
+                                                                GLuint texture,
+                                                                GLint level,
+                                                                GLsizei samples)
+{
+    EVENT(
+        "(GLenum target = 0x%X, GLenum attachment = 0x%X, GLenum textarget = 0x%X, GLuint texture "
+        "= %u, GLint level = %d, GLsizei samples = %d)",
+        target, attachment, textarget, texture, level, samples);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        bool isCallValid = (context->skipValidation() ||
+                            ValidateFramebufferTexture2DMultisampleEXT(
+                                context, target, attachment, textarget, texture, level, samples));
+        if (isCallValid)
+        {
+            context->framebufferTexture2DMultisample(target, attachment, textarget, texture, level,
+                                                     samples);
+        }
+        ANGLE_CAPTURE(FramebufferTexture2DMultisampleEXT, isCallValid, context, target, attachment,
+                      textarget, texture, level, samples);
     }
 }
 
@@ -15610,6 +15695,34 @@ void GL_APIENTRY RenderbufferStorageMultisampleANGLEContextANGLE(GLeglContext ct
             context->renderbufferStorageMultisample(target, samples, internalformat, width, height);
         }
         ANGLE_CAPTURE(RenderbufferStorageMultisampleANGLE, isCallValid, context, target, samples,
+                      internalformat, width, height);
+    }
+}
+
+void GL_APIENTRY RenderbufferStorageMultisampleEXTContextANGLE(GLeglContext ctx,
+                                                               GLenum target,
+                                                               GLsizei samples,
+                                                               GLenum internalformat,
+                                                               GLsizei width,
+                                                               GLsizei height)
+{
+    EVENT(
+        "(GLenum target = 0x%X, GLsizei samples = %d, GLenum internalformat = 0x%X, GLsizei width "
+        "= %d, GLsizei height = %d)",
+        target, samples, internalformat, width, height);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        bool isCallValid = (context->skipValidation() ||
+                            ValidateRenderbufferStorageMultisampleEXT(
+                                context, target, samples, internalformat, width, height));
+        if (isCallValid)
+        {
+            context->renderbufferStorageMultisample(target, samples, internalformat, width, height);
+        }
+        ANGLE_CAPTURE(RenderbufferStorageMultisampleEXT, isCallValid, context, target, samples,
                       internalformat, width, height);
     }
 }
