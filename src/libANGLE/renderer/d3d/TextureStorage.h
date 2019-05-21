@@ -34,11 +34,14 @@ class SwapChainD3D;
 class RenderTargetD3D;
 class ImageD3D;
 
-class TextureStorage : angle::NonCopyable
+// Dirty bit messages from TextureStorage
+constexpr size_t kTextureStorageObserverMessageIndex = 0;
+
+class TextureStorage : public angle::Subject
 {
   public:
     TextureStorage() {}
-    virtual ~TextureStorage() {}
+    ~TextureStorage() override {}
 
     virtual angle::Result onDestroy(const gl::Context *context);
 
@@ -50,7 +53,8 @@ class TextureStorage : angle::NonCopyable
 
     virtual angle::Result getRenderTarget(const gl::Context *context,
                                           const gl::ImageIndex &index,
-                                          RenderTargetD3D **outRT)        = 0;
+                                          RenderTargetD3D **outRT,
+                                          GLsizei samples)                = 0;
     virtual angle::Result generateMipmap(const gl::Context *context,
                                          const gl::ImageIndex &sourceIndex,
                                          const gl::ImageIndex &destIndex) = 0;
@@ -72,6 +76,11 @@ class TextureStorage : angle::NonCopyable
 
     virtual void invalidateTextures() {}
 
+    // For shadow multisampled textures
+    virtual angle::Result releaseMultisampledTexStorageForLevel(size_t level);
+    virtual angle::Result resolveAndReleaseTexture(const gl::Context *context);
+    virtual GLsizei getRenderToTextureSamples();
+
   protected:
     const angle::Subject *mSubject;
 };
@@ -85,6 +94,21 @@ inline angle::Result TextureStorage::useLevelZeroWorkaroundTexture(const gl::Con
                                                                    bool useLevelZeroTexture)
 {
     return angle::Result::Continue;
+}
+
+inline angle::Result TextureStorage::releaseMultisampledTexStorageForLevel(size_t level)
+{
+    return angle::Result::Continue;
+}
+
+inline angle::Result TextureStorage::resolveAndReleaseTexture(const gl::Context *context)
+{
+    return angle::Result::Continue;
+}
+
+inline GLsizei TextureStorage::getRenderToTextureSamples()
+{
+    return -1;
 }
 
 using TexStoragePointer = angle::UniqueObjectPointer<TextureStorage, gl::Context>;
