@@ -618,7 +618,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     const bool blitDepthBuffer   = (mask & GL_DEPTH_BUFFER_BIT) != 0;
     const bool blitStencilBuffer = (mask & GL_STENCIL_BUFFER_BIT) != 0;
 
-    const bool isResolve = srcFramebuffer->getCachedSamples(context) > 1;
+    const bool isResolve = srcFramebuffer->getCachedSamples(context, true) > 1;
 
     FramebufferVk *srcFramebufferVk    = vk::GetImpl(srcFramebuffer);
     const bool srcFramebufferFlippedY  = contextVk->isViewportFlipEnabledForReadFBO();
@@ -1490,10 +1490,10 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
                                          commandBuffer);
 
         // Make the resolved image the target of buffer copy.
-        srcImage  = &resolvedImage.get();
-        level     = 0;
-        layer     = 0;
-        srcOffset = {0, 0, 0};
+        srcImage                      = &resolvedImage.get();
+        level                         = 0;
+        layer                         = 0;
+        srcOffset                     = {0, 0, 0};
         srcSubresource.baseArrayLayer = 0;
         srcSubresource.layerCount     = 1;
         srcSubresource.mipLevel       = 0;
