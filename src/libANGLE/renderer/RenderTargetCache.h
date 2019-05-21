@@ -138,11 +138,14 @@ angle::Result RenderTargetCache<RenderTargetT>::updateCachedRenderTarget(
     const gl::FramebufferAttachment *attachment,
     RenderTargetT **cachedRenderTarget)
 {
+    // TODO am i saving the shadowed RT or non shadowed RT?
+    // need new set of caches?
     RenderTargetT *newRenderTarget = nullptr;
     if (attachment)
     {
         ASSERT(attachment->isAttached());
-        ANGLE_TRY(attachment->getRenderTarget(context, &newRenderTarget));
+        ANGLE_TRY(
+            attachment->getRenderTarget(context, gl::RenderTargetUse::DRAW, &newRenderTarget));
     }
     *cachedRenderTarget = newRenderTarget;
     return angle::Result::Continue;

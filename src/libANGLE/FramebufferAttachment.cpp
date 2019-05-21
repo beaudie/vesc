@@ -24,8 +24,10 @@ namespace gl
 
 ////// FramebufferAttachment::Target Implementation //////
 
-const GLsizei FramebufferAttachment::kDefaultNumViews    = 1;
-const GLint FramebufferAttachment::kDefaultBaseViewIndex = 0;
+const GLsizei FramebufferAttachment::kDefaultNumViews             = 1;
+const GLint FramebufferAttachment::kDefaultBaseViewIndex          = 0;
+const GLint FramebufferAttachment::kDefaultRenderToTextureLevel   = INT_MAX;
+const GLint FramebufferAttachment::kDefaultRenderToTextureSamples = 0;
 
 FramebufferAttachment::Target::Target() : mBinding(GL_NONE), mTextureIndex() {}
 
@@ -51,7 +53,9 @@ FramebufferAttachment::FramebufferAttachment()
       mResource(nullptr),
       mNumViews(kDefaultNumViews),
       mIsMultiview(false),
-      mBaseViewIndex(kDefaultBaseViewIndex)
+      mBaseViewIndex(kDefaultBaseViewIndex),
+      mRenderToTextureSamples(kDefaultRenderToTextureSamples),
+      mRenderToTextureLevel(kDefaultRenderToTextureLevel)
 {}
 
 FramebufferAttachment::FramebufferAttachment(const Context *context,
@@ -62,7 +66,7 @@ FramebufferAttachment::FramebufferAttachment(const Context *context,
     : mResource(nullptr)
 {
     attach(context, type, binding, textureIndex, resource, kDefaultNumViews, kDefaultBaseViewIndex,
-           false);
+           false, kDefaultRenderToTextureSamples, kDefaultRenderToTextureLevel);
 }
 
 FramebufferAttachment::FramebufferAttachment(FramebufferAttachment &&other)
@@ -79,6 +83,8 @@ FramebufferAttachment &FramebufferAttachment::operator=(FramebufferAttachment &&
     std::swap(mNumViews, other.mNumViews);
     std::swap(mIsMultiview, other.mIsMultiview);
     std::swap(mBaseViewIndex, other.mBaseViewIndex);
+    std::swap(mRenderToTextureSamples, other.mRenderToTextureSamples);
+    std::swap(mRenderToTextureLevel, other.mRenderToTextureLevel);
     return *this;
 }
 
@@ -110,7 +116,9 @@ void FramebufferAttachment::attach(const Context *context,
                                    FramebufferAttachmentObject *resource,
                                    GLsizei numViews,
                                    GLuint baseViewIndex,
-                                   bool isMultiview)
+                                   bool isMultiview,
+                                   GLsizei samples,
+                                   GLint level)
 {
     if (resource == nullptr)
     {
@@ -118,11 +126,13 @@ void FramebufferAttachment::attach(const Context *context,
         return;
     }
 
-    mType          = type;
-    mTarget        = Target(binding, textureIndex);
-    mNumViews      = numViews;
-    mBaseViewIndex = baseViewIndex;
-    mIsMultiview   = isMultiview;
+    mType                   = type;
+    mTarget                 = Target(binding, textureIndex);
+    mNumViews               = numViews;
+    mBaseViewIndex          = baseViewIndex;
+    mIsMultiview            = isMultiview;
+    mRenderToTextureSamples = samples;
+    mRenderToTextureLevel   = level;
     resource->onAttach(context);
 
     if (mResource != nullptr)
@@ -241,10 +251,21 @@ FramebufferAttachmentObject *FramebufferAttachment::getResource() const
     return mResource;
 }
 
+angle::Result FramebufferAttachment::resolveAttachment(const Context *context)
+{
+    if (mType == GL_TEXTURE)
+    {
+        return getTexture()->resolveAndReleaseTexture(context);
+    }
+    return angle::Result::Continue;
+}
+
 bool FramebufferAttachment::operator==(const FramebufferAttachment &other) const
 {
     if (mResource != other.mResource || mType != other.mType || mNumViews != other.mNumViews ||
-        mIsMultiview != other.mIsMultiview || mBaseViewIndex != other.mBaseViewIndex)
+        mIsMultiview != other.mIsMultiview || mBaseViewIndex != other.mBaseViewIndex ||
+        mRenderToTextureLevel != other.mRenderToTextureLevel ||
+        mRenderToTextureSamples != other.mRenderToTextureSamples)
     {
         return false;
     }
@@ -291,9 +312,11 @@ angle::Result FramebufferAttachmentObject::getAttachmentRenderTarget(
     const Context *context,
     GLenum binding,
     const ImageIndex &imageIndex,
+    RenderTargetUse rtUse,
     rx::FramebufferAttachmentRenderTarget **rtOut) const
 {
-    return getAttachmentImpl()->getAttachmentRenderTarget(context, binding, imageIndex, rtOut);
+    return getAttachmentImpl()->getAttachmentRenderTarget(context, binding, imageIndex, rtUse,
+                                                          rtOut);
 }
 
 angle::Result FramebufferAttachmentObject::initializeContents(const Context *context,

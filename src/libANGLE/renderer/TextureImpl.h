@@ -187,6 +187,10 @@ class TextureImpl : public FramebufferAttachmentObjectImpl, public angle::Subjec
 
     virtual angle::Result syncState(const gl::Context *context,
                                     const gl::Texture::DirtyBits &dirtyBits) = 0;
+    virtual angle::Result setMultisampledTextureInfo(const gl::Context *context,
+                                                     GLsizei samples,
+                                                     size_t level);
+    virtual angle::Result resolveAndReleaseTexture(const gl::Context *context);
 
   protected:
     const gl::TextureState &mState;

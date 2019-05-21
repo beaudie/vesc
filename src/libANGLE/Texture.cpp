@@ -1712,6 +1712,17 @@ bool Texture::isSamplerComplete(const Context *context, const Sampler *optionalS
     return mCompletenessCache.samplerComplete;
 }
 
+angle::Result Texture::setMultisampledTextureInfo(const Context *context,
+                                                  GLsizei samples,
+                                                  size_t level)
+{
+    return mTexture->setMultisampledTextureInfo(context, samples, level);
+}
+angle::Result Texture::resolveAndReleaseTexture(const Context *context)
+{
+    return mTexture->resolveAndReleaseTexture(context);
+}
+
 Texture::SamplerCompletenessCache::SamplerCompletenessCache()
     : context(0), samplerState(), samplerComplete(false)
 {}

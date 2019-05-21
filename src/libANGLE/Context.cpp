@@ -1061,18 +1061,22 @@ void Context::bindTexture(TextureType target, GLuint handle)
 
 void Context::bindReadFramebuffer(GLuint framebufferHandle)
 {
+    mReadFramebufferObserverBinding.onStateChange(angle::SubjectMessage::FramebufferDetached);
     Framebuffer *framebuffer = mState.mFramebufferManager->checkFramebufferAllocation(
         mImplementation.get(), mState.mCaps, framebufferHandle);
     mState.setReadFramebufferBinding(framebuffer);
     mReadFramebufferObserverBinding.bind(framebuffer);
+    mReadFramebufferObserverBinding.onStateChange(angle::SubjectMessage::FramebufferAttached);
 }
 
 void Context::bindDrawFramebuffer(GLuint framebufferHandle)
 {
+    mDrawFramebufferObserverBinding.onStateChange(angle::SubjectMessage::FramebufferDetached);
     Framebuffer *framebuffer = mState.mFramebufferManager->checkFramebufferAllocation(
         mImplementation.get(), mState.mCaps, framebufferHandle);
     mState.setDrawFramebufferBinding(framebuffer);
     mDrawFramebufferObserverBinding.bind(framebuffer);
+    mDrawFramebufferObserverBinding.onStateChange(angle::SubjectMessage::FramebufferAttached);
     mStateCache.onDrawFramebufferChange(this);
 }
 
@@ -3845,6 +3849,8 @@ void Context::framebufferRenderbuffer(GLenum target,
     {
         Renderbuffer *renderbufferObject = getRenderbuffer(renderbuffer);
 
+        // #TODO may need to change this to add samples into it
+        // havent really thought about renderbuffer side of things
         framebuffer->setAttachment(this, GL_RENDERBUFFER, attachment, gl::ImageIndex(),
                                    renderbufferObject);
     }
@@ -5267,6 +5273,33 @@ void Context::renderbufferStorageMultisample(GLenum target,
     Renderbuffer *renderbuffer = mState.getCurrentRenderbuffer();
     ANGLE_CONTEXT_TRY(
         renderbuffer->setStorageMultisample(this, samples, convertedInternalFormat, width, height));
+}
+
+void Context::framebufferTexture2DMultisample(GLenum target,
+                                              GLenum attachment,
+                                              GLenum textarget,
+                                              GLuint texture,
+                                              GLint level,
+                                              GLsizei samples)
+{
+    Framebuffer *framebuffer = mState.getTargetFramebuffer(target);
+    ASSERT(framebuffer);
+
+    if (texture != 0)
+    {
+        Texture *textureObj           = getTexture(texture);
+        TextureTarget textargetPacked = FromGLenum<TextureTarget>(textarget);
+        ImageIndex index              = ImageIndex::MakeFromTarget(textargetPacked, level);
+        ANGLE_CONTEXT_TRY(textureObj->setMultisampledTextureInfo(this, samples, level));
+        framebuffer->setAttachmentMultisample(this, GL_TEXTURE, attachment, index, textureObj,
+                                              samples, level);
+    }
+    else
+    {
+        framebuffer->resetAttachment(this, attachment);
+    }
+
+    mState.setObjectDirty(target);
 }
 
 void Context::getSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values)
@@ -7794,7 +7827,8 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
         {
             static_assert(GL_MAX_SAMPLES_ANGLE == GL_MAX_SAMPLES,
                           "GL_MAX_SAMPLES_ANGLE not equal to GL_MAX_SAMPLES");
-            if ((getClientMajorVersion() < 3) && !getExtensions().framebufferMultisample)
+            if ((getClientMajorVersion() < 3) && !(getExtensions().framebufferMultisample ||
+                                                   getExtensions().multisampledRenderToTexture))
             {
                 return false;
             }
@@ -8288,13 +8322,73 @@ void Context::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
             break;
 
         case kReadFramebufferSubjectIndex:
-            ASSERT(message == angle::SubjectMessage::DirtyBitsFlagged);
-            mState.setReadFramebufferDirty();
+            if (message == angle::SubjectMessage::FramebufferDetached)
+            {
+                Framebuffer *currFB = mState.getReadFramebuffer();
+                if (currFB)
+                {
+                    ANGLE_CONTEXT_TRY(currFB->resolveMultisampledAttachments(this));
+                }
+            }
+            if (message == angle::SubjectMessage::FramebufferAttached)
+            {
+                Framebuffer *currFB = mState.getReadFramebuffer();
+                if (currFB)
+                {
+                    const FramebufferAttachment *color = currFB->getFirstColorbuffer();
+                    if (color)
+                    {
+                        GLsizei samples = color->getRenderToTextureSamples();
+                        GLint level     = color->getRenderToTextureLevel();
+                        if (color->type() == GL_TEXTURE &&
+                            (samples != FramebufferAttachment::kDefaultRenderToTextureSamples ||
+                             level != FramebufferAttachment::kDefaultRenderToTextureLevel))
+                        {
+                            ANGLE_CONTEXT_TRY(color->getTexture()->setMultisampledTextureInfo(
+                                this, samples, level));
+                        }
+                    }
+                }
+            }
+            if (message == angle::SubjectMessage::DirtyBitsFlagged)
+            {
+                mState.setReadFramebufferDirty();
+            }
             break;
 
         case kDrawFramebufferSubjectIndex:
-            ASSERT(message == angle::SubjectMessage::DirtyBitsFlagged);
-            mState.setDrawFramebufferDirty();
+            if (message == angle::SubjectMessage::FramebufferDetached)
+            {
+                Framebuffer *currFB = mState.getDrawFramebuffer();
+                if (currFB)
+                {
+                    ANGLE_CONTEXT_TRY(currFB->resolveMultisampledAttachments(this));
+                }
+            }
+            if (message == angle::SubjectMessage::FramebufferAttached)
+            {
+                Framebuffer *currFB = mState.getDrawFramebuffer();
+                if (currFB)
+                {
+                    const FramebufferAttachment *color = currFB->getFirstColorbuffer();
+                    if (color)
+                    {
+                        GLsizei samples = color->getRenderToTextureSamples();
+                        GLint level     = color->getRenderToTextureLevel();
+                        if (color->type() == GL_TEXTURE &&
+                            (samples != FramebufferAttachment::kDefaultRenderToTextureSamples ||
+                             level != FramebufferAttachment::kDefaultRenderToTextureLevel))
+                        {
+                            ANGLE_CONTEXT_TRY(color->getTexture()->setMultisampledTextureInfo(
+                                this, samples, level));
+                        }
+                    }
+                }
+            }
+            if (message == angle::SubjectMessage::DirtyBitsFlagged)
+            {
+                mState.setDrawFramebufferDirty();
+            }
             mStateCache.onDrawFramebufferChange(this);
             break;
 
