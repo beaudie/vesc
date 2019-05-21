@@ -21,6 +21,7 @@ ANGLE_DISABLE_EXTRA_SEMI_WARNING
 ANGLE_REENABLE_EXTRA_SEMI_WARNING
 
 #include <array>
+#include <numeric>
 
 #include "common/FixedVector.h"
 #include "common/string_utils.h"
@@ -352,6 +353,7 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
     // TODO(syoussefi): Add support for EXT_blend_func_extended.  http://anglebug.com/3385
     const auto &outputLocations = programState.getOutputLocations();
     const auto &outputVariables = programState.getOutputVariables();
+    const std::array<std::string, 2> implicitOutputs = {"gl_FragDepth", "gl_SampleMask"};
     for (const gl::VariableLocation &outputLocation : outputLocations)
     {
         if (outputLocation.arrayIndex == 0 && outputLocation.used() && !outputLocation.ignored)
@@ -363,11 +365,19 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
             {
                 locationString = "location = " + Str(outputVar.location);
             }
-            else
+            else if (std::find(implicitOutputs.begin(), implicitOutputs.end(), outputVar.name) ==
+                     implicitOutputs.end())
             {
                 // If there is only one output, it is allowed not to have a location qualifier, in
                 // which case it defaults to 0.  GLSL ES 3.00 spec, section 4.3.8.2.
-                ASSERT(outputVariables.size() == 1);
+                ASSERT(std::accumulate(
+                           outputVariables.begin(), outputVariables.end(), 0,
+                           [&implicitOutputs](uint32_t count, const sh::OutputVariable &var) {
+                               bool isExplicit =
+                                   std::find(implicitOutputs.begin(), implicitOutputs.end(),
+                                             var.name) == implicitOutputs.end();
+                               return count + isExplicit;
+                           }) == 1);
                 locationString = "location = 0";
             }
 

@@ -845,5 +845,30 @@ void AddSampleCounts(VkSampleCountFlags sampleCounts, gl::SupportedSampleSet *se
         setOut->insert(1 << bit);
     }
 }
+
+GLuint GetMaxSampleCount(VkSampleCountFlags sampleCounts)
+{
+    GLuint maxCount = 0;
+    for (unsigned long bit : angle::BitSet32<32>(sampleCounts))
+    {
+        maxCount = 1 << bit;
+    }
+    return maxCount;
+}
+
+GLuint GetSampleCount(VkSampleCountFlags supportedCounts, GLuint requestedCount)
+{
+    for (unsigned long bit : angle::BitSet32<32>(supportedCounts))
+    {
+        GLuint sampleCount = 1 << bit;
+        if (sampleCount >= requestedCount)
+        {
+            return sampleCount;
+        }
+    }
+
+    UNREACHABLE();
+    return 0;
+}
 }  // namespace vk_gl
 }  // namespace rx
