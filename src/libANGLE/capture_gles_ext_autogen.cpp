@@ -3819,6 +3819,46 @@ CallCapture CaptureImportMemoryFdEXT(const Context *context,
     return CallCapture(gl::EntryPoint::ImportMemoryFdEXT, std::move(paramBuffer));
 }
 
+CallCapture CaptureFramebufferTexture2DMultisampleEXT(const Context *context,
+                                                      bool isCallValid,
+                                                      GLenum target,
+                                                      GLenum attachment,
+                                                      GLenum textarget,
+                                                      GLuint texture,
+                                                      GLint level,
+                                                      GLsizei samples)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addValueParam("target", ParamType::TGLenum, target);
+    paramBuffer.addValueParam("attachment", ParamType::TGLenum, attachment);
+    paramBuffer.addValueParam("textarget", ParamType::TGLenum, textarget);
+    paramBuffer.addValueParam("texture", ParamType::TGLuint, texture);
+    paramBuffer.addValueParam("level", ParamType::TGLint, level);
+    paramBuffer.addValueParam("samples", ParamType::TGLsizei, samples);
+
+    return CallCapture(gl::EntryPoint::FramebufferTexture2DMultisampleEXT, std::move(paramBuffer));
+}
+
+CallCapture CaptureRenderbufferStorageMultisampleEXT(const Context *context,
+                                                     bool isCallValid,
+                                                     GLenum target,
+                                                     GLsizei samples,
+                                                     GLenum internalformat,
+                                                     GLsizei width,
+                                                     GLsizei height)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addValueParam("target", ParamType::TGLenum, target);
+    paramBuffer.addValueParam("samples", ParamType::TGLsizei, samples);
+    paramBuffer.addValueParam("internalformat", ParamType::TGLenum, internalformat);
+    paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
+    paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
+
+    return CallCapture(gl::EntryPoint::RenderbufferStorageMultisampleEXT, std::move(paramBuffer));
+}
+
 CallCapture CaptureGetGraphicsResetStatusEXT(const Context *context,
                                              bool isCallValid,
                                              GLenum returnValue)

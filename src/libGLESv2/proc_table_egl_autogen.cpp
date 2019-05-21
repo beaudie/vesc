@@ -467,6 +467,9 @@ ProcEntry g_procTable[] = {
     {"glFramebufferRenderbufferOESContextANGLE", P(gl::FramebufferRenderbufferOESContextANGLE)},
     {"glFramebufferTexture2D", P(gl::FramebufferTexture2D)},
     {"glFramebufferTexture2DContextANGLE", P(gl::FramebufferTexture2DContextANGLE)},
+    {"glFramebufferTexture2DMultisampleEXT", P(gl::FramebufferTexture2DMultisampleEXT)},
+    {"glFramebufferTexture2DMultisampleEXTContextANGLE",
+     P(gl::FramebufferTexture2DMultisampleEXTContextANGLE)},
     {"glFramebufferTexture2DOES", P(gl::FramebufferTexture2DOES)},
     {"glFramebufferTexture2DOESContextANGLE", P(gl::FramebufferTexture2DOESContextANGLE)},
     {"glFramebufferTexture3DOES", P(gl::FramebufferTexture3DOES)},
@@ -1156,6 +1159,9 @@ ProcEntry g_procTable[] = {
      P(gl::RenderbufferStorageMultisampleANGLEContextANGLE)},
     {"glRenderbufferStorageMultisampleContextANGLE",
      P(gl::RenderbufferStorageMultisampleContextANGLE)},
+    {"glRenderbufferStorageMultisampleEXT", P(gl::RenderbufferStorageMultisampleEXT)},
+    {"glRenderbufferStorageMultisampleEXTContextANGLE",
+     P(gl::RenderbufferStorageMultisampleEXTContextANGLE)},
     {"glRenderbufferStorageOES", P(gl::RenderbufferStorageOES)},
     {"glRenderbufferStorageOESContextANGLE", P(gl::RenderbufferStorageOESContextANGLE)},
     {"glRequestExtensionANGLE", P(gl::RequestExtensionANGLE)},
@@ -1491,5 +1497,5 @@ ProcEntry g_procTable[] = {
     {"glWeightPointerOES", P(gl::WeightPointerOES)},
     {"glWeightPointerOESContextANGLE", P(gl::WeightPointerOESContextANGLE)}};
 
-size_t g_numProcs = 1402;
+size_t g_numProcs = 1406;
 }  // namespace egl

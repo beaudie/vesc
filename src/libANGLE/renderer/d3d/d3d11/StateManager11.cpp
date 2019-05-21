@@ -1512,7 +1512,13 @@ void StateManager11::processFramebufferInvalidation(const gl::Context *context)
     mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
 
     gl::Framebuffer *fbo = context->getState().getDrawFramebuffer();
+    GLenum status        = GL_FRAMEBUFFER_COMPLETE;
+    if (!fbo->cachedStatusValid())
+    {
+        status = fbo->checkStatus(context);
+    }
     ASSERT(fbo);
+    ASSERT(status == GL_FRAMEBUFFER_COMPLETE);
 
     // Disable the depth test/depth write if we are using a stencil-only attachment.
     // This is because ANGLE emulates stencil-only with D24S8 on D3D11 - we should neither read
@@ -1530,7 +1536,7 @@ void StateManager11::processFramebufferInvalidation(const gl::Context *context)
         mCurDisableStencil = disableStencil;
     }
 
-    bool multiSample = (fbo->getCachedSamples(context) != 0);
+    bool multiSample = (fbo->getCachedSamples(context, false) != 0);
     if (multiSample != mCurRasterState.multiSample)
     {
         mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
