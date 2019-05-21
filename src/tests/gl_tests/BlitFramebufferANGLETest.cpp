@@ -1225,6 +1225,10 @@ TEST_P(BlitFramebufferTest, MultisampleStencil)
     // Incorrect rendering results seen on AMD Windows OpenGL. http://anglebug.com/2486
     ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL() && IsWindows());
 
+    // TODO(syoussefi): Multisampled stencil resolve requires workaround where
+    // VK_EXT_shader_stencil_export is not supported.  http://anglebug.com/3200
+    ANGLE_SKIP_TEST_IF(IsVulkan() && !IsAMD());
+
     GLRenderbuffer renderbuf;
     glBindRenderbuffer(GL_RENDERBUFFER, renderbuf.get());
     glRenderbufferStorageMultisample(GL_RENDERBUFFER, 2, GL_STENCIL_INDEX8, 256, 256);
@@ -1282,6 +1286,9 @@ TEST_P(BlitFramebufferTest, MultisampleStencil)
 // Blit an SRGB framebuffer and scale it.
 TEST_P(BlitFramebufferTest, BlitSRGBToRGBAndScale)
 {
+    // TODO(syoussefi): Vulkan does not implement stretching yet.  http://anglebug.com/3200
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
     constexpr const GLsizei kWidth  = 256;
     constexpr const GLsizei kHeight = 256;
 
@@ -1393,6 +1400,9 @@ TEST_P(BlitFramebufferTest, PartialBlitSRGBToRGB)
 // clipped out).
 TEST_P(BlitFramebufferTest, BlitSRGBToRGBOversizedSourceArea)
 {
+    // TODO(syoussefi): Vulkan does not implement stretching yet.  http://anglebug.com/3200
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
     constexpr const GLsizei kWidth  = 256;
     constexpr const GLsizei kHeight = 256;
 
@@ -1497,6 +1507,7 @@ ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest,
                        ES2_D3D11_PRESENT_PATH_FAST(),
                        ES2_OPENGL(),
                        ES3_OPENGL(),
-                       ES2_VULKAN());
+                       ES2_VULKAN(),
+                       ES3_VULKAN());
 
-ANGLE_INSTANTIATE_TEST(BlitFramebufferTest, ES3_D3D11(), ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(BlitFramebufferTest, ES3_D3D11(), ES3_OPENGL(), ES3_VULKAN());
