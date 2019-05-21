@@ -47,6 +47,10 @@ enum class SubjectMessage
     // Generic state change message. Used in multiple places for different purposes.
     SubjectChanged,
 
+    // Framebuffer changed used to denote when framebuffer bindings have changed
+    // MS shadow texture needs to be resolved when framebuffer is unbound.
+    FramebufferChanged,
+
     // Indicates a bound gl::Buffer is now mapped or unmapped. Passed from gl::Buffer, through
     // gl::VertexArray, into gl::Context. Used to track validation.
     SubjectMapped,

@@ -102,6 +102,7 @@ SurfaceVk::~SurfaceVk() = default;
 angle::Result SurfaceVk::getAttachmentRenderTarget(const gl::Context *context,
                                                    GLenum binding,
                                                    const gl::ImageIndex &imageIndex,
+                                                   gl::RenderTargetUse rtUse,
                                                    FramebufferAttachmentRenderTarget **rtOut)
 {
     ContextVk *contextVk = vk::GetImpl(context);

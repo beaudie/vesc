@@ -50,7 +50,8 @@ class TextureStorage : angle::NonCopyable
 
     virtual angle::Result getRenderTarget(const gl::Context *context,
                                           const gl::ImageIndex &index,
-                                          RenderTargetD3D **outRT)        = 0;
+                                          RenderTargetD3D **outRT,
+                                          gl::RenderTargetUse rtUse)      = 0;
     virtual angle::Result generateMipmap(const gl::Context *context,
                                          const gl::ImageIndex &sourceIndex,
                                          const gl::ImageIndex &destIndex) = 0;
@@ -71,6 +72,17 @@ class TextureStorage : angle::NonCopyable
                                                         bool useLevelZeroTexture);
 
     virtual void invalidateTextures() {}
+
+    // For shadow multisampled textures
+    virtual angle::Result releaseMultisampledTexStorageForLevel(size_t level)
+    {
+        return angle::Result::Continue;
+    }
+    virtual angle::Result resolveAndReleaseTexture(const gl::Context *context)
+    {
+        return angle::Result::Continue;
+    }
+    virtual void setMultisampledTextureInfo(GLsizei samples, size_t level) {}
 
   protected:
     const angle::Subject *mSubject;

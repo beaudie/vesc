@@ -26,6 +26,7 @@ class SurfaceVk : public SurfaceImpl
     angle::Result getAttachmentRenderTarget(const gl::Context *context,
                                             GLenum binding,
                                             const gl::ImageIndex &imageIndex,
+                                            gl::RenderTargetUse rtUse,
                                             FramebufferAttachmentRenderTarget **rtOut) override;
 
   protected:

@@ -419,6 +419,8 @@ class Texture final : public RefCountObject, public egl::ImageSibling, public La
 
     rx::TextureImpl *getImplementation() const { return mTexture; }
 
+    angle::Result resolveAndReleaseTexture(const Context *context);
+
     // FramebufferAttachmentObject implementation
     Extents getAttachmentSize(const ImageIndex &imageIndex) const override;
     Format getAttachmentFormat(GLenum binding, const ImageIndex &imageIndex) const override;
@@ -485,6 +487,10 @@ class Texture final : public RefCountObject, public egl::ImageSibling, public La
 
     // ObserverInterface implementation.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
+
+    angle::Result setMultisampledTextureInfo(const gl::Context *context,
+                                             GLsizei samples,
+                                             size_t level);
 
   private:
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override;
