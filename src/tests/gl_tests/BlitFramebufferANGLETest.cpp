@@ -1497,6 +1497,7 @@ ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest,
                        ES2_D3D11_PRESENT_PATH_FAST(),
                        ES2_OPENGL(),
                        ES3_OPENGL(),
-                       ES2_VULKAN());
+                       ES2_VULKAN(),
+                       ES3_VULKAN());
 
 ANGLE_INSTANTIATE_TEST(BlitFramebufferTest, ES3_D3D11(), ES3_OPENGL());

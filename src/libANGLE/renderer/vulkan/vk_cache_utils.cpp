@@ -189,11 +189,13 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
 {
     // Unpack the packed and split representation into the format required by Vulkan.
     gl::DrawBuffersVector<VkAttachmentReference> colorAttachmentRefs;
+    gl::DrawBuffersVector<VkAttachmentReference> resolveAttachmentRefs;
     VkAttachmentReference depthStencilAttachmentRef = {VK_ATTACHMENT_UNUSED};
     gl::AttachmentArray<VkAttachmentDescription> attachmentDescs;
 
     uint32_t colorAttachmentCount = 0;
     uint32_t attachmentCount      = 0;
+    bool anyResolve               = false;
     for (uint32_t colorIndexGL = 0; colorIndexGL < desc.colorAttachmentRange(); ++colorIndexGL)
     {
         // Vulkan says:
@@ -205,12 +207,14 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
         // This means that colorAttachmentRefs is indexed by colorIndexGL.  Where the color
         // attachment is disabled, a reference with VK_ATTACHMENT_UNUSED is given.
 
+        VkAttachmentReference unusedRef;
+        unusedRef.attachment = VK_ATTACHMENT_UNUSED;
+        unusedRef.layout     = VK_IMAGE_LAYOUT_UNDEFINED;
+
         if (!desc.isColorAttachmentEnabled(colorIndexGL))
         {
-            VkAttachmentReference colorRef;
-            colorRef.attachment = VK_ATTACHMENT_UNUSED;
-            colorRef.layout     = VK_IMAGE_LAYOUT_UNDEFINED;
-            colorAttachmentRefs.push_back(colorRef);
+            colorAttachmentRefs.push_back(unusedRef);
+            resolveAttachmentRefs.push_back(unusedRef);
 
             continue;
         }
@@ -225,6 +229,8 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
         colorRef.layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
         colorAttachmentRefs.push_back(colorRef);
+        resolveAttachmentRefs.push_back(ops[colorIndexVk].resolve ? colorRef : unusedRef);
+        anyResolve = anyResolve || ops[colorIndexVk].resolve;
 
         UnpackAttachmentDesc(&attachmentDescs[colorIndexVk], format, desc.samples(),
                              ops[colorIndexVk]);
@@ -258,7 +264,7 @@ angle::Result InitializeRenderPassFromDesc(vk::Context *context,
     subpassDesc.pInputAttachments    = nullptr;
     subpassDesc.colorAttachmentCount = static_cast<uint32_t>(colorAttachmentRefs.size());
     subpassDesc.pColorAttachments    = colorAttachmentRefs.data();
-    subpassDesc.pResolveAttachments  = nullptr;
+    subpassDesc.pResolveAttachments  = anyResolve ? resolveAttachmentRefs.data() : nullptr;
     subpassDesc.pDepthStencilAttachment =
         (depthStencilAttachmentRef.attachment != VK_ATTACHMENT_UNUSED ? &depthStencilAttachmentRef
                                                                       : nullptr);
@@ -854,6 +860,11 @@ void GraphicsPipelineDesc::updateLineWidth(GraphicsPipelineTransitionBits *trans
     transition->set(ANGLE_GET_TRANSITION_BIT(mRasterizationAndMultisampleStateInfo, lineWidth));
 }
 
+void GraphicsPipelineDesc::setSampleShadingEnable(bool enable)
+{
+    mRasterizationAndMultisampleStateInfo.bits.sampleShadingEnable = enable;
+}
+
 void GraphicsPipelineDesc::setRasterizationSamples(uint32_t rasterizationSamples)
 {
     mRasterizationAndMultisampleStateInfo.bits.rasterizationSamples = rasterizationSamples;
@@ -1282,6 +1293,8 @@ void AttachmentOpsArray::initDummyOp(size_t index,
     SetBitField(ops.stencilLoadOp, VK_ATTACHMENT_LOAD_OP_DONT_CARE);
     SetBitField(ops.storeOp, VK_ATTACHMENT_STORE_OP_STORE);
     SetBitField(ops.stencilStoreOp, VK_ATTACHMENT_STORE_OP_DONT_CARE);
+
+    ops.resolve = false;
 }
 
 void AttachmentOpsArray::initWithLoadStore(size_t index,
@@ -1296,6 +1309,8 @@ void AttachmentOpsArray::initWithLoadStore(size_t index,
     SetBitField(ops.stencilLoadOp, VK_ATTACHMENT_LOAD_OP_LOAD);
     SetBitField(ops.storeOp, VK_ATTACHMENT_STORE_OP_STORE);
     SetBitField(ops.stencilStoreOp, VK_ATTACHMENT_STORE_OP_STORE);
+
+    ops.resolve = false;
 }
 
 size_t AttachmentOpsArray::hash() const
@@ -1356,8 +1371,8 @@ void DescriptorSetLayoutDesc::unpackBindings(DescriptorSetLayoutBindingVector *b
         binding.binding                      = bindingIndex;
         binding.descriptorCount              = packedBinding.count;
         binding.descriptorType               = static_cast<VkDescriptorType>(packedBinding.type);
-        binding.stageFlags = static_cast<VkShaderStageFlags>(packedBinding.stages);
-        binding.pImmutableSamplers           = nullptr;
+        binding.stageFlags         = static_cast<VkShaderStageFlags>(packedBinding.stages);
+        binding.pImmutableSamplers = nullptr;
 
         bindings->push_back(binding);
     }
@@ -1454,7 +1469,10 @@ angle::Result RenderPassCache::addRenderPass(vk::Context *context,
                                              const vk::RenderPassDesc &desc,
                                              vk::RenderPass **renderPassOut)
 {
-    // Insert some dummy attachment ops.
+    // Insert some dummy attachment ops.  Note that render passes with different ops are still
+    // compatible.  Similarly, two render passes are compatible if they have a single subpass and
+    // they differ in their resolve attachments.
+    //
     // It would be nice to pre-populate the cache in the Renderer so we rarely miss here.
     vk::AttachmentOpsArray ops;
 
