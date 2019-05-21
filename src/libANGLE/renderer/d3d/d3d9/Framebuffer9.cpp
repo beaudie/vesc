@@ -88,7 +88,7 @@ angle::Result Framebuffer9::readPixelsImpl(const gl::Context *context,
     ASSERT(colorbuffer);
 
     RenderTarget9 *renderTarget = nullptr;
-    ANGLE_TRY(colorbuffer->getRenderTarget(context, &renderTarget));
+    ANGLE_TRY(colorbuffer->getRenderTarget(context, gl::RenderTargetUse::READ, &renderTarget));
     ASSERT(renderTarget);
 
     IDirect3DSurface9 *surface = renderTarget->getSurface();
@@ -237,14 +237,16 @@ angle::Result Framebuffer9::blitImpl(const gl::Context *context,
         ASSERT(readBuffer);
 
         RenderTarget9 *readRenderTarget = nullptr;
-        ANGLE_TRY(readBuffer->getRenderTarget(context, &readRenderTarget));
+        ANGLE_TRY(
+            readBuffer->getRenderTarget(context, gl::RenderTargetUse::READ, &readRenderTarget));
         ASSERT(readRenderTarget);
 
         const gl::FramebufferAttachment *drawBuffer = mState.getColorAttachment(0);
         ASSERT(drawBuffer);
 
         RenderTarget9 *drawRenderTarget = nullptr;
-        ANGLE_TRY(drawBuffer->getRenderTarget(context, &drawRenderTarget));
+        ANGLE_TRY(
+            drawBuffer->getRenderTarget(context, gl::RenderTargetUse::DRAW, &drawRenderTarget));
         ASSERT(drawRenderTarget);
 
         // The getSurface calls do an AddRef so save them until after no errors are possible
@@ -353,14 +355,16 @@ angle::Result Framebuffer9::blitImpl(const gl::Context *context,
         ASSERT(readBuffer);
 
         RenderTarget9 *readDepthStencil = nullptr;
-        ANGLE_TRY(readBuffer->getRenderTarget(context, &readDepthStencil));
+        ANGLE_TRY(
+            readBuffer->getRenderTarget(context, gl::RenderTargetUse::READ, &readDepthStencil));
         ASSERT(readDepthStencil);
 
         const gl::FramebufferAttachment *drawBuffer = mState.getDepthOrStencilAttachment();
         ASSERT(drawBuffer);
 
         RenderTarget9 *drawDepthStencil = nullptr;
-        ANGLE_TRY(drawBuffer->getRenderTarget(context, &drawDepthStencil));
+        ANGLE_TRY(
+            drawBuffer->getRenderTarget(context, gl::RenderTargetUse::DRAW, &drawDepthStencil));
         ASSERT(drawDepthStencil);
 
         // The getSurface calls do an AddRef so save them until after no errors are possible

@@ -314,6 +314,11 @@ ANGLE_VALIDATE_PACKED_ENUM(DrawElementsType, UnsignedShort, GL_UNSIGNED_SHORT);
 ANGLE_VALIDATE_PACKED_ENUM(DrawElementsType, UnsignedInt, GL_UNSIGNED_INT);
 
 std::ostream &operator<<(std::ostream &os, DrawElementsType value);
+enum class RenderTargetUse
+{
+    READ,
+    DRAW
+};
 
 enum class VertexAttribType
 {

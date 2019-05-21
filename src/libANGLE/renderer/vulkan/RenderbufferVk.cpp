@@ -191,6 +191,7 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
 angle::Result RenderbufferVk::getAttachmentRenderTarget(const gl::Context *context,
                                                         GLenum binding,
                                                         const gl::ImageIndex &imageIndex,
+                                                        gl::RenderTargetUse rtUse,
                                                         FramebufferAttachmentRenderTarget **rtOut)
 {
     ASSERT(mImage && mImage->valid());
