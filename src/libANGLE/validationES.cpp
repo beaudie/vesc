@@ -1320,7 +1320,7 @@ bool ValidateBlitFramebufferParameters(Context *context,
         return false;
     }
 
-    if (!ValidateFramebufferNotMultisampled(context, drawFramebuffer))
+    if (!ValidateFramebufferNotMultisampled(context, drawFramebuffer, false))
     {
         return false;
     }
@@ -2471,7 +2471,8 @@ bool ValidateCopyTexImageParametersBase(Context *context,
         return false;
     }
 
-    if (readFramebuffer->id() != 0 && !ValidateFramebufferNotMultisampled(context, readFramebuffer))
+    if (readFramebuffer->id() != 0 &&
+        !ValidateFramebufferNotMultisampled(context, readFramebuffer, true))
     {
         return false;
     }
@@ -3883,6 +3884,14 @@ bool ValidateGetFramebufferAttachmentParameterivBase(Context *context,
         case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_BASE_VIEW_INDEX_OVR:
             if (clientVersion < 3 ||
                 !(context->getExtensions().multiview || context->getExtensions().multiview2))
+            {
+                context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
+                return false;
+            }
+            break;
+
+        case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_SAMPLES_EXT:
+            if (!context->getExtensions().multisampledRenderToTexture)
             {
                 context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
                 return false;
@@ -5428,7 +5437,8 @@ bool ValidateReadPixelsBase(Context *context,
         return false;
     }
 
-    if (readFramebuffer->id() != 0 && !ValidateFramebufferNotMultisampled(context, readFramebuffer))
+    if (readFramebuffer->id() != 0 &&
+        !ValidateFramebufferNotMultisampled(context, readFramebuffer, true))
     {
         return false;
     }
@@ -6280,9 +6290,13 @@ bool ValidateGetInternalFormativBase(Context *context,
     return true;
 }
 
-bool ValidateFramebufferNotMultisampled(Context *context, Framebuffer *framebuffer)
+bool ValidateFramebufferNotMultisampled(Context *context,
+                                        Framebuffer *framebuffer,
+                                        bool needIntrinsic)
 {
-    if (framebuffer->getSamples(context) != 0)
+    int samples = needIntrinsic ? framebuffer->getIntrinsicSamples(context)
+                                : framebuffer->getSamples(context);
+    if (samples != 0)
     {
         context->validationError(GL_INVALID_OPERATION, kInvalidMultisampledFramebufferOperation);
         return false;

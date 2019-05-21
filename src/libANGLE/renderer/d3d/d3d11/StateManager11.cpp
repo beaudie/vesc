@@ -1512,6 +1512,11 @@ void StateManager11::processFramebufferInvalidation(const gl::Context *context)
     mInternalDirtyBits.set(DIRTY_BIT_BLEND_STATE);
 
     gl::Framebuffer *fbo = context->getState().getDrawFramebuffer();
+    if (!fbo->cachedStatusValid())
+    {
+        GLenum status = fbo->checkStatus(context);
+        ASSERT(status == GL_FRAMEBUFFER_COMPLETE);
+    }
     ASSERT(fbo);
 
     // Disable the depth test/depth write if we are using a stencil-only attachment.
@@ -1530,7 +1535,7 @@ void StateManager11::processFramebufferInvalidation(const gl::Context *context)
         mCurDisableStencil = disableStencil;
     }
 
-    bool multiSample = (fbo->getCachedSamples(context) != 0);
+    bool multiSample = (fbo->getCachedSamples(context, false) != 0);
     if (multiSample != mCurRasterState.multiSample)
     {
         mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);

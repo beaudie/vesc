@@ -60,8 +60,9 @@ angle::Result EGLImageD3D::getRenderTarget(const gl::Context *context,
     {
         ASSERT(!mRenderTarget);
         FramebufferAttachmentRenderTarget *rt = nullptr;
+        // samples = -1 for resolve
         ANGLE_TRY(
-            mState.source->getAttachmentRenderTarget(context, GL_NONE, mState.imageIndex, &rt));
+            mState.source->getAttachmentRenderTarget(context, GL_NONE, mState.imageIndex, -1, &rt));
         *outRT = static_cast<RenderTargetD3D *>(rt);
         return angle::Result::Continue;
     }

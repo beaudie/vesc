@@ -90,7 +90,8 @@ class TextureStorage9_2D : public TextureStorage9
                                   IDirect3DSurface9 **outSurface) override;
     angle::Result getRenderTarget(const gl::Context *context,
                                   const gl::ImageIndex &index,
-                                  RenderTargetD3D **outRT) override;
+                                  RenderTargetD3D **outRT,
+                                  GLsizei samples) override;
     angle::Result getBaseTexture(const gl::Context *context,
                                  IDirect3DBaseTexture9 **outTexture) override;
     angle::Result generateMipmap(const gl::Context *context,
@@ -116,7 +117,8 @@ class TextureStorage9_EGLImage final : public TextureStorage9
                                   IDirect3DSurface9 **outSurface) override;
     angle::Result getRenderTarget(const gl::Context *context,
                                   const gl::ImageIndex &index,
-                                  RenderTargetD3D **outRT) override;
+                                  RenderTargetD3D **outRT,
+                                  GLsizei samples) override;
     angle::Result getBaseTexture(const gl::Context *context,
                                  IDirect3DBaseTexture9 **outTexture) override;
     angle::Result generateMipmap(const gl::Context *context,
@@ -146,7 +148,8 @@ class TextureStorage9_Cube : public TextureStorage9
                                   IDirect3DSurface9 **outSurface) override;
     angle::Result getRenderTarget(const gl::Context *context,
                                   const gl::ImageIndex &index,
-                                  RenderTargetD3D **outRT) override;
+                                  RenderTargetD3D **outRT,
+                                  GLsizei samples) override;
     angle::Result getBaseTexture(const gl::Context *context,
                                  IDirect3DBaseTexture9 **outTexture) override;
     angle::Result generateMipmap(const gl::Context *context,
