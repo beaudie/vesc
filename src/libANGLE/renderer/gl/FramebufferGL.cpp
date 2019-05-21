@@ -540,8 +540,8 @@ angle::Result FramebufferGL::blit(const gl::Context *context,
                                   GLbitfield mask,
                                   GLenum filter)
 {
-    const FunctionsGL *functions = GetFunctionsGL(context);
-    StateManagerGL *stateManager = GetStateManagerGL(context);
+    const FunctionsGL *functions      = GetFunctionsGL(context);
+    StateManagerGL *stateManager      = GetStateManagerGL(context);
     const angle::FeaturesGL &features = GetFeaturesGL(context);
 
     const Framebuffer *sourceFramebuffer = context->getState().getReadFramebuffer();
@@ -552,7 +552,14 @@ angle::Result FramebufferGL::blit(const gl::Context *context,
     GLsizei readAttachmentSamples = 0;
     if (colorReadAttachment != nullptr)
     {
-        readAttachmentSamples = colorReadAttachment->getSamples();
+        if (colorReadAttachment->type() == GL_TEXTURE && colorReadAttachment->getSamples() > -1)
+        {
+            readAttachmentSamples = colorReadAttachment->getIntrinsicSamples();
+        }
+        else
+        {
+            readAttachmentSamples = colorReadAttachment->getSamples();
+        }
     }
 
     bool needManualColorBlit = false;
