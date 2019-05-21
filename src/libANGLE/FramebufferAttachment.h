@@ -79,7 +79,9 @@ class FramebufferAttachment final
                 FramebufferAttachmentObject *resource,
                 GLsizei numViews,
                 GLuint baseViewIndex,
-                bool isMultiview);
+                bool isMultiview,
+                GLsizei samples,
+                GLint level);
 
     // Helper methods
     GLuint getRedSize() const;
@@ -115,6 +117,10 @@ class FramebufferAttachment final
     bool isMultiview() const;
     GLint getBaseViewIndex() const;
 
+    GLsizei getRenderToTextureSamples() const { return mRenderToTextureSamples; }
+    GLint getRenderToTextureLevel() const { return mRenderToTextureLevel; }
+    angle::Result resolveAttachment(const Context *context);
+
     // The size of the underlying resource the attachment points to. The 'depth' value will
     // correspond to a 3D texture depth or the layer count of a 2D array texture. For Surfaces and
     // Renderbuffers, it will always be 1.
@@ -135,12 +141,12 @@ class FramebufferAttachment final
 
     // "T" must be static_castable from FramebufferAttachmentRenderTarget
     template <typename T>
-    angle::Result getRenderTarget(const Context *context, T **rtOut) const
+    angle::Result getRenderTarget(const Context *context, RenderTargetUse rtUse, T **rtOut) const
     {
         static_assert(std::is_base_of<rx::FramebufferAttachmentRenderTarget, T>(),
                       "Invalid RenderTarget class.");
         return getRenderTargetImpl(
-            context, reinterpret_cast<rx::FramebufferAttachmentRenderTarget **>(rtOut));
+            context, rtUse, reinterpret_cast<rx::FramebufferAttachmentRenderTarget **>(rtOut));
     }
 
     bool operator==(const FramebufferAttachment &other) const;
@@ -148,9 +154,12 @@ class FramebufferAttachment final
 
     static const GLsizei kDefaultNumViews;
     static const GLint kDefaultBaseViewIndex;
+    static const GLint kDefaultRenderToTextureLevel;
+    static const GLint kDefaultRenderToTextureSamples;
 
   private:
     angle::Result getRenderTargetImpl(const Context *context,
+                                      RenderTargetUse rtUse,
                                       rx::FramebufferAttachmentRenderTarget **rtOut) const;
 
     // A framebuffer attachment points to one of three types of resources: Renderbuffers,
@@ -181,6 +190,8 @@ class FramebufferAttachment final
     GLsizei mNumViews;
     bool mIsMultiview;
     GLint mBaseViewIndex;
+    GLsizei mRenderToTextureSamples;
+    GLint mRenderToTextureLevel;
 };
 
 // A base class for objects that FBO Attachments may point to.
@@ -208,6 +219,7 @@ class FramebufferAttachmentObject : public angle::Subject
     angle::Result getAttachmentRenderTarget(const Context *context,
                                             GLenum binding,
                                             const ImageIndex &imageIndex,
+                                            RenderTargetUse rtUse,
                                             rx::FramebufferAttachmentRenderTarget **rtOut) const;
 
     angle::Result initializeContents(const Context *context, const ImageIndex &imageIndex);
@@ -230,17 +242,22 @@ inline Format FramebufferAttachment::getFormat() const
 
 inline GLsizei FramebufferAttachment::getSamples() const
 {
+    if (mRenderToTextureSamples != 0)
+    {
+        return mRenderToTextureSamples;
+    }
     ASSERT(mResource);
     return mResource->getAttachmentSamples(mTarget.textureIndex());
 }
 
 inline angle::Result FramebufferAttachment::getRenderTargetImpl(
     const Context *context,
+    RenderTargetUse rtUse,
     rx::FramebufferAttachmentRenderTarget **rtOut) const
 {
     ASSERT(mResource);
     return mResource->getAttachmentRenderTarget(context, mTarget.binding(), mTarget.textureIndex(),
-                                                rtOut);
+                                                rtUse, rtOut);
 }
 
 inline bool FramebufferAttachment::isRenderable(const Context *context) const

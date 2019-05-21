@@ -504,6 +504,12 @@ class Renderer11 : public RendererD3D
                                        gl::TextureType type,
                                        gl::Texture **textureOut) override;
 
+    angle::Result resolveMultisampledTexture(const gl::Context *context,
+                                             RenderTarget11 *renderTarget,
+                                             bool depth,
+                                             bool stencil,
+                                             TextureHelper11 *textureOut);
+
   private:
     void generateCaps(gl::Caps *outCaps,
                       gl::TextureCapsMap *outTextureCaps,
@@ -524,12 +530,6 @@ class Renderer11 : public RendererD3D
                                   const void *indices,
                                   int baseVertex,
                                   int instances);
-
-    angle::Result resolveMultisampledTexture(const gl::Context *context,
-                                             RenderTarget11 *renderTarget,
-                                             bool depth,
-                                             bool stencil,
-                                             TextureHelper11 *textureOut);
 
     void populateRenderer11DeviceCaps();
 
