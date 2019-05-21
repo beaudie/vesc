@@ -43,22 +43,22 @@ void RenderTargetVk::init(vk::ImageHelper *image,
                           size_t layerIndex,
                           TextureVk *owner)
 {
-    mImage      = image;
-    mImageView  = imageView;
+    mImage              = image;
+    mImageView          = imageView;
     mCubeImageFetchView = cubeImageFetchView;
-    mLevelIndex = levelIndex;
-    mLayerIndex = layerIndex;
-    mOwner      = owner;
+    mLevelIndex         = levelIndex;
+    mLayerIndex         = layerIndex;
+    mOwner              = owner;
 }
 
 void RenderTargetVk::reset()
 {
-    mImage      = nullptr;
-    mImageView  = nullptr;
+    mImage              = nullptr;
+    mImageView          = nullptr;
     mCubeImageFetchView = nullptr;
-    mLevelIndex = 0;
-    mLayerIndex = 0;
-    mOwner      = nullptr;
+    mLevelIndex         = 0;
+    mLayerIndex         = 0;
+    mOwner              = nullptr;
 }
 
 angle::Result RenderTargetVk::onColorDraw(ContextVk *contextVk,
@@ -145,10 +145,10 @@ gl::Extents RenderTargetVk::getExtents() const
 void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image, vk::ImageView *imageView)
 {
     ASSERT(image && image->valid() && imageView && imageView->valid());
-    mImage     = image;
-    mImageView = imageView;
+    mImage              = image;
+    mImageView          = imageView;
     mCubeImageFetchView = nullptr;
-    mOwner     = nullptr;
+    mOwner              = nullptr;
 }
 
 vk::ImageHelper *RenderTargetVk::getImageForRead(vk::CommandGraphResource *readingResource,
