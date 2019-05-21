@@ -127,10 +127,14 @@ struct PackedAttachmentOpsDesc final
     uint16_t stencilLoadOp : 2;
     uint16_t stencilStoreOp : 1;
 
-    // 5-bits to force pad the structure to exactly 2 bytes.  Note that we currently don't support
-    // any of the extension layouts, whose values start at 1'000'000'000.
-    uint16_t initialLayout : 5;
-    uint16_t finalLayout : 5;
+    // Note that we currently don't support any of the extension layouts, whose values start at
+    // 1'000'000'000.
+    uint16_t initialLayout : 4;
+    uint16_t finalLayout : 4;
+
+    // Whether the attachment should be resolved.  2 bits to force pad the structure to exactly 2
+    // bytes.
+    uint16_t resolve : 2;
 };
 
 static_assert(sizeof(PackedAttachmentOpsDesc) == 2, "Size check failed");
@@ -385,6 +389,7 @@ class GraphicsPipelineDesc final
     void updateLineWidth(GraphicsPipelineTransitionBits *transition, float lineWidth);
 
     // Multisample states
+    void setSampleShadingEnable(bool enable);
     void setRasterizationSamples(uint32_t rasterizationSamples);
     void updateRasterizationSamples(GraphicsPipelineTransitionBits *transition,
                                     uint32_t rasterizationSamples);
@@ -763,7 +768,7 @@ class RenderPassCache final : angle::NonCopyable
                                 vk::RenderPass **renderPassOut);
 
     // Use a two-layer caching scheme. The top level matches the "compatible" RenderPass elements.
-    // The second layer caches the attachment load/store ops and initial/final layout.
+    // The second layer caches the attachment load/store ops, resolve mask and initial/final layout.
     using InnerCache = std::unordered_map<vk::AttachmentOpsArray, vk::RenderPassAndSerial>;
     using OuterCache = std::unordered_map<vk::RenderPassDesc, InnerCache>;
 

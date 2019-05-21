@@ -119,6 +119,11 @@ class CommandGraphNode final : angle::NonCopyable
         mRenderPassClearValues[attachmentIndex].depthStencil.stencil = stencil;
     }
 
+    void resolveRenderPassColorAttachment(size_t attachmentIndex)
+    {
+        mRenderPassAttachmentOps[attachmentIndex].resolve = true;
+    }
+
     // Dependency commands order node execution in the command graph.
     // Once a node has commands that must happen after it, recording is stopped and the node is
     // frozen forever.
@@ -346,6 +351,12 @@ class CommandGraphResource : angle::NonCopyable
     {
         ASSERT(renderPassStartedButEmpty());
         mCurrentWritingNode->clearRenderPassStencilAttachment(attachmentIndex, stencil);
+    }
+
+    void resolveRenderPassColorAttachment(size_t attachmentIndex)
+    {
+        ASSERT(renderPassStartedButEmpty());
+        mCurrentWritingNode->resolveRenderPassColorAttachment(attachmentIndex);
     }
 
     // Accessor for RenderPass RenderArea.

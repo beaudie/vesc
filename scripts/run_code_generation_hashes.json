@@ -192,7 +192,7 @@
   "Vulkan format:src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp":
     "ba26e079062affec8cd72d48f5c91d21",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py":
-    "4cc82aa02df5371fc2e3d7448a241fc1",
+    "3089dcc7ffff60a8803595fd44278f6e",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000000.inc":
     "df5fdc47f0950e3eae3d9491e9c84af7",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000001.inc":
@@ -335,6 +335,30 @@
     "084c1b02964cf2baefcc733b7f4e4786",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000015.inc":
     "6a2e5e10e686370f3350a96cda2441a0",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/MultisampledCopy.frag.00000000.inc":
+    "9596a9da74bfe0fd76323f783306d62b",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/MultisampledCopy.frag.00000001.inc":
+    "6a878172dc20ca58a591367c7e75c21d",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/MultisampledCopy.frag.00000002.inc":
+    "e0710fe097bdbd33d79ea915545c77ce",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/MultisampledCopy.frag.00000003.inc":
+    "9a117e69fcb293cbc74c1e4cd2f8098d",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/MultisampledCopy.frag.00000004.inc":
+    "986ca9cacecc7cea2c49cc5c96e633db",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/MultisampledCopy.frag.00000005.inc":
+    "0dd292078c980326a92b583ead15e6b3",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/ResolveDepthStencil.frag.00000000.inc":
+    "1160df0dacc79de1f3596607992ed2eb",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/ResolveDepthStencil.frag.00000001.inc":
+    "0e1b8ae391967aacc1a9c01329962f61",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/ResolveDepthStencil.frag.00000002.inc":
+    "461bceb624f98bbee0669e2a90989309",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/ResolveDepthStencil.frag.00000003.inc":
+    "4909888bf8cbbba9b44da4f51efd4a02",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/ResolveDepthStencil.frag.00000004.inc":
+    "bac1de051c3198f25c9431d98c2e2550",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/ResolveDepthStencil.frag.00000005.inc":
+    "7afa84a4bd99addb5e03955b74785244",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/src/BufferUtils.comp":
     "0c8c050841543da0d7faca2559212aa8",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/src/ConvertVertex.comp":
@@ -345,10 +369,14 @@
     "7f562c60e5df018b0087ecb8642ac821",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag":
     "20c83ade1efb48a802dc34ca838a2be6",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/src/MultisampledCopy.frag":
+    "4e7068765282ce0651961608fa03c14c",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/src/ResolveDepthStencil.frag":
+    "d23de54f97cccca65dedf0ad765d16ef",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.cpp":
-    "751f3554fe613d9b4739c7a4ac87b037",
+    "f76893cea6aea561b7a2e01c4f693500",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h":
-    "930fc6f4a705a0d2121770377d3bc764",
+    "4f4f3acbb43ed6fa6fcba1521fd0eb26",
   "Vulkan internal shader programs:tools/glslang/glslang_validator.exe.sha1":
     "9f1f0fc61116a657e065c40f9296e5ab",
   "Vulkan internal shader programs:tools/glslang/glslang_validator.sha1":
