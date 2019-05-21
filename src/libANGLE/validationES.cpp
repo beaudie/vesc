@@ -1320,7 +1320,7 @@ bool ValidateBlitFramebufferParameters(Context *context,
         return false;
     }
 
-    if (!ValidateFramebufferNotMultisampled(context, drawFramebuffer))
+    if (!ValidateFramebufferNotMultisampled(context, drawFramebuffer, false))
     {
         return false;
     }
@@ -2471,7 +2471,8 @@ bool ValidateCopyTexImageParametersBase(Context *context,
         return false;
     }
 
-    if (readFramebuffer->id() != 0 && !ValidateFramebufferNotMultisampled(context, readFramebuffer))
+    if (readFramebuffer->id() != 0 &&
+        !ValidateFramebufferNotMultisampled(context, readFramebuffer, true))
     {
         return false;
     }
@@ -5428,7 +5429,8 @@ bool ValidateReadPixelsBase(Context *context,
         return false;
     }
 
-    if (readFramebuffer->id() != 0 && !ValidateFramebufferNotMultisampled(context, readFramebuffer))
+    if (readFramebuffer->id() != 0 &&
+        !ValidateFramebufferNotMultisampled(context, readFramebuffer, true))
     {
         return false;
     }
@@ -6280,9 +6282,13 @@ bool ValidateGetInternalFormativBase(Context *context,
     return true;
 }
 
-bool ValidateFramebufferNotMultisampled(Context *context, Framebuffer *framebuffer)
+bool ValidateFramebufferNotMultisampled(Context *context,
+                                        Framebuffer *framebuffer,
+                                        bool needIntrinsic)
 {
-    if (framebuffer->getSamples(context) != 0)
+    int samples = needIntrinsic ? framebuffer->getIntrinsicSamples(context)
+                                : framebuffer->getSamples(context);
+    if (samples != 0)
     {
         context->validationError(GL_INVALID_OPERATION, kInvalidMultisampledFramebufferOperation);
         return false;
