@@ -188,6 +188,14 @@ class FramebufferVk : public FramebufferImpl
     void updateRenderPassDesc();
     angle::Result updateColorAttachment(const gl::Context *context, size_t colorIndex);
 
+  private:
+    // Resolve from the read framebuffer into the draw framebuffer.  This is a specialized usage of
+    // glBlitFramebuffer() for multisampled images where scaling is not performed.
+    angle::Result resolve(ContextVk *contextVk,
+                          const gl::Rectangle &sourceArea,
+                          const gl::Rectangle &destArea,
+                          GLbitfield mask);
+
     WindowSurfaceVk *mBackbuffer;
 
     vk::RenderPassDesc mRenderPassDesc;
