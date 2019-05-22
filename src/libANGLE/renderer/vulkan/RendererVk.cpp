@@ -469,7 +469,7 @@ void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
     ASSERT(submitInfo->signalSemaphoreCount == 0);
 
     submitInfo->sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo->commandBufferCount = 1;
+    submitInfo->commandBufferCount = commandBuffer.valid() ? 1 : 0;
     submitInfo->pCommandBuffers    = commandBuffer.ptr();
 
     if (waitSemaphore)
@@ -1412,28 +1412,10 @@ angle::Result RendererVk::finish(vk::Context *context,
                                  const vk::Semaphore *waitSemaphore,
                                  const vk::Semaphore *signalSemaphore)
 {
-    if (!mCommandGraph.empty())
+    if (!mCommandGraph.empty() || waitSemaphore != nullptr || signalSemaphore != nullptr)
     {
         TRACE_EVENT0("gpu.angle", "RendererVk::finish");
-
-        vk::Scoped<vk::PrimaryCommandBuffer> commandBatch(mDevice);
-        ANGLE_TRY(flushCommandGraph(context, &commandBatch.get()));
-
-        VkSubmitInfo submitInfo       = {};
-        VkPipelineStageFlags waitMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-        InitializeSubmitInfo(&submitInfo, commandBatch.get(), waitSemaphore, &waitMask,
-                             signalSemaphore);
-
-        ANGLE_TRY(submitFrame(context, submitInfo, std::move(commandBatch.get())));
-    }
-    else
-    {
-        // If the sempahores were non-null, there will be breaks in the semaphore chain by not
-        // submitting them.
-        // TODO(geofflang): We can request the semaphores from the surface just before submission
-        // once contexts hold the command graph.  http://anglebug.com/2464
-        ASSERT(waitSemaphore == nullptr);
-        ASSERT(signalSemaphore == nullptr);
+        ANGLE_TRY(flushImpl(context, waitSemaphore, signalSemaphore));
     }
 
     ASSERT(mQueue != VK_NULL_HANDLE);
@@ -1525,6 +1507,26 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
     }
 
     ANGLE_TRY(cleanupFencedGarbage(context, false));
+
+    return angle::Result::Continue;
+}
+
+angle::Result RendererVk::flushImpl(vk::Context *context,
+                                    const vk::Semaphore *waitSemaphore,
+                                    const vk::Semaphore *signalSemaphore)
+{
+    vk::Scoped<vk::PrimaryCommandBuffer> commandBatch(mDevice);
+    if (!mCommandGraph.empty())
+    {
+        ANGLE_TRY(flushCommandGraph(context, &commandBatch.get()));
+    }
+
+    VkSubmitInfo submitInfo       = {};
+    VkPipelineStageFlags waitMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+    InitializeSubmitInfo(&submitInfo, commandBatch.get(), waitSemaphore, &waitMask,
+                         signalSemaphore);
+
+    ANGLE_TRY(submitFrame(context, submitInfo, commandBatch.release()));
 
     return angle::Result::Continue;
 }
@@ -1665,30 +1667,14 @@ angle::Result RendererVk::flush(vk::Context *context,
                                 const vk::Semaphore *waitSemaphore,
                                 const vk::Semaphore *signalSemaphore)
 {
-    if (mCommandGraph.empty())
+    if (mCommandGraph.empty() && waitSemaphore == nullptr && signalSemaphore == nullptr)
     {
-        // If the sempahores were non-null, there will be breaks in the semaphore chain by not
-        // submitting them.
-        // TODO(geofflang): We can request the semaphores from the surface just before submission
-        // once contexts hold the command graph.  http://anglebug.com/2464
-        ASSERT(waitSemaphore == nullptr);
-        ASSERT(signalSemaphore == nullptr);
         return angle::Result::Continue;
     }
 
     TRACE_EVENT0("gpu.angle", "RendererVk::flush");
 
-    vk::Scoped<vk::PrimaryCommandBuffer> commandBatch(mDevice);
-    ANGLE_TRY(flushCommandGraph(context, &commandBatch.get()));
-
-    VkSubmitInfo submitInfo       = {};
-    VkPipelineStageFlags waitMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-    InitializeSubmitInfo(&submitInfo, commandBatch.get(), waitSemaphore, &waitMask,
-                         signalSemaphore);
-
-    ANGLE_TRY(submitFrame(context, submitInfo, commandBatch.release()));
-
-    return angle::Result::Continue;
+    return flushImpl(context, waitSemaphore, signalSemaphore);
 }
 
 Serial RendererVk::issueShaderSerial()
