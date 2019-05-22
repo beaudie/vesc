@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ace2fd48_d6e93ccd",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-22T15:31:17Z",
+      "side": 1,
+      "message": "Should this be unreachable? Also might as well move the \u0027return false\u0027 up here.",
+      "range": {
+        "startLine": 142,
+        "startChar": 12,
+        "endLine": 142,
+        "endChar": 28
+      },
+      "revId": "3f145fbc5c5302714975e7196146332b45a673e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cf1e900_c2bb5ad7",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-22T15:31:17Z",
+      "side": 1,
+      "message": "This comment is no longer correct.",
+      "range": {
+        "startLine": 737,
+        "startChar": 4,
+        "endLine": 737,
+        "endChar": 46
+      },
+      "revId": "3f145fbc5c5302714975e7196146332b45a673e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7366fc72_c8e3588c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1893,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-22T15:31:17Z",
+      "side": 1,
+      "message": "Could this switch on conflictPipeline instead?",
+      "range": {
+        "startLine": 1893,
+        "startChar": 16,
+        "endLine": 1893,
+        "endChar": 26
+      },
+      "revId": "3f145fbc5c5302714975e7196146332b45a673e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74057c56_7a36d60e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1907,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-22T15:31:17Z",
+      "side": 1,
+      "message": "un-needed",
+      "range": {
+        "startLine": 1907,
+        "startChar": 0,
+        "endLine": 1907,
+        "endChar": 11
+      },
+      "revId": "3f145fbc5c5302714975e7196146332b45a673e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d42f84a_92959c64",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2329,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-22T15:31:17Z",
+      "side": 1,
+      "message": "I wonder if there is a cleaner way to do this, maybe Jamie has a suggestion.",
+      "range": {
+        "startLine": 2317,
+        "startChar": 0,
+        "endLine": 2329,
+        "endChar": 0
+      },
+      "revId": "3f145fbc5c5302714975e7196146332b45a673e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
