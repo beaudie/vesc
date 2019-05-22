@@ -14,6 +14,7 @@
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Program.h"
+#include "libANGLE/Semaphore.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/renderer_utils.h"
@@ -202,14 +203,19 @@ angle::Result ContextVk::initialize()
 
 angle::Result ContextVk::flush(const gl::Context *context)
 {
-    return flushImpl();
+    return flushImpl(nullptr);
 }
 
-angle::Result ContextVk::flushImpl()
+angle::Result ContextVk::flushImpl(const gl::Semaphore *clientSignalSemaphore)
 {
     SignalSemaphoreVector signalSemaphores;
 
     ANGLE_TRY(generateSurfaceSemaphores(&signalSemaphores));
+
+    if (clientSignalSemaphore != nullptr)
+    {
+        signalSemaphores.push_back(vk::GetImpl(clientSignalSemaphore)->getHandle());
+    }
 
     return mRenderer->flush(this, signalSemaphores);
 }
@@ -226,6 +232,17 @@ angle::Result ContextVk::finishImpl()
     ANGLE_TRY(generateSurfaceSemaphores(&signalSemaphores));
 
     return mRenderer->finish(this, signalSemaphores);
+}
+
+angle::Result ContextVk::waitSemaphore(const gl::Context *context, const gl::Semaphore *semaphore)
+{
+    mRenderer->addWaitSemaphore(vk::GetImpl(semaphore)->getHandle());
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::signalSemaphore(const gl::Context *context, const gl::Semaphore *semaphore)
+{
+    return flushImpl(semaphore);
 }
 
 angle::Result ContextVk::setupDraw(const gl::Context *context,
@@ -1098,7 +1115,7 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
 
 angle::Result ContextVk::onUnMakeCurrent(const gl::Context *context)
 {
-    ANGLE_TRY(flushImpl());
+    ANGLE_TRY(flushImpl(nullptr));
     mCurrentWindowSurface = nullptr;
     return angle::Result::Continue;
 }

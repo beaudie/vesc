@@ -7243,24 +7243,54 @@ void Context::getSemaphoreParameterui64v(GLuint semaphore, GLenum pname, GLuint6
     UNIMPLEMENTED();
 }
 
-void Context::waitSemaphore(GLuint semaphore,
+void Context::waitSemaphore(GLuint semaphoreHandle,
                             GLuint numBufferBarriers,
                             const GLuint *buffers,
                             GLuint numTextureBarriers,
                             const GLuint *textures,
                             const GLenum *srcLayouts)
 {
-    UNIMPLEMENTED();
+    Semaphore *semaphore = getSemaphore(semaphoreHandle);
+    ASSERT(semaphore);
+
+    ANGLE_CONTEXT_TRY(mImplementation->waitSemaphore(this, semaphore));
+
+    if (numBufferBarriers != 0)
+    {
+        // Buffers in external memory are not implemented yet.
+        UNIMPLEMENTED();
+    }
+
+    if (numTextureBarriers != 0)
+    {
+        // Texture barriers are not implemented yet.
+        UNIMPLEMENTED();
+    }
 }
 
-void Context::signalSemaphore(GLuint semaphore,
+void Context::signalSemaphore(GLuint semaphoreHandle,
                               GLuint numBufferBarriers,
                               const GLuint *buffers,
                               GLuint numTextureBarriers,
                               const GLuint *textures,
                               const GLenum *dstLayouts)
 {
-    UNIMPLEMENTED();
+    if (numBufferBarriers != 0)
+    {
+        // Buffers in external memory are not implemented yet.
+        UNIMPLEMENTED();
+    }
+
+    if (numTextureBarriers != 0)
+    {
+        // Texture barriers are not implemented yet.
+        UNIMPLEMENTED();
+    }
+
+    Semaphore *semaphore = getSemaphore(semaphoreHandle);
+    ASSERT(semaphore);
+
+    ANGLE_CONTEXT_TRY(mImplementation->signalSemaphore(this, semaphore));
 }
 
 void Context::importSemaphoreFd(GLuint semaphore, HandleType handleType, GLint fd)
