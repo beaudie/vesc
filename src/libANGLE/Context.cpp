@@ -1331,7 +1331,7 @@ void Context::getBooleanvImpl(GLenum pname, GLboolean *params)
             *params = GL_TRUE;
             break;
         case GL_CONTEXT_ROBUST_ACCESS_EXT:
-            *params = mRobustAccess ? GL_TRUE : GL_FALSE;
+            *params = ConvertToGLBoolean(mRobustAccess);
             break;
 
         default:
@@ -5838,7 +5838,7 @@ GLboolean Context::isBuffer(GLuint buffer)
         return GL_FALSE;
     }
 
-    return (getBuffer(buffer) ? GL_TRUE : GL_FALSE);
+    return ConvertToGLBoolean(getBuffer(buffer));
 }
 
 GLboolean Context::isEnabled(GLenum cap)
@@ -5853,7 +5853,7 @@ GLboolean Context::isFramebuffer(GLuint framebuffer)
         return GL_FALSE;
     }
 
-    return (getFramebuffer(framebuffer) ? GL_TRUE : GL_FALSE);
+    return ConvertToGLBoolean(getFramebuffer(framebuffer));
 }
 
 GLboolean Context::isProgram(GLuint program)
@@ -5863,7 +5863,7 @@ GLboolean Context::isProgram(GLuint program)
         return GL_FALSE;
     }
 
-    return (getProgramNoResolveLink(program) ? GL_TRUE : GL_FALSE);
+    return ConvertToGLBoolean(getProgramNoResolveLink(program));
 }
 
 GLboolean Context::isRenderbuffer(GLuint renderbuffer)
@@ -5873,7 +5873,7 @@ GLboolean Context::isRenderbuffer(GLuint renderbuffer)
         return GL_FALSE;
     }
 
-    return (getRenderbuffer(renderbuffer) ? GL_TRUE : GL_FALSE);
+    return ConvertToGLBoolean(getRenderbuffer(renderbuffer));
 }
 
 GLboolean Context::isShader(GLuint shader)
@@ -5883,7 +5883,7 @@ GLboolean Context::isShader(GLuint shader)
         return GL_FALSE;
     }
 
-    return (getShader(shader) ? GL_TRUE : GL_FALSE);
+    return ConvertToGLBoolean(getShader(shader));
 }
 
 GLboolean Context::isTexture(GLuint texture)
@@ -5893,7 +5893,7 @@ GLboolean Context::isTexture(GLuint texture)
         return GL_FALSE;
     }
 
-    return (getTexture(texture) ? GL_TRUE : GL_FALSE);
+    return ConvertToGLBoolean(getTexture(texture));
 }
 
 void Context::linkProgram(GLuint program)
@@ -6225,7 +6225,7 @@ void Context::deleteQueries(GLsizei n, const GLuint *ids)
 
 GLboolean Context::isQuery(GLuint id)
 {
-    return (getQuery(id, false, QueryType::InvalidEnum) != nullptr) ? GL_TRUE : GL_FALSE;
+    return ConvertToGLBoolean(getQuery(id, false, QueryType::InvalidEnum) != nullptr);
 }
 
 void Context::uniformMatrix2x3fv(GLint location,
@@ -6323,7 +6323,7 @@ bool Context::isVertexArray(GLuint array)
     }
 
     VertexArray *vao = getVertexArray(array);
-    return (vao != nullptr ? GL_TRUE : GL_FALSE);
+    return ConvertToGLBoolean(vao != nullptr);
 }
 
 void Context::endTransformFeedback()
@@ -6400,7 +6400,7 @@ bool Context::isTransformFeedback(GLuint id)
     }
 
     const TransformFeedback *transformFeedback = getTransformFeedback(id);
-    return ((transformFeedback != nullptr) ? GL_TRUE : GL_FALSE);
+    return ConvertToGLBoolean(transformFeedback != nullptr);
 }
 
 void Context::pauseTransformFeedback()
@@ -6939,7 +6939,7 @@ GLboolean Context::isProgramPipeline(GLuint pipeline)
         return GL_FALSE;
     }
 
-    return (getProgramPipeline(pipeline) ? GL_TRUE : GL_FALSE);
+    return ConvertToGLBoolean(getProgramPipeline(pipeline));
 }
 
 void Context::finishFenceNV(GLuint fence)
@@ -7104,7 +7104,7 @@ GLboolean Context::isMemoryObject(GLuint memoryObject)
         return GL_FALSE;
     }
 
-    return (getMemoryObject(memoryObject) ? GL_TRUE : GL_FALSE);
+    return ConvertToGLBoolean(getMemoryObject(memoryObject));
 }
 
 void Context::createMemoryObjects(GLsizei n, GLuint *memoryObjects)
