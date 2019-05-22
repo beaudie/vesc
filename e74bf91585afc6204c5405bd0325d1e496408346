@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67c1e697_bab49996",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7233,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-22T14:35:33Z",
+      "side": 1,
+      "message": "nit: we have a small ConvertToGLBoolean helper for this.",
+      "range": {
+        "startLine": 7233,
+        "startChar": 11,
+        "endLine": 7233,
+        "endChar": 57
+      },
+      "revId": "e74bf91585afc6204c5405bd0325d1e496408346",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
