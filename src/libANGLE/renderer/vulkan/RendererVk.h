@@ -231,6 +231,9 @@ class RendererVk : angle::NonCopyable
 
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
+    angle::Result flushImpl(vk::Context *context,
+                            const vk::Semaphore *waitSemaphore,
+                            const vk::Semaphore *signalSemaphore);
     angle::Result submitFrame(vk::Context *context,
                               const VkSubmitInfo &submitInfo,
                               vk::PrimaryCommandBuffer &&commandBuffer);
