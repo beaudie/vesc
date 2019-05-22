@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5694b2e1_6feb7483",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-22T15:15:17Z",
+      "side": 1,
+      "message": "There is already this helper to unbind attachments.  Could you instead have PrepareForClear return another ClearBindTargetVector of attachments to unbind and then call UnbindAttachments in clearRenderableTexture and clearRenderbuffer?\n\nI think this is better because PrepareForClear doesn\u0027t have to assume that mScratchFBO will be used.",
+      "range": {
+        "startLine": 157,
+        "startChar": 5,
+        "endLine": 157,
+        "endChar": 22
+      },
+      "revId": "45074690f8ce80e67ccf0d116655ff1682d13dd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "435a46a7_10a2d8e0",
+        "filename": "src/tests/gl_tests/WebGLFramebufferTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-22T15:15:17Z",
+      "side": 1,
+      "message": "Could this live in RobustResourceInitTestES3 instead?  Does it require a WebGL context or just robust resource init to be enabled?",
+      "range": {
+        "startLine": 849,
+        "startChar": 0,
+        "endLine": 849,
+        "endChar": 93
+      },
+      "revId": "45074690f8ce80e67ccf0d116655ff1682d13dd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
