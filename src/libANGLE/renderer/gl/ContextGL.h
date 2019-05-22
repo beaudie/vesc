@@ -85,6 +85,12 @@ class ContextGL : public ContextImpl
     angle::Result flush(const gl::Context *context) override;
     angle::Result finish(const gl::Context *context) override;
 
+    // Semaphore operations.
+    angle::Result waitSemaphore(const gl::Context *context,
+                                const gl::Semaphore *semaphore) override;
+    angle::Result signalSemaphore(const gl::Context *context,
+                                  const gl::Semaphore *semaphore) override;
+
     // Drawing methods.
     angle::Result drawArrays(const gl::Context *context,
                              gl::PrimitiveMode mode,

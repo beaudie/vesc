@@ -39,9 +39,15 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
 
     // Flush and finish.
     angle::Result flush(const gl::Context *context) override;
-    angle::Result flushImpl();
+    angle::Result flushImpl(const gl::Semaphore *semaphore);
     angle::Result finish(const gl::Context *context) override;
     angle::Result finishImpl();
+
+    // Semaphore operations.
+    angle::Result waitSemaphore(const gl::Context *context,
+                                const gl::Semaphore *semaphore) override;
+    angle::Result signalSemaphore(const gl::Context *context,
+                                  const gl::Semaphore *semaphore) override;
 
     // Drawing methods.
     angle::Result drawArrays(const gl::Context *context,
