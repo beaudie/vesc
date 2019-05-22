@@ -21,6 +21,7 @@ namespace gl
 class ErrorSet;
 class MemoryProgramCache;
 class Path;
+class Semaphore;
 struct Workarounds;
 }  // namespace gl
 
@@ -39,6 +40,12 @@ class ContextImpl : public GLImplFactory
     // Flush and finish.
     virtual angle::Result flush(const gl::Context *context)  = 0;
     virtual angle::Result finish(const gl::Context *context) = 0;
+
+    // Semaphore operations.
+    virtual angle::Result waitSemaphore(const gl::Context *context,
+                                        const gl::Semaphore *semaphore)   = 0;
+    virtual angle::Result signalSemaphore(const gl::Context *context,
+                                          const gl::Semaphore *semaphore) = 0;
 
     // Drawing methods.
     virtual angle::Result drawArrays(const gl::Context *context,
