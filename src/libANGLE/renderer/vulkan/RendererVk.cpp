@@ -460,9 +460,9 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
 
 void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
                           const vk::PrimaryCommandBuffer &commandBuffer,
-                          const vk::Semaphore *waitSemaphore,
+                          const std::vector<VkSemaphore> &waitSemaphores,
                           VkPipelineStageFlags *waitStageMask,
-                          const vk::Semaphore *signalSemaphore)
+                          const SignalSemaphoreVector &signalSemaphores)
 {
     // Verify that the submitInfo has been zero'd out.
     ASSERT(submitInfo->waitSemaphoreCount == 0);
@@ -471,19 +471,11 @@ void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
     submitInfo->sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo->commandBufferCount = commandBuffer.valid() ? 1 : 0;
     submitInfo->pCommandBuffers    = commandBuffer.ptr();
-
-    if (waitSemaphore)
-    {
-        submitInfo->waitSemaphoreCount = 1;
-        submitInfo->pWaitSemaphores    = waitSemaphore->ptr();
-        submitInfo->pWaitDstStageMask  = waitStageMask;
-    }
-
-    if (signalSemaphore)
-    {
-        submitInfo->signalSemaphoreCount = 1;
-        submitInfo->pSignalSemaphores    = signalSemaphore->ptr();
-    }
+    submitInfo->waitSemaphoreCount   = waitSemaphores.size();
+    submitInfo->pWaitSemaphores      = waitSemaphores.data();
+    submitInfo->pWaitDstStageMask    = waitStageMask;
+    submitInfo->signalSemaphoreCount = signalSemaphores.size();
+    submitInfo->pSignalSemaphores    = signalSemaphores.data();
 }
 
 angle::Result WaitFences(vk::Context *context,
@@ -578,8 +570,8 @@ void RendererVk::onDestroy(vk::Context *context)
 {
     if (!mInFlightCommands.empty() || !mGarbage.empty() || !mFencedGarbage.empty())
     {
-        // TODO(jmadill): Not nice to pass nullptr here, but shouldn't be a problem.
-        (void)finish(context, nullptr, nullptr);
+        // TODO(jmadill): Not nice to omit semaphores here, but shouldn't be a problem.
+        (void)finish(context, {});
     }
 
     mUtils.destroy(mDevice);
@@ -1117,7 +1109,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         // Calculate the difference between CPU and GPU clocks for GPU event reporting.
         ANGLE_TRY(mGpuEventQueryPool.init(displayVk, VK_QUERY_TYPE_TIMESTAMP,
                                           vk::kDefaultTimestampQueryPoolSize));
-        ANGLE_TRY(synchronizeCpuGpuTime(displayVk, nullptr, nullptr));
+        ANGLE_TRY(synchronizeCpuGpuTime(displayVk));
     }
 
     return angle::Result::Continue;
@@ -1408,14 +1400,18 @@ const vk::CommandPool &RendererVk::getCommandPool() const
     return mCommandPool;
 }
 
-angle::Result RendererVk::finish(vk::Context *context,
-                                 const vk::Semaphore *waitSemaphore,
-                                 const vk::Semaphore *signalSemaphore)
+void RendererVk::addWaitSemaphore(VkSemaphore waitSemaphore)
 {
-    if (!mCommandGraph.empty() || waitSemaphore != nullptr || signalSemaphore != nullptr)
+    mWaitSemaphores.push_back(waitSemaphore);
+}
+
+angle::Result RendererVk::finish(vk::Context *context,
+                                 const SignalSemaphoreVector &signalSemaphores)
+{
+    if (!mCommandGraph.empty() || !mWaitSemaphores.empty() || !signalSemaphores.empty())
     {
         TRACE_EVENT0("gpu.angle", "RendererVk::finish");
-        ANGLE_TRY(flushImpl(context, waitSemaphore, signalSemaphore));
+        ANGLE_TRY(flushImpl(context, signalSemaphores));
     }
 
     ASSERT(mQueue != VK_NULL_HANDLE);
@@ -1437,7 +1433,7 @@ angle::Result RendererVk::finish(vk::Context *context,
         // multiple times towards the end of the application).
         if (mGpuEvents.size() > 0)
         {
-            ANGLE_TRY(synchronizeCpuGpuTime(context, nullptr, nullptr));
+            ANGLE_TRY(synchronizeCpuGpuTime(context));
         }
     }
 
@@ -1512,8 +1508,7 @@ angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
 }
 
 angle::Result RendererVk::flushImpl(vk::Context *context,
-                                    const vk::Semaphore *waitSemaphore,
-                                    const vk::Semaphore *signalSemaphore)
+                                    const SignalSemaphoreVector &signalSemaphores)
 {
     vk::Scoped<vk::PrimaryCommandBuffer> commandBatch(mDevice);
     if (!mCommandGraph.empty())
@@ -1523,10 +1518,12 @@ angle::Result RendererVk::flushImpl(vk::Context *context,
 
     VkSubmitInfo submitInfo       = {};
     VkPipelineStageFlags waitMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-    InitializeSubmitInfo(&submitInfo, commandBatch.get(), waitSemaphore, &waitMask,
-                         signalSemaphore);
+    InitializeSubmitInfo(&submitInfo, commandBatch.get(), mWaitSemaphores, &waitMask,
+                         signalSemaphores);
 
     ANGLE_TRY(submitFrame(context, submitInfo, commandBatch.release()));
+
+    mWaitSemaphores.clear();
 
     return angle::Result::Continue;
 }
@@ -1663,18 +1660,16 @@ angle::Result RendererVk::flushCommandGraph(vk::Context *context,
                                         &mCommandPool, commandBatch);
 }
 
-angle::Result RendererVk::flush(vk::Context *context,
-                                const vk::Semaphore *waitSemaphore,
-                                const vk::Semaphore *signalSemaphore)
+angle::Result RendererVk::flush(vk::Context *context, const SignalSemaphoreVector &signalSemaphores)
 {
-    if (mCommandGraph.empty() && waitSemaphore == nullptr && signalSemaphore == nullptr)
+    if (mCommandGraph.empty() && mWaitSemaphores.empty() && signalSemaphores.empty())
     {
         return angle::Result::Continue;
     }
 
     TRACE_EVENT0("gpu.angle", "RendererVk::flush");
 
-    return flushImpl(context, waitSemaphore, signalSemaphore);
+    return flushImpl(context, signalSemaphores);
 }
 
 Serial RendererVk::issueShaderSerial()
@@ -1842,7 +1837,7 @@ angle::Result RendererVk::getTimestamp(vk::Context *context, uint64_t *timestamp
 
     // Submit the command buffer
     VkSubmitInfo submitInfo = {};
-    InitializeSubmitInfo(&submitInfo, commandBatch.get(), nullptr, nullptr, nullptr);
+    InitializeSubmitInfo(&submitInfo, commandBatch.get(), {}, nullptr, {});
 
     ANGLE_VK_TRY(context, vkQueueSubmit(mQueue, 1, &submitInfo, fence.get().getHandle()));
 
@@ -1905,9 +1900,7 @@ void RendererVk::popDebugMarker()
     mCommandGraph.popDebugMarker();
 }
 
-angle::Result RendererVk::synchronizeCpuGpuTime(vk::Context *context,
-                                                const vk::Semaphore *waitSemaphore,
-                                                const vk::Semaphore *signalSemaphore)
+angle::Result RendererVk::synchronizeCpuGpuTime(vk::Context *context)
 {
     ASSERT(mGpuEventsEnabled);
 
@@ -2048,8 +2041,7 @@ angle::Result RendererVk::synchronizeCpuGpuTime(vk::Context *context,
         // Submit the command buffer
         VkSubmitInfo submitInfo       = {};
         VkPipelineStageFlags waitMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-        InitializeSubmitInfo(&submitInfo, commandBatch.get(), waitSemaphore, &waitMask,
-                             signalSemaphore);
+        InitializeSubmitInfo(&submitInfo, commandBatch.get(), {}, &waitMask, {});
 
         ANGLE_TRY(submitFrame(context, submitInfo, std::move(commandBuffer)));
 

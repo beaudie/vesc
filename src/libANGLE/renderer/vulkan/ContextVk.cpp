@@ -207,15 +207,11 @@ angle::Result ContextVk::flush(const gl::Context *context)
 
 angle::Result ContextVk::flushImpl()
 {
-    const vk::Semaphore *waitSemaphore   = nullptr;
-    const vk::Semaphore *signalSemaphore = nullptr;
-    if (mCurrentWindowSurface && !mRenderer->getCommandGraph()->empty())
-    {
-        ANGLE_TRY(mCurrentWindowSurface->generateSemaphoresForFlush(this, &waitSemaphore,
-                                                                    &signalSemaphore));
-    }
+    SignalSemaphoreVector signalSemaphores;
 
-    return mRenderer->flush(this, waitSemaphore, signalSemaphore);
+    ANGLE_TRY(generateSurfaceSemaphores(&signalSemaphores));
+
+    return mRenderer->flush(this, signalSemaphores);
 }
 
 angle::Result ContextVk::finish(const gl::Context *context)
@@ -225,15 +221,11 @@ angle::Result ContextVk::finish(const gl::Context *context)
 
 angle::Result ContextVk::finishImpl()
 {
-    const vk::Semaphore *waitSemaphore   = nullptr;
-    const vk::Semaphore *signalSemaphore = nullptr;
-    if (mCurrentWindowSurface && !mRenderer->getCommandGraph()->empty())
-    {
-        ANGLE_TRY(mCurrentWindowSurface->generateSemaphoresForFlush(this, &waitSemaphore,
-                                                                    &signalSemaphore));
-    }
+    SignalSemaphoreVector signalSemaphores;
 
-    return mRenderer->finish(this, waitSemaphore, signalSemaphore);
+    ANGLE_TRY(generateSurfaceSemaphores(&signalSemaphores));
+
+    return mRenderer->finish(this, signalSemaphores);
 }
 
 angle::Result ContextVk::setupDraw(const gl::Context *context,
@@ -1480,6 +1472,21 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
 
     mVertexArray->updateDefaultAttrib(this, attribIndex, bufferHandle,
                                       static_cast<uint32_t>(offset));
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::generateSurfaceSemaphores(SignalSemaphoreVector *signalSemaphores)
+{
+    if (mCurrentWindowSurface && !mRenderer->getCommandGraph()->empty())
+    {
+        const vk::Semaphore *waitSemaphore   = nullptr;
+        const vk::Semaphore *signalSemaphore = nullptr;
+        ANGLE_TRY(mCurrentWindowSurface->generateSemaphoresForFlush(this, &waitSemaphore,
+                                                                    &signalSemaphore));
+        mRenderer->addWaitSemaphore(waitSemaphore->getHandle());
+        signalSemaphores->push_back(signalSemaphore->getHandle());
+    }
+
     return angle::Result::Continue;
 }
 
