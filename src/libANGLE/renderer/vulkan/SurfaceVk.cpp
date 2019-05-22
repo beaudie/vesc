@@ -384,7 +384,7 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     VkInstance instance  = renderer->getInstance();
 
     // We might not need to flush the pipe here.
-    (void)renderer->finish(displayVk, nullptr, nullptr);
+    (void)renderer->finish(displayVk, {});
 
     releaseSwapchainImages(renderer);
 
@@ -831,7 +831,9 @@ angle::Result WindowSurfaceVk::present(DisplayVk *displayVk,
         ANGLE_TRY(generateSemaphoresForFlush(displayVk, &waitSemaphore, &signalSemaphore));
     }
 
-    ANGLE_TRY(renderer->flush(displayVk, waitSemaphore, signalSemaphore));
+    renderer->addWaitSemaphore(waitSemaphore->getHandle());
+
+    ANGLE_TRY(renderer->flush(displayVk, {signalSemaphore->getHandle()}));
 
     // The semaphore chain must at least have the semaphore returned by vkAquireImage in it. It will
     // likely have more based on how much work was flushed this frame.

@@ -300,6 +300,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     angle::Result handleDirtyDescriptorSets(const gl::Context *context,
                                             vk::CommandBuffer *commandBuffer);
 
+    angle::Result generateSurfaceSemaphores(std::vector<VkSemaphore> *signalSemaphores);
+
     vk::PipelineHelper *mCurrentPipeline;
     gl::PrimitiveMode mCurrentDrawMode;
 
