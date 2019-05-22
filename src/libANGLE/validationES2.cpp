@@ -3341,8 +3341,16 @@ bool ValidateSignalSemaphoreEXT(Context *context,
         return false;
     }
 
-    UNIMPLEMENTED();
-    return false;
+    for (GLuint i = 0; i < numTextureBarriers; ++i)
+    {
+        if (FromGLenum<ImageLayout>(dstLayouts[i]) == ImageLayout::InvalidEnum)
+        {
+            context->validationError(GL_INVALID_ENUM, kInvalidImageLayout);
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool ValidateWaitSemaphoreEXT(Context *context,
@@ -3359,8 +3367,16 @@ bool ValidateWaitSemaphoreEXT(Context *context,
         return false;
     }
 
-    UNIMPLEMENTED();
-    return false;
+    for (GLuint i = 0; i < numTextureBarriers; ++i)
+    {
+        if (FromGLenum<ImageLayout>(srcLayouts[i]) == ImageLayout::InvalidEnum)
+        {
+            context->validationError(GL_INVALID_ENUM, kInvalidImageLayout);
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool ValidateImportSemaphoreFdEXT(Context *context,

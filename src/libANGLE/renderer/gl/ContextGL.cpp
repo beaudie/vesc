@@ -190,6 +190,18 @@ angle::Result ContextGL::finish(const gl::Context *context)
     return mRenderer->finish();
 }
 
+angle::Result ContextGL::waitSemaphore(const gl::Context *context, const gl::Semaphore *semaphore)
+{
+    UNREACHABLE();
+    return angle::Result::Stop;
+}
+
+angle::Result ContextGL::signalSemaphore(const gl::Context *context, const gl::Semaphore *semaphore)
+{
+    UNREACHABLE();
+    return angle::Result::Stop;
+}
+
 ANGLE_INLINE angle::Result ContextGL::setDrawArraysState(const gl::Context *context,
                                                          GLint first,
                                                          GLsizei count,
