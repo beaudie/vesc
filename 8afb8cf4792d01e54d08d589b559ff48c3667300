@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61478b02_3fd27f2e",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-05-22T20:57:42Z",
+      "side": 1,
+      "message": "fault-\u003efalse",
+      "revId": "8afb8cf4792d01e54d08d589b559ff48c3667300",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
