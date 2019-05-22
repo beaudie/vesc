@@ -77,12 +77,9 @@ class RendererVk : angle::NonCopyable
                                                VkSurfaceKHR surface,
                                                uint32_t *presentQueueOut);
 
-    angle::Result finish(vk::Context *context,
-                         const vk::Semaphore *waitSemaphore,
-                         const vk::Semaphore *signalSemaphore);
-    angle::Result flush(vk::Context *context,
-                        const vk::Semaphore *waitSemaphore,
-                        const vk::Semaphore *signalSemaphore);
+    void addWaitSemaphore(VkSemaphore waitSemaphore);
+    angle::Result finish(vk::Context *context, const std::vector<VkSemaphore> &signalSemaphores);
+    angle::Result flush(vk::Context *context, const std::vector<VkSemaphore> &signalSemaphores);
 
     const vk::CommandPool &getCommandPool() const;
 
@@ -231,9 +228,7 @@ class RendererVk : angle::NonCopyable
 
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
-    angle::Result flushImpl(vk::Context *context,
-                            const vk::Semaphore *waitSemaphore,
-                            const vk::Semaphore *signalSemaphore);
+    angle::Result flushImpl(vk::Context *context, const std::vector<VkSemaphore> &signalSemaphores);
     angle::Result submitFrame(vk::Context *context,
                               const VkSubmitInfo &submitInfo,
                               vk::PrimaryCommandBuffer &&commandBuffer);
@@ -243,9 +238,7 @@ class RendererVk : angle::NonCopyable
     void initPipelineCacheVkKey();
     angle::Result initPipelineCache(DisplayVk *display);
 
-    angle::Result synchronizeCpuGpuTime(vk::Context *context,
-                                        const vk::Semaphore *waitSemaphore,
-                                        const vk::Semaphore *signalSemaphore);
+    angle::Result synchronizeCpuGpuTime(vk::Context *context);
     angle::Result traceGpuEventImpl(vk::Context *context,
                                     vk::PrimaryCommandBuffer *commandBuffer,
                                     char phase,
@@ -391,6 +384,8 @@ class RendererVk : angle::NonCopyable
     std::vector<GpuEventQuery> mInFlightGpuEventQueries;
     // A list of gpu events since the last clock sync.
     std::vector<GpuEvent> mGpuEvents;
+
+    std::vector<VkSemaphore> mWaitSemaphores;
 
     // Hold information from the last gpu clock sync for future gpu-to-cpu timestamp conversions.
     struct GpuClockSyncInfo
