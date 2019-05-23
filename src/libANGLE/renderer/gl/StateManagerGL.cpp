@@ -394,7 +394,7 @@ void StateManagerGL::activeTexture(size_t unit)
 
 void StateManagerGL::bindTexture(gl::TextureType type, GLuint texture)
 {
-    if (mTextures[type][mTextureUnitIndex] != texture)
+    // if (mTextures[type][mTextureUnitIndex] != texture)
     {
         mTextures[type][mTextureUnitIndex] = texture;
         mFunctions->bindTexture(ToGLenum(type), texture);
@@ -797,8 +797,8 @@ void StateManagerGL::updateProgramTextureBindings(const gl::Context *context)
         if (texture != nullptr)
         {
             const TextureGL *textureGL = GetImplAs<TextureGL>(texture);
-            ASSERT(!texture->hasAnyDirtyBit());
-            ASSERT(!textureGL->hasAnyDirtyBit());
+            // ASSERT(!texture->hasAnyDirtyBit());
+            // ASSERT(!textureGL->hasAnyDirtyBit());
 
             activeTexture(textureUnitIndex);
             bindTexture(textureType, textureGL->getTextureID());
@@ -1502,7 +1502,8 @@ void StateManagerGL::syncState(const gl::Context *context,
         }
     }
 
-    const gl::State::DirtyBits glAndLocalDirtyBits = (glDirtyBits | mLocalDirtyBits) & bitMask;
+    gl::State::DirtyBits glAndLocalDirtyBits = (glDirtyBits | mLocalDirtyBits) & bitMask;
+    glAndLocalDirtyBits.set(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
     if (!glAndLocalDirtyBits.any())
     {
         return;

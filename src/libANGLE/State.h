@@ -228,6 +228,7 @@ class State : angle::NonCopyable
     }
 
     GLuint getSamplerTextureId(unsigned int sampler, TextureType type) const;
+    GLuint getSamplerTextureNativeId(unsigned int sampler, TextureType type) const;
     void detachTexture(const Context *context, const TextureMap &zeroTextures, GLuint texture);
     void initializeZeroTextures(const Context *context, const TextureMap &zeroTextures);
 

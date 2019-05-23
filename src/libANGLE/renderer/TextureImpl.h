@@ -141,6 +141,12 @@ class TextureImpl : public FramebufferAttachmentObjectImpl, public angle::Subjec
                                      GLenum internalFormat,
                                      const gl::Extents &size) = 0;
 
+    virtual angle::Result setStorageExternal(const gl::Context *context,
+                                             gl::TextureType type,
+                                             size_t levels,
+                                             GLenum internalFormat,
+                                             const gl::Extents &size);
+
     virtual angle::Result setStorageMultisample(const gl::Context *context,
                                                 gl::TextureType type,
                                                 GLsizei samples,
@@ -175,6 +181,8 @@ class TextureImpl : public FramebufferAttachmentObjectImpl, public angle::Subjec
     // Override if accurate native memory size information is available
     virtual GLint getMemorySize() const;
     virtual GLint getLevelMemorySize(gl::TextureTarget target, GLint level);
+
+    virtual GLint getNativeID() const;
 
     virtual angle::Result syncState(const gl::Context *context,
                                     const gl::Texture::DirtyBits &dirtyBits) = 0;

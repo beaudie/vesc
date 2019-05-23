@@ -6979,5 +6979,15 @@ void RecordBindTextureTypeError(Context *context, TextureType target)
             context->validationError(GL_INVALID_ENUM, kInvalidTextureTarget);
     }
 }
+// GL_ANGLE_texture_storage_external
+bool ValidateTexStorage2DExternalANGLE(Context *context,
+                                       TextureType type,
+                                       GLsizei levels,
+                                       GLenum internalformat,
+                                       GLsizei width,
+                                       GLsizei height)
+{
+    return true;
+}
 
 }  // namespace gl

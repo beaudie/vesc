@@ -1116,6 +1116,16 @@ GLuint State::getSamplerTextureId(unsigned int sampler, TextureType type) const
     return mSamplerTextures[type][sampler].id();
 }
 
+GLuint State::getSamplerTextureNativeId(unsigned int sampler, TextureType type) const
+{
+    ASSERT(sampler < mSamplerTextures[type].size());
+    if (mSamplerTextures[type][sampler].get())
+    {
+        return mSamplerTextures[type][sampler]->getNativeID();
+    }
+    return 0;
+}
+
 void State::detachTexture(const Context *context, const TextureMap &zeroTextures, GLuint texture)
 {
     // Textures have a detach method on State rather than a simple
@@ -2303,6 +2313,11 @@ angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *pa
             ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
             *params = getSamplerTextureId(static_cast<unsigned int>(mActiveSampler),
                                           TextureType::External);
+            break;
+        case GL_TEXTURE_BINDING_EXTERNAL_NATIVE_ID_ANGLE:
+            ASSERT(mActiveSampler < mMaxCombinedTextureImageUnits);
+            *params = getSamplerTextureNativeId(static_cast<unsigned int>(mActiveSampler),
+                                                TextureType::External);
             break;
         case GL_UNIFORM_BUFFER_BINDING:
             *params = mBoundBuffers[BufferBinding::Uniform].id();
