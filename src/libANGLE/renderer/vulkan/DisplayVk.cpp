@@ -169,9 +169,9 @@ gl::Version DisplayVk::getMaxSupportedESVersion() const
 
 void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
-    outExtensions->createContextRobustness  = true;
-    outExtensions->surfaceOrientation       = true;
-    outExtensions->displayTextureShareGroup = true;
+    outExtensions->createContextRobustness      = true;
+    outExtensions->surfaceOrientation           = true;
+    outExtensions->displayTextureShareGroup     = true;
     outExtensions->robustResourceInitialization = true;
 
     // The Vulkan implementation will always say that EGL_KHR_swap_buffers_with_damage is supported.
@@ -191,6 +191,7 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->glRenderbufferImage   = true;
     outExtensions->imageNativeBuffer =
         getRenderer()->getFeatures().supportsAndroidHardwareBuffer.enabled;
+    outExtensions->queryStringIndexed = true;
 }
 
 void DisplayVk::generateCaps(egl::Caps *outCaps) const
@@ -233,4 +234,10 @@ egl::Error DisplayVk::getEGLError(EGLint errorCode)
 {
     return egl::Error(errorCode, 0, std::move(mStoredErrorString));
 }
+
+void DisplayVk::initializeFeatureList(angle::FeatureList &features)
+{
+    mRenderer->getFeatures().buildFeatureList(features);
+}
+
 }  // namespace rx
