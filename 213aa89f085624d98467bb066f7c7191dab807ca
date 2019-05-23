@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "138cc254_298af626",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1979,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2019-05-23T17:05:52Z",
+      "side": 1,
+      "message": "nit: comment needs updating with the latest patchset.",
+      "range": {
+        "startLine": 1978,
+        "startChar": 52,
+        "endLine": 1979,
+        "endChar": 50
+      },
+      "revId": "213aa89f085624d98467bb066f7c7191dab807ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
