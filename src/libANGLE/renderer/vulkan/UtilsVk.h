@@ -14,7 +14,11 @@
 //      * Used by VertexArrayVk::convertVertexBuffer() to convert vertex attributes from unsupported
 //        formats to their fallbacks.
 //    - Image clear: Used by FramebufferVk::clearWithDraw().
-//    - Image copy: Not yet implemented
+//    - Image copy: Used by TextureVk::copySubImageImplWithDraw().
+//    - Color resolve: Used by FramebufferVk::resolve() to implement multisample resolve on color
+//      images.
+//    - Depth/Stencil resolve: Used by FramebufferVk::resolve() to implement multisample resolve on
+//      depth/stencil images.
 //    - Mipmap generation: Not yet implemented
 //
 
@@ -65,6 +69,8 @@ class UtilsVk : angle::NonCopyable
         // safer way.
         ClearFramebufferParameters();
 
+        // TODO: if there are multiple targets and only one is cleared, what happens to the other
+        // color attachments that are never written to?
         const vk::RenderPassDesc *renderPassDesc;
         GLint renderAreaHeight;
         gl::Rectangle clearArea;
@@ -80,6 +86,38 @@ class UtilsVk : angle::NonCopyable
 
         VkClearColorValue colorClearValue;
         uint8_t stencilClearValue;
+    };
+
+    struct ColorResolveParameters
+    {
+        // TODO make up your own render pass desc so that it can have a custom subpass with resolve
+        // attachments.
+        int srcOffset[2];
+        int srcExtents[2];  // TODO: use this for clamping?
+        int destOffset[2];
+        int resolveExtents[2];  // TODO: use this to define the render area
+        int srcLayer;
+        bool flipX;
+        bool flipY;
+
+        // TODO: all formats should match, I think, so format of the read is enough.
+        const angle::Format *colorFormat;
+    };
+
+    struct DepthStencilResolveParameters
+    {
+        const vk::RenderPassDesc *renderPassDesc;
+        GLint renderAreaHeight;
+        int srcOffset[2];
+        int srcExtents[2];  // TODO: use this for clamping?
+        int destOffset[2];
+        int resolveExtents[2];  // TODO: use this to define the render area
+        int srcLayer;
+        bool flipX;
+        bool flipY;
+
+        bool resolveDepth;
+        bool resolveStencil;
     };
 
     struct CopyImageParameters
@@ -111,6 +149,14 @@ class UtilsVk : angle::NonCopyable
     angle::Result clearFramebuffer(ContextVk *contextVk,
                                    FramebufferVk *framebuffer,
                                    const ClearFramebufferParameters &params);
+    // TODO: source image view
+    angle::Result colorResolve(ContextVk *contextVk,
+                               FramebufferVk *framebuffer,
+                               const ColorResolveParameters);
+    // TODO: source image views
+    angle::Result depthStencilResolve(ContextVk *contextVk,
+                                      FramebufferVk *framebuffer,
+                                      const DepthStencilResolveParameters);
 
     angle::Result copyImage(ContextVk *contextVk,
                             vk::ImageHelper *dest,
@@ -172,21 +218,44 @@ class UtilsVk : angle::NonCopyable
         uint32_t destDefaultChannelsMask = 0;
     };
 
+    struct MultisampledFlipShaderParams
+    {
+        // Structure matching PushConstants in MultisampledFlip.frag
+        int32_t srcOffset[2]  = {};
+        int32_t destOffset[2] = {};
+        int32_t srcLayer      = 0;
+        uint32_t outputMask   = 0;
+        uint32_t flipX        = 0;
+        uint32_t flipY        = 0;
+    };
+
+    struct ResolveDepthStencilShaderParams
+    {
+        // Structure matching PushConstants in ResolvedDepthStencil.frag
+        int32_t srcOffset[2]  = {};
+        int32_t destOffset[2] = {};
+        int32_t srcLayer      = 0;
+        uint32_t flipX        = 0;
+        uint32_t flipY        = 0;
+    };
+
     // Functions implemented by the class:
     enum class Function
     {
         // Functions implemented in graphics
-        ImageClear = 0,
-        ImageCopy  = 1,
+        ImageClear          = 0,
+        ImageCopy           = 1,
+        MultisampeldFlip    = 2,
+        ResolveDepthStencil = 3,
 
         // Functions implemented in compute
-        ComputeStartIndex   = 2,  // Special value to separate draw and dispatch functions.
-        BufferClear         = 2,
-        BufferCopy          = 3,
-        ConvertVertexBuffer = 4,
+        ComputeStartIndex   = 4,  // Special value to separate draw and dispatch functions.
+        BufferClear         = 4,
+        BufferCopy          = 5,
+        ConvertVertexBuffer = 6,
 
-        InvalidEnum = 5,
-        EnumCount   = 5,
+        InvalidEnum = 7,
+        EnumCount   = 7,
     };
 
     // Common function that creates the pipeline for the specified function, binds it and prepares
@@ -223,6 +292,8 @@ class UtilsVk : angle::NonCopyable
     angle::Result ensureConvertVertexResourcesInitialized(vk::Context *context);
     angle::Result ensureImageClearResourcesInitialized(vk::Context *context);
     angle::Result ensureImageCopyResourcesInitialized(vk::Context *context);
+    angle::Result ensureMultisampledFlipResourcesInitialized(vk::Context *context);
+    angle::Result ensureResolveDepthStencilResourcesInitialized(vk::Context *context);
 
     angle::Result startRenderPass(ContextVk *contextVk,
                                   vk::ImageHelper *image,
@@ -249,6 +320,12 @@ class UtilsVk : angle::NonCopyable
     vk::ShaderProgramHelper mImageCopyPrograms[vk::InternalShader::ImageCopy_frag::kFlagsMask |
                                                vk::InternalShader::ImageCopy_frag::kSrcFormatMask |
                                                vk::InternalShader::ImageCopy_frag::kDestFormatMask];
+    vk::ShaderProgramHelper
+        mMultisampledFlipPrograms[vk::InternalShader::MultisampledFlip_frag::kFlagsMask |
+                                  vk::InternalShader::MultisampledFlip_frag::kFormatMask];
+    vk::ShaderProgramHelper
+        mDepthStencilResolvePrograms[vk::InternalShader::ResolveDepthStencil_frag::kFlagsMask |
+                                     vk::InternalShader::ResolveDepthStencil_frag::kResolveMask];
 };
 
 }  // namespace rx

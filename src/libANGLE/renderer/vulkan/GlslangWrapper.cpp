@@ -351,8 +351,8 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
     // Parse output locations and replace them in the fragment shader.
     // See corresponding code in OutputVulkanGLSL.cpp.
     // TODO(syoussefi): Add support for EXT_blend_func_extended.  http://anglebug.com/3385
-    const auto &outputLocations = programState.getOutputLocations();
-    const auto &outputVariables = programState.getOutputVariables();
+    const auto &outputLocations                      = programState.getOutputLocations();
+    const auto &outputVariables                      = programState.getOutputVariables();
     const std::array<std::string, 2> implicitOutputs = {"gl_FragDepth", "gl_SampleMask"};
     for (const gl::VariableLocation &outputLocation : outputLocations)
     {
@@ -497,7 +497,7 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
 
     // Assign textures to a descriptor set and binding.
     uint32_t textureBinding = 0;
-    const auto &uniforms = programState.getUniforms();
+    const auto &uniforms    = programState.getUniforms();
     for (unsigned int uniformIndex : programState.getSamplerUniformRange())
     {
         const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];

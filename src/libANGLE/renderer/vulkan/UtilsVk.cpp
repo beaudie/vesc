@@ -16,22 +16,27 @@
 namespace rx
 {
 
-namespace BufferUtils_comp   = vk::InternalShader::BufferUtils_comp;
-namespace ConvertVertex_comp = vk::InternalShader::ConvertVertex_comp;
-namespace ImageClear_frag    = vk::InternalShader::ImageClear_frag;
-namespace ImageCopy_frag     = vk::InternalShader::ImageCopy_frag;
+namespace BufferUtils_comp         = vk::InternalShader::BufferUtils_comp;
+namespace ConvertVertex_comp       = vk::InternalShader::ConvertVertex_comp;
+namespace ImageClear_frag          = vk::InternalShader::ImageClear_frag;
+namespace ImageCopy_frag           = vk::InternalShader::ImageCopy_frag;
+namespace MultisampledFlip_frag    = vk::InternalShader::MultisampledFlip_frag;
+namespace ResolveDepthStencil_frag = vk::InternalShader::ResolveDepthStencil_frag;
 
 namespace
 {
 // All internal shaders assume there is only one descriptor set, indexed at 0
 constexpr uint32_t kSetIndex = 0;
 
-constexpr uint32_t kBufferClearOutputBinding        = 0;
-constexpr uint32_t kBufferCopyDestinationBinding    = 0;
-constexpr uint32_t kBufferCopySourceBinding         = 1;
-constexpr uint32_t kConvertVertexDestinationBinding = 0;
-constexpr uint32_t kConvertVertexSourceBinding      = 1;
-constexpr uint32_t kImageCopySourceBinding          = 0;
+constexpr uint32_t kBufferClearOutputBinding          = 0;
+constexpr uint32_t kBufferCopyDestinationBinding      = 0;
+constexpr uint32_t kBufferCopySourceBinding           = 1;
+constexpr uint32_t kConvertVertexDestinationBinding   = 0;
+constexpr uint32_t kConvertVertexSourceBinding        = 1;
+constexpr uint32_t kImageCopySourceBinding            = 0;
+constexpr uint32_t kMultisampledFlipSourceBinding     = 0;
+constexpr uint32_t kResolveDepthStencilDepthBinding   = 0;
+constexpr uint32_t kResolveDepthStencilStencilBinding = 1;
 
 uint32_t GetBufferUtilsFlags(size_t dispatchSize, const vk::Format &format)
 {
@@ -209,6 +214,14 @@ void UtilsVk::destroy(VkDevice device)
     {
         program.destroy(device);
     }
+    for (vk::ShaderProgramHelper &program : mMultisampledFlipPrograms)
+    {
+        program.destroy(device);
+    }
+    for (vk::ShaderProgramHelper &program : mResolveDepthStencilPrograms)
+    {
+        program.destroy(device);
+    }
 }
 
 angle::Result UtilsVk::ensureResourcesInitialized(vk::Context *context,
@@ -327,6 +340,37 @@ angle::Result UtilsVk::ensureImageCopyResourcesInitialized(vk::Context *context)
 
     return ensureResourcesInitialized(context, Function::ImageCopy, setSizes, ArraySize(setSizes),
                                       sizeof(ImageCopyShaderParams));
+}
+
+angle::Result UtilsVk::ensureMultisampledFlipResourcesInitialized(vk::Context *context)
+{
+    if (mPipelineLayouts[Function::MultisampledFlip].valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    VkDescriptorPoolSize setSizes[1] = {
+        {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1},
+    };
+
+    return ensureResourcesInitialized(context, Function::MultisampledFlip, setSizes,
+                                      ArraySize(setSizes), sizeof(MultisampledFlipShaderParams));
+}
+
+angle::Result UtilsVk::ensureResolveDepthStencilResourcesInitialized(vk::Context *context)
+{
+    if (mPipelineLayouts[Function::ResolveDepthStencil].valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    VkDescriptorPoolSize setSizes[1] = {
+        {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1},
+        {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1},
+    };
+
+    return ensureResourcesInitialized(context, Function::ResolveDepthStencil, setSizes,
+                                      ArraySize(setSizes), sizeof(ResolveDepthStencilShaderParams));
 }
 
 angle::Result UtilsVk::setupProgram(vk::Context *context,
@@ -718,6 +762,53 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
                            sizeof(shaderParams), commandBuffer));
     commandBuffer->draw(6, 0);
     return angle::Result::Continue;
+}
+
+angle::Result UtilsVk::colorResolve(ContextVk *contextVk,
+                                    FramebufferVk *framebuffer,
+                                    const ColorResolveParameters &params)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    // TODO: transition source to shader read only
+    // TODO: create a render pass with a subpass that has resolve attachments for every enabled
+    // color buffer.
+    // TODO: if flipping is necessary, take the code from TextureVK's ImageCopy call to adjust the
+    // src and dst offsets
+    // TODO: if flipping is necessary, ensureMultisampledFlipResourcesInitialized and issue a draw
+    // with that.  Otherwise there's no need for a draw call.
+    // TODO: DON'T append to a started render pass. That could have worked if we could start a new
+    // subpass (with the resolve) and set up the dependencies apriori, but that's too much work now.
+    // TODO: make sure the render pass is immediately finished after this.  Future draws cannot
+    // append to a render pass started here for the same reason.
+
+    return angle::Result::Stop;
+}
+
+angle::Result UtilsVk::depthStencilResolve(ContextVk *contextVk,
+                                           FramebufferVk *framebuffer,
+                                           const DepthStencilResolveParameters &params)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    // TODO: transition source depth/stencil to shader read only.
+    // TODO: append to started render pass, or create render pass as usual.
+    // TODO: if flipping is necessary, take the code from TextureVK's ImageCopy call to adjust the
+    // src and dst offsets.
+    // TODO: set everything up and do the draw call.
+
+    ANGLE_TRY(ensureResolveDepthStencilResourcesInitialized(contextVk));
+
+#if 0
+    vk::CommandBuffer *commandBuffer;
+    if (!framebuffer->appendToStartedRenderPass(renderer->getCurrentQueueSerial(),
+                                                scissoredRenderArea, &commandBuffer))
+    {
+        ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, scissoredRenderArea, &commandBuffer));
+    }
+#endif
+
+    return angle::Result::Stop;
 }
 
 angle::Result UtilsVk::copyImage(ContextVk *contextVk,
