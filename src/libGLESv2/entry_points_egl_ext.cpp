@@ -943,7 +943,7 @@ ANGLE_EXPORT EGLint EGLAPIENTRY EGL_ClientWaitSyncKHR(EGLDisplay dpy,
                          "eglClientWaitSync", GetDisplayIfValid(display), EGL_FALSE);
 
     gl::Context *currentContext = thread->getContext();
-    EGLint syncStatus = EGL_FALSE;
+    EGLint syncStatus           = EGL_FALSE;
     ANGLE_EGL_TRY_RETURN(
         thread, syncObject->clientWait(display, currentContext, flags, timeout, &syncStatus),
         "eglClientWaitSync", GetDisplayIfValid(display), EGL_FALSE);
@@ -1414,6 +1414,59 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_GetFrameTimestampsANDROID(EGLDisplay dpy
         "eglGetFrameTimestampsANDROID", GetSurfaceIfValid(display, eglSurface), EGL_FALSE);
 
     return EGL_TRUE;
+}
+
+ANGLE_EXPORT const char *EGLAPIENTRY EGL_QueryStringiANGLE(EGLDisplay dpy,
+                                                           EGLint name,
+                                                           EGLint index)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT("(EGLDisplay dpy = 0x%016" PRIxPTR ", EGLint name = %d, EGLint index = %d)",
+          (uintptr_t)dpy, name, index);
+
+    egl::Display *display = static_cast<egl::Display *>(dpy);
+    Thread *thread        = egl::GetCurrentThread();
+
+    Error error = ValidateQueryStringiANGLE(display, name, index);
+    if (error.isError())
+    {
+        thread->setError(error, GetDebug(), "eglQueryStringiANGLE", GetDisplayIfValid(display));
+        return nullptr;
+    }
+
+    const char *result;
+    const angle::FeatureList features = display->getFeatures();
+    switch (name)
+    {
+        case EGL_WORKAROUND_NAME_ANGLE:
+            result = features[index]->name;
+            break;
+        case EGL_WORKAROUND_CATEGORY_ANGLE:
+            result = angle::FeatureCategoryToString(features[index]->category);
+            break;
+        case EGL_WORKAROUND_DESCRIPTION_ANGLE:
+            result = features[index]->description;
+            break;
+        case EGL_WORKAROUND_BUG_ANGLE:
+            result = features[index]->bug;
+            break;
+        case EGL_WORKAROUND_ENABLED_ANGLE:
+            if (features[index]->enabled)
+            {
+                result = "true";
+            }
+            else
+            {
+                result = "false";
+            }
+            break;
+        default:
+            UNREACHABLE();
+            return nullptr;
+    }
+
+    thread->setSuccess();
+    return result;
 }
 
 }  // extern "C"

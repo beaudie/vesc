@@ -85,6 +85,8 @@ class DisplayWGL : public DisplayGL
                                        HGLRC sharedContext,
                                        const std::vector<int> &workerContextAttribs);
 
+    void initializeFeatureList(angle::FeatureList &features) override;
+
   private:
     egl::Error initializeImpl(egl::Display *display);
     void destroy();

@@ -592,6 +592,7 @@ void Renderer9::generateDisplayExtensions(egl::DisplayExtensions *outExtensions)
     outExtensions->surfacelessContext = true;
 
     outExtensions->robustResourceInitialization = true;
+    outExtensions->queryStringIndexed           = true;
 }
 
 void Renderer9::startScene()

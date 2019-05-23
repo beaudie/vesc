@@ -76,6 +76,8 @@ void DisplayGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
     // Advertise robust resource initialization on all OpenGL backends for testing even though it is
     // not fully implemented.
     outExtensions->robustResourceInitialization = true;
+
+    outExtensions->queryStringIndexed = true;
 }
 
 egl::Error DisplayGL::makeCurrentSurfaceless(gl::Context *context)
@@ -83,4 +85,5 @@ egl::Error DisplayGL::makeCurrentSurfaceless(gl::Context *context)
     UNIMPLEMENTED();
     return egl::NoError();
 }
+
 }  // namespace rx

@@ -883,6 +883,9 @@ struct DisplayExtensions
 
     // EGL_ANGLE_power_preference
     bool powerPreference;
+
+    // EGL_ANGLE_query_string_indexed
+    bool queryStringIndexed;
 };
 
 struct DeviceExtensions
