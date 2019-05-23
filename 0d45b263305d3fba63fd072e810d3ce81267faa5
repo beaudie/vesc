@@ -46,6 +46,30 @@
       "revId": "0d45b263305d3fba63fd072e810d3ce81267faa5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "649158ee_14159095",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-05-23T08:04:17Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0614298e_7a9ad6af",
+      "range": {
+        "startLine": 238,
+        "startChar": 8,
+        "endLine": 238,
+        "endChar": 100
+      },
+      "revId": "0d45b263305d3fba63fd072e810d3ce81267faa5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
