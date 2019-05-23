@@ -1058,4 +1058,9 @@ WorkerContext *DisplayWGL::createWorkerContext(std::string *infoLog,
     return new WorkerContextWGL(mFunctionsWGL, workerPbuffer, workerDeviceContext, workerContext);
 }
 
+void DisplayWGL::initializeFeatureList(angle::FeatureList &features)
+{
+    mRenderer->getWorkarounds().buildFeatureList(features);
+}
+
 }  // namespace rx

@@ -204,6 +204,7 @@ void DisplayNULL::generateExtensions(egl::DisplayExtensions *outExtensions) cons
     outExtensions->createContextClientArrays          = true;
     outExtensions->programCacheControl                = true;
     outExtensions->robustResourceInitialization       = true;
+    outExtensions->queryStringIndexed                 = true;
 }
 
 void DisplayNULL::generateCaps(egl::Caps *outCaps) const

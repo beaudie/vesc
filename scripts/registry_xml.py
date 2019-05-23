@@ -81,6 +81,7 @@ supported_egl_extensions = [
     "EGL_ANGLE_device_creation",
     "EGL_ANGLE_device_d3d",
     "EGL_ANGLE_program_cache_control",
+    "EGL_ANGLE_query_string_indexed",
     "EGL_ANGLE_query_surface_pointer",
     "EGL_ANGLE_stream_producer_d3d_texture",
     "EGL_ANGLE_surface_d3d_texture_2d_share_handle",

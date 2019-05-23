@@ -426,4 +426,9 @@ void DisplayCGL::unreferenceDiscreteGPU()
         mDiscreteGPUPixelFormat = nullptr;
     }
 }
+
+void DisplayCGL::initializeFeatureList(angle::FeatureList &features)
+{
+    mRenderer->getWorkarounds().buildFeatureList(features);
+}
 }

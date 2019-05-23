@@ -372,4 +372,11 @@ void DisplayD3D::handleResult(HRESULT hr,
 
     mStoredErrorString = errorStream.str();
 }
+
+void DisplayD3D::initializeFeatureList(angle::FeatureList &features)
+{
+    mRenderer->getWorkarounds()->buildFeatureList(features);
+    // getRenderer()->getWorkarounds()->buildFeatureList(features);
+}
+
 }  // namespace rx
