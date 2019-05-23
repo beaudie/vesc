@@ -69,6 +69,30 @@
       "revId": "bcd2085e784e46df1c5a39798113b9b6c1866a3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1956f856_4c7a1693",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2309,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-23T13:46:02Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2d361c86_90da99bc",
+      "range": {
+        "startLine": 2309,
+        "startChar": 24,
+        "endLine": 2309,
+        "endChar": 28
+      },
+      "revId": "bcd2085e784e46df1c5a39798113b9b6c1866a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
