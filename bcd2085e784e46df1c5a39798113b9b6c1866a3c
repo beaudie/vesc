@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a5f408ab_fbc53dc8",
+        "filename": "src/compiler/translator/OutputHLSL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-23T13:45:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50a99bf0_ed43e4c7",
+      "range": {
+        "startLine": 2276,
+        "startChar": 42,
+        "endLine": 2276,
+        "endChar": 78
+      },
+      "revId": "bcd2085e784e46df1c5a39798113b9b6c1866a3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2d361c86_90da99bc",
         "filename": "src/compiler/translator/OutputHLSL.cpp",
         "patchSetId": 3
