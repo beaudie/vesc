@@ -543,6 +543,9 @@ Error Display::initialize()
         config.second.renderableType |= EGL_OPENGL_ES_BIT;
     }
 
+    mFeatures.clear();
+    mImplementation->initializeFeatureList(mFeatures);
+
     initDisplayExtensions();
     initVendorString();
 

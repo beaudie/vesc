@@ -1073,4 +1073,9 @@ WorkerContext *DisplayOzone::createWorkerContext(std::string *infoLog,
     return new WorkerContextOzone(context, mEGL);
 }
 
+void DisplayOzone::initializeFeatureList(angle::FeatureList &features)
+{
+    mRenderer->getWorkarounds().buildFeatureList(features);
+}
+
 }  // namespace rx

@@ -1482,6 +1482,9 @@ EXPORTS
     EGL_ProgramCacheQueryANGLE
     EGL_ProgramCacheResizeANGLE
 
+    ; EGL_ANGLE_query_string_indexed
+    EGL_QueryStringiANGLE
+
     ; EGL_ANGLE_query_surface_pointer
     EGL_QuerySurfacePointerANGLE
 
