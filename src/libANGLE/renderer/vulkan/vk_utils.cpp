@@ -415,6 +415,32 @@ angle::Result InitShaderAndSerial(Context *context,
     return angle::Result::Continue;
 }
 
+gl::TextureType Get2DTextureType(uint32_t layerCount, GLint samples)
+{
+    if (layerCount > 1)
+    {
+        if (samples > 1)
+        {
+            return gl::TextureType::_2DMultisampleArray;
+        }
+        else
+        {
+            return gl::TextureType::_2DArray;
+        }
+    }
+    else
+    {
+        if (samples > 1)
+        {
+            return gl::TextureType::_2DMultisample;
+        }
+        else
+        {
+            return gl::TextureType::_2D;
+        }
+    }
+}
+
 GarbageObjectBase::GarbageObjectBase() : mHandleType(HandleType::Invalid), mHandle(VK_NULL_HANDLE)
 {}
 

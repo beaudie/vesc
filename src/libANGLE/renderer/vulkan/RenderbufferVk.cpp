@@ -176,9 +176,8 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
 
     if (imageVk->getImageTextureType() == gl::TextureType::CubeMap)
     {
-        gl::TextureType arrayType = imageVk->getImage()->getSamples() > 1
-                                        ? gl::TextureType::_2DMultisampleArray
-                                        : gl::TextureType::_2DArray;
+        gl::TextureType arrayType = vk::Get2DTextureType(imageVk->getImage()->getLayerCount(),
+                                                         imageVk->getImage()->getSamples());
         ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, aspect, gl::SwizzleState(),
                                              &mCubeImageAs2DArrayView, imageVk->getImageLevel(), 1,
                                              imageVk->getImageLayer(), 1));

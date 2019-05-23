@@ -303,6 +303,8 @@ angle::Result InitShaderAndSerial(Context *context,
                                   const uint32_t *shaderCode,
                                   size_t shaderCodeSize);
 
+gl::TextureType Get2DTextureType(uint32_t layerCount, GLint samples);
+
 enum class RecordingMode
 {
     Start,
