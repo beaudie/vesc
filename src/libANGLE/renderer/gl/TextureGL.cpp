@@ -785,7 +785,8 @@ angle::Result TextureGL::copySubTextureHelper(const gl::Context *context,
         sourceGL->mState.getImageDesc(NonCubeTextureTypeToTarget(source->getType()), sourceLevel);
 
     // Check is this is a simple copySubTexture that can be done with a copyTexSubImage
-    ASSERT(sourceGL->getType() == gl::TextureType::_2D);
+    ASSERT(sourceGL->getType() == gl::TextureType::_2D ||
+           source->getType() == gl::TextureType::External);
     const LevelInfoGL &sourceLevelInfo =
         sourceGL->getLevelInfo(NonCubeTextureTypeToTarget(source->getType()), sourceLevel);
     bool needsLumaWorkaround = sourceLevelInfo.lumaWorkaround.enabled;
@@ -800,7 +801,7 @@ angle::Result TextureGL::copySubTextureHelper(const gl::Context *context,
     bool destSRGB              = destFormat.colorEncoding == GL_SRGB;
     if (!unpackFlipY && unpackPremultiplyAlpha == unpackUnmultiplyAlpha && !needsLumaWorkaround &&
         sourceFormatContainSupersetOfDestFormat && sourceComponentType == destComponentType &&
-        !destSRGB)
+        !destSRGB && sourceGL->getType() == gl::TextureType::_2D)
     {
         bool copySucceeded = false;
         ANGLE_TRY(blitter->copyTexSubImage(sourceGL, sourceLevel, this, target, level, sourceArea,
@@ -995,6 +996,22 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
 
     setLevelInfo(context, type, 0, levels,
                  GetLevelInfo(internalFormat, texStorageFormat.internalFormat));
+
+    return angle::Result::Continue;
+}
+
+angle::Result TextureGL::setStorageExternal(const gl::Context *context,
+                                            gl::TextureType type,
+                                            size_t levels,
+                                            GLenum internalFormat,
+                                            const gl::Extents &size)
+{
+    StateManagerGL *stateManager = GetStateManagerGL(context);
+
+    // Force the statemanager to rebind whatever was on this binding point for the next draw.
+    stateManager->bindTexture(getType(), 0);
+
+    setLevelInfo(context, type, 0, levels, GetLevelInfo(internalFormat, internalFormat));
 
     return angle::Result::Continue;
 }

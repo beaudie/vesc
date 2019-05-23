@@ -182,6 +182,7 @@ SemaphoreImpl *ContextGL::createSemaphore()
 
 angle::Result ContextGL::flush(const gl::Context *context)
 {
+    mRenderer->getStateManager()->bindTexture(gl::TextureType::External, 0);
     return mRenderer->flush();
 }
 

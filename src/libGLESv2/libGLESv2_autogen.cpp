@@ -3235,6 +3235,16 @@ void GL_APIENTRY glSampleMaskiANGLE(GLuint maskNumber, GLbitfield mask)
     return gl::SampleMaskiANGLE(maskNumber, mask);
 }
 
+// GL_ANGLE_texture_storage_external
+void GL_APIENTRY glTexStorage2DExternalANGLE(GLenum target,
+                                             GLsizei levels,
+                                             GLenum internalformat,
+                                             GLsizei width,
+                                             GLsizei height)
+{
+    return gl::TexStorage2DExternalANGLE(target, levels, internalformat, width, height);
+}
+
 // GL_ANGLE_translated_shader_source
 void GL_APIENTRY glGetTranslatedShaderSourceANGLE(GLuint shader,
                                                   GLsizei bufsize,
@@ -9554,6 +9564,17 @@ void GL_APIENTRY glProvokingVertexANGLEContextANGLE(GLeglContext ctx, GLenum mod
 void GL_APIENTRY glLoseContextCHROMIUMContextANGLE(GLeglContext ctx, GLenum current, GLenum other)
 {
     return gl::LoseContextCHROMIUMContextANGLE(ctx, current, other);
+}
+
+void GL_APIENTRY glTexStorage2DExternalANGLEContextANGLE(GLeglContext ctx,
+                                                         GLenum target,
+                                                         GLsizei levels,
+                                                         GLenum internalformat,
+                                                         GLsizei width,
+                                                         GLsizei height)
+{
+    return gl::TexStorage2DExternalANGLEContextANGLE(ctx, target, levels, internalformat, width,
+                                                     height);
 }
 
 }  // extern "C"
