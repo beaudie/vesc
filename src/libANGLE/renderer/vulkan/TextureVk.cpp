@@ -427,9 +427,8 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
         ASSERT(offsetImageIndex.getLayerCount() == 1);
 
         return copySubImageImplWithDraw(contextVk, offsetImageIndex, modifiedDestOffset, destFormat,
-                                        0, colorReadRT->getLayerIndex(), clippedSourceArea,
-                                        isViewportFlipY, false, false, false,
-                                        &colorReadRT->getImage(), colorReadRT->getReadImageView());
+                                        0, clippedSourceArea, isViewportFlipY, false, false, false,
+                                        &colorReadRT->getImage(), colorReadRT->getFetchImageView());
     }
 
     // Do a CPU readback that does the conversion, and then stage the change to the pixel buffer.
@@ -477,9 +476,9 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
     if (CanCopyWithDraw(renderer, sourceVkFormat, destVkFormat) && !forceCpuPath)
     {
         return copySubImageImplWithDraw(contextVk, offsetImageIndex, destOffset, destVkFormat,
-                                        sourceLevel, 0, sourceArea, false, unpackFlipY,
+                                        sourceLevel, sourceArea, false, unpackFlipY,
                                         unpackPremultiplyAlpha, unpackUnmultiplyAlpha,
-                                        &source->getImage(), &source->getReadImageView());
+                                        &source->getImage(), &source->getFetchImageView());
     }
 
     if (sourceLevel != 0)
@@ -627,7 +626,6 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
                                                   const gl::Offset &destOffset,
                                                   const vk::Format &destFormat,
                                                   size_t sourceLevel,
-                                                  size_t sourceLayer,
                                                   const gl::Rectangle &sourceArea,
                                                   bool isSrcFlipY,
                                                   bool unpackFlipY,
@@ -658,33 +656,6 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
     uint32_t baseLayer  = index.hasLayer() ? index.getLayerIndex() : 0;
     uint32_t layerCount = index.getLayerCount();
 
-    // If the source image is a cube map, the view is of VK_IMAGE_VIEW_TYPE_CUBE type.  However,
-    // GLSL's texelFetch cannot take a textureCube.  We need to create a 2D_ARRAY type view to be
-    // able to perform the copy.
-    //
-    // Note(syoussefi): Array textures are not yet supported in Vulkan.  Once they are, the if below
-    // should be changed to detect cube maps only.
-    vk::ImageView cubeAs2DArrayView;
-    if (srcImage->getLayerCount() % 6 == 0)
-    {
-        // TODO(syoussefi): If the cube map is LUMA, we need swizzle.  http://anglebug.com/2911
-        // This can't happen when copying from framebuffers, so only source of concern would be
-        // copy[Sub]Texture copying from a LUMA cube map.
-        ASSERT(!srcImage->getFormat().imageFormat().isLUMA());
-
-        gl::TextureType arrayTextureType =
-            Get2DTextureType(srcImage->getLayerCount(), srcImage->getSamples());
-        ANGLE_TRY(srcImage->initImageView(contextVk, arrayTextureType, VK_IMAGE_ASPECT_COLOR_BIT,
-                                          gl::SwizzleState(), &cubeAs2DArrayView, 0,
-                                          srcImage->getLevelCount()));
-        srcView = &cubeAs2DArrayView;
-    }
-    else
-    {
-        // Source layer is otherwise baked into the view
-        sourceLayer = 0;
-    }
-
     // If destination is valid, copy the source directly into it.
     if (mImage->valid())
     {
@@ -693,7 +664,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
 
         for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
         {
-            params.srcLayer = sourceLayer + layerIndex;
+            params.srcLayer = layerIndex;
 
             vk::ImageView *destView;
             ANGLE_TRY(
@@ -721,7 +692,7 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
 
         for (uint32_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
         {
-            params.srcLayer = sourceLayer + layerIndex;
+            params.srcLayer = layerIndex;
 
             // Create a temporary view for this layer.
             vk::ImageView stagingView;
@@ -741,11 +712,6 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         mImage->stageSubresourceUpdateFromImage(
             stagingImage.release(), index, destOffset,
             gl::Extents(sourceArea.width, sourceArea.height, 1));
-    }
-
-    if (cubeAs2DArrayView.valid())
-    {
-        renderer->releaseObject(currentQueueSerial, &cubeAs2DArrayView);
     }
 
     return angle::Result::Continue;
@@ -929,8 +895,8 @@ void TextureVk::setImageHelper(RendererVk *renderer,
     mImage            = imageHelper;
     mImage->initStagingBuffer(renderer, format);
 
-    mRenderTarget.init(mImage, &mDrawBaseLevelImageView, getNativeImageLevel(0),
-                       getNativeImageLayer(0), this);
+    mRenderTarget.init(mImage, &mDrawBaseLevelImageView, &mFetchBaseLevelImageView,
+                       getNativeImageLevel(0), getNativeImageLayer(0), this);
 
     // Force re-creation of cube map render targets next time they are needed
     mCubeMapRenderTargets.clear();
@@ -1209,13 +1175,26 @@ angle::Result TextureVk::initCubeMapRenderTargets(ContextVk *contextVk)
     if (!mCubeMapRenderTargets.empty())
         return angle::Result::Continue;
 
+    mLayerFetchImageView.resize(gl::kCubeFaceCount);
     mCubeMapRenderTargets.resize(gl::kCubeFaceCount);
     for (size_t cubeMapFaceIndex = 0; cubeMapFaceIndex < gl::kCubeFaceCount; ++cubeMapFaceIndex)
     {
-        vk::ImageView *imageView;
-        ANGLE_TRY(getLayerLevelDrawImageView(contextVk, cubeMapFaceIndex, 0, &imageView));
-        mCubeMapRenderTargets[cubeMapFaceIndex].init(mImage, imageView, getNativeImageLevel(0),
-                                                     getNativeImageLayer(cubeMapFaceIndex), this);
+        vk::ImageView *drawView;
+        ANGLE_TRY(getLayerLevelDrawImageView(contextVk, cubeMapFaceIndex, 0, &drawView));
+
+        // Users of the render target expect the views to directly view the desired layer, so we
+        // need create a fetch view for each layer as well.
+        gl::SwizzleState mappedSwizzle;
+        MapSwizzleState(mImage->getFormat(), mState.getSwizzleState(), &mappedSwizzle);
+        gl::TextureType arrayType = Get2DTextureType(gl::kCubeFaceCount, mImage->getSamples());
+        ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, mImage->getAspectFlags(),
+                                             mappedSwizzle, &mLayerFetchImageView[cubeMapFaceIndex],
+                                             getNativeImageLevel(0), 1,
+                                             getNativeImageLayer(cubeMapFaceIndex), 1));
+
+        mCubeMapRenderTargets[cubeMapFaceIndex].init(
+            mImage, drawView, &mLayerFetchImageView[cubeMapFaceIndex], getNativeImageLevel(0),
+            getNativeImageLayer(cubeMapFaceIndex), this);
     }
     return angle::Result::Continue;
 }
@@ -1308,6 +1287,24 @@ const vk::ImageView &TextureVk::getReadImageView() const
     }
 
     return mReadMipmapImageView;
+}
+
+const vk::ImageView &TextureVk::getFetchImageView() const
+{
+    if (!mFetchBaseLevelImageView.valid())
+    {
+        return getReadImageView();
+    }
+
+    ASSERT(mImage->valid());
+
+    const GLenum minFilter = mState.getSamplerState().getMinFilter();
+    if (minFilter == GL_LINEAR || minFilter == GL_NEAREST)
+    {
+        return mFetchBaseLevelImageView;
+    }
+
+    return mFetchMipmapImageView;
 }
 
 angle::Result TextureVk::getLayerLevelDrawImageView(vk::Context *context,
@@ -1427,6 +1424,17 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
     ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), aspectFlags, mappedSwizzle,
                                          &mReadBaseLevelImageView, baseLevel, 1, baseLayer,
                                          layerCount));
+    if (mState.getType() == gl::TextureType::CubeMap)
+    {
+        gl::TextureType arrayType = Get2DTextureType(layerCount, mImage->getSamples());
+
+        ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, aspectFlags, mappedSwizzle,
+                                             &mFetchMipmapImageView, baseLevel, levelCount,
+                                             baseLayer, layerCount));
+        ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, aspectFlags, mappedSwizzle,
+                                             &mFetchBaseLevelImageView, baseLevel, 1, baseLayer,
+                                             layerCount));
+    }
     if (!format.imageFormat().isBlock)
     {
         ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), aspectFlags,
@@ -1456,18 +1464,22 @@ void TextureVk::releaseImage(RendererVk *renderer)
     renderer->releaseObject(currentSerial, &mDrawBaseLevelImageView);
     renderer->releaseObject(currentSerial, &mReadBaseLevelImageView);
     renderer->releaseObject(currentSerial, &mReadMipmapImageView);
+    renderer->releaseObject(currentSerial, &mFetchBaseLevelImageView);
+    renderer->releaseObject(currentSerial, &mFetchMipmapImageView);
 
     for (auto &layerViews : mLayerLevelDrawImageViews)
     {
         for (vk::ImageView &imageView : layerViews)
         {
-            if (imageView.valid())
-            {
-                renderer->releaseObject(currentSerial, &imageView);
-            }
+            renderer->releaseObject(currentSerial, &imageView);
         }
     }
     mLayerLevelDrawImageViews.clear();
+    for (vk::ImageView &imageView : mLayerFetchImageView)
+    {
+        renderer->releaseObject(currentSerial, &imageView);
+    }
+    mLayerFetchImageView.clear();
     mCubeMapRenderTargets.clear();
 }
 
