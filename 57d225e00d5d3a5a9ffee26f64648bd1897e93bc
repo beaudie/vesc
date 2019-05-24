@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a93e3516_5b31880c",
+        "filename": "AUTHORS",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-24T03:15:59Z",
+      "side": 1,
+      "message": "you can remove your name from this section, as it only applies to non-corporate contributors.",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 12
+      },
+      "revId": "57d225e00d5d3a5a9ffee26f64648bd1897e93bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
