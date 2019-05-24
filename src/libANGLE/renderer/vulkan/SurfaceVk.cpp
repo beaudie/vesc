@@ -89,7 +89,7 @@ constexpr VkImageUsageFlags kSurfaceVKDepthStencilImageUsageFlags =
 
 OffscreenSurfaceVk::AttachmentImage::AttachmentImage()
 {
-    renderTarget.init(&image, &imageView, 0, 0, nullptr);
+    renderTarget.init(&image, &imageView, nullptr, 0, 0, nullptr);
 }
 
 OffscreenSurfaceVk::AttachmentImage::~AttachmentImage() = default;
@@ -364,10 +364,11 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
       mCurrentSwapchainImageIndex(0),
       mCurrentSwapHistoryIndex(0)
 {
-    mDepthStencilRenderTarget.init(&mDepthStencilImage, &mDepthStencilImageView, 0, 0, nullptr);
+    mDepthStencilRenderTarget.init(&mDepthStencilImage, &mDepthStencilImageView, nullptr, 0, 0,
+                                   nullptr);
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
-    mColorRenderTarget.init(&mColorImageMS, &mColorImageViewMS, 0, 0, nullptr);
+    mColorRenderTarget.init(&mColorImageMS, &mColorImageViewMS, nullptr, 0, 0, nullptr);
 }
 
 WindowSurfaceVk::~WindowSurfaceVk()
