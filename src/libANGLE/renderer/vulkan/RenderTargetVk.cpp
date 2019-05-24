@@ -17,7 +17,12 @@
 namespace rx
 {
 RenderTargetVk::RenderTargetVk()
-    : mImage(nullptr), mImageView(nullptr), mLevelIndex(0), mLayerIndex(0), mOwner(nullptr)
+    : mImage(nullptr),
+      mImageView(nullptr),
+      mCubeImageFetchView(nullptr),
+      mLevelIndex(0),
+      mLayerIndex(0),
+      mOwner(nullptr)
 {}
 
 RenderTargetVk::~RenderTargetVk() {}
@@ -25,6 +30,7 @@ RenderTargetVk::~RenderTargetVk() {}
 RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
     : mImage(other.mImage),
       mImageView(other.mImageView),
+      mCubeImageFetchView(other.mCubeImageFetchView),
       mLevelIndex(other.mLevelIndex),
       mLayerIndex(other.mLayerIndex),
       mOwner(other.mOwner)
@@ -32,12 +38,14 @@ RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
 
 void RenderTargetVk::init(vk::ImageHelper *image,
                           vk::ImageView *imageView,
+                          vk::ImageView *cubeImageFetchView,
                           size_t levelIndex,
                           size_t layerIndex,
                           TextureVk *owner)
 {
     mImage      = image;
     mImageView  = imageView;
+    mCubeImageFetchView = cubeImageFetchView;
     mLevelIndex = levelIndex;
     mLayerIndex = layerIndex;
     mOwner      = owner;
@@ -47,6 +55,7 @@ void RenderTargetVk::reset()
 {
     mImage      = nullptr;
     mImageView  = nullptr;
+    mCubeImageFetchView = nullptr;
     mLevelIndex = 0;
     mLayerIndex = 0;
     mOwner      = nullptr;
@@ -115,6 +124,12 @@ vk::ImageView *RenderTargetVk::getReadImageView() const
     return getDrawImageView();
 }
 
+vk::ImageView *RenderTargetVk::getFetchImageView() const
+{
+    return mCubeImageFetchView && mCubeImageFetchView->valid() ? mCubeImageFetchView
+                                                               : getReadImageView();
+}
+
 const vk::Format &RenderTargetVk::getImageFormat() const
 {
     ASSERT(mImage && mImage->valid());
@@ -132,6 +147,7 @@ void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image, vk::ImageView 
     ASSERT(image && image->valid() && imageView && imageView->valid());
     mImage     = image;
     mImageView = imageView;
+    mCubeImageFetchView = nullptr;
     mOwner     = nullptr;
 }
 

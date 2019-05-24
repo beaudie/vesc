@@ -88,7 +88,7 @@ angle::Result RenderbufferVk::setStorage(const gl::Context *context,
         ANGLE_TRY(mImage->clearIfEmulatedFormat(vk::GetImpl(context), gl::ImageIndex::Make2D(0),
                                                 vkFormat));
 
-        mRenderTarget.init(mImage, &mImageView, 0, 0, nullptr);
+        mRenderTarget.init(mImage, &mImageView, nullptr, 0, 0, nullptr);
     }
 
     return angle::Result::Continue;
@@ -135,8 +135,19 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
                                          gl::SwizzleState(), &mImageView, imageVk->getImageLevel(),
                                          1, imageVk->getImageLayer(), 1));
 
-    mRenderTarget.init(mImage, &mImageView, imageVk->getImageLevel(), imageVk->getImageLayer(),
-                       nullptr);
+    if (imageVk->getImageTextureType() == gl::TextureType::CubeMap)
+    {
+        gl::TextureType arrayType = imageVk->getImage()->getSamples() > 1
+                                        ? gl::TextureType::_2DMultisampleArray
+                                        : gl::TextureType::_2DArray;
+        ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, aspect, gl::SwizzleState(),
+                                             &mCubeImageFetchView, imageVk->getImageLevel(), 1,
+                                             imageVk->getImageLayer(), 1));
+    }
+
+    mRenderTarget.init(mImage, &mImageView,
+                       mCubeImageFetchView.valid() ? &mCubeImageFetchView : nullptr,
+                       imageVk->getImageLevel(), imageVk->getImageLayer(), nullptr);
 
     return angle::Result::Continue;
 }
@@ -186,6 +197,7 @@ void RenderbufferVk::releaseImage(const gl::Context *context, RendererVk *render
     }
 
     renderer->releaseObject(renderer->getCurrentQueueSerial(), &mImageView);
+    renderer->releaseObject(renderer->getCurrentQueueSerial(), &mCubeImageFetchView);
 }
 
 }  // namespace rx
