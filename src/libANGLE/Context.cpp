@@ -5158,6 +5158,17 @@ void Context::texStorage3DMultisample(TextureType target,
                                                      ConvertToBool(fixedsamplelocations)));
 }
 
+void Context::texStorage2DExternal(TextureType target,
+                                   GLsizei levels,
+                                   GLenum internalFormat,
+                                   GLsizei width,
+                                   GLsizei height)
+{
+    Extents size(width, height, 1);
+    Texture *texture = getTextureByType(target);
+    ANGLE_CONTEXT_TRY(texture->setStorageExternal(this, target, levels, internalFormat, size));
+}
+
 void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
 {
     // According to spec 3.1 Table 20.49: Framebuffer Dependent Values,
@@ -7514,6 +7525,14 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
             return true;
         case GL_TEXTURE_BINDING_EXTERNAL_OES:
             if (!getExtensions().eglStreamConsumerExternal && !getExtensions().eglImageExternal)
+            {
+                return false;
+            }
+            *type      = GL_INT;
+            *numParams = 1;
+            return true;
+        case GL_TEXTURE_BINDING_EXTERNAL_NATIVE_ID_ANGLE:
+            if (!getExtensions().nativeId || !getExtensions().eglImageExternal)
             {
                 return false;
             }

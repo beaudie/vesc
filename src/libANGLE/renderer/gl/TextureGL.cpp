@@ -1000,6 +1000,22 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result TextureGL::setStorageExternal(const gl::Context *context,
+                                            gl::TextureType type,
+                                            size_t levels,
+                                            GLenum internalFormat,
+                                            const gl::Extents &size)
+{
+    StateManagerGL *stateManager = GetStateManagerGL(context);
+
+    // Force the statemanager to rebind whatever was on this binding point for the next draw.
+    stateManager->bindTexture(getType(), 0);
+
+    setLevelInfo(context, type, 0, levels, GetLevelInfo(internalFormat, internalFormat));
+
+    return angle::Result::Continue;
+}
+
 angle::Result TextureGL::setStorageMultisample(const gl::Context *context,
                                                gl::TextureType type,
                                                GLsizei samples,

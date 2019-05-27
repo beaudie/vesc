@@ -1269,7 +1269,37 @@ angle::Result Texture::setStorage(Context *context,
     mDirtyBits.set(DIRTY_BIT_BASE_LEVEL);
     mDirtyBits.set(DIRTY_BIT_MAX_LEVEL);
 
-    signalDirtyStorage(context, InitState::MayNeedInit);
+    return angle::Result::Continue;
+}
+
+angle::Result Texture::setStorageExternal(Context *context,
+                                          TextureType type,
+                                          GLsizei levels,
+                                          GLenum internalFormat,
+                                          const Extents &size)
+{
+    ASSERT(type == mState.mType);
+
+    // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
+    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(orphanImages(context));
+
+    ANGLE_TRY(mTexture->setStorageExternal(context, type, levels, internalFormat, size));
+
+    mState.mImmutableFormat = true;
+    mState.mImmutableLevels = static_cast<GLuint>(levels);
+    mState.clearImageDescs();
+    mState.setImageDescChain(0, static_cast<GLuint>(levels - 1), size, Format(internalFormat),
+                             InitState::Initialized);
+
+    // Changing the texture to immutable can trigger a change in the base and max levels:
+    // GLES 3.0.4 section 3.8.10 pg 158:
+    // "For immutable-format textures, levelbase is clamped to the range[0;levels],levelmax is then
+    // clamped to the range[levelbase;levels].
+    mDirtyBits.set(DIRTY_BIT_BASE_LEVEL);
+    mDirtyBits.set(DIRTY_BIT_MAX_LEVEL);
+
+    signalDirtyStorage(context, InitState::Initialized);
 
     return angle::Result::Continue;
 }
@@ -1634,6 +1664,11 @@ void Texture::onDetach(const Context *context)
 GLuint Texture::getId() const
 {
     return id();
+}
+
+GLuint Texture::getNativeID() const
+{
+    return mTexture->getNativeID();
 }
 
 angle::Result Texture::syncState(const Context *context)
