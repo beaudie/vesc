@@ -1741,6 +1741,17 @@ bool ValidateES2TexStorageParameters(Context *context,
         return false;
     }
 
+    return ValidateES2TexStorageParametersBase(context, target, levels, internalformat, width,
+                                               height);
+}
+
+bool ValidateES2TexStorageParametersBase(Context *context,
+                                         TextureType target,
+                                         GLsizei levels,
+                                         GLenum internalformat,
+                                         GLsizei width,
+                                         GLsizei height)
+{
     if (width < 1 || height < 1 || levels < 1)
     {
         context->validationError(GL_INVALID_VALUE, kTextureSizeTooSmall);

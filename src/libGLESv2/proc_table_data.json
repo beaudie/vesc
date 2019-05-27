@@ -1003,5 +1003,10 @@
     ],
     "EGL_ANGLE_workaround_control": [
         "eglQueryStringiANGLE"
+    ],
+
+    "GL_ANGLE_texture_storage_external": [
+        "glTexStorage2DExternalANGLE",
+        "glInvalidateTextureANGLE"
     ]
 }

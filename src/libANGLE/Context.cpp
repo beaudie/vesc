@@ -5164,6 +5164,23 @@ void Context::texStorage3DMultisample(TextureType target,
                                                      ConvertToBool(fixedsamplelocations)));
 }
 
+void Context::texStorage2DExternal(TextureType target,
+                                   GLsizei levels,
+                                   GLenum internalFormat,
+                                   GLsizei width,
+                                   GLsizei height)
+{
+    Extents size(width, height, 1);
+    Texture *texture = getTextureByType(target);
+    ANGLE_CONTEXT_TRY(texture->setStorageExternal(this, target, levels, internalFormat, size));
+}
+
+void Context::invalidateTexture(TextureType target)
+{
+    mImplementation->invalidateTexture(target);
+    mState.invalidateTexture(target);
+}
+
 void Context::getMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
 {
     // According to spec 3.1 Table 20.49: Framebuffer Dependent Values,
