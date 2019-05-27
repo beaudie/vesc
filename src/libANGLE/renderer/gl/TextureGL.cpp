@@ -1000,6 +1000,26 @@ angle::Result TextureGL::setStorage(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result TextureGL::setImageExternal(const gl::Context *context,
+                                          const gl::ImageIndex &index,
+                                          GLenum internalFormat,
+                                          const gl::Extents &size,
+                                          GLenum format,
+                                          GLenum type)
+{
+    const FunctionsGL *functions     = GetFunctionsGL(context);
+    const WorkaroundsGL &workarounds = GetWorkaroundsGL(context);
+
+    gl::TextureTarget target = index.getTarget();
+    size_t level             = static_cast<size_t>(index.getLevelIndex());
+    nativegl::TexImageFormat texImageFormat =
+        nativegl::GetTexImageFormat(functions, workarounds, internalFormat, format, type);
+
+    setLevelInfo(context, target, level, 1,
+                 GetLevelInfo(internalFormat, texImageFormat.internalFormat));
+    return angle::Result::Continue;
+}
+
 angle::Result TextureGL::setStorageMultisample(const gl::Context *context,
                                                gl::TextureType type,
                                                GLsizei samples,
@@ -1128,6 +1148,11 @@ angle::Result TextureGL::setEGLImageTarget(const gl::Context *context,
                  GetLevelInfo(image->getFormat().info->internalFormat, imageNativeInternalFormat));
 
     return angle::Result::Continue;
+}
+
+GLint TextureGL::getNativeID() const
+{
+    return mTextureID;
 }
 
 angle::Result TextureGL::syncState(const gl::Context *context,

@@ -1004,5 +1004,10 @@
     "EGL_ANGLE_feature_control": [
         "eglQueryStringiANGLE",
         "eglQueryDisplayAttribANGLE"
+    ],
+
+    "GL_ANGLE_texture_external_update": [
+        "glTexImage2DExternalANGLE",
+        "glInvalidateTextureANGLE"
     ]
 }
