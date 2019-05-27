@@ -81,6 +81,16 @@ angle::Result TextureImpl::copy3DSubTexture(const gl::Context *context,
     return angle::Result::Stop;
 }
 
+angle::Result TextureImpl::setStorageExternal(const gl::Context *context,
+                                              gl::TextureType type,
+                                              size_t levels,
+                                              GLenum internalFormat,
+                                              const gl::Extents &size)
+{
+    UNREACHABLE();
+    return angle::Result::Stop;
+}
+
 GLint TextureImpl::getMemorySize() const
 {
     return 0;
@@ -88,6 +98,12 @@ GLint TextureImpl::getMemorySize() const
 
 GLint TextureImpl::getLevelMemorySize(gl::TextureTarget target, GLint level)
 {
+    return 0;
+}
+
+GLint TextureImpl::getNativeID() const
+{
+    UNREACHABLE();
     return 0;
 }
 

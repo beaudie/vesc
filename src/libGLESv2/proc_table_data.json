@@ -1000,5 +1000,10 @@
 
     "GL_CHROMIUM_lose_context": [
         "glLoseContextCHROMIUM"
+    ],
+
+    "GL_ANGLE_texture_storage_external": [
+        "glTexStorage2DExternalANGLE",
+        "glInvalidateTextureANGLE"
     ]
 }

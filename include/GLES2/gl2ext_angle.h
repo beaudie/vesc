@@ -669,6 +669,21 @@ GL_APICALL void GL_APIENTRY glLoseContextCHROMIUM(GLenum current, GLenum other);
 typedef void (GL_APIENTRYP PFNGLLOSECONTEXTCHROMIUMPROC) (GLenum current, GLenum other);
 #endif  /* GL_CHROMIUM_lose_context */
 
+#ifndef GL_ANGLE_native_id
+#define GL_ANGLE_native_id 1
+#endif /* GL_ANGLE_native_id */
+
+#ifndef GL_ANGLE_texture_storage_external
+#define GL_ANGLE_texture_storage_external 1
+#define GL_TEXTURE_NATIVE_ID_ANGLE 0x3481
+typedef void (GL_APIENTRYP PFNGLTEXSTORAGE2DEXTERNALANGLEPROC) (GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height);
+typedef void (GL_APIENTRYP PFNGLINVALIDATETEXTUREBINDINGANGLEPROC) (GLenum target);
+#ifdef GL_GLEXT_PROTOTYPES
+GL_APICALL void GL_APIENTRY glTexStorage2DExternalANGLE (GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height);
+GL_APICALL void GL_APIENTRY glInvalidateTextureANGLE(GLenum target);
+#endif
+#endif /* GL_ANGLE_texture_storage_external */
+
 // clang-format on
 
 #endif  // INCLUDE_GLES2_GL2EXT_ANGLE_H_
