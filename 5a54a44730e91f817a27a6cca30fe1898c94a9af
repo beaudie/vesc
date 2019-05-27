@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a500d74_afa4ade2",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-27T18:20:30Z",
+      "side": 1,
+      "message": "feels like these should either be both invalid or both valid. I would maybe ASSERT that they\u0027re consistent and only do the first check (nullptr).",
+      "range": {
+        "startLine": 129,
+        "startChar": 11,
+        "endLine": 129,
+        "endChar": 70
+      },
+      "revId": "5a54a44730e91f817a27a6cca30fe1898c94a9af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9dfbd7e_66ceb53b",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-27T18:20:30Z",
+      "side": 1,
+      "message": "nit: maybe call these mCubeImageFetchView ?",
+      "range": {
+        "startLine": 95,
+        "startChar": 19,
+        "endLine": 95,
+        "endChar": 42
+      },
+      "revId": "5a54a44730e91f817a27a6cca30fe1898c94a9af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
