@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1c33eb13_f5893408",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-27T18:50:41Z",
+      "side": 1,
+      "message": "This is unfortunate, but is done for the sake of `TextureVk::setImageHelper`. Every call site sets this view as nullptr except that function, which sets the render target views before it can even know what the image is going to be.",
+      "parentUuid": "0a500d74_afa4ade2",
+      "range": {
+        "startLine": 129,
+        "startChar": 11,
+        "endLine": 129,
+        "endChar": 70
+      },
+      "revId": "5a54a44730e91f817a27a6cca30fe1898c94a9af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e9dfbd7e_66ceb53b",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "5a54a44730e91f817a27a6cca30fe1898c94a9af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f5eff13_fa90435a",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-27T18:50:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9dfbd7e_66ceb53b",
+      "range": {
+        "startLine": 95,
+        "startChar": 19,
+        "endLine": 95,
+        "endChar": 42
+      },
+      "revId": "5a54a44730e91f817a27a6cca30fe1898c94a9af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
