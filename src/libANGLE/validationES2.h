@@ -153,6 +153,14 @@ ANGLE_INLINE bool ValidateBindTexture(Context *context, TextureType target, GLui
 
     return true;
 }
+
+bool ValidateES2TexStorageParametersBase(Context *context,
+                                         TextureType target,
+                                         GLsizei levels,
+                                         GLenum internalformat,
+                                         GLsizei width,
+                                         GLsizei height);
+
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES2_H_

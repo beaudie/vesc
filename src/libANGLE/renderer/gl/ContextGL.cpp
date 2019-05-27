@@ -599,4 +599,9 @@ void ContextGL::setMaxShaderCompilerThreads(GLuint count)
     mRenderer->setMaxShaderCompilerThreads(count);
 }
 
+void ContextGL::invalidateTexture(gl::TextureType target)
+{
+    mRenderer->getStateManager()->invalidateTexture(target);
+}
+
 }  // namespace rx
