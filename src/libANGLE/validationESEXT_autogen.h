@@ -571,6 +571,18 @@ bool ValidateGetTexLevelParameterfvANGLE(Context *context,
 bool ValidateGetMultisamplefvANGLE(Context *context, GLenum pname, GLuint index, GLfloat *val);
 bool ValidateSampleMaskiANGLE(Context *context, GLuint maskNumber, GLbitfield mask);
 
+// GL_ANGLE_texture_storage_external
+bool ValidateTexImage2DExternalANGLE(Context *context,
+                                     TextureTarget targetPacked,
+                                     GLint level,
+                                     GLint internalformat,
+                                     GLsizei width,
+                                     GLsizei height,
+                                     GLint border,
+                                     GLenum format,
+                                     GLenum type);
+bool ValidateInvalidateTextureANGLE(Context *context, TextureType targetPacked);
+
 // GL_ANGLE_translated_shader_source
 bool ValidateGetTranslatedShaderSourceANGLE(Context *context,
                                             GLuint shader,

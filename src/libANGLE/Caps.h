@@ -502,6 +502,9 @@ struct Extensions
 
     // GL_CHROMIUM_lose_context
     bool loseContextCHROMIUM = false;
+
+    // GL_ANGLE_texture_storage_external
+    bool textureStorageExternal = false;
 };
 
 struct ExtensionInfo
