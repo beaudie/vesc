@@ -828,6 +828,8 @@ ProcEntry g_procTable[] = {
     {"glInvalidateFramebufferContextANGLE", P(gl::InvalidateFramebufferContextANGLE)},
     {"glInvalidateSubFramebuffer", P(gl::InvalidateSubFramebuffer)},
     {"glInvalidateSubFramebufferContextANGLE", P(gl::InvalidateSubFramebufferContextANGLE)},
+    {"glInvalidateTextureANGLE", P(gl::InvalidateTextureANGLE)},
+    {"glInvalidateTextureANGLEContextANGLE", P(gl::InvalidateTextureANGLEContextANGLE)},
     {"glIsBuffer", P(gl::IsBuffer)},
     {"glIsBufferContextANGLE", P(gl::IsBufferContextANGLE)},
     {"glIsEnabled", P(gl::IsEnabled)},
@@ -1218,6 +1220,8 @@ ProcEntry g_procTable[] = {
     {"glTexEnvxvContextANGLE", P(gl::TexEnvxvContextANGLE)},
     {"glTexImage2D", P(gl::TexImage2D)},
     {"glTexImage2DContextANGLE", P(gl::TexImage2DContextANGLE)},
+    {"glTexImage2DExternalANGLE", P(gl::TexImage2DExternalANGLE)},
+    {"glTexImage2DExternalANGLEContextANGLE", P(gl::TexImage2DExternalANGLEContextANGLE)},
     {"glTexImage2DRobustANGLE", P(gl::TexImage2DRobustANGLE)},
     {"glTexImage2DRobustANGLEContextANGLE", P(gl::TexImage2DRobustANGLEContextANGLE)},
     {"glTexImage3D", P(gl::TexImage3D)},
@@ -1419,5 +1423,5 @@ ProcEntry g_procTable[] = {
     {"glWeightPointerOES", P(gl::WeightPointerOES)},
     {"glWeightPointerOESContextANGLE", P(gl::WeightPointerOESContextANGLE)}};
 
-size_t g_numProcs = 1333;
+size_t g_numProcs = 1337;
 }  // namespace egl

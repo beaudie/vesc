@@ -156,6 +156,13 @@ class TextureGL : public TextureImpl
                                            GLuint64 offset) override;
 
     angle::Result setImageExternal(const gl::Context *context,
+                                   const gl::ImageIndex &index,
+                                   GLenum internalFormat,
+                                   const gl::Extents &size,
+                                   GLenum format,
+                                   GLenum type) override;
+
+    angle::Result setImageExternal(const gl::Context *context,
                                    gl::TextureType type,
                                    egl::Stream *stream,
                                    const egl::Stream::GLTextureDescription &desc) override;
@@ -168,6 +175,8 @@ class TextureGL : public TextureImpl
     angle::Result setEGLImageTarget(const gl::Context *context,
                                     gl::TextureType type,
                                     egl::Image *image) override;
+
+    GLint getNativeID() const override;
 
     GLuint getTextureID() const { return mTextureID; }
 
