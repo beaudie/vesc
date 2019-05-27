@@ -2051,6 +2051,48 @@ void GL_APIENTRY SampleMaskiANGLE(GLuint maskNumber, GLbitfield mask)
     }
 }
 
+// GL_ANGLE_texture_storage_external
+void GL_APIENTRY TexStorage2DExternalANGLE(GLenum target,
+                                           GLsizei levels,
+                                           GLenum internalformat,
+                                           GLsizei width,
+                                           GLsizei height)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum target = 0x%X, GLsizei levels = %d, GLenum internalformat = 0x%X, GLsizei width = "
+        "%d, GLsizei height = %d)",
+        target, levels, internalformat, width, height);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        TextureType targetPacked = FromGLenum<TextureType>(target);
+        if (context->skipValidation() ||
+            ValidateTexStorage2DExternalANGLE(context, targetPacked, levels, internalformat, width,
+                                              height))
+        {
+            context->texStorage2DExternal(targetPacked, levels, internalformat, width, height);
+        }
+    }
+}
+
+void GL_APIENTRY InvalidateTextureANGLE(GLenum target)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT("(GLenum target = 0x%X)", target);
+
+    Context *context = GetValidGlobalContext();
+    if (context)
+    {
+        TextureType targetPacked = FromGLenum<TextureType>(target);
+        if (context->skipValidation() || ValidateInvalidateTextureANGLE(context, targetPacked))
+        {
+            context->invalidateTexture(targetPacked);
+        }
+    }
+}
+
 // GL_ANGLE_translated_shader_source
 void GL_APIENTRY GetTranslatedShaderSourceANGLE(GLuint shader,
                                                 GLsizei bufsize,
@@ -19057,6 +19099,50 @@ void GL_APIENTRY LoseContextCHROMIUMContextANGLE(GLeglContext ctx, GLenum curren
             ValidateLoseContextCHROMIUM(context, currentPacked, otherPacked))
         {
             context->loseContext(currentPacked, otherPacked);
+        }
+    }
+}
+
+void GL_APIENTRY TexStorage2DExternalANGLEContextANGLE(GLeglContext ctx,
+                                                       GLenum target,
+                                                       GLsizei levels,
+                                                       GLenum internalformat,
+                                                       GLsizei width,
+                                                       GLsizei height)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT(
+        "(GLenum target = 0x%X, GLsizei levels = %d, GLenum internalformat = 0x%X, GLsizei width = "
+        "%d, GLsizei height = %d)",
+        target, levels, internalformat, width, height);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        TextureType targetPacked = FromGLenum<TextureType>(target);
+        if (context->skipValidation() ||
+            ValidateTexStorage2DExternalANGLE(context, targetPacked, levels, internalformat, width,
+                                              height))
+        {
+            context->texStorage2DExternal(targetPacked, levels, internalformat, width, height);
+        }
+    }
+}
+
+void GL_APIENTRY InvalidateTextureANGLEContextANGLE(GLeglContext ctx, GLenum target)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EVENT("(GLenum target = 0x%X)", target);
+
+    Context *context = static_cast<gl::Context *>(ctx);
+    if (context)
+    {
+        ASSERT(context == GetValidGlobalContext());
+        TextureType targetPacked = FromGLenum<TextureType>(target);
+        if (context->skipValidation() || ValidateInvalidateTextureANGLE(context, targetPacked))
+        {
+            context->invalidateTexture(targetPacked);
         }
     }
 }

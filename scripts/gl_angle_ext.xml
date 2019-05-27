@@ -905,6 +905,18 @@
                 <param group="GraphicsResetStatus"><ptype>GLenum</ptype> <name>current</name></param>
                 <param group="GraphicsResetStatus"><ptype>GLenum</ptype> <name>other</name></param>
             </command>
+            <command>
+                <proto>void <name>glTexStorage2DExternalANGLE</name></proto>
+                <param group="TextureTarget"><ptype>GLenum</ptype> <name>target</name></param>
+                <param><ptype>GLsizei</ptype> <name>levels</name></param>
+                <param group="InternalFormat"><ptype>GLenum</ptype> <name>internalformat</name></param>
+                <param><ptype>GLsizei</ptype> <name>width</name></param>
+                <param><ptype>GLsizei</ptype> <name>height</name></param>
+            </command>
+            <command>
+                <proto>void <name>glInvalidateTextureANGLE</name></proto>
+                <param group="TextureTarget"><ptype>GLenum</ptype> <name>target</name></param>
+            </command>
     </commands>
     <!-- SECTION: ANGLE extension interface definitions -->
     <extensions>
@@ -1068,6 +1080,12 @@
                 <enum name="GL_INNOCENT_CONTEXT_RESET"/>
                 <enum name="GL_UNKNOWN_CONTEXT_RESET"/>
                 <command name="glLoseContextCHROMIUM"/>
+            </require>
+        </extension>
+        <extension name="GL_ANGLE_texture_storage_external" supported='gl|gles2'>
+            <require>
+                <command name="glTexStorage2DExternalANGLE"/>
+                <command name="glInvalidateTextureANGLE"/>
             </require>
         </extension>
     </extensions>

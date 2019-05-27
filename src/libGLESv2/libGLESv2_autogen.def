@@ -515,6 +515,10 @@ EXPORTS
     glSampleMaskiANGLE
     glTexStorage2DMultisampleANGLE
 
+    ; GL_ANGLE_texture_storage_external
+    glInvalidateTextureANGLE
+    glTexStorage2DExternalANGLE
+
     ; GL_ANGLE_translated_shader_source
     glGetTranslatedShaderSourceANGLE
 
@@ -1109,6 +1113,7 @@ EXPORTS
     glInsertEventMarkerEXTContextANGLE
     glInvalidateFramebufferContextANGLE
     glInvalidateSubFramebufferContextANGLE
+    glInvalidateTextureANGLEContextANGLE
     glIsBufferContextANGLE
     glIsEnabledContextANGLE
     glIsFenceNVContextANGLE
@@ -1322,6 +1327,7 @@ EXPORTS
     glTexStorage1DEXTContextANGLE
     glTexStorage2DContextANGLE
     glTexStorage2DEXTContextANGLE
+    glTexStorage2DExternalANGLEContextANGLE
     glTexStorage2DMultisampleContextANGLE
     glTexStorage2DMultisampleANGLEContextANGLE
     glTexStorage3DContextANGLE

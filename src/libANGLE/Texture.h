@@ -383,6 +383,12 @@ class Texture final : public RefCountObject,
                              GLenum internalFormat,
                              const Extents &size);
 
+    angle::Result setStorageExternal(Context *context,
+                                     TextureType type,
+                                     GLsizei levels,
+                                     GLenum internalFormat,
+                                     const Extents &size);
+
     angle::Result setStorageMultisample(Context *context,
                                         TextureType type,
                                         GLsizei samples,
@@ -433,6 +439,7 @@ class Texture final : public RefCountObject,
     void onAttach(const Context *context) override;
     void onDetach(const Context *context) override;
     GLuint getId() const override;
+    GLuint getNativeID() const;
 
     // Needed for robust resource init.
     angle::Result ensureInitialized(const Context *context);

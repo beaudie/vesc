@@ -14,7 +14,13 @@
 
 namespace gl
 {
-// Nothing here yet.
+bool ValidateES3TexStorageParametersBase(Context *context,
+                                         TextureType target,
+                                         GLsizei levels,
+                                         GLenum internalformat,
+                                         GLsizei width,
+                                         GLsizei height,
+                                         GLsizei depth);
 }  // namespace gl
 
 #endif  // LIBANGLE_VALIDATION_ES3_H_
