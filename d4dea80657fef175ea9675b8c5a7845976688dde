@@ -1,0 +1,199 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f95257c6_3e85c57f",
+        "filename": "extensions/EGL_ANGLE_query_string_indexed.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-28T14:36:25Z",
+      "side": 1,
+      "message": "The extension would be named after what it does, not the functions it adds.\n\nMaybe a good name would be ANGLE_workaround_control?  It would add the queries and ways of initializing the display with workarounds.  You don\u0027t need to do it all in one CL though.",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 30
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8f2f1f4_9ac7150c",
+        "filename": "extensions/EGL_ANGLE_query_string_indexed.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-28T14:36:25Z",
+      "side": 1,
+      "message": "List the new entry points here.",
+      "range": {
+        "startLine": 54,
+        "startChar": 4,
+        "endLine": 54,
+        "endChar": 9
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97d435ae_0151bda6",
+        "filename": "extensions/EGL_ANGLE_query_string_indexed.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-28T14:36:25Z",
+      "side": 1,
+      "message": "Also need a way to query how many workarounds there are.",
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01d22f64_20332a6f",
+        "filename": "extensions/EGL_ANGLE_query_string_indexed.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-28T14:36:25Z",
+      "side": 1,
+      "message": "Do we want to stick with ENABLED or use STATUS?",
+      "range": {
+        "startLine": 64,
+        "startChar": 23,
+        "endLine": 64,
+        "endChar": 30
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "820f8624_0461f927",
+        "filename": "extensions/EGL_ANGLE_query_string_indexed.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-28T14:36:25Z",
+      "side": 1,
+      "message": "This needs a paragraph describing the entry point, what the enums are and the error cases.",
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe4faf41_2c71ea04",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-28T14:36:25Z",
+      "side": 1,
+      "message": "All the backends will end up implementing this so you can set it to true in  Display::initDisplayExtensions",
+      "range": {
+        "startLine": 1183,
+        "startChar": 4,
+        "endLine": 1183,
+        "endChar": 45
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c30c3a77_65ca0929",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3757,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-28T14:36:25Z",
+      "side": 1,
+      "message": "nit: static_cast",
+      "range": {
+        "startLine": 3757,
+        "startChar": 8,
+        "endLine": 3757,
+        "endChar": 16
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d006ca5_3db4d68a",
+        "filename": "src/libGLESv2/entry_points_egl_ext.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1435,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-28T14:36:25Z",
+      "side": 1,
+      "message": "You can use the ANGLE_EGL_TRY_RETURN to simplify this pattern.",
+      "range": {
+        "startLine": 1430,
+        "startChar": 4,
+        "endLine": 1435,
+        "endChar": 5
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4edc74ea_5c902e79",
+        "filename": "src/libGLESv2/entry_points_egl_ext.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-28T14:36:25Z",
+      "side": 1,
+      "message": "nit: init to nullptr.",
+      "range": {
+        "startLine": 1437,
+        "startChar": 4,
+        "endLine": 1437,
+        "endChar": 23
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
