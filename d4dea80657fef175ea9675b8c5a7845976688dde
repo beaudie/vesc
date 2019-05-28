@@ -25,6 +25,52 @@
     },
     {
       "key": {
+        "uuid": "1f05cbc8_dfd61f06",
+        "filename": "extensions/EGL_ANGLE_query_string_indexed.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-28T14:38:34Z",
+      "side": 1,
+      "message": "I think I would mention workarounds explicitly in the extension name. The enums explicitly deal with workarounds.",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 34
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9745cb2e_94f413be",
+        "filename": "extensions/EGL_ANGLE_query_string_indexed.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-28T14:38:34Z",
+      "side": 1,
+      "message": "nit: trailing space",
+      "range": {
+        "startLine": 40,
+        "startChar": 64,
+        "endLine": 40,
+        "endChar": 65
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f8f2f1f4_9ac7150c",
         "filename": "extensions/EGL_ANGLE_query_string_indexed.txt",
         "patchSetId": 4
@@ -41,6 +87,29 @@
         "startChar": 4,
         "endLine": 54,
         "endChar": 9
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ab0df29_b6cd5664",
+        "filename": "extensions/EGL_ANGLE_query_string_indexed.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-28T14:38:34Z",
+      "side": 1,
+      "message": "You should mention where to add this new entry point in the spec. Probably in the section after eglQueryString. It should be eglQueryStringiANGLE as we\u0027re implementing an ANGLE vendor extension. And also detail error conditions for eglQuerystringiANGLE?",
+      "range": {
+        "startLine": 54,
+        "startChar": 4,
+        "endLine": 54,
+        "endChar": 8
       },
       "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
@@ -88,6 +157,29 @@
     },
     {
       "key": {
+        "uuid": "5e68aefd_03430608",
+        "filename": "extensions/EGL_ANGLE_query_string_indexed.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-28T14:38:34Z",
+      "side": 1,
+      "message": "Could you describe what the various enums mean?",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 49
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "820f8624_0461f927",
         "filename": "extensions/EGL_ANGLE_query_string_indexed.txt",
         "patchSetId": 4
@@ -105,6 +197,75 @@
     },
     {
       "key": {
+        "uuid": "051355dd_a170658c",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-28T14:38:34Z",
+      "side": 1,
+      "message": "make sure to reserve these in the spreadsheet.",
+      "range": {
+        "startLine": 214,
+        "startChar": 34,
+        "endLine": 214,
+        "endChar": 40
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6253dea_cfefeb61",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-28T14:38:34Z",
+      "side": 1,
+      "message": "can you suffix this with ANGLE? We should also migrate all the existing extensions to use the right suffix when we have time.",
+      "range": {
+        "startLine": 888,
+        "startChar": 9,
+        "endLine": 888,
+        "endChar": 27
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d675b583_1fc27e1b",
+        "filename": "src/libANGLE/renderer/d3d/DisplayD3D.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-28T14:38:34Z",
+      "side": 1,
+      "message": "tiny nit: maybe populateFeatureList is more apropos. also instead of initialize.",
+      "range": {
+        "startLine": 378,
+        "startChar": 32,
+        "endLine": 378,
+        "endChar": 48
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fe4faf41_2c71ea04",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 4
@@ -116,6 +277,29 @@
       "writtenOn": "2019-05-28T14:36:25Z",
       "side": 1,
       "message": "All the backends will end up implementing this so you can set it to true in  Display::initDisplayExtensions",
+      "range": {
+        "startLine": 1183,
+        "startChar": 4,
+        "endLine": 1183,
+        "endChar": 45
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e333e46e_fc69b6a5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-28T14:38:34Z",
+      "side": 1,
+      "message": "we should unconditionally enable this in the front end. Instead of per back-end. Since it\u0027s implemented in the front-end (mostly).",
       "range": {
         "startLine": 1183,
         "startChar": 4,
@@ -148,6 +332,75 @@
       "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0506b0b6_686879b7",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3757,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-28T14:38:34Z",
+      "side": 1,
+      "message": "nit: don\u0027t forget to always use c++-style casts.\n\nhttps://google.github.io/styleguide/cppguide.html#Casting",
+      "range": {
+        "startLine": 3757,
+        "startChar": 8,
+        "endLine": 3757,
+        "endChar": 16
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "414c9724_b1c8a8f6",
+        "filename": "src/libGLESv2/entry_points_egl_ext.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1419,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-28T14:38:34Z",
+      "side": 1,
+      "message": "could you try to implement this by calling into the display? And making the entry point as boiler plate as possible? To aid future auto-generation of this file.",
+      "range": {
+        "startLine": 1419,
+        "startChar": 37,
+        "endLine": 1419,
+        "endChar": 58
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15eb4882_8dc77c48",
+        "filename": "src/libGLESv2/entry_points_egl_ext.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1425,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-28T14:38:34Z",
+      "side": 1,
+      "message": "(exception - here we need to use c-style casts for obscure reasons)",
+      "range": {
+        "startLine": 1425,
+        "startChar": 12,
+        "endLine": 1425,
+        "endChar": 13
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -190,6 +443,52 @@
         "startChar": 4,
         "endLine": 1437,
         "endChar": 23
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83ada752_e7543383",
+        "filename": "src/tests/egl_tests/EGLQueryStringIndexedTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-28T14:38:34Z",
+      "side": 1,
+      "message": "tiny nit: don\u0027t need (c) anymore.",
+      "range": {
+        "startLine": 2,
+        "startChar": 14,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "985ab711_8f18907a",
+        "filename": "src/tests/egl_tests/EGLQueryStringIndexedTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-28T14:38:34Z",
+      "side": 1,
+      "message": "nit: comment before each new test if you could.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 6
       },
       "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
