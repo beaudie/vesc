@@ -95,6 +95,7 @@ if (is_win) {
 }
 
 angle_common_configs = [
+  angle_root + ":better_linux_stack_traces",
   angle_root + ":extra_warnings",
   angle_root + ":internal_config",
 ]
@@ -103,6 +104,11 @@ angle_remove_configs = [ "//build/config/compiler:default_include_dirs" ]
 
 if (is_clang) {
   angle_remove_configs += [ "//build/config/clang:find_bad_constructs" ]
+
+  # Disabled to enable better stack traces.
+  if ((is_debug || dcheck_always_on) && is_linux) {
+    angle_remove_configs += [ "//build/config/gcc:symbol_visibility_hidden" ]
+  }
 }
 
 set_defaults("angle_executable") {

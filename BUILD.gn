@@ -145,6 +145,13 @@ config("build_id_config") {
   ldflags = [ "-Wl,--build-id" ]
 }
 
+# Useful for more informative stack traces.
+config("better_linux_stack_traces") {
+  if ((is_debug || dcheck_always_on) && is_linux) {
+    ldflags = [ "-Wl,--export-dynamic" ]
+  }
+}
+
 # Windows ARM64 is available since 10.0.16299 so no need to copy
 # d3dcompiler_47.dll because this file is available as inbox.
 if (is_win && target_cpu != "arm64") {
@@ -210,8 +217,31 @@ config("angle_common_config") {
   }
 }
 
+if (is_win) {
+  angle_source_set("angle_stack_walker") {
+    sources = [
+      "src/common/third_party/StackWalker/src/StackWalker.cpp",
+      "src/common/third_party/StackWalker/src/StackWalker.h",
+    ]
+
+    if (is_clang) {
+      cflags_cc = [
+        "-Wno-c++98-compat-extra-semi",
+        "-Wno-missing-declarations",
+        "-Wno-switch",
+      ]
+    }
+  }
+}
+
 angle_source_set("angle_system_utils") {
   sources = angle_system_utils_sources
+
+  if (is_win) {
+    deps = [
+      ":angle_stack_walker",
+    ]
+  }
 }
 
 angle_source_set("xxhash") {
