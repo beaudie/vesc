@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "53fcd1c6_6a2232c9",
+        "filename": "scripts/generate_stats.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-28T16:08:37Z",
+      "side": 1,
+      "message": "Why not replace these with \u0027 \u0027 directly?",
+      "range": {
+        "startLine": 432,
+        "startChar": 44,
+        "endLine": 432,
+        "endChar": 47
+      },
+      "revId": "191ebd333c06a8837f15b3f4b78b9eaf731c9017",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
