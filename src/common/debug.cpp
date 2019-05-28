@@ -175,6 +175,8 @@ LogMessage::~LogMessage()
         }
         else
         {
+            angle::PrintStackBacktrace();
+            angle::TerminateCrashHandler();
             ANGLE_CRASH();
         }
     }

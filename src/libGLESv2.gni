@@ -61,6 +61,8 @@ xxhash_sources = [
 ]
 
 angle_system_utils_sources = [
+  "src/common/CrashHandler.cpp",
+  "src/common/CrashHandler.h",
   "src/common/Optional.h",
   "src/common/angleutils.h",
   "src/common/platform.h",
