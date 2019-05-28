@@ -339,6 +339,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     void updateScissor(const gl::State &glState);
     void updateFlipViewportDrawFramebuffer(const gl::State &glState);
     void updateFlipViewportReadFramebuffer(const gl::State &glState);
+    void updateFeedbackLoopCache(FramebufferVk *previous, FramebufferVk *current);
 
     angle::Result updateActiveTextures(const gl::Context *context);
     angle::Result updateDefaultAttribute(size_t attribIndex);

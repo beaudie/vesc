@@ -1297,6 +1297,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
+      mIsInCurrentlyBoundFramebuffer(std::move(other.mIsInCurrentlyBoundFramebuffer)),
       mStagingBuffer(std::move(other.mStagingBuffer)),
       mSubresourceUpdates(std::move(other.mSubresourceUpdates))
 {
@@ -1353,6 +1354,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     mSamples    = samples;
     mLayerCount = layerCount;
     mLevelCount = mipLevels;
+    mIsInCurrentlyBoundFramebuffer.resize((mLayerCount * mLevelCount + 63) / 64, 0);
 
     VkImageCreateInfo imageInfo     = {};
     imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -1504,6 +1506,7 @@ void ImageHelper::destroy(VkDevice device)
     mCurrentLayout = ImageLayout::Undefined;
     mLayerCount    = 0;
     mLevelCount    = 0;
+    mIsInCurrentlyBoundFramebuffer.clear();
 }
 
 void ImageHelper::init2DWeakReference(VkImage handle,
@@ -1519,6 +1522,7 @@ void ImageHelper::init2DWeakReference(VkImage handle,
     mCurrentLayout = ImageLayout::Undefined;
     mLayerCount    = 1;
     mLevelCount    = 1;
+    mIsInCurrentlyBoundFramebuffer.resize((mLayerCount * mLevelCount + 63) / 64, 0);
 
     mImage.setHandle(handle);
 }
@@ -1537,6 +1541,7 @@ angle::Result ImageHelper::init2DStaging(Context *context,
     mSamples    = 1;
     mLayerCount = layerCount;
     mLevelCount = 1;
+    mIsInCurrentlyBoundFramebuffer.resize((mLayerCount * mLevelCount + 63) / 64, 0);
 
     mCurrentLayout = ImageLayout::Undefined;
 

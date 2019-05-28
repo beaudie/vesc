@@ -736,6 +736,37 @@ class ImageHelper final : public CommandGraphResource
                               uint32_t newQueueFamilyIndex,
                               vk::CommandBuffer *commandBuffer);
 
+    bool isInCurrentlyBoundFramebuffer(uint32_t level, uint32_t layer)
+    {
+        return mIsInCurrentlyBoundFramebuffer[layer * mLevelCount + level];
+    }
+    bool isAnySubresourceInCurrentlyBoundFramebuffer()
+    {
+        uint32_t count = (mLevelCount * mLayerCount + 63) / 64;
+        for (uint32_t i = 0; i < count; ++i)
+        {
+            if (mIsInCurrentlyBoundFramebuffer[i] != 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    void setIsInCurrentlyBoundFramebuffer(uint32_t level, uint32_t layer, bool yes)
+    {
+        size_t index  = (layer * mLevelCount + level) / 64;
+        size_t offset = (layer * mLevelCount + level) % 64;
+        size_t bit    = 1 << offset;
+        if (yes)
+        {
+            mIsInCurrentlyBoundFramebuffer[index] |= bit;
+        }
+        else
+        {
+            mIsInCurrentlyBoundFramebuffer[index] &= ~bit;
+        }
+    }
+
   private:
     void forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                    ImageLayout newLayout,
@@ -831,6 +862,8 @@ class ImageHelper final : public CommandGraphResource
     // Cached properties.
     uint32_t mLayerCount;
     uint32_t mLevelCount;
+    // Whether the image is a part of the currently bound framebuffer.  A bitset of layers * levels.
+    std::vector<uint64_t> mIsInCurrentlyBoundFramebuffer;
 
     // Staging buffer
     vk::DynamicBuffer mStagingBuffer;

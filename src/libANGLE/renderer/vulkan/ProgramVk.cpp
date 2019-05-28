@@ -993,6 +993,14 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
             ANGLE_TRY(textureVk->ensureImageInitialized(contextVk));
             vk::ImageHelper &image = textureVk->getImage();
 
+            // If there's a feedback loop, don't bind this image.
+            if (image.isAnySubresourceInCurrentlyBoundFramebuffer())
+            {
+                // TODO: or bind a dummy one.  In ES3, can test the actual image range that will be
+                // used, instead of the whole image.
+                continue;
+            }
+
             // Ensure the image is in read-only layout
             if (image.isLayoutChangeNecessary(vk::ImageLayout::FragmentShaderReadOnly))
             {

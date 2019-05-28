@@ -1486,7 +1486,9 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // command graph node can only support one RenderPass configuration at a time.
                 onCommandBufferFinished();
 
+                FramebufferVk *previousFramebuffer = mDrawFramebuffer;
                 mDrawFramebuffer = vk::GetImpl(glState.getDrawFramebuffer());
+                updateFeedbackLoopCache(previousFramebuffer, mDrawFramebuffer);
                 updateFlipViewportDrawFramebuffer(glState);
                 updateViewport(mDrawFramebuffer, glState.getViewport(), glState.getNearPlane(),
                                glState.getFarPlane(), isViewportFlipEnabledForDrawFBO());
@@ -1658,6 +1660,16 @@ void ContextVk::updateFlipViewportReadFramebuffer(const gl::State &glState)
     gl::Framebuffer *readFramebuffer = glState.getReadFramebuffer();
     mFlipViewportForReadFramebuffer =
         readFramebuffer->isDefault() && mRenderer->getFeatures().flipViewportY.enabled;
+}
+
+void ContextVk::updateFeedbackLoopCache(FramebufferVk *previous, FramebufferVk *current)
+{
+    if (previous)
+    {
+        previous->onBind(this, false);
+    }
+
+    current->onBind(this, true);
 }
 
 gl::Caps ContextVk::getNativeCaps() const

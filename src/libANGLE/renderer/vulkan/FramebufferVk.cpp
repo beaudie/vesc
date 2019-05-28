@@ -1329,6 +1329,24 @@ void FramebufferVk::onScissorChange(ContextVk *contextVk)
     }
 }
 
+void FramebufferVk::onBind(ContextVk *contextVk, bool bind)
+{
+    for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
+    {
+        RenderTargetVk *drawRenderTarget = mRenderTargetCache.getColors()[colorIndexGL];
+        drawRenderTarget->getImage().setIsInCurrentlyBoundFramebuffer(
+            drawRenderTarget->getLevelIndex(), drawRenderTarget->getLayerIndex(), bind);
+    }
+
+    RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
+    if (depthStencilRenderTarget)
+    {
+        depthStencilRenderTarget->getImage().setIsInCurrentlyBoundFramebuffer(
+            depthStencilRenderTarget->getLevelIndex(), depthStencilRenderTarget->getLayerIndex(),
+            bind);
+    }
+}
+
 RenderTargetVk *FramebufferVk::getFirstRenderTarget() const
 {
     for (auto *renderTarget : mRenderTargetCache.getColors())
