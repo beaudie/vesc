@@ -8,6 +8,8 @@
 
 #include "system_utils.h"
 
+#include "common/CrashHandler.h"
+
 #include <array>
 
 #include <dlfcn.h>
@@ -276,5 +278,15 @@ void BreakDebugger()
     // This could have a fuller implementation.
     // See https://cs.chromium.org/chromium/src/base/debug/debugger_posix.cc
     abort();
+}
+
+void InitCrashHandler()
+{
+    SetupCrashHandler();
+}
+
+void PrintStackBacktrace()
+{
+    PrintStackTrace();
 }
 }  // namespace angle

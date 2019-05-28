@@ -210,8 +210,31 @@ config("angle_common_config") {
   }
 }
 
+if (is_win) {
+  angle_source_set("angle_stack_walker") {
+    sources = [
+      "src/common/third_party/StackWalker/src/StackWalker.cpp",
+      "src/common/third_party/StackWalker/src/StackWalker.h",
+    ]
+
+    if (is_clang) {
+      cflags_cc = [
+        "-Wno-c++98-compat-extra-semi",
+        "-Wno-missing-declarations",
+        "-Wno-switch",
+      ]
+    }
+  }
+}
+
 angle_source_set("angle_system_utils") {
   sources = angle_system_utils_sources
+
+  if (is_win) {
+    deps = [
+      ":angle_stack_walker",
+    ]
+  }
 }
 
 angle_source_set("xxhash") {
