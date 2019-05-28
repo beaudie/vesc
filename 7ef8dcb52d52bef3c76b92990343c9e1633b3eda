@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "087b611e_8d6a0558",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-28T21:36:01Z",
+      "side": 1,
+      "message": "no need",
+      "range": {
+        "startLine": 117,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 11
+      },
+      "revId": "7ef8dcb52d52bef3c76b92990343c9e1633b3eda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4c61d49_ecb9b70d",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-28T21:36:01Z",
+      "side": 1,
+      "message": "no need",
+      "range": {
+        "startLine": 118,
+        "startChar": 42,
+        "endLine": 118,
+        "endChar": 49
+      },
+      "revId": "7ef8dcb52d52bef3c76b92990343c9e1633b3eda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24493ec5_b739583d",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-28T21:36:01Z",
+      "side": 1,
+      "message": "nit: formatting",
+      "range": {
+        "startLine": 923,
+        "startChar": 0,
+        "endLine": 926,
+        "endChar": 0
+      },
+      "revId": "7ef8dcb52d52bef3c76b92990343c9e1633b3eda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
