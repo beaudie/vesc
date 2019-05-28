@@ -593,17 +593,6 @@ egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
         initVersionStrings();
         initExtensionStrings();
 
-        int width  = 0;
-        int height = 0;
-        if (surface != nullptr)
-        {
-            width  = surface->getWidth();
-            height = surface->getHeight();
-        }
-
-        mState.setViewportParams(0, 0, width, height);
-        mState.setScissorParams(0, 0, width, height);
-
         mHasBeenCurrent = true;
     }
 
@@ -612,6 +601,18 @@ egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
     mState.setAllDirtyObjects();
 
     ANGLE_TRY(setDefaultFramebuffer(surface));
+
+    int width  = 0;
+    int height = 0;
+    if (surface != nullptr)
+    {
+        // After setDefaultFramebuffer(), so we have the correct Surface made current
+        width  = surface->getWidth();
+        height = surface->getHeight();
+    }
+
+    mState.setViewportParams(0, 0, width, height);
+    mState.setScissorParams(0, 0, width, height);
 
     // Notify the renderer of a context switch.
     angle::Result implResult = mImplementation->onMakeCurrent(this);
