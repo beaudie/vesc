@@ -60,6 +60,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     vk::ImageHelper &getImage();
     const vk::ImageHelper &getImage() const;
+    bool valid() { return mImage && mImage->valid(); }
 
     // getImageForRead will also transition the resource to the given layout.
     vk::ImageHelper *getImageForRead(vk::CommandGraphResource *readingResource,

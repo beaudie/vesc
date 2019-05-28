@@ -537,7 +537,23 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
 
     ANGLE_TRY(createSwapChain(displayVk, extents, VK_NULL_HANDLE));
 
-    return nextSwapchainImage(displayVk);
+    return angle::Result::Continue;
+}
+
+egl::Error WindowSurfaceVk::makeCurrent(const gl::Context *context)
+{
+    DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
+    angle::Result result = angle::Result::Continue;
+
+    // TIMTIM
+    // What's the right way to do this semaphore check?
+    // What is this implying I should actually be looking at?
+    if (!mColorRenderTarget.valid() || (isMultiSampled() && mFlushSemaphoreChain.empty()))
+    {
+        result = nextSwapchainImage(vk::GetImpl(context), mCurrentSwapHistoryIndex);
+    }
+
+    return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
 angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk,
@@ -979,7 +995,7 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context, EGLint *rect
         // http://anglebug.com/2927
         TRACE_EVENT0("gpu.angle", "nextSwapchainImage");
         // Get the next available swapchain image.
-        ANGLE_TRY(nextSwapchainImage(contextVk));
+        ANGLE_TRY(nextSwapchainImage(contextVk, mCurrentSwapHistoryIndex));
     }
 
     RendererVk *renderer = contextVk->getRenderer();
@@ -988,16 +1004,30 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context, EGLint *rect
     return angle::Result::Continue;
 }
 
-angle::Result WindowSurfaceVk::nextSwapchainImage(vk::Context *context)
+angle::Result WindowSurfaceVk::nextSwapchainImage(ContextVk *contextVk, uint32_t swapHistoryIndex)
 {
-    VkDevice device = context->getDevice();
+    VkDevice device = contextVk->getDevice();
 
     vk::Scoped<vk::Semaphore> aquireImageSemaphore(device);
-    ANGLE_VK_TRY(context, aquireImageSemaphore.get().init(device));
+    ANGLE_VK_TRY(contextVk, aquireImageSemaphore.get().init(device));
 
-    ANGLE_VK_TRY(context, vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
-                                                aquireImageSemaphore.get().getHandle(),
-                                                VK_NULL_HANDLE, &mCurrentSwapchainImageIndex));
+    VkResult result = vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
+                                            aquireImageSemaphore.get().getHandle(), VK_NULL_HANDLE,
+                                            &mCurrentSwapchainImageIndex);
+
+    // If SUBOPTIMAL/OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before
+    // continuing.
+    if (ANGLE_UNLIKELY((result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_SUBOPTIMAL_KHR)))
+    {
+        gl::Extents currentExtents;
+        ANGLE_TRY(getCurrentWindowSize(contextVk, &currentExtents));
+        ANGLE_TRY(recreateSwapchain(contextVk, currentExtents, swapHistoryIndex));
+        // Try one more time and bail if we fail
+        result = vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
+                                       aquireImageSemaphore.get().getHandle(), VK_NULL_HANDLE,
+                                       &mCurrentSwapchainImageIndex);
+    }
+    ANGLE_VK_TRY(contextVk, result);
 
     // After presenting, the flush semaphore chain is cleared. The semaphore returned by
     // vkAcquireNextImage will start a new chain.
@@ -1099,12 +1129,15 @@ void WindowSurfaceVk::setSwapInterval(EGLint interval)
 
 EGLint WindowSurfaceVk::getWidth() const
 {
-    return static_cast<EGLint>(mColorRenderTarget.getExtents().width);
+    ASSERT(mCurrentSwapchainImageIndex < mSwapchainImages.size());
+    return static_cast<EGLint>(
+        mSwapchainImages[mCurrentSwapchainImageIndex].image.getExtents().width);
 }
 
 EGLint WindowSurfaceVk::getHeight() const
 {
-    return static_cast<EGLint>(mColorRenderTarget.getExtents().height);
+    ASSERT(mCurrentSwapchainImageIndex < mSwapchainImages.size());
+    return static_cast<EGLint>(mSwapchainImages.front().image.getExtents().height);
 }
 
 EGLint WindowSurfaceVk::isPostSubBufferSupported() const
