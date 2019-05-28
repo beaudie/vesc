@@ -976,6 +976,7 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
 
     const gl::ActiveTextureArray<TextureVk *> &activeTextures = contextVk->getActiveTextures();
 
+    const auto &uniforms = mState.getUniforms();
     for (uint32_t textureIndex = 0; textureIndex < mState.getSamplerBindings().size();
          ++textureIndex)
     {
@@ -993,16 +994,21 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
             ANGLE_TRY(textureVk->ensureImageInitialized(contextVk));
             vk::ImageHelper &image = textureVk->getImage();
 
+            vk::ImageLayout imageLayout = vk::ImageLayout::FragmentShaderReadOnly;
+            if (uniforms[textureUnit].isActive(gl::ShaderType::Vertex))
+            {
+                imageLayout = vk::ImageLayout::VertexShaderReadOnly;
+            }
+
             // Ensure the image is in read-only layout
-            if (image.isLayoutChangeNecessary(vk::ImageLayout::FragmentShaderReadOnly))
+            if (image.isLayoutChangeNecessary(imageLayout))
             {
                 vk::CommandBuffer *srcLayoutChange;
                 ANGLE_TRY(image.recordCommands(contextVk, &srcLayoutChange));
 
                 VkImageAspectFlags aspectFlags = image.getAspectFlags();
                 ASSERT(aspectFlags != 0);
-                image.changeLayout(aspectFlags, vk::ImageLayout::FragmentShaderReadOnly,
-                                   srcLayoutChange);
+                image.changeLayout(aspectFlags, imageLayout, srcLayoutChange);
             }
 
             image.addReadDependency(framebuffer);
