@@ -111,6 +111,7 @@ class WindowSurfaceVk : public SurfaceVk
     void destroy(const egl::Display *display) override;
 
     egl::Error initialize(const egl::Display *display) override;
+    egl::Error makeCurrent(const gl::Context *context) override;
     FramebufferImpl *createDefaultFramebuffer(const gl::Context *context,
                                               const gl::FramebufferState &state) override;
     egl::Error swap(const gl::Context *context) override;
@@ -167,7 +168,9 @@ class WindowSurfaceVk : public SurfaceVk
                                              bool presentOutOfDate);
     void releaseSwapchainImages(ContextVk *contextVk);
     void destroySwapChainImages(DisplayVk *displayVk);
-    angle::Result nextSwapchainImage(vk::Context *context);
+    angle::Result nextSwapchainImage(vk::Context *context,
+                                     rx::ContextVk *contextVk,
+                                     uint32_t swapHistoryIndex);
     angle::Result present(ContextVk *contextVk,
                           EGLint *rects,
                           EGLint n_rects,

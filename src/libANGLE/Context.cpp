@@ -597,6 +597,7 @@ egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
         int height = 0;
         if (surface != nullptr)
         {
+            ANGLE_TRY(surface->makeCurrent(this));
             width  = surface->getWidth();
             height = surface->getHeight();
         }
