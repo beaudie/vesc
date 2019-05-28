@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "37db17af_46e4b7fc",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4801,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-28T16:39:06Z",
+      "side": 1,
+      "message": "please comment before new tests. not sure if I missed this in previous reviews.",
+      "range": {
+        "startLine": 4801,
+        "startChar": 0,
+        "endLine": 4801,
+        "endChar": 6
+      },
+      "revId": "6cff69e3ec16810d391248a66a74ea221257b10d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
