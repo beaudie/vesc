@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2273dc6e_6cddfffe",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-28T15:59:59Z",
+      "side": 1,
+      "message": "Fixes a regression with `./gen_vk_internal_shaders.py PATTERN`, where only *PATTERN* was supposed to be built (for faster testing, though with parallel compile is rather unnecessary)",
+      "range": {
+        "startLine": 639,
+        "startChar": 34,
+        "endLine": 639,
+        "endChar": 70
+      },
+      "revId": "7f622ff786ef87b9d6bbb65424f7704540a4ee8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
