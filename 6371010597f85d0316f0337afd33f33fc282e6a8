@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0847c15_66eb147f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-28T18:25:28Z",
+      "side": 1,
+      "message": "First, see the comment in vk_helpers.cpp.\n\nSelect the appropriate layout based on whether the image is used in FS-only, VS-only or both:\n\n    bool isActiveInVertex \u003d uniforms[textureUnit].isActive(gl::ShaderType::Vertex);\n    bool isActiveInFragment \u003d uniforms[textureUnit].isActive(gl::ShaderType::Fragment);\n\n    if (!isActiveInVertex \u0026\u0026 isActiveInFragment)\n    {\n        imageLayout \u003d vk::ImageLayout::FragmentShaderReadOnly;\n    }\n    else if (isActiveInVertex \u0026\u0026 !isActiveInFragment)\n    {\n        imageLayout \u003d vk::ImageLayout::VertexShaderReadOnly;\n    }\n    else\n    {\n        imageLayout \u003d vk::ImageLayout::AllGraphicsShadersReadOnly;\n    }\n\nYou can make a helper function out of that.",
+      "revId": "6371010597f85d0316f0337afd33f33fc282e6a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc0d725b_e745f170",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-28T18:25:28Z",
+      "side": 1,
+      "message": "This is good, but can break if a texture is used both in the VS and FS stages.\n\nCan you add another layout named `AllGraphicsShadersReadOnly` and have the stages be:\n\n    VK_PIPELINE_STAGE_VERTEX_SHADER_BIT,\n    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,\n\nThat means transitions into the barrier would have the vertex stage (and implicitly every stage after it) as the dstStage, and when transitioning out, the barrier would have the fragment stage (and implicitly every stage before it) as the srcStage.\n\nSee the comment in ProgramVk.cpp!",
+      "range": {
+        "startLine": 184,
+        "startChar": 0,
+        "endLine": 194,
+        "endChar": 10
+      },
+      "revId": "6371010597f85d0316f0337afd33f33fc282e6a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
