@@ -163,7 +163,7 @@ class WindowSurfaceVk : public SurfaceVk
                                              uint32_t swapHistoryIndex,
                                              bool presentOutOfDate);
     void releaseSwapchainImages(RendererVk *renderer);
-    angle::Result nextSwapchainImage(DisplayVk *displayVk);
+    angle::Result nextSwapchainImage(DisplayVk *displayVk, uint32_t swapHistoryIndex);
     angle::Result present(DisplayVk *displayVk,
                           EGLint *rects,
                           EGLint n_rects,

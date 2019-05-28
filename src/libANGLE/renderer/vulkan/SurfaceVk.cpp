@@ -528,7 +528,7 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     ANGLE_TRY(recreateSwapchain(displayVk, extents, mCurrentSwapHistoryIndex));
 
     // Get the first available swapchain iamge.
-    return nextSwapchainImage(displayVk);
+    return nextSwapchainImage(displayVk, mCurrentSwapHistoryIndex);
 }
 
 angle::Result WindowSurfaceVk::recreateSwapchain(DisplayVk *displayVk,
@@ -911,6 +911,7 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk, EGLint *rects, EGL
 
     ANGLE_TRY(present(displayVk, rects, n_rects, swapchainOutOfDate));
 
+    // TIMTIM -- Is this still necessary if we recreateSwapchain() in nextSwapchainImage()?
     ANGLE_TRY(checkForOutOfDateSwapchain(displayVk, currentSwapHistoryIndex, swapchainOutOfDate));
 
     {
@@ -918,7 +919,7 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk, EGLint *rects, EGL
         // http://anglebug.com/2927
         TRACE_EVENT0("gpu.angle", "nextSwapchainImage");
         // Get the next available swapchain image.
-        ANGLE_TRY(nextSwapchainImage(displayVk));
+        ANGLE_TRY(nextSwapchainImage(displayVk, currentSwapHistoryIndex));
     }
 
     RendererVk *renderer = displayVk->getRenderer();
@@ -927,16 +928,34 @@ angle::Result WindowSurfaceVk::swapImpl(DisplayVk *displayVk, EGLint *rects, EGL
     return angle::Result::Continue;
 }
 
-angle::Result WindowSurfaceVk::nextSwapchainImage(DisplayVk *displayVk)
+angle::Result WindowSurfaceVk::nextSwapchainImage(DisplayVk *displayVk, uint32_t swapHistoryIndex)
 {
     VkDevice device = displayVk->getDevice();
 
     vk::Scoped<vk::Semaphore> aquireImageSemaphore(device);
     ANGLE_VK_TRY(displayVk, aquireImageSemaphore.get().init(device));
 
-    ANGLE_VK_TRY(displayVk, vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
-                                                  aquireImageSemaphore.get().getHandle(),
-                                                  VK_NULL_HANDLE, &mCurrentSwapchainImageIndex));
+    auto result = vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
+                                        aquireImageSemaphore.get().getHandle(), VK_NULL_HANDLE,
+                                        &mCurrentSwapchainImageIndex);
+
+    // If SUBOPTIMAL/OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before
+    // continuing.
+    if (ANGLE_UNLIKELY((result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_SUBOPTIMAL_KHR)))
+    {
+        gl::Extents currentExtents;
+        ANGLE_TRY(getCurrentWindowSize(displayVk, &currentExtents));
+        ANGLE_TRY(recreateSwapchain(displayVk, currentExtents, swapHistoryIndex));
+        // Try one more time and bail if we fail
+        ANGLE_VK_TRY(displayVk,
+                     vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX,
+                                           aquireImageSemaphore.get().getHandle(), VK_NULL_HANDLE,
+                                           &mCurrentSwapchainImageIndex));
+    }
+    else
+    {
+        ANGLE_VK_TRY(displayVk, result);
+    }
 
     // After presenting, the flush semaphore chain is cleared. The semaphore returned by
     // vkAcquireNextImage will start a new chain.
