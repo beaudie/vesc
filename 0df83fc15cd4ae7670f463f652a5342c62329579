@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22753f0f_f7717bdc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-28T21:04:35Z",
+      "side": 1,
+      "message": "I thought this was on by default.  If not, we should probably make it default.",
+      "range": {
+        "startLine": 21,
+        "startChar": 11,
+        "endLine": 21,
+        "endChar": 35
+      },
+      "revId": "0df83fc15cd4ae7670f463f652a5342c62329579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b64c3ab2_ffb45161",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-28T21:04:35Z",
+      "side": 1,
+      "message": "I think this may not be neccessary if you add a --use-cmd-decoder\u003dpassthrough",
+      "range": {
+        "startLine": 21,
+        "startChar": 36,
+        "endLine": 21,
+        "endChar": 77
+      },
+      "revId": "0df83fc15cd4ae7670f463f652a5342c62329579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0781b575_090d94ce",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3346,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-28T21:04:35Z",
+      "side": 1,
+      "message": "I would prefer to use a switch on the valid enums (you can factor into a function for both these validations).  This protects us from more enums being added in the future and we silently validate them when they may require a new extension or feature check.",
+      "range": {
+        "startLine": 3346,
+        "startChar": 12,
+        "endLine": 3346,
+        "endChar": 78
+      },
+      "revId": "0df83fc15cd4ae7670f463f652a5342c62329579",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
