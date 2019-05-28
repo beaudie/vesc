@@ -2079,6 +2079,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
     const gl::ActiveTextureMask &activeTextures    = program->getActiveSamplersMask();
     const gl::ActiveTextureTypeArray &textureTypes = program->getActiveSamplerTypes();
 
+    const auto &uniforms = program->getState().getUniforms();
     for (size_t textureUnit : activeTextures)
     {
         gl::Texture *texture        = textures[textureUnit];
@@ -2098,16 +2099,32 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
         // staged updates in its staging buffer for unused texture mip levels or layers. Therefore
         // we can't verify it has no staged updates right here.
 
+        // Find out the image is used in which shader stage.
+        vk::ImageLayout imageLayout;
+        bool isActiveInVertex   = uniforms[textureUnit].isActive(gl::ShaderType::Vertex);
+        bool isActiveInFragment = uniforms[textureUnit].isActive(gl::ShaderType::Fragment);
+        if (isActiveInVertex && isActiveInFragment)
+        {
+            imageLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
+        }
+        else if (isActiveInVertex)
+        {
+            imageLayout = vk::ImageLayout::VertexShaderReadOnly;
+        }
+        else
+        {
+            imageLayout = vk::ImageLayout::FragmentShaderReadOnly;
+        }
+
         // Ensure the image is in read-only layout
-        if (image.isLayoutChangeNecessary(vk::ImageLayout::FragmentShaderReadOnly))
+        if (image.isLayoutChangeNecessary(imageLayout))
         {
             vk::CommandBuffer *srcLayoutChange;
             ANGLE_TRY(image.recordCommands(this, &srcLayoutChange));
 
             VkImageAspectFlags aspectFlags = image.getAspectFlags();
             ASSERT(aspectFlags != 0);
-            image.changeLayout(aspectFlags, vk::ImageLayout::FragmentShaderReadOnly,
-                               srcLayoutChange);
+            image.changeLayout(aspectFlags, imageLayout, srcLayoutChange);
         }
 
         image.addReadDependency(mDrawFramebuffer->getFramebuffer());
