@@ -105,6 +105,11 @@ const vk::ImageHelper &RenderTargetVk::getImage() const
     return *mImage;
 }
 
+bool RenderTargetVk::isImageValid()
+{
+    return mImage && mImage->valid();
+}
+
 vk::ImageView *RenderTargetVk::getDrawImageView() const
 {
     ASSERT(mImageView && mImageView->valid());
