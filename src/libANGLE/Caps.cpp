@@ -177,6 +177,7 @@ Extensions::Extensions()
       depthTextureANGLE(false),
       depthTextureOES(false),
       depth32(false),
+      texture3D(false),
       textureStorage(false),
       textureNPOT(false),
       drawBuffers(false),
@@ -863,6 +864,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_ANGLE_depth_texture"] = esOnlyExtension(&Extensions::depthTextureANGLE);
         map["GL_OES_depth_texture"] = esOnlyExtension(&Extensions::depthTextureOES);
         map["GL_OES_depth32"] = esOnlyExtension(&Extensions::depth32);
+        map["GL_OES_texture_3D"] = esOnlyExtension(&Extensions::texture3D);
         map["GL_EXT_texture_storage"] = enableableExtension(&Extensions::textureStorage);
         map["GL_OES_texture_npot"] = enableableExtension(&Extensions::textureNPOT);
         map["GL_EXT_draw_buffers"] = enableableExtension(&Extensions::drawBuffers);
