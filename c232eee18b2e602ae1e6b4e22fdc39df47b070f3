@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9e88fb0a_45f6ba8d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 970,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-29T20:54:30Z",
+      "side": 1,
+      "message": "Done in the next CL.",
+      "parentUuid": "b13cd6dc_2cf8af7a",
+      "range": {
+        "startLine": 970,
+        "startChar": 16,
+        "endLine": 970,
+        "endChar": 76
+      },
+      "revId": "c232eee18b2e602ae1e6b4e22fdc39df47b070f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f5a8cff_a16ed965",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "f727f098_42573cbb",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-29T20:54:30Z",
+      "side": 1,
+      "message": "I have been planning on changes here as part of the barrier optimization task. What needs a bit of work is to have ImageHelper::changeLayout return angle::Result, so it can make more complex decisions about when to issue a barrier, and only record commands if necessary.",
+      "parentUuid": "4f5a8cff_a16ed965",
+      "range": {
+        "startLine": 1122,
+        "startChar": 8,
+        "endLine": 1122,
+        "endChar": 11
+      },
+      "revId": "c232eee18b2e602ae1e6b4e22fdc39df47b070f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50b9ddb0_f7717906",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "c232eee18b2e602ae1e6b4e22fdc39df47b070f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28d3edb3_84df9204",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-29T20:54:30Z",
+      "side": 1,
+      "message": "Talked offline.",
+      "parentUuid": "50b9ddb0_f7717906",
+      "range": {
+        "startLine": 1130,
+        "startChar": 0,
+        "endLine": 1131,
+        "endChar": 88
+      },
+      "revId": "c232eee18b2e602ae1e6b4e22fdc39df47b070f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
