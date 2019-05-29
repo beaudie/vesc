@@ -22,6 +22,121 @@
       "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e488ab1_6df82908",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7281,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-29T15:33:45Z",
+      "side": 1,
+      "message": "can you mirror the signalSemaphore call and move these unimplemented calls before the call to waitSemaphore? Also feels like you might want to pass the extra arguments even if they aren\u0027t yet implemented.",
+      "range": {
+        "startLine": 7271,
+        "startChar": 0,
+        "endLine": 7281,
+        "endChar": 5
+      },
+      "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c4ba2c5_121aabf2",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7306,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-29T15:33:45Z",
+      "side": 1,
+      "message": "same here, might want to pass the other arguments to the impl.",
+      "range": {
+        "startLine": 7306,
+        "startChar": 39,
+        "endLine": 7306,
+        "endChar": 54
+      },
+      "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b830689_affc73fd",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-29T15:33:45Z",
+      "side": 1,
+      "message": "ANGLE_GL_UNREACHABLE for these",
+      "range": {
+        "startLine": 195,
+        "startChar": 0,
+        "endLine": 196,
+        "endChar": 31
+      },
+      "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03eeed9e_5b6ae5d0",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-29T15:33:45Z",
+      "side": 1,
+      "message": "ANGLE_GL_UNREACHABLE for these",
+      "range": {
+        "startLine": 201,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 31
+      },
+      "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98ce5b74_21f64554",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3330,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-29T15:33:45Z",
+      "side": 1,
+      "message": "nit: can be in the anonymous name space I think",
+      "range": {
+        "startLine": 3330,
+        "startChar": 5,
+        "endLine": 3330,
+        "endChar": 23
+      },
+      "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
