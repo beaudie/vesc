@@ -3,36 +3,50 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// ResolveStencilNoExport.comp: Resolve multisampled stencil images into a buffer.  This is used
-// where VK_EXT_shader_stencil_export is not available, to output the resolved stencil into a
-// temporary buffer, which is then copied into the stencil aspect of the final image.
+// BlitResolveStencilNoExport.comp: Blit stencil images or resolve multisampled ones into a buffer.
+// This is used where VK_EXT_shader_stencil_export is not available, to output the resolved stencil
+// into a temporary buffer, which is then copied into the stencil aspect of the final image.
 
 #version 450 core
 
+#if IsResolve
 #extension GL_EXT_samplerless_texture_functions : require
+#endif
 
 #define MAKE_SRC_RESOURCE(prefix, type) prefix ## type
 
-#define STENCIL_SRC_RESOURCE(type) MAKE_SRC_RESOURCE(u, type)
+#if IsResolve
 
+#define CoordType ivec2
 #if SrcIsArray
-#define SRC_RESOURCE_NAME texture2DMSArray
+#define SRC_RESOURCE utexture2DMSArray
+#define TEXEL_FETCH(src, coord, sample) texelFetch(src, ivec3(coord, params.srcLayer), sample)
 #else
-#define SRC_RESOURCE_NAME texture2DMS
+#define SRC_RESOURCE utexture2DMS
+#define TEXEL_FETCH(src, coord, sample) texelFetch(src, coord, sample)
 #endif
 
-layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
+#else
 
-layout (set = 0, binding = 0) buffer dest
-{
-    // Note: every invocation handles 4 stencil value and output one value here.
-    uint destData[];
-};
+#define CoordType vec2
+#if SrcIsArray
+#define SRC_RESOURCE utexture2DArray
+#define TEXEL_FETCH(src, coord, sample) texture(usampler2DArray(src, blitSampler), vec3(coord * params.invSrcExtent, params.srcLayer))
+#else
+#define SRC_RESOURCE utexture2D
+#define TEXEL_FETCH(src, coord, sample) texture(usampler2D(src, blitSampler), coord * params.invSrcExtent)
+#endif
+
+#endif  // IsResolve
+
+layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 
 layout(push_constant) uniform PushConstants {
     // Robust access.
     ivec2 srcExtent;
+    vec2 invSrcExtent;
     // Translation from source to destination coordinates.
+    vec2 stretch;
     ivec2 srcOffset;
     int srcLayer;
     // Output.
@@ -43,7 +57,17 @@ layout(push_constant) uniform PushConstants {
     bool flipY;
 } params;
 
-layout(set = 0, binding = 1) uniform STENCIL_SRC_RESOURCE(SRC_RESOURCE_NAME) stencil;
+layout (set = 0, binding = 0) buffer dest
+{
+    // Note: every invocation handles 4 stencil value and output one value here.
+    uint destData[];
+};
+
+layout(set = 0, binding = 1) uniform SRC_RESOURCE stencil;
+
+#if !IsResolve
+layout(set = 0, binding = 2) uniform sampler blitSampler;
+#endif
 
 void main()
 {
@@ -63,7 +87,11 @@ void main()
     if (params.flipY)
         srcSubImageCoords.y = -srcSubImageCoords.y;
 
-    ivec2 srcImageCoords = params.srcOffset + srcSubImageCoords;
+#if IsResolve
+    CoordType srcImageCoords = params.srcOffset + srcSubImageCoords;
+#else
+    CoordType srcImageCoords = params.srcOffset + srcSubImageCoords * params.stretch;
+#endif
 
     int xDir = params.flipX ? -1 : 1;
 
@@ -80,11 +108,7 @@ void main()
             {
                 // Note: always resolve using sample 0.  GLES3 gives us freedom in choosing how to resolve
                 // depth/stencil images.
-#if SrcIsArray
-                stencilValue = texelFetch(stencil, ivec3(srcImageCoords, params.srcLayer), 0).x;
-#else
-                stencilValue = texelFetch(stencil, srcImageCoords, 0).x;
-#endif
+                stencilValue = TEXEL_FETCH(stencil, srcImageCoords, 0).x;
 
 #if IsBigEndian
                 outStencils |= (stencilValue & 0xFF) << ((3 - i) * 8);
