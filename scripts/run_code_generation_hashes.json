@@ -193,6 +193,62 @@
     "ba26e079062affec8cd72d48f5c91d21",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py":
     "3089dcc7ffff60a8803595fd44278f6e",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000000.inc":
+    "e911ac19c123455c0b26e5ea96f7c587",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000001.inc":
+    "0604bf6a6191d30570212d6a9d9e6840",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000002.inc":
+    "6f7e176eaab364958ef6a6b5bf62178a",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000003.inc":
+    "a5457e39b01582df1a33984509b3f068",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000004.inc":
+    "834ba21e432d7c45d84490fb05faf73a",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000005.inc":
+    "8b2bdc72bfea07fc7ced99414ca23d17",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000006.inc":
+    "e44cae9658aa5f545bd829c60c850d29",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000007.inc":
+    "16e3a04c133cfb4d920049df77276592",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000008.inc":
+    "8bfbefa889c6a03c2d99740a3df5e2b3",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000009.inc":
+    "e1b836c57c7dc3ed2efa98b9f2e5e6a3",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.0000000A.inc":
+    "c0564e4bbe06b60f27a06e60454fa550",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.0000000B.inc":
+    "141257aed573449a772d63cf58274a0e",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.0000000C.inc":
+    "765a0373b780057eea72fcf539839ffa",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.0000000D.inc":
+    "80904166436aaeb5f8b27ad57470f3aa",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.0000000E.inc":
+    "2b598286a3a02b772e2fb604375d830b",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.0000000F.inc":
+    "40998b701270771df4861ed69c09282a",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000010.inc":
+    "156e3e088f00ee0fa37ec923b2508b9f",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000011.inc":
+    "5c0637961a99334e83658aeb2011abe4",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000012.inc":
+    "360e738c88b07cfa9534753a4c70ba12",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000013.inc":
+    "ab847c3558ba54afeb47069766c3fbc1",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000014.inc":
+    "5d427d85c8e4a9ecad7d0cb737cd52c3",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000015.inc":
+    "9fb217ed479672f318c46fff3b7e91d4",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000016.inc":
+    "632a3d035173edc81f118f9635c6bf06",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000017.inc":
+    "24d88a985510b93244f2fe19da3b8434",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolveStencilNoExport.comp.00000000.inc":
+    "83d8d72a71cb0caaba21c3d3ba579f38",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolveStencilNoExport.comp.00000001.inc":
+    "f322779ac67a9fae4bc97fbc62ba47d3",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolveStencilNoExport.comp.00000002.inc":
+    "bf5b1e92916025e3baede0f0a91c1669",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolveStencilNoExport.comp.00000003.inc":
+    "6fc09f1f8033d9363319c8894bbdc52f",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000000.inc":
     "df5fdc47f0950e3eae3d9491e9c84af7",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BufferUtils.comp.00000001.inc":
@@ -335,34 +391,10 @@
     "084c1b02964cf2baefcc733b7f4e4786",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/ImageCopy.frag.00000015.inc":
     "6a2e5e10e686370f3350a96cda2441a0",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/Resolve.frag.00000000.inc":
-    "84fa20e6ba68fb79779a722267a1ad91",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/Resolve.frag.00000001.inc":
-    "83d7ac2143f0cf2c4aee30c19460b83e",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/Resolve.frag.00000002.inc":
-    "0ad619b74d9656525192fe1256ebf9a7",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/Resolve.frag.00000003.inc":
-    "08fb6f2d172844ed477ea9543de4100d",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/Resolve.frag.00000004.inc":
-    "9aa55cb9940e64b7b95d8cbdefdff423",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/Resolve.frag.00000005.inc":
-    "05335cdf088745d86888aecba393bca5",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/Resolve.frag.00000006.inc":
-    "d58c013c101739e4872fa3344a134aaa",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/Resolve.frag.00000007.inc":
-    "53203083fc6c9ca36d6d39c41fc0fee9",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/Resolve.frag.00000008.inc":
-    "bb20b6b10d20c8f38ac434f61cd38312",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/Resolve.frag.00000009.inc":
-    "9345a1e02ad4adfb2abcc9bc72270a2e",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/Resolve.frag.0000000A.inc":
-    "940cd724621b6c71c92c2f0ce86a15f2",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/Resolve.frag.0000000B.inc":
-    "285e1051de156004be9d0aeaf71d8ac9",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/ResolveStencilNoExport.comp.00000000.inc":
-    "46e731194edd3eca95a8aeade5fea543",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/ResolveStencilNoExport.comp.00000001.inc":
-    "5f9bbc046387b04be58dbd71988abfc2",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/src/BlitResolve.frag":
+    "0cfc6df8292dfa5c237eed7638a15177",
+  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/src/BlitResolveStencilNoExport.comp":
+    "0de5eca5fe584a4382976659660e574c",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/src/BufferUtils.comp":
     "0c8c050841543da0d7faca2559212aa8",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/src/ConvertVertex.comp":
@@ -373,14 +405,10 @@
     "7f562c60e5df018b0087ecb8642ac821",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag":
     "20c83ade1efb48a802dc34ca838a2be6",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/src/Resolve.frag":
-    "367b96958db6d1aa1b10baaf692d3676",
-  "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/src/ResolveStencilNoExport.comp":
-    "645d157257fd8b5315ed56cc12bc94b9",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.cpp":
-    "f41ce1c729f1fb8adc179d7767cda072",
+    "1f6fe3ea19c5babce1d566a2c6dc0273",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h":
-    "d903e4852d80ccb8b7f817728f8fb887",
+    "c5610379d5d9576c9eb74e3daeed28a4",
   "Vulkan internal shader programs:tools/glslang/glslang_validator.exe.sha1":
     "9f1f0fc61116a657e065c40f9296e5ab",
   "Vulkan internal shader programs:tools/glslang/glslang_validator.sha1":
