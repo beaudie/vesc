@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc3d1287_d15a2178",
+        "filename": "scripts/registry_xml.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-29T14:13:01Z",
+      "side": 1,
+      "message": "This line probabably needs to be changed back.",
+      "revId": "eda23e1e1edf0b6ca12edf1b53f114c1c3029950",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1388ea8_e68e6378",
+        "filename": "src/libGLESv2/entry_points_egl_ext.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-29T14:13:01Z",
+      "side": 1,
+      "message": "This needs a thread-\u003esetSuccess().  Looks like the frame timestamp extension above is missing it too.",
+      "revId": "eda23e1e1edf0b6ca12edf1b53f114c1c3029950",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

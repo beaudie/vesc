@@ -272,6 +272,24 @@
     },
     {
       "key": {
+        "uuid": "50c6c90b_af6feb22",
+        "filename": "extensions/EGL_ANGLE_query_string_indexed.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-29T14:13:01Z",
+      "side": 1,
+      "message": "You could if you wanted but they are most important for \u0027bug fixes\u0027 to the spec after it\u0027s been exposed for a while.",
+      "parentUuid": "d0f0d4fc_19eb054f",
+      "revId": "d4dea80657fef175ea9675b8c5a7845976688dde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "01d22f64_20332a6f",
         "filename": "extensions/EGL_ANGLE_query_string_indexed.txt",
         "patchSetId": 4
