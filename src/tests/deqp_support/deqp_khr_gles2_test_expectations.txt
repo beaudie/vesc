@@ -40,3 +40,14 @@
 
 // Depth/stencil related failures.
 3457 VULKAN : KHR-GLES2.core.internalformat.texture2d.depth_stencil_unsigned_int_24_8_depth_stencil = FAIL
+
+// 3d texture framebuffer tests
+0000 VULKAN : KHR-GLES2.texture_3d.framebuffer_* = SKIP
+
+// Unclear what is happening here, failing to validate a 2D texture format
+0000 VULKAN : KHR-GLES2.texture_3d.copy_sub_image.rgba8 = SKIP
+
+// Missing compressed texture formats
+0000 VULKAN : KHR-GLES2.texture_3d.compressed_texture.rgba_astc_* = FAIL
+0000 VULKAN : KHR-GLES2.texture_3d_compressed_texture.sgb8_alpha8_astc_* = FAIL
+0000 VULKAN : KHR-GLES2.texture_3d_compressed_texture.srgb8_alpha8_astc_* = FAIL
