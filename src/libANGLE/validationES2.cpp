@@ -2918,6 +2918,23 @@ bool ValidateTexSubImage2DRobustANGLE(Context *context,
                                            pixels);
 }
 
+bool ValidateTexSubImage3DOES(Context *context,
+                              TextureTarget target,
+                              GLint level,
+                              GLint xoffset,
+                              GLint yoffset,
+                              GLint zoffset,
+                              GLsizei width,
+                              GLsizei height,
+                              GLsizei depth,
+                              GLenum format,
+                              GLenum type,
+                              const void *pixels)
+{
+    return ValidateTexSubImage3D(context, target, level, xoffset, yoffset, zoffset, width, height,
+                                 depth, format, type, pixels);
+}
+
 bool ValidateCompressedTexImage2D(Context *context,
                                   TextureTarget target,
                                   GLint level,
@@ -2991,6 +3008,21 @@ bool ValidateCompressedTexImage2DRobustANGLE(Context *context,
                                         border, imageSize, data);
 }
 
+bool ValidateCompressedTexImage3DOES(Context *context,
+                                     TextureTarget target,
+                                     GLint level,
+                                     GLenum internalformat,
+                                     GLsizei width,
+                                     GLsizei height,
+                                     GLsizei depth,
+                                     GLint border,
+                                     GLsizei imageSize,
+                                     const void *data)
+{
+    return ValidateCompressedTexImage3D(context, target, level, internalformat, width, height,
+                                        depth, border, imageSize, data);
+}
+
 bool ValidateCompressedTexSubImage2DRobustANGLE(Context *context,
                                                 TextureTarget target,
                                                 GLint level,
@@ -3057,6 +3089,23 @@ bool ValidateCompressedTexSubImage2D(Context *context,
     }
 
     return true;
+}
+
+bool ValidateCompressedTexSubImage3DOES(Context *context,
+                                        TextureTarget target,
+                                        GLint level,
+                                        GLint xoffset,
+                                        GLint yoffset,
+                                        GLint zoffset,
+                                        GLsizei width,
+                                        GLsizei height,
+                                        GLsizei depth,
+                                        GLenum format,
+                                        GLsizei imageSize,
+                                        const void *data)
+{
+    return ValidateCompressedTexSubImage3D(context, target, level, xoffset, yoffset, zoffset, width,
+                                           height, depth, format, imageSize, data);
 }
 
 bool ValidateGetBufferPointervOES(Context *context,
@@ -6146,6 +6195,21 @@ bool ValidateCopyTexSubImage2D(Context *context,
                                                yoffset, 0, x, y, width, height, 0);
 }
 
+bool ValidateCopyTexSubImage3DOES(Context *context,
+                                  TextureTarget target,
+                                  GLint level,
+                                  GLint xoffset,
+                                  GLint yoffset,
+                                  GLint zoffset,
+                                  GLint x,
+                                  GLint y,
+                                  GLsizei width,
+                                  GLsizei height)
+{
+    return ValidateCopyTexSubImage3D(context, target, level, xoffset, yoffset, zoffset, x, y, width,
+                                     height);
+}
+
 bool ValidateDeleteBuffers(Context *context, GLint n, const GLuint *)
 {
     return ValidateGenOrDelete(context, n);
@@ -6331,6 +6395,18 @@ bool ValidateFramebufferTexture2D(Context *context,
     }
 
     return true;
+}
+
+bool ValidateFramebufferTexture3DOES(Context *context,
+                                     GLenum target,
+                                     GLenum attachment,
+                                     TextureTarget textargetPacked,
+                                     GLuint texture,
+                                     GLint level,
+                                     GLint zoffset)
+{
+    UNIMPLEMENTED();
+    return false;
 }
 
 bool ValidateGenBuffers(Context *context, GLint n, GLuint *)
@@ -6922,7 +6998,7 @@ bool ValidateVertexAttribDivisorEXT(Context *context, GLuint index, GLuint divis
 }
 
 bool ValidateTexImage3DOES(Context *context,
-                           GLenum target,
+                           TextureTarget target,
                            GLint level,
                            GLenum internalformat,
                            GLsizei width,
@@ -6933,8 +7009,8 @@ bool ValidateTexImage3DOES(Context *context,
                            GLenum type,
                            const void *pixels)
 {
-    UNIMPLEMENTED();  // FIXME
-    return false;
+    return ValidateTexImage3D(context, target, level, internalformat, width, height, depth, border,
+                              format, type, pixels);
 }
 
 bool ValidatePopGroupMarkerEXT(Context *context)

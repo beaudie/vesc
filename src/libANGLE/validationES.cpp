@@ -503,7 +503,7 @@ bool ValidTextureTarget(const Context *context, TextureType type)
 
         case TextureType::_3D:
         case TextureType::_2DArray:
-            return (context->getClientMajorVersion() >= 3);
+            return (context->getClientMajorVersion() >= 3 || context->getExtensions().texture3D);
 
         case TextureType::_2DMultisample:
             return (context->getClientVersion() >= Version(3, 1) ||
@@ -5647,6 +5647,12 @@ bool ValidateTexParameterBase(Context *context,
     switch (pname)
     {
         case GL_TEXTURE_WRAP_R:
+            if (context->getClientMajorVersion() < 3 && !context->getExtensions().texture3D)
+            {
+                context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
+                return false;
+            }
+            break;
         case GL_TEXTURE_SWIZZLE_R:
         case GL_TEXTURE_SWIZZLE_G:
         case GL_TEXTURE_SWIZZLE_B:
