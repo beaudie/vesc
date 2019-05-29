@@ -1930,6 +1930,11 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
         bufferRowLength   = checkedRowLength.ValueOrDie();
         bufferImageHeight = checkedImageHeight.ValueOrDie();
     }
+    // If packed depth & stencil we have to upload the depth and stencil
+    // separately.
+    // May need to adjust outputDepthPitch so that we can hold packed
+    // 32bit depth and packed 8bit stencil back to back in the staging buffer.
+    // We will then have to regions for this copy command to copy each part.
     else
     {
         ASSERT(storageFormat.pixelBytes != 0);
@@ -1959,6 +1964,7 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     VkBufferImageCopy copy         = {};
     VkImageAspectFlags aspectFlags = GetFormatAspectFlags(vkFormat.imageFormat());
 
+    // Note: packed depth & stencil will need two copy regions with different offsets
     copy.bufferOffset                    = stagingOffset;
     copy.bufferRowLength                 = bufferRowLength;
     copy.bufferImageHeight               = bufferImageHeight;
@@ -1980,6 +1986,7 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     if (aspectFlags)
     {
         copy.imageSubresource.aspectMask = aspectFlags;
+        // QUESTION: Can we add two copy regions here?
         mSubresourceUpdates.emplace_back(bufferHandle, copy);
     }
 
