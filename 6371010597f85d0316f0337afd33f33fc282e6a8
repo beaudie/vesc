@@ -63,6 +63,30 @@
       "revId": "6371010597f85d0316f0337afd33f33fc282e6a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5f4dde0_5005f6b9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-29T14:21:11Z",
+      "side": 1,
+      "message": "It\u0027s the same for other vendors too (the implicit dependency from earlier/later stages are a Vulkan requirement), so using VS as the dst stage when transitioning into the layout is fine. I was more concerned about the other side of the barrier (transition out of this layout); using VS as the src stage would be incorrect if the image is also used in FS.",
+      "parentUuid": "11a0fc93_e5209aab",
+      "range": {
+        "startLine": 184,
+        "startChar": 0,
+        "endLine": 194,
+        "endChar": 10
+      },
+      "revId": "6371010597f85d0316f0337afd33f33fc282e6a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
