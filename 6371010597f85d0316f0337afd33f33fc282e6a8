@@ -39,6 +39,30 @@
       "revId": "6371010597f85d0316f0337afd33f33fc282e6a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "11a0fc93_e5209aab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-05-29T00:05:14Z",
+      "side": 1,
+      "message": "Yes, I aware of this too. But for Mali GPUs, if the vertex stage has a dependency, then the following fragment stage will also has the dependency, as fragment stage depends on vertex stage.\nI\u0027m not sure if it\u0027s the same for other vendors.\nAnyway, your suggestion is what I thought previously, it\u0027s good to make the logic more clear.",
+      "parentUuid": "dc0d725b_e745f170",
+      "range": {
+        "startLine": 184,
+        "startChar": 0,
+        "endLine": 194,
+        "endChar": 10
+      },
+      "revId": "6371010597f85d0316f0337afd33f33fc282e6a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
