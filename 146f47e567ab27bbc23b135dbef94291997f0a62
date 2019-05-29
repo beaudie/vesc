@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "abbc4848_55b1ed37",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1146,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-29T19:35:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb9da613_5f85440f",
+      "revId": "146f47e567ab27bbc23b135dbef94291997f0a62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0a678dda_1407cd79",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 2
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "e2720791_61b73b1a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-29T19:35:29Z",
+      "side": 1,
+      "message": "Yes, basically. If you have a workgroup with size AxBxC and you want a total of XxYxZ invocations, you necessarily need to dispatch Ceil(X/A)xCeil(Y/B)xCeil(Z/C) workgroups. The shader would have to make sure the invocations with x\u003e\u003dX or y\u003e\u003dY or z\u003e\u003dZ are noop.\n\nThe Vulkan spec says `maxComputeWorkGroupSize` limit should have a minimum value of 128x128x64, so we were well below the limits.",
+      "parentUuid": "0a678dda_1407cd79",
+      "range": {
+        "startLine": 1169,
+        "startChar": 71,
+        "endLine": 1169,
+        "endChar": 72
+      },
+      "revId": "146f47e567ab27bbc23b135dbef94291997f0a62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56b15542_49ef3111",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 2
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "b93be495_0625eebf",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-29T19:35:29Z",
+      "side": 1,
+      "message": "No, `region.bufferRowLength` is the \"pitch\" of each row of data in the buffer. Because the compute shader writes in `uint32_t`s, I create the buffer with a size of RoundUpToMultipleOf4(width)*height, where each row has a size of RoundUpToMultipleOf4(width) (which equals bufferRowLengthInUints * 4).\n\nIn other words, the buffer corresponds to an image with a bit of padding in width to make it a multiple of 4.",
+      "parentUuid": "56b15542_49ef3111",
+      "revId": "146f47e567ab27bbc23b135dbef94291997f0a62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1850f8b1_a2170b8c",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ResolveStencilNoExport.comp",
         "patchSetId": 2
@@ -73,6 +133,24 @@
       "revId": "146f47e567ab27bbc23b135dbef94291997f0a62",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d657edca_e19d7a04",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ResolveStencilNoExport.comp",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-29T19:35:29Z",
+      "side": 1,
+      "message": "It would be _great_ if it could match what the HW supports. The problem is Vulkan doesn\u0027t actually report that value. Even if it did, it may not be worth creating many variations of this shader with different workgroup sizes (this particular shader mind you. It may make sense for some other shader).\n\nFirst of all, if you create a workgroup size that\u0027s bigger than the hardware supports (but is a multiple of it), there\u0027s really no harm in this kind of shader (that doesn\u0027t share anything inside the workgroup).  For example, if HW\u0027s workgroup size is 64, but the shader wants to be of size 256, the HW simply uses 4 hardware units for it.  If the workgroup wanted to share data, there would be an expensive barrier involved in that case (which would be otherwise avoided if the shader and HW workgroup sizes matched). If the shader workgroup size is smaller than the hardware supports though, then you would be wasting the unused hardware threads.\n\nI choose a size of 64 by experience (note the size here is 8x8x1). I know AMD\u0027s GCN always has 64-thread compute units. Nvidia has had 32, 64, 128 and even 256 I believe. At my previous job (graphics developer in video gmaes), a sister company of us was doing the PC port of our game (particularly focused on Nvidia), and they added variations to our shaders to build either as 32-thread or 64-thread workgroups. I don\u0027t have data, but based on that I\u0027m assuming the majority of Nvidia cards have compute units of either size of 32 or 64. I don\u0027t know about intel, but I would be surprised if their workgroup size is larger than 64.\n\nSo, 64 should be an equal or larger size than what most hardware have.  Again, in this shader having a larger workgroup size is harmless.",
+      "parentUuid": "1850f8b1_a2170b8c",
+      "revId": "146f47e567ab27bbc23b135dbef94291997f0a62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
