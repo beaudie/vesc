@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c4c2815_5b78c126",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-29T18:46:16Z",
+      "side": 1,
+      "message": "Unrelated fix. This access mask was only being set if inserting a barrier, but should be always set.",
+      "revId": "5113f007de02da1221bde4cbba6ef67babb1642b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
