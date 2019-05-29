@@ -71,19 +71,25 @@ const char *gTestExpectationsSearchPaths[] = {
 
 #define OPENGL_CTS_DIR(PATH) "/external/openglcts/data/mustpass/gles/" PATH
 
-const char *gCaseListFiles[] = {OPENGL_CTS_DIR("aosp_mustpass/master/gles2-master.txt"),
-                                OPENGL_CTS_DIR("aosp_mustpass/master/gles3-master.txt"),
-                                OPENGL_CTS_DIR("aosp_mustpass/master/gles31-master.txt"),
-                                "/android/cts/master/egl-master.txt",
-                                OPENGL_CTS_DIR("khronos_mustpass/master/gles2-khr-master.txt"),
-                                OPENGL_CTS_DIR("khronos_mustpass/master/gles3-khr-master.txt")};
+// const char *gCaseListFiles[] = {OPENGL_CTS_DIR("aosp_mustpass/master/gles2-master.txt"),
+//                                OPENGL_CTS_DIR("aosp_mustpass/master/gles3-master.txt"),
+//                                OPENGL_CTS_DIR("aosp_mustpass/master/gles31-master.txt"),
+//                                "/android/cts/master/egl-master.txt",
+//                                OPENGL_CTS_DIR("khronos_mustpass/master/gles2-khr-master.txt"),
+//                                OPENGL_CTS_DIR("khronos_mustpass/master/gles3-khr-master.txt")};
+
+const char *gCaseListFiles[] = {"", OPENGL_CTS_DIR("aosp_mustpass/master/cody-2darray-list.txt")};
 
 #undef OPENGL_CTS_DIR
 
+// const char *gTestExpectationsFiles[] = {
+//    "deqp_gles2_test_expectations.txt",     "deqp_gles3_test_expectations.txt",
+//    "deqp_gles31_test_expectations.txt",    "deqp_egl_test_expectations.txt",
+//    "deqp_khr_gles2_test_expectations.txt", "deqp_khr_gles3_test_expectations.txt",
+//};
 const char *gTestExpectationsFiles[] = {
-    "deqp_gles2_test_expectations.txt",     "deqp_gles3_test_expectations.txt",
-    "deqp_gles31_test_expectations.txt",    "deqp_egl_test_expectations.txt",
-    "deqp_khr_gles2_test_expectations.txt", "deqp_khr_gles3_test_expectations.txt",
+    "",
+    "cody-2darray-expectations.txt",
 };
 
 using APIInfo = std::pair<const char *, GPUTestConfig::API>;
