@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3667a533_20a34619",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-05-29T17:48:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f69da40d_c3b365f8",
+      "range": {
+        "startLine": 18,
+        "startChar": 31,
+        "endLine": 18,
+        "endChar": 35
+      },
+      "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e488ab1_6df82908",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c9f0603_b3547b08",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7281,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-05-29T17:48:38Z",
+      "side": 1,
+      "message": "I believe this ordering is correct (although it wouldn\u0027t make any difference unless a flush could happen between the operations, and it currently can\u0027t).\n\nThe full synchronization for accessing an image from ANGLE would be:\n\n1. Acquire image\n1.a. wait on acquire-side semaphore\n1.b. acquire-side image memory barrier\n\n2. operate on image as if it were any other texture\n\n3. Release image\n3.a. release-side image memory barrier\n3.b. signal release-side semaphore\n\nSwapping the order would introduce a small region where flushing is unsafe. Even if there is no risk of a flush happening I think it hurts readability; I think it is more intuitive to update the context state in the same order that commands must be issued.\n\nIn any case, moved this from Context to ContextVk since we\u0027re now passing the barriers in.",
+      "parentUuid": "5e488ab1_6df82908",
+      "range": {
+        "startLine": 7271,
+        "startChar": 0,
+        "endLine": 7281,
+        "endChar": 5
+      },
+      "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d7924ab1_ff4c3930",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 7306,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-05-29T17:48:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c4ba2c5_121aabf2",
+      "range": {
+        "startLine": 7306,
+        "startChar": 39,
+        "endLine": 7306,
+        "endChar": 54
+      },
+      "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4b830689_affc73fd",
         "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
         "patchSetId": 7
@@ -91,6 +163,30 @@
       "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a5fe4cc_5599866a",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-05-29T17:48:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b830689_affc73fd",
+      "range": {
+        "startLine": 195,
+        "startChar": 0,
+        "endLine": 196,
+        "endChar": 31
+      },
+      "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "74abf652_d8fc701c",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-05-29T17:48:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03eeed9e_5b6ae5d0",
+      "range": {
+        "startLine": 201,
+        "startChar": 0,
+        "endLine": 202,
+        "endChar": 31
+      },
+      "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98ce5b74_21f64554",
         "filename": "src/libANGLE/validationES2.cpp",
         "patchSetId": 7
@@ -137,6 +257,30 @@
       "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "443f79dc_575f1757",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3330,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-05-29T17:48:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98ce5b74_21f64554",
+      "range": {
+        "startLine": 3330,
+        "startChar": 5,
+        "endLine": 3330,
+        "endChar": 23
+      },
+      "revId": "444fd107da88c2d627d37151de4e30a2bbcdc143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
