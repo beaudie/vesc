@@ -1350,7 +1350,10 @@ Optional<EGLint> ANGLETestBase::mLastRendererType;
 std::unique_ptr<Library> ANGLETestEnvironment::gEGLLibrary;
 std::unique_ptr<Library> ANGLETestEnvironment::gWGLLibrary;
 
-void ANGLETestEnvironment::SetUp() {}
+void ANGLETestEnvironment::SetUp()
+{
+    InitCrashHandler();
+}
 
 void ANGLETestEnvironment::TearDown() {}
 
