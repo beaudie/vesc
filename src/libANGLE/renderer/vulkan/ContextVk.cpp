@@ -240,13 +240,13 @@ angle::Result ContextVk::initialize()
 {
     TRACE_EVENT0("gpu.angle", "ContextVk::initialize");
     // Note that this may reserve more sets than strictly necessary for a particular layout.
-    VkDescriptorPoolSize uniformSetSize = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
+    VkDescriptorPoolSize uniformSetSize      = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
                                            GetUniformBufferDescriptorCount()};
     VkDescriptorPoolSize uniformBlockSetSize = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
                                                 mRenderer->getMaxUniformBlocks()};
-    VkDescriptorPoolSize textureSetSize = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+    VkDescriptorPoolSize textureSetSize      = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                            mRenderer->getMaxActiveTextures()};
-    VkDescriptorPoolSize driverSetSize  = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1};
+    VkDescriptorPoolSize driverSetSize       = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1};
     ANGLE_TRY(mDynamicDescriptorPools[kUniformsDescriptorSetIndex].init(this, &uniformSetSize, 1));
     ANGLE_TRY(mDynamicDescriptorPools[kUniformBlockDescriptorSetIndex].init(
         this, &uniformBlockSetSize, 1));
@@ -860,8 +860,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         // Submit the command buffer
         VkSubmitInfo submitInfo       = {};
         VkPipelineStageFlags waitMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-        InitializeSubmitInfo(&submitInfo, commandBatch.get(), {}, &waitMask,
-                             {});
+        InitializeSubmitInfo(&submitInfo, commandBatch.get(), {}, &waitMask, {});
 
         ANGLE_TRY(submitFrame(submitInfo, std::move(commandBuffer)));
 
@@ -1071,6 +1070,8 @@ angle::Result ContextVk::drawArrays(const gl::Context *context,
                                     GLint first,
                                     GLsizei count)
 {
+    ASSERT(false);
+
     vk::CommandBuffer *commandBuffer = nullptr;
     uint32_t clampedVertexCount      = gl::GetClampedVertexCount<uint32_t>(count);
 

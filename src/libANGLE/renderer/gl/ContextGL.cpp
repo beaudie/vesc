@@ -267,6 +267,8 @@ angle::Result ContextGL::drawArrays(const gl::Context *context,
                                     GLint first,
                                     GLsizei count)
 {
+    ASSERT(false);
+
     const gl::Program *program  = context->getState().getProgram();
     const bool usesMultiview    = program->usesMultiview();
     const GLsizei instanceCount = usesMultiview ? program->getNumViews() : 0;
