@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f55e66ab_6d751d96",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-05-29T03:37:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ace2fd48_d6e93ccd",
+      "range": {
+        "startLine": 142,
+        "startChar": 12,
+        "endLine": 142,
+        "endChar": 28
+      },
+      "revId": "3f145fbc5c5302714975e7196146332b45a673e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5cf1e900_c2bb5ad7",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "3f145fbc5c5302714975e7196146332b45a673e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc3602ce_58f3cff1",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-05-29T03:37:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cf1e900_c2bb5ad7",
+      "range": {
+        "startLine": 737,
+        "startChar": 4,
+        "endLine": 737,
+        "endChar": 46
+      },
+      "revId": "3f145fbc5c5302714975e7196146332b45a673e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "f4732ad0_2c87d468",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1893,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-05-29T03:37:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7366fc72_c8e3588c",
+      "range": {
+        "startLine": 1893,
+        "startChar": 16,
+        "endLine": 1893,
+        "endChar": 26
+      },
+      "revId": "3f145fbc5c5302714975e7196146332b45a673e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "74057c56_7a36d60e",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 7
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "4c6c48e1_7dc16ea9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1907,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-05-29T03:37:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74057c56_7a36d60e",
+      "range": {
+        "startLine": 1907,
+        "startChar": 0,
+        "endLine": 1907,
+        "endChar": 11
+      },
+      "revId": "3f145fbc5c5302714975e7196146332b45a673e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3d42f84a_92959c64",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 7
@@ -105,6 +201,30 @@
       "writtenOn": "2019-05-22T15:31:17Z",
       "side": 1,
       "message": "I wonder if there is a cleaner way to do this, maybe Jamie has a suggestion.",
+      "range": {
+        "startLine": 2317,
+        "startChar": 0,
+        "endLine": 2329,
+        "endChar": 0
+      },
+      "revId": "3f145fbc5c5302714975e7196146332b45a673e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e348e8af_c1f338c7",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2329,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-05-29T03:37:07Z",
+      "side": 1,
+      "message": "I also think these code is ugly. @Jamie, please give some comments here, thank you.",
+      "parentUuid": "3d42f84a_92959c64",
       "range": {
         "startLine": 2317,
         "startChar": 0,
