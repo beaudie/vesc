@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5b9d171_1d41693a",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/Resolve.frag",
+        "patchSetId": 3
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-29T22:31:10Z",
+      "side": 1,
+      "message": "nit: formatting",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 177,
+        "endChar": 0
+      },
+      "revId": "9d7d221facb4840daa10bd12ed6e87824d179f75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
