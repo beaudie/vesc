@@ -18,29 +18,30 @@
 #include "texture_utils.h"
 #include "util/shader_utils.h"
 
-class SimpleTexture2DSample : public SampleApplication
+class SimpleTexture3DSample : public SampleApplication
 {
   public:
-    SimpleTexture2DSample(int argc, char **argv) : SampleApplication("SimpleTexture2D", argc, argv)
+    SimpleTexture3DSample(int argc, char **argv) : SampleApplication("SimpleTexture3D", argc, argv)
     {}
 
     bool initialize() override
     {
         constexpr char kVS[] = R"(attribute vec4 a_position;
-attribute vec2 a_texCoord;
-varying vec2 v_texCoord;
+attribute vec3 a_texCoord;
+varying vec3 v_texCoord;
 void main()
 {
     gl_Position = a_position;
     v_texCoord = a_texCoord;
 })";
 
-        constexpr char kFS[] = R"(precision mediump float;
-varying vec2 v_texCoord;
-uniform sampler2D s_texture;
+        constexpr char kFS[] = R"(#extension GL_OES_texture_3D:require
+precision mediump float;
+varying vec3 v_texCoord;
+uniform mediump sampler3D s_texture;
 void main()
 {
-    gl_FragColor = texture2D(s_texture, v_texCoord);
+    gl_FragColor = texture3D(s_texture, v_texCoord);
 })";
 
         mProgram = CompileProgram(kVS, kFS);
@@ -57,7 +58,7 @@ void main()
         mSamplerLoc = glGetUniformLocation(mProgram, "s_texture");
 
         // Load the texture
-        mTexture = CreateSimpleTexture2D();
+        mTexture = CreateSimpleTexture3D();
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -72,15 +73,16 @@ void main()
 
     void draw() override
     {
-        GLfloat vertices[] = {
+        const size_t vertex_stride = 6;
+        GLfloat vertices[]         = {
             -0.5f, 0.5f,  0.0f,  // Position 0
-            0.0f,  0.0f,         // TexCoord 0
+            0.0f,  0.0f,  0.0f,  // TexCoord 0
             -0.5f, -0.5f, 0.0f,  // Position 1
-            0.0f,  1.0f,         // TexCoord 1
+            0.0f,  1.0f,  0.3f,  // TexCoord 1
             0.5f,  -0.5f, 0.0f,  // Position 2
-            1.0f,  1.0f,         // TexCoord 2
+            1.0f,  1.0f,  0.6f,  // TexCoord 2
             0.5f,  0.5f,  0.0f,  // Position 3
-            1.0f,  0.0f          // TexCoord 3
+            0.0f,  1.0f,  1.0f   // TexCoord 3
         };
         GLushort indices[] = {0, 1, 2, 0, 2, 3};
 
@@ -94,9 +96,10 @@ void main()
         glUseProgram(mProgram);
 
         // Load the vertex position
-        glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), vertices);
+        glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, vertex_stride * sizeof(GLfloat),
+                              vertices);
         // Load the texture coordinate
-        glVertexAttribPointer(mTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat),
+        glVertexAttribPointer(mTexCoordLoc, 3, GL_FLOAT, GL_FALSE, vertex_stride * sizeof(GLfloat),
                               vertices + 3);
 
         glEnableVertexAttribArray(mPositionLoc);
@@ -104,7 +107,7 @@ void main()
 
         // Bind the texture
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mTexture);
+        glBindTexture(GL_TEXTURE_3D, mTexture);
 
         // Set the texture sampler to texture unit to 0
         glUniform1i(mSamplerLoc, 0);
@@ -129,6 +132,6 @@ void main()
 
 int main(int argc, char **argv)
 {
-    SimpleTexture2DSample app(argc, argv);
+    SimpleTexture3DSample app(argc, argv);
     return app.run();
 }

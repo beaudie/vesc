@@ -657,6 +657,7 @@ void GenerateCaps(IDirect3D9 *d3d9,
     extensions->pixelBufferObject = false;
     extensions->mapBuffer         = false;
     extensions->mapBufferRange    = false;
+    extensions->texture3D         = false;
 
     // D3D does not allow depth textures to have more than one mipmap level OES_depth_texture
     // allows for that so we can't implement full support with the D3D9 back end.
