@@ -2177,9 +2177,9 @@ bool ValidateTexImage3D(Context *context,
                         GLenum type,
                         const void *pixels)
 {
-    if (context->getClientMajorVersion() < 3)
+    if (context->getClientMajorVersion() < 3 && !context->getExtensions().texture3D)
     {
-        context->validationError(GL_INVALID_OPERATION, kES3Required);
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
 
