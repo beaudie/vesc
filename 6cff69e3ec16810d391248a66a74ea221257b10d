@@ -22,6 +22,30 @@
       "revId": "6cff69e3ec16810d391248a66a74ea221257b10d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26e2974a_65f820e3",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4801,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-05-29T05:30:05Z",
+      "side": 1,
+      "message": "Fixed.\n\nI checked tests I added in previous patches. No missing comments there as far as I can see.",
+      "parentUuid": "37db17af_46e4b7fc",
+      "range": {
+        "startLine": 4801,
+        "startChar": 0,
+        "endLine": 4801,
+        "endChar": 6
+      },
+      "revId": "6cff69e3ec16810d391248a66a74ea221257b10d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
