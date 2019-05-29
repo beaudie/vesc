@@ -84,6 +84,8 @@ if (is_mac) {
 
 if (is_win) {
   angle_system_utils_sources += [ "src/common/system_utils_win.cpp" ]
+} else {
+  angle_system_utils_sources += [ "src/common/CrashHandler.cpp" ]
 }
 
 if (is_android) {
