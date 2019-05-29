@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb9da613_5f85440f",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1146,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-29T18:49:49Z",
+      "side": 1,
+      "message": "Above, you have:\n\n    VkDescriptorPoolSize setSizes[2] \u003d {\n        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},\n        {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1},\n    };\n\nBut you\u0027re actually filling them in the reverse order here.\n\nAdditionally, you have:\n\nconstexpr uint32_t kResolveStencilNoExportDestBinding \u003d 0;\nconstexpr uint32_t kResolveStencilNoExportSrcBinding  \u003d 1;\n\nSo it seems the typical pattern is DST\u003d0 and SRC\u003d1, so the init of these VkWriteDescriptorSet values should probably be swapped to match.",
+      "revId": "146f47e567ab27bbc23b135dbef94291997f0a62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a678dda_1407cd79",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-29T18:49:49Z",
+      "side": 1,
+      "message": "This \u00278\u0027 is to make sure that there are as many workgroups as there are uint32\u0027s in the buffer?\n\nDoes this need to be bounds-checked against what the HW supports?",
+      "range": {
+        "startLine": 1169,
+        "startChar": 71,
+        "endLine": 1169,
+        "endChar": 72
+      },
+      "revId": "146f47e567ab27bbc23b135dbef94291997f0a62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56b15542_49ef3111",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1194,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-29T18:49:49Z",
+      "side": 1,
+      "message": "Should you use params.resolveArea.width here?   Otherwise, if there was a remainder you may end up with an extra 4 bytes here.\n\n    uint32_t bufferRowLengthInUints \u003d\n        UnsignedCeilDivide(params.resolveArea.width, sizeof(uint32_t));\n\ninline unsigned int UnsignedCeilDivide(unsigned int value, unsigned int divisor)\n{\n    unsigned int divided \u003d value / divisor;\n    return (divided + ((value % divisor \u003d\u003d 0) ? 0 : 1));  \u003c\u003c---- may add a +1\n}",
+      "revId": "146f47e567ab27bbc23b135dbef94291997f0a62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1850f8b1_a2170b8c",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ResolveStencilNoExport.comp",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-29T18:49:49Z",
+      "side": 1,
+      "message": "Just learning what a workgroup and subgroup are today...\n\nWhy is \u00278\u0027 the best value here?   Can/Should this be matched to exactly as many subgroups the HW supports?",
+      "revId": "146f47e567ab27bbc23b135dbef94291997f0a62",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
