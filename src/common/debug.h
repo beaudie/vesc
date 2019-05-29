@@ -229,6 +229,7 @@ std::ostream &FmtHex(std::ostream &os, T value)
 #    define ANGLE_TRACE_ENABLED
 #endif
 
+#define ANGLE_ENABLE_ASSERTS
 #if !defined(NDEBUG) || defined(ANGLE_ENABLE_RELEASE_ASSERTS)
 #    define ANGLE_ENABLE_ASSERTS
 #endif
@@ -278,15 +279,15 @@ std::ostream &FmtHex(std::ostream &os, T value)
 #define ANGLE_EAT_STREAM_PARAMETERS \
     true ? static_cast<void>(0) : ::gl::priv::LogMessageVoidify() & (*::gl::priv::gSwallowStream)
 
+#define ASSERT(expression) assert(expression)
 // A macro asserting a condition and outputting failures to the debug log
-#if defined(ANGLE_ENABLE_ASSERTS)
-#    define ASSERT(expression)                                                                \
-        (expression ? static_cast<void>(0)                                                    \
-                    : (FATAL() << "\t! Assert failed in " << __FUNCTION__ << " (" << __FILE__ \
-                               << ":" << __LINE__ << "): " << #expression))
-#else
-#    define ASSERT(condition) ANGLE_EAT_STREAM_PARAMETERS << !(condition)
-#endif  // defined(ANGLE_ENABLE_ASSERTS)
+//#if defined(ANGLE_ENABLE_ASSERTS)
+//#    define ASSERT(expression) (expression ? static_cast<void>(0) : __debugbreak())
+//   //: (FATAL() << "\t! Assert failed in " << __FUNCTION__ << " (" << __FILE__ \
+//                    //           << ":" << __LINE__ << "): " << #expression))
+//#else
+//#    define ASSERT(condition) ANGLE_EAT_STREAM_PARAMETERS << !(condition)
+//#endif  // defined(ANGLE_ENABLE_ASSERTS)
 
 #define UNREACHABLE_IS_NORETURN 0
 

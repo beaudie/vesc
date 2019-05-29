@@ -8694,10 +8694,10 @@ void StateCache::updateValidBindTextureTypes(Context *context)
 
     mCachedValidBindTextureTypes = {{
         {TextureType::_2D, true},
-        {TextureType::_2DArray, isGLES3},
+        {TextureType::_2DArray, isGLES3 || exts.texture3D},
         {TextureType::_2DMultisample, isGLES31 || exts.textureMultisample},
         {TextureType::_2DMultisampleArray, exts.textureStorageMultisample2DArray},
-        {TextureType::_3D, isGLES3},
+        {TextureType::_3D, isGLES3 || exts.texture3D},
         {TextureType::External, exts.eglImageExternal || exts.eglStreamConsumerExternal},
         {TextureType::Rectangle, exts.textureRectangle},
         {TextureType::CubeMap, true},
