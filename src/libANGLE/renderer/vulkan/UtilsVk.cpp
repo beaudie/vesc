@@ -17,28 +17,30 @@
 namespace rx
 {
 
-namespace BufferUtils_comp            = vk::InternalShader::BufferUtils_comp;
-namespace ConvertVertex_comp          = vk::InternalShader::ConvertVertex_comp;
-namespace ImageClear_frag             = vk::InternalShader::ImageClear_frag;
-namespace ImageCopy_frag              = vk::InternalShader::ImageCopy_frag;
-namespace Resolve_frag                = vk::InternalShader::Resolve_frag;
-namespace ResolveStencilNoExport_comp = vk::InternalShader::ResolveStencilNoExport_comp;
+namespace BufferUtils_comp                = vk::InternalShader::BufferUtils_comp;
+namespace ConvertVertex_comp              = vk::InternalShader::ConvertVertex_comp;
+namespace ImageClear_frag                 = vk::InternalShader::ImageClear_frag;
+namespace ImageCopy_frag                  = vk::InternalShader::ImageCopy_frag;
+namespace BlitResolve_frag                = vk::InternalShader::BlitResolve_frag;
+namespace BlitResolveStencilNoExport_comp = vk::InternalShader::BlitResolveStencilNoExport_comp;
 
 namespace
 {
 // All internal shaders assume there is only one descriptor set, indexed at 0
 constexpr uint32_t kSetIndex = 0;
 
-constexpr uint32_t kBufferClearOutputBinding          = 0;
-constexpr uint32_t kBufferCopyDestinationBinding      = 0;
-constexpr uint32_t kBufferCopySourceBinding           = 1;
-constexpr uint32_t kConvertVertexDestinationBinding   = 0;
-constexpr uint32_t kConvertVertexSourceBinding        = 1;
-constexpr uint32_t kImageCopySourceBinding            = 0;
-constexpr uint32_t kResolveColorOrDepthBinding        = 0;
-constexpr uint32_t kResolveStencilBinding             = 1;
-constexpr uint32_t kResolveStencilNoExportDestBinding = 0;
-constexpr uint32_t kResolveStencilNoExportSrcBinding  = 1;
+constexpr uint32_t kBufferClearOutputBinding                 = 0;
+constexpr uint32_t kBufferCopyDestinationBinding             = 0;
+constexpr uint32_t kBufferCopySourceBinding                  = 1;
+constexpr uint32_t kConvertVertexDestinationBinding          = 0;
+constexpr uint32_t kConvertVertexSourceBinding               = 1;
+constexpr uint32_t kImageCopySourceBinding                   = 0;
+constexpr uint32_t kBlitResolveColorOrDepthBinding           = 0;
+constexpr uint32_t kBlitResolveStencilBinding                = 1;
+constexpr uint32_t kBlitResolveSamplerBinding                = 2;
+constexpr uint32_t kBlitResolveStencilNoExportDestBinding    = 0;
+constexpr uint32_t kBlitResolveStencilNoExportSrcBinding     = 1;
+constexpr uint32_t kBlitResolveStencilNoExportSamplerBinding = 2;
 
 uint32_t GetBufferUtilsFlags(size_t dispatchSize, const vk::Format &format)
 {
@@ -176,33 +178,33 @@ uint32_t GetImageCopyFlags(const vk::Format &srcFormat, const vk::Format &destFo
     return flags;
 }
 
-uint32_t GetResolveFlags(bool resolveColor,
-                         bool resolveDepth,
-                         bool resolveStencil,
-                         const vk::Format &format)
+uint32_t GetBlitResolveFlags(bool blitColor,
+                             bool blitDepth,
+                             bool blitStencil,
+                             const vk::Format &format)
 {
-    if (resolveColor)
+    if (blitColor)
     {
         const angle::Format &angleFormat = format.angleFormat();
 
-        return GetFormatFlags(angleFormat, Resolve_frag::kResolveColorInt,
-                              Resolve_frag::kResolveColorUint, Resolve_frag::kResolveColorFloat);
+        return GetFormatFlags(angleFormat, BlitResolve_frag::kBlitColorInt,
+                              BlitResolve_frag::kBlitColorUint, BlitResolve_frag::kBlitColorFloat);
     }
 
-    if (resolveDepth)
+    if (blitDepth)
     {
-        if (resolveStencil)
+        if (blitStencil)
         {
-            return Resolve_frag::kResolveDepthStencil;
+            return BlitResolve_frag::kBlitDepthStencil;
         }
         else
         {
-            return Resolve_frag::kResolveDepth;
+            return BlitResolve_frag::kBlitDepth;
         }
     }
     else
     {
-        return Resolve_frag::kResolveStencil;
+        return BlitResolve_frag::kBlitStencil;
     }
 }
 
@@ -221,6 +223,27 @@ uint32_t GetFormatDefaultChannelMask(const vk::Format &format)
     mask |= angleFormat.alphaBits == 0 && textureFormat.alphaBits > 0 ? 8 : 0;
 
     return mask;
+}
+
+// Calculate the transformation offset for blit/resolve.  See BlitResolve.frag for details on how
+// these values are derived.
+void CalculateBlitOffset(const UtilsVk::BlitResolveParameters &params, float offset[2])
+{
+    int srcOffsetFactorX = params.flipX ? -1 : 1;
+    int srcOffsetFactorY = params.flipY ? -1 : 1;
+
+    offset[0] = params.destOffset[0] * params.stretch[0] - params.srcOffset[0] * srcOffsetFactorX;
+    offset[1] = params.destOffset[1] * params.stretch[1] - params.srcOffset[1] * srcOffsetFactorY;
+}
+
+void CalculateResolveOffset(const UtilsVk::BlitResolveParameters &params, int32_t offset[2])
+{
+    int srcOffsetFactorX = params.flipX ? -1 : 1;
+    int srcOffsetFactorY = params.flipY ? -1 : 1;
+
+    // There's no stretching in resolve.
+    offset[0] = params.destOffset[0] - params.srcOffset[0] * srcOffsetFactorX;
+    offset[1] = params.destOffset[1] - params.srcOffset[1] * srcOffsetFactorY;
 }
 }  // namespace
 
@@ -261,14 +284,17 @@ void UtilsVk::destroy(VkDevice device)
     {
         program.destroy(device);
     }
-    for (vk::ShaderProgramHelper &program : mResolvePrograms)
+    for (vk::ShaderProgramHelper &program : mBlitResolvePrograms)
     {
         program.destroy(device);
     }
-    for (vk::ShaderProgramHelper &program : mResolveStencilNoExportPrograms)
+    for (vk::ShaderProgramHelper &program : mBlitResolveStencilNoExportPrograms)
     {
         program.destroy(device);
     }
+
+    mPointSampler.destroy(device);
+    mLinearSampler.destroy(device);
 }
 
 angle::Result UtilsVk::ensureResourcesInitialized(ContextVk *context,
@@ -389,37 +415,76 @@ angle::Result UtilsVk::ensureImageCopyResourcesInitialized(ContextVk *context)
                                       sizeof(ImageCopyShaderParams));
 }
 
-angle::Result UtilsVk::ensureResolveResourcesInitialized(ContextVk *context)
+angle::Result UtilsVk::ensureBlitResolveResourcesInitialized(ContextVk *context)
 {
-    if (mPipelineLayouts[Function::Resolve].valid())
+    if (!mPipelineLayouts[Function::BlitResolve].valid())
     {
-        return angle::Result::Continue;
+        VkDescriptorPoolSize setSizes[3] = {
+            {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1},
+            {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1},
+            {VK_DESCRIPTOR_TYPE_SAMPLER, 1},
+        };
+
+        ANGLE_TRY(ensureResourcesInitialized(context, Function::BlitResolve, setSizes,
+                                             ArraySize(setSizes), sizeof(BlitResolveShaderParams)));
     }
 
-    VkDescriptorPoolSize setSizes[2] = {
-        {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1},
-        {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1},
-    };
-
-    return ensureResourcesInitialized(context, Function::Resolve, setSizes, ArraySize(setSizes),
-                                      sizeof(ResolveShaderParams));
+    return ensureBlitResolveSamplersInitialized(context);
 }
 
-angle::Result UtilsVk::ensureResolveStencilNoExportResourcesInitialized(ContextVk *context)
+angle::Result UtilsVk::ensureBlitResolveStencilNoExportResourcesInitialized(ContextVk *context)
 {
-    if (mPipelineLayouts[Function::ResolveStencilNoExport].valid())
+    if (!mPipelineLayouts[Function::BlitResolveStencilNoExport].valid())
     {
-        return angle::Result::Continue;
+        VkDescriptorPoolSize setSizes[3] = {
+            {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},
+            {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1},
+            {VK_DESCRIPTOR_TYPE_SAMPLER, 1},
+        };
+
+        ANGLE_TRY(ensureResourcesInitialized(context, Function::BlitResolveStencilNoExport,
+                                             setSizes, ArraySize(setSizes),
+                                             sizeof(BlitResolveStencilNoExportShaderParams)));
     }
 
-    VkDescriptorPoolSize setSizes[2] = {
-        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},
-        {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1},
-    };
+    return ensureBlitResolveSamplersInitialized(context);
+}
 
-    return ensureResourcesInitialized(context, Function::ResolveStencilNoExport, setSizes,
-                                      ArraySize(setSizes),
-                                      sizeof(ResolveStencilNoExportShaderParams));
+angle::Result UtilsVk::ensureBlitResolveSamplersInitialized(ContextVk *context)
+{
+    VkSamplerCreateInfo samplerInfo;
+    samplerInfo.sType                   = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+    samplerInfo.flags                   = 0;
+    samplerInfo.magFilter               = VK_FILTER_NEAREST;
+    samplerInfo.minFilter               = VK_FILTER_NEAREST;
+    samplerInfo.mipmapMode              = VK_SAMPLER_MIPMAP_MODE_NEAREST;
+    samplerInfo.addressModeU            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+    samplerInfo.addressModeV            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+    samplerInfo.addressModeW            = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+    samplerInfo.mipLodBias              = 0.0f;
+    samplerInfo.anisotropyEnable        = VK_FALSE;
+    samplerInfo.maxAnisotropy           = 1;
+    samplerInfo.compareEnable           = VK_FALSE;
+    samplerInfo.compareOp               = VK_COMPARE_OP_ALWAYS;
+    samplerInfo.minLod                  = 0;
+    samplerInfo.maxLod                  = 0;
+    samplerInfo.borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK;
+    samplerInfo.unnormalizedCoordinates = VK_FALSE;
+
+    if (!mPointSampler.valid())
+    {
+        ANGLE_VK_TRY(context, mPointSampler.init(context->getDevice(), samplerInfo));
+    }
+
+    samplerInfo.magFilter = VK_FILTER_LINEAR;
+    samplerInfo.minFilter = VK_FILTER_LINEAR;
+
+    if (!mLinearSampler.valid())
+    {
+        ANGLE_VK_TRY(context, mLinearSampler.init(context->getDevice(), samplerInfo));
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result UtilsVk::setupProgram(ContextVk *context,
@@ -803,32 +868,33 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-angle::Result UtilsVk::colorResolve(ContextVk *contextVk,
-                                    FramebufferVk *framebuffer,
-                                    vk::ImageHelper *src,
-                                    const vk::ImageView *srcView,
-                                    const ResolveParameters &params)
+angle::Result UtilsVk::colorBlitResolve(ContextVk *contextVk,
+                                        FramebufferVk *framebuffer,
+                                        vk::ImageHelper *src,
+                                        const vk::ImageView *srcView,
+                                        const BlitResolveParameters &params)
 {
-    return resolveImpl(contextVk, framebuffer, src, srcView, nullptr, nullptr, params);
+    return blitResolveImpl(contextVk, framebuffer, src, srcView, nullptr, nullptr, params);
 }
 
-angle::Result UtilsVk::depthStencilResolve(ContextVk *contextVk,
-                                           FramebufferVk *framebuffer,
-                                           vk::ImageHelper *src,
-                                           const vk::ImageView *srcDepthView,
-                                           const vk::ImageView *srcStencilView,
-                                           const ResolveParameters &params)
+angle::Result UtilsVk::depthStencilBlitResolve(ContextVk *contextVk,
+                                               FramebufferVk *framebuffer,
+                                               vk::ImageHelper *src,
+                                               const vk::ImageView *srcDepthView,
+                                               const vk::ImageView *srcStencilView,
+                                               const BlitResolveParameters &params)
 {
-    return resolveImpl(contextVk, framebuffer, src, nullptr, srcDepthView, srcStencilView, params);
+    return blitResolveImpl(contextVk, framebuffer, src, nullptr, srcDepthView, srcStencilView,
+                           params);
 }
 
-angle::Result UtilsVk::resolveImpl(ContextVk *contextVk,
-                                   FramebufferVk *framebuffer,
-                                   vk::ImageHelper *src,
-                                   const vk::ImageView *srcColorView,
-                                   const vk::ImageView *srcDepthView,
-                                   const vk::ImageView *srcStencilView,
-                                   const ResolveParameters &params)
+angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
+                                       FramebufferVk *framebuffer,
+                                       vk::ImageHelper *src,
+                                       const vk::ImageView *srcColorView,
+                                       const vk::ImageView *srcDepthView,
+                                       const vk::ImageView *srcStencilView,
+                                       const BlitResolveParameters &params)
 {
     // Possible ways to resolve color are:
     //
@@ -838,10 +904,10 @@ angle::Result UtilsVk::resolveImpl(ContextVk *contextVk,
     // - Using subpass resolve attachment: A shader can transform the sample colors from source to
     //   destination coordinates and the subpass resolve would finish the job.
     //
-    // The first method is unable to handle flipping, so it's not usable.  The last method would
-    // have been great were we able to modify the last render pass that rendered into source, but
-    // still wouldn't be able to handle flipping.  The second method is implemented in this function
-    // for complete control.
+    // The first method is unable to handle flipping, so it's not generally applicable.  The last
+    // method would have been great were we able to modify the last render pass that rendered into
+    // source, but still wouldn't be able to handle flipping.  The second method is implemented in
+    // this function for complete control.
 
     // Possible ways to resolve depth/stencil are:
     //
@@ -851,50 +917,82 @@ angle::Result UtilsVk::resolveImpl(ContextVk *contextVk,
     //
     // The first method is implemented in this function.
 
-    ANGLE_TRY(ensureResolveResourcesInitialized(contextVk));
+    // Possible ways to blit color, depth or stencil are:
+    //
+    // - vkCmdBlitImage: This function works if the source and destination formats have the blit
+    //   feature.
+    // - Manual blit: A shader can sample from the source image and write it to the destination.
+    //
+    // The first method has a serious shortcoming.  GLES allows blit parameters to exceed the
+    // source or destination boundaries.  The actual blit is clipped to these limits, but the
+    // scaling applied is determined solely by the input areas.  Vulkan requires the blit parameters
+    // to be within the source and destination bounds.  This makes it hard to keep the scaling
+    // constant.  TODO(syoussefi): depends on whether source clipping results in a smaller
+    // destination region too (which then means the scaling can be kept), or whether it means the
+    // destination is filled with some value, like black, where there's no source data.
+    //
+    // The second method is implemented in this function, which shares code with the resolve method.
 
-    ASSERT(src->getSamples() > 1);
+    ANGLE_TRY(ensureBlitResolveResourcesInitialized(contextVk));
 
-    ResolveShaderParams shaderParams;
-    shaderParams.srcExtent[0]  = params.srcExtents[0];
-    shaderParams.srcExtent[1]  = params.srcExtents[1];
-    shaderParams.srcOffset[0]  = params.srcOffset[0];
-    shaderParams.srcOffset[1]  = params.srcOffset[1];
-    shaderParams.destOffset[0] = params.destOffset[0];
-    shaderParams.destOffset[1] = params.destOffset[1];
-    shaderParams.srcLayer      = params.srcLayer;
-    shaderParams.samples       = src->getSamples();
-    shaderParams.invSamples    = 1.0f / shaderParams.samples;
+    bool isResolve = src->getSamples() > 1;
+
+    BlitResolveShaderParams shaderParams;
+    if (isResolve)
+    {
+        CalculateResolveOffset(params, shaderParams.offset.resolve);
+    }
+    else
+    {
+        CalculateBlitOffset(params, shaderParams.offset.blit);
+    }
+    shaderParams.stretch[0]      = params.stretch[0];
+    shaderParams.stretch[1]      = params.stretch[1];
+    shaderParams.invSrcExtent[0] = 1.0f / params.srcExtents[0];
+    shaderParams.invSrcExtent[1] = 1.0f / params.srcExtents[1];
+    shaderParams.srcLayer        = params.srcLayer;
+    shaderParams.samples         = src->getSamples();
+    shaderParams.invSamples      = 1.0f / shaderParams.samples;
     shaderParams.outputMask =
         static_cast<uint32_t>(framebuffer->getState().getEnabledDrawBuffers().to_ulong());
     shaderParams.flipX = params.flipX;
     shaderParams.flipY = params.flipY;
 
-    bool resolveColor   = srcColorView != nullptr;
-    bool resolveDepth   = srcDepthView != nullptr;
-    bool resolveStencil = srcStencilView != nullptr;
+    bool blitColor   = srcColorView != nullptr;
+    bool blitDepth   = srcDepthView != nullptr;
+    bool blitStencil = srcStencilView != nullptr;
 
-    // Either color is resolved or depth/stencil, but not both.
-    ASSERT(resolveColor != (resolveDepth || resolveStencil));
+    // Either color is blitted/resolved or depth/stencil, but not both.
+    ASSERT(blitColor != (blitDepth || blitStencil));
 
-    uint32_t flags = GetResolveFlags(resolveColor, resolveDepth, resolveStencil, src->getFormat());
-    flags |= src->getLayerCount() > 1 ? Resolve_frag::kSrcIsArray : 0;
+    // Linear sampling is only valid with color blitting.
+    ASSERT((blitColor && !isResolve) || !params.linear);
+
+    uint32_t flags = GetBlitResolveFlags(blitColor, blitDepth, blitStencil, src->getFormat());
+    flags |= src->getLayerCount() > 1 ? BlitResolve_frag::kSrcIsArray : 0;
+    flags |= isResolve ? BlitResolve_frag::kIsResolve : 0;
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(mDescriptorPools[Function::Resolve].allocateSets(
-        contextVk, mDescriptorSetLayouts[Function::Resolve][kSetIndex].get().ptr(), 1,
+    ANGLE_TRY(mDescriptorPools[Function::BlitResolve].allocateSets(
+        contextVk, mDescriptorSetLayouts[Function::BlitResolve][kSetIndex].get().ptr(), 1,
         &descriptorPoolBinding, &descriptorSet));
     descriptorPoolBinding.get().updateSerial(contextVk->getCurrentQueueSerial());
 
+    constexpr VkColorComponentFlags kAllColorComponents =
+        VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
+        VK_COLOR_COMPONENT_A_BIT;
+
     vk::GraphicsPipelineDesc pipelineDesc;
     pipelineDesc.initDefaults();
+    pipelineDesc.setColorWriteMask(kAllColorComponents,
+                                   framebuffer->getEmulatedAlphaAttachmentMask());
     pipelineDesc.setRenderPassDesc(framebuffer->getRenderPassDesc());
-    pipelineDesc.setDepthTestEnabled(resolveDepth);
-    pipelineDesc.setDepthWriteEnabled(resolveDepth);
+    pipelineDesc.setDepthTestEnabled(blitDepth);
+    pipelineDesc.setDepthWriteEnabled(blitDepth);
     pipelineDesc.setDepthFunc(VK_COMPARE_OP_ALWAYS);
 
-    if (resolveStencil)
+    if (blitStencil)
     {
         ASSERT(contextVk->getRenderer()->getFeatures().supportsShaderStencilExport.enabled);
 
@@ -917,7 +1015,7 @@ angle::Result UtilsVk::resolveImpl(ContextVk *contextVk,
     gl_vk::GetViewport(completeRenderArea, 0.0f, 1.0f, false, completeRenderArea.height, &viewport);
     pipelineDesc.setViewport(viewport);
 
-    pipelineDesc.setScissor(gl_vk::GetRect(params.resolveArea));
+    pipelineDesc.setScissor(gl_vk::GetRect(params.blitArea));
 
     // Change source layout outside render pass
     if (src->isLayoutChangeNecessary(vk::ImageLayout::FragmentShaderReadOnly))
@@ -929,10 +1027,10 @@ angle::Result UtilsVk::resolveImpl(ContextVk *contextVk,
     }
 
     vk::CommandBuffer *commandBuffer;
-    if (!framebuffer->appendToStartedRenderPass(contextVk->getCurrentQueueSerial(),
-                                                params.resolveArea, &commandBuffer))
+    if (!framebuffer->appendToStartedRenderPass(contextVk->getCurrentQueueSerial(), params.blitArea,
+                                                &commandBuffer))
     {
-        ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, params.resolveArea, &commandBuffer));
+        ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, params.blitArea, &commandBuffer));
     }
 
     // Source's layout change should happen before rendering
@@ -940,111 +1038,139 @@ angle::Result UtilsVk::resolveImpl(ContextVk *contextVk,
 
     VkDescriptorImageInfo imageInfos[2] = {};
 
-    if (resolveColor)
+    if (blitColor)
     {
         imageInfos[0].imageView   = srcColorView->getHandle();
         imageInfos[0].imageLayout = src->getCurrentLayout();
     }
-    if (resolveDepth)
+    if (blitDepth)
     {
         imageInfos[0].imageView   = srcDepthView->getHandle();
         imageInfos[0].imageLayout = src->getCurrentLayout();
     }
-    if (resolveStencil)
+    if (blitStencil)
     {
         imageInfos[1].imageView   = srcStencilView->getHandle();
         imageInfos[1].imageLayout = src->getCurrentLayout();
     }
 
-    VkWriteDescriptorSet writeInfos[2] = {};
+    VkDescriptorImageInfo samplerInfo = {};
+    samplerInfo.sampler = params.linear ? mLinearSampler.getHandle() : mPointSampler.getHandle();
+
+    VkWriteDescriptorSet writeInfos[3] = {};
     writeInfos[0].sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeInfos[0].dstSet               = descriptorSet;
-    writeInfos[0].dstBinding           = kResolveColorOrDepthBinding;
+    writeInfos[0].dstBinding           = kBlitResolveColorOrDepthBinding;
     writeInfos[0].descriptorCount      = 1;
     writeInfos[0].descriptorType       = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
     writeInfos[0].pImageInfo           = &imageInfos[0];
 
     writeInfos[1]            = writeInfos[0];
-    writeInfos[1].dstBinding = kResolveStencilBinding;
+    writeInfos[1].dstBinding = kBlitResolveStencilBinding;
     writeInfos[1].pImageInfo = &imageInfos[1];
+
+    writeInfos[2].sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfos[2].dstSet          = descriptorSet;
+    writeInfos[2].dstBinding      = kBlitResolveSamplerBinding;
+    writeInfos[2].descriptorCount = 1;
+    writeInfos[2].descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLER;
+    writeInfos[2].pImageInfo      = &samplerInfo;
 
     // If resolving color, there's one write info; index 0
     // If resolving depth, write info index 0 must be written
     // If resolving stencil, write info index 1 must also be written
     //
     // Note again that resolving color and depth/stencil are mutually exclusive here.
-    uint32_t writeInfoOffset = resolveDepth || resolveColor ? 0 : 1;
-    uint32_t writeInfoCount  = resolveColor + resolveDepth + resolveStencil;
+    uint32_t writeInfoOffset = blitDepth || blitColor ? 0 : 1;
+    uint32_t writeInfoCount  = blitColor + blitDepth + blitStencil;
 
     vkUpdateDescriptorSets(contextVk->getDevice(), writeInfoCount, writeInfos + writeInfoOffset, 0,
                            nullptr);
+    vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfos[2], 0, nullptr);
 
     vk::ShaderLibrary &shaderLibrary                    = contextVk->getShaderLibrary();
     vk::RefCounted<vk::ShaderAndSerial> *vertexShader   = nullptr;
     vk::RefCounted<vk::ShaderAndSerial> *fragmentShader = nullptr;
     ANGLE_TRY(shaderLibrary.getFullScreenQuad_vert(contextVk, 0, &vertexShader));
-    ANGLE_TRY(shaderLibrary.getResolve_frag(contextVk, flags, &fragmentShader));
+    ANGLE_TRY(shaderLibrary.getBlitResolve_frag(contextVk, flags, &fragmentShader));
 
-    ANGLE_TRY(setupProgram(contextVk, Function::Resolve, fragmentShader, vertexShader,
-                           &mResolvePrograms[flags], &pipelineDesc, descriptorSet, &shaderParams,
-                           sizeof(shaderParams), commandBuffer));
+    ANGLE_TRY(setupProgram(contextVk, Function::BlitResolve, fragmentShader, vertexShader,
+                           &mBlitResolvePrograms[flags], &pipelineDesc, descriptorSet,
+                           &shaderParams, sizeof(shaderParams), commandBuffer));
     commandBuffer->draw(6, 0);
     descriptorPoolBinding.reset();
 
     return angle::Result::Continue;
 }
 
-angle::Result UtilsVk::stencilResolveNoShaderExport(ContextVk *contextVk,
-                                                    FramebufferVk *framebuffer,
-                                                    vk::ImageHelper *src,
-                                                    const vk::ImageView *srcStencilView,
-                                                    const ResolveParameters &params)
+angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
+                                                        FramebufferVk *framebuffer,
+                                                        vk::ImageHelper *src,
+                                                        const vk::ImageView *srcStencilView,
+                                                        const BlitResolveParameters &params)
 {
-    // When VK_EXT_shader_stencil_export is not available, stencil is resolved into a temporary
-    // buffer which is then copied into the stencil aspect of the image.
+    // When VK_EXT_shader_stencil_export is not available, stencil is blitted/resolved into a
+    // temporary buffer which is then copied into the stencil aspect of the image.
 
-    ANGLE_TRY(ensureResolveStencilNoExportResourcesInitialized(contextVk));
+    ANGLE_TRY(ensureBlitResolveStencilNoExportResourcesInitialized(contextVk));
+
+    bool isResolve = src->getSamples() > 1;
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
-    ANGLE_TRY(mDescriptorPools[Function::ResolveStencilNoExport].allocateSets(
-        contextVk, mDescriptorSetLayouts[Function::ResolveStencilNoExport][kSetIndex].get().ptr(),
-        1, &descriptorPoolBinding, &descriptorSet));
+    ANGLE_TRY(mDescriptorPools[Function::BlitResolveStencilNoExport].allocateSets(
+        contextVk,
+        mDescriptorSetLayouts[Function::BlitResolveStencilNoExport][kSetIndex].get().ptr(), 1,
+        &descriptorPoolBinding, &descriptorSet));
     descriptorPoolBinding.get().updateSerial(contextVk->getCurrentQueueSerial());
 
-    // Create a temporary buffer to resolve stencil into.
-    vk::Scoped<vk::BufferHelper> resolveBuffer(contextVk->getDevice());
+    // Create a temporary buffer to blit/resolve stencil into.
+    vk::Scoped<vk::BufferHelper> blitBuffer(contextVk->getDevice());
 
-    uint32_t bufferRowLengthInUints =
-        UnsignedCeilDivide(params.resolveArea.width, sizeof(uint32_t));
-    VkDeviceSize bufferSize = bufferRowLengthInUints * sizeof(uint32_t) * params.resolveArea.height;
+    uint32_t bufferRowLengthInUints = UnsignedCeilDivide(params.blitArea.width, sizeof(uint32_t));
+    VkDeviceSize bufferSize = bufferRowLengthInUints * sizeof(uint32_t) * params.blitArea.height;
 
-    VkBufferCreateInfo resolveBufferInfo = {};
-    resolveBufferInfo.sType              = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    resolveBufferInfo.flags              = 0;
-    resolveBufferInfo.size               = bufferSize;
-    resolveBufferInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
-    resolveBufferInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
-    resolveBufferInfo.queueFamilyIndexCount = 0;
-    resolveBufferInfo.pQueueFamilyIndices   = nullptr;
+    VkBufferCreateInfo blitBufferInfo = {};
+    blitBufferInfo.sType              = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    blitBufferInfo.flags              = 0;
+    blitBufferInfo.size               = bufferSize;
+    blitBufferInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+    blitBufferInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    blitBufferInfo.queueFamilyIndexCount = 0;
+    blitBufferInfo.pQueueFamilyIndices   = nullptr;
 
-    ANGLE_TRY(resolveBuffer.get().init(contextVk, resolveBufferInfo,
-                                       VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
-    resolveBuffer.get().updateQueueSerial(contextVk->getCurrentQueueSerial());
+    ANGLE_TRY(
+        blitBuffer.get().init(contextVk, blitBufferInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+    blitBuffer.get().updateQueueSerial(contextVk->getCurrentQueueSerial());
 
-    ResolveStencilNoExportShaderParams shaderParams;
-    shaderParams.srcExtent[0]  = params.srcExtents[0];
-    shaderParams.srcExtent[1]  = params.srcExtents[1];
-    shaderParams.srcOffset[0]  = params.srcOffset[0];
-    shaderParams.srcOffset[1]  = params.srcOffset[1];
-    shaderParams.destPitch     = bufferRowLengthInUints;
-    shaderParams.destExtent[0] = params.resolveArea.width;
-    shaderParams.destExtent[1] = params.resolveArea.height;
-    shaderParams.srcLayer      = params.srcLayer;
-    shaderParams.flipX         = params.flipX;
-    shaderParams.flipY         = params.flipY;
+    BlitResolveStencilNoExportShaderParams shaderParams;
+    if (isResolve)
+    {
+        CalculateResolveOffset(params, shaderParams.offset.resolve);
+    }
+    else
+    {
+        CalculateBlitOffset(params, shaderParams.offset.blit);
+    }
+    shaderParams.stretch[0]      = params.stretch[0];
+    shaderParams.stretch[1]      = params.stretch[1];
+    shaderParams.invSrcExtent[0] = 1.0f / params.srcExtents[0];
+    shaderParams.invSrcExtent[1] = 1.0f / params.srcExtents[1];
+    shaderParams.srcLayer        = params.srcLayer;
+    shaderParams.srcWidth        = params.srcExtents[0];
+    shaderParams.destPitch       = bufferRowLengthInUints;
+    shaderParams.blitArea[0]     = params.blitArea.x;
+    shaderParams.blitArea[1]     = params.blitArea.y;
+    shaderParams.blitArea[2]     = params.blitArea.width;
+    shaderParams.blitArea[3]     = params.blitArea.height;
+    shaderParams.flipX           = params.flipX;
+    shaderParams.flipY           = params.flipY;
 
-    uint32_t flags = src->getLayerCount() > 1 ? ResolveStencilNoExport_comp::kSrcIsArray : 0;
+    // Linear sampling is only valid with color blitting.
+    ASSERT(!params.linear);
+
+    uint32_t flags = src->getLayerCount() > 1 ? BlitResolveStencilNoExport_comp::kSrcIsArray : 0;
+    flags |= isResolve ? BlitResolve_frag::kIsResolve : 0;
 
     // Change source layout prior to computation.
     if (src->isLayoutChangeNecessary(vk::ImageLayout::ComputeShaderReadOnly))
@@ -1060,42 +1186,52 @@ angle::Result UtilsVk::stencilResolveNoShaderExport(ContextVk *contextVk,
 
     src->addReadDependency(framebuffer->getFramebuffer());
 
-    // Resolve stencil into the buffer.
+    // Blit/resolve stencil into the buffer.
     VkDescriptorImageInfo imageInfo = {};
     imageInfo.imageView             = srcStencilView->getHandle();
     imageInfo.imageLayout           = src->getCurrentLayout();
 
     VkDescriptorBufferInfo bufferInfo = {};
-    bufferInfo.buffer                 = resolveBuffer.get().getBuffer().getHandle();
+    bufferInfo.buffer                 = blitBuffer.get().getBuffer().getHandle();
     bufferInfo.offset                 = 0;
     bufferInfo.range                  = VK_WHOLE_SIZE;
 
-    VkWriteDescriptorSet writeInfos[2] = {};
+    VkDescriptorImageInfo samplerInfo = {};
+    samplerInfo.sampler = params.linear ? mLinearSampler.getHandle() : mPointSampler.getHandle();
+
+    VkWriteDescriptorSet writeInfos[3] = {};
     writeInfos[0].sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeInfos[0].dstSet               = descriptorSet;
-    writeInfos[0].dstBinding           = kResolveStencilNoExportDestBinding;
+    writeInfos[0].dstBinding           = kBlitResolveStencilNoExportDestBinding;
     writeInfos[0].descriptorCount      = 1;
     writeInfos[0].descriptorType       = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
     writeInfos[0].pBufferInfo          = &bufferInfo;
 
     writeInfos[1].sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     writeInfos[1].dstSet          = descriptorSet;
-    writeInfos[1].dstBinding      = kResolveStencilNoExportSrcBinding;
+    writeInfos[1].dstBinding      = kBlitResolveStencilNoExportSrcBinding;
     writeInfos[1].descriptorCount = 1;
     writeInfos[1].descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
     writeInfos[1].pImageInfo      = &imageInfo;
 
-    vkUpdateDescriptorSets(contextVk->getDevice(), 2, writeInfos, 0, nullptr);
+    writeInfos[2].sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfos[2].dstSet          = descriptorSet;
+    writeInfos[2].dstBinding      = kBlitResolveStencilNoExportSamplerBinding;
+    writeInfos[2].descriptorCount = 1;
+    writeInfos[2].descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLER;
+    writeInfos[2].pImageInfo      = &samplerInfo;
+
+    vkUpdateDescriptorSets(contextVk->getDevice(), 3, writeInfos, 0, nullptr);
 
     vk::RefCounted<vk::ShaderAndSerial> *shader = nullptr;
-    ANGLE_TRY(
-        contextVk->getShaderLibrary().getResolveStencilNoExport_comp(contextVk, flags, &shader));
+    ANGLE_TRY(contextVk->getShaderLibrary().getBlitResolveStencilNoExport_comp(contextVk, flags,
+                                                                               &shader));
 
-    ANGLE_TRY(setupProgram(contextVk, Function::ResolveStencilNoExport, shader, nullptr,
-                           &mResolveStencilNoExportPrograms[flags], nullptr, descriptorSet,
+    ANGLE_TRY(setupProgram(contextVk, Function::BlitResolveStencilNoExport, shader, nullptr,
+                           &mBlitResolveStencilNoExportPrograms[flags], nullptr, descriptorSet,
                            &shaderParams, sizeof(shaderParams), commandBuffer));
     commandBuffer->dispatch(UnsignedCeilDivide(bufferRowLengthInUints, 8),
-                            UnsignedCeilDivide(params.resolveArea.height, 8), 1);
+                            UnsignedCeilDivide(params.blitArea.height, 8), 1);
     descriptorPoolBinding.reset();
 
     // Add a barrier prior to copy.
@@ -1109,7 +1245,7 @@ angle::Result UtilsVk::stencilResolveNoShaderExport(ContextVk *contextVk,
                                    VK_PIPELINE_STAGE_TRANSFER_BIT, 0, 1, &memoryBarrier, 0, nullptr,
                                    0, nullptr);
 
-    // Copy the resolved buffer into dest.
+    // Copy the resulting buffer into dest.
     RenderTargetVk *depthStencilRenderTarget = framebuffer->getDepthStencilRenderTarget();
     ASSERT(depthStencilRenderTarget != nullptr);
     vk::ImageHelper *depthStencilImage = &depthStencilRenderTarget->getImage();
@@ -1120,23 +1256,23 @@ angle::Result UtilsVk::stencilResolveNoShaderExport(ContextVk *contextVk,
     VkBufferImageCopy region               = {};
     region.bufferOffset                    = 0;
     region.bufferRowLength                 = bufferRowLengthInUints * sizeof(uint32_t);
-    region.bufferImageHeight               = params.resolveArea.height;
+    region.bufferImageHeight               = params.blitArea.height;
     region.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_STENCIL_BIT;
     region.imageSubresource.mipLevel       = depthStencilRenderTarget->getLevelIndex();
     region.imageSubresource.baseArrayLayer = depthStencilRenderTarget->getLayerIndex();
     region.imageSubresource.layerCount     = 1;
-    region.imageOffset.x                   = params.resolveArea.x;
-    region.imageOffset.y                   = params.resolveArea.y;
+    region.imageOffset.x                   = params.blitArea.x;
+    region.imageOffset.y                   = params.blitArea.y;
     region.imageOffset.z                   = 0;
-    region.imageExtent.width               = params.resolveArea.width;
-    region.imageExtent.height              = params.resolveArea.height;
+    region.imageExtent.width               = params.blitArea.width;
+    region.imageExtent.height              = params.blitArea.height;
     region.imageExtent.depth               = 1;
 
-    commandBuffer->copyBufferToImage(resolveBuffer.get().getBuffer().getHandle(),
+    commandBuffer->copyBufferToImage(blitBuffer.get().getBuffer().getHandle(),
                                      depthStencilImage->getImage(),
                                      depthStencilImage->getCurrentLayout(), 1, &region);
 
-    resolveBuffer.get().release(contextVk);
+    blitBuffer.get().release(contextVk);
 
     return angle::Result::Continue;
 }
