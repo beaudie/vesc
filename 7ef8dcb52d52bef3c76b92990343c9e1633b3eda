@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d775ea15_2e73841a",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-29T14:17:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "087b611e_8d6a0558",
+      "range": {
+        "startLine": 117,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 11
+      },
+      "revId": "7ef8dcb52d52bef3c76b92990343c9e1633b3eda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4c61d49_ecb9b70d",
         "filename": "include/platform/FeaturesVk.h",
         "patchSetId": 18
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "d3260420_76ff3f37",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-29T14:17:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4c61d49_ecb9b70d",
+      "range": {
+        "startLine": 118,
+        "startChar": 42,
+        "endLine": 118,
+        "endChar": 49
+      },
+      "revId": "7ef8dcb52d52bef3c76b92990343c9e1633b3eda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24493ec5_b739583d",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 18
@@ -68,6 +116,30 @@
       "revId": "7ef8dcb52d52bef3c76b92990343c9e1633b3eda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e498815_273d115f",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 926,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-29T14:17:36Z",
+      "side": 1,
+      "message": "Done. Also realized the comment in `colorResolve` was outdated.",
+      "parentUuid": "24493ec5_b739583d",
+      "range": {
+        "startLine": 923,
+        "startChar": 0,
+        "endLine": 926,
+        "endChar": 0
+      },
+      "revId": "7ef8dcb52d52bef3c76b92990343c9e1633b3eda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

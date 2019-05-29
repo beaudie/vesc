@@ -261,6 +261,30 @@
     },
     {
       "key": {
+        "uuid": "078e6948_cf0bc8c4",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-29T14:17:36Z",
+      "side": 1,
+      "message": "(Yes, but not without complaining (warning) about it). Ack",
+      "parentUuid": "62ef5b2c_653830c3",
+      "range": {
+        "startLine": 374,
+        "startChar": 0,
+        "endLine": 381,
+        "endChar": 36
+      },
+      "revId": "7f622ff786ef87b9d6bbb65424f7704540a4ee8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62f38c35_7d44c5cb",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 15
@@ -449,6 +473,24 @@
       "side": 1,
       "message": "Shouldn\u0027t be too hard to add it to the bots. We should probably add it for the Vulkan configs on the dEQP bots. Not super pressing.",
       "parentUuid": "85ff6b09_2d53d8fa",
+      "revId": "7f622ff786ef87b9d6bbb65424f7704540a4ee8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4086a9cb_b02af704",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-05-29T14:17:36Z",
+      "side": 1,
+      "message": "http://anglebug.com/3488",
+      "parentUuid": "59e7c2f7_18dbad91",
       "revId": "7f622ff786ef87b9d6bbb65424f7704540a4ee8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
