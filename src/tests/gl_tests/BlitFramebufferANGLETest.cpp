@@ -1341,6 +1341,105 @@ TEST_P(BlitFramebufferTest, MultisampleStencil)
     ASSERT_GL_NO_ERROR();
 }
 
+// Test resolving a multisampled stencil buffer with scissor.
+TEST_P(BlitFramebufferTest, ScissoredMultisampleStencil)
+{
+    // Incorrect rendering results seen on AMD Windows OpenGL. http://anglebug.com/2486
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL() && IsWindows());
+
+    constexpr GLuint kSize = 256;
+
+    // Create the resolve framebuffer.
+    GLTexture destColorbuf;
+    glBindTexture(GL_TEXTURE_2D, destColorbuf.get());
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, kSize, kSize);
+
+    GLRenderbuffer destRenderbuf;
+    glBindRenderbuffer(GL_RENDERBUFFER, destRenderbuf.get());
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, kSize, kSize);
+
+    GLFramebuffer resolved;
+    glBindFramebuffer(GL_FRAMEBUFFER, resolved.get());
+    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                           destColorbuf.get(), 0);
+    glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              destRenderbuf.get());
+
+    // Clear the resolved buffer with gray and 0x10 stencil.
+    GLColor gray(127, 127, 127, 255);
+    glClearStencil(0x10);
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, gray);
+    EXPECT_PIXEL_COLOR_EQ(kSize / 2, kSize / 2, gray);
+
+    // Create the multisampled framebuffer.
+    GLRenderbuffer renderbuf;
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuf.get());
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 2, GL_STENCIL_INDEX8, kSize, kSize);
+
+    ANGLE_GL_PROGRAM(drawRed, essl3_shaders::vs::Simple(), essl3_shaders::fs::Red());
+    ANGLE_GL_PROGRAM(drawGreen, essl3_shaders::vs::Simple(), essl3_shaders::fs::Green());
+    ANGLE_GL_PROGRAM(drawBlue, essl3_shaders::vs::Simple(), essl3_shaders::fs::Blue());
+
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                              renderbuf.get());
+
+    ASSERT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+
+    // Fill the stencil buffer with 0x1.
+    glClearStencil(0x1);
+    glClear(GL_STENCIL_BUFFER_BIT);
+
+    // Fill a smaller region of the buffer with 0x2.
+    glEnable(GL_SCISSOR_TEST);
+    glEnable(GL_STENCIL_TEST);
+    glScissor(kSize / 4, kSize / 4, kSize / 2, kSize / 2);
+    glStencilFunc(GL_ALWAYS, 0x2, 0xFF);
+    glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+    drawQuad(drawRed.get(), essl3_shaders::PositionAttrib(), 0.5f);
+
+    // Blit into the resolved framebuffer (with scissor still enabled).
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, resolved.get());
+    glBlitFramebuffer(0, 0, kSize, kSize, 0, 0, kSize, kSize, GL_STENCIL_BUFFER_BIT, GL_NEAREST);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, resolved.get());
+
+    ASSERT_GL_NO_ERROR();
+
+    // Draw blue if the stencil is 0x1, which should never be true.
+    glDisable(GL_SCISSOR_TEST);
+    glStencilFunc(GL_EQUAL, 0x1, 0xFF);
+    drawQuad(drawBlue.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, gray);
+    EXPECT_PIXEL_COLOR_EQ(kSize - 1, 0, gray);
+    EXPECT_PIXEL_COLOR_EQ(0, kSize - 1, gray);
+    EXPECT_PIXEL_COLOR_EQ(kSize - 1, kSize - 1, gray);
+    EXPECT_PIXEL_COLOR_EQ(kSize / 2, kSize / 2, gray);
+
+    // Draw red if the stencil is 0x2, which should be true in the middle after the blit/resolve.
+    glStencilFunc(GL_EQUAL, 0x2, 0xFF);
+    drawQuad(drawRed.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, gray);
+    EXPECT_PIXEL_COLOR_EQ(kSize - 1, 0, gray);
+    EXPECT_PIXEL_COLOR_EQ(0, kSize - 1, gray);
+    EXPECT_PIXEL_COLOR_EQ(kSize - 1, kSize - 1, gray);
+    EXPECT_PIXEL_COLOR_EQ(kSize / 2, kSize / 2, GLColor::red);
+
+    // Draw green if the stencil is 0x10, which should be left untouched in the outer regions.
+    glStencilFunc(GL_EQUAL, 0x10, 0xFF);
+    drawQuad(drawGreen.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(kSize - 1, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, kSize - 1, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(kSize - 1, kSize - 1, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(kSize / 2, kSize / 2, GLColor::red);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Blit an SRGB framebuffer and scale it.
 TEST_P(BlitFramebufferTest, BlitSRGBToRGBAndScale)
 {
@@ -1476,7 +1575,7 @@ TEST_P(BlitFramebufferTest, BlitSRGBToRGBOversizedSourceArea)
     glBindFramebuffer(GL_READ_FRAMEBUFFER, sourceFBO);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, targetFBO);
 
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Blit so that the source area gets placed at the center of the target FBO.
@@ -1496,10 +1595,10 @@ TEST_P(BlitFramebufferTest, BlitSRGBToRGBOversizedSourceArea)
 
     // Clear color should remain around the edges of the target FBO (WebGL 2.0 spec explicitly
     // requires this and ANGLE is expected to follow that).
-    EXPECT_PIXEL_COLOR_EQ(kWidth / 4, kHeight / 4, GLColor::black);
-    EXPECT_PIXEL_COLOR_EQ(3 * kWidth / 4, kHeight / 4, GLColor::black);
-    EXPECT_PIXEL_COLOR_EQ(3 * kWidth / 4, 3 * kHeight / 4, GLColor::black);
-    EXPECT_PIXEL_COLOR_EQ(kWidth / 4, 3 * kHeight / 4, GLColor::black);
+    EXPECT_PIXEL_COLOR_EQ(kWidth / 4, kHeight / 4, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(3 * kWidth / 4, kHeight / 4, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(3 * kWidth / 4, 3 * kHeight / 4, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(kWidth / 4, 3 * kHeight / 4, GLColor::blue);
 }
 
 // Test blitFramebuffer size overflow checks. WebGL 2.0 spec section 5.41. We do validation for
