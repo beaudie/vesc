@@ -1965,14 +1965,14 @@ TEST_P(ImageTest, UpdatedData)
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(ImageTest,
-                       ES2_D3D9(),
-                       ES2_D3D11(),
-                       ES3_D3D11(),
-                       ES2_OPENGL(),
-                       ES3_OPENGL(),
-                       ES2_OPENGLES(),
-                       ES3_OPENGLES(),
+                       // ES2_D3D9(),
+                       // ES2_D3D11(),
+                       // ES3_D3D11(),
+                       // ES2_OPENGL(),
+                       // ES3_OPENGL(),
+                       // ES2_OPENGLES(),
+                       // ES3_OPENGLES(),
                        ES2_VULKAN(),
-                       ES3_VULKAN());
+                       /*ES3_VULKAN()*/);
 ANGLE_INSTANTIATE_TEST(ImageTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES(), ES3_VULKAN());
 }  // namespace angle

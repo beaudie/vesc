@@ -103,6 +103,8 @@ void RendererVk::ensureCapsInitialized() const
     // Vulkan natively supports non power-of-two textures
     mNativeExtensions.textureNPOT = true;
 
+    mNativeExtensions.texture3D = true;
+
     // Vulkan natively supports standard derivatives
     mNativeExtensions.standardDerivatives = true;
 
