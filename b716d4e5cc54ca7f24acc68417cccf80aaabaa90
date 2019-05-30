@@ -117,6 +117,23 @@
     },
     {
       "key": {
+        "uuid": "fe5c1be6_025fe190",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-05-30T15:02:50Z",
+      "side": 1,
+      "message": "We might need to re-create the aquireImagerSempahore in this case?  Not sure exactly what semaphore the validation message is about.",
+      "revId": "b716d4e5cc54ca7f24acc68417cccf80aaabaa90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9bf47236_c1554180",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 3
