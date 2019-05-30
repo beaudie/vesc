@@ -7256,32 +7256,24 @@ void Context::getSemaphoreParameterui64v(GLuint semaphore, GLenum pname, GLuint6
     UNIMPLEMENTED();
 }
 
-void Context::waitSemaphore(GLuint semaphoreHandle,
+void Context::waitSemaphore(GLuint semaphore,
                             GLuint numBufferBarriers,
                             const GLuint *buffers,
                             GLuint numTextureBarriers,
                             const GLuint *textures,
                             const GLenum *srcLayouts)
 {
-    Semaphore *semaphore = getSemaphore(semaphoreHandle);
-    ASSERT(semaphore);
-
-    ANGLE_CONTEXT_TRY(mImplementation->waitSemaphore(this, semaphore, numBufferBarriers, buffers,
-                                                     numTextureBarriers, textures, srcLayouts));
+    UNIMPLEMENTED();
 }
 
-void Context::signalSemaphore(GLuint semaphoreHandle,
+void Context::signalSemaphore(GLuint semaphore,
                               GLuint numBufferBarriers,
                               const GLuint *buffers,
                               GLuint numTextureBarriers,
                               const GLuint *textures,
                               const GLenum *dstLayouts)
 {
-    Semaphore *semaphore = getSemaphore(semaphoreHandle);
-    ASSERT(semaphore);
-
-    ANGLE_CONTEXT_TRY(mImplementation->signalSemaphore(this, semaphore, numBufferBarriers, buffers,
-                                                       numTextureBarriers, textures, dstLayouts));
+    UNIMPLEMENTED();
 }
 
 void Context::importSemaphoreFd(GLuint semaphore, HandleType handleType, GLint fd)

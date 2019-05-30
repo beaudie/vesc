@@ -14,7 +14,6 @@
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Program.h"
-#include "libANGLE/Semaphore.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/renderer_utils.h"
@@ -82,7 +81,7 @@ void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
                           const SignalSemaphoreVector &signalSemaphores)
 {
     submitInfo->sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo->commandBufferCount = commandBuffer.valid() ? 1 : 0;
+    submitInfo->commandBufferCount = 1;
     submitInfo->pCommandBuffers    = commandBuffer.ptr();
 
     submitInfo->waitSemaphoreCount = waitSemaphores.size();
@@ -310,60 +309,12 @@ angle::Result ContextVk::initialize()
 
 angle::Result ContextVk::flush(const gl::Context *context)
 {
-    return flushImpl(nullptr);
+    return flushImpl();
 }
 
 angle::Result ContextVk::finish(const gl::Context *context)
 {
     return finishImpl();
-}
-
-angle::Result ContextVk::waitSemaphore(const gl::Context *context,
-                                       const gl::Semaphore *semaphore,
-                                       GLuint numBufferBarriers,
-                                       const GLuint *buffers,
-                                       GLuint numTextureBarriers,
-                                       const GLuint *textures,
-                                       const GLenum *srcLayouts)
-{
-    mWaitSemaphores.push_back(vk::GetImpl(semaphore)->getHandle());
-
-    if (numBufferBarriers != 0)
-    {
-        // Buffers in external memory are not implemented yet.
-        UNIMPLEMENTED();
-    }
-
-    if (numTextureBarriers != 0)
-    {
-        // Texture barriers are not implemented yet.
-        UNIMPLEMENTED();
-    }
-
-    return angle::Result::Continue;
-}
-
-angle::Result ContextVk::signalSemaphore(const gl::Context *context,
-                                         const gl::Semaphore *semaphore,
-                                         GLuint numBufferBarriers,
-                                         const GLuint *buffers,
-                                         GLuint numTextureBarriers,
-                                         const GLuint *textures,
-                                         const GLenum *dstLayouts)
-{
-    if (numBufferBarriers != 0)
-    {
-        // Buffers in external memory are not implemented yet.
-        UNIMPLEMENTED();
-    }
-
-    if (numTextureBarriers != 0)
-    {
-        // Texture barriers are not implemented yet.
-        UNIMPLEMENTED();
-    }
-
-    return flushImpl(semaphore);
 }
 
 angle::Result ContextVk::setupDraw(const gl::Context *context,
@@ -1692,7 +1643,7 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
 
 angle::Result ContextVk::onUnMakeCurrent(const gl::Context *context)
 {
-    ANGLE_TRY(flushImpl(nullptr));
+    ANGLE_TRY(flushImpl());
     mCurrentWindowSurface = nullptr;
     return angle::Result::Continue;
 }
@@ -2030,9 +1981,9 @@ const gl::ActiveTextureArray<TextureVk *> &ContextVk::getActiveTextures() const
     return mActiveTextures;
 }
 
-angle::Result ContextVk::flushImpl(const gl::Semaphore *clientSignalSemaphore)
+angle::Result ContextVk::flushImpl()
 {
-    if (mCommandGraph.empty() && !clientSignalSemaphore && mWaitSemaphores.empty())
+    if (mCommandGraph.empty())
     {
         return angle::Result::Continue;
     }
@@ -2040,18 +1991,10 @@ angle::Result ContextVk::flushImpl(const gl::Semaphore *clientSignalSemaphore)
     TRACE_EVENT0("gpu.angle", "ContextVk::flush");
 
     vk::Scoped<vk::PrimaryCommandBuffer> commandBatch(getDevice());
-    if (!mCommandGraph.empty())
-    {
-        ANGLE_TRY(flushCommandGraph(&commandBatch.get()));
-    }
+    ANGLE_TRY(flushCommandGraph(&commandBatch.get()));
 
     SignalSemaphoreVector signalSemaphores;
     ANGLE_TRY(generateSurfaceSemaphores(&signalSemaphores));
-
-    if (clientSignalSemaphore)
-    {
-        signalSemaphores.push_back(vk::GetImpl(clientSignalSemaphore)->getHandle());
-    }
 
     VkSubmitInfo submitInfo       = {};
     VkPipelineStageFlags waitMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
@@ -2069,7 +2012,7 @@ angle::Result ContextVk::finishImpl()
 {
     TRACE_EVENT0("gpu.angle", "ContextVk::finish");
 
-    ANGLE_TRY(flushImpl(nullptr));
+    ANGLE_TRY(flushImpl());
 
     ANGLE_TRY(finishToSerial(mLastSubmittedQueueSerial));
     freeAllInFlightResources();
