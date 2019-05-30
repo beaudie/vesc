@@ -369,7 +369,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     void freeAllInFlightResources();
     angle::Result flushCommandGraph(vk::PrimaryCommandBuffer *commandBatch);
 
-    angle::Result synchronizeCpuGpuTime();
+    angle::Result synchronizeCpuGpuTime(const vk::Semaphore *waitSemaphore,
+                                        const vk::Semaphore *signalSemaphore);
     angle::Result traceGpuEventImpl(vk::PrimaryCommandBuffer *commandBuffer,
                                     char phase,
                                     const char *name);
@@ -377,8 +378,6 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     void flushGpuEvents(double nextSyncGpuTimestampS, double nextSyncCpuTimestampS);
 
     void handleDeviceLost();
-
-    angle::Result generateSurfaceSemaphores(SignalSemaphoreVector *signalSemaphores);
 
     vk::PipelineHelper *mCurrentPipeline;
     gl::PrimitiveMode mCurrentDrawMode;
@@ -536,9 +535,6 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     std::vector<GpuEventQuery> mInFlightGpuEventQueries;
     // A list of gpu events since the last clock sync.
     std::vector<GpuEvent> mGpuEvents;
-
-    // Semaphores that must be waited on in the next submission.
-    std::vector<VkSemaphore> mWaitSemaphores;
 
     // Hold information from the last gpu clock sync for future gpu-to-cpu timestamp conversions.
     struct GpuClockSyncInfo
