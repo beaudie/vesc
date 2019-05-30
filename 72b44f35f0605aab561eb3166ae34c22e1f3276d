@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "59ae8e3f_a0b5e685",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-30T19:13:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0f8d0df_4d82a1b0",
+      "range": {
+        "startLine": 9,
+        "startChar": 53,
+        "endLine": 9,
+        "endChar": 55
+      },
+      "revId": "72b44f35f0605aab561eb3166ae34c22e1f3276d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "840db7a7_e6ea12ae",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "72b44f35f0605aab561eb3166ae34c22e1f3276d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a715155b_08ff3b6b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-30T19:13:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "840db7a7_e6ea12ae",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 4
+      },
+      "revId": "72b44f35f0605aab561eb3166ae34c22e1f3276d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "599af7ab_e03ab8fa",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-30T19:13:08Z",
+      "side": 1,
+      "message": "After chatting with Geoff, we only want to vkAcquireNextImageKHR() if we don\u0027t have one already (mImage is not valid).   That could be a bad assumption though.",
+      "parentUuid": "fb60a66a_233516fd",
+      "range": {
+        "startLine": 548,
+        "startChar": 0,
+        "endLine": 548,
+        "endChar": 36
+      },
+      "revId": "72b44f35f0605aab561eb3166ae34c22e1f3276d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1bf4cf31_1f592097",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "89e129af_b600a864",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-30T19:13:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bf4cf31_1f592097",
+      "range": {
+        "startLine": 995,
+        "startChar": 37,
+        "endLine": 995,
+        "endChar": 57
+      },
+      "revId": "72b44f35f0605aab561eb3166ae34c22e1f3276d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0a0d0dc_b39ede45",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 4
@@ -128,6 +224,30 @@
       "writtenOn": "2019-05-30T18:41:06Z",
       "side": 1,
       "message": "checkForOutOfDateSwapchain() already does all of this (and sets the window size to the surface size as returned by Vulkan). You can use that instead.",
+      "range": {
+        "startLine": 1020,
+        "startChar": 0,
+        "endLine": 1022,
+        "endChar": 82
+      },
+      "revId": "72b44f35f0605aab561eb3166ae34c22e1f3276d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "402ffe30_05e9e8b6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-05-30T19:13:08Z",
+      "side": 1,
+      "message": "That doesn\u0027t seem to work for me.   I still hit the assert:\n\n05-30 13:08:59.886 25328 25365 E libEGL  : ANGLE Error:getExtents(138): \t! Assert failed in getExtents (../../third_party/angle/src/libANGLE/renderer/vulkan/RenderTargetVk.cpp:138): mImage \u0026\u0026 mImage-\u003evalid()\n\nI can dig deeper into what\u0027s going wrong here once we have an solution that address the other (larger) issue related to querying the surface in case that affects any of this also.",
+      "parentUuid": "c0a0d0dc_b39ede45",
       "range": {
         "startLine": 1020,
         "startChar": 0,
