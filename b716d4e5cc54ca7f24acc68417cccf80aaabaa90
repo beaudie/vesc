@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ea1edcd_fb52accd",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-30T13:33:48Z",
+      "side": 1,
+      "message": "nit: can probably just name this \"valid()\"",
+      "range": {
+        "startLine": 63,
+        "startChar": 9,
+        "endLine": 63,
+        "endChar": 21
+      },
+      "revId": "b716d4e5cc54ca7f24acc68417cccf80aaabaa90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76681548_8a3b1a6a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 989,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-30T13:33:48Z",
+      "side": 1,
+      "message": "You probably can remove this comment. it might be necessary on other platforms. Not 100% sure but doesn\u0027t hurt in any case.",
+      "range": {
+        "startLine": 989,
+        "startChar": 3,
+        "endLine": 989,
+        "endChar": 91
+      },
+      "revId": "b716d4e5cc54ca7f24acc68417cccf80aaabaa90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9353c681_6eae7ad7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-30T13:33:48Z",
+      "side": 1,
+      "message": "can you try using mCurrentSwapHistoryIndex instead of passing currentSwapHistoryIndex??",
+      "range": {
+        "startLine": 997,
+        "startChar": 70,
+        "endLine": 997,
+        "endChar": 93
+      },
+      "revId": "b716d4e5cc54ca7f24acc68417cccf80aaabaa90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f55cf33_69dcee08",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-30T13:33:48Z",
+      "side": 1,
+      "message": "you don\u0027t need the vk::Context argument if you\u0027re passing contextVk. contextVk is a vk::Context.",
+      "range": {
+        "startLine": 1006,
+        "startChar": 50,
+        "endLine": 1007,
+        "endChar": 75
+      },
+      "revId": "b716d4e5cc54ca7f24acc68417cccf80aaabaa90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b1aef3c_e5af50eb",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-30T13:33:48Z",
+      "side": 1,
+      "message": "nit: can you use the explicit type here? makes it easier on the reader. And auto doesn\u0027t save many characters.",
+      "range": {
+        "startLine": 1015,
+        "startChar": 4,
+        "endLine": 1015,
+        "endChar": 8
+      },
+      "revId": "b716d4e5cc54ca7f24acc68417cccf80aaabaa90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bf47236_c1554180",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-30T13:33:48Z",
+      "side": 1,
+      "message": "one tiny cleanup: you could assign result \u003d vkAcquireNextImage and then move the ANGLE_VK_TRY out of the else",
+      "range": {
+        "startLine": 1027,
+        "startChar": 0,
+        "endLine": 1034,
+        "endChar": 5
+      },
+      "revId": "b716d4e5cc54ca7f24acc68417cccf80aaabaa90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
