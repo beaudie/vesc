@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "840db7a7_e6ea12ae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-30T17:15:04Z",
+      "side": 1,
+      "message": "nit: typo \u0027;\u0027 should be \u0027:\u0027",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 4
+      },
+      "revId": "72b44f35f0605aab561eb3166ae34c22e1f3276d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32d874f5_eae81e18",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-30T17:15:04Z",
+      "side": 1,
+      "message": "nit: can probably inline this in the header.",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 1
+      },
+      "revId": "72b44f35f0605aab561eb3166ae34c22e1f3276d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bf4cf31_1f592097",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 995,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-30T17:15:04Z",
+      "side": 1,
+      "message": "nit: you can pass contextVk, as we already init it above.",
+      "range": {
+        "startLine": 995,
+        "startChar": 37,
+        "endLine": 995,
+        "endChar": 57
+      },
+      "revId": "72b44f35f0605aab561eb3166ae34c22e1f3276d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62d1cf6e_cfcd8a3e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-30T17:15:04Z",
+      "side": 1,
+      "message": "rx:: namespace is redundant, don\u0027t need it here.",
+      "range": {
+        "startLine": 171,
+        "startChar": 37,
+        "endLine": 171,
+        "endChar": 41
+      },
+      "revId": "72b44f35f0605aab561eb3166ae34c22e1f3276d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
