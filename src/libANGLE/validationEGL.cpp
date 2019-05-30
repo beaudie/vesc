@@ -3762,4 +3762,45 @@ Error ValidateQueryStringiANGLE(const Display *display, EGLint name, EGLint inde
     return NoError();
 }
 
+Error ValidateQueryDisplayAttribBase(const Display *display, const EGLint attribute)
+{
+    ANGLE_TRY(ValidateDisplay(display));
+
+    return NoError();
+}
+
+Error ValidateQueryDisplayAttribEXT(const Display *display, const EGLint attribute)
+{
+    ANGLE_TRY(ValidateQueryDisplayAttribBase(display, attribute));
+
+    if (!display->getExtensions().deviceQuery)
+    {
+        return EglBadAccess() << "EGL_EXT_device_query extension is not available.";
+    }
+
+    if (attribute != EGL_DEVICE_EXT)
+    {
+        return EglBadAttribute() << "attribute is not valid.";
+    }
+
+    return NoError();
+}
+
+Error ValidateQueryDisplayAttribANGLE(const Display *display, const EGLint attribute)
+{
+    ANGLE_TRY(ValidateQueryDisplayAttribBase(display, attribute));
+
+    if (!display->getExtensions().workaroundControlANGLE)
+    {
+        return EglBadAccess() << "EGL_ANGLE_workaround_control extension is not available.";
+    }
+
+    if (attribute != EGL_WORKAROUND_COUNT_ANGLE)
+    {
+        return EglBadAttribute() << "attribute is not valid.";
+    }
+
+    return NoError();
+}
+
 }  // namespace egl
