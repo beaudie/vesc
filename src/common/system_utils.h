@@ -58,6 +58,13 @@ bool IsDebuggerAttached();
 
 // Calls system APIs to break into the debugger.
 void BreakDebugger();
+
+// Set a crash handler to print stack traces.
+void InitCrashHandler();
+void TerminateCrashHandler();
+
+// Print a stack back trace.
+void PrintStackBacktrace();
 }  // namespace angle
 
 #endif  // COMMON_SYSTEM_UTILS_H_
