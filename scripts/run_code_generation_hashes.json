@@ -96,7 +96,7 @@
   "GL/EGL entry points:scripts/generate_entry_points.py":
     "e7ab486465bf7873d8f06ddd9b204539",
   "GL/EGL entry points:scripts/gl.xml":
-    "b470cb06b06cbbe7adb2c8129ec85708",
+    "48b567555592950c70cc8af0ac2deeec",
   "GL/EGL entry points:scripts/gl_angle_ext.xml":
     "11e1eb2cbe51ae6e7b8705d3506846d5",
   "GL/EGL entry points:scripts/registry_xml.py":
@@ -166,7 +166,7 @@
   "GL/EGL/WGL loader:util/windows/wgl_loader_autogen.h":
     "e18f6c134b709c5a69ed3b4ff38642d0",
   "OpenGL dispatch table:scripts/gl.xml":
-    "b470cb06b06cbbe7adb2c8129ec85708",
+    "48b567555592950c70cc8af0ac2deeec",
   "OpenGL dispatch table:src/libANGLE/renderer/angle_format.py":
     "7ce0869650454e1eebc93658d4d96844",
   "OpenGL dispatch table:src/libANGLE/renderer/gl/DispatchTableGL_autogen.cpp":
