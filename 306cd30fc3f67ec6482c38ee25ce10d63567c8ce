@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d2bd875d_cbfbc34b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-31T19:47:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0629386f_b5aaf873",
+      "range": {
+        "startLine": 9,
+        "startChar": 7,
+        "endLine": 9,
+        "endChar": 30
+      },
+      "revId": "306cd30fc3f67ec6482c38ee25ce10d63567c8ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71d6c022_3da4ffeb",
         "filename": "extensions/EGL_ANGLE_workaround_control.txt",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "0cb97b6a_c310d2ac",
+        "filename": "extensions/EGL_ANGLE_workaround_control.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-31T19:47:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71d6c022_3da4ffeb",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 12
+      },
+      "revId": "306cd30fc3f67ec6482c38ee25ce10d63567c8ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5fea57c_d9aa5692",
         "filename": "extensions/EGL_ANGLE_workaround_control.txt",
         "patchSetId": 5
@@ -68,6 +116,30 @@
       "revId": "306cd30fc3f67ec6482c38ee25ce10d63567c8ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "208f87c6_3b3def6f",
+        "filename": "extensions/EGL_ANGLE_workaround_control.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-31T19:47:06Z",
+      "side": 1,
+      "message": "I definitely agree, don\u0027t know why I missed it too. For consistency I\u0027d rather rename the entire extension to EGL_ANGLE_feature_control. I\u0027ll do a follow-up CL",
+      "parentUuid": "d5fea57c_d9aa5692",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 128,
+        "endChar": 30
+      },
+      "revId": "306cd30fc3f67ec6482c38ee25ce10d63567c8ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
