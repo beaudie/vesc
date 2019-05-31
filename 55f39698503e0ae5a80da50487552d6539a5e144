@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97254a1a_1a379f5e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-31T12:10:35Z",
+      "side": 1,
+      "message": "same comment, can you tag these with an issue with reproduction steps or problem description?",
+      "revId": "55f39698503e0ae5a80da50487552d6539a5e144",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
