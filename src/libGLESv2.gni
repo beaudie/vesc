@@ -86,6 +86,11 @@ if (is_win) {
   angle_system_utils_sources += [ "src/common/system_utils_win.cpp" ]
 }
 
+if (!is_win) {
+  angle_system_utils_sources +=
+      [ "src/common/system_utils_crash_handler_posix.cpp" ]
+}
+
 if (is_android) {
   angle_system_utils_sources += [
     "src/common/android_util.cpp",
