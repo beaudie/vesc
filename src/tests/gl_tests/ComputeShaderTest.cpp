@@ -2401,6 +2401,39 @@ void main()
     EXPECT_GL_NO_ERROR();
 }
 
+// Test that passing a non-struct member of a std140 structure to a function won't trigger the
+// struct mapping.
+TEST_P(ComputeShaderTest, NonStructMemberAsFunctionArgument)
+{
+    constexpr char kComputeShaderSource[] = R"(#version 310 es
+layout(local_size_x=8) in;
+precision mediump float;
+
+struct InstancingData
+{
+    vec4 data;
+};
+
+#define MAX_INSTANCE_COUNT 800
+
+layout(std140) uniform InstanceBlock
+{
+    InstancingData instances[MAX_INSTANCE_COUNT];
+};
+
+layout(std140, binding = 1) buffer blockB {
+    float v[];
+} instanceB;
+
+void main()
+{
+    instanceB.v[gl_GlobalInvocationID.x] = dot(instances[gl_GlobalInvocationID.x].data, vec4(1.0, 1.0, 1.0, 1.0));
+})";
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kComputeShaderSource);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Check that it is not possible to create a compute shader when the context does not support ES
 // 3.10
 TEST_P(ComputeShaderTestES3, NotSupported)
