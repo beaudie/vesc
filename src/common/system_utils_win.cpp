@@ -6,9 +6,11 @@
 
 // system_utils_win.cpp: Implementation of OS-specific functions for Windows
 
-#include "system_utils.h"
+#include "common/system_utils.h"
 
+#include <DbgHelp.h>
 #include <stdarg.h>
+#include <stdio.h>
 #include <windows.h>
 #include <array>
 #include <vector>
@@ -63,6 +65,7 @@ void ReadEntireFile(HANDLE handle, std::string *out)
         out->append(buffer, bytesRead);
     }
 }
+
 }  // anonymous namespace
 
 std::string GetExecutablePath()
