@@ -669,6 +669,34 @@ GL_APICALL void GL_APIENTRY glLoseContextCHROMIUM(GLenum current, GLenum other);
 typedef void (GL_APIENTRYP PFNGLLOSECONTEXTCHROMIUMPROC) (GLenum current, GLenum other);
 #endif  /* GL_CHROMIUM_lose_context */
 
+#ifndef GL_ANGLE_memory_object_zircon_handle
+#define GL_ANGLE_memory_object_zircon_handle 1
+#define GL_HANDLE_TYPE_ZIRCON_VMO_ANGLE 0xA0C5 /* XXX - Temporary value */
+typedef void(GL_APIENTRYP PFNGLIMPORTMEMORYZIRCONHANDLEANGLEPROC)(GLuint memory,
+                                                             GLuint64 size,
+                                                             GLenum handleType,
+                                                             GLuint handle);
+#ifdef GL_GLEXT_PROTOTYPES
+GL_APICALL void GL_APIENTRY glImportMemoryZirconHandleANGLE(GLuint memory,
+                                                       GLuint64 size,
+                                                       GLenum handleType,
+                                                       GLuint handle);
+#endif
+#endif /* GL_ANGLE_memory_object_zircon_handle */
+
+#ifndef GL_ANGLE_semaphore_zircon_handle
+#define GL_ANGLE_semaphore_zircon_handle 1
+#define GL_HANDLE_TYPE_ZIRCON_EVENT_ANGLE 0xA0C6 /* XXX - Temporary value */
+typedef void(GL_APIENTRYP PFNGLIMPORTSEMAPHOREZIRCONHANDLEANGLEPROC)(GLuint semaphore,
+                                                             GLenum handleType,
+                                                             GLuint handle);
+#ifdef GL_GLEXT_PROTOTYPES
+GL_APICALL void GL_APIENTRY glImportSemaphoreZirconHandleANGLE(GLuint memory,
+                                                       GLenum handleType,
+                                                       GLuint handle);
+#endif
+#endif /* GL_ANGLE_semaphore_zircon_handle */
+
 // clang-format on
 
 #endif  // INCLUDE_GLES2_GL2EXT_ANGLE_H_
