@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9bf532b_72495efb",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2405,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-31T12:12:41Z",
+      "side": 1,
+      "message": "this test doesn\u0027t really verify that. you could make a compiler unit test that does.",
+      "range": {
+        "startLine": 2404,
+        "startChar": 0,
+        "endLine": 2405,
+        "endChar": 18
+      },
+      "revId": "b6386cca026b6c8992b9f888f13bf58646d474d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
