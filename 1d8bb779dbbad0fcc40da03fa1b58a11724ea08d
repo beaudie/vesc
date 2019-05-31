@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c561fc9_63591545",
+        "filename": "src/common/CrashHandler.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-05-31T14:15:06Z",
+      "side": 1,
+      "message": "I would expect these definitions in system_utils_posix.cpp. Maybe define the 3 system_utils functions there, and then call into some other CrashHandler.h header with the helper functions?",
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
