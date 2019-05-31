@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0629386f_b5aaf873",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-31T17:18:06Z",
+      "side": 1,
+      "message": "nit: naming",
+      "range": {
+        "startLine": 9,
+        "startChar": 7,
+        "endLine": 9,
+        "endChar": 30
+      },
+      "revId": "306cd30fc3f67ec6482c38ee25ce10d63567c8ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71d6c022_3da4ffeb",
+        "filename": "extensions/EGL_ANGLE_workaround_control.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-31T17:18:06Z",
+      "side": 1,
+      "message": "probably want to copy this to the new API as well.",
+      "range": {
+        "startLine": 112,
+        "startChar": 0,
+        "endLine": 113,
+        "endChar": 12
+      },
+      "revId": "306cd30fc3f67ec6482c38ee25ce10d63567c8ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5fea57c_d9aa5692",
+        "filename": "extensions/EGL_ANGLE_workaround_control.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-31T17:18:06Z",
+      "side": 1,
+      "message": "kinda missed this in the first review. but I was thinking we might have wanted to call these features to be more generic. not a big deal though.",
+      "range": {
+        "startLine": 128,
+        "startChar": 4,
+        "endLine": 128,
+        "endChar": 30
+      },
+      "revId": "306cd30fc3f67ec6482c38ee25ce10d63567c8ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
