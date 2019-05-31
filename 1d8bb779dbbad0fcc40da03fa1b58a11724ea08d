@@ -2,6 +2,121 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a1c58ad_73ad9f3f",
+        "filename": "BUILD.gn",
+        "patchSetId": 9
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-31T16:50:55Z",
+      "side": 1,
+      "message": "I think this should be limited to standalone build, if I understand the relationship between this CL and anglebug.com/3162 correctly.\nRationale: don\u0027t want to increase binary size in Chrome + Chrome already has stack symbolization.\nMakes sense to also move InitCrashHandler(), TerminateCrashHandler(), PrintStackBacktrace() implementations into their own files (Win/Posix) and include them only in standalone.",
+      "range": {
+        "startLine": 241,
+        "startChar": 6,
+        "endLine": 241,
+        "endChar": 12
+      },
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f16e1d61_f0b86ecf",
+        "filename": "gni/angle.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-31T16:50:55Z",
+      "side": 1,
+      "message": "nit: you can define a variable with this condition, so it\u0027s not repeated in BUILD.gn and here.",
+      "range": {
+        "startLine": 110,
+        "startChar": 7,
+        "endLine": 110,
+        "endChar": 48
+      },
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91bb35fd_bf3b4172",
+        "filename": "scripts/generate_loader.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-31T16:50:55Z",
+      "side": 1,
+      "message": "Could you please remove this whitespace while at it?",
+      "range": {
+        "startLine": 273,
+        "startChar": 0,
+        "endLine": 273,
+        "endChar": 4
+      },
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3db6f4a_fdcf2b64",
+        "filename": "src/common/CrashHandler.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-31T16:50:55Z",
+      "side": 1,
+      "message": "I don\u0027t think you actually use this. (Was in WIN Skia code originally).",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 25
+      },
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8e8d2ab_f1b7eb00",
+        "filename": "src/common/CrashHandler.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-31T16:50:55Z",
+      "side": 1,
+      "message": "// defined(ANGLE_PLATFORM_APPLE)",
+      "range": {
+        "startLine": 141,
+        "startChar": 5,
+        "endLine": 141,
+        "endChar": 10
+      },
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c561fc9_63591545",
         "filename": "src/common/CrashHandler.cpp",
         "patchSetId": 9
@@ -13,6 +128,29 @@
       "writtenOn": "2019-05-31T14:15:06Z",
       "side": 1,
       "message": "I would expect these definitions in system_utils_posix.cpp. Maybe define the 3 system_utils functions there, and then call into some other CrashHandler.h header with the helper functions?",
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30e3b7b1_d63dc3a9",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-05-31T16:50:55Z",
+      "side": 1,
+      "message": "Can just initialize to _TRUNCATE",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 34
+      },
       "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
