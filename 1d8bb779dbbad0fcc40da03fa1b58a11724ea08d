@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "bef2e317_7f6c7c4b",
+        "filename": "BUILD.gn",
+        "patchSetId": 9
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-31T20:13:29Z",
+      "side": 1,
+      "message": "I\u0027d like to push back on this. It\u0027s a bit difficult to make these methods standalone only. And I don\u0027t think it adds much value. I tested with Chromium and standalone builds with and without this CL on several platforms. You should be able to see stack traces in both cases. In the worst case you might see double traces on some platforms until 3162 is finished.\n\nThe binary size difference should be minimal. We don\u0027t usually worry about small regressions like this.",
+      "parentUuid": "1a1c58ad_73ad9f3f",
+      "range": {
+        "startLine": 241,
+        "startChar": 6,
+        "endLine": 241,
+        "endChar": 12
+      },
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f16e1d61_f0b86ecf",
         "filename": "gni/angle.gni",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2452fbd0_fcd7edcc",
+        "filename": "gni/angle.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-31T20:13:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f16e1d61_f0b86ecf",
+      "range": {
+        "startLine": 110,
+        "startChar": 7,
+        "endLine": 110,
+        "endChar": 48
+      },
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "4c4ae7fd_d14d070a",
+        "filename": "scripts/generate_loader.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-31T20:13:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91bb35fd_bf3b4172",
+      "range": {
+        "startLine": 273,
+        "startChar": 0,
+        "endLine": 273,
+        "endChar": 4
+      },
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3db6f4a_fdcf2b64",
         "filename": "src/common/CrashHandler.cpp",
         "patchSetId": 9
@@ -91,6 +163,30 @@
       "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0d6b058_8766bece",
+        "filename": "src/common/CrashHandler.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-31T20:13:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3db6f4a_fdcf2b64",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 63,
+        "endChar": 25
+      },
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "ffa3e158_f76052a4",
+        "filename": "src/common/CrashHandler.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-31T20:13:29Z",
+      "side": 1,
+      "message": "Done, though usually I leave of end annotations for idefs that use elif clauses as they don\u0027t make sense.",
+      "parentUuid": "f8e8d2ab_f1b7eb00",
+      "range": {
+        "startLine": 141,
+        "startChar": 5,
+        "endLine": 141,
+        "endChar": 10
+      },
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6c561fc9_63591545",
         "filename": "src/common/CrashHandler.cpp",
         "patchSetId": 9
@@ -131,6 +251,24 @@
       "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8703d9ba_76d85ee4",
+        "filename": "src/common/CrashHandler.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-31T20:13:29Z",
+      "side": 1,
+      "message": "I had that and went with this before uploading. I think I prefer avoiding forwarding headers that don\u0027t really add anything. I renamed this file to system_utils_crash_handler_posix.cpp to help clarify the intent.",
+      "parentUuid": "6c561fc9_63591545",
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -157,6 +295,30 @@
     },
     {
       "key": {
+        "uuid": "a11bee6b_b4547461",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-31T20:13:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30e3b7b1_d63dc3a9",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 97,
+        "endChar": 34
+      },
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "533f589e_f2211f7f",
         "filename": "src/libGLESv2.gni",
         "patchSetId": 9
@@ -171,6 +333,24 @@
       "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86bebab3_7c80265e",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-05-31T20:13:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "533f589e_f2211f7f",
+      "revId": "1d8bb779dbbad0fcc40da03fa1b58a11724ea08d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
