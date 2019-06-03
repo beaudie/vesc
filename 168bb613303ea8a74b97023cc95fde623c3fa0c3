@@ -22,6 +22,30 @@
       "revId": "168bb613303ea8a74b97023cc95fde623c3fa0c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f3e21c8_bcb85849",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T19:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "968082fe_e9ab0baf",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 20
+      },
+      "revId": "168bb613303ea8a74b97023cc95fde623c3fa0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
