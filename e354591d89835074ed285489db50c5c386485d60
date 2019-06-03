@@ -22,6 +22,30 @@
       "revId": "e354591d89835074ed285489db50c5c386485d60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02fd9d4f_cb51b61d",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3292,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-06-03T16:01:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88be9e9e_f6d34d6b",
+      "range": {
+        "startLine": 3291,
+        "startChar": 8,
+        "endLine": 3292,
+        "endChar": 97
+      },
+      "revId": "e354591d89835074ed285489db50c5c386485d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
