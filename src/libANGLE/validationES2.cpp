@@ -3576,14 +3576,22 @@ bool ValidateImportMemoryZirconHandleANGLE(Context *context,
                                            HandleType handleType,
                                            GLuint handle)
 {
-    if (!context->getExtensions().memoryObjectZirconHandle)
+    if (!context->getExtensions().memoryObjectFuchsia)
     {
         context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
 
-    UNIMPLEMENTED();
-    return false;
+    switch (handleType)
+    {
+        case HandleType::ZirconVmo:
+            break;
+        default:
+            context->validationError(GL_INVALID_ENUM, kInvalidHandleType);
+            return false;
+    }
+
+    return true;
 }
 
 bool ValidateDeleteSemaphoresEXT(Context *context, GLsizei n, const SemaphoreID *semaphores)
@@ -3726,17 +3734,25 @@ bool ValidateImportSemaphoreFdEXT(Context *context,
 
 bool ValidateImportSemaphoreZirconHandleANGLE(Context *context,
                                               SemaphoreID semaphore,
-                                              HandleType handleTypePacked,
+                                              HandleType handleType,
                                               GLuint handle)
 {
-    if (!context->getExtensions().semaphoreZirconHandle)
+    if (!context->getExtensions().semaphoreFuchsia)
     {
         context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
         return false;
     }
 
-    UNIMPLEMENTED();
-    return false;
+    switch (handleType)
+    {
+        case HandleType::ZirconEvent:
+            break;
+        default:
+            context->validationError(GL_INVALID_ENUM, kInvalidHandleType);
+            return false;
+    }
+
+    return true;
 }
 
 bool ValidateMapBufferBase(Context *context, BufferBinding target)
