@@ -32,6 +32,9 @@ enum class CommandGraphResourceType
     Framebuffer,
     Image,
     Query,
+    // Transform feedback queries could be handled entirely on the CPU (if not using
+    // VK_EXT_transform_feedback), but still need to generate a command graph barrier node.
+    EmulatedQuery,
     FenceSync,
     DebugMarker,
     HostAvailabilityOperation,
@@ -45,6 +48,8 @@ enum class CommandGraphNodeFunction
     BeginQuery,
     EndQuery,
     WriteTimestamp,
+    BeginTransformFeedbackQuery,
+    EndTransformFeedbackQuery,
     SetFenceSync,
     WaitFenceSync,
     InsertDebugMarker,
@@ -539,6 +544,8 @@ class CommandGraph final : angle::NonCopyable
     void beginQuery(const QueryPool *queryPool, uint32_t queryIndex);
     void endQuery(const QueryPool *queryPool, uint32_t queryIndex);
     void writeTimestamp(const QueryPool *queryPool, uint32_t queryIndex);
+    void beginTransformFeedbackEmulatedQuery(const TransformFeedbackVk *transformFeedbackVk);
+    void endTransformFeedbackEmulatedQuery(const TransformFeedbackVk *transformFeedbackVk);
     // GLsync and EGLSync:
     void setFenceSync(const vk::Event &event);
     void waitFenceSync(const vk::Event &event);
