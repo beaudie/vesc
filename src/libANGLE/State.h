@@ -484,6 +484,26 @@ class State : angle::NonCopyable
 
     enum DirtyBitType
     {
+        // Note: process binding bits first, so that other dirty bits whose effect depend on the
+        // currently bound objects are not processed while the old objects are still bound.
+        DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING,
+        DIRTY_BIT_READ_FRAMEBUFFER_BINDING,
+        // TODO(jmadill): Fine-grained dirty bits for each index.
+        DIRTY_BIT_PROGRAM_BINDING,
+        DIRTY_BIT_UNPACK_BUFFER_BINDING,
+        DIRTY_BIT_PACK_BUFFER_BINDING,
+        DIRTY_BIT_RENDERBUFFER_BINDING,
+        DIRTY_BIT_VERTEX_ARRAY_BINDING,
+        DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING,
+        DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING,
+        // TODO(jmadill): Fine-grained dirty bits for each texture/sampler.
+        DIRTY_BIT_TEXTURE_BINDINGS,
+        DIRTY_BIT_SAMPLER_BINDINGS,
+        DIRTY_BIT_IMAGE_BINDINGS,
+        DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING,
+        DIRTY_BIT_UNIFORM_BUFFER_BINDINGS,
+        DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING,
+        DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING,
         DIRTY_BIT_SCISSOR_TEST_ENABLED,
         DIRTY_BIT_SCISSOR,
         DIRTY_BIT_VIEWPORT,
@@ -520,29 +540,11 @@ class State : angle::NonCopyable
         DIRTY_BIT_CLEAR_DEPTH,
         DIRTY_BIT_CLEAR_STENCIL,
         DIRTY_BIT_UNPACK_STATE,
-        DIRTY_BIT_UNPACK_BUFFER_BINDING,
         DIRTY_BIT_PACK_STATE,
-        DIRTY_BIT_PACK_BUFFER_BINDING,
         DIRTY_BIT_DITHER_ENABLED,
         DIRTY_BIT_GENERATE_MIPMAP_HINT,
         DIRTY_BIT_SHADER_DERIVATIVE_HINT,
-        DIRTY_BIT_READ_FRAMEBUFFER_BINDING,
-        DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING,
-        DIRTY_BIT_RENDERBUFFER_BINDING,
-        DIRTY_BIT_VERTEX_ARRAY_BINDING,
-        DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING,
-        DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING,
-        // TODO(jmadill): Fine-grained dirty bits for each index.
-        DIRTY_BIT_PROGRAM_BINDING,
         DIRTY_BIT_PROGRAM_EXECUTABLE,
-        // TODO(jmadill): Fine-grained dirty bits for each texture/sampler.
-        DIRTY_BIT_TEXTURE_BINDINGS,
-        DIRTY_BIT_SAMPLER_BINDINGS,
-        DIRTY_BIT_IMAGE_BINDINGS,
-        DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING,
-        DIRTY_BIT_UNIFORM_BUFFER_BINDINGS,
-        DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING,
-        DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING,
         DIRTY_BIT_MULTISAMPLING,
         DIRTY_BIT_SAMPLE_ALPHA_TO_ONE,
         DIRTY_BIT_COVERAGE_MODULATION,  // CHROMIUM_framebuffer_mixed_samples
