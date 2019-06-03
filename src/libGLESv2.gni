@@ -59,6 +59,7 @@ libangle_common_sources = [
   "src/common/utilities.cpp",
   "src/common/utilities.h",
   "src/common/vector_utils.h",
+  "src/common/vulkan_fuchsia_ext.h",
 ]
 
 xxhash_sources = [
