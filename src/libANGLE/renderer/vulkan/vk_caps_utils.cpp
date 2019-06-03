@@ -233,6 +233,13 @@ void RendererVk::ensureCapsInitialized() const
         (mPhysicalDeviceProperties.limits.maxVertexOutputComponents / 4) - kReservedVaryingCount;
     mNativeCaps.maxVertexOutputComponents = mNativeCaps.maxVaryingVectors * 4;
 
+    mNativeCaps.maxTransformFeedbackInterleavedComponents =
+        gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS;
+    mNativeCaps.maxTransformFeedbackSeparateAttributes =
+        gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS;
+    mNativeCaps.maxTransformFeedbackSeparateComponents =
+        gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS;
+
     const VkPhysicalDeviceLimits &limits = mPhysicalDeviceProperties.limits;
     const uint32_t sampleCounts          = limits.framebufferColorSampleCounts &
                                   limits.framebufferDepthSampleCounts &
