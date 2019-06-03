@@ -277,6 +277,21 @@ size_t TransformFeedback::getIndexedBufferCount() const
     return mState.mIndexedBuffers.size();
 }
 
+GLsizeiptr TransformFeedback::getPrimitivesDrawn() const
+{
+    switch (mState.mPrimitiveMode)
+    {
+        case gl::PrimitiveMode::Points:
+            return mState.mVerticesDrawn;
+        case gl::PrimitiveMode::Lines:
+            return mState.mVerticesDrawn / 2;
+        case gl::PrimitiveMode::Triangles:
+            return mState.mVerticesDrawn / 3;
+        default:
+            return 0;
+    }
+}
+
 bool TransformFeedback::buffersBoundForOtherUse() const
 {
     for (auto &buffer : mState.mIndexedBuffers)
@@ -289,12 +304,7 @@ bool TransformFeedback::buffersBoundForOtherUse() const
     return false;
 }
 
-rx::TransformFeedbackImpl *TransformFeedback::getImplementation()
-{
-    return mImplementation;
-}
-
-const rx::TransformFeedbackImpl *TransformFeedback::getImplementation() const
+rx::TransformFeedbackImpl *TransformFeedback::getImplementation() const
 {
     return mImplementation;
 }

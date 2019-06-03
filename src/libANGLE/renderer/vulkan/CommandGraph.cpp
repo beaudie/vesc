@@ -745,6 +745,15 @@ void CommandGraphNode::setDiagnosticInfo(CommandGraphResourceType resourceType,
 std::string CommandGraphNode::dumpCommandsForDiagnostics(const char *separator) const
 {
     std::string result;
+    if (mGlobalMemoryBarrierSrcAccess != 0 || mGlobalMemoryBarrierDstAccess != 0)
+    {
+        result += separator;
+
+        std::ostringstream out;
+        out << "Barrier 0x" << std::hex << mGlobalMemoryBarrierSrcAccess << " &rarr; 0x" << std::hex
+            << mGlobalMemoryBarrierDstAccess;
+        result += out.str();
+    }
     if (mOutsideRenderPassCommands.valid())
     {
         result += separator;
@@ -898,6 +907,18 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
             }
         }
     }
+
+    // Make sure all writes to host-visible buffers are flushed.  This is unconditionally done, as
+    // we have no way of knowing whether any buffer will be mapped for readback in the future, and
+    // we can't afford to make a one-pipeline-barrier command buffer on every map().
+    VkMemoryBarrier memoryBarrier = {};
+    memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+    memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
+    memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;
+
+    primaryCommandBufferOut->pipelineBarrier(VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                                             VK_PIPELINE_STAGE_HOST_BIT, 0, 1, &memoryBarrier, 0,
+                                             nullptr, 0, nullptr);
 
     ANGLE_TRY(context->traceGpuEvent(primaryCommandBufferOut, TRACE_EVENT_PHASE_END,
                                      "Primary Command Buffer"));
