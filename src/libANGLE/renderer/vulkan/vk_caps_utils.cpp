@@ -16,6 +16,7 @@
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/vulkan/DisplayVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 #include "vk_format_utils.h"
 
 namespace
@@ -228,10 +229,26 @@ void RendererVk::ensureCapsInitialized() const
     // TODO(lucferron): AMD has a weird behavior when we edge toward the maximum number of varyings
     // and can often crash. Reserving an additional varying just for them bringing the total to 2.
     // http://anglebug.com/2483
-    constexpr GLint kReservedVaryingCount = 2;
-    mNativeCaps.maxVaryingVectors =
-        (mPhysicalDeviceProperties.limits.maxVertexOutputComponents / 4) - kReservedVaryingCount;
+    //
+    // To support transform feedback without rebuilding the shader for every configuration, we use a
+    // bitmask to specify which vertex shader outputs should be captured.  As a result, we cap the
+    // vertex shader outputs to the transform feedback limit as well.
+    constexpr uint32_t kReservedVaryingCount = 2;
+    constexpr uint32_t maxTFVertexOutputComponents =
+        TransformFeedbackVk::GetMaxInterleavedComponents();
+    uint32_t maxVkVertexOutputComponents =
+        mPhysicalDeviceProperties.limits.maxVertexOutputComponents;
+    uint32_t maxVertexOutputComponents =
+        std::min(maxVkVertexOutputComponents, maxTFVertexOutputComponents);
+
+    mNativeCaps.maxVaryingVectors         = maxVertexOutputComponents / 4 - kReservedVaryingCount;
     mNativeCaps.maxVertexOutputComponents = mNativeCaps.maxVaryingVectors * 4;
+
+    mNativeCaps.maxTransformFeedbackInterleavedComponents = maxVertexOutputComponents;
+    mNativeCaps.maxTransformFeedbackSeparateAttributes =
+        TransformFeedbackVk::GetMaxSeparateAttributes();
+    mNativeCaps.maxTransformFeedbackSeparateComponents =
+        TransformFeedbackVk::GetMaxSeparateComponents();
 
     const VkPhysicalDeviceLimits &limits = mPhysicalDeviceProperties.limits;
     const uint32_t sampleCounts          = limits.framebufferColorSampleCounts &

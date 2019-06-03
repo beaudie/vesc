@@ -158,16 +158,7 @@ angle::Result BufferVk::map(const gl::Context *context, GLenum access, void **ma
 {
     ASSERT(mBuffer.valid());
 
-    ContextVk *contextVk = vk::GetImpl(context);
-    return mapImpl(contextVk, mapPtr);
-}
-
-angle::Result BufferVk::mapImpl(ContextVk *contextVk, void **mapPtr)
-{
-    ANGLE_VK_TRY(contextVk,
-                 mBuffer.getDeviceMemory().map(contextVk->getDevice(), 0, mState.getSize(), 0,
-                                               reinterpret_cast<uint8_t **>(mapPtr)));
-    return angle::Result::Continue;
+    return mapImpl(vk::GetImpl(context), mapPtr);
 }
 
 angle::Result BufferVk::mapRange(const gl::Context *context,
@@ -176,9 +167,26 @@ angle::Result BufferVk::mapRange(const gl::Context *context,
                                  GLbitfield access,
                                  void **mapPtr)
 {
+    return mapRangeImpl(vk::GetImpl(context), offset, length, mapPtr);
+}
+
+angle::Result BufferVk::mapImpl(ContextVk *contextVk, void **mapPtr)
+{
+    return mapRangeImpl(contextVk, 0, mState.getSize(), mapPtr);
+}
+
+angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
+                                     size_t offset,
+                                     size_t length,
+                                     void **mapPtr)
+{
     ASSERT(mBuffer.valid());
 
-    ContextVk *contextVk = vk::GetImpl(context);
+    if (mState.isBoundForTransformFeedback())
+    {
+        // TODO: the serial seems to be not up to date here
+        ANGLE_TRY(contextVk->finishToSerial(mBuffer.getStoredQueueSerial()));
+    }
 
     ANGLE_VK_TRY(contextVk, mBuffer.getDeviceMemory().map(contextVk->getDevice(), offset, length, 0,
                                                           reinterpret_cast<uint8_t **>(mapPtr)));

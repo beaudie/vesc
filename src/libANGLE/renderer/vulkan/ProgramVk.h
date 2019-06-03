@@ -16,6 +16,7 @@
 #include "libANGLE/renderer/ProgramImpl.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 namespace rx
@@ -104,11 +105,13 @@ class ProgramVk : public ProgramImpl
 
     // Also initializes the pipeline layout, descriptor set layouts, and used descriptor ranges.
 
-    angle::Result updateUniforms(ContextVk *contextVk);
+    angle::Result updateUniforms(ContextVk *contextVk, vk::FramebufferHelper *framebuffer);
     angle::Result updateTexturesDescriptorSet(ContextVk *contextVk,
                                               vk::FramebufferHelper *framebuffer);
     angle::Result updateUniformBuffersDescriptorSet(ContextVk *contextVk,
                                                     vk::FramebufferHelper *framebuffer);
+    angle::Result updateTransformFeedbackDescriptorSet(ContextVk *contextVk,
+                                                       vk::FramebufferHelper *framebuffer);
 
     angle::Result updateDescriptorSets(ContextVk *contextVk, vk::CommandBuffer *commandBuffer);
 
@@ -157,6 +160,8 @@ class ProgramVk : public ProgramImpl
     angle::Result initDefaultUniformBlocks(const gl::Context *glContext);
 
     angle::Result updateDefaultUniformsDescriptorSet(ContextVk *contextVk);
+    angle::Result updateTransformFeedbackDescriptorSetImpl(ContextVk *contextVk,
+                                                           vk::FramebufferHelper *framebuffer);
 
     template <class T>
     void getUniformImpl(GLint location, T *v, GLenum entryPointType) const;
@@ -216,7 +221,11 @@ class ProgramVk : public ProgramImpl
 
     gl::ShaderMap<DefaultUniformBlock> mDefaultUniformBlocks;
     gl::ShaderBitSet mDefaultUniformBlocksDirty;
-    gl::ShaderMap<uint32_t> mUniformBlocksOffsets;
+
+    static constexpr uint32_t kShaderTypeMin   = static_cast<uint32_t>(gl::kGLES2ShaderTypeMin);
+    static constexpr uint32_t kShaderTypeMax   = static_cast<uint32_t>(gl::kGLES2ShaderTypeMax);
+    static constexpr uint32_t kShaderTypeCount = kShaderTypeMax - kShaderTypeMin + 1;
+    std::array<uint32_t, kShaderTypeCount> mDynamicBufferOffsets;
 
     // This is a special "empty" placeholder buffer for when a shader has no uniforms.
     // It is necessary because we want to keep a compatible pipeline layout in all cases,

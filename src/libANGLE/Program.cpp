@@ -1422,6 +1422,7 @@ angle::Result Program::link(const Context *context)
         }
 
         gatherTransformFeedbackVaryings(mergedVaryings);
+        mState.updateTransformFeedbackStrides();
     }
 
     mLinkingState.reset(new LinkingState());
@@ -4784,6 +4785,11 @@ angle::Result Program::deserialize(const Context *context,
                   "Too many shader types");
     mState.mLinkedShaderStages = ShaderBitSet(stream.readInt<uint8_t>());
 
+    if (!mState.mAttachedShaders[ShaderType::Compute])
+    {
+        mState.updateTransformFeedbackStrides();
+    }
+
     postResolveLink(context);
 
     return angle::Result::Continue;
@@ -4791,11 +4797,6 @@ angle::Result Program::deserialize(const Context *context,
 
 void Program::postResolveLink(const gl::Context *context)
 {
-    if (!mState.mAttachedShaders[ShaderType::Compute])
-    {
-        mState.updateTransformFeedbackStrides();
-    }
-
     mState.updateActiveSamplers();
     mState.updateActiveImages();
 

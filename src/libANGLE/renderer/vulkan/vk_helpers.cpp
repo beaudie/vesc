@@ -2203,7 +2203,7 @@ angle::Result ImageHelper::allocateStagingMemory(ContextVk *contextVk,
                                    newBufferAllocatedOut);
 }
 
-angle::Result ImageHelper::flushStagedUpdates(ContextVk *context,
+angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                                               uint32_t levelStart,
                                               uint32_t levelEnd,
                                               uint32_t layerStart,
@@ -2215,7 +2215,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *context,
         return angle::Result::Continue;
     }
 
-    ANGLE_TRY(mStagingBuffer.flush(context));
+    ANGLE_TRY(mStagingBuffer.flush(contextVk));
 
     std::vector<SubresourceUpdate> updatesToKeep;
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(mFormat->imageFormat());
@@ -2289,7 +2289,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *context,
                                      getCurrentLayout(), 1, &update.image.copyRegion);
         }
 
-        update.release(context);
+        update.release(contextVk);
     }
 
     // Only remove the updates that were actually applied to the image.
@@ -2297,7 +2297,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *context,
 
     if (mSubresourceUpdates.empty())
     {
-        mStagingBuffer.releaseRetainedBuffers(context);
+        mStagingBuffer.releaseRetainedBuffers(contextVk);
     }
 
     return angle::Result::Continue;
