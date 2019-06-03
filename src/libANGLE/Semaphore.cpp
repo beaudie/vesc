@@ -30,4 +30,9 @@ angle::Result Semaphore::importFd(Context *context, HandleType handleType, GLint
     return mImplementation->importFd(context, handleType, fd);
 }
 
+angle::Result Semaphore::importZirconHandle(Context *context, HandleType handleType, GLuint handle)
+{
+    return mImplementation->importZirconHandle(context, handleType, handle);
+}
+
 }  // namespace gl

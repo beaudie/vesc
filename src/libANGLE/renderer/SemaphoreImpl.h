@@ -30,6 +30,10 @@ class SemaphoreImpl : angle::NonCopyable
     virtual void onDestroy(const gl::Context *context) = 0;
 
     virtual angle::Result importFd(gl::Context *context, gl::HandleType handleType, GLint fd) = 0;
+
+    virtual angle::Result importZirconHandle(gl::Context *context,
+                                             gl::HandleType handleType,
+                                             GLuint handle) = 0;
 };
 
 }  // namespace rx

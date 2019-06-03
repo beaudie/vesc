@@ -38,6 +38,21 @@ angle::Result SemaphoreVk::importFd(gl::Context *context, gl::HandleType handleT
     }
 }
 
+angle::Result SemaphoreVk::importZirconHandle(gl::Context *context,
+                                              gl::HandleType handleType,
+                                              GLuint handle)
+{
+    switch (handleType)
+    {
+        case gl::HandleType::ZirconEvent:
+            return importZirconEvent(context, handle);
+
+        default:
+            ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
+            return angle::Result::Stop;
+    }
+}
+
 angle::Result SemaphoreVk::importOpaqueFd(gl::Context *context, GLint fd)
 {
     ContextVk *contextVk = vk::GetImpl(context);
@@ -58,6 +73,33 @@ angle::Result SemaphoreVk::importOpaqueFd(gl::Context *context, GLint fd)
     importSemaphoreFdInfo.fd         = fd;
 
     ANGLE_VK_TRY(contextVk, vkImportSemaphoreFdKHR(renderer->getDevice(), &importSemaphoreFdInfo));
+
+    return angle::Result::Continue;
+}
+
+angle::Result SemaphoreVk::importZirconEvent(gl::Context *context, GLuint handle)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
+
+    if (!mSemaphore.valid())
+    {
+        mSemaphore.init(renderer->getDevice());
+    }
+
+    ASSERT(mSemaphore.valid());
+
+    VkImportSemaphoreZirconHandleInfoFUCHSIA importSemaphoreZirconHandleInfo = {};
+    importSemaphoreZirconHandleInfo.sType =
+        VK_STRUCTURE_TYPE_TEMP_IMPORT_SEMAPHORE_ZIRCON_HANDLE_INFO_FUCHSIA;
+    importSemaphoreZirconHandleInfo.semaphore = mSemaphore.getHandle();
+    importSemaphoreZirconHandleInfo.flags     = 0;
+    importSemaphoreZirconHandleInfo.handleType =
+        VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_TEMP_ZIRCON_EVENT_BIT_FUCHSIA;
+    importSemaphoreZirconHandleInfo.handle = handle;
+
+    ANGLE_VK_TRY(contextVk, vkImportSemaphoreZirconHandleFUCHSIA(renderer->getDevice(),
+                                                                 &importSemaphoreZirconHandleInfo));
 
     return angle::Result::Continue;
 }

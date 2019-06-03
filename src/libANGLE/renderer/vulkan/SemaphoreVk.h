@@ -25,10 +25,15 @@ class SemaphoreVk : public SemaphoreImpl
 
     angle::Result importFd(gl::Context *context, gl::HandleType handleType, GLint fd) override;
 
+    angle::Result importZirconHandle(gl::Context *context,
+                                     gl::HandleType handleType,
+                                     GLuint handle) override;
+
     VkSemaphore getHandle() const { return mSemaphore.getHandle(); }
 
   private:
     angle::Result importOpaqueFd(gl::Context *context, GLint fd);
+    angle::Result importZirconEvent(gl::Context *context, GLuint handle);
 
     vk::Semaphore mSemaphore;
 };

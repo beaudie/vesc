@@ -37,6 +37,7 @@ class Semaphore final : public RefCountObject
     rx::SemaphoreImpl *getImplementation() const { return mImplementation.get(); }
 
     angle::Result importFd(Context *context, HandleType handleType, GLint fd);
+    angle::Result importZirconHandle(Context *context, HandleType handleType, GLuint handle);
 
   private:
     std::unique_ptr<rx::SemaphoreImpl> mImplementation;

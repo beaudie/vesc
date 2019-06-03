@@ -551,6 +551,9 @@ PFN_vkGetPhysicalDeviceProperties2KHR vkGetPhysicalDeviceProperties2KHR = nullpt
 // VK_KHR_external_semaphore_fd
 PFN_vkImportSemaphoreFdKHR vkImportSemaphoreFdKHR = nullptr;
 
+// VK_FUCHSIA_external_semaphore
+PFN_vkImportSemaphoreZirconHandleFUCHSIA vkImportSemaphoreZirconHandleFUCHSIA = nullptr;
+
 #if defined(ANGLE_PLATFORM_FUCHSIA)
 // VK_FUCHSIA_imagepipe_surface
 PFN_vkCreateImagePipeSurfaceFUCHSIA vkCreateImagePipeSurfaceFUCHSIA = nullptr;
@@ -581,6 +584,11 @@ void InitDebugReportEXTFunctions(VkInstance instance)
 void InitGetPhysicalDeviceProperties2KHRFunctions(VkInstance instance)
 {
     GET_FUNC(vkGetPhysicalDeviceProperties2KHR);
+}
+
+void InitExternalSemaphoreFUCHSIAFunctions(VkInstance instance)
+{
+    GET_FUNC(vkImportSemaphoreZirconHandleFUCHSIA);
 }
 
 #if defined(ANGLE_PLATFORM_FUCHSIA)

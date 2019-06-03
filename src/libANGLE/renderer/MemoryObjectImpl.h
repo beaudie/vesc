@@ -33,6 +33,10 @@ class MemoryObjectImpl : angle::NonCopyable
                                    GLuint64 size,
                                    gl::HandleType handleType,
                                    GLint fd) = 0;
+    virtual angle::Result importZirconHandle(gl::Context *context,
+                                             GLuint64 size,
+                                             gl::HandleType handleType,
+                                             GLuint handle) = 0;
 };
 
 }  // namespace rx
