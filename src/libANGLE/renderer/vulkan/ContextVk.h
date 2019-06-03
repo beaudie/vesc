@@ -215,6 +215,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     void onFramebufferChange(const vk::RenderPassDesc &renderPassDesc);
     void onHostVisibleBufferWrite() { mIsAnyHostVisibleBufferWritten = true; }
 
+    void invalidateCurrentTransformFeedbackBuffers();
+    void onTransformFeedbackPauseResume();
+
     vk::DynamicQueryPool *getQueryPool(gl::QueryType queryType);
 
     const VkClearValue &getClearColorValue() const;
@@ -324,6 +327,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
         DIRTY_BIT_INDEX_BUFFER,
         DIRTY_BIT_DRIVER_UNIFORMS,
         DIRTY_BIT_UNIFORM_BUFFERS,
+        DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS,
         DIRTY_BIT_DESCRIPTOR_SETS,
         DIRTY_BIT_MAX,
     };
@@ -391,6 +395,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
                                             vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyUniformBuffers(const gl::Context *context,
                                             vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyTransformFeedbackBuffers(const gl::Context *context,
+                                                      vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyDescriptorSets(const gl::Context *context,
                                             vk::CommandBuffer *commandBuffer);
 
@@ -442,6 +448,13 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     const GLvoid *mLastIndexBufferOffset;
     gl::DrawElementsType mCurrentDrawElementsType;
 
+    // TODO(syoussefi): A hacky way to communicate firstVertex to
+    // TransformFeedbackVk::updateBufferOffsets.  This may be unnecessary with the rework of
+    // descriptor updates.  Unfortunately, gl_BaseVertex support in Vulkan is not yet ubiquitous,
+    // which would have otherwise removed the need for this hack.
+    // http://anglebug.com/3205
+    GLint mXfbBaseVertex;
+
     // Cached clear value/mask for color and depth/stencil.
     VkClearValue mClearColorValue;
     VkClearValue mClearDepthStencilValue;
@@ -467,7 +480,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
         float halfRenderAreaHeight;
         float viewportYScale;
         float negViewportYScale;
-        float padding;
+        uint32_t xfbActiveUnpaused;
+
+        std::array<int32_t, 4> xfbBufferOffsets;
 
         // We'll use x, y, z for near / far / diff respectively.
         std::array<float, 4> depthRange;
