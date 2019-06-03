@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b3c476b9_8577ceed",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Image11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T18:13:33Z",
+      "side": 1,
+      "message": "can you also generate an error here?",
+      "range": {
+        "startLine": 654,
+        "startChar": 8,
+        "endLine": 654,
+        "endChar": 35
+      },
+      "revId": "5468c790fd1921cfa321b7a84831ed25e5df24c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c09f131_e8fb76c6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/MappedSubresourceVerifier11.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T18:13:33Z",
+      "side": 1,
+      "message": "this (c) isn\u0027t needed any more.",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "5468c790fd1921cfa321b7a84831ed25e5df24c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e74da45a_77fce4b5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/MappedSubresourceVerifier11.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T18:13:33Z",
+      "side": 1,
+      "message": "this is redundant.",
+      "range": {
+        "startLine": 24,
+        "startChar": 4,
+        "endLine": 24,
+        "endChar": 43
+      },
+      "revId": "5468c790fd1921cfa321b7a84831ed25e5df24c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "180cf4e4_2dfa80d9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/MappedSubresourceVerifier11.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T18:13:33Z",
+      "side": 1,
+      "message": "could you refactor the code so these can be optimized away when the appropriate defines are not enabled? to ensure there is minimal/near-zero overhead in release.",
+      "range": {
+        "startLine": 29,
+        "startChar": 3,
+        "endLine": 31,
+        "endChar": 0
+      },
+      "revId": "5468c790fd1921cfa321b7a84831ed25e5df24c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
