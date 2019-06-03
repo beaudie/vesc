@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88be9e9e_f6d34d6b",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3292,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T14:28:05Z",
+      "side": 1,
+      "message": "this is the fix, right? Could you split this into a separate CL with newly enabled tests? And we\u0027ll review the verified stuff independently?",
+      "range": {
+        "startLine": 3291,
+        "startChar": 8,
+        "endLine": 3292,
+        "endChar": 97
+      },
+      "revId": "e354591d89835074ed285489db50c5c386485d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
