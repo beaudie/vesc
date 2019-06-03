@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8386706_0be6ad49",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T18:48:46Z",
+      "side": 1,
+      "message": "can update this. also it\u0027s not specific to Vulkan.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 40
+      },
+      "revId": "359e43d1413b988f30d381e92d89b2be7c30cbda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a00dc1d8_117a6d59",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T18:48:46Z",
+      "side": 1,
+      "message": "can update this to generally be \"binding bits first\"",
+      "range": {
+        "startLine": 487,
+        "startChar": 17,
+        "endLine": 489,
+        "endChar": 53
+      },
+      "revId": "359e43d1413b988f30d381e92d89b2be7c30cbda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
