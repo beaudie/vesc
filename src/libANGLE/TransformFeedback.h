@@ -38,6 +38,7 @@ class TransformFeedbackState final : angle::NonCopyable
     const OffsetBindingPointer<Buffer> &getIndexedBuffer(size_t idx) const;
     const std::vector<OffsetBindingPointer<Buffer>> &getIndexedBuffers() const;
     const Program *getBoundProgram() const { return mProgram; }
+    GLsizeiptr getVerticesDrawn() const { return mVerticesDrawn; }
 
   private:
     friend class TransformFeedback;
@@ -98,8 +99,7 @@ class TransformFeedback final : public RefCountObject, public LabeledObject
 
     angle::Result detachBuffer(const Context *context, GLuint bufferName);
 
-    rx::TransformFeedbackImpl *getImplementation();
-    const rx::TransformFeedbackImpl *getImplementation() const;
+    rx::TransformFeedbackImpl *getImplementation() const;
 
     void onBindingChanged(const Context *context, bool bound);
 

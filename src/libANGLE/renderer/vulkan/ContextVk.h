@@ -214,6 +214,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     void invalidateDefaultAttributes(const gl::AttributesMask &dirtyMask);
     void onFramebufferChange(const vk::RenderPassDesc &renderPassDesc);
 
+    void invalidateCurrentTransformFeedbackBuffers();
+    void onTransformFeedbackPauseResume();
+
     vk::DynamicDescriptorPool *getDynamicDescriptorPool(uint32_t descriptorSetIndex);
     vk::DynamicQueryPool *getQueryPool(gl::QueryType queryType);
 
@@ -311,6 +314,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
         DIRTY_BIT_INDEX_BUFFER,
         DIRTY_BIT_DRIVER_UNIFORMS,
         DIRTY_BIT_UNIFORM_BUFFERS,
+        DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS,
         DIRTY_BIT_DESCRIPTOR_SETS,
         DIRTY_BIT_MAX,
     };
@@ -377,6 +381,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
                                             vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyUniformBuffers(const gl::Context *context,
                                             vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyTransformFeedbackBuffers(const gl::Context *context,
+                                                      vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyDescriptorSets(const gl::Context *context,
                                             vk::CommandBuffer *commandBuffer);
 

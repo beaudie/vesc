@@ -863,14 +863,15 @@ class PipelineLayoutCache final : angle::NonCopyable
 //   only under rare circumstances, such as viewport or depth range change.  However, there is only
 //   one binding in this set.
 // - Set 1 contains uniform blocks created to encompass default uniforms.  Bindings 0 and 1
-//   correspond to default uniforms in the vertex and fragment shaders respectively.
+//   correspond to default uniforms in the vertex and fragment shaders respectively.  Additionally,
+//   transform feedback buffers are bound from binding 2 and up.
 // - Set 2 contains all textures.
 // - Set 3 contains all uniform blocks.
 
 // ANGLE driver uniforms set index (binding is always 0):
 constexpr uint32_t kDriverUniformsDescriptorSetIndex = 0;
 // Uniforms set index:
-constexpr uint32_t kUniformsDescriptorSetIndex = 1;
+constexpr uint32_t kUniformsAndXfbDescriptorSetIndex = 1;
 // Textures set index:
 constexpr uint32_t kTextureDescriptorSetIndex = 2;
 // Uniform blocks set index:
@@ -882,6 +883,8 @@ constexpr uint32_t kReservedDriverUniformBindingCount = 1;
 constexpr uint32_t kVertexUniformsBindingIndex = 0;
 // Binding index for default uniforms in the fragment shader:
 constexpr uint32_t kFragmentUniformsBindingIndex = 1;
+// Binding index start for transform feedback buffers:
+constexpr uint32_t kXfbBindingIndexStart = 2;
 
 }  // namespace rx
 

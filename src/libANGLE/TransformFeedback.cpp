@@ -289,12 +289,7 @@ bool TransformFeedback::buffersBoundForOtherUse() const
     return false;
 }
 
-rx::TransformFeedbackImpl *TransformFeedback::getImplementation()
-{
-    return mImplementation;
-}
-
-const rx::TransformFeedbackImpl *TransformFeedback::getImplementation() const
+rx::TransformFeedbackImpl *TransformFeedback::getImplementation() const
 {
     return mImplementation;
 }

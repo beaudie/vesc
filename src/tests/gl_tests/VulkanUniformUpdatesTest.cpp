@@ -52,7 +52,7 @@ class VulkanUniformUpdatesTest : public ANGLETest
 
         // Force a small limit on the max sets per pool to more easily trigger a new allocation.
         rx::vk::DynamicDescriptorPool *uniformPool =
-            contextVk->getDynamicDescriptorPool(rx::kUniformsDescriptorSetIndex);
+            contextVk->getDynamicDescriptorPool(rx::kUniformsAndXfbDescriptorSetIndex);
         uniformPool->setMaxSetsPerPoolForTesting(kMaxSetsForTesting);
         VkDescriptorPoolSize uniformSetSize = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
                                                rx::GetUniformBufferDescriptorCount()};
