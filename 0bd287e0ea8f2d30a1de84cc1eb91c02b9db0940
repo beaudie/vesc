@@ -105,6 +105,23 @@
     },
     {
       "key": {
+        "uuid": "6908902b_3cd7a9f8",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-03T16:40:52Z",
+      "side": 1,
+      "message": "Why is this padding necessary?",
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c7b5eaad_c703057e",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
         "patchSetId": 3
@@ -145,6 +162,23 @@
         "endLine": 82,
         "endChar": 43
       },
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1561199_e4012a63",
+        "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-03T16:40:52Z",
+      "side": 1,
+      "message": "Why not ES2_VULKAN() here also?",
       "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
