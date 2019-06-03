@@ -3275,6 +3275,7 @@ angle::Result TextureD3D_2DArray::copyTexture(const gl::Context *context,
     }
     else
     {
+        sourceBox.depth = 1;
         for (int i = 0; i < size.depth; i++)
         {
             gl::ImageIndex currentSourceDepthIndex =
