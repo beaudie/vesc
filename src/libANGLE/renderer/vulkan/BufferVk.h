@@ -92,6 +92,7 @@ class BufferVk : public BufferImpl
     }
 
     angle::Result mapImpl(ContextVk *contextVk, void **mapPtr);
+    angle::Result mapRangeImpl(ContextVk *contextVk, size_t offset, size_t length, void **mapPtr);
     angle::Result unmapImpl(ContextVk *contextVk);
 
     // Calls copyBuffer internally.

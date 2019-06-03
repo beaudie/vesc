@@ -745,6 +745,15 @@ void CommandGraphNode::setDiagnosticInfo(CommandGraphResourceType resourceType,
 std::string CommandGraphNode::dumpCommandsForDiagnostics(const char *separator) const
 {
     std::string result;
+    if (mGlobalMemoryBarrierSrcAccess != 0 || mGlobalMemoryBarrierDstAccess != 0)
+    {
+        result += separator;
+
+        std::ostringstream out;
+        out << "Barrier 0x" << std::hex << mGlobalMemoryBarrierSrcAccess << " &rarr; 0x" << std::hex
+            << mGlobalMemoryBarrierDstAccess;
+        result += out.str();
+    }
     if (mOutsideRenderPassCommands.valid())
     {
         result += separator;
