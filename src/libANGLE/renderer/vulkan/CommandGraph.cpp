@@ -88,6 +88,17 @@ const char *GetResourceTypeName(CommandGraphResourceType resourceType,
                     UNREACHABLE();
                     return "Query";
             }
+        case CommandGraphResourceType::EmulatedQuery:
+            switch (function)
+            {
+                case CommandGraphNodeFunction::BeginTransformFeedbackQuery:
+                    return "BeginTransformFeedbackQuery";
+                case CommandGraphNodeFunction::EndTransformFeedbackQuery:
+                    return "EndTransformFeedbackQuery";
+                default:
+                    UNREACHABLE();
+                    return "EmulatedQuery";
+            }
         case CommandGraphResourceType::FenceSync:
             switch (function)
             {
@@ -540,7 +551,9 @@ void CommandGraphNode::setQueryPool(const QueryPool *queryPool, uint32_t queryIn
 {
     ASSERT(mFunction == CommandGraphNodeFunction::BeginQuery ||
            mFunction == CommandGraphNodeFunction::EndQuery ||
-           mFunction == CommandGraphNodeFunction::WriteTimestamp);
+           mFunction == CommandGraphNodeFunction::WriteTimestamp ||
+           mFunction == CommandGraphNodeFunction::BeginTransformFeedbackQuery ||
+           mFunction == CommandGraphNodeFunction::EndTransformFeedbackQuery);
     mQueryPool  = queryPool->getHandle();
     mQueryIndex = queryIndex;
 }
@@ -683,6 +696,15 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
 
             break;
 
+        case CommandGraphNodeFunction::BeginTransformFeedbackQuery:
+            // Unless using VK_EXT_transform_feedback (not implemented currently), there's nothing
+            // to do.
+            break;
+
+        case CommandGraphNodeFunction::EndTransformFeedbackQuery:
+            // Same as BeginTransformFeedbackQuery.
+            break;
+
         case CommandGraphNodeFunction::SetFenceSync:
             ASSERT(!mOutsideRenderPassCommands.valid() && !mInsideRenderPassCommands.valid());
             ASSERT(mFenceSyncEvent != VK_NULL_HANDLE);
@@ -774,6 +796,15 @@ void CommandGraphNode::setDiagnosticInfo(CommandGraphResourceType resourceType,
 std::string CommandGraphNode::dumpCommandsForDiagnostics(const char *separator) const
 {
     std::string result;
+    if (mGlobalMemoryBarrierSrcAccess != 0 || mGlobalMemoryBarrierDstAccess != 0)
+    {
+        result += separator;
+
+        std::ostringstream out;
+        out << "Memory Barrier 0x" << std::hex << mGlobalMemoryBarrierSrcAccess << " &rarr; 0x"
+            << std::hex << mGlobalMemoryBarrierDstAccess;
+        result += out.str();
+    }
     if (mOutsideRenderPassCommands.valid())
     {
         result += separator;
@@ -992,6 +1023,21 @@ void CommandGraph::writeTimestamp(const QueryPool *queryPool, uint32_t queryInde
     newNode->setQueryPool(queryPool, queryIndex);
 }
 
+void CommandGraph::beginTransformFeedbackEmulatedQuery(
+    const TransformFeedbackVk *transformFeedbackVk)
+{
+    allocateBarrierNode(CommandGraphNodeFunction::BeginTransformFeedbackQuery,
+                        CommandGraphResourceType::EmulatedQuery,
+                        reinterpret_cast<uintptr_t>(transformFeedbackVk));
+}
+
+void CommandGraph::endTransformFeedbackEmulatedQuery(const TransformFeedbackVk *transformFeedbackVk)
+{
+    allocateBarrierNode(CommandGraphNodeFunction::EndTransformFeedbackQuery,
+                        CommandGraphResourceType::EmulatedQuery,
+                        reinterpret_cast<uintptr_t>(transformFeedbackVk));
+}
+
 void CommandGraph::setFenceSync(const vk::Event &event)
 {
     CommandGraphNode *newNode = allocateBarrierNode(CommandGraphNodeFunction::SetFenceSync,
@@ -1054,6 +1100,7 @@ void CommandGraph::dumpGraphDotFile(std::ostream &out) const
     int imageIDCounter       = 1;
     int queryIDCounter       = 1;
     int fenceIDCounter       = 1;
+    int xfbIDCounter         = 1;
 
     out << "digraph {" << std::endl;
 
@@ -1129,6 +1176,9 @@ void CommandGraph::dumpGraphDotFile(std::ostream &out) const
                         break;
                     case CommandGraphResourceType::FenceSync:
                         id = fenceIDCounter++;
+                        break;
+                    case CommandGraphResourceType::EmulatedQuery:
+                        id = xfbIDCounter++;
                         break;
                     default:
                         UNREACHABLE();
