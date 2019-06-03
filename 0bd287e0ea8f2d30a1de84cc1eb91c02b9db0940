@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39950515_f4531363",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-03T14:19:14Z",
+      "side": 1,
+      "message": "Note that the parameters to the functions here don\u0027t necessarily match the push constants sent to the shaders. I would prefer if you keep the public function parameters here as what you would like to see on the C++ side of things, and add a private struct below for shader parameters, like the other cases.\n\nOtherwise, at least comment that this struct is supposed to mirror the push constants in the shader.",
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76b1cbb2_4b0aa49a",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-03T14:19:14Z",
+      "side": 1,
+      "message": "Would be good to add a comment why an alignment of 4 is necessary.",
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcbc3559_4465a0af",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-03T14:19:14Z",
+      "side": 1,
+      "message": "Not exactly correct (it could read last byte of one and the first byte of next).",
+      "range": {
+        "startLine": 25,
+        "startChar": 43,
+        "endLine": 25,
+        "endChar": 67
+      },
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2aa5fa0_7ca4a2be",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-03T14:19:14Z",
+      "side": 1,
+      "message": "I would prefer a more helpful comment, like \"Offset of source indices in bytes\" and such (especially with `maxIndex` as it sounds like it\u0027s setting an upper limit to the indices being converted!)",
+      "range": {
+        "startLine": 31,
+        "startChar": 7,
+        "endLine": 31,
+        "endChar": 35
+      },
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7b5eaad_c703057e",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-03T14:19:14Z",
+      "side": 1,
+      "message": "?",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 71,
+        "endChar": 80
+      },
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a34daf3_90e41d64",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-03T14:19:14Z",
+      "side": 1,
+      "message": "You can replace `dstOffset` with this in the push constants. There\u0027s no reason for every shader to perform this instruction if the CPU can do it once.",
+      "range": {
+        "startLine": 82,
+        "startChar": 4,
+        "endLine": 82,
+        "endChar": 43
+      },
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
