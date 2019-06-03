@@ -7245,7 +7245,9 @@ void Context::importMemoryZirconHandle(GLuint memory,
                                        HandleType handleType,
                                        GLuint handle)
 {
-    UNREACHABLE();
+    MemoryObject *memoryObject = getMemoryObject(memory);
+    ASSERT(memoryObject != nullptr);
+    ANGLE_CONTEXT_TRY(memoryObject->importZirconHandle(this, size, handleType, handle));
 }
 
 void Context::genSemaphores(GLsizei n, GLuint *semaphores)
@@ -7321,7 +7323,9 @@ void Context::importSemaphoreFd(GLuint semaphore, HandleType handleType, GLint f
 
 void Context::importSemaphoreZirconHandle(GLuint semaphore, HandleType handleType, GLuint handle)
 {
-    UNREACHABLE();
+    Semaphore *semaphoreObject = getSemaphore(semaphore);
+    ASSERT(semaphoreObject != nullptr);
+    ANGLE_CONTEXT_TRY(semaphoreObject->importZirconHandle(this, handleType, handle));
 }
 
 void Context::eGLImageTargetTexture2D(TextureType target, GLeglImageOES image)
