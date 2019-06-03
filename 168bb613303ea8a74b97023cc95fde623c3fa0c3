@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "968082fe_e9ab0baf",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-06-03T19:02:54Z",
+      "side": 1,
+      "message": "nit: You don\u0027t need this (and stdio) now.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 20
+      },
+      "revId": "168bb613303ea8a74b97023cc95fde623c3fa0c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
