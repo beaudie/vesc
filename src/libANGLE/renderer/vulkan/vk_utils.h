@@ -16,6 +16,7 @@
 #include "common/Optional.h"
 #include "common/PackedEnums.h"
 #include "common/debug.h"
+#include "common/vulkan_fuchsia_ext.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Observer.h"
 #include "libANGLE/renderer/vulkan/SecondaryCommandBuffer.h"
@@ -504,6 +505,10 @@ extern PFN_vkImportSemaphoreFdKHR vkImportSemaphoreFdKHR;
 void InitDebugUtilsEXTFunctions(VkInstance instance);
 void InitDebugReportEXTFunctions(VkInstance instance);
 void InitGetPhysicalDeviceProperties2KHRFunctions(VkInstance instance);
+
+// VK_FUCHSIA_external_semaphore
+extern PFN_vkImportSemaphoreZirconHandleFUCHSIA vkImportSemaphoreZirconHandleFUCHSIA;
+void InitExternalSemaphoreFUCHSIAFunctions(VkInstance instance);
 
 #if defined(ANGLE_PLATFORM_FUCHSIA)
 // VK_FUCHSIA_imagepipe_surface
