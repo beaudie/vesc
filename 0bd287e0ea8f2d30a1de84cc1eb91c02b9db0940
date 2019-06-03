@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "83a9ab4c_ac93dbe0",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T17:20:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39950515_f4531363",
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76b1cbb2_4b0aa49a",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7a5acfe_1c5b6789",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T17:20:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76b1cbb2_4b0aa49a",
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "c958bb7e_22428092",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T17:20:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68095106_0f557104",
+      "range": {
+        "startLine": 23,
+        "startChar": 30,
+        "endLine": 23,
+        "endChar": 40
+      },
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fcbc3559_4465a0af",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
         "patchSetId": 3
@@ -79,6 +139,30 @@
       "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af587025_910d3a9d",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T17:20:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcbc3559_4465a0af",
+      "range": {
+        "startLine": 25,
+        "startChar": 43,
+        "endLine": 25,
+        "endChar": 67
+      },
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "cb054bec_a0ef2756",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T17:20:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2aa5fa0_7ca4a2be",
+      "range": {
+        "startLine": 31,
+        "startChar": 7,
+        "endLine": 31,
+        "endChar": 35
+      },
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6908902b_3cd7a9f8",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
         "patchSetId": 3
@@ -119,6 +227,24 @@
       "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c281ac12_72c3aa86",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T17:20:17Z",
+      "side": 1,
+      "message": "Commented. It\u0027s to pad to a vec4.",
+      "parentUuid": "6908902b_3cd7a9f8",
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -145,6 +271,30 @@
     },
     {
       "key": {
+        "uuid": "1b80faca_5bfefa96",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T17:20:17Z",
+      "side": 1,
+      "message": "Outdated comment, removed.",
+      "parentUuid": "c7b5eaad_c703057e",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 71,
+        "endChar": 80
+      },
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2a34daf3_90e41d64",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
         "patchSetId": 3
@@ -168,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "20ab5fc5_83c365cc",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T17:20:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a34daf3_90e41d64",
+      "range": {
+        "startLine": 82,
+        "startChar": 4,
+        "endLine": 82,
+        "endChar": 43
+      },
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1561199_e4012a63",
         "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
         "patchSetId": 3
@@ -179,6 +353,24 @@
       "writtenOn": "2019-06-03T16:40:52Z",
       "side": 1,
       "message": "Why not ES2_VULKAN() here also?",
+      "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3d63654_8bf0a818",
+        "filename": "src/tests/gl_tests/DrawElementsTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T17:20:17Z",
+      "side": 1,
+      "message": "I tried this and was getting test failures. It\u0027s ES3 only. I guess it might rely on some unimplemented behaviour. I could file a bug for it if youp prefer. But I had just left it off for now.",
+      "parentUuid": "d1561199_e4012a63",
       "revId": "0bd287e0ea8f2d30a1de84cc1eb91c02b9db0940",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
