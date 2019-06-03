@@ -347,6 +347,10 @@ class ProgramState final : angle::NonCopyable
     {
         return mLinkedTransformFeedbackVaryings;
     }
+    const std::vector<GLsizei> &getTransformFeedbackStrides() const
+    {
+        return mTransformFeedbackStrides;
+    }
     const std::vector<AtomicCounterBuffer> &getAtomicCounterBuffers() const
     {
         return mAtomicCounterBuffers;

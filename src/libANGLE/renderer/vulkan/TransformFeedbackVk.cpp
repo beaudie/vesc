@@ -9,6 +9,11 @@
 
 #include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 
+#include "libANGLE/Context.h"
+#include "libANGLE/renderer/vulkan/BufferVk.h"
+#include "libANGLE/renderer/vulkan/ContextVk.h"
+#include "libANGLE/renderer/vulkan/ProgramVk.h"
+
 #include "common/debug.h"
 
 namespace rx
@@ -23,26 +28,30 @@ TransformFeedbackVk::~TransformFeedbackVk() {}
 angle::Result TransformFeedbackVk::begin(const gl::Context *context,
                                          gl::PrimitiveMode primitiveMode)
 {
-    UNIMPLEMENTED();
-    return angle::Result::Stop;
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    // Make sure the transform feedback buffers are bound to the program descriptor sets.
+    contextVk->invalidateCurrentTransformFeedbackBuffers();
+    contextVk->invalidateCurrentTransformFeedbackBuffers();
+    return angle::Result::Continue;
 }
 
 angle::Result TransformFeedbackVk::end(const gl::Context *context)
 {
-    UNIMPLEMENTED();
-    return angle::Result::Stop;
+    // Nothing to do.
+    return angle::Result::Continue;
 }
 
 angle::Result TransformFeedbackVk::pause(const gl::Context *context)
 {
-    UNIMPLEMENTED();
-    return angle::Result::Stop;
+    // Nothing to do.
+    return angle::Result::Continue;
 }
 
 angle::Result TransformFeedbackVk::resume(const gl::Context *context)
 {
-    UNIMPLEMENTED();
-    return angle::Result::Stop;
+    // Nothing to do.
+    return angle::Result::Continue;
 }
 
 angle::Result TransformFeedbackVk::bindIndexedBuffer(
@@ -50,8 +59,132 @@ angle::Result TransformFeedbackVk::bindIndexedBuffer(
     size_t index,
     const gl::OffsetBindingPointer<gl::Buffer> &binding)
 {
-    UNIMPLEMENTED();
-    return angle::Result::Stop;
+    // Nothing to do.
+    return angle::Result::Continue;
+}
+
+void TransformFeedbackVk::updateDescriptorSetLayout(
+    const gl::ProgramState &programState,
+    vk::DescriptorSetLayoutDesc *descSetLayoutOut) const
+{
+    size_t xfbBufferCount = programState.getLinkedTransformFeedbackVaryings().size();
+    fprintf(stderr, "%zu\n", xfbBufferCount);
+    if (xfbBufferCount == 0)
+    {
+        return;
+    }
+
+    GLenum bufferMode = programState.getTransformFeedbackBufferMode();
+    if (bufferMode == GL_INTERLEAVED_ATTRIBS)
+    {
+        // If interleaved, there's only one output buffer.
+        xfbBufferCount = 1;
+    }
+
+    for (size_t bufferIndex = 0; bufferIndex < xfbBufferCount; ++bufferIndex)
+    {
+        descSetLayoutOut->update(kXfbBindingIndexStart + bufferIndex,
+                                 VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1,
+                                 VK_SHADER_STAGE_FRAGMENT_BIT);
+    }
+}
+
+void TransformFeedbackVk::updateDescriptorSet(ContextVk *contextVk,
+                                              const gl::ProgramState &programState,
+                                              VkDescriptorSet descSet,
+                                              uint32_t bindingOffset,
+                                              vk::FramebufferHelper *framebuffer) const
+{
+    const std::vector<gl::OffsetBindingPointer<gl::Buffer>> &xfbBuffers =
+        mState.getIndexedBuffers();
+    size_t xfbBufferCount = programState.getLinkedTransformFeedbackVaryings().size();
+    GLenum bufferMode     = programState.getTransformFeedbackBufferMode();
+
+    ASSERT(xfbBufferCount > 0);
+    if (bufferMode == GL_INTERLEAVED_ATTRIBS)
+    {
+        // If interleaved, there's only one output buffer.
+        xfbBufferCount = 1;
+    }
+
+    std::array<VkDescriptorBufferInfo, kMaxSeparateAttributes> descriptorBufferInfo;
+
+    // Write default uniforms for each shader type.
+    for (size_t bufferIndex = 0; bufferIndex < xfbBufferCount; ++bufferIndex)
+    {
+        VkDescriptorBufferInfo &bufferInfo = descriptorBufferInfo[bufferIndex];
+
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = xfbBuffers[bufferIndex];
+        gl::Buffer *buffer                                        = bufferBinding.get();
+        ASSERT(buffer != nullptr);
+
+        // Make sure there's no possible under/overflow with binding size.
+        static_assert(sizeof(VkDeviceSize) >= sizeof(bufferBinding.getSize()),
+                      "VkDeviceSize too small");
+
+        vk::BufferHelper &bufferHelper = vk::GetImpl(buffer)->getBuffer();
+
+        bufferHelper.onWrite(VK_ACCESS_SHADER_WRITE_BIT);
+        bufferHelper.addWriteDependency(framebuffer);
+
+        bufferInfo.buffer = bufferHelper.getBuffer().getHandle();
+        bufferInfo.offset = 0;
+        bufferInfo.range  = VK_WHOLE_SIZE;
+    }
+
+    VkDevice device = contextVk->getDevice();
+
+    VkWriteDescriptorSet writeDescriptorInfo = {};
+    writeDescriptorInfo.sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeDescriptorInfo.dstSet               = descSet;
+    writeDescriptorInfo.dstBinding           = bindingOffset;
+    writeDescriptorInfo.dstArrayElement      = 0;
+    writeDescriptorInfo.descriptorCount      = xfbBufferCount;
+    writeDescriptorInfo.descriptorType       = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC;
+    writeDescriptorInfo.pImageInfo           = nullptr;
+    writeDescriptorInfo.pBufferInfo          = descriptorBufferInfo.data();
+    writeDescriptorInfo.pTexelBufferView     = nullptr;
+
+    vkUpdateDescriptorSets(device, 1, &writeDescriptorInfo, 0, nullptr);
+}
+
+void TransformFeedbackVk::updateBufferOffsets(const gl::ProgramState &programState,
+                                              uint32_t *offsetsOut,
+                                              size_t offsetsSize) const
+{
+    const std::vector<gl::OffsetBindingPointer<gl::Buffer>> &xfbBuffers =
+        mState.getIndexedBuffers();
+    GLsizeiptr verticesDrawn = mState.getVerticesDrawn();
+    const std::vector<GLsizei> &bufferStrides =
+        mState.getBoundProgram()->getTransformFeedbackStrides();
+    size_t xfbBufferCount = programState.getLinkedTransformFeedbackVaryings().size();
+    GLenum bufferMode     = programState.getTransformFeedbackBufferMode();
+
+    ASSERT(xfbBufferCount > 0);
+    if (bufferMode == GL_INTERLEAVED_ATTRIBS)
+    {
+        // If interleaved, there's only one output buffer.
+        xfbBufferCount = 1;
+    }
+
+    // The caller should make sure the offsets array has enough space.  The maximum possible number
+    // of outputs is kMaxSeparateAttributes.
+    ASSERT(offsetsSize >= xfbBufferCount);
+
+    for (size_t bufferIndex = 0; bufferIndex < xfbBufferCount; ++bufferIndex)
+    {
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = xfbBuffers[bufferIndex];
+        ASSERT(bufferBinding.get() != nullptr);
+
+        GLintptr offset = bufferBinding.getOffset();
+        ASSERT(static_cast<size_t>(offset) < sizeof(uint32_t));
+
+        // TODO: get mVerticesDrawn from state and multiply it by the size of the varying that's
+        // output to this buffer, or the total sum if interleaved.  Otherwise this is always the
+        // start offset of the buffer.
+        offsetsOut[bufferIndex] =
+            static_cast<uint32_t>(offset) + verticesDrawn * bufferStrides[bufferIndex];
+    }
 }
 
 }  // namespace rx

@@ -173,6 +173,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mDirtyBitHandlers[DIRTY_BIT_INDEX_BUFFER]    = &ContextVk::handleDirtyIndexBuffer;
     mDirtyBitHandlers[DIRTY_BIT_DRIVER_UNIFORMS] = &ContextVk::handleDirtyDriverUniforms;
     mDirtyBitHandlers[DIRTY_BIT_UNIFORM_BUFFERS] = &ContextVk::handleDirtyUniformBuffers;
+    mDirtyBitHandlers[DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS] =
+        &ContextVk::handleDirtyTransformFeedbackBuffers;
     mDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] = &ContextVk::handleDirtyDescriptorSets;
 
     mDirtyBits = mNewCommandBufferDirtyBits;
@@ -407,7 +409,14 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
 
     if (mProgram->dirtyUniforms())
     {
-        ANGLE_TRY(mProgram->updateUniforms(this));
+        ANGLE_TRY(mProgram->updateUniforms(this, mDrawFramebuffer->getFramebuffer()));
+        mDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+    }
+
+    // Update transform feedback offsets on every draw call.
+    if (mState.isTransformFeedbackActiveUnpaused())
+    {
+        mProgram->updateTransformFeedbackOffsets(this);
         mDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
     }
 
@@ -597,6 +606,17 @@ angle::Result ContextVk::handleDirtyUniformBuffers(const gl::Context *context,
     {
         ANGLE_TRY(
             mProgram->updateUniformBuffersDescriptorSet(this, mDrawFramebuffer->getFramebuffer()));
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyTransformFeedbackBuffers(const gl::Context *context,
+                                                             vk::CommandBuffer *commandBuffer)
+{
+    if (mState.isTransformFeedbackActiveUnpaused())
+    {
+        ANGLE_TRY(mProgram->updateTransformFeedbackDescriptorSet(
+            this, mDrawFramebuffer->getFramebuffer()));
     }
     return angle::Result::Continue;
 }
@@ -1591,6 +1611,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 invalidateCurrentTextures();
                 break;
             case gl::State::DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING:
+                // Nothing to do.
                 break;
             case gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING:
                 break;
@@ -1838,6 +1859,17 @@ void ContextVk::onFramebufferChange(const vk::RenderPassDesc &renderPassDesc)
     mGraphicsPipelineDesc->updateRenderPassDesc(&mGraphicsPipelineTransition, renderPassDesc);
 }
 
+void ContextVk::invalidateCurrentTransformFeedbackBuffers()
+{
+    mDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
+    mDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+}
+
+void ContextVk::onTransformFeedbackPauseResume()
+{
+    invalidateDriverUniforms();
+}
+
 angle::Result ContextVk::dispatchCompute(const gl::Context *context,
                                          GLuint numGroupsX,
                                          GLuint numGroupsY,
@@ -1907,6 +1939,8 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
                                              nullptr));
     float scaleY = isViewportFlipEnabledForDrawFBO() ? -1.0f : 1.0f;
 
+    uint32_t xfbActiveUnpaused = mState.isTransformFeedbackActiveUnpaused();
+
     float depthRangeNear = mState.getNearPlane();
     float depthRangeFar  = mState.getFarPlane();
     float depthRangeDiff = depthRangeFar - depthRangeNear;
@@ -1919,7 +1953,7 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
         halfRenderAreaHeight,
         scaleY,
         -scaleY,
-        0.0f,
+        xfbActiveUnpaused,
         {depthRangeNear, depthRangeFar, depthRangeDiff, 0.0f}};
 
     ANGLE_TRY(mDriverUniformsBuffer.flush(this));

@@ -1127,6 +1127,13 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
         maxVersion = std::max(maxVersion, gl::Version(2, 0));
     }
 
+    // If vertexPipelineStoresAndAtomics is not supported, we can't currently support transform
+    // feedback.
+    if (!mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics)
+    {
+        maxVersion = std::max(maxVersion, gl::Version(2, 0));
+    }
+
     return maxVersion;
 }
 
