@@ -952,8 +952,11 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
 
     // If SUBOPTIMAL/OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain before
     // continuing.
-    swapchainOutOfDate = result == VK_SUBOPTIMAL_KHR || result == VK_ERROR_OUT_OF_DATE_KHR;
-    if (!swapchainOutOfDate)
+    if (result == VK_SUBOPTIMAL_KHR)
+    {
+        // TODO: Check for preRotation
+    }
+    else if (result == VK_ERROR_OUT_OF_DATE_KHR)
     {
         ANGLE_VK_TRY(contextVk, result);
     }
@@ -966,7 +969,7 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context, EGLint *rect
     ContextVk *contextVk = vk::GetImpl(context);
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
 
-    bool swapchainOutOfDate;
+    bool swapchainOutOfDate = false;
     // Save this now, since present() will increment the value.
     size_t currentSwapHistoryIndex = mCurrentSwapHistoryIndex;
 
