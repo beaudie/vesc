@@ -213,6 +213,8 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
 {
     ASSERT(mBuffer.valid());
 
+    // TODO(syoussefi): should mState.isBoundForTransformFeedback() override
+    // GL_MAP_UNSYNCHRONIZED_BIT?  http://anglebug.com/3205
     if ((access & GL_MAP_UNSYNCHRONIZED_BIT) == 0)
     {
         // If there are pending commands for the buffer, flush them.
