@@ -1270,10 +1270,35 @@ void ContextVk::updateColorMask(const gl::BlendState &blendState)
 
 void ContextVk::updateSampleMask(const gl::State &glState)
 {
+    // If sample coverage is enabled, emulate it by generating and applying a mask on top of the
+    // sample mask.
+    uint32_t coverageSamplesIfEnabled = static_cast<uint32_t>(
+        std::round(glState.getSampleCoverageValue() * mDrawFramebuffer->getSamples()));
+    bool sampleCoverageEnabled  = glState.isSampleCoverageEnabled();
+    bool sampleCoverageInverted = sampleCoverageEnabled && glState.getSampleCoverageInvert();
+    uint32_t coverageSamples =
+        sampleCoverageEnabled ? coverageSamplesIfEnabled : mDrawFramebuffer->getSamples();
+
+    static_assert(sizeof(uint32_t) == sizeof(GLbitfield), "Vulkan assumes 32-bit sample masks");
     for (uint32_t maskNumber = 0; maskNumber < glState.getMaxSampleMaskWords(); ++maskNumber)
     {
-        static_assert(sizeof(uint32_t) == sizeof(GLbitfield), "Vulkan assumes 32-bit sample masks");
-        uint32_t mask = glState.isSampleMaskEnabled() ? glState.getSampleMaskWord(maskNumber) : 0;
+        uint32_t mask =
+            glState.isSampleMaskEnabled() ? glState.getSampleMaskWord(maskNumber) : 0xFFFFFFFFu;
+
+        if (sampleCoverageEnabled)
+        {
+            uint32_t maskBitOffset = maskNumber * 32;
+            uint32_t coverageMask  = coverageSamples >= (maskBitOffset + 32)
+                                        ? 0xFFFFFFFFu
+                                        : (1u << (coverageSamples - maskBitOffset)) - 1;
+
+            if (sampleCoverageInverted)
+            {
+                coverageMask = ~coverageMask;
+            }
+            mask &= coverageMask;
+        }
+
         mGraphicsPipelineDesc->updateSampleMask(&mGraphicsPipelineTransition, maskNumber, mask);
     }
 }
@@ -1386,33 +1411,10 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                     &mGraphicsPipelineTransition, glState.isSampleAlphaToCoverageEnabled());
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_COVERAGE_ENABLED:
-                // TODO(syoussefi): glSampleCoverage and `GL_SAMPLE_COVERAGE` have a similar
-                // behavior to alphaToCoverage, without native support in Vulkan.  Sample coverage
-                // results in a mask that's applied *on top of* alphaToCoverage.  More importantly,
-                // glSampleCoverage can choose to invert the applied mask; a feature that's not
-                // easily emulatable.  For example, say there are 4 samples {0, 1, 2, 3} and
-                // alphaToCoverage (both in GL and Vulkan, as well as sampleCoverage in GL) is
-                // implemented such that the alpha value selects the set of samples
-                // {0, ..., round(alpha * 4)}.  With glSampleCoverage, an application can blend two
-                // object LODs as such the following, covering all samples in a pixel:
-                //
-                //      glSampleCoverage(0.5, GL_FALSE); // covers samples {0, 1}
-                //      drawLOD0();
-                //      glSampleCoverage(0.5, GL_TRUE);  // covers samples {2, 3}
-                //      drawLOD1();
-                //
-                // In Vulkan, it's not possible to restrict drawing to samples {2, 3} through
-                // alphaToCoverage alone.
-                //
-                // One way to acheive this behavior is to modify the shader to output to
-                // gl_SampleMask with values we emulate for sample coverage, taking inversion
-                // into account.
-                //
-                // http://anglebug.com/3204
+                updateSampleMask(glState);
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_COVERAGE:
-                // TODO(syoussefi): See DIRTY_BIT_SAMPLE_COVERAGE_ENABLED.
-                // http://anglebug.com/3204
+                updateSampleMask(glState);
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_MASK_ENABLED:
                 updateSampleMask(glState);
