@@ -220,6 +220,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     void invalidateDefaultAttributes(const gl::AttributesMask &dirtyMask);
     void onFramebufferChange(const vk::RenderPassDesc &renderPassDesc);
 
+    void invalidateCurrentTransformFeedbackBuffers();
+    void onTransformFeedbackPauseResume();
+
     vk::DynamicQueryPool *getQueryPool(gl::QueryType queryType);
 
     const VkClearValue &getClearColorValue() const;
@@ -325,6 +328,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
         DIRTY_BIT_INDEX_BUFFER,
         DIRTY_BIT_DRIVER_UNIFORMS,
         DIRTY_BIT_UNIFORM_BUFFERS,
+        DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS,
         DIRTY_BIT_DESCRIPTOR_SETS,
         DIRTY_BIT_MAX,
     };
@@ -385,6 +389,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     angle::Result handleDirtyIndexBuffer(const gl::Context *context);
     angle::Result handleDirtyDriverUniforms(const gl::Context *context);
     angle::Result handleDirtyUniformBuffers(const gl::Context *context);
+    angle::Result handleDirtyTransformFeedbackBuffers(const gl::Context *context);
     angle::Result handleDirtyDescriptorSets(const gl::Context *context);
 
     void recordDirtyPipeline(vk::CommandBuffer *commandBuffer);
@@ -463,7 +468,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
         float halfRenderAreaHeight;
         float viewportYScale;
         float negViewportYScale;
-        float padding;
+        uint32_t xfbActiveUnpaused;
+
+        std::array<uint32_t, 4> xfbBufferOffsets;
 
         // We'll use x, y, z for near / far / diff respectively.
         std::array<float, 4> depthRange;

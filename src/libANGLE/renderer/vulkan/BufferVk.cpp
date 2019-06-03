@@ -158,16 +158,7 @@ angle::Result BufferVk::map(const gl::Context *context, GLenum access, void **ma
 {
     ASSERT(mBuffer.valid());
 
-    ContextVk *contextVk = vk::GetImpl(context);
-    return mapImpl(contextVk, mapPtr);
-}
-
-angle::Result BufferVk::mapImpl(ContextVk *contextVk, void **mapPtr)
-{
-    ANGLE_VK_TRY(contextVk,
-                 mBuffer.getDeviceMemory().map(contextVk->getDevice(), 0, mState.getSize(), 0,
-                                               reinterpret_cast<uint8_t **>(mapPtr)));
-    return angle::Result::Continue;
+    return mapImpl(vk::GetImpl(context), mapPtr);
 }
 
 angle::Result BufferVk::mapRange(const gl::Context *context,
@@ -176,9 +167,28 @@ angle::Result BufferVk::mapRange(const gl::Context *context,
                                  GLbitfield access,
                                  void **mapPtr)
 {
+    return mapRangeImpl(vk::GetImpl(context), offset, length, access, mapPtr);
+}
+
+angle::Result BufferVk::mapImpl(ContextVk *contextVk, void **mapPtr)
+{
+    return mapRangeImpl(contextVk, 0, mState.getSize(), 0, mapPtr);
+}
+
+angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
+                                     size_t offset,
+                                     size_t length,
+                                     GLbitfield access,
+                                     void **mapPtr)
+{
     ASSERT(mBuffer.valid());
 
-    ContextVk *contextVk = vk::GetImpl(context);
+    // TODO(syoussefi): should mState.isBoundForTransformFeedback() override
+    // GL_MAP_UNSYNCHRONIZED_BIT?  http://anglebug.com/3205
+    if ((access & GL_MAP_UNSYNCHRONIZED_BIT) == 0)
+    {
+        ANGLE_TRY(contextVk->finishToSerial(mBuffer.getStoredQueueSerial()));
+    }
 
     ANGLE_VK_TRY(contextVk, mBuffer.getDeviceMemory().map(contextVk->getDevice(), offset, length, 0,
                                                           reinterpret_cast<uint8_t **>(mapPtr)));
