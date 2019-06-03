@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2cd0626d_0008775c",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/BlitResolve.frag",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T19:18:57Z",
+      "side": 1,
+      "message": "aside: it can be helpful to move file renaming to a split CL so that git doesn\u0027t get confused with file changes. makes it easier to review.",
+      "revId": "db2f2e798ee9c02a16bc805176c7c6e9b11c820f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29cacf2a_ebbc8cf5",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/BlitResolve.frag.json",
+        "patchSetId": 13
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T19:18:57Z",
+      "side": 1,
+      "message": "tab snuck in",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 1
+      },
+      "revId": "db2f2e798ee9c02a16bc805176c7c6e9b11c820f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58f17827_e2a64df9",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/BlitResolveStencilNoExport.comp.json",
+        "patchSetId": 13
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T19:18:57Z",
+      "side": 1,
+      "message": "tab snuck in",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 1
+      },
+      "revId": "db2f2e798ee9c02a16bc805176c7c6e9b11c820f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07045e2d_21d32ef4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T19:18:57Z",
+      "side": 1,
+      "message": "unrelated fix? something you noticed?",
+      "range": {
+        "startLine": 174,
+        "startChar": 12,
+        "endLine": 174,
+        "endChar": 54
+      },
+      "revId": "db2f2e798ee9c02a16bc805176c7c6e9b11c820f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99f7e54d_a48d21fe",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-03T19:18:57Z",
+      "side": 1,
+      "message": "nice test",
+      "range": {
+        "startLine": 1494,
+        "startChar": 28,
+        "endLine": 1494,
+        "endChar": 54
+      },
+      "revId": "db2f2e798ee9c02a16bc805176c7c6e9b11c820f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
