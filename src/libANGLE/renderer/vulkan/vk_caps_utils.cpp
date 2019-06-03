@@ -92,11 +92,14 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.eglImageExternalOES      = true;
     mNativeExtensions.eglImageExternalEssl3OES = true;
 
-    mNativeExtensions.memoryObject   = true;
-    mNativeExtensions.memoryObjectFd = getFeatures().supportsExternalMemoryFd.enabled;
+    mNativeExtensions.memoryObject        = true;
+    mNativeExtensions.memoryObjectFd      = getFeatures().supportsExternalMemoryFd.enabled;
+    mNativeExtensions.memoryObjectFuchsia = getFeatures().supportsExternalMemoryFuchsia.enabled;
 
     mNativeExtensions.semaphore   = true;
     mNativeExtensions.semaphoreFd = getFeatures().supportsExternalSemaphoreFd.enabled;
+    mNativeExtensions.semaphoreFuchsia =
+        getFeatures().supportsExternalSemaphoreZirconHandle.enabled;
 
     mNativeExtensions.vertexHalfFloatOES = true;
 

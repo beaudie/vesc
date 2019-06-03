@@ -393,7 +393,7 @@ struct Extensions
     bool memoryObjectFd = false;
 
     // GL_ANGLE_memory_object_fuchsia
-    bool memoryObjectZirconHandle;
+    bool memoryObjectFuchsia;
 
     // GL_EXT_semaphore
     bool semaphore = false;
@@ -402,7 +402,7 @@ struct Extensions
     bool semaphoreFd = false;
 
     // GL_ANGLE_semaphore_fuchsia
-    bool semaphoreZirconHandle;
+    bool semaphoreFuchsia;
 
     // NV_EGL_stream_consumer_external
     bool eglStreamConsumerExternalNV = false;

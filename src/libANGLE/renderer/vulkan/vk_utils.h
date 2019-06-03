@@ -18,6 +18,7 @@
 #include "common/Optional.h"
 #include "common/PackedEnums.h"
 #include "common/debug.h"
+#include "common/vulkan_fuchsia_ext.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Observer.h"
 #include "libANGLE/renderer/serial_utils.h"
