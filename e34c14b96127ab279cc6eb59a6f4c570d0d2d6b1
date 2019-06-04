@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e1f9939c_56a0941b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-04T21:24:27Z",
+      "side": 1,
+      "message": "See my response below.",
+      "parentUuid": "8b31abab_fb3a24ad",
+      "range": {
+        "startLine": 540,
+        "startChar": 13,
+        "endLine": 540,
+        "endChar": 24
+      },
+      "revId": "e34c14b96127ab279cc6eb59a6f4c570d0d2d6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ad8bfb89_751b5200",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 8
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "887c9afb_362a4c69",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-04T21:24:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad8bfb89_751b5200",
+      "range": {
+        "startLine": 983,
+        "startChar": 17,
+        "endLine": 983,
+        "endChar": 28
+      },
+      "revId": "e34c14b96127ab279cc6eb59a6f4c570d0d2d6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "640d8eca_b565113b",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 8
@@ -59,6 +107,30 @@
       "writtenOn": "2019-06-04T21:01:30Z",
       "side": 1,
       "message": "I think the VK_ERROR_OUT_OF_DATE_KHR and VK_SUBOPTIMAL_KHR are still considered errors to ANGLE_VK_TRY so we need to explicitly skip them I think.  The callers of this function can still use ANGLE_TRY then.",
+      "range": {
+        "startLine": 1020,
+        "startChar": 4,
+        "endLine": 1020,
+        "endChar": 39
+      },
+      "revId": "e34c14b96127ab279cc6eb59a6f4c570d0d2d6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4473f26_4db71d35",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-04T21:24:27Z",
+      "side": 1,
+      "message": "Correct, those are still considered errors and logged:\n\n06-04 15:04:46.820 22501 22536 W libEGL  : ANGLE Warn:handleError(8343): Error: 0x00000502, in ../../third_party/angle/src/libANGLE/renderer/vulkan/SurfaceVk.cpp, nextSwapchainImage:1040. Internal Vulkan error: A surface has changed in such a way that it is no longer compatible with the swapchain..\n\nHowever, I left it this way for a couple reasons:\n1.) As you noted above, logging the error is useful. I don\u0027t know if this is going to flood the logs though, so we may get pushback eventually if we really need to reconstruct the swapchain a lot at some point.\n2.) We can\u0027t always recover from VK_ERROR_OUT_OF_DATE_KHR or VK_SUBOPTIMAL_KHR, so I\u0027m treating the \u0027general\u0027 case as failing if anything within nextSwapchainImage() fails, and letting the caller special-case any return codes if they are able to.\n\nFor example, initializeImpl() is the general case where if we fail to vkAcquireNextImageKHR(), we can\u0027t retry and we end up without an Image that the rest of the code expects to exist.   We want to fail entirely in that case, since we can\u0027t (currently) recover.\n\nOn the other hand, swapImpl() can handle the failure, so it has some return code checking that special-cases the handling for VK_ERROR_OUT_OF_DATE_KHR and VK_SUBOPTIMAL_KHR by clearing errors, retrying, etc.\n\nUnfortunately, nextSwapchainImage() can\u0027t know who\u0027s calling it so it needs to be able to return an error in all cases.   The alternative is that every caller to nextSwapchainImage() needs to check both the angle::Result and VkResult values, regardless of whether it can handle them or not.\n\nUsing ANGLE_VK_TRY() here and getError() in swapImpl() felt cleaner to me (especially with the free logging) than duplicating the error code checking in swapImpl() and initializeImpl().",
+      "parentUuid": "640d8eca_b565113b",
       "range": {
         "startLine": 1020,
         "startChar": 4,
