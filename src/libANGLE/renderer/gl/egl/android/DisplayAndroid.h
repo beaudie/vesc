@@ -89,7 +89,8 @@ class DisplayAndroid : public DisplayEGL
 
     egl::Error createRenderer(EGLContext shareContext,
                               bool makeNewContextCurrent,
-                              std::shared_ptr<RendererEGL> *outRenderer);
+                              std::shared_ptr<RendererEGL> *outRenderer,
+                              const egl::Display *display);
 
     egl::Error makeCurrentSurfaceless(gl::Context *context) override;
 
@@ -120,6 +121,9 @@ class DisplayAndroid : public DisplayEGL
         EGLContext context = EGL_NO_CONTEXT;
     };
     std::unordered_map<std::thread::id, CurrentNativeContext> mCurrentNativeContext;
+
+    WorkaroundsGL mWorkarounds;
+    bool mWorkaroundsInitialized;
 };
 
 }  // namespace rx
