@@ -46,6 +46,29 @@
       "revId": "e354591d89835074ed285489db50c5c386485d60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e0a9c031_9129e45a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/MappedSubresourceVerifier11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1174485
+      },
+      "writtenOn": "2019-06-04T14:31:54Z",
+      "side": 1,
+      "message": "come to think of it, this is probably not a good idea since it\u0027s valid for the client to not write all data.\nI don\u0027t know if it\u0027s worth it to work on catching this: https://docs.microsoft.com/en-us/windows/desktop/api/d3d11/nf-d3d11-id3d11devicecontext-map#don-t-read-from-a-subresource-mapped-for-writing",
+      "range": {
+        "startLine": 78,
+        "startChar": 8,
+        "endLine": 78,
+        "endChar": 9
+      },
+      "revId": "e354591d89835074ed285489db50c5c386485d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
