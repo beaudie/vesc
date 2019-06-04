@@ -69,6 +69,30 @@
       "revId": "e354591d89835074ed285489db50c5c386485d60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdc7928a_58d63485",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/MappedSubresourceVerifier11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-04T14:37:03Z",
+      "side": 1,
+      "message": "Probably best to leave it out if it\u0027s not easy to correctly verify.",
+      "parentUuid": "e0a9c031_9129e45a",
+      "range": {
+        "startLine": 78,
+        "startChar": 8,
+        "endLine": 78,
+        "endChar": 9
+      },
+      "revId": "e354591d89835074ed285489db50c5c386485d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

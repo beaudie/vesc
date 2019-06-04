@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "565863a4_763cd174",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Image11.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-04T14:37:03Z",
+      "side": 1,
+      "message": "one more request - can you refactor this to not use std::unique_ptr? But instead track a bit more state in the verifier? This would probably allow the code to no-op more easily in Release.",
+      "range": {
+        "startLine": 117,
+        "startChar": 4,
+        "endLine": 117,
+        "endChar": 83
+      },
+      "revId": "7ddd12ff9f2c8cf87d242c6a18fb4ef0731ba2e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
