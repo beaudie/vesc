@@ -123,10 +123,6 @@ bool EGLWindow::initializeDisplay(OSWindow *osWindow,
     std::vector<EGLAttrib> displayAttributes;
     displayAttributes.push_back(EGL_PLATFORM_ANGLE_TYPE_ANGLE);
     displayAttributes.push_back(params.renderer);
-    displayAttributes.push_back(EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE);
-    displayAttributes.push_back(params.majorVersion);
-    displayAttributes.push_back(EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE);
-    displayAttributes.push_back(params.minorVersion);
 
     if (params.deviceType != EGL_DONT_CARE)
     {
