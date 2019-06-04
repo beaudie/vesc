@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7bf4907_e40eec9a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-04T18:14:44Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand this computation. Is this generating a temporary mask in a \"pseudo-random\" way?",
+      "range": {
+        "startLine": 1276,
+        "startChar": 19,
+        "endLine": 1276,
+        "endChar": 84
+      },
+      "revId": "5a4f1d8ec8a5eb9d7d11893798b35c8aa1d13c5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

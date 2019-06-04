@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f239fe2_e289fd97",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1278,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-04T18:14:44Z",
+      "side": 1,
+      "message": "can you refactor the code to isolate the test for sampleCoverageEnabled? then maybe call a helper function inside the for loop(s) to share code?",
+      "range": {
+        "startLine": 1278,
+        "startChar": 34,
+        "endLine": 1278,
+        "endChar": 55
+      },
+      "revId": "3c7b9e9652e54650bb73c5cf4a2972df03c445bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

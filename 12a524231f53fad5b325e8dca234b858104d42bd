@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82bedbd6_b008038c",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-04T18:14:44Z",
+      "side": 0,
+      "message": "nice!",
+      "range": {
+        "startLine": 547,
+        "startChar": 3,
+        "endLine": 547,
+        "endChar": 16
+      },
+      "revId": "12a524231f53fad5b325e8dca234b858104d42bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

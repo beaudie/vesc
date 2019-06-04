@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "923b0759_e6041c02",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1286,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-04T18:14:44Z",
+      "side": 1,
+      "message": "you can use std::numeric_limits\u003cuin32_t\u003e::max()",
+      "range": {
+        "startLine": 1286,
+        "startChar": 84,
+        "endLine": 1286,
+        "endChar": 95
+      },
+      "revId": "0dd5592738a8da152d17dfd0759429604a9678c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b90a3b95_adb0cf33",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-04T18:14:44Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 1292,
+        "startChar": 42,
+        "endLine": 1292,
+        "endChar": 53
+      },
+      "revId": "0dd5592738a8da152d17dfd0759429604a9678c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
