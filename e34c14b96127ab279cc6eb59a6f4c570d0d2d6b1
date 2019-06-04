@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b31abab_fb3a24ad",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-04T21:01:30Z",
+      "side": 1,
+      "message": "Let\u0027s check this value and at least log if it is not success.",
+      "range": {
+        "startLine": 540,
+        "startChar": 13,
+        "endLine": 540,
+        "endChar": 24
+      },
+      "revId": "e34c14b96127ab279cc6eb59a6f4c570d0d2d6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad8bfb89_751b5200",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-04T21:01:30Z",
+      "side": 1,
+      "message": "nit: I would call it aquireImageResult",
+      "range": {
+        "startLine": 983,
+        "startChar": 17,
+        "endLine": 983,
+        "endChar": 28
+      },
+      "revId": "e34c14b96127ab279cc6eb59a6f4c570d0d2d6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "640d8eca_b565113b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1020,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-04T21:01:30Z",
+      "side": 1,
+      "message": "I think the VK_ERROR_OUT_OF_DATE_KHR and VK_SUBOPTIMAL_KHR are still considered errors to ANGLE_VK_TRY so we need to explicitly skip them I think.  The callers of this function can still use ANGLE_TRY then.",
+      "range": {
+        "startLine": 1020,
+        "startChar": 4,
+        "endLine": 1020,
+        "endChar": 39
+      },
+      "revId": "e34c14b96127ab279cc6eb59a6f4c570d0d2d6b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
