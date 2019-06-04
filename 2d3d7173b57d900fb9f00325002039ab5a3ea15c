@@ -16,6 +16,24 @@
       "revId": "2d3d7173b57d900fb9f00325002039ab5a3ea15c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebeeb75e_8b118247",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-04T17:11:57Z",
+      "side": 1,
+      "message": "Ok, that worked out well. Now Jamie can use this as a starter bug with good conscience.",
+      "parentUuid": "2df9eb01_74176c46",
+      "revId": "2d3d7173b57d900fb9f00325002039ab5a3ea15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
