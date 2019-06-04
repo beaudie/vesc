@@ -106,7 +106,8 @@ DisplayWGL::DisplayWGL(const egl::DisplayState &state)
       mD3d11Module(nullptr),
       mD3D11DeviceHandle(nullptr),
       mD3D11Device(nullptr),
-      mUseARBShare(true)
+      mUseARBShare(true),
+      mWorkarounds()
 {}
 
 DisplayWGL::~DisplayWGL() {}
@@ -275,7 +276,7 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
                << "Failed to set the pixel format on the intermediate OpenGL window.";
     }
 
-    ANGLE_TRY(createRenderer(&mRenderer));
+    ANGLE_TRY(createRenderer(&mRenderer, display));
     const FunctionsGL *functionsGL = mRenderer->getFunctions();
 
     mHasRobustness = functionsGL->getGraphicsResetStatus != nullptr;
@@ -879,7 +880,8 @@ HGLRC DisplayWGL::createContextAttribs(const gl::Version &version,
     return context;
 }
 
-egl::Error DisplayWGL::createRenderer(std::shared_ptr<RendererWGL> *outRenderer)
+egl::Error DisplayWGL::createRenderer(std::shared_ptr<RendererWGL> *outRenderer,
+                                      const egl::Display *display)
 {
     HGLRC context       = nullptr;
     HGLRC sharedContext = nullptr;
@@ -928,8 +930,13 @@ egl::Error DisplayWGL::createRenderer(std::shared_ptr<RendererWGL> *outRenderer)
         new FunctionsGLWindows(mOpenGLModule, mFunctionsWGL->getProcAddress));
     functionsGL->initialize(mDisplayAttributes);
 
-    outRenderer->reset(new RendererWGL(std::move(functionsGL), mDisplayAttributes, this, context,
-                                       sharedContext, workerContextAttribs));
+    nativegl_gl::GenerateWorkarounds(functionsGL.get(), &mWorkarounds);
+    mWorkarounds.overrideFeatures(display->getFeatureOverrides(true), true);
+    mWorkarounds.overrideFeatures(display->getFeatureOverrides(false), false);
+
+    outRenderer->reset(new RendererWGL(std::move(functionsGL), mDisplayAttributes, this,
+                                       &mWorkarounds, context, sharedContext,
+                                       workerContextAttribs));
 
     return egl::NoError();
 }
@@ -1060,7 +1067,7 @@ WorkerContext *DisplayWGL::createWorkerContext(std::string *infoLog,
 
 void DisplayWGL::populateFeatureList(angle::FeatureList *features)
 {
-    mRenderer->getWorkarounds().populateFeatureList(features);
+    mWorkarounds.populateFeatureList(features);
 }
 
 }  // namespace rx

@@ -309,6 +309,19 @@ void Display_logInfo(angle::PlatformMethods *platform, const char *infoMessage)
     // gl::Trace(gl::LOG_WARN, infoMessage);
 }
 
+const std::vector<std::string> ParseCStringArray(const char **ary)
+{
+    std::vector<std::string> vec = std::vector<std::string>();
+    if (ary != nullptr)
+    {
+        for (; *ary != nullptr; ary++)
+        {
+            vec.push_back(std::string(*ary));
+        }
+    }
+    return vec;
+}
+
 void ANGLESetDefaultDisplayPlatform(angle::EGLDisplayType display)
 {
     angle::PlatformMethods *platformMethods = ANGLEPlatformCurrent();
@@ -431,7 +444,10 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
       mTextureManager(nullptr),
       mBlobCache(gl::kDefaultMaxProgramCacheMemoryBytes),
       mMemoryProgramCache(mBlobCache),
-      mGlobalTextureShareGroupUsers(0)
+      mGlobalTextureShareGroupUsers(0),
+      mFeatures(),
+      mFeatureOverridesEnabled(),
+      mFeatureOverridesDisabled()
 {}
 
 Display::~Display()
@@ -498,6 +514,13 @@ void Display::setAttributes(rx::DisplayImpl *impl, const AttributeMap &attribMap
     {
         ANGLESetDefaultDisplayPlatform(this);
     }
+
+    const char **featuresForceEnabled =
+        reinterpret_cast<const char **>(mAttributeMap.get(EGL_FEATURE_OVERRIDES_ENABLED_ANGLE, 0));
+    const char **featuresForceDisabled =
+        reinterpret_cast<const char **>(mAttributeMap.get(EGL_FEATURE_OVERRIDES_DISABLED_ANGLE, 0));
+    mFeatureOverridesEnabled  = ParseCStringArray(featuresForceEnabled);
+    mFeatureOverridesDisabled = ParseCStringArray(featuresForceDisabled);
 }
 
 Error Display::initialize()
@@ -1189,6 +1212,7 @@ static ClientExtensions GenerateClientExtensions()
     extensions.clientGetAllProcAddresses = true;
     extensions.debug                     = true;
     extensions.explicitContext           = true;
+    extensions.featureControlANGLE       = true;
 
     return extensions;
 }

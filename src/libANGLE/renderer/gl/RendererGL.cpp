@@ -180,7 +180,9 @@ static void INTERNAL_GL_APIENTRY LogGLDebugMessage(GLenum source,
 namespace rx
 {
 
-RendererGL::RendererGL(std::unique_ptr<FunctionsGL> functions, const egl::AttributeMap &attribMap)
+RendererGL::RendererGL(std::unique_ptr<FunctionsGL> functions,
+                       const egl::AttributeMap &attribMap,
+                       const WorkaroundsGL *workarounds)
     : mMaxSupportedESVersion(0, 0),
       mFunctions(std::move(functions)),
       mStateManager(nullptr),
@@ -189,12 +191,12 @@ RendererGL::RendererGL(std::unique_ptr<FunctionsGL> functions, const egl::Attrib
       mUseDebugOutput(false),
       mCapsInitialized(false),
       mMultiviewImplementationType(MultiviewImplementationTypeGL::UNSPECIFIED),
-      mNativeParallelCompileEnabled(false)
+      mNativeParallelCompileEnabled(false),
+      mWorkarounds(workarounds)
 {
     ASSERT(mFunctions);
-    nativegl_gl::GenerateWorkarounds(mFunctions.get(), &mWorkarounds);
     mStateManager = new StateManagerGL(mFunctions.get(), getNativeCaps(), getNativeExtensions());
-    mBlitter      = new BlitGL(mFunctions.get(), mWorkarounds, mStateManager);
+    mBlitter          = new BlitGL(mFunctions.get(), *workarounds, mStateManager);
     mMultiviewClearer = new ClearMultiviewGL(mFunctions.get(), mStateManager);
 
     bool hasDebugOutput = mFunctions->isAtLeastGL(gl::Version(4, 3)) ||
@@ -219,7 +221,7 @@ RendererGL::RendererGL(std::unique_ptr<FunctionsGL> functions, const egl::Attrib
         mFunctions->debugMessageCallback(&LogGLDebugMessage, nullptr);
     }
 
-    if (mWorkarounds.initializeCurrentVertexAttributes.enabled)
+    if (workarounds->initializeCurrentVertexAttributes.enabled)
     {
         GLint maxVertexAttribs = 0;
         mFunctions->getIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxVertexAttribs);
@@ -257,14 +259,14 @@ angle::Result RendererGL::flush()
 
 angle::Result RendererGL::finish()
 {
-    if (mWorkarounds.finishDoesNotCauseQueriesToBeAvailable.enabled && mUseDebugOutput)
+    if (mWorkarounds->finishDoesNotCauseQueriesToBeAvailable.enabled && mUseDebugOutput)
     {
         mFunctions->enable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     }
 
     mFunctions->finish();
 
-    if (mWorkarounds.finishDoesNotCauseQueriesToBeAvailable.enabled && mUseDebugOutput)
+    if (mWorkarounds->finishDoesNotCauseQueriesToBeAvailable.enabled && mUseDebugOutput)
     {
         mFunctions->disable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     }
@@ -495,7 +497,7 @@ void RendererGL::generateCaps(gl::Caps *outCaps,
                               gl::Extensions *outExtensions,
                               gl::Limitations * /* outLimitations */) const
 {
-    nativegl_gl::GenerateCaps(mFunctions.get(), mWorkarounds, outCaps, outTextureCaps,
+    nativegl_gl::GenerateCaps(mFunctions.get(), *mWorkarounds, outCaps, outTextureCaps,
                               outExtensions, &mMaxSupportedESVersion,
                               &mMultiviewImplementationType);
 }
@@ -586,7 +588,7 @@ angle::Result RendererGL::memoryBarrierByRegion(GLbitfield barriers)
 
 bool RendererGL::bindWorkerContext(std::string *infoLog)
 {
-    if (mWorkarounds.disableWorkerContexts.enabled)
+    if (mWorkarounds->disableWorkerContexts.enabled)
     {
         return false;
     }

@@ -108,7 +108,8 @@ class DisplayWGL : public DisplayGL
                                bool &useARBShare,
                                std::vector<int> &workerContextAttribs) const;
 
-    egl::Error createRenderer(std::shared_ptr<RendererWGL> *outRenderer);
+    egl::Error createRenderer(std::shared_ptr<RendererWGL> *outRenderer,
+                              const egl::Display *display);
 
     std::shared_ptr<RendererWGL> mRenderer;
 
@@ -148,6 +149,8 @@ class DisplayWGL : public DisplayGL
     std::map<IUnknown *, D3DObjectHandle> mRegisteredD3DDevices;
 
     bool mUseARBShare;
+
+    WorkaroundsGL mWorkarounds;
 };
 
 }  // namespace rx

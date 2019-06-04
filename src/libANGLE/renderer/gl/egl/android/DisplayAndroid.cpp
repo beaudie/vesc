@@ -46,7 +46,9 @@ DisplayAndroid::DisplayAndroid(const egl::DisplayState &state)
     : DisplayEGL(state),
       mVirtualizedContexts(kDefaultEGLVirtualizedContexts),
       mSupportsSurfaceless(false),
-      mDummyPbuffer(EGL_NO_SURFACE)
+      mDummyPbuffer(EGL_NO_SURFACE),
+      mWorkarounds(),
+      mWorkaroundsInitialized(false)
 {}
 
 DisplayAndroid::~DisplayAndroid() {}
@@ -153,7 +155,7 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
         mConfig           = configWithFormat;
     }
 
-    ANGLE_TRY(createRenderer(EGL_NO_CONTEXT, true, &mRenderer));
+    ANGLE_TRY(createRenderer(EGL_NO_CONTEXT, true, &mRenderer, display));
 
     const gl::Version &maxVersion = mRenderer->getMaxSupportedESVersion();
     if (maxVersion < gl::Version(2, 0))
@@ -269,7 +271,7 @@ ContextImpl *DisplayAndroid::createContext(const gl::State &state,
         // Create a new renderer for this context.  It only needs to share with the user's requested
         // share context because there are no internal resources in DisplayAndroid that are shared
         // at the GL level.
-        egl::Error error = createRenderer(nativeShareContext, false, &renderer);
+        egl::Error error = createRenderer(nativeShareContext, false, &renderer, nullptr);
         if (error.isError())
         {
             ERR() << "Failed to create a shared renderer: " << error.getMessage();
@@ -599,7 +601,8 @@ egl::Error DisplayAndroid::makeCurrentSurfaceless(gl::Context *context)
 
 egl::Error DisplayAndroid::createRenderer(EGLContext shareContext,
                                           bool makeNewContextCurrent,
-                                          std::shared_ptr<RendererEGL> *outRenderer)
+                                          std::shared_ptr<RendererEGL> *outRenderer,
+                                          const egl::Display *display)
 {
     EGLContext context = EGL_NO_CONTEXT;
     native_egl::AttributeVector attribs;
@@ -614,8 +617,16 @@ egl::Error DisplayAndroid::createRenderer(EGLContext shareContext,
     std::unique_ptr<FunctionsGL> functionsGL(mEGL->makeFunctionsGL());
     functionsGL->initialize(mDisplayAttributes);
 
-    outRenderer->reset(
-        new RendererEGL(std::move(functionsGL), mDisplayAttributes, this, context, attribs));
+    if (!mWorkaroundsInitialized && display != nullptr)
+    {
+        nativegl_gl::GenerateWorkarounds(functionsGL.get(), &mWorkarounds);
+        mWorkarounds.overrideFeatures(display->getFeatureOverrides(true), true);
+        mWorkarounds.overrideFeatures(display->getFeatureOverrides(false), false);
+        mWorkaroundsInitialized = true;
+    }
+
+    outRenderer->reset(new RendererEGL(std::move(functionsGL), mDisplayAttributes, this,
+                                       &mWorkarounds, context, attribs));
 
     CurrentNativeContext &currentContext = mCurrentNativeContext[std::this_thread::get_id()];
     if (makeNewContextCurrent)
@@ -692,7 +703,7 @@ WorkerContext *DisplayAndroid::createWorkerContext(std::string *infoLog,
 
 void DisplayAndroid::populateFeatureList(angle::FeatureList *features)
 {
-    mRenderer->getWorkarounds().populateFeatureList(features);
+    mWorkarounds.populateFeatureList(features);
 }
 
 }  // namespace rx

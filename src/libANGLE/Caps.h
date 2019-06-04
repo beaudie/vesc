@@ -954,6 +954,9 @@ struct ClientExtensions
 
     // EGL_ANGLE_explicit_context
     bool explicitContext;
+
+    // EGL_ANGLE_feature_control
+    bool featureControlANGLE;
 };
 
 }  // namespace egl
