@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08843544_8b908f3e",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-04T20:45:35Z",
+      "side": 1,
+      "message": "This is currently inserting the macros into every VS, yes? Is there any condition we can/should check to limit when the macros are inserted?",
+      "revId": "0e4ae4511a36211e482e4391f66424ff2405f723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ef6267a_8b201b51",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-04T20:45:35Z",
+      "side": 1,
+      "message": "What happened to the DefaultUniformsSpecifier? Is XFB addition rendering it moot? Was it not needed to begin with? Or should it still be there?",
+      "revId": "0e4ae4511a36211e482e4391f66424ff2405f723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
