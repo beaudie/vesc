@@ -1952,8 +1952,8 @@ TEST_P(Texture2DTestES3, TextureImplPropogatesDirtyBits)
     glBindTexture(GL_TEXTURE_2D, source);
 
     // Put data in mip 0 and 1
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                 GLColor::red.data());
+    std::vector<GLColor> texDataRed(2u * 2u, GLColor::red);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, texDataRed.data());
     glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE,
                  GLColor::green.data());
 
