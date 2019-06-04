@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2df9eb01_74176c46",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-04T16:51:11Z",
+      "side": 1,
+      "message": "This version is meant to be the Vulkan API version.  I think the issue here is that the sample application is setting mPlatformParams.majorVersion \u003d glesMajorVersion; which is incorrect.",
+      "revId": "2d3d7173b57d900fb9f00325002039ab5a3ea15c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
