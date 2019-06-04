@@ -84,7 +84,8 @@ DisplayGLX::DisplayGLX(const egl::DisplayState &state)
       mCurrentSwapInterval(-1),
       mCurrentDrawable(0),
       mXDisplay(nullptr),
-      mEGLDisplay(nullptr)
+      mEGLDisplay(nullptr),
+      mWorkarounds()
 {}
 
 DisplayGLX::~DisplayGLX() {}
@@ -322,7 +323,14 @@ egl::Error DisplayGLX::initialize(egl::Display *display)
 
     syncXCommands();
 
-    mRenderer.reset(new RendererGLX(std::move(functionsGL), eglAttributes, this));
+    nativegl_gl::GenerateWorkarounds(functionsGL.get(), &mWorkarounds);
+    if (display->getExtensions().featureControlANGLE)
+    {
+        mWorkarounds.overrideFeatures(display->getFeatureOverrides(true), true);
+        mWorkarounds.overrideFeatures(display->getFeatureOverrides(false), false);
+    }
+
+    mRenderer.reset(new RendererGLX(std::move(functionsGL), eglAttributes, this, &mWorkarounds));
     const gl::Version &maxVersion = mRenderer->getMaxSupportedESVersion();
     if (maxVersion < gl::Version(2, 0))
     {
@@ -993,7 +1001,7 @@ WorkerContext *DisplayGLX::createWorkerContext(std::string *infoLog)
 
 void DisplayGLX::populateFeatureList(angle::FeatureList *features)
 {
-    mRenderer->getWorkarounds().populateFeatureList(features);
+    mWorkarounds.populateFeatureList(features);
 }
 
 }  // namespace rx

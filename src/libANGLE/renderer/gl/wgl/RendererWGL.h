@@ -22,6 +22,7 @@ class RendererWGL : public RendererGL
     RendererWGL(std::unique_ptr<FunctionsGL> functionsGL,
                 const egl::AttributeMap &attribMap,
                 DisplayWGL *display,
+                const WorkaroundsGL *workarounds,
                 HGLRC context,
                 HGLRC sharedContext,
                 const std::vector<int> workerContextAttribs);

@@ -371,7 +371,8 @@ DisplayOzone::DisplayOzone(const egl::DisplayState &state)
       mCenterUniform(0),
       mWindowSizeUniform(0),
       mBorderSizeUniform(0),
-      mDepthUniform(0)
+      mDepthUniform(0),
+      mWorkarounds()
 {}
 
 DisplayOzone::~DisplayOzone() {}
@@ -535,8 +536,15 @@ egl::Error DisplayOzone::initialize(egl::Display *display)
     std::unique_ptr<FunctionsGL> functionsGL(mEGL->makeFunctionsGL());
     functionsGL->initialize(display->getAttributeMap());
 
+    nativegl_gl::GenerateWorkarounds(functionsGL.get(), &mWorkarounds);
+    if (display->getExtensions().featureControlANGLE)
+    {
+        mWorkarounds.overrideFeatures(display->getFeatureOverrides(true), true);
+        mWorkarounds.overrideFeatures(display->getFeatureOverrides(false), false);
+    }
+
     mRenderer.reset(new RendererEGL(std::move(functionsGL), display->getAttributeMap(), this,
-                                    context, attribs));
+                                    &mWorkarounds, context, attribs));
     const gl::Version &maxVersion = mRenderer->getMaxSupportedESVersion();
     if (maxVersion < gl::Version(2, 0))
     {
@@ -1075,7 +1083,7 @@ WorkerContext *DisplayOzone::createWorkerContext(std::string *infoLog,
 
 void DisplayOzone::populateFeatureList(angle::FeatureList *features)
 {
-    mRenderer->getWorkarounds().populateFeatureList(features);
+    mWorkarounds.populateFeatureList(features);
 }
 
 }  // namespace rx

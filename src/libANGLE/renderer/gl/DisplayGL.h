@@ -11,6 +11,7 @@
 
 #include "libANGLE/renderer/DisplayImpl.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
+#include "libANGLE/renderer/gl/WorkaroundsGL.h"
 
 namespace egl
 {

@@ -208,6 +208,8 @@ class DisplayOzone final : public DisplayEGL
     GLint mWindowSizeUniform;
     GLint mBorderSizeUniform;
     GLint mDepthUniform;
+
+    WorkaroundsGL mWorkarounds;
 };
 }  // namespace rx
 

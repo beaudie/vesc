@@ -15,8 +15,9 @@ namespace rx
 
 RendererGLX::RendererGLX(std::unique_ptr<FunctionsGL> functions,
                          const egl::AttributeMap &attribMap,
-                         DisplayGLX *display)
-    : RendererGL(std::move(functions), attribMap), mDisplay(display)
+                         DisplayGLX *display,
+                         const WorkaroundsGL *workarounds)
+    : RendererGL(std::move(functions), attribMap, workarounds), mDisplay(display)
 {}
 
 RendererGLX::~RendererGLX() {}
