@@ -378,4 +378,9 @@ void DisplayD3D::populateFeatureList(angle::FeatureList *features)
     mRenderer->getWorkarounds().populateFeatureList(features);
 }
 
+void DisplayD3D::overrideFeatures(const std::vector<std::string> &features, const bool enabled)
+{
+    mRenderer->overrideWorkarounds(featureNames, enabled);
+}
+
 }  // namespace rx

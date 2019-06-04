@@ -192,6 +192,17 @@ class Display final : public LabeledObject, angle::NonCopyable
     const ContextSet &getContextSet() { return mContextSet; }
 
     const angle::FeatureList &getFeatures() const { return mFeatures; }
+    const std::vector<std::string> &getFeatureOverrides(const bool enabled)
+    {
+        if (enabled)
+        {
+            return mFeatureOverridesEnabled;
+        }
+        else
+        {
+            return mFeatureOverridesDisabled;
+        }
+    }
 
     const char *queryStringi(const EGLint name, const EGLint index);
 
@@ -246,6 +257,8 @@ class Display final : public LabeledObject, angle::NonCopyable
     size_t mGlobalTextureShareGroupUsers;
 
     angle::FeatureList mFeatures;
+    std::vector<std::string> mFeatureOverridesEnabled;
+    std::vector<std::string> mFeatureOverridesDisabled;
 };
 
 }  // namespace egl

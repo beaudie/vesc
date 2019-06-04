@@ -56,7 +56,8 @@ DisplayCGL::DisplayCGL(const egl::DisplayState &state)
       mPixelFormat(nullptr),
       mSupportsGPUSwitching(false),
       mDiscreteGPUPixelFormat(nullptr),
-      mDiscreteGPURefs(0)
+      mDiscreteGPURefs(0),
+      mWorkarounds()
 {}
 
 DisplayCGL::~DisplayCGL() {}
@@ -111,6 +112,10 @@ egl::Error DisplayCGL::initialize(egl::Display *display)
 
     std::unique_ptr<FunctionsGL> functionsGL(new FunctionsGLCGL(handle));
     functionsGL->initialize(display->getAttributeMap());
+
+    nativegl_gl::GenerateWorkarounds(functionsGL.get(), &mWorkarounds);
+    mWorkarounds.overrideFeatures(display->getFeatureOverrides(true), true);
+    mWorkarounds.overrideFeatures(display->getFeatureOverrides(false), false);
 
     mRenderer.reset(new RendererCGL(std::move(functionsGL), display->getAttributeMap(), this));
 
@@ -429,6 +434,6 @@ void DisplayCGL::unreferenceDiscreteGPU()
 
 void DisplayCGL::populateFeatureList(angle::FeatureList *features)
 {
-    mRenderer->getWorkarounds().populateFeatureList(features);
+    mWorkarounds.populateFeatureList(features);
 }
 }
