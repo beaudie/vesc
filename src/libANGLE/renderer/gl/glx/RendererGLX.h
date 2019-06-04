@@ -21,7 +21,8 @@ class RendererGLX : public RendererGL
   public:
     RendererGLX(std::unique_ptr<FunctionsGL> functions,
                 const egl::AttributeMap &attribMap,
-                DisplayGLX *display);
+                DisplayGLX *display,
+                const WorkaroundsGL *workarounds);
     ~RendererGLX() override;
 
   private:

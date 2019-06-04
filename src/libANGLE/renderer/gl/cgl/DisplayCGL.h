@@ -95,6 +95,8 @@ class DisplayCGL : public DisplayGL
     bool mSupportsGPUSwitching;
     CGLPixelFormatObj mDiscreteGPUPixelFormat;
     int mDiscreteGPURefs;
+
+    WorkaroundsGL mWorkarounds;
 };
 
 }  // namespace rx

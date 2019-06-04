@@ -106,7 +106,8 @@ DisplayWGL::DisplayWGL(const egl::DisplayState &state)
       mD3d11Module(nullptr),
       mD3D11DeviceHandle(nullptr),
       mD3D11Device(nullptr),
-      mUseARBShare(true)
+      mUseARBShare(true),
+      mWorkarounds()
 {}
 
 DisplayWGL::~DisplayWGL() {}
@@ -273,6 +274,13 @@ egl::Error DisplayWGL::initializeImpl(egl::Display *display)
     {
         return egl::EglNotInitialized()
                << "Failed to set the pixel format on the intermediate OpenGL window.";
+    }
+
+    nativegl_gl::GenerateWorkarounds(functionsGL.get(), &mWorkarounds);
+    if (display->getExtensions().featureControlANGLE)
+    {
+        mWorkarounds.overrideFeatures(display->getFeatureOverrides(true), true);
+        mWorkarounds.overrideFeatures(display->getFeatureOverrides(false), false);
     }
 
     ANGLE_TRY(createRenderer(&mRenderer));
@@ -928,8 +936,9 @@ egl::Error DisplayWGL::createRenderer(std::shared_ptr<RendererWGL> *outRenderer)
         new FunctionsGLWindows(mOpenGLModule, mFunctionsWGL->getProcAddress));
     functionsGL->initialize(mDisplayAttributes);
 
-    outRenderer->reset(new RendererWGL(std::move(functionsGL), mDisplayAttributes, this, context,
-                                       sharedContext, workerContextAttribs));
+    outRenderer->reset(new RendererWGL(std::move(functionsGL), mDisplayAttributes, this,
+                                       &mWorkarounds, context, sharedContext,
+                                       workerContextAttribs));
 
     return egl::NoError();
 }
@@ -1060,7 +1069,7 @@ WorkerContext *DisplayWGL::createWorkerContext(std::string *infoLog,
 
 void DisplayWGL::populateFeatureList(angle::FeatureList *features)
 {
-    mRenderer->getWorkarounds().populateFeatureList(features);
+    mWorkarounds.populateFeatureList(features);
 }
 
 }  // namespace rx

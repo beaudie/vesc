@@ -46,7 +46,8 @@ DisplayAndroid::DisplayAndroid(const egl::DisplayState &state)
     : DisplayEGL(state),
       mVirtualizedContexts(kDefaultEGLVirtualizedContexts),
       mSupportsSurfaceless(false),
-      mDummyPbuffer(EGL_NO_SURFACE)
+      mDummyPbuffer(EGL_NO_SURFACE),
+      mWorkarounds()
 {}
 
 DisplayAndroid::~DisplayAndroid() {}
@@ -151,6 +152,13 @@ egl::Error DisplayAndroid::initialize(egl::Display *display)
     {
         mConfigAttribList = configAttribListWithFormat;
         mConfig           = configWithFormat;
+    }
+
+    nativegl_gl::GenerateWorkarounds(functionsGL.get(), &mWorkarounds);
+    if (display->getExtensions().featureControlANGLE)
+    {
+        mWorkarounds.overrideFeatures(display->getFeatureOverrides(true), true);
+        mWorkarounds.overrideFeatures(display->getFeatureOverrides(false), false);
     }
 
     ANGLE_TRY(createRenderer(EGL_NO_CONTEXT, true, &mRenderer));
@@ -614,8 +622,8 @@ egl::Error DisplayAndroid::createRenderer(EGLContext shareContext,
     std::unique_ptr<FunctionsGL> functionsGL(mEGL->makeFunctionsGL());
     functionsGL->initialize(mDisplayAttributes);
 
-    outRenderer->reset(
-        new RendererEGL(std::move(functionsGL), mDisplayAttributes, this, context, attribs));
+    outRenderer->reset(new RendererEGL(std::move(functionsGL), mDisplayAttributes, this,
+                                       &mWorkarounds, context, attribs));
 
     CurrentNativeContext &currentContext = mCurrentNativeContext[std::this_thread::get_id()];
     if (makeNewContextCurrent)
@@ -692,7 +700,7 @@ WorkerContext *DisplayAndroid::createWorkerContext(std::string *infoLog,
 
 void DisplayAndroid::populateFeatureList(angle::FeatureList *features)
 {
-    mRenderer->getWorkarounds().populateFeatureList(features);
+    mWorkarounds.populateFeatureList(features);
 }
 
 }  // namespace rx

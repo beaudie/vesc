@@ -14,9 +14,10 @@ namespace rx
 RendererEGL::RendererEGL(std::unique_ptr<FunctionsGL> functionsGL,
                          const egl::AttributeMap &attribMap,
                          DisplayEGL *display,
+                         const WorkaroundsGL *workarounds,
                          EGLContext context,
                          const native_egl::AttributeVector attribs)
-    : RendererGL(std::move(functionsGL), attribMap),
+    : RendererGL(std::move(functionsGL), attribMap, workarounds),
       mDisplay(display),
       mContext(context),
       mAttribs(attribs)

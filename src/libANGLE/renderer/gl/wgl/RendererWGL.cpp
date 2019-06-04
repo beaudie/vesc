@@ -14,10 +14,11 @@ namespace rx
 RendererWGL::RendererWGL(std::unique_ptr<FunctionsGL> functionsGL,
                          const egl::AttributeMap &attribMap,
                          DisplayWGL *display,
+                         const WorkaroundsGL *workarounds,
                          HGLRC context,
                          HGLRC sharedContext,
                          const std::vector<int> workerContextAttribs)
-    : RendererGL(std::move(functionsGL), attribMap),
+    : RendererGL(std::move(functionsGL), attribMap, workarounds),
       mDisplay(display),
       mContext(context),
       mSharedContext(sharedContext),

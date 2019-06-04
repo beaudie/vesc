@@ -120,6 +120,8 @@ class DisplayAndroid : public DisplayEGL
         EGLContext context = EGL_NO_CONTEXT;
     };
     std::unordered_map<std::thread::id, CurrentNativeContext> mCurrentNativeContext;
+
+    WorkaroundsGL mWorkarounds;
 };
 
 }  // namespace rx

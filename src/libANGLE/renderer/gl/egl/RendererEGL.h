@@ -22,6 +22,7 @@ class RendererEGL : public RendererGL
     RendererEGL(std::unique_ptr<FunctionsGL> functionsGL,
                 const egl::AttributeMap &attribMap,
                 DisplayEGL *display,
+                const WorkaroundsGL *workarounds,
                 EGLContext context,
                 const native_egl::AttributeVector attribs);
     ~RendererEGL() override;

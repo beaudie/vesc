@@ -158,6 +158,8 @@ class DisplayGLX : public DisplayGL
     FunctionsGLX mGLX;
     Display *mXDisplay;
     egl::Display *mEGLDisplay;
+
+    WorkaroundsGL mWorkarounds;
 };
 
 }  // namespace rx
