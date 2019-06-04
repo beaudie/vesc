@@ -2002,7 +2002,9 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
     const gl::State &glState   = mState;
     const gl::Program *program = glState.getProgram();
 
-    mActiveTextures.fill(nullptr);
+    uint32_t prevMaxIndex = mActiveTexturesDesc.getMaxIndex();
+    memset(mActiveTextures.data(), 0, sizeof(mActiveTextures[0]) * prevMaxIndex);
+    mActiveTexturesDesc.reset();
 
     const gl::ActiveTexturePointerArray &textures  = glState.getActiveTexturesCache();
     const gl::ActiveTextureMask &activeTextures    = program->getActiveSamplersMask();
@@ -2019,7 +2021,9 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
             ANGLE_TRY(getIncompleteTexture(context, textureType, &texture));
         }
 
-        mActiveTextures[textureUnit] = vk::GetImpl(texture);
+        TextureVk *textureVk         = vk::GetImpl(texture);
+        mActiveTextures[textureUnit] = textureVk;
+        mActiveTexturesDesc.update(textureUnit, textureVk->getSerial());
     }
 
     return angle::Result::Continue;

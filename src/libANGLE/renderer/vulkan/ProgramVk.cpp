@@ -965,6 +965,15 @@ angle::Result ProgramVk::updateUniformBuffersDescriptorSet(ContextVk *contextVk,
 angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
                                                      vk::FramebufferHelper *framebuffer)
 {
+    const vk::TextureDescriptorDesc &texturesDesc = contextVk->getActiveTexturesDesc();
+
+    auto iter = mTextureDescriptorsCache.find(texturesDesc);
+    if (iter != mTextureDescriptorsCache.end())
+    {
+        mDescriptorSets[kTextureDescriptorSetIndex] = iter->second;
+        return angle::Result::Continue;
+    }
+
     ASSERT(hasTextures());
     ANGLE_TRY(allocateDescriptorSet(contextVk, kTextureDescriptorSetIndex));
 
@@ -1034,6 +1043,8 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
 
     ASSERT(writeCount > 0);
     vkUpdateDescriptorSets(device, writeCount, writeDescriptorInfo.data(), 0, nullptr);
+
+    mTextureDescriptorsCache.emplace(texturesDesc, descriptorSet);
 
     return angle::Result::Continue;
 }
