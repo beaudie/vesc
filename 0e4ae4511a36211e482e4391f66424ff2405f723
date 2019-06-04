@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ca1a7b47_02281d42",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-04T20:49:22Z",
+      "side": 1,
+      "message": "Yes. Unfortunately at this point we cannot know if the program will be used in conjunction with transform feedback.",
+      "parentUuid": "08843544_8b908f3e",
+      "revId": "0e4ae4511a36211e482e4391f66424ff2405f723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4ef6267a_8b201b51",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "0e4ae4511a36211e482e4391f66424ff2405f723",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b310b9e_662bc337",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-04T20:49:22Z",
+      "side": 1,
+      "message": "It was unused (left over of previous clean up)",
+      "parentUuid": "4ef6267a_8b201b51",
+      "revId": "0e4ae4511a36211e482e4391f66424ff2405f723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
