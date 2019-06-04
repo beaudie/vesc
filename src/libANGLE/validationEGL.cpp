@@ -570,11 +570,12 @@ Error ValidateGetPlatformDisplayCommon(EGLenum platform,
 
         if (platformType == EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE)
         {
-            if ((majorVersion.valid() && majorVersion.value() != 1) ||
-                (minorVersion.valid() && minorVersion.value() != 0))
+            long major = majorVersion.valid() ? majorVersion.value() : 2;
+            long minor = minorVersion.valid() ? minorVersion.value() : 0;
+            if (major > 3 || (major == 3 && minor > 0))
             {
                 return EglBadAttribute() << "EGL_PLATFORM_ANGLE_TYPE_VULKAN_ANGLE currently "
-                                            "only supports Vulkan 1.0.";
+                                            "only supports GLES 3.0 or lower.";
             }
         }
 
