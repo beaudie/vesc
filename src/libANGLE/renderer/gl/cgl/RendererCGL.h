@@ -21,7 +21,8 @@ class RendererCGL : public RendererGL
   public:
     RendererCGL(std::unique_ptr<FunctionsGL> functions,
                 const egl::AttributeMap &attribMap,
-                DisplayCGL *display);
+                DisplayCGL *display,
+                const WorkaroundsGL *workarounds);
     ~RendererCGL() override;
 
   private:

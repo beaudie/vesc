@@ -16,7 +16,6 @@
 #include "libANGLE/Caps.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Version.h"
-#include "libANGLE/renderer/gl/WorkaroundsGL.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
 namespace gl
@@ -73,7 +72,9 @@ class ScopedWorkerContextGL
 class RendererGL : angle::NonCopyable
 {
   public:
-    RendererGL(std::unique_ptr<FunctionsGL> functions, const egl::AttributeMap &attribMap);
+    RendererGL(std::unique_ptr<FunctionsGL> functions,
+               const egl::AttributeMap &attribMap,
+               const WorkaroundsGL *workarounds);
     virtual ~RendererGL();
 
     angle::Result flush();
@@ -158,7 +159,7 @@ class RendererGL : angle::NonCopyable
     const gl::Version &getMaxSupportedESVersion() const;
     const FunctionsGL *getFunctions() const { return mFunctions.get(); }
     StateManagerGL *getStateManager() const { return mStateManager; }
-    const WorkaroundsGL &getWorkarounds() const { return mWorkarounds; }
+    const WorkaroundsGL &getWorkarounds() const { return *mWorkarounds; }
     BlitGL *getBlitter() const { return mBlitter; }
     ClearMultiviewGL *getMultiviewClearer() const { return mMultiviewClearer; }
 
@@ -205,8 +206,6 @@ class RendererGL : angle::NonCopyable
     BlitGL *mBlitter;
     ClearMultiviewGL *mMultiviewClearer;
 
-    WorkaroundsGL mWorkarounds;
-
     bool mUseDebugOutput;
 
     mutable bool mCapsInitialized;
@@ -224,6 +223,8 @@ class RendererGL : angle::NonCopyable
     std::mutex mWorkerMutex;
 
     bool mNativeParallelCompileEnabled;
+
+    const WorkaroundsGL *mWorkarounds;
 };
 
 }  // namespace rx
