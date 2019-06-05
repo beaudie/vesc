@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d26a472_a5bc5ebe",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-05T13:59:44Z",
+      "side": 1,
+      "message": "Per the style guide, please use pointers for output parameters (in other words, avoid non const references).\n\nAlso, the only functions here that return anything are the `init` and `vkAcquireNextImageKHR`. You could just return a `VkResult` instead of `angle::Result` in my opinion. It\u0027s awkward that the function has two \"result\" outputs and sometimes it would have to ignore one and look at the other.",
+      "range": {
+        "startLine": 1009,
+        "startChar": 72,
+        "endLine": 1009,
+        "endChar": 93
+      },
+      "revId": "b8471d5c60b5c1153bcf01116108f322dbb11cde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
