@@ -13,6 +13,67 @@
 #include <algorithm>
 #include <tuple>
 
+namespace
+{
+const char *glSeverityToString(GLenum severity)
+{
+    switch (severity)
+    {
+        case GL_DEBUG_SEVERITY_HIGH:
+            return "HIGH";
+        case GL_DEBUG_SEVERITY_MEDIUM:
+            return "MEDIUM";
+        case GL_DEBUG_SEVERITY_LOW:
+            return "LOW";
+        case GL_DEBUG_SEVERITY_NOTIFICATION:
+        default:
+            return "NOTIFICATION";
+    }
+}
+
+const char *eglMessageTypeToString(egl::MessageType messageType)
+{
+    switch (messageType)
+    {
+        case egl::MessageType::Critical:
+            return "CRITICAL";
+        case egl::MessageType::Error:
+            return "ERROR";
+        case egl::MessageType::Warn:
+            return "WARNING";
+        case egl::MessageType::Info:
+        default:
+            return "INFO";
+    }
+}
+
+const char *glMessageTypeToString(GLenum type)
+{
+    switch (type)
+    {
+        case GL_DEBUG_TYPE_ERROR:
+            return "error";
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+            return "deprecated behavior";
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+            return "undefined behavior";
+        case GL_DEBUG_TYPE_PORTABILITY:
+            return "portability";
+        case GL_DEBUG_TYPE_PERFORMANCE:
+            return "performance";
+        case GL_DEBUG_TYPE_MARKER:
+            return "marker";
+        case GL_DEBUG_TYPE_PUSH_GROUP:
+            return "start of group";
+        case GL_DEBUG_TYPE_POP_GROUP:
+            return "end of group";
+        case GL_DEBUG_TYPE_OTHER:
+        default:
+            return "other message";
+    }
+}
+}  // namespace
+
 namespace gl
 {
 
@@ -87,7 +148,8 @@ void Debug::insertMessage(GLenum source,
                           GLenum type,
                           GLuint id,
                           GLenum severity,
-                          const std::string &message) const
+                          const std::string &message,
+                          gl::LogSeverity logSeverity) const
 {
     std::string messageCopy(message);
     insertMessage(source, type, id, severity, std::move(messageCopy));
@@ -97,8 +159,18 @@ void Debug::insertMessage(GLenum source,
                           GLenum type,
                           GLuint id,
                           GLenum severity,
-                          std::string &&message) const
+                          std::string &&message,
+                          gl::LogSeverity logSeverity) const
 {
+    {
+        // output all messages to the debug log
+        const char *messageTypeString = glMessageTypeToString(type);
+        const char *severityString    = glSeverityToString(severity);
+        std::ostringstream messageStream;
+        messageStream << "GL " << messageTypeString << ": " << severityString << ": " << message;
+        gl::Trace(logSeverity, messageStream.str().c_str());
+    }
+
     if (!isMessageEnabled(source, type, id, severity))
     {
         return;
@@ -365,6 +437,14 @@ void Debug::insertMessage(EGLenum error,
                           EGLLabelKHR objectLabel,
                           const std::string &message) const
 {
+    {
+        // output all messages to the debug log
+        const char *messageTypeString = eglMessageTypeToString(messageType);
+        std::ostringstream messageStream;
+        messageStream << "EGL " << messageTypeString << ": " << command << ": " << message;
+        gl::Trace(gl::LOG_INFO, messageStream.str().c_str());
+    }
+
     // TODO(geofflang): Lock before checking the callback. http://anglebug.com/2464
     if (mCallback && isMessageTypeEnabled(messageType))
     {

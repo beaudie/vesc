@@ -8339,11 +8339,13 @@ void ErrorSet::handleError(GLenum errorCode,
 
     std::string formattedMessage = errorStream.str();
 
-    // Always log a warning, this function is only called on unexpected internal errors.
-    WARN() << formattedMessage;
+    // Process the error, but log it with WARN severity so it shows up in logs.
+    ASSERT(errorCode != GL_NO_ERROR);
+    mErrors.insert(errorCode);
 
-    // validationError does the necessary work to process the error.
-    validationError(errorCode, formattedMessage.c_str());
+    mContext->getState().getDebug().insertMessage(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_ERROR,
+                                                  errorCode, GL_DEBUG_SEVERITY_HIGH, message,
+                                                  gl::LOG_WARN);
 }
 
 void ErrorSet::validationError(GLenum errorCode, const char *message)
