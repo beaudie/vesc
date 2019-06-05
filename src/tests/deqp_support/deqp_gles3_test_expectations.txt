@@ -618,9 +618,6 @@
 3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.offset.int2_10_10_10* = SKIP
 3193 VULKAN : dEQP-GLES3.functional.vertex_array_objects.all_attributes = SKIP
 
-// Vertex ID, Index ID
-3221 VULKAN : dEQP-GLES3.functional.shaders.builtin_variable.vertex_id = FAIL
-
 // Polygon offset:
 2950 VULKAN : dEQP-GLES3.functional.polygon_offset.float32_result_depth_clamp = FAIL
 2950 VULKAN : dEQP-GLES3.functional.polygon_offset.float32_factor_1_slope = FAIL
@@ -695,8 +692,6 @@
 2950 VULKAN : dEQP-GLES3.functional.clipping.point.wide_point_clip_viewport_corner = FAIL
 2950 VULKAN : dEQP-GLES3.functional.clipping.point.point_clip_viewport_center = FAIL
 2950 VULKAN : dEQP-GLES3.functional.clipping.point.point_clip_viewport_corner = FAIL
-2672 VULKAN : dEQP-GLES3.functional.draw.draw_arrays_instanced.line_loop.* = SKIP
-2672 VULKAN : dEQP-GLES3.functional.draw.draw_elements_instanced.line_loop.* = SKIP
 2672 VULKAN : dEQP-GLES3.functional.draw.random.* = SKIP
 
 // Failures on newer NVIDIA drivers (411.95) and passes on older drivers (388.16).  Passes on 418.12 on Linux.

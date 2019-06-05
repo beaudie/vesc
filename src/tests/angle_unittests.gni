@@ -72,6 +72,7 @@ angle_unittests_sources = [
   "../tests/compiler_tests/GeometryShader_test.cpp",
   "../tests/compiler_tests/ImmutableString_test.cpp",
   "../tests/compiler_tests/ImmutableString_test_autogen.cpp",
+  "../tests/compiler_tests/InvalidVariables_test.cpp",
   "../tests/compiler_tests/InitOutputVariables_test.cpp",
   "../tests/compiler_tests/IntermNode_test.cpp",
   "../tests/compiler_tests/NV_draw_buffers_test.cpp",
