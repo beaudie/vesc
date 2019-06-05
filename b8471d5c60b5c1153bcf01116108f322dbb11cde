@@ -22,6 +22,30 @@
       "revId": "b8471d5c60b5c1153bcf01116108f322dbb11cde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f5feaa0_3da6be21",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-05T15:16:06Z",
+      "side": 1,
+      "message": "Agree with returning VkResult if we go with this implementation.",
+      "parentUuid": "5d26a472_a5bc5ebe",
+      "range": {
+        "startLine": 1009,
+        "startChar": 72,
+        "endLine": 1009,
+        "endChar": 93
+      },
+      "revId": "b8471d5c60b5c1153bcf01116108f322dbb11cde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
