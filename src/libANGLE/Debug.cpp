@@ -99,6 +99,31 @@ void Debug::insertMessage(GLenum source,
                           GLenum severity,
                           std::string &&message) const
 {
+#if defined(ANGLE_DEBUG_LOG_ALL)
+    {
+        // output all messages to the debug log
+        const char *severityString;
+        switch (severity)
+        {
+            case GL_DEBUG_SEVERITY_HIGH:
+                severityString = "HIGH";
+                break;
+            case GL_DEBUG_SEVERITY_MEDIUM:
+                severityString = "MEDIUM";
+                break;
+            case GL_DEBUG_SEVERITY_LOW:
+                severityString = "LOW";
+                break;
+            case GL_DEBUG_SEVERITY_NOTIFICATION:
+            default:
+                severityString = "NOTIFICATION";
+        }
+        std::ostringstream messageStream;
+        messageStream << "GL error: " << severityString << ": " << message;
+        gl::Trace(gl::LOG_INFO, messageStream.str().c_str());
+    }
+#endif
+
     if (!isMessageEnabled(source, type, id, severity))
     {
         return;
@@ -365,6 +390,31 @@ void Debug::insertMessage(EGLenum error,
                           EGLLabelKHR objectLabel,
                           const std::string &message) const
 {
+#if defined(ANGLE_DEBUG_LOG_ALL)
+    {
+        // output all messages to the debug log
+        const char *severityString;
+        switch (messageType)
+        {
+            case MessageType::Critical:
+                severityString = "CRITICAL";
+                break;
+            case MessageType::Error:
+                severityString = "ERROR";
+                break;
+            case MessageType::Warn:
+                severityString = "WARN";
+                break;
+            case MessageType::Info:
+            default:
+                severityString = "INFO";
+        }
+        std::ostringstream messageStream;
+        messageStream << "EGL error: " << severityString << ": " << command << ": " << message;
+        gl::Trace(gl::LOG_INFO, messageStream.str().c_str());
+    }
+#endif
+
     // TODO(geofflang): Lock before checking the callback. http://anglebug.com/2464
     if (mCallback && isMessageTypeEnabled(messageType))
     {
