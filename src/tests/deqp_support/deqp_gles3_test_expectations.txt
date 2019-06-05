@@ -707,7 +707,6 @@
 2950 VULKAN : dEQP-GLES3.functional.fragment_ops.random.* = SKIP
 2950 VULKAN : dEQP-GLES3.functional.samplers.* = SKIP
 2950 VULKAN : dEQP-GLES3.functional.instanced.* = SKIP
-2950 VULKAN : dEQP-GLES3.functional.rasterizer_discard.* = SKIP
 2950 VULKAN : dEQP-GLES3.functional.negative_api.vertex_array.draw_element* = SKIP
 2950 VULKAN : dEQP-GLES3.functional.negative_api.state.get_active_unifor* = SKIP
 2950 VULKAN : dEQP-GLES3.functional.negative_api.state.get_active_attrib = SKIP
