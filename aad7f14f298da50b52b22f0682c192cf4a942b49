@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c322d26_a880ac49",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-05T19:04:19Z",
+      "side": 1,
+      "message": "Instead of using max, use the values calculated above for the layouts. Same with textures below.",
+      "range": {
+        "startLine": 380,
+        "startChar": 58,
+        "endLine": 380,
+        "endChar": 77
+      },
+      "revId": "aad7f14f298da50b52b22f0682c192cf4a942b49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de0db092_89bc9924",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-05T19:04:19Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be here",
+      "range": {
+        "startLine": 390,
+        "startChar": 0,
+        "endLine": 391,
+        "endChar": 98
+      },
+      "revId": "aad7f14f298da50b52b22f0682c192cf4a942b49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
