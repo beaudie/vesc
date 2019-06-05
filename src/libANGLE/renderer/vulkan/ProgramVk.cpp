@@ -197,7 +197,10 @@ angle::Result ProgramVk::ShaderInfo::initShaders(ContextVk *contextVk,
                                       fragmentCode.data(), fragmentCode.size() * sizeof(uint32_t)));
 
     mProgramHelper.setShader(gl::ShaderType::Vertex, &mShaders[gl::ShaderType::Vertex]);
-    mProgramHelper.setShader(gl::ShaderType::Fragment, &mShaders[gl::ShaderType::Fragment]);
+    if (!contextVk->getState().getRasterizerState().rasterizerDiscard)
+    {
+        mProgramHelper.setShader(gl::ShaderType::Fragment, &mShaders[gl::ShaderType::Fragment]);
+    }
 
     return angle::Result::Continue;
 }
