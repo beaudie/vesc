@@ -463,7 +463,7 @@ angle::Result UtilsVk::setupProgram(ContextVk *contextVk,
     else
     {
         program->setShader(gl::ShaderType::Vertex, vsShader);
-        if (fsCsShader)
+        if (fsCsShader && !contextVk->getState().getRasterizerState().rasterizerDiscard)
         {
             program->setShader(gl::ShaderType::Fragment, fsCsShader);
         }
