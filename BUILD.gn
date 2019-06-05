@@ -699,6 +699,10 @@ angle_static_library("libANGLE") {
     defines += [ "ANGLE_GENERATE_SHADER_DEBUG_INFO" ]
   }
 
+  if (angle_debug_log_all) {
+    defines += [ "ANGLE_DEBUG_LOG_ALL" ]
+  }
+
   configs += [ ":debug_annotations_config" ]
   public_configs += [
     ":libANGLE_config",
