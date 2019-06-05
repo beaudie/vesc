@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc0a02ea_927ff803",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-05T17:26:15Z",
+      "side": 1,
+      "message": "Now that this is done here, do you think we can just do this instead?\n\n    ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, currentSwapHistoryIndex, true));",
+      "range": {
+        "startLine": 995,
+        "startChar": 0,
+        "endLine": 997,
+        "endChar": 94
+      },
+      "revId": "b8f4a650aa1c8d00a09261432eadd2d3715ba609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcde34b1_fc0f67e0",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-05T17:26:15Z",
+      "side": 1,
+      "message": "ANGLE_VK_TRY?",
+      "range": {
+        "startLine": 1015,
+        "startChar": 0,
+        "endLine": 1019,
+        "endChar": 5
+      },
+      "revId": "b8f4a650aa1c8d00a09261432eadd2d3715ba609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e705014d_a254e65a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-05T17:26:15Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 1021,
+        "startChar": 0,
+        "endLine": 1027,
+        "endChar": 5
+      },
+      "revId": "b8f4a650aa1c8d00a09261432eadd2d3715ba609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
