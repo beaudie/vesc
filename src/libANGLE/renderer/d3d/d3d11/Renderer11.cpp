@@ -38,6 +38,7 @@
 #include "libANGLE/renderer/d3d/d3d11/Buffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Clear11.h"
 #include "libANGLE/renderer/d3d/d3d11/Context11.h"
+#include "libANGLE/renderer/d3d/d3d11/ExternalImageSiblingImpl11.h"
 #include "libANGLE/renderer/d3d/d3d11/Fence11.h"
 #include "libANGLE/renderer/d3d/d3d11/Framebuffer11.h"
 #include "libANGLE/renderer/d3d/d3d11/Image11.h"
@@ -1135,6 +1136,7 @@ void Renderer11::generateDisplayExtensions(egl::DisplayExtensions *outExtensions
         outExtensions->surfaceD3DTexture2DShareHandle = true;
     }
     outExtensions->d3dTextureClientBuffer = true;
+    outExtensions->imageD3D11Texture      = true;
 
     outExtensions->keyedMutex          = true;
     outExtensions->querySurfacePointer = true;
@@ -2954,6 +2956,22 @@ angle::Result Renderer11::fastCopyBufferToTexture(const gl::Context *context,
 ImageD3D *Renderer11::createImage()
 {
     return new Image11(this);
+}
+
+ExternalImageSiblingImpl *Renderer11::createExternalImageSibling(const gl::Context *context,
+                                                                 EGLenum target,
+                                                                 EGLClientBuffer buffer,
+                                                                 const egl::AttributeMap &attribs)
+{
+    switch (target)
+    {
+        case EGL_D3D11_TEXTURE_ANGLE:
+            return new ExternalImageSiblingImpl11(this, buffer);
+
+        default:
+            UNREACHABLE();
+            return nullptr;
+    }
 }
 
 angle::Result Renderer11::generateMipmap(const gl::Context *context, ImageD3D *dest, ImageD3D *src)

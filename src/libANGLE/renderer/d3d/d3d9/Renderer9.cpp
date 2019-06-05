@@ -2780,6 +2780,15 @@ ImageD3D *Renderer9::createImage()
     return new Image9(this);
 }
 
+ExternalImageSiblingImpl *Renderer9::createExternalImageSibling(const gl::Context *context,
+                                                                EGLenum target,
+                                                                EGLClientBuffer buffer,
+                                                                const egl::AttributeMap &attribs)
+{
+    UNREACHABLE();
+    return nullptr;
+}
+
 angle::Result Renderer9::generateMipmap(const gl::Context *context, ImageD3D *dest, ImageD3D *src)
 {
     Image9 *src9 = GetAs<Image9>(src);
