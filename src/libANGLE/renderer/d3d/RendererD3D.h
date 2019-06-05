@@ -275,6 +275,11 @@ class RendererD3D : public BufferFactoryD3D
 
     // Image operations
     virtual ImageD3D *createImage()                                                        = 0;
+    virtual ExternalImageSiblingImpl *createExternalImageSibling(
+        const gl::Context *context,
+        EGLenum target,
+        EGLClientBuffer buffer,
+        const egl::AttributeMap &attribs)                                                  = 0;
     virtual angle::Result generateMipmap(const gl::Context *context,
                                          ImageD3D *dest,
                                          ImageD3D *source)                                 = 0;
