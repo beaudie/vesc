@@ -2054,6 +2054,10 @@ Error ValidateCreateImageKHR(const Display *display,
         }
         break;
 
+        case EGL_D3D11_TEXTURE_ANGLE:
+            // TODO(sunnyps): Check for extension. Validate.
+            break;
+
         default:
             return EglBadParameter()
                    << "invalid target: 0x" << std::hex << std::uppercase << target;
