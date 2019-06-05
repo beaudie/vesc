@@ -215,6 +215,15 @@ StreamProducerImpl *DisplayD3D::createStreamProducerD3DTexture(
     return mRenderer->createStreamProducerD3DTexture(consumerType, attribs);
 }
 
+ExternalImageSiblingImpl *DisplayD3D::createExternalImageSibling(const gl::Context *context,
+                                                                 EGLenum target,
+                                                                 EGLClientBuffer buffer,
+                                                                 const egl::AttributeMap &attribs)
+{
+    ASSERT(mRenderer != nullptr);
+    return mRenderer->createExternalImageSibling(context, target, buffer, attribs);
+}
+
 egl::Error DisplayD3D::makeCurrent(egl::Surface *drawSurface,
                                    egl::Surface *readSurface,
                                    gl::Context *context)

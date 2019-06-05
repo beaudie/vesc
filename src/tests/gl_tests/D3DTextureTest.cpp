@@ -233,6 +233,30 @@ class D3DTextureTest : public ANGLETest
         }
     }
 
+    EGLImage createD3D11TextureImage(size_t width, size_t height)
+    {
+        EGLWindow *window  = getEGLWindow();
+        EGLDisplay display = window->getDisplay();
+
+        EXPECT_TRUE(mD3D11Device != nullptr);
+        ID3D11Texture2D *texture = nullptr;
+        CD3D11_TEXTURE2D_DESC desc(DXGI_FORMAT_R8G8B8A8_UNORM, static_cast<UINT>(width),
+                                   static_cast<UINT>(height), 1, 1,
+                                   D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET);
+        desc.SampleDesc.Count   = 1;
+        desc.SampleDesc.Quality = 0;
+        EXPECT_TRUE(SUCCEEDED(mD3D11Device->CreateTexture2D(&desc, nullptr, &texture)));
+
+        const EGLint attribs[] = {EGL_NONE};
+
+        EGLImage image = eglCreateImageKHR(display, EGL_NO_CONTEXT, EGL_D3D11_TEXTURE_ANGLE,
+                                           static_cast<EGLClientBuffer>(texture), attribs);
+
+        texture->Release();
+
+        return image;
+    }
+
     bool valid() const
     {
         EGLWindow *window  = getEGLWindow();
@@ -755,12 +779,47 @@ TEST_P(D3DTextureTest, Clear)
     glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     ASSERT_GL_NO_ERROR();
+
     EXPECT_PIXEL_EQ(static_cast<GLint>(bufferSize) / 2, static_cast<GLint>(bufferSize) / 2, 255, 0,
                     255, 255);
+}
 
-    // Make current with fixture EGL to ensure the Surface can be released immediately.
-    getEGLWindow()->makeCurrent();
-    eglDestroySurface(display, pbuffer);
+TEST_P(D3DTextureTest, ClearExternalImage)
+{
+    ANGLE_SKIP_TEST_IF(!valid() || !IsD3D11());
+
+    const size_t bufferSize = 32;
+
+    EGLImage image = createD3D11TextureImage(bufferSize, bufferSize);
+    ASSERT_EGL_SUCCESS();
+    ASSERT_NE(image, EGL_NO_IMAGE_KHR);
+
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_EXTERNAL_OES, texture);
+    glTexParameteri(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    EXPECT_GL_NO_ERROR();
+
+    glEGLImageTargetTexture2DOES(GL_TEXTURE_EXTERNAL_OES, image);
+
+    GLuint fbo;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_EXTERNAL_OES, texture,
+                           0);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_EQ(static_cast<GLint>(bufferSize) / 2, static_cast<GLint>(bufferSize) / 2, 0, 0, 0,
+                    0);
+
+    glViewport(0, 0, static_cast<GLsizei>(bufferSize), static_cast<GLsizei>(bufferSize));
+    glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_EQ(static_cast<GLint>(bufferSize) / 2, static_cast<GLint>(bufferSize) / 2, 255, 0,
+                    255, 255);
 }
 
 // Test creating a pbuffer with a D3D texture and depth stencil bits in the EGL config creates keeps
