@@ -32,6 +32,7 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "platform/Platform.h"
 #include "third_party/trace_event/trace_event.h"
+#include "vulkan/vulkan_core.h"
 
 // Consts
 namespace
@@ -887,6 +888,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
     ExtensionNameList enabledDeviceExtensions;
     enabledDeviceExtensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+    enabledDeviceExtensions.push_back(VK_KHR_SHADER_DRAW_PARAMETERS_EXTENSION_NAME);
 
     initFeatures(deviceExtensionNames);
     mFeaturesInitialized = true;

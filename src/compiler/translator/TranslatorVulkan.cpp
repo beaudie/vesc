@@ -16,6 +16,7 @@
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/OutputVulkanGLSL.h"
 #include "compiler/translator/StaticType.h"
+#include "compiler/translator/Symbol.h"
 #include "compiler/translator/tree_ops/NameEmbeddedUniformStructs.h"
 #include "compiler/translator/tree_ops/RewriteStructSamplers.h"
 #include "compiler/translator/tree_util/BuiltIn_autogen.h"
@@ -628,6 +629,47 @@ void AddLineSegmentRasterizationEmulation(TInfoSinkBase &sink,
 
     mainSequence->insert(mainSequence->begin(), GenerateLineRasterIfDef());
 }
+
+void InsertVertexIDDefinition(TIntermBlock *root,
+                              TIntermSequence *insertSequence,
+                              TSymbolTable *symbolTable)
+{
+    // gl_VertexIndex in Vulkan has the same semantics as gl_VertexID
+    ReplaceVariable(root, BuiltInVariable::gl_VertexID(), BuiltInVariable::gl_VertexIndex());
+}
+
+void InsertInstanceIDDefinition(TIntermBlock *root,
+                                TIntermSequence *insertSequence,
+                                TSymbolTable *symbolTable)
+{
+    // gl_InstanceIndex has slightly different semantics than gl_InstanceID;
+    // gl_InstanceIndex := gl_InstanceID + gl_BaseInstance,
+    // so gl_InstanceID == gl_InstanceIndex - gl_BaseInstance
+
+    // Declare a replacement variable
+    TVariable *replacementInstanceID = new TVariable(
+        symbolTable, ImmutableString("angle_InstanceID"),
+        StaticType::Get<EbtInt, EbpHigh, EvqGlobal, 1, 1>(), SymbolType::AngleInternal);
+    DeclareGlobalVariable(root, replacementInstanceID);
+
+    // Replace instances of gl_InstanceID with the replacement variable
+    ReplaceVariable(root, BuiltInVariable::gl_InstanceID(), replacementInstanceID);
+
+    // Create symbol references
+    TIntermSymbol *replacementRef   = new TIntermSymbol(replacementInstanceID);
+    TIntermSymbol *instanceIndexRef = new TIntermSymbol(BuiltInVariable::gl_InstanceIndex());
+    TIntermSymbol *baseIndexRef     = new TIntermSymbol(BuiltInVariable::gl_BaseInstance());
+
+    // Create the expression "gl_InstanceIndex - gl_BaseInstance"
+    TIntermBinary *correctedInstanceID = new TIntermBinary(EOpSub, instanceIndexRef, baseIndexRef);
+
+    // Create the assignment to the replacement variable
+    TIntermBinary *assignToReplacement =
+        new TIntermBinary(EOpInitialize, replacementRef, correctedInstanceID);
+
+    // Add this assignment to the beginning of the main function
+    insertSequence->insert(insertSequence->begin(), assignToReplacement);
+}
 }  // anonymous namespace
 
 TranslatorVulkan::TranslatorVulkan(sh::GLenum type, ShShaderSpec spec)
@@ -643,7 +685,7 @@ void TranslatorVulkan::translate(TIntermBlock *root,
                                  getNameMap(), &getSymbolTable(), getShaderType(),
                                  getShaderVersion(), getOutputType(), compileOptions);
 
-    sink << "#version 450 core\n";
+    sink << "#version 460 core\n";
 
     // Write out default uniforms into a uniform block assigned to a specific set/binding.
     int defaultUniformCount        = 0;
@@ -778,6 +820,44 @@ void TranslatorVulkan::translate(TIntermBlock *root,
 
         // Append depth range translation to main.
         AppendVertexShaderDepthCorrectionToMain(root, &getSymbolTable());
+
+        bool usesVertexID   = false;
+        bool usesInstanceID = false;
+
+        // Search for gl_VertexID and gl_InstanceID usage; if they're used,
+        // we need to generate them from their Vulkan equivalents
+        for (const Attribute &attribute : mAttributes)
+        {
+            if (!attribute.isBuiltIn())
+            {
+                continue;
+            }
+
+            if (attribute.name == "gl_VertexID")
+            {
+                usesVertexID = true;
+            }
+
+            if (attribute.name == "gl_InstanceID")
+            {
+                usesInstanceID = true;
+            }
+
+            if (usesVertexID && usesInstanceID)
+            {
+                break;
+            }
+        }
+
+        if (usesVertexID)
+        {
+            InsertVertexIDDefinition(root, GetMainSequence(root), &getSymbolTable());
+        }
+
+        if (usesInstanceID)
+        {
+            InsertInstanceIDDefinition(root, GetMainSequence(root), &getSymbolTable());
+        }
     }
 
     // Write translated shader.

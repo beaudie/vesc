@@ -968,6 +968,9 @@ constexpr const TSymbolUniqueId BuiltInId::gl_Position;
 constexpr const TSymbolUniqueId BuiltInId::gl_PointSize;
 constexpr const TSymbolUniqueId BuiltInId::gl_InstanceID;
 constexpr const TSymbolUniqueId BuiltInId::gl_VertexID;
+constexpr const TSymbolUniqueId BuiltInId::gl_InstanceIndex;
+constexpr const TSymbolUniqueId BuiltInId::gl_VertexIndex;
+constexpr const TSymbolUniqueId BuiltInId::gl_BaseInstance;
 constexpr const TSymbolUniqueId BuiltInId::gl_ViewportIndex;
 constexpr const TSymbolUniqueId BuiltInId::gl_LayerVS;
 constexpr const TSymbolUniqueId BuiltInId::gl_DrawID;
@@ -989,7 +992,7 @@ constexpr const TSymbolUniqueId BuiltInId::gl_PositionGS;
 constexpr const TSymbolUniqueId BuiltInId::gl_ViewID_OVR;
 constexpr const TSymbolUniqueId BuiltInId::gl_ViewID_OVRESSL1;
 
-const int TSymbolTable::kLastBuiltInId = 1025;
+const int TSymbolTable::kLastBuiltInId = 1028;
 
 namespace BuiltInName
 {
@@ -1076,6 +1079,7 @@ constexpr const ImmutableString frexp("frexp");
 constexpr const ImmutableString frexp_3B3C("frexp(3B3C");
 constexpr const ImmutableString fwidth("fwidth");
 constexpr const ImmutableString fwidthExt("fwidth");
+constexpr const ImmutableString gl_BaseInstance("gl_BaseInstance");
 constexpr const ImmutableString gl_DepthRange("gl_DepthRange");
 constexpr const ImmutableString gl_DepthRangeParameters("gl_DepthRangeParameters");
 constexpr const ImmutableString gl_DrawID("gl_DrawID");
@@ -1087,6 +1091,7 @@ constexpr const ImmutableString gl_FragDepthEXT("gl_FragDepthEXT");
 constexpr const ImmutableString gl_FrontFacing("gl_FrontFacing");
 constexpr const ImmutableString gl_GlobalInvocationID("gl_GlobalInvocationID");
 constexpr const ImmutableString gl_InstanceID("gl_InstanceID");
+constexpr const ImmutableString gl_InstanceIndex("gl_InstanceIndex");
 constexpr const ImmutableString gl_InvocationID("gl_InvocationID");
 constexpr const ImmutableString gl_LastFragColor("gl_LastFragColor");
 constexpr const ImmutableString gl_LastFragColorARM("gl_LastFragColorARM");
@@ -1153,6 +1158,7 @@ constexpr const ImmutableString gl_PrimitiveIDIn("gl_PrimitiveIDIn");
 constexpr const ImmutableString gl_SecondaryFragColorEXT("gl_SecondaryFragColorEXT");
 constexpr const ImmutableString gl_SecondaryFragDataEXT("gl_SecondaryFragDataEXT");
 constexpr const ImmutableString gl_VertexID("gl_VertexID");
+constexpr const ImmutableString gl_VertexIndex("gl_VertexIndex");
 constexpr const ImmutableString gl_ViewID_OVR("gl_ViewID_OVR");
 constexpr const ImmutableString gl_ViewportIndex("gl_ViewportIndex");
 constexpr const ImmutableString gl_WorkGroupID("gl_WorkGroupID");
@@ -1456,6 +1462,12 @@ constexpr const ImmutableString yuv_2_rgb("yuv_2_rgb");
 namespace BuiltInVariable
 {
 
+constexpr const TVariable kVar_gl_BaseInstance(
+    BuiltInId::gl_BaseInstance,
+    BuiltInName::gl_BaseInstance,
+    SymbolType::BuiltIn,
+    TExtension::UNDEFINED,
+    StaticType::Get<EbtInt, EbpHigh, EvqBaseInstance, 1, 1>());
 constexpr const TVariable kVar_gl_DrawID(BuiltInId::gl_DrawID,
                                          BuiltInName::gl_DrawID,
                                          SymbolType::BuiltIn,
@@ -1502,6 +1514,12 @@ constexpr const TVariable kVar_gl_InstanceID(
     SymbolType::BuiltIn,
     TExtension::UNDEFINED,
     StaticType::Get<EbtInt, EbpHigh, EvqInstanceID, 1, 1>());
+constexpr const TVariable kVar_gl_InstanceIndex(
+    BuiltInId::gl_InstanceIndex,
+    BuiltInName::gl_InstanceIndex,
+    SymbolType::BuiltIn,
+    TExtension::UNDEFINED,
+    StaticType::Get<EbtInt, EbpHigh, EvqInstanceIndex, 1, 1>());
 constexpr const TVariable kVar_gl_InvocationID(
     BuiltInId::gl_InvocationID,
     BuiltInName::gl_InvocationID,
@@ -1599,6 +1617,12 @@ constexpr const TVariable kVar_gl_VertexID(BuiltInId::gl_VertexID,
                                            SymbolType::BuiltIn,
                                            TExtension::UNDEFINED,
                                            StaticType::Get<EbtInt, EbpHigh, EvqVertexID, 1, 1>());
+constexpr const TVariable kVar_gl_VertexIndex(
+    BuiltInId::gl_VertexIndex,
+    BuiltInName::gl_VertexIndex,
+    SymbolType::BuiltIn,
+    TExtension::UNDEFINED,
+    StaticType::Get<EbtInt, EbpHigh, EvqVertexIndex, 1, 1>());
 constexpr const TVariable kVar_gl_ViewID_OVR(
     BuiltInId::gl_ViewID_OVR,
     BuiltInName::gl_ViewID_OVR,
@@ -2044,6 +2068,11 @@ constexpr const TVariable kVar_pt_o_3D(BuiltInId::pt_o_3D,
                                        TExtension::UNDEFINED,
                                        StaticType::Get<EbtUInt, EbpUndefined, EvqOut, 4, 1>());
 
+const TVariable *gl_BaseInstance()
+{
+    return &kVar_gl_BaseInstance;
+}
+
 const TVariable *gl_DrawID()
 {
     return &kVar_gl_DrawID;
@@ -2082,6 +2111,11 @@ const TVariable *gl_GlobalInvocationID()
 const TVariable *gl_InstanceID()
 {
     return &kVar_gl_InstanceID;
+}
+
+const TVariable *gl_InstanceIndex()
+{
+    return &kVar_gl_InstanceIndex;
 }
 
 const TVariable *gl_InvocationID()
@@ -2167,6 +2201,11 @@ const TVariable *gl_SecondaryFragColorEXT()
 const TVariable *gl_VertexID()
 {
     return &kVar_gl_VertexID;
+}
+
+const TVariable *gl_VertexIndex()
+{
+    return &kVar_gl_VertexIndex;
 }
 
 const TVariable *gl_ViewID_OVR()
@@ -7347,7 +7386,7 @@ constexpr const TFunction kFunction_texture_0Y2B(
     BuiltInId::texture_USamplerCube1_Float3,
     BuiltInName::texture,
     TExtension::UNDEFINED,
-    BuiltInParameters::p0Y2B0B,
+    BuiltInParameters::p0Y2B2B2B,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     EOpCallBuiltInFunction,
@@ -9624,7 +9663,7 @@ constexpr const TFunction kFunction_textureGather_0Y2B(
     BuiltInId::textureGather_USamplerCube1_Float3,
     BuiltInName::textureGather,
     TExtension::UNDEFINED,
-    BuiltInParameters::p0Y2B0B,
+    BuiltInParameters::p0Y2B2B2B,
     2,
     StaticType::Get<EbtUInt, EbpUndefined, EvqGlobal, 4, 1>(),
     EOpCallBuiltInFunction,

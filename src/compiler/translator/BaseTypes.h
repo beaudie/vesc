@@ -681,6 +681,11 @@ enum TQualifier
     EvqPrimitiveID,    // gl_PrimitiveID
     EvqLayer,          // gl_Layer
 
+    // Vulkan-specific built-in variables
+    EvqInstanceIndex,
+    EvqVertexIndex,
+    EvqBaseInstance,
+
     // end of list
     EvqLast
 };

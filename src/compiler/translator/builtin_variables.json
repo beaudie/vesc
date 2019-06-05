@@ -652,6 +652,33 @@
                     "qualifier":"VertexID"
                 }
             },
+            "gl_InstanceIndex":{
+                "comment":"For internal use by ANGLE - not exposed to the parser.",
+                "level":"GLSL_BUILTINS",
+                "type":{
+                    "basic":"Int",
+                    "precision":"High",
+                    "qualifier":"InstanceIndex"
+                }
+            },
+            "gl_VertexIndex":{
+                "comment":"For internal use by ANGLE - not exposed to the parser.",
+                "level":"GLSL_BUILTINS",
+                "type":{
+                    "basic":"Int",
+                    "precision":"High",
+                    "qualifier":"VertexIndex"
+                }
+            },
+            "gl_BaseInstance":{
+                "comment":"For internal use by ANGLE - not exposed to the parser.",
+                "level":"GLSL_BUILTINS",
+                "type":{
+                    "basic":"Int",
+                    "precision":"High",
+                    "qualifier":"BaseInstance"
+                }
+            },
             "gl_ViewportIndex":{
                 "comment":"For internal use by ANGLE - not exposed to the parser.",
                 "level":"GLSL_BUILTINS",
