@@ -214,7 +214,6 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     void invalidateDefaultAttributes(const gl::AttributesMask &dirtyMask);
     void onFramebufferChange(const vk::RenderPassDesc &renderPassDesc);
 
-    vk::DynamicDescriptorPool *getDynamicDescriptorPool(uint32_t descriptorSetIndex);
     vk::DynamicQueryPool *getQueryPool(gl::QueryType queryType);
 
     const VkClearValue &getClearColorValue() const;
@@ -406,12 +405,11 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     std::unique_ptr<vk::GraphicsPipelineDesc> mGraphicsPipelineDesc;
     vk::GraphicsPipelineTransitionBits mGraphicsPipelineTransition;
 
-    // The descriptor pools are externally sychronized, so cannot be accessed from different
+    // These pools are externally sychronized, so cannot be accessed from different
     // threads simultaneously. Hence, we keep them in the ContextVk instead of the RendererVk.
     // Note that this implementation would need to change in shared resource scenarios. Likely
-    // we'd instead share a single set of dynamic descriptor pools between the share groups.
-    // Same with query pools.
-    vk::DescriptorSetLayoutArray<vk::DynamicDescriptorPool> mDynamicDescriptorPools;
+    // we'd instead share a single set of pools between the share groups.
+    vk::DynamicDescriptorPool mDriverUniformsDescriptorPool;
     angle::PackedEnumMap<gl::QueryType, vk::DynamicQueryPool> mQueryPools;
 
     // Dirty bits.

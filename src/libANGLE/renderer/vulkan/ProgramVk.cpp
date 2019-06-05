@@ -256,6 +256,11 @@ void ProgramVk::reset(ContextVk *contextVk)
     {
         binding.reset();
     }
+
+    for (vk::DynamicDescriptorPool &descriptorPool : mDynamicDescriptorPools)
+    {
+        descriptorPool.release(contextVk);
+    }
 }
 
 std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
@@ -367,6 +372,23 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
 
     ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc, mDescriptorSetLayouts,
                                           &mPipelineLayout));
+
+    // Note that this may reserve more sets than strictly necessary for a particular layout.
+    VkDescriptorPoolSize uniformSetSize      = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
+                                           GetUniformBufferDescriptorCount()};
+    VkDescriptorPoolSize uniformBlockSetSize = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                                                renderer->getMaxUniformBlocks()};
+    VkDescriptorPoolSize textureSetSize      = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                           renderer->getMaxActiveTextures()};
+    VkDescriptorPoolSize driverSetSize       = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1};
+    ANGLE_TRY(
+        mDynamicDescriptorPools[kUniformsDescriptorSetIndex].init(contextVk, &uniformSetSize, 1));
+    ANGLE_TRY(mDynamicDescriptorPools[kUniformBlockDescriptorSetIndex].init(
+        contextVk, &uniformBlockSetSize, 1));
+    ANGLE_TRY(
+        mDynamicDescriptorPools[kTextureDescriptorSetIndex].init(contextVk, &textureSetSize, 1));
+    ANGLE_TRY(mDynamicDescriptorPools[kDriverUniformsDescriptorSetIndex].init(contextVk,
+                                                                              &driverSetSize, 1));
 
     return angle::Result::Continue;
 }
@@ -760,9 +782,7 @@ void ProgramVk::setPathFragmentInputGen(const std::string &inputName,
 
 angle::Result ProgramVk::allocateDescriptorSet(ContextVk *contextVk, uint32_t descriptorSetIndex)
 {
-    // Write out to a new a descriptor set.
-    vk::DynamicDescriptorPool *dynamicDescriptorPool =
-        contextVk->getDynamicDescriptorPool(descriptorSetIndex);
+    vk::DynamicDescriptorPool &dynamicDescriptorPool = mDynamicDescriptorPools[descriptorSetIndex];
 
     uint32_t potentialNewCount = descriptorSetIndex + 1;
     if (potentialNewCount > mDescriptorSets.size())
@@ -772,9 +792,9 @@ angle::Result ProgramVk::allocateDescriptorSet(ContextVk *contextVk, uint32_t de
 
     const vk::DescriptorSetLayout &descriptorSetLayout =
         mDescriptorSetLayouts[descriptorSetIndex].get();
-    ANGLE_TRY(dynamicDescriptorPool->allocateSets(contextVk, descriptorSetLayout.ptr(), 1,
-                                                  &mDescriptorPoolBindings[descriptorSetIndex],
-                                                  &mDescriptorSets[descriptorSetIndex]));
+    ANGLE_TRY(dynamicDescriptorPool.allocateSets(contextVk, descriptorSetLayout.ptr(), 1,
+                                                 &mDescriptorPoolBindings[descriptorSetIndex],
+                                                 &mDescriptorSets[descriptorSetIndex]));
     mEmptyDescriptorSets[descriptorSetIndex] = VK_NULL_HANDLE;
 
     return angle::Result::Continue;
@@ -1082,12 +1102,10 @@ angle::Result ProgramVk::updateDescriptorSets(ContextVk *contextVk,
             // later sets to misbehave.
             if (mEmptyDescriptorSets[descriptorSetIndex] == VK_NULL_HANDLE)
             {
-                vk::DynamicDescriptorPool *dynamicDescriptorPool =
-                    contextVk->getDynamicDescriptorPool(descriptorSetIndex);
                 const vk::DescriptorSetLayout &descriptorSetLayout =
                     mDescriptorSetLayouts[descriptorSetIndex].get();
 
-                ANGLE_TRY(dynamicDescriptorPool->allocateSets(
+                ANGLE_TRY(mDynamicDescriptorPools[descriptorSetIndex].allocateSets(
                     contextVk, descriptorSetLayout.ptr(), 1,
                     &mDescriptorPoolBindings[descriptorSetIndex],
                     &mEmptyDescriptorSets[descriptorSetIndex]));
