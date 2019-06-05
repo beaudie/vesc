@@ -1256,9 +1256,10 @@ angle::Result UtilsVk::allocateDescriptorSet(ContextVk *contextVk,
                                              vk::RefCountedDescriptorPoolBinding *bindingOut,
                                              VkDescriptorSet *descriptorSetOut)
 {
+    bool newPoolAllocated;
     ANGLE_TRY(mDescriptorPools[function].allocateSets(
-        contextVk, mDescriptorSetLayouts[function][kSetIndex].get().ptr(), 1,
-        bindingOut, descriptorSetOut));
+        contextVk, mDescriptorSetLayouts[function][kSetIndex].get().ptr(), 1, bindingOut,
+        descriptorSetOut, &newPoolAllocated));
     bindingOut->get().updateSerial(contextVk->getCurrentQueueSerial());
     return angle::Result::Continue;
 }
