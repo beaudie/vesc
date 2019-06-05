@@ -46,6 +46,30 @@
       "revId": "b8471d5c60b5c1153bcf01116108f322dbb11cde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "494b0bcb_641ca405",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1009,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-05T16:04:56Z",
+      "side": 1,
+      "message": "I think this cleans up the return code checking in the calling functions, but requires a little extra manual checking in nextSwapchainImage() to be able to return a VkResult.   \n\nLet me know what you think.",
+      "parentUuid": "3f5feaa0_3da6be21",
+      "range": {
+        "startLine": 1009,
+        "startChar": 72,
+        "endLine": 1009,
+        "endChar": 93
+      },
+      "revId": "b8471d5c60b5c1153bcf01116108f322dbb11cde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
