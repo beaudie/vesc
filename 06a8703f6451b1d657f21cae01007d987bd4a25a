@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f18bef43_77b23ff6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-05T16:28:39Z",
+      "side": 1,
+      "message": "You won\u0027t need this if you handle/generate the errors in this method.",
+      "range": {
+        "startLine": 995,
+        "startChar": 11,
+        "endLine": 996,
+        "endChar": 65
+      },
+      "revId": "06a8703f6451b1d657f21cae01007d987bd4a25a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ffdd9d1_250aa90a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1024,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-05T16:28:39Z",
+      "side": 1,
+      "message": "you can return the VkResult directly here if we aren\u0027t VK_SUCCESS.",
+      "range": {
+        "startLine": 1018,
+        "startChar": 0,
+        "endLine": 1024,
+        "endChar": 0
+      },
+      "revId": "06a8703f6451b1d657f21cae01007d987bd4a25a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3174c11_f7e747c5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1033,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-05T16:28:39Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 1028,
+        "startChar": 0,
+        "endLine": 1033,
+        "endChar": 0
+      },
+      "revId": "06a8703f6451b1d657f21cae01007d987bd4a25a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
