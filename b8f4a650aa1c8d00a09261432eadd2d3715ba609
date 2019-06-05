@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3561dcf9_a70f3d5d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-05T18:24:16Z",
+      "side": 1,
+      "message": "That should be fine.   We\u0027re already in a bad state and have to do the recreate work, so presumably doing the extra checking in checkForOutOfDateSwapchain() shouldn\u0027t be a noticeable impact.",
+      "parentUuid": "fc0a02ea_927ff803",
+      "range": {
+        "startLine": 995,
+        "startChar": 0,
+        "endLine": 997,
+        "endChar": 94
+      },
+      "revId": "b8f4a650aa1c8d00a09261432eadd2d3715ba609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "dcde34b1_fc0f67e0",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 11
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "e7ac6c93_48527033",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1019,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-05T18:24:16Z",
+      "side": 1,
+      "message": "The tradeoff is that we lose the logging for OUT_OF_DATE/SUBOPTIMAL by not doing a ANGLE_VK_TRY() here, but the caller doesn\u0027t have to clear the error.   We can recover from those errors so we may not want to spam the logs anyway.   The caller should also be ANGLE_VK_TRY()\u0027ing to handle/log other return codes, though there\u0027s no way to enforce that in the code.\n\nI\u0027ll keep it like this unless someone feels strongly about a different approach.",
+      "parentUuid": "475600ea_857b6704",
+      "range": {
+        "startLine": 1015,
+        "startChar": 0,
+        "endLine": 1019,
+        "endChar": 5
+      },
+      "revId": "b8f4a650aa1c8d00a09261432eadd2d3715ba609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e705014d_a254e65a",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 11
@@ -92,6 +140,30 @@
       "revId": "b8f4a650aa1c8d00a09261432eadd2d3715ba609",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33e37ade_a7f42881",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1027,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-05T18:24:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e705014d_a254e65a",
+      "range": {
+        "startLine": 1021,
+        "startChar": 0,
+        "endLine": 1027,
+        "endChar": 5
+      },
+      "revId": "b8f4a650aa1c8d00a09261432eadd2d3715ba609",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
