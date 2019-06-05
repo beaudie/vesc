@@ -956,6 +956,9 @@ bool IsExternalImageTarget(EGLenum target)
         case EGL_NATIVE_BUFFER_ANDROID:
             return true;
 
+        case EGL_D3D11_TEXTURE_ANGLE:
+            return true;
+
         default:
             return false;
     }

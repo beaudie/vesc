@@ -1439,7 +1439,6 @@ TextureStorage11_External::TextureStorage11_External(
     auto *producer = static_cast<StreamProducerD3DTexture *>(stream->getImplementation());
     mTexture.set(producer->getD3DTexture(), mFormatInfo);
     mSubresourceIndex = producer->getArraySlice();
-    mTexture.get()->AddRef();
     mMipLevels = 1;
 
     D3D11_TEXTURE2D_DESC desc;
