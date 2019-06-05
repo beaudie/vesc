@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "24c0161e_3aa2c549",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-05T12:24:30Z",
+      "side": 1,
+      "message": "Yeah, we can replace the macro with the empty string in non-XFB cases.",
+      "parentUuid": "ca1a7b47_02281d42",
+      "revId": "0e4ae4511a36211e482e4391f66424ff2405f723",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4ef6267a_8b201b51",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 1
