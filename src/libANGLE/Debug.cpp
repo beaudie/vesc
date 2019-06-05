@@ -99,6 +99,27 @@ void Debug::insertMessage(GLenum source,
                           GLenum severity,
                           std::string &&message) const
 {
+#if defined(ANGLE_DEBUG_LOG_ALL)
+    {
+        // output all messages to the debug log
+        gl::LogSeverity logSeverity;
+        switch (severity)
+        {
+            case GL_DEBUG_SEVERITY_HIGH:
+                logSeverity = gl::LOG_ERR;
+                break;
+            case GL_DEBUG_SEVERITY_MEDIUM:
+            case GL_DEBUG_SEVERITY_LOW:
+                logSeverity = gl::LOG_WARN;
+                break;
+            case GL_DEBUG_SEVERITY_NOTIFICATION:
+            default:
+                logSeverity = gl::LOG_EVENT;
+        }
+        gl::Trace(logSeverity, message.c_str());
+    }
+#endif
+
     if (!isMessageEnabled(source, type, id, severity))
     {
         return;
@@ -365,6 +386,29 @@ void Debug::insertMessage(EGLenum error,
                           EGLLabelKHR objectLabel,
                           const std::string &message) const
 {
+#if defined(ANGLE_DEBUG_LOG_ALL)
+    {
+        // output all messages to the debug log
+        gl::LogSeverity logSeverity;
+        switch (messageType)
+        {
+            case MessageType::Critical:
+            case MessageType::Error:
+                logSeverity = gl::LOG_ERR;
+                break;
+            case MessageType::Warn:
+                logSeverity = gl::LOG_WARN;
+                break;
+            case MessageType::Info:
+            default:
+                logSeverity = gl::LOG_EVENT;
+        }
+        std::ostringstream messageStream;
+        messageStream << command << ": " << message;
+        gl::Trace(logSeverity, messageStream.str().c_str());
+    }
+#endif
+
     // TODO(geofflang): Lock before checking the callback. http://anglebug.com/2464
     if (mCallback && isMessageTypeEnabled(messageType))
     {
