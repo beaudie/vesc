@@ -966,7 +966,7 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context, EGLint *rect
     ContextVk *contextVk = vk::GetImpl(context);
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
 
-    bool swapchainOutOfDate;
+    bool swapchainOutOfDate = false;
     // Save this now, since present() will increment the value.
     size_t currentSwapHistoryIndex = mCurrentSwapHistoryIndex;
 
