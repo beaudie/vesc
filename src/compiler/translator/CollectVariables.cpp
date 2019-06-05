@@ -176,6 +176,10 @@ class CollectVariablesTraverser : public TIntermTraverser
     bool mPointSizeAdded;
     bool mDrawIDAdded;
 
+    // Vulkan-specific Vertex Shader builtins
+    bool mInstanceIndexAdded;
+    bool mVertexIndexAdded;
+
     // Vertex Shader and Geometry Shader builtins
     bool mPositionAdded;
 
@@ -233,6 +237,8 @@ CollectVariablesTraverser::CollectVariablesTraverser(
       mVertexIDAdded(false),
       mPointSizeAdded(false),
       mDrawIDAdded(false),
+      mInstanceIndexAdded(false),
+      mVertexIndexAdded(false),
       mPositionAdded(false),
       mPointCoordAdded(false),
       mFrontFacingAdded(false),
@@ -479,6 +485,12 @@ void CollectVariablesTraverser::visitSymbol(TIntermSymbol *symbol)
                 return;
             case EvqVertexID:
                 recordBuiltInAttributeUsed(symbol->variable(), &mVertexIDAdded);
+                return;
+            case EvqInstanceIndex:
+                recordBuiltInAttributeUsed(symbol->variable(), &mInstanceIndexAdded);
+                return;
+            case EvqVertexIndex:
+                recordBuiltInAttributeUsed(symbol->variable(), &mVertexIndexAdded);
                 return;
             case EvqPosition:
                 recordBuiltInVaryingUsed(symbol->variable(), &mPositionAdded, mOutputVaryings);
