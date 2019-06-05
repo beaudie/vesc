@@ -1,0 +1,149 @@
+//
+// Copyright 2019 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
+#include "libANGLE/renderer/d3d/d3d11/ExternalImageSiblingImpl11.h"
+
+#include "libANGLE/Context.h"
+#include "libANGLE/Error.h"
+#include "libANGLE/angletypes.h"
+#include "libANGLE/formatutils.h"
+#include "libANGLE/renderer/d3d/d3d11/Context11.h"
+#include "libANGLE/renderer/d3d/d3d11/RenderTarget11.h"
+#include "libANGLE/renderer/d3d/d3d11/Renderer11.h"
+#include "libANGLE/renderer/d3d/d3d11/texture_format_table.h"
+
+namespace rx
+{
+ExternalImageSiblingImpl11::ExternalImageSiblingImpl11(Renderer11 *renderer, EGLClientBuffer buffer)
+    : mRenderer(renderer),
+      mBuffer(buffer),
+      mFormat(GL_NONE),
+      mIsRenderable(false),
+      mIsTexturable(false)
+{}
+
+ExternalImageSiblingImpl11::~ExternalImageSiblingImpl11() {}
+
+egl::Error ExternalImageSiblingImpl11::initialize(const egl::Display *display)
+{
+    egl::Config defaultConfig;
+    EGLint width, height = 0;
+    const angle::Format *format = nullptr;
+    ANGLE_TRY(mRenderer->getD3DTextureInfo(&defaultConfig, static_cast<IUnknown *>(mBuffer), &width,
+                                           &height, &format));
+    mSize   = gl::Extents(width, height, 1);
+    mFormat = gl::Format(format->glInternalFormat);
+    mTexture.set(
+        static_cast<ID3D11Texture2D *>(mBuffer),
+        d3d11::Format::Get(format->glInternalFormat, mRenderer->getRenderer11DeviceCaps()));
+
+    D3D11_TEXTURE2D_DESC textureDesc = {};
+    mTexture.getDesc(&textureDesc);
+
+    IDXGIResource *resource =
+        d3d11::DynamicCastComObject<IDXGIResource>(static_cast<IUnknown *>(mBuffer));
+    ASSERT(resource);
+
+    DXGI_USAGE resourceUsage = 0;
+    resource->GetUsage(&resourceUsage);
+    SafeRelease(resource);
+
+    mIsRenderable = (textureDesc.BindFlags & D3D11_BIND_RENDER_TARGET) &&
+                    (resourceUsage & DXGI_USAGE_RENDER_TARGET_OUTPUT) &&
+                    ~(resourceUsage & DXGI_USAGE_READ_ONLY);
+
+    mIsTexturable = (textureDesc.BindFlags & D3D11_BIND_SHADER_RESOURCE) &&
+                    (resourceUsage & DXGI_USAGE_SHADER_INPUT);
+
+    return egl::NoError();
+}
+
+gl::Format ExternalImageSiblingImpl11::getFormat() const
+{
+    return mFormat;
+}
+
+bool ExternalImageSiblingImpl11::isRenderable(const gl::Context *context) const
+{
+    return mIsRenderable;
+}
+
+bool ExternalImageSiblingImpl11::isTexturable(const gl::Context *context) const
+{
+    return mIsTexturable;
+}
+
+gl::Extents ExternalImageSiblingImpl11::getSize() const
+{
+    return mSize;
+}
+
+size_t ExternalImageSiblingImpl11::getSamples() const
+{
+    return 0;
+}
+
+angle::Result ExternalImageSiblingImpl11::getAttachmentRenderTarget(
+    const gl::Context *context,
+    GLenum binding,
+    const gl::ImageIndex &imageIndex,
+    FramebufferAttachmentRenderTarget **rtOut)
+{
+    ANGLE_TRY(createRenderTarget(context));
+    *rtOut = mRenderTarget.get();
+    return angle::Result::Continue;
+}
+
+angle::Result ExternalImageSiblingImpl11::initializeContents(const gl::Context *context,
+                                                             const gl::ImageIndex &imageIndex)
+{
+    ANGLE_TRY(createRenderTarget(context));
+    return mRenderer->initRenderTarget(context, mRenderTarget.get());
+}
+
+angle::Result ExternalImageSiblingImpl11::createRenderTarget(const gl::Context *context)
+{
+    if (mRenderTarget)
+        return angle::Result::Continue;
+
+    Context11 *context11 = GetImplAs<Context11>(context);
+
+    const d3d11::Format &formatInfo =
+        d3d11::Format::Get(mFormat.info->internalFormat, mRenderer->getRenderer11DeviceCaps());
+
+    d3d11::RenderTargetView rtv;
+    if (mIsRenderable)
+    {
+        D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+        rtvDesc.Format             = formatInfo.rtvFormat;
+        rtvDesc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+        rtvDesc.Texture2D.MipSlice = 0;
+
+        ANGLE_TRY(mRenderer->allocateResource(context11, rtvDesc, mTexture.get(), &rtv));
+        rtv.setDebugName("getAttachmentRenderTarget.RTV");
+    }
+
+    d3d11::SharedSRV srv;
+    if (mIsTexturable)
+    {
+        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+        srvDesc.Format                    = formatInfo.srvFormat;
+        srvDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2D;
+        srvDesc.Texture2D.MostDetailedMip = 0;
+        srvDesc.Texture2D.MipLevels       = 1;
+
+        ANGLE_TRY(mRenderer->allocateResource(context11, srvDesc, mTexture.get(), &srv));
+        srv.setDebugName("getAttachmentRenderTarget.SRV");
+    }
+    d3d11::SharedSRV blitSrv = srv.makeCopy();
+
+    mRenderTarget = std::make_unique<TextureRenderTarget11>(
+        std::move(rtv), mTexture, std::move(srv), std::move(blitSrv), formatInfo.internalFormat,
+        formatInfo, mSize.width, mSize.height, 1, 1);
+    return angle::Result::Continue;
+}
+
+}  // namespace rx
