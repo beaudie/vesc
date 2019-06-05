@@ -299,6 +299,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
 
     RenderPassCache &getRenderPassCache() { return mRenderPassCache; }
 
+    Serial generateTextureSerial() { return mTextureSerialFactory.generate(); }
+    const vk::TextureDescriptorDesc &getActiveTexturesDesc() const { return mActiveTexturesDesc; }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -462,6 +465,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     // This cache should also probably include the texture index (shader location) and array
     // index (also in the shader). This info is used in the descriptor update step.
     gl::ActiveTextureArray<TextureVk *> mActiveTextures;
+    vk::TextureDescriptorDesc mActiveTexturesDesc;
 
     // "Current Value" aka default vertex attribute state.
     gl::AttributesMask mDirtyDefaultAttribsMask;
@@ -566,6 +570,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     // have a value close to zero, to avoid losing 12 bits when converting these 64 bit values to
     // double.
     uint64_t mGpuEventTimestampOrigin;
+
+    // Generator for texure serials.
+    SerialFactory mTextureSerialFactory;
 };
 }  // namespace rx
 
