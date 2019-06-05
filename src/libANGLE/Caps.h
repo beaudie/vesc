@@ -886,6 +886,9 @@ struct DisplayExtensions
 
     // EGL_ANGLE_feature_control
     bool featureControlANGLE;
+
+    // EGL_ANGLE_image_d3d11_texture
+    bool imageD3D11Texture;
 };
 
 struct DeviceExtensions
