@@ -106,6 +106,8 @@ void RendererVk::ensureCapsInitialized() const
     // Vulkan natively supports standard derivatives
     mNativeExtensions.standardDerivatives = true;
 
+    mNativeExtensions.elementIndexUint = true;
+
     // https://vulkan.lunarg.com/doc/view/1.0.30.0/linux/vkspec.chunked/ch31s02.html
     mNativeCaps.maxElementIndex       = std::numeric_limits<GLuint>::max() - 1;
     mNativeCaps.max3DTextureSize      = mPhysicalDeviceProperties.limits.maxImageDimension3D;
