@@ -193,11 +193,7 @@ void ContextVk::onDestroy(const gl::Context *context)
     mIncompleteTextures.onDestroy(context);
     mDriverUniformsBuffer.destroy(device);
     mDriverUniformsDescriptorPoolBinding.reset();
-
-    for (vk::DynamicDescriptorPool &descriptorPool : mDynamicDescriptorPools)
-    {
-        descriptorPool.destroy(device);
-    }
+    mDriverUniformsDescriptorPool.destroy(device);
 
     for (vk::DynamicBuffer &defaultBuffer : mDefaultAttribBuffers)
     {
@@ -240,20 +236,9 @@ angle::Result ContextVk::getIncompleteTexture(const gl::Context *context,
 angle::Result ContextVk::initialize()
 {
     TRACE_EVENT0("gpu.angle", "ContextVk::initialize");
-    // Note that this may reserve more sets than strictly necessary for a particular layout.
-    VkDescriptorPoolSize uniformSetSize      = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
-                                           GetUniformBufferDescriptorCount()};
-    VkDescriptorPoolSize uniformBlockSetSize = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-                                                mRenderer->getMaxUniformBlocks()};
-    VkDescriptorPoolSize textureSetSize      = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                           mRenderer->getMaxActiveTextures()};
-    VkDescriptorPoolSize driverSetSize       = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1};
-    ANGLE_TRY(mDynamicDescriptorPools[kUniformsDescriptorSetIndex].init(this, &uniformSetSize, 1));
-    ANGLE_TRY(mDynamicDescriptorPools[kUniformBlockDescriptorSetIndex].init(
-        this, &uniformBlockSetSize, 1));
-    ANGLE_TRY(mDynamicDescriptorPools[kTextureDescriptorSetIndex].init(this, &textureSetSize, 1));
-    ANGLE_TRY(
-        mDynamicDescriptorPools[kDriverUniformsDescriptorSetIndex].init(this, &driverSetSize, 1));
+
+    VkDescriptorPoolSize driverSetSize = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1};
+    ANGLE_TRY(mDriverUniformsDescriptorPool.init(this, &driverSetSize, 1));
 
     ANGLE_TRY(mQueryPools[gl::QueryType::AnySamples].init(this, VK_QUERY_TYPE_OCCLUSION,
                                                           vk::kDefaultOcclusionQueryPoolSize));
@@ -1876,11 +1861,6 @@ angle::Result ContextVk::memoryBarrierByRegion(const gl::Context *context, GLbit
     return angle::Result::Stop;
 }
 
-vk::DynamicDescriptorPool *ContextVk::getDynamicDescriptorPool(uint32_t descriptorSetIndex)
-{
-    return &mDynamicDescriptorPools[descriptorSetIndex];
-}
-
 vk::DynamicQueryPool *ContextVk::getQueryPool(gl::QueryType queryType)
 {
     ASSERT(queryType == gl::QueryType::AnySamples ||
@@ -1950,9 +1930,9 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
     }
 
     // Allocate a new descriptor set.
-    ANGLE_TRY(mDynamicDescriptorPools[kDriverUniformsDescriptorSetIndex].allocateSets(
-        this, mDriverUniformsSetLayout.get().ptr(), 1, &mDriverUniformsDescriptorPoolBinding,
-        &mDriverUniformsDescriptorSet));
+    ANGLE_TRY(mDriverUniformsDescriptorPool.allocateSets(this, mDriverUniformsSetLayout.get().ptr(),
+                                                         1, &mDriverUniformsDescriptorPoolBinding,
+                                                         &mDriverUniformsDescriptorSet));
 
     // Update the driver uniform descriptor set.
     VkDescriptorBufferInfo bufferInfo = {};
