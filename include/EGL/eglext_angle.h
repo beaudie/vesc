@@ -222,6 +222,10 @@ EGLAPI const char *EGLAPIENTRY eglQueryStringiANGLE(EGLDisplay dpy, EGLint name,
 #endif
 #endif /* EGL_ANGLE_workaround_control */
 
+#ifndef EGL_ANGLE_image_d3d11_texture
+#define EGL_D3D11_TEXTURE_ANGLE 0x3484
+#endif /* EGL_ANGLE_image_d3d11_texture */
+
 // clang-format on
 
 #endif  // INCLUDE_EGL_EGLEXT_ANGLE_
