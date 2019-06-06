@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b5066c9_d392c558",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-06T12:41:43Z",
+      "side": 1,
+      "message": "I don\u0027t think we can use this mapping. This will turn validation errors into test failures when the define is enabled. We also will get a double message for internal errors, see Context.cpp in ErrorSet::handleError.\n\nI think we need to use a new LOG_INFO severity here. We already have a logInfo in Platform.h. Can you verify it\u0027s hooked up properly in the current loader implementation?\n\nYou can use copy the existing pattern from LOG_WARN in debug.h to implement INFO()/LOG_INFO.",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 44
+      },
+      "revId": "bf3ec981eded45366b681a59eb5f83caa33efe32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
