@@ -14,6 +14,7 @@
 #include <climits>
 #include <cstdarg>
 #include <cstddef>
+#include <limits>
 #include <set>
 #include <sstream>
 #include <string>
@@ -38,7 +39,9 @@ class NonCopyable
     void operator=(const NonCopyable &) = delete;
 };
 
-extern const uintptr_t DirtyPointer;
+// dirtyPointer is a special value that will make the comparison with any valid pointer fail and
+// force the renderer to re-apply the state.
+constexpr uintptr_t DirtyPointer = std::numeric_limits<uintptr_t>::max();
 
 }  // namespace angle
 
