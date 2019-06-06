@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c2052d3_5bf3138e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-06T14:28:50Z",
+      "side": 1,
+      "message": "should probably rename this to swapchainOutOfData since it isn\u0027t just on present.",
+      "range": {
+        "startLine": 693,
+        "startChar": 63,
+        "endLine": 693,
+        "endChar": 79
+      },
+      "revId": "ab2c43561553e26f3a78921ec1ec888b925395bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
