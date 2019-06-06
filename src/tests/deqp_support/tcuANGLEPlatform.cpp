@@ -20,6 +20,8 @@
 
 #include "tcuANGLEPlatform.h"
 
+#include "common/platform.h"
+
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
