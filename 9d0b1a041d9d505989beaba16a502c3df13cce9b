@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "161944e8_006b4926",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-06T12:35:06Z",
+      "side": 1,
+      "message": "I think this will introduce a bug where certain state change orderings will break. Can you add a regression test in SimpleStateChangeTest that:\n\na) draws with rasterizer discard\nb) disables discard\nc) draws again without changing any other state\n\nAnd verify the results should be as expected? I think what will happen is that in ProgramVk::initShaders we will see mDefaultShaderInfo.valid() and not enter ShaderInfo::initShaders to reinit the missing fragment shader.\n\nMore likely we should always init the fragment shader if there is one. If it\u0027s valid to link a program without a fragment shader (I don\u0027t recall if it is or not) then we should be checking the program state and not the context rasterizer state.",
+      "range": {
+        "startLine": 200,
+        "startChar": 0,
+        "endLine": 204,
+        "endChar": 0
+      },
+      "revId": "9d0b1a041d9d505989beaba16a502c3df13cce9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e25ff1e1_72fb83e5",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-06T12:35:06Z",
+      "side": 1,
+      "message": "This also looks like it shouldn\u0027t be needed. UtilsVk is an internal shader library. I think we shouldn\u0027t be referring to the Context state.",
+      "range": {
+        "startLine": 466,
+        "startChar": 26,
+        "endLine": 466,
+        "endChar": 87
+      },
+      "revId": "9d0b1a041d9d505989beaba16a502c3df13cce9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
