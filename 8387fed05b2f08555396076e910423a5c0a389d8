@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "476371ee_7b1b94e8",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-06T23:14:32Z",
+      "side": 1,
+      "message": "Sounds good. Should I just define a static function in this file?",
+      "parentUuid": "8482bbda_2e15b966",
+      "range": {
+        "startLine": 122,
+        "startChar": 26,
+        "endLine": 122,
+        "endChar": 34
+      },
+      "revId": "8387fed05b2f08555396076e910423a5c0a389d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bb762602_d6229548",
         "filename": "src/libANGLE/Debug.cpp",
         "patchSetId": 3
@@ -59,6 +83,30 @@
       "writtenOn": "2019-06-06T22:37:16Z",
       "side": 1,
       "message": "can you use INFO() \u003c\u003c stuff; instead of making a stream inline?",
+      "range": {
+        "startLine": 123,
+        "startChar": 8,
+        "endLine": 123,
+        "endChar": 61
+      },
+      "revId": "8387fed05b2f08555396076e910423a5c0a389d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7fbc50d6_30e2d5f7",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-06T23:14:32Z",
+      "side": 1,
+      "message": "My objection was that it would include the file/line number inside insertMessage(), which is not very useful. Wouldn\u0027t mind changing it though.",
+      "parentUuid": "bb762602_d6229548",
       "range": {
         "startLine": 123,
         "startChar": 8,
