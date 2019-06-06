@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "820ff62e_ad8444c6",
+        "filename": "gni/angle.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-06T22:37:16Z",
+      "side": 1,
+      "message": "I\u0027s suggest removing this option and enabling it by default. It\u0027s better not to have a plethora of optional configuration. I would suggest silencing TestPlatform_logInfo so we don\u0027t get as much spam in the tests.",
+      "range": {
+        "startLine": 53,
+        "startChar": 2,
+        "endLine": 53,
+        "endChar": 22
+      },
+      "revId": "8387fed05b2f08555396076e910423a5c0a389d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8482bbda_2e15b966",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-06T22:37:16Z",
+      "side": 1,
+      "message": "GL error is not totally accurate. Some of these messages are not errors. Probably you should convert the type to a string. Maybe making a helper that converts a type to a string and another for severity would make sense.",
+      "range": {
+        "startLine": 122,
+        "startChar": 26,
+        "endLine": 122,
+        "endChar": 34
+      },
+      "revId": "8387fed05b2f08555396076e910423a5c0a389d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb762602_d6229548",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-06T22:37:16Z",
+      "side": 1,
+      "message": "can you use INFO() \u003c\u003c stuff; instead of making a stream inline?",
+      "range": {
+        "startLine": 123,
+        "startChar": 8,
+        "endLine": 123,
+        "endChar": 61
+      },
+      "revId": "8387fed05b2f08555396076e910423a5c0a389d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d154222e_ace8ee8b",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-06T22:37:16Z",
+      "side": 1,
+      "message": "same comments for this guy.",
+      "range": {
+        "startLine": 393,
+        "startChar": 0,
+        "endLine": 416,
+        "endChar": 6
+      },
+      "revId": "8387fed05b2f08555396076e910423a5c0a389d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
