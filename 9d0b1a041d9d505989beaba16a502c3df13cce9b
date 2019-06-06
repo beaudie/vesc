@@ -45,6 +45,30 @@
       "revId": "9d0b1a041d9d505989beaba16a502c3df13cce9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01f35f88_19bd4927",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-06T14:04:38Z",
+      "side": 1,
+      "message": "Agreed. We don\u0027t have any internal operation that\u0027s affected by rasterizer discard.",
+      "parentUuid": "e25ff1e1_72fb83e5",
+      "range": {
+        "startLine": 466,
+        "startChar": 26,
+        "endLine": 466,
+        "endChar": 87
+      },
+      "revId": "9d0b1a041d9d505989beaba16a502c3df13cce9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
