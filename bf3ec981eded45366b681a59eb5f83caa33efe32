@@ -46,6 +46,30 @@
       "revId": "bf3ec981eded45366b681a59eb5f83caa33efe32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "216d7bf2_bc8d4f95",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-06T21:41:28Z",
+      "side": 1,
+      "message": "I went ahead and made everything LOG_INFO so it shouldn\u0027t break anything.\nLet me know if you want me to change anything else.",
+      "parentUuid": "2a3ae80b_a3f55d7a",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 117,
+        "endChar": 44
+      },
+      "revId": "bf3ec981eded45366b681a59eb5f83caa33efe32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
