@@ -2,6 +2,121 @@
   "comments": [
     {
       "key": {
+        "uuid": "1b9f81bc_a2db14ce",
+        "filename": "extensions/EGL_ANGLE_feature_control.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-06T20:48:07Z",
+      "side": 1,
+      "message": "I think client extensions supersede device extensions so we can probably remove it from DisplayExtensions.",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 31,
+        "endChar": 21
+      },
+      "revId": "7287d0fbe7265e1dbc86f4304c477403654805ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "641a216c_341babf2",
+        "filename": "extensions/EGL_ANGLE_feature_control.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-06T20:48:07Z",
+      "side": 1,
+      "message": "Let\u0027s change this to 1.5 when eglGetPlatformDisplay becomes core.",
+      "range": {
+        "startLine": 35,
+        "startChar": 63,
+        "endLine": 35,
+        "endChar": 64
+      },
+      "revId": "7287d0fbe7265e1dbc86f4304c477403654805ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7993b3b7_b4e9675b",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-06T20:48:07Z",
+      "side": 1,
+      "message": "nit: initializer is not needed.",
+      "range": {
+        "startLine": 314,
+        "startChar": 35,
+        "endLine": 314,
+        "endChar": 61
+      },
+      "revId": "7287d0fbe7265e1dbc86f4304c477403654805ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92595adc_61655980",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-06T20:48:07Z",
+      "side": 1,
+      "message": "nit: Let\u0027s either add two getters or move this to the cpp file.",
+      "range": {
+        "startLine": 195,
+        "startChar": 81,
+        "endLine": 205,
+        "endChar": 5
+      },
+      "revId": "7287d0fbe7265e1dbc86f4304c477403654805ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d15c1933_6070bcd6",
+        "filename": "src/libANGLE/renderer/gl/egl/android/DisplayAndroid.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-06T20:48:07Z",
+      "side": 1,
+      "message": "You can assert that if display \u003d\u003d nullptr then mWorkaroundsInitialized is already initialized.",
+      "range": {
+        "startLine": 620,
+        "startChar": 4,
+        "endLine": 620,
+        "endChar": 55
+      },
+      "revId": "7287d0fbe7265e1dbc86f4304c477403654805ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5ba2e205_8112457f",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 4
@@ -13,6 +128,29 @@
       "writtenOn": "2019-06-06T19:49:50Z",
       "side": 1,
       "message": "Swapped around the for loop so I could add an extra check for the 2 new attributes.\nI could more easily have added checks for .contains() or .get() but this is saves extra traversals of attribMap. Is that necessary?",
+      "revId": "7287d0fbe7265e1dbc86f4304c477403654805ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04a4ff13_620494fe",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-06T20:48:07Z",
+      "side": 1,
+      "message": "I think validation like this will break because it relies on all the attributes being parsed first.\n\nThe overhead of iterating over the attributes twice will be fairly low, validation of EGL functions is not very performance sensitive.",
+      "range": {
+        "startLine": 524,
+        "startChar": 13,
+        "endLine": 524,
+        "endChar": 62
+      },
       "revId": "7287d0fbe7265e1dbc86f4304c477403654805ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
