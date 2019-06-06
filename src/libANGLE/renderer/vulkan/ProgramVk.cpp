@@ -374,20 +374,40 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
     ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc, mDescriptorSetLayouts,
                                           &mPipelineLayout));
 
-    // Note that this may reserve more sets than strictly necessary for a particular layout.
-    // TODO(jmadill): Optimize descriptor counts. http://anglebug.com/3117
-    VkDescriptorPoolSize uniformSetSize      = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
+    // Reserve only as many sets as strictly necessary for a particular object type.
+    VkDescriptorPoolSize uniformSetSize = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
                                            GetUniformBufferDescriptorCount()};
-    VkDescriptorPoolSize uniformBlockSetSize = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-                                                renderer->getMaxUniformBlocks()};
-    VkDescriptorPoolSize textureSetSize      = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                           renderer->getMaxActiveTextures()};
     ANGLE_TRY(
         mDynamicDescriptorPools[kUniformsDescriptorSetIndex].init(contextVk, &uniformSetSize, 1));
-    ANGLE_TRY(mDynamicDescriptorPools[kUniformBlockDescriptorSetIndex].init(
-        contextVk, &uniformBlockSetSize, 1));
-    ANGLE_TRY(
-        mDynamicDescriptorPools[kTextureDescriptorSetIndex].init(contextVk, &textureSetSize, 1));
+
+    uint32_t textureDescriptorCount = 0;
+    for (uint32_t textureIndex = 0; textureIndex < mState.getSamplerBindings().size();
+         ++textureIndex)
+    {
+        const gl::SamplerBinding &samplerBinding = mState.getSamplerBindings()[textureIndex];
+        if (!samplerBinding.unreferenced)
+        {
+            textureDescriptorCount +=
+                static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
+        }
+    }
+
+    if (textureDescriptorCount > 0)
+    {
+        VkDescriptorPoolSize textureSetSize = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                               textureDescriptorCount};
+        ANGLE_TRY(mDynamicDescriptorPools[kTextureDescriptorSetIndex].init(contextVk,
+                                                                           &textureSetSize, 1));
+    }
+
+    uint32_t uniformBufferDescriptorCount = static_cast<uint32_t>(mState.getUniformBlocks().size());
+    if (uniformBufferDescriptorCount > 0)
+    {
+        VkDescriptorPoolSize uniformBlockSetSize = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                                                    uniformBufferDescriptorCount};
+        ANGLE_TRY(mDynamicDescriptorPools[kUniformBlockDescriptorSetIndex].init(
+            contextVk, &uniformBlockSetSize, 1));
+    }
 
     return angle::Result::Continue;
 }
@@ -911,18 +931,17 @@ angle::Result ProgramVk::updateUniformBuffersDescriptorSet(ContextVk *contextVk,
 
     gl::UniformBuffersArray<VkDescriptorBufferInfo> descriptorBufferInfo;
     gl::UniformBuffersArray<VkWriteDescriptorSet> writeDescriptorInfo;
-    uint32_t writeCount     = 0;
     uint32_t currentBinding = 0;
 
     // Write uniform buffers.
     const gl::State &glState                             = contextVk->getState();
     const std::vector<gl::InterfaceBlock> &uniformBlocks = mState.getUniformBlocks();
+    const uint32_t writeCount = static_cast<uint32_t>(uniformBlocks.size());
+
     for (uint32_t bufferIndex = 0; bufferIndex < uniformBlocks.size(); ++bufferIndex)
     {
-        if (glState.getIndexedUniformBuffer(uniformBlocks[bufferIndex].binding).get() == nullptr)
-        {
-            continue;
-        }
+        // It's undefined behaviour to draw with an unbound uniform block. ANGLE will error out.
+        ASSERT(glState.getIndexedUniformBuffer(uniformBlocks[bufferIndex].binding).get());
 
         VkWriteDescriptorSet &writeInfo    = writeDescriptorInfo[writeCount];
         VkDescriptorBufferInfo &bufferInfo = descriptorBufferInfo[writeCount];
@@ -974,8 +993,6 @@ angle::Result ProgramVk::updateUniformBuffersDescriptorSet(ContextVk *contextVk,
         writeInfo.pBufferInfo      = &bufferInfo;
         writeInfo.pTexelBufferView = nullptr;
         ASSERT(writeInfo.pBufferInfo[0].buffer != VK_NULL_HANDLE);
-
-        ++writeCount;
     }
 
     VkDevice device = contextVk->getDevice();
