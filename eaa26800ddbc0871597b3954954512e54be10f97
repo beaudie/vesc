@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d945757c_34d44beb",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-06T17:15:21Z",
+      "side": 1,
+      "message": "you can use gl::GetDrawElementsTypeSize.",
+      "range": {
+        "startLine": 172,
+        "startChar": 4,
+        "endLine": 188,
+        "endChar": 0
+      },
+      "revId": "eaa26800ddbc0871597b3954954512e54be10f97",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
