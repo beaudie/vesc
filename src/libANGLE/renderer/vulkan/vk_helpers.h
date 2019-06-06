@@ -160,7 +160,8 @@ class DynamicDescriptorPool final : angle::NonCopyable
                                const VkDescriptorSetLayout *descriptorSetLayout,
                                uint32_t descriptorSetCount,
                                RefCountedDescriptorPoolBinding *bindingOut,
-                               VkDescriptorSet *descriptorSetsOut);
+                               VkDescriptorSet *descriptorSetsOut,
+                               bool *newPoolAllocatedOut);
 
     // For testing only!
     void setMaxSetsPerPoolForTesting(uint32_t maxSetsPerPool);
