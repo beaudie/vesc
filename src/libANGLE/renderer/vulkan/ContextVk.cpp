@@ -1895,7 +1895,7 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
                                                    vk::CommandBuffer *commandBuffer)
 {
     // Release any previously retained buffers.
-    mDriverUniformsBuffer.releaseRetainedBuffers(this);
+    mDriverUniformsBuffer.releaseRetainedBuffers();
 
     const gl::Rectangle &glViewport = mState.getViewport();
     float halfRenderAreaHeight =

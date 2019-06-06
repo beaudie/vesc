@@ -480,7 +480,7 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
     ANGLE_TRY(readPixelsImpl(contextVk, flippedArea, params, VK_IMAGE_ASPECT_COLOR_BIT,
                              getColorReadRenderTarget(),
                              static_cast<uint8_t *>(pixels) + outputSkipBytes));
-    mReadPixelBuffer.releaseRetainedBuffers(contextVk);
+    mReadPixelBuffer.releaseRetainedBuffers();
     return angle::Result::Continue;
 }
 
@@ -596,7 +596,7 @@ angle::Result FramebufferVk::blitWithReadback(ContextVk *contextVk,
     commandBuffer->copyBufferToImage(destBufferHandle, imageForWrite->getImage(),
                                      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copyRegion);
 
-    mBlitPixelBuffer.releaseRetainedBuffers(contextVk);
+    mBlitPixelBuffer.releaseRetainedBuffers();
 
     return angle::Result::Continue;
 }

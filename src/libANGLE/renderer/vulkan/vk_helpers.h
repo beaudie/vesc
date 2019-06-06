@@ -50,7 +50,7 @@ class DynamicBuffer : angle::NonCopyable
     // a new buffer to be created (which is returned in the optional parameter
     // `newBufferAllocatedOut`).  The new region will be in the returned buffer at given offset. If
     // a memory pointer is given, the buffer will be automatically map()ed.
-    angle::Result allocate(ContextVk *context,
+    angle::Result allocate(ContextVk *contextVk,
                            size_t sizeInBytes,
                            uint8_t **ptrOut,
                            VkBuffer *bufferOut,
@@ -58,18 +58,17 @@ class DynamicBuffer : angle::NonCopyable
                            bool *newBufferAllocatedOut);
 
     // After a sequence of writes, call flush to ensure the data is visible to the device.
-    angle::Result flush(ContextVk *context);
+    angle::Result flush(ContextVk *contextVk);
 
     // After a sequence of writes, call invalidate to ensure the data is visible to the host.
     angle::Result invalidate(ContextVk *context);
 
     // This releases resources when they might currently be in use.
-    void release(ContextVk *context);
+    void release(ContextVk *contextVk);
     void release(DisplayVk *display, std::vector<GarbageObjectBase> *garbageQueue);
 
     // This releases all the buffers that have been allocated since this was last called.
-    void releaseRetainedBuffers(ContextVk *context);
-    void releaseRetainedBuffers(DisplayVk *display, std::vector<GarbageObjectBase> *garbageQueue);
+    void releaseRetainedBuffers();
 
     // This frees resources immediately.
     void destroy(VkDevice device);
@@ -95,6 +94,7 @@ class DynamicBuffer : angle::NonCopyable
     size_t mAlignment;
 
     std::vector<BufferHelper *> mRetainedBuffers;
+    std::vector<BufferHelper *> mBufferFreeList;
 };
 
 // Uses DescriptorPool to allocate descriptor sets as needed. If a descriptor pool becomes full, we
@@ -714,7 +714,7 @@ class ImageHelper final : public CommandGraphResource
     // Flushes staged updates to a range of levels and layers from start to (but not including) end.
     // Due to the nature of updates (done wholly to a VkImageSubresourceLayers), some unsolicited
     // layers may also be updated.
-    angle::Result flushStagedUpdates(ContextVk *context,
+    angle::Result flushStagedUpdates(ContextVk *contextVk,
                                      uint32_t levelStart,
                                      uint32_t levelEnd,
                                      uint32_t layerStart,
