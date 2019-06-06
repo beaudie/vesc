@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f8cb3ce_718274e6",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2175,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-06-06T19:49:50Z",
+      "side": 0,
+      "message": "Moved to correct location in RendererD3D.cpp",
+      "revId": "e431aaa15a4c79fda27f25c7b8ab4eb4409d79f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

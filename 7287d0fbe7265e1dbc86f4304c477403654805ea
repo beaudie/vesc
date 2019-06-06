@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ba2e205_8112457f",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-06-06T19:49:50Z",
+      "side": 1,
+      "message": "Swapped around the for loop so I could add an extra check for the 2 new attributes.\nI could more easily have added checks for .contains() or .get() but this is saves extra traversals of attribMap. Is that necessary?",
+      "revId": "7287d0fbe7265e1dbc86f4304c477403654805ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
