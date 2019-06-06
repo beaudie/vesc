@@ -66,6 +66,7 @@ constexpr VkBufferUsageFlags kVertexBufferUsage = VK_BUFFER_USAGE_VERTEX_BUFFER_
 constexpr size_t kDefaultValueSize              = sizeof(gl::VertexAttribCurrentValueData::Values);
 constexpr size_t kDefaultBufferSize             = kDefaultValueSize * 16;
 constexpr size_t kDefaultPoolAllocatorPageSize  = 16 * 1024;
+constexpr size_t kDriverUniformsBufferSize      = 32;
 
 // Wait a maximum of 10s.  If that times out, we declare it a failure.
 constexpr uint64_t kMaxFenceWaitTimeNs = 10'000'000'000llu;
@@ -173,7 +174,9 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mCurrentDrawElementsType(gl::DrawElementsType::InvalidEnum),
       mClearColorMask(kAllColorChannelsMask),
       mFlipYForCurrentSurface(false),
-      mDriverUniformsBuffer(VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, sizeof(DriverUniforms) * 16, true),
+      mDriverUniformsBuffer(VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+                            sizeof(DriverUniforms) * kDriverUniformsBufferSize,
+                            true),
       mDriverUniformsDescriptorSet(VK_NULL_HANDLE),
       mDriverUniformsDynamicOffset(0),
       mDefaultAttribBuffers{{INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT,
