@@ -170,6 +170,11 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
 {
   public:
     CommandBuffer() = default;
+    CommandBuffer(VkCommandBuffer &&commandBufferHandle)
+    {
+        ASSERT(!valid());
+        std::swap(mHandle, commandBufferHandle);
+    }
 
     VkCommandBuffer releaseHandle();
 
