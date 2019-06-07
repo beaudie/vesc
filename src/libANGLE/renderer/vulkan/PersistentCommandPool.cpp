@@ -1,0 +1,108 @@
+//
+// Copyright 2019 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// PersistentCommandPool.cpp:
+//    Implements the class methods for PersistentCommandPool
+//
+
+#include "libANGLE/renderer/vulkan/PersistentCommandPool.h"
+
+namespace rx
+{
+
+namespace vk
+{
+
+PersistentCommandPool::PersistentCommandPool() : mAllocatedBufferCount(0) {}
+
+PersistentCommandPool::~PersistentCommandPool()
+{
+    ASSERT(!mCommandPool.valid() && mFreeBuffers.empty());
+}
+
+angle::Result PersistentCommandPool::init(vk::Context *context, uint32_t queueFamilyIndex)
+{
+    ASSERT(!mCommandPool.valid());
+
+    // Initialize the command pool now that we know the queue family index.
+    VkCommandPoolCreateInfo commandPoolInfo = {};
+    commandPoolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    commandPoolInfo.flags                   = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+    commandPoolInfo.queueFamilyIndex        = queueFamilyIndex;
+
+    ANGLE_VK_TRY(context, mCommandPool.init(context->getDevice(), commandPoolInfo));
+
+    for (uint32_t i = 0; i < kInitBufferNum; i++)
+    {
+        ANGLE_TRY(allocateCommandBuffers(context));
+    }
+
+    return angle::Result::Continue;
+}
+
+void PersistentCommandPool::destroy(const vk::Context *context)
+{
+    ASSERT(mCommandPool.valid());
+    ASSERT(mAllocatedBufferCount == mFreeBuffers.size());
+    mAllocatedBufferCount = 0;
+
+    VkDevice device = context->getDevice();
+    for (vk::PrimaryCommandBuffer &cmdBuf : mFreeBuffers)
+    {
+        cmdBuf.destroy(device, mCommandPool);
+    }
+    mFreeBuffers.clear();
+
+    mCommandPool.destroy(device);
+}
+
+angle::Result PersistentCommandPool::alloc(vk::Context *context,
+                                           vk::PrimaryCommandBuffer *bufferOutput)
+{
+    if (mFreeBuffers.empty())
+    {
+        ANGLE_TRY(allocateCommandBuffers(context));
+        ASSERT(!mFreeBuffers.empty());
+    }
+
+    *bufferOutput = std::move(mFreeBuffers.back());
+    mFreeBuffers.pop_back();
+
+    return angle::Result::Continue;
+}
+
+void PersistentCommandPool::collect(vk::PrimaryCommandBuffer &&buffer)
+{
+    // VK_COMMAND_BUFFER_RESET_RELEASE_RESOURCES_BIT NOT set, CommandBuffer
+    // still hold the memory resource
+    VkResult res = vkResetCommandBuffer(buffer.getHandle(), 0);
+    ASSERT(res == VK_SUCCESS);
+
+    mFreeBuffers.emplace_back(std::move(buffer));
+}
+
+angle::Result PersistentCommandPool::allocateCommandBuffers(vk::Context *context)
+{
+    vk::PrimaryCommandBuffer commandBuffer;
+    {
+        // Only used for primary CommandBuffer allocation
+        VkCommandBufferAllocateInfo commandBufferInfo = {};
+        commandBufferInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+        commandBufferInfo.commandPool        = mCommandPool.getHandle();
+        commandBufferInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        commandBufferInfo.commandBufferCount = 1;
+
+        commandBuffer.init(context->getDevice(), commandBufferInfo);
+    }
+    mAllocatedBufferCount += 1;
+
+    mFreeBuffers.emplace_back(std::move(commandBuffer));
+
+    return angle::Result::Continue;
+}
+
+}  // namespace vk
+
+}  // namespace rx
