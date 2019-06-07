@@ -574,9 +574,6 @@
 2905 VULKAN : dEQP-GLES3.functional.state_query.fbo.framebuffer_attachment_component_type = SKIP
 2905 VULKAN : dEQP-GLES3.functional.state_query.fbo.framebuffer_attachment_x_size_texture = SKIP
 
-// Buffer copy:
-3194 VULKAN : dEQP-GLES3.functional.buffer.copy.* = SKIP
-
 // Shader support:
 3219 VULKAN : dEQP-GLES3.functional.negative_api.shader.link_program = FAIL
 3219 VULKAN : dEQP-GLES3.functional.negative_api.shader.use_program = FAIL
@@ -651,9 +648,6 @@
 
 // - Primitive restart:
 2950 VULKAN : dEQP-GLES3.functional.primitive_restart.* = SKIP
-
-// - BufferVk::copySubData:
-2950 VULKAN : dEQP-GLES3.functional.negative_api.buffer.copy_buffer_sub_data = SKIP
 
 // - ES3 Query Types:
 2950 VULKAN : dEQP-GLES3.functional.negative_api.fragment.begin_query = SKIP

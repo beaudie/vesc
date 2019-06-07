@@ -150,8 +150,31 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
                                     GLintptr destOffset,
                                     GLsizeiptr size)
 {
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-    return angle::Result::Stop;
+    ASSERT(mBuffer.valid());
+
+    ContextVk *contextVk   = vk::GetImpl(context);
+    BufferVk *sourceBuffer = GetAs<BufferVk>(source);
+    ASSERT(sourceBuffer != nullptr);
+
+    // Enqueue a copy command on the GPU.
+    VkBufferCopy copyRegion = {static_cast<VkDeviceSize>(sourceOffset),
+                               static_cast<VkDeviceSize>(destOffset),
+                               static_cast<VkDeviceSize>(size)};
+
+    ANGLE_TRY(mBuffer.copyFromBuffer(contextVk, sourceBuffer->getBuffer().getBuffer(),
+                                     VK_ACCESS_MEMORY_READ_BIT, copyRegion));
+
+    // It's possible to read/write from the same buffer, so only add a dependency if they are
+    // different
+    if (&mBuffer != &sourceBuffer->mBuffer)
+    {
+        sourceBuffer->mBuffer.onRead(&mBuffer, VK_ACCESS_TRANSFER_READ_BIT);
+    }
+    mBuffer.onWrite(VK_ACCESS_TRANSFER_WRITE_BIT);
+
+    ANGLE_TRY(contextVk->finish(context));
+
+    return angle::Result::Continue;
 }
 
 angle::Result BufferVk::map(const gl::Context *context, GLenum access, void **mapPtr)
