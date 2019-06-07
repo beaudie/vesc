@@ -14,6 +14,7 @@
 
 #include "common/PackedEnums.h"
 #include "libANGLE/renderer/ContextImpl.h"
+#include "libANGLE/renderer/vulkan/CommandVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
@@ -236,7 +237,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     angle::Result flushImpl(const gl::Semaphore *semaphore);
     angle::Result finishImpl();
 
-    const vk::CommandPool &getCommandPool() const;
+    vk::PersistantCommandPool &getSecondaryCommandPool();
 
     Serial getCurrentQueueSerial() const { return mCurrentQueueSerial; }
     Serial getLastSubmittedQueueSerial() const { return mLastSubmittedQueueSerial; }
@@ -469,9 +470,9 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     gl::AttributesMask mDirtyDefaultAttribsMask;
     gl::AttribArray<vk::DynamicBuffer> mDefaultAttribBuffers;
 
-    // We use a single pool for recording commands. We also keep a free list for pool recycling.
-    vk::CommandPool mCommandPool;
-    std::vector<vk::CommandPool> mCommandPoolFreeList;
+    // We use a persistant CommandPool with pre-allocated CommandBuffers
+    vk::PersistantCommandPool mPrimCommandPool;
+    vk::PersistantCommandPool mSecdCommandPool;
 
     Serial mLastCompletedQueueSerial;
     Serial mLastSubmittedQueueSerial;
@@ -486,7 +487,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
 
         void destroy(VkDevice device);
 
-        vk::CommandPool commandPool;
+        vk::PrimaryCommandBuffer command;
         vk::Shared<vk::Fence> fence;
         Serial serial;
     };
