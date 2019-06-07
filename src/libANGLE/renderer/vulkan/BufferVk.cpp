@@ -150,8 +150,22 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
                                     GLintptr destOffset,
                                     GLsizeiptr size)
 {
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-    return angle::Result::Stop;
+    ASSERT(mBuffer.valid());
+
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    uint8_t *srcMapPointer = nullptr;
+    ANGLE_TRY(source->map(context, GL_MAP_READ_BIT, reinterpret_cast<void **>(&srcMapPointer)));
+    ASSERT(srcMapPointer);
+    srcMapPointer += sourceOffset;
+
+    ANGLE_TRY(
+        setDataImpl(contextVk, static_cast<const uint8_t *>(srcMapPointer), size, destOffset));
+
+    GLboolean result = 0;  // Purposely ignored
+    ANGLE_TRY(source->unmap(context, &result));
+
+    return angle::Result::Continue;
 }
 
 angle::Result BufferVk::map(const gl::Context *context, GLenum access, void **mapPtr)
