@@ -433,7 +433,7 @@ class CommandGraph final : angle::NonCopyable
     angle::Result submitCommands(ContextVk *context,
                                  Serial serial,
                                  RenderPassCache *renderPassCache,
-                                 CommandPool *commandPool,
+                                 PersistentCommandPool *primaryCommandPool,
                                  PrimaryCommandBuffer *primaryCommandBufferOut);
     bool empty() const;
     void clear();

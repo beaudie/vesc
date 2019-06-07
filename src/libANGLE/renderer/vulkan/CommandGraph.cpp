@@ -16,7 +16,6 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
-
 #include "third_party/trace_event/trace_event.h"
 
 namespace rx
@@ -44,7 +43,7 @@ angle::Result InitAndBeginCommandBuffer(vk::Context *context,
                                         const VkCommandBufferInheritanceInfo &inheritanceInfo,
                                         VkCommandBufferUsageFlags flags,
                                         angle::PoolAllocator *poolAllocator,
-                                        PrimaryCommandBuffer *commandBuffer)
+                                        priv::CommandBuffer *commandBuffer)
 {
     ASSERT(!commandBuffer->valid());
     VkCommandBufferAllocateInfo createInfo = {};
@@ -709,7 +708,7 @@ void CommandGraph::setNewBarrier(CommandGraphNode *newBarrier)
 angle::Result CommandGraph::submitCommands(ContextVk *context,
                                            Serial serial,
                                            RenderPassCache *renderPassCache,
-                                           CommandPool *commandPool,
+                                           PersistentCommandPool *primaryCommandPool,
                                            PrimaryCommandBuffer *primaryCommandBufferOut)
 {
     // There is no point in submitting an empty command buffer, so make sure not to call this
@@ -727,13 +726,7 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
             previousBarrier, &mNodes[previousBarrierIndex + 1], afterNodesCount);
     }
 
-    VkCommandBufferAllocateInfo primaryInfo = {};
-    primaryInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    primaryInfo.commandPool                 = commandPool->getHandle();
-    primaryInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    primaryInfo.commandBufferCount          = 1;
-
-    ANGLE_VK_TRY(context, primaryCommandBufferOut->init(context->getDevice(), primaryInfo));
+    ANGLE_TRY(primaryCommandPool->alloc(context->getDevice(), primaryCommandBufferOut));
 
     if (mEnableGraphDiagnostics)
     {
