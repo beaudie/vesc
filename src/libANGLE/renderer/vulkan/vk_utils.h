@@ -18,6 +18,7 @@
 #include "common/debug.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Observer.h"
+#include "libANGLE/renderer/vulkan/CommandVk.h"
 #include "libANGLE/renderer/vulkan/SecondaryCommandBuffer.h"
 #include "libANGLE/renderer/vulkan/vk_wrapper.h"
 
@@ -120,10 +121,10 @@ class Context : angle::NonCopyable
 #if ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
 using CommandBuffer = priv::SecondaryCommandBuffer;
 #else
-using CommandBuffer = priv::CommandBuffer;
+using CommandBuffer = vk::PersistantCommandBuffer;
 #endif
 
-using PrimaryCommandBuffer = priv::CommandBuffer;
+using PrimaryCommandBuffer = vk::PersistantCommandBuffer;
 
 VkImageAspectFlags GetDepthStencilAspectFlags(const angle::Format &format);
 VkImageAspectFlags GetFormatAspectFlags(const angle::Format &format);
