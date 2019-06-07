@@ -51,6 +51,7 @@ class WrappedObject : angle::NonCopyable
 
   protected:
     WrappedObject() : mHandle(VK_NULL_HANDLE) {}
+    WrappedObject(HandleT handle) : mHandle(handle) {}
     ~WrappedObject() { ASSERT(!valid()); }
 
     WrappedObject(WrappedObject &&other) : mHandle(other.mHandle)
@@ -170,6 +171,9 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
 {
   public:
     CommandBuffer() = default;
+
+    // This is used to initialize CommandBuffer whose life-cycle is externally managed
+    CommandBuffer(VkCommandBuffer commandBufferHandle) : WrappedObject(commandBufferHandle) {}
 
     VkCommandBuffer releaseHandle();
 
