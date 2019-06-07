@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "7770abee_9bf8d367",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-07T12:05:00Z",
+      "side": 1,
+      "message": "Yeah. Use an anonymous namespace block at the top of the file.\n\nhttps://chromium.googlesource.com/chromium/src/+/master/styleguide/c++/c++.md#unnamed-namespaces",
+      "parentUuid": "476371ee_7b1b94e8",
+      "range": {
+        "startLine": 122,
+        "startChar": 26,
+        "endLine": 122,
+        "endChar": 34
+      },
+      "revId": "8387fed05b2f08555396076e910423a5c0a389d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bb762602_d6229548",
         "filename": "src/libANGLE/Debug.cpp",
         "patchSetId": 3
@@ -116,6 +140,30 @@
       "revId": "8387fed05b2f08555396076e910423a5c0a389d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dbd0a10_8d3ced32",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-07T12:05:00Z",
+      "side": 1,
+      "message": "Makes sense. SGTM.",
+      "parentUuid": "7fbc50d6_30e2d5f7",
+      "range": {
+        "startLine": 123,
+        "startChar": 8,
+        "endLine": 123,
+        "endChar": 61
+      },
+      "revId": "8387fed05b2f08555396076e910423a5c0a389d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
