@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0c07d98_f2428524",
+        "filename": "src/compiler/preprocessor/DiagnosticsBase.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-07T18:17:01Z",
+      "side": 1,
+      "message": "Would it be worth it to duplicate the message and have ESSL1 in the other case? Just to avoid confusion for future users.",
+      "range": {
+        "startLine": 120,
+        "startChar": 89,
+        "endLine": 120,
+        "endChar": 96
+      },
+      "revId": "7153e0fd67aab6a8a20fc4a873d7cf0994895b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
