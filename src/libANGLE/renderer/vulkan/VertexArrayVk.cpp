@@ -155,6 +155,8 @@ angle::Result VertexArrayVk::convertIndexBufferGPU(ContextVk *contextVk,
     params.srcOffset                       = static_cast<uint32_t>(offsetIntoSrcData);
     params.dstOffset = static_cast<uint32_t>(mCurrentElementArrayBufferOffset);
     params.maxIndex  = static_cast<uint32_t>(bufferVk->getSize());
+    params.primitiveRestart =
+        static_cast<uint32_t>(contextVk->getState().isPrimitiveRestartEnabled());
 
     return contextVk->getUtils().convertIndexBuffer(contextVk, dest, src, params);
 }
@@ -189,13 +191,26 @@ angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
         // memory to a GLushort.
         const GLubyte *in     = static_cast<const GLubyte *>(sourcePointer);
         GLushort *expandedDst = reinterpret_cast<GLushort *>(dst);
+        bool primitiveRestart = contextVk->getState().isPrimitiveRestartEnabled();
+
+        constexpr GLubyte kUnsignedByteRestartValue   = GLubyte{0xFF};
+        constexpr GLushort kUnsignedShortRestartValue = GLushort{0xFFFF};
+
         for (size_t index = 0; index < indexCount; index++)
         {
-            expandedDst[index] = static_cast<GLushort>(in[index]);
+            GLushort value = static_cast<GLushort>(in[index]);
+            if (primitiveRestart && in[index] == kUnsignedByteRestartValue)
+            {
+                // Convert from 8-bit restart value to 16-bit restart value
+                value = GLushort{kUnsignedShortRestartValue};
+            }
+            expandedDst[index] = value;
         }
     }
     else
     {
+        // The primitive restart value is the same for OpenGL and Vulkan,
+        // so there's no need to perform any conversion.
         memcpy(dst, sourcePointer, amount);
     }
     ANGLE_TRY(dynamicBuffer->flush(contextVk));
