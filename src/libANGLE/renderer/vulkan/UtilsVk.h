@@ -48,9 +48,10 @@ class UtilsVk : angle::NonCopyable
 
     struct ConvertIndexParameters
     {
-        uint32_t srcOffset = 0;
-        uint32_t dstOffset = 0;
-        uint32_t maxIndex  = 0;
+        uint32_t srcOffset        = 0;
+        uint32_t dstOffset        = 0;
+        uint32_t maxIndex         = 0;
+        uint32_t primitiveRestart = 0;
     };
 
     struct ConvertVertexParameters
