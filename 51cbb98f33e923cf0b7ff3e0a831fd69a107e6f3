@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b11beb9f_eab093ef",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3765,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-07T16:10:01Z",
+      "side": 1,
+      "message": "This causes SamplerSyncNotTiedToProgram to fail, since GL_LINEAR is still used, rather than the sampler\u0027s GL_NEAREST. Not sure what\u0027s going on there yet.",
+      "range": {
+        "startLine": 3765,
+        "startChar": 76,
+        "endLine": 3765,
+        "endChar": 88
+      },
+      "revId": "51cbb98f33e923cf0b7ff3e0a831fd69a107e6f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
