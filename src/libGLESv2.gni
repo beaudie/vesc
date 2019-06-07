@@ -773,6 +773,8 @@ libangle_vulkan_sources = [
   "src/libANGLE/renderer/vulkan/CommandGraph.h",
   "src/libANGLE/renderer/vulkan/CompilerVk.cpp",
   "src/libANGLE/renderer/vulkan/CompilerVk.h",
+  "src/libANGLE/renderer/vulkan/CommandVk.cpp",
+  "src/libANGLE/renderer/vulkan/CommandVk.h",
   "src/libANGLE/renderer/vulkan/ContextVk.cpp",
   "src/libANGLE/renderer/vulkan/ContextVk.h",
   "src/libANGLE/renderer/vulkan/DeviceVk.cpp",
