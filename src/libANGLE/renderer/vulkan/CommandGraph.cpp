@@ -16,7 +16,6 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
-
 #include "third_party/trace_event/trace_event.h"
 
 namespace rx
@@ -44,7 +43,7 @@ angle::Result InitAndBeginCommandBuffer(vk::Context *context,
                                         const VkCommandBufferInheritanceInfo &inheritanceInfo,
                                         VkCommandBufferUsageFlags flags,
                                         angle::PoolAllocator *poolAllocator,
-                                        PrimaryCommandBuffer *commandBuffer)
+                                        priv::CommandBuffer *commandBuffer)
 {
     ASSERT(!commandBuffer->valid());
     VkCommandBufferAllocateInfo createInfo = {};
@@ -709,8 +708,7 @@ void CommandGraph::setNewBarrier(CommandGraphNode *newBarrier)
 angle::Result CommandGraph::submitCommands(ContextVk *context,
                                            Serial serial,
                                            RenderPassCache *renderPassCache,
-                                           CommandPool *commandPool,
-                                           PrimaryCommandBuffer *primaryCommandBufferOut)
+                                           PrimaryCommandBuffer *primaryCommandBuffer)
 {
     // There is no point in submitting an empty command buffer, so make sure not to call this
     // function if there's nothing to do.
@@ -727,14 +725,6 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
             previousBarrier, &mNodes[previousBarrierIndex + 1], afterNodesCount);
     }
 
-    VkCommandBufferAllocateInfo primaryInfo = {};
-    primaryInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    primaryInfo.commandPool                 = commandPool->getHandle();
-    primaryInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    primaryInfo.commandBufferCount          = 1;
-
-    ANGLE_VK_TRY(context, primaryCommandBufferOut->init(context->getDevice(), primaryInfo));
-
     if (mEnableGraphDiagnostics)
     {
         dumpGraphDotFile(std::cout);
@@ -747,9 +737,9 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
     beginInfo.flags                    = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
     beginInfo.pInheritanceInfo         = nullptr;
 
-    ANGLE_VK_TRY(context, primaryCommandBufferOut->begin(beginInfo));
+    ANGLE_VK_TRY(context, primaryCommandBuffer->begin(beginInfo));
 
-    ANGLE_TRY(context->traceGpuEvent(primaryCommandBufferOut, TRACE_EVENT_PHASE_BEGIN,
+    ANGLE_TRY(context->traceGpuEvent(primaryCommandBuffer, TRACE_EVENT_PHASE_BEGIN,
                                      "Primary Command Buffer"));
 
     for (CommandGraphNode *topLevelNode : mNodes)
@@ -772,7 +762,7 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
                     break;
                 case VisitedState::Ready:
                     ANGLE_TRY(node->visitAndExecute(context, serial, renderPassCache,
-                                                    primaryCommandBufferOut));
+                                                    primaryCommandBuffer));
                     nodeStack.pop_back();
                     break;
                 case VisitedState::Visited:
@@ -785,10 +775,10 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
         }
     }
 
-    ANGLE_TRY(context->traceGpuEvent(primaryCommandBufferOut, TRACE_EVENT_PHASE_END,
+    ANGLE_TRY(context->traceGpuEvent(primaryCommandBuffer, TRACE_EVENT_PHASE_END,
                                      "Primary Command Buffer"));
 
-    ANGLE_VK_TRY(context, primaryCommandBufferOut->end());
+    ANGLE_VK_TRY(context, primaryCommandBuffer->end());
 
     clear();
 
