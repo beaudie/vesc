@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e9bf7777_716af7b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-07T19:09:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc141be8_8b524c94",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "7153e0fd67aab6a8a20fc4a873d7cf0994895b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a0c07d98_f2428524",
         "filename": "src/compiler/preprocessor/DiagnosticsBase.cpp",
         "patchSetId": 2
@@ -71,6 +95,54 @@
     },
     {
       "key": {
+        "uuid": "395dd01a_83bc19ee",
+        "filename": "src/compiler/preprocessor/DiagnosticsBase.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-07T19:09:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56fd2868_ce580e14",
+      "range": {
+        "startLine": 120,
+        "startChar": 86,
+        "endLine": 120,
+        "endChar": 94
+      },
+      "revId": "7153e0fd67aab6a8a20fc4a873d7cf0994895b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c29d55ee_80d9c024",
+        "filename": "src/compiler/preprocessor/DiagnosticsBase.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-07T19:09:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0c07d98_f2428524",
+      "range": {
+        "startLine": 120,
+        "startChar": 89,
+        "endLine": 120,
+        "endChar": 96
+      },
+      "revId": "7153e0fd67aab6a8a20fc4a873d7cf0994895b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "db60c6c4_c2e95583",
         "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
         "patchSetId": 2
@@ -82,6 +154,24 @@
       "writtenOn": "2019-06-07T18:23:01Z",
       "side": 1,
       "message": "I don\u0027t understand how this changes the behavior of the compiler. It looks like it is only changing which exact warning message is printed. (\u0027valid\u003dfalse\u0027 still doesn\u0027t happen in either case.)\n\nDoes this fix the reported test case(s)?",
+      "revId": "7153e0fd67aab6a8a20fc4a873d7cf0994895b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a39f87f0_0715e335",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-07T19:09:12Z",
+      "side": 1,
+      "message": "When the report() call is made the presence of the new ENUM after the PP_WARNING_BEGIN line causes it to be flagged as a warning instead of an error:\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/compiler/preprocessor/DiagnosticsBase.h#73\n\nThis mirrors the previous behavior that the PP_NON_PP_TOKEN_BEFORE_EXTENSION_ESSL1 enum was hitting before my previous change that introduced the WebGL issue.",
+      "parentUuid": "db60c6c4_c2e95583",
       "revId": "7153e0fd67aab6a8a20fc4a873d7cf0994895b4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
