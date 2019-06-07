@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "fc141be8_8b524c94",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2019-06-07T18:23:01Z",
+      "side": 1,
+      "message": "nit: according to reports, this isn\u0027t vulkan specific. So remove this to make it clearer to anyone looking at the commit logs.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "7153e0fd67aab6a8a20fc4a873d7cf0994895b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a0c07d98_f2428524",
         "filename": "src/compiler/preprocessor/DiagnosticsBase.cpp",
         "patchSetId": 2
@@ -19,6 +42,46 @@
         "endLine": 120,
         "endChar": 96
       },
+      "revId": "7153e0fd67aab6a8a20fc4a873d7cf0994895b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56fd2868_ce580e14",
+        "filename": "src/compiler/preprocessor/DiagnosticsBase.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2019-06-07T18:23:01Z",
+      "side": 1,
+      "message": "nit: remove \"in ESSL3\" now? Or is this the right message for ESSL1 shaders too?",
+      "range": {
+        "startLine": 120,
+        "startChar": 86,
+        "endLine": 120,
+        "endChar": 94
+      },
+      "revId": "7153e0fd67aab6a8a20fc4a873d7cf0994895b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db60c6c4_c2e95583",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2019-06-07T18:23:01Z",
+      "side": 1,
+      "message": "I don\u0027t understand how this changes the behavior of the compiler. It looks like it is only changing which exact warning message is printed. (\u0027valid\u003dfalse\u0027 still doesn\u0027t happen in either case.)\n\nDoes this fix the reported test case(s)?",
       "revId": "7153e0fd67aab6a8a20fc4a873d7cf0994895b4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
