@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae49e9c1_d38ae50a",
+        "filename": "extensions/EGL_ANGLE_feature_control.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-06-07T15:30:47Z",
+      "side": 1,
+      "message": "I\u0027m not sure this will work. On this chromium CL (https://chromium-review.googlesource.com/c/chromium/src/+/1638658), chrome checks HasEGLExtension, which calls eglQueryString from ANGLE.\nThat\u0027s populated with the display extensions only. \n\nThis extension is sort of two different things, a display extension once you have a display, and a client extension before you have a display if you want to override features. What are your thoughts?",
+      "revId": "d95301972fe97e9e924d73dc6ff24178056b5812",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
