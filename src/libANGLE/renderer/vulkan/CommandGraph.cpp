@@ -27,7 +27,7 @@ namespace
 {
 ANGLE_MAYBE_UNUSED
 angle::Result InitAndBeginCommandBuffer(ContextVk *context,
-                                        const CommandPool &commandPool,
+                                        vk::PersistantCommandPool &commandPool,
                                         const VkCommandBufferInheritanceInfo &inheritanceInfo,
                                         VkCommandBufferUsageFlags flags,
                                         angle::PoolAllocator *poolAllocator,
@@ -40,20 +40,15 @@ angle::Result InitAndBeginCommandBuffer(ContextVk *context,
 
 ANGLE_MAYBE_UNUSED
 angle::Result InitAndBeginCommandBuffer(vk::Context *context,
-                                        const CommandPool &commandPool,
+                                        vk::PersistantCommandPool &commandPool,
                                         const VkCommandBufferInheritanceInfo &inheritanceInfo,
                                         VkCommandBufferUsageFlags flags,
                                         angle::PoolAllocator *poolAllocator,
                                         PrimaryCommandBuffer *commandBuffer)
 {
     ASSERT(!commandBuffer->valid());
-    VkCommandBufferAllocateInfo createInfo = {};
-    createInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    createInfo.commandPool                 = commandPool.getHandle();
-    createInfo.level                       = VK_COMMAND_BUFFER_LEVEL_SECONDARY;
-    createInfo.commandBufferCount          = 1;
 
-    ANGLE_VK_TRY(context, commandBuffer->init(context->getDevice(), createInfo));
+    ANGLE_TRY(commandPool.alloc(commandBuffer));
 
     VkCommandBufferBeginInfo beginInfo = {};
     beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -198,14 +193,14 @@ angle::Result CommandGraphResource::recordCommands(ContextVk *context,
     {
         startNewCommands(context);
         return mCurrentWritingNode->beginOutsideRenderPassRecording(
-            context, context->getCommandPool(), commandBufferOut);
+            context, context->getSecondaryCommandPool(), commandBufferOut);
     }
 
     CommandBuffer *outsideRenderPassCommands = mCurrentWritingNode->getOutsideRenderPassCommands();
     if (!outsideRenderPassCommands->valid())
     {
         ANGLE_TRY(mCurrentWritingNode->beginOutsideRenderPassRecording(
-            context, context->getCommandPool(), commandBufferOut));
+            context, context->getSecondaryCommandPool(), commandBufferOut));
     }
     else
     {
@@ -321,7 +316,7 @@ CommandGraphNode::~CommandGraphNode()
 }
 
 angle::Result CommandGraphNode::beginOutsideRenderPassRecording(ContextVk *context,
-                                                                const CommandPool &commandPool,
+                                                                PersistantCommandPool &commandPool,
                                                                 CommandBuffer **commandsOut)
 {
     ASSERT(!mHasChildren);
@@ -363,7 +358,8 @@ angle::Result CommandGraphNode::beginInsideRenderPassRecording(ContextVk *contex
     inheritanceInfo.queryFlags         = 0;
     inheritanceInfo.pipelineStatistics = 0;
 
-    ANGLE_TRY(InitAndBeginCommandBuffer(context, context->getCommandPool(), inheritanceInfo,
+    ANGLE_TRY(InitAndBeginCommandBuffer(context, context->getSecondaryCommandPool(),
+                                        inheritanceInfo,
                                         VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT,
                                         mPoolAllocator, &mInsideRenderPassCommands));
 
@@ -709,7 +705,7 @@ void CommandGraph::setNewBarrier(CommandGraphNode *newBarrier)
 angle::Result CommandGraph::submitCommands(ContextVk *context,
                                            Serial serial,
                                            RenderPassCache *renderPassCache,
-                                           CommandPool *commandPool,
+                                           PersistantCommandPool *primaryCommandPool,
                                            PrimaryCommandBuffer *primaryCommandBufferOut)
 {
     // There is no point in submitting an empty command buffer, so make sure not to call this
@@ -727,13 +723,7 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
             previousBarrier, &mNodes[previousBarrierIndex + 1], afterNodesCount);
     }
 
-    VkCommandBufferAllocateInfo primaryInfo = {};
-    primaryInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    primaryInfo.commandPool                 = commandPool->getHandle();
-    primaryInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    primaryInfo.commandBufferCount          = 1;
-
-    ANGLE_VK_TRY(context, primaryCommandBufferOut->init(context->getDevice(), primaryInfo));
+    ANGLE_TRY(primaryCommandPool->alloc(primaryCommandBufferOut));
 
     if (mEnableGraphDiagnostics)
     {
