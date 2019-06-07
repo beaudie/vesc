@@ -37,7 +37,6 @@
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
-
 #include "third_party/trace_event/trace_event.h"
 
 namespace rx
@@ -148,6 +147,7 @@ ContextVk::CommandBatch::CommandBatch(CommandBatch &&other)
 
 ContextVk::CommandBatch &ContextVk::CommandBatch::operator=(CommandBatch &&other)
 {
+    std::swap(primaryCommands, other.primaryCommands);
     std::swap(commandPool, other.commandPool);
     std::swap(fence, other.fence);
     std::swap(serial, other.serial);
@@ -156,6 +156,7 @@ ContextVk::CommandBatch &ContextVk::CommandBatch::operator=(CommandBatch &&other
 
 void ContextVk::CommandBatch::destroy(VkDevice device)
 {
+    primaryCommands.destroy(device);
     commandPool.destroy(device);
     fence.reset(device);
 }
@@ -252,6 +253,7 @@ void ContextVk::onDestroy(const gl::Context *context)
     mShaderLibrary.destroy(device);
     mGpuEventQueryPool.destroy(device);
     mCommandPool.destroy(device);
+    mPrimaryCommandPool.destroy(this);
 
     for (vk::CommandPool &pool : mCommandPoolFreeList)
     {
@@ -302,12 +304,16 @@ angle::Result ContextVk::initialize()
     }
 
     // Initialize the command pool now that we know the queue family index.
+    uint32_t queueFamilyIndex = getRenderer()->getQueueFamilyIndex();
+    VkDevice device           = getDevice();
+    ANGLE_TRY(mPrimaryCommandPool.init(this, queueFamilyIndex));
+
+    // Create CommandPool for Secondary CommandBuffer allocating
     VkCommandPoolCreateInfo commandPoolInfo = {};
     commandPoolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     commandPoolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
-    commandPoolInfo.queueFamilyIndex        = getRenderer()->getQueueFamilyIndex();
+    commandPoolInfo.queueFamilyIndex        = queueFamilyIndex;
 
-    VkDevice device = getDevice();
     ANGLE_VK_TRY(this, mCommandPool.init(device, commandPoolInfo));
 
 #if ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS
@@ -672,9 +678,13 @@ angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
     // using this VkQueue that they their current command buffer is no longer valid.
     onCommandBufferFinished();
 
-    // Store this command buffer in the in-flight list.
+    // Store the primary CommandBuffer and command pool used for secondary CommandBuffer
+    // in the in-flight list.
+#if !ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
     batch.commandPool = std::move(mCommandPool);
-    batch.serial      = mCurrentQueueSerial;
+#endif
+    batch.serial          = mCurrentQueueSerial;
+    batch.primaryCommands = std::move(commandBuffer);
 
     mInFlightCommands.emplace_back(scopedBatch.release());
 
@@ -697,10 +707,8 @@ angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
         ANGLE_TRY(checkCompletedGpuEvents());
     }
 
-    // Simply null out the command buffer here - it was allocated using the command pool.
-    commandBuffer.releaseHandle();
-
-    // Reallocate the command pool for next frame.
+#if !ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+    // Recreate CommandPool only when VkCommandBuffer are being used as secondary CommandBuffer
     VkCommandPoolCreateInfo poolInfo = {};
     poolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     poolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
@@ -715,6 +723,7 @@ angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
         mCommandPool = std::move(mCommandPoolFreeList.back());
         mCommandPoolFreeList.pop_back();
     }
+#endif
 
     return angle::Result::Continue;
 }
@@ -732,9 +741,12 @@ void ContextVk::freeAllInFlightResources()
             // If wait times out, it is probably not possible to recover from lost device
             ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
         }
+        mPrimaryCommandPool.collect(std::move(batch.primaryCommands));
 
+#if !ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
         batch.commandPool.reset(device, 0);
         mCommandPoolFreeList.emplace_back(std::move(batch.commandPool));
+#endif
 
         batch.fence.reset(device);
     }
@@ -751,8 +763,7 @@ void ContextVk::freeAllInFlightResources()
 
 angle::Result ContextVk::flushCommandGraph(vk::PrimaryCommandBuffer *commandBatch)
 {
-    return mCommandGraph.submitCommands(this, mCurrentQueueSerial, &mRenderPassCache, &mCommandPool,
-                                        commandBatch);
+    return mCommandGraph.submitCommands(this, mCurrentQueueSerial, &mRenderPassCache, commandBatch);
 }
 
 angle::Result ContextVk::synchronizeCpuGpuTime()
@@ -864,13 +875,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         vk::Scoped<vk::PrimaryCommandBuffer> commandBatch(device);
         vk::PrimaryCommandBuffer &commandBuffer = commandBatch.get();
 
-        VkCommandBufferAllocateInfo commandBufferInfo = {};
-        commandBufferInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        commandBufferInfo.commandPool        = mCommandPool.getHandle();
-        commandBufferInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        commandBufferInfo.commandBufferCount = 1;
-
-        ANGLE_VK_TRY(this, commandBuffer.init(device, commandBufferInfo));
+        ANGLE_TRY(mPrimaryCommandPool.alloc(this, &commandBuffer));
 
         VkCommandBufferBeginInfo beginInfo = {};
         beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -899,7 +904,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         VkPipelineStageFlags waitMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
         InitializeSubmitInfo(&submitInfo, commandBatch.get(), {}, &waitMask, {});
 
-        ANGLE_TRY(submitFrame(submitInfo, std::move(commandBuffer)));
+        ANGLE_TRY(submitFrame(submitInfo, commandBatch.release()));
 
         // Wait for GPU to be ready.  This is a short busy wait.
         VkResult result = VK_EVENT_RESET;
@@ -2037,6 +2042,8 @@ angle::Result ContextVk::flushImpl(const gl::Semaphore *clientSignalSemaphore)
     TRACE_EVENT0("gpu.angle", "ContextVk::flush");
 
     vk::Scoped<vk::PrimaryCommandBuffer> commandBatch(getDevice());
+    ANGLE_TRY(mPrimaryCommandPool.alloc(this, &commandBatch.get()));
+
     if (!mCommandGraph.empty())
     {
         ANGLE_TRY(flushCommandGraph(&commandBatch.get()));
@@ -2119,9 +2126,12 @@ angle::Result ContextVk::checkCompletedCommands()
         mLastCompletedQueueSerial = batch.serial;
 
         batch.fence.reset(device);
-        TRACE_EVENT0("gpu.angle", "commandPool.destroy");
+        TRACE_EVENT0("gpu.angle", "command buffer recycling");
+#if !ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
         batch.commandPool.reset(device, 0);
         mCommandPoolFreeList.emplace_back(std::move(batch.commandPool));
+#endif
+        mPrimaryCommandPool.collect(std::move(batch.primaryCommands));
         ++finishedCount;
     }
 
@@ -2275,13 +2285,7 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     vk::Scoped<vk::PrimaryCommandBuffer> commandBatch(device);
     vk::PrimaryCommandBuffer &commandBuffer = commandBatch.get();
 
-    VkCommandBufferAllocateInfo commandBufferInfo = {};
-    commandBufferInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    commandBufferInfo.commandPool                 = mCommandPool.getHandle();
-    commandBufferInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    commandBufferInfo.commandBufferCount          = 1;
-
-    ANGLE_VK_TRY(this, commandBuffer.init(device, commandBufferInfo));
+    ANGLE_TRY(mPrimaryCommandPool.alloc(this, &commandBuffer));
 
     VkCommandBufferBeginInfo beginInfo = {};
     beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -2336,6 +2340,8 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     *timestampOut = static_cast<uint64_t>(
         *timestampOut *
         static_cast<double>(getRenderer()->getPhysicalDeviceProperties().limits.timestampPeriod));
+
+    mPrimaryCommandPool.collect(commandBatch.release());
 
     return angle::Result::Continue;
 }
