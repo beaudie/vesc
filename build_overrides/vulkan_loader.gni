@@ -12,3 +12,5 @@ vulkan_loader_extra_defines = [
 ]
 vulkan_gen_subdir = "angle/vulkan"
 vulkan_loader_shared = angle_shared_libvulkan
+vk_loader_gen_files = "//third_party/vk_loader_gen_files"
+vk_loader_use_dynamic_generation = false

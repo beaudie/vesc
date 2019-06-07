@@ -10,3 +10,5 @@ glslang_dir = "//third_party/glslang/src"
 
 vulkan_data_subdir = angle_data_dir
 vulkan_gen_subdir = "angle/vulkan"
+vk_layer_gen_files = "//third_party/vk_layer_gen_files"
+vvl_use_dynamic_generation = false

@@ -21,6 +21,8 @@ declare_args() {
 
   # Link in system libGL, to work with apitrace.  See doc/DebuggingTips.md.
   angle_link_glx = false
+  vvl_use_dynamic_generation = false
+  vk_loader_use_dynamic_generation = false
 }
 
 if (!build_with_chromium) {
