@@ -155,6 +155,7 @@ ContextVk::CommandBatch::CommandBatch(CommandBatch &&other)
 
 ContextVk::CommandBatch &ContextVk::CommandBatch::operator=(CommandBatch &&other)
 {
+    std::swap(primaryCommands, other.primaryCommands);
     std::swap(commandPool, other.commandPool);
     std::swap(fence, other.fence);
     std::swap(serial, other.serial);
@@ -163,6 +164,7 @@ ContextVk::CommandBatch &ContextVk::CommandBatch::operator=(CommandBatch &&other
 
 void ContextVk::CommandBatch::destroy(VkDevice device)
 {
+    primaryCommands.destroy(device);
     commandPool.destroy(device);
     fence.reset(device);
 }
@@ -284,6 +286,7 @@ void ContextVk::onDestroy(const gl::Context *context)
     mShaderLibrary.destroy(device);
     mGpuEventQueryPool.destroy(device);
     mCommandPool.destroy(device);
+    mPrimaryCommandPool.destroy(this);
 
     for (vk::CommandPool &pool : mCommandPoolFreeList)
     {
@@ -335,13 +338,18 @@ angle::Result ContextVk::initialize()
     }
 
     // Initialize the command pool now that we know the queue family index.
+    uint32_t queueFamilyIndex = getRenderer()->getQueueFamilyIndex();
+    ANGLE_TRY(mPrimaryCommandPool.init(this, queueFamilyIndex));
+
+#if !ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS
+    // Create CommandPool for secondary VkCommandBuffer allocating
     VkCommandPoolCreateInfo commandPoolInfo = {};
     commandPoolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     commandPoolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
-    commandPoolInfo.queueFamilyIndex        = getRenderer()->getQueueFamilyIndex();
+    commandPoolInfo.queueFamilyIndex        = queueFamilyIndex;
 
-    VkDevice device = getDevice();
-    ANGLE_VK_TRY(this, mCommandPool.init(device, commandPoolInfo));
+    ANGLE_VK_TRY(this, mCommandPool.init(getDevice(), commandPoolInfo));
+#endif
 
 #if ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
@@ -735,6 +743,38 @@ angle::Result ContextVk::handleDirtyComputeDescriptorSets(const gl::Context *con
     return mProgram->updateDescriptorSets(this, commandBuffer);
 }
 
+angle::Result ContextVk::releaseCommandPoolToBatch(CommandBatch *batch)
+{
+    if (!mCommandPool.valid())
+    {
+        // CommandPool are not valid, custom CommandBuffers are being used
+        return angle::Result::Continue;
+    }
+
+    batch->commandPool = std::move(mCommandPool);
+
+    // Recreate CommandPool
+    VkCommandPoolCreateInfo poolInfo = {};
+    poolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    poolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+    poolInfo.queueFamilyIndex        = getRenderer()->getQueueFamilyIndex();
+
+    ANGLE_VK_TRY(this, mCommandPool.init(getDevice(), poolInfo));
+
+    return angle::Result::Continue;
+}
+
+void ContextVk::recycleCommandPoolFromBatch(CommandBatch *batch)
+{
+    if (!batch->commandPool.valid())
+    {
+        // CommandPool is not being used
+        return;
+    }
+
+    batch->commandPool.destroy(getDevice());
+}
+
 angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
                                      vk::PrimaryCommandBuffer &&commandBuffer)
 {
@@ -760,9 +800,11 @@ angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
     onRenderPassFinished();
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
 
-    // Store this command buffer in the in-flight list.
-    batch.commandPool = std::move(mCommandPool);
-    batch.serial      = mCurrentQueueSerial;
+    // Store the primary CommandBuffer and command pool used for secondary CommandBuffers
+    // in the in-flight list.
+    ANGLE_TRY(releaseCommandPoolToBatch(&batch));
+    batch.serial          = mCurrentQueueSerial;
+    batch.primaryCommands = std::move(commandBuffer);
 
     mInFlightCommands.emplace_back(scopedBatch.release());
 
@@ -785,56 +827,7 @@ angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
         ANGLE_TRY(checkCompletedGpuEvents());
     }
 
-    // Simply null out the command buffer here - it was allocated using the command pool.
-    commandBuffer.releaseHandle();
-
-    // Reallocate the command pool for next frame.
-    VkCommandPoolCreateInfo poolInfo = {};
-    poolInfo.sType                   = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    poolInfo.flags                   = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
-    poolInfo.queueFamilyIndex        = getRenderer()->getQueueFamilyIndex();
-
-    if (mCommandPoolFreeList.empty())
-    {
-        ANGLE_VK_TRY(this, mCommandPool.init(device, poolInfo));
-    }
-    else
-    {
-        mCommandPool = std::move(mCommandPoolFreeList.back());
-        mCommandPoolFreeList.pop_back();
-    }
-
     return angle::Result::Continue;
-}
-
-void ContextVk::freeAllInFlightResources()
-{
-    VkDevice device = getDevice();
-
-    for (CommandBatch &batch : mInFlightCommands)
-    {
-        // On device loss we need to wait for fence to be signaled before destroying it
-        if (getRenderer()->isDeviceLost())
-        {
-            VkResult status = batch.fence.get().wait(device, kMaxFenceWaitTimeNs);
-            // If wait times out, it is probably not possible to recover from lost device
-            ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
-        }
-
-        batch.commandPool.reset(device, 0);
-        mCommandPoolFreeList.emplace_back(std::move(batch.commandPool));
-
-        batch.fence.reset(device);
-    }
-    mInFlightCommands.clear();
-
-    for (auto &garbage : mGarbage)
-    {
-        garbage.destroy(device);
-    }
-    mGarbage.clear();
-
-    mLastCompletedQueueSerial = mLastSubmittedQueueSerial;
 }
 
 angle::Result ContextVk::flushCommandGraph(vk::PrimaryCommandBuffer *commandBatch)
@@ -845,8 +838,7 @@ angle::Result ContextVk::flushCommandGraph(vk::PrimaryCommandBuffer *commandBatc
     }
     mIsAnyHostVisibleBufferWritten = false;
 
-    return mCommandGraph.submitCommands(this, mCurrentQueueSerial, &mRenderPassCache, &mCommandPool,
-                                        commandBatch);
+    return mCommandGraph.submitCommands(this, mCurrentQueueSerial, &mRenderPassCache, commandBatch);
 }
 
 angle::Result ContextVk::synchronizeCpuGpuTime()
@@ -958,13 +950,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         vk::Scoped<vk::PrimaryCommandBuffer> commandBatch(device);
         vk::PrimaryCommandBuffer &commandBuffer = commandBatch.get();
 
-        VkCommandBufferAllocateInfo commandBufferInfo = {};
-        commandBufferInfo.sType              = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        commandBufferInfo.commandPool        = mCommandPool.getHandle();
-        commandBufferInfo.level              = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        commandBufferInfo.commandBufferCount = 1;
-
-        ANGLE_VK_TRY(this, commandBuffer.init(device, commandBufferInfo));
+        ANGLE_TRY(mPrimaryCommandPool.alloc(this, &commandBuffer));
 
         VkCommandBufferBeginInfo beginInfo = {};
         beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -993,7 +979,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         InitializeSubmitInfo(&submitInfo, commandBatch.get(), {}, &mWaitSemaphoreStageMasks,
                              nullptr);
 
-        ANGLE_TRY(submitFrame(submitInfo, std::move(commandBuffer)));
+        ANGLE_TRY(submitFrame(submitInfo, commandBatch.release()));
 
         // Wait for GPU to be ready.  This is a short busy wait.
         VkResult result = VK_EVENT_RESET;
@@ -1191,7 +1177,31 @@ void ContextVk::handleDeviceLost()
 {
     mCommandGraph.clear();
     // TODO: generate a new serial neccessary here?
-    freeAllInFlightResources();
+    VkDevice device = getDevice();
+
+    for (CommandBatch &batch : mInFlightCommands)
+    {
+        // On device loss we need to wait for fence to be signaled before destroying it
+        VkResult status = batch.fence.get().wait(device, kMaxFenceWaitTimeNs);
+        // If the wait times out, it is probably not possible to recover from lost device
+        ASSERT(status == VK_SUCCESS || status == VK_ERROR_DEVICE_LOST);
+
+        // On device lost, here simply destroy the CommandBuffer, it will fully cleared later
+        // by CommandPool::destroy
+        batch.primaryCommands.destroy(device);
+
+        batch.commandPool.destroy(device);
+        batch.fence.reset(device);
+    }
+    mInFlightCommands.clear();
+
+    for (vk::GarbageObject &garbage : mGarbage)
+    {
+        garbage.destroy(device);
+    }
+    mGarbage.clear();
+
+    mLastCompletedQueueSerial = mLastSubmittedQueueSerial;
 
     mRenderer->notifyDeviceLost();
 }
@@ -2296,6 +2306,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flush");
 
     vk::Scoped<vk::PrimaryCommandBuffer> commandBatch(getDevice());
+    ANGLE_TRY(mPrimaryCommandPool.alloc(this, &commandBatch.get()));
+
     if (!mCommandGraph.empty())
     {
         ANGLE_TRY(flushCommandGraph(&commandBatch.get()));
@@ -2321,7 +2333,13 @@ angle::Result ContextVk::finishImpl()
     ANGLE_TRY(flushImpl(nullptr));
 
     ANGLE_TRY(finishToSerial(mLastSubmittedQueueSerial));
-    freeAllInFlightResources();
+    ASSERT(mInFlightCommands.empty());
+
+    for (vk::GarbageObject &garbage : mGarbage)
+    {
+        garbage.destroy(getDevice());
+    }
+    mGarbage.clear();
 
     if (mGpuEventsEnabled)
     {
@@ -2376,8 +2394,9 @@ angle::Result ContextVk::checkCompletedCommands()
         mLastCompletedQueueSerial = batch.serial;
 
         mRenderer->resetSharedFence(&batch.fence);
-        ANGLE_TRACE_EVENT0("gpu.angle", "commandPool.destroy");
-        batch.commandPool.destroy(device);
+        ANGLE_TRACE_EVENT0("gpu.angle", "command buffer recycling");
+        recycleCommandPoolFromBatch(&batch);
+        ANGLE_TRY(mPrimaryCommandPool.collect(this, std::move(batch.primaryCommands)));
         ++finishedCount;
     }
 
@@ -2526,13 +2545,7 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     vk::Scoped<vk::PrimaryCommandBuffer> commandBatch(device);
     vk::PrimaryCommandBuffer &commandBuffer = commandBatch.get();
 
-    VkCommandBufferAllocateInfo commandBufferInfo = {};
-    commandBufferInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    commandBufferInfo.commandPool                 = mCommandPool.getHandle();
-    commandBufferInfo.level                       = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    commandBufferInfo.commandBufferCount          = 1;
-
-    ANGLE_VK_TRY(this, commandBuffer.init(device, commandBufferInfo));
+    ANGLE_TRY(mPrimaryCommandPool.alloc(this, &commandBuffer));
 
     VkCommandBufferBeginInfo beginInfo = {};
     beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -2587,6 +2600,8 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
     *timestampOut = static_cast<uint64_t>(
         *timestampOut *
         static_cast<double>(getRenderer()->getPhysicalDeviceProperties().limits.timestampPeriod));
+
+    ANGLE_TRY(mPrimaryCommandPool.collect(this, commandBatch.release()));
 
     return angle::Result::Continue;
 }
