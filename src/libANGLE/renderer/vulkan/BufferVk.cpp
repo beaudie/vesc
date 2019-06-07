@@ -150,8 +150,27 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
                                     GLintptr destOffset,
                                     GLsizeiptr size)
 {
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-    return angle::Result::Stop;
+    ASSERT(mBuffer.valid());
+
+    ContextVk *contextVk = vk::GetImpl(context);
+    auto *sourceBuffer   = GetAs<BufferVk>(source);
+    ASSERT(sourceBuffer != nullptr);
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(mBuffer.recordCommands(contextVk, &commandBuffer));
+
+    // Enqueue a copy command on the GPU.
+    VkBufferCopy copyRegion = {static_cast<VkDeviceSize>(sourceOffset),
+                               static_cast<VkDeviceSize>(destOffset),
+                               static_cast<VkDeviceSize>(size)};
+
+    sourceBuffer->mBuffer.onRead(&mBuffer, VK_ACCESS_TRANSFER_READ_BIT);
+    mBuffer.onWrite(VK_ACCESS_TRANSFER_WRITE_BIT);
+
+    commandBuffer->copyBuffer(sourceBuffer->getBuffer().getBuffer(), mBuffer.getBuffer(), 1,
+                              &copyRegion);
+
+    return angle::Result::Continue;
 }
 
 angle::Result BufferVk::map(const gl::Context *context, GLenum access, void **mapPtr)
@@ -164,6 +183,9 @@ angle::Result BufferVk::map(const gl::Context *context, GLenum access, void **ma
 
 angle::Result BufferVk::mapImpl(ContextVk *contextVk, void **mapPtr)
 {
+    // Needed before mapping buffer or we could get stale data.
+    ANGLE_TRY(contextVk->finishImpl());
+
     ANGLE_VK_TRY(contextVk,
                  mBuffer.getDeviceMemory().map(contextVk->getDevice(), 0, mState.getSize(), 0,
                                                reinterpret_cast<uint8_t **>(mapPtr)));
@@ -179,6 +201,9 @@ angle::Result BufferVk::mapRange(const gl::Context *context,
     ASSERT(mBuffer.valid());
 
     ContextVk *contextVk = vk::GetImpl(context);
+
+    // Needed before mapping buffer or we could get stale data.
+    ANGLE_TRY(contextVk->finishImpl());
 
     ANGLE_VK_TRY(contextVk, mBuffer.getDeviceMemory().map(contextVk->getDevice(), offset, length, 0,
                                                           reinterpret_cast<uint8_t **>(mapPtr)));
