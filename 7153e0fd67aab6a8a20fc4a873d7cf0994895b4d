@@ -175,6 +175,24 @@
       "revId": "7153e0fd67aab6a8a20fc4a873d7cf0994895b4d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4d3c374_5bda2c8f",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1172235
+      },
+      "writtenOn": "2019-06-07T20:04:40Z",
+      "side": 1,
+      "message": "Oh, gotcha",
+      "parentUuid": "a39f87f0_0715e335",
+      "revId": "7153e0fd67aab6a8a20fc4a873d7cf0994895b4d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
