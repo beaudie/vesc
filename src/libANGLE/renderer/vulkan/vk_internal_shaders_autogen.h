@@ -72,7 +72,13 @@ enum Format
 }  // namespace BufferUtils_comp
 
 namespace ConvertIndex_comp
-{}  // namespace ConvertIndex_comp
+{
+enum flags
+{
+    kIsPrimitiveRestartEnabled = 0x00000001,
+    kFlagsMask                 = 0x00000001,
+};
+}  // namespace ConvertIndex_comp
 
 namespace ConvertVertex_comp
 {
@@ -189,7 +195,8 @@ class ShaderLibrary final : angle::NonCopyable
         mBufferUtils_comp_shaders[InternalShader::BufferUtils_comp::kFlagsMask |
                                   InternalShader::BufferUtils_comp::kFunctionMask |
                                   InternalShader::BufferUtils_comp::kFormatMask];
-    RefCounted<ShaderAndSerial> mConvertIndex_comp_shaders[1];
+    RefCounted<ShaderAndSerial>
+        mConvertIndex_comp_shaders[InternalShader::ConvertIndex_comp::kFlagsMask];
     RefCounted<ShaderAndSerial>
         mConvertVertex_comp_shaders[InternalShader::ConvertVertex_comp::kFlagsMask |
                                     InternalShader::ConvertVertex_comp::kConversionMask];

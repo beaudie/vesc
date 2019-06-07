@@ -48,9 +48,10 @@ class UtilsVk : angle::NonCopyable
 
     struct ConvertIndexParameters
     {
-        uint32_t srcOffset = 0;
-        uint32_t dstOffset = 0;
-        uint32_t maxIndex  = 0;
+        uint32_t srcOffset        = 0;
+        uint32_t dstOffset        = 0;
+        uint32_t maxIndex         = 0;
+        uint32_t primitiveRestart = 0;
     };
 
     struct ConvertVertexParameters
@@ -346,8 +347,8 @@ class UtilsVk : angle::NonCopyable
                              vk::InternalShader::BufferUtils_comp::kFunctionMask |
                              vk::InternalShader::BufferUtils_comp::kFormatMask];
 
-    // Currently does not use parameters.
-    vk::ShaderProgramHelper mConvertIndexProgram;
+    vk::ShaderProgramHelper
+        mConvertIndexPrograms[vk::InternalShader::ConvertIndex_comp::kFlagsMask];
 
     vk::ShaderProgramHelper
         mConvertVertexPrograms[vk::InternalShader::ConvertVertex_comp::kFlagsMask |
