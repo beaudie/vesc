@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "288925be_892d3870",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-07T16:45:32Z",
+      "side": 1,
+      "message": "nit: we should Capitalize all static methods to meet ANGLE style. GLSeverityToString or something",
+      "range": {
+        "startLine": 18,
+        "startChar": 12,
+        "endLine": 18,
+        "endChar": 30
+      },
+      "revId": "b3dbb07395c72e344ef33554da0186a129ded788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1af232b1_5de2e3e3",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-07T16:45:32Z",
+      "side": 1,
+      "message": "same nit",
+      "range": {
+        "startLine": 34,
+        "startChar": 12,
+        "endLine": 34,
+        "endChar": 34
+      },
+      "revId": "b3dbb07395c72e344ef33554da0186a129ded788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c74208b_d19b2f4b",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-07T16:45:32Z",
+      "side": 1,
+      "message": "same nit",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 46
+      },
+      "revId": "b3dbb07395c72e344ef33554da0186a129ded788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "616333c5_e698b070",
+        "filename": "src/libANGLE/Debug.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-07T16:45:32Z",
+      "side": 1,
+      "message": "would it be possible to remove the default argument? not sure how many sites it would impact. they\u0027re not always that easy to work with.",
+      "range": {
+        "startLine": 56,
+        "startChar": 23,
+        "endLine": 56,
+        "endChar": 65
+      },
+      "revId": "b3dbb07395c72e344ef33554da0186a129ded788",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
