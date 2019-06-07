@@ -88,7 +88,7 @@ class CommandGraphNode final : angle::NonCopyable
 
     // For outside the render pass (copies, transitions, etc).
     angle::Result beginOutsideRenderPassRecording(ContextVk *context,
-                                                  const CommandPool &commandPool,
+                                                  PersistantCommandPool &commandPool,
                                                   CommandBuffer **commandsOut);
 
     // For rendering commands (draws).
@@ -433,7 +433,7 @@ class CommandGraph final : angle::NonCopyable
     angle::Result submitCommands(ContextVk *context,
                                  Serial serial,
                                  RenderPassCache *renderPassCache,
-                                 CommandPool *commandPool,
+                                 PersistantCommandPool *primaryCommandPool,
                                  PrimaryCommandBuffer *primaryCommandBufferOut);
     bool empty() const;
     void clear();
