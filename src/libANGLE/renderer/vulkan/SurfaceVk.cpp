@@ -572,6 +572,7 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk,
         mSwapHistory[swapHistoryIndex].swapchain = oldSwapchain;
     }
 
+    ANGLE_TRY(contextVk->finishImpl());
     releaseSwapchainImages(contextVk);
 
     return createSwapChain(contextVk, extents, oldSwapchain);
@@ -916,14 +917,10 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     // likely have more based on how much work was flushed this frame.
     ASSERT(!mFlushSemaphoreChain.empty());
 
-    VkPresentInfoKHR presentInfo   = {};
-    presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-    presentInfo.waitSemaphoreCount = 1;
-    presentInfo.pWaitSemaphores    = mFlushSemaphoreChain.back().ptr();
-    presentInfo.swapchainCount     = 1;
-    presentInfo.pSwapchains        = &mSwapchain;
-    presentInfo.pImageIndices      = &mCurrentSwapchainImageIndex;
-    presentInfo.pResults           = nullptr;
+    PresentInfo presentInfo;
+    presentInfo.imageIndex    = mCurrentSwapchainImageIndex;
+    presentInfo.swapchain     = mSwapchain;
+    presentInfo.waitSemaphore = mFlushSemaphoreChain.back().getHandle();
 
     VkPresentRegionKHR presentRegion   = {};
     VkPresentRegionsKHR presentRegions = {};
@@ -954,7 +951,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         presentRegions.swapchainCount = 1;
         presentRegions.pRegions       = &presentRegion;
 
-        presentInfo.pNext = &presentRegions;
+        // FIXME
+        // presentInfo.pNext = &presentRegions;
     }
 
     // Update the swap history for this presentation
