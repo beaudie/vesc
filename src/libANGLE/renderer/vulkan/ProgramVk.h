@@ -110,7 +110,9 @@ class ProgramVk : public ProgramImpl
     angle::Result updateUniformBuffersDescriptorSet(ContextVk *contextVk,
                                                     vk::FramebufferHelper *framebuffer);
 
-    angle::Result updateDescriptorSets(ContextVk *contextVk, vk::CommandBuffer *commandBuffer);
+    angle::Result updateDescriptorSets(ContextVk *contextVk,
+                                       vk::DescriptorSetLayoutArray<VkDescriptorSet> *sets,
+                                       vk::DescriptorSetOffsetVector *dynamicOffsets);
 
     // For testing only.
     void setDefaultUniformBlocksMinSizeForTesting(size_t minSize);
@@ -159,6 +161,10 @@ class ProgramVk : public ProgramImpl
     angle::Result initDefaultUniformBlocks(const gl::Context *glContext);
 
     angle::Result updateDefaultUniformsDescriptorSet(ContextVk *contextVk);
+
+    angle::Result allocateEmptyDescriptorSet(ContextVk *contextVk,
+                                             size_t descriptorSetIndex,
+                                             VkDescriptorType descriptorType);
 
     template <class T>
     void getUniformImpl(GLint location, T *v, GLenum entryPointType) const;
@@ -226,8 +232,7 @@ class ProgramVk : public ProgramImpl
     vk::BufferHelper mEmptyUniformBlockStorage;
 
     // Descriptor sets for uniform blocks and textures for this program.
-    std::vector<VkDescriptorSet> mDescriptorSets;
-    vk::DescriptorSetLayoutArray<VkDescriptorSet> mEmptyDescriptorSets;
+    vk::DescriptorSetLayoutArray<VkDescriptorSet> mDescriptorSets;
 
     std::unordered_map<vk::TextureDescriptorDesc, VkDescriptorSet> mTextureDescriptorsCache;
 

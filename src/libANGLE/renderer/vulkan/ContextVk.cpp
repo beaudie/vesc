@@ -644,12 +644,18 @@ angle::Result ContextVk::handleDirtyUniformBuffers(const gl::Context *context,
 angle::Result ContextVk::handleDirtyDescriptorSets(const gl::Context *context,
                                                    vk::CommandBuffer *commandBuffer)
 {
-    ANGLE_TRY(mProgram->updateDescriptorSets(this, commandBuffer));
+    vk::DescriptorSetOffsetVector dynamicOffsets;
+    vk::DescriptorSetLayoutArray<VkDescriptorSet> sets;
+
+    ANGLE_TRY(mProgram->updateDescriptorSets(this, &sets, &dynamicOffsets));
+
+    sets[kDriverUniformsDescriptorSetIndex] = mDriverUniformsDescriptorSet;
+    dynamicOffsets.push_back(mDriverUniformsDynamicOffset);
 
     // Bind the graphics descriptor sets.
-    commandBuffer->bindGraphicsDescriptorSets(
-        mProgram->getPipelineLayout(), kDriverUniformsDescriptorSetIndex, 1,
-        &mDriverUniformsDescriptorSet, 1, &mDriverUniformsDynamicOffset);
+    commandBuffer->bindGraphicsDescriptorSets(mProgram->getPipelineLayout(), 0,
+                                              vk::kMaxDescriptorSetLayouts, sets.data(),
+                                              dynamicOffsets.size(), dynamicOffsets.data());
     return angle::Result::Continue;
 }
 

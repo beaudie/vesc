@@ -541,6 +541,7 @@ struct PackedPushConstantRange
     uint32_t size;
 };
 
+using DescriptorSetOffsetVector = angle::FixedVector<uint32_t, kMaxDescriptorSetLayouts>;
 template <typename T>
 using DescriptorSetLayoutArray = std::array<T, kMaxDescriptorSetLayouts>;
 using DescriptorSetLayoutPointerArray =
