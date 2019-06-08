@@ -12,6 +12,7 @@
 #include "ANGLEPerfTestArgs.h"
 #include "common/platform.h"
 #include "third_party/perf/perf_test.h"
+#include "third_party/trace_event/trace_event.h"
 #include "util/shader_utils.h"
 #include "util/system_utils.h"
 
@@ -500,8 +501,28 @@ void ANGLERenderTest::TearDown()
     ANGLEPerfTest::TearDown();
 }
 
+void ANGLERenderTest::beginInternalTraceEvent(const char *name)
+{
+    if (gEnableTrace)
+    {
+        mTraceEventBuffer.emplace_back(TRACE_EVENT_PHASE_BEGIN, gTraceCategories[0].name, name,
+                                       MonotonicallyIncreasingTime(&mPlatformMethods));
+    }
+}
+
+void ANGLERenderTest::endInternalTraceEvent(const char *name)
+{
+    if (gEnableTrace)
+    {
+        mTraceEventBuffer.emplace_back(TRACE_EVENT_PHASE_END, gTraceCategories[0].name, name,
+                                       MonotonicallyIncreasingTime(&mPlatformMethods));
+    }
+}
+
 void ANGLERenderTest::step()
 {
+    beginInternalTraceEvent("step");
+
     // Clear events that the application did not process from this frame
     Event event;
     bool closed = false;
@@ -528,6 +549,8 @@ void ANGLERenderTest::step()
         mGLWindow->swap();
         mOSWindow->messageLoop();
     }
+
+    endInternalTraceEvent("step");
 }
 
 void ANGLERenderTest::startGpuTimer()
