@@ -1,0 +1,314 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ce5d9f09_8d01e7cf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T20:03:30Z",
+      "side": 1,
+      "message": "the spelling of this word is \"persistent\".",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 24
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e30f855b_b8228e87",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T20:03:30Z",
+      "side": 1,
+      "message": "the style guide forbids non-const \u0026 args. \n\nhttps://google.github.io/styleguide/cppguide.html#Reference_Arguments",
+      "range": {
+        "startLine": 30,
+        "startChar": 40,
+        "endLine": 30,
+        "endChar": 67
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32041c31_c61853df",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T20:03:30Z",
+      "side": 1,
+      "message": "here I think it does make sense to use the persistent pool.",
+      "range": {
+        "startLine": 708,
+        "startChar": 43,
+        "endLine": 708,
+        "endChar": 84
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bea104f_f990bd3d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T20:03:30Z",
+      "side": 1,
+      "message": "I think we should probably keep using CommandPool for secondaries. Instead of Persistent.",
+      "range": {
+        "startLine": 91,
+        "startChar": 50,
+        "endLine": 91,
+        "endChar": 71
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b189b42c_66133ae5",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T20:03:30Z",
+      "side": 1,
+      "message": "when you add new files, please add the license header:\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#comments\n\nplease also include a file-level comment.\n\nAlso I would rename this to PersistentCommandPool.h/cpp if you don\u0027t mind.",
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "678a8ff1_f9edcf0d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T20:03:30Z",
+      "side": 1,
+      "message": "I think we would be better off just storing a vk::CommandBuffer for the primary buffer in CommandBatch. I think this would totally forego the need for this other class.",
+      "range": {
+        "startLine": 16,
+        "startChar": 36,
+        "endLine": 16,
+        "endChar": 64
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c34f13a_839fa95d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T20:03:30Z",
+      "side": 1,
+      "message": "can you please resolve these comments (TODO, XXX)?",
+      "range": {
+        "startLine": 84,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 47
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa6c7a29_7cf1ac5b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T20:03:30Z",
+      "side": 1,
+      "message": "it\u0027s interesting to allocate arrays of command buffers. but if we just use these for primaries we can probably allocate single buffers at a time.",
+      "range": {
+        "startLine": 93,
+        "startChar": 3,
+        "endLine": 99,
+        "endChar": 52
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e0cdcc6_b8dadbf2",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T20:03:30Z",
+      "side": 1,
+      "message": "std::list can have exceptionally bad performance. std::vector should be better in almost all operations. if you take the above suggestion we could just have a std::vector of free command buffers. I don\u0027t know if we\u0027d need to track the currently allocated.",
+      "range": {
+        "startLine": 101,
+        "startChar": 3,
+        "endLine": 104,
+        "endChar": 55
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52e298a5_fe42108d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T20:03:30Z",
+      "side": 1,
+      "message": "I think we can assume these are primaries as mentioned earlier.",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 24
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68f94331_9280b5cf",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T20:03:30Z",
+      "side": 1,
+      "message": "please refactor the code to accept a VkDevice as a first parameter when necessary instead of storing a reference.",
+      "range": {
+        "startLine": 108,
+        "startChar": 4,
+        "endLine": 108,
+        "endChar": 12
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fb71ffc_33099874",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T20:03:30Z",
+      "side": 1,
+      "message": "please resolve FIXMEs before uploading CLs for review",
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24e0deff_1b5625eb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T20:03:30Z",
+      "side": 1,
+      "message": "ideally we could make this a non-error-throwing operation. like it just pushes back a vk::CommandBuffer.",
+      "range": {
+        "startLine": 679,
+        "startChar": 8,
+        "endLine": 679,
+        "endChar": 94
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b64963e_4097367e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T20:03:30Z",
+      "side": 1,
+      "message": "nit: avoid hard to read names like mSecd",
+      "range": {
+        "startLine": 475,
+        "startChar": 30,
+        "endLine": 475,
+        "endChar": 46
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
