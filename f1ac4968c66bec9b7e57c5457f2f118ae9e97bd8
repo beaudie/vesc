@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd5a3c0a_908a91b4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-10T15:00:50Z",
+      "side": 1,
+      "message": "ASSERT can expand to nothing. The expression inside the ASSERT may never be called in non-debug builds.",
+      "range": {
+        "startLine": 26,
+        "startChar": 8,
+        "endLine": 26,
+        "endChar": 81
+      },
+      "revId": "f1ac4968c66bec9b7e57c5457f2f118ae9e97bd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a9b4678_3537322f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-10T15:00:50Z",
+      "side": 1,
+      "message": "You should add a way for more buffers to be allocated if necessary. 50 secondary command buffers is not too many with the way we record things.",
+      "range": {
+        "startLine": 81,
+        "startChar": 4,
+        "endLine": 81,
+        "endChar": 37
+      },
+      "revId": "f1ac4968c66bec9b7e57c5457f2f118ae9e97bd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5260d25a_e1f0a25a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-10T15:00:50Z",
+      "side": 1,
+      "message": "Shouldn\u0027t there be a reset call?",
+      "revId": "f1ac4968c66bec9b7e57c5457f2f118ae9e97bd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f05ab43e_fb5d0c2c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-10T15:00:50Z",
+      "side": 1,
+      "message": "Add `override`.",
+      "range": {
+        "startLine": 43,
+        "startChar": 30,
+        "endLine": 43,
+        "endChar": 31
+      },
+      "revId": "f1ac4968c66bec9b7e57c5457f2f118ae9e97bd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "078c469b_4e583d18",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-10T15:00:50Z",
+      "side": 1,
+      "message": "static constexpr int kNullPollAllocatedId \u003d -1;",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 65,
+        "endChar": 49
+      },
+      "revId": "f1ac4968c66bec9b7e57c5457f2f118ae9e97bd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4448e423_c221f354",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-10T15:00:50Z",
+      "side": 1,
+      "message": "Per style guide, use pointers for outputs. Non-const references should be avoided.",
+      "range": {
+        "startLine": 86,
+        "startChar": 48,
+        "endLine": 86,
+        "endChar": 55
+      },
+      "revId": "f1ac4968c66bec9b7e57c5457f2f118ae9e97bd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e3406a3_0e4495ba",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-10T15:00:50Z",
+      "side": 1,
+      "message": "... constexpr ... kMaxBuffers ..",
+      "range": {
+        "startLine": 91,
+        "startChar": 11,
+        "endLine": 91,
+        "endChar": 38
+      },
+      "revId": "f1ac4968c66bec9b7e57c5457f2f118ae9e97bd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
