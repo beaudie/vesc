@@ -78,12 +78,17 @@ constexpr bool kEnableCommandGraphDiagnostics = false;
 void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
                           const vk::PrimaryCommandBuffer &commandBuffer,
                           const std::vector<VkSemaphore> &waitSemaphores,
-                          VkPipelineStageFlags *waitStageMask,
                           const SignalSemaphoreVector &signalSemaphores)
 {
     submitInfo->sType              = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo->commandBufferCount = commandBuffer.valid() ? 1 : 0;
     submitInfo->pCommandBuffers    = commandBuffer.ptr();
+
+    static const VkPipelineStageFlags waitStageMask[] = {
+        VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+        VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+    };
+    ASSERT(std::extent<decltype(waitStageMask)>() == signalSemaphores.max_size());
 
     submitInfo->waitSemaphoreCount = waitSemaphores.size();
     submitInfo->pWaitSemaphores    = waitSemaphores.data();
@@ -907,8 +912,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
 
         // Submit the command buffer
         VkSubmitInfo submitInfo       = {};
-        VkPipelineStageFlags waitMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-        InitializeSubmitInfo(&submitInfo, commandBatch.get(), {}, &waitMask, {});
+        InitializeSubmitInfo(&submitInfo, commandBatch.get(), {}, {});
 
         ANGLE_TRY(submitFrame(submitInfo, std::move(commandBuffer)));
 
@@ -2097,9 +2101,7 @@ angle::Result ContextVk::flushImpl(const gl::Semaphore *clientSignalSemaphore)
     }
 
     VkSubmitInfo submitInfo       = {};
-    VkPipelineStageFlags waitMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
-    InitializeSubmitInfo(&submitInfo, commandBatch.get(), mWaitSemaphores, &waitMask,
-                         signalSemaphores);
+    InitializeSubmitInfo(&submitInfo, commandBatch.get(), mWaitSemaphores, signalSemaphores);
 
     ANGLE_TRY(submitFrame(submitInfo, commandBatch.release()));
 
