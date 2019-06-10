@@ -22,6 +22,30 @@
       "revId": "43eab82613bb75872a1ef6609ffcb7cab357b114",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd99401f_54b79c55",
+        "filename": "src/tests/compiler_tests/InvalidVariables_test.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-10T19:02:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bd404852_cc1f889c",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "43eab82613bb75872a1ef6609ffcb7cab357b114",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
