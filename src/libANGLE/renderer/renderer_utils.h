@@ -307,6 +307,132 @@ gl::Rectangle ClipRectToScissor(const gl::State &glState, const gl::Rectangle &r
 // Helper method to intialize a FeatureSet with overrides from the DisplayState
 void OverrideFeaturesWithDisplayState(angle::FeatureSetBase *features,
                                       const egl::DisplayState &state);
+
+template <typename In>
+struct RestartIndexHelper
+{
+    static constexpr In value = static_cast<In>((size_t{1} << (8 * sizeof(In))) - 1);
+};
+
+static_assert(RestartIndexHelper<uint8_t>::value == 0xFF,
+              "verify value of RestartIndexHelper for uint8_t");
+static_assert(RestartIndexHelper<uint16_t>::value == 0xFFFF,
+              "verify value of RestartIndexHelper for uint16_t");
+static_assert(RestartIndexHelper<uint32_t>::value == 0xFFFFFFFF,
+              "verify value of RestartIndexHelper for uint32_t");
+
+template <typename In>
+size_t LineLoopRestartNumIndicesHelper(GLsizei indexCount, const void *srcPtr)
+{
+    constexpr In restartIndex = RestartIndexHelper<In>::value;
+    const In *inIndices       = reinterpret_cast<const In *>(srcPtr);
+    size_t numIndices         = 0;
+    // See PrimitiveRestartHelper() below for more info on how numIndices is calculated.
+    GLsizei loopStartIndex = 0;
+    for (GLsizei i = 0; i < indexCount; i++)
+    {
+        In vertex = inIndices[i];
+        if (vertex != restartIndex)
+        {
+            numIndices++;
+        }
+        else
+        {
+            // Size of loop is i - loopStartIndex;
+            if (i >= loopStartIndex + 2)
+            {
+                numIndices++;
+                numIndices++;
+            }
+            else if (i == loopStartIndex + 1)
+            {
+                numIndices--;
+            }
+            loopStartIndex = i + 1;
+        }
+    }
+    if (indexCount >= loopStartIndex + 2)
+    {
+        numIndices++;
+    }
+    return numIndices;
+}
+
+inline size_t GetLineLoopIndexCountWithRestart(gl::DrawElementsType glIndexType,
+                                               GLsizei indexCount,
+                                               const void *srcPtr)
+{
+    switch (glIndexType)
+    {
+        case gl::DrawElementsType::UnsignedByte:
+            return LineLoopRestartNumIndicesHelper<uint8_t>(indexCount, srcPtr);
+        case gl::DrawElementsType::UnsignedShort:
+            return LineLoopRestartNumIndicesHelper<uint16_t>(indexCount, srcPtr);
+        case gl::DrawElementsType::UnsignedInt:
+            return LineLoopRestartNumIndicesHelper<uint32_t>(indexCount, srcPtr);
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+// Writes the line-strip vertices for a line loop to outPtr,
+// where outLimit is calculated as in GetPrimitiveRestartIndexCount.
+template <typename In, typename Out>
+void CopyLineLoopIndicesWithRestart(GLsizei indexCount,
+                                    const void *srcPtr,
+                                    size_t outLimit,
+                                    void *outPtr,
+                                    Out outRestartIndex)
+{
+    constexpr In restartIndex = RestartIndexHelper<In>::value;
+    const In *inIndices       = reinterpret_cast<const In *>(srcPtr);
+    Out *outIndices           = reinterpret_cast<Out *>(outPtr);
+    Out *outEnd               = outIndices + outLimit;
+    GLsizei loopStartIndex    = 0;
+    for (GLsizei i = 0; i < indexCount; i++)
+    {
+        In vertex = inIndices[i];
+        if (vertex != restartIndex)
+        {
+            *(outIndices++) = vertex;
+        }
+        else
+        {
+            if (i >= loopStartIndex + 2)
+            {
+                // Emit an extra vertex only if the loop is not empty
+                // (has at least two vertices.)
+                *(outIndices++) = inIndices[loopStartIndex];
+                // Then restart the strip.
+                *(outIndices++) = outRestartIndex;
+            }
+            else if (i == loopStartIndex + 1)
+            {
+                // Emitted a vertex for an empty loop; overwrite it.
+                outIndices--;
+            }
+            loopStartIndex = i + 1;
+        }
+        if (outIndices >= outEnd)
+        {
+            ASSERT(outIndices == outEnd);
+            // Reached end of out vertices.
+            // We want to prevent out-of-bounds writes
+            // (from a "fake" vertex in a size-1 loop),
+            // so we can exit early here.
+            // Every non-empty loop emits at least four vertices,
+            // and we've emitted at most one "fake" vertex,
+            // so there aren't any more loops to write.
+            return;
+        }
+    }
+    if (indexCount >= loopStartIndex + 2)
+    {
+        // Close the last loop if not empty.
+        *(outIndices++) = inIndices[loopStartIndex];
+    }
+}
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_RENDERER_UTILS_H_
