@@ -78,11 +78,13 @@ Ensure `depot_tools` is in your path as it provides ninja.
 
 ### Building with Visual Studio
 
-Run `scripts/msvs_projects.py` to generate a Visual Studio solution in `out/sln/ANGLE.sln`.
-This script runs GN and consolidates all the targets in `out` into a single meta-solution.
+To generate the Visual Studio solution in `out/Debug/angle-debug.sln`:
+```
+gn gen out/Debug --sln=angle-debug --ide=vs<2017/2019>
+```
 
 In Visual Studio:
- 1. Open the ANGLE solution file `out/sln/ANGLE.sln`.
+ 1. Open the ANGLE solution file `out/Debug/angle-debug.sln`.
  2. The configurations found in your `out` directory will be mapped to configurations in the configuration manager.  For compatibility reasons all configurations are listed as 64-bits.
  3. Right click the "all" solution and select build.  "Build Solution" is not functional with GN; instead build one target at a time."
 Once the build completes the output directory for your selected configuration (e.g. `out/Release_x64`) will contain the required libraries and dlls to build and run an OpenGL ES 2.0 application.  ANGLE executables (tests and samples) are under out/sln.
