@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "bf061578_bc0dbc52",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-10T17:51:21Z",
+      "side": 1,
+      "message": "All right, I will keep all the ASSERT there",
+      "parentUuid": "db92c8fd_13d15089",
+      "range": {
+        "startLine": 26,
+        "startChar": 8,
+        "endLine": 26,
+        "endChar": 81
+      },
+      "revId": "f1ac4968c66bec9b7e57c5457f2f118ae9e97bd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a9b4678_3537322f",
         "filename": "src/libANGLE/renderer/vulkan/CommandVk.cpp",
         "patchSetId": 1
