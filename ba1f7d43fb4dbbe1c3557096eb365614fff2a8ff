@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "abaf7246_6519c793",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-10T14:44:38Z",
+      "side": 1,
+      "message": "There are multiple issues here, the first of which is that you are reading from the buffer while the GPU could still be writing to it. This implementation would need a \"finish\" call to work. We don\u0027t want that though.\n\nSince the source buffer is already on the GPU, you can use vkCmdCopyBuffer to do the copy on the GPU itself. It\u0027s important that you take care of the barriers and set a graph dependency between the buffers.\n\nOnce done, you can also enable the relevant dEQP tests.",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 47
+      },
+      "revId": "ba1f7d43fb4dbbe1c3557096eb365614fff2a8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ce3e994_f0d2e8f3",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-10T14:44:38Z",
+      "side": 1,
+      "message": "Does this fail if you enable it?",
+      "range": {
+        "startLine": 479,
+        "startChar": 23,
+        "endLine": 479,
+        "endChar": 44
+      },
+      "revId": "ba1f7d43fb4dbbe1c3557096eb365614fff2a8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
