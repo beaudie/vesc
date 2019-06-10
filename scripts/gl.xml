@@ -598,6 +598,8 @@ typedef unsigned int GLhandleARB;
             <enum name="GL_HANDLE_TYPE_D3D11_IMAGE_EXT"/>
             <enum name="GL_HANDLE_TYPE_D3D11_IMAGE_KMT_EXT"/>
             <enum name="GL_HANDLE_TYPE_D3D12_FENCE_EXT"/>
+            <enum name="GL_HANDLE_TYPE_ZIRCON_VMO_ANGLE"/>
+            <enum name="GL_HANDLE_TYPE_ZIRCON_EVENT_ANGLE"/>
         </group>
 
         <group name="FeedbackType">
@@ -10078,6 +10080,8 @@ typedef unsigned int GLhandleARB;
         <enum value="0x958A" name="GL_HANDLE_TYPE_D3D12_RESOURCE_EXT"/>
         <enum value="0x958B" name="GL_HANDLE_TYPE_D3D11_IMAGE_EXT"/>
         <enum value="0x958C" name="GL_HANDLE_TYPE_D3D11_IMAGE_KMT_EXT"/>
+        <enum value="0xA0C5" name="GL_HANDLE_TYPE_ZIRCON_VMO_ANGLE"/>
+        <enum value="0xA0C6" name="GL_HANDLE_TYPE_ZIRCON_EVENT_ANGLE"/>
         <enum value="0x958D" name="GL_LAYOUT_GENERAL_EXT"/>
         <enum value="0x958E" name="GL_LAYOUT_COLOR_ATTACHMENT_EXT"/>
         <enum value="0x958F" name="GL_LAYOUT_DEPTH_STENCIL_ATTACHMENT_EXT"/>
@@ -19433,6 +19437,13 @@ typedef unsigned int GLhandleARB;
             <param><ptype>GLint</ptype> <name>fd</name></param>
         </command>
         <command>
+            <proto>void <name>glImportMemoryZirconHandleANGLE</name></proto>
+            <param><ptype>GLuint</ptype> <name>memory</name></param>
+            <param><ptype>GLuint64</ptype> <name>size</name></param>
+            <param group="ExternalHandleType"><ptype>GLenum</ptype> <name>handleType</name></param>
+            <param><ptype>GLuint</ptype> <name>handle</name></param>
+        </command>
+        <command>
             <proto>void <name>glImportMemoryWin32HandleEXT</name></proto>
             <param><ptype>GLuint</ptype> <name>memory</name></param>
             <param><ptype>GLuint64</ptype> <name>size</name></param>
@@ -19451,6 +19462,12 @@ typedef unsigned int GLhandleARB;
             <param><ptype>GLuint</ptype> <name>semaphore</name></param>
             <param group="ExternalHandleType"><ptype>GLenum</ptype> <name>handleType</name></param>
             <param><ptype>GLint</ptype> <name>fd</name></param>
+        </command>
+        <command>
+            <proto>void <name>glImportSemaphoreZirconHandleANGLE</name></proto>
+            <param><ptype>GLuint</ptype> <name>semaphore</name></param>
+            <param group="ExternalHandleType"><ptype>GLenum</ptype> <name>handleType</name></param>
+            <param><ptype>GLuint</ptype> <name>handle</name></param>
         </command>
         <command>
             <proto>void <name>glImportSemaphoreWin32HandleEXT</name></proto>
@@ -43838,6 +43855,12 @@ typedef unsigned int GLhandleARB;
                 <command name="glImportMemoryFdEXT"/>
             </require>
         </extension>
+        <extension name="GL_ANGLE_memory_object_zircon_handle" supported="gl|gles2">
+            <require>
+                <enum name="GL_HANDLE_TYPE_ZIRCON_VMO_ANGLE"/>
+                <command name="glImportMemoryZirconHandleANGLE"/>
+            </require>
+        </extension>
         <extension name="GL_EXT_memory_object_win32" supported="gl|gles2">
             <require>
                 <enum name="GL_HANDLE_TYPE_OPAQUE_WIN32_EXT"/>
@@ -44137,6 +44160,12 @@ typedef unsigned int GLhandleARB;
             <require>
                 <enum name="GL_HANDLE_TYPE_OPAQUE_FD_EXT"/>
                 <command name="glImportSemaphoreFdEXT"/>
+            </require>
+        </extension>
+        <extension name="GL_ANGLE_semaphore_zircon_handle" supported="gl|gles2">
+            <require>
+                <enum name="GL_HANDLE_TYPE_ZIRCON_EVENT_ANGLE"/>
+                <command name="glImportSemaphoreZirconHandleANGLE"/>
             </require>
         </extension>
         <extension name="GL_EXT_semaphore_win32" supported="gl|gles2">
