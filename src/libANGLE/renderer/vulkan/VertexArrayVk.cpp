@@ -601,7 +601,8 @@ angle::Result VertexArrayVk::handleLineLoop(ContextVk *contextVk,
                                             GLint firstVertex,
                                             GLsizei vertexOrIndexCount,
                                             gl::DrawElementsType indexTypeOrInvalid,
-                                            const void *indices)
+                                            const void *indices,
+                                            size_t *numIndicesOut)
 {
     if (indexTypeOrInvalid != gl::DrawElementsType::InvalidEnum)
     {
@@ -615,7 +616,7 @@ angle::Result VertexArrayVk::handleLineLoop(ContextVk *contextVk,
                 ANGLE_TRY(mLineLoopHelper.streamIndices(
                     contextVk, indexTypeOrInvalid, vertexOrIndexCount,
                     reinterpret_cast<const uint8_t *>(indices), &mCurrentElementArrayBuffer,
-                    &mCurrentElementArrayBufferOffset));
+                    &mCurrentElementArrayBufferOffset, numIndicesOut));
             }
             else
             {
@@ -624,7 +625,7 @@ angle::Result VertexArrayVk::handleLineLoop(ContextVk *contextVk,
                 BufferVk *elementArrayBufferVk = vk::GetImpl(elementArrayBuffer);
                 ANGLE_TRY(mLineLoopHelper.getIndexBufferForElementArrayBuffer(
                     contextVk, elementArrayBufferVk, indexTypeOrInvalid, vertexOrIndexCount, offset,
-                    &mCurrentElementArrayBuffer, &mCurrentElementArrayBufferOffset));
+                    &mCurrentElementArrayBuffer, &mCurrentElementArrayBufferOffset, numIndicesOut));
             }
         }
 
@@ -651,6 +652,7 @@ angle::Result VertexArrayVk::handleLineLoop(ContextVk *contextVk,
         mLineLoopBufferFirstIndex = firstVertex;
         mLineLoopBufferLastIndex  = lastVertex;
     }
+    *numIndicesOut = vertexOrIndexCount + 1;
 
     return angle::Result::Continue;
 }

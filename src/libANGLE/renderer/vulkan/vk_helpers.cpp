@@ -1017,9 +1017,11 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
                                                                   int indexCount,
                                                                   intptr_t elementArrayOffset,
                                                                   vk::BufferHelper **bufferOut,
-                                                                  VkDeviceSize *bufferOffsetOut)
+                                                                  VkDeviceSize *bufferOffsetOut,
+                                                                  size_t *numIndicesOut)
 {
-    if (glIndexType == gl::DrawElementsType::UnsignedByte)
+    if (glIndexType == gl::DrawElementsType::UnsignedByte ||
+        contextVk->getState().isPrimitiveRestartEnabled())
     {
         TRACE_EVENT0("gpu.angle", "LineLoopHelper::getIndexBufferForElementArrayBuffer");
         // Needed before reading buffer or we could get stale data.
@@ -1029,10 +1031,12 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
         ANGLE_TRY(elementArrayBufferVk->mapImpl(contextVk, &srcDataMapping));
         ANGLE_TRY(streamIndices(contextVk, glIndexType, indexCount,
                                 static_cast<const uint8_t *>(srcDataMapping) + elementArrayOffset,
-                                bufferOut, bufferOffsetOut));
+                                bufferOut, bufferOffsetOut, numIndicesOut));
         ANGLE_TRY(elementArrayBufferVk->unmapImpl(contextVk));
         return angle::Result::Continue;
     }
+
+    *numIndicesOut = indexCount + 1;
 
     VkIndexType indexType = gl_vk::kIndexTypeMap[glIndexType];
     ASSERT(indexType == VK_INDEX_TYPE_UINT16 || indexType == VK_INDEX_TYPE_UINT32);
@@ -1062,40 +1066,205 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
     return angle::Result::Continue;
 }
 
+namespace
+{
+template <typename In>
+struct RestartIndexHelper
+{
+    static constexpr In value = static_cast<In>((size_t{1} << (8 * sizeof(In))) - 1);
+};
+
+static_assert(RestartIndexHelper<uint8_t>::value == 0xFF,
+              "verify value of RestartIndexHelper for uint8_t");
+static_assert(RestartIndexHelper<uint16_t>::value == 0xFFFF,
+              "verify value of RestartIndexHelper for uint16_t");
+static_assert(RestartIndexHelper<uint32_t>::value == 0xFFFFFFFF,
+              "verify value of RestartIndexHelper for uint32_t");
+
+template <typename In>
+size_t GetPrimitiveRestartNumIndicesHelper(GLsizei indexCount, const uint8_t *srcPtr)
+{
+    constexpr In restartIndex = RestartIndexHelper<In>::value;
+    const In *inIndices       = reinterpret_cast<const In *>(srcPtr);
+    size_t numIndices         = 0;
+    // See PrimitiveRestartHelper() below for more info on how numIndices is calculated.
+    GLsizei loopStartIndex = 0;
+    for (GLsizei i = 0; i < indexCount; i++)
+    {
+        In vertex = inIndices[i];
+        if (vertex != restartIndex)
+        {
+            numIndices++;
+        }
+        else
+        {
+            // Size of loop is i - loopStartIndex;
+            if (i >= loopStartIndex + 2)
+            {
+                numIndices++;
+                numIndices++;
+            }
+            else if (i == loopStartIndex + 1)
+            {
+                numIndices--;
+            }
+            loopStartIndex = i + 1;
+        }
+    }
+    if (indexCount >= loopStartIndex + 2)
+    {
+        numIndices++;
+    }
+    return numIndices;
+}
+
+size_t GetPrimitiveRestartNumIndices(gl::DrawElementsType glIndexType,
+                                     GLsizei indexCount,
+                                     const uint8_t *srcPtr)
+{
+    switch (glIndexType)
+    {
+        case gl::DrawElementsType::UnsignedByte:
+            return GetPrimitiveRestartNumIndicesHelper<uint8_t>(indexCount, srcPtr);
+        case gl::DrawElementsType::UnsignedShort:
+            return GetPrimitiveRestartNumIndicesHelper<uint16_t>(indexCount, srcPtr);
+        case gl::DrawElementsType::UnsignedInt:
+            return GetPrimitiveRestartNumIndicesHelper<uint32_t>(indexCount, srcPtr);
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+// Writes the line-strip vertices for a line loop to outPtr,
+// where outLimit is calculated with the above function.
+template <typename In, typename Out = In>
+void PrimitiveRestartHelper(GLsizei indexCount,
+                            const uint8_t *srcPtr,
+                            size_t outLimit,
+                            uint8_t *outPtr)
+{
+    constexpr In restartIndex     = RestartIndexHelper<In>::value;
+    constexpr Out outRestartIndex = RestartIndexHelper<Out>::value;
+    const In *inIndices           = reinterpret_cast<const In *>(srcPtr);
+    Out *outIndices               = reinterpret_cast<Out *>(outPtr);
+    Out *outEnd                   = outIndices + outLimit;
+    GLsizei loopStartIndex        = 0;
+    for (GLsizei i = 0; i < indexCount; i++)
+    {
+        In vertex = inIndices[i];
+        if (vertex != restartIndex)
+        {
+            *(outIndices++) = vertex;
+        }
+        else
+        {
+            if (i >= loopStartIndex + 2)
+            {
+                // Emit an extra vertex only if the loop is not empty
+                // (has at least two vertices.)
+                *(outIndices++) = inIndices[loopStartIndex];
+                // Then restart the strip.
+                *(outIndices++) = outRestartIndex;
+            }
+            else if (i == loopStartIndex + 1)
+            {
+                // Emitted a vertex for an empty loop; overwrite it.
+                outIndices--;
+            }
+            loopStartIndex = i + 1;
+        }
+        if (outIndices >= outEnd)
+        {
+            ASSERT(outIndices == outEnd);
+            // Reached end of out vertices.
+            // We want to prevent out-of-bounds writes
+            // (from a "fake" vertex in a size-1 loop),
+            // so we can exit early here.
+            // Every non-empty loop emits at least four vertices,
+            // and we've emitted at most one "fake" vertex,
+            // so there aren't any more loops to write.
+            return;
+        }
+    }
+    if (indexCount >= loopStartIndex + 2)
+    {
+        // Close the last loop if not empty.
+        *(outIndices++) = inIndices[loopStartIndex];
+    }
+}
+
+void HandlePrimitiveRestart(gl::DrawElementsType glIndexType,
+                            GLsizei indexCount,
+                            const uint8_t *srcPtr,
+                            size_t outLimit,
+                            uint8_t *outPtr)
+{
+    switch (glIndexType)
+    {
+        case gl::DrawElementsType::UnsignedByte:
+            PrimitiveRestartHelper<uint8_t, uint16_t>(indexCount, srcPtr, outLimit, outPtr);
+            break;
+        case gl::DrawElementsType::UnsignedShort:
+            PrimitiveRestartHelper<uint16_t>(indexCount, srcPtr, outLimit, outPtr);
+            break;
+        case gl::DrawElementsType::UnsignedInt:
+            PrimitiveRestartHelper<uint32_t>(indexCount, srcPtr, outLimit, outPtr);
+            break;
+        default:
+            UNREACHABLE();
+    }
+}
+}  // namespace
+
 angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
                                             gl::DrawElementsType glIndexType,
                                             GLsizei indexCount,
                                             const uint8_t *srcPtr,
                                             vk::BufferHelper **bufferOut,
-                                            VkDeviceSize *bufferOffsetOut)
+                                            VkDeviceSize *bufferOffsetOut,
+                                            size_t *numIndicesOut)
 {
     VkIndexType indexType = gl_vk::kIndexTypeMap[glIndexType];
 
     uint8_t *indices = nullptr;
 
     auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
-    size_t allocateBytes = unitSize * (indexCount + 1);
+    size_t numOutIndices = static_cast<size_t>(indexCount) + 1;
+    if (contextVk->getState().isPrimitiveRestartEnabled())
+    {
+        numOutIndices = GetPrimitiveRestartNumIndices(glIndexType, indexCount, srcPtr);
+    }
+    *numIndicesOut       = numOutIndices;
+    size_t allocateBytes = unitSize * numOutIndices;
     ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes,
                                            reinterpret_cast<uint8_t **>(&indices), nullptr,
                                            bufferOffsetOut, nullptr));
     *bufferOut = mDynamicIndexBuffer.getCurrentBuffer();
 
-    if (glIndexType == gl::DrawElementsType::UnsignedByte)
+    if (contextVk->getState().isPrimitiveRestartEnabled())
     {
-        // Vulkan doesn't support uint8 index types, so we need to emulate it.
-        ASSERT(indexType == VK_INDEX_TYPE_UINT16);
-        uint16_t *indicesDst = reinterpret_cast<uint16_t *>(indices);
-        for (int i = 0; i < indexCount; i++)
-        {
-            indicesDst[i] = srcPtr[i];
-        }
-
-        indicesDst[indexCount] = srcPtr[0];
+        HandlePrimitiveRestart(glIndexType, indexCount, srcPtr, numOutIndices, indices);
     }
     else
     {
-        memcpy(indices, srcPtr, unitSize * indexCount);
-        memcpy(indices + unitSize * indexCount, srcPtr, unitSize);
+        if (glIndexType == gl::DrawElementsType::UnsignedByte)
+        {
+            // Vulkan doesn't support uint8 index types, so we need to emulate it.
+            ASSERT(indexType == VK_INDEX_TYPE_UINT16);
+            uint16_t *indicesDst = reinterpret_cast<uint16_t *>(indices);
+            for (int i = 0; i < indexCount; i++)
+            {
+                indicesDst[i] = srcPtr[i];
+            }
+
+            indicesDst[indexCount] = srcPtr[0];
+        }
+        else
+        {
+            memcpy(indices, srcPtr, unitSize * indexCount);
+            memcpy(indices + unitSize * indexCount, srcPtr, unitSize);
+        }
     }
 
     ANGLE_TRY(mDynamicIndexBuffer.flush(contextVk));
@@ -1116,8 +1285,7 @@ void LineLoopHelper::destroy(VkDevice device)
 void LineLoopHelper::Draw(uint32_t count, vk::CommandBuffer *commandBuffer)
 {
     // Our first index is always 0 because that's how we set it up in createIndexBuffer*.
-    // Note: this could theoretically overflow and wrap to zero.
-    commandBuffer->drawIndexed(count + 1);
+    commandBuffer->drawIndexed(count);
 }
 
 // BufferHelper implementation.
