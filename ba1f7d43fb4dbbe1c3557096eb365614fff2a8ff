@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0a5327e1_7f82a9ee",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-10T14:57:28Z",
+      "side": 1,
+      "message": "It\u0027s also worth noting that this CL is implementing buffer copy while the description mentions ES 3.0 map buffer semantics. There\u0027s a bunch of new map bits in ES 3.0 that we currently ignore. \n\nMAP_INVALIDATE_RANGE_BIT, MAP_INVALIDATE_BUFFER_BIT, MAP_FLUSH_EXPLICIT_BITMAP_UNSYNCHRONIZED_BIT. See the ES 3.0 spec.",
+      "parentUuid": "abaf7246_6519c793",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 47
+      },
+      "revId": "ba1f7d43fb4dbbe1c3557096eb365614fff2a8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ce3e994_f0d2e8f3",
         "filename": "src/tests/gl_tests/BufferDataTest.cpp",
         "patchSetId": 1
