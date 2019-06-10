@@ -154,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "cfadf4cd_5f84c1ea",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-10T16:52:12Z",
+      "side": 1,
+      "message": "Ah, just find the `valid()` in grandparent is not a virtual function, I can not override/virtual it. So I rename it to something else.   `valid` -\u003e `allocated`",
+      "parentUuid": "f05ab43e_fb5d0c2c",
+      "range": {
+        "startLine": 43,
+        "startChar": 30,
+        "endLine": 43,
+        "endChar": 31
+      },
+      "revId": "f1ac4968c66bec9b7e57c5457f2f118ae9e97bd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "078c469b_4e583d18",
         "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
         "patchSetId": 1
@@ -221,6 +245,30 @@
       "revId": "f1ac4968c66bec9b7e57c5457f2f118ae9e97bd8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0684187c_e70cd442",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-10T16:52:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4448e423_c221f354",
+      "range": {
+        "startLine": 86,
+        "startChar": 48,
+        "endLine": 86,
+        "endChar": 55
+      },
+      "revId": "f1ac4968c66bec9b7e57c5457f2f118ae9e97bd8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
