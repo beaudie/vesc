@@ -684,6 +684,27 @@ class PipelineHelper final : angle::NonCopyable
 
 ANGLE_INLINE PipelineHelper::PipelineHelper(Pipeline &&pipeline) : mPipeline(std::move(pipeline)) {}
 
+class TextureDescriptorDesc
+{
+  public:
+    TextureDescriptorDesc();
+    ~TextureDescriptorDesc();
+
+    TextureDescriptorDesc(const TextureDescriptorDesc &other);
+    TextureDescriptorDesc &operator=(const TextureDescriptorDesc &other);
+
+    void update(size_t index, Serial serial);
+    size_t hash() const;
+    void reset();
+
+    bool operator==(const TextureDescriptorDesc &other) const;
+
+    uint32_t getMaxIndex() const { return mMaxIndex; }
+
+  private:
+    uint32_t mMaxIndex;
+    gl::ActiveTextureArray<uint32_t> mSerials;
+};
 }  // namespace vk
 }  // namespace rx
 
@@ -718,6 +739,12 @@ template <>
 struct hash<rx::vk::PipelineLayoutDesc>
 {
     size_t operator()(const rx::vk::PipelineLayoutDesc &key) const { return key.hash(); }
+};
+
+template <>
+struct hash<rx::vk::TextureDescriptorDesc>
+{
+    size_t operator()(const rx::vk::TextureDescriptorDesc &key) const { return key.hash(); }
 };
 }  // namespace std
 
@@ -884,7 +911,6 @@ constexpr uint32_t kReservedDriverUniformBindingCount = 1;
 constexpr uint32_t kVertexUniformsBindingIndex = 0;
 // Binding index for default uniforms in the fragment shader:
 constexpr uint32_t kFragmentUniformsBindingIndex = 1;
-
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_VULKAN_VK_CACHE_UTILS_H_
