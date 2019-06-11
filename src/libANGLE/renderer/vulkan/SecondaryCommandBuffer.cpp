@@ -416,6 +416,9 @@ std::string SecondaryCommandBuffer::dumpCommands(const char *separator) const
                 case CommandID::ResetQueryPool:
                     result += "ResetQueryPool";
                     break;
+                case CommandID::ResolveImage:
+                    result += "ResolveImage";
+                    break;
                 case CommandID::SetEvent:
                     result += "SetEvent";
                     break;

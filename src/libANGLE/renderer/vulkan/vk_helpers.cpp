@@ -1215,17 +1215,94 @@ void BufferHelper::release(DisplayVk *display, std::vector<GarbageObjectBase> *g
     mDeviceMemory.dumpResources(garbageQueue);
 }
 
-void BufferHelper::onWrite(ContextVk *contextVk, VkAccessFlags writeAccessType)
+bool BufferHelper::needsOnReadBarrier(VkAccessFlags readAccessType,
+                                      VkAccessFlags *barrierSrcOut,
+                                      VkAccessFlags *barrierDstOut)
 {
-    if (mCurrentReadAccess != 0 || mCurrentWriteAccess != 0)
-    {
-        addGlobalMemoryBarrier(mCurrentReadAccess | mCurrentWriteAccess, writeAccessType);
-    }
+    bool needsBarrier =
+        mCurrentWriteAccess != 0 && (mCurrentReadAccess & readAccessType) != readAccessType;
+    *barrierSrcOut = mCurrentWriteAccess;
+    *barrierDstOut = readAccessType;
+
+    mCurrentReadAccess |= readAccessType;
+
+    return needsBarrier;
+}
+
+bool BufferHelper::needsOnWriteBarrier(VkAccessFlags writeAccessType,
+                                       VkAccessFlags *barrierSrcOut,
+                                       VkAccessFlags *barrierDstOut)
+{
+    bool needsBarrier = mCurrentReadAccess != 0 || mCurrentWriteAccess != 0;
+
+    *barrierSrcOut = mCurrentReadAccess | mCurrentWriteAccess;
+    *barrierDstOut = writeAccessType;
 
     mCurrentWriteAccess = writeAccessType;
     mCurrentReadAccess  = 0;
 
+    return needsBarrier;
+}
+
+void BufferHelper::onRead(ContextVk *contextVk,
+                          CommandGraphResource *reader,
+                          VkAccessFlags readAccessType)
+{
+    VkAccessFlags barrierSrc, barrierDst;
+    if (needsOnReadBarrier(readAccessType, &barrierSrc, &barrierDst))
+    {
+        reader->addDependencyAndMemoryBarrier(contextVk, this, barrierSrc, barrierDst);
+    }
+    else
+    {
+        reader->addDependency(contextVk, this);
+    }
+}
+
+void BufferHelper::onWrite(ContextVk *contextVk,
+                           CommandGraphResource *writer,
+                           VkAccessFlags writeAccessType)
+{
+    VkAccessFlags barrierSrc, barrierDst;
+    if (needsOnWriteBarrier(writeAccessType, &barrierSrc, &barrierDst))
+    {
+        writer->addDependencyAndMemoryBarrier(contextVk, this, barrierSrc, barrierDst);
+    }
+    else
+    {
+        writer->addDependency(contextVk, this);
+    }
+
     bool hostVisible = mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+    if (hostVisible && writeAccessType != VK_ACCESS_HOST_WRITE_BIT)
+    {
+        contextVk->onHostVisibleBufferWrite();
+    }
+}
+
+void BufferHelper::onReadByBuffer(ContextVk *contextVk,
+                                  BufferHelper *reader,
+                                  VkAccessFlags readAccessType,
+                                  VkAccessFlags writeAccessType)
+{
+    VkAccessFlags thisBarrierSrc, thisBarrierDst;
+    VkAccessFlags readerBarrierSrc, readerBarrierDst;
+
+    bool thisNeedsBarrier = needsOnReadBarrier(readAccessType, &thisBarrierSrc, &thisBarrierDst);
+    bool readerNeedsBarrier =
+        reader->needsOnWriteBarrier(writeAccessType, &readerBarrierSrc, &readerBarrierDst);
+
+    if (thisNeedsBarrier || readerNeedsBarrier)
+    {
+        reader->addDependencyAndMemoryBarrier(contextVk, this, thisBarrierSrc | readerBarrierSrc,
+                                              thisBarrierDst | readerBarrierDst);
+    }
+    else
+    {
+        reader->addDependency(contextVk, this);
+    }
+
+    bool hostVisible = reader->mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
     if (hostVisible && writeAccessType != VK_ACCESS_HOST_WRITE_BIT)
     {
         contextVk->onHostVisibleBufferWrite();
@@ -1668,25 +1745,62 @@ bool ImageHelper::isLayoutChangeNecessary(ImageLayout newLayout) const
     return !sameLayoutReadAfterRead;
 }
 
-void ImageHelper::changeLayout(VkImageAspectFlags aspectMask,
-                               ImageLayout newLayout,
-                               vk::CommandBuffer *commandBuffer)
+bool ImageHelper::isQueueChangeNeccesary(uint32_t newQueueFamilyIndex) const
 {
+    return mCurrentQueueFamilyIndex != newQueueFamilyIndex;
+}
+
+angle::Result ImageHelper::changeLayout(ContextVk *contextVk,
+                                        VkImageAspectFlags aspectMask,
+                                        ImageLayout newLayout)
+{
+    if (!isLayoutChangeNecessary(newLayout))
+    {
+        return angle::Result::Continue;
+    }
+
+    CommandBuffer *commandBuffer;
+    ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+
+    forceChangeLayoutAndQueue(aspectMask, newLayout, mCurrentQueueFamilyIndex, commandBuffer);
+
+    return angle::Result::Continue;
+}
+
+angle::Result ImageHelper::changeLayoutAndQueue(ContextVk *contextVk,
+                                                VkImageAspectFlags aspectMask,
+                                                ImageLayout newLayout,
+                                                uint32_t newQueueFamilyIndex)
+{
+    if (!isQueueChangeNeccesary(newQueueFamilyIndex))
+    {
+        return angle::Result::Continue;
+    }
+
+    CommandBuffer *commandBuffer;
+    ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+
+    forceChangeLayoutAndQueue(aspectMask, newLayout, newQueueFamilyIndex, commandBuffer);
+
+    return angle::Result::Continue;
+}
+
+void ImageHelper::changeLayoutWithCommand(VkImageAspectFlags aspectMask,
+                                          ImageLayout newLayout,
+                                          vk::CommandBuffer *commandBuffer)
+{
+    ASSERT(commandBuffer != nullptr);
+    ASSERT(newLayout != ImageLayout::ColorAttachment ||
+           !mFormat->imageFormat().hasDepthOrStencilBits());
+    ASSERT(newLayout != ImageLayout::DepthStencilAttachment ||
+           mFormat->imageFormat().hasDepthOrStencilBits());
+
     if (!isLayoutChangeNecessary(newLayout))
     {
         return;
     }
 
     forceChangeLayoutAndQueue(aspectMask, newLayout, mCurrentQueueFamilyIndex, commandBuffer);
-}
-
-void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
-                                       ImageLayout newLayout,
-                                       uint32_t newQueueFamilyIndex,
-                                       vk::CommandBuffer *commandBuffer)
-{
-    ASSERT(isQueueChangeNeccesary(newQueueFamilyIndex));
-    forceChangeLayoutAndQueue(aspectMask, newLayout, newQueueFamilyIndex, commandBuffer);
 }
 
 void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
@@ -1730,7 +1844,7 @@ void ImageHelper::clearColor(const VkClearColorValue &color,
 {
     ASSERT(valid());
 
-    changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, commandBuffer);
+    changeLayoutWithCommand(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, commandBuffer);
 
     VkImageSubresourceRange range = {};
     range.aspectMask              = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -1753,7 +1867,7 @@ void ImageHelper::clearDepthStencil(VkImageAspectFlags imageAspectFlags,
 {
     ASSERT(valid());
 
-    changeLayout(imageAspectFlags, ImageLayout::TransferDst, commandBuffer);
+    changeLayoutWithCommand(imageAspectFlags, ImageLayout::TransferDst, commandBuffer);
 
     VkImageSubresourceRange clearRange = {
         /*aspectMask*/ clearAspectFlags,
@@ -1834,7 +1948,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
 
-    changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, commandBuffer);
+    changeLayoutWithCommand(VK_IMAGE_ASPECT_COLOR_BIT, ImageLayout::TransferDst, commandBuffer);
 
     // We are able to use blitImage since the image format we are using supports it. This
     // is a faster way we can generate the mips.
@@ -1909,8 +2023,8 @@ void ImageHelper::resolve(ImageHelper *dest,
                           vk::CommandBuffer *commandBuffer)
 {
     ASSERT(mCurrentLayout == vk::ImageLayout::TransferSrc);
-    dest->changeLayout(region.dstSubresource.aspectMask, vk::ImageLayout::TransferDst,
-                       commandBuffer);
+    dest->changeLayoutWithCommand(region.dstSubresource.aspectMask, vk::ImageLayout::TransferDst,
+                                  commandBuffer);
 
     commandBuffer->resolveImage(getImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dest->getImage(),
                                 VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
@@ -2257,8 +2371,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                                               uint32_t levelStart,
                                               uint32_t levelEnd,
                                               uint32_t layerStart,
-                                              uint32_t layerEnd,
-                                              vk::CommandBuffer *commandBuffer)
+                                              uint32_t layerEnd)
 {
     if (mSubresourceUpdates.empty())
     {
@@ -2269,6 +2382,9 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
     std::vector<SubresourceUpdate> updatesToKeep;
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(mFormat->imageFormat());
+
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
 
     for (SubresourceUpdate &update : mSubresourceUpdates)
     {
@@ -2315,7 +2431,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         // Conservatively add a barrier between every update.  This is to avoid races when updating
         // the same subresource.  A possible optimization could be to only issue this barrier when
         // an overlap in updates is observed.
-        changeLayout(aspectFlags, vk::ImageLayout::TransferDst, commandBuffer);
+        changeLayoutWithCommand(aspectFlags, vk::ImageLayout::TransferDst, commandBuffer);
 
         if (update.updateSource == SubresourceUpdate::UpdateSource::Clear)
         {
@@ -2329,10 +2445,13 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         }
         else
         {
-            update.image.image->changeLayout(aspectFlags, vk::ImageLayout::TransferSrc,
-                                             commandBuffer);
+            addDependency(contextVk, update.image.image);
 
-            update.image.image->addReadDependency(this);
+            // Note that the command buffer can be invalidated after the |addDependency| call.
+            ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+
+            update.image.image->changeLayoutWithCommand(aspectFlags, vk::ImageLayout::TransferSrc,
+                                                        commandBuffer);
 
             commandBuffer->copyImage(update.image.image->getImage(),
                                      update.image.image->getCurrentLayout(), mImage,
@@ -2355,10 +2474,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
 angle::Result ImageHelper::flushAllStagedUpdates(ContextVk *contextVk)
 {
-    // Clear the image.
-    vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
-    return flushStagedUpdates(contextVk, 0, mLevelCount, 0, mLayerCount, commandBuffer);
+    return flushStagedUpdates(contextVk, 0, mLevelCount, 0, mLayerCount);
 }
 
 // ImageHelper::SubresourceUpdate implementation
