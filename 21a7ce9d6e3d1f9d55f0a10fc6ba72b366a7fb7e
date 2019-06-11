@@ -101,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "7fb60d39_1eed1e1d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T14:37:24Z",
+      "side": 1,
+      "message": "So long as your revamp can be equally as fast or faster that sounds great! But landing a temporary solution to unblock Tim would be helpful. A few days is on the long side to wait.",
+      "parentUuid": "583cb0f1_2a9726da",
+      "revId": "21a7ce9d6e3d1f9d55f0a10fc6ba72b366a7fb7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5f3e9b9f_f424f2ea",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 3
