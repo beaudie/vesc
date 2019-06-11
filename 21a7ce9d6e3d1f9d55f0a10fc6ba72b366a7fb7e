@@ -137,6 +137,24 @@
     },
     {
       "key": {
+        "uuid": "288701b4_22a80520",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T14:57:34Z",
+      "side": 1,
+      "message": "That\u0027s good. However we also need to update the command graph serial. I\u0027m still okay with my proposed workaround.\n\nBTW I was referring to CPU overhead. Having fewer graph edges is good too.",
+      "parentUuid": "9f61fec5_d745a577",
+      "revId": "21a7ce9d6e3d1f9d55f0a10fc6ba72b366a7fb7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5f3e9b9f_f424f2ea",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 3
