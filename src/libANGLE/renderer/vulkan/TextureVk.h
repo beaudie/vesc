@@ -264,8 +264,7 @@ class TextureVk : public TextureImpl
     angle::Result initImage(ContextVk *contextVk,
                             const vk::Format &format,
                             const gl::Extents &extents,
-                            const uint32_t levelCount,
-                            vk::CommandBuffer *commandBuffer);
+                            const uint32_t levelCount);
     void releaseImage(ContextVk *context);
     void releaseStagingBuffer(ContextVk *context);
     uint32_t getLevelCount() const;

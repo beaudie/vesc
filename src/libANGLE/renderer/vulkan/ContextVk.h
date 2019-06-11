@@ -189,13 +189,21 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
 
     ANGLE_INLINE const angle::FeaturesVk &getFeatures() const { return mRenderer->getFeatures(); }
 
+    ANGLE_INLINE void invalidateVertexBuffers()
+    {
+        mDirtyBits |= 1 << DIRTY_BIT_VERTEX_BUFFERS | 1 << DIRTY_BIT_VERTEX_BUFFERS_BINDING;
+    }
+    ANGLE_INLINE void invalidateIndexBuffer()
+    {
+        mDirtyBits |= 1 << DIRTY_BIT_INDEX_BUFFER | 1 << DIRTY_BIT_INDEX_BUFFER_BINDING;
+    }
     ANGLE_INLINE void invalidateVertexAndIndexBuffers()
     {
         // TODO: Make the pipeline invalidate more fine-grained. Only need to dirty here if PSO
         //  VtxInput state (stride, fmt, inputRate...) has changed. http://anglebug.com/3256
         invalidateCurrentPipeline();
-        mDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
-        mDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
+        invalidateVertexBuffers();
+        invalidateIndexBuffer();
     }
 
     ANGLE_INLINE void onVertexAttributeChange(size_t attribIndex,
@@ -208,6 +216,11 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
         mGraphicsPipelineDesc->updateVertexInput(&mGraphicsPipelineTransition,
                                                  static_cast<uint32_t>(attribIndex), stride,
                                                  divisor, format, relativeOffset);
+    }
+
+    ANGLE_INLINE void onTextureContentsChange()
+    {
+        mDirtyBits |= 1 << DIRTY_BIT_TEXTURES | 1 << DIRTY_BIT_DESCRIPTOR_SETS_BINDING;
     }
 
     void invalidateDefaultAttribute(size_t attribIndex);
@@ -230,8 +243,6 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
                      const char *function,
                      unsigned int line) override;
     const gl::ActiveTextureArray<TextureVk *> &getActiveTextures() const;
-
-    void setIndexBufferDirty() { mDirtyBits.set(DIRTY_BIT_INDEX_BUFFER); }
 
     angle::Result flushImpl(const gl::Semaphore *semaphore);
     angle::Result finishImpl();
@@ -312,6 +323,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     // Dirty bits.
     enum DirtyBitType : size_t
     {
+        // Handlers of these bits update various resources, such as descriptor sets, and create
+        // dependencies to the current draw framebuffer.  They should *not* record any commands.
         DIRTY_BIT_DEFAULT_ATTRIBS,
         DIRTY_BIT_PIPELINE,
         DIRTY_BIT_TEXTURES,
@@ -319,16 +332,25 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
         DIRTY_BIT_INDEX_BUFFER,
         DIRTY_BIT_DRIVER_UNIFORMS,
         DIRTY_BIT_UNIFORM_BUFFERS,
-        DIRTY_BIT_DESCRIPTOR_SETS,
+
+        // Handlers of these dirty bits record necessary commands into the command buffer.  They
+        // must be handled after the handlers that could invalidate the command buffer through a
+        // dependency.
+        DIRTY_BIT_PIPELINE_BINDING,
+        DIRTY_BIT_VERTEX_BUFFERS_BINDING,
+        DIRTY_BIT_INDEX_BUFFER_BINDING,
+        DIRTY_BIT_DESCRIPTOR_SETS_BINDING,
+
         DIRTY_BIT_MAX,
     };
 
     using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
 
-    using DirtyBitHandler = angle::Result (ContextVk::*)(const gl::Context *,
-                                                         vk::CommandBuffer *commandBuffer);
+    using DirtyBitHandler        = angle::Result (ContextVk::*)(const gl::Context *);
+    using DirtyBindingBitHandler = angle::Result (ContextVk::*)(vk::CommandBuffer *commandBuffer);
 
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mDirtyBitHandlers;
+    std::array<DirtyBindingBitHandler, DIRTY_BIT_MAX> mDirtyBindingBitHandlers;
 
     angle::Result setupDraw(const gl::Context *context,
                             gl::PrimitiveMode mode,
@@ -367,26 +389,27 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     angle::Result updateActiveTextures(const gl::Context *context);
     angle::Result updateDefaultAttribute(size_t attribIndex);
 
-    ANGLE_INLINE void invalidateCurrentPipeline() { mDirtyBits.set(DIRTY_BIT_PIPELINE); }
+    ANGLE_INLINE void invalidateCurrentPipeline()
+    {
+        mDirtyBits |= 1 << DIRTY_BIT_PIPELINE | 1 << DIRTY_BIT_PIPELINE_BINDING;
+    }
 
     void invalidateCurrentTextures();
     void invalidateCurrentUniformBuffers();
     void invalidateDriverUniforms();
 
-    angle::Result handleDirtyDefaultAttribs(const gl::Context *context,
-                                            vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyPipeline(const gl::Context *context, vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyTextures(const gl::Context *context, vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyVertexBuffers(const gl::Context *context,
-                                           vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyIndexBuffer(const gl::Context *context,
-                                         vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyDriverUniforms(const gl::Context *context,
-                                            vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyUniformBuffers(const gl::Context *context,
-                                            vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyDescriptorSets(const gl::Context *context,
-                                            vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyDefaultAttribs(const gl::Context *context);
+    angle::Result handleDirtyPipeline(const gl::Context *context);
+    angle::Result handleDirtyTextures(const gl::Context *context);
+    angle::Result handleDirtyVertexBuffers(const gl::Context *context);
+    angle::Result handleDirtyIndexBuffer(const gl::Context *context);
+    angle::Result handleDirtyDriverUniforms(const gl::Context *context);
+    angle::Result handleDirtyUniformBuffers(const gl::Context *context);
+
+    angle::Result handleDirtyPipelineBinding(vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyVertexBuffersBinding(vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyIndexBufferBinding(vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyDescriptorSetsBinding(vk::CommandBuffer *commandBuffer);
 
     angle::Result submitFrame(const VkSubmitInfo &submitInfo,
                               vk::PrimaryCommandBuffer &&commandBuffer);
@@ -425,7 +448,19 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     DirtyBits mDirtyBits;
     DirtyBits mNonIndexedDirtyBitsMask;
     DirtyBits mIndexedDirtyBitsMask;
-    DirtyBits mNewCommandBufferDirtyBits;
+    // Precalculated set of bits for fast setting and masking.
+    static constexpr DirtyBits kAllDirtyUpdateBits{
+        1 << DIRTY_BIT_DEFAULT_ATTRIBS | 1 << DIRTY_BIT_PIPELINE | 1 << DIRTY_BIT_TEXTURES |
+        1 << DIRTY_BIT_VERTEX_BUFFERS | 1 << DIRTY_BIT_INDEX_BUFFER |
+        1 << DIRTY_BIT_DRIVER_UNIFORMS | 1 << DIRTY_BIT_UNIFORM_BUFFERS};
+    static constexpr DirtyBits kAllDirtyBindingBits{
+        1 << DIRTY_BIT_PIPELINE_BINDING | 1 << DIRTY_BIT_VERTEX_BUFFERS_BINDING |
+        1 << DIRTY_BIT_INDEX_BUFFER_BINDING | 1 << DIRTY_BIT_DESCRIPTOR_SETS_BINDING};
+    static constexpr DirtyBits kNewCommandBufferDirtyBits{
+        1 << DIRTY_BIT_PIPELINE | 1 << DIRTY_BIT_TEXTURES | 1 << DIRTY_BIT_VERTEX_BUFFERS |
+        1 << DIRTY_BIT_INDEX_BUFFER | 1 << DIRTY_BIT_UNIFORM_BUFFERS |
+        1 << DIRTY_BIT_PIPELINE_BINDING | 1 << DIRTY_BIT_VERTEX_BUFFERS_BINDING |
+        1 << DIRTY_BIT_INDEX_BUFFER_BINDING | 1 << DIRTY_BIT_DESCRIPTOR_SETS_BINDING};
 
     // Cached back-end objects.
     VertexArrayVk *mVertexArray;
