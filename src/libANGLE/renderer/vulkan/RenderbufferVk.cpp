@@ -160,13 +160,8 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
 
     // Transfer the image to this queue if needed
     uint32_t rendererQueueFamilyIndex = contextVk->getRenderer()->getQueueFamilyIndex();
-    if (mImage->isQueueChangeNeccesary(rendererQueueFamilyIndex))
-    {
-        vk::CommandBuffer *commandBuffer = nullptr;
-        ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
-        mImage->changeLayoutAndQueue(aspect, vk::ImageLayout::ColorAttachment,
-                                     rendererQueueFamilyIndex, commandBuffer);
-    }
+    ANGLE_TRY(mImage->changeLayoutAndQueue(contextVk, aspect, vk::ImageLayout::ColorAttachment,
+                                           rendererQueueFamilyIndex));
 
     ANGLE_TRY(mImage->initLayerImageView(contextVk, imageVk->getImageTextureType(), aspect,
                                          gl::SwizzleState(), &mImageView, imageVk->getImageLevel(),
