@@ -48,6 +48,47 @@
     },
     {
       "key": {
+        "uuid": "50a30ece_c4072875",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-11T23:34:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e30f855b_b8228e87",
+      "range": {
+        "startLine": 30,
+        "startChar": 40,
+        "endLine": 30,
+        "endChar": 67
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e4054911_8ceda463",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-11T23:34:38Z",
+      "side": 1,
+      "message": "Looks like this should be `priv::CommandBuffer`, as it does the buffer recording implementation for secondary CommandBuffer allocated from GPU side, is it?",
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "32041c31_c61853df",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 5
@@ -68,6 +109,30 @@
       "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcf19e80_792d6cf7",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-11T23:34:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32041c31_c61853df",
+      "range": {
+        "startLine": 708,
+        "startChar": 43,
+        "endLine": 708,
+        "endChar": 84
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +159,30 @@
     },
     {
       "key": {
+        "uuid": "518442cb_a586b6d3",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-11T23:34:38Z",
+      "side": 1,
+      "message": "Tobin reminded me about we are mostly using custom secondary CommandBuffers in our builds. Yeah, in that case, we should only care about Primary CommandBuffers",
+      "parentUuid": "4bea104f_f990bd3d",
+      "range": {
+        "startLine": 91,
+        "startChar": 50,
+        "endLine": 91,
+        "endChar": 71
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b189b42c_66133ae5",
         "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
         "patchSetId": 5
@@ -111,6 +200,24 @@
     },
     {
       "key": {
+        "uuid": "cafcf4a1_a32582a9",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-11T23:34:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b189b42c_66133ae5",
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "678a8ff1_f9edcf0d",
         "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
         "patchSetId": 5
@@ -122,6 +229,30 @@
       "writtenOn": "2019-06-10T20:03:30Z",
       "side": 1,
       "message": "I think we would be better off just storing a vk::CommandBuffer for the primary buffer in CommandBatch. I think this would totally forego the need for this other class.",
+      "range": {
+        "startLine": 16,
+        "startChar": 36,
+        "endLine": 16,
+        "endChar": 64
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67e11b04_ebdf69db",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-11T23:34:38Z",
+      "side": 1,
+      "message": "Are you suggesting instead of using inheritance, we store a handle of vk::CommandBuffer?  I kind of agree with you, because then we can implement it with only methods used by primary CommandBuffer with some delegating to the handle.  Andway, inheritance is some \u0027lazy\u0027 approach, I would make change later if it\u0027s really required",
+      "parentUuid": "678a8ff1_f9edcf0d",
       "range": {
         "startLine": 16,
         "startChar": 36,
@@ -157,6 +288,30 @@
     },
     {
       "key": {
+        "uuid": "8c85fa4c_5c5edd29",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-11T23:34:38Z",
+      "side": 1,
+      "message": "Ah sorry, my fault. Next time I will checking all those symbols and solve them.",
+      "parentUuid": "4c34f13a_839fa95d",
+      "range": {
+        "startLine": 84,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 47
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa6c7a29_7cf1ac5b",
         "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
         "patchSetId": 5
@@ -168,6 +323,30 @@
       "writtenOn": "2019-06-10T20:03:30Z",
       "side": 1,
       "message": "it\u0027s interesting to allocate arrays of command buffers. but if we just use these for primaries we can probably allocate single buffers at a time.",
+      "range": {
+        "startLine": 93,
+        "startChar": 3,
+        "endLine": 99,
+        "endChar": 52
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51a617d7_ad7ac946",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-11T23:34:38Z",
+      "side": 1,
+      "message": "Agree that one CommandBuffer per allocation would satisfy primary CommandBuffer\u0027s usage needs. However, I still think it\u0027s good to initially allocate several ones (for example 3, I think 3 inflight CommandBuffer is a common situation), so I\u0027d rather keep the `allocateCommandBufferArray` method in order to be consistent and merely change the `count` to 1",
+      "parentUuid": "aa6c7a29_7cf1ac5b",
       "range": {
         "startLine": 93,
         "startChar": 3,
@@ -203,6 +382,30 @@
     },
     {
       "key": {
+        "uuid": "8b9e5333_4e9da78c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-11T23:34:38Z",
+      "side": 1,
+      "message": "Right, vector satisfies all the usage, made the change.",
+      "parentUuid": "0e0cdcc6_b8dadbf2",
+      "range": {
+        "startLine": 101,
+        "startChar": 3,
+        "endLine": 104,
+        "endChar": 55
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "52e298a5_fe42108d",
         "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
         "patchSetId": 5
@@ -223,6 +426,30 @@
       "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e6d74a5_ad612abc",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-11T23:34:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52e298a5_fe42108d",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 24
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -249,6 +476,30 @@
     },
     {
       "key": {
+        "uuid": "476f5351_033b11a7",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-11T23:34:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68f94331_9280b5cf",
+      "range": {
+        "startLine": 108,
+        "startChar": 4,
+        "endLine": 108,
+        "endChar": 12
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0fb71ffc_33099874",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 5
@@ -263,6 +514,24 @@
       "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e6c382e_903e18d1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-11T23:34:38Z",
+      "side": 1,
+      "message": "Whoops, I am being careless :(",
+      "parentUuid": "0fb71ffc_33099874",
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -289,6 +558,30 @@
     },
     {
       "key": {
+        "uuid": "41f1faad_ffee9bbf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-11T23:34:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24e0deff_1b5625eb",
+      "range": {
+        "startLine": 679,
+        "startChar": 8,
+        "endLine": 679,
+        "endChar": 94
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b64963e_4097367e",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 5
@@ -309,6 +602,30 @@
       "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5125cfc_513fb384",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-11T23:34:38Z",
+      "side": 1,
+      "message": "Removed as only Primary CommandBuffer are allocated through Persistent Pool",
+      "parentUuid": "9b64963e_4097367e",
+      "range": {
+        "startLine": 475,
+        "startChar": 30,
+        "endLine": 475,
+        "endChar": 46
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
