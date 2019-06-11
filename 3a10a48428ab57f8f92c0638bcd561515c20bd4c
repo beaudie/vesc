@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4180a597_25e2d1b9",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-11T21:59:26Z",
+      "side": 1,
+      "message": "Is this array large enough? I copied the format from the other variables, but it seems that the array size is the largest valid entry, which is off by one.",
+      "range": {
+        "startLine": 351,
+        "startChar": 30,
+        "endLine": 351,
+        "endChar": 79
+      },
+      "revId": "3a10a48428ab57f8f92c0638bcd561515c20bd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
