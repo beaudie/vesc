@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b98bda4e_ebec923f",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T14:01:43Z",
+      "side": 1,
+      "message": "nit: Graphics",
+      "range": {
+        "startLine": 194,
+        "startChar": 4,
+        "endLine": 194,
+        "endChar": 20
+      },
+      "revId": "7e6df334f28710b59478c1d50402e663a48e31f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40c629d2_7b84e81c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T14:01:43Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 893,
+        "startChar": 0,
+        "endLine": 894,
+        "endChar": 49
+      },
+      "revId": "7e6df334f28710b59478c1d50402e663a48e31f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc401d77_a07f471d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T14:01:43Z",
+      "side": 1,
+      "message": "We can use a method BitSett::Iterator::resetLaterBit to fix this performance issue. First use an explicit iterator in the for loop instead of a range-for. Then make COMPUTE_SRVUAV and RENDER_SRVUAV state lower bits than TEXTURE_AND_SAMPLER. Then in handling the SRVUAV states call iter.resetLaterBit(TEXTURE_AND_SAMPLER)",
+      "range": {
+        "startLine": 896,
+        "startChar": 0,
+        "endLine": 900,
+        "endChar": 5
+      },
+      "revId": "7e6df334f28710b59478c1d50402e663a48e31f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8db9460f_ef9b06fe",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2317,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T14:01:43Z",
+      "side": 1,
+      "message": "to fix this performance problem use a mGraphicsDirtyBitsMask similar to the mComputeDirtyBitsMask as above.",
+      "range": {
+        "startLine": 2312,
+        "startChar": 0,
+        "endLine": 2317,
+        "endChar": 0
+      },
+      "revId": "7e6df334f28710b59478c1d50402e663a48e31f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba073804_9d5e2729",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2322,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T14:01:43Z",
+      "side": 1,
+      "message": "same comment here about using resetLaterBit and iterators.",
+      "range": {
+        "startLine": 2318,
+        "startChar": 0,
+        "endLine": 2322,
+        "endChar": 15
+      },
+      "revId": "7e6df334f28710b59478c1d50402e663a48e31f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1df05f4_12116370",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2395,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T14:01:43Z",
+      "side": 1,
+      "message": "you can use mGraphicsDirtyBitsMask here",
+      "range": {
+        "startLine": 2392,
+        "startChar": 0,
+        "endLine": 2395,
+        "endChar": 77
+      },
+      "revId": "7e6df334f28710b59478c1d50402e663a48e31f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
