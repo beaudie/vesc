@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eefefbef_82e8c551",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T16:50:34Z",
+      "side": 1,
+      "message": "I think you need to change this to be just \"val\".",
+      "range": {
+        "startLine": 723,
+        "startChar": 33,
+        "endLine": 723,
+        "endChar": 34
+      },
+      "revId": "9ee44d2167177ea6032b80308d2662b370f29cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
