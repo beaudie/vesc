@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "588b6258_2c4f3e64",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T13:36:25Z",
+      "side": 1,
+      "message": "tiny nit pick: can you limit the subject description to something \u003c\u003d 65 characters? You can include a longer description in a second paragraph.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 79
+      },
+      "revId": "e0255e26a59da6529b0e5439c7624b32efa9a998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdd6bc5b_f3ad8216",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T13:36:25Z",
+      "side": 1,
+      "message": "can you tag this with Bug: angleproject:#### to associate it with the issue in the issue tracker? see other CLs in git log for examples.",
+      "revId": "e0255e26a59da6529b0e5439c7624b32efa9a998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "497a190e_94c69a0b",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T13:36:25Z",
+      "side": 1,
+      "message": "can you remove this \u003e\u003e character?",
+      "range": {
+        "startLine": 81,
+        "startChar": 63,
+        "endLine": 81,
+        "endChar": 64
+      },
+      "revId": "e0255e26a59da6529b0e5439c7624b32efa9a998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14feec19_9a711fba",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T13:36:25Z",
+      "side": 1,
+      "message": "this will actually be angle-debug.sln",
+      "range": {
+        "startLine": 81,
+        "startChar": 53,
+        "endLine": 81,
+        "endChar": 58
+      },
+      "revId": "e0255e26a59da6529b0e5439c7624b32efa9a998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2924be5a_75acee82",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T13:36:25Z",
+      "side": 1,
+      "message": "also angle-debug here",
+      "range": {
+        "startLine": 87,
+        "startChar": 44,
+        "endLine": 87,
+        "endChar": 49
+      },
+      "revId": "e0255e26a59da6529b0e5439c7624b32efa9a998",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
