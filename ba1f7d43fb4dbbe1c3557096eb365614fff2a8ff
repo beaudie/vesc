@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "1f914bed_bb3013fe",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-11T01:46:33Z",
+      "side": 1,
+      "message": "My main concern here is that this function is doing a CPU copy while it should be doing it on the GPU.",
+      "parentUuid": "7bf5dace_7263bd6c",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 47
+      },
+      "revId": "ba1f7d43fb4dbbe1c3557096eb365614fff2a8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ce3e994_f0d2e8f3",
         "filename": "src/tests/gl_tests/BufferDataTest.cpp",
         "patchSetId": 1
