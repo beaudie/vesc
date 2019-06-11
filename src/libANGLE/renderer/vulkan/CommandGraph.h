@@ -257,11 +257,61 @@ class CommandGraphResource : angle::NonCopyable
     // queries, to know if the queue they are submitted on has finished execution.
     Serial getStoredQueueSerial() const { return mStoredQueueSerial; }
 
-    // Sets up dependency relations. 'this' resource is the resource being written to.
-    void addWriteDependency(CommandGraphResource *writingResource);
+    // Sets up dependency relations.  |this| resource is the resource that's recording commands.
+    // |used| is the resource being used in the commands, be it to read from or to write to.  May
+    // create a new node for |this| if necessary.  As there would be a dependency from |used| to
+    // |this|, any command buffer previously allocated from |used| should no longer be used.  The
+    // usage pattern is:
+    //
+    //     A.recordCommands(&commandBufferA);
+    //     A.render(commandBufferA);
+    //
+    //     B.addDependency(A)
+    //
+    //     B.recordCommands(&commandBufferB);
+    //     B.render(commandBufferB);
+    //
+    // or:
+    //
+    //     B.addDependency(A)
+    //
+    //     B.recordCommands(&commandBufferB);
+    //     A.render(commandBufferB);
+    //     B.render(commandBufferB);
+    //
+    // Note again that after B.addDependency(A), both A's and B's previously allocated command
+    // buffers may be invalid.  So, if B uses multiple resources, it would be simpler to set the
+    // dependencies first, and render all at once instead of setting dependencies and re-acquiring
+    // the command buffer after every addDependency():
+    //
+    //     B.addDependency(M)
+    //     B.addDependency(N)
+    //     B.addDependency(O)
+    //     B.addDependency(P)
+    //
+    //     B.recordCommands(&commandBufferB);
+    //     M.render(commandBufferB);
+    //     N.render(commandBufferB);
+    //     O.render(commandBufferB);
+    //     P.render(commandBufferB);
+    //     B.render(commandBufferB);
+    //
+    // The |addDependency| function effectively creates an execution ordering; all commands
+    // previously recorded in A will be executed before all commands to be recorded in B.
+    void addDependency(ContextVk *contextVk, CommandGraphResource *used);
 
-    // Sets up dependency relations. 'this' resource is the resource being read.
-    void addReadDependency(CommandGraphResource *readingResource);
+    // The global memory barriers (for the sake of buffers) can be executed at the beginning of the
+    // node that uses the buffers.  If a node depends on multiple buffers, their memory barrier
+    // access masks can be accumulated and a single memory barrier generated.
+    //
+    // If a resource accesses the same buffer in different ways, its graph node needs to break off
+    // between each use so the memory barriers would be placed in between.  Setting the memory
+    // barrier access masks is thus paired with setting dependency, so the graph node can be broken
+    // off if necessary and the barrier set on the new node.
+    void addDependencyAndMemoryBarrier(ContextVk *contextVk,
+                                       CommandGraphResource *used,
+                                       VkFlags srcAccess,
+                                       VkFlags dstAccess);
 
     // Updates the in-use serial tracked for this resource. Will clear dependencies if the resource
     // was not used in this set of command nodes.
@@ -272,7 +322,6 @@ class CommandGraphResource : angle::NonCopyable
         if (queueSerial > mStoredQueueSerial)
         {
             mCurrentWritingNode = nullptr;
-            mCurrentReadingNodes.clear();
             mStoredQueueSerial = queueSerial;
         }
     }
@@ -284,7 +333,7 @@ class CommandGraphResource : angle::NonCopyable
     // Allocates a write node via getNewWriteNode and returns a started command buffer.
     // The started command buffer will render outside of a RenderPass.
     // Will append to an existing command buffer/graph node if possible.
-    angle::Result recordCommands(ContextVk *context, CommandBuffer **commandBufferOut);
+    angle::Result recordCommands(ContextVk *contextVk, CommandBuffer **commandBufferOut);
 
     // Begins a command buffer on the current graph node for in-RenderPass rendering.
     // Called from FramebufferVk::startNewRenderPass and UtilsVk functions.
@@ -358,13 +407,6 @@ class CommandGraphResource : angle::NonCopyable
     // Called when 'this' object changes, but we'd like to start a new command buffer later.
     void finishCurrentCommands(ContextVk *contextVk);
 
-    // Store a deferred memory barrier. Will be recorded into a primary command buffer at submit.
-    void addGlobalMemoryBarrier(VkFlags srcAccess, VkFlags dstAccess)
-    {
-        ASSERT(mCurrentWritingNode);
-        mCurrentWritingNode->addGlobalMemoryBarrier(srcAccess, dstAccess);
-    }
-
   protected:
     explicit CommandGraphResource(CommandGraphResourceType resourceType);
 
@@ -384,11 +426,9 @@ class CommandGraphResource : angle::NonCopyable
 
     void startNewCommands(ContextVk *contextVk);
 
-    void onWriteImpl(CommandGraphNode *writingNode, Serial currentSerial);
+    void addDependencyImpl(ContextVk *contextVk, CommandGraphResource *used);
 
     Serial mStoredQueueSerial;
-
-    std::vector<CommandGraphNode *> mCurrentReadingNodes;
 
     // Current command graph writing node.
     CommandGraphNode *mCurrentWritingNode;
