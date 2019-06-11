@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "62205b0f_80669c26",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T12:12:38Z",
+      "side": 1,
+      "message": "could you update this to be \"Implement copyBufferSubData\"? Since that\u0027s what you\u0027re doing in this CL.",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 39
+      },
+      "revId": "21a7ce9d6e3d1f9d55f0a10fc6ba72b366a7fb7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe0080d9_1b077e00",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T12:12:38Z",
+      "side": 1,
+      "message": "could you update this to be 3194?",
+      "range": {
+        "startLine": 11,
+        "startChar": 18,
+        "endLine": 11,
+        "endChar": 22
+      },
+      "revId": "21a7ce9d6e3d1f9d55f0a10fc6ba72b366a7fb7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4363ba20_2015b87b",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 3
@@ -13,6 +59,47 @@
       "writtenOn": "2019-06-11T02:52:39Z",
       "side": 1,
       "message": "Super hacky pointer comparison. Presumably there\u0027s a handle or something I can check instead.",
+      "revId": "21a7ce9d6e3d1f9d55f0a10fc6ba72b366a7fb7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e803dbce_3e09221e",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T12:12:38Z",
+      "side": 1,
+      "message": "My suggestion is just to put the check in CommandGraphResource::addReadDependency. It\u0027s a bit hacky. We could update the command graph APIs at some point. But it would get you going. Maybe Shabi has a better solution.\n\nYou still need to call onRead even if source \u003d\u003d dest I think. To get the right access masks in the barrier.\n\nAlso onRead and onWrite should probably be called before copyFromBuffer.",
+      "parentUuid": "4363ba20_2015b87b",
+      "revId": "21a7ce9d6e3d1f9d55f0a10fc6ba72b366a7fb7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f3e9b9f_f424f2ea",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T12:12:38Z",
+      "side": 1,
+      "message": "You should remove this. Will kill perf. If there\u0027s a bug we should try to fix it without a finish.",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 42
+      },
       "revId": "21a7ce9d6e3d1f9d55f0a10fc6ba72b366a7fb7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
