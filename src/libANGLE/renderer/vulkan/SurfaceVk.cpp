@@ -881,15 +881,13 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     vk::CommandBuffer *swapCommands = nullptr;
     if (mColorImageMS.valid())
     {
-        // Transition the multisampled image to TRANSFER_SRC for resolve.
-        vk::CommandBuffer *multisampledTransition = nullptr;
-        ANGLE_TRY(mColorImageMS.recordCommands(contextVk, &multisampledTransition));
-
-        mColorImageMS.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferSrc,
-                                   multisampledTransition);
-
         // Setup graph dependency between the swapchain image and the multisampled one.
-        image.image.addReadDependency(&mColorImageMS);
+        mColorImageMS.addDependency(contextVk, &image.image);
+
+        ANGLE_TRY(image.image.recordCommands(contextVk, &swapCommands));
+
+        mColorImageMS.changeLayoutWithCommand(VK_IMAGE_ASPECT_COLOR_BIT,
+                                              vk::ImageLayout::TransferSrc, swapCommands);
 
         VkImageResolve resolveRegion                = {};
         resolveRegion.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -901,14 +899,14 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         resolveRegion.dstOffset                     = {};
         gl_vk::GetExtent(image.image.getExtents(), &resolveRegion.extent);
 
-        ANGLE_TRY(image.image.recordCommands(contextVk, &swapCommands));
         mColorImageMS.resolve(&image.image, resolveRegion, swapCommands);
     }
     else
     {
         ANGLE_TRY(image.image.recordCommands(contextVk, &swapCommands));
     }
-    image.image.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::Present, swapCommands);
+    image.image.changeLayoutWithCommand(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::Present,
+                                        swapCommands);
 
     ANGLE_TRY(contextVk->flushImpl(nullptr));
 

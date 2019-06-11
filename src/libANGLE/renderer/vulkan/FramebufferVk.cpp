@@ -246,8 +246,6 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    mFramebuffer.updateQueueSerial(contextVk->getCurrentQueueSerial());
-
     // This function assumes that only enabled attachments are asked to be cleared.
     ASSERT((clearColorBuffers & mState.getEnabledDrawBuffers()) == clearColorBuffers);
 
@@ -317,7 +315,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         // that case, end the render pass immediately.  http://anglebug.com/2361
         if (contextVk->getRenderer()->getFeatures().restartRenderPassAfterLoadOpClear.enabled)
         {
-            mFramebuffer.finishCurrentCommands(contextVk);
+            mFramebuffer.forceNewRenderPass(contextVk);
         }
 
         // Fallback to other methods for whatever isn't cleared here.
@@ -534,8 +532,13 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
     // at the same time.
     ASSERT(colorBlit != (depthBlit || stencilBlit));
 
+    // vkCmdBlitImage requires its source and destination to be in TRANSFER_SRC/DST layouts
+    // respectively.
+    ANGLE_TRY(readRenderTarget->onAccess(contextVk, &mFramebuffer, vk::ImageLayout::TransferSrc));
+    ANGLE_TRY(drawRenderTarget->onAccess(contextVk, &mFramebuffer, vk::ImageLayout::TransferDst));
+
     vk::ImageHelper *srcImage = &readRenderTarget->getImage();
-    vk::ImageHelper *dstImage = drawRenderTarget->getImageForWrite(&mFramebuffer);
+    vk::ImageHelper *dstImage = &drawRenderTarget->getImage();
 
     VkImageAspectFlags imageAspectMask = srcImage->getAspectFlags();
     VkImageAspectFlags blitAspectMask  = imageAspectMask;
@@ -550,17 +553,8 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
         blitAspectMask &= ~VK_IMAGE_ASPECT_STENCIL_BIT;
     }
 
-    if (srcImage->isLayoutChangeNecessary(vk::ImageLayout::TransferSrc))
-    {
-        vk::CommandBuffer *srcLayoutChange;
-        ANGLE_TRY(srcImage->recordCommands(contextVk, &srcLayoutChange));
-        srcImage->changeLayout(imageAspectMask, vk::ImageLayout::TransferSrc, srcLayoutChange);
-    }
-
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &commandBuffer));
-
-    srcImage->addReadDependency(&mFramebuffer);
 
     VkImageBlit blit                   = {};
     blit.srcSubresource.aspectMask     = blitAspectMask;
@@ -575,10 +569,6 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
     blit.dstSubresource.layerCount     = 1;
     blit.dstOffsets[0]                 = {destArea.x0(), destArea.y0(), 0};
     blit.dstOffsets[1]                 = {destArea.x1(), destArea.y1(), 1};
-
-    // Requirement of the copyImageToBuffer, the dst image must be in
-    // VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL layout.
-    dstImage->changeLayout(imageAspectMask, vk::ImageLayout::TransferDst, commandBuffer);
 
     commandBuffer->blitImage(srcImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                              dstImage->getImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit,
@@ -880,19 +870,22 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
                                                      const UtilsVk::BlitResolveParameters &params,
                                                      vk::ImageHelper *srcImage)
 {
-    if (srcImage->isLayoutChangeNecessary(vk::ImageLayout::TransferSrc))
+    // Set up dependencies.
+    mFramebuffer.addDependency(contextVk, srcImage);
+
+    for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
     {
-        vk::CommandBuffer *srcLayoutChange;
-        ANGLE_TRY(srcImage->recordCommands(contextVk, &srcLayoutChange));
-        srcImage->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferSrc,
-                               srcLayoutChange);
+        RenderTargetVk *drawRenderTarget = mRenderTargetCache.getColors()[colorIndexGL];
+        ANGLE_TRY(
+            drawRenderTarget->onAccess(contextVk, &mFramebuffer, vk::ImageLayout::TransferDst));
     }
 
+    // Record commands after dependencies are set.
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &commandBuffer));
 
-    // Source's layout change should happen before rendering
-    srcImage->addReadDependency(&mFramebuffer);
+    srcImage->changeLayoutWithCommand(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferSrc,
+                                      commandBuffer);
 
     VkImageResolve resolveRegion                = {};
     resolveRegion.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -914,9 +907,6 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
     for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
     {
         RenderTargetVk *drawRenderTarget = mRenderTargetCache.getColors()[colorIndexGL];
-        vk::ImageHelper *drawImage       = drawRenderTarget->getImageForWrite(&mFramebuffer);
-        drawImage->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst,
-                                commandBuffer);
 
         resolveRegion.dstSubresource.mipLevel       = drawRenderTarget->getLevelIndex();
         resolveRegion.dstSubresource.baseArrayLayer = drawRenderTarget->getLayerIndex();
@@ -1022,9 +1012,10 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
 
     mFramebuffer.release(contextVk);
 
-    // Will freeze the current set of dependencies on this FBO. The next time we render we will
-    // create a new entry in the command graph.
-    mFramebuffer.finishCurrentCommands(contextVk);
+    // The framebuffer has changed in such a way that it cannot continue rendering to its previous
+    // render pass, if any.  Mark it so that the next time we render we create a new node in the
+    // command graph.
+    mFramebuffer.forceNewRenderPass(contextVk);
 
     // Notify the ContextVk to update the pipeline desc.
     updateRenderPassDesc();
@@ -1141,7 +1132,12 @@ angle::Result FramebufferVk::clearWithRenderPassOp(
     // exactly as specified by the scissor for the loadOp to clear only that area.  See
     // onScissorChange for more information.
 
-    if (!mFramebuffer.valid() || !mFramebuffer.renderPassStartedButEmpty() ||
+    vk::Framebuffer *framebuffer = nullptr;
+    ANGLE_TRY(getFramebuffer(contextVk, &framebuffer));
+
+    mFramebuffer.updateQueueSerial(contextVk->getCurrentQueueSerial());
+
+    if (!mFramebuffer.valid() || !mFramebuffer.renderPassStartedButEmpty(*framebuffer) ||
         mFramebuffer.getRenderPassRenderArea() != clearArea)
     {
         vk::CommandBuffer *commandBuffer;
@@ -1246,6 +1242,24 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
     return angle::Result::Stop;
 }
 
+angle::Result FramebufferVk::appendOrStartRenderPass(ContextVk *contextVk,
+                                                     const gl::Rectangle &renderArea,
+                                                     vk::CommandBuffer **commandBufferOut)
+{
+    *commandBufferOut = nullptr;
+
+    vk::Framebuffer *framebuffer = nullptr;
+    ANGLE_TRY(getFramebuffer(contextVk, &framebuffer));
+
+    if (!mFramebuffer.appendToStartedRenderPass(contextVk->getCurrentQueueSerial(), *framebuffer,
+                                                renderArea, commandBufferOut))
+    {
+        ANGLE_TRY(startNewRenderPass(contextVk, renderArea, commandBufferOut));
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                                 const gl::Rectangle &renderArea,
                                                 vk::CommandBuffer **commandBufferOut)
@@ -1256,9 +1270,6 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     vk::AttachmentOpsArray renderPassAttachmentOps;
     std::vector<VkClearValue> attachmentClearValues;
 
-    vk::CommandBuffer *writeCommands = nullptr;
-    ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &writeCommands));
-
     // Initialize RenderPass info.
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
     for (size_t colorIndexGL : mState.getEnabledDrawBuffers())
@@ -1266,7 +1277,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         ASSERT(colorRenderTarget);
 
-        ANGLE_TRY(colorRenderTarget->onColorDraw(contextVk, &mFramebuffer, writeCommands));
+        ANGLE_TRY(colorRenderTarget->onColorDraw(contextVk, &mFramebuffer));
 
         renderPassAttachmentOps.initWithLoadStore(attachmentClearValues.size(),
                                                   VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
@@ -1277,8 +1288,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     RenderTargetVk *depthStencilRenderTarget = mRenderTargetCache.getDepthStencil();
     if (depthStencilRenderTarget)
     {
-        ANGLE_TRY(
-            depthStencilRenderTarget->onDepthStencilDraw(contextVk, &mFramebuffer, writeCommands));
+        ANGLE_TRY(depthStencilRenderTarget->onDepthStencilDraw(contextVk, &mFramebuffer));
 
         renderPassAttachmentOps.initWithLoadStore(attachmentClearValues.size(),
                                                   VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
@@ -1315,12 +1325,13 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
 
     RendererVk *renderer = contextVk->getRenderer();
 
+    ANGLE_TRY(renderTarget->onAccess(contextVk, &mFramebuffer, vk::ImageLayout::TransferSrc));
+
+    // Record the framebuffer after the dependency is established in onAccess.
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &commandBuffer));
 
-    // Note that although we're reading from the image, we need to update the layout below.
-    vk::ImageHelper *srcImage =
-        renderTarget->getImageForRead(&mFramebuffer, vk::ImageLayout::TransferSrc, commandBuffer);
+    vk::ImageHelper *srcImage = &renderTarget->getImage();
 
     const angle::Format *readFormat = &srcImage->getFormat().imageFormat();
 
@@ -1348,9 +1359,6 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
         resolvedImage.get().updateQueueSerial(contextVk->getCurrentQueueSerial());
 
         // Note: resolve only works on color images (not depth/stencil).
-        //
-        // TODO: Currently, depth/stencil blit can perform a depth/stencil readback, but that code
-        // path will be optimized away.  http://anglebug.com/3200
         ASSERT(copyAspectFlags == VK_IMAGE_ASPECT_COLOR_BIT);
 
         VkImageResolve resolveRegion                = {};
@@ -1368,8 +1376,8 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
 
         srcImage->resolve(&resolvedImage.get(), resolveRegion, commandBuffer);
 
-        resolvedImage.get().changeLayout(copyAspectFlags, vk::ImageLayout::TransferSrc,
-                                         commandBuffer);
+        resolvedImage.get().changeLayoutWithCommand(copyAspectFlags, vk::ImageLayout::TransferSrc,
+                                                    commandBuffer);
 
         // Make the resolved image the target of buffer copy.
         srcImage  = &resolvedImage.get();
@@ -1451,10 +1459,11 @@ void FramebufferVk::onScissorChange(ContextVk *contextVk)
     // a render pass, the scissor is disabled and a draw call is issued to affect the whole
     // framebuffer.
     mFramebuffer.updateQueueSerial(contextVk->getCurrentQueueSerial());
+
     if (mFramebuffer.hasStartedRenderPass() &&
         !mFramebuffer.getRenderPassRenderArea().encloses(scissoredRenderArea))
     {
-        mFramebuffer.finishCurrentCommands(contextVk);
+        mFramebuffer.forceNewRenderPass(contextVk);
     }
 }
 
