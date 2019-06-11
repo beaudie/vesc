@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17acd520_03ca1193",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-11T15:05:50Z",
+      "side": 1,
+      "message": "I suggest adding a small paragraph describing under what circumstances one might want to reuse an older descriptor set.",
+      "revId": "a1b3f2fb9b02c6123edface764e80936cb91fd15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "237cf33f_4277e58a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1458,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-11T15:05:50Z",
+      "side": 1,
+      "message": "\"at a\"",
+      "range": {
+        "startLine": 1458,
+        "startChar": 62,
+        "endLine": 1458,
+        "endChar": 64
+      },
+      "revId": "a1b3f2fb9b02c6123edface764e80936cb91fd15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75d17260_0eaffac6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-11T15:05:50Z",
+      "side": 1,
+      "message": "Maybe add a comment that says this is exclusive (as the name suggests otherwise).",
+      "range": {
+        "startLine": 705,
+        "startChar": 13,
+        "endLine": 705,
+        "endChar": 22
+      },
+      "revId": "a1b3f2fb9b02c6123edface764e80936cb91fd15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
