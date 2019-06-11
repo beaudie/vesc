@@ -320,7 +320,8 @@ class UtilsVk : angle::NonCopyable
                                   const vk::ImageView *imageView,
                                   const vk::RenderPassDesc &renderPassDesc,
                                   const gl::Rectangle &renderArea,
-                                  vk::CommandBuffer **commandBufferOut);
+                                  vk::CommandBuffer **preRenderPassCommandBufferOut,
+                                  vk::CommandBuffer **renderPassCommandBufferOut);
 
     // Blits or resolves either color or depth/stencil, based on which view is given.
     angle::Result blitResolveImpl(ContextVk *contextVk,
