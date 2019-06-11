@@ -14,6 +14,7 @@
 #include "libANGLE/renderer/RenderTargetCache.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
+#include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/UtilsVk.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
@@ -110,16 +111,13 @@ class FramebufferVk : public FramebufferImpl
     const gl::DrawBufferMask &getEmulatedAlphaAttachmentMask() const;
     RenderTargetVk *getColorReadRenderTarget() const;
 
-    // This will clear the current write operation if it is complete.
-    bool appendToStartedRenderPass(Serial currentQueueSerial,
-                                   const gl::Rectangle &renderArea,
-                                   vk::CommandBuffer **commandBufferOut)
-    {
-        return mFramebuffer.appendToStartedRenderPass(currentQueueSerial, renderArea,
-                                                      commandBufferOut);
-    }
-
     vk::FramebufferHelper *getFramebuffer() { return &mFramebuffer; }
+
+    // If there's an ongoing render pass for this framebuffer, append to it.  Otherwise start a new
+    // render pass.
+    angle::Result appendOrStartRenderPass(ContextVk *contextVk,
+                                          const gl::Rectangle &renderArea,
+                                          vk::CommandBuffer **commandBufferOut);
 
     angle::Result startNewRenderPass(ContextVk *context,
                                      const gl::Rectangle &renderArea,
