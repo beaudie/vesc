@@ -185,7 +185,6 @@ bool CommandGraphResource::isResourceInUse(ContextVk *context) const
 void CommandGraphResource::resetQueueSerial()
 {
     mCurrentWritingNode = nullptr;
-    mCurrentReadingNodes.clear();
     mStoredQueueSerial = Serial();
 }
 
@@ -224,7 +223,8 @@ angle::Result CommandGraphResource::beginRenderPass(
     const std::vector<VkClearValue> &clearValues,
     CommandBuffer **commandBufferOut)
 {
-    // If a barrier has been inserted in the meantime, stop the command buffer.
+    // If any recording depending on this node was done in the meantime, create a new node for the
+    // render pass.
     if (!hasChildlessWritingNode())
     {
         startNewCommands(contextVk);
@@ -238,62 +238,150 @@ angle::Result CommandGraphResource::beginRenderPass(
     return mCurrentWritingNode->beginInsideRenderPassRecording(contextVk, commandBufferOut);
 }
 
-void CommandGraphResource::addWriteDependency(CommandGraphResource *writingResource)
+void CommandGraphResource::addDependencyImpl(ContextVk *contextVk, CommandGraphResource *used)
 {
-    CommandGraphNode *writingNode = writingResource->mCurrentWritingNode;
-    ASSERT(writingNode);
-
-    onWriteImpl(writingNode, writingResource->getStoredQueueSerial());
-}
-
-void CommandGraphResource::addReadDependency(CommandGraphResource *readingResource)
-{
-    updateQueueSerial(readingResource->getStoredQueueSerial());
-
-    CommandGraphNode *readingNode = readingResource->mCurrentWritingNode;
-    ASSERT(readingNode);
-
     if (mCurrentWritingNode)
     {
-        // Ensure 'readingNode' happens after the current writing node.
-        CommandGraphNode::SetHappensBeforeDependency(mCurrentWritingNode, readingNode);
+        // Find the last node that's using |this|.
+        mCurrentWritingNode = mCurrentWritingNode->getDescendant();
+    }
+    else
+    {
+        startNewCommands(contextVk);
     }
 
-    // Add the read node to the list of nodes currently reading this resource.
-    mCurrentReadingNodes.push_back(readingNode);
+    if (used->mCurrentWritingNode)
+    {
+        // Find the last node that's using |used|.
+        used->mCurrentWritingNode = used->mCurrentWritingNode->getDescendant();
+
+        // If |used| and |this| have the same descendant nodes, any future usage of either of them
+        // would be necessarily after the current commands in the current node.  There is no reason
+        // to create any other dependency.  If a buffer barrier needs to be inserted at this point,
+        // the node may need to be break off.  This is handled in |addDependencyAndMemoryBarrier|.
+        if (mCurrentWritingNode == used->mCurrentWritingNode)
+        {
+            return;
+        }
+
+        // Set a dependency from |used|'s current node to |this|'s.  Now that |used| has a child, we
+        // can be sure its node is not appended to.  Note that in B.addDependency(A), we are not
+        // only ensuring future commands in B to be done after A, but also whatever is recorded in
+        // the same node beforehand.  This lets us avoid breaking off |this|'s node.
+        CommandGraphNode::SetHappensBeforeDependency(used->mCurrentWritingNode,
+                                                     mCurrentWritingNode);
+    }
+
+    // The current node of |used| is then changed to |this|'s current node.  This allows us to
+    // detect when |this| uses |used| again in the same node (and allows
+    // |addDependencyAndMemoryBarrier| to break off the node if necessary).  There is little reason
+    // otherwise to do this.  There is however a side effects.
+    //
+    // Chaining |used|'s current node may result it in it "stealing" |this|'s node for its own
+    // rendering.  For example, if a framebuffer is rendered to, then read from (say into an image)
+    // and rendered to again, we could end up with the following graph:
+    //
+    //     Framebuffer: start render pass, draw, draw, end render pass
+    //          |
+    //          V
+    //        Image: copy image, start render pass, draw, draw, end render pass
+    //
+    // This is because future draw calls to Framebuffer see Image's node and record into it.  This
+    // can be worked around by keeping a flag in |used| saying that it's not pointing to its own
+    // node.  In |hasChildlessWritingNode|, that flag could make the function return false,
+    // effectively resulting in a new node to be created:
+    //
+    //     Framebuffer: start render pass, draw, draw, end render pass
+    //          |
+    //          V
+    //        Image: copy image
+    //          |
+    //          V
+    //     Framebuffer: start render pass, draw, draw, end render pass
+    //
+    // The former may look odd in debugging, but is otherwise more efficient as it allocates fewer
+    // nodes and command buffers.
+    used->mCurrentWritingNode = mCurrentWritingNode;
+}
+
+void CommandGraphResource::addDependency(ContextVk *contextVk, CommandGraphResource *used)
+{
+    // Update queue serials, so if any resource has dangling pointers to deleted nodes, they are
+    // reset.
+    Serial currentQueueSerial = contextVk->getCurrentQueueSerial();
+    updateQueueSerial(currentQueueSerial);
+    used->updateQueueSerial(currentQueueSerial);
+
+    addDependencyImpl(contextVk, used);
+}
+
+void CommandGraphResource::addDependencyAndMemoryBarrier(ContextVk *contextVk,
+                                                         CommandGraphResource *used,
+                                                         VkFlags srcAccess,
+                                                         VkFlags dstAccess)
+{
+    // Update queue serials, so if any resource has dangling pointers to deleted nodes, they are
+    // reset.
+    Serial currentQueueSerial = contextVk->getCurrentQueueSerial();
+    updateQueueSerial(currentQueueSerial);
+    used->updateQueueSerial(currentQueueSerial);
+
+    // If |used| and |this| have the same writing nodes, one was using the other in that node.
+    // Regardless of which was using the other, a new barrier is requested to be inserted here,
+    // which means we need to break off the node.  This works because of the
+    //
+    //     used->mCurrentWritingNode = mCurrentWritingNode;
+    //
+    // in |addDependencyImpl|.
+    if (mCurrentWritingNode == used->mCurrentWritingNode)
+    {
+        startNewCommands(contextVk);
+    }
+
+    addDependencyImpl(contextVk, used);
+
+    // Have the most recently created node execute the memory barrier.
+    mCurrentWritingNode->addGlobalMemoryBarrier(srcAccess, dstAccess);
 }
 
 void CommandGraphResource::finishCurrentCommands(ContextVk *contextVk)
 {
+    updateQueueSerial(contextVk->getCurrentQueueSerial());
+
     startNewCommands(contextVk);
 }
 
 void CommandGraphResource::startNewCommands(ContextVk *contextVk)
 {
+    // If all we have is an empty node, don't create another node.  The current one suffices.
+    if (hasChildlessWritingNode() &&
+        !mCurrentWritingNode->getOutsideRenderPassCommands()->valid() && !hasStartedRenderPass())
+    {
+        return;
+    }
+
     CommandGraphNode *newCommands =
         contextVk->getCommandGraph()->allocateNode(CommandGraphNodeFunction::Generic);
     newCommands->setDiagnosticInfo(mResourceType, reinterpret_cast<uintptr_t>(this));
-    onWriteImpl(newCommands, contextVk->getCurrentQueueSerial());
-}
 
-void CommandGraphResource::onWriteImpl(CommandGraphNode *writingNode, Serial currentSerial)
-{
-    updateQueueSerial(currentSerial);
+    updateQueueSerial(contextVk->getCurrentQueueSerial());
 
-    // Make sure any open reads and writes finish before we execute 'writingNode'.
-    if (!mCurrentReadingNodes.empty())
+    CommandGraphNode *parent = mCurrentWritingNode;
+    if (parent == nullptr)
     {
-        CommandGraphNode::SetHappensBeforeDependencies(mCurrentReadingNodes.data(),
-                                                       mCurrentReadingNodes.size(), writingNode);
-        mCurrentReadingNodes.clear();
+        // If there were no previous nodes, make sure the new node is parented to the last command
+        // graph barrier node, if any.
+        size_t previousBarrierIndexUnused;
+        parent = contextVk->getCommandGraph()->getLastBarrierNode(&previousBarrierIndexUnused);
     }
 
-    if (mCurrentWritingNode && mCurrentWritingNode != writingNode)
+    if (parent)
     {
-        CommandGraphNode::SetHappensBeforeDependency(mCurrentWritingNode, writingNode);
+        // Set a dependency from the previous node to the current.
+        CommandGraphNode::SetHappensBeforeDependency(parent->getDescendant(), newCommands);
     }
 
-    mCurrentWritingNode = writingNode;
+    mCurrentWritingNode = newCommands;
 }
 
 // CommandGraphNode implementation.
@@ -305,7 +393,7 @@ CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function,
       mQueryPool(VK_NULL_HANDLE),
       mQueryIndex(0),
       mFenceSyncEvent(VK_NULL_HANDLE),
-      mHasChildren(false),
+      mDescendant(nullptr),
       mVisitedState(VisitedState::Unvisited),
       mGlobalMemoryBarrierSrcAccess(0),
       mGlobalMemoryBarrierDstAccess(0),
@@ -324,7 +412,7 @@ angle::Result CommandGraphNode::beginOutsideRenderPassRecording(ContextVk *conte
                                                                 const CommandPool &commandPool,
                                                                 CommandBuffer **commandsOut)
 {
-    ASSERT(!mHasChildren);
+    ASSERT(!hasChild());
 
     VkCommandBufferInheritanceInfo inheritanceInfo = {};
     inheritanceInfo.sType       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_INFO;
@@ -346,10 +434,11 @@ angle::Result CommandGraphNode::beginOutsideRenderPassRecording(ContextVk *conte
 angle::Result CommandGraphNode::beginInsideRenderPassRecording(ContextVk *context,
                                                                CommandBuffer **commandsOut)
 {
-    ASSERT(!mHasChildren);
+    ASSERT(!hasChild());
 
     // Get a compatible RenderPass from the cache so we can initialize the inheritance info.
-    // TODO(jmadill): Support query for compatible/conformant render pass. http://anglebug.com/2361
+    // TODO(jmadill): Support query for compatible/conformant render pass.
+    // http://anglebug.com/2361
     RenderPass *compatibleRenderPass;
     ANGLE_TRY(context->getCompatibleRenderPass(mRenderPassDesc, &compatibleRenderPass));
 
@@ -384,31 +473,26 @@ void CommandGraphNode::storeRenderPassInfo(const Framebuffer &framebuffer,
     std::copy(clearValues.begin(), clearValues.end(), mRenderPassClearValues.begin());
 }
 
-// static
-void CommandGraphNode::SetHappensBeforeDependencies(CommandGraphNode **beforeNodes,
-                                                    size_t beforeNodesCount,
-                                                    CommandGraphNode *afterNode)
+CommandGraphNode *CommandGraphNode::getDescendant()
 {
-    afterNode->mParents.insert(afterNode->mParents.end(), beforeNodes,
-                               beforeNodes + beforeNodesCount);
-
-    // TODO(jmadill): is there a faster way to do this?
-    for (size_t i = 0; i < beforeNodesCount; ++i)
+    // Find the descendant with no child.
+    CommandGraphNode *descendant = this;
+    while (descendant->mDescendant != nullptr)
     {
-        beforeNodes[i]->setHasChildren();
-
-        ASSERT(beforeNodes[i] != afterNode && !beforeNodes[i]->isChildOf(afterNode));
+        descendant = descendant->mDescendant;
     }
-}
 
-void CommandGraphNode::SetHappensBeforeDependencies(CommandGraphNode *beforeNode,
-                                                    CommandGraphNode **afterNodes,
-                                                    size_t afterNodesCount)
-{
-    for (size_t i = 0; i < afterNodesCount; ++i)
+    // Walk the chain again and set every node's descendant to the last node.  Effectively, this is
+    // a disjoint set data structure with this function having an execution order of O(log*n).
+    CommandGraphNode *node = this;
+    while (node->mDescendant != nullptr)
     {
-        SetHappensBeforeDependency(beforeNode, afterNodes[i]);
+        CommandGraphNode *child = node->mDescendant;
+        node->mDescendant       = descendant;
+        node                    = child;
     }
+
+    return descendant;
 }
 
 bool CommandGraphNode::hasParents() const
@@ -575,7 +659,8 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
             ASSERT(!mOutsideRenderPassCommands.valid() && !mInsideRenderPassCommands.valid());
             ASSERT(mFenceSyncEvent != VK_NULL_HANDLE);
 
-            // Fence Syncs are purely execution barriers, so there are no memory barriers attached.
+            // Fence Syncs are purely execution barriers, so there are no memory barriers
+            // attached.
             primaryCommandBuffer->waitEvents(
                 1, &mFenceSyncEvent, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
                 VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, nullptr, 0, nullptr, 0, nullptr);
@@ -690,15 +775,7 @@ CommandGraphNode *CommandGraph::allocateBarrierNode(CommandGraphNodeFunction fun
 void CommandGraph::setNewBarrier(CommandGraphNode *newBarrier)
 {
     size_t previousBarrierIndex       = 0;
-    CommandGraphNode *previousBarrier = getLastBarrierNode(&previousBarrierIndex);
-
-    // Add a dependency from previousBarrier to all nodes in (previousBarrier, newBarrier).
-    if (previousBarrier && previousBarrierIndex + 1 < mNodes.size())
-    {
-        size_t afterNodesCount = mNodes.size() - (previousBarrierIndex + 2);
-        CommandGraphNode::SetHappensBeforeDependencies(
-            previousBarrier, &mNodes[previousBarrierIndex + 1], afterNodesCount);
-    }
+    getLastBarrierNode(&previousBarrierIndex);
 
     // Add a dependency from all nodes in [previousBarrier, newBarrier) to newBarrier.
     addDependenciesToNextBarrier(previousBarrierIndex, mNodes.size() - 1, newBarrier);
@@ -715,17 +792,6 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
     // There is no point in submitting an empty command buffer, so make sure not to call this
     // function if there's nothing to do.
     ASSERT(!mNodes.empty());
-
-    size_t previousBarrierIndex       = 0;
-    CommandGraphNode *previousBarrier = getLastBarrierNode(&previousBarrierIndex);
-
-    // Add a dependency from previousBarrier to all nodes in (previousBarrier, end].
-    if (previousBarrier && previousBarrierIndex + 1 < mNodes.size())
-    {
-        size_t afterNodesCount = mNodes.size() - (previousBarrierIndex + 1);
-        CommandGraphNode::SetHappensBeforeDependencies(
-            previousBarrier, &mNodes[previousBarrierIndex + 1], afterNodesCount);
-    }
 
     VkCommandBufferAllocateInfo primaryInfo = {};
     primaryInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -756,7 +822,7 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
     {
         // Only process commands that don't have child commands. The others will be pulled in
         // automatically. Also skip commands that have already been visited.
-        if (topLevelNode->hasChildren() || topLevelNode->visitedState() != VisitedState::Unvisited)
+        if (topLevelNode->hasChild() || topLevelNode->visitedState() != VisitedState::Unvisited)
             continue;
 
         nodeStack.push_back(topLevelNode);
@@ -915,8 +981,8 @@ void CommandGraph::dumpGraphDotFile(std::ostream &out) const
         }
         else if (node->getResourceTypeForDiagnostics() == CommandGraphResourceType::Query)
         {
-            // Special case for queries as they cannot generate a resource ID at creation time that
-            // would reliably fit in a uintptr_t.
+            // Special case for queries as they cannot generate a resource ID at creation time
+            // that would reliably fit in a uintptr_t.
             strstr << " ";
 
             ASSERT(node->getResourceIDForDiagnostics() == 0);
@@ -940,8 +1006,8 @@ void CommandGraph::dumpGraphDotFile(std::ostream &out) const
         {
             strstr << " ";
 
-            // Otherwise assign each object an ID, so all the nodes of the same object have the same
-            // label.
+            // Otherwise assign each object an ID, so all the nodes of the same object have the
+            // same label.
             ASSERT(node->getResourceIDForDiagnostics() != 0);
             auto it = objectIDMap.find(node->getResourceIDForDiagnostics());
             if (it != objectIDMap.end())
@@ -1007,9 +1073,8 @@ void CommandGraph::addDependenciesToNextBarrier(size_t begin,
 {
     for (size_t i = begin; i < end; ++i)
     {
-        // As a small optimization, only add edges to childless nodes.  The others have an
-        // indirect dependency.
-        if (!mNodes[i]->hasChildren())
+        // Only add edges to childless nodes.  The others have an indirect dependency.
+        if (!mNodes[i]->hasChild())
         {
             CommandGraphNode::SetHappensBeforeDependency(mNodes[i], nextBarrier);
         }

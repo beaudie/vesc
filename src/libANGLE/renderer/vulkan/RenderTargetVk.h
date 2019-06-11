@@ -50,22 +50,14 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
               size_t layerIndex);
     void reset();
 
-    // Note: RenderTargets should be called in order, with the depth/stencil onRender last.
-    angle::Result onColorDraw(ContextVk *contextVk,
-                              vk::FramebufferHelper *framebufferVk,
-                              vk::CommandBuffer *commandBuffer);
-    angle::Result onDepthStencilDraw(ContextVk *contextVk,
-                                     vk::FramebufferHelper *framebufferVk,
-                                     vk::CommandBuffer *commandBuffer);
+    angle::Result onColorDraw(ContextVk *contextVk, vk::FramebufferHelper *framebufferVk);
+    angle::Result onDepthStencilDraw(ContextVk *contextVk, vk::FramebufferHelper *framebufferVk);
+    angle::Result onAccess(ContextVk *contextVk,
+                           vk::CommandGraphResource *readingResource,
+                           vk::ImageLayout layout);
 
     vk::ImageHelper &getImage();
     const vk::ImageHelper &getImage() const;
-
-    // getImageForRead will also transition the resource to the given layout.
-    vk::ImageHelper *getImageForRead(vk::CommandGraphResource *readingResource,
-                                     vk::ImageLayout layout,
-                                     vk::CommandBuffer *commandBuffer);
-    vk::ImageHelper *getImageForWrite(vk::CommandGraphResource *writingResource) const;
 
     vk::ImageView *getDrawImageView() const;
     vk::ImageView *getReadImageView() const;
