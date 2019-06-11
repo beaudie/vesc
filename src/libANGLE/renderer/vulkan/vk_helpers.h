@@ -433,19 +433,27 @@ class BufferHelper final : public CommandGraphResource
     const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
     VkDeviceSize getSize() const { return mSize; }
 
-    // Helpers for setting the graph dependencies *and* setting the appropriate barrier.
-    ANGLE_INLINE void onRead(CommandGraphResource *reader, VkAccessFlags readAccessType)
+    // Helpers for setting the graph dependencies *and* setting the appropriate barrier.  These are
+    // made for dependencies to non-buffer resources, as only one of two resources participating in
+    // the dependency would require a memory barrier.  Incidentally, these can also be used to
+    // issue a memory barrier within nodes of the same buffer (in which case, |writer| or |reader|
+    // is |this|).
+    void onRead(ContextVk *contextVk, CommandGraphResource *reader, VkAccessFlags readAccessType);
+    void onWrite(ContextVk *contextVk, CommandGraphResource *writer, VkAccessFlags writeAccessType);
+    // Helper for setting the graph dependency between two buffers.  This is a specialized function
+    // as both buffers may incur a memory barrier.  Using |onRead| followed by |onWrite| between
+    // the buffers is impossible as it would result in a command graph loop.
+    void onReadByBuffer(ContextVk *contextVk,
+                        BufferHelper *writer,
+                        VkAccessFlags readAccessType,
+                        VkAccessFlags writeAccessType);
+
+    // Set write access mask when the buffer is modified externally, e.g. by host.  There is no
+    // graph resource to create a dependency to.
+    ANGLE_INLINE void onExternalWrite(VkAccessFlags writeAccessType)
     {
-        addReadDependency(reader);
-
-        if (mCurrentWriteAccess != 0 && (mCurrentReadAccess & readAccessType) != readAccessType)
-        {
-            reader->addGlobalMemoryBarrier(mCurrentWriteAccess, readAccessType);
-            mCurrentReadAccess |= readAccessType;
-        }
+        mCurrentWriteAccess |= writeAccessType;
     }
-
-    void onWrite(ContextVk *contextVk, VkAccessFlags writeAccessType);
 
     // Also implicitly sets up the correct barriers.
     angle::Result copyFromBuffer(ContextVk *contextVk,
@@ -488,6 +496,15 @@ class BufferHelper final : public CommandGraphResource
 
   private:
     angle::Result mapImpl(ContextVk *contextVk);
+
+    // Helper functions to update current access masks and determine when a memory barrier is
+    // necessary.
+    bool needsOnReadBarrier(VkAccessFlags readAccessType,
+                            VkAccessFlags *barrierSrcOut,
+                            VkAccessFlags *barrierDstOut);
+    bool needsOnWriteBarrier(VkAccessFlags writeAccessType,
+                             VkAccessFlags *barrierSrcOut,
+                             VkAccessFlags *barrierDstOut);
 
     // Vulkan objects.
     Buffer mBuffer;
@@ -649,13 +666,6 @@ class ImageHelper final : public CommandGraphResource
     // image.
     gl::Extents getLevelExtents2D(uint32_t level) const;
 
-    // Clear either color or depth/stencil based on image format.
-    void clear(const VkClearValue &value,
-               uint32_t mipLevel,
-               uint32_t baseArrayLayer,
-               uint32_t layerCount,
-               vk::CommandBuffer *commandBuffer);
-
     gl::Extents getSize(const gl::ImageIndex &index) const;
 
     static void Copy(ImageHelper *srcImage,
@@ -701,7 +711,8 @@ class ImageHelper final : public CommandGraphResource
                                                         const gl::InternalFormat &formatInfo,
                                                         FramebufferVk *framebufferVk);
 
-    void stageSubresourceUpdateFromImage(vk::ImageHelper *image,
+    void stageSubresourceUpdateFromImage(ContextVk *contextVk,
+                                         vk::ImageHelper *image,
                                          const gl::ImageIndex &index,
                                          const gl::Offset &destOffset,
                                          const gl::Extents &extents);
@@ -733,8 +744,7 @@ class ImageHelper final : public CommandGraphResource
                                      uint32_t levelStart,
                                      uint32_t levelEnd,
                                      uint32_t layerStart,
-                                     uint32_t layerEnd,
-                                     vk::CommandBuffer *commandBuffer);
+                                     uint32_t layerEnd);
     // Creates a command buffer and flushes all staged updates.  This is used for one-time
     // initialization of resources that we don't expect to accumulate further staged updates, such
     // as with renderbuffers or surface images.
@@ -742,26 +752,35 @@ class ImageHelper final : public CommandGraphResource
 
     bool hasStagedUpdates() const { return !mSubresourceUpdates.empty(); }
 
+    // Change image layout (and possibly queue).  The command is recorded in the command buffer of
+    // the image's own graph node.
+    //
+    // Does nothing if layout change is not necessary.
+    angle::Result changeLayout(ContextVk *contextVk,
+                               VkImageAspectFlags aspectMask,
+                               ImageLayout newLayout);
+
+    // Same as changeLayout, but records the command on a given command buffer.  The former is
+    // useful to avoid allocating command buffers if the layout change is unnecessary.  The latter
+    // is useful to avoid unnecessary ANGLE_TRYs.
+    void changeLayoutWithCommand(VkImageAspectFlags aspectMask,
+                                 ImageLayout newLayout,
+                                 vk::CommandBuffer *commandBuffer);
+
+    angle::Result changeLayoutAndQueue(ContextVk *contextVk,
+                                       VkImageAspectFlags aspectMask,
+                                       ImageLayout newLayout,
+                                       uint32_t newQueueFamilyIndex);
+
+  private:
     // changeLayout automatically skips the layout change if it's unnecessary.  This function can be
     // used to prevent creating a command graph node and subsequently a command buffer for the sole
     // purpose of performing a transition (which may then not be issued).
     bool isLayoutChangeNecessary(ImageLayout newLayout) const;
 
-    void changeLayout(VkImageAspectFlags aspectMask,
-                      ImageLayout newLayout,
-                      vk::CommandBuffer *commandBuffer);
+    bool isQueueChangeNeccesary(uint32_t newQueueFamilyIndex) const;
 
-    bool isQueueChangeNeccesary(uint32_t newQueueFamilyIndex) const
-    {
-        return mCurrentQueueFamilyIndex != newQueueFamilyIndex;
-    }
-
-    void changeLayoutAndQueue(VkImageAspectFlags aspectMask,
-                              ImageLayout newLayout,
-                              uint32_t newQueueFamilyIndex,
-                              vk::CommandBuffer *commandBuffer);
-
-  private:
+    // Change layout and queue, assuming the change is necessary.
     void forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                    ImageLayout newLayout,
                                    uint32_t newQueueFamilyIndex,
@@ -771,6 +790,13 @@ class ImageHelper final : public CommandGraphResource
                                const angle::Format &format,
                                const VkClearColorValue &colorValue,
                                const VkClearDepthStencilValue &depthStencilValue);
+
+    // Clear either color or depth/stencil based on image format.
+    void clear(const VkClearValue &value,
+               uint32_t mipLevel,
+               uint32_t baseArrayLayer,
+               uint32_t layerCount,
+               vk::CommandBuffer *commandBuffer);
 
     void clearColor(const VkClearColorValue &color,
                     uint32_t baseMipLevel,
@@ -787,6 +813,9 @@ class ImageHelper final : public CommandGraphResource
                            uint32_t baseArrayLayer,
                            uint32_t layerCount,
                            vk::CommandBuffer *commandBuffer);
+
+    template <typename... Args>
+    void storeSubresourceUpdate(ContextVk *contextVk, Args &&... args);
 
     struct SubresourceUpdate
     {
