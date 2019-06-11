@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e6cf053_867caa6a",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-06-11T17:25:06Z",
+      "side": 1,
+      "message": "Could you please add here how to generate a solution for a Chromium checkout vs standalone ANGLE, while at it?\nI add \"--filters\u003d//third_party/angle/*\" to the flags above.",
+      "revId": "918c8c3decd11f4afe388923036a0359e4dcd565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
