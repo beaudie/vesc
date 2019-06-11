@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "8ad0b504_84c141f9",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T13:44:32Z",
+      "side": 1,
+      "message": "nit: this init syntax isn\u0027t used typically in ANGLE - maybe just omit the cast? ( \u003d 0xFFFF; )",
+      "range": {
+        "startLine": 197,
+        "startChar": 56,
+        "endLine": 197,
+        "endChar": 73
+      },
+      "revId": "7d60b6a54e43ad186f7ac5fa29e3af0adc75db22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b3a466d_3946027a",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T13:44:32Z",
+      "side": 1,
+      "message": "you can put the if (primitiveRestart) outside the for loop and implement two for loops. This should give slightly better performance as one for loop won\u0027t need any if.",
+      "range": {
+        "startLine": 202,
+        "startChar": 12,
+        "endLine": 202,
+        "endChar": 75
+      },
+      "revId": "7d60b6a54e43ad186f7ac5fa29e3af0adc75db22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8ea8657_4e3ac612",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T13:44:32Z",
+      "side": 1,
+      "message": "again you can omit the cast here.",
+      "range": {
+        "startLine": 205,
+        "startChar": 24,
+        "endLine": 205,
+        "endChar": 61
+      },
+      "revId": "7d60b6a54e43ad186f7ac5fa29e3af0adc75db22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ae3aa5d0_0bcba226",
         "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
         "patchSetId": 5
@@ -13,6 +82,47 @@
       "writtenOn": "2019-06-10T22:20:55Z",
       "side": 1,
       "message": "Do we have an idea of what the perf impact is here?\nThese are simple operations so probably not significant but makes me wonder if primitive restart should be forced to use CPU path to avoid adding overhead to common index conversion GPU path.",
+      "revId": "7d60b6a54e43ad186f7ac5fa29e3af0adc75db22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13bcca2a_a586a769",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T13:44:32Z",
+      "side": 1,
+      "message": "You can use an ubershader approach here to optimize the \"if\" away when restart is disabled. Shabi set this up pretty well. Look in ConvertVertex.comp.json. You can add a \"Flags\" section with \"IsPrimitiveRestartEnabled\". Then in the shader here you can use the define \"IsPrimitiveRestartEnabled\" to #ifdef in the \"if\" statement.\n\nYou will also need to update UtilsVk::convertIndexBuffer.",
+      "parentUuid": "ae3aa5d0_0bcba226",
+      "revId": "7d60b6a54e43ad186f7ac5fa29e3af0adc75db22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3d09d50_4db84681",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T13:44:32Z",
+      "side": 1,
+      "message": "ah, line loops. Those are a bit trickier. A good idea to handle them in a split patch. Can you update the issue number for these suppressions to be 3215?",
+      "range": {
+        "startLine": 653,
+        "startChar": 60,
+        "endLine": 653,
+        "endChar": 69
+      },
       "revId": "7d60b6a54e43ad186f7ac5fa29e3af0adc75db22",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
