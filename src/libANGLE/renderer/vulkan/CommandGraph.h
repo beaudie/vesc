@@ -76,13 +76,13 @@ class CommandGraphNode final : angle::NonCopyable
     // Immutable queries for when we're walking the commands tree.
     CommandBuffer *getOutsideRenderPassCommands()
     {
-        ASSERT(!mHasChildren);
+        ASSERT(!hasChild());
         return &mOutsideRenderPassCommands;
     }
 
     CommandBuffer *getInsideRenderPassCommands()
     {
-        ASSERT(!mHasChildren);
+        ASSERT(!hasChild());
         return &mInsideRenderPassCommands;
     }
 
@@ -100,6 +100,7 @@ class CommandGraphNode final : angle::NonCopyable
                              const vk::RenderPassDesc &renderPassDesc,
                              const AttachmentOpsArray &renderPassAttachmentOps,
                              const std::vector<VkClearValue> &clearValues);
+    const Framebuffer &getRenderPassFramebuffer() const { return mRenderPassFramebuffer; }
 
     void clearRenderPassColorAttachment(size_t attachmentIndex, const VkClearColorValue &clearValue)
     {
@@ -126,20 +127,17 @@ class CommandGraphNode final : angle::NonCopyable
                                            CommandGraphNode *afterNode)
     {
         ASSERT(beforeNode != afterNode && !beforeNode->isChildOf(afterNode));
+        ASSERT(beforeNode->mFunction != CommandGraphNodeFunction::Generic ||
+               !beforeNode->hasChild());
         afterNode->mParents.emplace_back(beforeNode);
-        beforeNode->setHasChildren();
+        beforeNode->mDescendant = afterNode;
+        beforeNode->onSetChild();
     }
 
-    static void SetHappensBeforeDependencies(CommandGraphNode **beforeNodes,
-                                             size_t beforeNodesCount,
-                                             CommandGraphNode *afterNode);
-
-    static void SetHappensBeforeDependencies(CommandGraphNode *beforeNode,
-                                             CommandGraphNode **afterNodes,
-                                             size_t afterNodesCount);
+    CommandGraphNode *getDescendant();
 
     bool hasParents() const;
-    bool hasChildren() const { return mHasChildren; }
+    bool hasChild() const { return mDescendant != nullptr; }
 
     // Commands for traversing the node on a flush operation.
     VisitedState visitedState() const;
@@ -174,6 +172,12 @@ class CommandGraphNode final : angle::NonCopyable
         mGlobalMemoryBarrierDstAccess |= dstAccess;
     }
 
+    void forceNewRenderPass()
+    {
+        // Invalidate the owner's command buffer so it would create a new render pass.
+        invalidateOwnerCommandBuffer();
+    }
+
     // This can only be set for RenderPass nodes. Each RenderPass node can have at most one owner.
     void setCommandBufferOwner(CommandBufferOwner *owner)
     {
@@ -182,14 +186,15 @@ class CommandGraphNode final : angle::NonCopyable
     }
 
   private:
-    ANGLE_INLINE void setHasChildren()
+    ANGLE_INLINE void invalidateOwnerCommandBuffer()
     {
-        mHasChildren = true;
         if (mCommandBufferOwner)
         {
             mCommandBufferOwner->onCommandBufferFinished();
         }
     }
+
+    ANGLE_INLINE void onSetChild() { invalidateOwnerCommandBuffer(); }
 
     // Used for testing only.
     bool isChildOf(CommandGraphNode *parent);
@@ -221,8 +226,17 @@ class CommandGraphNode final : angle::NonCopyable
     // Parents are commands that must be submitted before 'this' CommandNode can be submitted.
     std::vector<CommandGraphNode *> mParents;
 
-    // If this is true, other commands exist that must be submitted after 'this' command.
-    bool mHasChildren;
+    // When a dependency is created between two nodes, through B.addDependency(A), any future user
+    // of A must add an edge to B's node, so it can be executed after B has finished using A (even
+    // if all users are reads, because the image and buffer barriers set when recording the readers'
+    // nodes assume same-order execution).  As a result, A is never going to have multiple children.
+    //
+    // This variable is set to whichever node is the child of this node when creating a dependency.
+    // When a new user of this node appears, the dependency is instead created on the child.
+    //
+    // Note that if the child itself has a child, the dependency is created on the descendant with
+    // no child.  This pointer is updated to the latest child-less descendant whenever queried.
+    CommandGraphNode *mDescendant;
 
     // Used when traversing the dependency graph.
     VisitedState mVisitedState;
@@ -257,11 +271,61 @@ class CommandGraphResource : angle::NonCopyable
     // queries, to know if the queue they are submitted on has finished execution.
     Serial getStoredQueueSerial() const { return mStoredQueueSerial; }
 
-    // Sets up dependency relations. 'this' resource is the resource being written to.
-    void addWriteDependency(CommandGraphResource *writingResource);
+    // Sets up dependency relations.  |this| resource is the resource that's recording commands.
+    // |used| is the resource being used in the commands, be it to read from or to write to.  May
+    // create a new node for |this| if necessary.  As there would be a dependency from |used| to
+    // |this|, any command buffer previously allocated from |used| should no longer be used.  The
+    // usage pattern is:
+    //
+    //     A.recordCommands(&commandBufferA);
+    //     A.render(commandBufferA);
+    //
+    //     B.addDependency(A)
+    //
+    //     B.recordCommands(&commandBufferB);
+    //     B.render(commandBufferB);
+    //
+    // or:
+    //
+    //     B.addDependency(A)
+    //
+    //     B.recordCommands(&commandBufferB);
+    //     A.render(commandBufferB);
+    //     B.render(commandBufferB);
+    //
+    // Note again that after B.addDependency(A), both A's and B's previously allocated command
+    // buffers may be invalid.  So, if B uses multiple resources, it would be best to set the
+    // dependencies first, and render all at once instead of setting dependencies and re-acquiring
+    // the command buffer after every addDependency():
+    //
+    //     B.addDependency(M)
+    //     B.addDependency(N)
+    //     B.addDependency(O)
+    //     B.addDependency(P)
+    //
+    //     B.recordCommands(&commandBufferB);
+    //     M.render(commandBufferB);
+    //     N.render(commandBufferB);
+    //     O.render(commandBufferB);
+    //     P.render(commandBufferB);
+    //     B.render(commandBufferB);
+    //
+    // The |addDependency| function effectively creates a weak execution ordering; all commands
+    // previously recorded in A will be executed before all commands to be recorded in B.
+    void addDependency(ContextVk *contextVk, CommandGraphResource *used);
 
-    // Sets up dependency relations. 'this' resource is the resource being read.
-    void addReadDependency(CommandGraphResource *readingResource);
+    // The global memory barriers (for the sake of buffers) are executed at the beginning of the
+    // node that uses the buffers.  If a node depends on multiple buffers, their memory barrier
+    // access masks can be accumulated and a single memory barrier generated.
+    //
+    // If a resource accesses the same buffer in different ways, its graph node needs to break off
+    // between each use so the memory barriers would be placed in between.  Setting the memory
+    // barrier access masks is thus paired with setting dependency, so the graph node can be broken
+    // off if necessary and the barrier set on the new node.
+    void addDependencyAndMemoryBarrier(ContextVk *contextVk,
+                                       CommandGraphResource *used,
+                                       VkFlags srcAccess,
+                                       VkFlags dstAccess);
 
     // Updates the in-use serial tracked for this resource. Will clear dependencies if the resource
     // was not used in this set of command nodes.
@@ -272,7 +336,6 @@ class CommandGraphResource : angle::NonCopyable
         if (queueSerial > mStoredQueueSerial)
         {
             mCurrentWritingNode = nullptr;
-            mCurrentReadingNodes.clear();
             mStoredQueueSerial = queueSerial;
         }
     }
@@ -284,7 +347,7 @@ class CommandGraphResource : angle::NonCopyable
     // Allocates a write node via getNewWriteNode and returns a started command buffer.
     // The started command buffer will render outside of a RenderPass.
     // Will append to an existing command buffer/graph node if possible.
-    angle::Result recordCommands(ContextVk *context, CommandBuffer **commandBufferOut);
+    angle::Result recordCommands(ContextVk *contextVk, CommandBuffer **commandBufferOut);
 
     // Begins a command buffer on the current graph node for in-RenderPass rendering.
     // Called from FramebufferVk::startNewRenderPass and UtilsVk functions.
@@ -299,18 +362,29 @@ class CommandGraphResource : angle::NonCopyable
     // Checks if we're in a RenderPass without children.
     bool hasStartedRenderPass() const
     {
-        return hasChildlessWritingNode() &&
+        return !mForceNewRenderPass && hasChildlessWritingNode() &&
                mCurrentWritingNode->getInsideRenderPassCommands()->valid();
+    }
+
+    // Checks if we're in a useable render pass for this particular framebuffer.  When modifying or
+    // appending to the render pass of this node, we have to make sure it belongs to the correct
+    // framebuffer.
+    bool hasStartedFramebufferRenderPass(const Framebuffer &framebuffer) const
+    {
+        return hasStartedRenderPass() &&
+               framebuffer.getHandle() ==
+                   mCurrentWritingNode->getRenderPassFramebuffer().getHandle();
     }
 
     // Checks if we're in a RenderPass that encompasses renderArea, returning true if so. Updates
     // serial internally. Returns the started command buffer in commandBufferOut.
     ANGLE_INLINE bool appendToStartedRenderPass(Serial currentQueueSerial,
+                                                const Framebuffer &framebuffer,
                                                 const gl::Rectangle &renderArea,
                                                 CommandBuffer **commandBufferOut)
     {
         updateQueueSerial(currentQueueSerial);
-        if (hasStartedRenderPass())
+        if (hasStartedFramebufferRenderPass(framebuffer))
         {
             if (mCurrentWritingNode->getRenderPassRenderArea().encloses(renderArea))
             {
@@ -324,28 +398,25 @@ class CommandGraphResource : angle::NonCopyable
 
     // Returns true if the render pass is started, but there are no commands yet recorded in it.
     // This is useful to know if the render pass ops can be modified.
-    bool renderPassStartedButEmpty() const
+    bool renderPassStartedButEmpty(const Framebuffer &framebuffer) const
     {
-        return hasStartedRenderPass() &&
+        return hasStartedFramebufferRenderPass(framebuffer) &&
                (!vk::CommandBuffer::CanKnowIfEmpty() ||
                 mCurrentWritingNode->getInsideRenderPassCommands()->empty());
     }
 
+    // The following modify the render pass ops, and must be called only if
+    // renderPassStartedButEmpty().
     void clearRenderPassColorAttachment(size_t attachmentIndex, const VkClearColorValue &clearValue)
     {
-        ASSERT(renderPassStartedButEmpty());
         mCurrentWritingNode->clearRenderPassColorAttachment(attachmentIndex, clearValue);
     }
-
     void clearRenderPassDepthAttachment(size_t attachmentIndex, float depth)
     {
-        ASSERT(renderPassStartedButEmpty());
         mCurrentWritingNode->clearRenderPassDepthAttachment(attachmentIndex, depth);
     }
-
     void clearRenderPassStencilAttachment(size_t attachmentIndex, uint32_t stencil)
     {
-        ASSERT(renderPassStartedButEmpty());
         mCurrentWritingNode->clearRenderPassStencilAttachment(attachmentIndex, stencil);
     }
 
@@ -357,14 +428,7 @@ class CommandGraphResource : angle::NonCopyable
     }
 
     // Called when 'this' object changes, but we'd like to start a new command buffer later.
-    void finishCurrentCommands(ContextVk *contextVk);
-
-    // Store a deferred memory barrier. Will be recorded into a primary command buffer at submit.
-    void addGlobalMemoryBarrier(VkFlags srcAccess, VkFlags dstAccess)
-    {
-        ASSERT(mCurrentWritingNode);
-        mCurrentWritingNode->addGlobalMemoryBarrier(srcAccess, dstAccess);
-    }
+    void forceNewRenderPass(ContextVk *contextVk);
 
   protected:
     explicit CommandGraphResource(CommandGraphResourceType resourceType);
@@ -380,19 +444,22 @@ class CommandGraphResource : angle::NonCopyable
         // false.
         ASSERT(mCurrentWritingNode == nullptr ||
                mCurrentWritingNode->getFunction() == CommandGraphNodeFunction::Generic);
-        return (mCurrentWritingNode != nullptr && !mCurrentWritingNode->hasChildren());
+        return (mCurrentWritingNode != nullptr && !mCurrentWritingNode->hasChild());
     }
 
     void startNewCommands(ContextVk *contextVk);
 
-    void onWriteImpl(CommandGraphNode *writingNode, Serial currentSerial);
+    void addDependencyImpl(ContextVk *contextVk, CommandGraphResource *used);
 
     Serial mStoredQueueSerial;
 
-    std::vector<CommandGraphNode *> mCurrentReadingNodes;
-
     // Current command graph writing node.
     CommandGraphNode *mCurrentWritingNode;
+
+    // Set if the framebuffer or scissor has changed in such a way that would require the render
+    // pass to restart.  If the render pass isn't automatically restarted for some other reason
+    // (such as a dependency), this would ensure it does on next draw call.
+    bool mForceNewRenderPass;
 
     // Additional diagnostic information.
     CommandGraphResourceType mResourceType;
@@ -452,12 +519,13 @@ class CommandGraph final : angle::NonCopyable
     void pushDebugMarker(GLenum source, std::string &&marker);
     void popDebugMarker();
 
+    CommandGraphNode *getLastBarrierNode(size_t *indexOut);
+
   private:
     CommandGraphNode *allocateBarrierNode(CommandGraphNodeFunction function,
                                           CommandGraphResourceType resourceType,
                                           uintptr_t resourceID);
     void setNewBarrier(CommandGraphNode *newBarrier);
-    CommandGraphNode *getLastBarrierNode(size_t *indexOut);
     void addDependenciesToNextBarrier(size_t begin, size_t end, CommandGraphNode *nextBarrier);
 
     void dumpGraphDotFile(std::ostream &out) const;
