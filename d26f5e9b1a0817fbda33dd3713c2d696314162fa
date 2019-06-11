@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e42222f2_9242ce26",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T19:15:15Z",
+      "side": 1,
+      "message": "nit: should use a pointer to match style guide.",
+      "range": {
+        "startLine": 308,
+        "startChar": 39,
+        "endLine": 308,
+        "endChar": 67
+      },
+      "revId": "d26f5e9b1a0817fbda33dd3713c2d696314162fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcf902c4_bd8971e9",
+        "filename": "src/tests/egl_tests/EGLFeatureControlTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T19:15:15Z",
+      "side": 1,
+      "message": "nit: technically this won\u0027t stop the test body from running. Because ASSERT_TRUE just returns from the current function if the condition fails. You could have something like an mInitSucceeded or you could just make testSetUp no-op, move it into an init function and call that from the start of each test. Like ASSERT_TRUE(testSetup()); Pretty minor point though.",
+      "range": {
+        "startLine": 24,
+        "startChar": 8,
+        "endLine": 26,
+        "endChar": 78
+      },
+      "revId": "d26f5e9b1a0817fbda33dd3713c2d696314162fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
