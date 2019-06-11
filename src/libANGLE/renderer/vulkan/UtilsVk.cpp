@@ -561,11 +561,11 @@ angle::Result UtilsVk::clearBuffer(ContextVk *contextVk,
 {
     ANGLE_TRY(ensureBufferClearResourcesInitialized(contextVk));
 
+    // Tell dest it's being written to.
+    dest->onWrite(contextVk, dest, VK_ACCESS_SHADER_WRITE_BIT);
+
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(dest->recordCommands(contextVk, &commandBuffer));
-
-    // Tell dest it's being written to.
-    dest->onWrite(VK_ACCESS_SHADER_WRITE_BIT);
 
     const vk::Format &destFormat = dest->getViewFormat();
 
@@ -613,13 +613,11 @@ angle::Result UtilsVk::convertIndexBuffer(ContextVk *contextVk,
 {
     ANGLE_TRY(ensureConvertIndexResourcesInitialized(contextVk));
 
+    // Create dependency between src and dest.
+    src->onReadByBuffer(contextVk, dest, VK_ACCESS_SHADER_READ_BIT, VK_ACCESS_SHADER_WRITE_BIT);
+
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(dest->recordCommands(contextVk, &commandBuffer));
-
-    // Tell src we are going to read from it.
-    src->onRead(dest, VK_ACCESS_SHADER_READ_BIT);
-    // Tell dest it's being written to.
-    dest->onWrite(VK_ACCESS_SHADER_WRITE_BIT);
 
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
@@ -670,13 +668,11 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
 {
     ANGLE_TRY(ensureConvertVertexResourcesInitialized(contextVk));
 
+    // Create dependency between src and dest.
+    src->onReadByBuffer(contextVk, dest, VK_ACCESS_SHADER_READ_BIT, VK_ACCESS_SHADER_WRITE_BIT);
+
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(dest->recordCommands(contextVk, &commandBuffer));
-
-    // Tell src we are going to read from it.
-    src->onRead(dest, VK_ACCESS_SHADER_READ_BIT);
-    // Tell dest it's being written to.
-    dest->onWrite(VK_ACCESS_SHADER_WRITE_BIT);
 
     ConvertVertexShaderParams shaderParams;
     shaderParams.Ns = params.srcFormat->channelCount();
@@ -1000,14 +996,10 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
 
     pipelineDesc.setScissor(gl_vk::GetRect(params.blitArea));
 
-    // Change source layout outside render pass
-    if (src->isLayoutChangeNecessary(vk::ImageLayout::FragmentShaderReadOnly))
-    {
-        vk::CommandBuffer *srcLayoutChange;
-        ANGLE_TRY(src->recordCommands(contextVk, &srcLayoutChange));
-        src->changeLayout(src->getAspectFlags(), vk::ImageLayout::FragmentShaderReadOnly,
-                          srcLayoutChange);
-    }
+    ANGLE_TRY(src->changeLayout(contextVk, src->getAspectFlags(),
+                                vk::ImageLayout::FragmentShaderReadOnly));
+
+    framebuffer->getFramebuffer()->addDependency(contextVk, src);
 
     vk::CommandBuffer *commandBuffer;
     if (!framebuffer->appendToStartedRenderPass(contextVk->getCurrentQueueSerial(), params.blitArea,
@@ -1015,9 +1007,6 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     {
         ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, params.blitArea, &commandBuffer));
     }
-
-    // Source's layout change should happen before rendering
-    src->addReadDependency(framebuffer->getFramebuffer());
 
     VkDescriptorImageInfo imageInfos[2] = {};
 
@@ -1152,19 +1141,18 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
     uint32_t flags = src->getLayerCount() > 1 ? BlitResolveStencilNoExport_comp::kSrcIsArray : 0;
     flags |= isResolve ? BlitResolve_frag::kIsResolve : 0;
 
-    // Change source layout prior to computation.
-    if (src->isLayoutChangeNecessary(vk::ImageLayout::ComputeShaderReadOnly))
-    {
-        vk::CommandBuffer *srcLayoutChange;
-        ANGLE_TRY(src->recordCommands(contextVk, &srcLayoutChange));
-        src->changeLayout(src->getAspectFlags(), vk::ImageLayout::ComputeShaderReadOnly,
-                          srcLayoutChange);
-    }
+    RenderTargetVk *depthStencilRenderTarget = framebuffer->getDepthStencilRenderTarget();
+    ASSERT(depthStencilRenderTarget != nullptr);
+
+    framebuffer->getFramebuffer()->addDependency(contextVk, src);
+    ANGLE_TRY(depthStencilRenderTarget->onAccess(contextVk, framebuffer->getFramebuffer(),
+                                                 vk::ImageLayout::TransferDst));
 
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(framebuffer->getFramebuffer()->recordCommands(contextVk, &commandBuffer));
 
-    src->addReadDependency(framebuffer->getFramebuffer());
+    src->changeLayoutWithCommand(src->getAspectFlags(), vk::ImageLayout::ComputeShaderReadOnly,
+                                 commandBuffer);
 
     // Blit/resolve stencil into the buffer.
     VkDescriptorImageInfo imageInfo = {};
@@ -1226,12 +1214,7 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
                                    0, nullptr);
 
     // Copy the resulting buffer into dest.
-    RenderTargetVk *depthStencilRenderTarget = framebuffer->getDepthStencilRenderTarget();
-    ASSERT(depthStencilRenderTarget != nullptr);
     vk::ImageHelper *depthStencilImage = &depthStencilRenderTarget->getImage();
-
-    depthStencilImage->changeLayout(depthStencilImage->getAspectFlags(),
-                                    vk::ImageLayout::TransferDst, commandBuffer);
 
     VkBufferImageCopy region               = {};
     region.bufferOffset                    = 0;
@@ -1330,28 +1313,17 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     VkRect2D scissor = gl_vk::GetRect(renderArea);
     pipelineDesc.setScissor(scissor);
 
-    // Change source layout outside render pass
-    if (src->isLayoutChangeNecessary(vk::ImageLayout::FragmentShaderReadOnly))
-    {
-        vk::CommandBuffer *srcLayoutChange;
-        ANGLE_TRY(src->recordCommands(contextVk, &srcLayoutChange));
-        src->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::FragmentShaderReadOnly,
-                          srcLayoutChange);
-    }
+    ANGLE_TRY(src->changeLayout(contextVk, VK_IMAGE_ASPECT_COLOR_BIT,
+                                vk::ImageLayout::FragmentShaderReadOnly));
 
-    // Change destination layout outside render pass as well
-    vk::CommandBuffer *destLayoutChange;
-    ANGLE_TRY(dest->recordCommands(contextVk, &destLayoutChange));
+    dest->addDependency(contextVk, src);
 
-    dest->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorAttachment,
-                       destLayoutChange);
+    ANGLE_TRY(
+        dest->changeLayout(contextVk, VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::ColorAttachment));
 
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(
         startRenderPass(contextVk, dest, destView, renderPassDesc, renderArea, &commandBuffer));
-
-    // Source's layout change should happen before rendering
-    src->addReadDependency(dest);
 
     VkDescriptorImageInfo imageInfo = {};
     imageInfo.imageView             = srcView->getHandle();
