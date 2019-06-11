@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "7bf5dace_7263bd6c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-11T00:21:50Z",
+      "side": 1,
+      "message": "This function is the only thing that generates an error when enabling all of the buffer mapping tests, so I started here.\n\nOnce this is working, the next step are the various bit functions:\n\nGL_MAP_INVALIDATE_RANGE_BIT\n- No work necessary, since it only indicates we may discard the data (we don\u0027t actually have to) and the data in the buffer is undefined.\n\nGL_MAP_INVALIDATE_BUFFER_BIT\n- No work necessary, same as GL_MAP_INVALIDATE_RANGE_BIT.\n\nGL_MAP_FLUSH_EXPLICIT_BIT\n- When this flag is set, modifications to each subrange must be explicitly flushed by calling glFlushMappedBufferRange.   We already flush data with explicit barriers, so any additional calls to glFlushMappedBufferRange() are just doing extra flushes we\u0027ve already done.\n  - Implementing this correctly could change performance characteristics, but since it doesn\u0027t change functionality (we already guarantee they read/write the correct data, regardless of whether they correctly flush) it will be harder to test.\n\nGL_MAP_UNSYNCHRONIZED_BIT\n- Indicates that the GL should not attempt to synchronize pending operations on the buffer prior to returning from glMapBufferRange.\n  - We already synchronize pending operations though, so similar to GL_MAP_FLUSH_EXPLICIT_BIT, a more correct implementation of this may change performance characteristics but be difficult to test explicitly.\n\n\nWhat are your thoughts on how to handle those bits?   Is removing flushing/synchronizing worth it, even though we can pass dEQP without the changes?   How do we validate the implementations are correct?\n\nI\u0027ll check to see what you guys think is a good approach for these.",
+      "parentUuid": "0a5327e1_7f82a9ee",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 47
+      },
+      "revId": "ba1f7d43fb4dbbe1c3557096eb365614fff2a8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ce3e994_f0d2e8f3",
         "filename": "src/tests/gl_tests/BufferDataTest.cpp",
         "patchSetId": 1
@@ -69,6 +93,30 @@
       "revId": "ba1f7d43fb4dbbe1c3557096eb365614fff2a8ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c39a835d_c5828996",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-11T00:21:50Z",
+      "side": 1,
+      "message": "Looks good:\n\n[----------] 2 tests from IndexedBufferCopyTest\n[ RUN      ] IndexedBufferCopyTest.IndexRangeBug/ES3_OpenGL\n[       OK ] IndexedBufferCopyTest.IndexRangeBug/ES3_OpenGL (936 ms)\n[ RUN      ] IndexedBufferCopyTest.IndexRangeBug/ES3_Vulkan\n[       OK ] IndexedBufferCopyTest.IndexRangeBug/ES3_Vulkan (602 ms)\n[----------] 2 tests from IndexedBufferCopyTest (1538 ms total)",
+      "parentUuid": "2ce3e994_f0d2e8f3",
+      "range": {
+        "startLine": 479,
+        "startChar": 23,
+        "endLine": 479,
+        "endChar": 44
+      },
+      "revId": "ba1f7d43fb4dbbe1c3557096eb365614fff2a8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
