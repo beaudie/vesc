@@ -938,7 +938,7 @@ angle::Result ProgramVk::updateUniformBuffersDescriptorSet(ContextVk *contextVk,
         VkDeviceSize blockSize         = uniformBlock.dataSize;
         vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
-        ANGLE_TRY(bufferVk->onRead(contextVk, framebuffer, VK_ACCESS_UNIFORM_READ_BIT));
+        bufferHelper.onRead(contextVk, framebuffer, VK_ACCESS_UNIFORM_READ_BIT);
 
         // If size is 0, we can't always use VK_WHOLE_SIZE (or bufferHelper.getSize()), as the
         // backing buffer may be larger than maxUniformBufferRange.  In that case, we use the
@@ -1010,19 +1010,11 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
             ANGLE_TRY(textureVk->ensureImageInitialized(contextVk));
             vk::ImageHelper &image = textureVk->getImage();
 
+            framebuffer->addDependency(contextVk, &image);
+
             // Ensure the image is in read-only layout
-            if (image.isLayoutChangeNecessary(vk::ImageLayout::FragmentShaderReadOnly))
-            {
-                vk::CommandBuffer *srcLayoutChange;
-                ANGLE_TRY(image.recordCommands(contextVk, &srcLayoutChange));
-
-                VkImageAspectFlags aspectFlags = image.getAspectFlags();
-                ASSERT(aspectFlags != 0);
-                image.changeLayout(aspectFlags, vk::ImageLayout::FragmentShaderReadOnly,
-                                   srcLayoutChange);
-            }
-
-            image.addReadDependency(framebuffer);
+            ANGLE_TRY(image.changeLayout(contextVk, image.getAspectFlags(),
+                                         vk::ImageLayout::FragmentShaderReadOnly));
 
             VkDescriptorImageInfo &imageInfo = descriptorImageInfo[writeCount];
 

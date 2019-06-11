@@ -586,6 +586,7 @@ angle::Result ContextVk::handleDirtyTextures(const gl::Context *context,
 angle::Result ContextVk::handleDirtyVertexBuffers(const gl::Context *context,
                                                   vk::CommandBuffer *commandBuffer)
 {
+    ContextVk *contextVk = vk::GetImpl(context);
     uint32_t maxAttrib = mProgram->getState().getMaxActiveAttribLocation();
     const gl::AttribArray<VkBuffer> &bufferHandles = mVertexArray->getCurrentArrayBufferHandles();
     const gl::AttribArray<VkDeviceSize> &bufferOffsets =
@@ -602,7 +603,7 @@ angle::Result ContextVk::handleDirtyVertexBuffers(const gl::Context *context,
         vk::BufferHelper *arrayBuffer = arrayBufferResources[attribIndex];
         if (arrayBuffer)
         {
-            arrayBuffer->onRead(framebuffer, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
+            arrayBuffer->onRead(contextVk, framebuffer, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT);
         }
     }
 
@@ -612,6 +613,7 @@ angle::Result ContextVk::handleDirtyVertexBuffers(const gl::Context *context,
 angle::Result ContextVk::handleDirtyIndexBuffer(const gl::Context *context,
                                                 vk::CommandBuffer *commandBuffer)
 {
+    ContextVk *contextVk                 = vk::GetImpl(context);
     vk::BufferHelper *elementArrayBuffer = mVertexArray->getCurrentElementArrayBuffer();
     ASSERT(elementArrayBuffer != nullptr);
 
@@ -620,7 +622,7 @@ angle::Result ContextVk::handleDirtyIndexBuffer(const gl::Context *context,
                                    gl_vk::kIndexTypeMap[mCurrentDrawElementsType]);
 
     vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
-    elementArrayBuffer->onRead(framebuffer, VK_ACCESS_INDEX_READ_BIT);
+    elementArrayBuffer->onRead(contextVk, framebuffer, VK_ACCESS_INDEX_READ_BIT);
 
     return angle::Result::Continue;
 }
