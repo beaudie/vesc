@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "fe188c25_14f4daac",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-11T02:52:39Z",
+      "side": 1,
+      "message": "Does this comment about CPU vs GPU apply to this patchset 1 or patchset 3?   Patchset 3 is using vkCmdCopyBuffer() now which should be using the GPU (based on the trouble I was having until the finish() was added to actually submit the work).   I\u0027m hoping this latest version is a bit more correct.",
+      "parentUuid": "1f914bed_bb3013fe",
+      "range": {
+        "startLine": 155,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 47
+      },
+      "revId": "ba1f7d43fb4dbbe1c3557096eb365614fff2a8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ce3e994_f0d2e8f3",
         "filename": "src/tests/gl_tests/BufferDataTest.cpp",
         "patchSetId": 1
