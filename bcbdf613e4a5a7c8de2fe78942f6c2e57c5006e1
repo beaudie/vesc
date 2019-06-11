@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43cd6e83_5e1b08d0",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T15:53:57Z",
+      "side": 1,
+      "message": "forgot, we can remove this line as it no longer applies.",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 184
+      },
+      "revId": "bcbdf613e4a5a7c8de2fe78942f6c2e57c5006e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "837f5e1d_6079244a",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-11T15:53:57Z",
+      "side": 1,
+      "message": "should probably update this too. Suggestion:\n\n1. Open the ANGLE solution...\n2. Right click the ...\n3. Once the build completes all ANGLE libraries, tests, and samples are located in out/Debug.",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 252
+      },
+      "revId": "bcbdf613e4a5a7c8de2fe78942f6c2e57c5006e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
