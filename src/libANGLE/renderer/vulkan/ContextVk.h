@@ -210,6 +210,12 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
                                                  divisor, format, relativeOffset);
     }
 
+    ANGLE_INLINE void onTextureContentsChange()
+    {
+        mDirtyBits.set(DIRTY_BIT_TEXTURES);
+        mDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+    }
+
     void invalidateDefaultAttribute(size_t attribIndex);
     void invalidateDefaultAttributes(const gl::AttributesMask &dirtyMask);
     void onFramebufferChange(const vk::RenderPassDesc &renderPassDesc);
@@ -326,8 +332,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
 
     using DirtyBits = angle::BitSet<DIRTY_BIT_MAX>;
 
-    using DirtyBitHandler = angle::Result (ContextVk::*)(const gl::Context *,
-                                                         vk::CommandBuffer *commandBuffer);
+    using DirtyBitHandler = angle::Result (ContextVk::*)(const gl::Context *);
 
     std::array<DirtyBitHandler, DIRTY_BIT_MAX> mDirtyBitHandlers;
 
@@ -375,20 +380,21 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     void invalidateCurrentUniformBuffers();
     void invalidateDriverUniforms();
 
-    angle::Result handleDirtyDefaultAttribs(const gl::Context *context,
-                                            vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyPipeline(const gl::Context *context, vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyTextures(const gl::Context *context, vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyVertexBuffers(const gl::Context *context,
-                                           vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyIndexBuffer(const gl::Context *context,
-                                         vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyDriverUniforms(const gl::Context *context,
-                                            vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyUniformBuffers(const gl::Context *context,
-                                            vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyDescriptorSets(const gl::Context *context,
-                                            vk::CommandBuffer *commandBuffer);
+    angle::Result handleDirtyDefaultAttribs(const gl::Context *context);
+    angle::Result handleDirtyPipeline(const gl::Context *context);
+    angle::Result handleDirtyTextures(const gl::Context *context);
+    angle::Result handleDirtyVertexBuffers(const gl::Context *context);
+    angle::Result handleDirtyIndexBuffer(const gl::Context *context);
+    angle::Result handleDirtyDriverUniforms(const gl::Context *context);
+    angle::Result handleDirtyUniformBuffers(const gl::Context *context);
+    angle::Result handleDirtyDescriptorSets(const gl::Context *context);
+
+    void recordDirtyPipeline(vk::CommandBuffer *commandBuffer);
+    void recordDirtyVertexBuffers(vk::CommandBuffer *commandBuffer);
+    void recordDirtyIndexBuffer(vk::CommandBuffer *commandBuffer);
+    angle::Result recordDirtyDescriptorSets(vk::CommandBuffer *commandBuffer);
+
+    angle::Result recordDirtyChanges(DirtyBits dirtyBits, vk::CommandBuffer *commandBuffer);
 
     angle::Result submitFrame(const VkSubmitInfo &submitInfo,
                               vk::PrimaryCommandBuffer &&commandBuffer);
