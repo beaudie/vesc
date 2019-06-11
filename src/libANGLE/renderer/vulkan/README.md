@@ -2,17 +2,18 @@
 
 ANGLE's Vulkan back-end implementation lives in this folder.
 
-[Vulkan](https://www.khronos.org/vulkan/) is an explicit graphics API. It has a lot in common with
-other explicit APIs such as Microsoft's [D3D12][D3D12 Guide] and Apple's
-[Metal](https://developer.apple.com/metal/). Compared to APIs like OpenGL or D3D11 explicit APIs can
-offer a number of significant benefits:
+[Vulkan][Vulkan] is an explicit graphics API. It has a lot in common with other explicit APIs such
+as Microsoft's [D3D12][D3D12 Guide] and Apple's [Metal][Metal]. Compared to APIs like OpenGL or
+D3D11, explicit APIs can offer a number of significant benefits:
 
  * Lower API call CPU overhead.
  * A smaller API surface with more direct hardware control.
  * Better support for multi-core programming.
  * Vulkan in particular has open-source tooling and tests.
 
+[Vulkan]: https://www.khronos.org/vulkan/
 [D3D12 Guide]: https://docs.microsoft.com/en-us/windows/desktop/direct3d12/directx-12-programming-guide
+[Metal]: https://developer.apple.com/metal/
 
 [TOC]
 
@@ -151,6 +152,196 @@ Note right of "Vulkan Back-end": We init VkShaderModules\nand VkPipeline then\nr
 [glslang]: https://github.com/KhronosGroup/glslang
 [GlslangWrapper.cpp]: https://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/renderer/vulkan/GlslangWrapper.cpp
 [SPIRV-Tools]: https://github.com/KhronosGroup/SPIRV-Tools
+
+### Command Graph Design
+
+The Vulkan back-end supports deferred command execution. Deferred recording allows ANGLE to
+implement command reordering, automatic RenderPass load/store ops and implicit layout transitions.
+We implement this deferred command execution by recording commands into secondary command buffers.
+We enforce ordering on the commands via public dependency relations and special barrier nodes. For
+example: a draw call reads from a Texture and writes to a Framebuffer and its attachments. The
+Framebuffer will have a dependency on the Texture as well as its attachments. Thus commands
+operating on the Texture or attachments must execute before the draw calls on the Framebuffer.
+As another example, query begin/end create special graph nodes that ensure commands are not
+reordered around them.
+
+Internally ANGLE uses a directed acyclic graph to enforce the ordering on command buffers. Each node
+of the command graph must execute after any connected parent nodes. Each node stores deferred Vulkan
+commands. Nodes also store additional parameters needed to begin a RenderPass.
+
+OpenGL objects that record command buffers inherit from `CommandGraphResource`. That is the only
+class that can create command buffers and record commands. `CommandGraphResource` APIs also enforce
+ordering between commands via dependencies. They are not themselves nodes in the command graph but
+each holds a reference to the graph node it is currently using to record commands.
+
+#### Classes that Implement CommandGraphResource
+
+- `ImageHelper` (owns vk::Image and memory)
+- `BufferHelper` (owns vk::Buffer and memory)
+- `FramebufferHelper` (owns vk::Framebuffer)
+
+#### CommandGraphResource Internal API
+
+Starting Vulkan command buffers can only be done inside a `CommandGraphResource`. Vulkan commands
+either work inside or outside a RenderPass instance. RenderPasses are necessary for commands used
+with a Framebuffer, such as draw calls or Framebuffer-based clears. RenderPasses also require more
+state.  The `CommandGraphResource` APIs are divided between RenderPass and Writing (outside a
+RenderPass) commands.  RenderPass commands are also divided between “begin” or “append” APIs.
+
+##### Recording Commands Outside a RenderPass
+
+```
+angle::Result recordCommands(ContextVk *contextVk, CommandBuffer **commandBufferOut);
+Serial getStoredQueueSerial() const;
+```
+
+The `recordCommands` API returns a started command buffer for recording new commands. If possible we
+will return an existing command buffer for performance. For example, we can combine multiple layout
+transitions, copies, dispatch calls etc using the same dependencies into a single command buffer.
+
+The `getStoredQueueSerial` API is used when enqueing Vulkan objects into garbage collection.
+Occasionally, it is used to know if the resource has pending operations that may necessitate a
+flush, such as with mapping a buffer.
+
+##### RenderPass APIs
+
+```
+angle::Result beginRenderPass(ContextVk *contextVk,
+                              const Framebuffer &framebuffer,
+                              const gl::Rectangle &renderArea,
+                              const RenderPassDesc &renderPassDesc,
+                              const AttachmentOpsArray &renderPassAttachmentOps,
+                              const std::vector<VkClearValue> &clearValues,
+                              CommandBuffer **commandBufferOut);
+bool hasStartedFramebufferRenderPass(const Framebuffer &framebuffer) const;
+bool appendToStartedRenderPass(Serial currentQueueSerial,
+                               const Framebuffer &framebuffer,
+                               const gl::Rectangle &renderArea,
+                               CommandBuffer **commandBufferOut);
+```
+
+The `beginRenderPass` API is special in that it includes a bunch of extra state information that is
+necessary for starting a RenderPass. `hasStartedFramebufferRenderPass` tests to see if the current
+node of a Framebuffer has a RenderPass started for this framebuffer. In that case,
+`appendToStartedRenderPass` can be used to append more commands to the same RenderPass.
+`FramebufferVk::appendOrStartRenderPass` nicely encapsulates the necessary logic and returns a
+command buffer for the framebuffer to issue draw calls to.
+
+#### CommandGraphResource External API
+
+Each `CommandGraphResource` keeps track of the last graph node with a command buffer that reads from
+or writes to it. When a `CommandGraphResource` records commands, it will opportunistically try to
+append commands to that node's command buffer. That may not be possible if a dependent command
+buffer in another node is using the resource. To maintain the correct ordering of operations, the
+resources create dependencies, which effectively creates an edge between their current nodes.
+
+```
+void addDependency(ContextVk *contextVk, CommandGraphResource *used);
+void addDependencyAndMemoryBarrier(ContextVk *contextVk,
+                                   CommandGraphResource *used,
+                                   VkFlags srcAccess,
+                                   VkFlags dstAccess);
+```
+
+The `addDependency` function is called on the resource that's about to record commands to ensure
+what's already recorded for `used` executes beforehand. An example usage is:
+
+```
+A.recordCommands(&commandBufferA)
+renderA(commandBufferA)
+
+B.addDependency(A)
+
+B.recordCommands(&commandBufferB)
+renderB(commandBufferB)
+```
+
+In this example, what's recorded in `commandBufferA` executes before what's recorded in
+`commandBufferB`. Given this property, the caller can reduce the number of secondary command buffers
+by equivalently recording as such:
+
+```
+B.addDependency(A)
+
+B.recordCommands(&commandBufferB)
+renderA(commandBufferB)
+renderB(commandBufferB)
+```
+
+The `addDependencyAndMemoryBarrier` is a special-cased `addDependency` that includes a memory
+barrier. This is used to terminate the current command buffer and create a new node if the memory
+barrier cannot be aggregated in to the current node.
+
+#### Implementation
+
+Vulkan image and memory barriers are created based on their usage in the GLES command timeline. This
+means that if a resource is read from through two independent paths, the order of execution of the
+Vulkan command buffers of those paths must necessarily be the same as specified by the GLES
+commands. For example, if an image is in layout A, the first reader requires it to be in layout B
+and the second reader in layout C, then the barriers issued in the Vulkan command buffers are `A->B`
+in the first command buffer and `B->C` in the second. The two command buffers cannot therefore be
+executed out of order.
+
+This property allows us to restrict every node to a single child. Every `addDependency` would first
+descend to the last descendant of the resource's current node, and creates the dependency there.
+While the graph is being generated, the graph basically forms a forest of [disjoint
+sets][DisjointSet], with each set's descendant node being the representative of the set.
+
+```
+A   B   C   D
+ \ /     \ /
+  E   F   G
+```
+
+In the above, each letter represents a graph node, and the edge directions are from top to bottom.
+Creating a dependency between nodes of the same set is a no-op (for example between `A` and `B` or
+`C` and `G`), because they would both append their commands to `E` and the order is naturally
+maintained. Creating a dependency between two nodes of different sets creates an edge between the
+descendants. For example, creating an edge from `F` to `E` (`ownerOfF.addDependency(ownerOfE)`, and
+subsequently from a new node `H` to both `A` and `D` would result in the following graph:
+
+```
+A   B
+ \ /
+  E   C   D
+   \   \ /
+    F   G
+     \ /
+      H
+```
+
+[DisjointSet]: https://en.wikipedia.org/wiki/Disjoint-set_data_structure
+
+##### Command Graph Barrier Nodes
+
+A certain number of GLES commands imply an ordering between commands, but don't necessarily
+associate with any resource. More importantly, they don't create a dependency between command
+buffers that have already been recorded. Examples of such commands include query begin/end, debug
+marker push/pop, sync fence set/wait etc. A special node is created for such an operation that
+doesn't record any commands. These "command graph barrier nodes" set dependencies between nodes
+before and after them such that the commands are not reordered around them, but they don't
+participate in the disjoint set data structure. This allows disjoint sets to remain disjoint and
+avoids serializing every command after the first barrier node.
+
+##### RenderPass loadOp and storeOp
+
+When a Framebuffer starts a RenderPass, the RenderPass loadOp and storeOp parameters are set.
+However, as long as no command is recorded in the RenderPass, these values are allowed to be
+modified. For example, a `glClearBuffer` may start a RenderPass where loadOp for the corresponding
+draw buffer is set to `VK_ATTACHMENT_LOAD_OP_CLEAR` while the rest of the draw buffers have
+`VK_ATTACHMENT_LOAD_OP_LOAD`. A subsequent `glClearBuffer` call would simply update the loadOp of
+another draw buffer instead of restarting the RenderPass.
+
+##### Graph Debugging
+
+The command graph supports outputting a diagram using [the DOT format][DOT]. This is done through
+setting `kEnableCommandGraphDiagnostics` to `true` in ContextVk.cpp. Currently, there is no runtime
+flag to enable this.
+
+If the `angle_enable_custom_vulkan_cmd_buffers` build flag is set (which is the default), a summary
+of the commands recorded in each node is also output in the diagram.
+
+[DOT]: https://en.wikipedia.org/wiki/DOT_(graph_description_language)
 
 ### OpenGL Line Segment Rasterization
 
