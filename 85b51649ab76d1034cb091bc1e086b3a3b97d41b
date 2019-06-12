@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea1b7857_4dc520f5",
+        "filename": "src/libGLESv2/entry_points_egl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T11:58:30Z",
+      "side": 1,
+      "message": "One additional refactor needed for consistency here. We should make new validation methods ValidateCreateImage and ValdiateDestroyImage. Same as Validate*ImageKHR but without the suffix. Then ValidateCreateImage should validate the same thing as ValidateCreateImageKHR but we don\u0027t check for the presence of the image extensions.\n\nYou can implement this by renaming ValidateCreateImageKHR -\u003e ValidateCreateImage, making a new method ValidateCreateImageKHR and calling ValidateCreateImage from the new ValidateCreateImageKHR. And moving the \"if (!displayExtensions.imageBase \u0026\u0026 !displayExtensions.image)\" validation to ValidateCreateImageKHR. Same for Destroy.",
+      "range": {
+        "startLine": 941,
+        "startChar": 18,
+        "endLine": 941,
+        "endChar": 40
+      },
+      "revId": "85b51649ab76d1034cb091bc1e086b3a3b97d41b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb304ccb_6dd77ceb",
+        "filename": "src/libGLESv2/entry_points_egl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T11:58:30Z",
+      "side": 1,
+      "message": "is it possible to use ANGLE_EGL_TRY_RETURN here and below? You could also update the CreateImageKHR and DestroyImageKHR EPs if so.",
+      "range": {
+        "startLine": 940,
+        "startChar": 0,
+        "endLine": 946,
+        "endChar": 5
+      },
+      "revId": "85b51649ab76d1034cb091bc1e086b3a3b97d41b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
