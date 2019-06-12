@@ -78,14 +78,7 @@ void TestPlatform_logWarning(PlatformMethods *platform, const char *warningMessa
     }
 }
 
-void TestPlatform_logInfo(PlatformMethods *platform, const char *infoMessage)
-{
-    auto *testPlatformContext = static_cast<TestPlatformContext *>(platform->context);
-    if (testPlatformContext->ignoreMessages)
-        return;
-
-    WriteDebugMessage("%s\n", infoMessage);
-}
+void TestPlatform_logInfo(PlatformMethods *platform, const char *infoMessage) {}
 
 void TestPlatform_overrideWorkaroundsD3D(PlatformMethods *platform, WorkaroundsD3D *workaroundsD3D)
 {

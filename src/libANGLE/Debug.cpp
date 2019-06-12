@@ -168,7 +168,24 @@ void Debug::insertMessage(GLenum source,
         const char *severityString    = GLSeverityToString(severity);
         std::ostringstream messageStream;
         messageStream << "GL " << messageTypeString << ": " << severityString << ": " << message;
-        gl::Trace(logSeverity, messageStream.str().c_str());
+        switch (logSeverity)
+        {
+            case gl::LOG_FATAL:
+                FATAL() << messageStream.str();
+                break;
+            case gl::LOG_ERR:
+                ERR() << messageStream.str();
+                break;
+            case gl::LOG_WARN:
+                WARN() << messageStream.str();
+                break;
+            case gl::LOG_INFO:
+                INFO() << messageStream.str();
+                break;
+            case gl::LOG_EVENT:
+                ANGLE_LOG(EVENT) << messageStream.str();
+                break;
+        }
     }
 
     if (!isMessageEnabled(source, type, id, severity))
