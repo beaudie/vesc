@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a3a98e8_775641ce",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T18:32:49Z",
+      "side": 0,
+      "message": "nit: probably should rename this to remove the \"out\" as it\u0027s an in parameter now",
+      "range": {
+        "startLine": 437,
+        "startChar": 55,
+        "endLine": 437,
+        "endChar": 78
+      },
+      "revId": "148ecd89a2dcf77d58cef943835a6d2c9b928a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

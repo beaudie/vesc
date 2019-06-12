@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a69fcbd_adacbbff",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2105,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T18:32:49Z",
+      "side": 1,
+      "message": "I don\u0027t think we need the #ifndef here. You can call destroy on an invalid object and it will no-op. Renaming the trace event is a good idea. Maybe just \"command buffer recycling?\" I think one trace event is probably sufficient. You\u0027ll also need to rebase as this code has changed slightly.",
+      "range": {
+        "startLine": 2105,
+        "startChar": 8,
+        "endLine": 2105,
+        "endChar": 36
+      },
+      "revId": "62fdc8054c6dff49b364780fec667a4da516ee86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db2d209c_f1d32518",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T18:32:49Z",
+      "side": 1,
+      "message": "would also call this primaryCommands or primaryCommandBuffer",
+      "range": {
+        "startLine": 493,
+        "startChar": 33,
+        "endLine": 493,
+        "endChar": 47
+      },
+      "revId": "62fdc8054c6dff49b364780fec667a4da516ee86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a71d1912_0a116a5c",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T18:32:49Z",
+      "side": 1,
+      "message": "ANGLE_VK_TRY here once we\u0027re returning angle::Result",
+      "range": {
+        "startLine": 35,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 12
+      },
+      "revId": "62fdc8054c6dff49b364780fec667a4da516ee86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c57651f_482302d9",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T18:32:49Z",
+      "side": 1,
+      "message": "this should also return angle::Result and take a vk::Context * argument",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 83
+      },
+      "revId": "62fdc8054c6dff49b364780fec667a4da516ee86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8c0abde_642df1bf",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T18:32:49Z",
+      "side": 1,
+      "message": "this can also take vk::Context",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 34
+      },
+      "revId": "62fdc8054c6dff49b364780fec667a4da516ee86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac5d64b8_5b6522da",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T18:32:49Z",
+      "side": 1,
+      "message": "small nitpick but can you make this take a vk::Context and return angle::Result, calling ANGLE_VK_TRY internally?",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 62
+      },
+      "revId": "62fdc8054c6dff49b364780fec667a4da516ee86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68a6593e_56fde6d4",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T18:32:49Z",
+      "side": 1,
+      "message": "same here. also this should probably take a pointer-to-pointer arg given the other changes I\u0027m requesting.",
+      "range": {
+        "startLine": 33,
+        "startChar": 24,
+        "endLine": 33,
+        "endChar": 39
+      },
+      "revId": "62fdc8054c6dff49b364780fec667a4da516ee86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82f71490_23ce3798",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T18:32:49Z",
+      "side": 1,
+      "message": "Given single ownership I\u0027m going to suggest we don\u0027t store the allocated buffer batches here. As suggested before. Rather we just store a free list. If you want to keep a count of working set size that seems reasonable.\n\nOn allocate you can give ownership directly to the allocating code.",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 40,
+        "endChar": 70
+      },
+      "revId": "62fdc8054c6dff49b364780fec667a4da516ee86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f56f022_5b4dc0cf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T18:32:49Z",
+      "side": 1,
+      "message": "ideally we could remove this new method.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 54
+      },
+      "revId": "62fdc8054c6dff49b364780fec667a4da516ee86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d239ab0f_6b39b5e0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T18:32:49Z",
+      "side": 1,
+      "message": "ideally we could remove this new method. you will likely have to add a move constructor and move assignment operator for priv::CommandBuffer and SecondaryCommandBuffer.",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 176,
+        "endChar": 94
+      },
+      "revId": "62fdc8054c6dff49b364780fec667a4da516ee86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c61fb777_8158023e",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 9
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T18:32:49Z",
+      "side": 1,
+      "message": "nit: please sort",
+      "range": {
+        "startLine": 776,
+        "startChar": 32,
+        "endLine": 776,
+        "endChar": 53
+      },
+      "revId": "62fdc8054c6dff49b364780fec667a4da516ee86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
