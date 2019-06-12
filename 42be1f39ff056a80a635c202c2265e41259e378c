@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "848ef3e7_0675b26a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-12T19:47:06Z",
+      "side": 1,
+      "message": "The masks are no longer necessary, isn\u0027t that right? They can be removed.",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 13
+      },
+      "revId": "42be1f39ff056a80a635c202c2265e41259e378c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
