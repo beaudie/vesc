@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "70c199fc_07405500",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-12T17:06:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d1b295b_00b58b07",
+      "revId": "71e93d1518f856b7480168ba4ca55eb386629f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a5493c17_f0094bdc",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
         "patchSetId": 1
@@ -66,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "dc7c0ef1_cc0c7029",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-12T17:06:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "838015a9_4c9f72fc",
+      "range": {
+        "startLine": 347,
+        "startChar": 28,
+        "endLine": 347,
+        "endChar": 48
+      },
+      "revId": "71e93d1518f856b7480168ba4ca55eb386629f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6da5a28d_8d9fa90e",
         "filename": "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h",
         "patchSetId": 1
@@ -86,6 +128,30 @@
       "revId": "71e93d1518f856b7480168ba4ca55eb386629f0c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0ef15ee_030e0499",
+        "filename": "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-12T17:06:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6da5a28d_8d9fa90e",
+      "range": {
+        "startLine": 211,
+        "startChar": 37,
+        "endLine": 213,
+        "endChar": 77
+      },
+      "revId": "71e93d1518f856b7480168ba4ca55eb386629f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
