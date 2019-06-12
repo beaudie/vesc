@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "838015a9_4c9f72fc",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T16:47:06Z",
+      "side": 1,
+      "message": "As you like. You can change in in the next CL if you prefer.",
+      "parentUuid": "a5493c17_f0094bdc",
+      "range": {
+        "startLine": 347,
+        "startChar": 28,
+        "endLine": 347,
+        "endChar": 48
+      },
+      "revId": "71e93d1518f856b7480168ba4ca55eb386629f0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6da5a28d_8d9fa90e",
         "filename": "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h",
         "patchSetId": 1
