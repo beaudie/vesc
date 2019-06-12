@@ -1477,13 +1477,13 @@ void GenerateWorkarounds(const FunctionsGL *functions, WorkaroundsGL *workaround
         (IsWindows() && (IsIntel(vendor) || IsAMD(vendor))) || (IsLinux() && IsNvidia(vendor));
 }
 
-void ApplyWorkarounds(const FunctionsGL *functions, gl::Workarounds *workarounds)
+void InitializeFrontendFeatures(const FunctionsGL *functions, gl::FrontendFeatures *features)
 {
     VendorID vendor = GetVendorID(functions);
 
-    workarounds->disableProgramCachingForTransformFeedback.enabled =
-        IsAndroid() && IsQualcomm(vendor);
-    workarounds->syncFramebufferBindingsOnTexImage.enabled = IsWindows() && IsIntel(vendor);
+    features->loseContextOnOutOfMemory.enabled                  = true;
+    features->disableProgramCachingForTransformFeedback.enabled = IsAndroid() && IsQualcomm(vendor);
+    features->syncFramebufferBindingsOnTexImage.enabled         = IsWindows() && IsIntel(vendor);
 }
 
 }  // namespace nativegl_gl
