@@ -113,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "dbca6f18_7156679a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T12:51:00Z",
+      "side": 1,
+      "message": "Yeah, sounds right.",
+      "parentUuid": "e4054911_8ceda463",
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "32041c31_c61853df",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 5
@@ -289,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "86963e45_5944d5ce",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T12:51:00Z",
+      "side": 1,
+      "message": "Yeah, you can get rid of this class entirely. I suggest we do that, if you don\u0027t mind.",
+      "parentUuid": "67e11b04_ebdf69db",
+      "range": {
+        "startLine": 16,
+        "startChar": 36,
+        "endLine": 16,
+        "endChar": 64
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4c34f13a_839fa95d",
         "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
         "patchSetId": 5
@@ -371,6 +413,30 @@
       "side": 1,
       "message": "Agree that one CommandBuffer per allocation would satisfy primary CommandBuffer\u0027s usage needs. However, I still think it\u0027s good to initially allocate several ones (for example 3, I think 3 inflight CommandBuffer is a common situation), so I\u0027d rather keep the `allocateCommandBufferArray` method in order to be consistent and merely change the `count` to 1",
       "parentUuid": "aa6c7a29_7cf1ac5b",
+      "range": {
+        "startLine": 93,
+        "startChar": 3,
+        "endLine": 99,
+        "endChar": 52
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8984802_8854c4f3",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T12:51:00Z",
+      "side": 1,
+      "message": "I\u0027d suggest for now we remove the struct CommandBufferArrayHandle and just store a std::vector\u003cvk::CommandBuffer\u003e for the free list. If we need to preallocate 2-3 command buffers up front we can do that as well with my proposed design. This change will help simplify this class.",
+      "parentUuid": "51a617d7_ad7ac946",
       "range": {
         "startLine": 93,
         "startChar": 3,
