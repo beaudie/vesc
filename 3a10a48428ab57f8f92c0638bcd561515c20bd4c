@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "03a69c5b_b30733fd",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T11:53:40Z",
+      "side": 1,
+      "message": "you can remove this - we\u0027re checking the contextVk now.",
+      "range": {
+        "startLine": 54,
+        "startChar": 7,
+        "endLine": 54,
+        "endChar": 38
+      },
+      "revId": "3a10a48428ab57f8f92c0638bcd561515c20bd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4180a597_25e2d1b9",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
         "patchSetId": 6
@@ -18,6 +41,53 @@
         "startChar": 30,
         "endLine": 351,
         "endChar": 79
+      },
+      "revId": "3a10a48428ab57f8f92c0638bcd561515c20bd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96e326cb_f9d30e25",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T11:53:40Z",
+      "side": 1,
+      "message": "It looks wrong to me. Maybe the autogen should output a constexpr size_t value that is the maximum number of shaders needed for the array.",
+      "parentUuid": "4180a597_25e2d1b9",
+      "range": {
+        "startLine": 351,
+        "startChar": 30,
+        "endLine": 351,
+        "endChar": 79
+      },
+      "revId": "3a10a48428ab57f8f92c0638bcd561515c20bd4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e87ea136_b1e0265c",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T11:53:40Z",
+      "side": 1,
+      "message": "nit: you can probably combine these into one line again.",
+      "range": {
+        "startLine": 217,
+        "startChar": 0,
+        "endLine": 218,
+        "endChar": 43
       },
       "revId": "3a10a48428ab57f8f92c0638bcd561515c20bd4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",

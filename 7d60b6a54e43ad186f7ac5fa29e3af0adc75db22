@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "4881da64_51672f9b",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T11:53:40Z",
+      "side": 1,
+      "message": "You\u0027d be surprised. Often I\u0027ve seen our code perform a lot better with tweaking.",
+      "parentUuid": "ae57a46d_4073ae96",
+      "range": {
+        "startLine": 202,
+        "startChar": 12,
+        "endLine": 202,
+        "endChar": 75
+      },
+      "revId": "7d60b6a54e43ad186f7ac5fa29e3af0adc75db22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e8ea8657_4e3ac612",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 5
