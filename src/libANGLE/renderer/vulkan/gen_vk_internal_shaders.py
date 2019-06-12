@@ -435,6 +435,7 @@ class ShaderAndVariations:
         (self.flags, self.enums) = get_shader_variations(shader_file)
         get_variation_bits(self.flags, self.enums)
         (self.flags_bits, self.enum_bits) = get_variation_bits(self.flags, self.enums)
+        self.array_len = 1 << (self.flags_bits + sum(self.enum_bits))
 
 
 def get_variation_definition(shader_and_variation):
@@ -443,6 +444,7 @@ def get_variation_definition(shader_and_variation):
     enums = shader_and_variation.enums
     flags_bits = shader_and_variation.flags_bits
     enum_bits = shader_and_variation.enum_bits
+    array_len = shader_and_variation.array_len
 
     namespace_name = get_namespace_name(shader_file)
 
@@ -466,6 +468,8 @@ def get_variation_definition(shader_and_variation):
                                                ((1 << enum_bits[e]) - 1) << current_bit_start)
         definition += '};\n'
         current_bit_start += enum_bits[e]
+
+    definition += 'constexpr size_t kArrayLen = 0x%08X;\n' % array_len
 
     definition += '}  // namespace %s\n' % namespace_name
     return definition
