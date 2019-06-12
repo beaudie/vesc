@@ -589,13 +589,17 @@ angle::Result DynamicDescriptorPool::allocateSets(ContextVk *context,
                                                   const VkDescriptorSetLayout *descriptorSetLayout,
                                                   uint32_t descriptorSetCount,
                                                   RefCountedDescriptorPoolBinding *bindingOut,
-                                                  VkDescriptorSet *descriptorSetsOut)
+                                                  VkDescriptorSet *descriptorSetsOut,
+                                                  bool *newPoolAllocatedOut)
 {
+    *newPoolAllocatedOut = false;
+
     if (!bindingOut->valid() || !bindingOut->get().hasCapacity(descriptorSetCount))
     {
         if (!mDescriptorPools[mCurrentPoolIndex]->get().hasCapacity(descriptorSetCount))
         {
             ANGLE_TRY(allocateNewPool(context));
+            *newPoolAllocatedOut = true;
         }
 
         // Make sure the old binding knows the descriptor sets can still be in-use. We only need
