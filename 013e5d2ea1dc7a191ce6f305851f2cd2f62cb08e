@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fee24a76_5218f8df",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1951,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-12T20:53:34Z",
+      "side": 1,
+      "message": "Not used.",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17120f10_eb443822",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2031,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-12T20:53:34Z",
+      "side": 1,
+      "message": "I see this pattern also used in ProgramVk: https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/ProgramVk.cpp?g\u003d0\u0026l\u003d1014\n\nPotentially worth having an \"image.changeLayoutIfNecessary(dstLayout)\" member function since all of the state/ops needed for this pattern are contained in the image.",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c641e8f_afb62ef4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-12T20:53:34Z",
+      "side": 1,
+      "message": "Potentially add comment here in the vein of commit message: Each texture generates a unique serial for every combination of VkImage and VkSampler that the texture owns.\n\nJust to help clarify function of texture serials in the code.",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e32f00e_d811e1b6",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-12T20:53:34Z",
+      "side": 1,
+      "message": "Not used.",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d020770f_d2506acd",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-12T20:53:34Z",
+      "side": 1,
+      "message": "Not used.",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e6c457a_c9659324",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-12T20:53:34Z",
+      "side": 1,
+      "message": "Not used.",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fed7de8c_d4d00829",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-12T20:53:34Z",
+      "side": 1,
+      "message": "Not used.",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b25ff6e_08205ea4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-12T20:53:34Z",
+      "side": 1,
+      "message": "Nice. This will be handy when some pathological test case hits it.",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f82b77b8_81802d02",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-12T20:53:34Z",
+      "side": 1,
+      "message": "I flagged 5 instances where this new parameter appears to be a don\u0027t-care. Could overload this function instead, keeping original variant, which could declare the unused bool locally and call new implementation. Would save the extra, unused code at call time.",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
