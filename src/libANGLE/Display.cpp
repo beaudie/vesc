@@ -564,7 +564,11 @@ Error Display::initialize()
         config.second.renderableType |= EGL_OPENGL_ES_BIT;
     }
 
+    mImplementation->initializeFrontendFeatures(&mFrontendFeatures);
+    rx::OverrideFeaturesWithDisplayState(&mFrontendFeatures, mState);
+
     mFeatures.clear();
+    mFrontendFeatures.populateFeatureList(&mFeatures);
     mImplementation->populateFeatureList(&mFeatures);
 
     initDisplayExtensions();
