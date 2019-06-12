@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a78fe5b6_41777e84",
+        "filename": "src/tests/perf_tests/DrawCallPerfParams.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-06-12T20:16:16Z",
+      "side": 1,
+      "message": "Not feeling strong about it, but:\n1. The function name use to also have GLES in it, which I think was nice.\n2. Other backends don\u0027t have null device parameter, so it makes sense for this one to be consistent and not have it as well.",
+      "range": {
+        "startLine": 79,
+        "startChar": 27,
+        "endLine": 79,
+        "endChar": 48
+      },
+      "revId": "a63d93a54929fe9bd9870e8cec0f1e4684c7711f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
