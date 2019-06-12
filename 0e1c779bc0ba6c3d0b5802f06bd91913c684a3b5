@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a77eba8_b7de7300",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1484,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-12T21:19:42Z",
+      "side": 1,
+      "message": "I think this is no longer set to true on the D3D backends.  Maybe the Display should do it before/after calling initializeFrontendFeatures instead.",
+      "range": {
+        "startLine": 1484,
+        "startChar": 4,
+        "endLine": 1484,
+        "endChar": 71
+      },
+      "revId": "0e1c779bc0ba6c3d0b5802f06bd91913c684a3b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
