@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e44c1f63_ed92e931",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T19:22:40Z",
+      "side": 1,
+      "message": "did it turn out this was more helpful than gl::Trace?",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 189,
+        "endChar": 5
+      },
+      "revId": "e53138c8b1a56e18f6fecfb527aace4a922d048a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
