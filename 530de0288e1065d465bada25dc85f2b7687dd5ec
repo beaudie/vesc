@@ -331,6 +331,30 @@
     },
     {
       "key": {
+        "uuid": "7f5d415d_600ec05a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-12T16:24:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "86963e45_5944d5ce",
+      "range": {
+        "startLine": 16,
+        "startChar": 36,
+        "endLine": 16,
+        "endChar": 64
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4c34f13a_839fa95d",
         "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
         "patchSetId": 5
@@ -437,6 +461,30 @@
       "side": 1,
       "message": "I\u0027d suggest for now we remove the struct CommandBufferArrayHandle and just store a std::vector\u003cvk::CommandBuffer\u003e for the free list. If we need to preallocate 2-3 command buffers up front we can do that as well with my proposed design. This change will help simplify this class.",
       "parentUuid": "51a617d7_ad7ac946",
+      "range": {
+        "startLine": 93,
+        "startChar": 3,
+        "endLine": 99,
+        "endChar": 52
+      },
+      "revId": "530de0288e1065d465bada25dc85f2b7687dd5ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cba890ef_e1559b1e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-12T16:24:55Z",
+      "side": 1,
+      "message": "Yeah vector makes sense. But I kind of hesitate to store a vector of `vk::CommandBuffer`, because it relies on the vk::CommandBuffer being a pure wrapper around `VkCommandBuffer`, it may breaks if we later added some helper variables in the `vk::CommandBuffer`",
+      "parentUuid": "d8984802_8854c4f3",
       "range": {
         "startLine": 93,
         "startChar": 3,
