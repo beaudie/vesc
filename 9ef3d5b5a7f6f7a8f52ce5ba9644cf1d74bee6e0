@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58b02c08_e10ad1b6",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T19:21:44Z",
+      "side": 1,
+      "message": "nit: can you make a temp variable to store linkingState-\u003econtext? for readability.",
+      "range": {
+        "startLine": 1483,
+        "startChar": 17,
+        "endLine": 1483,
+        "endChar": 39
+      },
+      "revId": "9ef3d5b5a7f6f7a8f52ce5ba9644cf1d74bee6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cc81d44_14571063",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4467,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T19:21:44Z",
+      "side": 1,
+      "message": "come to think of it, can you make a getFrontendFeatures helper in gl::Context that simply relays the call to getDisplay?",
+      "range": {
+        "startLine": 4466,
+        "startChar": 8,
+        "endLine": 4467,
+        "endChar": 35
+      },
+      "revId": "9ef3d5b5a7f6f7a8f52ce5ba9644cf1d74bee6e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
