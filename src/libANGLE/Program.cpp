@@ -19,6 +19,7 @@
 #include "common/version.h"
 #include "compiler/translator/blocklayout.h"
 #include "libANGLE/Context.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/MemoryProgramCache.h"
 #include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/ResourceManager.h"
@@ -1481,7 +1482,8 @@ void Program::resolveLinkImpl(const Context *context)
     // Save to the program cache.
     auto *cache = linkingState->context->getMemoryProgramCache();
     if (cache && (mState.mLinkedTransformFeedbackVaryings.empty() ||
-                  !linkingState->context->getWorkarounds()
+                  !linkingState->context->getDisplay()
+                       ->getFrontendFeatures()
                        .disableProgramCachingForTransformFeedback.enabled))
     {
         cache->putProgram(linkingState->programHash, linkingState->context, this);
@@ -4461,7 +4463,9 @@ void Program::serialize(const Context *context, angle::MemoryBuffer *binaryOut) 
 
     // Warn the app layer if saving a binary with unsupported transform feedback.
     if (!mState.getLinkedTransformFeedbackVaryings().empty() &&
-        context->getWorkarounds().disableProgramCachingForTransformFeedback.enabled)
+        context->getDisplay()
+            ->getFrontendFeatures()
+            .disableProgramCachingForTransformFeedback.enabled)
     {
         WARN() << "Saving program binary with transform feedback, which is not supported on this "
                   "driver.";
@@ -4679,8 +4683,9 @@ angle::Result Program::deserialize(const Context *context,
     unsigned int transformFeedbackVaryingCount = stream.readInt<unsigned int>();
 
     // Reject programs that use transform feedback varyings if the hardware cannot support them.
-    if (transformFeedbackVaryingCount > 0 &&
-        context->getWorkarounds().disableProgramCachingForTransformFeedback.enabled)
+    if (transformFeedbackVaryingCount > 0 && context->getDisplay()
+                                                 ->getFrontendFeatures()
+                                                 .disableProgramCachingForTransformFeedback.enabled)
     {
         infoLog << "Current driver does not support transform feedback in binary programs.";
         return angle::Result::Incomplete;

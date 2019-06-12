@@ -27,7 +27,6 @@
 #include "libANGLE/ResourceMap.h"
 #include "libANGLE/State.h"
 #include "libANGLE/VertexAttribute.h"
-#include "libANGLE/Workarounds.h"
 #include "libANGLE/WorkerThread.h"
 #include "libANGLE/angletypes.h"
 
@@ -1772,6 +1771,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool isContextLost() const { return mContextLost; }
 
     GLenum getGraphicsResetStatus();
+    GLenum getGraphicsResetStrategy() const { return mResetStrategy; }
     bool isResetNotificationEnabled();
 
     const egl::Config *getConfig() const;
@@ -1788,7 +1788,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     size_t getRequestableExtensionStringCount() const;
 
     rx::ContextImpl *getImplementation() const { return mImplementation.get(); }
-    const Workarounds &getWorkarounds() const;
 
     ANGLE_NO_DISCARD bool getScratchBuffer(size_t requestedSizeBytes,
                                            angle::MemoryBuffer **scratchBufferOut) const;
@@ -1930,7 +1929,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     Extensions generateSupportedExtensions() const;
     void initCaps();
     void updateCaps();
-    void initWorkarounds();
 
     gl::LabeledObject *getLabeledObject(GLenum identifier, GLuint name) const;
     gl::LabeledObject *getLabeledObjectFromPtr(const void *ptr) const;
@@ -2019,8 +2017,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     State::DirtyBits mComputeDirtyBits;
     State::DirtyObjects mComputeDirtyObjects;
     State::DirtyObjects mCopyImageDirtyObjects;
-
-    Workarounds mWorkarounds;
 
     // Binding to container objects that use dependent state updates.
     angle::ObserverBinding mVertexArrayObserverBinding;
