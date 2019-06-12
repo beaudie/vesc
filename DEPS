@@ -15,7 +15,7 @@ vars = {
   'glslang_revision': '9866ad9195cec8f266f16191fb4ec2ce4896e5c0',
 
   # Current revision fo the SPIRV-Headers Vulkan support library.
-  'spirv_headers_revision': '903d447d96eb3973bdf95e9d16581b704784a0e3',
+  'spirv_headers_revision': '9cf7c3a7d2d203b1ee35896547b9644e28d9280e',
 
   # Current revision of SPIRV-Tools for Vulkan.
   'spirv_tools_revision': '699e167d78eee66232f140d4dcf5e9453de2dc74',
