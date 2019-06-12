@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3c28055_5b76913e",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1833,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T16:52:16Z",
+      "side": 1,
+      "message": "nit: probably this comment should stay the same. the extension name is still EXT_KHR_image_base",
+      "range": {
+        "startLine": 1833,
+        "startChar": 49,
+        "endLine": 1833,
+        "endChar": 63
+      },
+      "revId": "fea2885bf23dd5f0819f1baed10a16d24f493e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f80c704_7be48a96",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1863,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T16:52:16Z",
+      "side": 1,
+      "message": "probably need to leave this comment as well",
+      "range": {
+        "startLine": 1863,
+        "startChar": 57,
+        "endLine": 1863,
+        "endChar": 68
+      },
+      "revId": "fea2885bf23dd5f0819f1baed10a16d24f493e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9feb23fa_d62a6ea0",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1892,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T16:52:16Z",
+      "side": 1,
+      "message": "same, since they\u0027re all auxiliary required extensions",
+      "range": {
+        "startLine": 1892,
+        "startChar": 45,
+        "endLine": 1892,
+        "endChar": 64
+      },
+      "revId": "fea2885bf23dd5f0819f1baed10a16d24f493e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bcb70ceb_f610f5cf",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1934,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T16:52:16Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 1934,
+        "startChar": 45,
+        "endLine": 1934,
+        "endChar": 69
+      },
+      "revId": "fea2885bf23dd5f0819f1baed10a16d24f493e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3a17664_be9a3d58",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1981,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T16:52:16Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 1981,
+        "startChar": 45,
+        "endLine": 1981,
+        "endChar": 64
+      },
+      "revId": "fea2885bf23dd5f0819f1baed10a16d24f493e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a3f6899_ff24fae6",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2028,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-12T16:52:16Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 2028,
+        "startChar": 45,
+        "endLine": 2028,
+        "endChar": 66
+      },
+      "revId": "fea2885bf23dd5f0819f1baed10a16d24f493e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
