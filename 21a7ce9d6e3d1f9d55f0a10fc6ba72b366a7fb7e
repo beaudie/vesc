@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3e1a51b6_836181c7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-12T19:46:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62205b0f_80669c26",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 39
+      },
+      "revId": "21a7ce9d6e3d1f9d55f0a10fc6ba72b366a7fb7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fe0080d9_1b077e00",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "21a7ce9d6e3d1f9d55f0a10fc6ba72b366a7fb7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f484f200_d7d53051",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-12T19:46:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe0080d9_1b077e00",
+      "range": {
+        "startLine": 11,
+        "startChar": 18,
+        "endLine": 11,
+        "endChar": 22
+      },
+      "revId": "21a7ce9d6e3d1f9d55f0a10fc6ba72b366a7fb7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +203,24 @@
     },
     {
       "key": {
+        "uuid": "27e94dee_398ef1f9",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-12T19:46:43Z",
+      "side": 1,
+      "message": "There isn\u0027t a huge rush to get this change in, so if waiting a few days saves some effort and we get a better CL, I\u0027m fine waiting.   There\u0027s also a lot to go read about based on these comments, so it\u0027ll take some time to play around with things anyway.",
+      "parentUuid": "288701b4_22a80520",
+      "revId": "21a7ce9d6e3d1f9d55f0a10fc6ba72b366a7fb7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5f3e9b9f_f424f2ea",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 3
@@ -166,6 +232,30 @@
       "writtenOn": "2019-06-11T12:12:38Z",
       "side": 1,
       "message": "You should remove this. Will kill perf. If there\u0027s a bug we should try to fix it without a finish.",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 42
+      },
+      "revId": "21a7ce9d6e3d1f9d55f0a10fc6ba72b366a7fb7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7d11759_6c167967",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-12T19:46:43Z",
+      "side": 1,
+      "message": "The dEQP.GLES3/functional_buffer* tests can pass without this, however the angle_end2end_tests BufferDataTestES3.BufferResizing/ES3_Vulkan fails because the vkCmdCopyBuffer() is never executed.   The test itself seems straightforward, so I don\u0027t think it\u0027s bad.\n\nAny ideas on what to try next?",
+      "parentUuid": "5f3e9b9f_f424f2ea",
       "range": {
         "startLine": 175,
         "startChar": 0,
