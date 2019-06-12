@@ -22,6 +22,30 @@
       "revId": "42be1f39ff056a80a635c202c2265e41259e378c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc18c075_472eb1c7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-12T20:07:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "848ef3e7_0675b26a",
+      "range": {
+        "startLine": 38,
+        "startChar": 4,
+        "endLine": 38,
+        "endChar": 13
+      },
+      "revId": "42be1f39ff056a80a635c202c2265e41259e378c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
