@@ -425,9 +425,9 @@ angle::Result FramebufferGL::readPixels(const gl::Context *context,
                                         GLenum type,
                                         void *pixels)
 {
-    ContextGL *contextGL             = GetImplAs<ContextGL>(context);
-    const FunctionsGL *functions     = GetFunctionsGL(context);
-    StateManagerGL *stateManager     = GetStateManagerGL(context);
+    ContextGL *contextGL              = GetImplAs<ContextGL>(context);
+    const FunctionsGL *functions      = GetFunctionsGL(context);
+    StateManagerGL *stateManager      = GetStateManagerGL(context);
     const angle::FeaturesGL &features = GetFeaturesGL(context);
 
     // Clip read area to framebuffer.
@@ -740,7 +740,7 @@ void FramebufferGL::syncClearState(const gl::Context *context, GLbitfield mask)
 
     if (functions->standard == STANDARD_GL_DESKTOP)
     {
-        StateManagerGL *stateManager     = GetStateManagerGL(context);
+        StateManagerGL *stateManager      = GetStateManagerGL(context);
         const angle::FeaturesGL &features = GetFeaturesGL(context);
 
         if (features.doesSRGBClearsOnLinearFramebufferAttachments.enabled &&
@@ -773,7 +773,7 @@ void FramebufferGL::syncClearBufferState(const gl::Context *context,
 
     if (functions->standard == STANDARD_GL_DESKTOP)
     {
-        StateManagerGL *stateManager     = GetStateManagerGL(context);
+        StateManagerGL *stateManager      = GetStateManagerGL(context);
         const angle::FeaturesGL &features = GetFeaturesGL(context);
 
         if (features.doesSRGBClearsOnLinearFramebufferAttachments.enabled && buffer == GL_COLOR &&

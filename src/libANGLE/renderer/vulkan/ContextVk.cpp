@@ -916,7 +916,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         ANGLE_VK_TRY(this, commandBuffer.end());
 
         // Submit the command buffer
-        VkSubmitInfo submitInfo       = {};
+        VkSubmitInfo submitInfo = {};
         InitializeSubmitInfo(&submitInfo, commandBatch.get(), {}, {});
 
         ANGLE_TRY(submitFrame(submitInfo, std::move(commandBuffer)));
@@ -2106,7 +2106,7 @@ angle::Result ContextVk::flushImpl(const gl::Semaphore *clientSignalSemaphore)
         signalSemaphores.push_back(vk::GetImpl(clientSignalSemaphore)->getHandle());
     }
 
-    VkSubmitInfo submitInfo       = {};
+    VkSubmitInfo submitInfo = {};
     InitializeSubmitInfo(&submitInfo, commandBatch.get(), mWaitSemaphores, signalSemaphores);
 
     ANGLE_TRY(submitFrame(submitInfo, commandBatch.release()));

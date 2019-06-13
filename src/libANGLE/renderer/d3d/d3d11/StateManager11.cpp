@@ -1876,9 +1876,9 @@ void StateManager11::unsetConflictingSRVs(gl::PipelineType pipeline,
                                           const gl::ImageIndex *index,
                                           bool isRenderTarget)
 {
-    auto *currentSRVs = getSRVCache(shaderType);
+    auto *currentSRVs                 = getSRVCache(shaderType);
     gl::PipelineType conflictPipeline = gl::GetPipelineType(shaderType);
-    bool foundOne = false;
+    bool foundOne                     = false;
 
     for (size_t resourceIndex = 0; resourceIndex < currentSRVs->size(); ++resourceIndex)
     {
