@@ -206,7 +206,7 @@ angle::Result CommandGraphResource::recordCommands(ContextVk *context,
 {
     updateQueueSerial(context->getCurrentQueueSerial());
 
-    if (!hasChildlessWritingNode() || hasStartedRenderPass())
+    if (!hasChildlessWritingNode() || mCurrentWritingNode->getInsideRenderPassCommands()->valid())
     {
         startNewCommands(context);
         return mCurrentWritingNode->beginOutsideRenderPassRecording(
