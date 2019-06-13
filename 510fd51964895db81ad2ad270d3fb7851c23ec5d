@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4ae7c697_8d1b3e28",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-13T16:29:26Z",
+      "side": 1,
+      "message": "Thank you for the suggestion. Yeah, `#if !`  makes it more clearly and also good to know about our `#define` rules",
+      "parentUuid": "eca7d583_1346cf35",
+      "range": {
+        "startLine": 683,
+        "startChar": 0,
+        "endLine": 683,
+        "endChar": 43
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6639bf39_2c968119",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -45,6 +69,30 @@
       "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e4a0a87_c984c11a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-13T16:29:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6639bf39_2c968119",
+      "range": {
+        "startLine": 711,
+        "startChar": 38,
+        "endLine": 711,
+        "endChar": 84
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "58aa62c6_6cdb209e",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-13T16:29:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85302c23_99fe4803",
+      "range": {
+        "startLine": 7,
+        "startChar": 39,
+        "endLine": 7,
+        "endChar": 60
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e66927b0_82c70dad",
         "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
         "patchSetId": 11
@@ -91,6 +163,54 @@
       "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a057e1c1_ab2539b3",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-13T16:29:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e66927b0_82c70dad",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 14
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b9b4ab96_a066f38c",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-13T16:29:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e66927b0_82c70dad",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 14
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +237,54 @@
     },
     {
       "key": {
+        "uuid": "02cd9b01_381d0aba",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-13T16:29:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "983736c4_0b7c2f1f",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 31
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "16675c56_c7d137eb",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-13T16:29:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "983736c4_0b7c2f1f",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 31
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7624da3a_e4b6c591",
         "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
         "patchSetId": 11
@@ -140,6 +308,30 @@
     },
     {
       "key": {
+        "uuid": "b9af464e_56567e7b",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-13T16:29:26Z",
+      "side": 1,
+      "message": "Thank you for the information! I will remove it.",
+      "parentUuid": "7624da3a_e4b6c591",
+      "range": {
+        "startLine": 109,
+        "startChar": 35,
+        "endLine": 109,
+        "endChar": 37
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "193c3b50_58d6f6eb",
         "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.h",
         "patchSetId": 11
@@ -160,6 +352,30 @@
       "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5627f51_6d2ffb91",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-13T16:29:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "193c3b50_58d6f6eb",
+      "range": {
+        "startLine": 7,
+        "startChar": 38,
+        "endLine": 7,
+        "endChar": 61
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
