@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db64d066_d7278364",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:04:17Z",
+      "side": 1,
+      "message": "nit: you need Bug: angleproject:3432. Otherwise it defaults to \"chromium\" bugs. Since we\u0027re on chromium-review.googlesource.com.",
+      "range": {
+        "startLine": 12,
+        "startChar": 5,
+        "endLine": 12,
+        "endChar": 9
+      },
+      "revId": "8e0763d96bbecd5748391abd628b51fda27d40ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
