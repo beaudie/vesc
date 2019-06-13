@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "7cc427c9_1ac43a8d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T15:34:10Z",
+      "side": 1,
+      "message": "Would be nice if you cast this to a size_t explicitly.",
+      "range": {
+        "startLine": 654,
+        "startChar": 59,
+        "endLine": 654,
+        "endChar": 84
+      },
+      "revId": "97b458c5b551c41b8809445a047bb882554aeb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5f73eae3_2f61e9e1",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 2
@@ -13,6 +36,24 @@
       "writtenOn": "2019-06-13T15:00:28Z",
       "side": 1,
       "message": "I\u0027m curious, why a lambda vs. a static helper function?",
+      "revId": "97b458c5b551c41b8809445a047bb882554aeb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e3cc431_5f9d779d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T15:34:10Z",
+      "side": 1,
+      "message": "Second this question. Would prefer using a helper function. Keeps the code more straightforward.",
+      "parentUuid": "5f73eae3_2f61e9e1",
       "revId": "97b458c5b551c41b8809445a047bb882554aeb89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
