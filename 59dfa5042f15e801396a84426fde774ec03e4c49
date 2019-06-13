@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43251a25_4436ccda",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:12:05Z",
+      "side": 1,
+      "message": "same comments here as below.",
+      "range": {
+        "startLine": 683,
+        "startChar": 5,
+        "endLine": 683,
+        "endChar": 40
+      },
+      "revId": "59dfa5042f15e801396a84426fde774ec03e4c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9302273_21bc0c85",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:12:05Z",
+      "side": 1,
+      "message": "same comment here. If we need to we might need to make an abstraction for secondary command pools that can no-op for custom secondaries.",
+      "range": {
+        "startLine": 710,
+        "startChar": 5,
+        "endLine": 710,
+        "endChar": 40
+      },
+      "revId": "59dfa5042f15e801396a84426fde774ec03e4c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fb219d6_2751fbc1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:12:05Z",
+      "side": 1,
+      "message": "same comment as below. Let\u0027s remove this compile-time if. It\u0027s good to have as few preprocessor checks as possible.",
+      "range": {
+        "startLine": 746,
+        "startChar": 5,
+        "endLine": 746,
+        "endChar": 40
+      },
+      "revId": "59dfa5042f15e801396a84426fde774ec03e4c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6ba3fb8_2652f48f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2130,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:12:05Z",
+      "side": 1,
+      "message": "I\u0027d like to remove this compile-time if. You can use a runtime check if necessary: batch.commandPool.valid()",
+      "range": {
+        "startLine": 2130,
+        "startChar": 5,
+        "endLine": 2130,
+        "endChar": 40
+      },
+      "revId": "59dfa5042f15e801396a84426fde774ec03e4c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea99ade0_77591f13",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:12:05Z",
+      "side": 1,
+      "message": "I think in practice we will only need 2-3 command buffers. Preallocating might actually use more than strictly necessary. My concern is this code doesn\u0027t help. What do you think?\n\nMy idea is simply to allocate a single new command buffer whenever the free list is empty.",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 0
+      },
+      "revId": "59dfa5042f15e801396a84426fde774ec03e4c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

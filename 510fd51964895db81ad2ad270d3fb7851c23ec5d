@@ -96,6 +96,29 @@
     },
     {
       "key": {
+        "uuid": "00798d4a_60fbd2ad",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2133,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:12:05Z",
+      "side": 1,
+      "message": "rather than ifdef here maybe you can check if the command pool is valid? I\u0027d like to minimize our use of compile time flags.",
+      "range": {
+        "startLine": 2130,
+        "startChar": 0,
+        "endLine": 2133,
+        "endChar": 6
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "85302c23_99fe4803",
         "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
         "patchSetId": 11
