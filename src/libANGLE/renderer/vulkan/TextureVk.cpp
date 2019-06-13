@@ -232,14 +232,19 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                                          const uint8_t *pixels,
                                          const vk::Format &vkFormat)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
+    ContextVk *contextVk           = vk::GetImpl(context);
+    const gl::State &glState       = contextVk->getState();
+    const gl::Buffer *unpackBuffer = glState.getTargetBuffer(gl::BufferBinding::PixelUnpack);
 
-    if (pixels)
+    if ((pixels != nullptr) || (unpackBuffer != nullptr))
     {
         ANGLE_TRY(mImage->stageSubresourceUpdate(
             contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
             gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels, vkFormat));
         onStagingBufferChange();
+
+        // Create a new graph node to store image initialization commands.
+        mImage->finishCurrentCommands(contextVk);
     }
 
     return angle::Result::Continue;
