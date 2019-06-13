@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e6c38d7c_6e597805",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T19:11:11Z",
+      "side": 1,
+      "message": "No, we are still checking for the command buffer not being nullptr instead of using a dirty bit mechanism.",
+      "parentUuid": "25936c17_fefd10de",
+      "revId": "7a856fae18c26e8b57f583493b30d0a16e1bf0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d38652d0_fb20a876",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
@@ -33,6 +51,24 @@
       "revId": "7a856fae18c26e8b57f583493b30d0a16e1bf0cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0fab342_0dca1516",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T19:11:11Z",
+      "side": 1,
+      "message": "The first sets up dependencies, which may invalidate the command buffer (as the comment on `*commandBufferOut \u003d mCommandBuffer;` previously said as well). The split is there so that we can get the command buffer _after_ the dependencies are set.  In short, this code looks like this:\n\n- Set dependencies (these are the handleDirty* functions)\n- Acquire command buffer\n- Record into command buffer (and do nothing else)",
+      "parentUuid": "d38652d0_fb20a876",
+      "revId": "7a856fae18c26e8b57f583493b30d0a16e1bf0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "b5c670bf_de65dd84",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T19:11:11Z",
+      "side": 1,
+      "message": "Yes it can.",
+      "parentUuid": "5365edfd_46c2c5d1",
+      "revId": "7a856fae18c26e8b57f583493b30d0a16e1bf0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "252e0f08_be17cc2f",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 8
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "c91e0c2f_1339a55e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T19:11:11Z",
+      "side": 1,
+      "message": "stageSubresourceUpdateFromFramebuffer does a finish call, so the graph would be empty after that call! If the dependency is set before that call, it would vanish after it.\n\nGiven that there\u0027s a finish, this dependency is probably just useless. This is a slow we-should-never-hit-it path though, so doesn\u0027t really matter.",
+      "parentUuid": "252e0f08_be17cc2f",
+      "revId": "7a856fae18c26e8b57f583493b30d0a16e1bf0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f67b6b8_8788fd07",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 8
@@ -84,6 +156,24 @@
       "revId": "7a856fae18c26e8b57f583493b30d0a16e1bf0cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3563ca8a_8d9e2538",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T19:11:11Z",
+      "side": 1,
+      "message": "Yes, I\u0027m aware this would create an unnecessary memory barrier in that case. Best way to optimize that would probably be during command buffer construction (i.e. graph traversal), where the barrier is issued; if the access masks are such that a memory barrier is unnecessary, we can simply do an execution barrier.\n\nI would defer such an optimization to when we have a benchmark to measure it against.",
+      "parentUuid": "4f67b6b8_8788fd07",
+      "revId": "7a856fae18c26e8b57f583493b30d0a16e1bf0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
