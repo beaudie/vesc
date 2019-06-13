@@ -22,6 +22,30 @@
       "revId": "a63d93a54929fe9bd9870e8cec0f1e4684c7711f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb1cefc6_a1ad5e23",
+        "filename": "src/tests/perf_tests/DrawCallPerfParams.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T17:54:14Z",
+      "side": 1,
+      "message": "Done on #2. I was leaning towards preferring shorter names so I left out #1. Wouldn\u0027t be opposed to changing it back if people felt strongly.",
+      "parentUuid": "a78fe5b6_41777e84",
+      "range": {
+        "startLine": 79,
+        "startChar": 27,
+        "endLine": 79,
+        "endChar": 48
+      },
+      "revId": "a63d93a54929fe9bd9870e8cec0f1e4684c7711f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
