@@ -37,7 +37,7 @@ namespace gl
 {
 class Context;
 struct FrontendFeatures;
-}
+}  // namespace gl
 
 namespace rx
 {

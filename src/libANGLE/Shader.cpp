@@ -449,7 +449,7 @@ void Shader::resolveCompile()
         {
             {
                 mState.mOutputVaryings = GetShaderVariables(sh::GetOutputVaryings(compilerHandle));
-                mState.mAllAttributes    = GetShaderVariables(sh::GetAttributes(compilerHandle));
+                mState.mAllAttributes  = GetShaderVariables(sh::GetAttributes(compilerHandle));
                 mState.mActiveAttributes = GetActiveShaderVariables(&mState.mAllAttributes);
                 mState.mNumViews         = sh::GetVertexShaderNumViews(compilerHandle);
             }

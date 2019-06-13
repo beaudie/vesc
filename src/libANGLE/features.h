@@ -55,7 +55,7 @@
 // Controls if our threading code uses std::async or falls back to single-threaded operations.
 #if !defined(ANGLE_STD_ASYNC_WORKERS)
 #    define ANGLE_STD_ASYNC_WORKERS ANGLE_ENABLED
-#endif      // !defined(ANGLE_STD_ASYNC_WORKERS)
+#endif  // !defined(ANGLE_STD_ASYNC_WORKERS)
 
 // Force thread safety in all of ANGLE by locking a global mutex in every ANGLE entry point.
 #if !defined(ANGLE_FORCE_THREAD_SAFETY)
