@@ -648,6 +648,45 @@ std::string CommandGraphNode::dumpCommandsForDiagnostics(const char *separator) 
     {
         result += separator;
         result += "Inside RP:";
+
+        size_t attachmentCount         = mRenderPassDesc.attachmentCount();
+        bool hasDepthStencilAttachment = mRenderPassDesc.hasDepthStencilAttachment();
+        bool colorAttachmentCount      = attachmentCount - hasDepthStencilAttachment;
+
+        auto appendLoadOp = [&result](uint32_t loadOp) {
+            switch (loadOp)
+            {
+                case VK_ATTACHMENT_LOAD_OP_CLEAR:
+                    result += "C";
+                    break;
+                case VK_ATTACHMENT_LOAD_OP_LOAD:
+                    result += "L";
+                    break;
+                default:
+                    result += "D";
+                    break;
+            }
+        };
+
+        if (colorAttachmentCount > 0)
+        {
+            result += " Color: ";
+
+            for (size_t i = 0; i < colorAttachmentCount; ++i)
+            {
+                appendLoadOp(mRenderPassAttachmentOps[i].loadOp);
+            }
+        }
+
+        if (hasDepthStencilAttachment)
+        {
+            result += " Depth/Stencil: ";
+            size_t dsIndex = colorAttachmentCount;
+
+            appendLoadOp(mRenderPassAttachmentOps[dsIndex].loadOp);
+            appendLoadOp(mRenderPassAttachmentOps[dsIndex].stencilLoadOp);
+        }
+
         result += DumpCommands(mInsideRenderPassCommands, separator);
     }
     return result;
