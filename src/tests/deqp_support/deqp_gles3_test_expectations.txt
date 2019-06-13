@@ -554,7 +554,9 @@
 3189 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.size.2d_array_32x64x3_4_levels = FAIL
 3189 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.size.2d_array_57x63x5* = FAIL
 3189 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.size.2d_array_64x32x3_7_levels = FAIL
+3189 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_pbo.*2d_array = FAIL
 3189 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_depth*2d_array = FAIL
+3189 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.*2d_array = FAIL
 3189 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_depth*2d_array = FAIL
 
 //  New or broken formats in ES 3.0:
@@ -562,21 +564,13 @@
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.depth32* = FAIL
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage2d.rgb9_e5_* = FAIL
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage3d.rgb9* = FAIL
-3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage2d.rgb9_e5_* = FAIL
+3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage2d.rgb8_snorm* = FAIL
+// Some of the tests for the following line will occassionally assert in log code:
+3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage2d.rgb9_e5_* = SKIP
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.rgb9* = FAIL
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.random_teximage2d.2d_9 = FAIL
-3190 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.* = FAIL
-3190 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rgb8_* = SKIP
-3190 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_pbo.* = FAIL
-3190 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_pbo.rgb8_* = SKIP
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_unpack_params.rgb8_skip_images = FAIL
-3190 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_pbo.* = FAIL
-3190 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_pbo.rgb8_* = SKIP
-3190 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.* = FAIL
-3190 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.rgb8_* = SKIP
-3190 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_unpack_params.rgb8_skip_images = FAIL
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_depth.depth32f_stencil8 = FAIL
-3190 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_depth_pbo.* = FAIL
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_depth.depth32f_stencil8 = FAIL
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_unpack_params.r8_* = FAIL
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_unpack_params.r8_* = FAIL
@@ -596,6 +590,120 @@
 3190 VULKAN : dEQP-GLES3.functional.texture.units.*mixed* = SKIP
 3190 VULKAN : dEQP-GLES3.functional.texture.units.all_units.* = SKIP
 3190 VULKAN : dEQP-GLES3.functional.texture.units.8_units.* = SKIP
+
+// The following may be related to Mohan's PBO CL:
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage2d.rgb8_snorm_2d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage2d.rgb8_snorm_cube = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_copyteximage2d.cube_luminance = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_copyteximage2d.cube_alpha = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_copytexsubimage2d.cube_luminance = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage3d.rgb8_snorm_3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage3d.rg32*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage3d.rg16*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage3d.rg8*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage3d.r32*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage3d.r16*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage3d.r8*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.rgba32*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.rgba16*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.rgba4*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.rgba8*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.rgb32*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.rgb16*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.rgb8*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.rg32*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.rg16*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.rg8*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.r32*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.r16*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.r8*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.srgb8*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.rgb10*3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.rgb5_a1_3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.rgb565_3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.r11f_g11f_b10f_3d = FAIL
+
+// The following MUST be related to Mohan's PBO CL:
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8_snorm* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rg32* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rg16* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rg8* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.r32* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.r16* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.r8* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.depth_component* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.depth24* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.size* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.format.rgb8_snorm* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.format.rg32* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.format.rg16* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.format.rg8* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.format.r32* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.format.r16* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.format.r8* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.format.depth_component* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.size* = FAIL
+
+// The following are related to implementing PBO's:
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rgb8_2d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rgb8_cube = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rgb8_snorm_2d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rgb8_offset* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rgb8_alignment* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rgb8_row* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rgb8_skip* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rgb8*i* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rgb16* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rgb32* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.r16i_2d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.r16ui_2d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.srgb8_2d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.srgb8_cube = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.r8*2d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.r16f_2d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rgba4_* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rgb5_* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rgb565_2d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.rg8*2d = FAIL
+// Some of the tests for the following line will occassionally assert in log code:
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_depth_pbo.* = SKIP
+
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_pbo.rgba4* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_pbo.rgb5* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_pbo.rgb32* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_pbo.rgb16* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_pbo.rgb8* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_pbo.srgb8_2d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_pbo.srgb8_cube = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_pbo.rgb9* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_pbo.rg8* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_pbo.r16* = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_pbo.r8* = FAIL
+
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_pbo* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_pbo.rgba4* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_pbo.rgb5* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_pbo.rgb8* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_pbo.rgb16* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_pbo.rgb32* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_pbo.rg8* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_pbo.r16* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_pbo.r8* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_pbo.srgb8_3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_unpack* = FAIL
+
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.rgba4* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.rgb5* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.rgb8* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.rgb9* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.rgb16* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.rgb32* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.rg8* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.r16* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.r8* = FAIL
+//3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.srgb8_3d = FAIL
+3209 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_unpack* = FAIL
 
 // Formats:
 3677 ANDROID VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.renderbuffer.color0.rgba32f = FAIL

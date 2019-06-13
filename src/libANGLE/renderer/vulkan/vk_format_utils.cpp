@@ -191,6 +191,13 @@ bool Format::hasEmulatedImageChannels() const
            (angleFmt.stencilBits == 0 && textureFmt.stencilBits > 0);
 }
 
+bool Format::nativeSupportForTransfer(RendererVk *rendererVk) const
+{
+    // Returns true for only those formats that have native support for transfer operations
+    // Here we check that there are no fallback formats needed for image transfer operations
+    return (angleFormatID == imageFormatID);
+}
+
 bool operator==(const Format &lhs, const Format &rhs)
 {
     return &lhs == &rhs;
