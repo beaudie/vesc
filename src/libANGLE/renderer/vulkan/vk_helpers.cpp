@@ -1734,6 +1734,10 @@ void ImageHelper::changeLayoutWithCommand(VkImageAspectFlags aspectMask,
                                           vk::CommandBuffer *commandBuffer)
 {
     ASSERT(commandBuffer != nullptr);
+    ASSERT(newLayout != ImageLayout::ColorAttachment ||
+           !mFormat->imageFormat().hasDepthOrStencilBits());
+    ASSERT(newLayout != ImageLayout::DepthStencilAttachment ||
+           mFormat->imageFormat().hasDepthOrStencilBits());
 
     if (!isLayoutChangeNecessary(newLayout))
     {
