@@ -313,6 +313,30 @@
       "revId": "21a7ce9d6e3d1f9d55f0a10fc6ba72b366a7fb7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cfbd5d3_26e0c9a6",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-13T20:57:18Z",
+      "side": 1,
+      "message": "Ok, chatted with Courtney to help clarify why a map would be related to the copy, rather than the copy being issued being enough to require the work to be kicked off to the GPU.   A glCopyBufferSubData() can be issued without any commands following it, like in BufferDataTestES3.NoBufferInitDataCopyBug/ES3_Vulkan:\n\nTEST_P(BufferDataTestES3, NoBufferInitDataCopyBug)\n{\n    constexpr GLsizei size \u003d 64;\n\n    GLBuffer sourceBuffer;\n    glBindBuffer(GL_COPY_READ_BUFFER, sourceBuffer);\n    glBufferData(GL_COPY_READ_BUFFER, size, nullptr, GL_STATIC_DRAW);\n\n    GLBuffer destBuffer;\n    glBindBuffer(GL_ARRAY_BUFFER, destBuffer);\n    glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STATIC_DRAW);\n\n    glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_ARRAY_BUFFER, 0, 0, size);\n    ASSERT_GL_NO_ERROR();\n}\n\n\nIn this case, we don\u0027t actually want to immediately submit the work and drain the GPU when the command is issued, since we could unnecessarily stall the GPU for data that may never accessed by the CPU (or even at all).   Instead, the finish() calls should be made in the BufferVk::mapImpl() and BufferVk::mapRange() calls, since those are the cases where it\u0027s required that all of the GPU work is done and flushed to memory so that the CPU can see the results.",
+      "parentUuid": "aeb84ec6_b5fdce44",
+      "range": {
+        "startLine": 175,
+        "startChar": 0,
+        "endLine": 175,
+        "endChar": 42
+      },
+      "revId": "21a7ce9d6e3d1f9d55f0a10fc6ba72b366a7fb7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
