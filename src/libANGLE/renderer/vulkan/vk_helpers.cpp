@@ -2153,20 +2153,43 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
         }
     }
 
-    VkBuffer bufferHandle = VK_NULL_HANDLE;
+    VkBuffer bufferHandle          = VK_NULL_HANDLE;
+    uint8_t *stagingPointer        = nullptr;
+    VkDeviceSize stagingOffset     = 0;
+    const uint8_t *source          = pixels + inputSkipBytes;
+    const gl::State &glState       = contextVk->getState();
+    const gl::Buffer *unpackBuffer = glState.getTargetBuffer(gl::BufferBinding::PixelUnpack);
 
-    uint8_t *stagingPointer    = nullptr;
-    VkDeviceSize stagingOffset = 0;
-    ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
-                                      &stagingOffset, nullptr));
+    if (unpackBuffer != nullptr)
+    {
+        if (vkFormat.isNative())
+        {
+            BufferVk *unpackBufferVk = GetImplAs<BufferVk>(unpackBuffer);
+            bufferHandle             = (unpackBufferVk->getBuffer()).getBuffer().getHandle();
+            stagingOffset            = static_cast<VkDeviceSize>((uint64_t)(pixels));
+        }
+        else
+        {
+            // Native support for transfer operation is unavailable
+            printf("Format not supported\n");
+            return angle::Result::Continue;
+        }
+    }
+    else if (pixels != nullptr)
+    {
+        ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
+                                          &stagingOffset, nullptr));
 
-    const uint8_t *source = pixels + inputSkipBytes;
+        LoadImageFunctionInfo loadFunction = vkFormat.textureLoadFunctions(type);
 
-    LoadImageFunctionInfo loadFunction = vkFormat.textureLoadFunctions(type);
-
-    loadFunction.loadFunction(glExtents.width, glExtents.height, glExtents.depth, source,
-                              inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
-                              outputDepthPitch);
+        loadFunction.loadFunction(glExtents.width, glExtents.height, glExtents.depth, source,
+                                  inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                                  outputDepthPitch);
+    }
+    else
+    {
+        ANGLE_VK_UNREACHABLE(contextVk);
+    }
 
     VkBufferImageCopy copy         = {};
     VkImageAspectFlags aspectFlags = GetFormatAspectFlags(vkFormat.imageFormat());
