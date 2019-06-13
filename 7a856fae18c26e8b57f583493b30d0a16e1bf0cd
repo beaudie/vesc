@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25936c17_fefd10de",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-13T18:55:28Z",
+      "side": 1,
+      "message": "Has this comment block been addressed now?",
+      "revId": "7a856fae18c26e8b57f583493b30d0a16e1bf0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d38652d0_fb20a876",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-13T18:55:28Z",
+      "side": 1,
+      "message": "Why do we need mDirtyBitHandlers() and recordDirtyChanges()?",
+      "revId": "7a856fae18c26e8b57f583493b30d0a16e1bf0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5365edfd_46c2c5d1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-13T18:55:28Z",
+      "side": 1,
+      "message": "nit: This feels like a lot of code for a header file. Can it be moved to the .cpp?",
+      "revId": "7a856fae18c26e8b57f583493b30d0a16e1bf0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "252e0f08_be17cc2f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-13T18:55:28Z",
+      "side": 1,
+      "message": "Can/Should this be done before the call to stageSubresourceUpdateFromFramebuffer(), since that could end up calling recordCommands()?",
+      "revId": "7a856fae18c26e8b57f583493b30d0a16e1bf0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f67b6b8_8788fd07",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-13T18:55:28Z",
+      "side": 1,
+      "message": "What\u0027s the expectation for how this should work when read/writing the same buffer?\n\nLooking here:\nhttps://github.com/KhronosGroup/Vulkan-Docs/wiki/Synchronization-Examples#first-dispatch-reads-from-a-storage-buffer-second-dispatch-writes-to-that-storage-buffer\n\n\"First dispatch reads from a storage buffer, second dispatch writes to that storage buffer.\nWAR hazards don\u0027t need a memory barrier between them - execution barriers are sufficient. A pipeline barrier or event without a memory barrier is an execution-only dependency.\"\n\nSo only an execution barrier is required which should happen here because mCurrentWriteAccess/mCurrentReadAccess will be 0 when entering this function.",
+      "revId": "7a856fae18c26e8b57f583493b30d0a16e1bf0cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
