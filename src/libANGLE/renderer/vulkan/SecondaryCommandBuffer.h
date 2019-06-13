@@ -50,6 +50,7 @@ enum class CommandID : uint16_t
     DrawIndexedInstanced,
     DrawInstanced,
     EndQuery,
+    ExecutionBarrier,
     ImageBarrier,
     MemoryBarrier,
     PipelineBarrier,
@@ -238,6 +239,12 @@ struct PipelineBarrierParams
     uint32_t imageMemoryBarrierCount;
 };
 VERIFY_4_BYTE_ALIGNMENT(PipelineBarrierParams)
+
+struct ExecutionBarrierParams
+{
+    VkPipelineStageFlags stageMask;
+};
+VERIFY_4_BYTE_ALIGNMENT(ExecutionBarrierParams)
 
 struct ImageBarrierParams
 {
@@ -428,6 +435,8 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void drawInstanced(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex);
 
     void endQuery(VkQueryPool queryPool, uint32_t query);
+
+    void executionBarrier(VkPipelineStageFlags stageMask);
 
     void imageBarrier(VkPipelineStageFlags srcStageMask,
                       VkPipelineStageFlags dstStageMask,
@@ -863,6 +872,13 @@ ANGLE_INLINE void SecondaryCommandBuffer::endQuery(VkQueryPool queryPool, uint32
     EndQueryParams *paramStruct = initCommand<EndQueryParams>(CommandID::EndQuery);
     paramStruct->queryPool      = queryPool;
     paramStruct->query          = query;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::executionBarrier(VkPipelineStageFlags stageMask)
+{
+    ExecutionBarrierParams *paramStruct =
+        initCommand<ExecutionBarrierParams>(CommandID::ExecutionBarrier);
+    paramStruct->stageMask = stageMask;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::imageBarrier(
