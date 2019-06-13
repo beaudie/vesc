@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eca7d583_1346cf35",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T03:41:25Z",
+      "side": 1,
+      "message": "I suggest doing this for all these #ifndefs:\n\n    #if !ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS\n\nThe ! makes it clearer that this is negated, as opposed to the n in the middle of the preprocessor directive.  What\u0027s more, we expect\n\n    #define ANGLE_USE_CUSTOM_VULKAN_CMD_BUFFERS 0\n\nto have the same effect as not #defining the symbol, in which case #ifndef would be incorrect.",
+      "range": {
+        "startLine": 683,
+        "startChar": 0,
+        "endLine": 683,
+        "endChar": 43
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6639bf39_2c968119",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T03:41:25Z",
+      "side": 1,
+      "message": "\"... Vulkan-native secondary command buffers are used.\"\n\nThe command buffer is not stored on the GPU (but rather the driver)",
+      "range": {
+        "startLine": 711,
+        "startChar": 38,
+        "endLine": 711,
+        "endChar": 84
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85302c23_99fe4803",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T03:41:25Z",
+      "side": 1,
+      "message": "Same here",
+      "range": {
+        "startLine": 7,
+        "startChar": 39,
+        "endLine": 7,
+        "endChar": 60
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e66927b0_82c70dad",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T03:41:25Z",
+      "side": 1,
+      "message": "You can say `return allocateCommandBuffers...` here and avoid `ANGLE_TRY` followed by `return Continue`",
+      "range": {
+        "startLine": 37,
+        "startChar": 4,
+        "endLine": 37,
+        "endChar": 14
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "983736c4_0b7c2f1f",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T03:41:25Z",
+      "side": 1,
+      "message": "`cmdBuf.destroy(device, mCommandPool)` should do the trick.",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 31
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7624da3a_e4b6c591",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T03:41:25Z",
+      "side": 1,
+      "message": "Some of our tests may be hitting such a limit, if they flush like crazy. I would be ok with an ASSERT like this for temporary verification that everything is ok, but generally such a thing is not needed.\n\nWe previously had such an ASSERT with the size of in-flight batches as stored in ContextVk. That limit kept growing until we realized the ASSERT doesn\u0027t make sense.",
+      "range": {
+        "startLine": 109,
+        "startChar": 35,
+        "endLine": 109,
+        "endChar": 37
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "193c3b50_58d6f6eb",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T03:41:25Z",
+      "side": 1,
+      "message": "No longer there",
+      "range": {
+        "startLine": 7,
+        "startChar": 38,
+        "endLine": 7,
+        "endChar": 61
+      },
+      "revId": "510fd51964895db81ad2ad270d3fb7851c23ec5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
