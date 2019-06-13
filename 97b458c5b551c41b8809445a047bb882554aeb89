@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f73eae3_2f61e9e1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-06-13T15:00:28Z",
+      "side": 1,
+      "message": "I\u0027m curious, why a lambda vs. a static helper function?",
+      "revId": "97b458c5b551c41b8809445a047bb882554aeb89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
