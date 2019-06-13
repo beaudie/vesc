@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "618eb9d2_fb28f774",
+        "filename": "src/tests/perf_tests/DrawCallPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-06-13T20:23:02Z",
+      "side": 1,
+      "message": "Missed this one, or intentional?",
+      "range": {
+        "startLine": 341,
+        "startChar": 65,
+        "endLine": 341,
+        "endChar": 82
+      },
+      "revId": "81d4be10272dcbb70c2a032b351b627c4a7c023c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a26ecdd4_171e91bc",
+        "filename": "src/tests/perf_tests/DrawCallPerf.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-06-13T20:23:02Z",
+      "side": 1,
+      "message": "It will be good to keep same order as in the other tests.\nI also wish it would be easy to visually see which test runs in which configuration, not sure how to solve that, though.",
+      "range": {
+        "startLine": 344,
+        "startChar": 0,
+        "endLine": 345,
+        "endChar": 85
+      },
+      "revId": "81d4be10272dcbb70c2a032b351b627c4a7c023c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
