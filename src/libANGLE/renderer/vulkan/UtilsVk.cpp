@@ -1135,10 +1135,10 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
 
     RenderTargetVk *depthStencilRenderTarget = framebuffer->getDepthStencilRenderTarget();
     ASSERT(depthStencilRenderTarget != nullptr);
+    vk::ImageHelper *depthStencilImage = &depthStencilRenderTarget->getImage();
 
     framebuffer->getFramebuffer()->addDependency(contextVk, src);
-    ANGLE_TRY(depthStencilRenderTarget->onAccess(contextVk, framebuffer->getFramebuffer(),
-                                                 vk::ImageLayout::TransferDst));
+    framebuffer->getFramebuffer()->addDependency(contextVk, depthStencilImage);
 
     vk::CommandBuffer *commandBuffer;
     ANGLE_TRY(framebuffer->getFramebuffer()->recordCommands(contextVk, &commandBuffer));
@@ -1206,7 +1206,7 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
                                    0, nullptr);
 
     // Copy the resulting buffer into dest.
-    vk::ImageHelper *depthStencilImage = &depthStencilRenderTarget->getImage();
+    depthStencilRenderTarget->onAccess(vk::ImageLayout::TransferDst, commandBuffer);
 
     VkBufferImageCopy region               = {};
     region.bufferOffset                    = 0;

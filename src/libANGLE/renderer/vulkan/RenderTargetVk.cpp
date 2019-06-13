@@ -57,71 +57,10 @@ void RenderTargetVk::reset()
     mLayerIndex         = 0;
 }
 
-angle::Result RenderTargetVk::onColorDraw(ContextVk *contextVk,
-                                          vk::FramebufferHelper *framebufferVk)
-{
-    ASSERT(!mImage->getFormat().imageFormat().hasDepthOrStencilBits());
-    return onAccess(contextVk, framebufferVk, vk::ImageLayout::ColorAttachment);
-}
-
-angle::Result RenderTargetVk::onDepthStencilDraw(ContextVk *contextVk,
-                                                 vk::FramebufferHelper *framebufferVk)
-{
-    ASSERT(mImage->getFormat().imageFormat().hasDepthOrStencilBits());
-    return onAccess(contextVk, framebufferVk, vk::ImageLayout::DepthStencilAttachment);
-}
-
-angle::Result RenderTargetVk::onAccess(ContextVk *contextVk,
-                                       vk::CommandGraphResource *user,
-                                       vk::ImageLayout layout)
-{
-    ASSERT(mImage && mImage->valid());
-
-    ANGLE_TRY(mImage->changeLayout(contextVk, mImage->getAspectFlags(), layout));
-    user->addDependency(contextVk, mImage);
-
-    return angle::Result::Continue;
-}
-
-vk::ImageHelper &RenderTargetVk::getImage()
-{
-    ASSERT(mImage && mImage->valid());
-    return *mImage;
-}
-
-const vk::ImageHelper &RenderTargetVk::getImage() const
-{
-    ASSERT(mImage && mImage->valid());
-    return *mImage;
-}
-
-vk::ImageView *RenderTargetVk::getDrawImageView() const
-{
-    ASSERT(mImageView && mImageView->valid());
-    return mImageView;
-}
-
-vk::ImageView *RenderTargetVk::getReadImageView() const
-{
-    return getDrawImageView();
-}
-
 vk::ImageView *RenderTargetVk::getFetchImageView() const
 {
     return mCubeImageFetchView && mCubeImageFetchView->valid() ? mCubeImageFetchView
                                                                : getReadImageView();
-}
-
-const vk::Format &RenderTargetVk::getImageFormat() const
-{
-    ASSERT(mImage && mImage->valid());
-    return mImage->getFormat();
-}
-
-gl::Extents RenderTargetVk::getExtents() const
-{
-    ASSERT(mImage && mImage->valid());
-    return mImage->getLevelExtents2D(mLevelIndex);
 }
 
 void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image, vk::ImageView *imageView)

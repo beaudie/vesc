@@ -50,24 +50,59 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
               size_t layerIndex);
     void reset();
 
-    angle::Result onColorDraw(ContextVk *contextVk, vk::FramebufferHelper *framebufferVk);
-    angle::Result onDepthStencilDraw(ContextVk *contextVk, vk::FramebufferHelper *framebufferVk);
-    angle::Result onAccess(ContextVk *contextVk,
-                           vk::CommandGraphResource *readingResource,
-                           vk::ImageLayout layout);
+    void onColorDraw(vk::CommandBuffer *commandBuffer)
+    {
+        onAccess(vk::ImageLayout::ColorAttachment, commandBuffer);
+    }
 
-    vk::ImageHelper &getImage();
-    const vk::ImageHelper &getImage() const;
+    void onDepthStencilDraw(vk::CommandBuffer *commandBuffer)
+    {
+        onAccess(vk::ImageLayout::DepthStencilAttachment, commandBuffer);
+    }
 
-    vk::ImageView *getDrawImageView() const;
-    vk::ImageView *getReadImageView() const;
+    void onAccess(vk::ImageLayout layout, vk::CommandBuffer *commandBuffer)
+    {
+        ASSERT(mImage && mImage->valid());
+        mImage->changeLayoutWithCommand(mImage->getAspectFlags(), layout, commandBuffer);
+    }
+
+    vk::ImageHelper &getImage()
+    {
+        ASSERT(mImage && mImage->valid());
+        return *mImage;
+    }
+
+    const vk::ImageHelper &getImage() const
+    {
+        ASSERT(mImage && mImage->valid());
+        return *mImage;
+    }
+
+    vk::ImageView *getDrawImageView() const
+    {
+        ASSERT(mImageView && mImageView->valid());
+        return mImageView;
+    }
+
+    vk::ImageView *getReadImageView() const { return getDrawImageView(); }
+
     // GLSL's texelFetch() needs a 2D array view to read from cube maps.  This function returns the
     // same view as `getReadImageView()`, except for cubemaps, in which case it returns a 2D array
     // view of it.
     vk::ImageView *getFetchImageView() const;
 
-    const vk::Format &getImageFormat() const;
-    gl::Extents getExtents() const;
+    const vk::Format &getImageFormat() const
+    {
+        ASSERT(mImage && mImage->valid());
+        return mImage->getFormat();
+    }
+
+    gl::Extents getExtents() const
+    {
+        ASSERT(mImage && mImage->valid());
+        return mImage->getLevelExtents2D(mLevelIndex);
+    }
+
     size_t getLevelIndex() const { return mLevelIndex; }
     size_t getLayerIndex() const { return mLayerIndex; }
 
