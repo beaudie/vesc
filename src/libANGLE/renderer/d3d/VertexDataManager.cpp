@@ -207,7 +207,7 @@ VertexDataManager::CurrentValueState::CurrentValueState(BufferFactoryD3D *factor
     data.Values.FloatValues[1] = std::numeric_limits<float>::quiet_NaN();
     data.Values.FloatValues[2] = std::numeric_limits<float>::quiet_NaN();
     data.Values.FloatValues[3] = std::numeric_limits<float>::quiet_NaN();
-    data.Type           = gl::VertexAttribType::Float;
+    data.Type                  = gl::VertexAttribType::Float;
 }
 
 VertexDataManager::CurrentValueState::CurrentValueState(CurrentValueState &&other)

@@ -897,7 +897,6 @@ class Program final : angle::NonCopyable, public LabeledObject
     // Writes a program's binary to the output memory buffer.
     void serialize(const Context *context, angle::MemoryBuffer *binaryOut) const;
 
-
   private:
     struct LinkingState;
 
