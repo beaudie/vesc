@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e18d8aa7_80e96802",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1951,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:02:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fee24a76_5218f8df",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "17120f10_eb443822",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 19
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "b1040f38_9951baaf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2031,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:02:29Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3f50981e_5aac3c0f",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c641e8f_afb62ef4",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 19
@@ -68,6 +104,24 @@
       "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dba14751_3a3e613f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:02:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c641e8f_afb62ef4",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "631f0269_f32fee87",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:02:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e32f00e_d811e1b6",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d020770f_d2506acd",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 19
@@ -102,6 +174,24 @@
       "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58d92b39_4f196b3e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:02:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d020770f_d2506acd",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -122,6 +212,24 @@
     },
     {
       "key": {
+        "uuid": "8ecd34ee_c0d9f28f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:02:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e6c457a_c9659324",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fed7de8c_d4d00829",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 19
@@ -136,6 +244,24 @@
       "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00847725_513a11bf",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:02:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fed7de8c_d4d00829",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -156,6 +282,24 @@
     },
     {
       "key": {
+        "uuid": "1ab15fa1_b8708903",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1459,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:02:29Z",
+      "side": 1,
+      "message": "Yeah, it might be possible if you leave a \"mean\" test running for a few days or something like that.",
+      "parentUuid": "3b25ff6e_08205ea4",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f82b77b8_81802d02",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 19
@@ -167,6 +311,24 @@
       "writtenOn": "2019-06-12T20:53:34Z",
       "side": 1,
       "message": "I flagged 5 instances where this new parameter appears to be a don\u0027t-care. Could overload this function instead, keeping original variant, which could declare the unused bool locally and call new implementation. Would save the extra, unused code at call time.",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5861e0ae_5b183074",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-13T19:02:29Z",
+      "side": 1,
+      "message": "That\u0027s reasonable, I added.",
+      "parentUuid": "f82b77b8_81802d02",
       "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
