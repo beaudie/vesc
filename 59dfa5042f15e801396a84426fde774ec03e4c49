@@ -114,6 +114,30 @@
       "revId": "59dfa5042f15e801396a84426fde774ec03e4c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc15117d_846d921d",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T19:17:13Z",
+      "side": 1,
+      "message": "I agree. I appreciate that the code can support batched allocations (though batch size is currently 1), but in any real application (that never calls glFlush()), we should never need more than 3 command buffers. IOW, batch size will forever be 1, so the code might as well be simplified around this fact.",
+      "parentUuid": "ea99ade0_77591f13",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 0
+      },
+      "revId": "59dfa5042f15e801396a84426fde774ec03e4c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
