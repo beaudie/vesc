@@ -138,6 +138,30 @@
       "revId": "59dfa5042f15e801396a84426fde774ec03e4c49",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f1769c8_e820e82a",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-13T22:43:05Z",
+      "side": 1,
+      "message": "Right, if we only requires 2-3 command buffers, there is no need to use batched allocation, it may bring overheads.   \n\nI just made it one allocation a time and the code looks much better and clear, I am happy with it.",
+      "parentUuid": "dc15117d_846d921d",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 0
+      },
+      "revId": "59dfa5042f15e801396a84426fde774ec03e4c49",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
