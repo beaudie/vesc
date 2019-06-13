@@ -56,9 +56,14 @@ struct ImageMemoryBarrierData
     VkAccessFlags srcAccessMask;
 
     // If access is read-only, the execution barrier can be skipped altogether if retransitioning to
-    // the same layout. This is because read-after-read does not need an execution or memory
-    // barrier.
-    bool isReadOnlyAccess;
+    // the same layout.  This is because read-after-read does not need an execution or memory
+    // barrier.  Vulkan additionally guarantees color attachment and depth/stencil attachment
+    // read/writes to be in execution order, so they too won't need a barrier if transitioning to
+    // the same layout.
+    //
+    // Otherwise, same-layout transitions only require an execution barrier (and not a memory
+    // barrier).
+    bool sameLayoutTransitionRequiresBarrier;
 };
 
 // clang-format off
@@ -73,7 +78,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             // Transition from: there's no data in the image to care about.
             0,
-            true,
+            false,
         },
     },
     {
@@ -99,7 +104,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_TRANSFER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            true,
+            false,
         },
     },
     {
@@ -112,7 +117,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_TRANSFER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_TRANSFER_WRITE_BIT,
-            false,
+            true,
         },
     },
     {
@@ -125,7 +130,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            true,
+            false,
         },
     },
     {
@@ -138,7 +143,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_SHADER_WRITE_BIT,
-            false,
+            true,
         },
     },
     {
@@ -151,7 +156,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_SHADER_READ_BIT,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            true,
+            false,
         },
     },
     {
@@ -195,7 +200,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             0,
             // Transition from: RAR and WAR don't need memory barrier.
             0,
-            true,
+            false,
         },
     },
 };
@@ -1688,10 +1693,14 @@ bool ImageHelper::isLayoutChangeNecessary(ImageLayout newLayout) const
 {
     const ImageMemoryBarrierData &layoutData = kImageMemoryBarrierData[mCurrentLayout];
 
-    // If transitioning to the same read-only layout (RAR), don't generate a barrier.
-    bool sameLayoutReadAfterRead = mCurrentLayout == newLayout && layoutData.isReadOnlyAccess;
+    // If transitioning to the same layout, we rarely need a barrier.  RAR (read-after-read)
+    // doesn't need a barrier, and WAW (write-after-write) is guaranteed to not require a barrier
+    // for color attachment and depth/stencil attachment writes.  Transfer dst and shader writes
+    // are basically the only cases where an execution barrier is still necessary.
+    bool sameLayoutAndNoNeedForBarrier =
+        mCurrentLayout == newLayout && !layoutData.sameLayoutTransitionRequiresBarrier;
 
-    return !sameLayoutReadAfterRead;
+    return !sameLayoutAndNoNeedForBarrier;
 }
 
 bool ImageHelper::isQueueChangeNeccesary(uint32_t newQueueFamilyIndex) const
@@ -1721,7 +1730,7 @@ angle::Result ImageHelper::changeLayoutAndQueue(ContextVk *contextVk,
                                                 ImageLayout newLayout,
                                                 uint32_t newQueueFamilyIndex)
 {
-    if (!isQueueChangeNeccesary(newQueueFamilyIndex))
+    if (!isQueueChangeNeccesary(newQueueFamilyIndex) && !isLayoutChangeNecessary(newLayout))
     {
         return angle::Result::Continue;
     }
@@ -1757,6 +1766,19 @@ void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                             uint32_t newQueueFamilyIndex,
                                             vk::CommandBuffer *commandBuffer)
 {
+    // If transitioning to the same layout (and there is no queue transfer), an execution barrier
+    // suffices.
+    if (mCurrentLayout == newLayout && mCurrentQueueFamilyIndex == newQueueFamilyIndex)
+    {
+        const ImageMemoryBarrierData &transition = kImageMemoryBarrierData[mCurrentLayout];
+
+        // In this case, the image is going to be used in the same way, so the src and dst stage
+        // masks must be necessarily equal.
+        ASSERT(transition.srcStageMask == transition.dstStageMask);
+
+        commandBuffer->executionBarrier(transition.dstStageMask);
+        return;
+    }
 
     const ImageMemoryBarrierData &transitionFrom = kImageMemoryBarrierData[mCurrentLayout];
     const ImageMemoryBarrierData &transitionTo   = kImageMemoryBarrierData[newLayout];
