@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "3f50981e_5aac3c0f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 2031,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T02:29:58Z",
+      "side": 1,
+      "message": "I\u0027ve already done this in a change I\u0027ll be putting up for review.",
+      "parentUuid": "17120f10_eb443822",
+      "revId": "013e5d2ea1dc7a191ce6f305851f2cd2f62cb08e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c641e8f_afb62ef4",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 19
