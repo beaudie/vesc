@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6614e56_24adcb75",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-13T02:28:03Z",
+      "side": 1,
+      "message": "Sorry I just remembered. This code already does the same job. You could either move this up to ShaderAndVariation.__init__, thought that would require moving enum_maxes too, or simpler yet, just remove this and use array_len here.",
+      "range": {
+        "startLine": 522,
+        "startChar": 4,
+        "endLine": 522,
+        "endChar": 88
+      },
+      "revId": "a0944305d879f1991b7af5ef858dbc97be3a9464",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
