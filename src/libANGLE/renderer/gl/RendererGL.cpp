@@ -199,7 +199,7 @@ RendererGL::RendererGL(std::unique_ptr<FunctionsGL> functions,
     nativegl_gl::GenerateWorkarounds(mFunctions.get(), &mWorkarounds);
     OverrideFeaturesWithDisplayState(&mWorkarounds, display->getState());
     mStateManager = new StateManagerGL(mFunctions.get(), getNativeCaps(), getNativeExtensions());
-    mBlitter          = new BlitGL(mFunctions.get(), mWorkarounds, mStateManager);
+    mBlitter      = new BlitGL(mFunctions.get(), mWorkarounds, mStateManager);
     mMultiviewClearer = new ClearMultiviewGL(mFunctions.get(), mStateManager);
 
     bool hasDebugOutput = mFunctions->isAtLeastGL(gl::Version(4, 3)) ||

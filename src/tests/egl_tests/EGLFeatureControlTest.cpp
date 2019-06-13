@@ -16,10 +16,7 @@ using namespace angle;
 class EGLFeatureControlTest : public ANGLETest
 {
   public:
-    void testSetUp() override
-    {
-        
-    }
+    void testSetUp() override {}
 
     void testTearDown() override
     {
