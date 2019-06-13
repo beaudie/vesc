@@ -204,6 +204,14 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                     vkCmdEndQuery(cmdBuffer, params->queryPool, params->query);
                     break;
                 }
+                case CommandID::ExecutionBarrier:
+                {
+                    const ExecutionBarrierParams *params =
+                        getParamPtr<ExecutionBarrierParams>(currentCommand);
+                    vkCmdPipelineBarrier(cmdBuffer, params->stageMask, params->stageMask, 0, 0,
+                                         nullptr, 0, nullptr, 0, nullptr);
+                    break;
+                }
                 case CommandID::ImageBarrier:
                 {
                     const ImageBarrierParams *params =
@@ -387,6 +395,9 @@ std::string SecondaryCommandBuffer::dumpCommands(const char *separator) const
                     break;
                 case CommandID::EndQuery:
                     result += "EndQuery";
+                    break;
+                case CommandID::ExecutionBarrier:
+                    result += "ExecutionBarrier";
                     break;
                 case CommandID::ImageBarrier:
                     result += "ImageBarrier";

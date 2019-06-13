@@ -287,6 +287,7 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     void endRenderPass();
     void executeCommands(uint32_t commandBufferCount, const CommandBuffer *commandBuffers);
 
+    void executionBarrier(VkPipelineStageFlags stageMask);
     void imageBarrier(VkPipelineStageFlags srcStageMask,
                       VkPipelineStageFlags dstStageMask,
                       const VkImageMemoryBarrier *imageMemoryBarrier);
@@ -642,6 +643,12 @@ ANGLE_INLINE void CommandBuffer::pipelineBarrier(VkPipelineStageFlags srcStageMa
     vkCmdPipelineBarrier(mHandle, srcStageMask, dstStageMask, dependencyFlags, memoryBarrierCount,
                          memoryBarriers, bufferMemoryBarrierCount, bufferMemoryBarriers,
                          imageMemoryBarrierCount, imageMemoryBarriers);
+}
+
+ANGLE_INLINE void CommandBuffer::executionBarrier(VkPipelineStageFlags stageMask)
+{
+    ASSERT(valid());
+    vkCmdPipelineBarrier(mHandle, stageMask, stageMask, 0, 0, nullptr, 0, nullptr, 0, nullptr);
 }
 
 ANGLE_INLINE void CommandBuffer::imageBarrier(VkPipelineStageFlags srcStageMask,
