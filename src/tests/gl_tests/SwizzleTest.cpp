@@ -287,6 +287,7 @@ TEST_P(SwizzleTest, RGBA32F_2D)
 
 TEST_P(SwizzleTest, RGB32F_2D)
 {
+    ANGLE_SKIP_TEST_IF(IsVulkan());  // anglebug.com/2898 - float textures
     GLfloat data[] = {0.1f, 0.2f, 0.3f};
     init2DTexture(GL_RGB32F, GL_RGB, GL_FLOAT, data);
     runTest2D();
@@ -429,7 +430,7 @@ TEST_P(SwizzleTest, SubUpdate)
     EXPECT_PIXEL_COLOR_EQ(0, 0, expectedUpdateData);
 }
 
-ANGLE_INSTANTIATE_TEST(SwizzleTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+ANGLE_INSTANTIATE_TEST(SwizzleTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES(), ES3_VULKAN());
 ANGLE_INSTANTIATE_TEST(SwizzleIntegerTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 
 }  // namespace
