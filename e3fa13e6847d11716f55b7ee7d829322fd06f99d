@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77bad0e2_1834d859",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-14T19:01:12Z",
+      "side": 1,
+      "message": "Please add the `if ((access \u0026 GL_MAP_UNSYNCHRONIZED_BIT) \u003d\u003d 0)` call before the finish. Same with mapImpl (where access should be forwarded to). Adding a generic test for this may be difficult, as there is no guarantee any backend is not going to flush anyway. However, you can add a Vulkan-specific test where you do this:\n\n- Create buffer1, map it, and write 1 2 3 4\n- Create buffer2, map it, and write 5 6 7 8\n- Call copy buffer1 into buffer2\n- Map buffer2 with the flag set, read back and expect 5 6 7 8\n- Map buffer2 without the flag, read back and expect 1 2 3 4\n\nThis can only be non-flaky if we know exactly when the backend can flush (hence it being a Vulkan-only test).\n\n---\n\nAlso, super important, this should be a `finishToSerial` call with the serial of the buffer. It\u0027s possible a triple-buffered application knows the buffer hasn\u0027t been used in the past few frames so it can always map it without incurring a GPU bubble. This would kill that application\u0027s performance.",
+      "revId": "e3fa13e6847d11716f55b7ee7d829322fd06f99d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d4ac3f1_9d4d73fa",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-14T19:01:12Z",
+      "side": 1,
+      "message": "I would complain about having same-buffer copies be handled especially in the respective function, though the command graph rework would make that moot. I could live with this.",
+      "range": {
+        "startLine": 256,
+        "startChar": 31,
+        "endLine": 256,
+        "endChar": 67
+      },
+      "revId": "e3fa13e6847d11716f55b7ee7d829322fd06f99d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
