@@ -470,6 +470,62 @@ void main()
     }
 }
 
+// This test will initialize a frame buffer, render to it with depth testing, and verify
+// pixel correctness.
+TEST_P(DepthStencilFormatsTest, DepthBuffer)
+{
+    struct TypeInfo
+    {
+        GLenum internalFormat;
+        bool isSupported;
+    };
+
+    std::vector<TypeInfo> types = {
+        {GL_DEPTH_COMPONENT16, true},
+        {GL_DEPTH_COMPONENT24_OES, IsGLExtensionEnabled("GL_OES_depth24")}};
+
+    for (const TypeInfo &type : types)
+    {
+        EXPECT_EQ(checkRenderbufferFormatSupport(type.internalFormat), type.isSupported);
+
+        if (type.isSupported)
+        {
+            GLTexture tex;
+            glBindTexture(GL_TEXTURE_2D, tex);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+            ASSERT_GL_NO_ERROR();
+
+            GLRenderbuffer rbDepth;
+            glBindRenderbuffer(GL_RENDERBUFFER, rbDepth);
+            glRenderbufferStorage(GL_RENDERBUFFER, type.internalFormat, 1, 1);
+            ASSERT_GL_NO_ERROR();
+
+            GLFramebuffer fbo;
+            glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,
+                                      rbDepth);
+
+            EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+            ASSERT_GL_NO_ERROR();
+
+            ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+            glEnable(GL_DEPTH_TEST);
+            glDepthFunc(GL_EQUAL);
+            glClearDepthf(1.0f);
+            glClearColor(0, 0, 0, 1);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            drawQuad(program.get(), essl1_shaders::PositionAttrib(), 1.0f);
+            glDisable(GL_DEPTH_TEST);
+
+            EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+            ASSERT_GL_NO_ERROR();
+        }
+    }
+}
+
 TEST_P(DepthStencilFormatsTestES3, DrawWithDepthStencil)
 {
     GLushort data[16];
