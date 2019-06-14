@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b108a1d_48c93116",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T17:38:43Z",
+      "side": 1,
+      "message": "nit: reads better as releaseCommandPool",
+      "range": {
+        "startLine": 658,
+        "startChar": 25,
+        "endLine": 658,
+        "endChar": 43
+      },
+      "revId": "ed09ad309d91bfcca59c2bf9acc25049b961b30a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26cff6af_ab96aeda",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T17:38:43Z",
+      "side": 1,
+      "message": "nit: reads better are recycleCommandPool",
+      "range": {
+        "startLine": 687,
+        "startChar": 16,
+        "endLine": 687,
+        "endChar": 33
+      },
+      "revId": "ed09ad309d91bfcca59c2bf9acc25049b961b30a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9f28679_7324de1f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T17:38:43Z",
+      "side": 1,
+      "message": "You can drop the command buffers here. freeAllInFlightResources is only called when the device is lost. Just leave a short comment. The benefit is we won\u0027t have to handle a VkResult.",
+      "range": {
+        "startLine": 767,
+        "startChar": 8,
+        "endLine": 767,
+        "endChar": 70
+      },
+      "revId": "ed09ad309d91bfcca59c2bf9acc25049b961b30a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87256c61_11be99c4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2097,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T17:38:43Z",
+      "side": 1,
+      "message": "you can change this to ASSERT(mInFlightCommands.empty());",
+      "range": {
+        "startLine": 2097,
+        "startChar": 4,
+        "endLine": 2097,
+        "endChar": 28
+      },
+      "revId": "ed09ad309d91bfcca59c2bf9acc25049b961b30a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c48a311f_24bab5da",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T17:38:43Z",
+      "side": 1,
+      "message": "If you\u0027re calling reset command buffer and that can return and error then we need to handle that potential error. So collect should be returning angle::Result, taking a vk::Context * argument and handling the error with ANGLE_VK_TRY.",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 4
+      },
+      "revId": "ed09ad309d91bfcca59c2bf9acc25049b961b30a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4675f667_3b1d931e",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T17:38:43Z",
+      "side": 1,
+      "message": "nit: maybe start with 2? since that\u0027s probably the best base.",
+      "range": {
+        "startLine": 43,
+        "startChar": 38,
+        "endLine": 43,
+        "endChar": 39
+      },
+      "revId": "ed09ad309d91bfcca59c2bf9acc25049b961b30a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
