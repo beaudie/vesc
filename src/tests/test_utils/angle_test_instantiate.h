@@ -31,6 +31,12 @@ bool IsNexus6P();
 bool IsPixelXL();
 bool IsPixel2();
 bool IsNVIDIAShield();
+bool IsAdreno();
+
+// Desktop devices.
+bool IsIntel();
+bool IsAMD();
+bool IsNVIDIA();
 
 bool IsPlatformAvailable(const PlatformParameters &param);
 
