@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "7cca4c27_b7aac14d",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-14T23:56:03Z",
+      "side": 1,
+      "message": "The other piece is that the test you describe makes sense intuitively, but GL_MAP_UNSYNCHRONIZED_BIT only applies when mapping a buffer to write it (GL_MAP_WRITE_BIT):\n\n\u003e GL_INVALID_OPERATION is generated for any of the following conditions:\n\u003e GL_MAP_READ_BIT is set and any of GL_MAP_INVALIDATE_RANGE_BIT, GL_MAP_INVALIDATE_BUFFER_BIT, or GL_MAP_UNSYNCHRONIZED_BIT is set.\n\nThis means we can\u0027t test GL_MAP_UNSYNCHRONIZED_BIT is implemented correctly by reading back data from a buffer, which makes things a bit more difficult.   I\u0027ll have to see if something pops into mind over the weekend that could work.   Since we are the GL driver, we may be able to bend the rules a bit and read the buffer anyway, even if we only specify GL_MAP_WRITE_BIT.   The spec indicates this isn\u0027t an error, just undefined behavior:\n\n\u003e GL_MAP_READ_BIT indicates that the returned pointer may be used to read buffer object data. No GL error is generated if the pointer is used to query a mapping which excludes this flag, but the result is undefined and system errors (possibly including program termination) may occur.\n\nOtherwise, I\u0027ll probably need some help coming up with a sequence that matches Mohan\u0027s description in anglebug.com/3213:\n\n\u003e otherwise, flushing a pipeline prematurely might result in a deadlock. in the hypothetical case i mentioned ([draw frame n] [buffer map for frame n+1] [prep for frame n+1] *[more work on draw n]* [swap frame n]) the highlighted command may have resources needed by \"draw n\"",
+      "parentUuid": "5553b6b3_84645132",
+      "revId": "e3fa13e6847d11716f55b7ee7d829322fd06f99d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d4ac3f1_9d4d73fa",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 5

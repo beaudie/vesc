@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10a29569_67fa2292",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-14T23:56:03Z",
+      "side": 1,
+      "message": "vkCmdCopyBuffer() doesn\u0027t seem to work on pixel 2 while these tests pass on linux and other pixel devices.   If the code looks good I\u0027ll open a bug to QC once this is ready to merge (so we have stable code) and ask them to take a look.",
+      "revId": "057cf67dfd30ba5faf57d06079e98c611c9ae206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
