@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "abae7b48_11eba611",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T17:42:41Z",
+      "side": 1,
+      "message": "nit: numIndices (or indexCount if you want to be consistent with Vulkan - https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndexed.html)",
+      "range": {
+        "startLine": 1162,
+        "startChar": 15,
+        "endLine": 1162,
+        "endChar": 18
+      },
+      "revId": "e02c37da83038f24e94e41dfc2146dd0cf39eb04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ae9c4e0_21d6dee3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1021,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T17:42:41Z",
+      "side": 1,
+      "message": "tiny nit but can you rename these to indexCountOut?",
+      "range": {
+        "startLine": 1021,
+        "startChar": 74,
+        "endLine": 1021,
+        "endChar": 87
+      },
+      "revId": "e02c37da83038f24e94e41dfc2146dd0cf39eb04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "94c2d3ef_c9ec4fc4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -52,6 +98,29 @@
       "revId": "e02c37da83038f24e94e41dfc2146dd0cf39eb04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef5224d2_1992ec26",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1085,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T17:42:41Z",
+      "side": 1,
+      "message": "can you take a look at renderer/d3d/d3d11/Renderer11.cpp and see if you can share any code with CopyLineLoopIndices/CopyLineLoopIndicesWithRestart? The shared code would go in renderer/renderer_utils.h/cpp. I think the code I\u0027m seeing there is a bit shorter too.",
+      "range": {
+        "startLine": 1085,
+        "startChar": 7,
+        "endLine": 1085,
+        "endChar": 42
+      },
+      "revId": "e02c37da83038f24e94e41dfc2146dd0cf39eb04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
