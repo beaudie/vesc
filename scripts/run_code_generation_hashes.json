@@ -451,12 +451,20 @@
     "5f591d220ee53b6e54a27d1523a3ab79",
   "packed enum:src/common/packed_gl_enums.json":
     "3f730faeebe986cd3017432ad56cf203",
+  "proc table:scripts/egl.xml":
+    "842e24514c4cfe09fba703c17a0fd292",
+  "proc table:scripts/egl_angle_ext.xml":
+    "fc2e249239fb1365f6d145cdf1a3cfcf",
+  "proc table:scripts/gl.xml":
+    "b470cb06b06cbbe7adb2c8129ec85708",
+  "proc table:scripts/gl_angle_ext.xml":
+    "11e1eb2cbe51ae6e7b8705d3506846d5",
+  "proc table:scripts/registry_xml.py":
+    "be904202ce40755daac33faf4123b9b9",
   "proc table:src/libGLESv2/gen_proc_table.py":
-    "3be3e8ed7fad58e8cc6fcf348da7b17d",
+    "772119e707ae7c7616354492dd8856ba",
   "proc table:src/libGLESv2/proc_table_autogen.cpp":
-    "7cf8dbd79fddffd89d2348d1210ba4ca",
-  "proc table:src/libGLESv2/proc_table_data.json":
-    "4dfc7f64b7a44b93c83504d1c5332814",
+    "7f3946df1fde2195c4bc7f6dbc5256bd",
   "uniform type:src/common/gen_uniform_type_table.py":
     "9dd389f2b5793ba635169d61cef2dde9",
   "uniform type:src/common/uniform_type_info_autogen.cpp":
