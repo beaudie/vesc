@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "94c2d3ef_c9ec4fc4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-06-14T17:14:41Z",
+      "side": 1,
+      "message": "What\u0027s this +1 for? Haven\u0027t we counted all the output indices in streamIndices?",
+      "revId": "e02c37da83038f24e94e41dfc2146dd0cf39eb04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
