@@ -16,6 +16,24 @@
       "revId": "e02c37da83038f24e94e41dfc2146dd0cf39eb04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77bb2ce5_b4764399",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-14T17:22:35Z",
+      "side": 1,
+      "message": "Somewhat obscured, but this is when primitive restart is disabled (the if above returns), so the number of indices is one more than the number of input indices.",
+      "parentUuid": "94c2d3ef_c9ec4fc4",
+      "revId": "e02c37da83038f24e94e41dfc2146dd0cf39eb04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
