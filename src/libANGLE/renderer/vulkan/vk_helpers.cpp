@@ -282,22 +282,30 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
 
         mSize = std::max(sizeToAllocate, mMinSize);
 
-        std::unique_ptr<BufferHelper> buffer = std::make_unique<BufferHelper>();
+        if (mBufferFreeList.empty())
+        {
+            std::unique_ptr<BufferHelper> buffer = std::make_unique<BufferHelper>();
 
-        VkBufferCreateInfo createInfo    = {};
-        createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-        createInfo.flags                 = 0;
-        createInfo.size                  = mSize;
-        createInfo.usage                 = mUsage;
-        createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
-        createInfo.queueFamilyIndexCount = 0;
-        createInfo.pQueueFamilyIndices   = nullptr;
+            VkBufferCreateInfo createInfo    = {};
+            createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+            createInfo.flags                 = 0;
+            createInfo.size                  = mSize;
+            createInfo.usage                 = mUsage;
+            createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+            createInfo.queueFamilyIndexCount = 0;
+            createInfo.pQueueFamilyIndices   = nullptr;
 
-        const VkMemoryPropertyFlags memoryProperty = mHostVisible
-                                                         ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-                                                         : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-        ANGLE_TRY(buffer->init(contextVk, createInfo, memoryProperty));
-        mBuffer = buffer.release();
+            const VkMemoryPropertyFlags memoryProperty = mHostVisible
+                                                             ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+                                                             : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+            ANGLE_TRY(buffer->init(contextVk, createInfo, memoryProperty));
+            mBuffer = buffer.release();
+        }
+        else
+        {
+            mBuffer = mBufferFreeList.back();
+            mBufferFreeList.pop_back();
+        }
 
         mNextAllocationOffset        = 0;
         mLastFlushOrInvalidateOffset = 0;
@@ -360,7 +368,22 @@ angle::Result DynamicBuffer::invalidate(ContextVk *contextVk)
 void DynamicBuffer::release(ContextVk *contextVk)
 {
     reset();
-    releaseRetainedBuffers(contextVk);
+
+    for (BufferHelper *toFree : mRetainedBuffers)
+    {
+        toFree->release(contextVk);
+        delete toFree;
+    }
+
+    mRetainedBuffers.clear();
+
+    for (BufferHelper *toFree : mBufferFreeList)
+    {
+        toFree->release(contextVk);
+        delete toFree;
+    }
+
+    mBufferFreeList.clear();
 
     if (mBuffer)
     {
@@ -379,7 +402,22 @@ void DynamicBuffer::release(ContextVk *contextVk)
 void DynamicBuffer::release(DisplayVk *display, std::vector<GarbageObjectBase> *garbageQueue)
 {
     reset();
-    releaseRetainedBuffers(display, garbageQueue);
+
+    for (BufferHelper *toFree : mRetainedBuffers)
+    {
+        toFree->release(display, garbageQueue);
+        delete toFree;
+    }
+
+    mRetainedBuffers.clear();
+
+    for (BufferHelper *toFree : mBufferFreeList)
+    {
+        toFree->release(display, garbageQueue);
+        delete toFree;
+    }
+
+    mBufferFreeList.clear();
 
     if (mBuffer)
     {
@@ -391,29 +429,18 @@ void DynamicBuffer::release(DisplayVk *display, std::vector<GarbageObjectBase> *
     }
 }
 
-void DynamicBuffer::releaseRetainedBuffers(ContextVk *contextVk)
+void DynamicBuffer::releaseRetainedBuffers()
 {
-    for (BufferHelper *toFree : mRetainedBuffers)
+    if (mBufferFreeList.empty())
     {
-        // See note in release().
-        toFree->updateQueueSerial(contextVk->getCurrentQueueSerial());
-        toFree->release(contextVk);
-        delete toFree;
+        mBufferFreeList = std::move(mRetainedBuffers);
     }
-
-    mRetainedBuffers.clear();
-}
-
-void DynamicBuffer::releaseRetainedBuffers(DisplayVk *display,
-                                           std::vector<GarbageObjectBase> *garbageQueue)
-{
-    for (BufferHelper *toFree : mRetainedBuffers)
+    else
     {
-        toFree->release(display, garbageQueue);
-        delete toFree;
+        mBufferFreeList.insert(mBufferFreeList.end(),
+                               std::make_move_iterator(mRetainedBuffers.begin()),
+                               std::make_move_iterator(mRetainedBuffers.end()));
     }
-
-    mRetainedBuffers.clear();
 }
 
 void DynamicBuffer::destroy(VkDevice device)
@@ -427,6 +454,14 @@ void DynamicBuffer::destroy(VkDevice device)
     }
 
     mRetainedBuffers.clear();
+
+    for (BufferHelper *toFree : mBufferFreeList)
+    {
+        toFree->destroy(device);
+        delete toFree;
+    }
+
+    mBufferFreeList.clear();
 
     if (mBuffer)
     {
@@ -988,7 +1023,7 @@ angle::Result LineLoopHelper::getIndexBufferForDrawArrays(ContextVk *contextVk,
     uint32_t *indices    = nullptr;
     size_t allocateBytes = sizeof(uint32_t) * (static_cast<size_t>(clampedVertexCount) + 1);
 
-    mDynamicIndexBuffer.releaseRetainedBuffers(contextVk);
+    mDynamicIndexBuffer.releaseRetainedBuffers();
     ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes,
                                            reinterpret_cast<uint8_t **>(&indices), nullptr,
                                            offsetOut, nullptr));
@@ -1041,7 +1076,7 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
     auto unitSize = (indexType == VK_INDEX_TYPE_UINT16 ? sizeof(uint16_t) : sizeof(uint32_t));
     size_t allocateBytes = unitSize * (indexCount + 1) + 1;
 
-    mDynamicIndexBuffer.releaseRetainedBuffers(contextVk);
+    mDynamicIndexBuffer.releaseRetainedBuffers();
     ANGLE_TRY(mDynamicIndexBuffer.allocate(contextVk, allocateBytes,
                                            reinterpret_cast<uint8_t **>(&indices), nullptr,
                                            bufferOffsetOut, nullptr));
@@ -2302,7 +2337,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
     if (mSubresourceUpdates.empty())
     {
-        mStagingBuffer.releaseRetainedBuffers(contextVk);
+        mStagingBuffer.releaseRetainedBuffers();
     }
 
     return angle::Result::Continue;

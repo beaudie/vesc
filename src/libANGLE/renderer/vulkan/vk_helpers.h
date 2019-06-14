@@ -68,8 +68,7 @@ class DynamicBuffer : angle::NonCopyable
     void release(DisplayVk *display, std::vector<GarbageObjectBase> *garbageQueue);
 
     // This releases all the buffers that have been allocated since this was last called.
-    void releaseRetainedBuffers(ContextVk *contextVk);
-    void releaseRetainedBuffers(DisplayVk *display, std::vector<GarbageObjectBase> *garbageQueue);
+    void releaseRetainedBuffers();
 
     // This frees resources immediately.
     void destroy(VkDevice device);
@@ -95,6 +94,7 @@ class DynamicBuffer : angle::NonCopyable
     size_t mAlignment;
 
     std::vector<BufferHelper *> mRetainedBuffers;
+    std::vector<BufferHelper *> mBufferFreeList;
 };
 
 // Uses DescriptorPool to allocate descriptor sets as needed. If a descriptor pool becomes full, we
