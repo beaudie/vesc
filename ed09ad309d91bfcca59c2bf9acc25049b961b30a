@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "6053775b_cd28f627",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-14T18:42:00Z",
+      "side": 1,
+      "message": "This is called from finish too! Although finish should probably just ASSERT that there are no batches left, as the finishToSerial call (from finish) should have already taken care of the in-flight batches.",
+      "parentUuid": "f9f28679_7324de1f",
+      "range": {
+        "startLine": 767,
+        "startChar": 8,
+        "endLine": 767,
+        "endChar": 70
+      },
+      "revId": "ed09ad309d91bfcca59c2bf9acc25049b961b30a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "87256c61_11be99c4",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 15
