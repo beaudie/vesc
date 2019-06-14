@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ba4fd00_f0b781d7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T18:59:36Z",
+      "side": 1,
+      "message": "wouldn\u0027t hurt to add a short explanation paragraph documenting your changes",
+      "revId": "117ca86e0c6dd31bace76fb76c1a0352ca62c44a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fa43edc_d0b8c52f",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T18:59:36Z",
+      "side": 1,
+      "message": "nitpick: can you update this if to pass gles_overloads instead of True/False? Also you can use a temporary like \n\ngles_overloads \u003d gles1_overloads if is_gles1 else []\n\nAnd you can save a bit of code duplication.",
+      "range": {
+        "startLine": 850,
+        "startChar": 0,
+        "endLine": 855,
+        "endChar": 55
+      },
+      "revId": "117ca86e0c6dd31bace76fb76c1a0352ca62c44a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a6d2d70_3c04665b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3059,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T18:59:36Z",
+      "side": 1,
+      "message": "discussed offline, can call through to const versions to reduce duplication",
+      "range": {
+        "startLine": 3017,
+        "startChar": 0,
+        "endLine": 3059,
+        "endChar": 1
+      },
+      "revId": "117ca86e0c6dd31bace76fb76c1a0352ca62c44a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
