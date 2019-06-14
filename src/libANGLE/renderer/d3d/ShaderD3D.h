@@ -15,8 +15,8 @@
 
 namespace angle
 {
-struct CompilerWorkaroundsD3D;
-struct WorkaroundsD3D;
+struct CompilerFeaturesD3D;
+struct FeaturesD3D;
 }  // namespace angle
 
 namespace gl
@@ -34,7 +34,7 @@ class ShaderD3D : public ShaderImpl
 {
   public:
     ShaderD3D(const gl::ShaderState &data,
-              const angle::WorkaroundsD3D &workarounds,
+              const angle::FeaturesD3D &features,
               const gl::Extensions &extensions);
     ~ShaderD3D() override;
 
@@ -60,7 +60,7 @@ class ShaderD3D : public ShaderImpl
     bool useImage2DFunction(const std::string &functionName) const;
     void appendDebugInfo(const std::string &info) const { mDebugInfo += info; }
 
-    void generateWorkarounds(angle::CompilerWorkaroundsD3D *workarounds) const;
+    void generateWorkarounds(angle::CompilerFeaturesD3D *features) const;
 
     bool usesMultipleRenderTargets() const { return mUsesMultipleRenderTargets; }
     bool usesFragColor() const { return mUsesFragColor; }

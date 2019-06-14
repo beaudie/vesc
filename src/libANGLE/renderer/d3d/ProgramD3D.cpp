@@ -386,7 +386,7 @@ ProgramD3DMetadata::ProgramD3DMetadata(RendererD3D *renderer,
     : mRendererMajorShaderModel(renderer->getMajorShaderModel()),
       mShaderModelSuffix(renderer->getShaderModelSuffix()),
       mUsesInstancedPointSpriteEmulation(
-          renderer->getWorkarounds().useInstancedPointSpriteEmulation.enabled),
+          renderer->getFeatures().useInstancedPointSpriteEmulation.enabled),
       mUsesViewScale(renderer->presentPathFastEnabled()),
       mCanSelectViewInVertexShader(renderer->canSelectViewInVertexShader()),
       mAttachedShaders(attachedShaders)
@@ -696,7 +696,7 @@ bool ProgramD3D::usesGeometryShader(const gl::State &state, const gl::PrimitiveM
 
 bool ProgramD3D::usesInstancedPointSpriteEmulation() const
 {
-    return mRenderer->getWorkarounds().useInstancedPointSpriteEmulation.enabled;
+    return mRenderer->getFeatures().useInstancedPointSpriteEmulation.enabled;
 }
 
 GLint ProgramD3D::getSamplerMapping(gl::ShaderType type,
@@ -1076,7 +1076,7 @@ std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
     {
         stream->readString(&mShaderHLSL[shaderType]);
         stream->readBytes(reinterpret_cast<unsigned char *>(&mShaderWorkarounds[shaderType]),
-                          sizeof(angle::CompilerWorkaroundsD3D));
+                          sizeof(angle::CompilerFeaturesD3D));
     }
 
     stream->readBool(&mUsesFragDepth);
@@ -1357,7 +1357,7 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
     {
         stream->writeString(mShaderHLSL[shaderType]);
         stream->writeBytes(reinterpret_cast<unsigned char *>(&mShaderWorkarounds[shaderType]),
-                           sizeof(angle::CompilerWorkaroundsD3D));
+                           sizeof(angle::CompilerFeaturesD3D));
     }
 
     stream->writeInt(mUsesFragDepth);
@@ -1593,7 +1593,7 @@ angle::Result ProgramD3D::getGeometryExecutableForPrimitiveType(d3d::Context *co
     angle::Result result                    = mRenderer->compileToExecutable(
         context, *currentInfoLog, geometryHLSL, gl::ShaderType::Geometry, mStreamOutVaryings,
         (mState.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS),
-        angle::CompilerWorkaroundsD3D(), &geometryExecutable);
+        angle::CompilerFeaturesD3D(), &geometryExecutable);
 
     if (!infoLog && result == angle::Result::Stop)
     {
@@ -1923,7 +1923,7 @@ angle::Result ProgramD3D::getComputeExecutableForImage2DBindLayout(
 
     ANGLE_TRY(mRenderer->compileToExecutable(
         context, *currentInfoLog, finalComputeHLSL, gl::ShaderType::Compute,
-        std::vector<D3DVarying>(), false, angle::CompilerWorkaroundsD3D(), &computeExecutable));
+        std::vector<D3DVarying>(), false, angle::CompilerFeaturesD3D(), &computeExecutable));
 
     if (computeExecutable)
     {

@@ -2615,7 +2615,7 @@ angle::Result Renderer9::compileToExecutable(d3d::Context *context,
                                              gl::ShaderType type,
                                              const std::vector<D3DVarying> &streamOutVaryings,
                                              bool separatedOutputBuffers,
-                                             const angle::CompilerWorkaroundsD3D &workarounds,
+                                             const angle::CompilerFeaturesD3D &features,
                                              ShaderExecutableD3D **outExectuable)
 {
     // Transform feedback is not supported in ES2 or D3D9
@@ -2643,11 +2643,11 @@ angle::Result Renderer9::compileToExecutable(d3d::Context *context,
 
     UINT flags = ANGLE_COMPILE_OPTIMIZATION_LEVEL;
 
-    if (workarounds.skipOptimization)
+    if (features.skipOptimization)
     {
         flags = D3DCOMPILE_SKIP_OPTIMIZATION;
     }
-    else if (workarounds.useMaxOptimization)
+    else if (features.useMaxOptimization)
     {
         flags = D3DCOMPILE_OPTIMIZATION_LEVEL3;
     }
@@ -2974,10 +2974,10 @@ void Renderer9::generateCaps(gl::Caps *outCaps,
                           outExtensions, outLimitations);
 }
 
-void Renderer9::generateWorkarounds(angle::WorkaroundsD3D *workarounds) const
+void Renderer9::generateWorkarounds(angle::FeaturesD3D *features) const
 {
-    d3d9::GenerateWorkarounds(workarounds);
-    OverrideFeaturesWithDisplayState(workarounds, mDisplay->getState());
+    d3d9::GenerateWorkarounds(features);
+    OverrideFeaturesWithDisplayState(features, mDisplay->getState());
 }
 
 DeviceImpl *Renderer9::createEGLDevice()
