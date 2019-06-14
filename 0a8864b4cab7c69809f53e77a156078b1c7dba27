@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a453379c_eb313a7a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1436,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-14T19:04:47Z",
+      "side": 1,
+      "message": "Might be a good idea to have something like this here:\n\n    TRACE_EVENT0(\"gpu.angle\", \"RendererVk::queuePresent::vkQueuePresentKHR\");\n\nso with multithreaded tests we can tell if we are stuck on the mutex or the present.",
+      "revId": "0a8864b4cab7c69809f53e77a156078b1c7dba27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
