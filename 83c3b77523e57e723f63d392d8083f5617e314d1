@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "121664be_bb78e518",
+        "filename": ".clang-format",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-14T23:32:25Z",
+      "side": 1,
+      "message": "Yeah, regroup would be better. But ANGLE is kind of \u0027complex\u0027 (e.g. with precompiled shader header files etc.) and may need some efforts to maintain the regex. Could we just keep the `Preserve` and rely on human effort to group the header files for now?  If later I got some spare time I would like to figure out a good regex grouping.",
+      "parentUuid": "08716451_ab17b26b",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 24
+      },
+      "revId": "83c3b77523e57e723f63d392d8083f5617e314d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1344e0af_5b7ea922",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "83c3b77523e57e723f63d392d8083f5617e314d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5648747_78fc56ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-14T23:32:25Z",
+      "side": 1,
+      "message": "Yeah, it did warn me, and I missed it :(. Fixed now",
+      "parentUuid": "1344e0af_5b7ea922",
+      "revId": "83c3b77523e57e723f63d392d8083f5617e314d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
