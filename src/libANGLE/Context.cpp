@@ -8107,7 +8107,7 @@ Shader *Context::getShader(GLuint handle) const
     return mState.mShaderProgramManager->getShader(handle);
 }
 
-const FrontendFeatures &Context::getFrontendFeatures() const
+const angle::FrontendFeatures &Context::getFrontendFeatures() const
 {
     return mDisplay->getFrontendFeatures();
 }
