@@ -743,13 +743,9 @@ def main():
     # auto_script parameters.
     if len(sys.argv) > 1:
         inputs = [
-            'egl.xml',
-            'egl_angle_ext.xml',
             'entry_point_packed_gl_enums.json',
-            'gl.xml',
-            'gl_angle_ext.xml',
             'registry_xml.py',
-        ]
+        ] + registry_xml.xml_inputs
         outputs = [
             '../src/libANGLE/Context_gles_1_0_autogen.h',
             '../src/libANGLE/Context_gles_2_0_autogen.h',
