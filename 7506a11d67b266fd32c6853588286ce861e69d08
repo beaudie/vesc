@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "88688ade_69212283",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T22:14:43Z",
+      "side": 1,
+      "message": "can you parameterize this as depth24OES? We should at some point update all of the other extensions.",
+      "range": {
+        "startLine": 249,
+        "startChar": 9,
+        "endLine": 249,
+        "endChar": 16
+      },
+      "revId": "7506a11d67b266fd32c6853588286ce861e69d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c11d3c4f_71375ec6",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T22:14:43Z",
+      "side": 1,
+      "message": "Small request, but instead of using a TypeInfo parameter in the test body could you split this test into two TEST_P cases and call a shared helper function? It makes it easier to tell when one specific test failed.",
+      "range": {
+        "startLine": 473,
+        "startChar": 1,
+        "endLine": 475,
+        "endChar": 44
+      },
+      "revId": "7506a11d67b266fd32c6853588286ce861e69d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb9e94f3_2f669b54",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T22:14:43Z",
+      "side": 1,
+      "message": "you can use EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER));",
+      "range": {
+        "startLine": 509,
+        "startChar": 12,
+        "endLine": 509,
+        "endChar": 28
+      },
+      "revId": "7506a11d67b266fd32c6853588286ce861e69d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
