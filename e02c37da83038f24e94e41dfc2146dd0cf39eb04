@@ -34,6 +34,24 @@
       "revId": "e02c37da83038f24e94e41dfc2146dd0cf39eb04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d1e5d243_0ce429b8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1039,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-06-14T17:36:39Z",
+      "side": 1,
+      "message": "Okay, and the reason we had to add it here was because we removed a +1 in LineLoopHelper::Draw, right?",
+      "parentUuid": "77bb2ce5_b4764399",
+      "revId": "e02c37da83038f24e94e41dfc2146dd0cf39eb04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
