@@ -95,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "3e496047_dd3a7444",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 767,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-14T19:01:05Z",
+      "side": 1,
+      "message": "See my other comments. Exactly what you said. We should remove this call from finishImpl.",
+      "parentUuid": "6053775b_cd28f627",
+      "range": {
+        "startLine": 767,
+        "startChar": 8,
+        "endLine": 767,
+        "endChar": 70
+      },
+      "revId": "ed09ad309d91bfcca59c2bf9acc25049b961b30a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "87256c61_11be99c4",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 15
