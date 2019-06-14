@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5553b6b3_84645132",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-14T22:52:57Z",
+      "side": 1,
+      "message": "The test you\u0027re describing is similar to BufferDataTestES3.BufferResizing/ES3_Vulkan, which is failing without the full contextVk-\u003efinishImpl().   Adding a test that does what you\u0027re describing specifically should be easy enough.\n\nHowever, if I do a contextVk-\u003efinishToSerial(mBuffer.getStoredQueueSerial()) instead, I need to add a contextVk-\u003eflushImpl(nullptr) also, which is essentially what contextVk-\u003efinishImpl() does anyway.\n\nTo help clarify that a bit, there are 2 versions that work:\n\ncontextVk-\u003efinishImpl()\nOR\ncontextVk-\u003eflushImpl(nullptr)\ncontextVk-\u003efinishToSerial(mBuffer.getStoredQueueSerial())\n\nOtherwise, the commands are never sent to the GPU and BufferDataTestES3.BufferResizing/ES3_Vulkan fails:\n\nTEST_P(BufferDataTestES3, BufferResizing)\n{\n[[[...]]]\n    glBufferData(GL_COPY_WRITE_BUFFER, numBytes, zeros, GL_STATIC_DRAW);\n    glCopyBufferSubData(GL_ARRAY_BUFFER, GL_COPY_WRITE_BUFFER, 0, 0, numBytes);\n\n    ASSERT_GL_NO_ERROR();\n\n    // Read back the data and compare it to the original\n    uint8_t *data \u003d reinterpret_cast\u003cuint8_t *\u003e(\n        glMapBufferRange(GL_COPY_WRITE_BUFFER, 0, numBytes, GL_MAP_READ_BIT));\n\n    ASSERT_GL_NO_ERROR();\n\n    for (size_t i \u003d 0; i \u003c numBytes; ++i)\n    {\n        EXPECT_EQ(srcBytes[i], data[i]);  \u003c\u003c--- data[i] is all 0s\n    }\n    glUnmapBuffer(GL_COPY_WRITE_BUFFER);\n\n\nBased on the spec, this appears to be the expected outcome:\n\n\u003e If no error occurs, a pointer to the beginning of the mapped range is returned once all pending operations on that buffer have completed\n\nThis means we need to perform a finishImpl() to wait for all GPU commands to complete and become visible to the CPU.   To handle the triple-buffering scenario you described, the caller should be expected to specify GL_MAP_UNSYNCHRONIZED_BIT for us to skip the finishImpl().   That\u0027s still a dangerous plan for them though since there may be queued GPU work still in flight that will modify that buffer, which we have no guarantee of when they will finish relative to any modifications the CPU makes to the map()\u0027ed buffer:\n\n\u003e No GL error is generated if pending operations which source or modify the buffer overlap the mapped region, but the result of such previous and any subsequent operations is undefined.\n\nIs the flushImpl()/finishToSerial(mBuffer.getStoredQueueSerial()) still better or should I keep the full finishImpl() call to make sure all of the related work is done also?",
+      "parentUuid": "77bad0e2_1834d859",
+      "revId": "e3fa13e6847d11716f55b7ee7d829322fd06f99d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d4ac3f1_9d4d73fa",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 5
