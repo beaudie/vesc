@@ -16,6 +16,24 @@
       "revId": "f279f1858dd4de80e5bf9f1ee9a8931d5508d001",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ebb5eb4_aa8723c6",
+        "filename": "gni/angle.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-06-14T08:57:32Z",
+      "side": 1,
+      "message": "Oh after more investigation I find it seems the paths of all third_party libraries can be overwritten with a build_overrides/angle.gni file, except for \"angle_root\" variable, which will always be reset here because it is reset after importing \"//build_overrides/angle.gni\".\n\nSo In my side I only need to update ANGLE GN files to allow me resetting angle_root.",
+      "parentUuid": "98ff9b56_e536cb61",
+      "revId": "f279f1858dd4de80e5bf9f1ee9a8931d5508d001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
