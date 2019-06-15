@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "d3027f4c_155f8018",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-15T03:29:04Z",
+      "side": 1,
+      "message": "\u003e To help clarify that a bit, there are 2 versions that work:\n\u003e\n\u003e contextVk-\u003efinishImpl()\n\u003e OR\n\u003e contextVk-\u003eflushImpl(nullptr)\n\u003e contextVk-\u003efinishToSerial(mBuffer.getStoredQueueSerial())\n\u003e\n\u003e Otherwise, the commands are never sent to the GPU and BufferDataTestES3.BufferResizing/ES3_Vulkan fails\n\nDefinitely the second method, though with a modificaiton. You should add a function similar to QueryHelper::hasPendingWork() to CommandGraphResource, and then do this:\n\nif (mBuffer.hasPendingWork(contextVk))\n{\n    contextVk-\u003eflushImpl(nullptr);\n}\ncontextVk-\u003efinishToSerial(mBuffer.getStoredQueueSerial);\n\nThe point here is to only flush if the buffer has recorded commands in this frame (and thus haven\u0027t submitted yet)\n\n\u003e The other piece is that the test you describe makes sense intuitively, but GL_MAP_UNSYNCHRONIZED_BIT only applies when mapping a buffer to write it (GL_MAP_WRITE_BIT)\n\nI see. One way to test this that I can think of is this:\n\neglSwapInterval(1)\nstartTime \u003d getTime()\nfor (500 times)\n{\n  Draw\n  glMapBufferRanges(UNSYNCHRONIZED)\n  glUnmap\n}\nendTime \u003d getTime()\nASSERT(endTime - startTime \u003c 1 second)\n\nIf `glMapBufferRanges(UNSYNCHRONIZED)` does a finish, this would run for 500 vsyncs which could be detected by the execution length of the test. The test is definitely going to fail on some platforms though, like mac+gl.",
+      "parentUuid": "7cca4c27_b7aac14d",
+      "revId": "e3fa13e6847d11716f55b7ee7d829322fd06f99d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d4ac3f1_9d4d73fa",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 5
