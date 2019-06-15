@@ -366,6 +366,8 @@ class CommandGraphResource : angle::NonCopyable
         mCurrentWritingNode->addGlobalMemoryBarrier(srcAccess, dstAccess);
     }
 
+    void onHostVisibleBufferWrite(ContextVk *contextVk);
+
   protected:
     explicit CommandGraphResource(CommandGraphResourceType resourceType);
 
@@ -439,6 +441,8 @@ class CommandGraph final : angle::NonCopyable
     bool empty() const;
     void clear();
 
+    void onHostVisibleBufferWrite() { mIsAnyHostVisibleBufferWritten = true; }
+
     // The following create special-function nodes that don't require a graph resource.
     // Queries:
     void beginQuery(const QueryPool *queryPool, uint32_t queryIndex);
@@ -465,6 +469,10 @@ class CommandGraph final : angle::NonCopyable
     std::vector<CommandGraphNode *> mNodes;
     bool mEnableGraphDiagnostics;
     angle::PoolAllocator *mPoolAllocator;
+
+    // If during the recording of the graph, any host-visible buffer is written by the GPU, a
+    // barrier is inserted at the end of the command buffer to make that write visible to host.
+    bool mIsAnyHostVisibleBufferWritten;
 
     // A set of nodes (eventually) exist that act as barriers to guarantee submission order.  For
     // example, a glMemoryBarrier() calls would lead to such a barrier or beginning and ending a
