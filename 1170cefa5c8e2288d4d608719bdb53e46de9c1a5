@@ -22,6 +22,29 @@
       "revId": "1170cefa5c8e2288d4d608719bdb53e46de9c1a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cc8511b_750e041d",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-15T21:49:46Z",
+      "side": 1,
+      "message": "nit: this should be ANGLE_VK_TRY",
+      "range": {
+        "startLine": 96,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 68
+      },
+      "revId": "1170cefa5c8e2288d4d608719bdb53e46de9c1a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
