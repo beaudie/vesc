@@ -68,6 +68,29 @@
       "revId": "7506a11d67b266fd32c6853588286ce861e69d08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fb3336b_02993ebd",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-15T02:58:39Z",
+      "side": 1,
+      "message": "Although unlikely for 1.0, you can experiment with `glDepthFunc(GL_GEQUAL)` and `drawQuad(..., 0.99f)` just to make sure the error on Android is not a precision issue.\n\nYou might also want to know that `drawQuad(..., depth)` actually outputs to (depth + 1)/2. This should be irrelevant in this case (as depth\u003d\u003d1.0), but just something to keep in mind. You can take a look at ClearTestES3::verifyDepth for inspiration on how to verifying depth.",
+      "range": {
+        "startLine": 519,
+        "startChar": 68,
+        "endLine": 519,
+        "endChar": 73
+      },
+      "revId": "7506a11d67b266fd32c6853588286ce861e69d08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
