@@ -281,6 +281,11 @@ void CommandGraphResource::finishCurrentCommands(ContextVk *contextVk)
     startNewCommands(contextVk);
 }
 
+void CommandGraphResource::onHostVisibleBufferWrite(ContextVk *contextVk)
+{
+    contextVk->getCommandGraph()->onHostVisibleBufferWrite();
+}
+
 void CommandGraphResource::startNewCommands(ContextVk *contextVk)
 {
     CommandGraphNode *newCommands =
@@ -696,6 +701,7 @@ std::string CommandGraphNode::dumpCommandsForDiagnostics(const char *separator) 
 CommandGraph::CommandGraph(bool enableGraphDiagnostics, angle::PoolAllocator *poolAllocator)
     : mEnableGraphDiagnostics(enableGraphDiagnostics),
       mPoolAllocator(poolAllocator),
+      mIsAnyHostVisibleBufferWritten(false),
       mLastBarrierIndex(kInvalidNodeIndex)
 {
     // Push so that allocations made from here will be recycled in clear() below.
@@ -823,6 +829,22 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
             }
         }
     }
+
+    if (mIsAnyHostVisibleBufferWritten)
+    {
+        // Make sure all writes to host-visible buffers are flushed.  We have no way of knowing
+        // whether any buffer will be mapped for readback in the future, and we can't afford to make
+        // a one-pipeline-barrier command buffer on every map().
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = VK_ACCESS_MEMORY_WRITE_BIT;
+        memoryBarrier.dstAccessMask   = VK_ACCESS_HOST_READ_BIT;
+
+        primaryCommandBufferOut->pipelineBarrier(VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                                                 VK_PIPELINE_STAGE_HOST_BIT, 0, 1, &memoryBarrier,
+                                                 0, nullptr, 0, nullptr);
+    }
+    mIsAnyHostVisibleBufferWritten = false;
 
     ANGLE_TRY(context->traceGpuEvent(primaryCommandBufferOut, TRACE_EVENT_PHASE_END,
                                      "Primary Command Buffer"));
