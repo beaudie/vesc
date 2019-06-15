@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "220d499f_1cbf603c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2122,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-15T21:46:50Z",
+      "side": 1,
+      "message": "nit: can you replace auto with the normal type? better not to use auto for small types as it is helpful to see the full type name to the reader.",
+      "range": {
+        "startLine": 2122,
+        "startChar": 9,
+        "endLine": 2122,
+        "endChar": 13
+      },
+      "revId": "1170cefa5c8e2288d4d608719bdb53e46de9c1a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
