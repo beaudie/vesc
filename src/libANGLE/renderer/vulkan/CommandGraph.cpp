@@ -387,19 +387,11 @@ void CommandGraphResource::startNewCommands(ContextVk *contextVk)
 
     updateQueueSerial(contextVk->getCurrentQueueSerial());
 
-    CommandGraphNode *parent = mCurrentWritingNode;
-    if (parent == nullptr)
-    {
-        // If there were no previous nodes, make sure the new node is parented to the last command
-        // graph barrier node, if any.
-        size_t previousBarrierIndexUnused;
-        parent = contextVk->getCommandGraph()->getLastBarrierNode(&previousBarrierIndexUnused);
-    }
-
-    if (parent)
+    if (mCurrentWritingNode)
     {
         // Set a dependency from the previous node to the current.
-        CommandGraphNode::SetHappensBeforeDependency(parent->getDescendant(), newCommands);
+        CommandGraphNode::SetHappensBeforeDependency(mCurrentWritingNode->getDescendant(),
+                                                     newCommands);
     }
 
     mCurrentWritingNode = newCommands;
@@ -410,6 +402,7 @@ void CommandGraphResource::startNewCommands(ContextVk *contextVk)
 CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function,
                                    angle::PoolAllocator *poolAllocator)
     : mRenderPassClearValues{},
+      mForceNewNode(false),
       mFunction(function),
       mPoolAllocator(poolAllocator),
       mQueryPool(VK_NULL_HANDLE),
@@ -823,7 +816,11 @@ CommandGraphNode *CommandGraph::allocateBarrierNode(CommandGraphNodeFunction fun
 void CommandGraph::setNewBarrier(CommandGraphNode *newBarrier)
 {
     size_t previousBarrierIndex       = 0;
-    getLastBarrierNode(&previousBarrierIndex);
+    CommandGraphNode *previousBarrier = getLastBarrierNode(&previousBarrierIndex);
+
+    // Add a dependency from previousBarrier to all nodes in (previousBarrier, newBarrier)
+    addDependenciesFromPreviousBarrier(previousBarrierIndex + 1, mNodes.size() - 1,
+                                       previousBarrier);
 
     // Add a dependency from all nodes in [previousBarrier, newBarrier) to newBarrier.
     addDependenciesToNextBarrier(previousBarrierIndex, mNodes.size() - 1, newBarrier);
@@ -840,6 +837,12 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
     // There is no point in submitting an empty command buffer, so make sure not to call this
     // function if there's nothing to do.
     ASSERT(!mNodes.empty());
+
+    size_t previousBarrierIndex       = 0;
+    CommandGraphNode *previousBarrier = getLastBarrierNode(&previousBarrierIndex);
+
+    // Add a dependency from previousBarrier to all nodes in (previousBarrier, end]
+    addDependenciesFromPreviousBarrier(previousBarrierIndex + 1, mNodes.size(), previousBarrier);
 
     VkCommandBufferAllocateInfo primaryInfo = {};
     primaryInfo.sType                       = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -1115,6 +1118,20 @@ CommandGraphNode *CommandGraph::getLastBarrierNode(size_t *indexOut)
     return mLastBarrierIndex == kInvalidNodeIndex ? nullptr : mNodes[mLastBarrierIndex];
 }
 
+void CommandGraph::addDependenciesFromPreviousBarrier(size_t begin,
+                                                      size_t end,
+                                                      CommandGraphNode *previousBarrier)
+{
+    if (previousBarrier == nullptr)
+    {
+        return;
+    }
+    for (size_t i = begin; i < end; ++i)
+    {
+        CommandGraphNode::SetHappensAfterBarrierDependency(previousBarrier, mNodes[i]);
+    }
+}
+
 void CommandGraph::addDependenciesToNextBarrier(size_t begin,
                                                 size_t end,
                                                 CommandGraphNode *nextBarrier)
@@ -1124,7 +1141,7 @@ void CommandGraph::addDependenciesToNextBarrier(size_t begin,
         // Only add edges to childless nodes.  The others have an indirect dependency.
         if (!mNodes[i]->hasChild())
         {
-            CommandGraphNode::SetHappensBeforeDependency(mNodes[i], nextBarrier);
+            CommandGraphNode::SetHappensBeforeBarrierDependency(mNodes[i], nextBarrier);
         }
     }
 }
