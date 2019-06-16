@@ -128,16 +128,40 @@ class CommandGraphNode final : angle::NonCopyable
     {
         ASSERT(beforeNode != afterNode && !beforeNode->isChildOf(afterNode));
         ASSERT(beforeNode->mFunction != CommandGraphNodeFunction::Generic ||
-               !beforeNode->hasChild());
+               beforeNode->mDescendant == nullptr);
         afterNode->mParents.emplace_back(beforeNode);
         beforeNode->mDescendant = afterNode;
         beforeNode->onSetChild();
     }
 
+    // Specialized versions of SetHappensBeforeDependency where one of the nodes is a barrier node.
+    // To avoid having a barrier node serialize the rest of the commands (by unifying the disjoint
+    // sets of nodes), it does not participate in the descendant chain, and only affects the graph
+    // to constrain the traversal.
+    static void SetHappensBeforeBarrierDependency(CommandGraphNode *beforeNode,
+                                                  CommandGraphNode *barrierNode)
+    {
+        ASSERT(beforeNode != barrierNode && !beforeNode->isChildOf(barrierNode));
+        ASSERT(!beforeNode->hasChild());
+        // Make sure nothing gets appended to the node.
+        beforeNode->mForceNewNode = true;
+        beforeNode->forceNewRenderPass();
+        // Make sure this node is traversed before the barrier node.
+        barrierNode->mParents.emplace_back(beforeNode);
+    }
+
+    static void SetHappensAfterBarrierDependency(CommandGraphNode *barrierNode,
+                                                 CommandGraphNode *afterNode)
+    {
+        ASSERT(barrierNode != afterNode && !barrierNode->isChildOf(afterNode));
+        // Make sure this node is traversed after the barrier node.
+        afterNode->mParents.emplace_back(barrierNode);
+    }
+
     CommandGraphNode *getDescendant();
 
     bool hasParents() const;
-    bool hasChild() const { return mDescendant != nullptr; }
+    bool hasChild() const { return mDescendant != nullptr || mForceNewNode; }
 
     // Commands for traversing the node on a flush operation.
     VisitedState visitedState() const;
@@ -205,6 +229,8 @@ class CommandGraphNode final : angle::NonCopyable
     Framebuffer mRenderPassFramebuffer;
     gl::Rectangle mRenderPassRenderArea;
     gl::AttachmentArray<VkClearValue> mRenderPassClearValues;
+
+    bool mForceNewNode;
 
     CommandGraphNodeFunction mFunction;
     angle::PoolAllocator *mPoolAllocator;
@@ -427,7 +453,7 @@ class CommandGraphResource : angle::NonCopyable
         return mCurrentWritingNode->getRenderPassRenderArea();
     }
 
-    // Called when 'this' object changes, but we'd like to start a new command buffer later.
+    // Called when 'this' object changes, and we'd like to restart the render pass later.
     void forceNewRenderPass(ContextVk *contextVk);
 
   protected:
@@ -519,13 +545,15 @@ class CommandGraph final : angle::NonCopyable
     void pushDebugMarker(GLenum source, std::string &&marker);
     void popDebugMarker();
 
-    CommandGraphNode *getLastBarrierNode(size_t *indexOut);
-
   private:
     CommandGraphNode *allocateBarrierNode(CommandGraphNodeFunction function,
                                           CommandGraphResourceType resourceType,
                                           uintptr_t resourceID);
     void setNewBarrier(CommandGraphNode *newBarrier);
+    CommandGraphNode *getLastBarrierNode(size_t *indexOut);
+    void addDependenciesFromPreviousBarrier(size_t begin,
+                                            size_t end,
+                                            CommandGraphNode *previousBarrier);
     void addDependenciesToNextBarrier(size_t begin, size_t end, CommandGraphNode *nextBarrier);
 
     void dumpGraphDotFile(std::ostream &out) const;
