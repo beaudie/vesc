@@ -215,6 +215,12 @@ angle::Result CommandGraphResource::recordCommands(ContextVk *context,
 {
     updateQueueSerial(context->getCurrentQueueSerial());
 
+    if (mCurrentWritingNode)
+    {
+        // Try to directly record into the descendant node instead of creating a child for it.
+        mCurrentWritingNode = mCurrentWritingNode->getDescendant();
+    }
+
     if (!hasChildlessWritingNode() || mCurrentWritingNode->getInsideRenderPassCommands()->valid())
     {
         startNewCommands(context);
