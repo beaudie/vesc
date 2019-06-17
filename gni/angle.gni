@@ -277,18 +277,6 @@ template("angle_static_library") {
 }
 
 template("angle_test") {
-  _googletest_deps = [
-    "//testing/gmock",
-    "//testing/gtest",
-    "//third_party/googletest:gmock",
-    "//third_party/googletest:gtest",
-  ]
-
-  # TODO(jmadill): Migrate to standalone harness. http://anglebug.com/3162
-  if (build_with_chromium) {
-    _googletest_deps += [ "//base/test:test_support" ]
-  }
-
   test(target_name) {
     forward_variables_from(invoker,
                            "*",
@@ -318,15 +306,35 @@ template("angle_test") {
       }
     }
 
-    deps += _googletest_deps + [
-              "$angle_root:angle_common",
-              "$angle_root:includes",
-            ]
+    deps += [
+      "$angle_root:angle_common",
+      "$angle_root:includes",
+      "//testing/gmock",
+      "//testing/gtest",
+      "//third_party/googletest:gmock",
+      "//third_party/googletest:gtest",
+    ]
 
+    # To use the Chromium test infrastructure we must currently use the //base test launcher.
+    # Eventually we could switch to using standalone testing. See http://crbug.com/837741
     if (build_with_chromium) {
       sources += [ "//gpu/${invoker.main}.cc" ]
+      deps += [ "//base/test:test_support" ]
     } else {
-      sources += [ "${invoker.main}.cpp" ]
+      sources += [
+        "$angle_root/src/tests/test_utils/runner/TestSuite.cpp",
+        "$angle_root/src/tests/test_utils/runner/TestSuite.h",
+        "${invoker.main}.cpp",
+      ]
+
+      deps += [ "$angle_root/third_party/rapidjson:rapidjson" ]
+
+      data += [
+        "//testing/scripts/common.py",
+        "//testing/test_env.py",
+        "//testing/xvfb.py",
+        "$angle_root/src/tests/test_utils/runner/run_gtest_angle_test.py",
+      ]
     }
   }
 }
