@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4134cfad_c576b41a",
+        "filename": "src/libGLESv2/gen_proc_table.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T19:04:57Z",
+      "side": 1,
+      "message": "could you maybe define a variable in registry_xml that we can use here and in generate_entry_points.py to save on a bit of code duplication?",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 9
+      },
+      "revId": "e0f78478dd3eb2153493b99be8e6c57ca37a54ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e15fd806_85f085b2",
+        "filename": "src/libGLESv2/gen_proc_table.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T19:04:57Z",
+      "side": 1,
+      "message": "nit: technically also the other few xml files.",
+      "range": {
+        "startLine": 129,
+        "startChar": 30,
+        "endLine": 129,
+        "endChar": 36
+      },
+      "revId": "e0f78478dd3eb2153493b99be8e6c57ca37a54ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
