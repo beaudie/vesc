@@ -6,11 +6,12 @@
 
 // system_utils_win.cpp: Implementation of OS-specific functions for Windows
 
-#include "system_utils.h"
+#include "common/system_utils.h"
 
 #include <stdarg.h>
 #include <windows.h>
 #include <array>
+#include <iostream>
 #include <vector>
 
 namespace angle
@@ -126,7 +127,7 @@ std::string GetEnvironmentVar(const char *variableName)
     }
 }
 
-const char *GetPathSeparator()
+const char *GetPathSeparatorForEnvrionmentVar()
 {
     return ";";
 }
@@ -216,6 +217,7 @@ bool RunApp(const std::vector<const char *> &args,
                         TRUE,  // Handles are inherited.
                         0, nullptr, nullptr, &startInfo, &processInfo))
     {
+        std::cerr << "CreateProcessA Error code: " << GetLastError() << "\n";
         return false;
     }
 
@@ -326,4 +328,5 @@ void BreakDebugger()
 {
     __debugbreak();
 }
+
 }  // namespace angle

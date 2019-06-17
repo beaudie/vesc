@@ -4,35 +4,17 @@
 // found in the LICENSE file.
 //
 
-#include "shader_utils.h"
+#include "util/shader_utils.h"
 
 #include <cstring>
 #include <fstream>
 #include <iostream>
 #include <vector>
 
+#include "util/system_utils.h"
+
 namespace
 {
-std::string ReadFileToString(const std::string &source)
-{
-    std::ifstream stream(source.c_str());
-    if (!stream)
-    {
-        std::cerr << "Failed to load shader file: " << source;
-        return "";
-    }
-
-    std::string result;
-
-    stream.seekg(0, std::ios::end);
-    result.reserve(static_cast<unsigned int>(stream.tellg()));
-    stream.seekg(0, std::ios::beg);
-
-    result.assign((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
-
-    return result;
-}
-
 GLuint CompileProgramInternal(const char *vsSource,
                               const char *gsSource,
                               const char *fsSource,
@@ -124,9 +106,10 @@ GLuint CompileShader(GLenum type, const char *source)
 
 GLuint CompileShaderFromFile(GLenum type, const std::string &sourcePath)
 {
-    std::string source = ReadFileToString(sourcePath);
-    if (source.empty())
+    std::string source;
+    if (!angle::ReadEntireFileToString(sourcePath, &source) || source.empty())
     {
+        std::cerr << "Error reading shader file: " << sourcePath << "\n";
         return 0;
     }
 
@@ -214,10 +197,17 @@ GLuint CompileProgramWithGS(const char *vsSource, const char *gsSource, const ch
 
 GLuint CompileProgramFromFiles(const std::string &vsPath, const std::string &fsPath)
 {
-    std::string vsSource = ReadFileToString(vsPath);
-    std::string fsSource = ReadFileToString(fsPath);
-    if (vsSource.empty() || fsSource.empty())
+    std::string vsSource;
+    if (!angle::ReadEntireFileToString(vsPath, &vsSource) || vsSource.empty())
     {
+        std::cerr << "Error reading shader: " << vsPath << "\n";
+        return 0;
+    }
+
+    std::string fsSource;
+    if (!angle::ReadEntireFileToString(fsPath, &fsSource) || fsSource.empty())
+    {
+        std::cerr << "Error reading shader: " << fsPath << "\n";
         return 0;
     }
 

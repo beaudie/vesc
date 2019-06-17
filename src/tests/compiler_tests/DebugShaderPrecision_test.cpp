@@ -34,6 +34,7 @@ class DebugShaderPrecisionTest : public MatchOutputCodeTest
 
     bool foundInHLSLCode(const char *stringToFind) const
     {
+        ANGLE_CRASH();
 #if defined(ANGLE_ENABLE_HLSL)
         return foundInCode(SH_HLSL_4_1_OUTPUT, stringToFind);
 #else
@@ -306,7 +307,7 @@ TEST_F(DebugShaderPrecisionTest, CompoundAddFunction)
         foundInHLSLCode("float4 angle_compound_add_frm(inout float4 x, in float4 y) {\n"
                         "    x = angle_frm(angle_frm(x) + y);"));
     ASSERT_TRUE(foundInAllGLSLCode("angle_compound_add_frm(_uv, angle_frm(_uu2));"));
-    ASSERT_TRUE(foundInHLSLCodeRegex("angle_compound_add_frm\\(_v(\\d)*, angle_frm\\(_u2\\)\\);"));
+    ASSERT_TRUE(foundInHLSLCodeRegex(R"(angle_compound_add_frm\(_v(\d)*, angle_frm\(_u2\)\);)"));
     ASSERT_TRUE(notFoundInCode("+="));
 }
 
@@ -1055,7 +1056,7 @@ TEST_F(DebugShaderPrecisionTest, ModfOutParameter)
         "}\n";
     compile(shaderString);
     ASSERT_TRUE(foundInAllGLSLCode("modf(angle_frm(_uu), _uo)"));
-    ASSERT_TRUE(foundInHLSLCodeRegex("modf\\(angle_frm\\(_u\\), _o(\\d)*)"));
+    ASSERT_TRUE(foundInHLSLCodeRegex(R"(modf\(angle_frm\(_u\), _o(\d)*)"));
 }
 
 #if defined(ANGLE_ENABLE_HLSL)

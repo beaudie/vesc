@@ -9,6 +9,7 @@
 #ifndef UTIL_SYSTEM_UTILS_H_
 #define UTIL_SYSTEM_UTILS_H_
 
+#include <functional>
 #include <string>
 
 #include "common/system_utils.h"
@@ -28,11 +29,32 @@ ANGLE_UTIL_EXPORT void WriteDebugMessage(const char *format, ...);
 ANGLE_UTIL_EXPORT bool StabilizeCPUForBenchmarking();
 
 // Set a crash handler to print stack traces.
-ANGLE_UTIL_EXPORT void InitCrashHandler();
+using CrashCallback = std::function<void()>;
+ANGLE_UTIL_EXPORT void InitCrashHandler(CrashCallback *callback);
 ANGLE_UTIL_EXPORT void TerminateCrashHandler();
 
 // Print a stack back trace.
 ANGLE_UTIL_EXPORT void PrintStackBacktrace();
+
+// Get temporary directory.
+ANGLE_UTIL_EXPORT bool GetTempDir(std::string *tempDirOut);
+
+// Creates a temporary file. The full path is placed in |path|, and the
+// function returns true if was successful in creating the file. The file will
+// be empty and all handles closed after this function returns.
+ANGLE_UTIL_EXPORT bool CreateTemporaryFile(std::string *tempFileNameOut);
+
+// Same as CreateTemporaryFile but the file is created in |dir|.
+ANGLE_UTIL_EXPORT bool CreateTemporaryFileInDir(const std::string &dir,
+                                                std::string *tempFileNameOut);
+
+// Deletes a file or directory.
+ANGLE_UTIL_EXPORT bool DeleteFile(const char *path);
+
+// Reads a file contents into a string.
+ANGLE_UTIL_EXPORT bool ReadEntireFileToString(const std::string &filePath,
+                                              std::string *contentsOut);
+
 }  // namespace angle
 
 #endif  // UTIL_SYSTEM_UTILS_H_

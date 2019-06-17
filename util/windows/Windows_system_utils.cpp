@@ -13,6 +13,7 @@
 #include <array>
 #include <vector>
 
+#include "anglebase/no_destructor.h"
 #include "util/windows/third_party/StackWalker/src/StackWalker.h"
 
 namespace angle
@@ -105,6 +106,17 @@ LONG WINAPI StackTraceCrashHandler(EXCEPTION_POINTERS *e)
     // The compiler wants us to return something.  This is what we'd do if we didn't _exit().
     return EXCEPTION_EXECUTE_HANDLER;
 }
+
+CrashCallback *gCrashHandlerCallback;
+
+LONG WINAPI CrashHandler(EXCEPTION_POINTERS *e)
+{
+    if (gCrashHandlerCallback)
+    {
+        (*gCrashHandlerCallback)();
+    }
+    return StackTraceCrashHandler(e);
+}
 }  // anonymous namespace
 
 void Sleep(unsigned int milliseconds)
@@ -127,13 +139,18 @@ void WriteDebugMessage(const char *format, ...)
     OutputDebugStringA(buffer.data());
 }
 
-void InitCrashHandler()
+void InitCrashHandler(CrashCallback *callback)
 {
-    SetUnhandledExceptionFilter(StackTraceCrashHandler);
+    if (callback)
+    {
+        gCrashHandlerCallback = callback;
+    }
+    SetUnhandledExceptionFilter(CrashHandler);
 }
 
 void TerminateCrashHandler()
 {
+    gCrashHandlerCallback = nullptr;
     SetUnhandledExceptionFilter(nullptr);
 }
 
