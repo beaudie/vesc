@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9dd715c6_b82bdd67",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-06-17T07:31:52Z",
+      "side": 1,
+      "message": "UAV",
+      "range": {
+        "startLine": 384,
+        "startChar": 18,
+        "endLine": 384,
+        "endChar": 21
+      },
+      "revId": "5f8a4f09c29d606141fa690846cdc19723127a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20dada89_50a310e8",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-06-17T07:31:52Z",
+      "side": 1,
+      "message": "UAV",
+      "range": {
+        "startLine": 452,
+        "startChar": 18,
+        "endLine": 452,
+        "endChar": 21
+      },
+      "revId": "5f8a4f09c29d606141fa690846cdc19723127a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71d23862_ca29dc62",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2019-06-17T07:31:52Z",
+      "side": 1,
+      "message": "UAV",
+      "range": {
+        "startLine": 504,
+        "startChar": 18,
+        "endLine": 504,
+        "endChar": 21
+      },
+      "revId": "5f8a4f09c29d606141fa690846cdc19723127a70",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
