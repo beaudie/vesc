@@ -16,6 +16,24 @@
       "revId": "12f38c49d0ba6bec94808f072a3e29e0df85f081",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90c6ce5a_2c631775",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-17T21:32:05Z",
+      "side": 0,
+      "message": "We still need to apply the user swizzle, so we can\u0027t exit early. We could just copy swizzleState to swizzleStateOut, but I chose to unify everything into internalSwizzle before composing the user swizzle. I still handle isBlock in line 343.",
+      "parentUuid": "452e3e49_7627f736",
+      "revId": "12f38c49d0ba6bec94808f072a3e29e0df85f081",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
