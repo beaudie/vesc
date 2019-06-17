@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2bcedd8e_2e7c0609",
+        "filename": "src/common/utilities.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-17T21:08:04Z",
+      "side": 1,
+      "message": "nit: can merge into the previous case instead of a separate return.",
+      "range": {
+        "startLine": 959,
+        "startChar": 0,
+        "endLine": 960,
+        "endChar": 24
+      },
+      "revId": "42d8ae9f3efc95a35cd29a64539e3f0f1b6f7ad5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "334bda2b_40c3b2bf",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ExternalImageSiblingImpl11.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-17T21:08:04Z",
+      "side": 1,
+      "message": "Can you update RendererD3D::getD3DTextureInfo to return the sample count to implement this?  Just remember that a sample count of 1 in D3D is 0 (not multisampled) in GL.",
+      "range": {
+        "startLine": 87,
+        "startChar": 11,
+        "endLine": 87,
+        "endChar": 12
+      },
+      "revId": "42d8ae9f3efc95a35cd29a64539e3f0f1b6f7ad5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c39eb379_040b33ae",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ExternalImageSiblingImpl11.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-17T21:08:04Z",
+      "side": 1,
+      "message": "You can call createRenderTarget right in the initialize I think.\n\nThis function is for initializing the data of the texture so that it\u0027s not undefined before first use.  This isn\u0027t done on external image siblings.  You can also remove the call to createRenderTarget in xternalImageSiblingImpl11::getAttachmentRenderTarget.",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 69
+      },
+      "revId": "42d8ae9f3efc95a35cd29a64539e3f0f1b6f7ad5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
