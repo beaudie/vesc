@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b9cd4d6_52299630",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-06-17T21:24:56Z",
+      "side": 1,
+      "message": "Do we need to clear the dirty bits here?\nI suspect not, there are other state updates that need to happen.",
+      "revId": "341952af247129b889157db7111b2db178d58367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
