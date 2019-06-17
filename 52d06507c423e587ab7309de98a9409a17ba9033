@@ -16,6 +16,24 @@
       "revId": "52d06507c423e587ab7309de98a9409a17ba9033",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3dd346b_23e35100",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-17T14:52:00Z",
+      "side": 1,
+      "message": "I ran the Pixel XL deqp bots too, and looks like this failure is not specific to Pixel2, and perhaps can be marked with \"Android\" instead.",
+      "parentUuid": "3d4ecbcf_5afe9d0b",
+      "revId": "52d06507c423e587ab7309de98a9409a17ba9033",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
