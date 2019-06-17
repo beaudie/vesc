@@ -484,6 +484,7 @@ if (build_angle_gles1_conform_tests) {
     include_dirs = [ "." ]
 
     sources = [
+      "angle_end2end_tests_main.cpp",
       "gles1_conformance_tests/ConformanceTests.cpp",
       "test_utils/ANGLETest.cpp",
       "test_utils/ANGLETest.h",
@@ -853,6 +854,7 @@ if (build_angle_deqp_tests && !is_fuchsia) {
 
       # Must be included outside of the source set for the define
       sources = [
+        "angle_deqp_tests_main.cpp",
         "deqp_support/angle_deqp_gtest.cpp",
       ]
       main = "angle_deqp_tests_main"
