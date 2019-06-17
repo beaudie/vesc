@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79ea8187_d8f9a17e",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T20:12:19Z",
+      "side": 1,
+      "message": "I think you can probably include this in your list.",
+      "range": {
+        "startLine": 747,
+        "startChar": 12,
+        "endLine": 747,
+        "endChar": 30
+      },
+      "revId": "0f10847aa33eb1b459b0faed518bfa9b774131a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
