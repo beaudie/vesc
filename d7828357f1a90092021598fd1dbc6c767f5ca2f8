@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93818736_7568f3ef",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:57:55Z",
+      "side": 1,
+      "message": "nit: closing namespace comment",
+      "revId": "d7828357f1a90092021598fd1dbc6c767f5ca2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "23c9d235_666f6b03",
+        "filename": "src/libANGLE/renderer/DisplayImpl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:57:55Z",
+      "side": 1,
+      "message": "same nit",
+      "revId": "d7828357f1a90092021598fd1dbc6c767f5ca2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a17bebc6_bc9f24c6",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:57:55Z",
+      "side": 1,
+      "message": "and so on",
+      "revId": "d7828357f1a90092021598fd1dbc6c767f5ca2f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
