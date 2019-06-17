@@ -162,16 +162,14 @@ class WindowSurfaceVk : public SurfaceVk
     angle::Result createSwapChain(vk::Context *context,
                                   const gl::Extents &extents,
                                   VkSwapchainKHR oldSwapchain);
-    angle::Result checkForOutOfDateSwapchain(ContextVk *contextVk,
-                                             uint32_t swapHistoryIndex,
-                                             bool presentOutOfDate);
+    angle::Result handleOutOfDataSwapchain(ContextVk *contextVk, uint32_t swapHistoryIndex);
     void releaseSwapchainImages(ContextVk *contextVk);
     void destroySwapChainImages(DisplayVk *displayVk);
     VkResult nextSwapchainImage(vk::Context *context);
     angle::Result present(ContextVk *contextVk,
                           EGLint *rects,
                           EGLint n_rects,
-                          bool &swapchainOutOfDate);
+                          bool *swapchainOutOfDate);
 
     angle::Result swapImpl(const gl::Context *context, EGLint *rects, EGLint n_rects);
 
