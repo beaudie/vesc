@@ -149,6 +149,9 @@ set_defaults("angle_static_library") {
 set_defaults("angle_test") {
   configs = angle_common_configs
   public_configs = []
+  public_deps = []
+  sources = []
+  data = []
   suppressed_configs = angle_remove_configs
 }
 
@@ -231,8 +234,17 @@ template("angle_static_library") {
   }
 }
 
+_googletest_deps = [
+  "//testing/gmock",
+  "//testing/gtest",
+  "//third_party/googletest:gmock",
+  "//third_party/googletest:gtest",
+]
+
 template("angle_test") {
   test(target_name) {
+    testonly = true
+
     forward_variables_from(invoker,
                            "*",
                            [
@@ -257,5 +269,23 @@ template("angle_test") {
       configs += [ angle_root + ":build_id_config" ]
       configs -= [ "//build/config/android:hide_all_but_jni" ]
     }
+
+    deps += _googletest_deps + [
+              "$angle_root/third_party/rapidjson:rapidjson",
+              "$angle_root:angle_common",
+              "$angle_root:includes",
+            ]
+
+    sources += [
+      "$angle_root/src/tests/test_utils/runner/TestSuite.cpp",
+      "$angle_root/src/tests/test_utils/runner/TestSuite.h",
+    ]
+
+    data += [
+      "//testing/scripts/common.py",
+      "//testing/test_env.py",
+      "//testing/xvfb.py",
+      "$angle_root/src/tests/test_utils/runner/run_gtest_angle_test.py",
+    ]
   }
 }

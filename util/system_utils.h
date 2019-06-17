@@ -9,6 +9,7 @@
 #ifndef UTIL_SYSTEM_UTILS_H_
 #define UTIL_SYSTEM_UTILS_H_
 
+#include <functional>
 #include <string>
 
 #include "common/system_utils.h"
@@ -28,7 +29,8 @@ ANGLE_UTIL_EXPORT void WriteDebugMessage(const char *format, ...);
 ANGLE_UTIL_EXPORT bool StabilizeCPUForBenchmarking();
 
 // Set a crash handler to print stack traces.
-ANGLE_UTIL_EXPORT void InitCrashHandler();
+using CrashCallback = std::function<void()>;
+ANGLE_UTIL_EXPORT void InitCrashHandler(CrashCallback *callback);
 ANGLE_UTIL_EXPORT void TerminateCrashHandler();
 
 // Print a stack back trace.
