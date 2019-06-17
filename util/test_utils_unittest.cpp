@@ -220,4 +220,7 @@ TEST(TestUtils, NumberOfProcessors)
     EXPECT_GT(numProcs, 0);
     EXPECT_LT(numProcs, 1000);
 }
+
+// Verify basic test harness execution.
+TEST(TestUtils, TestHarness) {}
 }  // namespace
