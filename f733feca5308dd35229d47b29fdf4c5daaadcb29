@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ed24b27_b49b0a85",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T12:38:34Z",
+      "side": 1,
+      "message": "Sorry, let me try to explain what I meant. I meant you should call resetLaterBit inside of the dirty bit loop below. You will have to change \"auto dirtyBit : dirtyBitsCopy\" into an iterator loop like here.",
+      "range": {
+        "startLine": 896,
+        "startChar": 0,
+        "endLine": 911,
+        "endChar": 5
+      },
+      "revId": "f733feca5308dd35229d47b29fdf4c5daaadcb29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7024c7d_4b0eb522",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2345,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T12:38:34Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 2329,
+        "startChar": 0,
+        "endLine": 2345,
+        "endChar": 5
+      },
+      "revId": "f733feca5308dd35229d47b29fdf4c5daaadcb29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
