@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "f5dfff7a_30fafa7b",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-17T18:33:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88240825_966d559d",
+      "range": {
+        "startLine": 434,
+        "startChar": 71,
+        "endLine": 434,
+        "endChar": 85
+      },
+      "revId": "057cf67dfd30ba5faf57d06079e98c611c9ae206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27b88835_1f95d8c5",
         "filename": "src/tests/gl_tests/BufferDataTest.cpp",
         "patchSetId": 6
@@ -53,6 +77,30 @@
       "writtenOn": "2019-06-15T04:07:39Z",
       "side": 1,
       "message": "I don\u0027t think GL_MAP_WRITE_BIT would mean you cannot read data (unless paired with GL_MAP_INVALIDATE_RANGE/BUFFER_BIT). The spec says it can be used to \"modify\" the data. Well, doing data[i] |\u003d 0x20 is a modification and necessarily requires the memory to be readable.",
+      "range": {
+        "startLine": 440,
+        "startChar": 31,
+        "endLine": 442,
+        "endChar": 15
+      },
+      "revId": "057cf67dfd30ba5faf57d06079e98c611c9ae206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a95393f_d5560c53",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-17T18:33:33Z",
+      "side": 1,
+      "message": "It\u0027s not so much that we specify GL_MAP_WRITE_BIT, but that we don\u0027t specify GL_MAP_READ_BIT.\n\n\u003e GL_MAP_READ_BIT indicates that the returned pointer may be used to read buffer object data. No GL error is generated if the pointer is used to query a mapping which excludes this flag, but the result is undefined and system errors (possibly including program termination) may occur.\n\nThat\u0027s where the undefined behavior piece comes from when reading the data, like in your example.",
+      "parentUuid": "27b88835_1f95d8c5",
       "range": {
         "startLine": 440,
         "startChar": 31,

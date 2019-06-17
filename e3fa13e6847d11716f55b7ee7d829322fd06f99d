@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "2853e4d2_cad6f340",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-17T18:33:33Z",
+      "side": 1,
+      "message": "Building on your changes is helpful for seeing what\u0027s necessary.   This CL isn\u0027t much code, but I\u0027m definitely learning a lot.   Thanks for your help in building up the surrounding pieces.\n\n\nI think my current implementation that\u0027s slightly abusing the undefined behavior is more straightforward than timing submissions, so I\u0027d prefer to keep that version if there aren\u0027t any objections.",
+      "parentUuid": "d3027f4c_155f8018",
+      "revId": "e3fa13e6847d11716f55b7ee7d829322fd06f99d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3d4ac3f1_9d4d73fa",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 5
