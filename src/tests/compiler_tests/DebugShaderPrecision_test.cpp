@@ -34,6 +34,7 @@ class DebugShaderPrecisionTest : public MatchOutputCodeTest
 
     bool foundInHLSLCode(const char *stringToFind) const
     {
+        ANGLE_CRASH();
 #if defined(ANGLE_ENABLE_HLSL)
         return foundInCode(SH_HLSL_4_1_OUTPUT, stringToFind);
 #else
