@@ -89,13 +89,18 @@ class ANGLE_UTIL_EXPORT Process : angle::NonCopyable
 class ANGLE_UTIL_EXPORT ProcessHandle final : angle::NonCopyable
 {
   public:
+    ProcessHandle();
     ProcessHandle(Process *process);
     ~ProcessHandle();
+    ProcessHandle(ProcessHandle &&other);
+    ProcessHandle &operator=(ProcessHandle &&rhs);
 
     Process *operator->() { return mProcess; }
     const Process *operator->() const { return mProcess; }
 
     operator bool() const { return mProcess != nullptr; }
+
+    void reset();
 
   private:
     Process *mProcess;

@@ -66,9 +66,27 @@ void Process::Delete(Process **process)
     *process = nullptr;
 }
 
+ProcessHandle::ProcessHandle() : mProcess(nullptr) {}
+
 ProcessHandle::ProcessHandle(Process *process) : mProcess(process) {}
 
 ProcessHandle::~ProcessHandle()
+{
+    reset();
+}
+
+ProcessHandle::ProcessHandle(ProcessHandle &&other) : mProcess(other.mProcess)
+{
+    other.mProcess = nullptr;
+}
+
+ProcessHandle &ProcessHandle::operator=(ProcessHandle &&rhs)
+{
+    std::swap(mProcess, rhs.mProcess);
+    return *this;
+}
+
+void ProcessHandle::reset()
 {
     if (mProcess)
     {
