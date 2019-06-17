@@ -581,6 +581,8 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
                                                const gl::Extents &extents,
                                                VkSwapchainKHR oldSwapchain)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::createSwapchain");
+
     ASSERT(mSwapchain == VK_NULL_HANDLE);
 
     RendererVk *renderer = context->getRenderer();
@@ -705,7 +707,7 @@ bool WindowSurfaceVk::isMultiSampled() const
 
 angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
                                                           uint32_t swapHistoryIndex,
-                                                          bool swapchainOutOfDate)
+                                                          bool presentOutOfDate)
 {
     bool swapIntervalChanged = mSwapchainPresentMode != mDesiredSwapchainPresentMode;
 
@@ -714,6 +716,14 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
     ANGLE_TRY(getCurrentWindowSize(contextVk, &currentExtents));
 
     gl::Extents swapchainExtents(getWidth(), getHeight(), 0);
+
+    // Work-around for some device which does not return OUT_OF_DATE after window resizing
+    bool windowExtentChanged = false;
+    if (contextVk->getRenderer()->getFeatures().perFrameWindowSizeQuery.enabled)
+    {
+        // Check for window resize and recreate swapchain if necessary.
+        windowExtentChanged = (currentExtents != swapchainExtents);
+    }
 
     // If window size has changed, check with surface capabilities.  It has been observed on
     // Android that `getCurrentWindowSize()` returns 1920x1080 for example, while surface
@@ -736,7 +746,7 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
     }
 
     // If anything has changed, recreate the swapchain.
-    if (swapchainOutOfDate || swapIntervalChanged || currentExtents != swapchainExtents)
+    if (presentOutOfDate || swapIntervalChanged || windowExtentChanged)
     {
         ANGLE_TRY(recreateSwapchain(contextVk, currentExtents, swapHistoryIndex));
     }
@@ -864,7 +874,7 @@ egl::Error WindowSurfaceVk::swap(const gl::Context *context)
 angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
                                        EGLint *rects,
                                        EGLint n_rects,
-                                       bool &swapchainOutOfDate)
+                                       bool *presentOutOfDate)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present");
 
@@ -973,8 +983,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     // recreate the swapchain with a new window orientation. We aren't quite ready for that so just
     // ignore for now.
     // TODO: Check for preRotation: http://anglebug.com/3502
-    swapchainOutOfDate = result == VK_ERROR_OUT_OF_DATE_KHR;
-    if (!swapchainOutOfDate && result != VK_SUBOPTIMAL_KHR)
+    *presentOutOfDate = result == VK_ERROR_OUT_OF_DATE_KHR;
+    if (!*presentOutOfDate && result != VK_SUBOPTIMAL_KHR)
     {
         ANGLE_VK_TRY(contextVk, result);
     }
@@ -989,13 +999,22 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context, EGLint *rect
     ContextVk *contextVk = vk::GetImpl(context);
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
 
-    bool swapchainOutOfDate = false;
+    bool presentOutOfDate = false;
     // Save this now, since present() will increment the value.
     size_t currentSwapHistoryIndex = mCurrentSwapHistoryIndex;
 
-    ANGLE_TRY(present(contextVk, rects, n_rects, swapchainOutOfDate));
+    ANGLE_TRY(present(contextVk, rects, n_rects, &presentOutOfDate));
 
-    ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, currentSwapHistoryIndex, swapchainOutOfDate));
+    if (presentOutOfDate)
+    {
+        ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, currentSwapHistoryIndex, true));
+    }
+    else if (contextVk->getRenderer()->getFeatures().perFrameWindowSizeQuery.enabled)
+    {
+        // Work-around for some devices which does not return VK_OUT_OF_DATE after window
+        // resizing
+        ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, currentSwapHistoryIndex, presentOutOfDate));
+    }
 
     {
         // Note: TRACE_EVENT0 is put here instead of inside the function to workaround this issue:
