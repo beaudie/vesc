@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9dc2ea21_f05f45b9",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-17T17:16:57Z",
+      "side": 1,
+      "message": "Looks like mShaderVersion \u003e\u003d 300 should do PP_NON_PP_TOKEN_BEFORE_EXTENSION_ESSL even if WebGL, according to the failing test (and the previous behavior).",
+      "revId": "0a941f59a7e2e3f2b3065ce6a41defc2a1ce3825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
