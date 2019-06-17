@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 _angle_perf_test_common_sources = [
+  "angle_perftests_main.cpp",
   "../third_party/trace_event/trace_event.h",
   "perf_tests/ANGLEPerfTest.cpp",
   "perf_tests/ANGLEPerfTest.h",
