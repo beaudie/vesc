@@ -11,6 +11,8 @@
 
 #include "common/bitset_utils.h"
 
+#include "util/system_utils.h"
+
 using namespace angle;
 
 namespace
@@ -23,6 +25,9 @@ class BitSetTest : public testing::Test
 
 TEST_F(BitSetTest, Basic)
 {
+    // Timout
+    angle::Sleep(100000);
+
     EXPECT_FALSE(mBits.all());
     EXPECT_FALSE(mBits.any());
     EXPECT_TRUE(mBits.none());
