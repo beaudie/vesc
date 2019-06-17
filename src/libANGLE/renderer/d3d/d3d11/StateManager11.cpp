@@ -2759,7 +2759,7 @@ angle::Result StateManager11::applyTexturesForUAVs(const gl::Context *context,
 
 angle::Result StateManager11::syncTexturesForCompute(const gl::Context *context)
 {
-    // applyTexturesForUAVs must be earlier than applyTexturesForSRVs since we need to do clearUVAs
+    // applyTexturesForUAVs must be earlier than applyTexturesForSRVs since we need to do clearUAVs
     // before set resources to SRVs. Otherwise, it will report the following error:
     // ID3D11DeviceContext::CSSetShaderResources: Resource being set to CS shader resource slot 0 is
     // still bound on output! Forcing to NULL.
@@ -2777,6 +2777,21 @@ angle::Result StateManager11::setTextureForImage(const gl::Context *context,
     TextureD3D *textureImpl = nullptr;
     if (!imageUnit.texture.get())
     {
+        // The texture is used in shader. However, there is no resource binding to it. We
+        // should clear the corresponding UAV/SRV in case the previous view type is a buffer not a
+        // texture. Otherwise, below error will be reported. The Unordered Access View dimension
+        // declared in the shader code (TEXTURE2D) does not match the view type bound to slot 0
+        // of the Compute Shader unit (BUFFER).
+        ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+        if (readonly)
+        {
+            deviceContext->CSSetShaderResources(static_cast<unsigned int>(index), 1, &mNullSRVs[0]);
+        }
+        else
+        {
+            deviceContext->CSSetUnorderedAccessViews(static_cast<unsigned int>(index), 1,
+                                                     &mNullUAVs[0], nullptr);
+        }
         return angle::Result::Continue;
     }
 
@@ -3587,9 +3602,21 @@ angle::Result StateManager11::syncShaderStorageBuffersForShader(const gl::Contex
          blockIndex++)
     {
         GLuint binding = program->getShaderStorageBlockBinding(static_cast<GLuint>(blockIndex));
+        const unsigned int registerIndex = mProgramD3D->getShaderStorageBufferRegisterIndex(
+            static_cast<GLuint>(blockIndex), shaderType);
+        // It means this block is active but not statically used.
+        if (registerIndex == GL_INVALID_INDEX)
+        {
+            continue;
+        }
         const auto &shaderStorageBuffer = glState.getIndexedShaderStorageBuffer(binding);
         if (shaderStorageBuffer.get() == nullptr)
         {
+            // We didn't see a driver error like atomic buffer did. But theoretically, the same
+            // thing should be done.
+            ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+            deviceContext->CSSetUnorderedAccessViews(static_cast<unsigned int>(registerIndex), 1,
+                                                     &mNullUAVs[0], nullptr);
             continue;
         }
 
@@ -3624,15 +3651,6 @@ angle::Result StateManager11::syncShaderStorageBuffersForShader(const gl::Contex
         if (uavPtr && unsetConflictingView(uavPtr->get()))
         {
             mInternalDirtyBits.set(DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE);
-        }
-
-        const unsigned int registerIndex = mProgramD3D->getShaderStorageBufferRegisterIndex(
-            static_cast<GLuint>(blockIndex), shaderType);
-
-        // It means this block is active but not statically used.
-        if (registerIndex == GL_INVALID_INDEX)
-        {
-            continue;
         }
 
         switch (shaderType)
@@ -3700,9 +3718,19 @@ angle::Result StateManager11::syncAtomicCounterBuffersForShader(const gl::Contex
     {
         GLuint binding     = atomicCounterBuffer.binding;
         const auto &buffer = glState.getIndexedAtomicCounterBuffer(binding);
-
+        const unsigned int registerIndex =
+            mProgramD3D->getAtomicCounterBufferRegisterIndex(binding, shaderType);
+        ASSERT(registerIndex != GL_INVALID_INDEX);
         if (buffer.get() == nullptr)
         {
+            // The atomic counter is used in shader. However, there is no buffer binding to it. We
+            // should clear the corresponding UAV in case the previous view type is a texture not a
+            // buffer. Otherwise, below error will be reported. The Unordered Access View dimension
+            // declared in the shader code (BUFFER) does not match the view type bound to slot 0
+            // of the Compute Shader unit (TEXTURE2D).
+            ID3D11DeviceContext *deviceContext = mRenderer->getDeviceContext();
+            deviceContext->CSSetUnorderedAccessViews(static_cast<unsigned int>(registerIndex), 1,
+                                                     &mNullUAVs[0], nullptr);
             continue;
         }
 
@@ -3722,9 +3750,6 @@ angle::Result StateManager11::syncAtomicCounterBuffersForShader(const gl::Contex
         {
             mInternalDirtyBits.set(DIRTY_BIT_TEXTURE_AND_SAMPLER_STATE);
         }
-
-        const unsigned int registerIndex =
-            mProgramD3D->getAtomicCounterBufferRegisterIndex(binding, shaderType);
 
         if (shaderType == gl::ShaderType::Compute)
         {
