@@ -1,0 +1,418 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "229e6b7d_028388d5",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "I think this can be abridged as\n\ntemplate \u003ctypename T\u003e\nconstexpr T GetPrimitiveRestartIndexFromType\u003cT\u003e\n{\n    return std::numeric_limits\u003cT\u003e::max();\n}\n\nAlso you could put this beside gl::GetPrimitiveRestartIndex in utilities.h.",
+      "range": {
+        "startLine": 311,
+        "startChar": 0,
+        "endLine": 316,
+        "endChar": 0
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2e729ef_842ec964",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "nit: GetLineLoopWithRestartIndexCount?",
+      "range": {
+        "startLine": 325,
+        "startChar": 7,
+        "endLine": 325,
+        "endChar": 38
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "197672a5_82912364",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "needs update?",
+      "range": {
+        "startLine": 330,
+        "startChar": 11,
+        "endLine": 330,
+        "endChar": 33
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02a6f2e0_c08d2b5a",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "nit: numIndices +\u003d 2",
+      "range": {
+        "startLine": 344,
+        "startChar": 0,
+        "endLine": 345,
+        "endChar": 29
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a60ff301_72869ccf",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "nit: uint8_t if possible",
+      "range": {
+        "startLine": 363,
+        "startChar": 53,
+        "endLine": 363,
+        "endChar": 58
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72951f8c_8006761f",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "nit: uint8_t if possible",
+      "range": {
+        "startLine": 383,
+        "startChar": 42,
+        "endLine": 383,
+        "endChar": 47
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e340213_2fb8936c",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "nit: uint8_t if possible",
+      "range": {
+        "startLine": 385,
+        "startChar": 36,
+        "endLine": 385,
+        "endChar": 40
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bfb7403_157ba9ad",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "nit: loopIndex for clarity?",
+      "range": {
+        "startLine": 393,
+        "startChar": 17,
+        "endLine": 393,
+        "endChar": 19
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f4e5c3f_d2d9b3ea",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "nit: should probably static_cast",
+      "range": {
+        "startLine": 398,
+        "startChar": 30,
+        "endLine": 398,
+        "endChar": 36
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a3995b3_08af37ab",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "is this necessary? I have a feeling a single vertex might be ignored by Vulkan as well.",
+      "range": {
+        "startLine": 410,
+        "startChar": 11,
+        "endLine": 414,
+        "endChar": 13
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0fee8d7_d8b71832",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "I don\u0027t quite follow why this is necessary. Shouldn\u0027t you be done with i reaches indexCount?",
+      "range": {
+        "startLine": 417,
+        "startChar": 0,
+        "endLine": 428,
+        "endChar": 9
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59c25fd6_57e9679e",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 605,
+        "startChar": 52,
+        "endLine": 605,
+        "endChar": 65
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e67b6aa0_943132ba",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "nit: indexCountOut",
+      "range": {
+        "startLine": 52,
+        "startChar": 41,
+        "endLine": 52,
+        "endChar": 54
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9d95592_e7434a31",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1072,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "nit: should go at the top of the file in the prior existing unnamed namespace block.",
+      "range": {
+        "startLine": 1072,
+        "startChar": 5,
+        "endLine": 1072,
+        "endChar": 27
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84e420c2_6cb545d4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1076,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "nit: indexCountOut I think?",
+      "range": {
+        "startLine": 1076,
+        "startChar": 37,
+        "endLine": 1076,
+        "endChar": 43
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d5c46e4_714afeaf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "nit: you shouldn\u0027t need to pass in the primitive restart index if you can determine it from the types to this function.",
+      "range": {
+        "startLine": 1082,
+        "startChar": 62,
+        "endLine": 1082,
+        "endChar": 68
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "abbe75d9_042368fa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "nit: indexCountOut",
+      "range": {
+        "startLine": 396,
+        "startChar": 62,
+        "endLine": 396,
+        "endChar": 75
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2700f071_8c58d751",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-17T14:40:25Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 404,
+        "startChar": 40,
+        "endLine": 404,
+        "endChar": 53
+      },
+      "revId": "bebcce9dcfc233f20dc447528f5cf95cc5cd8647",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
