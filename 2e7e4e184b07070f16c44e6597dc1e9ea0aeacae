@@ -46,6 +46,30 @@
       "revId": "2e7e4e184b07070f16c44e6597dc1e9ea0aeacae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfbcdf54_4d51393b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-17T21:35:40Z",
+      "side": 1,
+      "message": "Oh, nice.   I missed that comment block since Gerrit didn\u0027t show it.   Pictures definitely help.",
+      "parentUuid": "70186834_630872d4",
+      "range": {
+        "startLine": 822,
+        "startChar": 4,
+        "endLine": 822,
+        "endChar": 38
+      },
+      "revId": "2e7e4e184b07070f16c44e6597dc1e9ea0aeacae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
