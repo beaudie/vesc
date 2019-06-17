@@ -16,6 +16,24 @@
       "revId": "0a941f59a7e2e3f2b3065ce6a41defc2a1ce3825",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f91ec0a5_3cbc18eb",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-17T17:37:25Z",
+      "side": 1,
+      "message": "Good catch, Shabi. I\u0027ve updated the fix to restore the original behavior (from before my fix 2 changes ago) where there is still always an error for shaders \u003e\u003d ver3.00.",
+      "parentUuid": "9dc2ea21_f05f45b9",
+      "revId": "0a941f59a7e2e3f2b3065ce6a41defc2a1ce3825",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
