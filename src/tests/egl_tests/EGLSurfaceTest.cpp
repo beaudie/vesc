@@ -46,6 +46,7 @@ class EGLSurfaceTest : public ANGLETest
     {
         mOSWindow = OSWindow::New();
         mOSWindow->initialize("EGLSurfaceTest", 64, 64);
+        mOSWindow->setVisible(true);
     }
 
     // Release any resources created in the test body
