@@ -703,12 +703,9 @@ bool WindowSurfaceVk::isMultiSampled() const
     return mColorImageMS.valid();
 }
 
-angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
-                                                          uint32_t swapHistoryIndex,
-                                                          bool swapchainOutOfDate)
+angle::Result WindowSurfaceVk::handleOutOfDataSwapchain(ContextVk *contextVk,
+                                                        uint32_t swapHistoryIndex)
 {
-    bool swapIntervalChanged = mSwapchainPresentMode != mDesiredSwapchainPresentMode;
-
     // Check for window resize and recreate swapchain if necessary.
     gl::Extents currentExtents;
     ANGLE_TRY(getCurrentWindowSize(contextVk, &currentExtents));
@@ -735,11 +732,7 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
         }
     }
 
-    // If anything has changed, recreate the swapchain.
-    if (swapchainOutOfDate || swapIntervalChanged || currentExtents != swapchainExtents)
-    {
-        ANGLE_TRY(recreateSwapchain(contextVk, currentExtents, swapHistoryIndex));
-    }
+    ANGLE_TRY(recreateSwapchain(contextVk, currentExtents, swapHistoryIndex));
 
     return angle::Result::Continue;
 }
@@ -864,7 +857,7 @@ egl::Error WindowSurfaceVk::swap(const gl::Context *context)
 angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
                                        EGLint *rects,
                                        EGLint n_rects,
-                                       bool &swapchainOutOfDate)
+                                       bool *swapchainOutOfDate)
 {
     // Throttle the submissions to avoid getting too far ahead of the GPU.
     SwapHistory &swap = mSwapHistory[mCurrentSwapHistoryIndex];
@@ -971,8 +964,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     // recreate the swapchain with a new window orientation. We aren't quite ready for that so just
     // ignore for now.
     // TODO: Check for preRotation: http://anglebug.com/3502
-    swapchainOutOfDate = result == VK_ERROR_OUT_OF_DATE_KHR;
-    if (!swapchainOutOfDate && result != VK_SUBOPTIMAL_KHR)
+    *swapchainOutOfDate = result == VK_ERROR_OUT_OF_DATE_KHR;
+    if (!*swapchainOutOfDate && result != VK_SUBOPTIMAL_KHR)
     {
         ANGLE_VK_TRY(contextVk, result);
     }
@@ -989,9 +982,7 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context, EGLint *rect
     // Save this now, since present() will increment the value.
     size_t currentSwapHistoryIndex = mCurrentSwapHistoryIndex;
 
-    ANGLE_TRY(present(contextVk, rects, n_rects, swapchainOutOfDate));
-
-    ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, currentSwapHistoryIndex, swapchainOutOfDate));
+    ANGLE_TRY(present(contextVk, rects, n_rects, &swapchainOutOfDate));
 
     {
         // Note: TRACE_EVENT0 is put here instead of inside the function to workaround this issue:
@@ -1002,9 +993,11 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context, EGLint *rect
         VkResult result = nextSwapchainImage(contextVk);
         // If SUBOPTIMAL/OUT_OF_DATE is returned, it's ok, we just need to recreate the swapchain
         // before continuing.
-        if (ANGLE_UNLIKELY((result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_SUBOPTIMAL_KHR)))
+        if (ANGLE_UNLIKELY(swapchainOutOfDate ||
+                           (mSwapchainPresentMode != mDesiredSwapchainPresentMode) ||
+                           (result == VK_ERROR_OUT_OF_DATE_KHR) || (result == VK_SUBOPTIMAL_KHR)))
         {
-            ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, currentSwapHistoryIndex, true));
+            ANGLE_TRY(handleOutOfDataSwapchain(contextVk, currentSwapHistoryIndex));
             // Try one more time and bail if we fail
             result = nextSwapchainImage(contextVk);
         }
