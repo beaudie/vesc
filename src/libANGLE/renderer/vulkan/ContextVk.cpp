@@ -1332,6 +1332,8 @@ angle::Result ContextVk::drawArrays(const gl::Context *context,
     vk::CommandBuffer *commandBuffer = nullptr;
     uint32_t clampedVertexCount      = gl::GetClampedVertexCount<uint32_t>(count);
 
+    ASSERT(false);
+
     if (mode == gl::PrimitiveMode::LineLoop)
     {
         uint32_t numIndices;
