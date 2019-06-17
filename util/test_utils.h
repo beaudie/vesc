@@ -76,14 +76,21 @@ class ANGLE_UTIL_EXPORT Process : angle::NonCopyable
   public:
     virtual ~Process() {}
 
-    virtual bool started()                 = 0;
-    virtual bool finished()                = 0;
-    virtual bool finish()                  = 0;
-    virtual int getExitCode()              = 0;
-    virtual double getElapsedTimeSeconds() = 0;
+    virtual bool started()                         = 0;
+    virtual bool finished()                        = 0;
+    virtual bool finish()                          = 0;
+    virtual bool kill()                            = 0;
+    virtual int getExitCode()                      = 0;
+    virtual double getElapsedTimeSeconds()         = 0;
+    virtual void getStdout(std::string *stdoutOut) = 0;
+    virtual void getStderr(std::string *stderrOut) = 0;
 };
 
-ANGLE_UTIL_EXPORT Process *RunProcessAsync(const std::vector<const char *> &args);
+ANGLE_UTIL_EXPORT Process *RunProcessAsync(const std::vector<const char *> &args,
+                                           bool captureStdout,
+                                           bool captureStderr);
+
+ANGLE_UTIL_EXPORT int NumberOfProcessors();
 
 }  // namespace angle
 

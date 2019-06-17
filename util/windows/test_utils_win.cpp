@@ -14,6 +14,8 @@
 #include <iostream>
 #include <vector>
 
+#include <aclapi.h>
+
 #include "common/angleutils.h"
 
 #include "anglebase/no_destructor.h"
@@ -150,6 +152,7 @@ struct ScopedPipe
     {
         if (::CreatePipe(&readHandle, &writeHandle, securityAttribs, 0) == FALSE)
         {
+            std::cerr << "Error creating pipe: " << GetLastError() << "\n";
             return false;
         }
 
@@ -288,13 +291,21 @@ class WindowsProcess : public Process
 
     bool started() override { return mStarted; }
 
-    void getStdout(std::string *stdoutOut) { ReadEntireFile(mStdoutPipe.readHandle, stdoutOut); }
+    void getStdout(std::string *stdoutOut) override
+    {
+        ReadEntireFile(mStdoutPipe.readHandle, stdoutOut);
+    }
 
-    void getStderr(std::string *stderrOut) { ReadEntireFile(mStderrPipe.readHandle, stderrOut); }
+    void getStderr(std::string *stderrOut) override
+    {
+        ReadEntireFile(mStderrPipe.readHandle, stderrOut);
+    }
 
     bool finish() override
     {
-        return ::WaitForSingleObject(mProcessInfo.hProcess, INFINITE) == WAIT_OBJECT_0;
+        DWORD result = ::WaitForSingleObject(mProcessInfo.hProcess, INFINITE);
+        mTimer.stop();
+        return result == WAIT_OBJECT_0;
     }
 
     bool finished() override
@@ -304,9 +315,14 @@ class WindowsProcess : public Process
 
         DWORD result = ::WaitForSingleObject(mProcessInfo.hProcess, 0);
         if (result == WAIT_OBJECT_0)
+        {
+            mTimer.stop();
             return true;
+        }
         if (result == WAIT_TIMEOUT)
             return false;
+
+        mTimer.stop();
         std::cerr << "Unexpected result from WaitForSingleObject: " << result
                   << ". Last error: " << ::GetLastError() << "\n";
         return false;
@@ -328,6 +344,39 @@ class WindowsProcess : public Process
     }
 
     double getElapsedTimeSeconds() override { return mTimer.getElapsedTime(); }
+
+    bool kill() override
+    {
+        if (!mStarted)
+            return true;
+
+        HANDLE newHandle;
+        if (::DuplicateHandle(::GetCurrentProcess(), mProcessInfo.hProcess, ::GetCurrentProcess(),
+                              &newHandle, PROCESS_ALL_ACCESS, false,
+                              DUPLICATE_CLOSE_SOURCE) == FALSE)
+        {
+            std::cerr << "Error getting permission to terminate process: " << ::GetLastError()
+                      << "\n";
+            return false;
+        }
+        mProcessInfo.hProcess = newHandle;
+
+        if (::TerminateThread(mProcessInfo.hThread, 1) == FALSE)
+        {
+            std::cerr << "TerminateThread failed: " << GetLastError() << "\n";
+            return false;
+        }
+
+        if (::TerminateProcess(mProcessInfo.hProcess, 1) == FALSE)
+        {
+            std::cerr << "TerminateProcess failed: " << GetLastError() << "\n";
+            return false;
+        }
+
+        mStarted = false;
+        mTimer.stop();
+        return true;
+    }
 
   private:
     bool mStarted = false;
@@ -409,9 +458,11 @@ bool RunApp(const std::vector<const char *> &args,
     return true;
 }
 
-Process *RunProcessAsync(const std::vector<const char *> &args)
+Process *RunProcessAsync(const std::vector<const char *> &args,
+                         bool captureStdout,
+                         bool captureStderr)
 {
-    return nullptr;
+    return new WindowsProcess(args, captureStdout, captureStderr);
 }
 
 bool GetTempDir(std::string *tempDirOut)
@@ -461,5 +512,10 @@ bool DeleteFile(const char *path)
     }
 
     return !!::DeleteFileA(path) ? true : ReturnSuccessOnNotFound();
+}
+
+int NumberOfProcessors()
+{
+    return ::GetActiveProcessorCount(ALL_PROCESSOR_GROUPS);
 }
 }  // namespace angle
