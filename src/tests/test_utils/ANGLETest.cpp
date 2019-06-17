@@ -57,10 +57,6 @@ void TestPlatform_logError(PlatformMethods *platform, const char *errorMessage)
         return;
 
     GTEST_NONFATAL_FAILURE_(errorMessage);
-
-    // Print the stack and stop any crash handling to prevent duplicate reports.
-    PrintStackBacktrace();
-    TerminateCrashHandler();
 }
 
 void TestPlatform_logWarning(PlatformMethods *platform, const char *warningMessage)
@@ -481,8 +477,6 @@ void ANGLETestBase::ANGLETestSetUp()
 {
     mSetUpCalled = true;
 
-    InitCrashHandler(nullptr);
-
     gDefaultPlatformMethods.overrideWorkaroundsD3D = TestPlatform_overrideWorkaroundsD3D;
     gDefaultPlatformMethods.overrideFeaturesVk     = TestPlatform_overrideFeaturesVk;
     gDefaultPlatformMethods.logError               = TestPlatform_logError;
@@ -615,8 +609,6 @@ void ANGLETestBase::ANGLETestTearDown()
         mFixture->eglWindow->destroyContext();
         mFixture->eglWindow->destroySurface();
     }
-
-    TerminateCrashHandler();
 
     // Check for quit message
     Event myEvent;
