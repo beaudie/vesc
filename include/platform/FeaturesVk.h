@@ -167,6 +167,15 @@ struct FeaturesVk : FeatureSetBase
         "disable_flipping_blit_with_command", FeatureCategory::VulkanWorkarounds,
         "On some android devices, vkCmdBlitImage with flipped coordinates blits incorrectly.",
         &members, "http://anglebug.com/3498"};
+
+    // On Windows with Intel GPU, a window resizing would not trigger the vulkan driver to return
+    // VK_ERROR_OUT_OF_DATE on swapchain present.  Work-around by query current window extent every
+    // frame to detect a window resizing.
+    Feature perFrameWindowSizeQuery = {
+        "per_frame_window_size_query", FeatureCategory::VulkanWorkarounds,
+        "On Windows Intel, vulkan swapchain is not returning VK_ERROR_OUT_OF_DATE"
+        "when window resizing",
+        &members, "http://anglebug.com/3535"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

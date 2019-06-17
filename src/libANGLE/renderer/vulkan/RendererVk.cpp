@@ -10,8 +10,6 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
 // Placing this first seems to solve an intellisense bug.
-#include "libANGLE/renderer/vulkan/vk_utils.h"
-
 #include <EGL/eglext.h>
 
 #include "common/debug.h"
@@ -30,6 +28,7 @@
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
+#include "libANGLE/renderer/vulkan/vk_utils.h"
 #include "libANGLE/trace.h"
 #include "platform/Platform.h"
 
@@ -1220,6 +1219,11 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
     if (IsWindows() && IsIntel(mPhysicalDeviceProperties.vendorID))
     {
         mFeatures.forceNonZeroScissor.enabled = true;
+    }
+
+    if (IsIntel(mPhysicalDeviceProperties.vendorID))
+    {
+        mFeatures.perFrameWindowSizeQuery.enabled = true;
     }
 
     if (IsAndroid() && IsQualcomm(mPhysicalDeviceProperties.vendorID))
