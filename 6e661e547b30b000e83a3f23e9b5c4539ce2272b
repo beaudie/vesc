@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2054d1a_fb08e552",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-18T16:59:15Z",
+      "side": 1,
+      "message": "nit: you can omit this ASSERT",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 36
+      },
+      "revId": "6e661e547b30b000e83a3f23e9b5c4539ce2272b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb4148a1_2c74c9bd",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-18T16:59:15Z",
+      "side": 1,
+      "message": "you can actually use PIXEL2 here to be super specific thanks to work Jonah did. Can you also file a new bug for this? Unless you plan on working on it in 3194 soon.",
+      "range": {
+        "startLine": 592,
+        "startChar": 5,
+        "endLine": 592,
+        "endChar": 13
+      },
+      "revId": "6e661e547b30b000e83a3f23e9b5c4539ce2272b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
