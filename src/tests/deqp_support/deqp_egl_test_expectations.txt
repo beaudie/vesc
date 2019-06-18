@@ -30,9 +30,9 @@
 //  91531 NEXUS5X GLES : conformance_more_* = SKIP
 
 // ANGLE does not yet support multithreading
-1340 : dEQP-EGL.functional.sharing.gles2.multithread.* = SKIP
-1340 : dEQP-EGL.functional.multithread.* = SKIP
-1340 : dEQP-EGL.functional.render.multi_thread.* = SKIP
+//1340 : dEQP-EGL.functional.sharing.gles2.multithread.* = SKIP
+//1340 : dEQP-EGL.functional.multithread.* = SKIP
+//1340 : dEQP-EGL.functional.render.multi_thread.* = SKIP
 
 // dEQP doesn't handle configs created for extensions
 1662 WIN : dEQP-EGL.functional.color_clears.single_context.gles2.other = FAIL
