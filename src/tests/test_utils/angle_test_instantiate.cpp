@@ -212,6 +212,13 @@ bool IsAMD()
 
 bool IsNVIDIA()
 {
+#if defined(ANGLE_PLATFORM_ANDROID)
+    // NVIDIA Shield cannot detect vendor ID
+    if (IsNVIDIAShield())
+    {
+        return true;
+    }
+#endif
     return HasSystemVendorID(kVendorID_NVIDIA);
 }
 
