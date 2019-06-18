@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39060e74_fa39bdcb",
+        "filename": "infra/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-18T20:35:59Z",
+      "side": 1,
+      "message": "nit: If adding a Mac bot,",
+      "range": {
+        "startLine": 26,
+        "startChar": 9,
+        "endLine": 26,
+        "endChar": 15
+      },
+      "revId": "23d1d9b757c1a7ec7be4ff4275c1e447765f62f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff13f2d8_aab63c2e",
+        "filename": "infra/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-18T20:35:59Z",
+      "side": 1,
+      "message": "nit: the previous step",
+      "range": {
+        "startLine": 30,
+        "startChar": 103,
+        "endLine": 30,
+        "endChar": 112
+      },
+      "revId": "23d1d9b757c1a7ec7be4ff4275c1e447765f62f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
