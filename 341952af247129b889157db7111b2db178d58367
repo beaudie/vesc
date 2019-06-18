@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1edb763c_8d37b52b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1197,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-18T16:34:03Z",
+      "side": 1,
+      "message": "The dirty bits are cleared in Texture.cpp after calling syncState().",
+      "parentUuid": "8b9cd4d6_52299630",
+      "revId": "341952af247129b889157db7111b2db178d58367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f2a54bd2_7335f996",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 2
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "fa5d327f_f4560e3e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-18T16:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2a54bd2_7335f996",
+      "range": {
+        "startLine": 339,
+        "startChar": 0,
+        "endLine": 351,
+        "endChar": 76
+      },
+      "revId": "341952af247129b889157db7111b2db178d58367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a19f0910_44a242e5",
         "filename": "src/tests/gl_tests/SwizzleTest.cpp",
         "patchSetId": 2
@@ -62,6 +104,30 @@
       "revId": "341952af247129b889157db7111b2db178d58367",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e039808_c5d88754",
+        "filename": "src/tests/gl_tests/SwizzleTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-18T16:34:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a19f0910_44a242e5",
+      "range": {
+        "startLine": 434,
+        "startChar": 23,
+        "endLine": 434,
+        "endChar": 41
+      },
+      "revId": "341952af247129b889157db7111b2db178d58367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
