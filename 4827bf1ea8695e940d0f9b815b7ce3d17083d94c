@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df932c96_b99f39cc",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-06-18T15:50:15Z",
+      "side": 1,
+      "message": "textureExternalUpdateANGLE, is that the convention we\u0027re going for now?",
+      "revId": "4827bf1ea8695e940d0f9b815b7ce3d17083d94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fca23831_d4090e60",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-06-18T15:50:15Z",
+      "side": 1,
+      "message": "Are you missing the addition to generateSupportedExtensions? https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/Context.cpp?type\u003dcs\u0026q\u003dmemorySize+f:third_party/angle\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d3147",
+      "revId": "4827bf1ea8695e940d0f9b815b7ce3d17083d94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41f3b5a3_5314a930",
+        "filename": "src/libANGLE/renderer/ContextImpl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-06-18T15:50:15Z",
+      "side": 1,
+      "message": "I assume these aren\u0027t pure virtual methods because the extension is supported only on the GL backend? Is that going to be managed when the Caps are set?",
+      "revId": "4827bf1ea8695e940d0f9b815b7ce3d17083d94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
