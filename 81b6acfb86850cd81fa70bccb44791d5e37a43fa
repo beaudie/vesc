@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3bbf84e5_b62f3693",
+        "filename": "src/common/event_tracer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-18T21:15:25Z",
+      "side": 0,
+      "message": "needed to get rid of this.",
+      "range": {
+        "startLine": 14,
+        "startChar": 4,
+        "endLine": 14,
+        "endChar": 44
+      },
+      "revId": "81b6acfb86850cd81fa70bccb44791d5e37a43fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
