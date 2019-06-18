@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b8593022_7c0e5c44",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-18T19:33:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df932c96_b99f39cc",
+      "revId": "4827bf1ea8695e940d0f9b815b7ce3d17083d94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fca23831_d4090e60",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 10
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "df3f7056_5eaf7c40",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-18T19:33:10Z",
+      "side": 1,
+      "message": "Not for this extension.  I would update that function if the extension was implemented in the frontend or should be disabled for some reason.",
+      "parentUuid": "fca23831_d4090e60",
+      "revId": "4827bf1ea8695e940d0f9b815b7ce3d17083d94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41f3b5a3_5314a930",
         "filename": "src/libANGLE/renderer/ContextImpl.h",
         "patchSetId": 10
@@ -50,6 +86,24 @@
       "revId": "4827bf1ea8695e940d0f9b815b7ce3d17083d94c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b325bce0_ca77a1fc",
+        "filename": "src/libANGLE/renderer/ContextImpl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-18T19:33:10Z",
+      "side": 1,
+      "message": "That\u0027s right.  Because it\u0027s an extension that is unlikely to be implemented on many backends, this minimizes the stub unimplemented functions.",
+      "parentUuid": "41f3b5a3_5314a930",
+      "revId": "4827bf1ea8695e940d0f9b815b7ce3d17083d94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -73,6 +127,30 @@
       "revId": "4827bf1ea8695e940d0f9b815b7ce3d17083d94c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "592570b1_719e7fdc",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-18T19:33:10Z",
+      "side": 1,
+      "message": "👍",
+      "parentUuid": "9f439342_1f4dfbac",
+      "range": {
+        "startLine": 409,
+        "startChar": 16,
+        "endLine": 409,
+        "endChar": 27
+      },
+      "revId": "4827bf1ea8695e940d0f9b815b7ce3d17083d94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
