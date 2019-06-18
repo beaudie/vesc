@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "943781cf_5d70a45c",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-18T21:43:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2054d1a_fb08e552",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 157,
+        "endChar": 36
+      },
+      "revId": "6e661e547b30b000e83a3f23e9b5c4539ce2272b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb4148a1_2c74c9bd",
         "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
         "patchSetId": 14
@@ -93,6 +117,30 @@
       "revId": "6e661e547b30b000e83a3f23e9b5c4539ce2272b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4b90ae9_25378288",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-18T21:43:42Z",
+      "side": 1,
+      "message": "This test is passing on Pixel 3 and later, so I\u0027ve opened b/135551071 to chase the Pixel 2 issue with QC (Pixel 1 is essentially EOL, so no sense bugging them about it).   I\u0027ll add a reference to that here.\n\nI know it\u0027ll look goofy referencing Android bugs here, but that\u0027s our interface with the Pixel and Qualcomm teams from our perspective.   We may find it\u0027s better/easier to shift that to Monorail at some point though, and interface with them outside of Android.   That\u0027s something we can chat about at the next weekly and get Alan\u0027s input on after he\u0027s had a chance to work with Pixel/QC.",
+      "parentUuid": "cc2d2610_b9b81e24",
+      "range": {
+        "startLine": 592,
+        "startChar": 5,
+        "endLine": 592,
+        "endChar": 13
+      },
+      "revId": "6e661e547b30b000e83a3f23e9b5c4539ce2272b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
