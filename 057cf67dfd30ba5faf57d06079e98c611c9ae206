@@ -182,6 +182,30 @@
       "revId": "057cf67dfd30ba5faf57d06079e98c611c9ae206",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "200e4964_a6874f40",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-18T16:51:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d375e137_c7b476af",
+      "range": {
+        "startLine": 440,
+        "startChar": 31,
+        "endLine": 442,
+        "endChar": 15
+      },
+      "revId": "057cf67dfd30ba5faf57d06079e98c611c9ae206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
