@@ -104,8 +104,14 @@ Format::Format()
 
 void Format::initImageFallback(RendererVk *renderer, const ImageFormatInitInfo *info, int numInfo)
 {
-    size_t skip = renderer->getFeatures().forceFallbackFormat.enabled ? 1 : 0;
-    int i = FindSupportedFormat(renderer, info + skip, numInfo - skip, HasFullTextureFormatSupport);
+    size_t skip              = renderer->getFeatures().forceFallbackFormat.enabled ? 1 : 0;
+    SupportTest testFunction = HasFullTextureFormatSupport;
+    if (angle::Format::Get(info[0].format).isInt() || angle::Format::Get(info[0].format).isUint())
+    {
+        // Integer formats don't support filtering in GL, so don't test for it.
+        testFunction = HasBasicTextureFormatSupport;
+    }
+    int i = FindSupportedFormat(renderer, info + skip, numInfo - skip, testFunction);
     i += skip;
 
     imageFormatID            = info[i].format;
@@ -256,6 +262,16 @@ bool HasFullTextureFormatSupport(RendererVk *renderer, VkFormat vkFormat)
     constexpr uint32_t kBitsColor = VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT |
                                     VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT |
                                     VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
+    constexpr uint32_t kBitsDepth = VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT;
+
+    return renderer->hasImageFormatFeatureBits(vkFormat, kBitsColor) ||
+           renderer->hasImageFormatFeatureBits(vkFormat, kBitsDepth);
+}
+
+bool HasBasicTextureFormatSupport(RendererVk *renderer, VkFormat vkFormat)
+{
+    constexpr uint32_t kBitsColor =
+        VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
     constexpr uint32_t kBitsDepth = VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT;
 
     return renderer->hasImageFormatFeatureBits(vkFormat, kBitsColor) ||
