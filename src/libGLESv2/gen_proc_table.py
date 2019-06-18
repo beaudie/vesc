@@ -7,8 +7,6 @@
 #  Code generation for entry point loading tables.
 #  NOTE: don't run this script directly. Run scripts/run_code_generation.py.
 
-# TODO(jmadill): Should be part of entry point generation.
-
 import sys
 from datetime import date
 sys.path.append('../../scripts')
