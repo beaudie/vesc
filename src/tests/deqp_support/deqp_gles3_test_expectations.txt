@@ -539,7 +539,7 @@
 2950 VULKAN : dEQP-GLES3.functional.implementation_limits.min_program_texel_offset = SKIP
 2950 VULKAN : dEQP-GLES3.functional.implementation_limits.max_transform_feedback_* = SKIP
 
-// 3D texture (anglebug.com/3188), 2D array (anglebug.com/3189):
+// 3D texture (anglebug.com/3188), 2D array (anglebug.com/3189), weird new formats (anglebug.com/3190):
 3189 VULKAN : dEQP-GLES3.functional.shaders.texture_functions.texturegrad.sampler2darrayshadow_vertex = SKIP
 3189 VULKAN : dEQP-GLES3.functional.fbo.completeness.layer.2darr* = SKIP
 3188 VULKAN : dEQP-GLES3.functional.fbo.completeness.layer.3d* = SKIP
@@ -551,7 +551,28 @@
 3189 VULKAN : dEQP-GLES3.functional.texture.filtering.* = SKIP
 3189 VULKAN : dEQP-GLES3.functional.texture.mipmap.* = SKIP
 3189 VULKAN : dEQP-GLES3.functional.texture.shadow.2d_array.* = SKIP
-3189 VULKAN : dEQP-GLES3.functional.texture.specification.* = SKIP
+3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage2d.r11f_g11f_b10f_* = SKIP
+3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage2d.rgb32f_* = SKIP
+3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage2d.rgb16f_* = SKIP
+3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage2d.rgb8_snorm_* = SKIP
+3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage2d.rgb9_e5_* = SKIP
+3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage2d.r11f_g11f_b10f_* = SKIP
+3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage2d.rgb32f_* = SKIP
+3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage2d.rgb16f_* = SKIP
+3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage2d.rgb8_snorm_* = SKIP
+3190 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage2d.rgb9_e5_* = SKIP
+2905 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_depth.* = SKIP
+3210 VULKAN : dEQP-GLES3.functional.texture.specification.teximage2d_pbo.* = SKIP
+3210 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage2d_pbo.* = SKIP
+3189 VULKAN : dEQP-GLES3.functional.texture.specification.basic_teximage3d.* = SKIP
+3189 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_unpack_params.* = SKIP
+3189 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_pbo.* = SKIP
+3189 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_depth.* = SKIP
+3189 VULKAN : dEQP-GLES3.functional.texture.specification.basic_texsubimage3d.* = SKIP
+3189 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_unpack_params.* = SKIP
+3189 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_pbo.* = SKIP
+3189 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_depth.* = SKIP
+3189 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.* = SKIP
 3189 VULKAN : dEQP-GLES3.functional.texture.vertex.* = SKIP
 3189 VULKAN : dEQP-GLES3.functional.texture.units.* = SKIP
 3189 VULKAN : dEQP-GLES3.functional.texture.compressed.* = SKIP
