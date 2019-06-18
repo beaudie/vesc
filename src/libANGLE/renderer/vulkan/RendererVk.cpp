@@ -1431,8 +1431,14 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context)
 
 VkResult RendererVk::queuePresent(const VkPresentInfoKHR &presentInfo)
 {
+    TRACE_EVENT0("gpu.angle", "RendererVk::queuePresent");
+
     std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
-    return vkQueuePresentKHR(mQueue, &presentInfo);
+
+    {
+        TRACE_EVENT0("gpu.angle", "vkQueuePresentKHR");
+        return vkQueuePresentKHR(mQueue, &presentInfo);
+    }
 }
 
 Serial RendererVk::nextSerial()
