@@ -134,6 +134,30 @@
       "revId": "057cf67dfd30ba5faf57d06079e98c611c9ae206",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d19b042_52a8e3c9",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-18T15:46:09Z",
+      "side": 1,
+      "message": "Ha, yeah, this is a tough one.   I think this test is still better than nothing for now though, since it\u0027s able to catch the case where GL_MAP_UNSYNCHRONIZED_BIT is ignored and the glCopyBufferSubData() is finished without being explicitly told to do so.\n\nHacking BufferVk.cpp to ignore GL_MAP_UNSYNCHRONIZED_BIT:\n\nangle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,\n                                     VkDeviceSize offset,\n                                     VkDeviceSize length,\n                                     GLbitfield access,\n                                     void **mapPtr)\n{\n    ASSERT(mBuffer.valid());\n\n//    if ((access \u0026 GL_MAP_UNSYNCHRONIZED_BIT) \u003d\u003d 0)\n//    {\n        // If there are pending commands for the buffer, flush them.\n        if (mBuffer.isResourceInUse(contextVk))\n        {\n            ANGLE_TRY(contextVk-\u003eflushImpl(nullptr));\n        }\n        // Make sure the GPU is done with the buffer.\n        ANGLE_TRY(contextVk-\u003efinishToSerial(mBuffer.getStoredQueueSerial()));\n//    }\n\n    ANGLE_VK_TRY(contextVk, mBuffer.getDeviceMemory().map(contextVk-\u003egetDevice(), offset, length, 0,\n                                                          reinterpret_cast\u003cuint8_t **\u003e(mapPtr)));\n    return angle::Result::Continue;\n}\n\n\nCauses the test to fail, since the glCopyBufferSubData() was finished:\n\n[ RUN      ] BufferDataTestES3.MapBufferRangeUnsynchronizedBit/ES3_Vulkan\n../../third_party/angle/src/tests/gl_tests/BufferDataTest.cpp:448: Failure\nExpected equality of these values:\n  dstData[i]\n    Which is: \u0027\\n\u0027 (10, 0xA)\n  data[i]\n    Which is: \u0027\\0\u0027\n\n\nI can pull this test out though if you think it\u0027s too hacky and isn\u0027t really getting us anything.\n\nI\u0027ll chat with some people here to see if they can make sense of Mohan\u0027s sequence that may cause a hang if there\u0027s a bug in this code.   I\u0027m not sure I want to hold up this CL for that though, since dEQP and the other end2end tests are passing.",
+      "parentUuid": "1a5bd211_c09b13f4",
+      "range": {
+        "startLine": 440,
+        "startChar": 31,
+        "endLine": 442,
+        "endChar": 15
+      },
+      "revId": "057cf67dfd30ba5faf57d06079e98c611c9ae206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
