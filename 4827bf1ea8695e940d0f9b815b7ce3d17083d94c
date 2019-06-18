@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "765fa448_78e35dd7",
+        "filename": "src/libANGLE/renderer/ContextImpl.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-18T19:34:31Z",
+      "side": 1,
+      "message": "Also the validation will should block this function from ever being called without the backend advertising the extension.",
+      "parentUuid": "b325bce0_ca77a1fc",
+      "revId": "4827bf1ea8695e940d0f9b815b7ce3d17083d94c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f439342_1f4dfbac",
         "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
         "patchSetId": 10
