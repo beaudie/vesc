@@ -110,6 +110,30 @@
       "revId": "057cf67dfd30ba5faf57d06079e98c611c9ae206",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a5bd211_c09b13f4",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-18T15:24:10Z",
+      "side": 1,
+      "message": "Ok I see what you mean. I guess GL_MAP_READ_BIT would be the equivalent of vkInvalidateMappedMemoryRanges, which means without it we may be reading stale data already in the CPU cache, which would indeed make this test incorrectly pass (because the stale data _is_ the old data).\n\nI don\u0027t have another solution to test this!",
+      "parentUuid": "1a95393f_d5560c53",
+      "range": {
+        "startLine": 440,
+        "startChar": 31,
+        "endLine": 442,
+        "endChar": 15
+      },
+      "revId": "057cf67dfd30ba5faf57d06079e98c611c9ae206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
