@@ -63,7 +63,7 @@ class VulkanUniformUpdatesTest : public ANGLETest
 
         // Force a small limit on the max sets per pool to more easily trigger a new allocation.
         rx::vk::DynamicDescriptorPool *uniformPool =
-            programVk->getDynamicDescriptorPool(rx::kUniformsDescriptorSetIndex);
+            programVk->getDynamicDescriptorPool(rx::kUniformsAndXfbDescriptorSetIndex);
         uniformPool->setMaxSetsPerPoolForTesting(kMaxSetsForTesting);
         VkDescriptorPoolSize uniformSetSize = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
                                                rx::GetUniformBufferDescriptorCount()};
@@ -409,6 +409,9 @@ void main()
 TEST_P(VulkanUniformUpdatesTest, TextureStagingBufferRecycling)
 {
     ASSERT_TRUE(IsVulkan());
+
+    // Fails on older MESA drivers.  http://crbug.com/979349
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsLinux());
 
     GLTexture tex;
     glBindTexture(GL_TEXTURE_2D, tex);

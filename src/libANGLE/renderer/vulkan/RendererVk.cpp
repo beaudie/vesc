@@ -50,8 +50,8 @@ namespace
 // We currently only allocate 2 uniform buffer per descriptor set, one for the fragment shader and
 // one for the vertex shader.
 constexpr size_t kUniformBufferDescriptorsPerDescriptorSet = 2;
-// Update the pipeline cache every this many swaps (if 60fps, this means every 10 minutes)
-constexpr uint32_t kPipelineCacheVkUpdatePeriod = 10 * 60 * 60;
+// Update the pipeline cache every this many swaps.
+constexpr uint32_t kPipelineCacheVkUpdatePeriod = 60;
 // Wait a maximum of 10s.  If that times out, we declare it a failure.
 constexpr uint64_t kMaxFenceWaitTimeNs = 10'000'000'000llu;
 // Per the Vulkan specification, as long as Vulkan 1.1+ is returned by vkEnumerateInstanceVersion,
@@ -498,7 +498,8 @@ RendererVk::RendererVk()
       mMaxVertexAttribDivisor(1),
       mDevice(VK_NULL_HANDLE),
       mDeviceLost(false),
-      mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod)
+      mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
+      mPipelineCacheDirty(false)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
@@ -951,6 +952,8 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     enabledFeatures.features.independentBlend    = mPhysicalDeviceFeatures.independentBlend;
     enabledFeatures.features.robustBufferAccess  = mPhysicalDeviceFeatures.robustBufferAccess;
     enabledFeatures.features.samplerAnisotropy   = mPhysicalDeviceFeatures.samplerAnisotropy;
+    enabledFeatures.features.vertexPipelineStoresAndAtomics =
+        mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics;
     if (!vk::CommandBuffer::ExecutesInline())
     {
         enabledFeatures.features.inheritedQueries = mPhysicalDeviceFeatures.inheritedQueries;
@@ -1013,7 +1016,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     vkGetDeviceQueue(mDevice, mCurrentQueueFamilyIndex, 0, &mQueue);
 
     // Initialize the vulkan pipeline cache.
-    ANGLE_TRY(initPipelineCache(displayVk));
+    ANGLE_TRY(initPipelineCache(displayVk, &mPipelineCache));
 
     return angle::Result::Continue;
 }
@@ -1128,6 +1131,14 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
         maxVersion = std::max(maxVersion, gl::Version(2, 0));
     }
 
+    // If vertexPipelineStoresAndAtomics is not supported, we can't currently support transform
+    // feedback.  TODO(syoussefi): this should be conditioned to the extension not being present as
+    // well, when that code path is implemented.  http://anglebug.com/3206
+    if (!mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics)
+    {
+        maxVersion = std::max(maxVersion, gl::Version(2, 0));
+    }
+
     return maxVersion;
 }
 
@@ -1202,6 +1213,13 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
         mFeatures.supportsShaderStencilExport.enabled = true;
     }
 
+    // TODO(syoussefi): when the code path using the extension is implemented, this should be
+    // conditioned to the extension not being present as well.  http://anglebug.com/3206
+    if (mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics)
+    {
+        mFeatures.emulateTransformFeedback.enabled = true;
+    }
+
     if (IsLinux() && IsIntel(mPhysicalDeviceProperties.vendorID))
     {
         mFeatures.disableFifoPresentMode.enabled = true;
@@ -1252,7 +1270,7 @@ void RendererVk::initPipelineCacheVkKey()
                                hashString.length(), mPipelineCacheVkBlobKey.data());
 }
 
-angle::Result RendererVk::initPipelineCache(DisplayVk *display)
+angle::Result RendererVk::initPipelineCache(DisplayVk *display, vk::PipelineCache *pipelineCache)
 {
     initPipelineCacheVkKey();
 
@@ -1267,7 +1285,21 @@ angle::Result RendererVk::initPipelineCache(DisplayVk *display)
     pipelineCacheCreateInfo.initialDataSize = success ? initialData.size() : 0;
     pipelineCacheCreateInfo.pInitialData    = success ? initialData.data() : nullptr;
 
-    ANGLE_VK_TRY(display, mPipelineCache.init(mDevice, pipelineCacheCreateInfo));
+    ANGLE_VK_TRY(display, pipelineCache->init(mDevice, pipelineCacheCreateInfo));
+    return angle::Result::Continue;
+}
+
+angle::Result RendererVk::onSetBlobCacheFuncs(DisplayVk *display)
+{
+    // We should now recreate the pipeline cache with the blob cache pipeline data.
+    vk::PipelineCache pipelineCache;
+    ANGLE_TRY(initPipelineCache(display, &pipelineCache));
+
+    // Merge the newly created pipeline cache into the existing one.
+    ANGLE_VK_TRY(display,
+                 mPipelineCache.merge(mDevice, mPipelineCache.getHandle(), 1, pipelineCache.ptr()));
+
+    pipelineCache.destroy(mDevice);
     return angle::Result::Continue;
 }
 
@@ -1337,6 +1369,11 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)
     {
         return angle::Result::Continue;
     }
+    if (!mPipelineCacheDirty)
+    {
+        mPipelineCacheVkUpdateTimeout = kPipelineCacheVkUpdatePeriod;
+        return angle::Result::Continue;
+    }
 
     mPipelineCacheVkUpdateTimeout = kPipelineCacheVkUpdatePeriod;
 
@@ -1370,6 +1407,7 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)
     }
 
     displayVk->getBlobCache()->putApplication(mPipelineCacheVkBlobKey, *pipelineCacheData);
+    mPipelineCacheDirty = false;
 
     return angle::Result::Continue;
 }
