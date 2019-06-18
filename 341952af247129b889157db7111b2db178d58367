@@ -16,6 +16,52 @@
       "revId": "341952af247129b889157db7111b2db178d58367",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2a54bd2_7335f996",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-18T11:51:24Z",
+      "side": 1,
+      "message": "nit: could be a tiny cleanup by going\n\nif (block)\n{\n   break;\n}\n\ninternalSwizzle.red \u003d redBits \u003e 0 ? RED : ZERO;\n// etc\n\ngl::SwizzleState will have a unity mapping by default. So no need to override it for block.",
+      "range": {
+        "startLine": 339,
+        "startChar": 0,
+        "endLine": 351,
+        "endChar": 76
+      },
+      "revId": "341952af247129b889157db7111b2db178d58367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a19f0910_44a242e5",
+        "filename": "src/tests/gl_tests/SwizzleTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-18T11:51:24Z",
+      "side": 1,
+      "message": "maybe enable these tests with a skip on anglebug.com/3196 just to keep them tracked?",
+      "range": {
+        "startLine": 434,
+        "startChar": 23,
+        "endLine": 434,
+        "endChar": 41
+      },
+      "revId": "341952af247129b889157db7111b2db178d58367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
