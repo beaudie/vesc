@@ -2708,9 +2708,7 @@ const char *ValidateDrawStates(Context *context)
                 return kMultiviewMismatch;
             }
 
-            const TransformFeedback *transformFeedbackObject = state.getCurrentTransformFeedback();
-            if (transformFeedbackObject != nullptr && transformFeedbackObject->isActive() &&
-                !transformFeedbackObject->isPaused() && framebufferNumViews > 1)
+            if (state.isTransformFeedbackActiveUnpaused() && framebufferNumViews > 1)
             {
                 return kMultiviewTransformFeedback;
             }
@@ -2760,7 +2758,7 @@ const char *ValidateDrawStates(Context *context)
             }
 
             const TransformFeedback *transformFeedbackObject = state.getCurrentTransformFeedback();
-            if (transformFeedbackObject != nullptr && transformFeedbackObject->isActive() &&
+            if (state.isTransformFeedbackActive() &&
                 transformFeedbackObject->buffersBoundForOtherUse())
             {
                 return kTransformFeedbackBufferDoubleBound;
@@ -2809,8 +2807,7 @@ void RecordDrawModeError(Context *context, PrimitiveMode mode)
 {
     const State &state                      = context->getState();
     TransformFeedback *curTransformFeedback = state.getCurrentTransformFeedback();
-    if (curTransformFeedback && curTransformFeedback->isActive() &&
-        !curTransformFeedback->isPaused())
+    if (state.isTransformFeedbackActiveUnpaused())
     {
         if (!ValidateTransformFeedbackPrimitiveMode(context,
                                                     curTransformFeedback->getPrimitiveMode(), mode))
