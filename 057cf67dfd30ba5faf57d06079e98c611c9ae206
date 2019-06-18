@@ -158,6 +158,30 @@
       "revId": "057cf67dfd30ba5faf57d06079e98c611c9ae206",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d375e137_c7b476af",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-18T16:17:05Z",
+      "side": 1,
+      "message": "No, I don\u0027t want to block you on this. I would add a comment saying that on Vulkan, if we ever use memory that\u0027s not `VK_MEMORY_PROPERTY_HOST_COHERENT_BIT`, then this could incorrectly pass. Otherwise yes, we can try to figure out with Mohan what he has in mind and implement that.",
+      "parentUuid": "6d19b042_52a8e3c9",
+      "range": {
+        "startLine": 440,
+        "startChar": 31,
+        "endLine": 442,
+        "endChar": 15
+      },
+      "revId": "057cf67dfd30ba5faf57d06079e98c611c9ae206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
