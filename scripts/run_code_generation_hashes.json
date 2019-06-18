@@ -196,9 +196,9 @@
   "Vulkan format:src/libANGLE/renderer/vulkan/gen_vk_format_table.py":
     "c50c9c66b89df7179a688cda42eb85f2",
   "Vulkan format:src/libANGLE/renderer/vulkan/vk_format_map.json":
-    "2590230893bdc30563cdca291a12d92b",
+    "6be1ce5b7edb67e5b2db9dd9b64c232a",
   "Vulkan format:src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp":
-    "ba26e079062affec8cd72d48f5c91d21",
+    "103913e41fbd3b82e6a834d9849c7459",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py":
     "a528a53197ea6c8eaa3bb42a7cdf0a17",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000000.inc":
