@@ -45,6 +45,30 @@
       "revId": "6e661e547b30b000e83a3f23e9b5c4539ce2272b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86092906_48c53bc7",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 14
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-18T17:05:21Z",
+      "side": 1,
+      "message": "I ran the Pixel XL bots and they too seem to fail. My recommendation was to make this ANDROID until resolved.\n\nBy the way, it could be removed the \"Android\" failures section below.",
+      "parentUuid": "bb4148a1_2c74c9bd",
+      "range": {
+        "startLine": 592,
+        "startChar": 5,
+        "endLine": 592,
+        "endChar": 13
+      },
+      "revId": "6e661e547b30b000e83a3f23e9b5c4539ce2272b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
