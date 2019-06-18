@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include <angle_gl.h>
+
 /*
 ** Copyright (c) 2013-2018 The Khronos Group Inc.
 **

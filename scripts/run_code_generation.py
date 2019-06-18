@@ -86,6 +86,8 @@ generators = {
         'src/common/gen_packed_gl_enums.py',
     'proc table':
         'src/libGLESv2/gen_proc_table.py',
+    'proc table wgl':
+        'src/openGL32/gen_proc_table.py',
     'Vulkan format':
         'src/libANGLE/renderer/vulkan/gen_vk_format_table.py',
     'Vulkan mandatory format support table':
