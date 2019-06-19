@@ -502,6 +502,9 @@ struct Extensions
 
     // GL_CHROMIUM_lose_context
     bool loseContextCHROMIUM = false;
+
+    // GL_ANGLE_base_vertex_base_instance
+    bool baseVertexBaseInstance = false;
 };
 
 struct ExtensionInfo
