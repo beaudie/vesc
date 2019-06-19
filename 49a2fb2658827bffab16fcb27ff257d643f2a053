@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5400eb1_ab0131f4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-19T18:35:38Z",
+      "side": 1,
+      "message": "If you want to use a static here please make it static constexpr and define it outside of this function at the top in an anonymous block. You can use std::array as well.",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 6
+      },
+      "revId": "49a2fb2658827bffab16fcb27ff257d643f2a053",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aca1ecc1_fa9c25c2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-19T18:35:38Z",
+      "side": 1,
+      "message": "Can you make this a static_assert? You will need to make max_size constexpr. That should be trivial.",
+      "range": {
+        "startLine": 91,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 10
+      },
+      "revId": "49a2fb2658827bffab16fcb27ff257d643f2a053",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
