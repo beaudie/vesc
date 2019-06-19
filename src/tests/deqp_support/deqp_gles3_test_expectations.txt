@@ -596,22 +596,6 @@
 3443 VULKAN : dEQP-GLES3.functional.ubo.random.basic_arrays.10 = FAIL
 3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.* = FAIL
 
-// New vertex attribute formats:
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.strides.int2_10_10_10.* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.unsigned_int.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.int.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.half.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.usigned_int2_10_10_10.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.normalize.int2_10_10_10.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.unsigned_int.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.int.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.half.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.usigned_int2_10_10_10.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.output_types.int2_10_10_10.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.first.int2_10_10_10* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.offset.int2_10_10_10* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_array_objects.all_attributes = SKIP
-
 3221 VULKAN : dEQP-GLES3.functional.instanced.* = SKIP
 
 // Polygon offset:

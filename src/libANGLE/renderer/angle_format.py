@@ -218,7 +218,11 @@ def get_vertex_copy_function(src_format, dst_format):
     sign = ''
     base_type = None
     if 'FLOAT' in src_format:
+        bits = get_bits(src_format)
+        redbits = bits and bits.get('R')
         base_type = 'float'
+        if redbits == 16:
+            base_type = 'half'
     else:
         bits = get_bits(src_format)
         redbits = bits and bits.get('R')
