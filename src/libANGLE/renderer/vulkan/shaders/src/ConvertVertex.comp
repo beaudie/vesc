@@ -209,12 +209,16 @@ SrcType loadSourceComponent(uint cd)
 #if SintToSint || SintToFloat
     bool isNegative = (valueAsUint & (1 << (valueBits - 1))) != 0;
     // Sign extend
-    SrcType value = SrcType(valueAsUint | (isNegative ? 0xFFFFFFFF << valueBits : 0));
+    // Note: if valueBits == 32, then 0xFFFFFFFF << valueBits is undefined,
+    // causing sign extension of value below to produce incorrect values.
+    uint signExtension = isNegative && valueBits < 32 ? 0xFFFFFFFF << valueBits : 0;
+    SrcType value = SrcType(valueAsUint | signExtension);
 #elif UintToUint || UintToFloat
     SrcType value = valueAsUint;
 #elif SnormToFloat
     bool isNegative = (valueAsUint & (1 << (valueBits - 1))) != 0;
-    int valueAsInt = int(valueAsUint | (isNegative ? 0xFFFFFFFF << valueBits : 0));
+    uint signExtension = isNegative && valueBits < 32 ? 0xFFFFFFFF << valueBits : 0;
+    int valueAsInt = int(valueAsUint | signExtension);
     SrcType value = (2 * float(valueAsInt) + 1) / valueMask;
 #elif UnormToFloat
     float positiveMax = valueMask;
