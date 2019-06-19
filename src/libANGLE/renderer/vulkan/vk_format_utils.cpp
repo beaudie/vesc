@@ -271,7 +271,8 @@ size_t GetVertexInputAlignment(const vk::Format &format)
 
 void MapSwizzleState(const vk::Format &format,
                      const gl::SwizzleState &swizzleState,
-                     gl::SwizzleState *swizzleStateOut)
+                     gl::SwizzleState *swizzleStateOut,
+                     int glMajorVersion)
 {
     const angle::Format &angleFormat = format.angleFormat();
 
@@ -306,12 +307,14 @@ void MapSwizzleState(const vk::Format &format,
         default:
             if (angleFormat.hasDepthOrStencilBits())
             {
-                swizzleStateOut->swizzleRed =
-                    angleFormat.depthBits > 0 ? swizzleState.swizzleRed : GL_ZERO;
-                swizzleStateOut->swizzleGreen =
-                    angleFormat.depthBits > 0 ? swizzleState.swizzleRed : GL_ZERO;
-                swizzleStateOut->swizzleBlue =
-                    angleFormat.depthBits > 0 ? swizzleState.swizzleRed : GL_ZERO;
+                bool hasRed = angleFormat.depthBits > 0;
+                // In OES_depth_texture/ARB_depth_texture, depth
+                // textures are treated as luminance.
+                bool hasGB = hasRed && glMajorVersion <= 2;
+
+                swizzleStateOut->swizzleRed   = hasRed ? swizzleState.swizzleRed : GL_ZERO;
+                swizzleStateOut->swizzleGreen = hasGB ? swizzleState.swizzleRed : GL_ZERO;
+                swizzleStateOut->swizzleBlue  = hasGB ? swizzleState.swizzleRed : GL_ZERO;
                 swizzleStateOut->swizzleAlpha = GL_ONE;
             }
             else

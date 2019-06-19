@@ -237,7 +237,8 @@ class TextureGL : public TextureImpl
     void syncTextureStateSwizzle(const FunctionsGL *functions,
                                  GLenum name,
                                  GLenum value,
-                                 GLenum *outValue);
+                                 GLenum *outValue,
+                                 gl::Version glVersion);
 
     void setLevelInfo(const gl::Context *context,
                       gl::TextureTarget target,
