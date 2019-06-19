@@ -117,7 +117,10 @@ angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,
 
 // TextureVk implementation.
 TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
-    : TextureImpl(state), mOwnsImage(false), mImage(nullptr)
+    : TextureImpl(state),
+      mOwnsImage(false),
+      mImage(nullptr),
+      mStagingBufferInitialSize(vk::kStagingBufferFlags)
 {}
 
 TextureVk::~TextureVk() = default;
@@ -865,7 +868,8 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
     mImageLevelOffset = imageLevelOffset;
     mImageLayerOffset = imageLayerOffset;
     mImage            = imageHelper;
-    mImage->initStagingBuffer(contextVk->getRenderer(), format);
+    mImage->initStagingBuffer(contextVk->getRenderer(), format, vk::kStagingBufferFlags,
+                              vk::kStagingBufferSize);
 
     mRenderTarget.init(mImage, &mDrawBaseLevelImageView, &mFetchBaseLevelImageView,
                        getNativeImageLevel(0), getNativeImageLayer(0));
@@ -879,7 +883,8 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
 void TextureVk::updateImageHelper(ContextVk *contextVk, const vk::Format &format)
 {
     ASSERT(mImage != nullptr);
-    mImage->initStagingBuffer(contextVk->getRenderer(), format);
+    mImage->initStagingBuffer(contextVk->getRenderer(), format, vk::kStagingBufferFlags,
+                              vk::kStagingBufferSize);
 }
 
 angle::Result TextureVk::redefineImage(const gl::Context *context,

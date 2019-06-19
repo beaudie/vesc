@@ -18,6 +18,7 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/ProgramVk.h"
+#include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "test_utils/gl_raii.h"
 #include "util/EGLWindow.h"
 #include "util/shader_utils.h"
@@ -45,6 +46,14 @@ class VulkanUniformUpdatesTest : public ANGLETest
         return rx::vk::GetImpl(program);
     }
 
+    rx::TextureVk *hackTexture(GLuint handle) const
+    {
+        // Hack the angle!
+        const gl::Context *context = static_cast<gl::Context *>(getEGLWindow()->getContext());
+        const gl::Texture *texture = context->getTexture(handle);
+        return rx::vk::GetImpl(texture);
+    }
+
     static constexpr uint32_t kMaxSetsForTesting = 32;
 
     void limitMaxSets(GLuint program)
@@ -66,6 +75,14 @@ class VulkanUniformUpdatesTest : public ANGLETest
         VkDescriptorPoolSize textureSetSize = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                                contextVk->getRenderer()->getMaxActiveTextures()};
         (void)texturePool->init(contextVk, &textureSetSize, 1);
+    }
+
+    static constexpr size_t kTextureStagingBufferSizeForTesting = 128;
+
+    void limitTextureStagingBufferSize(GLuint texture)
+    {
+        rx::TextureVk *textureVk = hackTexture(texture);
+        textureVk->overrideStagingBufferSizeForTesting(kTextureStagingBufferSizeForTesting);
     }
 };
 
@@ -387,6 +404,9 @@ void main()
     swapBuffers();
     ASSERT_GL_NO_ERROR();
 }
+
+// Verify that overflowing a Texture's staging buffer doesn't overwrite current data.
+TEST_P(VulkanUniformUpdatesTest, TextureStagingBufferRecycling) {}
 
 ANGLE_INSTANTIATE_TEST(VulkanUniformUpdatesTest, ES2_VULKAN(), ES3_VULKAN());
 
