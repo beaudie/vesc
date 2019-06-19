@@ -42,7 +42,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::A1R5G5B5_UNORM;
             vkBufferFormat               = VK_FORMAT_A1R5G5B5_UNORM_PACK16;
             vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
+            vertexLoadFunction           = CopyNativeVertexData<GLushort, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -406,7 +406,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::B4G4R4A4_UNORM;
             vkBufferFormat               = VK_FORMAT_B4G4R4A4_UNORM_PACK16;
             vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
+            vertexLoadFunction           = CopyNativeVertexData<GLushort, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -418,7 +418,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::B5G5R5A1_UNORM;
             vkBufferFormat               = VK_FORMAT_B5G5R5A1_UNORM_PACK16;
             vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
+            vertexLoadFunction           = CopyNativeVertexData<GLushort, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -430,7 +430,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::B5G6R5_UNORM;
             vkBufferFormat               = VK_FORMAT_B5G6R5_UNORM_PACK16;
             vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
+            vertexLoadFunction           = CopyNativeVertexData<GLushort, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -890,7 +890,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R10G10B10A2_SINT;
             vkBufferFormat               = VK_FORMAT_A2B10G10R10_SINT_PACK32;
             vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
+            vertexLoadFunction           = CopyNativeVertexData<GLuint, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -902,7 +902,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R10G10B10A2_SNORM;
             vkBufferFormat               = VK_FORMAT_A2B10G10R10_SNORM_PACK32;
             vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
+            vertexLoadFunction           = CopyNativeVertexData<GLuint, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -914,7 +914,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R10G10B10A2_SSCALED;
             vkBufferFormat               = VK_FORMAT_A2B10G10R10_SSCALED_PACK32;
             vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
+            vertexLoadFunction           = CopyNativeVertexData<GLuint, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -926,7 +926,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R10G10B10A2_UINT;
             vkBufferFormat               = VK_FORMAT_A2B10G10R10_UINT_PACK32;
             vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
+            vertexLoadFunction           = CopyNativeVertexData<GLuint, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -938,7 +938,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R10G10B10A2_UNORM;
             vkBufferFormat               = VK_FORMAT_A2B10G10R10_UNORM_PACK32;
             vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
+            vertexLoadFunction           = CopyNativeVertexData<GLuint, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -950,7 +950,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R10G10B10A2_USCALED;
             vkBufferFormat               = VK_FORMAT_A2B10G10R10_USCALED_PACK32;
             vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
+            vertexLoadFunction           = CopyNativeVertexData<GLuint, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -966,7 +966,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R16G16B16A16_FLOAT;
             vkBufferFormat               = VK_FORMAT_R16G16B16A16_SFLOAT;
             vkBufferFormatIsPacked       = false;
-            vertexLoadFunction           = CopyNativeVertexData<GLfloat, 4, 4, 0>;
+            vertexLoadFunction           = CopyNativeVertexData<GLhalf, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -1062,7 +1062,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R16G16B16_FLOAT;
             vkBufferFormat               = VK_FORMAT_R16G16B16_SFLOAT;
             vkBufferFormatIsPacked       = false;
-            vertexLoadFunction           = CopyNativeVertexData<GLfloat, 3, 3, 0>;
+            vertexLoadFunction           = CopyNativeVertexData<GLhalf, 3, 3, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -1158,7 +1158,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R16G16_FLOAT;
             vkBufferFormat               = VK_FORMAT_R16G16_SFLOAT;
             vkBufferFormatIsPacked       = false;
-            vertexLoadFunction           = CopyNativeVertexData<GLfloat, 2, 2, 0>;
+            vertexLoadFunction           = CopyNativeVertexData<GLhalf, 2, 2, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -1254,7 +1254,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R16_FLOAT;
             vkBufferFormat               = VK_FORMAT_R16_SFLOAT;
             vkBufferFormatIsPacked       = false;
-            vertexLoadFunction           = CopyNativeVertexData<GLfloat, 1, 1, 0>;
+            vertexLoadFunction           = CopyNativeVertexData<GLhalf, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -1377,11 +1377,23 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::R32G32B32A32_SNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGBA32_SNORM_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32G32B32A32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32B32A32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLint, 4, 4, true>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32G32B32A32_SSCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGBA32_SSCALED_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32G32B32A32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32B32A32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLint, 4, 4, false>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32G32B32A32_UINT:
@@ -1397,11 +1409,23 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::R32G32B32A32_UNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGBA32_UNORM_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32G32B32A32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32B32A32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLuint, 4, 4, true>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32G32B32A32_USCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGBA32_USCALED_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32G32B32A32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32B32A32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLuint, 4, 4, false>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32G32B32_FIXED:
@@ -1439,11 +1463,23 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::R32G32B32_SNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB32_SNORM_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32G32B32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32B32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLint, 3, 3, true>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32G32B32_SSCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB32_SSCALED_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32G32B32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32B32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLint, 3, 3, false>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32G32B32_UINT:
@@ -1459,11 +1495,23 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::R32G32B32_UNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB32_UNORM_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32G32B32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32B32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLuint, 3, 3, true>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32G32B32_USCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RGB32_USCALED_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32G32B32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32B32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLuint, 3, 3, false>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32G32_FIXED:
@@ -1501,11 +1549,23 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::R32G32_SNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RG32_SNORM_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32G32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLint, 2, 2, true>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32G32_SSCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RG32_SSCALED_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32G32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLint, 2, 2, false>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32G32_UINT:
@@ -1521,11 +1581,23 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::R32G32_UNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RG32_UNORM_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32G32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLuint, 2, 2, true>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32G32_USCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_RG32_USCALED_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32G32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32G32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLuint, 2, 2, false>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32_FIXED:
@@ -1563,11 +1635,23 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::R32_SNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_R32_SNORM_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLint, 1, 1, true>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32_SSCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_R32_SSCALED_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLint, 1, 1, false>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32_UINT:
@@ -1583,11 +1667,23 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::R32_UNORM:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_R32_UNORM_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLuint, 1, 1, true>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R32_USCALED:
-            // This format is not implemented in Vulkan.
+            internalFormat = GL_R32_USCALED_ANGLEX;
+
+            bufferFormatID               = angle::FormatID::R32_FLOAT;
+            vkBufferFormat               = VK_FORMAT_R32_SFLOAT;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = CopyTo32FVertexData<GLuint, 1, 1, false>;
+            vertexLoadRequiresConversion = true;
             break;
 
         case angle::FormatID::R4G4B4A4_UNORM:
@@ -1598,7 +1694,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R4G4B4A4_UNORM;
             vkBufferFormat               = VK_FORMAT_R4G4B4A4_UNORM_PACK16;
             vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
+            vertexLoadFunction           = CopyNativeVertexData<GLushort, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -1610,7 +1706,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R5G5B5A1_UNORM;
             vkBufferFormat               = VK_FORMAT_R5G5B5A1_UNORM_PACK16;
             vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
+            vertexLoadFunction           = CopyNativeVertexData<GLushort, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -1622,7 +1718,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R5G6B5_UNORM;
             vkBufferFormat               = VK_FORMAT_R5G6B5_UNORM_PACK16;
             vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
+            vertexLoadFunction           = CopyNativeVertexData<GLushort, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
