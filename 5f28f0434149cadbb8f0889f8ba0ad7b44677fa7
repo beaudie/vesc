@@ -234,6 +234,24 @@
       "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "046a1381_6215aeb6",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-19T21:10:07Z",
+      "side": 1,
+      "message": "I\u0027d rather fix the test at that point. Will do that tomorrow.",
+      "parentUuid": "959cd65c_962d5526",
+      "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
