@@ -11,6 +11,7 @@
 #include "libANGLE/Texture.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/load_functions_table.h"
+#include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_caps_utils.h"
 
@@ -299,7 +300,8 @@ void ComposeSwizzleState(const gl::SwizzleState &first,
 
 void MapSwizzleState(const vk::Format &format,
                      const gl::SwizzleState &swizzleState,
-                     gl::SwizzleState *swizzleStateOut)
+                     gl::SwizzleState *swizzleStateOut,
+                     const ContextVk *contextVk)
 {
     const angle::Format &angleFormat = format.angleFormat();
 
@@ -328,9 +330,14 @@ void MapSwizzleState(const vk::Format &format,
         default:
             if (angleFormat.hasDepthOrStencilBits())
             {
-                internalSwizzle.swizzleRed   = angleFormat.depthBits > 0 ? GL_RED : GL_ZERO;
-                internalSwizzle.swizzleGreen = angleFormat.depthBits > 0 ? GL_RED : GL_ZERO;
-                internalSwizzle.swizzleBlue  = angleFormat.depthBits > 0 ? GL_RED : GL_ZERO;
+                bool hasRed = angleFormat.depthBits > 0;
+                // In OES_depth_texture/ARB_depth_texture, depth
+                // textures are treated as luminance.
+                bool hasGB = hasRed && contextVk->getClientMajorVersion() <= 2;
+
+                internalSwizzle.swizzleRed   = hasRed ? GL_RED : GL_ZERO;
+                internalSwizzle.swizzleGreen = hasGB ? GL_RED : GL_ZERO;
+                internalSwizzle.swizzleBlue  = hasGB ? GL_RED : GL_ZERO;
                 internalSwizzle.swizzleAlpha = GL_ONE;
             }
             else
