@@ -252,6 +252,24 @@
       "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7a42ee8_fa6448b1",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-19T21:14:53Z",
+      "side": 1,
+      "message": "Just to make sure there\u0027s no misunderstanding, I\u0027m saying this diff would be all that\u0027s needed to fix the test:\n\n    -    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);\n    -    EXPECT_PIXEL_COLOR_EQ(w, 0, GLColor::green);\n    -    EXPECT_PIXEL_COLOR_EQ(0, h, GLColor::blue);\n    -    EXPECT_PIXEL_COLOR_EQ(w, h, GLColor::yellow);",
+      "parentUuid": "046a1381_6215aeb6",
+      "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
