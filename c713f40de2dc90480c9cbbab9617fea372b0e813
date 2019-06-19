@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "265c0161_3266312d",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-19T17:05:38Z",
+      "side": 1,
+      "message": "what about is_trivially_destructible? there\u0027s an exit-time-destructors warning that would eventually be nice to enable? http://anglebug.com/1459",
+      "range": {
+        "startLine": 39,
+        "startChar": 19,
+        "endLine": 39,
+        "endChar": 45
+      },
+      "revId": "c713f40de2dc90480c9cbbab9617fea372b0e813",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
