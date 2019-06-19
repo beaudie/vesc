@@ -101,6 +101,29 @@ def is_packed(format_id):
     return "true" if "_PACK" in format_id else "false"
 
 
+def verify_vk_map_keys(angle_to_gl, vk_json_data):
+    """Verify that the keys in Vulkan format tables exist in the ANGLE table.  If they don't, the
+    entry in the Vulkan file is incorrect and needs to be fixed."""
+
+    no_error = True
+    for angle_format in vk_json_data["map"].keys():
+        if not angle_format in angle_to_gl.keys():
+            print "Invalid format " + angle_format + " in vk_format_map.json in map"
+            no_error = False
+
+    for angle_format in vk_json_data["overrides"].keys():
+        if not angle_format in angle_to_gl.keys():
+            print "Invalid format " + angle_format + " in vk_format_map.json in overrides"
+            no_error = False
+
+    for angle_format in vk_json_data["fallbacks"].keys():
+        if not angle_format in angle_to_gl.keys():
+            print "Invalid format " + angle_format + " in vk_format_map.json in fallbacks"
+            no_error = False
+
+    return no_error
+
+
 def gen_format_case(angle, internal_format, vk_json_data):
     vk_map = vk_json_data["map"]
     vk_overrides = vk_json_data["overrides"]
@@ -180,6 +203,10 @@ def main():
 
     angle_to_gl = angle_format.load_inverse_table(os.path.join('..', 'angle_format_map.json'))
     vk_json_data = angle_format.load_json(input_file_name)
+
+    if not verify_vk_map_keys(angle_to_gl, vk_json_data):
+        return 1
+
     vk_cases = [
         gen_format_case(angle, gl, vk_json_data) for angle, gl in sorted(angle_to_gl.iteritems())
     ]
