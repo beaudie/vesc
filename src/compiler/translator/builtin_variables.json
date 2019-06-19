@@ -704,7 +704,57 @@
                         }
                     }
                 }
-
+            },
+            "ANGLEBaseVertexBaseInstance":{
+                "condition": "mResources.ANGLE_base_vertex_base_instance",
+                "subgroups":{
+                  "ESSL3":{
+                        "variables":{
+                            "gl_BaseVertex":{
+                                "level":"ESSL3_BUILTINS",
+                                "extension":"ANGLE_base_vertex_base_instance",
+                                "type":{
+                                    "basic":"Int",
+                                    "precision":"High",
+                                    "qualifier":"BaseVertex"
+                                }
+                            },
+                            "gl_BaseInstance":{
+                                "level":"ESSL3_BUILTINS",
+                                "extension":"ANGLE_base_vertex_base_instance",
+                                "type":{
+                                    "basic":"Int",
+                                    "precision":"High",
+                                    "qualifier":"BaseInstance"
+                                }
+                            }
+                        }
+                    },
+                    "ESSL1":{
+                        "variables":{
+                            "gl_BaseVertex":{
+                                "suffix":"ESSL1",
+                                "level":"ESSL1_BUILTINS",
+                                "extension":"ANGLE_base_vertex_base_instance",
+                                "type":{
+                                    "basic":"Int",
+                                    "precision":"High",
+                                    "qualifier":"BaseVertex"
+                                }
+                            },
+                            "gl_BaseInstance":{
+                                "suffix":"ESSL1",
+                                "level":"ESSL1_BUILTINS",
+                                "extension":"ANGLE_base_vertex_base_instance",
+                                "type":{
+                                    "basic":"Int",
+                                    "precision":"High",
+                                    "qualifier":"BaseInstance"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     },
