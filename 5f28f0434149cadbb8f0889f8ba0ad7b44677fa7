@@ -216,6 +216,24 @@
       "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "959cd65c_962d5526",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-19T20:49:04Z",
+      "side": 1,
+      "message": "From what I recall, the issue was `draw2DTextureQuad` reuploading the vertex data (hence your change here) and restarting the render pass. With this change and without the EXPECT* calls, you should be able to make it fail.\n\nMy concern is generally that since we don\u0027t have a good test to demonstrate the failure, bugs in this implementation could go unnoticed (though hopefully there\u0027s something in dEQP for it).\n\n---\n\nEdit: did a quick experiment and indeed, modifying the test as you did here + removing the EXPECT calls above + removing all finishCurrentCommands from TextureVk makes this test fail.\n\nSo, please go ahead and remove the EXPECT calls before this.",
+      "parentUuid": "9ae63ea8_c46004c9",
+      "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
