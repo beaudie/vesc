@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "539b0aaa_87f39620",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-06-19T19:03:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5400eb1_ab0131f4",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 90,
+        "endChar": 6
+      },
+      "revId": "49a2fb2658827bffab16fcb27ff257d643f2a053",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aca1ecc1_fa9c25c2",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "49a2fb2658827bffab16fcb27ff257d643f2a053",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6b364bea_b7642398",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-06-19T19:03:54Z",
+      "side": 1,
+      "message": "I also thought it would be easy until I tried it. I had to call the C++ help line to get the right syntax.",
+      "parentUuid": "aca1ecc1_fa9c25c2",
+      "range": {
+        "startLine": 91,
+        "startChar": 4,
+        "endLine": 91,
+        "endChar": 10
+      },
+      "revId": "49a2fb2658827bffab16fcb27ff257d643f2a053",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
