@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f06b41ad_3024adb1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-19T14:44:48Z",
+      "side": 1,
+      "message": "I did your idea initially but I wasn\u0027t crazy about how it turned out. It didn\u0027t look very nice to pass a TextureVk to the pixel buffer functions. And then pass nullptr from RenderbufferVk. And check the pointer for nullptr before flagging dirty. So I opted for this design since it\u0027s consistent with dirty bits. If you guys both hate it I can change it back. But given this is how dirty bits work I\u0027m okay with it. There might be a clever alternative I didn\u0027t think of.",
+      "parentUuid": "7f751c1d_959e7259",
+      "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7986f5b3_8b22699f",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2019-06-19T14:36:34Z",
       "side": 1,
       "message": "This is confusing to me. Why is onContentsChanged() not issuing ContentsChanged message?",
+      "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ef4ef42_893015ac",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-19T14:44:48Z",
+      "side": 1,
+      "message": "I can change it to contents changed. It doesn\u0027t really matter.",
+      "parentUuid": "7986f5b3_8b22699f",
       "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
