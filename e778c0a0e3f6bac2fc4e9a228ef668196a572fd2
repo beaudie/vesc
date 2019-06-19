@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73bdac53_b373ef34",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-19T20:38:04Z",
+      "side": 1,
+      "message": "nit: you can generalize this with a for-each type loop over [\"map\", \"overrides\", \"fallbacks\"]\n\n(Thanks for adding BTW)",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 122,
+        "endChar": 28
+      },
+      "revId": "e778c0a0e3f6bac2fc4e9a228ef668196a572fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
