@@ -101,6 +101,22 @@ def is_packed(format_id):
     return "true" if "_PACK" in format_id else "false"
 
 
+def get_vertex_copy_function(src_format, dst_format, vk_format):
+    if "_PACK" in vk_format:
+        pack_bits = int(re.search(r'_PACK(\d+)', vk_format).group(1))
+        base_type = None
+        if pack_bits == 8:
+            base_type = 'byte'
+        elif pack_bits == 16:
+            base_type = 'short'
+        elif pack_bits == 32:
+            base_type = 'int'
+        else:
+            return 'nullptr'
+        return 'CopyNativeVertexData<GLu%s, 1, 1, 0>' % base_type
+    return angle_format.get_vertex_copy_function(src_format, dst_format)
+
+
 def gen_format_case(angle, internal_format, vk_json_data):
     vk_map = vk_json_data["map"]
     vk_overrides = vk_json_data["overrides"]
@@ -133,7 +149,7 @@ def gen_format_case(angle, internal_format, vk_json_data):
             buffer="angle::FormatID::" + format,
             vk_buffer_format=vk_map[format],
             vk_buffer_format_is_packed=is_packed(vk_map[format]),
-            vertex_load_function=angle_format.get_vertex_copy_function(angle, format),
+            vertex_load_function=get_vertex_copy_function(angle, format, vk_map[format]),
             vertex_load_converts='false' if angle == format else 'true',
         )
 
