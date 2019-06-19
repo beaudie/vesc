@@ -1761,6 +1761,20 @@ TEST_P(SimpleStateChangeTest, UpdateTextureInUse)
 {
     std::array<GLColor, 4> rgby = {{GLColor::red, GLColor::green, GLColor::blue, GLColor::yellow}};
 
+    // Set up 2D quad resources.
+    GLuint program = get2DTexturedQuadProgram();
+    glUseProgram(program);
+    ASSERT_EQ(0, glGetAttribLocation(program, "position"));
+
+    const auto &quadVerts = GetQuadVertices();
+
+    GLBuffer vbo;
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, quadVerts.size() * sizeof(quadVerts[0]), quadVerts.data(),
+                 GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    glEnableVertexAttribArray(0);
+
     GLTexture tex;
     glBindTexture(GL_TEXTURE_2D, tex);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgby.data());
@@ -1768,7 +1782,7 @@ TEST_P(SimpleStateChangeTest, UpdateTextureInUse)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     // Draw RGBY to the Framebuffer. The texture is now in-use by GL.
-    draw2DTexturedQuad(0.5f, 1.0f, true);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 
     // Update the texture to be YBGR, while the Texture is in-use. Should not affect the draw.
     std::array<GLColor, 4> ybgr = {{GLColor::yellow, GLColor::blue, GLColor::green, GLColor::red}};
@@ -1779,13 +1793,15 @@ TEST_P(SimpleStateChangeTest, UpdateTextureInUse)
     int w = getWindowWidth() - 2;
     int h = getWindowHeight() - 2;
 
+    // Note: a better test would not check readpixels (which could flush) until after the second
+    // draw.
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
     EXPECT_PIXEL_COLOR_EQ(w, 0, GLColor::green);
     EXPECT_PIXEL_COLOR_EQ(0, h, GLColor::blue);
     EXPECT_PIXEL_COLOR_EQ(w, h, GLColor::yellow);
 
     // Draw again to the Framebuffer. The second draw call should use the updated YBGR data.
-    draw2DTexturedQuad(0.5f, 1.0f, true);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
     EXPECT_PIXEL_COLOR_EQ(w, 0, GLColor::blue);
