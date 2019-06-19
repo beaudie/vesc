@@ -473,10 +473,13 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
                                           const void *indices,
                                           vk::CommandBuffer **commandBufferOut)
 {
+    ASSERT(mode != gl::PrimitiveMode::LineLoop);
+
     if (indexType != mCurrentDrawElementsType)
     {
         mDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
         mCurrentDrawElementsType = indexType;
+        setIndexBufferDirty();
     }
 
     const gl::Buffer *elementArrayBuffer = mVertexArray->getState().getElementArrayBuffer();
@@ -517,6 +520,7 @@ angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
     ANGLE_TRY(mVertexArray->handleLineLoop(this, firstVertex, vertexOrIndexCount,
                                            indexTypeOrInvalid, indices, numIndicesOut));
     mDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
+    setIndexBufferDirty();
     mCurrentDrawElementsType = indexTypeOrInvalid != gl::DrawElementsType::InvalidEnum
                                    ? indexTypeOrInvalid
                                    : gl::DrawElementsType::UnsignedInt;
