@@ -1157,7 +1157,8 @@ angle::Result TextureVk::initCubeMapRenderTargets(ContextVk *contextVk)
         // Users of the render target expect the views to directly view the desired layer, so we
         // need create a fetch view for each layer as well.
         gl::SwizzleState mappedSwizzle;
-        MapSwizzleState(mImage->getFormat(), mState.getSwizzleState(), &mappedSwizzle);
+        MapSwizzleState(mImage->getFormat(), mState.getSwizzleState(), &mappedSwizzle,
+                        contextVk->getClientMajorVersion());
         gl::TextureType arrayType = vk::Get2DTextureType(gl::kCubeFaceCount, mImage->getSamples());
         ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, mImage->getAspectFlags(),
                                              mappedSwizzle, &mLayerFetchImageView[cubeMapFaceIndex],
@@ -1393,7 +1394,8 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
     ASSERT(mImage != nullptr);
 
     gl::SwizzleState mappedSwizzle;
-    MapSwizzleState(format, mState.getSwizzleState(), &mappedSwizzle);
+    MapSwizzleState(format, mState.getSwizzleState(), &mappedSwizzle,
+                    contextVk->getClientMajorVersion());
 
     // TODO: Support non-zero base level for ES 3.0 by passing it to getNativeImageLevel.
     // http://anglebug.com/3148

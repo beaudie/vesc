@@ -150,7 +150,8 @@ size_t GetVertexInputAlignment(const vk::Format &format);
 
 void MapSwizzleState(const vk::Format &format,
                      const gl::SwizzleState &swizzleState,
-                     gl::SwizzleState *swizzleStateOut);
+                     gl::SwizzleState *swizzleStateOut,
+                     int glMajorVersion);
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_VULKAN_VK_FORMAT_UTILS_H_
