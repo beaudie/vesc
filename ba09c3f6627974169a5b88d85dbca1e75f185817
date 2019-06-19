@@ -16,6 +16,24 @@
       "revId": "ba09c3f6627974169a5b88d85dbca1e75f185817",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d22d15b_1a70480e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 782,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-19T13:27:48Z",
+      "side": 1,
+      "message": "Ok, I\u0027ll add Src/Dst but probably like this:\n\n    Memory Barrier Src: 0x? -\u003e Dst: 0x?\n\nThis is one of the longest lines in each node, and makes the \"bubble\" around the node in the visualized graph huge.",
+      "parentUuid": "135abc25_a44b57ef",
+      "revId": "ba09c3f6627974169a5b88d85dbca1e75f185817",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
