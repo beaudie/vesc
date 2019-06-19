@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "78b7d081_f44b9a52",
+        "filename": "src/libANGLE/Image.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-19T20:05:02Z",
+      "side": 1,
+      "message": "Prefixed to kTextureImage\u003cblah\u003e to make it clearer.",
+      "parentUuid": "6d1cb5d5_ec414b1c",
+      "range": {
+        "startLine": 29,
+        "startChar": 17,
+        "endLine": 29,
+        "endChar": 42
+      },
+      "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e27e2d0b_ac083b4b",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2449052a_bd4bc9c3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2048,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-19T20:05:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e27e2d0b_ac083b4b",
+      "range": {
+        "startLine": 2047,
+        "startChar": 0,
+        "endLine": 2048,
+        "endChar": 57
+      },
+      "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -118,6 +166,24 @@
     },
     {
       "key": {
+        "uuid": "31bcee94_fb9be269",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-19T20:05:02Z",
+      "side": 1,
+      "message": "Renamed the function instead.",
+      "parentUuid": "8ef4ef42_893015ac",
+      "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "72c5f4c4_7ca9614a",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 6
@@ -129,6 +195,24 @@
       "writtenOn": "2019-06-19T19:13:23Z",
       "side": 1,
       "message": "Could you get the test to fail by just removing the node breaks? Didn\u0027t the EXPECT_PIXEL_COLOR_EQ calls cause it to work either way? If so, it would be better to remove them to make sure there\u0027s a single submission that does all the work (and does it right).",
+      "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ae63ea8_c46004c9",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-19T20:05:02Z",
+      "side": 1,
+      "message": "I don\u0027t recall if I was even able to get this test to fail. Do you? Improving the test further would require a bit more work. Splitting the viewport to render to each half sequentially or  something like that. So I left it for a future implementer with a note. Is that ok?",
+      "parentUuid": "72c5f4c4_7ca9614a",
       "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
