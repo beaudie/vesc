@@ -203,6 +203,7 @@ def get_internal_format_initializer(internal_format, format_id):
 
 
 def get_vertex_copy_function(src_format, dst_format):
+
     if dst_format == "NONE":
         return "nullptr"
 
@@ -218,7 +219,11 @@ def get_vertex_copy_function(src_format, dst_format):
     sign = ''
     base_type = None
     if 'FLOAT' in src_format:
+        bits = get_bits(src_format)
+        redbits = bits and bits.get('R')
         base_type = 'float'
+        if redbits == 16:
+            base_type = 'half'
     else:
         bits = get_bits(src_format)
         redbits = bits and bits.get('R')
