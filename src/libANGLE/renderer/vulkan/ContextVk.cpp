@@ -138,12 +138,6 @@ void ApplySampleCoverage(const gl::State &glState,
 
 }  // anonymous namespace
 
-// std::array only uses aggregate init. Thus we make a helper macro to reduce on code duplication.
-#define INIT                                         \
-    {                                                \
-        kVertexBufferUsage, kDefaultBufferSize, true \
-    }
-
 // CommandBatch implementation.
 ContextVk::CommandBatch::CommandBatch() = default;
 
@@ -182,11 +176,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mClearColorMask(kAllColorChannelsMask),
       mFlipYForCurrentSurface(false),
       mIsAnyHostVisibleBufferWritten(false),
-      mDriverUniformsBuffer(VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, sizeof(DriverUniforms) * 16, true),
       mDriverUniformsDescriptorSet(VK_NULL_HANDLE),
       mDriverUniformsDynamicOffset(0),
-      mDefaultAttribBuffers{{INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT, INIT,
-                             INIT, INIT, INIT, INIT}},
       mLastCompletedQueueSerial(renderer->nextSerial()),
       mCurrentQueueSerial(renderer->nextSerial()),
       mPoolAllocator(kDefaultPoolAllocatorPageSize, 1),
@@ -223,8 +214,6 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mDirtyBits = mNewCommandBufferDirtyBits;
     mActiveTextures.fill(nullptr);
 }
-
-#undef INIT
 
 ContextVk::~ContextVk() = default;
 
@@ -297,7 +286,8 @@ angle::Result ContextVk::initialize()
 
     size_t minAlignment = static_cast<size_t>(
         mRenderer->getPhysicalDeviceProperties().limits.minUniformBufferOffsetAlignment);
-    mDriverUniformsBuffer.init(minAlignment, mRenderer);
+    mDriverUniformsBuffer.init(mRenderer, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, minAlignment,
+                               sizeof(DriverUniforms) * 16, true);
 
     // Get the descriptor set layout.
     vk::DescriptorSetLayoutDesc desc = getDriverUniformsDescriptorSetDesc();
@@ -309,7 +299,7 @@ angle::Result ContextVk::initialize()
     // Initialize current value/default attribute buffers.
     for (vk::DynamicBuffer &buffer : mDefaultAttribBuffers)
     {
-        buffer.init(1, mRenderer);
+        buffer.init(mRenderer, kVertexBufferUsage, 1, kDefaultBufferSize, true);
     }
 
     // Initialize the command pool now that we know the queue family index.
