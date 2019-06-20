@@ -82,10 +82,9 @@ void PrintResultsImpl(const std::string& measurement,
       ANDROID_LOG_INFO, "ANGLE", "%s",
       ResultsToString(measurement, modifier, trace, values, prefix, suffix, units, important)
           .c_str());
-#else
+#endif  // defined(ANDROID)
   printf("%s", ResultsToString(measurement, modifier, trace, values,
                                prefix, suffix, units, important).c_str());
-#endif  // defined(ANDROID)
   fflush(stdout);
 }
 
