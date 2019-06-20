@@ -1930,7 +1930,7 @@ angle::Result ContextVk::handleDirtyDriverUniforms(const gl::Context *context,
                                                    vk::CommandBuffer *commandBuffer)
 {
     // Release any previously retained buffers.
-    mDriverUniformsBuffer.releaseRetainedBuffers(this);
+    mDriverUniformsBuffer.releaseRetainedBuffers();
 
     const gl::Rectangle &glViewport = mState.getViewport();
     float halfRenderAreaHeight =
@@ -2402,7 +2402,7 @@ angle::Result ContextVk::updateDefaultAttribute(size_t attribIndex)
 {
     vk::DynamicBuffer &defaultBuffer = mDefaultAttribBuffers[attribIndex];
 
-    defaultBuffer.releaseRetainedBuffers(this);
+    defaultBuffer.releaseRetainedBuffers();
 
     uint8_t *ptr;
     VkBuffer bufferHandle = VK_NULL_HANDLE;
