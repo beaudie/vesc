@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "805584fa_2980e4f9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 0,
+      "message": "feels like this should stay. unless I\u0027m missing something.",
+      "range": {
+        "startLine": 1122,
+        "startChar": 0,
+        "endLine": 1125,
+        "endChar": 5
+      },
+      "revId": "cd946a034fcdc3b78bdf4215fed6abceb36d57f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

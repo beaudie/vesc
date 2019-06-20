@@ -1,0 +1,349 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4dfb40b6_704f5ef3",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "can you give this a clearer name? i.e. beforeResource or afterResource?",
+      "range": {
+        "startLine": 263,
+        "startChar": 89,
+        "endLine": 263,
+        "endChar": 93
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d05a8cd2_61c55377",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "you assign to used-\u003emCurrentWritingNode twice in this case. I don\u0027t know if you need to assign to it here. You can use a local temporary I think.",
+      "range": {
+        "startLine": 278,
+        "startChar": 8,
+        "endLine": 278,
+        "endChar": 79
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "852d81f3_7ce5add4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "maybe rephrase this as \"No buffer barrier should need to be inserted here. Buffer barriers are handled in ...\"",
+      "range": {
+        "startLine": 282,
+        "startChar": 43,
+        "endLine": 283,
+        "endChar": 98
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b1b5249_18c5aef1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "I would probably just remove this section. It\u0027s pretty clear we\u0027re chaining nodes in this code.",
+      "range": {
+        "startLine": 297,
+        "startChar": 2,
+        "endLine": 300,
+        "endChar": 62
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95e59144_4f087e7b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "I think I would take out the comment starting from \"This can be worked around..\" \n\nI think we\u0027re fine with node sharing as long as only one resource is writing at a time and the dependencies work fine. Lowers the amount of information needed to process this code section.",
+      "range": {
+        "startLine": 302,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 6
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34632bed_93741bc4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "nit: you can omit \"requested to be\"",
+      "range": {
+        "startLine": 357,
+        "startChar": 66,
+        "endLine": 357,
+        "endChar": 80
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fec9a3ec_3ff4caae",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "nit: ensureNewCommands? as you added the skip?",
+      "range": {
+        "startLine": 389,
+        "startChar": 27,
+        "endLine": 389,
+        "endChar": 43
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d86ca7eb_7f2a6176",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "I doesn\u0027t seem clear to me why unifying a disjoint set of nodes serializes commands in the nodes. Might want to shorten this to make it clearer.",
+      "range": {
+        "startLine": 140,
+        "startChar": 38,
+        "endLine": 141,
+        "endChar": 20
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3da682e1_94eeea8e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "can you make this a static helper function:\n\nAddHappensBeforeDependency(Resource *beforeResource, Resource *afterResource) ?\n\nIt\u0027s easier to reason about before/after than parent/child or this/used.",
+      "range": {
+        "startLine": 343,
+        "startChar": 9,
+        "endLine": 343,
+        "endChar": 22
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3efd8f8_1e6d1d24",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "ditto.\n\nAddHappensBeforeDependencyWithBarrier",
+      "range": {
+        "startLine": 353,
+        "startChar": 9,
+        "endLine": 353,
+        "endChar": 38
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92365b1d_91c8d010",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "maybe the queue serial should be a part of getFramebuffer?",
+      "range": {
+        "startLine": 1138,
+        "startChar": 0,
+        "endLine": 1138,
+        "endChar": 71
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79d6eece_d059217d",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1245,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "this whole function should likely be inlined in the header.",
+      "range": {
+        "startLine": 1245,
+        "startChar": 29,
+        "endLine": 1245,
+        "endChar": 52
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26ba1df3_e4dd7f8a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "you can remove this, I doubt it provides any additional safety.",
+      "range": {
+        "startLine": 1249,
+        "startChar": 4,
+        "endLine": 1249,
+        "endChar": 32
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9fd69f0_3268bc7c",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "can you try ensuring the framebuffer is initialized in FramebufferVk::syncState? Then you can omit this line. I haven\u0027t tested it.",
+      "range": {
+        "startLine": 1252,
+        "startChar": 14,
+        "endLine": 1252,
+        "endChar": 28
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f2bbfb8c_82a3e071",
+        "filename": "src/libANGLE/renderer/vulkan/README.md",
+        "patchSetId": 16
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T20:28:10Z",
+      "side": 1,
+      "message": "can you actually make this into a separate markdown file? maybe in a doc/ subdirectory or something. I might split this off into a separate CL for a faster review of the code changes. though normally it is good to update both at once.",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 24
+      },
+      "revId": "1e7975619771c4c367fa7517d04358e15f1c05e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
