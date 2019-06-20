@@ -270,6 +270,24 @@
       "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47d40ff0_7db7436a",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T13:51:40Z",
+      "side": 1,
+      "message": "I understood. Your proposal then doesn\u0027t verify the first draw succeeds. I updated the CL with a complete fix that uses the glViewport command to draw to the left and right halves of the framebuffer with the first and second draw calls. In the end I think this is the best fix. I also verified the new test fails on ToT with the finish commands calls removed in TextureVk.",
+      "parentUuid": "c7a42ee8_fa6448b1",
+      "revId": "5f28f0434149cadbb8f0889f8ba0ad7b44677fa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
