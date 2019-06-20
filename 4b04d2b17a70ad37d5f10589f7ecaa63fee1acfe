@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "553aa1ef_163b8c90",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T15:50:38Z",
+      "side": 1,
+      "message": "nit: is not valid. Custom Commandbuffers",
+      "range": {
+        "startLine": 667,
+        "startChar": 22,
+        "endLine": 667,
+        "endChar": 73
+      },
+      "revId": "4b04d2b17a70ad37d5f10589f7ecaa63fee1acfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25f8894d_6a5cd027",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T15:50:38Z",
+      "side": 1,
+      "message": "nit: is not being used.",
+      "range": {
+        "startLine": 688,
+        "startChar": 23,
+        "endLine": 688,
+        "endChar": 26
+      },
+      "revId": "4b04d2b17a70ad37d5f10589f7ecaa63fee1acfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f5377d3_0dc329dd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T15:50:38Z",
+      "side": 1,
+      "message": "return is not necessary here.",
+      "range": {
+        "startLine": 693,
+        "startChar": 4,
+        "endLine": 693,
+        "endChar": 11
+      },
+      "revId": "4b04d2b17a70ad37d5f10589f7ecaa63fee1acfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0bb4ecc_8f8b3d21",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T15:50:38Z",
+      "side": 1,
+      "message": "nit: CommandBuffers",
+      "range": {
+        "startLine": 720,
+        "startChar": 75,
+        "endLine": 720,
+        "endChar": 88
+      },
+      "revId": "4b04d2b17a70ad37d5f10589f7ecaa63fee1acfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d0b9219_c64c2c2a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 1103,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T15:50:38Z",
+      "side": 1,
+      "message": "nit: If the wait",
+      "range": {
+        "startLine": 1103,
+        "startChar": 11,
+        "endLine": 1103,
+        "endChar": 18
+      },
+      "revId": "4b04d2b17a70ad37d5f10589f7ecaa63fee1acfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93eadadb_5474164a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T15:50:38Z",
+      "side": 1,
+      "message": "nit: it will be fully cleared later by CommandPool::destroy.",
+      "range": {
+        "startLine": 1106,
+        "startChar": 70,
+        "endLine": 1107,
+        "endChar": 40
+      },
+      "revId": "4b04d2b17a70ad37d5f10589f7ecaa63fee1acfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a99dadc1_664765c4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T15:50:38Z",
+      "side": 1,
+      "message": "please move this struct before the function definitions instead of predeclaring. That would match the style guide anyway:\n\nhttps://google.github.io/styleguide/cppguide.html#Declaration_Order",
+      "range": {
+        "startLine": 501,
+        "startChar": 0,
+        "endLine": 516,
+        "endChar": 6
+      },
+      "revId": "4b04d2b17a70ad37d5f10589f7ecaa63fee1acfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81584dc7_e787ceca",
+        "filename": "src/libANGLE/renderer/vulkan/PersistentCommandPool.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-20T15:50:38Z",
+      "side": 1,
+      "message": "nit: The CommandBuffer can",
+      "range": {
+        "startLine": 77,
+        "startChar": 62,
+        "endLine": 77,
+        "endChar": 75
+      },
+      "revId": "4b04d2b17a70ad37d5f10589f7ecaa63fee1acfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
