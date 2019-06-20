@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f770a258_93db32b3",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-06-20T15:16:56Z",
+      "side": 1,
+      "message": "I\u0027m curious, why the change to a pointer from a reference?",
+      "revId": "8093400e544d33d20c0d9d2821fdb8cc00b8f7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
