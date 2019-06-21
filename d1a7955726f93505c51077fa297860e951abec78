@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0e51c44_fb5a5673",
+        "filename": "include/platform/FeaturesGL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-06-21T18:25:36Z",
+      "side": 1,
+      "message": "textute-\u003etexture",
+      "revId": "d1a7955726f93505c51077fa297860e951abec78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
