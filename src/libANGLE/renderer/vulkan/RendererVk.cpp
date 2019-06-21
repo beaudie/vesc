@@ -945,14 +945,40 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     std::sort(enabledDeviceExtensions.begin(), enabledDeviceExtensions.end(), StrLess);
     ANGLE_VK_TRY(displayVk, VerifyExtensionsPresent(deviceExtensionNames, enabledDeviceExtensions));
 
-    // Select additional features to be enabled
+    // Select additional features to be enabled.
     VkPhysicalDeviceFeatures2KHR enabledFeatures = {};
     enabledFeatures.sType                        = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
     enabledFeatures.features.independentBlend    = mPhysicalDeviceFeatures.independentBlend;
     enabledFeatures.features.robustBufferAccess  = mPhysicalDeviceFeatures.robustBufferAccess;
     enabledFeatures.features.samplerAnisotropy   = mPhysicalDeviceFeatures.samplerAnisotropy;
-    enabledFeatures.features.vertexPipelineStoresAndAtomics =
-        mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics;
+    if (!getFeatures().supportsTransformFeedbackExtension)
+    {
+        // Needed to emulate transform feedback.
+        enabledFeatures.features.vertexPipelineStoresAndAtomics =
+            mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics;
+        // TODO: refactor to "get" feature/properties of divisor and transform feedback much
+        // earlier.  Then pass the transform feedback properties to initFeatures (or better yet,
+        // just cache it like the core properties are). In initFeature, make sure the limits match
+        // the minimum of GLES, like geometryStreams should be 4 at least (I believe that matches
+        // the separate attributes transform feedback output?). The properties can also be used in
+        // vk_caps_utils probably to set the limits.
+        //
+        // Without some features, we cannot use the extension.  Like if transformFeedbackQueries is
+        // not there, we can't do xfb queries, so no point in the extesion.  Without
+        // transformFeedbackStreamsLinesTriangles, we should be ok for GLES 3.1, but not 3.2 as it
+        // wants all sorts of output from GS to be capturable.
+        //
+        // Not sure if transformFeedbackRasterizationStreamSelect and associated stuff are really
+        // relevant. AFAIU, GLES just binds the xfb buffer as a vertex array and draws from it.  How
+        // does it know how much to draw?  Vulkan has vkCmdDrawIndirectByteCountEXT as optional
+        // (transformFeedbackDraw property) but if GLES application is not using a special draw
+        // call, it would be hard to decide to use that. Still a mystery to me where the draw count
+        // comes from.  Anyway, if this function is necessary, we can't do 3.2 without it.
+        //
+        // For 3.1, we could use the CPU-calculated values for queries, draw size etc, so it could
+        // be ok if some of those features are missing.  Could be a mess to use the extension like
+        // that to support up-to-3.1 though, so may be not worth it.
+    }
     if (!vk::CommandBuffer::ExecutesInline())
     {
         enabledFeatures.features.inheritedQueries = mPhysicalDeviceFeatures.inheritedQueries;
@@ -1112,7 +1138,7 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
     gl::Version maxVersion = gl::Version(3, 0);
 
 #if ANGLE_VULKAN_CONFORMANT_CONFIGS_ONLY
-    // TODO: Disallow ES 3.0 until supported. http://crbug.com/angleproject/2950
+    // TODO: Disallow ES 3.0 until supported. http://anglebug.com/2950
     maxVersion = gl::Version(2, 0);
 #endif
 
@@ -1130,10 +1156,11 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
         maxVersion = std::max(maxVersion, gl::Version(2, 0));
     }
 
-    // If vertexPipelineStoresAndAtomics is not supported, we can't currently support transform
-    // feedback.  TODO(syoussefi): this should be conditioned to the extension not being present as
-    // well, when that code path is implemented.  http://anglebug.com/3205
-    if (!mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics)
+    // If the Vulkan transform feedback extension is not present, we use an emulation path that
+    // requires the vertexPipelineStoresAndAtomics feature.  Without the extension or this feature,
+    // we can't currently support transform feedback.
+    if (!mFeatures.supportsTransformFeedbackExtension.enabled &&
+        !mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics)
     {
         maxVersion = std::max(maxVersion, gl::Version(2, 0));
     }
@@ -1212,11 +1239,9 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
         mFeatures.supportsShaderStencilExport.enabled = true;
     }
 
-    // TODO(syoussefi): when the code path using the extension is implemented, this should be
-    // conditioned to the extension not being present as well.  http://anglebug.com/3205
-    if (mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics)
+    if (ExtensionFound(VK_EXT_TRANSFORM_FEEDBACK_EXTENSION_NAME, deviceExtensionNames))
     {
-        mFeatures.emulateTransformFeedback.enabled = true;
+        mFeatures.supportsTransformFeedbackExtension.enabled = true;
     }
 
     if (IsLinux() && IsIntel(mPhysicalDeviceProperties.vendorID))
