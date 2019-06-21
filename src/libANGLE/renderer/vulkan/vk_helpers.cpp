@@ -1232,6 +1232,28 @@ void BufferHelper::onWrite(ContextVk *contextVk, VkAccessFlags writeAccessType)
     }
 }
 
+void BufferHelper::onSelfReadWrite(ContextVk *contextVk,
+                                   VkAccessFlags readAccessType,
+                                   VkAccessFlags writeAccessType)
+{
+    finishCurrentCommands(contextVk);
+
+    if (mCurrentReadAccess || mCurrentWriteAccess)
+    {
+        addGlobalMemoryBarrier(mCurrentReadAccess | mCurrentWriteAccess,
+                               readAccessType | writeAccessType);
+    }
+
+    mCurrentReadAccess  = readAccessType;
+    mCurrentWriteAccess = writeAccessType;
+
+    bool hostVisible = mMemoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT;
+    if (hostVisible && writeAccessType != VK_ACCESS_HOST_WRITE_BIT)
+    {
+        contextVk->onHostVisibleBufferWrite();
+    }
+}
+
 angle::Result BufferHelper::copyFromBuffer(ContextVk *contextVk,
                                            const Buffer &buffer,
                                            VkAccessFlags bufferAccessType,
