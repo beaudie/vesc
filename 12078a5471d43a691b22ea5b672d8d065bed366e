@@ -22,6 +22,30 @@
       "revId": "12078a5471d43a691b22ea5b672d8d065bed366e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19802bd8_40112fb1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-21T15:14:52Z",
+      "side": 1,
+      "message": "I think it worked out to 64 bytes on Android. So 16x is about 1k, 32x is about 2k, 64x is about 4k. When you say one page is 4096 bytes, is that something that is guaranteed to be true across platforms?",
+      "parentUuid": "5503dc5d_40863e50",
+      "range": {
+        "startLine": 143,
+        "startChar": 28,
+        "endLine": 143,
+        "endChar": 50
+      },
+      "revId": "12078a5471d43a691b22ea5b672d8d065bed366e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
