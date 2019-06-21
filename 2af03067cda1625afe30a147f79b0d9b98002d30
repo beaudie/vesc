@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79fb15fe_78df3516",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-06-21T22:37:39Z",
+      "side": 1,
+      "message": "Why is SUBOPTIMAL okay here, but not for vkQueuePresentKHR?  Should be considered successful both here and there.",
+      "revId": "2af03067cda1625afe30a147f79b0d9b98002d30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46c5b82d_187ae979",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-06-21T22:37:39Z",
+      "side": 1,
+      "message": "I\u0027m guessing that changing this to a pointer will be a coding standard violation (sorry for not looking up the pointer to the coding standards).",
+      "revId": "2af03067cda1625afe30a147f79b0d9b98002d30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "040bd4e4_c0ac26f3",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-06-21T22:37:39Z",
+      "side": 1,
+      "message": "This should be like line 550, unless I\u0027m missing something.  SUBOPTIMAL should be okay.",
+      "revId": "2af03067cda1625afe30a147f79b0d9b98002d30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
