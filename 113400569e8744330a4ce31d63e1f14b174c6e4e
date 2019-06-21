@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "09a16692_054f31a3",
+        "filename": "scripts/clang-format.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-21T11:40:03Z",
+      "side": 1,
+      "message": "would it be possible to make this into a python script? you can call clang-format.bat on Windows. Also you should include a license header as do the other scripts in this folder.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 0
+      },
+      "revId": "113400569e8744330a4ce31d63e1f14b174c6e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
