@@ -46,6 +46,30 @@
       "revId": "c6bbdfbcca62c09c2b03016754286fcf80d98704",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fb7ecb6_df9c5224",
+        "filename": "src/tests/perf_tests/third_party/perf/perf_test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-21T15:42:45Z",
+      "side": 1,
+      "message": "OK, that\u0027s fine. What was the wrapper you were using? If it\u0027s the bin/run_ scripts you can pass the -vv argument to see stdout. I\u0027m not actually sure how the harness pipes stdout. It does it somehow.",
+      "parentUuid": "493dc30c_62dcc311",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 27
+      },
+      "revId": "c6bbdfbcca62c09c2b03016754286fcf80d98704",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
