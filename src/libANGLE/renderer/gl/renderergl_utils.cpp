@@ -1505,6 +1505,8 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
 
     features->limitMaxTextureSizeTo4096.enabled = IsAndroid();
     features->limitMaxMSAASamplesTo4.enabled    = IsAndroid();
+
+    features->allowClearForRobustResourceInit.enabled = IsApple();
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
