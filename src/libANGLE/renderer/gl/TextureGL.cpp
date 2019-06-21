@@ -1586,7 +1586,8 @@ angle::Result TextureGL::initializeContents(const gl::Context *context,
 
     GLenum nativeInternalFormat =
         getLevelInfo(imageIndex.getTarget(), imageIndex.getLevelIndex()).nativeInternalFormat;
-    if (nativegl::SupportsNativeRendering(functions, mState.getType(), nativeInternalFormat))
+    if (features.allowClearForRobustResourceInit.enabled &&
+        nativegl::SupportsNativeRendering(functions, mState.getType(), nativeInternalFormat))
     {
         BlitGL *blitter = GetBlitGL(context);
 
@@ -1610,6 +1611,7 @@ angle::Result TextureGL::initializeContents(const gl::Context *context,
     unpackState.alignment = 1;
     stateManager->setPixelUnpackState(unpackState);
 
+    stateManager->bindTexture(getType(), mTextureID);
     if (internalFormatInfo.compressed)
     {
         nativegl::CompressedTexSubImageFormat nativeSubImageFormat =

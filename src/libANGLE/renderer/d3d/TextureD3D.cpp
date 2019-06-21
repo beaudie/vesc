@@ -732,8 +732,9 @@ angle::Result TextureD3D::initializeContents(const gl::Context *context,
     // Fast path: can use a render target clear.
     // We don't use the fast path with the zero max lod workaround because it would introduce a race
     // between the rendertarget and the staging images.
-    if (canCreateRenderTargetForImage(index) &&
-        !mRenderer->getFeatures().zeroMaxLodWorkaround.enabled)
+    const angle::FeaturesD3D &features = mRenderer->getFeatures();
+    if (canCreateRenderTargetForImage(index) && !features.zeroMaxLodWorkaround.enabled &&
+        features.allowClearForRobustResourceInit.enabled)
     {
         ANGLE_TRY(ensureRenderTarget(context));
         ASSERT(mTexStorage);
