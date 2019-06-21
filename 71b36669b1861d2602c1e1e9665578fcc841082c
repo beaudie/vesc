@@ -105,6 +105,24 @@
       "revId": "71b36669b1861d2602c1e1e9665578fcc841082c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a17f4d45_60650e12",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-21T14:50:52Z",
+      "side": 1,
+      "message": "Oh, right. Sorry, misunderstood. We can check that out in a separate CL.",
+      "parentUuid": "4cbc2807_417f2259",
+      "revId": "71b36669b1861d2602c1e1e9665578fcc841082c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
