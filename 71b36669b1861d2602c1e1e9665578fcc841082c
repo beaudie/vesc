@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "58b22e4e_2397a088",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-21T14:42:01Z",
+      "side": 1,
+      "message": "That\u0027s ok",
+      "parentUuid": "81abc6d3_284247c6",
+      "revId": "71b36669b1861d2602c1e1e9665578fcc841082c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c77c1e13_78e3fd4a",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 3
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "Unfortunately not. This call invalidates the bind pipeline dirty bit. That will trigger a pipeline cache query. Unless we don\u0027t set the dirty bits for it.",
       "parentUuid": "c77c1e13_78e3fd4a",
+      "revId": "71b36669b1861d2602c1e1e9665578fcc841082c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4cbc2807_417f2259",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-21T14:42:01Z",
+      "side": 1,
+      "message": "This function calls invalidateCurrentPipeline() *and* sets vertex and index dirty. My question was to simply not set vertex and index dirty. The pipeline dirty parts would remain identical.",
+      "parentUuid": "e0563e45_454da244",
       "revId": "71b36669b1861d2602c1e1e9665578fcc841082c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
