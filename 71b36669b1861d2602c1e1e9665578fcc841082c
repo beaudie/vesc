@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c2aef248_fb51e3bf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-21T14:29:18Z",
+      "side": 1,
+      "message": "I think it would be worthwhile to go through the dirty bits now (rather than later) and add as many bits we can that shouldn\u0027t invalidateCurrentPipeline(). Finding at least a conservative list shouldn\u0027t be too hard.",
+      "revId": "71b36669b1861d2602c1e1e9665578fcc841082c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c77c1e13_78e3fd4a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-21T14:29:18Z",
+      "side": 1,
+      "message": "With your changes on top of mine, can you try `invalidateCurrentPipeline()` here instead? Maybe the issue you were seeing before is fixed by setting depenendencies before starting renderpass.",
+      "revId": "71b36669b1861d2602c1e1e9665578fcc841082c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
