@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "714a31e6_fad791f9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-21T23:58:17Z",
+      "side": 1,
+      "message": "SUBOPTIMAL is ok here as a bit of a compromise.   We can\u0027t recreate the image here, because we don\u0027t have enough information available at this point; in particular, we don\u0027t have a ContextVk here which is required by recreateSwapchain().   However, we can still display a SUBOPTIMAL image and then the next present() will recreate the swapchain, so it should all resolve itself pretty quickly since this is just initialization code.\n\nGeoff and I spent a lot of time trying to be able to call recreateSwapchain() here, without any luck:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1632424",
+      "parentUuid": "79fb15fe_78df3516",
+      "revId": "2af03067cda1625afe30a147f79b0d9b98002d30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46c5b82d_187ae979",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 8
@@ -47,6 +65,24 @@
       "writtenOn": "2019-06-21T22:37:39Z",
       "side": 1,
       "message": "This should be like line 550, unless I\u0027m missing something.  SUBOPTIMAL should be okay.",
+      "revId": "2af03067cda1625afe30a147f79b0d9b98002d30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f202db60_5b810177",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 972,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-21T23:58:17Z",
+      "side": 1,
+      "message": "As the comment indicates, see anglebug.com/3502.\n\nBoth present and acquireNextImage will return SUBOPTIMAL until we pre-rotate the image, if the display is rotated (e.g., landscape mode).   This is a relatively recent change to shift the work to the driver and reduce the workload on the display engine.\n\nWe were initially recreating the swapchain for SUBOPTIMAL as well, but that was creating visual artifacts whenever an app was displaying in landscape mode.   Ignoring SUBOPTIMAL and not recreating the swapchain is a temporary workaround until the full fix for 3502 (pre-rotating the image in ANGLE) is implemented, since we don\u0027t want to rely on the display engine handling rotation for us forever.   This work belongs in ANGLE, since OpenGL drivers are expected to handle this already without the app knowing.",
+      "parentUuid": "040bd4e4_c0ac26f3",
       "revId": "2af03067cda1625afe30a147f79b0d9b98002d30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
