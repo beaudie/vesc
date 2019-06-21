@@ -34,6 +34,24 @@
       "revId": "8093400e544d33d20c0d9d2821fdb8cc00b8f7d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b07bc2d8_cb80e065",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-06-21T17:07:02Z",
+      "side": 1,
+      "message": "This is ANGLE code, uses somewhat different style:\nhttps://github.com/google/angle/blob/master/doc/CodingStandard.md\n\nIn this case I believe the following applies:\n{DEV} all parameters passed by reference, except for STL containers (e.g. std::vector, std::list), must be labeled const. For return parameters other than STL containers, use a pointer.\n\nOkay, it says for return parameters use a pointer.",
+      "parentUuid": "d24a5e2d_e647f092",
+      "revId": "8093400e544d33d20c0d9d2821fdb8cc00b8f7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
