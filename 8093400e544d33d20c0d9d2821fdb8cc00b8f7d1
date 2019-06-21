@@ -16,6 +16,24 @@
       "revId": "8093400e544d33d20c0d9d2821fdb8cc00b8f7d1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d24a5e2d_e647f092",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-21T16:51:11Z",
+      "side": 1,
+      "message": "Hmm, because the google code style seems not to encourage using non-const reference. I am change this part of code, so modified it at the same time.",
+      "parentUuid": "f770a258_93db32b3",
+      "revId": "8093400e544d33d20c0d9d2821fdb8cc00b8f7d1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
