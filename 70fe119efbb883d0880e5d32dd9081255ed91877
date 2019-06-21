@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5bc1c142_f98ec846",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-21T18:56:01Z",
+      "side": 1,
+      "message": "Hm, this looks a little awkward.   In one case you set the dependencies and then recordCommands(), but in the other it\u0027s the opposite ordering.   It looks like this is because of the finishCurrentCommands() call within onSelfReadWrite(), which recordCommands() could also do if the right conditions are met.\n\nDo we expect that finishCurrentCommands() could be missed so it\u0027s required within onSelfReadWrite().   Or, with finishCurrentCommands() inside onSelfReadWrite(), could multiple finishCurrentCommands() could be performed?",
+      "revId": "70fe119efbb883d0880e5d32dd9081255ed91877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "829acd74_58f16572",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-06-21T18:56:01Z",
+      "side": 1,
+      "message": "For my own understanding, why isn\u0027t the hostVisible stuff that onWrite() does necessary here also?   Couldn\u0027t the buffer that\u0027s doing an internal copy also be host visible, or do we expect that to be handled by something else?",
+      "revId": "70fe119efbb883d0880e5d32dd9081255ed91877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
