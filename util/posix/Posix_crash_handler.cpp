@@ -107,7 +107,7 @@ void PrintStackBacktrace()
         Dl_info info;
         if (dladdr(stack[i], &info) && info.dli_sname)
         {
-            char demangled[256];
+            char demangled[4096];
             size_t len = ArraySize(demangled);
             int ok;
 
