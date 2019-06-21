@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "91a133f1_8fdd5fdd",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-21T19:38:32Z",
+      "side": 1,
+      "message": "The current graph API _is_ awkward. Setting global memory barriers always prepends the barrier to whatever node is current (with no regards to whether that\u0027s correct). `recordCommands` is oblivious to memory barrier.",
+      "parentUuid": "5bc1c142_f98ec846",
+      "revId": "70fe119efbb883d0880e5d32dd9081255ed91877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "829acd74_58f16572",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "70fe119efbb883d0880e5d32dd9081255ed91877",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d02a286_de0ae85a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-21T19:38:32Z",
+      "side": 1,
+      "message": "Oops, it is, I missed it!",
+      "parentUuid": "829acd74_58f16572",
+      "revId": "70fe119efbb883d0880e5d32dd9081255ed91877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
