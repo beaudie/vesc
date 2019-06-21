@@ -22,6 +22,30 @@
       "revId": "113400569e8744330a4ce31d63e1f14b174c6e4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b384e11_9f4080c1",
+        "filename": "scripts/clang-format.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-21T17:53:49Z",
+      "side": 1,
+      "message": "License added. \n\nI think the easiest way may be have both clang_format.sh and clang_format.bat, use python to handle cross-platform and call the corresponding script. I didn\u0027t use bad much, can not think of some \u0027windows alternative\u0027 for \u0027find\u0027 and \u0027grep\u0027, can we just leave a TODO for windows temporarily? :D",
+      "parentUuid": "09a16692_054f31a3",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 0
+      },
+      "revId": "113400569e8744330a4ce31d63e1f14b174c6e4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
