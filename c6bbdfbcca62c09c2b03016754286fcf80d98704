@@ -22,6 +22,30 @@
       "revId": "c6bbdfbcca62c09c2b03016754286fcf80d98704",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "493dc30c_62dcc311",
+        "filename": "src/tests/perf_tests/third_party/perf/perf_test.cc",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-21T13:58:18Z",
+      "side": 1,
+      "message": "When I run via run_angle_white_box_perftests wrapper I don\u0027t get results to STDOUT. I believe that\u0027s why I added the logcat output in the first place and noted need for logcat in instructions to vendors and comment here: https://cs.chromium.org/chromium/src/third_party/angle/src/tests/perf_tests/VulkanCommandBufferPerf.cpp?g\u003d0\u0026l\u003d9\n\nIf there\u0027s a better way to run these so that I can get output on STDOUT I\u0027m happy to remove logcat output but right now that\u0027s how I get results w/ wrapper script.",
+      "parentUuid": "5e2068ce_4bf6cb84",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 27
+      },
+      "revId": "c6bbdfbcca62c09c2b03016754286fcf80d98704",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
