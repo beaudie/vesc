@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "627744df_52e2dcf6",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-22T17:15:06Z",
+      "side": 1,
+      "message": "Is it fixed point that\u0027s not supported or integer?",
+      "range": {
+        "startLine": 561,
+        "startChar": 21,
+        "endLine": 561,
+        "endChar": 32
+      },
+      "revId": "023de50c1f5200ad1851c3e41f7cf1f607ee8292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10ad6223_437fd9fd",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2074,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-22T17:15:06Z",
+      "side": 1,
+      "message": "Would be great to try this too!",
+      "range": {
+        "startLine": 2074,
+        "startChar": 23,
+        "endLine": 2074,
+        "endChar": 49
+      },
+      "revId": "023de50c1f5200ad1851c3e41f7cf1f607ee8292",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
