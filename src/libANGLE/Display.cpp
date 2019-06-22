@@ -28,6 +28,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Device.h"
 #include "libANGLE/EGLSync.h"
+#include "libANGLE/FrameCapture.h"
 #include "libANGLE/Image.h"
 #include "libANGLE/ResourceManager.h"
 #include "libANGLE/Stream.h"
@@ -447,7 +448,7 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
       mBlobCache(gl::kDefaultMaxProgramCacheMemoryBytes),
       mMemoryProgramCache(mBlobCache),
       mGlobalTextureShareGroupUsers(0),
-      mFeatures()
+      mFrameCapture(new angle::FrameCapture)
 {}
 
 Display::~Display()
@@ -1349,7 +1350,7 @@ void Display::initVendorString()
 void Display::initializeFrontendFeatures()
 {
     // Enable on all Impls
-    mFrontendFeatures.loseContextOnOutOfMemory.enabled = true;
+    mFrontendFeatures.loseContextOnOutOfMemory.enabled          = true;
     mFrontendFeatures.scalarizeVecAndMatConstructorArgs.enabled = true;
 
     mImplementation->initializeFrontendFeatures(&mFrontendFeatures);
@@ -1524,4 +1525,9 @@ EGLAttrib Display::queryAttrib(const EGLint attribute)
     return value;
 }
 
+void Display::onPostSwap() const
+{
+    // Dump frame capture if enabled.
+    mFrameCapture->onEndFrame();
+}
 }  // namespace egl
