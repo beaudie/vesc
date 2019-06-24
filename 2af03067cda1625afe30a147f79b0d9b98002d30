@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "be365952_7108139e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-06-24T15:38:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "714a31e6_fad791f9",
+      "revId": "2af03067cda1625afe30a147f79b0d9b98002d30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "46c5b82d_187ae979",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 8
