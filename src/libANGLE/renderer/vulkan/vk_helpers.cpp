@@ -9,6 +9,7 @@
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 #include "common/utilities.h"
+#include "image_util/loadimage.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/renderer_utils.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
@@ -2081,6 +2082,7 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
 
     size_t outputRowPitch;
     size_t outputDepthPitch;
+    size_t stencilAllocationSize = 0;
     uint32_t bufferRowLength;
     uint32_t bufferImageHeight;
 
@@ -2119,13 +2121,20 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
 
         bufferRowLength   = extents.width;
         bufferImageHeight = extents.height;
+
+        if (storageFormat.depthBits > 0 && storageFormat.stencilBits > 0 &&
+            formatInfo.type == GL_UNSIGNED_INT_24_8_OES)
+        {
+            // Note: Stencil is always one byte
+            stencilAllocationSize = extents.width * extents.height * extents.depth;
+        }
     }
 
     VkBuffer bufferHandle = VK_NULL_HANDLE;
 
     uint8_t *stagingPointer    = nullptr;
     VkDeviceSize stagingOffset = 0;
-    size_t allocationSize      = outputDepthPitch * extents.depth;
+    size_t allocationSize      = outputDepthPitch * extents.depth + stencilAllocationSize;
     ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
                                       &stagingOffset, nullptr));
 
@@ -2149,13 +2158,42 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     gl_vk::GetOffset(offset, &copy.imageOffset);
     gl_vk::GetExtent(extents, &copy.imageExtent);
 
-    // TODO: http://anglebug.com/3437 - need to split packed depth_stencil into
-    // staging buffers for upload.
-    // Ignore stencil for now.
-    if (aspectFlags & VK_IMAGE_ASPECT_STENCIL_BIT)
+    if (stencilAllocationSize > 0)
     {
-        aspectFlags &= ~VK_IMAGE_ASPECT_STENCIL_BIT;
+        // Note: Stencil is always one byte
+        ASSERT((aspectFlags & VK_IMAGE_ASPECT_STENCIL_BIT) != 0);
+
+        // Skip over depth data.
+        stagingPointer += outputDepthPitch * extents.depth;
+        stagingOffset += outputDepthPitch * extents.depth;
+
+        // recompute pitch for stencil data
+        outputRowPitch   = extents.width;
+        outputDepthPitch = outputRowPitch * extents.height;
+
+        angle::LoadX24S8ToS8(extents.width, extents.height, extents.depth, source, inputRowPitch,
+                             inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
+
+        VkBufferImageCopy stencilCopy = {};
+
+        stencilCopy.bufferOffset                    = stagingOffset;
+        stencilCopy.bufferRowLength                 = bufferRowLength;
+        stencilCopy.bufferImageHeight               = bufferImageHeight;
+        stencilCopy.imageSubresource.mipLevel       = index.getLevelIndex();
+        stencilCopy.imageSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;
+        stencilCopy.imageSubresource.layerCount     = index.getLayerCount();
+
+        gl_vk::GetOffset(offset, &stencilCopy.imageOffset);
+        gl_vk::GetExtent(extents, &stencilCopy.imageExtent);
+        stencilCopy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+        mSubresourceUpdates.emplace_back(bufferHandle, stencilCopy);
     }
+
+    // If there was a stencil component we've transfered that above
+    // otherwise we could have a format with stencil where we aren't
+    // using the stencil bits. In either case, need to clear the
+    // stencil aspect
+    aspectFlags &= ~VK_IMAGE_ASPECT_STENCIL_BIT;
 
     if (aspectFlags)
     {
