@@ -635,6 +635,77 @@ TEST_P(DepthStencilFormatsTestES3, DrawWithLargeViewport)
     }
 }
 
+// Verify that stencil component of depth texture is uploaded
+TEST_P(DepthStencilFormatsTest, VerifyStencilData)
+{
+    bool shouldHaveTextureSupport = (IsGLExtensionEnabled("GL_OES_packed_depth_stencil") &&
+                                     IsGLExtensionEnabled("GL_OES_depth_texture"));
+
+    ANGLE_SKIP_TEST_IF(!shouldHaveTextureSupport ||
+                       !checkTexImageFormatSupport(GL_DEPTH_STENCIL_OES, GL_UNSIGNED_INT_24_8_OES));
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+
+    glEnable(GL_STENCIL_TEST);
+    glDisable(GL_DEPTH_TEST);
+
+    glViewport(0, 0, getWindowWidth(), getWindowHeight());
+    glClearColor(0, 0, 0, 1);
+
+    // Create offscreen fbo and its color attachment and depth stencil attachment.
+    GLTexture framebufferColorTexture;
+    glBindTexture(GL_TEXTURE_2D, framebufferColorTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWindowWidth(), getWindowHeight(), 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    std::vector<GLuint> depthStencilData(getWindowWidth() * getWindowHeight(), 0x000000A9);
+    GLTexture framebufferStencilTexture;
+    glBindTexture(GL_TEXTURE_2D, framebufferStencilTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_STENCIL, getWindowWidth(), getWindowHeight(), 0,
+                 GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8_OES, depthStencilData.data());
+    ASSERT_GL_NO_ERROR();
+
+    GLFramebuffer fb;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                           framebufferColorTexture, 0);
+
+    if (getClientMajorVersion() >= 3)
+    {
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D,
+                               framebufferStencilTexture, 0);
+        EXPECT_GL_NO_ERROR();
+    }
+    else
+    {
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
+                               framebufferStencilTexture, 0);
+        EXPECT_GL_NO_ERROR();
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_TEXTURE_2D,
+                               framebufferStencilTexture, 0);
+        EXPECT_GL_NO_ERROR();
+    }
+
+    EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    ASSERT_GL_NO_ERROR();
+
+    GLint kStencilRef = 0xA9;
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+    glStencilFunc(GL_EQUAL, kStencilRef, 0xFF);
+
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fb);
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    drawQuad(program.get(), essl1_shaders::PositionAttrib(), 0.0f);
+    ASSERT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fb);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    ASSERT_GL_NO_ERROR();
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(DepthStencilFormatsTest,

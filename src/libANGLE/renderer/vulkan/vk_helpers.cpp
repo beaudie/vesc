@@ -1937,6 +1937,35 @@ void ImageHelper::removeStagedUpdates(ContextVk *contextVk, const gl::ImageIndex
     }
 }
 
+// TODO: Temporary, I think this should be part of loadimage.cpp just
+// need to figure out how to pull it out since D24S8 format now grabs a depth-only
+// load function which is appropriate as Vulkan can't upload packed depth-stencil
+void LoadD24S8ToS8(size_t width,
+                   size_t height,
+                   size_t depth,
+                   const uint8_t *input,
+                   size_t inputRowPitch,
+                   size_t inputDepthPitch,
+                   uint8_t *output,
+                   size_t outputRowPitch,
+                   size_t outputDepthPitch)
+{
+    for (size_t z = 0; z < depth; z++)
+    {
+        for (size_t y = 0; y < height; y++)
+        {
+            const uint32_t *source = reinterpret_cast<const uint32_t *>(
+                input + (y * inputRowPitch) + (z * inputDepthPitch));
+            uint8_t *destStencil =
+                reinterpret_cast<uint8_t *>(output + (y * outputRowPitch) + (z * outputDepthPitch));
+            for (size_t x = 0; x < width; x++)
+            {
+                destStencil[x] = (source[x] & 0xFF);
+            }
+        }
+    }
+}
+
 angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
                                                   const gl::ImageIndex &index,
                                                   const gl::Extents &extents,
@@ -1968,6 +1997,7 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
 
     size_t outputRowPitch;
     size_t outputDepthPitch;
+    size_t stencilAllocationSize = 0;
     uint32_t bufferRowLength;
     uint32_t bufferImageHeight;
 
@@ -2006,13 +2036,21 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
 
         bufferRowLength   = extents.width;
         bufferImageHeight = extents.height;
+
+        if (formatInfo.format == GL_DEPTH_STENCIL_OES)
+        {
+            // Note: Stencil is always one byte
+            ASSERT(formatInfo.type == GL_UNSIGNED_INT_24_8_OES);
+
+            stencilAllocationSize = extents.width * extents.height * extents.depth;
+        }
     }
 
     VkBuffer bufferHandle = VK_NULL_HANDLE;
 
     uint8_t *stagingPointer    = nullptr;
     VkDeviceSize stagingOffset = 0;
-    size_t allocationSize      = outputDepthPitch * extents.depth;
+    size_t allocationSize      = outputDepthPitch * extents.depth + stencilAllocationSize;
     ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
                                       &stagingOffset, nullptr));
 
@@ -2039,8 +2077,32 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     // TODO: http://anglebug.com/3437 - need to split packed depth_stencil into
     // staging buffers for upload.
     // Ignore stencil for now.
-    if (aspectFlags & VK_IMAGE_ASPECT_STENCIL_BIT)
+    if (formatInfo.format == GL_DEPTH_STENCIL_OES)
     {
+        // Note: Stencil is always one byte
+        ASSERT((aspectFlags & VK_IMAGE_ASPECT_STENCIL_BIT) != 0);
+        ASSERT(formatInfo.type == GL_UNSIGNED_INT_24_8_OES);
+        outputRowPitch   = extents.width;
+        outputDepthPitch = outputRowPitch * extents.height;
+
+        stagingPointer += outputDepthPitch * extents.depth;
+        LoadD24S8ToS8(extents.width, extents.height, extents.depth, source, inputRowPitch,
+                      inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
+
+        VkBufferImageCopy stencilCopy = {};
+
+        stencilCopy.bufferOffset                    = outputDepthPitch * extents.depth;
+        stencilCopy.bufferRowLength                 = bufferRowLength;
+        stencilCopy.bufferImageHeight               = bufferImageHeight;
+        stencilCopy.imageSubresource.mipLevel       = index.getLevelIndex();
+        stencilCopy.imageSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;
+        stencilCopy.imageSubresource.layerCount     = index.getLayerCount();
+
+        gl_vk::GetOffset(offset, &stencilCopy.imageOffset);
+        gl_vk::GetExtent(extents, &stencilCopy.imageExtent);
+        stencilCopy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+        mSubresourceUpdates.emplace_back(bufferHandle, stencilCopy);
+
         aspectFlags &= ~VK_IMAGE_ASPECT_STENCIL_BIT;
     }
 
