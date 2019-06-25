@@ -998,6 +998,8 @@ ProgramState::ProgramState()
       mDrawIDLocation(-1),
       mBaseVertexLocation(-1),
       mBaseInstanceLocation(-1),
+      mCachedBaseVertex(0),
+      mCachedBaseInstance(0),
       mActiveSamplerRefCounts{}
 {
     mComputeShaderLocalSize.fill(1);
@@ -2937,6 +2939,11 @@ void Program::setBaseVertexUniform(GLint baseVertex)
 {
     ASSERT(mLinkResolved);
     ASSERT(mState.mBaseVertexLocation >= 0);
+    if (baseVertex == mState.mCachedBaseVertex)
+    {
+        return;
+    }
+    mState.mCachedBaseVertex = baseVertex;
     mProgram->setUniform1iv(mState.mBaseVertexLocation, 1, &baseVertex);
 }
 
@@ -2950,6 +2957,11 @@ void Program::setBaseInstanceUniform(GLuint baseInstance)
 {
     ASSERT(mLinkResolved);
     ASSERT(mState.mBaseInstanceLocation >= 0);
+    if (baseInstance == mState.mCachedBaseInstance)
+    {
+        return;
+    }
+    mState.mCachedBaseInstance = baseInstance;
     GLint baseInstanceInt = baseInstance;
     mProgram->setUniform1iv(mState.mBaseInstanceLocation, 1, &baseInstanceInt);
 }

@@ -5652,6 +5652,12 @@ void Context::drawArraysInstancedBaseInstance(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(mImplementation->drawArraysInstancedBaseInstance(
         this, mode, first, count, instanceCount, baseInstance));
     MarkTransformFeedbackBufferUsage(this, count, 1);
+
+    // Reset emulated uniforms to zero to avoid affecting other draw calls
+    if (hasBaseInstance)
+    {
+        programObject->setBaseInstanceUniform(0);
+    }
 }
 
 void Context::drawElementsInstancedBaseVertexBaseInstance(PrimitiveMode mode,
@@ -5684,6 +5690,16 @@ void Context::drawElementsInstancedBaseVertexBaseInstance(PrimitiveMode mode,
 
     ANGLE_CONTEXT_TRY(mImplementation->drawElementsInstancedBaseVertexBaseInstance(
         this, mode, count, type, indices, instanceCounts, baseVertex, baseInstance));
+
+    // Reset emulated uniforms to zero to avoid affecting other draw calls
+    if (hasBaseVertex)
+    {
+        programObject->setBaseVertexUniform(0);
+    }
+    if (hasBaseInstance)
+    {
+        programObject->setBaseInstanceUniform(0);
+    }
 }
 
 #define SET_DRAW_ID_UNIFORM_0(drawID) \
@@ -5760,6 +5776,12 @@ void Context::multiDrawArraysInstancedBaseInstance(PrimitiveMode mode,
     {
         MULTI_DRAW_ARRAYS_BLOCK(0, 0)
     }
+
+    // Reset emulated uniforms to zero to avoid affecting other draw calls
+    if (hasBaseInstance)
+    {
+        programObject->setBaseInstanceUniform(0);
+    }
 }
 
 void Context::multiDrawElementsInstancedBaseVertexBaseInstance(PrimitiveMode mode,
@@ -5826,6 +5848,16 @@ void Context::multiDrawElementsInstancedBaseVertexBaseInstance(PrimitiveMode mod
                 MULTI_DRAW_ELEMENTS_BLOCK(0, 0, 0)
             }
         }
+    }
+
+    // Reset emulated uniforms to zero to avoid affecting other draw calls
+    if (hasBaseVertex)
+    {
+        programObject->setBaseVertexUniform(0);
+    }
+    if (hasBaseInstance)
+    {
+        programObject->setBaseInstanceUniform(0);
     }
 }
 
