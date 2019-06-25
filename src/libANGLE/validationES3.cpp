@@ -3226,6 +3226,154 @@ bool ValidateMultiDrawElementsInstancedANGLE(Context *context,
     return true;
 }
 
+bool ValidateDrawArraysInstancedBaseInstanceANGLE(Context *context,
+                                                  PrimitiveMode mode,
+                                                  GLint first,
+                                                  GLsizei count,
+                                                  GLsizei instanceCount,
+                                                  GLuint baseInstance)
+{
+    if (!context->getExtensions().baseVertexBaseInstance)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+    if (context->getClientMajorVersion() < 3)
+    {
+        if (!context->getExtensions().instancedArraysAny())
+        {
+            context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+            return false;
+        }
+        if (!ValidateDrawInstancedANGLE(context))
+        {
+            return false;
+        }
+    }
+
+    if (!ValidateDrawArraysInstancedBase(context, mode, first, count, instanceCount))
+    {
+        return false;
+    }
+
+    // TODO: validate baseInstance (if there should be any)
+
+    return true;
+}
+
+bool ValidateDrawElementsInstancedBaseVertexBaseInstanceANGLE(Context *context,
+                                                              PrimitiveMode mode,
+                                                              GLsizei count,
+                                                              DrawElementsType type,
+                                                              const GLvoid *indices,
+                                                              GLsizei instanceCounts,
+                                                              GLint baseVertex,
+                                                              GLuint baseInstance)
+{
+    if (!context->getExtensions().baseVertexBaseInstance)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+    if (context->getClientMajorVersion() < 3)
+    {
+        if (!context->getExtensions().instancedArraysAny())
+        {
+            context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+            return false;
+        }
+        if (!ValidateDrawInstancedANGLE(context))
+        {
+            return false;
+        }
+    }
+
+    if (!ValidateDrawElementsInstancedBase(context, mode, count, type, indices, instanceCounts))
+    {
+        return false;
+    }
+
+    // TODO: validate baseVertex and baseInstance (if there should any)
+
+    return true;
+}
+
+bool ValidateMultiDrawArraysInstancedBaseInstanceANGLE(Context *context,
+                                                       PrimitiveMode mode,
+                                                       GLsizei drawcount,
+                                                       const GLsizei *counts,
+                                                       const GLsizei *instanceCounts,
+                                                       const GLint *firsts,
+                                                       const GLuint *baseInstances)
+{
+    if (!context->getExtensions().multiDraw)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+    if (context->getClientMajorVersion() < 3)
+    {
+        if (!context->getExtensions().instancedArraysAny())
+        {
+            context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+            return false;
+        }
+        if (!ValidateDrawInstancedANGLE(context))
+        {
+            return false;
+        }
+    }
+    for (GLsizei drawID = 0; drawID < drawcount; ++drawID)
+    {
+        if (!ValidateDrawArraysInstancedBase(context, mode, firsts[drawID], counts[drawID],
+                                             instanceCounts[drawID]))
+        {
+            return false;
+        }
+    }
+    // TODO: validate baseInstance (if there should any)
+    return true;
+}
+
+bool ValidateMultiDrawElementsInstancedBaseVertexBaseInstanceANGLE(Context *context,
+                                                                   PrimitiveMode mode,
+                                                                   DrawElementsType type,
+                                                                   GLsizei drawcount,
+                                                                   const GLsizei *counts,
+                                                                   const GLsizei *instanceCounts,
+                                                                   const GLvoid *const *indices,
+                                                                   const GLint *baseVertices,
+                                                                   const GLuint *baseInstances)
+{
+    if (!context->getExtensions().multiDraw)
+    {
+        context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+    if (context->getClientMajorVersion() < 3)
+    {
+        if (!context->getExtensions().instancedArraysAny())
+        {
+            context->validationError(GL_INVALID_OPERATION, kExtensionNotEnabled);
+            return false;
+        }
+        if (!ValidateDrawInstancedANGLE(context))
+        {
+            return false;
+        }
+    }
+    for (GLsizei drawID = 0; drawID < drawcount; ++drawID)
+    {
+        if (!ValidateDrawElementsInstancedBase(context, mode, counts[drawID], type, indices[drawID],
+                                               instanceCounts[drawID]))
+        {
+            return false;
+        }
+    }
+    // TODO: validate baseVertex and baseInstance (if there should any)
+    return true;
+}
+
 bool ValidateFramebufferTextureMultiviewOVR(Context *context,
                                             GLenum target,
                                             GLenum attachment,
