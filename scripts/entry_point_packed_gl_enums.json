@@ -150,6 +150,9 @@
     "glDrawArraysInstanced": {
         "mode": "PrimitiveMode"
     },
+    "glDrawArraysInstancedBaseInstance": {
+        "mode": "PrimitiveMode"
+    },
     "glDrawElements": {
         "mode": "PrimitiveMode",
         "type": "DrawElementsType"
@@ -159,6 +162,10 @@
         "type": "DrawElementsType"
     },
     "glDrawElementsInstanced": {
+        "mode": "PrimitiveMode",
+        "type": "DrawElementsType"
+    },
+    "glDrawElementsInstancedBaseVertexBaseInstance": {
         "mode": "PrimitiveMode",
         "type": "DrawElementsType"
     },
@@ -386,6 +393,9 @@
     "glMultiDrawArraysInstanced": {
         "mode": "PrimitiveMode"
     },
+    "glMultiDrawArraysInstancedBaseInstance": {
+        "mode": "PrimitiveMode"
+    },
     "glMultiDrawElements": {
         "mode": "PrimitiveMode",
         "type": "DrawElementsType"
@@ -411,6 +421,10 @@
     },
     "glNamedRenderbufferStorageMultisample": {
         "renderbuffer": "RenderbufferID"
+    },
+    "glMultiDrawElementsInstancedBaseVertexBaseInstance": {
+        "mode": "PrimitiveMode",
+        "type": "DrawElementsType"
     },
     "glNormalPointer": {
         "type": "VertexAttribType"
