@@ -962,6 +962,8 @@ ProgramState::ProgramState()
       mGeometryShaderInvocations(1),
       mGeometryShaderMaxVertices(0),
       mDrawIDLocation(-1),
+      mBaseVertexLocation(-1),
+      mBaseInstanceLocation(-1),
       mActiveSamplerRefCounts{}
 {
     mComputeShaderLocalSize.fill(1);
@@ -1426,12 +1428,12 @@ angle::Result Program::link(const Context *context)
     }
 
     mLinkingState.reset(new LinkingState());
-    mLinkingState->context     = context;
+    mLinkingState->context           = context;
     mLinkingState->linkingFromBinary = false;
-    mLinkingState->programHash = programHash;
-    mLinkingState->linkEvent   = mProgram->link(context, *resources, mInfoLog);
-    mLinkingState->resources   = std::move(resources);
-    mLinkResolved              = false;
+    mLinkingState->programHash       = programHash;
+    mLinkingState->linkEvent         = mProgram->link(context, *resources, mInfoLog);
+    mLinkingState->resources         = std::move(resources);
+    mLinkResolved                    = false;
 
     return angle::Result::Continue;
 }
@@ -1447,8 +1449,8 @@ void Program::resolveLinkImpl(const Context *context)
 
     angle::Result result = mLinkingState->linkEvent->wait(context);
 
-    mLinked           = result == angle::Result::Continue;
-    mLinkResolved     = true;
+    mLinked                                    = result == angle::Result::Continue;
+    mLinkResolved                              = true;
     std::unique_ptr<LinkingState> linkingState = std::move(mLinkingState);
     if (!mLinked)
     {
@@ -1602,6 +1604,8 @@ void Program::unlink()
     mState.mGeometryShaderInvocations         = 1;
     mState.mGeometryShaderMaxVertices         = 0;
     mState.mDrawIDLocation                    = -1;
+    mState.mBaseVertexLocation                = -1;
+    mState.mBaseInstanceLocation              = -1;
 
     mValidated = false;
 
@@ -2867,6 +2871,33 @@ void Program::setDrawIDUniform(GLint drawid)
     mProgram->setUniform1iv(mState.mDrawIDLocation, 1, &drawid);
 }
 
+bool Program::hasBaseVertexUniform() const
+{
+    ASSERT(mLinkResolved);
+    return mState.mBaseVertexLocation >= 0;
+}
+
+void Program::setBaseVertexUniform(GLint baseVertex)
+{
+    ASSERT(mLinkResolved);
+    ASSERT(mState.mBaseVertexLocation >= 0);
+    mProgram->setUniform1iv(mState.mBaseVertexLocation, 1, &baseVertex);
+}
+
+bool Program::hasBaseInstanceUniform() const
+{
+    ASSERT(mLinkResolved);
+    return mState.mBaseInstanceLocation >= 0;
+}
+
+void Program::setBaseInstanceUniform(GLuint baseInstance)
+{
+    ASSERT(mLinkResolved);
+    ASSERT(mState.mBaseInstanceLocation >= 0);
+    GLint baseInstanceInt = baseInstance;
+    mProgram->setUniform1iv(mState.mBaseInstanceLocation, 1, &baseInstanceInt);
+}
+
 bool Program::linkVaryings(InfoLog &infoLog) const
 {
     Shader *previousShader = nullptr;
@@ -4016,7 +4047,7 @@ bool Program::linkOutputVariables(const Caps &caps,
 
         // GLSL ES 3.10 section 4.3.6: Output variables cannot be arrays of arrays or arrays of
         // structures, so we may use getBasicTypeElementCount().
-        unsigned int elementCount          = outputVariable.getBasicTypeElementCount();
+        unsigned int elementCount = outputVariable.getBasicTypeElementCount();
         if (FindUsedOutputLocation(outputLocations, baseLocation, elementCount, reservedLocations,
                                    outputVariableIndex))
         {
@@ -4803,6 +4834,12 @@ void Program::postResolveLink(const gl::Context *context)
     if (context->getExtensions().multiDraw)
     {
         mState.mDrawIDLocation = getUniformLocation("gl_DrawID");
+    }
+
+    if (context->getExtensions().baseVertexBaseInstance)
+    {
+        mState.mBaseVertexLocation   = getUniformLocation("gl_BaseVertex");
+        mState.mBaseInstanceLocation = getUniformLocation("gl_BaseInstance");
     }
 }
 

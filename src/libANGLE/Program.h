@@ -465,6 +465,11 @@ class ProgramState final : angle::NonCopyable
     // GL_ANGLE_multi_draw
     int mDrawIDLocation;
 
+    // GL_ANGLE_base_vertex_base_instance
+    int mBaseVertexLocation;
+    int mBaseInstanceLocation;
+    // int mInstanceIDLocation;
+
     // The size of the data written to each transform feedback buffer per vertex.
     std::vector<GLsizei> mTransformFeedbackStrides;
 
@@ -763,6 +768,11 @@ class Program final : angle::NonCopyable, public LabeledObject
     bool hasDrawIDUniform() const;
     void setDrawIDUniform(GLint drawid);
 
+    bool hasBaseVertexUniform() const;
+    void setBaseVertexUniform(GLint baseVertex);
+    bool hasBaseInstanceUniform() const;
+    void setBaseInstanceUniform(GLuint baseInstance);
+
     ANGLE_INLINE void addRef()
     {
         ASSERT(mLinkResolved);
@@ -896,7 +906,6 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     // Writes a program's binary to the output memory buffer.
     void serialize(const Context *context, angle::MemoryBuffer *binaryOut) const;
-
 
   private:
     struct LinkingState;

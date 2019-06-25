@@ -532,9 +532,10 @@ void ShaderConstants11::onViewportChange(const gl::Rectangle &glViewport,
 }
 
 // Update the ShaderConstants with a new first vertex and return whether the update dirties them.
-ANGLE_INLINE bool ShaderConstants11::onFirstVertexChange(GLint firstVertex)
+ANGLE_INLINE bool ShaderConstants11::onFirstVertexChange(GLint firstVertex, GLint baseVertex)
 {
-    uint32_t newFirstVertex = static_cast<uint32_t>(firstVertex);
+    uint32_t newFirstVertex = static_cast<uint32_t>(firstVertex + baseVertex);
+
     bool firstVertexDirty   = (mVertex.firstVertex != newFirstVertex);
     if (firstVertexDirty)
     {
@@ -2210,7 +2211,7 @@ angle::Result StateManager11::updateState(const gl::Context *context,
     // The ShaderConstants only need to be updated when the program uses vertexID
     if (mProgramD3D->usesVertexID())
     {
-        if (mShaderConstants.onFirstVertexChange(firstVertex))
+        if (mShaderConstants.onFirstVertexChange(firstVertex, baseVertex))
         {
             mInternalDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS);
         }
