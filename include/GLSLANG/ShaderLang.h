@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 214
+#define ANGLE_SH_VERSION 215
 
 enum ShShaderSpec
 {
@@ -294,7 +294,7 @@ const ShCompileOptions SH_EMULATE_GL_BASE_VERTEX_BASE_INSTANCE = UINT64_C(1) << 
 // There are two variations of this.  One using subgroup operations where available, and another
 // that emulates those operations using dFdxFine and dFdyFine.  The latter is more universally
 // available, but is buggy on Nvidia.
-const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING = UINT64_C(1) << 44;
+const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING                  = UINT64_C(1) << 44;
 const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING_WITH_SUBGROUP_OP = UINT64_C(1) << 45;
 
 // If requested, validates the AST after every transformation.  Useful for debugging.
@@ -303,6 +303,11 @@ const ShCompileOptions SH_VALIDATE_AST = UINT64_C(1) << 46;
 // Use old version of RewriteStructSamplers, which doesn't produce as many
 // sampler arrays in parameters. This causes a few tests to pass on Android.
 const ShCompileOptions SH_USE_OLD_REWRITE_STRUCT_SAMPLERS = UINT64_C(1) << 47;
+
+// This flag works around a inconsistent behavior in Mac AMD driver where gl_VertexID doesn't
+// include base vertex value. It replaces gl_VertexID with (gl_VertexID + angle_BaseVertex)
+// when angle_BaseVertex is available.
+const ShCompileOptions SH_ADD_BASE_VERTEX_TO_VERTEX_ID = UINT64_C(1) << 48;
 
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy
