@@ -63,6 +63,14 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
                                         gl::DrawElementsType type,
                                         const void *indices,
                                         GLsizei instanceCount) override;
+    angle::Result drawElementsInstancedBaseVertexBaseInstance(const gl::Context *context,
+                                                              gl::PrimitiveMode mode,
+                                                              GLsizei count,
+                                                              gl::DrawElementsType type,
+                                                              const void *indices,
+                                                              GLsizei instances,
+                                                              GLint baseVertex,
+                                                              GLuint baseInstance) override;
     angle::Result drawRangeElements(const gl::Context *context,
                                     gl::PrimitiveMode mode,
                                     GLuint start,
