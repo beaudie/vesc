@@ -1285,6 +1285,19 @@ angle::Result ContextVk::drawElementsInstanced(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::drawElementsInstancedBaseVertexBaseInstance(const gl::Context *context,
+                                                                     gl::PrimitiveMode mode,
+                                                                     GLsizei count,
+                                                                     gl::DrawElementsType type,
+                                                                     const void *indices,
+                                                                     GLsizei instances,
+                                                                     GLint baseVertex,
+                                                                     GLuint baseInstance)
+{
+    // TODO
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::drawRangeElements(const gl::Context *context,
                                            gl::PrimitiveMode mode,
                                            GLuint start,

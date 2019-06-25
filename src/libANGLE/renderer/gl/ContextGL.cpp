@@ -324,6 +324,30 @@ angle::Result ContextGL::drawElementsInstanced(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result ContextGL::drawElementsInstancedBaseVertexBaseInstance(const gl::Context *context,
+                                                                     gl::PrimitiveMode mode,
+                                                                     GLsizei count,
+                                                                     gl::DrawElementsType type,
+                                                                     const void *indices,
+                                                                     GLsizei instances,
+                                                                     GLint baseVertex,
+                                                                     GLuint baseInstance)
+{
+    GLsizei adjustedInstanceCount = instances;
+    const gl::Program *program    = context->getState().getProgram();
+    if (program->usesMultiview())
+    {
+        adjustedInstanceCount *= program->getNumViews();
+    }
+    const void *drawIndexPointer = nullptr;
+
+    ANGLE_TRY(setDrawElementsState(context, count, type, indices, adjustedInstanceCount,
+                                   &drawIndexPointer));
+    getFunctions()->drawElementsInstancedBaseVertex(
+        ToGLenum(mode), count, ToGLenum(type), drawIndexPointer, adjustedInstanceCount, baseVertex);
+    return angle::Result::Continue;
+}
+
 angle::Result ContextGL::drawRangeElements(const gl::Context *context,
                                            gl::PrimitiveMode mode,
                                            GLuint start,
