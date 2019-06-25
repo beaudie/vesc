@@ -193,7 +193,9 @@ class Context11 : public ContextD3D, public MultisampleTextureInitializer
                                    GLsizei indexCount,
                                    gl::DrawElementsType indexType,
                                    const void *indices,
-                                   GLsizei instanceCount);
+                                   GLsizei instanceCount,
+                                   GLint baseVertex    = 0,
+                                   GLuint baseInstance = 0u);
 
     Renderer11 *mRenderer;
     IncompleteTextureSet mIncompleteTextures;

@@ -223,6 +223,8 @@ angle_translator_glsl_sources = [
   "src/compiler/translator/BuiltInFunctionEmulatorGLSL.h",
   "src/compiler/translator/ExtensionGLSL.cpp",
   "src/compiler/translator/ExtensionGLSL.h",
+  "src/compiler/translator/BuiltinsWorkaroundGLSL.cpp",
+  "src/compiler/translator/BuiltinsWorkaroundGLSL.h",
   "src/compiler/translator/OutputGLSL.cpp",
   "src/compiler/translator/OutputGLSL.h",
   "src/compiler/translator/OutputGLSLBase.cpp",

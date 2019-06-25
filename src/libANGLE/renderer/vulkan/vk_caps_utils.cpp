@@ -60,6 +60,8 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.translatedShaderSource = true;
     mNativeExtensions.discardFramebuffer     = true;
 
+    mNativeExtensions.baseVertexBaseInstance = true;
+
     // Enable EXT_blend_minmax
     mNativeExtensions.blendMinMax = true;
 
@@ -142,8 +144,8 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxDepthTextureSamples = limitsVk.sampledImageDepthSampleCounts;
     mNativeCaps.maxIntegerSamples      = limitsVk.sampledImageIntegerSampleCounts;
 
-    mNativeCaps.maxVertexAttributes           = limitsVk.maxVertexInputAttributes;
-    mNativeCaps.maxVertexAttribBindings       = limitsVk.maxVertexInputBindings;
+    mNativeCaps.maxVertexAttributes     = limitsVk.maxVertexInputAttributes;
+    mNativeCaps.maxVertexAttribBindings = limitsVk.maxVertexInputBindings;
     // Offset and stride are stored as uint16_t in PackedAttribDesc.
     mNativeCaps.maxVertexAttribRelativeOffset =
         std::min(static_cast<uint32_t>(std::numeric_limits<uint16_t>::max()),
@@ -394,7 +396,7 @@ void RendererVk::ensureCapsInitialized() const
                                   limitsVk.framebufferDepthSampleCounts &
                                   limitsVk.framebufferStencilSampleCounts;
 
-    mNativeCaps.maxSamples = vk_gl::GetMaxSampleCount(sampleCounts);
+    mNativeCaps.maxSamples            = vk_gl::GetMaxSampleCount(sampleCounts);
     mNativeCaps.maxFramebufferSamples = mNativeCaps.maxSamples;
 
     mNativeCaps.subPixelBits = limitsVk.subPixelPrecisionBits;

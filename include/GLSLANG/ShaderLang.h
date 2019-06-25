@@ -297,6 +297,11 @@ const ShCompileOptions SH_EMULATE_GL_BASE_VERTEX_BASE_INSTANCE = UINT64_C(1) << 
 const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING = UINT64_C(1) << 44;
 const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING_WITH_SUBGROUP_OP = UINT64_C(1) << 45;
 
+// This flag works around a inconsistent behavior in Mac AMD driver where gl_VertexID doesn't
+// include base vertex value. It replaces gl_VertexID with (gl_VertexID + angle_BaseVertex)
+// when angle_BaseVertex is available.
+const ShCompileOptions SH_ADD_BASE_VERTEX_TO_VERTEX_ID = UINT64_C(1) << 45;
+
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy
 {
