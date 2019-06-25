@@ -8,6 +8,7 @@
 
 #include "angle_gl.h"
 #include "compiler/translator/BuiltInFunctionEmulatorGLSL.h"
+#include "compiler/translator/BuiltinsWorkaroundGLSL.h"
 #include "compiler/translator/ExtensionGLSL.h"
 #include "compiler/translator/OutputGLSL.h"
 #include "compiler/translator/VersionGLSL.h"
@@ -210,6 +211,13 @@ void TranslatorGLSL::translate(TIntermBlock *root,
     TOutputGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(), getNameMap(),
                            &getSymbolTable(), getShaderType(), getShaderVersion(), getOutputType(),
                            compileOptions);
+
+    if (getShaderType() == GL_VERTEX_SHADER)
+    {
+        TBuiltinsWorkaroundGLSL builtins(&getSymbolTable(), compileOptions, false);
+        root->traverse(&builtins);
+        builtins.updateTree();
+    }
 
     root->traverse(&outputGLSL);
 }
