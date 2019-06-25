@@ -210,6 +210,12 @@ void TranslatorGLSL::translate(TIntermBlock *root,
     TOutputGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(), getNameMap(),
                            &getSymbolTable(), getShaderType(), getShaderVersion(), getOutputType(),
                            compileOptions);
+#if defined(ANGLE_PLATFORM_APPLE)
+    if (useBaseVertexBaseInstanceExt)
+    {
+        outputGLSL.markUseBaseVertexTrue();
+    }
+#endif
 
     root->traverse(&outputGLSL);
 }
@@ -251,6 +257,13 @@ void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root, ShCompileOptions 
         {
             continue;
         }
+
+#if defined(ANGLE_PLATFORM_APPLE)
+        if (iter.first == TExtension::ANGLE_base_vertex_base_instance)
+        {
+            useBaseVertexBaseInstanceExt = true;
+        }
+#endif
 
         if (getOutputType() == SH_GLSL_COMPATIBILITY_OUTPUT)
         {
