@@ -211,6 +211,11 @@ void TranslatorGLSL::translate(TIntermBlock *root,
                            &getSymbolTable(), getShaderType(), getShaderVersion(), getOutputType(),
                            compileOptions);
 
+    if (isBaseVertexInUse)
+    {
+        outputGLSL.markBaseVertexInUse();
+    }
+
     root->traverse(&outputGLSL);
 }
 
