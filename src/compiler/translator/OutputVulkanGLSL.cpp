@@ -204,10 +204,13 @@ void TOutputVulkanGLSL::visitSymbol(TIntermSymbol *node)
     else if (name == "gl_InstanceID")
     {
         // gl_InstanceIndex in Vulkan GLSL is equal to
-        // gl_InstanceID + baseInstance, but in OpenGL ES,
-        // baseInstance is always zero.
-        // (OpenGL ES 3.2 spec page 278 footnote 3)
-        out << "gl_InstanceIndex";
+        // gl_InstanceID + baseInstance.
+
+        // TODO: won't work if angle_BaseInstance is not used originally
+        out << "(gl_InstanceIndex - angle_BaseInstance)";
+        // out << "angle_InstanceIndex";
+        // out << "gl_InstanceIndex";
+        // out << "(gl_InstanceIndex - angle_BaseInstance)";
     }
     else
     {
