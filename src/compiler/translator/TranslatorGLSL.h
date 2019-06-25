@@ -31,6 +31,8 @@ class TranslatorGLSL : public TCompiler
     void writeVersion(TIntermNode *root);
     void writeExtensionBehavior(TIntermNode *root, ShCompileOptions compileOptions);
     void conditionallyOutputInvariantDeclaration(const char *builtinVaryingName);
+
+    bool useBaseVertexBaseInstanceExt = false;
 };
 
 }  // namespace sh

@@ -29,7 +29,17 @@ TOutputGLSL::TOutputGLSL(TInfoSinkBase &objSink,
                       shaderVersion,
                       output,
                       compileOptions)
-{}
+{
+    if (compileOptions & SH_VERTEX_ID_PLUS_BASE_VERTEX)
+    {
+        flagVertexIdPlusBaseVertex = true;
+    }
+}
+
+void TOutputGLSL::markBaseVertexInUse()
+{
+    flagBaseVertexInUse = true;
+}
 
 bool TOutputGLSL::writeVariablePrecision(TPrecision)
 {
@@ -68,6 +78,10 @@ void TOutputGLSL::visitSymbol(TIntermSymbol *node)
     else if (name == "gl_SecondaryFragDataEXT")
     {
         out << "angle_SecondaryFragData";
+    }
+    else if (flagVertexIdPlusBaseVertex && flagBaseVertexInUse && name == "gl_VertexID")
+    {
+        out << "(gl_VertexID + angle_BaseVertex)";
     }
     else
     {

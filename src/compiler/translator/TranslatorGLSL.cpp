@@ -211,6 +211,11 @@ void TranslatorGLSL::translate(TIntermBlock *root,
                            &getSymbolTable(), getShaderType(), getShaderVersion(), getOutputType(),
                            compileOptions);
 
+    if (useBaseVertexBaseInstanceExt)
+    {
+        outputGLSL.markBaseVertexInUse();
+    }
+
     root->traverse(&outputGLSL);
 }
 
@@ -245,11 +250,17 @@ void TranslatorGLSL::writeExtensionBehavior(TIntermNode *root, ShCompileOptions 
 {
     TInfoSinkBase &sink                   = getInfoSink().obj;
     const TExtensionBehavior &extBehavior = getExtensionBehavior();
+    useBaseVertexBaseInstanceExt          = false;
     for (const auto &iter : extBehavior)
     {
         if (iter.second == EBhUndefined)
         {
             continue;
+        }
+
+        if (iter.first == TExtension::ANGLE_base_vertex_base_instance)
+        {
+            useBaseVertexBaseInstanceExt = true;
         }
 
         if (getOutputType() == SH_GLSL_COMPATIBILITY_OUTPUT)
