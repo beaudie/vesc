@@ -31,6 +31,10 @@ class TranslatorGLSL : public TCompiler
     void writeVersion(TIntermNode *root);
     void writeExtensionBehavior(TIntermNode *root, ShCompileOptions compileOptions);
     void conditionallyOutputInvariantDeclaration(const char *builtinVaryingName);
+
+#if defined(ANGLE_PLATFORM_APPLE)
+    bool useBaseVertexBaseInstanceExt = false;
+#endif
 };
 
 }  // namespace sh

@@ -24,11 +24,18 @@ class TOutputGLSL : public TOutputGLSLBase
                 int shaderVersion,
                 ShShaderOutput output,
                 ShCompileOptions compileOptions);
+#if defined(ANGLE_PLATFORM_APPLE)
+    void markUseBaseVertexTrue();
+#endif
 
   protected:
     bool writeVariablePrecision(TPrecision) override;
     void visitSymbol(TIntermSymbol *node) override;
     ImmutableString translateTextureFunction(const ImmutableString &name) override;
+
+#if defined(ANGLE_PLATFORM_APPLE)
+    bool useBaseVertex = false;
+#endif
 };
 
 }  // namespace sh
