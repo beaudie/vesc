@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10a570e6_e92afc6c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-25T15:29:00Z",
+      "side": 1,
+      "message": "\"Disable using clear to do..\" is a bit hard to parse, rewording suggestion:\n\nGL: Use texture uploads instead of clears for robust resource init",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 59
+      },
+      "revId": "20c5880c2d5d9d50a43b21807ed6b531cfed4c5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d71afb63_e1bf5584",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-25T15:29:00Z",
+      "side": 1,
+      "message": "nit: should instead of must?",
+      "range": {
+        "startLine": 736,
+        "startChar": 9,
+        "endLine": 736,
+        "endChar": 21
+      },
+      "revId": "20c5880c2d5d9d50a43b21807ed6b531cfed4c5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b47dfba8_1922f211",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1598,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-25T15:29:00Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 1598,
+        "startChar": 9,
+        "endLine": 1598,
+        "endChar": 22
+      },
+      "revId": "20c5880c2d5d9d50a43b21807ed6b531cfed4c5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
