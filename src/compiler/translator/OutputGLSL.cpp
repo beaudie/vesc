@@ -69,6 +69,12 @@ void TOutputGLSL::visitSymbol(TIntermSymbol *node)
     {
         out << "angle_SecondaryFragData";
     }
+#if defined(ANGLE_PLATFORM_APPLE)
+    else if (useBaseVertex && name == "gl_VertexID")
+    {
+        out << "(gl_VertexID + angle_BaseVertex)";
+    }
+#endif
     else
     {
         TOutputGLSLBase::visitSymbol(node);
