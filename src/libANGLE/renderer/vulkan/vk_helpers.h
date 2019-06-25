@@ -28,6 +28,10 @@ constexpr VkBufferUsageFlags kIndexBufferUsageFlags =
 constexpr size_t kVertexBufferAlignment = 4;
 constexpr size_t kIndexBufferAlignment  = 4;
 
+constexpr VkBufferUsageFlags kStagingBufferFlags =
+    VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+constexpr size_t kStagingBufferSize = 1024 * 16;
+
 // A dynamic buffer is conceptually an infinitely long buffer. Each time you write to the buffer,
 // you will always write to a previously unused portion. After a series of writes, you must flush
 // the buffer data to the device. Buffer lifetime currently assumes that each new allocation will
@@ -73,7 +77,6 @@ class DynamicBuffer : angle::NonCopyable
 
     // This releases all the buffers that have been allocated since this was last called.
     void releaseRetainedBuffers(ContextVk *contextVk);
-    void releaseRetainedBuffers(DisplayVk *display, std::vector<GarbageObjectBase> *garbageQueue);
 
     // This frees resources immediately.
     void destroy(VkDevice device);
@@ -88,6 +91,7 @@ class DynamicBuffer : angle::NonCopyable
 
   private:
     void reset();
+    angle::Result allocateNewBuffer(ContextVk *contextVk);
 
     VkBufferUsageFlags mUsage;
     bool mHostVisible;
@@ -99,6 +103,7 @@ class DynamicBuffer : angle::NonCopyable
     size_t mAlignment;
 
     std::vector<BufferHelper *> mRetainedBuffers;
+    std::vector<BufferHelper *> mBufferFreeList;
 };
 
 // Uses DescriptorPool to allocate descriptor sets as needed. If a descriptor pool becomes full, we
@@ -563,7 +568,10 @@ class ImageHelper final : public CommandGraphResource
     ImageHelper(ImageHelper &&other);
     ~ImageHelper() override;
 
-    void initStagingBuffer(RendererVk *renderer, const vk::Format &format);
+    void initStagingBuffer(RendererVk *renderer,
+                           const vk::Format &format,
+                           VkBufferUsageFlags usageFlags,
+                           size_t initialSize);
 
     angle::Result init(Context *context,
                        gl::TextureType textureType,
