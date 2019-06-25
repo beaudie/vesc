@@ -273,7 +273,10 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
               uint32_t firstVertex,
               uint32_t firstInstance);
     void draw(uint32_t vertexCount, uint32_t firstVertex);
-    void drawInstanced(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex);
+    void drawInstanced(uint32_t vertexCount,
+                       uint32_t instanceCount,
+                       uint32_t firstVertex,
+                       uint32_t firstInstance);
     void drawIndexed(uint32_t indexCount,
                      uint32_t instanceCount,
                      uint32_t firstIndex,
@@ -281,6 +284,11 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
                      uint32_t firstInstance);
     void drawIndexed(uint32_t indexCount);
     void drawIndexedInstanced(uint32_t indexCount, uint32_t instanceCount);
+    void drawIndexedInstancedBaseVertexBaseInstance(uint32_t indexCount,
+                                                    uint32_t instanceCount,
+                                                    uint32_t firstIndex,
+                                                    int32_t vertexOffset,
+                                                    uint32_t firstInstance);
 
     VkResult end();
     void endQuery(VkQueryPool queryPool, uint32_t query);
@@ -909,10 +917,11 @@ ANGLE_INLINE void CommandBuffer::draw(uint32_t vertexCount, uint32_t firstVertex
 
 ANGLE_INLINE void CommandBuffer::drawInstanced(uint32_t vertexCount,
                                                uint32_t instanceCount,
-                                               uint32_t firstVertex)
+                                               uint32_t firstVertex,
+                                               uint32_t firstInstance)
 {
     ASSERT(valid());
-    vkCmdDraw(mHandle, vertexCount, instanceCount, firstVertex, 0);
+    vkCmdDraw(mHandle, vertexCount, instanceCount, firstVertex, firstInstance);
 }
 
 ANGLE_INLINE void CommandBuffer::drawIndexed(uint32_t indexCount,
@@ -935,6 +944,16 @@ ANGLE_INLINE void CommandBuffer::drawIndexedInstanced(uint32_t indexCount, uint3
 {
     ASSERT(valid());
     vkCmdDrawIndexed(mHandle, indexCount, instanceCount, 0, 0, 0);
+}
+
+ANGLE_INLINE void CommandBuffer::drawIndexedInstancedBaseVertexBaseInstance(uint32_t indexCount,
+                                                                            uint32_t instanceCount,
+                                                                            uint32_t firstIndex,
+                                                                            int32_t vertexOffset,
+                                                                            uint32_t firstInstance)
+{
+    ASSERT(valid());
+    vkCmdDrawIndexed(mHandle, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
 }
 
 ANGLE_INLINE void CommandBuffer::dispatch(uint32_t groupCountX,

@@ -24,11 +24,15 @@ class TOutputGLSL : public TOutputGLSLBase
                 int shaderVersion,
                 ShShaderOutput output,
                 ShCompileOptions compileOptions);
+    void markBaseVertexInUse();
 
   protected:
     bool writeVariablePrecision(TPrecision) override;
     void visitSymbol(TIntermSymbol *node) override;
     ImmutableString translateTextureFunction(const ImmutableString &name) override;
+
+    bool flagVertexIdPlusBaseVertex = false;
+    bool flagBaseVertexInUse        = false;
 };
 
 }  // namespace sh
