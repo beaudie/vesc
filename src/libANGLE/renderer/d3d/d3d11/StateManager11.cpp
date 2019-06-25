@@ -539,10 +539,11 @@ void ShaderConstants11::onViewportChange(const gl::Rectangle &glViewport,
 }
 
 // Update the ShaderConstants with a new first vertex and return whether the update dirties them.
-ANGLE_INLINE bool ShaderConstants11::onFirstVertexChange(GLint firstVertex)
+ANGLE_INLINE bool ShaderConstants11::onFirstVertexChange(GLint firstVertex, GLint baseVertex)
 {
-    uint32_t newFirstVertex = static_cast<uint32_t>(firstVertex);
-    bool firstVertexDirty   = (mVertex.firstVertex != newFirstVertex);
+    uint32_t newFirstVertex = static_cast<uint32_t>(firstVertex + baseVertex);
+
+    bool firstVertexDirty = (mVertex.firstVertex != newFirstVertex);
     if (firstVertexDirty)
     {
         mVertex.firstVertex = newFirstVertex;
@@ -1804,9 +1805,9 @@ void StateManager11::unsetConflictingSRVs(gl::PipelineType pipeline,
                                           const gl::ImageIndex *index,
                                           bool isRenderTarget)
 {
-    auto *currentSRVs = getSRVCache(shaderType);
+    auto *currentSRVs                 = getSRVCache(shaderType);
     gl::PipelineType conflictPipeline = gl::GetPipelineType(shaderType);
-    bool foundOne = false;
+    bool foundOne                     = false;
     size_t count                      = std::min(currentSRVs->size(), currentSRVs->highestUsed());
     for (size_t resourceIndex = 0; resourceIndex < count; ++resourceIndex)
     {
@@ -2217,7 +2218,7 @@ angle::Result StateManager11::updateState(const gl::Context *context,
     // The ShaderConstants only need to be updated when the program uses vertexID
     if (mProgramD3D->usesVertexID())
     {
-        if (mShaderConstants.onFirstVertexChange(firstVertex))
+        if (mShaderConstants.onFirstVertexChange(firstVertex, baseVertex))
         {
             mInternalDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS);
         }

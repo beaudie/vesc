@@ -118,6 +118,9 @@
     "glDrawArraysInstancedANGLE": {
         "mode": "PrimitiveMode"
     },
+    "glDrawArraysInstancedBaseInstanceANGLE": {
+        "mode": "PrimitiveMode"
+    },
     "glDrawArraysInstancedEXT": {
         "mode": "PrimitiveMode"
     },
@@ -134,6 +137,10 @@
         "type": "DrawElementsType"
     },
     "glDrawElementsInstancedANGLE": {
+        "mode": "PrimitiveMode",
+        "type": "DrawElementsType"
+    },
+    "glDrawElementsInstancedBaseVertexBaseInstanceANGLE": {
         "mode": "PrimitiveMode",
         "type": "DrawElementsType"
     },
@@ -350,6 +357,9 @@
     "glMultiDrawArraysInstancedANGLE": {
         "mode": "PrimitiveMode"
     },
+    "glMultiDrawArraysInstancedBaseInstanceANGLE": {
+        "mode": "PrimitiveMode"
+    },
     "glMultiDrawElements": {
         "mode": "PrimitiveMode",
         "type": "DrawElementsType"
@@ -359,6 +369,10 @@
         "type": "DrawElementsType"
     },
     "glMultiDrawElementsInstancedANGLE": {
+        "mode": "PrimitiveMode",
+        "type": "DrawElementsType"
+    },
+    "glMultiDrawElementsInstancedBaseVertexBaseInstanceANGLE": {
         "mode": "PrimitiveMode",
         "type": "DrawElementsType"
     },
