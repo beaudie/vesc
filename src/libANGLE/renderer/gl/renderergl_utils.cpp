@@ -1403,6 +1403,11 @@ void GenerateCaps(const FunctionsGL *functions,
     extensions->floatBlend = functions->standard == STANDARD_GL_DESKTOP ||
                              functions->hasGLESExtension("GL_EXT_float_blend");
 
+    // ANGLE_base_vertex_base_instance
+    extensions->baseVertexBaseInstance = functions->isAtLeastGL(gl::Version(3, 2)) ||
+                                         functions->isAtLeastGLES(gl::Version(3, 2)) ||
+                                         functions->hasGLESExtension("GL_EXT_base_instance");
+
     // GL_CHROMIUM_compressed_texture_etc
     // Expose this extension only when we support the formats or we're running on top of a native
     // ES driver.

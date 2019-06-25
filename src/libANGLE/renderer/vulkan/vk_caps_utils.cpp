@@ -60,6 +60,8 @@ void RendererVk::ensureCapsInitialized() const
     mNativeExtensions.translatedShaderSource = true;
     mNativeExtensions.discardFramebuffer     = true;
 
+    mNativeExtensions.baseVertexBaseInstance = true;
+
     // Enable EXT_blend_minmax
     mNativeExtensions.blendMinMax = true;
 
