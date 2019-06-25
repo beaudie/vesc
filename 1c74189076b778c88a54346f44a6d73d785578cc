@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "40e87501_1ae9ced2",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-25T20:44:08Z",
+      "side": 1,
+      "message": "Can we just mark all of these as SKIP?",
+      "range": {
+        "startLine": 556,
+        "startChar": 0,
+        "endLine": 563,
+        "endChar": 98
+      },
+      "revId": "1c74189076b778c88a54346f44a6d73d785578cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "730e51dc_dcf7f058",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-25T20:44:08Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 578,
+        "startChar": 0,
+        "endLine": 581,
+        "endChar": 99
+      },
+      "revId": "1c74189076b778c88a54346f44a6d73d785578cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c080c8f2_cbffc797",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-25T20:44:08Z",
+      "side": 1,
+      "message": "Nit: basic_teximage2d.*",
+      "range": {
+        "startLine": 600,
+        "startChar": 58,
+        "endLine": 600,
+        "endChar": 75
+      },
+      "revId": "1c74189076b778c88a54346f44a6d73d785578cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a6dad59_387de7b7",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-25T20:44:08Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 609,
+        "startChar": 0,
+        "endLine": 617,
+        "endChar": 93
+      },
+      "revId": "1c74189076b778c88a54346f44a6d73d785578cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2874ca0d_47a0beb6",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 618,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-06-25T20:44:08Z",
+      "side": 1,
+      "message": "Nit: texsubimage3d_depth.*",
+      "range": {
+        "startLine": 618,
+        "startChar": 58,
+        "endLine": 618,
+        "endChar": 78
+      },
+      "revId": "1c74189076b778c88a54346f44a6d73d785578cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
