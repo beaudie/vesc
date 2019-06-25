@@ -385,6 +385,9 @@ ProcEntry g_procTable[] = {
     {"glDrawArraysInstanced", P(gl::DrawArraysInstanced)},
     {"glDrawArraysInstancedANGLE", P(gl::DrawArraysInstancedANGLE)},
     {"glDrawArraysInstancedANGLEContextANGLE", P(gl::DrawArraysInstancedANGLEContextANGLE)},
+    {"glDrawArraysInstancedBaseInstanceANGLE", P(gl::DrawArraysInstancedBaseInstanceANGLE)},
+    {"glDrawArraysInstancedBaseInstanceANGLEContextANGLE",
+     P(gl::DrawArraysInstancedBaseInstanceANGLEContextANGLE)},
     {"glDrawArraysInstancedContextANGLE", P(gl::DrawArraysInstancedContextANGLE)},
     {"glDrawArraysInstancedEXT", P(gl::DrawArraysInstancedEXT)},
     {"glDrawArraysInstancedEXTContextANGLE", P(gl::DrawArraysInstancedEXTContextANGLE)},
@@ -399,6 +402,10 @@ ProcEntry g_procTable[] = {
     {"glDrawElementsInstanced", P(gl::DrawElementsInstanced)},
     {"glDrawElementsInstancedANGLE", P(gl::DrawElementsInstancedANGLE)},
     {"glDrawElementsInstancedANGLEContextANGLE", P(gl::DrawElementsInstancedANGLEContextANGLE)},
+    {"glDrawElementsInstancedBaseVertexBaseInstanceANGLE",
+     P(gl::DrawElementsInstancedBaseVertexBaseInstanceANGLE)},
+    {"glDrawElementsInstancedBaseVertexBaseInstanceANGLEContextANGLE",
+     P(gl::DrawElementsInstancedBaseVertexBaseInstanceANGLEContextANGLE)},
     {"glDrawElementsInstancedContextANGLE", P(gl::DrawElementsInstancedContextANGLE)},
     {"glDrawElementsInstancedEXT", P(gl::DrawElementsInstancedEXT)},
     {"glDrawElementsInstancedEXTContextANGLE", P(gl::DrawElementsInstancedEXTContextANGLE)},
@@ -988,11 +995,19 @@ ProcEntry g_procTable[] = {
     {"glMultiDrawArraysInstancedANGLE", P(gl::MultiDrawArraysInstancedANGLE)},
     {"glMultiDrawArraysInstancedANGLEContextANGLE",
      P(gl::MultiDrawArraysInstancedANGLEContextANGLE)},
+    {"glMultiDrawArraysInstancedBaseInstanceANGLE",
+     P(gl::MultiDrawArraysInstancedBaseInstanceANGLE)},
+    {"glMultiDrawArraysInstancedBaseInstanceANGLEContextANGLE",
+     P(gl::MultiDrawArraysInstancedBaseInstanceANGLEContextANGLE)},
     {"glMultiDrawElementsANGLE", P(gl::MultiDrawElementsANGLE)},
     {"glMultiDrawElementsANGLEContextANGLE", P(gl::MultiDrawElementsANGLEContextANGLE)},
     {"glMultiDrawElementsInstancedANGLE", P(gl::MultiDrawElementsInstancedANGLE)},
     {"glMultiDrawElementsInstancedANGLEContextANGLE",
      P(gl::MultiDrawElementsInstancedANGLEContextANGLE)},
+    {"glMultiDrawElementsInstancedBaseVertexBaseInstanceANGLE",
+     P(gl::MultiDrawElementsInstancedBaseVertexBaseInstanceANGLE)},
+    {"glMultiDrawElementsInstancedBaseVertexBaseInstanceANGLEContextANGLE",
+     P(gl::MultiDrawElementsInstancedBaseVertexBaseInstanceANGLEContextANGLE)},
     {"glMultiTexCoord4f", P(gl::MultiTexCoord4f)},
     {"glMultiTexCoord4fContextANGLE", P(gl::MultiTexCoord4fContextANGLE)},
     {"glMultiTexCoord4x", P(gl::MultiTexCoord4x)},
@@ -1489,5 +1504,5 @@ ProcEntry g_procTable[] = {
     {"glWeightPointerOES", P(gl::WeightPointerOES)},
     {"glWeightPointerOESContextANGLE", P(gl::WeightPointerOESContextANGLE)}};
 
-size_t g_numProcs = 1400;
+size_t g_numProcs = 1408;
 }  // namespace egl

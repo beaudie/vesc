@@ -962,6 +962,8 @@ ProgramState::ProgramState()
       mGeometryShaderInvocations(1),
       mGeometryShaderMaxVertices(0),
       mDrawIDLocation(-1),
+      mBaseVertexLocation(-1),
+      mBaseInstanceLocation(-1),
       mActiveSamplerRefCounts{}
 {
     mComputeShaderLocalSize.fill(1);
@@ -1603,6 +1605,8 @@ void Program::unlink()
     mState.mGeometryShaderInvocations         = 1;
     mState.mGeometryShaderMaxVertices         = 0;
     mState.mDrawIDLocation                    = -1;
+    mState.mBaseVertexLocation                = -1;
+    mState.mBaseInstanceLocation              = -1;
 
     mValidated = false;
 
@@ -2866,6 +2870,33 @@ void Program::setDrawIDUniform(GLint drawid)
     ASSERT(mLinkResolved);
     ASSERT(mState.mDrawIDLocation >= 0);
     mProgram->setUniform1iv(mState.mDrawIDLocation, 1, &drawid);
+}
+
+bool Program::hasBaseVertexUniform() const
+{
+    ASSERT(mLinkResolved);
+    return mState.mBaseVertexLocation >= 0;
+}
+
+void Program::setBaseVertexUniform(GLint baseVertex)
+{
+    ASSERT(mLinkResolved);
+    ASSERT(mState.mBaseVertexLocation >= 0);
+    mProgram->setUniform1iv(mState.mBaseVertexLocation, 1, &baseVertex);
+}
+
+bool Program::hasBaseInstanceUniform() const
+{
+    ASSERT(mLinkResolved);
+    return mState.mBaseInstanceLocation >= 0;
+}
+
+void Program::setBaseInstanceUniform(GLuint baseInstance)
+{
+    ASSERT(mLinkResolved);
+    ASSERT(mState.mBaseInstanceLocation >= 0);
+    GLint baseInstanceInt = baseInstance;
+    mProgram->setUniform1iv(mState.mBaseInstanceLocation, 1, &baseInstanceInt);
 }
 
 bool Program::linkVaryings(InfoLog &infoLog) const
@@ -4804,6 +4835,12 @@ void Program::postResolveLink(const gl::Context *context)
     if (context->getExtensions().multiDraw)
     {
         mState.mDrawIDLocation = getUniformLocation("gl_DrawID");
+    }
+
+    if (context->getExtensions().baseVertexBaseInstance)
+    {
+        mState.mBaseVertexLocation   = getUniformLocation("gl_BaseVertex");
+        mState.mBaseInstanceLocation = getUniformLocation("gl_BaseInstance");
     }
 }
 
