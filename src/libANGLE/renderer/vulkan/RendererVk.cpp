@@ -1429,16 +1429,40 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context)
     return angle::Result::Continue;
 }
 
-VkResult RendererVk::queuePresent(const VkPresentInfoKHR &presentInfo)
+PresentInfo::PresentInfo()                         = default;
+PresentInfo::~PresentInfo()                        = default;
+PresentInfo::PresentInfo(const PresentInfo &other) = default;
+
+namespace
+{
+void QueuePresentThreadMain(VkQueue queue, PresentInfo presentInfo)
+{
+    VkPresentInfoKHR info   = {};
+    info.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+    info.waitSemaphoreCount = 1;
+    info.pWaitSemaphores    = &presentInfo.waitSemaphore;
+    info.swapchainCount     = 1;
+    info.pSwapchains        = &presentInfo.swapchain;
+    info.pImageIndices      = &presentInfo.imageIndex;
+    info.pResults           = nullptr;
+
+    vkQueuePresentKHR(queue, &info);
+}
+}  // anonymous namespace
+
+VkResult RendererVk::queuePresent(const PresentInfo &presentInfo)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::queuePresent");
 
     std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
 
+    if (mPresentThread.joinable())
     {
-        ANGLE_TRACE_EVENT0("gpu.angle", "vkQueuePresentKHR");
-        return vkQueuePresentKHR(mQueue, &presentInfo);
+        mPresentThread.join();
     }
+
+    mPresentThread = std::thread(QueuePresentThreadMain, mQueue, presentInfo);
+    return VK_SUCCESS;
 }
 
 Serial RendererVk::nextSerial()

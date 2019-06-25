@@ -13,6 +13,7 @@
 #include <vulkan/vulkan.h>
 #include <memory>
 #include <mutex>
+#include <thread>
 
 #include "common/PoolAlloc.h"
 #include "common/angleutils.h"
@@ -44,6 +45,18 @@ struct Format;
 // Supports one semaphore from current surface, and one semaphore passed to
 // glSignalSemaphoreEXT.
 using SignalSemaphoreVector = angle::FixedVector<VkSemaphore, 2>;
+
+struct PresentInfo
+{
+    PresentInfo();
+    ~PresentInfo();
+    PresentInfo(const PresentInfo &other);
+
+    VkSemaphore waitSemaphore;
+    VkSwapchainKHR swapchain;
+    uint32_t imageIndex;
+    std::vector<VkRectLayerKHR> vkRects;
+};
 
 class RendererVk : angle::NonCopyable
 {
@@ -140,7 +153,7 @@ class RendererVk : angle::NonCopyable
                               const VkSubmitInfo &submitInfo,
                               const vk::Fence &fence);
     angle::Result queueWaitIdle(vk::Context *context);
-    VkResult queuePresent(const VkPresentInfoKHR &presentInfo);
+    VkResult queuePresent(const PresentInfo &presentInfo);
 
     Serial nextSerial();
 
@@ -222,6 +235,8 @@ class RendererVk : angle::NonCopyable
     // DescriptorSetLayouts are also managed in a cache.
     std::mutex mDescriptorSetLayoutCacheMutex;
     DescriptorSetLayoutCache mDescriptorSetLayoutCache;
+
+    std::thread mPresentThread;
 };
 
 uint32_t GetUniformBufferDescriptorCount();
