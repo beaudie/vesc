@@ -333,6 +333,11 @@ std::shared_ptr<WaitableCompileEvent> ShaderGL::compile(const gl::Context *conte
         additionalOptions |= SH_CLAMP_INDIRECT_ARRAY_BOUNDS;
     }
 
+    if (features.vertexIdDoesNotIncludeBaseVertex.enabled)
+    {
+        additionalOptions |= SH_VERTEX_ID_PLUS_BASE_VERTEX;
+    }
+
     options |= additionalOptions;
 
     auto workerThreadPool = context->getWorkerThreadPool();
