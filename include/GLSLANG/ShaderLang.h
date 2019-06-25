@@ -300,6 +300,11 @@ const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING_WITH_SUBGROUP_OP = U
 // If requested, validates the AST after every transformation.  Useful for debugging.
 const ShCompileOptions SH_VALIDATE_AST = UINT64_C(1) << 46;
 
+// This flag works around a inconsistent behavior in Mac AMD driver where gl_VertexID doesn't
+// include base vertex value. It replaces gl_VertexID with (gl_VertexID + angle_BaseVertex)
+// when angle_BaseVertex is available.
+const ShCompileOptions SH_ADD_BASE_VERTEX_TO_VERTEX_ID = UINT64_C(1) << 47;
+
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy
 {
