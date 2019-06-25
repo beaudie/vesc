@@ -13,6 +13,7 @@
 
 #include "angle_gl.h"
 #include "common/utilities.h"
+#include "compiler/translator/BuiltinsWorkaroundVulkanGLSL.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/OutputVulkanGLSL.h"
 #include "compiler/translator/StaticType.h"
@@ -662,6 +663,16 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
     TOutputVulkanGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(),
                                  getNameMap(), &getSymbolTable(), getShaderType(),
                                  getShaderVersion(), getOutputType(), compileOptions);
+
+    if (getShaderType() == GL_VERTEX_SHADER)
+    {
+        TBuiltinsWorkaroundVulkanGLSL builtins(&getSymbolTable(), compileOptions);
+        root->traverse(&builtins);
+        if (!builtins.updateTree(this, root))
+        {
+            return false;
+        }
+    }
 
     sink << "#version 450 core\n";
 
