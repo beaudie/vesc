@@ -13,6 +13,7 @@
 
 #include "angle_gl.h"
 #include "common/utilities.h"
+#include "compiler/translator/BuiltinsWorkaroundGLSL.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/OutputVulkanGLSL.h"
 #include "compiler/translator/StaticType.h"
@@ -648,6 +649,21 @@ ANGLE_NO_DISCARD bool AddLineSegmentRasterizationEmulation(TCompiler *compiler,
 
     return compiler->validateAST(root);
 }
+
+ANGLE_NO_DISCARD bool ShaderBuiltinsWorkaround(TCompiler *compiler,
+                                               TIntermBlock *root,
+                                               TSymbolTable *symbolTable,
+                                               ShCompileOptions compileOptions)
+{
+    TBuiltinsWorkaroundGLSL builtins(symbolTable, compileOptions);
+    root->traverse(&builtins);
+    if (!builtins.updateTree(compiler, root))
+    {
+        return false;
+    }
+    return true;
+}
+
 }  // anonymous namespace
 
 TranslatorVulkan::TranslatorVulkan(sh::GLenum type, ShShaderSpec spec)
@@ -662,6 +678,14 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
     TOutputVulkanGLSL outputGLSL(sink, getArrayIndexClampingStrategy(), getHashFunction(),
                                  getNameMap(), &getSymbolTable(), getShaderType(),
                                  getShaderVersion(), getOutputType(), compileOptions);
+
+    if (getShaderType() == GL_VERTEX_SHADER)
+    {
+        if (!ShaderBuiltinsWorkaround(this, root, &getSymbolTable(), compileOptions))
+        {
+            return false;
+        }
+    }
 
     sink << "#version 450 core\n";
 
