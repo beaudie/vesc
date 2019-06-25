@@ -47,6 +47,7 @@ enum class CommandID : uint16_t
     Draw,
     DrawIndexed,
     DrawIndexedInstanced,
+    DrawIndexedInstancedBaseVertexBaseInstance,
     DrawInstanced,
     EndQuery,
     ExecutionBarrier,
@@ -192,6 +193,7 @@ struct DrawInstancedParams
     uint32_t vertexCount;
     uint32_t instanceCount;
     uint32_t firstVertex;
+    uint32_t firstInstance;
 };
 VERIFY_4_BYTE_ALIGNMENT(DrawInstancedParams)
 
@@ -207,6 +209,16 @@ struct DrawIndexedInstancedParams
     uint32_t instanceCount;
 };
 VERIFY_4_BYTE_ALIGNMENT(DrawIndexedInstancedParams)
+
+struct DrawIndexedInstancedBaseVertexBaseInstanceParams
+{
+    uint32_t indexCount;
+    uint32_t instanceCount;
+    uint32_t firstIndex;
+    int32_t vertexOffset;
+    uint32_t firstInstance;
+};
+VERIFY_4_BYTE_ALIGNMENT(DrawIndexedInstancedBaseVertexBaseInstanceParams)
 
 struct DispatchParams
 {
@@ -433,8 +445,16 @@ class SecondaryCommandBuffer final : angle::NonCopyable
     void drawIndexed(uint32_t indexCount);
 
     void drawIndexedInstanced(uint32_t indexCount, uint32_t instanceCount);
+    void drawIndexedInstancedBaseVertexBaseInstance(uint32_t indexCount,
+                                                    uint32_t instanceCount,
+                                                    uint32_t firstIndex,
+                                                    int32_t vertexOffset,
+                                                    uint32_t firstInstance);
 
-    void drawInstanced(uint32_t vertexCount, uint32_t instanceCount, uint32_t firstVertex);
+    void drawInstanced(uint32_t vertexCount,
+                       uint32_t instanceCount,
+                       uint32_t firstVertex,
+                       uint32_t firstInstance);
 
     void endQuery(VkQueryPool queryPool, uint32_t query);
 
@@ -851,15 +871,33 @@ ANGLE_INLINE void SecondaryCommandBuffer::drawIndexedInstanced(uint32_t indexCou
     paramStruct->indexCount    = indexCount;
     paramStruct->instanceCount = instanceCount;
 }
+ANGLE_INLINE void SecondaryCommandBuffer::drawIndexedInstancedBaseVertexBaseInstance(
+    uint32_t indexCount,
+    uint32_t instanceCount,
+    uint32_t firstIndex,
+    int32_t vertexOffset,
+    uint32_t firstInstance)
+{
+    DrawIndexedInstancedBaseVertexBaseInstanceParams *paramStruct =
+        initCommand<DrawIndexedInstancedBaseVertexBaseInstanceParams>(
+            CommandID::DrawIndexedInstancedBaseVertexBaseInstance);
+    paramStruct->indexCount    = indexCount;
+    paramStruct->instanceCount = instanceCount;
+    paramStruct->firstIndex    = firstIndex;
+    paramStruct->vertexOffset  = vertexOffset;
+    paramStruct->firstInstance = firstInstance;
+}
 
 ANGLE_INLINE void SecondaryCommandBuffer::drawInstanced(uint32_t vertexCount,
                                                         uint32_t instanceCount,
-                                                        uint32_t firstVertex)
+                                                        uint32_t firstVertex,
+                                                        uint32_t firstInstance)
 {
     DrawInstancedParams *paramStruct = initCommand<DrawInstancedParams>(CommandID::DrawInstanced);
     paramStruct->vertexCount         = vertexCount;
     paramStruct->instanceCount       = instanceCount;
     paramStruct->firstVertex         = firstVertex;
+    paramStruct->firstInstance       = firstInstance;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::endQuery(VkQueryPool queryPool, uint32_t query)
