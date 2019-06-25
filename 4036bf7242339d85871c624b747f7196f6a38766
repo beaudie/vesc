@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e87a1622_5a961fb2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-25T16:22:17Z",
+      "side": 1,
+      "message": "OVer-\u003eOver",
+      "revId": "4036bf7242339d85871c624b747f7196f6a38766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "167eb99b_197c1ceb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-25T16:22:17Z",
+      "side": 1,
+      "message": "Is there memory leak here if mBuffer already has a value? Or should all buffers be held in Free/Retained vectors for eventual clean-up? I\u0027m wondering if there\u0027s a potential assert to add  to mBuffer prior to assignment to make sure we don\u0027t lose ptr.",
+      "revId": "4036bf7242339d85871c624b747f7196f6a38766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d1a4cb8_2da64d5b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-25T16:22:17Z",
+      "side": 1,
+      "message": "Move the vector clean-up to private helper function to avoid code duplication.",
+      "revId": "4036bf7242339d85871c624b747f7196f6a38766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba8c73f9_56530a85",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-25T16:22:17Z",
+      "side": 1,
+      "message": "Could use same private helper cleanup func here as well.",
+      "revId": "4036bf7242339d85871c624b747f7196f6a38766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14a9bb92_78204f1a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-25T16:22:17Z",
+      "side": 1,
+      "message": "Any updates needed to this comment based on recycling behavior?",
+      "revId": "4036bf7242339d85871c624b747f7196f6a38766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96538996_5b11502b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-25T16:22:17Z",
+      "side": 1,
+      "message": "\"Retained\" here is confusing to me. Does it mean they\u0027re being held on to? Would something like [Live|Active|InFlight|InUse]Buffers be a better name?",
+      "revId": "4036bf7242339d85871c624b747f7196f6a38766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
