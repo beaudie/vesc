@@ -264,6 +264,19 @@
                                                                                                    \
     /* GLES2+ Extensions */                                                                        \
                                                                                                    \
+    /* GL_ANGLE_base_vertex_base_instance */                                                       \
+    void drawArraysInstancedBaseInstance(GLenum mode, GLint first, GLsizei count,                  \
+                                         GLsizei instanceCount, GLuint baseInstance);              \
+    void drawElementsInstancedBaseVertexBaseInstance(                                              \
+        GLenum mode, GLsizei count, GLenum type, const GLvoid *indices, GLsizei instanceCounts,    \
+        GLint baseVertex, GLuint baseInstance);                                                    \
+    void multiDrawArraysInstancedBaseInstance(                                                     \
+        GLenum mode, GLsizei drawcount, const GLsizei *counts, const GLsizei *instanceCounts,      \
+        const GLint *firsts, const GLuint *baseInstances);                                         \
+    void multiDrawElementsInstancedBaseVertexBaseInstance(                                         \
+        GLenum mode, GLenum type, GLsizei drawcount, const GLsizei *counts,                        \
+        const GLsizei *instanceCounts, const GLvoid *const *indices, const GLint *baseVertices,    \
+        const GLuint *baseInstances);                                                              \
     /* GL_ANGLE_framebuffer_blit */                                                                \
     /* GL_ANGLE_framebuffer_multisample */                                                         \
     /* GL_ANGLE_instanced_arrays */                                                                \

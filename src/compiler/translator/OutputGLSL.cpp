@@ -7,6 +7,7 @@
 #include "compiler/translator/OutputGLSL.h"
 
 #include "compiler/translator/Compiler.h"
+#include "gpu_info_util/SystemInfo.h"
 
 namespace sh
 {
@@ -30,6 +31,20 @@ TOutputGLSL::TOutputGLSL(TInfoSinkBase &objSink,
                       output,
                       compileOptions)
 {}
+
+#if defined(ANGLE_PLATFORM_APPLE)
+void TOutputGLSL::markUseBaseVertexTrue()
+{
+    angle::SystemInfo info;
+    GetSystemInfo(&info);
+
+    if (angle::IsAMD(info.gpus[info.activeGPUIndex].vendorId))
+    {
+        // TODO: what if GPU switch in between?
+        useBaseVertex = true;
+    }
+}
+#endif
 
 bool TOutputGLSL::writeVariablePrecision(TPrecision)
 {
@@ -69,6 +84,12 @@ void TOutputGLSL::visitSymbol(TIntermSymbol *node)
     {
         out << "angle_SecondaryFragData";
     }
+#if defined(ANGLE_PLATFORM_APPLE)
+    else if (useBaseVertex && name == "gl_VertexID")
+    {
+        out << "(gl_VertexID + angle_BaseVertex)";
+    }
+#endif
     else
     {
         TOutputGLSLBase::visitSymbol(node);
