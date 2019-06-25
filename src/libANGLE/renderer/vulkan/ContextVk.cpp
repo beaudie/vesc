@@ -919,7 +919,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         ANGLE_VK_TRY(this, commandBuffer.end());
 
         // Submit the command buffer
-        VkSubmitInfo submitInfo       = {};
+        VkSubmitInfo submitInfo = {};
         InitializeSubmitInfo(&submitInfo, commandBatch.get(), {}, {});
 
         ANGLE_TRY(submitFrame(submitInfo, std::move(commandBuffer)));
@@ -1210,6 +1210,19 @@ angle::Result ContextVk::drawElementsInstanced(const gl::Context *context,
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(setupIndexedDraw(context, mode, count, instances, type, indices, &commandBuffer));
     commandBuffer->drawIndexedInstanced(count, instances);
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::drawElementsInstancedBaseVertexBaseInstance(const gl::Context *context,
+                                                                     gl::PrimitiveMode mode,
+                                                                     GLsizei count,
+                                                                     gl::DrawElementsType type,
+                                                                     const void *indices,
+                                                                     GLsizei instances,
+                                                                     GLint baseVertex,
+                                                                     GLuint baseInstance)
+{
+    // TODO
     return angle::Result::Continue;
 }
 
@@ -2109,7 +2122,7 @@ angle::Result ContextVk::flushImpl(const gl::Semaphore *clientSignalSemaphore)
         signalSemaphores.push_back(vk::GetImpl(clientSignalSemaphore)->getHandle());
     }
 
-    VkSubmitInfo submitInfo       = {};
+    VkSubmitInfo submitInfo = {};
     InitializeSubmitInfo(&submitInfo, commandBatch.get(), mWaitSemaphores, signalSemaphores);
 
     ANGLE_TRY(submitFrame(submitInfo, commandBatch.release()));
