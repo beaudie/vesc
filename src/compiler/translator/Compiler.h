@@ -178,6 +178,10 @@ class TCompiler : public TShHandleBase
     std::vector<sh::InterfaceBlock> mShaderStorageBlocks;
     std::vector<sh::InterfaceBlock> mInBlocks;
 
+    // Used for driver workaround
+    bool isBaseVertexInUse   = false;
+    bool isBaseInstanceInUse = false;
+
   private:
     // Initialize symbol-table with built-in symbols.
     bool initBuiltInSymbolTable(const ShBuiltInResources &resources);
