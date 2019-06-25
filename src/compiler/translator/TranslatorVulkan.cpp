@@ -643,6 +643,11 @@ void TranslatorVulkan::translate(TIntermBlock *root,
                                  getNameMap(), &getSymbolTable(), getShaderType(),
                                  getShaderVersion(), getOutputType(), compileOptions);
 
+    if (isBaseInstanceInUse)
+    {
+        outputGLSL.markBaseInstanceInUse();
+    }
+
     sink << "#version 450 core\n";
 
     if (compileOptions & SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING)

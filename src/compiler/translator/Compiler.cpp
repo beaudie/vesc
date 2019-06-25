@@ -662,10 +662,8 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     {
         if ((compileOptions & SH_EMULATE_GL_BASE_VERTEX_BASE_INSTANCE) != 0u)
         {
-            EmulateGLBaseVertex(root, &mSymbolTable, &mUniforms,
-                                shouldCollectVariables(compileOptions));
-            EmulateGLBaseInstance(root, &mSymbolTable, &mUniforms,
-                                  shouldCollectVariables(compileOptions));
+            EmulateGLBaseVertexBaseInstance(root, &mSymbolTable, &mUniforms,
+                                            shouldCollectVariables(compileOptions));
             if (!ValidateAST(root, &mDiagnostics, mValidateASTOptions))
             {
                 return false;
@@ -924,17 +922,18 @@ bool TCompiler::compile(const char *const shaderStrings[],
     TScopedPoolAllocator scopedAlloc(&allocator);
     TIntermBlock *root = compileTreeImpl(shaderStrings, numStrings, compileOptions);
 
+    isBaseVertexInUse   = false;
+    isBaseInstanceInUse = false;
+
     if (root)
     {
-        if (compileOptions & SH_INTERMEDIATE_TREE)
-            OutputTree(root, mInfoSink.info);
-
-        if (compileOptions & SH_OBJECT_CODE)
-        {
-            PerformanceDiagnostics perfDiagnostics(&mDiagnostics);
-            translate(root, compileOptions, &perfDiagnostics);
-        }
-
+        // Parse uniforms first to label if they are in use as needed by driver workaround
+        // before translate is called.
+        // but delay changing their names after translate.
+        // This need to make sure mUniforms is unchanged in OutputTree and translate functions.
+        int uniformVectorIdDrawId       = -1;
+        int uniformVectorIdBaseVertex   = -1;
+        int uniformVectorIdBaseInstance = -1;
         if (mShaderType == GL_VERTEX_SHADER)
         {
             bool lookForDrawID =
@@ -947,27 +946,47 @@ bool TCompiler::compile(const char *const shaderStrings[],
 
             if (lookForDrawID || lookForBaseVertexBaseInstance)
             {
-                for (auto &uniform : mUniforms)
+                // for (auto &uniform : mUniforms)
+                for (size_t i = 0; i < mUniforms.size(); i++)
                 {
+                    const auto &uniform = mUniforms[i];
                     if (lookForDrawID && uniform.name == "angle_DrawID" &&
                         uniform.mappedName == "angle_DrawID")
                     {
-                        uniform.name = "gl_DrawID";
+                        uniformVectorIdDrawId = i;
                     }
                     else if (lookForBaseVertexBaseInstance && uniform.name == "angle_BaseVertex" &&
                              uniform.mappedName == "angle_BaseVertex")
                     {
-                        uniform.name = "gl_BaseVertex";
+                        isBaseVertexInUse         = true;
+                        uniformVectorIdBaseVertex = i;
                     }
                     else if (lookForBaseVertexBaseInstance &&
                              uniform.name == "angle_BaseInstance" &&
                              uniform.mappedName == "angle_BaseInstance")
                     {
-                        uniform.name = "gl_BaseInstance";
+                        isBaseInstanceInUse         = true;
+                        uniformVectorIdBaseInstance = i;
                     }
                 }
             }
         }
+
+        if (compileOptions & SH_INTERMEDIATE_TREE)
+            OutputTree(root, mInfoSink.info);
+
+        if (compileOptions & SH_OBJECT_CODE)
+        {
+            PerformanceDiagnostics perfDiagnostics(&mDiagnostics);
+            translate(root, compileOptions, &perfDiagnostics);
+        }
+
+        if (uniformVectorIdDrawId >= 0)
+            mUniforms[uniformVectorIdDrawId].name = "gl_DrawID";
+        if (uniformVectorIdBaseVertex >= 0)
+            mUniforms[uniformVectorIdBaseVertex].name = "gl_BaseVertex";
+        if (uniformVectorIdBaseInstance >= 0)
+            mUniforms[uniformVectorIdBaseInstance].name = "gl_BaseInstance";
 
         // The IntermNode tree doesn't need to be deleted here, since the
         // memory will be freed in a big chunk by the PoolAllocator.
