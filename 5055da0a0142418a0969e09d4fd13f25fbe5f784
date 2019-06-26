@@ -16,6 +16,24 @@
       "revId": "5055da0a0142418a0969e09d4fd13f25fbe5f784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e66740a_0b587ca7",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-26T18:29:10Z",
+      "side": 1,
+      "message": "Yes, I did encounter this issue. I had been thinking it would make more sense for the override to be based on the action rather than the length of the suppression. I.e. PASS overrides SKIP overrides TIMEOUT overrides FAIL overrides FLAKY.\n\nDoes that order sound good to you? I put PASS as the highest priority as I would expect it be used like \"* \u003d FAIL, specific \u003d PASS\".",
+      "parentUuid": "cc5fdbe9_5e1f846b",
+      "revId": "5055da0a0142418a0969e09d4fd13f25fbe5f784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
