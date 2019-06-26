@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "cef0a0a1_016032ee",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:52:09Z",
+      "side": 1,
+      "message": "It\u0027s necessary right now. I had to add it originally to get things working. You\u0027ll note this is not a code change but just a moved call from below where releaseRetainedBuffers used to do this.",
+      "parentUuid": "3c5944b1_4e34b7d8",
+      "revId": "4036bf7242339d85871c624b747f7196f6a38766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f72092c_79cee9e9",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
@@ -109,6 +127,30 @@
       "revId": "4036bf7242339d85871c624b747f7196f6a38766",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfb509c6_8e23dda5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:52:09Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "9f72092c_79cee9e9",
+      "range": {
+        "startLine": 364,
+        "startChar": 34,
+        "endLine": 364,
+        "endChar": 36
+      },
+      "revId": "4036bf7242339d85871c624b747f7196f6a38766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -170,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "7d57f650_28ed0191",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:52:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f55ce76_7cec961f",
+      "range": {
+        "startLine": 490,
+        "startChar": 0,
+        "endLine": 491,
+        "endChar": 15
+      },
+      "revId": "4036bf7242339d85871c624b747f7196f6a38766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba8c73f9_56530a85",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 13
@@ -225,6 +291,30 @@
       "revId": "4036bf7242339d85871c624b747f7196f6a38766",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06ae22bc_30ecc7c3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:52:09Z",
+      "side": 1,
+      "message": "We could rename it. In this case I don\u0027t think it\u0027s dangerous.",
+      "parentUuid": "26e9bb9c_32871fe5",
+      "range": {
+        "startLine": 32,
+        "startChar": 39,
+        "endLine": 32,
+        "endChar": 71
+      },
+      "revId": "4036bf7242339d85871c624b747f7196f6a38766",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
