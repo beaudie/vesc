@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "270ac818_24fa05f9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-26T16:14:11Z",
+      "side": 1,
+      "message": "I think it would be better to fix the issue at the source (i.e. in the front end, avoid calling to the back end if setting the same values for something). Then this could be turned into an ASSERT.",
+      "revId": "8a6233777207e8320dd1855f8c87ade24037f209",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed1a0810_eef12a52",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-26T16:14:11Z",
+      "side": 1,
+      "message": "This was only used in one function, why has it turned into a member?",
+      "revId": "8a6233777207e8320dd1855f8c87ade24037f209",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
