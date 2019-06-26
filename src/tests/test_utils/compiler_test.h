@@ -64,9 +64,8 @@ class MatchOutputCodeTest : public testing::Test
         return foundInCode(SH_GLSL_COMPATIBILITY_OUTPUT, stringToFind);
     }
 
-    bool foundInCodeRegex(ShShaderOutput output, const char *regexToFind) const;
-
     bool foundInCode(ShShaderOutput output, const char *stringToFind) const;
+    bool foundInCodeRegex(ShShaderOutput output, const char *regexToFind) const;
 
     // Test that the strings are found in the specified output in the specified order.
     bool foundInCodeInOrder(ShShaderOutput output, std::vector<const char *> stringsToFind);
@@ -75,12 +74,17 @@ class MatchOutputCodeTest : public testing::Test
     bool foundInCode(ShShaderOutput output,
                      const char *stringToFind,
                      const int expectedOccurrences) const;
+    bool foundInCodeRegex(ShShaderOutput output,
+                          const char *regexToFind,
+                          const int expectedOccurrences) const;
 
     // Test that the string is found in all outputs
     bool foundInCode(const char *stringToFind) const;
+    bool foundInCodeRegex(const char *regexToFind) const;
 
     // Test that the string occurs for exactly expectedOccurrences times in all outputs
     bool foundInCode(const char *stringToFind, const int expectedOccurrences) const;
+    bool foundInCodeRegex(const char *regexToFind, const int expectedOccurences) const;
 
     // Test that the strings are found in all outputs in the specified order.
     bool foundInCodeInOrder(std::vector<const char *> stringsToFind);

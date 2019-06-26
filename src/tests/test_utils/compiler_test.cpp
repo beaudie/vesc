@@ -247,6 +247,18 @@ bool MatchOutputCodeTest::foundInCode(const char *stringToFind) const
     return true;
 }
 
+bool MatchOutputCodeTest::foundInCodeRegex(const char *regexToFind) const
+{
+    for (auto &code : mOutputCode)
+    {
+        if (!foundInCodeRegex(code.first, regexToFind))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool MatchOutputCodeTest::foundInCode(const char *stringToFind, const int expectedOccurrences) const
 {
     for (auto &code : mOutputCode)
