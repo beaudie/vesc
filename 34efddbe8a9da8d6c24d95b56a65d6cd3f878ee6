@@ -1,0 +1,533 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "602e1cea_43310b23",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "nit: while you\u0027re at it could you move this next to kDriverUniformNames?",
+      "range": {
+        "startLine": 359,
+        "startChar": 0,
+        "endLine": 368,
+        "endChar": 0
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "096a11a1_67d52333",
+        "filename": "src/libANGLE/Buffer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "this should not be part of the check. you could probably add a regression test for this if it can affect test output.",
+      "range": {
+        "startLine": 50,
+        "startChar": 15,
+        "endLine": 50,
+        "endChar": 53
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f539445_49914f0f",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "looks like maybe an unrelated but blocking fix?",
+      "range": {
+        "startLine": 256,
+        "startChar": 8,
+        "endLine": 256,
+        "endChar": 75
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d5eac45_75ab78c0",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "I don\u0027t follow why this is a concern. Why does XFB need special treatment?",
+      "range": {
+        "startLine": 216,
+        "startChar": 6,
+        "endLine": 217,
+        "endChar": 59
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2051e221_c2d51748",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2019,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "how about getBufferOffsets? For some reason I was reading this like you were updating the transformFeedbackVk object instead of retrieving information.",
+      "range": {
+        "startLine": 2019,
+        "startChar": 29,
+        "endLine": 2019,
+        "endChar": 48
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4882eefb_3f686ac6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "nit: to match the other invalidate functions you can omit \u0027current\u0027",
+      "range": {
+        "startLine": 218,
+        "startChar": 9,
+        "endLine": 218,
+        "endChar": 50
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4692a0dc_399a6412",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "what\u0027s the rework of descriptor updateS?",
+      "range": {
+        "startLine": 452,
+        "startChar": 84,
+        "endLine": 453,
+        "endChar": 25
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "034a5aed_7ec91443",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "please default init this in the ContextVk constructor.",
+      "range": {
+        "startLine": 456,
+        "startChar": 10,
+        "endLine": 456,
+        "endChar": 24
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34fa0515_90f8f8ae",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "It would be cool if you could add a column to \"UniformTypeInfo\" for the \"asFloat\" function and use it here. UniformTypeInfo is a bit misnamed. It\u0027s really a shader interface variable info structure. Just would clear up some of the redundant information.",
+      "range": {
+        "startLine": 383,
+        "startChar": 11,
+        "endLine": 383,
+        "endChar": 25
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cad1742b_ba19e451",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "couldn\u0027t you just output \"[\" \u003c\u003c col \u003c\u003c \"]\" ? and same for row?",
+      "range": {
+        "startLine": 469,
+        "startChar": 0,
+        "endLine": 477,
+        "endChar": 17
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d173f36_b3cb996d",
+        "filename": "src/libANGLE/renderer/vulkan/QueryVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "ouf, can we break this dependency?",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 44
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fe33a11_3a0cca2f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "I think you should use the extension xfb bug here.",
+      "range": {
+        "startLine": 1135,
+        "startChar": 50,
+        "endLine": 1135,
+        "endChar": 74
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e06ffda_31fe1fa4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "same, so you can close the emulation bug sooner.",
+      "range": {
+        "startLine": 1216,
+        "startChar": 64,
+        "endLine": 1216,
+        "endChar": 88
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8aec780_7065af8b",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "you could cache the BufferHelper */offsets for addFramebufferDependency and other methods below?",
+      "range": {
+        "startLine": 71,
+        "startChar": 3,
+        "endLine": 71,
+        "endChar": 21
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fdd918d_c6896009",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "nit: use a helper or two to clean up the formatting? like RendererVk *renderer.",
+      "range": {
+        "startLine": 129,
+        "startChar": 40,
+        "endLine": 129,
+        "endChar": 65
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3820f267_210543e9",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 195,
+        "startChar": 41,
+        "endLine": 195,
+        "endChar": 65
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6a64be8_8fab37eb",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "can these be negative? Or can we use uint64_t?",
+      "range": {
+        "startLine": 209,
+        "startChar": 8,
+        "endLine": 209,
+        "endChar": 16
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2177fb6e_9c47a911",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "nit: maybe use a few temporaries to make this more readable.",
+      "range": {
+        "startLine": 210,
+        "startChar": 5,
+        "endLine": 213,
+        "endChar": 51
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43d672d0_0a4a8bb5",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "Could clarify the wording. What\u0027s a dirty bit on buffer objects? And buffer usage as in dynamic-\u003estatic? Or do you mean how the buffer is bound?",
+      "range": {
+        "startLine": 236,
+        "startChar": 24,
+        "endLine": 237,
+        "endChar": 63
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9c2664c_095dca5c",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "can you add these to libANGLE/Constants.h?",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 58
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d612d89_01f9aefb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "can you remove this while you\u0027re at it?",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 31
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5a4f8cb_ab3c116d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "with the move to Constants.h, can you move this limit code into Context.cpp and use LimitCap?",
+      "range": {
+        "startLine": 242,
+        "startChar": 8,
+        "endLine": 242,
+        "endChar": 75
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66edbafc_c12bac52",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T15:49:51Z",
+      "side": 1,
+      "message": "this bug is closed now. Can you double check? We should change the TODO at least",
+      "range": {
+        "startLine": 990,
+        "startChar": 39,
+        "endLine": 990,
+        "endChar": 63
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
