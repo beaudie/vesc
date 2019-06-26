@@ -75,6 +75,7 @@ enum class LinkMismatchError
     BINDING_MISMATCH,
     LOCATION_MISMATCH,
     OFFSET_MISMATCH,
+    INSTANCE_NAME_MISMATCH,
 
     // Interface block specific
     LAYOUT_QUALIFIER_MISMATCH,
@@ -952,6 +953,12 @@ class Program final : angle::NonCopyable, public LabeledObject
                                        InfoLog &infoLog,
                                        const ProgramMergedVaryings &linkedVaryings,
                                        const Caps &caps) const;
+    bool linkValidateUniformBlockFieldsNoMatchingUniformNames(
+        InfoLog &infoLog,
+        std::vector<sh::InterfaceBlockField> fields) const;
+    bool linkValidateUniformBlockFieldsNoMatchingFieldNames(
+        InfoLog &infoLog,
+        sh::InterfaceBlock uniformBlockIn) const;
     bool linkValidateGlobalNames(InfoLog &infoLog) const;
 
     void gatherTransformFeedbackVaryings(const ProgramMergedVaryings &varyings);

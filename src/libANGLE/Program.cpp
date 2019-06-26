@@ -434,6 +434,8 @@ const char *GetLinkMismatchErrorString(LinkMismatchError linkError)
             return "Location layout qualifier";
         case LinkMismatchError::OFFSET_MISMATCH:
             return "Offset layout qualilfier";
+        case LinkMismatchError::INSTANCE_NAME_MISMATCH:
+            return "Instance name qualilfier";
 
         case LinkMismatchError::LAYOUT_QUALIFIER_MISMATCH:
             return "Layout qualifier";
@@ -491,6 +493,11 @@ LinkMismatchError AreMatchingInterfaceBlocks(const sh::InterfaceBlock &interface
         interfaceBlock1.binding != interfaceBlock2.binding)
     {
         return LinkMismatchError::LAYOUT_QUALIFIER_MISMATCH;
+    }
+    if ((interfaceBlock1.instanceName.empty() && !interfaceBlock2.instanceName.empty()) ||
+        (!interfaceBlock1.instanceName.empty() && interfaceBlock2.instanceName.empty()))
+    {
+        return LinkMismatchError::INSTANCE_NAME_MISMATCH;
     }
     const unsigned int numBlockMembers = static_cast<unsigned int>(interfaceBlock1.fields.size());
     for (unsigned int blockMemberIndex = 0; blockMemberIndex < numBlockMembers; blockMemberIndex++)
@@ -3662,6 +3669,74 @@ bool Program::linkValidateTransformFeedback(const Version &version,
     return true;
 }
 
+bool Program::linkValidateUniformBlockFieldsNoMatchingUniformNames(
+    InfoLog &infoLog,
+    std::vector<sh::InterfaceBlockField> fields) const
+{
+    for (ShaderType shaderType : kAllGraphicsShaderTypes)
+    {
+        Shader *shader = mState.mAttachedShaders[shaderType];
+        if (!shader)
+        {
+            continue;
+        }
+
+        const std::vector<sh::Uniform> &uniforms = shader->getUniforms();
+        for (const auto &uniform : uniforms)
+        {
+            for (const auto &field : fields)
+            {
+                if (uniform.name == field.name)
+                {
+                    infoLog << "Name conflicts between a uniform and a uniform block field: "
+                            << uniform.name;
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+bool Program::linkValidateUniformBlockFieldsNoMatchingFieldNames(
+    InfoLog &infoLog,
+    sh::InterfaceBlock uniformBlockIn) const
+{
+    for (ShaderType shaderType : kAllGraphicsShaderTypes)
+    {
+        Shader *shader = mState.mAttachedShaders[shaderType];
+        if (!shader)
+        {
+            continue;
+        }
+
+        const std::vector<sh::InterfaceBlock> &uniformBlocks = shader->getUniformBlocks();
+        for (const auto &uniformBlock : uniformBlocks)
+        {
+            if (uniformBlock.instanceName.empty() &&
+                !uniformBlock.isSameInterfaceBlockAtLinkTime(uniformBlockIn))
+            {
+                for (const auto &field : uniformBlock.fields)
+                {
+                    for (const auto &fieldIn : uniformBlockIn.fields)
+                    {
+                        if ((field.name == fieldIn.name) && (field.type == fieldIn.type) &&
+                            (field.precision == fieldIn.precision))
+                        {
+                            infoLog << "Name conflicts between uniform block field names: "
+                                    << field.name;
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
 bool Program::linkValidateGlobalNames(InfoLog &infoLog) const
 {
     const std::vector<sh::Attribute> &attributes =
@@ -3683,6 +3758,38 @@ bool Program::linkValidateGlobalNames(InfoLog &infoLog) const
                 if (uniform.name == attrib.name)
                 {
                     infoLog << "Name conflicts between a uniform and an attribute: " << attrib.name;
+                    return false;
+                }
+            }
+        }
+    }
+
+    // Validate no Uniform Block fields conflict with other Uniforms or Uniform Block fields
+    for (ShaderType shaderType : kAllGraphicsShaderTypes)
+    {
+        Shader *shader = mState.mAttachedShaders[shaderType];
+        if (!shader)
+        {
+            continue;
+        }
+
+        const std::vector<sh::InterfaceBlock> &uniformBlocks = shader->getUniformBlocks();
+        for (const auto &uniformBlock : uniformBlocks)
+        {
+            if (uniformBlock.instanceName.empty())
+            {
+                // If a uniform block has no instance name, no other uniforms may have the same name
+                // as any fields of the uniform block.
+                if (!linkValidateUniformBlockFieldsNoMatchingUniformNames(infoLog,
+                                                                          uniformBlock.fields))
+                {
+                    return false;
+                }
+
+                // If a uniform block has no instance name, no other uniform blocks without instance
+                // names may have a matching field name
+                if (!linkValidateUniformBlockFieldsNoMatchingFieldNames(infoLog, uniformBlock))
+                {
                     return false;
                 }
             }
