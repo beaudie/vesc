@@ -52,6 +52,8 @@ class ImmutableStringBuilder
             mData[mPos++]  = digitChar;
             --index;
         }
+        // Null-terminate the string
+        mData[mPos++] = '\0';
     }
 
     template <typename T>

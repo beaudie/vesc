@@ -17,6 +17,7 @@
 #include "compiler/translator/OutputVulkanGLSL.h"
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/tree_ops/NameEmbeddedUniformStructs.h"
+#include "compiler/translator/tree_ops/RewriteDfdy.h"
 #include "compiler/translator/tree_ops/RewriteStructSamplers.h"
 #include "compiler/translator/tree_util/BuiltIn_autogen.h"
 #include "compiler/translator/tree_util/FindMain.h"
@@ -762,6 +763,11 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         {
             InsertFragCoordCorrection(root, GetMainSequence(root), &getSymbolTable(),
                                       driverUniforms);
+        }
+
+        {
+            TIntermBinary *viewportYScale = CreateDriverUniformRef(driverUniforms, kViewportYScale);
+            RewriteDfdy(root, getSymbolTable(), getShaderVersion(), viewportYScale);
         }
     }
     else
