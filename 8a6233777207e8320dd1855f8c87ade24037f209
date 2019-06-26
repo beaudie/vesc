@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "0e8665f8_607d6b18",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T17:19:37Z",
+      "side": 1,
+      "message": "I\u0027m not sure I agree. If the user binds a different FBO, sure, we invalidate a bunch of caches. I think that\u0027s unavoidable. Checking for redundant state changes right before the call has not turned out to be more efficient in our other back-ends. It\u0027s better done in gl::State and in this case gl::VertexArray.",
+      "parentUuid": "ede807b5_f9d49b12",
+      "revId": "8a6233777207e8320dd1855f8c87ade24037f209",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed1a0810_eef12a52",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 1
