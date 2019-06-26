@@ -52,6 +52,24 @@
       "revId": "5055da0a0142418a0969e09d4fd13f25fbe5f784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71ca48e1_06d84715",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-26T18:51:50Z",
+      "side": 1,
+      "message": "Would you want me to make this change? Or since our expectations seem to be correct at the moment, defer that to another CL?",
+      "parentUuid": "8697fcb5_fe46d627",
+      "revId": "5055da0a0142418a0969e09d4fd13f25fbe5f784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
