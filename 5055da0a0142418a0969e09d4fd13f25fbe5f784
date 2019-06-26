@@ -70,6 +70,24 @@
       "revId": "5055da0a0142418a0969e09d4fd13f25fbe5f784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ecb2b6b_24b96c3c",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T19:00:06Z",
+      "side": 1,
+      "message": "Partial overlap can get pretty gnarly in some cases. I also recall Chrome having some problems with this kind of behaviour. You can probably just take out this section in the worst case as it\u0027s no longer valid.",
+      "parentUuid": "2e66740a_0b587ca7",
+      "revId": "5055da0a0142418a0969e09d4fd13f25fbe5f784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
