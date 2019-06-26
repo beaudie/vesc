@@ -473,7 +473,8 @@ angle::Result WaitFences(vk::Context *context,
         }
         ANGLE_VK_TRY(context, result);
 
-        fences->back().reset(context->getDevice());
+        fences->back().resetAndRecyle(context->getDevice(),
+                                      context->getRenderer()->getFenceRecycler());
         fences->pop_back();
     }
 
@@ -512,6 +513,8 @@ RendererVk::~RendererVk()
 void RendererVk::onDestroy(vk::Context *context)
 {
     (void)cleanupGarbage(context, true);
+
+    mFenceRecycler.destroy(mDevice);
 
     mPipelineLayoutCache.destroy(mDevice);
     mDescriptorSetLayoutCache.destroy(mDevice);

@@ -92,6 +92,8 @@ class RendererVk : angle::NonCopyable
 
     const vk::MemoryProperties &getMemoryProperties() const { return mMemoryProperties; }
 
+    vk::Recycler<vk::Fence> *getFenceRecycler() { return &mFenceRecycler; }
+
     // TODO(jmadill): We could pass angle::FormatID here.
     const vk::Format &getFormat(GLenum internalFormat) const
     {
@@ -197,6 +199,9 @@ class RendererVk : angle::NonCopyable
     Serial mCurrentQueueSerial;
 
     bool mDeviceLost;
+
+    // Recycler of vkObjects
+    vk::Recycler<vk::Fence> mFenceRecycler;
 
     std::mutex mGarbageMutex;
     using FencedGarbage =

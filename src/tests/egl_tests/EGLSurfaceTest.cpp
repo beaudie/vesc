@@ -354,6 +354,9 @@ TEST_P(EGLSurfaceTest, SwapInterval)
     ANGLE_SKIP_TEST_IF((IsNexus5X() || IsNexus6P()) &&
                        GetParam().getRenderer() == EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE);
 
+    // Flaky hang on Linux with Nvidia drier. http://anglebug.com/3450
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsNVIDIA());
+
     initializeDisplay();
     initializeSurfaceWithDefaultConfig();
     initializeContext();
