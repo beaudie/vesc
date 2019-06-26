@@ -459,6 +459,22 @@ class Shared final : angle::NonCopyable
 
     void reset(VkDevice device) { set(device, nullptr); }
 
+    template <typename Recycler_T>
+    void resetAndRecyle(VkDevice device, Recycler_T *recycler)
+    {
+        if (mRefCounted)
+        {
+            mRefCounted->releaseRef();
+            if (!mRefCounted->isReferenced())
+            {
+                recycler->recyle(std::move(mRefCounted->get()));
+                SafeDelete(mRefCounted);
+            }
+
+            mRefCounted = nullptr;
+        }
+    }
+
     bool isReferenced() const
     {
         // If reference is zero, the object should have been deleted.  I.e. if the object is not
@@ -480,6 +496,44 @@ class Shared final : angle::NonCopyable
 
   private:
     RefCounted<T> *mRefCounted;
+};
+
+template <typename T>
+class Recycler final : angle::NonCopyable
+{
+  public:
+    Recycler() = default;
+
+    void recyle(T &&garbageObject) { mObjectFreeList.emplace_back(std::move(garbageObject)); }
+
+    VkResult fetch(VkDevice device, T *outObject)
+    {
+        ASSERT(!empty());
+
+        VkResult res;
+        if ((res = mObjectFreeList.back().reset(device)) != VK_SUCCESS)
+        {
+            return res;
+        }
+
+        *outObject = std::move(mObjectFreeList.back());
+        mObjectFreeList.pop_back();
+
+        return VK_SUCCESS;
+    }
+
+    void destroy(VkDevice device)
+    {
+        for (T &object : mObjectFreeList)
+        {
+            object.destroy(device);
+        }
+    }
+
+    bool empty() const { return mObjectFreeList.empty(); }
+
+  private:
+    std::vector<T> mObjectFreeList;
 };
 
 }  // namespace vk
