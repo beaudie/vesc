@@ -847,6 +847,28 @@ libangle_vulkan_sources = [
   "src/libANGLE/renderer/vulkan/vk_wrapper.h",
 ]
 
+libANGLE_capture_sources = [
+  "src/libANGLE/FrameCapture.h",
+  "src/libANGLE/FrameCapture.cpp",
+  "src/libANGLE/capture_gles1_autogen.cpp",
+  "src/libANGLE/capture_gles1_autogen.h",
+  "src/libANGLE/capture_gles1_params.cpp",
+  "src/libANGLE/capture_gles2_autogen.cpp",
+  "src/libANGLE/capture_gles2_autogen.h",
+  "src/libANGLE/capture_gles2_params.cpp",
+  "src/libANGLE/capture_gles3_autogen.cpp",
+  "src/libANGLE/capture_gles3_autogen.h",
+  "src/libANGLE/capture_gles3_params.cpp",
+  "src/libANGLE/capture_gles31_autogen.cpp",
+  "src/libANGLE/capture_gles31_autogen.h",
+  "src/libANGLE/capture_gles31_params.cpp",
+  "src/libANGLE/capture_glesext_autogen.cpp",
+  "src/libANGLE/capture_glesext_autogen.h",
+  "src/libANGLE/capture_glesext_params.cpp",
+  "src/libANGLE/frame_capture_utils_autogen.cpp",
+  "src/libANGLE/frame_capture_utils_autogen.h",
+]
+
 libangle_vulkan_android_sources = [
   "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
   "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.h",
