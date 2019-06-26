@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ede807b5_f9d49b12",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-26T17:09:00Z",
+      "side": 1,
+      "message": "I have thought of doing it in the frontend, I think basically there are two ways to do it:\n\n1. We can mask out all the unnecessary update use gl_dirty_bits, but it would hit situation like https://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/renderer/vulkan/ContextVk.cpp#1559 , we have to update PipelineDesc when FrameBuffer change, but the PipelineDesc may not necessarily different than the previous one\n\n2. We can make all the `update*` functions at (https://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/renderer/vulkan/vk_cache_utils.h#369) to return a bool value indicates whether they have value change and if not don\u0027t set vkPipeline to dirty. But that would require lots of field-to-field compare dummy code. I\u0027d rather do a memcpy here.",
+      "parentUuid": "270ac818_24fa05f9",
+      "revId": "8a6233777207e8320dd1855f8c87ade24037f209",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed1a0810_eef12a52",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-06-26T16:14:11Z",
       "side": 1,
       "message": "This was only used in one function, why has it turned into a member?",
+      "revId": "8a6233777207e8320dd1855f8c87ade24037f209",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77efc691_cb3fadd2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-26T17:09:00Z",
+      "side": 1,
+      "message": "It is part of the state of CurrentPipeline, in the function, its read value should be the last computed result, so it has to be kept alive.",
+      "parentUuid": "ed1a0810_eef12a52",
       "revId": "8a6233777207e8320dd1855f8c87ade24037f209",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
