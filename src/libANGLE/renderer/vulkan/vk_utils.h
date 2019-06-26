@@ -416,7 +416,8 @@ template <typename T>
 class Shared final : angle::NonCopyable
 {
   public:
-    Shared() : mRefCounted(nullptr) {}
+    Shared() : mRefCounted(nullptr), mCollector(nullptr) {}
+    Shared(std::function<void(T &&)> collector) : mRefCounted(nullptr), mCollector(collector) {}
     ~Shared() { ASSERT(mRefCounted == nullptr); }
 
     Shared(Shared &&other) { *this = std::move(other); }
@@ -424,6 +425,7 @@ class Shared final : angle::NonCopyable
     {
         ASSERT(this != &other);
         mRefCounted       = other.mRefCounted;
+        mCollector        = other.mCollector;
         other.mRefCounted = nullptr;
         return *this;
     }
@@ -435,7 +437,15 @@ class Shared final : angle::NonCopyable
             mRefCounted->releaseRef();
             if (!mRefCounted->isReferenced())
             {
-                mRefCounted->get().destroy(device);
+                if (mCollector)
+                {
+                    WARN() << "fence collected";
+                    mCollector(std::move(mRefCounted->get()));
+                }
+                else
+                {
+                    mRefCounted->get().destroy(device);
+                }
                 SafeDelete(mRefCounted);
             }
         }
@@ -453,9 +463,16 @@ class Shared final : angle::NonCopyable
         set(device, new RefCounted<T>(std::move(newObject)));
     }
 
-    void copy(VkDevice device, const Shared<T> &other) { set(device, other.mRefCounted); }
+    void copy(VkDevice device, const Shared<T> &other)
+    {
+        set(device, other.mRefCounted);
+        mCollector = other.mCollector;
+    }
 
     void reset(VkDevice device) { set(device, nullptr); }
+
+    // It is useful when we want to force destroy it
+    void clearCollector() { mCollector = nullptr; }
 
     bool isReferenced() const
     {
@@ -478,6 +495,7 @@ class Shared final : angle::NonCopyable
 
   private:
     RefCounted<T> *mRefCounted;
+    std::function<void(T &&)> mCollector;
 };
 
 }  // namespace vk
