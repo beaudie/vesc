@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc5fdbe9_5e1f846b",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-06-26T17:12:34Z",
+      "side": 1,
+      "message": "Looks good in general, but I want to double check the logic here. Is this still the case? What\u0027s a good solution?\nIe.\n101 MAC : DEQP/test_group/*/long_named_test \u003d FAIL // int fails on Mac \n100 MAC NVIDIA : DEQP/test_group/subgroup/* \u003d SKIP // crashes on Nvidia mac\n\nThis case would use the FAIL expectation for \nDEQP/test_group/subgroup/long_named_test, which crashes.",
+      "revId": "5055da0a0142418a0969e09d4fd13f25fbe5f784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
