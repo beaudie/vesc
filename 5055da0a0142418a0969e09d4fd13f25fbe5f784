@@ -88,6 +88,24 @@
       "revId": "5055da0a0142418a0969e09d4fd13f25fbe5f784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18f21c11_a2ff9700",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-06-26T19:19:12Z",
+      "side": 1,
+      "message": "Just to note, this CL will mean we diverge from http://bit.ly/chromium-test-list-format",
+      "parentUuid": "7ecb2b6b_24b96c3c",
+      "revId": "5055da0a0142418a0969e09d4fd13f25fbe5f784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
