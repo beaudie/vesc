@@ -358,6 +358,9 @@ TEST_P(EGLSurfaceTest, SwapInterval)
     // Flaky hang on Ubuntu 19.04 NVIDIA Vulkan. http://anglebug.com/3618
     ANGLE_SKIP_TEST_IF(IsLinux() && IsNVIDIA() && isVulkanRenderer());
 
+    // Flaky hang on Linux with Nvidia drier. http://anglebug.com/3450
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsNVIDIA());
+
     initializeDisplay();
     initializeSurfaceWithDefaultConfig();
     initializeContext();
