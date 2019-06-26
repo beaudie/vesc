@@ -22,6 +22,30 @@
       "revId": "1dba7ec8d5aa6c226cd3a74738532f38853c8df3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6a05a2d_f1867eb3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-26T14:36:12Z",
+      "side": 1,
+      "message": "Saw this before some hacks in xfb made it not reproducible, but I don\u0027t remember where. The current implementation has a bug though which should be quite easily reproducible:\n\n- Write to the buffer in any way\n- glCopyBufferSubData into itself\n\nThe buffer\u0027s node should be broken in between but isn\u0027t. I\u0027ll update the commit description.",
+      "parentUuid": "6cf429eb_3998d2f2",
+      "range": {
+        "startLine": 10,
+        "startChar": 13,
+        "endLine": 10,
+        "endChar": 22
+      },
+      "revId": "1dba7ec8d5aa6c226cd3a74738532f38853c8df3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
