@@ -37,7 +37,6 @@
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
-
 #include "libANGLE/trace.h"
 
 namespace rx
@@ -515,28 +514,28 @@ angle::Result ContextVk::handleDirtyPipeline(const gl::Context *context,
 {
     if (!mCurrentPipeline)
     {
-        const vk::GraphicsPipelineDesc *descPtr;
-
         // Draw call shader patching, shader compilation, and pipeline cache query.
         ANGLE_TRY(mProgram->getGraphicsPipeline(this, mCurrentDrawMode, *mGraphicsPipelineDesc,
                                                 mProgram->getState().getActiveAttribLocationsMask(),
-                                                &descPtr, &mCurrentPipeline));
+                                                &mCurrentPipelineDesc, &mCurrentPipeline));
         mGraphicsPipelineTransition.reset();
     }
     else if (mGraphicsPipelineTransition.any())
     {
+        ASSERT(!vk::GraphicsPipelineDesc::isDirtyPartIdentical(
+            mGraphicsPipelineTransition, *mCurrentPipelineDesc, *mGraphicsPipelineDesc));
         if (!mCurrentPipeline->findTransition(mGraphicsPipelineTransition, *mGraphicsPipelineDesc,
                                               &mCurrentPipeline))
         {
             vk::PipelineHelper *oldPipeline = mCurrentPipeline;
 
-            const vk::GraphicsPipelineDesc *descPtr;
+            ANGLE_TRY(
+                mProgram->getGraphicsPipeline(this, mCurrentDrawMode, *mGraphicsPipelineDesc,
+                                              mProgram->getState().getActiveAttribLocationsMask(),
+                                              &mCurrentPipelineDesc, &mCurrentPipeline));
 
-            ANGLE_TRY(mProgram->getGraphicsPipeline(
-                this, mCurrentDrawMode, *mGraphicsPipelineDesc,
-                mProgram->getState().getActiveAttribLocationsMask(), &descPtr, &mCurrentPipeline));
-
-            oldPipeline->addTransition(mGraphicsPipelineTransition, descPtr, mCurrentPipeline);
+            oldPipeline->addTransition(mGraphicsPipelineTransition, mCurrentPipelineDesc,
+                                       mCurrentPipeline);
         }
 
         mGraphicsPipelineTransition.reset();
