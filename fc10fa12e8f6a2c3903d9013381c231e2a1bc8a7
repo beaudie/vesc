@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4cde90cd_ec00109b",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-06-26T14:42:09Z",
+      "side": 1,
+      "message": "Yeah, this is much better and helps code throughout.",
+      "revId": "fc10fa12e8f6a2c3903d9013381c231e2a1bc8a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
