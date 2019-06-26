@@ -225,6 +225,12 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
     mPipelineDirtyBitsMask.set();
     mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
+
+    mSubmitFence = vk::Shared<vk::Fence>([&](vk::Fence &&retiredFence) {
+        WARN() << "free list emplace";
+        ASSERT(retiredFence.valid());
+        mSubmitFenceFreeList.emplace_back(std::move(retiredFence));
+    });
 }
 
 #undef INIT
@@ -267,10 +273,17 @@ void ContextVk::onDestroy(const gl::Context *context)
     mGpuEventQueryPool.destroy(device);
     mCommandPool.destroy(device);
 
+    for (vk::Fence &fence : mSubmitFenceFreeList)
+    {
+        fence.destroy(device);
+    }
+
     for (vk::CommandPool &pool : mCommandPoolFreeList)
     {
         pool.destroy(device);
     }
+
+    WARN() << "Context destroyed";
 }
 
 angle::Result ContextVk::getIncompleteTexture(const gl::Context *context,
@@ -2270,12 +2283,23 @@ angle::Result ContextVk::getNextSubmitFence(vk::Shared<vk::Fence> *sharedFenceOu
     VkDevice device = getDevice();
     if (!mSubmitFence.isReferenced())
     {
-        vk::Fence fence;
-        VkFenceCreateInfo fenceCreateInfo = {};
-        fenceCreateInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-        fenceCreateInfo.flags             = 0;
-        ANGLE_VK_TRY(this, fence.init(device, fenceCreateInfo));
-        mSubmitFence.assign(device, std::move(fence));
+        if (mSubmitFenceFreeList.empty())
+        {
+            vk::Fence fence;
+            VkFenceCreateInfo fenceCreateInfo = {};
+            fenceCreateInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+            fenceCreateInfo.flags             = 0;
+            ANGLE_VK_TRY(this, fence.init(device, fenceCreateInfo));
+            mSubmitFence.assign(device, std::move(fence));
+            WARN() << "fence created";
+        }
+        else
+        {
+            WARN() << "fence reused";
+            ANGLE_VK_TRY(this, mSubmitFenceFreeList.back().reset(getDevice()));
+            mSubmitFence.assign(device, std::move(mSubmitFenceFreeList.back()));
+            mSubmitFenceFreeList.pop_back();
+        };
     }
     sharedFenceOut->copy(device, mSubmitFence);
     return angle::Result::Continue;

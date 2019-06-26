@@ -1504,6 +1504,13 @@ angle::Result RendererVk::cleanupGarbage(vk::Context *context, bool block)
     auto garbageIter = mFencedGarbage.begin();
     while (garbageIter != mFencedGarbage.end())
     {
+        // Here garbageFences may already leave Context scope, explicitly destroy them
+        auto &fences = garbageIter->first;
+        for (auto fenceIter = fences.begin(); fenceIter != fences.end(); fenceIter++)
+        {
+            fenceIter->clearCollector();
+        }
+
         ANGLE_TRY(WaitFences(context, &garbageIter->first, block));
         if (garbageIter->first.empty())
         {

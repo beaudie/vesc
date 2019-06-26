@@ -416,6 +416,9 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
 
     for (SwapHistory &swap : mSwapHistory)
     {
+        // Fence collector is in context scope, here fence may leave
+        // context scope, so clearCollector to explicitly destroy fence
+        swap.sharedFence.clearCollector();
         swap.destroy(device);
     }
 

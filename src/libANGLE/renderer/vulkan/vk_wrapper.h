@@ -534,6 +534,7 @@ class Fence final : public WrappedObject<Fence, VkFence>
     using WrappedObject::operator=;
 
     VkResult init(VkDevice device, const VkFenceCreateInfo &createInfo);
+    VkResult reset(VkDevice device);
     VkResult getStatus(VkDevice device) const;
     VkResult wait(VkDevice device, uint64_t timeout) const;
 };
@@ -1361,6 +1362,7 @@ ANGLE_INLINE void Event::destroy(VkDevice device)
 ANGLE_INLINE VkResult Event::init(VkDevice device, const VkEventCreateInfo &createInfo)
 {
     ASSERT(!valid());
+    WARN() << "fence created";
     return vkCreateEvent(device, &createInfo, nullptr, &mHandle);
 }
 
@@ -1387,6 +1389,7 @@ ANGLE_INLINE void Fence::destroy(VkDevice device)
 {
     if (valid())
     {
+        WARN() << "fence destroyed";
         vkDestroyFence(device, mHandle, nullptr);
         mHandle = VK_NULL_HANDLE;
     }
@@ -1396,6 +1399,12 @@ ANGLE_INLINE VkResult Fence::init(VkDevice device, const VkFenceCreateInfo &crea
 {
     ASSERT(!valid());
     return vkCreateFence(device, &createInfo, nullptr, &mHandle);
+}
+
+ANGLE_INLINE VkResult Fence::reset(VkDevice device)
+{
+    ASSERT(valid());
+    return vkResetFences(device, 1, &mHandle);
 }
 
 ANGLE_INLINE VkResult Fence::getStatus(VkDevice device) const

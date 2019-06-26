@@ -522,6 +522,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
     // is otherwise unnecessary as the SyncVk objects don't actually outlive the renderer currently.
     // http://anglebug.com/2701
     vk::Shared<vk::Fence> mSubmitFence;
+    std::vector<vk::Fence> mSubmitFenceFreeList;
 
     // Pool allocator used for command graph but may be expanded to other allocations
     angle::PoolAllocator mPoolAllocator;
