@@ -144,6 +144,12 @@ class RendererVk : angle::NonCopyable
 
     Serial nextSerial();
 
+    angle::Result newSharedFence(vk::Context *context, vk::Shared<vk::Fence> *sharedFenceOut);
+    inline void resetSharedFence(vk::Shared<vk::Fence> *sharedFenceIn)
+    {
+        sharedFenceIn->resetAndRecyle(&mFenceRecycler);
+    }
+
     void addGarbage(vk::Shared<vk::Fence> &&fence, std::vector<vk::GarbageObjectBase> &&garbage);
     void addGarbage(std::vector<vk::Shared<vk::Fence>> &&fences,
                     std::vector<vk::GarbageObjectBase> &&garbage);
@@ -197,6 +203,10 @@ class RendererVk : angle::NonCopyable
     Serial mCurrentQueueSerial;
 
     bool mDeviceLost;
+
+    // Recyclers of vkObject
+    // (TODO) vkSemaphore
+    vk::Recycler<vk::Fence> mFenceRecycler;
 
     std::mutex mGarbageMutex;
     using FencedGarbage =
