@@ -37,7 +37,6 @@
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
-
 #include "libANGLE/trace.h"
 
 namespace rx
@@ -166,6 +165,7 @@ void ContextVk::CommandBatch::destroy(VkDevice device)
 ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer)
     : ContextImpl(state, errorSet),
       vk::Context(renderer),
+      mCurrentPipelineDesc(nullptr),
       mCurrentPipeline(nullptr),
       mCurrentDrawMode(gl::PrimitiveMode::InvalidEnum),
       mCurrentWindowSurface(nullptr),
@@ -556,34 +556,41 @@ angle::Result ContextVk::handleDirtyDefaultAttribs(const gl::Context *context,
 angle::Result ContextVk::handleDirtyPipeline(const gl::Context *context,
                                              vk::CommandBuffer *commandBuffer)
 {
+    ASSERT(mGraphicsPipelineTransition.any());
+
     if (!mCurrentPipeline)
     {
-        const vk::GraphicsPipelineDesc *descPtr;
-
         // Draw call shader patching, shader compilation, and pipeline cache query.
         ANGLE_TRY(mProgram->getGraphicsPipeline(this, mCurrentDrawMode, *mGraphicsPipelineDesc,
                                                 mProgram->getState().getActiveAttribLocationsMask(),
-                                                &descPtr, &mCurrentPipeline));
-        mGraphicsPipelineTransition.reset();
+                                                &mCurrentPipelineDesc, &mCurrentPipeline));
     }
-    else if (mGraphicsPipelineTransition.any())
+    // Check whether the updaing pipeline description is identical to the current one,
+    else if (vk::GraphicsPipelineDesc::dirtyCompare(mGraphicsPipelineTransition,
+                                                    *mCurrentPipelineDesc, *mGraphicsPipelineDesc))
     {
-        if (!mCurrentPipeline->findTransition(mGraphicsPipelineTransition, *mGraphicsPipelineDesc,
-                                              &mCurrentPipeline))
+        if (mCurrentPipeline->getSerial() == getCurrentQueueSerial())
         {
-            vk::PipelineHelper *oldPipeline = mCurrentPipeline;
-
-            const vk::GraphicsPipelineDesc *descPtr;
-
-            ANGLE_TRY(mProgram->getGraphicsPipeline(
-                this, mCurrentDrawMode, *mGraphicsPipelineDesc,
-                mProgram->getState().getActiveAttribLocationsMask(), &descPtr, &mCurrentPipeline));
-
-            oldPipeline->addTransition(mGraphicsPipelineTransition, descPtr, mCurrentPipeline);
+            // CommandBuffer has been binded with current pipeline,
+            // no rebinding needed.
+            mGraphicsPipelineTransition.reset();
+            return angle::Result::Continue;
         }
-
-        mGraphicsPipelineTransition.reset();
     }
+    else if (!mCurrentPipeline->findTransition(mGraphicsPipelineTransition, *mGraphicsPipelineDesc,
+                                               &mCurrentPipeline))
+    {
+        vk::PipelineHelper *oldPipeline = mCurrentPipeline;
+
+        ANGLE_TRY(mProgram->getGraphicsPipeline(this, mCurrentDrawMode, *mGraphicsPipelineDesc,
+                                                mProgram->getState().getActiveAttribLocationsMask(),
+                                                &mCurrentPipelineDesc, &mCurrentPipeline));
+
+        oldPipeline->addTransition(mGraphicsPipelineTransition, mCurrentPipelineDesc,
+                                   mCurrentPipeline);
+    }
+    mGraphicsPipelineTransition.reset();
+
     commandBuffer->bindGraphicsPipeline(mCurrentPipeline->getPipeline());
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentPipeline && mCurrentPipeline->valid());

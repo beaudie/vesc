@@ -416,6 +416,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::CommandBuff
 
     angle::Result generateSurfaceSemaphores(SignalSemaphoreVector *signalSemaphores);
 
+    const vk::GraphicsPipelineDesc *mCurrentPipelineDesc;
     vk::PipelineHelper *mCurrentPipeline;
     gl::PrimitiveMode mCurrentDrawMode;
 
