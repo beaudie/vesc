@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e1036c66_cd735335",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T20:12:50Z",
+      "side": 1,
+      "message": "nit: \"Vulkan: Upload...\"",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 27
+      },
+      "revId": "4c4c45b2cf0e912d515013f50dbba944cc3408ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94b48fd5_5aacab61",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1943,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T20:12:50Z",
+      "side": 1,
+      "message": "I think you can call this LoadX24S8ToS8 and put it in the load functions lib",
+      "range": {
+        "startLine": 1943,
+        "startChar": 5,
+        "endLine": 1943,
+        "endChar": 18
+      },
+      "revId": "4c4c45b2cf0e912d515013f50dbba944cc3408ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b2cb704_ceb78387",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2040,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T20:12:50Z",
+      "side": 1,
+      "message": "use the Vulkan and ANGLE format enums here if you can.",
+      "range": {
+        "startLine": 2040,
+        "startChar": 8,
+        "endLine": 2040,
+        "endChar": 54
+      },
+      "revId": "4c4c45b2cf0e912d515013f50dbba944cc3408ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7876d70a_a5afc9fd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2079,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T20:12:50Z",
+      "side": 1,
+      "message": "you can resolve this TODO",
+      "range": {
+        "startLine": 2077,
+        "startChar": 4,
+        "endLine": 2079,
+        "endChar": 30
+      },
+      "revId": "4c4c45b2cf0e912d515013f50dbba944cc3408ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e6bd5f3b_d5db2b6b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2080,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-26T20:12:50Z",
+      "side": 1,
+      "message": "vulkan formats here too.",
+      "range": {
+        "startLine": 2080,
+        "startChar": 4,
+        "endLine": 2080,
+        "endChar": 50
+      },
+      "revId": "4c4c45b2cf0e912d515013f50dbba944cc3408ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
