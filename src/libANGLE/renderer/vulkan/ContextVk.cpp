@@ -37,7 +37,6 @@
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 #include "libANGLE/renderer/vulkan/TransformFeedbackVk.h"
 #include "libANGLE/renderer/vulkan/VertexArrayVk.h"
-
 #include "libANGLE/trace.h"
 
 namespace rx
@@ -171,6 +170,7 @@ void ContextVk::CommandBatch::destroy(VkDevice device)
 ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer)
     : ContextImpl(state, errorSet),
       vk::Context(renderer),
+      mCurrentPipelineDesc(nullptr),
       mCurrentPipeline(nullptr),
       mCurrentDrawMode(gl::PrimitiveMode::InvalidEnum),
       mCurrentWindowSurface(nullptr),
@@ -554,34 +554,43 @@ angle::Result ContextVk::handleDirtyDefaultAttribs(const gl::Context *context,
 angle::Result ContextVk::handleDirtyPipeline(const gl::Context *context,
                                              vk::CommandBuffer *commandBuffer)
 {
+    ASSERT(mGraphicsPipelineTransition.any());
+
+    if (mCurrentPipeline && mCurrentPipeline->getSerial() == getCurrentQueueSerial() &&
+        vk::GraphicsPipelineDesc::dirtyCompare(mGraphicsPipelineTransition, *mCurrentPipelineDesc,
+                                               *mGraphicsPipelineDesc))
+    {
+        // Dirty bits is set but the Pipeline decsription is identical to the current one,
+        // no pipeline rebinding needed.
+        mGraphicsPipelineTransition.reset();
+        return angle::Result::Continue;
+    }
+
     if (!mCurrentPipeline)
     {
-        const vk::GraphicsPipelineDesc *descPtr;
-
         // Draw call shader patching, shader compilation, and pipeline cache query.
         ANGLE_TRY(mProgram->getGraphicsPipeline(this, mCurrentDrawMode, *mGraphicsPipelineDesc,
                                                 mProgram->getState().getActiveAttribLocationsMask(),
-                                                &descPtr, &mCurrentPipeline));
-        mGraphicsPipelineTransition.reset();
+                                                &mCurrentPipelineDesc, &mCurrentPipeline));
     }
-    else if (mGraphicsPipelineTransition.any())
+    else
     {
         if (!mCurrentPipeline->findTransition(mGraphicsPipelineTransition, *mGraphicsPipelineDesc,
                                               &mCurrentPipeline))
         {
             vk::PipelineHelper *oldPipeline = mCurrentPipeline;
 
-            const vk::GraphicsPipelineDesc *descPtr;
+            ANGLE_TRY(
+                mProgram->getGraphicsPipeline(this, mCurrentDrawMode, *mGraphicsPipelineDesc,
+                                              mProgram->getState().getActiveAttribLocationsMask(),
+                                              &mCurrentPipelineDesc, &mCurrentPipeline));
 
-            ANGLE_TRY(mProgram->getGraphicsPipeline(
-                this, mCurrentDrawMode, *mGraphicsPipelineDesc,
-                mProgram->getState().getActiveAttribLocationsMask(), &descPtr, &mCurrentPipeline));
-
-            oldPipeline->addTransition(mGraphicsPipelineTransition, descPtr, mCurrentPipeline);
+            oldPipeline->addTransition(mGraphicsPipelineTransition, mCurrentPipelineDesc,
+                                       mCurrentPipeline);
         }
-
-        mGraphicsPipelineTransition.reset();
     }
+    mGraphicsPipelineTransition.reset();
+
     commandBuffer->bindGraphicsPipeline(mCurrentPipeline->getPipeline());
     // Update the queue serial for the pipeline object.
     ASSERT(mCurrentPipeline && mCurrentPipeline->valid());
@@ -919,7 +928,7 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
         ANGLE_VK_TRY(this, commandBuffer.end());
 
         // Submit the command buffer
-        VkSubmitInfo submitInfo       = {};
+        VkSubmitInfo submitInfo = {};
         InitializeSubmitInfo(&submitInfo, commandBatch.get(), {}, {});
 
         ANGLE_TRY(submitFrame(submitInfo, std::move(commandBuffer)));
@@ -2109,7 +2118,7 @@ angle::Result ContextVk::flushImpl(const gl::Semaphore *clientSignalSemaphore)
         signalSemaphores.push_back(vk::GetImpl(clientSignalSemaphore)->getHandle());
     }
 
-    VkSubmitInfo submitInfo       = {};
+    VkSubmitInfo submitInfo = {};
     InitializeSubmitInfo(&submitInfo, commandBatch.get(), mWaitSemaphores, signalSemaphores);
 
     ANGLE_TRY(submitFrame(submitInfo, commandBatch.release()));
