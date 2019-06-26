@@ -26,6 +26,11 @@
 #include "platform/Feature.h"
 #include "platform/FrontendFeatures.h"
 
+namespace angle
+{
+class FrameCapture;
+}  // namespace angle
+
 namespace gl
 {
 class Context;
@@ -202,6 +207,9 @@ class Display final : public LabeledObject, angle::NonCopyable
 
     EGLAttrib queryAttrib(const EGLint attribute);
 
+    angle::FrameCapture *getFrameCapture() { return mFrameCapture.get(); }
+    void onPostSwap() const;
+
   private:
     Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice);
 
@@ -254,6 +262,8 @@ class Display final : public LabeledObject, angle::NonCopyable
     angle::FrontendFeatures mFrontendFeatures;
 
     angle::FeatureList mFeatures;
+
+    std::unique_ptr<angle::FrameCapture> mFrameCapture;
 };
 
 }  // namespace egl

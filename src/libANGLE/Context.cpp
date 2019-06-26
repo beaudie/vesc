@@ -8339,6 +8339,11 @@ egl::Error Context::unsetDefaultFramebuffer()
     return egl::NoError();
 }
 
+angle::FrameCapture *Context::getFrameCapture()
+{
+    return mDisplay->getFrameCapture();
+}
+
 // ErrorSet implementation.
 ErrorSet::ErrorSet(Context *context) : mContext(context) {}
 
