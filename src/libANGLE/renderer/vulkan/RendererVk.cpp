@@ -457,27 +457,32 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
 }
 
 angle::Result WaitFences(vk::Context *context,
-                         std::vector<vk::Shared<vk::Fence>> *fences,
+                         const std::vector<vk::Shared<vk::Fence>> &fences,
                          bool block)
 {
     uint64_t timeout = block ? kMaxFenceWaitTimeNs : 0;
 
-    // Iterate backwards over the fences, removing them from the list in constant time when they are
-    // complete.
-    while (!fences->empty())
+    // Iterate over the fences and wait on them
+    for (const vk::Shared<vk::Fence> &fence : fences)
     {
-        VkResult result = fences->back().get().wait(context->getDevice(), timeout);
+        VkResult result = fence.get().wait(context->getDevice(), timeout);
         if (result == VK_TIMEOUT)
         {
             return angle::Result::Continue;
         }
         ANGLE_VK_TRY(context, result);
-
-        fences->back().reset(context->getDevice());
-        fences->pop_back();
     }
 
     return angle::Result::Continue;
+}
+
+void ResetFences(RendererVk *renderer, std::vector<vk::Shared<vk::Fence>> *fences)
+{
+    while (!fences->empty())
+    {
+        fences->back().resetAndRecyle(renderer->getDevice(), renderer->getFenceRecycler());
+        fences->pop_back();
+    }
 }
 
 }  // anonymous namespace
@@ -512,6 +517,8 @@ RendererVk::~RendererVk()
 void RendererVk::onDestroy(vk::Context *context)
 {
     (void)cleanupGarbage(context, true);
+
+    mFenceRecycler.destroy(mDevice);
 
     mPipelineLayoutCache.destroy(mDevice);
     mDescriptorSetLayoutCache.destroy(mDevice);
@@ -1504,7 +1511,8 @@ angle::Result RendererVk::cleanupGarbage(vk::Context *context, bool block)
     auto garbageIter = mFencedGarbage.begin();
     while (garbageIter != mFencedGarbage.end())
     {
-        ANGLE_TRY(WaitFences(context, &garbageIter->first, block));
+        ANGLE_TRY(WaitFences(context, garbageIter->first, block));
+        ResetFences(this, &garbageIter->first);
         if (garbageIter->first.empty())
         {
             for (vk::GarbageObjectBase &garbageObject : garbageIter->second)
