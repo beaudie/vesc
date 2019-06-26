@@ -171,6 +171,7 @@ void ContextVk::CommandBatch::destroy(VkDevice device)
 ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer)
     : ContextImpl(state, errorSet),
       vk::Context(renderer),
+      mCurrentPipelineDesc(nullptr),
       mCurrentPipeline(nullptr),
       mCurrentDrawMode(gl::PrimitiveMode::InvalidEnum),
       mCurrentWindowSurface(nullptr),
@@ -556,28 +557,28 @@ angle::Result ContextVk::handleDirtyPipeline(const gl::Context *context,
 {
     if (!mCurrentPipeline)
     {
-        const vk::GraphicsPipelineDesc *descPtr;
-
         // Draw call shader patching, shader compilation, and pipeline cache query.
         ANGLE_TRY(mProgram->getGraphicsPipeline(this, mCurrentDrawMode, *mGraphicsPipelineDesc,
                                                 mProgram->getState().getActiveAttribLocationsMask(),
-                                                &descPtr, &mCurrentPipeline));
+                                                &mCurrentPipelineDesc, &mCurrentPipeline));
         mGraphicsPipelineTransition.reset();
     }
-    else if (mGraphicsPipelineTransition.any())
+    else if (mGraphicsPipelineTransition.any() &&
+             vk::GraphicsPipelineDesc::dirtyCompare(mGraphicsPipelineTransition,
+                                                    *mCurrentPipelineDesc, *mGraphicsPipelineDesc))
     {
         if (!mCurrentPipeline->findTransition(mGraphicsPipelineTransition, *mGraphicsPipelineDesc,
                                               &mCurrentPipeline))
         {
             vk::PipelineHelper *oldPipeline = mCurrentPipeline;
 
-            const vk::GraphicsPipelineDesc *descPtr;
+            ANGLE_TRY(
+                mProgram->getGraphicsPipeline(this, mCurrentDrawMode, *mGraphicsPipelineDesc,
+                                              mProgram->getState().getActiveAttribLocationsMask(),
+                                              &mCurrentPipelineDesc, &mCurrentPipeline));
 
-            ANGLE_TRY(mProgram->getGraphicsPipeline(
-                this, mCurrentDrawMode, *mGraphicsPipelineDesc,
-                mProgram->getState().getActiveAttribLocationsMask(), &descPtr, &mCurrentPipeline));
-
-            oldPipeline->addTransition(mGraphicsPipelineTransition, descPtr, mCurrentPipeline);
+            oldPipeline->addTransition(mGraphicsPipelineTransition, mCurrentPipelineDesc,
+                                       mCurrentPipeline);
         }
 
         mGraphicsPipelineTransition.reset();
