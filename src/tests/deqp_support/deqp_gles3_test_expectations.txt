@@ -591,7 +591,6 @@
 3219 VULKAN : dEQP-GLES3.functional.negative_api.shader.link_program = FAIL
 3219 VULKAN : dEQP-GLES3.functional.negative_api.shader.use_program = FAIL
 3443 VULKAN : dEQP-GLES3.functional.ubo.random.basic_arrays.10 = FAIL
-3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.* = FAIL
 
 // New vertex attribute formats:
 3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.strides.int2_10_10_10.* = SKIP
@@ -735,3 +734,44 @@
 
 // Fixed in later driver versions.
 2727 VULKAN ANDROID : dEQP-GLES3.functional.shaders.builtin_variable.pointcoord = FAIL
+
+// dFdy() seems to act funny with mediump/highp, but only these tests (other med/hi pass).
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.fastest.default.vec3_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.fastest.default.vec3_mediump = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.fastest.default.vec4_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.fbo.vec3_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.fbo.vec3_mediump = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.fbo.vec4_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.in_function.vec2_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.in_function.vec2_mediump = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.in_function.vec3_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.in_function.vec3_mediump = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.in_function.vec4_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.linear.vec3_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.linear.vec3_mediump = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.linear.vec4_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.nicest.default.vec3_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.nicest.default.vec3_mediump = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.nicest.default.vec4_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.static_if.vec3_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.static_if.vec3_mediump = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.static_if.vec4_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.static_loop.vec3_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.static_loop.vec3_mediump = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.static_loop.vec4_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.static_switch.vec3_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.static_switch.vec3_mediump = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.static_switch.vec4_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.texture.basic.vec3_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.texture.basic.vec3_mediump = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.texture.basic.vec4_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.texture.basic.vec4_mediump = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.uniform_if.vec3_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.uniform_if.vec3_mediump = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.uniform_if.vec4_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.uniform_loop.vec3_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.uniform_loop.vec3_mediump = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.uniform_loop.vec4_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.uniform_switch.vec3_highp = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.uniform_switch.vec3_mediump = FAIL
+3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.uniform_switch.vec4_highp = FAIL
