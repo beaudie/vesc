@@ -183,6 +183,29 @@
       "revId": "4c4c45b2cf0e912d515013f50dbba944cc3408ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a53171a_b518dc9a",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-26T20:15:47Z",
+      "side": 1,
+      "message": "It would be great if you set some depth too, and verify depth after verifying stencil. That would have caught the issue where the stencil data is being written over depth data.",
+      "range": {
+        "startLine": 662,
+        "startChar": 79,
+        "endLine": 662,
+        "endChar": 89
+      },
+      "revId": "4c4c45b2cf0e912d515013f50dbba944cc3408ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
