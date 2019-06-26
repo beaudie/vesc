@@ -71,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "5fd1d016_df22b108",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2042,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-26T20:13:20Z",
+      "side": 1,
+      "message": "The comment seems to be for the line below this?",
+      "range": {
+        "startLine": 2042,
+        "startChar": 12,
+        "endLine": 2042,
+        "endChar": 47
+      },
+      "revId": "4c4c45b2cf0e912d515013f50dbba944cc3408ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7876d70a_a5afc9fd",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -85,6 +108,29 @@
       "range": {
         "startLine": 2077,
         "startChar": 4,
+        "endLine": 2079,
+        "endChar": 30
+      },
+      "revId": "4c4c45b2cf0e912d515013f50dbba944cc3408ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "460b3aff_9588bb96",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2079,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-26T20:13:20Z",
+      "side": 1,
+      "message": "Remove",
+      "range": {
+        "startLine": 2077,
+        "startChar": 0,
         "endLine": 2079,
         "endChar": 30
       },
@@ -110,6 +156,29 @@
         "startChar": 4,
         "endLine": 2080,
         "endChar": 50
+      },
+      "revId": "4c4c45b2cf0e912d515013f50dbba944cc3408ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dee2c046_7623d331",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-26T20:13:20Z",
+      "side": 1,
+      "message": "The offset into the stagingPointer should be `outputDepthPitch * extents.depth` **before** you modify them. Given that `outputRowPitch` is now likely smaller, you are overwriting previous depth data.",
+      "range": {
+        "startLine": 2085,
+        "startChar": 0,
+        "endLine": 2088,
+        "endChar": 59
       },
       "revId": "4c4c45b2cf0e912d515013f50dbba944cc3408ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
