@@ -34,6 +34,24 @@
       "revId": "5055da0a0142418a0969e09d4fd13f25fbe5f784",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8697fcb5_fe46d627",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-06-26T18:49:02Z",
+      "side": 1,
+      "message": "I\u0027m OK with using the expectation as a way to override.  We should make sure to use it sparingly though, the WebGL expectations used to work this way and it can become easy to make and end up with messy intertwined expectations.",
+      "parentUuid": "2e66740a_0b587ca7",
+      "revId": "5055da0a0142418a0969e09d4fd13f25fbe5f784",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
