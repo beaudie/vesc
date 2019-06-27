@@ -166,6 +166,24 @@
       "revId": "a466885ba670f533811cc71829348ad5038da332",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ead54821_2bd3cb15",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-27T17:25:21Z",
+      "side": 1,
+      "message": "FYI, if the window size is odd, then dFdy would be calculated between different pixels when inverted. If that\u0027s the case, I don\u0027t know if there\u0027s much we could do about it short of not flipping the framebuffer and flip everything else.\n\nUsing dFdyFine *might* help at some performance cost.",
+      "parentUuid": "a7d0a5f5_056746eb",
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
