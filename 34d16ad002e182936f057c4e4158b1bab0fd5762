@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f98334b3_32c20702",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-27T17:08:44Z",
+      "side": 1,
+      "message": "Minor nit: Even though width/height is not modified, I\u0027d avoid using `sourceArea` and use `readPixelsArea` instead (just for clarity).",
+      "range": {
+        "startLine": 686,
+        "startChar": 0,
+        "endLine": 688,
+        "endChar": 81
+      },
+      "revId": "34d16ad002e182936f057c4e4158b1bab0fd5762",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
