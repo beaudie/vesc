@@ -19,6 +19,29 @@
     },
     {
       "key": {
+        "uuid": "fda26e7e_90b09ffa",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-27T17:15:10Z",
+      "side": 1,
+      "message": "same nit",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 22
+      },
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ded70d1c_dd190687",
         "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
         "patchSetId": 2
@@ -42,6 +65,75 @@
     },
     {
       "key": {
+        "uuid": "46a6f28d_4e1de47d",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-27T17:15:10Z",
+      "side": 1,
+      "message": "could you clarify the naming of your variables? you\u0027re using scaleDfdy as the replacement node. and replacement as your temporary variable node inserted in the block.",
+      "range": {
+        "startLine": 94,
+        "startChar": 35,
+        "endLine": 94,
+        "endChar": 46
+      },
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e2b0160_7ec8e8f9",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-27T17:15:10Z",
+      "side": 1,
+      "message": "nit: just 2019 for new files and no (c)",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 22
+      },
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06db2618_dc0a5f50",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-27T17:15:10Z",
+      "side": 1,
+      "message": "probably needs an update?",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 11,
+        "endChar": 31
+      },
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a6932a10_23e4a473",
         "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
         "patchSetId": 2
@@ -53,6 +145,24 @@
       "writtenOn": "2019-06-27T15:28:15Z",
       "side": 1,
       "message": "Rejoice as I recently committed a change where you can specify all these as:\n\n3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.*highp \u003d FAIL\n3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.*mediump \u003d FAIL\n\n---\n\nAlso, do you happen to know if the framebuffer height in these tests is odd or even? If it\u0027s odd, I know why they could fail.",
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7d0a5f5_056746eb",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-27T17:15:10Z",
+      "side": 1,
+      "message": "Tim can you try to root cause this error? It makes me think we\u0027re doing something potentially wrong. Like we\u0027re off by some small error margin like one pixel. Especially if the test failures are cross platform. RenderDoc on Windows would probably be a good way to diagnose the bug. And potentially making a super simple reproduction as a GLSLTest in angle_end2end_tests.",
+      "parentUuid": "a6932a10_23e4a473",
       "revId": "a466885ba670f533811cc71829348ad5038da332",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
