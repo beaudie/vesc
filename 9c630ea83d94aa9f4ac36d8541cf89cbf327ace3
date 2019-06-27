@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a5a87da_89ead4b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-06-27T06:11:59Z",
+      "side": 1,
+      "message": "Remove the empty so that it can be a link.",
+      "range": {
+        "startLine": 14,
+        "startChar": 18,
+        "endLine": 14,
+        "endChar": 19
+      },
+      "revId": "9c630ea83d94aa9f4ac36d8541cf89cbf327ace3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
