@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e00ffa88_ce2e7d81",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-27T18:21:00Z",
+      "side": 1,
+      "message": "I don\u0027t think we should be calling the blob cache if the functions are null. It might cache data in ANGLE that isn\u0027t useful. Maybe check if the functions are null here before calling the blob cache?",
+      "range": {
+        "startLine": 1261,
+        "startChar": 0,
+        "endLine": 1262,
+        "endChar": 87
+      },
+      "revId": "0d64477fad35833ffac657ac6b943fca834c04bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8048fe5f_5270b05e",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 9
@@ -18,6 +41,53 @@
         "startChar": 68,
         "endLine": 1277,
         "endChar": 76
+      },
+      "revId": "0d64477fad35833ffac657ac6b943fca834c04bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2883ed6e_c0a6948b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-27T18:21:00Z",
+      "side": 1,
+      "message": "would suggest rewording this to something like\n\n\"We should now recreate the pipeline cache with the blob cache pipeline data.\"",
+      "parentUuid": "8048fe5f_5270b05e",
+      "range": {
+        "startLine": 1277,
+        "startChar": 68,
+        "endLine": 1277,
+        "endChar": 76
+      },
+      "revId": "0d64477fad35833ffac657ac6b943fca834c04bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "920221ba_ae02438d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-27T18:21:00Z",
+      "side": 1,
+      "message": "else is redundant here, you can remove it.",
+      "range": {
+        "startLine": 1356,
+        "startChar": 4,
+        "endLine": 1356,
+        "endChar": 8
       },
       "revId": "0d64477fad35833ffac657ac6b943fca834c04bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
