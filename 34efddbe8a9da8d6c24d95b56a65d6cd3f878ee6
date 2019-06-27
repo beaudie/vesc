@@ -1037,6 +1037,30 @@
     },
     {
       "key": {
+        "uuid": "8c93e9dd_5b0b793c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-27T19:48:07Z",
+      "side": 1,
+      "message": "You\u0027re right. We should probably just not make this a TODO. Anyway kind of out of scope from this CL.",
+      "parentUuid": "cac4f51d_21be52ba",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 231,
+        "endChar": 31
+      },
+      "revId": "34efddbe8a9da8d6c24d95b56a65d6cd3f878ee6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a5a4f8cb_ab3c116d",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 11
