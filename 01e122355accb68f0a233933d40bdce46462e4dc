@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b6388f84_fd5efdc6",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-27T17:34:15Z",
+      "side": 1,
+      "message": "I\u0027m not familiar with GL barriers yet, but if 0 is allowed here, I feel like both of these barriers can be `glMemoryBarrier(0)`. You probably need `glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);` just once before the first dispatch to synchronize image data upload.",
+      "revId": "01e122355accb68f0a233933d40bdce46462e4dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
