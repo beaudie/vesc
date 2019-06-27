@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6f537322_572f6588",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-27T15:19:41Z",
+      "side": 1,
+      "message": "shouldn\u0027t this test also work for ES context versions \u003e 2?",
+      "range": {
+        "startLine": 641,
+        "startChar": 36,
+        "endLine": 642,
+        "endChar": 83
+      },
+      "revId": "b95ccc44dbcb1f8e5c04a380da6f47c5a21cda82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "317f079c_29153c6d",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-27T15:19:41Z",
+      "side": 1,
+      "message": "you can change all these to ASSERT I would think.",
+      "range": {
+        "startLine": 690,
+        "startChar": 8,
+        "endLine": 690,
+        "endChar": 26
+      },
+      "revId": "b95ccc44dbcb1f8e5c04a380da6f47c5a21cda82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df22bd12_3c767769",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-27T15:19:41Z",
+      "side": 1,
+      "message": "we have an EXPECT_GL_FRAMEBUFFER_COMPLETE for this. Although I\u0027d recommend using ASSERT_GL_FRAMEBUFFER_COMPLETE as the test can\u0027t continue if the FBO is incomplete.",
+      "range": {
+        "startLine": 693,
+        "startChar": 3,
+        "endLine": 693,
+        "endChar": 88
+      },
+      "revId": "b95ccc44dbcb1f8e5c04a380da6f47c5a21cda82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
