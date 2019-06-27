@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26154699_547e27c5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-27T15:28:15Z",
+      "side": 1,
+      "message": "The translation code would be simpler if you did this instead:\n\n    vec3 s413 \u003d dFdy(_uv_coord);\n    (s413.y \u003d ANGLEUniforms.viewportYScale);\n    vec3 _ures \u003d ((s413 * _uu_scale) + _uu_bias);",
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ded70d1c_dd190687",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-27T15:28:15Z",
+      "side": 1,
+      "message": "Remove!",
+      "range": {
+        "startLine": 61,
+        "startChar": 4,
+        "endLine": 61,
+        "endChar": 18
+      },
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6932a10_23e4a473",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-27T15:28:15Z",
+      "side": 1,
+      "message": "Rejoice as I recently committed a change where you can specify all these as:\n\n3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.*highp \u003d FAIL\n3487 VULKAN : dEQP-GLES3.functional.shaders.derivate.dfdy.*mediump \u003d FAIL\n\n---\n\nAlso, do you happen to know if the framebuffer height in these tests is odd or even? If it\u0027s odd, I know why they could fail.",
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
