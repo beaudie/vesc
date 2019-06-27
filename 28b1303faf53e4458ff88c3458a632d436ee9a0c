@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "270cadae_dd71f376",
+        "filename": "src/libANGLE/renderer/vulkan/TransformFeedbackVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-27T18:47:17Z",
+      "side": 1,
+      "message": "nit: can you define a helper template alias in angletypes.h along the lines of gl::TransformFeedbackBufferArray ? see prior examples in that file.",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 83
+      },
+      "revId": "28b1303faf53e4458ff88c3458a632d436ee9a0c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
