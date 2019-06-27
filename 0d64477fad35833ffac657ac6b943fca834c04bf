@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8048fe5f_5270b05e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-27T18:00:18Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1277,
+        "startChar": 68,
+        "endLine": 1277,
+        "endChar": 76
+      },
+      "revId": "0d64477fad35833ffac657ac6b943fca834c04bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
