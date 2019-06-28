@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67403c49_c7517785",
+        "filename": "BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-06-28T17:44:02Z",
+      "side": 1,
+      "message": "Would be nice if this also could be removed.",
+      "range": {
+        "startLine": 1098,
+        "startChar": 36,
+        "endLine": 1098,
+        "endChar": 39
+      },
+      "revId": "aa466166c4b75931ddeee608cbb6d0a4d4759506",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
