@@ -1,0 +1,417 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "57e99740_a66c4648",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "could you file a bug for tracking your implementation?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 9
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7079c7c_49919745",
+        "filename": "BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 768,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "there\u0027s a different pattern here I introduced in https://chromium-review.googlesource.com/c/angle/angle/+/1678403\n\nBasically you can use output_name to append the suffix.",
+      "range": {
+        "startLine": 768,
+        "startChar": 2,
+        "endLine": 768,
+        "endChar": 56
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f5f7c03_2dac6e5c",
+        "filename": "BUILD.gn",
+        "patchSetId": 6
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "you can probably just add this to opengl32_sources.",
+      "range": {
+        "startLine": 770,
+        "startChar": 7,
+        "endLine": 770,
+        "endChar": 56
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1340923f_ab392838",
+        "filename": "include/WGL/wgl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "I don\u0027t think this should go here. It should go in the code that needs wgl.h.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 21
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f8988e8_531af140",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "For GLbyte and GLushort you can sort them into the above list (F9 in subl)\n\nMaybe update this comment to indicate the remaining types are Windows/WGL specific.",
+      "range": {
+        "startLine": 238,
+        "startChar": 4,
+        "endLine": 238,
+        "endChar": 63
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ed71417_cce0d32b",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "this code is duplicated",
+      "range": {
+        "startLine": 473,
+        "startChar": 0,
+        "endLine": 475,
+        "endChar": 71
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6bcf93e4_5428ec1d",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "how about format_context_decl?",
+      "range": {
+        "startLine": 560,
+        "startChar": 21,
+        "endLine": 560,
+        "endChar": 35
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4020f8ef_799ae91b",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "how about all_commands_no_suffix/all_commands_with_suffix?",
+      "range": {
+        "startLine": 883,
+        "startChar": 4,
+        "endLine": 883,
+        "endChar": 22
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08325253_c1d3e612",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "this code is mostly duplicated with the above, can you make it a helper func?",
+      "range": {
+        "startLine": 1000,
+        "startChar": 0,
+        "endLine": 1005,
+        "endChar": 63
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f546f125_b3608c29",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "is it possible to share code with the gles generation? just wondering how much custom stuff is in here. maybe we could make a helper function(s).",
+      "range": {
+        "startLine": 1058,
+        "startChar": 0,
+        "endLine": 1116,
+        "endChar": 53
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21eb1874_1e8f6a71",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 1119,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "what\u0027s up with this \\? looks like you should remove it.",
+      "range": {
+        "startLine": 1119,
+        "startChar": 48,
+        "endLine": 1119,
+        "endChar": 49
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c687393f_08b660b8",
+        "filename": "src/libANGLE/validationGL1.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "nit: don\u0027t need (c) anymore, you can remove it from the files you added",
+      "range": {
+        "startLine": 2,
+        "startChar": 12,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f800911c_241caa38",
+        "filename": "src/openGL32/entry_points_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "Maybe we can also share this file.",
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f35a16e2_41243092",
+        "filename": "src/openGL32/gen_proc_table.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "I\u0027d like it if we could share as much common code between the two proc table generators. Maybe by moving common functionality into registry_xml. Any ideas?",
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b88006b_9dd75382",
+        "filename": "src/openGL32/global_state.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "if this file is exactly the same as the one in libGLESv2 I think you can just include the libGLESv2 version in opengl32.",
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e9ff6ac_01632545",
+        "filename": "src/openGL32/global_state.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "if this file is exactly the same as the one in libGLESv2 I think you can just include the libGLESv2 version in opengl32.",
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "305fd3b5_9cd858c1",
+        "filename": "src/openGL32/openGL32_wgl.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "probably should remove this before landing.",
+      "range": {
+        "startLine": 132,
+        "startChar": 4,
+        "endLine": 132,
+        "endChar": 36
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bece6ea_13f2dfb9",
+        "filename": "src/openGL32/openGL32_wgl.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "maybe add a note why these are commented out?",
+      "range": {
+        "startLine": 199,
+        "startChar": 0,
+        "endLine": 210,
+        "endChar": 3
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfb883d4_91b33c6c",
+        "filename": "src/openGL32/proc_table_wgl.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T13:43:51Z",
+      "side": 1,
+      "message": "maybe add a comment here why you are defining this? Also you should put it inside the include guards.",
+      "range": {
+        "startLine": 10,
+        "startChar": 8,
+        "endLine": 10,
+        "endChar": 15
+      },
+      "revId": "fa512b5d7ee96daa133091684c92e59b30f7f0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
