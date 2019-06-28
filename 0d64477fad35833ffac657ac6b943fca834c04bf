@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "44c09afc_3e567213",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-06-28T00:16:03Z",
+      "side": 1,
+      "message": "But we already have this check inside getBlobCache()-\u003eget().",
+      "parentUuid": "e00ffa88_ce2e7d81",
+      "range": {
+        "startLine": 1261,
+        "startChar": 0,
+        "endLine": 1262,
+        "endChar": 87
+      },
+      "revId": "0d64477fad35833ffac657ac6b943fca834c04bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8048fe5f_5270b05e",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 9
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "1c7fba98_ce470559",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1277,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-06-28T00:16:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2883ed6e_c0a6948b",
+      "range": {
+        "startLine": 1277,
+        "startChar": 68,
+        "endLine": 1277,
+        "endChar": 76
+      },
+      "revId": "0d64477fad35833ffac657ac6b943fca834c04bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "920221ba_ae02438d",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 9
@@ -92,6 +140,30 @@
       "revId": "0d64477fad35833ffac657ac6b943fca834c04bf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdeab244_5a034910",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-06-28T00:16:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "920221ba_ae02438d",
+      "range": {
+        "startLine": 1356,
+        "startChar": 4,
+        "endLine": 1356,
+        "endChar": 8
+      },
+      "revId": "0d64477fad35833ffac657ac6b943fca834c04bf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
