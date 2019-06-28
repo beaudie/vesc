@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50baf0b3_1ea7f5e5",
+        "filename": "src/tests/test_utils/compiler_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-06-28T22:01:12Z",
+      "side": 1,
+      "message": "I like \"if (!match)\" better (or even putting the second arm first and doing \"if (match)\" but up to you.",
+      "range": {
+        "startLine": 170,
+        "startChar": 15,
+        "endLine": 170,
+        "endChar": 16
+      },
+      "revId": "dc731b224d44601a2cb546cc16c814daf7c04a68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
