@@ -553,12 +553,30 @@
 3189 VULKAN : dEQP-GLES3.functional.texture.filtering.*2d_array* = SKIP
 3189 VULKAN : dEQP-GLES3.functional.texture.shadow.2d_array.* = SKIP
 
+// Support for all GLES 3.0 texture formats:
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb32* = SKIP
-3190 VULKAN WIN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb16* = FAIL
+3190 VULKAN WIN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb16f* = FAIL
+// The following crashes on the latest Intel driver (Version 25.20.100.6373):
+3190 VULKAN WIN AMD : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb16i* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb16i* = SKIP
+3190 VULKAN WIN NVIDIA : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb16i* = FAIL
+// The following crashes on the latest Intel driver (Version 25.20.100.6373):
+3190 VULKAN WIN AMD : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb16ui* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb16ui* = SKIP
+3190 VULKAN WIN NVIDIA : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb16ui* = FAIL
 3190 VULKAN LINUX : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb16* = FAIL
 3190 VULKAN MAC : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb16* = FAIL
 3190 VULKAN ANDROID : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb16* = SKIP
-3190 VULKAN WIN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8* = FAIL
+3190 VULKAN WIN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8_snorm_2d = SKIP
+3190 VULKAN WIN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8_snorm_cube = FAIL
+// The following crashes on the latest Intel driver (Version 25.20.100.6373):
+3190 VULKAN WIN AMD : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8i* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8i* = SKIP
+3190 VULKAN WIN NVIDIA : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8i* = FAIL
+// The following crashes on the latest Intel driver (Version 25.20.100.6373):
+3190 VULKAN WIN AMD : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8ui* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8ui* = SKIP
+3190 VULKAN WIN NVIDIA : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8ui* = FAIL
 3190 VULKAN LINUX : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8* = FAIL
 3190 VULKAN MAC : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8* = FAIL
 3190 VULKAN ANDROID : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8* = SKIP
@@ -623,6 +641,18 @@
 3189 VULKAN : dEQP-GLES3.functional.texture.vertex.* = SKIP
 3189 VULKAN : dEQP-GLES3.functional.texture.units.* = SKIP
 3189 VULKAN : dEQP-GLES3.functional.shaders.texture_functions.* = SKIP
+
+// The following failures occur with the latest Intel driver (Version 25.20.100.6373):
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.basic_copyteximage2d.cube_alpha = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.basic_copyteximage2d.cube_luminance = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.basic_copytexsubimage2d.cube_luminance = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rg32* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rg16* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rg8* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.r32* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.r16* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.r8* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.size* = FAIL
 
 // ASTC support:
 // HDR not officially supported by Vulkan (see also the discussion in 1185):
