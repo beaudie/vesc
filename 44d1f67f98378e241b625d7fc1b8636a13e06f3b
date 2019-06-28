@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "92e1a911_18986aae",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-06-28T15:56:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fef4dc0b_78d618b2",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 6
+      },
+      "revId": "44d1f67f98378e241b625d7fc1b8636a13e06f3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6ccabe8c_2569c40f",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 2
@@ -60,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "002f193e_fc60ca3c",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4100,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-06-28T15:56:48Z",
+      "side": 1,
+      "message": "there should be no handle leak since they are being cleaned up in the Texture2DRGTest\u0027s testTearDown() override. not quite seeing the leak here",
+      "parentUuid": "1634e874_158a95f7",
+      "revId": "44d1f67f98378e241b625d7fc1b8636a13e06f3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5367fe7d_dabaabf1",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 2
@@ -71,6 +113,30 @@
       "writtenOn": "2019-06-28T11:31:14Z",
       "side": 1,
       "message": "would these tests also work in ES 3.0?",
+      "range": {
+        "startLine": 4106,
+        "startChar": 46,
+        "endLine": 4106,
+        "endChar": 63
+      },
+      "revId": "44d1f67f98378e241b625d7fc1b8636a13e06f3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40fffc96_e7168346",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4106,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-06-28T15:56:48Z",
+      "side": 1,
+      "message": "the unorm ones should, the half float ones cant be rendered to until 3.2 i think, will add another test instantiation line for 3.0 context",
+      "parentUuid": "5367fe7d_dabaabf1",
       "range": {
         "startLine": 4106,
         "startChar": 46,
