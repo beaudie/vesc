@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "a3311125_c09f8dc2",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-06-28T13:18:30Z",
+      "side": 1,
+      "message": "I just noticed that this should be \"3407\" (which is an example of how to file a driver bug).  If you\u0027re inclined, please change \"3153\" to \"3407\".",
+      "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65f904ae_f7f352b2",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-06-28T13:18:30Z",
+      "side": 1,
+      "message": "Ditto ... If you\u0027re inclined, please change \"3153\" to \"3407\".",
+      "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "438d79af_7b5b4f60",
         "filename": "include/platform/FeaturesVk.h",
         "patchSetId": 10
