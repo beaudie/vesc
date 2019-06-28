@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e19a3a01_0127bbac",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T19:00:09Z",
+      "side": 1,
+      "message": "I\u0027d suggest putting this in the if () case.",
+      "range": {
+        "startLine": 716,
+        "startChar": 4,
+        "endLine": 716,
+        "endChar": 64
+      },
+      "revId": "adf7eb0e605fcf02325fedbb0bd6d797f6176b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00500f40_4596b0bd",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T19:00:09Z",
+      "side": 1,
+      "message": "I\u0027d suggest adding an \"else\" case that sets currentExtents \u003d swapchainExtents",
+      "range": {
+        "startLine": 726,
+        "startChar": 0,
+        "endLine": 726,
+        "endChar": 4
+      },
+      "revId": "adf7eb0e605fcf02325fedbb0bd6d797f6176b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bee4dd14_4d179196",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T19:00:09Z",
+      "side": 1,
+      "message": "you could also put this in the \"if\" case",
+      "range": {
+        "startLine": 728,
+        "startChar": 0,
+        "endLine": 747,
+        "endChar": 0
+      },
+      "revId": "adf7eb0e605fcf02325fedbb0bd6d797f6176b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5e6f68a_d489f7f9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T19:00:09Z",
+      "side": 1,
+      "message": "here you can simplify this to the previous code if you accept my if restructuring suggestion.",
+      "range": {
+        "startLine": 1008,
+        "startChar": 0,
+        "endLine": 1018,
+        "endChar": 0
+      },
+      "revId": "adf7eb0e605fcf02325fedbb0bd6d797f6176b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
