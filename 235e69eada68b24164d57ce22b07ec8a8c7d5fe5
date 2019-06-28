@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5e857b02_a7380a91",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-28T18:06:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3311125_c09f8dc2",
+      "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "65f904ae_f7f352b2",
         "filename": "include/platform/FeaturesVk.h",
         "patchSetId": 10
@@ -33,6 +51,24 @@
       "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e82447c_19fb76fa",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-28T18:06:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65f904ae_f7f352b2",
+      "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -83,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "78ebf984_2ce740f0",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-28T18:06:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c99beab_73749d90",
+      "range": {
+        "startLine": 171,
+        "startChar": 6,
+        "endLine": 171,
+        "endChar": 32
+      },
+      "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5115081_8fddf631",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 10
@@ -100,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "29e76624_75a3ddfa",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-28T18:06:30Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "d5115081_8fddf631",
+      "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "91042dfe_d66183db",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
@@ -114,6 +192,24 @@
       "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85ea5cb2_d60a86c2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-28T18:06:30Z",
+      "side": 1,
+      "message": "Thanks for the suggestion, it turns out very easy.",
+      "parentUuid": "91042dfe_d66183db",
+      "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -137,6 +233,30 @@
       "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6ec99c8_00762f99",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-28T18:06:30Z",
+      "side": 1,
+      "message": "Yeah, it is necessary to pass the test if there is no per-frame window size query. \n\nMove it done to the `Resize` test case, in case it affects others",
+      "parentUuid": "a7bc5734_df8719f2",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 49,
+        "endChar": 36
+      },
+      "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
