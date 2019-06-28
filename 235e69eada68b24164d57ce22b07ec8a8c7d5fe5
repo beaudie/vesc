@@ -25,6 +25,47 @@
     },
     {
       "key": {
+        "uuid": "6c99beab_73749d90",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-06-28T13:11:00Z",
+      "side": 1,
+      "message": "Please also add Windows AMD to the comment.",
+      "parentUuid": "438d79af_7b5b4f60",
+      "range": {
+        "startLine": 171,
+        "startChar": 6,
+        "endLine": 171,
+        "endChar": 32
+      },
+      "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5115081_8fddf631",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-06-28T13:11:00Z",
+      "side": 1,
+      "message": "Need to add Windows+AMD.  For example:\n\nif (IsIntel(mPhysicalDeviceProperties.vendorID) ||\n    (IsWindows() \u0026\u0026 IsAMD(mPhysicalDeviceProperties.vendorID)))",
+      "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91042dfe_d66183db",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 10
