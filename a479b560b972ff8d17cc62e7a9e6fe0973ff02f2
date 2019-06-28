@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf56e86c_3707f813",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T20:27:44Z",
+      "side": 1,
+      "message": "thanks for fixing the style nit.",
+      "range": {
+        "startLine": 874,
+        "startChar": 45,
+        "endLine": 874,
+        "endChar": 61
+      },
+      "revId": "a479b560b972ff8d17cc62e7a9e6fe0973ff02f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
