@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "438d79af_7b5b4f60",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T11:28:37Z",
+      "side": 1,
+      "message": "I think this on Linux Intel as well. Could you update?",
+      "range": {
+        "startLine": 171,
+        "startChar": 6,
+        "endLine": 171,
+        "endChar": 32
+      },
+      "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91042dfe_d66183db",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T11:28:37Z",
+      "side": 1,
+      "message": "I think you could simplify this CL a lot. Roll back this file to the previous version. Then in checkForOutOfDateSwapchain only check if the extents mismatch when the feature is set. Is there something I\u0027m missing?",
+      "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7bc5734_df8719f2",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T11:28:37Z",
+      "side": 1,
+      "message": "is this still necessary?",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 49,
+        "endChar": 36
+      },
+      "revId": "235e69eada68b24164d57ce22b07ec8a8c7d5fe5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
