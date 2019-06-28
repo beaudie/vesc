@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e2a4044_8ca1c8cd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T22:07:44Z",
+      "side": 1,
+      "message": "also if you could tag this with the appropriate chromium issue that would be helpful for context.",
+      "revId": "a964cba0125e788f609f3ac07faaaf8eddc28bd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
