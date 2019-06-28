@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1e73b560_beac6731",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-28T20:18:57Z",
+      "side": 1,
+      "message": "You are right,  I am feeling a little dizzy.. after modifying this code over and over..",
+      "parentUuid": "e19a3a01_0127bbac",
+      "range": {
+        "startLine": 716,
+        "startChar": 4,
+        "endLine": 716,
+        "endChar": 64
+      },
+      "revId": "adf7eb0e605fcf02325fedbb0bd6d797f6176b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "00500f40_4596b0bd",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 11
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "fb53bfd5_8f613af1",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-28T20:18:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00500f40_4596b0bd",
+      "range": {
+        "startLine": 726,
+        "startChar": 0,
+        "endLine": 726,
+        "endChar": 4
+      },
+      "revId": "adf7eb0e605fcf02325fedbb0bd6d797f6176b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bee4dd14_4d179196",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 11
@@ -68,6 +116,30 @@
       "revId": "adf7eb0e605fcf02325fedbb0bd6d797f6176b43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2ef862b_927a3e54",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 747,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-06-28T20:18:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bee4dd14_4d179196",
+      "range": {
+        "startLine": 728,
+        "startChar": 0,
+        "endLine": 747,
+        "endChar": 0
+      },
+      "revId": "adf7eb0e605fcf02325fedbb0bd6d797f6176b43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
