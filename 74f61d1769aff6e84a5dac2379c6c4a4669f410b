@@ -22,6 +22,30 @@
       "revId": "74f61d1769aff6e84a5dac2379c6c4a4669f410b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42a2bf3e_9f2d042d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2079,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-28T14:38:13Z",
+      "side": 1,
+      "message": "I would be fine with having only two options: FS-only and all. With the FS-only case allowing vertex related shaders (essentially everything other than FS) to proceed in the gap introduced by the barrier. That should cover the majority of the cases fine.",
+      "parentUuid": "7e9769af_190439e2",
+      "range": {
+        "startLine": 2068,
+        "startChar": 0,
+        "endLine": 2079,
+        "endChar": 9
+      },
+      "revId": "74f61d1769aff6e84a5dac2379c6c4a4669f410b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
