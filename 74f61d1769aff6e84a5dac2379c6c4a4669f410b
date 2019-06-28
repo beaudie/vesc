@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e9769af_190439e2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2079,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T11:38:59Z",
+      "side": 1,
+      "message": "I think you could slightly optimize this by going\n\nif (vertex \u0026\u0026 fragment)\n{\n    layout \u003d all;\n}\nelse if (vertex)\n{\n    layout \u003d vertex;\n}\nelse\n{\n    layout \u003d fragment;\n}\n\nBut with other types of shaders this gets more complicated. I think we should just always barrier on all graphics shaders for now. I suspect narrowing the barriers won\u0027t actually boost performance that much.",
+      "range": {
+        "startLine": 2068,
+        "startChar": 0,
+        "endLine": 2079,
+        "endChar": 9
+      },
+      "revId": "74f61d1769aff6e84a5dac2379c6c4a4669f410b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
