@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "835661db_cee57949",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T20:22:25Z",
+      "side": 1,
+      "message": "better to take out before merging",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 42
+      },
+      "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41b715e5_4a1e72b8",
+        "filename": "src/openGL32/proc_table_wgl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T20:22:25Z",
+      "side": 1,
+      "message": "minor point of order,\n\ngl is to gles what wgl is to egl.\n\nSo you should either call your tables [gl/gles] or [wgl/egl]",
+      "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
