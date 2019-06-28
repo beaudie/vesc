@@ -117,7 +117,6 @@
 3467 D3D11 : dEQP-GLES3.functional.attribute_location.bind_aliasing.max_cond* = FAIL
 
 // Windows and Linux failures
-1095 WIN : dEQP-GLES3.functional.texture.mipmap.2d.projected.* = FAIL
 1095 LINUX : dEQP-GLES3.functional.texture.mipmap.2d.projected.* = FAIL
 
 // Windows only failure
@@ -559,6 +558,15 @@
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.depth_component16* = SKIP
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.depth24* = SKIP
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.depth32* = SKIP
+// The following failures on the latest Intel driver (Version 25.20.100.6373):
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8_snorm* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rg32* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rg16* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rg8* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.r32* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.r16* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.r8* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.size* = FAIL
 
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.format.r11f* = SKIP
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.format.rgba32* = SKIP
@@ -604,6 +612,12 @@
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_depth* = SKIP
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_unpack* = SKIP
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_unpack* = SKIP
+// The following failures on the latest Intel driver (Version 25.20.100.6373):
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.basic_teximage2d.rgb8_snorm* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.basic_texsubimage2d.rgb8_snorm* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.basic_copyteximage2d.cube_alpha = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.basic_copyteximage2d.cube_luminance = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.basic_copytexsubimage2d.cube_luminance = FAIL
 
 3189 VULKAN : dEQP-GLES3.functional.texture.vertex.* = SKIP
 3189 VULKAN : dEQP-GLES3.functional.texture.units.* = SKIP
@@ -616,6 +630,14 @@
 3594 VULKAN : dEQP-GLES3.functional.texture.compressed.astc.void_extent_ldr.* = FAIL
 3594 VULKAN : dEQP-GLES3.functional.texture.compressed.astc.color_endpoint_modes.* = FAIL
 3594 VULKAN : dEQP-GLES3.functional.texture.compressed.astc.random.* = FAIL
+// The following failures on the latest Intel driver (Version 25.20.100.6373):
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.compressed.astc.weight_grid.* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.compressed.astc.weight_ise.* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.compressed.astc.partition_pattern_index.* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.compressed.astc.endpoint_value_ldr.* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.compressed.astc.endpoint_ise.* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.compressed.astc.color_component_selector.* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.compressed.astc.block_size_remainder.* = FAIL
 
 // Formats:
 2950 VULKAN : dEQP-GLES3.functional.fbo.completeness.renderable.*.color0.rgba32f = FAIL
