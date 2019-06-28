@@ -359,12 +359,13 @@ void Context::initialize()
     Texture *zeroTextureCube = new Texture(mImplementation.get(), 0, TextureType::CubeMap);
     mZeroTextures[TextureType::CubeMap].set(this, zeroTextureCube);
 
-    if (getClientVersion() >= Version(3, 0))
+    if (getClientVersion() >= Version(3, 0) || mSupportedExtensions.texture3D)
     {
-        // TODO: These could also be enabled via extension
         Texture *zeroTexture3D = new Texture(mImplementation.get(), 0, TextureType::_3D);
         mZeroTextures[TextureType::_3D].set(this, zeroTexture3D);
-
+    }
+    if (getClientVersion() >= Version(3, 0))
+    {
         Texture *zeroTexture2DArray = new Texture(mImplementation.get(), 0, TextureType::_2DArray);
         mZeroTextures[TextureType::_2DArray].set(this, zeroTexture2DArray);
     }
@@ -7682,6 +7683,13 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
         return true;
     }
 
+    if (getExtensions().texture3D && pname == GL_TEXTURE_BINDING_3D_OES)
+    {
+        *type      = GL_INT;
+        *numParams = 1;
+        return true;
+    }
+
     // Check for ES3.0+ parameter names which are also exposed as ES2 extensions
     switch (pname)
     {
@@ -7786,6 +7794,17 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
 
     if ((getExtensions().multiview2 || getExtensions().multiview) && pname == GL_MAX_VIEWS_OVR)
     {
+        *type      = GL_INT;
+        *numParams = 1;
+        return true;
+    }
+
+    if (pname == GL_MAX_3D_TEXTURE_SIZE)
+    {
+        if ((getClientVersion() < Version(3, 0)) && !getExtensions().texture3D)
+        {
+            return false;
+        }
         *type      = GL_INT;
         *numParams = 1;
         return true;
@@ -7897,7 +7916,6 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
         case GL_READ_BUFFER:
         case GL_TEXTURE_BINDING_3D:
         case GL_TEXTURE_BINDING_2D_ARRAY:
-        case GL_MAX_3D_TEXTURE_SIZE:
         case GL_MAX_ARRAY_TEXTURE_LAYERS:
         case GL_MAX_VERTEX_UNIFORM_BLOCKS:
         case GL_MAX_FRAGMENT_UNIFORM_BLOCKS:
@@ -8714,7 +8732,7 @@ void StateCache::updateValidBindTextureTypes(Context *context)
         {TextureType::_2DArray, isGLES3},
         {TextureType::_2DMultisample, isGLES31 || exts.textureMultisample},
         {TextureType::_2DMultisampleArray, exts.textureStorageMultisample2DArray},
-        {TextureType::_3D, isGLES3},
+        {TextureType::_3D, isGLES3 || exts.texture3D},
         {TextureType::External, exts.eglImageExternal || exts.eglStreamConsumerExternal},
         {TextureType::Rectangle, exts.textureRectangle},
         {TextureType::CubeMap, true},
