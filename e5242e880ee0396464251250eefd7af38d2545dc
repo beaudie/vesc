@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "63acd64a_3ce307e0",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-28T19:46:20Z",
+      "side": 1,
+      "message": "You can move these under the \"// PBO\" comment with the appropriate bug tag.",
+      "range": {
+        "startLine": 544,
+        "startChar": 0,
+        "endLine": 546,
+        "endChar": 81
+      },
+      "revId": "e5242e880ee0396464251250eefd7af38d2545dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
