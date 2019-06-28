@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fef4dc0b_78d618b2",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T11:31:14Z",
+      "side": 1,
+      "message": "nit: can be constexpr.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 6
+      },
+      "revId": "44d1f67f98378e241b625d7fc1b8636a13e06f3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5367fe7d_dabaabf1",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4106,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-06-28T11:31:14Z",
+      "side": 1,
+      "message": "would these tests also work in ES 3.0?",
+      "range": {
+        "startLine": 4106,
+        "startChar": 46,
+        "endLine": 4106,
+        "endChar": 63
+      },
+      "revId": "44d1f67f98378e241b625d7fc1b8636a13e06f3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
