@@ -559,6 +559,15 @@
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.depth_component16* = SKIP
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.depth24* = SKIP
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage2d.format.depth32* = SKIP
+// The following failures on the latest Intel driver (Version 25.20.100.6373):
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rgb8_snorm* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rg32* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rg16* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.rg8* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.r32* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.r16* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.format.r8* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.texstorage2d.size* = FAIL
 
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.format.r11f* = SKIP
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texstorage3d.format.rgba32* = SKIP
@@ -604,6 +613,12 @@
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_depth* = SKIP
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.teximage3d_unpack* = SKIP
 3190 VULKAN : dEQP-GLES3.functional.texture.specification.texsubimage3d_unpack* = SKIP
+// The following failures on the latest Intel driver (Version 25.20.100.6373):
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.basic_teximage2d.rgb8_snorm* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.basic_texsubimage2d.rgb8_snorm* = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.basic_copyteximage2d.cube_alpha = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.basic_copyteximage2d.cube_luminance = FAIL
+3627 VULKAN WIN INTEL : dEQP-GLES3.functional.texture.specification.basic_copytexsubimage2d.cube_luminance = FAIL
 
 3189 VULKAN : dEQP-GLES3.functional.texture.vertex.* = SKIP
 3189 VULKAN : dEQP-GLES3.functional.texture.units.* = SKIP
