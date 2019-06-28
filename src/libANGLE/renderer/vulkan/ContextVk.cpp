@@ -1896,8 +1896,16 @@ void ContextVk::invalidateDriverUniforms()
     mDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
 }
 
-void ContextVk::onFramebufferChange(const vk::RenderPassDesc &renderPassDesc)
+void ContextVk::onFramebufferChange(const gl::Context *context, FramebufferVk *framebufferVk)
 {
+    FramebufferVk *drawFramebuffer = vk::GetImpl(context->getState().getDrawFramebuffer());
+    if (framebufferVk != drawFramebuffer)
+    {
+        return;
+    }
+
+    const vk::RenderPassDesc &renderPassDesc = framebufferVk->getRenderPassDesc();
+
     // Ensure that the RenderPass description is updated.
     invalidateCurrentPipeline();
     mGraphicsPipelineDesc->updateRenderPassDesc(&mGraphicsPipelineTransition, renderPassDesc);
