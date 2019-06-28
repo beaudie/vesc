@@ -132,13 +132,13 @@ void DumpTraceEventsToJSONFile(const std::vector<TraceEvent> &traceEvents,
         std::stringstream phaseName;
         phaseName << traceEvent.phase;
 
-        unsigned long long microseconds =
-            static_cast<unsigned long long>(traceEvent.timestamp * 1000.0 * 1000.0);
+        const auto microseconds =
+            static_cast<uint64_t>(traceEvent.timestamp * 1000.0 * 1000.0);
 
         value["name"] = traceEvent.name;
         value["cat"]  = traceEvent.categoryName;
         value["ph"]   = phaseName.str();
-        value["ts"]   = microseconds;
+        value["ts"]   = static_cast<uint64_t>(microseconds);
         value["pid"]  = "ANGLE";
         value["tid"]  = strcmp(traceEvent.categoryName, "gpu.angle.gpu") == 0 ? "GPU" : "CPU";
 
