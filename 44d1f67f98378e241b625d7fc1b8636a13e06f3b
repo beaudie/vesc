@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "6ccabe8c_2569c40f",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4100,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-06-28T14:48:56Z",
+      "side": 1,
+      "message": "You can use types from gl_raii.h to simplify a bit. Types such as `GLFramebuffer` automatically do the glGen* and glDelete* calls.",
+      "revId": "44d1f67f98378e241b625d7fc1b8636a13e06f3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5367fe7d_dabaabf1",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 2
