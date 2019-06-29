@@ -143,6 +143,12 @@ angle_sample("simple_texture_cubemap") {
   ]
 }
 
+angle_sample("simple_texture_3d") {
+  sources = [
+    "simple_texture_3d/SimpleTexture3D.cpp",
+  ]
+}
+
 angle_sample("simple_vertex_shader") {
   sources = [
     "simple_vertex_shader/SimpleVertexShader.cpp",
@@ -228,6 +234,7 @@ group("all") {
     ":sample_util",
     ":simple_instancing",
     ":simple_texture_2d",
+    ":simple_texture_3d",
     ":simple_texture_cubemap",
     ":simple_vertex_shader",
     ":stencil_operations",
