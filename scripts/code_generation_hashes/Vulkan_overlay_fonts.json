@@ -1,0 +1,14 @@
+{
+  "src/libANGLE/renderer/vulkan/OverlayVk_font_autogen.cpp":
+    "07d4637faee2adcac3a0600f1ebbf7c2",
+  "src/libANGLE/renderer/vulkan/OverlayVk_font_autogen.h":
+    "66cc673df65c61d453b3989327cd81c7",
+  "src/libANGLE/renderer/vulkan/gen_vk_overlay_fonts.py":
+    "d05d90fa2674d68511c9f39e78a457b9",
+  "src/libANGLE/renderer/vulkan/overlay/overlay_font_large.png":
+    "7eaf318e9456814ac4258a1f1d9fcbcd",
+  "src/libANGLE/renderer/vulkan/overlay/overlay_font_medium.png":
+    "e65e308ffc1806054fa5b42fcdafdace",
+  "src/libANGLE/renderer/vulkan/overlay/overlay_font_small.png":
+    "f8db8518694195fd24cc40e5b304f3af"
+}

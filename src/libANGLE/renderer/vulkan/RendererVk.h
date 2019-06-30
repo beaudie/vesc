@@ -160,6 +160,9 @@ class RendererVk : angle::NonCopyable
     static constexpr size_t kMaxExtensionNames = 200;
     using ExtensionNameList = angle::FixedVector<const char *, kMaxExtensionNames>;
 
+    void onNewValidationMessage(const std::string &message);
+    std::string getAndClearLastValidationMessage(uint32_t *countSinceLastClear);
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -234,6 +237,10 @@ class RendererVk : angle::NonCopyable
     // DescriptorSetLayouts are also managed in a cache.
     std::mutex mDescriptorSetLayoutCacheMutex;
     DescriptorSetLayoutCache mDescriptorSetLayoutCache;
+
+    // Latest validation data for debug overlay.
+    std::string mLastValidationMessage;
+    uint32_t mValidationMessageCount;
 };
 
 }  // namespace rx

@@ -217,6 +217,24 @@ std::string DumpCommands(const priv::CommandBuffer &commandBuffer, const char *s
     return "--blob--";
 }
 
+float CalculateSecondaryCommandBufferPoolWaste(const std::vector<CommandGraphNode *> nodes)
+{
+    size_t used      = 0;
+    size_t allocated = 0;
+
+    for (const CommandGraphNode *node : nodes)
+    {
+        size_t nodeUsed;
+        size_t nodeAllocated;
+        node->getMemoryUsageStatsForDiagnostics(&nodeUsed, &nodeAllocated);
+        used += nodeUsed;
+        allocated += nodeAllocated;
+    }
+
+    allocated = std::max<size_t>(allocated, 1);
+    return static_cast<float>(used) / static_cast<float>(allocated);
+}
+
 }  // anonymous namespace
 
 // CommandGraphResource implementation.
@@ -789,6 +807,19 @@ std::string CommandGraphNode::dumpCommandsForDiagnostics(const char *separator) 
     return result;
 }
 
+void CommandGraphNode::getMemoryUsageStatsForDiagnostics(size_t *usedMemoryOut,
+                                                         size_t *allocatedMemoryOut) const
+{
+    size_t commandBufferUsed;
+    size_t commandBufferAllocated;
+
+    mOutsideRenderPassCommands.getMemoryUsageStats(usedMemoryOut, allocatedMemoryOut);
+    mInsideRenderPassCommands.getMemoryUsageStats(&commandBufferUsed, &commandBufferAllocated);
+
+    *usedMemoryOut += commandBufferUsed;
+    *allocatedMemoryOut += commandBufferAllocated;
+}
+
 // CommandGraph implementation.
 CommandGraph::CommandGraph(bool enableGraphDiagnostics, angle::PoolAllocator *poolAllocator)
     : mEnableGraphDiagnostics(enableGraphDiagnostics),
@@ -850,6 +881,14 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
     // There is no point in submitting an empty command buffer, so make sure not to call this
     // function if there's nothing to do.
     ASSERT(!mNodes.empty());
+
+    context->getOverlay()->getRunningGraphItem(OverlayId::CommandGraphSize)->add(mNodes.size());
+    context->getOverlay()
+        ->getRunningHistogramItem(OverlayId::SecondaryCommandBufferPoolWaste)
+        ->set(CalculateSecondaryCommandBufferPoolWaste(mNodes));
+    context->getOverlay()
+        ->getRunningHistogramItem(OverlayId::SecondaryCommandBufferPoolWaste)
+        ->next();
 
     size_t previousBarrierIndex       = 0;
     CommandGraphNode *previousBarrier = getLastBarrierNode(&previousBarrierIndex);

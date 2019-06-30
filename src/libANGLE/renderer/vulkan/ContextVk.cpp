@@ -352,6 +352,8 @@ void ContextVk::onDestroy(const gl::Context *context)
     {
         pool.destroy(device);
     }
+
+    mOverlay.destroy(device);
 }
 
 angle::Result ContextVk::getIncompleteTexture(const gl::Context *context,
@@ -442,6 +444,8 @@ angle::Result ContextVk::initialize()
     }
 
     mEmulateSeamfulCubeMapSampling = shouldEmulateSeamfulCubeMapSampling();
+
+    ANGLE_TRY(mOverlay.init(this));
 
     return angle::Result::Continue;
 }
