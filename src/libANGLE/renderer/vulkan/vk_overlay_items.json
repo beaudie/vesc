@@ -1,0 +1,85 @@
+{
+    "description": [
+        "Copyright 2019 The ANGLE Project Authors. All rights reserved.",
+        "Use of this source code is governed by a BSD-style license that can be",
+        "found in the LICENSE file.",
+        "",
+        "vk_overlay_items.json: Layout of Overlay items.",
+        "",
+        "Data for every overlay item 'Item' is a map with the following keys:",
+        "",
+        " - type: one of OverlayType types (with constructor params), such as 'PerSecond' or",
+        "         'RunningGraph(64)'",
+        " - color: in [R,G,B,A] format where every value is in [0,255]",
+        " - coords: in [X,Y] which is the distance from the edges of the window, with negative",
+        "           values representing distance from the right/bottom edge.  If a value is given",
+        "           in the form of 'Item2.<edge>.<mode>', the calculated value for <edge> in Item2",
+        "           is used.  <edge> is one of:",
+        "            - 'left', 'right': valid for x",
+        "            - 'top', 'bottom': valid for y",
+        "           <mode> is one of:",
+        "            - 'align': the requested value is used",
+        "            - 'adjacent': the value is calculated such that two items become adjacent",
+        " - font: for Text items, one of 'large', 'medium' and 'small'",
+        " - length: for Text items, maximum number of characters for this item",
+        " - bar_width: for Graph items, size of each graph bar.",
+        " - height: for Graph items, the height of the graph.",
+        " - text: for Graph items, data for the attached Text item.  This is a map with the same",
+        "         Text keys as above except type, which is implicitly Text."
+    ],
+    "items": [
+        {
+            "name": "FPS",
+            "type": "PerSecond",
+            "color": [127, 191, 255, 255],
+            "coords": [10, 10],
+            "font": "medium",
+            "length": 12
+        },
+        {
+            "name": "LastValidationMessage",
+            "type": "Text",
+            "color": [255, 0, 0, 255],
+            "coords": [10, -10],
+            "font": "small",
+            "length": 150
+        },
+        {
+            "name": "ValidationMessageCount",
+            "type": "Count",
+            "color": [255, 0, 0, 255],
+            "coords": [10, "LastValidationMessage.top.adjacent"],
+            "font": "small",
+            "length": 25
+        },
+        {
+            "name": "CommandGraphSize",
+            "type": "RunningGraph(60)",
+            "color": [75, 200, 0, 200],
+            "coords": [10, 100],
+            "bar_width": 5,
+            "height": 100,
+            "description": {
+                "color": [75, 200, 0, 255],
+                "coords": ["CommandGraphSize.left.align", "CommandGraphSize.top.adjacent"],
+                "font": "small",
+                "length": 40
+            }
+        },
+        {
+            "name": "SecondaryCommandBufferPoolWaste",
+            "type": "RunningHistogram(50)",
+            "color": [255, 200, 75, 200],
+            "coords": [-50, 100],
+            "bar_width": 6,
+            "height": 100,
+            "description": {
+                "color": [255, 200, 75, 255],
+                "coords": ["SecondaryCommandBufferPoolWaste.left.align",
+                           "SecondaryCommandBufferPoolWaste.top.adjacent"],
+                "font": "small",
+                "length": 40
+            }
+        }
+    ]
+}

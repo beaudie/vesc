@@ -14,6 +14,7 @@
 
 #include "common/PackedEnums.h"
 #include "libANGLE/renderer/ContextImpl.h"
+#include "libANGLE/renderer/vulkan/OverlayVk.h"
 #include "libANGLE/renderer/vulkan/PersistentCommandPool.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
@@ -332,6 +333,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
         *useSubgroupOpsOut = mEmulateSeamfulCubeMapSamplingWithSubgroupOps;
         return mEmulateSeamfulCubeMapSampling;
     }
+
+    OverlayImplVk *getOverlay() { return &mOverlay; }
 
   private:
     // Dirty bits.
@@ -698,6 +701,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     SerialFactory mTextureSerialFactory;
 
     gl::State::DirtyBits mPipelineDirtyBitsMask;
+
+    OverlayImplVk mOverlay;
 };
 }  // namespace rx
 
