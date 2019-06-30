@@ -571,7 +571,15 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     VkFormat nativeFormat    = format.vkImageFormat;
 
     // We need transfer src for reading back from the backbuffer.
-    constexpr VkImageUsageFlags kImageUsageFlags = kSurfaceVKColorImageUsageFlags;
+    VkImageUsageFlags imageUsageFlags = kSurfaceVKColorImageUsageFlags;
+
+    // We need storage image for compute writes (debug overlay output).
+    VkFormatFeatureFlags featureBits =
+        renderer->getImageFormatFeatureBits(nativeFormat, VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT);
+    if ((featureBits & VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT) != 0)
+    {
+        imageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
+    }
 
     VkSwapchainCreateInfoKHR swapchainInfo = {};
     swapchainInfo.sType                    = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
@@ -584,7 +592,7 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     swapchainInfo.imageExtent.width     = std::max(extents.width, 1);
     swapchainInfo.imageExtent.height    = std::max(extents.height, 1);
     swapchainInfo.imageArrayLayers      = 1;
-    swapchainInfo.imageUsage            = kImageUsageFlags;
+    swapchainInfo.imageUsage            = imageUsageFlags;
     swapchainInfo.imageSharingMode      = VK_SHARING_MODE_EXCLUSIVE;
     swapchainInfo.queueFamilyIndexCount = 0;
     swapchainInfo.pQueueFamilyIndices   = nullptr;
@@ -867,7 +875,6 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
 
     SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
 
-    vk::CommandBuffer *swapCommands = nullptr;
     if (mColorImageMS.valid())
     {
         // Transition the multisampled image to TRANSFER_SRC for resolve.
@@ -890,14 +897,31 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         resolveRegion.dstOffset                     = {};
         resolveRegion.extent                        = image.image.getExtents();
 
-        ANGLE_TRY(image.image.recordCommands(contextVk, &swapCommands));
-        mColorImageMS.resolve(&image.image, resolveRegion, swapCommands);
+        vk::CommandBuffer *resolveCommands = nullptr;
+        ANGLE_TRY(image.image.recordCommands(contextVk, &resolveCommands));
+        mColorImageMS.resolve(&image.image, resolveRegion, resolveCommands);
     }
-    else
+
+    OverlayImplVk *overlayVk = contextVk->getOverlay();
+
+    uint32_t validationMessageCount = 0;
+    std::string lastValidationMessage =
+        contextVk->getRenderer()->getAndClearLastValidationMessage(&validationMessageCount);
+    if (validationMessageCount)
     {
-        ANGLE_TRY(image.image.recordCommands(contextVk, &swapCommands));
+        overlayVk->getTextItem(OverlayId::LastValidationMessage)
+            ->set(std::move(lastValidationMessage));
+        overlayVk->getCountItem(OverlayId::ValidationMessageCount)->add(validationMessageCount);
     }
-    image.image.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::Present, swapCommands);
+
+    overlayVk->getPerSecondItem(OverlayId::FPS)->add(1);
+    ANGLE_TRY(contextVk->getOverlay()->onPresent(contextVk, &image.image, &image.imageView));
+    contextVk->getOverlay()->getRunningGraphItem(OverlayId::CommandGraphSize)->next();
+
+    vk::CommandBuffer *transitionCommands = nullptr;
+    ANGLE_TRY(image.image.recordCommands(contextVk, &transitionCommands));
+    image.image.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::Present,
+                             transitionCommands);
 
     ANGLE_VK_TRY(contextVk, swap.presentImageSemaphore.init(contextVk->getDevice()));
 

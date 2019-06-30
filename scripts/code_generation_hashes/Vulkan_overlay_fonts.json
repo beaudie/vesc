@@ -1,0 +1,10 @@
+{
+  "src/libANGLE/renderer/vulkan/OverlayVk_font_autogen.cpp":
+    "6dd0d53c6b5ce853f504eb5043a4a94b",
+  "src/libANGLE/renderer/vulkan/OverlayVk_font_autogen.h":
+    "23183531197a34482da9273d9c36411e",
+  "src/libANGLE/renderer/vulkan/gen_vk_overlay_fonts.py":
+    "a2d520004e07eb56d8c52bdaf6c5a049",
+  "src/libANGLE/renderer/vulkan/overlay/DejaVuSansMono-Bold.ttf":
+    "f580ed7569a1967ceeb96fa3e1b234d4"
+}

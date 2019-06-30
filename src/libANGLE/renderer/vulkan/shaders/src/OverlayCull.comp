@@ -1,0 +1,164 @@
+//
+// Copyright 2019 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// OverlayCull.comp: Cull overlay items.  A maximum of 32 text items and 32 graph items is supported
+// simultaneously.
+
+#version 450 core
+
+#extension GL_EXT_samplerless_texture_functions : require
+#if SupportsBallot
+#extension GL_KHR_shader_subgroup_ballot: require
+#elif SupportsArithmetic
+#extension GL_KHR_shader_subgroup_arithmetic: require
+#endif
+
+#if Is8x4
+#define WORKGROUP_WIDTH 32
+#define BLOCK_WIDTH 8
+#define BLOCK_HEIGHT 4
+#elif Is8x8
+#define WORKGROUP_WIDTH 64
+#define BLOCK_WIDTH 8
+#define BLOCK_HEIGHT 8
+#else
+#error "Not all subgroup sizes are accounted for"
+#endif
+
+// Limits:
+#define MAX_TEXT_ITEMS 32
+#define MAX_GRAPH_ITEMS 32
+
+layout (local_size_x = WORKGROUP_WIDTH, local_size_y = 1, local_size_z = 1) in;
+
+layout(set = 0, binding = 0, rgba32ui) uniform writeonly uimage2D culledItemsOut;
+
+layout (set = 0, binding = 1) uniform ItemCoordinates
+{
+    uvec4 coordinates[MAX_TEXT_ITEMS + MAX_GRAPH_ITEMS];
+};
+
+#if SupportsNone
+shared uint intersectingItems[32];
+
+void accumulateItems(const uint localId)
+{
+    // Note: no barriers needed as the workgroup size is the same as hardware subgroup size.
+    if (localId < 16)
+    {
+        intersectingItems[localId] |= intersectingItems[localId + 16];
+        if (localId < 8)
+        {
+            intersectingItems[localId] |= intersectingItems[localId + 8];
+            if (localId < 4)
+            {
+                intersectingItems[localId] |= intersectingItems[localId + 4];
+                if (localId < 2)
+                {
+                    intersectingItems[localId] |= intersectingItems[localId + 2];
+                    if (localId < 1)
+                    {
+                        intersectingItems[localId] |= intersectingItems[localId + 1];
+                    }
+                }
+            }
+        }
+    }
+}
+#endif
+
+uvec2 cullItems(const uint offset, const uvec2 blockCoordLow, const uvec2 blockCoordHigh)
+{
+    const uint localId = gl_LocalInvocationID.x;
+    const uvec4 itemCoords = coordinates[offset + localId];
+
+    const bool intersects = itemCoords.x < itemCoords.z &&
+                            all(lessThan(itemCoords.xy, blockCoordHigh)) &&
+                            all(greaterThanEqual(itemCoords.zw, blockCoordLow));
+
+#if SupportsBallot
+
+    return subgroupBallot(intersects).xy;
+
+#elif SupportsArithmetic
+
+#if Is8x8
+    const uint textItemBit =
+        localId < MAX_TEXT_ITEMS ? uint(intersects) << localId : 0;
+    const uint graphItemBit =
+        localId >= MAX_TEXT_ITEMS ? uint(intersects) << (localId - MAX_TEXT_ITEMS) : 0;
+    return uvec2(subgroupOr(textItemBit), subgroupOr(graphItemBit));
+#elif Is8x4
+    return uvec2(subgroupOr(uint(intersects) << localId), 0);
+#else
+#error "Not all subgroup sizes are accounted for"
+#endif
+
+#elif SupportsNone
+
+    uvec2 ballot = uvec2(0, 0);
+#if Is8x8
+    if (localId < MAX_TEXT_ITEMS)
+    {
+        intersectingItems[localId] = uint(intersects) << localId;
+        accumulateItems(localId);
+        if (localId == 0)
+        {
+            ballot.x = intersectingItems[0];
+        }
+    }
+    else
+    {
+        const uint graphLocalId = localId - MAX_TEXT_ITEMS;
+        intersectingItems[graphLocalId] = uint(intersects) << graphLocalId;
+        accumulateItems(graphLocalId);
+    }
+    if (localId == 0)
+    {
+        ballot.y = intersectingItems[0];
+    }
+#elif Is8x4
+    intersectingItems[localId] = uint(intersects) << localId;
+    accumulateItems(localId);
+    if (localId == 0)
+    {
+        ballot.x = intersectingItems[0];
+    }
+#else
+#error "Not all subgroup sizes are accounted for"
+#endif
+
+    return ballot;
+
+#else
+#error "Not all subgroup operations are accounted for"
+#endif
+}
+
+void main()
+{
+    // There is one workgroup invocation per pixel in culledItemsOut.  Depending on the subgroup
+    // size, either all items and graphs are processed simultaneously (subgroup size 64) or
+    // separately (subgroup size 32).
+    const uvec2 outCoord = gl_WorkGroupID.xy;
+    const uvec2 blockCoordLow = outCoord * uvec2(BLOCK_WIDTH, BLOCK_HEIGHT);
+    const uvec2 blockCoordHigh = blockCoordLow + uvec2(BLOCK_WIDTH, BLOCK_HEIGHT);
+
+    uvec2 culledItems;
+
+#if Is8x8
+    culledItems = cullItems(0, blockCoordLow, blockCoordHigh);
+#elif Is8x4
+    culledItems.x = cullItems(0, blockCoordLow, blockCoordHigh).x;
+    culledItems.y = cullItems(MAX_TEXT_ITEMS, blockCoordLow, blockCoordHigh).x;
+#else
+#error "Not all subgroup sizes are accounted for"
+#endif
+
+    if (gl_LocalInvocationID.x == 0)
+    {
+        imageStore(culledItemsOut, ivec2(outCoord), uvec4(culledItems, 0, 0));
+    }
+}

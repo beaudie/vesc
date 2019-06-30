@@ -1,0 +1,8 @@
+{
+  "src/libANGLE/renderer/vulkan/OverlayVk_autogen.cpp":
+    "e1f26d9c4e2b4cfd8a51068ff676a188",
+  "src/libANGLE/renderer/vulkan/gen_vk_overlay_items.py":
+    "fb1b376821b7cd8f16d94d3a3ea23c49",
+  "src/libANGLE/renderer/vulkan/vk_overlay_items.json":
+    "1cb297aa829ce563a39aa94df7043c86"
+}
