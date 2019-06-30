@@ -100,105 +100,6 @@ class VertexArray final : public angle::ObserverInterface,
                           public angle::Subject
 {
   public:
-    VertexArray(rx::GLImplFactory *factory, GLuint id, size_t maxAttribs, size_t maxAttribBindings);
-
-    void onDestroy(const Context *context);
-
-    GLuint id() const { return mId; }
-
-    void setLabel(const Context *context, const std::string &label) override;
-    const std::string &getLabel() const override;
-
-    const VertexBinding &getVertexBinding(size_t bindingIndex) const;
-    const VertexAttribute &getVertexAttribute(size_t attribIndex) const;
-    const VertexBinding &getBindingFromAttribIndex(size_t attribIndex) const
-    {
-        return mState.getBindingFromAttribIndex(attribIndex);
-    }
-
-    // Returns true if the function finds and detaches a bound buffer.
-    bool detachBuffer(const Context *context, GLuint bufferName);
-
-    void setVertexAttribDivisor(const Context *context, size_t index, GLuint divisor);
-    void enableAttribute(size_t attribIndex, bool enabledState);
-
-    void setVertexAttribPointer(const Context *context,
-                                size_t attribIndex,
-                                Buffer *boundBuffer,
-                                GLint size,
-                                VertexAttribType type,
-                                bool normalized,
-                                GLsizei stride,
-                                const void *pointer);
-
-    void setVertexAttribIPointer(const Context *context,
-                                 size_t attribIndex,
-                                 Buffer *boundBuffer,
-                                 GLint size,
-                                 VertexAttribType type,
-                                 GLsizei stride,
-                                 const void *pointer);
-
-    void setVertexAttribFormat(size_t attribIndex,
-                               GLint size,
-                               VertexAttribType type,
-                               bool normalized,
-                               bool pureInteger,
-                               GLuint relativeOffset);
-    void bindVertexBuffer(const Context *context,
-                          size_t bindingIndex,
-                          Buffer *boundBuffer,
-                          GLintptr offset,
-                          GLsizei stride);
-    void setVertexAttribBinding(const Context *context, size_t attribIndex, GLuint bindingIndex);
-    void setVertexBindingDivisor(size_t bindingIndex, GLuint divisor);
-    void setVertexAttribFormatImpl(VertexAttribute *attrib,
-                                   GLint size,
-                                   VertexAttribType type,
-                                   bool normalized,
-                                   bool pureInteger,
-                                   GLuint relativeOffset);
-    void bindVertexBufferImpl(const Context *context,
-                              size_t bindingIndex,
-                              Buffer *boundBuffer,
-                              GLintptr offset,
-                              GLsizei stride);
-
-    Buffer *getElementArrayBuffer() const { return mState.getElementArrayBuffer(); }
-    size_t getMaxAttribs() const { return mState.getMaxAttribs(); }
-    size_t getMaxBindings() const { return mState.getMaxBindings(); }
-
-    const std::vector<VertexAttribute> &getVertexAttributes() const
-    {
-        return mState.getVertexAttributes();
-    }
-    const std::vector<VertexBinding> &getVertexBindings() const
-    {
-        return mState.getVertexBindings();
-    }
-
-    rx::VertexArrayImpl *getImplementation() const { return mVertexArray; }
-
-    const AttributesMask &getEnabledAttributesMask() const
-    {
-        return mState.getEnabledAttributesMask();
-    }
-
-    gl::AttributesMask getClientAttribsMask() const { return mState.mClientMemoryAttribsMask; }
-
-    bool hasEnabledNullPointerClientArray() const
-    {
-        return mState.hasEnabledNullPointerClientArray();
-    }
-
-    bool hasMappedEnabledArrayBuffer() const
-    {
-        return mState.mCachedEnabledMappedArrayBuffers.any();
-    }
-
-    // Observer implementation
-    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
-
     // Dirty bits for VertexArrays use a heirarchical design. At the top level, each attribute
     // has a single dirty bit. Then an array of MAX_ATTRIBS dirty bits each has a dirty bit for
     // enabled/pointer/format/binding. Bindings are handled similarly. Note that because the
@@ -252,6 +153,94 @@ class VertexArray final : public angle::ObserverInterface,
     using DirtyBindingBits      = angle::BitSet<DIRTY_BINDING_MAX>;
     using DirtyAttribBitsArray  = std::array<DirtyAttribBits, gl::MAX_VERTEX_ATTRIBS>;
     using DirtyBindingBitsArray = std::array<DirtyBindingBits, gl::MAX_VERTEX_ATTRIB_BINDINGS>;
+
+    VertexArray(rx::GLImplFactory *factory, GLuint id, size_t maxAttribs, size_t maxAttribBindings);
+
+    void onDestroy(const Context *context);
+
+    GLuint id() const { return mId; }
+
+    void setLabel(const Context *context, const std::string &label) override;
+    const std::string &getLabel() const override;
+
+    const VertexBinding &getVertexBinding(size_t bindingIndex) const;
+    const VertexAttribute &getVertexAttribute(size_t attribIndex) const;
+    const VertexBinding &getBindingFromAttribIndex(size_t attribIndex) const
+    {
+        return mState.getBindingFromAttribIndex(attribIndex);
+    }
+
+    // Returns true if the function finds and detaches a bound buffer.
+    bool detachBuffer(const Context *context, GLuint bufferName);
+
+    void setVertexAttribDivisor(const Context *context, size_t index, GLuint divisor);
+    void enableAttribute(size_t attribIndex, bool enabledState);
+
+    void setVertexAttribPointer(const Context *context,
+                                size_t attribIndex,
+                                Buffer *boundBuffer,
+                                GLint size,
+                                VertexAttribType type,
+                                bool normalized,
+                                GLsizei stride,
+                                const void *pointer);
+
+    void setVertexAttribIPointer(const Context *context,
+                                 size_t attribIndex,
+                                 Buffer *boundBuffer,
+                                 GLint size,
+                                 VertexAttribType type,
+                                 GLsizei stride,
+                                 const void *pointer);
+
+    void setVertexAttribFormat(size_t attribIndex,
+                               GLint size,
+                               VertexAttribType type,
+                               bool normalized,
+                               bool pureInteger,
+                               GLuint relativeOffset);
+    void bindVertexBuffer(const Context *context,
+                          size_t bindingIndex,
+                          Buffer *boundBuffer,
+                          GLintptr offset,
+                          GLsizei stride);
+    void setVertexAttribBinding(const Context *context, size_t attribIndex, GLuint bindingIndex);
+    void setVertexBindingDivisor(size_t bindingIndex, GLuint divisor);
+
+    Buffer *getElementArrayBuffer() const { return mState.getElementArrayBuffer(); }
+    size_t getMaxAttribs() const { return mState.getMaxAttribs(); }
+    size_t getMaxBindings() const { return mState.getMaxBindings(); }
+
+    const std::vector<VertexAttribute> &getVertexAttributes() const
+    {
+        return mState.getVertexAttributes();
+    }
+    const std::vector<VertexBinding> &getVertexBindings() const
+    {
+        return mState.getVertexBindings();
+    }
+
+    rx::VertexArrayImpl *getImplementation() const { return mVertexArray; }
+
+    const AttributesMask &getEnabledAttributesMask() const
+    {
+        return mState.getEnabledAttributesMask();
+    }
+
+    gl::AttributesMask getClientAttribsMask() const { return mState.mClientMemoryAttribsMask; }
+
+    bool hasEnabledNullPointerClientArray() const
+    {
+        return mState.hasEnabledNullPointerClientArray();
+    }
+
+    bool hasMappedEnabledArrayBuffer() const
+    {
+        return mState.mCachedEnabledMappedArrayBuffers.any();
+    }
+
+    // Observer implementation
+    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
     static size_t GetVertexIndexFromDirtyBit(size_t dirtyBit);
 
@@ -318,6 +307,21 @@ class VertexArray final : public angle::ObserverInterface,
                                     bool normalized,
                                     GLsizei stride,
                                     const void *pointer);
+
+    // These two functions return true if the state was dirty.
+    bool setVertexAttribFormatImpl(VertexAttribute *attrib,
+                                   GLint size,
+                                   VertexAttribType type,
+                                   bool normalized,
+                                   bool pureInteger,
+                                   GLuint relativeOffset,
+                                   size_t attribIndex,
+                                   DirtyAttribBitType dirtyAttribBit);
+    bool bindVertexBufferImpl(const Context *context,
+                              size_t bindingIndex,
+                              Buffer *boundBuffer,
+                              GLintptr offset,
+                              GLsizei stride);
 
     GLuint mId;
 
