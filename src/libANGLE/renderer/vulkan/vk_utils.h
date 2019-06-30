@@ -27,6 +27,7 @@
     PROC(Framebuffer)            \
     PROC(MemoryObject)           \
     PROC(Query)                  \
+    PROC(Overlay)                \
     PROC(Program)                \
     PROC(Sampler)                \
     PROC(Semaphore)              \
@@ -45,6 +46,7 @@ class Image;
 namespace gl
 {
 struct Box;
+class DummyOverlay;
 struct Extents;
 struct RasterizerState;
 struct Rectangle;
@@ -146,6 +148,12 @@ struct ImplTypeHelper<gl::OBJ>         \
 ANGLE_GL_OBJECTS_X(ANGLE_IMPL_TYPE_HELPER_GL)
 
 template <>
+struct ImplTypeHelper<gl::DummyOverlay>
+{
+    using ImplType = OverlayVk;
+};
+
+template <>
 struct ImplTypeHelper<egl::Display>
 {
     using ImplType = DisplayVk;
@@ -164,6 +172,12 @@ template <typename T>
 GetImplType<T> *GetImpl(const T *glObject)
 {
     return GetImplAs<GetImplType<T>>(glObject);
+}
+
+template <>
+inline OverlayVk *GetImpl(const gl::DummyOverlay *glObject)
+{
+    return nullptr;
 }
 
 class GarbageObjectBase
