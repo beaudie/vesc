@@ -1,0 +1,10 @@
+{
+  "src/libANGLE/Overlay_font_autogen.cpp":
+    "4b81388d0aacce3477a5902d029af8e6",
+  "src/libANGLE/Overlay_font_autogen.h":
+    "2eae247cebb716c4f591de8a251b4a8e",
+  "src/libANGLE/gen_overlay_fonts.py":
+    "163d873cd3fa854b71c57bc52ba83d81",
+  "src/libANGLE/overlay/DejaVuSansMono-Bold.ttf":
+    "f580ed7569a1967ceeb96fa3e1b234d4"
+}
