@@ -1,0 +1,230 @@
+//
+// Copyright 2019 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+// OverlayDraw.comp: Draw overlay items.  A maximum of 32 text items and 32 graph items is supported
+// simultaneously.
+
+#version 450 core
+
+#extension GL_EXT_samplerless_texture_functions : require
+
+#if Is8x4
+#define BLOCK_WIDTH 8
+#define BLOCK_HEIGHT 4
+#elif Is8x8
+#define BLOCK_WIDTH 8
+#define BLOCK_HEIGHT 8
+#else
+#error "Not all subgroup sizes are accounted for"
+#endif
+
+// Limits:
+// Note that max length and size is defined such that each buffer length is below 16KB, the minimum
+// guaranteed supported size for uniform buffers.
+#define MAX_TEXT_ITEMS 32
+#define MAX_GRAPH_ITEMS 32
+#define MAX_TEXT_LENGTH 256
+#define MAX_GRAPH_SIZE 64
+
+// Font information:
+#define FONT_GLYPHS_PER_ROW 32
+#define FONT_GLYPHS_ROWS 3
+#define FONT_CHARACTERS (FONT_GLYPHS_PER_ROW * FONT_GLYPHS_ROWS)
+
+layout (local_size_x = BLOCK_WIDTH, local_size_y = BLOCK_HEIGHT, local_size_z = 1) in;
+
+struct TextItemData
+{
+    uvec4 coordinates;
+    vec4 color;
+    uvec4 fontSize;     // w unused.  xy has the font glyph width/height.  z has the layer.
+    uvec4 text[MAX_TEXT_LENGTH / 16];
+};
+
+struct GraphItemData
+{
+    uvec4 coordinates;
+    vec4 color;
+    uvec4 valueWidth;   // yzw unused.  x should necessarily divide coordinate's z-x
+    uvec4 values[MAX_GRAPH_SIZE / 4];
+};
+
+layout(set = 0, binding = 0, rgba32f) uniform image2D blendOutput;
+
+layout (set = 0, binding = 1) uniform TextItems
+{
+    TextItemData textItemsData[MAX_TEXT_ITEMS];
+};
+
+layout (set = 0, binding = 2) uniform GraphItems
+{
+    GraphItemData graphItemsData[MAX_GRAPH_ITEMS];
+};
+
+layout(set = 0, binding = 3) uniform utexture2D culledItems;
+layout(set = 0, binding = 4) uniform texture2DArray font;
+
+layout (push_constant) uniform PushConstants
+{
+    uvec2 outputSize;
+} params;
+
+bool intersects(const uvec2 imageCoords, const uvec4 itemCoords)
+{
+    return all(greaterThanEqual(imageCoords, itemCoords.xy)) &&
+           all(lessThan(imageCoords, itemCoords.zw));
+}
+
+uint getChar(const uint textItem, const uvec2 coordInItem, const uint fontGlyphWidth)
+{
+    const uint charIndex = coordInItem.x / fontGlyphWidth;
+    const uint packIndex = charIndex / 4;
+    const uint packedChars = textItemsData[textItem].text[packIndex / 4][packIndex % 4];
+    const uint shift = (charIndex % 4) * 8;
+
+#if IsBigEndian
+    return (packedChars >> (24 - shift)) & 0xFF;
+#else
+    return (packedChars >> shift) & 0xFF;
+#endif
+}
+
+float sampleFont(const uint textChar,
+                 const uvec2 coordInItem,
+                 const uvec2 fontGlyphSize,
+                 const uint fontLayer)
+{
+    const uvec2 coordInGlyph = coordInItem % fontGlyphSize;
+    const uvec2 glyphOffset = fontGlyphSize *
+        uvec2(textChar % FONT_GLYPHS_PER_ROW, textChar / FONT_GLYPHS_PER_ROW);
+
+    return texelFetch(font, ivec3(glyphOffset + coordInGlyph, fontLayer), 0).x;
+}
+
+uint getValue(const uint graphItem, const uvec2 coordInItem, const uint valueWidth)
+{
+    const uint valueIndex = coordInItem.x / valueWidth.x;
+    return graphItemsData[graphItem].values[valueIndex / 4][valueIndex % 4];
+}
+
+vec4 blend(const vec4 blendedSoFar, const vec4 color)
+{
+    // Assuming colors (C1, a1), (C2, a2) ... (Cn, an) have been so far blended, blendedSoFar will
+    // contain:
+    //
+    //     .rgb = Cn*an + ... + C2*a2*(1-a3)*...*(1-an) + C1*a1*(1-a2)*...*(1-an)
+    //     .a = (1-a1)*(1-a2)*...*(1-an)
+    //
+    // Blending with (Cn+1, an+1) is simply:
+    //
+    //     .rgb = Cn+1*an+1 + .rgb*(1-an+1)
+    //     .a = .a*(1-an+1)
+    //
+    // Note that finally, the background color will be multipled by .a and added with .rgb.
+
+    return vec4(blendedSoFar.rgb * (1 - color.a) + color.rgb * color.a,
+                blendedSoFar.a * (1 - color.a));
+}
+
+void main()
+{
+    const uvec2 imageCoords = gl_GlobalInvocationID.xy;
+    if (any(greaterThanEqual(imageCoords, params.outputSize)))
+    {
+        return;
+    }
+
+    vec4 blendedItems = vec4(0, 0, 0, 1);
+
+    const uvec2 subgroupItems = texelFetch(culledItems, ivec2(gl_WorkGroupID.xy), 0).xy;
+    uint textItems = subgroupItems.x;
+    uint graphItems = subgroupItems.y;
+
+    // Loop through possible graph items that can intersect with this block.
+    while (graphItems != 0)
+    {
+        const uint graphItem = findLSB(graphItems);
+        graphItems ^= 1 << graphItem;
+
+        const uvec4 itemCoords = graphItemsData[graphItem].coordinates;
+        if (!intersects(imageCoords, itemCoords))
+        {
+            continue;
+        }
+
+        if (imageCoords.x == itemCoords.x || imageCoords.y == itemCoords.y ||
+            imageCoords.x + 1 == itemCoords.z || imageCoords.y + 1 == itemCoords.w)
+        {
+            // Use a black border around the graph to mark the area.
+            blendedItems = vec4(0);
+            continue;
+        }
+
+        const uvec2 coordInItem = imageCoords - itemCoords.xy;
+        const uint valueWidth = graphItemsData[graphItem].valueWidth.x;
+
+        // Find the value corresponding to this pixel.
+        const uint value = getValue(graphItem, coordInItem, valueWidth);
+
+        vec4 color = vec4(0);
+        const uint itemHeight = itemCoords.w - itemCoords.y;
+
+        // If the graph value overflows the designated area, have the last four rows show a
+        // checkerboard pattern to signify that there is an overflow.
+        bool indicateOverflow = value > itemHeight && coordInItem.y + 4 >= itemHeight
+                && ((coordInItem.x ^ coordInItem.y) & 1) == 0;
+
+        if ((itemHeight - coordInItem.y) < value && !indicateOverflow)
+        {
+            color = graphItemsData[graphItem].color;
+            blendedItems = blend(blendedItems, color);
+        }
+    }
+
+    // Loop through possible text items that can intersect with this block.
+    while (textItems != 0)
+    {
+        const uint textItem = findLSB(textItems);
+        textItems ^= 1 << textItem;
+
+        const uvec4 itemCoords = textItemsData[textItem].coordinates;
+        if (!intersects(imageCoords, itemCoords))
+        {
+            continue;
+        }
+
+        const uvec2 coordInItem = imageCoords - itemCoords.xy;
+        const uvec4 fontSizePacked = textItemsData[textItem].fontSize;
+        const uvec2 fontGlyphSize = fontSizePacked.xy;
+        const uint fontLayer = fontSizePacked.z;
+
+        // Find the character corresponding to this pixel.
+        const uint textChar = getChar(textItem, coordInItem, fontGlyphSize.x);
+
+        // The FONT_CHARACTERS value is a value filled where there is no character, so we don't add
+        // a background to it.
+        if (textChar < FONT_CHARACTERS)
+        {
+            // Sample the font based on this character.
+            const float sampleValue = sampleFont(textChar, coordInItem, fontGlyphSize, fontLayer);
+
+            vec4 color = vec4(0, 0, 0, 0.4);
+            color = mix(color, textItemsData[textItem].color, sampleValue);
+
+            blendedItems = blend(blendedItems, color);
+        }
+    }
+
+    if (blendedItems.a < 1)
+    {
+        vec3 blendedColor = blendedItems.rgb;
+        if (blendedItems.a > 0)
+        {
+            const vec4 color = imageLoad(blendOutput, ivec2(imageCoords));
+            blendedColor += color.rgb * color.a * blendedItems.a;
+        }
+        imageStore(blendOutput, ivec2(imageCoords), vec4(blendedColor, 1));
+    }
+}

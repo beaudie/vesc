@@ -281,6 +281,9 @@ DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
     bool isError    = (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) != 0;
     std::string msg = log.str();
 
+    RendererVk *rendererVk = static_cast<RendererVk *>(userData);
+    rendererVk->onNewValidationMessage(msg);
+
     if (isError)
     {
         ERR() << msg;
@@ -490,6 +493,7 @@ RendererVk::RendererVk()
       mDebugUtilsMessenger(VK_NULL_HANDLE),
       mDebugReportCallback(VK_NULL_HANDLE),
       mPhysicalDevice(VK_NULL_HANDLE),
+      mPhysicalDeviceSubgroupProperties{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_PROPERTIES},
       mQueue(VK_NULL_HANDLE),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mMaxVertexAttribDivisor(1),
@@ -1003,6 +1007,15 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     else
     {
         createInfo.pEnabledFeatures = &enabledFeatures.features;
+    }
+
+    if (vkGetPhysicalDeviceProperties2KHR)
+    {
+        VkPhysicalDeviceProperties2 deviceProperties = {};
+        deviceProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+        deviceProperties.pNext = &mPhysicalDeviceSubgroupProperties;
+
+        vkGetPhysicalDeviceProperties2KHR(mPhysicalDevice, &deviceProperties);
     }
 
     createInfo.enabledExtensionCount = static_cast<uint32_t>(enabledDeviceExtensions.size());
@@ -1568,4 +1581,17 @@ angle::Result RendererVk::cleanupGarbage(vk::Context *context, bool block)
     return angle::Result::Continue;
 }
 
+void RendererVk::onNewValidationMessage(const std::string &message)
+{
+    mLastValidationMessage = message;
+    ++mValidationMessageCount;
+}
+
+std::string RendererVk::getAndClearLastValidationMessage(uint32_t *countSinceLastClear)
+{
+    *countSinceLastClear    = mValidationMessageCount;
+    mValidationMessageCount = 0;
+
+    return std::move(mLastValidationMessage);
+}
 }  // namespace rx
