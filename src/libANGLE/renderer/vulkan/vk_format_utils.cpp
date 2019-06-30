@@ -303,7 +303,7 @@ size_t GetVertexInputAlignment(const vk::Format &format)
 {
     const angle::Format &bufferFormat = format.bufferFormat();
     size_t pixelBytes                 = bufferFormat.pixelBytes;
-    return format.vkBufferFormatIsPacked ? pixelBytes : (pixelBytes / bufferFormat.channelCount());
+    return format.vkBufferFormatIsPacked ? pixelBytes : (pixelBytes / bufferFormat.channelCount);
 }
 
 GLenum GetSwizzleStateComponent(const gl::SwizzleState &swizzleState, GLenum component)

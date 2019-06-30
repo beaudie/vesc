@@ -688,11 +688,11 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
     dest->onWrite(contextVk, VK_ACCESS_SHADER_WRITE_BIT);
 
     ConvertVertexShaderParams shaderParams;
-    shaderParams.Ns = params.srcFormat->channelCount();
-    shaderParams.Bs = params.srcFormat->pixelBytes / params.srcFormat->channelCount();
+    shaderParams.Ns = params.srcFormat->channelCount;
+    shaderParams.Bs = params.srcFormat->pixelBytes / params.srcFormat->channelCount;
     shaderParams.Ss = params.srcStride;
-    shaderParams.Nd = params.destFormat->channelCount();
-    shaderParams.Bd = params.destFormat->pixelBytes / params.destFormat->channelCount();
+    shaderParams.Nd = params.destFormat->channelCount;
+    shaderParams.Bd = params.destFormat->pixelBytes / params.destFormat->channelCount;
     shaderParams.Sd = shaderParams.Nd * shaderParams.Bd;
     // The component size is expected to either be 1, 2 or 4 bytes.
     ASSERT(4 % shaderParams.Bs == 0);

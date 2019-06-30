@@ -30,8 +30,7 @@ namespace
 {
 bool SameVertexAttribFormat(const VertexAttribute &a, const VertexAttribute &b)
 {
-    return a.size == b.size && a.type == b.type && a.normalized == b.normalized &&
-           a.pureInteger == b.pureInteger && a.relativeOffset == b.relativeOffset;
+    return a.format == b.format && a.relativeOffset == b.relativeOffset;
 }
 
 bool SameVertexBuffer(const VertexBinding &a, const VertexBinding &b)
@@ -460,10 +459,7 @@ void VertexArrayGL::updateAttribPointer(const gl::Context *context, size_t attri
     callVertexAttribPointer(static_cast<GLuint>(attribIndex), attrib, binding.getStride(),
                             binding.getOffset());
 
-    mAppliedAttributes[attribIndex].size        = attrib.size;
-    mAppliedAttributes[attribIndex].type        = attrib.type;
-    mAppliedAttributes[attribIndex].normalized  = attrib.normalized;
-    mAppliedAttributes[attribIndex].pureInteger = attrib.pureInteger;
+    mAppliedAttributes[attribIndex].format = attrib.format;
 
     // After VertexAttribPointer, attrib.relativeOffset is set to 0 and attrib.bindingIndex is set
     // to attribIndex in driver. If attrib.relativeOffset != 0 or attrib.bindingIndex !=
@@ -482,17 +478,21 @@ void VertexArrayGL::callVertexAttribPointer(GLuint attribIndex,
                                             GLsizei stride,
                                             GLintptr offset) const
 {
-    const GLvoid *pointer = reinterpret_cast<const GLvoid *>(offset);
-    if (attrib.pureInteger)
+    const GLvoid *pointer       = reinterpret_cast<const GLvoid *>(offset);
+    const angle::Format &format = *attrib.format;
+    if (format.isInt() || format.isUint())
     {
-        ASSERT(!attrib.normalized);
-        mFunctions->vertexAttribIPointer(attribIndex, attrib.size, gl::ToGLenum(attrib.type),
+        // FIXME
+        ASSERT(!format.isSnorm() && !format.isUnorm());
+        mFunctions->vertexAttribIPointer(attribIndex, format.channelCount, format.componentType,
                                          stride, pointer);
     }
     else
     {
-        mFunctions->vertexAttribPointer(attribIndex, attrib.size, gl::ToGLenum(attrib.type),
-                                        attrib.normalized, stride, pointer);
+        // FIXME
+        bool isNorm = format.isSnorm() || format.isUnorm();
+        mFunctions->vertexAttribPointer(attribIndex, format.channelCount, format.componentType,
+                                        isNorm, stride, pointer);
     }
 }
 
@@ -512,23 +512,23 @@ void VertexArrayGL::updateAttribFormat(size_t attribIndex)
         return;
     }
 
-    if (attrib.pureInteger)
+    const angle::Format &format = *attrib.format;
+    if (format.isInt() || format.isUint())
     {
-        ASSERT(!attrib.normalized);
-        mFunctions->vertexAttribIFormat(static_cast<GLuint>(attribIndex), attrib.size,
-                                        gl::ToGLenum(attrib.type), attrib.relativeOffset);
+        ASSERT(!format.isSnorm() && !format.isUnorm());
+        mFunctions->vertexAttribIFormat(static_cast<GLuint>(attribIndex), format.channelCount,
+                                        gl::ToGLenum(format.vertexAttribType),
+                                        attrib.relativeOffset);
     }
     else
     {
-        mFunctions->vertexAttribFormat(static_cast<GLuint>(attribIndex), attrib.size,
-                                       gl::ToGLenum(attrib.type), attrib.normalized,
+        bool isNorm = format.isSnorm() || format.isUnorm();
+        mFunctions->vertexAttribFormat(static_cast<GLuint>(attribIndex), format.channelCount,
+                                       gl::ToGLenum(format.vertexAttribType), isNorm,
                                        attrib.relativeOffset);
     }
 
-    mAppliedAttributes[attribIndex].size           = attrib.size;
-    mAppliedAttributes[attribIndex].type           = attrib.type;
-    mAppliedAttributes[attribIndex].normalized     = attrib.normalized;
-    mAppliedAttributes[attribIndex].pureInteger    = attrib.pureInteger;
+    mAppliedAttributes[attribIndex].format         = attrib.format;
     mAppliedAttributes[attribIndex].relativeOffset = attrib.relativeOffset;
 }
 
