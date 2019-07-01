@@ -39,7 +39,10 @@ void ActiveVariable::unionReferencesWith(const ActiveVariable &other)
 
 ShaderType ActiveVariable::getFirstShaderTypeWhereActive() const
 {
-    return static_cast<ShaderType>(ScanForward(mActiveUseBits.bits()));
+    // Some platforms have hard restrictions regarding values passed to ScanForward.
+    // Call into the function only if mActiveUseBits has atleast one bit set
+    return (mActiveUseBits.any()) ? static_cast<ShaderType>(ScanForward(mActiveUseBits.bits()))
+                                  : ShaderType::Vertex;
 }
 
 GLuint ActiveVariable::activeShaderCount() const

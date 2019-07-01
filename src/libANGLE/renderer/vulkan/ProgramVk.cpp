@@ -14,9 +14,7 @@
 #include "libANGLE/ProgramLinkedResources.h"
 #include "libANGLE/renderer/renderer_utils.h"
 #include "libANGLE/renderer/vulkan/BufferVk.h"
-#include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/GlslangWrapper.h"
-#include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 
 namespace rx
@@ -202,6 +200,46 @@ angle::Result ProgramVk::ShaderInfo::initShaders(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result ProgramVk::loadShaderSource(ContextVk *contextVk, gl::BinaryInputStream *stream)
+{
+    // Read in vertex shader data first, followed by fragment shader data. Order matched in
+    // ProgramVk::ShaderInfo::saveShaderSource. This can be easily modified to use a container
+    // and iteration when more shader types are supported.
+    uint32_t vertexBinarySize = stream->readInt<uint32_t>();
+    std::vector<unsigned char> vertexCode(vertexBinarySize);
+    stream->readBytes(vertexCode.data(), vertexBinarySize);
+    mVertexSource = std::string(vertexCode.begin(), vertexCode.end());
+
+    uint32_t fragmentBinarySize = stream->readInt<uint32_t>();
+    if (fragmentBinarySize != 0)
+    {
+        std::vector<unsigned char> fragmentCode(fragmentBinarySize);
+        stream->readBytes(fragmentCode.data(), fragmentBinarySize);
+        mFragmentSource = std::string(fragmentCode.begin(), fragmentCode.end());
+    }
+
+    return angle::Result::Continue;
+}
+
+void ProgramVk::saveShaderSource(gl::BinaryOutputStream *stream)
+{
+    // Write out vertex shader data first, followed by fragment shader data. Order matched in
+    // ProgramVk::ShaderInfo::loadShaderSource. This can be easily modified to use a container
+    // and iteration when more shader types are supported.
+    uint32_t vertexBinarySize = mVertexSource.length();
+    stream->writeInt(vertexBinarySize);
+    stream->writeBytes(reinterpret_cast<const unsigned char *>(mVertexSource.c_str()),
+                       vertexBinarySize);
+
+    uint32_t fragmentBinarySize = mFragmentSource.length();
+    stream->writeInt(fragmentBinarySize);
+    if (fragmentBinarySize != 0)
+    {
+        stream->writeBytes(reinterpret_cast<const unsigned char *>(mFragmentSource.c_str()),
+                           fragmentBinarySize);
+    }
+}
+
 void ProgramVk::ShaderInfo::release(ContextVk *contextVk)
 {
     mProgramHelper.release(contextVk);
@@ -265,13 +303,21 @@ std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
                                                gl::BinaryInputStream *stream,
                                                gl::InfoLog &infoLog)
 {
-    UNIMPLEMENTED();
-    return std::make_unique<LinkEventDone>(angle::Result::Stop);
+    ContextVk *contextVk = vk::GetImpl(context);
+    angle::Result status = loadShaderSource(contextVk, stream);
+    if (status != angle::Result::Continue)
+    {
+        return std::make_unique<LinkEventDone>(status);
+    }
+
+    return std::make_unique<LinkEventDone>(linkImpl(context, infoLog));
 }
 
 void ProgramVk::save(const gl::Context *context, gl::BinaryOutputStream *stream)
 {
-    UNIMPLEMENTED();
+    ANGLE_UNUSED_VARIABLE(context);
+
+    saveShaderSource(stream);
 }
 
 void ProgramVk::setBinaryRetrievableHint(bool retrievable)
@@ -288,14 +334,18 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
                                            const gl::ProgramLinkedResources &resources,
                                            gl::InfoLog &infoLog)
 {
+    // Link resources before calling GetShaderSource to make sure they are ready for the set/binding
+    // assignment done in that function.
+    linkResources(resources);
+
+    GlslangWrapper::GetShaderSource(mState, resources, &mVertexSource, &mFragmentSource);
+
     // TODO(jie.a.chen@intel.com): Parallelize linking.
     // http://crbug.com/849576
-    return std::make_unique<LinkEventDone>(linkImpl(context, resources, infoLog));
+    return std::make_unique<LinkEventDone>(linkImpl(context, infoLog));
 }
 
-angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
-                                  const gl::ProgramLinkedResources &resources,
-                                  gl::InfoLog &infoLog)
+angle::Result ProgramVk::linkImpl(const gl::Context *glContext, gl::InfoLog &infoLog)
 {
     const gl::State &glState                 = glContext->getState();
     ContextVk *contextVk                     = vk::GetImpl(glContext);
@@ -303,12 +353,6 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext,
     gl::TransformFeedback *transformFeedback = glState.getCurrentTransformFeedback();
 
     reset(contextVk);
-
-    // Link resources before calling GetShaderSource to make sure they are ready for the set/binding
-    // assignment done in that function.
-    linkResources(resources);
-
-    GlslangWrapper::GetShaderSource(mState, resources, &mVertexSource, &mFragmentSource);
 
     ANGLE_TRY(initDefaultUniformBlocks(glContext));
 
@@ -419,10 +463,13 @@ angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
 
     for (gl::ShaderType shaderType : gl::AllGLES2ShaderTypes())
     {
-        gl::Shader *shader                       = mState.getAttachedShader(shaderType);
-        const std::vector<sh::Uniform> &uniforms = shader->getUniforms();
-        InitDefaultUniformBlock(uniforms, shader, &layoutMap[shaderType],
-                                &requiredBufferSize[shaderType]);
+        gl::Shader *shader = mState.getAttachedShader(shaderType);
+        if (shader)
+        {
+            const std::vector<sh::Uniform> &uniforms = shader->getUniforms();
+            InitDefaultUniformBlock(uniforms, shader, &layoutMap[shaderType],
+                                    &requiredBufferSize[shaderType]);
+        }
     }
 
     // Init the default block layout info.
