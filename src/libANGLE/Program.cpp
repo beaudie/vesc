@@ -4401,6 +4401,8 @@ void Program::serialize(const Context *context, angle::MemoryBuffer *binaryOut) 
 
     stream.writeInt(mState.mNumViews);
 
+    stream.writeInt(mState.mMaxActiveAttribLocation);
+
     static_assert(MAX_VERTEX_ATTRIBS * 2 <= sizeof(uint32_t) * 8,
                   "All bits of mAttributesTypeMask types and mask fit into 32 bits each");
     stream.writeInt(static_cast<int>(mState.mAttributesTypeMask.to_ulong()));
@@ -4586,6 +4588,8 @@ angle::Result Program::deserialize(const Context *context,
     mState.mGeometryShaderMaxVertices         = stream.readInt<int>();
 
     mState.mNumViews = stream.readInt<int>();
+
+    mState.mMaxActiveAttribLocation = stream.readInt<unsigned int>();
 
     static_assert(MAX_VERTEX_ATTRIBS * 2 <= sizeof(uint32_t) * 8,
                   "All bits of mAttributesTypeMask types and mask fit into 32 bits each");
