@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d749d999_d2fec642",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-01T15:39:56Z",
+      "side": 1,
+      "message": "This can only hold 8 bits:\n\n// Used in Framebuffer / Program\nusing DrawBufferMask \u003d angle::BitSet\u003cIMPLEMENTATION_MAX_DRAW_BUFFERS\u003e;\n\n    IMPLEMENTATION_MAX_DRAW_BUFFERS    \u003d 8,\n\nBut you\u0027re using it to hold 17 values.",
+      "revId": "eb4d8952408c5b4b5b6d73df19354b17adef5eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d091b5b8_8a3f16a7",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-01T15:39:56Z",
+      "side": 1,
+      "message": "If attachment is GL_COLOR_ATTACHMENT0, then (attachment - GL_COLOR_ATTACHMENT0) will be 0.   However, you\u0027re already using that case for GL_COLOR.\n\n\nUsing (MAX - 1) for GL_COLOR may be a good choice.",
+      "revId": "eb4d8952408c5b4b5b6d73df19354b17adef5eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b0269d9_e641dfac",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-01T15:39:56Z",
+      "side": 1,
+      "message": "Is there an explicit ordering somewhere that\u0027s forcing depth/stencil invalidation to come after color due to attachmentIndexVk being incremented by color first?\n\nMaybe a different way to ask this is, why is attachmentIndexVk guaranteed to be set to the correct value for depth/stencil by looping through color buffers first?   Is this a vulkan thing or an ANGLE thing?",
+      "revId": "eb4d8952408c5b4b5b6d73df19354b17adef5eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
