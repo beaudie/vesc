@@ -239,6 +239,30 @@
     },
     {
       "key": {
+        "uuid": "24712845_7af1eeb5",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8545,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-02T22:47:57Z",
+      "side": 1,
+      "message": "Removing the mask hurts performance.",
+      "parentUuid": "071fc8b5_661383d8",
+      "range": {
+        "startLine": 8545,
+        "startChar": 4,
+        "endLine": 8545,
+        "endChar": 53
+      },
+      "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "695fd104_3a48f656",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 1
