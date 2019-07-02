@@ -308,7 +308,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
   public:
     Context(rx::EGLImplFactory *implFactory,
             const egl::Config *config,
-            const Context *shareContext,
+            Context *shareContext,
             TextureManager *shareTextures,
             MemoryProgramCache *memoryProgramCache,
             const egl::AttributeMap &attribs,
@@ -459,6 +459,10 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
         return mState.isCurrentVertexArray(va);
     }
 
+    bool isShared() const { return mShared; }
+    // Once a context is setShared() it cannot be undone
+    void setShared() { mShared = true; }
+
     const State &getState() const { return mState; }
     GLint getClientMajorVersion() const { return mState.getClientMajorVersion(); }
     GLint getClientMinorVersion() const { return mState.getClientMinorVersion(); }
@@ -581,6 +585,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void setUniform1iImpl(Program *program, GLint location, GLsizei count, const GLint *v);
 
     State mState;
+    bool mShared;
     bool mSkipValidation;
     bool mDisplayTextureShareGroup;
 

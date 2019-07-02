@@ -33,6 +33,9 @@ void GL_APIENTRY BlendColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat al
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateBlendColor(context, red, green, blue, alpha))
         {
             context->blendColor(red, green, blue, alpha);
@@ -47,6 +50,9 @@ void GL_APIENTRY BlendEquation(GLenum mode)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateBlendEquation(context, mode))
         {
             context->blendEquation(mode);
@@ -67,6 +73,9 @@ void GL_APIENTRY BlendFuncSeparate(GLenum sfactorRGB,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateBlendFuncSeparate(context, sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha))
         {
@@ -83,6 +92,9 @@ void GL_APIENTRY FogCoordPointer(GLenum type, GLsizei stride, const void *pointe
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateFogCoordPointer(context, type, stride, pointer))
         {
             context->fogCoordPointer(type, stride, pointer);
@@ -97,6 +109,9 @@ void GL_APIENTRY FogCoordd(GLdouble coord)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateFogCoordd(context, coord))
         {
             context->fogCoordd(coord);
@@ -111,6 +126,9 @@ void GL_APIENTRY FogCoorddv(const GLdouble *coord)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateFogCoorddv(context, coord))
         {
             context->fogCoorddv(coord);
@@ -125,6 +143,9 @@ void GL_APIENTRY FogCoordf(GLfloat coord)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateFogCoordf(context, coord))
         {
             context->fogCoordf(coord);
@@ -139,6 +160,9 @@ void GL_APIENTRY FogCoordfv(const GLfloat *coord)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateFogCoordfv(context, coord))
         {
             context->fogCoordfv(coord);
@@ -159,6 +183,9 @@ void GL_APIENTRY MultiDrawArrays(GLenum mode,
     if (context)
     {
         PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        auto shareContextLock    = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateMultiDrawArrays(context, modePacked, first, count, drawcount))
         {
@@ -183,6 +210,9 @@ void GL_APIENTRY MultiDrawElements(GLenum mode,
     {
         PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
         DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
+        auto shareContextLock       = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateMultiDrawElements(context, modePacked, count, typePacked, indices, drawcount))
         {
@@ -199,6 +229,9 @@ void GL_APIENTRY PointParameterf(GLenum pname, GLfloat param)
     if (context)
     {
         PointParameter pnamePacked = FromGLenum<PointParameter>(pname);
+        auto shareContextLock      = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidatePointParameterf(context, pnamePacked, param))
         {
             context->pointParameterf(pnamePacked, param);
@@ -215,6 +248,9 @@ void GL_APIENTRY PointParameterfv(GLenum pname, const GLfloat *params)
     if (context)
     {
         PointParameter pnamePacked = FromGLenum<PointParameter>(pname);
+        auto shareContextLock      = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidatePointParameterfv(context, pnamePacked, params))
         {
             context->pointParameterfv(pnamePacked, params);
@@ -229,6 +265,9 @@ void GL_APIENTRY PointParameteri(GLenum pname, GLint param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidatePointParameteri(context, pname, param))
         {
             context->pointParameteri(pname, param);
@@ -244,6 +283,9 @@ void GL_APIENTRY PointParameteriv(GLenum pname, const GLint *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidatePointParameteriv(context, pname, params))
         {
             context->pointParameteriv(pname, params);
@@ -258,6 +300,9 @@ void GL_APIENTRY SecondaryColor3b(GLbyte red, GLbyte green, GLbyte blue)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3b(context, red, green, blue))
         {
             context->secondaryColor3b(red, green, blue);
@@ -272,6 +317,9 @@ void GL_APIENTRY SecondaryColor3bv(const GLbyte *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3bv(context, v))
         {
             context->secondaryColor3bv(v);
@@ -286,6 +334,9 @@ void GL_APIENTRY SecondaryColor3d(GLdouble red, GLdouble green, GLdouble blue)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3d(context, red, green, blue))
         {
             context->secondaryColor3d(red, green, blue);
@@ -300,6 +351,9 @@ void GL_APIENTRY SecondaryColor3dv(const GLdouble *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3dv(context, v))
         {
             context->secondaryColor3dv(v);
@@ -314,6 +368,9 @@ void GL_APIENTRY SecondaryColor3f(GLfloat red, GLfloat green, GLfloat blue)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3f(context, red, green, blue))
         {
             context->secondaryColor3f(red, green, blue);
@@ -328,6 +385,9 @@ void GL_APIENTRY SecondaryColor3fv(const GLfloat *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3fv(context, v))
         {
             context->secondaryColor3fv(v);
@@ -342,6 +402,9 @@ void GL_APIENTRY SecondaryColor3i(GLint red, GLint green, GLint blue)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3i(context, red, green, blue))
         {
             context->secondaryColor3i(red, green, blue);
@@ -356,6 +419,9 @@ void GL_APIENTRY SecondaryColor3iv(const GLint *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3iv(context, v))
         {
             context->secondaryColor3iv(v);
@@ -370,6 +436,9 @@ void GL_APIENTRY SecondaryColor3s(GLshort red, GLshort green, GLshort blue)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3s(context, red, green, blue))
         {
             context->secondaryColor3s(red, green, blue);
@@ -384,6 +453,9 @@ void GL_APIENTRY SecondaryColor3sv(const GLshort *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3sv(context, v))
         {
             context->secondaryColor3sv(v);
@@ -398,6 +470,9 @@ void GL_APIENTRY SecondaryColor3ub(GLubyte red, GLubyte green, GLubyte blue)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3ub(context, red, green, blue))
         {
             context->secondaryColor3ub(red, green, blue);
@@ -412,6 +487,9 @@ void GL_APIENTRY SecondaryColor3ubv(const GLubyte *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3ubv(context, v))
         {
             context->secondaryColor3ubv(v);
@@ -426,6 +504,9 @@ void GL_APIENTRY SecondaryColor3ui(GLuint red, GLuint green, GLuint blue)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3ui(context, red, green, blue))
         {
             context->secondaryColor3ui(red, green, blue);
@@ -440,6 +521,9 @@ void GL_APIENTRY SecondaryColor3uiv(const GLuint *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3uiv(context, v))
         {
             context->secondaryColor3uiv(v);
@@ -454,6 +538,9 @@ void GL_APIENTRY SecondaryColor3us(GLushort red, GLushort green, GLushort blue)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3us(context, red, green, blue))
         {
             context->secondaryColor3us(red, green, blue);
@@ -468,6 +555,9 @@ void GL_APIENTRY SecondaryColor3usv(const GLushort *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3usv(context, v))
         {
             context->secondaryColor3usv(v);
@@ -485,6 +575,9 @@ void GL_APIENTRY SecondaryColorPointer(GLint size, GLenum type, GLsizei stride, 
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateSecondaryColorPointer(context, size, type, stride, pointer))
         {
@@ -500,6 +593,9 @@ void GL_APIENTRY WindowPos2d(GLdouble x, GLdouble y)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2d(context, x, y))
         {
             context->windowPos2d(x, y);
@@ -514,6 +610,9 @@ void GL_APIENTRY WindowPos2dv(const GLdouble *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2dv(context, v))
         {
             context->windowPos2dv(v);
@@ -528,6 +627,9 @@ void GL_APIENTRY WindowPos2f(GLfloat x, GLfloat y)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2f(context, x, y))
         {
             context->windowPos2f(x, y);
@@ -542,6 +644,9 @@ void GL_APIENTRY WindowPos2fv(const GLfloat *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2fv(context, v))
         {
             context->windowPos2fv(v);
@@ -556,6 +661,9 @@ void GL_APIENTRY WindowPos2i(GLint x, GLint y)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2i(context, x, y))
         {
             context->windowPos2i(x, y);
@@ -570,6 +678,9 @@ void GL_APIENTRY WindowPos2iv(const GLint *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2iv(context, v))
         {
             context->windowPos2iv(v);
@@ -584,6 +695,9 @@ void GL_APIENTRY WindowPos2s(GLshort x, GLshort y)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2s(context, x, y))
         {
             context->windowPos2s(x, y);
@@ -598,6 +712,9 @@ void GL_APIENTRY WindowPos2sv(const GLshort *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2sv(context, v))
         {
             context->windowPos2sv(v);
@@ -612,6 +729,9 @@ void GL_APIENTRY WindowPos3d(GLdouble x, GLdouble y, GLdouble z)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3d(context, x, y, z))
         {
             context->windowPos3d(x, y, z);
@@ -626,6 +746,9 @@ void GL_APIENTRY WindowPos3dv(const GLdouble *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3dv(context, v))
         {
             context->windowPos3dv(v);
@@ -640,6 +763,9 @@ void GL_APIENTRY WindowPos3f(GLfloat x, GLfloat y, GLfloat z)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3f(context, x, y, z))
         {
             context->windowPos3f(x, y, z);
@@ -654,6 +780,9 @@ void GL_APIENTRY WindowPos3fv(const GLfloat *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3fv(context, v))
         {
             context->windowPos3fv(v);
@@ -668,6 +797,9 @@ void GL_APIENTRY WindowPos3i(GLint x, GLint y, GLint z)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3i(context, x, y, z))
         {
             context->windowPos3i(x, y, z);
@@ -682,6 +814,9 @@ void GL_APIENTRY WindowPos3iv(const GLint *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3iv(context, v))
         {
             context->windowPos3iv(v);
@@ -696,6 +831,9 @@ void GL_APIENTRY WindowPos3s(GLshort x, GLshort y, GLshort z)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3s(context, x, y, z))
         {
             context->windowPos3s(x, y, z);
@@ -710,6 +848,9 @@ void GL_APIENTRY WindowPos3sv(const GLshort *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3sv(context, v))
         {
             context->windowPos3sv(v);
