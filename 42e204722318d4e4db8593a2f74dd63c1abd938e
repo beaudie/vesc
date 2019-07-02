@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b5e4ef27_cfd8eb7a",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-07-02T20:30:37Z",
+      "side": 1,
+      "message": "For the latter question (is this possible): I think it impossible by looking at the existing test, user defined gl_BaseVertex etc. is not allowed. User defined angle_BaseVertex etc. will be mapped to a different name.\nAll three should be available if [Multi]DrawElementsInstancedBaseVertexBaseInstance is called and all three is referenced in the shader, which should be a nontrivial use case. So I add this early return pattern following the pattern when there\u0027s only gl_DrawID.",
+      "parentUuid": "79a41386_8e3c9dd7",
+      "range": {
+        "startLine": 948,
+        "startChar": 16,
+        "endLine": 948,
+        "endChar": 31
+      },
+      "revId": "42e204722318d4e4db8593a2f74dd63c1abd938e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5da0aee6_5a82666a",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 11
