@@ -358,6 +358,24 @@
       "revId": "a466885ba670f533811cc71829348ad5038da332",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b50efd43_49974c8f",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-02T23:45:07Z",
+      "side": 1,
+      "message": "Thanks to getting some help from Cody, I\u0027m able to capture the Vulkan trace with RenderDoc on Linux and Windows now.   The trick was to click \"Queue Capture\" so it actually captures a frame. \n  With that, we did some poking around by playing with the fragment shader to see what values were actually being seen.\n\nIt turns out that we also need to correct the Z value, if one is present.\n\nI don\u0027t know why that\u0027s necessary yet, but here is a quick patch to enable that.   The generated shader code looks like:\n\nvec3 s413 \u003d dFdy((-_uv_coord));\n(s413.y *\u003d ANGLEUniforms.viewportYScale);\n(s413.z *\u003d ANGLEUniforms.viewportYScale);\n(_ures \u003d ((s413 * _uu_scale) + _uu_bias));\n\nThis could be probably cleaned up to create a vec2 to correct both .yz at the same time.   I wanted some opinions on why the Z value correction appears to be necessary before I optimized it though.",
+      "parentUuid": "de023891_8001d96a",
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

@@ -16,6 +16,24 @@
       "revId": "cb94a9daefdb19b9debc780eec1600fcc0a57d38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "545df89c_66a391f1",
+        "filename": "src/compiler/translator/tree_ops/RewriteDfdy.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-02T23:45:07Z",
+      "side": 1,
+      "message": "It\u0027s happening just before the line that contains the dFdy() call.   A few examples:\n\n// mediump vec3 computeRes (mediump vec3 value)\n// {\n//     return dFdy(v_coord) * u_scale + u_bias;\n// }\n\nvec3 _ucomputeRes(in vec3 _uvalue){\n    vec3 s415 \u003d dFdy(_uv_coord);\n    (s415.y *\u003d ANGLEUniforms.viewportYScale);\n    return ((s415 * _uu_scale) + _uu_bias);\n}\n\n\n// void main (void)\n// {\n//     mediump vec2 res;\n//     switch (1)\n//     {\n//         case 0:    res \u003d dFdy(-v_coord) * u_scale + u_bias;    break;\n//         case 1:    res \u003d dFdy(v_coord) * u_scale + u_bias;    break;\n//     }\n//     o_color \u003d vec4(res, 0.0, 1.0);\n// }\n\nvoid main(){\n    #ifdef ANGLE_ENABLE_LINE_SEGMENT_RASTERIZATION\n    [[[...]]]\n    #endif\n    vec2 _ures \u003d vec2(0.0, 0.0);\n    switch (1) {\n        case (0):\n            vec2 s413 \u003d dFdy((-_uv_coord));\n            (s413.y *\u003d ANGLEUniforms.viewportYScale);\n            (_ures \u003d ((s413 * _uu_scale) + _uu_bias));\n            break;\n        case (1):\n            vec2 s414 \u003d dFdy(_uv_coord);\n            (s414.y *\u003d ANGLEUniforms.viewportYScale);\n            (_ures \u003d ((s414 * _uu_scale) + _uu_bias));\n            break;\n    }\n    (_uo_color \u003d vec4(_ures, 0.0, 1.0));\n}",
+      "parentUuid": "260f3752_8ad80803",
+      "revId": "cb94a9daefdb19b9debc780eec1600fcc0a57d38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
