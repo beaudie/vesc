@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de4dd3e7_06dee1bc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T14:39:39Z",
+      "side": 1,
+      "message": "nit: can you pass ContextVk * here to match the style?",
+      "range": {
+        "startLine": 981,
+        "startChar": 34,
+        "endLine": 981,
+        "endChar": 62
+      },
+      "revId": "b9be3dc0bc2df3db05d8c4a3c4371c765c40775b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05f0c101_9f60db76",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T14:39:39Z",
+      "side": 1,
+      "message": "nit: can be a range-for, slightly simpler.",
+      "range": {
+        "startLine": 991,
+        "startChar": 4,
+        "endLine": 991,
+        "endChar": 38
+      },
+      "revId": "b9be3dc0bc2df3db05d8c4a3c4371c765c40775b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "730b0ce9_8fde06e7",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1021,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T14:39:39Z",
+      "side": 1,
+      "message": "how about a little bit op trick:\n\nfor (size_t colorIndexGL : (enabledDrawBuffers \u0026 invalidateColorBuffers))\n{\n}\n\nshould be a slight efficiency and code simplification.",
+      "range": {
+        "startLine": 1021,
+        "startChar": 31,
+        "endLine": 1021,
+        "endChar": 61
+      },
+      "revId": "b9be3dc0bc2df3db05d8c4a3c4371c765c40775b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4135c487_b2cf6cd4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T14:39:39Z",
+      "side": 1,
+      "message": "could you instead please test that this \u003d\u003d the draw framebuffer before calling onFramebufferChange? And rename onFramebufferChange to onDrawFramebufferChange? I\u0027d like to avoid requiring a gl::Context for ContextVk back-end APIs as much as we can.",
+      "range": {
+        "startLine": 1120,
+        "startChar": 15,
+        "endLine": 1120,
+        "endChar": 34
+      },
+      "revId": "b9be3dc0bc2df3db05d8c4a3c4371c765c40775b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6832f6d1_61451a46",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T14:39:39Z",
+      "side": 1,
+      "message": "unrelated fix? Maybe a split patch?",
+      "range": {
+        "startLine": 980,
+        "startChar": 0,
+        "endLine": 988,
+        "endChar": 5
+      },
+      "revId": "b9be3dc0bc2df3db05d8c4a3c4371c765c40775b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
