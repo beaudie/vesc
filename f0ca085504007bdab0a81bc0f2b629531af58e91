@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e962cf4c_5d731b94",
+        "filename": "src/tests/egl_tests/EGLFeatureControlTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T18:51:25Z",
+      "side": 1,
+      "message": "These could become EXPECT_TRUE/EXPECT_EQ so that the test will keep failing they they fail.",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 49,
+        "endChar": 25
+      },
+      "revId": "f0ca085504007bdab0a81bc0f2b629531af58e91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
