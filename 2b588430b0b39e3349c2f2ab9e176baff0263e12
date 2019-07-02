@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "e06625f2_0ff8788b",
+        "filename": "include/WGL/wgl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-02T20:29:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa9d16f_fc2eb129",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 21
+      },
+      "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "835661db_cee57949",
         "filename": "scripts/run_code_generation.py",
         "patchSetId": 8
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "9e8691d9_46dd322f",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-02T20:29:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "835661db_cee57949",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 42
+      },
+      "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ee4dbd9_7f50480b",
         "filename": "src/openGL32/openGL32_wgl.cpp",
         "patchSetId": 8
@@ -86,6 +134,24 @@
       "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d959814_6c2357c8",
+        "filename": "src/openGL32/openGL32_wgl.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-02T20:29:54Z",
+      "side": 1,
+      "message": "openGL32_autogen contains GL entry points and this file contains WGL entry points. This file contains all the unimplemented functions that can\u0027t go through the typical entry point/validation path because we don\u0027t have implementations for WGL functions.",
+      "parentUuid": "5ee4dbd9_7f50480b",
+      "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -124,6 +190,24 @@
     },
     {
       "key": {
+        "uuid": "6e0db5d8_011849f8",
+        "filename": "src/openGL32/openGL32_wgl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-02T20:29:54Z",
+      "side": 1,
+      "message": "Needed by proc_table_wgl, these specific functions need to be declared with wgl prefix",
+      "parentUuid": "b5dacaad_37a338c4",
+      "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41b715e5_4a1e72b8",
         "filename": "src/openGL32/proc_table_wgl.h",
         "patchSetId": 8
@@ -138,6 +222,24 @@
       "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a173534e_da8d06ed",
+        "filename": "src/openGL32/proc_table_wgl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-02T20:29:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41b715e5_4a1e72b8",
+      "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
