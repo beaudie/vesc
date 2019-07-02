@@ -216,6 +216,30 @@
     },
     {
       "key": {
+        "uuid": "590cdf54_625ab1a2",
+        "filename": "src/libANGLE/Uniform.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-02T17:22:58Z",
+      "side": 1,
+      "message": "hmmm, there might be an underlying bug in serialize where it is not recording uniforms correctly\nwill need to take a look",
+      "parentUuid": "a83d8dda_6483d31d",
+      "range": {
+        "startLine": 42,
+        "startChar": 3,
+        "endLine": 45,
+        "endChar": 55
+      },
+      "revId": "616a6c5d97afdf0225069325b5234d48b8de3e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a33335b_0fccdce5",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 3
@@ -236,6 +260,30 @@
       "revId": "616a6c5d97afdf0225069325b5234d48b8de3e5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8386346a_606b3a4a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-02T17:22:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3a33335b_0fccdce5",
+      "range": {
+        "startLine": 208,
+        "startChar": 4,
+        "endLine": 211,
+        "endChar": 70
+      },
+      "revId": "616a6c5d97afdf0225069325b5234d48b8de3e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -345,6 +393,30 @@
       "revId": "616a6c5d97afdf0225069325b5234d48b8de3e5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93a72f89_fa2df9ef",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-02T17:22:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "3bfa0a3e_64e14f4c",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 275,
+        "endChar": 32
+      },
+      "revId": "616a6c5d97afdf0225069325b5234d48b8de3e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
