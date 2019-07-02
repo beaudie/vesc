@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "34d60ff8_3d1e08f0",
+        "filename": "src/libANGLE/Uniform.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-02T16:47:27Z",
+      "side": 1,
+      "message": "\u003e Question is, what provoked `mActiveUseBits` to be 0 in this change?\n\nthe uniform is in the vertex shader, ideally i would have had ShaderType::Invalid \u003d\u003d 0 and ShaderType::Vertex starts from enum value 1. That would have been a lot more code change than what i was going for in this patch",
+      "parentUuid": "2fc8a77e_070c23fe",
+      "range": {
+        "startLine": 42,
+        "startChar": 3,
+        "endLine": 45,
+        "endChar": 55
+      },
+      "revId": "616a6c5d97afdf0225069325b5234d48b8de3e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a33335b_0fccdce5",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 3
