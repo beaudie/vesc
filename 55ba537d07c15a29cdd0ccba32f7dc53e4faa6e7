@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0afc2aff_2002265b",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-02T19:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00f69fdd_0f257d89",
+      "range": {
+        "startLine": 880,
+        "startChar": 35,
+        "endLine": 880,
+        "endChar": 50
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cbf1de14_b44a1fe3",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 9
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "720d529d_e81ed9e9",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-02T19:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbf1de14_b44a1fe3",
+      "range": {
+        "startLine": 256,
+        "startChar": 9,
+        "endLine": 256,
+        "endChar": 18
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "66bd9fb7_e451a6ed",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 9
@@ -59,6 +107,30 @@
       "writtenOn": "2019-07-02T13:08:30Z",
       "side": 1,
       "message": "can you tag this with the TODO now?",
+      "range": {
+        "startLine": 369,
+        "startChar": 17,
+        "endLine": 369,
+        "endChar": 35
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f529cd5_6c665f52",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-02T19:56:01Z",
+      "side": 1,
+      "message": "Not sure what TODO you mean, this should just work.",
+      "parentUuid": "66bd9fb7_e451a6ed",
       "range": {
         "startLine": 369,
         "startChar": 17,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "288a8b6c_97e11190",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7686,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-02T19:56:01Z",
+      "side": 1,
+      "message": "This comes from gl2ext.h",
+      "parentUuid": "90b5c2ba_747a1b7e",
+      "range": {
+        "startLine": 7686,
+        "startChar": 46,
+        "endLine": 7686,
+        "endChar": 71
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a63b54cb_61c49be6",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 9
@@ -114,6 +210,30 @@
       "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc878b40_95bd62f7",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7691,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-02T19:56:01Z",
+      "side": 1,
+      "message": "Ah, good catch, done.",
+      "parentUuid": "a63b54cb_61c49be6",
+      "range": {
+        "startLine": 7685,
+        "startChar": 0,
+        "endLine": 7691,
+        "endChar": 5
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "252af16f_5837d394",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7811,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-02T19:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73da891f_607e84a7",
+      "range": {
+        "startLine": 7802,
+        "startChar": 0,
+        "endLine": 7811,
+        "endChar": 5
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e8240274_7ac3f1de",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 9
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "8d790c89_8c6114e3",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-02T19:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8240274_7ac3f1de",
+      "range": {
+        "startLine": 372,
+        "startChar": 8,
+        "endLine": 372,
+        "endChar": 90
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "142370a6_1b6be7e2",
         "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
         "patchSetId": 9
@@ -183,6 +351,30 @@
       "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb974f21_3cb5341d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1655,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-02T19:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "142370a6_1b6be7e2",
+      "range": {
+        "startLine": 1655,
+        "startChar": 4,
+        "endLine": 1655,
+        "endChar": 57
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -229,6 +421,30 @@
       "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ee97bbf_bbb18a11",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-02T19:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbf66815_ae93b23b",
+      "range": {
+        "startLine": 1415,
+        "startChar": 45,
+        "endLine": 1415,
+        "endChar": 50
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -279,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "182db471_b0a1be33",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-02T19:56:01Z",
+      "side": 1,
+      "message": "I hit this when trying to enable a test that tries to perform a 2D sample from a layer of a 3D texture.  I\u0027m not enabling the test, so I can omit this if you like.  It\u0027s a bit future looking.",
+      "parentUuid": "46b3b479_6885a521",
+      "range": {
+        "startLine": 218,
+        "startChar": 19,
+        "endLine": 218,
+        "endChar": 58
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b5961f50_23b755b2",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 9
@@ -299,6 +539,30 @@
       "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb5e8c79_063b5aab",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5656,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-02T19:56:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5961f50_23b755b2",
+      "range": {
+        "startLine": 5652,
+        "startChar": 12,
+        "endLine": 5656,
+        "endChar": 13
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -325,6 +589,30 @@
     },
     {
       "key": {
+        "uuid": "d042ea05_71b62848",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-02T19:56:01Z",
+      "side": 1,
+      "message": "Planning to let Ian tackle as part of format survey, but I can certainly help",
+      "parentUuid": "9a065f97_e4e5a5b5",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 62
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4330330e_4a47662d",
         "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
         "patchSetId": 9
@@ -336,6 +624,30 @@
       "writtenOn": "2019-07-02T13:08:30Z",
       "side": 1,
       "message": "Are you sure this isn\u0027t because you didn\u0027t implement 3D support in TextureVk::setCompressedImage?",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 80
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afd0adeb_f3ffc2ab",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-02T19:56:01Z",
+      "side": 1,
+      "message": "I don\u0027t recall when I added these, but we can try a run without them, see what pops up.  On Windows Nvidia, they are all skipped with:\n\n  \"Not supported! Compressed format not supported by implementation\"\n\nI don\u0027t see any special 3D texture needs in setCompressedImage.  These tests don\u0027t even reach it.  Doesn\u0027t mean I haven\u0027t missed something though.",
+      "parentUuid": "4330330e_4a47662d",
       "range": {
         "startLine": 51,
         "startChar": 0,
