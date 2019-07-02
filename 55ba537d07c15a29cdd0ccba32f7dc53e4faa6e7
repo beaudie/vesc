@@ -255,6 +255,30 @@
     },
     {
       "key": {
+        "uuid": "50cf62d9_837a63ab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-02T15:37:15Z",
+      "side": 1,
+      "message": "On a somewhat unrelated note, we create a 2DArray view on our cube maps for use in a couple of places. The CubeMap case would need this flag too then. You could maybe report this as missing validation (either in the spec language or the layers).",
+      "parentUuid": "46b3b479_6885a521",
+      "range": {
+        "startLine": 218,
+        "startChar": 19,
+        "endLine": 218,
+        "endChar": 58
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b5961f50_23b755b2",
         "filename": "src/libANGLE/validationES.cpp",
         "patchSetId": 9
