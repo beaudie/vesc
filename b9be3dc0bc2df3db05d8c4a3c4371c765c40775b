@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2f808fa5_8a6aff41",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-02T15:01:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de4dd3e7_06dee1bc",
+      "range": {
+        "startLine": 981,
+        "startChar": 34,
+        "endLine": 981,
+        "endChar": 62
+      },
+      "revId": "b9be3dc0bc2df3db05d8c4a3c4371c765c40775b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "05f0c101_9f60db76",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2019-07-02T14:39:39Z",
       "side": 1,
       "message": "nit: can be a range-for, slightly simpler.",
+      "range": {
+        "startLine": 991,
+        "startChar": 4,
+        "endLine": 991,
+        "endChar": 38
+      },
+      "revId": "b9be3dc0bc2df3db05d8c4a3c4371c765c40775b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82a21389_c4148ce9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-02T15:01:48Z",
+      "side": 1,
+      "message": "`attachments` is not a container.",
+      "parentUuid": "05f0c101_9f60db76",
       "range": {
         "startLine": 991,
         "startChar": 4,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "53a8c2c2_c2886707",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1021,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-02T15:01:48Z",
+      "side": 1,
+      "message": "That would be incorrect as `attachmentIndexVk` needs to iterate over all bits in enabledDrawBuffers.",
+      "parentUuid": "730b0ce9_8fde06e7",
+      "range": {
+        "startLine": 1021,
+        "startChar": 31,
+        "endLine": 1021,
+        "endChar": 61
+      },
+      "revId": "b9be3dc0bc2df3db05d8c4a3c4371c765c40775b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4135c487_b2cf6cd4",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "eb68d5f9_a32d2233",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1120,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-02T15:01:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4135c487_b2cf6cd4",
+      "range": {
+        "startLine": 1120,
+        "startChar": 15,
+        "endLine": 1120,
+        "endChar": 34
+      },
+      "revId": "b9be3dc0bc2df3db05d8c4a3c4371c765c40775b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6832f6d1_61451a46",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 3
@@ -114,6 +210,30 @@
       "revId": "b9be3dc0bc2df3db05d8c4a3c4371c765c40775b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93ba33ea_db13bdec",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-02T15:01:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6832f6d1_61451a46",
+      "range": {
+        "startLine": 980,
+        "startChar": 0,
+        "endLine": 988,
+        "endChar": 5
+      },
+      "revId": "b9be3dc0bc2df3db05d8c4a3c4371c765c40775b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
