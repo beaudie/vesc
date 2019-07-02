@@ -8469,6 +8469,8 @@ void StateCache::updateActiveAttribsMask(Context *context)
     mCachedActiveBufferedAttribsMask = activeEnabled & ~clientAttribs;
     mCachedActiveDefaultAttribsMask  = activeAttribs & ~enabledAttribs;
     mCachedHasAnyEnabledClientAttrib = (clientAttribs & enabledAttribs).any();
+
+    updateMismatchedAttribsMask(glState);
 }
 
 void StateCache::updateVertexElementLimitsImpl(Context *context)
@@ -8520,6 +8522,51 @@ void StateCache::updateBasicDrawStatesError()
 void StateCache::updateBasicDrawElementsError()
 {
     mCachedBasicDrawElementsError = kInvalidPointer;
+}
+
+ANGLE_INLINE void StateCache::updateMismatchedAttribsMask(const State &glState)
+{
+    const VertexArray *vao = glState.getVertexArray();
+
+    // Bitset representing attributes used in the program.
+    uint_fast32_t programAttribActiveBits = glState.getProgram()->getAttributesMask().to_ulong();
+    // Bitset representing which attributes will use the current value
+    // (corresponding attrib array is disabled).
+    uint_fast32_t currentValueActiveBits = mCachedActiveDefaultAttribsMask.to_ulong();
+    // Type of the attributes as specified in the shader program.
+    // There are three types of values (float, int, uint), so all *TypeBits
+    // have a low part and a high part, where the type value of the ith
+    // attrib has the LSB equal to the ith bit and MSB equal to the i+16th bit.
+    uint_fast32_t programAttribTypeBits = glState.getProgram()->getAttributesTypeMask().to_ulong();
+    // Type of the attribute arrays.
+    uint_fast32_t arrayAttribTypeBits = vao->getAttributesTypeMask().to_ulong();
+    // Type of the current value for each attribute.
+    uint_fast32_t currentValueTypeBits = glState.getCurrentValuesTypeMask().to_ulong();
+
+    // Duplicate mask to low and high parts.
+    currentValueActiveBits |= currentValueActiveBits << kMaxComponentTypeMaskIndex;
+
+    // Selects bits from arrayAttribTypeBits where the bit in currentValueActiveBits is 0,
+    // and the bits from currentValueTypeBits where the bit is 1.
+    // Equivalent to currentValueTypeBits & currentValueActiveBits
+    //             | arrayAttribTypeBits & ~currentValueActiveBits,
+    // but is a bitwise operation faster.
+    // outputTypeBits holds the types which will be uploaded to the GPU.
+    uint_fast32_t outputTypeBits =
+        arrayAttribTypeBits ^
+        ((arrayAttribTypeBits ^ currentValueTypeBits) & currentValueActiveBits);
+    // inputTypeBits holds the types expected by the shader program.
+    uint_fast32_t inputTypeBits = programAttribTypeBits;
+
+    // Get the type bits which are mismatched.
+    uint_fast32_t mismatchedTypeBits   = outputTypeBits ^ inputTypeBits;
+    uint_fast32_t mismatchedAttribBits = mismatchedTypeBits;
+    // Set the corresponding low bit for each high bit as well.
+    mismatchedAttribBits |= mismatchedTypeBits >> kMaxComponentTypeMaskIndex;
+    // Ignore attributes not used in program.
+    mismatchedAttribBits &= programAttribActiveBits;
+
+    mCachedMismatchedAttribsMask = AttributesMask(mismatchedAttribBits);
 }
 
 intptr_t StateCache::getBasicDrawStatesErrorImpl(Context *context) const
@@ -8598,6 +8645,10 @@ void StateCache::onStencilStateChange(Context *context)
 void StateCache::onDefaultVertexAttributeChange(Context *context)
 {
     updateBasicDrawStatesError();
+
+    const State &glState = context->getState();
+
+    updateMismatchedAttribsMask(glState);
 }
 
 void StateCache::onActiveTextureChange(Context *context)
