@@ -22,6 +22,30 @@
       "revId": "f30b800f310e487fa4f238ee0fc5c8c6bf1775c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdee7cc5_eec82b82",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-02T15:47:25Z",
+      "side": 1,
+      "message": "Yes, some of the invalidate deqp tests enabled in the next change exposed this.",
+      "parentUuid": "87a192e2_daddfae5",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 59
+      },
+      "revId": "f30b800f310e487fa4f238ee0fc5c8c6bf1775c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
