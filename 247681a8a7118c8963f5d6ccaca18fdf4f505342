@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8620fd06_e74bae20",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-02T19:30:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4bed41f3_69836461",
+      "range": {
+        "startLine": 4433,
+        "startChar": 0,
+        "endLine": 4437,
+        "endChar": 9
+      },
+      "revId": "247681a8a7118c8963f5d6ccaca18fdf4f505342",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c2451b8a_8bd55413",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "247681a8a7118c8963f5d6ccaca18fdf4f505342",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09cd44e9_15f49d4b",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-02T19:30:50Z",
+      "side": 1,
+      "message": "Ack, i think im missing how it would be more performant to save there, for now im going to remove the todo tag",
+      "parentUuid": "c2451b8a_8bd55413",
+      "range": {
+        "startLine": 298,
+        "startChar": 2,
+        "endLine": 299,
+        "endChar": 30
+      },
+      "revId": "247681a8a7118c8963f5d6ccaca18fdf4f505342",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
