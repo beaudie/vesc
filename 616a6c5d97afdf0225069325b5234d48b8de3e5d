@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c408f0db_f8b3eec4",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4404,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-02T16:20:00Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "77227cba_d6291601",
+      "range": {
+        "startLine": 4404,
+        "startChar": 27,
+        "endLine": 4404,
+        "endChar": 51
+      },
+      "revId": "616a6c5d97afdf0225069325b5234d48b8de3e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3878f6a7_83046505",
         "filename": "src/libANGLE/Uniform.cpp",
         "patchSetId": 3
@@ -108,6 +132,30 @@
       "side": 1,
       "message": "If you looked at the SO link I included, even on x86_64 this behavior is undefined.",
       "parentUuid": "98b1b7d0_6fd77b46",
+      "range": {
+        "startLine": 42,
+        "startChar": 3,
+        "endLine": 45,
+        "endChar": 55
+      },
+      "revId": "616a6c5d97afdf0225069325b5234d48b8de3e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fc8a77e_070c23fe",
+        "filename": "src/libANGLE/Uniform.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-02T16:20:00Z",
+      "side": 1,
+      "message": "I\u0027m going to do the following -\n1. add the note about CTZ\n2. remove the parenthesis that bugs shabby so much\n3. split this into its own gerrit",
+      "parentUuid": "4c40d235_7ac2e856",
       "range": {
         "startLine": 42,
         "startChar": 3,
