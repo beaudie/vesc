@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cbf1de14_b44a1fe3",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T13:08:30Z",
+      "side": 1,
+      "message": "nit: texture3DOES",
+      "range": {
+        "startLine": 256,
+        "startChar": 9,
+        "endLine": 256,
+        "endChar": 18
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66bd9fb7_e451a6ed",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T13:08:30Z",
+      "side": 1,
+      "message": "can you tag this with the TODO now?",
+      "range": {
+        "startLine": 369,
+        "startChar": 17,
+        "endLine": 369,
+        "endChar": 35
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90b5c2ba_747a1b7e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7686,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T13:08:30Z",
+      "side": 1,
+      "message": "nit: you can omit the _OES",
+      "range": {
+        "startLine": 7686,
+        "startChar": 46,
+        "endLine": 7686,
+        "endChar": 71
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a63b54cb_61c49be6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7691,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T13:08:30Z",
+      "side": 1,
+      "message": "this should go in \"Check for ES3.0+ parameter names which are also exposed as ES2 extensions.\"",
+      "range": {
+        "startLine": 7685,
+        "startChar": 0,
+        "endLine": 7691,
+        "endChar": 5
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73da891f_607e84a7",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7811,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T13:08:30Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 7802,
+        "startChar": 0,
+        "endLine": 7811,
+        "endChar": 5
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "142370a6_1b6be7e2",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1655,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T13:08:30Z",
+      "side": 1,
+      "message": "you can make this true.",
+      "range": {
+        "startLine": 1655,
+        "startChar": 4,
+        "endLine": 1655,
+        "endChar": 57
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "343499f5_21555924",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T13:08:30Z",
+      "side": 1,
+      "message": "you can omit this.",
+      "range": {
+        "startLine": 660,
+        "startChar": 4,
+        "endLine": 660,
+        "endChar": 42
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46b3b479_6885a521",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T13:08:30Z",
+      "side": 1,
+      "message": "any idea why this is necessary?",
+      "range": {
+        "startLine": 218,
+        "startChar": 19,
+        "endLine": 218,
+        "endChar": 58
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a065f97_e4e5a5b5",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T13:08:30Z",
+      "side": 1,
+      "message": "possible to triage this?",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 62
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4330330e_4a47662d",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T13:08:30Z",
+      "side": 1,
+      "message": "Are you sure this isn\u0027t because you didn\u0027t implement 3D support in TextureVk::setCompressedImage?",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 80
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
