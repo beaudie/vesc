@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "32907891_d670c842",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T21:09:30Z",
+      "side": 1,
+      "message": "I would either remove the early break or split this into 3 loops searching for each uniform with \u0027break\u0027 after it\u0027s found.",
+      "parentUuid": "b5e4ef27_cfd8eb7a",
+      "range": {
+        "startLine": 948,
+        "startChar": 16,
+        "endLine": 948,
+        "endChar": 31
+      },
+      "revId": "42e204722318d4e4db8593a2f74dd63c1abd938e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5da0aee6_5a82666a",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 11
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "BaseVertex and BaseInstance are always emulated so they should always be available.\nVertexID and InstanceID needs native hardware support through. So I think it safe to assume they are always implemented?",
       "parentUuid": "5da0aee6_5a82666a",
+      "range": {
+        "startLine": 3207,
+        "startChar": 4,
+        "endLine": 3207,
+        "endChar": 54
+      },
+      "revId": "42e204722318d4e4db8593a2f74dd63c1abd938e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cc97738_3f8900f6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3207,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T21:09:30Z",
+      "side": 1,
+      "message": "Setting this to true would expose the extension from ANGLE\u0027s GL interface.  Probably not something you want to do yet because the entry points aren\u0027t added.",
+      "parentUuid": "9158238d_ee072252",
       "range": {
         "startLine": 3207,
         "startChar": 4,
