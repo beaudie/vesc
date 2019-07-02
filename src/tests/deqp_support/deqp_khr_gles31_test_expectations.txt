@@ -36,9 +36,11 @@
 // General Vulkan expectations
 
 // Limits:
-3520 VULKAN : KHR-GLES31.core.texture_gather* = FAIL
-3520 VULKAN : KHR-GLES31.core.layout_binding.sampler2D_* = FAIL
-3520 VULKAN : KHR-GLES31.core.layout_binding.block_* = FAIL
+// GL_MIN/MAX_PROGRAM_TEXTURE_GATHER_OFFSET not set.
+3605 VULKAN : KHR-GLES31.core.texture_gather* = FAIL
+
+// Vulkan limits lower than GLES minimum:
+3633 VULKAN : KHR-GLES31.core.layout_binding.block_layout_binding_block_FragmentShader = FAIL
 
 // Compute shaders
 3562 VULKAN : KHR-GLES31.core.constant_expressions.* = FAIL
@@ -63,6 +65,7 @@
 
 // Atomic counters:
 3566 VULKAN : KHR-GLES31.core.shader_atomic_counters.* = FAIL
+3566 VULKAN : KHR-GLES31.core.layout_binding.buffer_layout_binding_atomic* = SKIP
 
 // RGBA32F:
 3520 VULKAN : KHR-GLES31.core.texture_gather.*-gather-float-2d-rgb = SKIP
