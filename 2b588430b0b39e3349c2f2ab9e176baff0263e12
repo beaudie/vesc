@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "baa9d16f_fc2eb129",
+        "filename": "include/WGL/wgl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T16:56:36Z",
+      "side": 1,
+      "message": "This should be removed. Sorry, I didn\u0027t see Clemen\u0027s response. Yeah Clemen we should include angle_gl before wgl.h in the files that need it.",
+      "parentUuid": "31fdce66_d5dad33b",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 21
+      },
+      "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "835661db_cee57949",
         "filename": "scripts/run_code_generation.py",
         "patchSetId": 8
@@ -76,6 +100,24 @@
       "writtenOn": "2019-07-02T15:45:53Z",
       "side": 1,
       "message": "Are these fucntion declarations referenced anywhere?  I have a feeling they\u0027re going to be the same as the official wgl headers so this file isn\u0027t needed andthe includes can be moved into the cpp file.",
+      "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5dacaad_37a338c4",
+        "filename": "src/openGL32/openGL32_wgl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T16:56:36Z",
+      "side": 1,
+      "message": "Yes, I think we can get rid of this file.",
+      "parentUuid": "1cf04c79_a3a40c15",
       "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
