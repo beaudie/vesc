@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1e3244e_a63137f1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T13:33:52Z",
+      "side": 1,
+      "message": "you can omit this.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 60
+      },
+      "revId": "212a6cefb36a784a9dab696d3e690eca50a5d2fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d459d01_d30af28d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T13:33:52Z",
+      "side": 1,
+      "message": "please use \n\n\"Bug: chromium:961513\"\n\nYou should be seeing a presubmit warning about this.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 13
+      },
+      "revId": "212a6cefb36a784a9dab696d3e690eca50a5d2fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
