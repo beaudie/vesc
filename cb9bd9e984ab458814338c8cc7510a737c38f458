@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "2efb6fa1_d59149e5",
+        "filename": "src/libANGLE/renderer/gen_angle_format_table.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T20:24:48Z",
+      "side": 1,
+      "message": "It would probably dramatically explode. Vertex attribute formats wouldn\u0027t work correctly and we\u0027d get validation layer errors. Our regression tests should protect us.",
+      "parentUuid": "644666ff_a20aed68",
+      "revId": "cb9bd9e984ab458814338c8cc7510a737c38f458",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e403120_5676d4a4",
         "filename": "src/libANGLE/renderer/gl/VertexArrayGL.cpp",
         "patchSetId": 3
