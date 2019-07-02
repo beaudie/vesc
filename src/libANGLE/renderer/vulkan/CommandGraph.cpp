@@ -16,7 +16,6 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
-
 #include "libANGLE/trace.h"
 
 namespace rx
@@ -346,9 +345,11 @@ CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function,
     : mRenderPassClearValues{},
       mFunction(function),
       mPoolAllocator(poolAllocator),
+      mGraphNodePtrAllocator(poolAllocator),
       mQueryPool(VK_NULL_HANDLE),
       mQueryIndex(0),
       mFenceSyncEvent(VK_NULL_HANDLE),
+      mParents(mGraphNodePtrAllocator),
       mHasChildren(false),
       mVisitedState(VisitedState::Unvisited),
       mGlobalMemoryBarrierSrcAccess(0),
@@ -490,7 +491,7 @@ void CommandGraphNode::setDebugMarker(GLenum source, std::string &&marker)
 bool CommandGraphNode::isChildOf(CommandGraphNode *parent)
 {
     std::set<CommandGraphNode *> visitedList;
-    std::vector<CommandGraphNode *> openList;
+    std::vector<CommandGraphNode *, GraphNodePtrAllocator> openList(mGraphNodePtrAllocator);
     openList.insert(openList.begin(), mParents.begin(), mParents.end());
     while (!openList.empty())
     {
@@ -515,7 +516,7 @@ VisitedState CommandGraphNode::visitedState() const
     return mVisitedState;
 }
 
-void CommandGraphNode::visitParents(std::vector<CommandGraphNode *> *stack)
+void CommandGraphNode::visitParents(std::vector<CommandGraphNode *, GraphNodePtrAllocator> *stack)
 {
     ASSERT(mVisitedState == VisitedState::Unvisited);
     stack->insert(stack->end(), mParents.begin(), mParents.end());
@@ -693,7 +694,8 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
     return angle::Result::Continue;
 }
 
-const std::vector<CommandGraphNode *> &CommandGraphNode::getParentsForDiagnostics() const
+const std::vector<CommandGraphNode *, GraphNodePtrAllocator>
+    &CommandGraphNode::getParentsForDiagnostics() const
 {
     return mParents;
 }
@@ -777,6 +779,7 @@ std::string CommandGraphNode::dumpCommandsForDiagnostics(const char *separator) 
 CommandGraph::CommandGraph(bool enableGraphDiagnostics, angle::PoolAllocator *poolAllocator)
     : mEnableGraphDiagnostics(enableGraphDiagnostics),
       mPoolAllocator(poolAllocator),
+      mGraphNodeAllocator(poolAllocator),
       mLastBarrierIndex(kInvalidNodeIndex)
 {
     // Push so that allocations made from here will be recycled in clear() below.
@@ -860,7 +863,7 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
         dumpGraphDotFile(std::cout);
     }
 
-    std::vector<CommandGraphNode *> nodeStack;
+    std::vector<CommandGraphNode *, GraphNodePtrAllocator> nodeStack(mGraphNodeAllocator);
 
     VkCommandBufferBeginInfo beginInfo = {};
     beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
