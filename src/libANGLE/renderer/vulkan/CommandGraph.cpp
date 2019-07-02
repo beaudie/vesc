@@ -346,9 +346,11 @@ CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function,
     : mRenderPassClearValues{},
       mFunction(function),
       mPoolAllocator(poolAllocator),
+      mGraphNodePtrAllocator(mPoolAllocator),
       mQueryPool(VK_NULL_HANDLE),
       mQueryIndex(0),
       mFenceSyncEvent(VK_NULL_HANDLE),
+      mParents(mGraphNodePtrAllocator),
       mHasChildren(false),
       mVisitedState(VisitedState::Unvisited),
       mGlobalMemoryBarrierSrcAccess(0),
@@ -490,7 +492,7 @@ void CommandGraphNode::setDebugMarker(GLenum source, std::string &&marker)
 bool CommandGraphNode::isChildOf(CommandGraphNode *parent)
 {
     std::set<CommandGraphNode *> visitedList;
-    std::vector<CommandGraphNode *> openList;
+    std::vector<CommandGraphNode *, GraphNodePtrAllocator> openList(mGraphNodePtrAllocator);
     openList.insert(openList.begin(), mParents.begin(), mParents.end());
     while (!openList.empty())
     {
@@ -515,7 +517,7 @@ VisitedState CommandGraphNode::visitedState() const
     return mVisitedState;
 }
 
-void CommandGraphNode::visitParents(std::vector<CommandGraphNode *> *stack)
+void CommandGraphNode::visitParents(std::vector<CommandGraphNode *, GraphNodePtrAllocator> *stack)
 {
     ASSERT(mVisitedState == VisitedState::Unvisited);
     stack->insert(stack->end(), mParents.begin(), mParents.end());
@@ -693,7 +695,8 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
     return angle::Result::Continue;
 }
 
-const std::vector<CommandGraphNode *> &CommandGraphNode::getParentsForDiagnostics() const
+const std::vector<CommandGraphNode *, GraphNodePtrAllocator>
+    &CommandGraphNode::getParentsForDiagnostics() const
 {
     return mParents;
 }
@@ -860,7 +863,8 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
         dumpGraphDotFile(std::cout);
     }
 
-    std::vector<CommandGraphNode *> nodeStack;
+    GraphNodePtrAllocator nodePtrAllocator = GraphNodePtrAllocator(mPoolAllocator);
+    std::vector<CommandGraphNode *, GraphNodePtrAllocator> nodeStack(nodePtrAllocator);
 
     VkCommandBufferBeginInfo beginInfo = {};
     beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
