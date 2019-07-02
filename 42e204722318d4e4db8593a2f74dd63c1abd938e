@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "4399b37a_f75dd850",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-07-02T21:31:45Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "32907891_d670c842",
+      "range": {
+        "startLine": 948,
+        "startChar": 16,
+        "endLine": 948,
+        "endChar": 31
+      },
+      "revId": "42e204722318d4e4db8593a2f74dd63c1abd938e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5da0aee6_5a82666a",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 11
@@ -141,6 +165,30 @@
       "revId": "42e204722318d4e4db8593a2f74dd63c1abd938e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "216eb9aa_39c7c78d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3207,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-07-02T21:31:45Z",
+      "side": 1,
+      "message": "Done. Will add back in the later patch.",
+      "parentUuid": "4cc97738_3f8900f6",
+      "range": {
+        "startLine": 3207,
+        "startChar": 4,
+        "endLine": 3207,
+        "endChar": 54
+      },
+      "revId": "42e204722318d4e4db8593a2f74dd63c1abd938e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
