@@ -289,7 +289,7 @@ class CommandGraphResource : angle::NonCopyable
     // was not used in this set of command nodes.
     ANGLE_INLINE void updateQueueSerial(Serial queueSerial)
     {
-        ASSERT(queueSerial >= mStoredQueueSerial);
+        // ASSERT(queueSerial >= mStoredQueueSerial);
 
         if (queueSerial > mStoredQueueSerial)
         {
