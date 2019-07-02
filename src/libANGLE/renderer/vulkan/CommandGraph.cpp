@@ -349,6 +349,7 @@ CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function,
       mQueryPool(VK_NULL_HANDLE),
       mQueryIndex(0),
       mFenceSyncEvent(VK_NULL_HANDLE),
+      mParents(pointer_allocator(mPoolAllocator)),
       mHasChildren(false),
       mVisitedState(VisitedState::Unvisited),
       mGlobalMemoryBarrierSrcAccess(0),
@@ -490,7 +491,8 @@ void CommandGraphNode::setDebugMarker(GLenum source, std::string &&marker)
 bool CommandGraphNode::isChildOf(CommandGraphNode *parent)
 {
     std::set<CommandGraphNode *> visitedList;
-    std::vector<CommandGraphNode *> openList;
+    auto nodeAllocator = pointer_allocator(mPoolAllocator);
+    pointer_vector openList(nodeAllocator);
     openList.insert(openList.begin(), mParents.begin(), mParents.end());
     while (!openList.empty())
     {
@@ -515,7 +517,7 @@ VisitedState CommandGraphNode::visitedState() const
     return mVisitedState;
 }
 
-void CommandGraphNode::visitParents(std::vector<CommandGraphNode *> *stack)
+void CommandGraphNode::visitParents(pointer_vector *stack)
 {
     ASSERT(mVisitedState == VisitedState::Unvisited);
     stack->insert(stack->end(), mParents.begin(), mParents.end());
@@ -693,7 +695,7 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
     return angle::Result::Continue;
 }
 
-const std::vector<CommandGraphNode *> &CommandGraphNode::getParentsForDiagnostics() const
+const CommandGraphNode::pointer_vector &CommandGraphNode::getParentsForDiagnostics() const
 {
     return mParents;
 }
@@ -774,13 +776,14 @@ std::string CommandGraphNode::dumpCommandsForDiagnostics(const char *separator) 
 }
 
 // CommandGraph implementation.
-CommandGraph::CommandGraph(bool enableGraphDiagnostics, angle::PoolAllocator *poolAllocator)
+CommandGraph::CommandGraph(bool enableGraphDiagnostics)
     : mEnableGraphDiagnostics(enableGraphDiagnostics),
-      mPoolAllocator(poolAllocator),
+      mPoolAllocatorNode(kDefaultPoolAllocatorPageSize, alignof(CommandGraphNode)),
+      mPoolAllocatorFast(kDefaultPoolAllocatorPageSize, 1),
       mLastBarrierIndex(kInvalidNodeIndex)
 {
-    // Push so that allocations made from here will be recycled in clear() below.
-    mPoolAllocator->push();
+    mPoolAllocatorFast.push();
+    mPoolAllocatorNode.push();
 }
 
 CommandGraph::~CommandGraph()
@@ -790,9 +793,11 @@ CommandGraph::~CommandGraph()
 
 CommandGraphNode *CommandGraph::allocateNode(CommandGraphNodeFunction function)
 {
-    // TODO(jmadill): Use a pool allocator for the CPU node allocations.
-    CommandGraphNode *newCommands = new CommandGraphNode(function, mPoolAllocator);
+    void *nodeMemory = mPoolAllocatorNode.allocate(sizeof(CommandGraphNode));
+    CommandGraphNode *newCommands =
+        new (nodeMemory) CommandGraphNode(function, &mPoolAllocatorFast);
     mNodes.emplace_back(newCommands);
+
     return newCommands;
 }
 
@@ -860,7 +865,8 @@ angle::Result CommandGraph::submitCommands(ContextVk *context,
         dumpGraphDotFile(std::cout);
     }
 
-    std::vector<CommandGraphNode *> nodeStack;
+    auto nodeAllocator = CommandGraphNode::pointer_allocator(&mPoolAllocatorFast);
+    CommandGraphNode::pointer_vector nodeStack(nodeAllocator);
 
     VkCommandBufferBeginInfo beginInfo = {};
     beginInfo.sType                    = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -927,15 +933,18 @@ void CommandGraph::clear()
     // NOTE: This frees all memory since last push. Right now only the CommandGraph
     //  will push the allocator (at creation and below). If other people start
     //  pushing the allocator this (and/or the allocator) will need to be updated.
-    mPoolAllocator->pop();
-    mPoolAllocator->push();
+    mPoolAllocatorFast.pop();
+    mPoolAllocatorFast.push();
 
     // TODO(jmadill): Use pool allocator for performance. http://anglebug.com/2951
     for (CommandGraphNode *node : mNodes)
     {
-        delete node;
+        // pool allocated node, no need to free memory
+        node->~CommandGraphNode();
     }
     mNodes.clear();
+    mPoolAllocatorNode.pop();
+    mPoolAllocatorNode.push();
 }
 
 void CommandGraph::beginQuery(const QueryPool *queryPool, uint32_t queryIndex)
