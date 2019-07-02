@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "4c40d235_7ac2e856",
+        "filename": "src/libANGLE/Uniform.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-02T15:48:34Z",
+      "side": 1,
+      "message": "If you looked at the SO link I included, even on x86_64 this behavior is undefined.",
+      "parentUuid": "98b1b7d0_6fd77b46",
+      "range": {
+        "startLine": 42,
+        "startChar": 3,
+        "endLine": 45,
+        "endChar": 55
+      },
+      "revId": "616a6c5d97afdf0225069325b5234d48b8de3e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a33335b_0fccdce5",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 3
