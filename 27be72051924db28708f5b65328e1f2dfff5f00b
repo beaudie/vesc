@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91aa88ac_f56ef1bf",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 3
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T12:43:22Z",
+      "side": 1,
+      "message": "nit: clip comment to 100 chars",
+      "range": {
+        "startLine": 557,
+        "startChar": 67,
+        "endLine": 557,
+        "endChar": 105
+      },
+      "revId": "27be72051924db28708f5b65328e1f2dfff5f00b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28a5974c_33f31815",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 3
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T12:43:22Z",
+      "side": 1,
+      "message": "nit: you can omit this",
+      "range": {
+        "startLine": 558,
+        "startChar": 8,
+        "endLine": 558,
+        "endChar": 47
+      },
+      "revId": "27be72051924db28708f5b65328e1f2dfff5f00b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
