@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "79a41386_8e3c9dd7",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T19:09:55Z",
+      "side": 1,
+      "message": "Is this needed? It seems error prone for an early-exit: It will never be hit unless lookForDrawID and lookForBaseVertexBaseInstance are both true and could be hit early if it finds multiple uniforms with the names it\u0027s looking for (is this possible?).",
+      "range": {
+        "startLine": 948,
+        "startChar": 16,
+        "endLine": 948,
+        "endChar": 31
+      },
+      "revId": "42e204722318d4e4db8593a2f74dd63c1abd938e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5da0aee6_5a82666a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3207,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T19:09:55Z",
+      "side": 1,
+      "message": "Don\u0027t the backends need to set a uniform to support this?",
+      "range": {
+        "startLine": 3207,
+        "startChar": 4,
+        "endLine": 3207,
+        "endChar": 54
+      },
+      "revId": "42e204722318d4e4db8593a2f74dd63c1abd938e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
