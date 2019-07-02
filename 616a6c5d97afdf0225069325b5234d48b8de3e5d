@@ -48,6 +48,29 @@
     },
     {
       "key": {
+        "uuid": "3a33335b_0fccdce5",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T14:33:20Z",
+      "side": 1,
+      "message": "We have a BinaryInputStream::readString function that can do this without a copy.  Just make sure to call the corresponding BinaryOutputStream::writeString because it uses size_t for the length instead of uint32_t.",
+      "range": {
+        "startLine": 208,
+        "startChar": 4,
+        "endLine": 211,
+        "endChar": 70
+      },
+      "revId": "616a6c5d97afdf0225069325b5234d48b8de3e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a44c82a_bb39d617",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 3
@@ -110,6 +133,46 @@
         "startChar": 4,
         "endLine": 318,
         "endChar": 35
+      },
+      "revId": "616a6c5d97afdf0225069325b5234d48b8de3e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da15535e_695fd7c8",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T14:33:20Z",
+      "side": 1,
+      "message": "I think there is also room for saving the shader modules in the ShaderInfo objects too.  I realize that we initialize them lazily so they may not be compiled when save is called but we can also make sure to compile them at that time so the binary always contains the binaries.\n\nCould you add a TODO about this?",
+      "revId": "616a6c5d97afdf0225069325b5234d48b8de3e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bfa0a3e_64e14f4c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T14:33:20Z",
+      "side": 1,
+      "message": "I think these are ripe to be refactored into a gl::ShaderMap\u003cstd::string\u003e.  You can then iterate over the map when reading/writing the shader sources.",
+      "range": {
+        "startLine": 274,
+        "startChar": 0,
+        "endLine": 275,
+        "endChar": 32
       },
       "revId": "616a6c5d97afdf0225069325b5234d48b8de3e5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
