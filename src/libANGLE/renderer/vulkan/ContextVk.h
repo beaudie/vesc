@@ -568,9 +568,6 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     // http://anglebug.com/2701
     vk::Shared<vk::Fence> mSubmitFence;
 
-    // Pool allocator used for command graph but may be expanded to other allocations
-    angle::PoolAllocator mPoolAllocator;
-
     // See CommandGraph.h for a desription of the Command Graph.
     vk::CommandGraph mCommandGraph;
 

@@ -80,7 +80,75 @@ class RenderPassOwner
 class CommandGraphNode final : angle::NonCopyable
 {
   public:
-    CommandGraphNode(CommandGraphNodeFunction function, angle::PoolAllocator *poolAllocator);
+    // The pool itself is managed by CommandGraph
+    // push&pop in CommandGraph's initialization and clearance.
+    template <typename T>
+    class PoolAllocatorSTLWrapper
+    {
+      public:
+        typedef size_t size_type;
+        typedef ptrdiff_t difference_type;
+        typedef T *pointer;
+        typedef const T *const_pointer;
+        typedef T &reference;
+        typedef const T &const_reference;
+        typedef T value_type;
+
+        using propagate_on_container_copy_assignment = std::true_type;
+        using propagate_on_container_move_assignment = std::true_type;
+        using propagate_on_container_swap            = std::true_type;
+
+        PoolAllocatorSTLWrapper(angle::PoolAllocator *poolAllocator) noexcept
+            : mPoolAllocator(poolAllocator)
+        {}
+        ~PoolAllocatorSTLWrapper() noexcept {}
+
+        pointer allocate(size_type n)
+        {
+            ASSERT(mPoolAllocator);
+            return reinterpret_cast<pointer>(mPoolAllocator->allocate(n * sizeof(T)));
+        }
+        void deallocate(pointer, size_type)
+        {
+            // no op, pool is cleared when flush the CommandGraph
+        }
+
+        PoolAllocatorSTLWrapper(const PoolAllocatorSTLWrapper &other) noexcept
+            : mPoolAllocator(other.mPoolAllocator)
+        {}
+
+        template <typename U>
+        bool operator==(PoolAllocatorSTLWrapper<U> const &other) const
+        {
+            return mPoolAllocator == other.mPoolAllocator;
+        }
+
+        template <typename U>
+        bool operator!=(PoolAllocatorSTLWrapper<U> const &other) const
+        {
+            return mPoolAllocator != other.mPoolAllocator;
+        }
+
+        // Use std::allocator traits for construct and destroy
+        template <class U, class... Args>
+        void construct(U *p, Args &&... args)
+        {
+            new ((void *)p) U(std::forward<Args>(args)...);
+        }
+
+        void destroy(T *p) { p->~T(); }
+
+      private:
+        angle::PoolAllocator *mPoolAllocator;
+    };
+
+    using pointer_allocator = PoolAllocatorSTLWrapper<CommandGraphNode *>;
+    using pointer_vector    = std::vector<CommandGraphNode *, pointer_allocator>;
+
+  public:
+    CommandGraphNode(CommandGraphNodeFunction function,
+                     angle::PoolAllocator *fastPoolAllocator,
+                     angle::PoolAllocator *alignedPoolAllocator);
     ~CommandGraphNode();
 
     // Immutable queries for when we're walking the commands tree.
@@ -168,14 +236,14 @@ class CommandGraphNode final : angle::NonCopyable
 
     // Commands for traversing the node on a flush operation.
     VisitedState visitedState() const;
-    void visitParents(std::vector<CommandGraphNode *> *stack);
+    void visitParents(pointer_vector *stack);
     angle::Result visitAndExecute(Context *context,
                                   Serial serial,
                                   RenderPassCache *renderPassCache,
                                   PrimaryCommandBuffer *primaryCommandBuffer);
 
     // Only used in the command graph diagnostics.
-    const std::vector<CommandGraphNode *> &getParentsForDiagnostics() const;
+    const pointer_vector &getParentsForDiagnostics() const;
     void setDiagnosticInfo(CommandGraphResourceType resourceType, uintptr_t resourceID);
 
     CommandGraphResourceType getResourceTypeForDiagnostics() const { return mResourceType; }
@@ -231,7 +299,9 @@ class CommandGraphNode final : angle::NonCopyable
     gl::AttachmentArray<VkClearValue> mRenderPassClearValues;
 
     CommandGraphNodeFunction mFunction;
-    angle::PoolAllocator *mPoolAllocator;
+    angle::PoolAllocator *mCommandBufferPoolAllocator;
+    angle::PoolAllocator *mNodePointerAllocator;
+
     // Keep separate buffers for commands inside and outside a RenderPass.
     // TODO(jmadill): We might not need inside and outside RenderPass commands separate.
     CommandBuffer mOutsideRenderPassCommands;
@@ -248,7 +318,7 @@ class CommandGraphNode final : angle::NonCopyable
     std::string mDebugMarker;
 
     // Parents are commands that must be submitted before 'this' CommandNode can be submitted.
-    std::vector<CommandGraphNode *> mParents;
+    pointer_vector mParents;
 
     // If this is true, other commands exist that must be submitted after 'this' command.
     bool mHasChildren;
@@ -470,7 +540,7 @@ class CommandGraphResource : angle::NonCopyable
 class CommandGraph final : angle::NonCopyable
 {
   public:
-    explicit CommandGraph(bool enableGraphDiagnostics, angle::PoolAllocator *poolAllocator);
+    explicit CommandGraph(bool enableGraphDiagnostics);
     ~CommandGraph();
 
     // Allocates a new CommandGraphNode and adds it to the list of current open nodes. No ordering
@@ -516,9 +586,16 @@ class CommandGraph final : angle::NonCopyable
 
     void dumpGraphDotFile(std::ostream &out) const;
 
-    std::vector<CommandGraphNode *> mNodes;
     bool mEnableGraphDiagnostics;
-    angle::PoolAllocator *mPoolAllocator;
+
+    std::vector<CommandGraphNode *> mNodes;
+
+    const size_t kDefaultPoolAllocatorPageSize = 16 * 1024;
+    // PoolAllocators are push/pop every frame
+    // pool allocator for CommangGraphNode and CommandGraphNode*, fixed alignment
+    angle::PoolAllocator mPoolAllocatorAligned;
+    // pool allocator for fast allocate block of memory
+    angle::PoolAllocator mPoolAllocatorFast;
 
     // A set of nodes (eventually) exist that act as barriers to guarantee submission order.  For
     // example, a glMemoryBarrier() calls would lead to such a barrier or beginning and ending a
