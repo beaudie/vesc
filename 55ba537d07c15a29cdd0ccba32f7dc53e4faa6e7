@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "00f69fdd_0f257d89",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T14:02:52Z",
+      "side": 1,
+      "message": "Can be enableableExtension.",
+      "range": {
+        "startLine": 880,
+        "startChar": 35,
+        "endLine": 880,
+        "endChar": 50
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cbf1de14_b44a1fe3",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 9
@@ -117,6 +140,29 @@
     },
     {
       "key": {
+        "uuid": "e8240274_7ac3f1de",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T14:02:52Z",
+      "side": 1,
+      "message": "This should still be separated out into an ES3-only check.",
+      "range": {
+        "startLine": 372,
+        "startChar": 8,
+        "endLine": 372,
+        "endChar": 90
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "142370a6_1b6be7e2",
         "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
         "patchSetId": 9
@@ -163,6 +209,29 @@
     },
     {
       "key": {
+        "uuid": "fbf66815_ae93b23b",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T14:02:52Z",
+      "side": 1,
+      "message": "can be:\n\n   functions-\u003eisAtLeastGL(gl::Version(1, 2)) || functions-\u003eisAtLeastGLES(gl::Version(3, 0)) ||\n   functions-\u003ehasGLESExtension(\"GL_OES_texture_3D\")",
+      "range": {
+        "startLine": 1415,
+        "startChar": 45,
+        "endLine": 1415,
+        "endChar": 50
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "46b3b479_6885a521",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 9
@@ -179,6 +248,29 @@
         "startChar": 19,
         "endLine": 218,
         "endChar": 58
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5961f50_23b755b2",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5656,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T14:02:52Z",
+      "side": 1,
+      "message": "I think this ends up skipping the external texture type validation below.  Can you make the change to the version check below instead?  Something like:\n\n   if (context-\u003egetClientMajorVersion() \u003c 3 \u0026\u0026 !(pname \u003d\u003d GL_TEXTURE_WRAP_R \u0026\u0026 context-\u003egetExtensions().texture3D))",
+      "range": {
+        "startLine": 5652,
+        "startChar": 12,
+        "endLine": 5656,
+        "endChar": 13
       },
       "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
