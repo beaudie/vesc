@@ -1376,12 +1376,17 @@ angle::Result RendererVk::syncPipelineCacheVk(DisplayVk *displayVk)
                          displayVk->getScratchBuffer(pipelineCacheSize, &pipelineCacheData));
 
     size_t originalPipelineCacheSize = pipelineCacheSize;
-    result = mPipelineCache.getCacheData(mDevice, &pipelineCacheSize, pipelineCacheData->data());
-    // Note: currently we don't accept incomplete as we don't expect it (the full size of cache
-    // was determined just above), so receiving it hints at an implementation bug we would want
-    // to know about early.
-    ASSERT(result != VK_INCOMPLETE);
-    ANGLE_VK_TRY(displayVk, result);
+
+    if (originalPipelineCacheSize > 0)
+    {
+        result =
+            mPipelineCache.getCacheData(mDevice, &pipelineCacheSize, pipelineCacheData->data());
+        // Note: currently we don't accept incomplete as we don't expect it (the full size of cache
+        // was determined just above), so receiving it hints at an implementation bug we would want
+        // to know about early.
+        ASSERT(result != VK_INCOMPLETE);
+        ANGLE_VK_TRY(displayVk, result);
+    }
 
     // If vkGetPipelineCacheData ends up writing fewer bytes than requested, zero out the rest of
     // the buffer to avoid leaking garbage memory.
