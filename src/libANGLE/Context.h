@@ -121,8 +121,10 @@ class StateCache final : angle::NonCopyable
     AttributesMask getActiveBufferedAttribsMask() const { return mCachedActiveBufferedAttribsMask; }
     AttributesMask getActiveClientAttribsMask() const { return mCachedActiveClientAttribsMask; }
     AttributesMask getActiveDefaultAttribsMask() const { return mCachedActiveDefaultAttribsMask; }
+    AttributesMask getMismatchedAttribsMask() const { return mCachedMismatchedAttribsMask; }
     bool hasAnyEnabledClientAttrib() const { return mCachedHasAnyEnabledClientAttrib; }
     bool hasAnyActiveClientAttrib() const { return mCachedActiveClientAttribsMask.any(); }
+    bool hasAnyMismatchedAttrib() const { return mCachedMismatchedAttribsMask.any(); }
 
     // Places that can trigger updateVertexElementLimits:
     // 1. onVertexArrayBindingChange.
@@ -258,6 +260,7 @@ class StateCache final : angle::NonCopyable
     void updateBasicDrawElementsError();
     void updateTransformFeedbackActiveUnpaused(Context *context);
     void updateVertexAttribTypesValidation(Context *context);
+    void updateMismatchedAttribsMask(const State &glState);
 
     void setValidDrawModes(bool pointsOK, bool linesOK, bool trisOK, bool lineAdjOK, bool triAdjOK);
 
@@ -269,6 +272,7 @@ class StateCache final : angle::NonCopyable
     AttributesMask mCachedActiveBufferedAttribsMask;
     AttributesMask mCachedActiveClientAttribsMask;
     AttributesMask mCachedActiveDefaultAttribsMask;
+    AttributesMask mCachedMismatchedAttribsMask;
     bool mCachedHasAnyEnabledClientAttrib;
     GLint64 mCachedNonInstancedVertexElementLimit;
     GLint64 mCachedInstancedVertexElementLimit;
