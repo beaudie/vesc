@@ -4429,6 +4429,12 @@ void Program::serialize(const Context *context, angle::MemoryBuffer *binaryOut) 
         stream.writeInt(uniform.blockInfo.arrayStride);
         stream.writeInt(uniform.blockInfo.matrixStride);
         stream.writeInt(uniform.blockInfo.isRowMajorMatrix);
+
+        // Active shader info
+        for (ShaderType shaderType : gl::AllShaderTypes())
+        {
+            stream.writeInt(uniform.isActive(shaderType));
+        }
     }
 
     stream.writeInt(mState.getUniformLocations().size());
@@ -4624,6 +4630,12 @@ angle::Result Program::deserialize(const Context *context,
         uniform.blockInfo.isRowMajorMatrix = stream.readBool();
 
         uniform.typeInfo = &GetUniformTypeInfo(uniform.type);
+
+        // Active shader info
+        for (ShaderType shaderType : gl::AllShaderTypes())
+        {
+            uniform.setActive(shaderType, stream.readBool());
+        }
 
         mState.mUniforms.push_back(uniform);
     }
