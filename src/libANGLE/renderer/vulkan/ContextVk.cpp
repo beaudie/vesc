@@ -65,7 +65,6 @@ constexpr VkColorComponentFlags kAllColorChannelsMask =
 constexpr VkBufferUsageFlags kVertexBufferUsage = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT;
 constexpr size_t kDefaultValueSize              = sizeof(gl::VertexAttribCurrentValueData::Values);
 constexpr size_t kDefaultBufferSize             = kDefaultValueSize * 16;
-constexpr size_t kDefaultPoolAllocatorPageSize  = 16 * 1024;
 constexpr size_t kDriverUniformsBufferSize      = 64;
 
 // Wait a maximum of 10s.  If that times out, we declare it a failure.
@@ -186,8 +185,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mDriverUniformsDynamicOffset(0),
       mLastCompletedQueueSerial(renderer->nextSerial()),
       mCurrentQueueSerial(renderer->nextSerial()),
-      mPoolAllocator(kDefaultPoolAllocatorPageSize, 1),
-      mCommandGraph(kEnableCommandGraphDiagnostics, &mPoolAllocator),
+      mCommandGraph(kEnableCommandGraphDiagnostics),
       mGpuEventsEnabled(false),
       mGpuClockSync{std::numeric_limits<double>::max(), std::numeric_limits<double>::max()},
       mGpuEventTimestampOrigin(0)
