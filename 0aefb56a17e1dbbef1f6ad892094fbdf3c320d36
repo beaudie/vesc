@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fa14b97_36df8906",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-07-02T08:22:10Z",
+      "side": 1,
+      "message": "Can I remove this return value? The reason is if we have this return value, then I have to handle an unused return value in onGetPipelineCache().\nOr do you have any suggestions about how to handle unused return values?",
+      "revId": "0aefb56a17e1dbbef1f6ad892094fbdf3c320d36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
