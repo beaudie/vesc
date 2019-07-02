@@ -340,6 +340,24 @@
       "revId": "a466885ba670f533811cc71829348ad5038da332",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de023891_8001d96a",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T13:31:18Z",
+      "side": 1,
+      "message": "We should be able to get you a trace with RD on Linux or Windows. Were you trying to trace on desktop with GAPID? I think it can only capture on Android. If Android is segfaulting let\u0027s take it up in the GAPID chat.\n\nAlso I can try doing a capture with my WIP ANGLE capture patch. Moving it out of dEQP would probably make it easier to capture.",
+      "parentUuid": "170a4a2d_febcabdf",
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
