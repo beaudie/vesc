@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4bed41f3_69836461",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4437,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T19:12:44Z",
+      "side": 1,
+      "message": "can you migrate this to your prior CL?",
+      "range": {
+        "startLine": 4433,
+        "startChar": 0,
+        "endLine": 4437,
+        "endChar": 9
+      },
+      "revId": "247681a8a7118c8963f5d6ccaca18fdf4f505342",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2451b8a_8bd55413",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T19:12:44Z",
+      "side": 1,
+      "message": "All open TODOs are required to have Bug tags associated with them. Can you please either open a performance bug for this or remove the TODO tag?",
+      "range": {
+        "startLine": 298,
+        "startChar": 2,
+        "endLine": 299,
+        "endChar": 30
+      },
+      "revId": "247681a8a7118c8963f5d6ccaca18fdf4f505342",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
