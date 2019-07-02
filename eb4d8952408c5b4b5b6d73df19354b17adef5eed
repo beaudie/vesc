@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "a3de1693_ecaab444",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-02T15:37:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a694e9f4_3a6494c8",
+      "revId": "eb4d8952408c5b4b5b6d73df19354b17adef5eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d091b5b8_8a3f16a7",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
@@ -72,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "7a9fbc1e_b9919ce4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-02T15:37:09Z",
+      "side": 1,
+      "message": "Ah, ok.",
+      "parentUuid": "a8bce193_af3285cb",
+      "revId": "eb4d8952408c5b4b5b6d73df19354b17adef5eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7b0269d9_e641dfac",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
@@ -101,6 +137,24 @@
       "side": 1,
       "message": "It\u0027s the way we pack the attachments. You can see this pattern in `FramebufferVk::updateRenderPassDesc` which sets up the renderpass attachments, or perhaps more clearly in `FramebufferVk::clearWithRenderPassOp`.",
       "parentUuid": "7b0269d9_e641dfac",
+      "revId": "eb4d8952408c5b4b5b6d73df19354b17adef5eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aa76afec_e111a541",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-02T15:37:09Z",
+      "side": 1,
+      "message": "Cool, thanks for the pointer.   I\u0027ve actually reviewed that code too...eventually some of this stuff will start sinking in.",
+      "parentUuid": "8a8ad6f5_8568cc2b",
       "revId": "eb4d8952408c5b4b5b6d73df19354b17adef5eed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
