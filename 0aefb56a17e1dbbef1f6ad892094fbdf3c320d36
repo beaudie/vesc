@@ -16,6 +16,24 @@
       "revId": "0aefb56a17e1dbbef1f6ad892094fbdf3c320d36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe803a01_3acac987",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T11:42:49Z",
+      "side": 1,
+      "message": "I think we should try to structure the code so that we can guarantee the pipeline cache is initialized before getPipelineCache.",
+      "parentUuid": "2fa14b97_36df8906",
+      "revId": "0aefb56a17e1dbbef1f6ad892094fbdf3c320d36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
