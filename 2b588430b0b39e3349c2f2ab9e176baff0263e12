@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "31fdce66_d5dad33b",
+        "filename": "include/WGL/wgl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T15:45:53Z",
+      "side": 1,
+      "message": "Is it necessary to include the GLES headers from wgl?  A comment explaining why would help.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 21
+      },
+      "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "835661db_cee57949",
         "filename": "scripts/run_code_generation.py",
         "patchSetId": 8
@@ -19,6 +42,40 @@
         "endLine": 91,
         "endChar": 42
       },
+      "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ee4dbd9_7f50480b",
+        "filename": "src/openGL32/openGL32_wgl.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T15:45:53Z",
+      "side": 1,
+      "message": "nit: I would just name this entry_points_wgl.cpp\n\nAlso, why are WGL entry points implemented in here and in openGL32_autogen.cpp?",
+      "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1cf04c79_a3a40c15",
+        "filename": "src/openGL32/openGL32_wgl.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-02T15:45:53Z",
+      "side": 1,
+      "message": "Are these fucntion declarations referenced anywhere?  I have a feeling they\u0027re going to be the same as the official wgl headers so this file isn\u0027t needed andthe includes can be moved into the cpp file.",
       "revId": "2b588430b0b39e3349c2f2ab9e176baff0263e12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
