@@ -32,6 +32,9 @@ void GL_APIENTRY ActiveTexture(GLenum texture)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateActiveTexture(context, texture))
         {
             context->activeTexture(texture);
@@ -46,6 +49,9 @@ void GL_APIENTRY ClientActiveTexture(GLenum texture)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateClientActiveTexture(context, texture))
         {
             context->clientActiveTexture(texture);
@@ -69,6 +75,9 @@ void GL_APIENTRY CompressedTexImage1D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateCompressedTexImage1D(context, target, level, internalformat, width, border,
                                          imageSize, data))
@@ -98,6 +107,9 @@ void GL_APIENTRY CompressedTexImage2D(GLenum target,
     if (context)
     {
         TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        auto shareContextLock      = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateCompressedTexImage2D(context, targetPacked, level, internalformat, width,
                                          height, border, imageSize, data))
@@ -128,6 +140,9 @@ void GL_APIENTRY CompressedTexImage3D(GLenum target,
     if (context)
     {
         TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        auto shareContextLock      = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateCompressedTexImage3D(context, targetPacked, level, internalformat, width,
                                          height, depth, border, imageSize, data))
@@ -154,6 +169,9 @@ void GL_APIENTRY CompressedTexSubImage1D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateCompressedTexSubImage1D(context, target, level, xoffset, width, format,
                                             imageSize, data))
@@ -184,6 +202,9 @@ void GL_APIENTRY CompressedTexSubImage2D(GLenum target,
     if (context)
     {
         TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        auto shareContextLock      = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateCompressedTexSubImage2D(context, targetPacked, level, xoffset, yoffset, width,
                                             height, format, imageSize, data))
@@ -217,6 +238,9 @@ void GL_APIENTRY CompressedTexSubImage3D(GLenum target,
     if (context)
     {
         TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        auto shareContextLock      = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateCompressedTexSubImage3D(context, targetPacked, level, xoffset, yoffset, zoffset,
                                             width, height, depth, format, imageSize, data))
@@ -235,6 +259,9 @@ void GL_APIENTRY GetCompressedTexImage(GLenum target, GLint level, void *img)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateGetCompressedTexImage(context, target, level, img))
         {
             context->getCompressedTexImage(target, level, img);
@@ -249,6 +276,9 @@ void GL_APIENTRY LoadTransposeMatrixd(const GLdouble *m)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateLoadTransposeMatrixd(context, m))
         {
             context->loadTransposeMatrixd(m);
@@ -263,6 +293,9 @@ void GL_APIENTRY LoadTransposeMatrixf(const GLfloat *m)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateLoadTransposeMatrixf(context, m))
         {
             context->loadTransposeMatrixf(m);
@@ -277,6 +310,9 @@ void GL_APIENTRY MultTransposeMatrixd(const GLdouble *m)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultTransposeMatrixd(context, m))
         {
             context->multTransposeMatrixd(m);
@@ -291,6 +327,9 @@ void GL_APIENTRY MultTransposeMatrixf(const GLfloat *m)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultTransposeMatrixf(context, m))
         {
             context->multTransposeMatrixf(m);
@@ -305,6 +344,9 @@ void GL_APIENTRY MultiTexCoord1d(GLenum target, GLdouble s)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord1d(context, target, s))
         {
             context->multiTexCoord1d(target, s);
@@ -319,6 +361,9 @@ void GL_APIENTRY MultiTexCoord1dv(GLenum target, const GLdouble *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord1dv(context, target, v))
         {
             context->multiTexCoord1dv(target, v);
@@ -333,6 +378,9 @@ void GL_APIENTRY MultiTexCoord1f(GLenum target, GLfloat s)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord1f(context, target, s))
         {
             context->multiTexCoord1f(target, s);
@@ -347,6 +395,9 @@ void GL_APIENTRY MultiTexCoord1fv(GLenum target, const GLfloat *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord1fv(context, target, v))
         {
             context->multiTexCoord1fv(target, v);
@@ -361,6 +412,9 @@ void GL_APIENTRY MultiTexCoord1i(GLenum target, GLint s)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord1i(context, target, s))
         {
             context->multiTexCoord1i(target, s);
@@ -375,6 +429,9 @@ void GL_APIENTRY MultiTexCoord1iv(GLenum target, const GLint *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord1iv(context, target, v))
         {
             context->multiTexCoord1iv(target, v);
@@ -389,6 +446,9 @@ void GL_APIENTRY MultiTexCoord1s(GLenum target, GLshort s)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord1s(context, target, s))
         {
             context->multiTexCoord1s(target, s);
@@ -403,6 +463,9 @@ void GL_APIENTRY MultiTexCoord1sv(GLenum target, const GLshort *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord1sv(context, target, v))
         {
             context->multiTexCoord1sv(target, v);
@@ -417,6 +480,9 @@ void GL_APIENTRY MultiTexCoord2d(GLenum target, GLdouble s, GLdouble t)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord2d(context, target, s, t))
         {
             context->multiTexCoord2d(target, s, t);
@@ -431,6 +497,9 @@ void GL_APIENTRY MultiTexCoord2dv(GLenum target, const GLdouble *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord2dv(context, target, v))
         {
             context->multiTexCoord2dv(target, v);
@@ -445,6 +514,9 @@ void GL_APIENTRY MultiTexCoord2f(GLenum target, GLfloat s, GLfloat t)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord2f(context, target, s, t))
         {
             context->multiTexCoord2f(target, s, t);
@@ -459,6 +531,9 @@ void GL_APIENTRY MultiTexCoord2fv(GLenum target, const GLfloat *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord2fv(context, target, v))
         {
             context->multiTexCoord2fv(target, v);
@@ -473,6 +548,9 @@ void GL_APIENTRY MultiTexCoord2i(GLenum target, GLint s, GLint t)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord2i(context, target, s, t))
         {
             context->multiTexCoord2i(target, s, t);
@@ -487,6 +565,9 @@ void GL_APIENTRY MultiTexCoord2iv(GLenum target, const GLint *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord2iv(context, target, v))
         {
             context->multiTexCoord2iv(target, v);
@@ -501,6 +582,9 @@ void GL_APIENTRY MultiTexCoord2s(GLenum target, GLshort s, GLshort t)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord2s(context, target, s, t))
         {
             context->multiTexCoord2s(target, s, t);
@@ -515,6 +599,9 @@ void GL_APIENTRY MultiTexCoord2sv(GLenum target, const GLshort *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord2sv(context, target, v))
         {
             context->multiTexCoord2sv(target, v);
@@ -530,6 +617,9 @@ void GL_APIENTRY MultiTexCoord3d(GLenum target, GLdouble s, GLdouble t, GLdouble
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord3d(context, target, s, t, r))
         {
             context->multiTexCoord3d(target, s, t, r);
@@ -544,6 +634,9 @@ void GL_APIENTRY MultiTexCoord3dv(GLenum target, const GLdouble *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord3dv(context, target, v))
         {
             context->multiTexCoord3dv(target, v);
@@ -559,6 +652,9 @@ void GL_APIENTRY MultiTexCoord3f(GLenum target, GLfloat s, GLfloat t, GLfloat r)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord3f(context, target, s, t, r))
         {
             context->multiTexCoord3f(target, s, t, r);
@@ -573,6 +669,9 @@ void GL_APIENTRY MultiTexCoord3fv(GLenum target, const GLfloat *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord3fv(context, target, v))
         {
             context->multiTexCoord3fv(target, v);
@@ -587,6 +686,9 @@ void GL_APIENTRY MultiTexCoord3i(GLenum target, GLint s, GLint t, GLint r)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord3i(context, target, s, t, r))
         {
             context->multiTexCoord3i(target, s, t, r);
@@ -601,6 +703,9 @@ void GL_APIENTRY MultiTexCoord3iv(GLenum target, const GLint *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord3iv(context, target, v))
         {
             context->multiTexCoord3iv(target, v);
@@ -616,6 +721,9 @@ void GL_APIENTRY MultiTexCoord3s(GLenum target, GLshort s, GLshort t, GLshort r)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord3s(context, target, s, t, r))
         {
             context->multiTexCoord3s(target, s, t, r);
@@ -630,6 +738,9 @@ void GL_APIENTRY MultiTexCoord3sv(GLenum target, const GLshort *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord3sv(context, target, v))
         {
             context->multiTexCoord3sv(target, v);
@@ -647,6 +758,9 @@ void GL_APIENTRY MultiTexCoord4d(GLenum target, GLdouble s, GLdouble t, GLdouble
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord4d(context, target, s, t, r, q))
         {
             context->multiTexCoord4d(target, s, t, r, q);
@@ -661,6 +775,9 @@ void GL_APIENTRY MultiTexCoord4dv(GLenum target, const GLdouble *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord4dv(context, target, v))
         {
             context->multiTexCoord4dv(target, v);
@@ -676,6 +793,9 @@ void GL_APIENTRY MultiTexCoord4f(GLenum target, GLfloat s, GLfloat t, GLfloat r,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord4f(context, target, s, t, r, q))
         {
             context->multiTexCoord4f(target, s, t, r, q);
@@ -690,6 +810,9 @@ void GL_APIENTRY MultiTexCoord4fv(GLenum target, const GLfloat *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord4fv(context, target, v))
         {
             context->multiTexCoord4fv(target, v);
@@ -705,6 +828,9 @@ void GL_APIENTRY MultiTexCoord4i(GLenum target, GLint s, GLint t, GLint r, GLint
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord4i(context, target, s, t, r, q))
         {
             context->multiTexCoord4i(target, s, t, r, q);
@@ -719,6 +845,9 @@ void GL_APIENTRY MultiTexCoord4iv(GLenum target, const GLint *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord4iv(context, target, v))
         {
             context->multiTexCoord4iv(target, v);
@@ -734,6 +863,9 @@ void GL_APIENTRY MultiTexCoord4s(GLenum target, GLshort s, GLshort t, GLshort r,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord4s(context, target, s, t, r, q))
         {
             context->multiTexCoord4s(target, s, t, r, q);
@@ -748,6 +880,9 @@ void GL_APIENTRY MultiTexCoord4sv(GLenum target, const GLshort *v)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMultiTexCoord4sv(context, target, v))
         {
             context->multiTexCoord4sv(target, v);
@@ -762,6 +897,9 @@ void GL_APIENTRY SampleCoverage(GLfloat value, GLboolean invert)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSampleCoverage(context, value, invert))
         {
             context->sampleCoverage(value, invert);

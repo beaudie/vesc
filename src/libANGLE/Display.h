@@ -109,7 +109,7 @@ class Display final : public LabeledObject, angle::NonCopyable
     Error createStream(const AttributeMap &attribs, Stream **outStream);
 
     Error createContext(const Config *configuration,
-                        const gl::Context *shareContext,
+                        gl::Context *shareContext,
                         const AttributeMap &attribs,
                         gl::Context **outContext);
 

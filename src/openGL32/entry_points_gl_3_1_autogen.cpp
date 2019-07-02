@@ -42,6 +42,9 @@ void GL_APIENTRY CopyBufferSubData(GLenum readTarget,
     {
         BufferBinding readTargetPacked  = FromGLenum<BufferBinding>(readTarget);
         BufferBinding writeTargetPacked = FromGLenum<BufferBinding>(writeTarget);
+        auto shareContextLock           = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateCopyBufferSubData(context, readTargetPacked, writeTargetPacked, readOffset,
                                       writeOffset, size))
@@ -61,6 +64,9 @@ void GL_APIENTRY DrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GL
     if (context)
     {
         PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        auto shareContextLock    = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateDrawArraysInstanced(context, modePacked, first, count, instancecount))
         {
@@ -85,6 +91,9 @@ void GL_APIENTRY DrawElementsInstanced(GLenum mode,
     {
         PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
         DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
+        auto shareContextLock       = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateDrawElementsInstanced(context, modePacked, count, typePacked, indices,
                                           instancecount))
@@ -108,6 +117,9 @@ void GL_APIENTRY GetActiveUniformBlockName(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateGetActiveUniformBlockName(context, program, uniformBlockIndex, bufSize, length,
                                               uniformBlockName))
@@ -131,6 +143,9 @@ void GL_APIENTRY GetActiveUniformBlockiv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateGetActiveUniformBlockiv(context, program, uniformBlockIndex, pname, params))
         {
@@ -153,6 +168,9 @@ void GL_APIENTRY GetActiveUniformName(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateGetActiveUniformName(context, program, uniformIndex, bufSize, length,
                                          uniformName))
@@ -176,6 +194,9 @@ void GL_APIENTRY GetActiveUniformsiv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateGetActiveUniformsiv(context, program, uniformCount,
                                                                      uniformIndices, pname, params))
         {
@@ -192,6 +213,9 @@ GLuint GL_APIENTRY GetUniformBlockIndex(GLuint program, const GLchar *uniformBlo
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateGetUniformBlockIndex(context, program, uniformBlockName))
         {
@@ -215,6 +239,9 @@ void GL_APIENTRY GetUniformIndices(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateGetUniformIndices(context, program, uniformCount, uniformNames, uniformIndices))
         {
@@ -230,6 +257,9 @@ void GL_APIENTRY PrimitiveRestartIndex(GLuint index)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidatePrimitiveRestartIndex(context, index))
         {
             context->primitiveRestartIndex(index);
@@ -245,6 +275,9 @@ void GL_APIENTRY TexBuffer(GLenum target, GLenum internalformat, GLuint buffer)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateTexBuffer(context, target, internalformat, buffer))
         {
             context->texBuffer(target, internalformat, buffer);
@@ -262,6 +295,9 @@ void GL_APIENTRY UniformBlockBinding(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateUniformBlockBinding(context, program, uniformBlockIndex, uniformBlockBinding))
         {
