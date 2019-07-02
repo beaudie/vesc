@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d77448b_2a829874",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T19:10:05Z",
+      "side": 1,
+      "message": "can you please tag this with the bug ID for program binary on Vulkan? Just so it is logged in the tracker. you should be seeing a presubmit warning for this.",
+      "revId": "8420505ba27a3c7084ca759ef896e92f55e94896",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
