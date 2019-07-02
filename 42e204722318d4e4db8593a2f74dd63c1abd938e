@@ -45,6 +45,30 @@
       "revId": "42e204722318d4e4db8593a2f74dd63c1abd938e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9158238d_ee072252",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3207,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-07-02T20:18:11Z",
+      "side": 1,
+      "message": "BaseVertex and BaseInstance are always emulated so they should always be available.\nVertexID and InstanceID needs native hardware support through. So I think it safe to assume they are always implemented?",
+      "parentUuid": "5da0aee6_5a82666a",
+      "range": {
+        "startLine": 3207,
+        "startChar": 4,
+        "endLine": 3207,
+        "endChar": 54
+      },
+      "revId": "42e204722318d4e4db8593a2f74dd63c1abd938e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
