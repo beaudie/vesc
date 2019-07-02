@@ -1111,6 +1111,22 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
     // Current highest supported version
     gl::Version maxVersion = gl::Version(3, 1);
 
+    // Drop support to ES3.0 if there are blockers for ES3.1 support:
+
+    // If there are just enough SSBO outputs possible to implement transform feedback, we can't
+    // support ES3.1.  Note that Vulkan requires maxPerStageDescriptorStorageBuffers to be at least
+    // 4 (i.e. the same as gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS).
+    static_assert(
+        gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS == 4,
+        "Limit to ES2.0 if supported SSBO count < supporting transform feedback buffer count");
+    if (mPhysicalDeviceProperties.limits.maxPerStageDescriptorStorageBuffers ==
+        gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS)
+    {
+        maxVersion = gl::Version(3, 0);
+    }
+
+    // Drop support to ES2.0 if there are blockers for ES3.0 support:
+
 #if ANGLE_VULKAN_CONFORMANT_CONFIGS_ONLY
     // TODO: Disallow ES 3.0+ until supported. http://crbug.com/angleproject/2950
     maxVersion = gl::Version(2, 0);
