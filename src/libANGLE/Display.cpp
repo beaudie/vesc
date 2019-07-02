@@ -861,7 +861,7 @@ Error Display::createStream(const AttributeMap &attribs, Stream **outStream)
 }
 
 Error Display::createContext(const Config *configuration,
-                             const gl::Context *shareContext,
+                             gl::Context *shareContext,
                              const AttributeMap &attribs,
                              gl::Context **outContext)
 {
@@ -1349,7 +1349,7 @@ void Display::initVendorString()
 void Display::initializeFrontendFeatures()
 {
     // Enable on all Impls
-    mFrontendFeatures.loseContextOnOutOfMemory.enabled = true;
+    mFrontendFeatures.loseContextOnOutOfMemory.enabled          = true;
     mFrontendFeatures.scalarizeVecAndMatConstructorArgs.enabled = true;
 
     mImplementation->initializeFrontendFeatures(&mFrontendFeatures);

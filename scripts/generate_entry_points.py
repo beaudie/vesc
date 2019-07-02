@@ -121,6 +121,7 @@ template_entry_point_def = """{return_type}GL_APIENTRY {name}{explicit_context_s
     Context *context = {context_getter};
     if (context)
     {{{assert_explicit_context}{packed_gl_enum_conversions}
+	    auto shareContextLock = context->isShared() ? std::unique_lock<std::mutex>(egl::GetGlobalMutex()) : std::unique_lock<std::mutex>();
         if (context->skipValidation() || Validate{name}({validate_params}))
         {{
             {return_if_needed}context->{name_lower_no_suffix}({internal_params});

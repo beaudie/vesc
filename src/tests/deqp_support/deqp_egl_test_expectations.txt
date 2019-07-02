@@ -29,10 +29,19 @@
 // fails on Nexus5X with GLES backend (hangs)
 //  91531 NEXUS5X GLES : conformance_more_* = SKIP
 
-// ANGLE does not yet support multithreading
-1340 : dEQP-EGL.functional.sharing.gles2.multithread.* = SKIP
-1340 : dEQP-EGL.functional.multithread.* = SKIP
-1340 : dEQP-EGL.functional.render.multi_thread.* = SKIP
+// ANGLE multithreading support is WIP
+1340 : dEQP-EGL.functional.sharing.gles2.multithread.simple.images.texture_source.create_texture = SKIP
+1340 : dEQP-EGL.functional.sharing.gles2.multithread.random.textures.gen_delete* = SKIP
+1340 : dEQP-EGL.functional.sharing.gles2.multithread.random.programs.link* = SKIP
+1340 : dEQP-EGL.functional.sharing.gles2.multithread.random.images* = SKIP
+1340 : dEQP-EGL.functional.sharing.gles2.multithread.random_egl_sync.textures.copyteximage2d* = SKIP
+1340 : dEQP-EGL.functional.sharing.gles2.multithread.random_egl_sync.textures.copytexsubimage2d* = SKIP
+1340 : dEQP-EGL.functional.sharing.gles2.multithread.simple_egl_sync.programs* = SKIP
+1340 : dEQP-EGL.functional.sharing.gles2.multithread.simple_egl_sync.images.texture_source* = SKIP
+1340 : dEQP-EGL.functional.sharing.gles2.multithread.random_egl_sync.programs.link* = SKIP
+1340 : dEQP-EGL.functional.sharing.gles2.multithread.random_egl_sync.images* = SKIP
+1340 : dEQP-EGL.functional.sharing.gles2.multithread.simple_egl_server_sync* = SKIP
+1340 : dEQP-EGL.functional.sharing.gles2.multithread.random_egl_server_sync* = SKIP
 
 // dEQP doesn't handle configs created for extensions
 1662 WIN : dEQP-EGL.functional.color_clears.single_context.gles2.other = FAIL
