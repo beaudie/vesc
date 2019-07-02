@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a694e9f4_3a6494c8",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 987,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-02T14:07:52Z",
+      "side": 1,
+      "message": "From the assert, it _does_ look like I\u0027m storing 16 values (GL_COLOR \u003d\u003d GL_COLOR_ATTACHMENT0). But the attachments should in fact be limited to `IMPLEMENTATION_MAX_DRAW_BUFFERS`. If an attachment above that is given, the bitset is silently dropping it.\n\nThe ASSERT really checks that input is an expected GL enum. It being within supported range is automatically taken care of.",
+      "parentUuid": "d749d999_d2fec642",
+      "revId": "eb4d8952408c5b4b5b6d73df19354b17adef5eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d091b5b8_8a3f16a7",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "a8bce193_af3285cb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-02T14:07:52Z",
+      "side": 1,
+      "message": "GL_COLOR has the same behavior as GL_COLOR_ATTACHMENT0!",
+      "parentUuid": "d091b5b8_8a3f16a7",
+      "revId": "eb4d8952408c5b4b5b6d73df19354b17adef5eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7b0269d9_e641dfac",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 2
@@ -50,6 +86,24 @@
       "revId": "eb4d8952408c5b4b5b6d73df19354b17adef5eed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a8ad6f5_8568cc2b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-02T14:07:52Z",
+      "side": 1,
+      "message": "It\u0027s the way we pack the attachments. You can see this pattern in `FramebufferVk::updateRenderPassDesc` which sets up the renderpass attachments, or perhaps more clearly in `FramebufferVk::clearWithRenderPassOp`.",
+      "parentUuid": "7b0269d9_e641dfac",
+      "revId": "eb4d8952408c5b4b5b6d73df19354b17adef5eed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
