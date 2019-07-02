@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "037d604f_f7aa94c2",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8536,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-02T21:07:11Z",
+      "side": 1,
+      "message": "This is called from onDefaultVertexAttributeChange() as well, so I just re-calculated it here.",
+      "parentUuid": "de8b9505_097d10d9",
+      "range": {
+        "startLine": 8536,
+        "startChar": 18,
+        "endLine": 8536,
+        "endChar": 40
+      },
+      "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0ebf3b0f_9e6a33b2",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-07-02T20:56:40Z",
       "side": 1,
       "message": "same as mCachedActiveClientAttribsMask",
+      "range": {
+        "startLine": 8538,
+        "startChar": 4,
+        "endLine": 8539,
+        "endChar": 78
+      },
+      "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "713c4f3a_886df7d4",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8539,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-02T21:07:11Z",
+      "side": 1,
+      "message": "Seems like that\u0027s the array attributes which are in client memory? I\u0027m not sure that\u0027s what we want.",
+      "parentUuid": "0ebf3b0f_9e6a33b2",
       "range": {
         "startLine": 8538,
         "startChar": 4,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d170f2c5_d564d70f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8545,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-02T21:07:11Z",
+      "side": 1,
+      "message": "I think it makes it a bit clearer as it indicates we\u0027re comparing against the attributes in the program. Also I\u0027m not sure if the other bits are all cleared.",
+      "parentUuid": "8078ef96_e699862b",
+      "range": {
+        "startLine": 8545,
+        "startChar": 4,
+        "endLine": 8545,
+        "endChar": 53
+      },
+      "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "695fd104_3a48f656",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2019-07-02T20:56:40Z",
       "side": 1,
       "message": "can\u0027t we use programAttribActiveBits for all of these? feels like we only need to mask out inactive bits.",
+      "range": {
+        "startLine": 8546,
+        "startChar": 27,
+        "endLine": 8546,
+        "endChar": 48
+      },
+      "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e02df987_7e312371",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8546,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-02T21:07:11Z",
+      "side": 1,
+      "message": "Not sure, but likely that disabled attributes still have their bits set, so we don\u0027t want those affecting the final bits.",
+      "parentUuid": "695fd104_3a48f656",
       "range": {
         "startLine": 8546,
         "startChar": 27,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "2821a299_6e084896",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8547,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-02T21:07:11Z",
+      "side": 1,
+      "message": "Similar reasoning to above. Basically if the attribute is enabled, then use the array type, otherwise use the current value.",
+      "parentUuid": "0dcf1916_652f5186",
+      "range": {
+        "startLine": 8547,
+        "startChar": 28,
+        "endLine": 8547,
+        "endChar": 50
+      },
+      "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3302cf24_15720910",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 1
@@ -128,6 +248,30 @@
       "writtenOn": "2019-07-02T20:56:40Z",
       "side": 1,
       "message": "theoretically we wouldn\u0027t need this either. Could make it an ASSERT.",
+      "range": {
+        "startLine": 8555,
+        "startChar": 28,
+        "endLine": 8555,
+        "endChar": 51
+      },
+      "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31497bef_643e6bac",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8555,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-02T21:07:11Z",
+      "side": 1,
+      "message": "No, we need this because we have some extra bits in the upper part (bits 16-31) since types have two bits.",
+      "parentUuid": "3302cf24_15720910",
       "range": {
         "startLine": 8555,
         "startChar": 28,
