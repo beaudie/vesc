@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "b2d35252_d30043ad",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8536,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-02T22:12:57Z",
+      "side": 1,
+      "message": "OK, is there anything else I can move out?",
+      "parentUuid": "be360856_4a6a6d1b",
+      "range": {
+        "startLine": 8536,
+        "startChar": 18,
+        "endLine": 8536,
+        "endChar": 40
+      },
+      "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0ebf3b0f_9e6a33b2",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 1
@@ -191,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "071fc8b5_661383d8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8545,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-02T22:12:57Z",
+      "side": 1,
+      "message": "I should be able to get rid of this mask.",
+      "parentUuid": "d170f2c5_d564d70f",
+      "range": {
+        "startLine": 8545,
+        "startChar": 4,
+        "endLine": 8545,
+        "endChar": 53
+      },
+      "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "695fd104_3a48f656",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 1
@@ -250,6 +298,30 @@
       "side": 1,
       "message": "active !\u003d disabled. We only care about active.",
       "parentUuid": "e02df987_7e312371",
+      "range": {
+        "startLine": 8546,
+        "startChar": 27,
+        "endLine": 8546,
+        "endChar": 48
+      },
+      "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5c83da9_74f2ad98",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8546,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-02T22:12:57Z",
+      "side": 1,
+      "message": "I mean, if an array is disabled, then its type bits are still set in the type mask, so it\u0027d cause the outputTypeBits to include the bits even though it should only be those in the current values.\n\nFor example, if array 0 has type 0x1 and is disabled, and the current value for index 0 has type 0x2, then we would get 0x3 for outputTypeBits instead of 0x2.",
+      "parentUuid": "58abb3f5_f8d647bf",
       "range": {
         "startLine": 8546,
         "startChar": 27,
