@@ -76,6 +76,39 @@ class CommandBufferOwner
 // Only used internally in the command graph. Kept in the header for better inlining performance.
 class CommandGraphNode final : angle::NonCopyable
 {
+  private:
+    // a STL compatible wrapper of angle::PoolAllocator,
+    // the pool itself is managed by CommandGraph
+    // push&pop in CommandGraph's initialization and clearance.
+    template <typename T>
+    class LocalPoolAllocator
+    {
+      public:
+        typedef size_t size_type;
+        typedef ptrdiff_t difference_type;
+        typedef T *pointer;
+        typedef const T *const_pointer;
+        typedef T &reference;
+        typedef const T &const_reference;
+        typedef T value_type;
+
+        LocalPoolAllocator(angle::PoolAllocator *poolAllocator) noexcept
+            : mPoolAllocator(poolAllocator)
+        {}
+        ~LocalPoolAllocator() noexcept {}
+
+        pointer allocate(size_type n)
+        {
+            ASSERT(mPoolAllocator);
+            return reinterpret_cast<pointer>(mPoolAllocator->fastAllocate(n * sizeof(T)));
+        }
+        void deallocate(pointer, size_type) {}
+
+      private:
+        angle::PoolAllocator *mPoolAllocator;
+    };
+    using GraphNodePtrAllocator = LocalPoolAllocator<CommandGraphNode *>;
+
   public:
     CommandGraphNode(CommandGraphNodeFunction function, angle::PoolAllocator *poolAllocator);
     ~CommandGraphNode();
@@ -172,7 +205,7 @@ class CommandGraphNode final : angle::NonCopyable
                                   PrimaryCommandBuffer *primaryCommandBuffer);
 
     // Only used in the command graph diagnostics.
-    const std::vector<CommandGraphNode *> &getParentsForDiagnostics() const;
+    const std::vector<CommandGraphNode *, GraphNodePtrAllocator> &getParentsForDiagnostics() const;
     void setDiagnosticInfo(CommandGraphResourceType resourceType, uintptr_t resourceID);
 
     CommandGraphResourceType getResourceTypeForDiagnostics() const { return mResourceType; }
@@ -225,6 +258,8 @@ class CommandGraphNode final : angle::NonCopyable
 
     CommandGraphNodeFunction mFunction;
     angle::PoolAllocator *mPoolAllocator;
+    GraphNodePtrAllocator mGraphNodePtrAllocator;
+
     // Keep separate buffers for commands inside and outside a RenderPass.
     // TODO(jmadill): We might not need inside and outside RenderPass commands separate.
     CommandBuffer mOutsideRenderPassCommands;
@@ -241,7 +276,7 @@ class CommandGraphNode final : angle::NonCopyable
     std::string mDebugMarker;
 
     // Parents are commands that must be submitted before 'this' CommandNode can be submitted.
-    std::vector<CommandGraphNode *> mParents;
+    std::vector<CommandGraphNode *, GraphNodePtrAllocator> mParents;
 
     // If this is true, other commands exist that must be submitted after 'this' command.
     bool mHasChildren;

@@ -346,9 +346,11 @@ CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function,
     : mRenderPassClearValues{},
       mFunction(function),
       mPoolAllocator(poolAllocator),
+      mGraphNodePtrAllocator(poolAllocator),
       mQueryPool(VK_NULL_HANDLE),
       mQueryIndex(0),
       mFenceSyncEvent(VK_NULL_HANDLE),
+      mParents(mGraphNodePtrAllocator),
       mHasChildren(false),
       mVisitedState(VisitedState::Unvisited),
       mGlobalMemoryBarrierSrcAccess(0),
@@ -490,7 +492,8 @@ void CommandGraphNode::setDebugMarker(GLenum source, std::string &&marker)
 bool CommandGraphNode::isChildOf(CommandGraphNode *parent)
 {
     std::set<CommandGraphNode *> visitedList;
-    std::vector<CommandGraphNode *> openList;
+    std::vector<CommandGraphNode *, CommandGraphNode::GraphNodePtrAllocator> openList(
+        mGraphNodePtrAllocator);
     openList.insert(openList.begin(), mParents.begin(), mParents.end());
     while (!openList.empty())
     {
@@ -693,7 +696,8 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
     return angle::Result::Continue;
 }
 
-const std::vector<CommandGraphNode *> &CommandGraphNode::getParentsForDiagnostics() const
+const std::vector<CommandGraphNode *, CommandGraphNode::GraphNodePtrAllocator>
+    &CommandGraphNode::getParentsForDiagnostics() const
 {
     return mParents;
 }
