@@ -8469,6 +8469,9 @@ void StateCache::updateActiveAttribsMask(Context *context)
     mCachedActiveBufferedAttribsMask = activeEnabled & ~clientAttribs;
     mCachedActiveDefaultAttribsMask  = activeAttribs & ~enabledAttribs;
     mCachedHasAnyEnabledClientAttrib = (clientAttribs & enabledAttribs).any();
+
+    updateMismatchedAttribsMask(glState, activeAttribs.to_ulong(),
+                                mCachedActiveDefaultAttribsMask.to_ulong());
 }
 
 void StateCache::updateVertexElementLimitsImpl(Context *context)
@@ -8520,6 +8523,34 @@ void StateCache::updateBasicDrawStatesError()
 void StateCache::updateBasicDrawElementsError()
 {
     mCachedBasicDrawElementsError = kInvalidPointer;
+}
+
+void StateCache::updateMismatchedAttribsMask(const State &glState,
+                                             unsigned long programAttribActiveBits,
+                                             unsigned long currentValueActiveBits)
+{
+    const VertexArray *vao = glState.getVertexArray();
+
+    unsigned long programAttribTypeBits = glState.getProgram()->getAttributesTypeMask().to_ulong();
+    unsigned long arrayAttribTypeBits   = vao->getAttributesTypeMask().to_ulong();
+    unsigned long currentValueTypeBits  = glState.getCurrentValuesTypeMask().to_ulong();
+
+    programAttribActiveBits |= programAttribActiveBits << kMaxComponentTypeMaskIndex;
+    currentValueActiveBits |= currentValueActiveBits << kMaxComponentTypeMaskIndex;
+
+    // Selects bits from arrayAttribTypeBits where the bit in currentValueActiveBits is 0,
+    // and the bits from currentValueTypeBits where the bit is 1.
+    unsigned long outputTypeBits =
+        arrayAttribTypeBits ^
+        ((arrayAttribTypeBits ^ currentValueTypeBits) & currentValueActiveBits);
+    unsigned long inputTypeBits = programAttribTypeBits;
+
+    unsigned long mismatchedTypeBits   = outputTypeBits ^ inputTypeBits;
+    unsigned long mismatchedAttribBits = mismatchedTypeBits;
+    mismatchedAttribBits |= mismatchedTypeBits >> kMaxComponentTypeMaskIndex;
+    mismatchedAttribBits &= programAttribActiveBits;
+
+    mCachedMismatchedAttribsMask = AttributesMask(mismatchedAttribBits);
 }
 
 intptr_t StateCache::getBasicDrawStatesErrorImpl(Context *context) const
@@ -8598,6 +8629,13 @@ void StateCache::onStencilStateChange(Context *context)
 void StateCache::onDefaultVertexAttributeChange(Context *context)
 {
     updateBasicDrawStatesError();
+
+    const State &glState = context->getState();
+
+    unsigned long programAttribActiveBits = glState.getProgram()->getAttributesMask().to_ulong();
+    unsigned long currentValueActiveBits  = mCachedActiveDefaultAttribsMask.to_ulong();
+
+    updateMismatchedAttribsMask(glState, programAttribActiveBits, currentValueActiveBits);
 }
 
 void StateCache::onActiveTextureChange(Context *context)
