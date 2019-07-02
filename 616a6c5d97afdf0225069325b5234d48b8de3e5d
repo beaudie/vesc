@@ -192,6 +192,30 @@
     },
     {
       "key": {
+        "uuid": "a83d8dda_6483d31d",
+        "filename": "src/libANGLE/Uniform.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T17:02:20Z",
+      "side": 1,
+      "message": "Sorry Shabi, I misread.\n\nIf the uniform is in the vertex shader the 0 bit should be set to 1. in mActiveUseBits. It would only be exactly zero if the uniform isn\u0027t used. Maybe we should ASSERT in this method that mActiveUseBits !\u003d 0?",
+      "parentUuid": "34d60ff8_3d1e08f0",
+      "range": {
+        "startLine": 42,
+        "startChar": 3,
+        "endLine": 45,
+        "endChar": 55
+      },
+      "revId": "616a6c5d97afdf0225069325b5234d48b8de3e5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3a33335b_0fccdce5",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 3
