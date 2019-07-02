@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "be360856_4a6a6d1b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8536,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T21:49:49Z",
+      "side": 1,
+      "message": "We need to improve the performance of the code. As it stands it will introduce a performance regression. So see below comments. We\u0027ll need to kill as many masks as we can. You can measure perf with python scripts/perf_test_runner.py DrawCall*vulkan_null_vbo_change",
+      "parentUuid": "037d604f_f7aa94c2",
+      "range": {
+        "startLine": 8536,
+        "startChar": 18,
+        "endLine": 8536,
+        "endChar": 40
+      },
+      "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0ebf3b0f_9e6a33b2",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 1
@@ -93,6 +117,30 @@
       "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e3530d6_450e3d90",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8539,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T21:49:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "713c4f3a_886df7d4",
+      "range": {
+        "startLine": 8538,
+        "startChar": 4,
+        "endLine": 8539,
+        "endChar": 78
+      },
+      "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -190,6 +238,30 @@
     },
     {
       "key": {
+        "uuid": "58abb3f5_f8d647bf",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8546,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T21:49:49Z",
+      "side": 1,
+      "message": "active !\u003d disabled. We only care about active.",
+      "parentUuid": "e02df987_7e312371",
+      "range": {
+        "startLine": 8546,
+        "startChar": 27,
+        "endLine": 8546,
+        "endChar": 48
+      },
+      "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0dcf1916_652f5186",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 1
@@ -272,6 +344,30 @@
       "side": 1,
       "message": "No, we need this because we have some extra bits in the upper part (bits 16-31) since types have two bits.",
       "parentUuid": "3302cf24_15720910",
+      "range": {
+        "startLine": 8555,
+        "startChar": 28,
+        "endLine": 8555,
+        "endChar": 51
+      },
+      "revId": "8c70b56cfa609d4bb410fc771fc3ec388c357cce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04ccbdf5_4e85a8ab",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8555,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-02T21:49:49Z",
+      "side": 1,
+      "message": "Right. I think you need to omit all masking except a final mask against program active bits.",
+      "parentUuid": "31497bef_643e6bac",
       "range": {
         "startLine": 8555,
         "startChar": 28,
