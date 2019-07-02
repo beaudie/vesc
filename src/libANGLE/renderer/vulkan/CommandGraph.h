@@ -148,8 +148,14 @@ class CommandGraphNode final : angle::NonCopyable
                                            CommandGraphNode *afterNode)
     {
         ASSERT(beforeNode != afterNode && !beforeNode->isChildOf(afterNode));
-        afterNode->mParents.emplace_back(beforeNode);
+        ParentPointerBlock *newBlock = afterNode->allocateNewParentBlock();
+
+        newBlock->parent = beforeNode;
         beforeNode->setHasChildren();
+        afterNode->mParentCount++;
+
+        newBlock->next          = afterNode->mParentsList;
+        afterNode->mParentsList = newBlock;
     }
 
     static void SetHappensBeforeDependencies(CommandGraphNode **beforeNodes,
@@ -172,7 +178,7 @@ class CommandGraphNode final : angle::NonCopyable
                                   PrimaryCommandBuffer *primaryCommandBuffer);
 
     // Only used in the command graph diagnostics.
-    const std::vector<CommandGraphNode *> &getParentsForDiagnostics() const;
+    std::vector<CommandGraphNode *> getParentsForDiagnostics() const;
     void setDiagnosticInfo(CommandGraphResourceType resourceType, uintptr_t resourceID);
 
     CommandGraphResourceType getResourceTypeForDiagnostics() const { return mResourceType; }
@@ -241,7 +247,31 @@ class CommandGraphNode final : angle::NonCopyable
     std::string mDebugMarker;
 
     // Parents are commands that must be submitted before 'this' CommandNode can be submitted.
-    std::vector<CommandGraphNode *> mParents;
+    struct ParentPointerBlock
+    {
+        ParentPointerBlock() : parent(nullptr), next(nullptr) {}
+        CommandGraphNode *parent;
+        ParentPointerBlock *next;
+    };
+    ParentPointerBlock *mParentsList;
+    uint32_t mParentCount;
+
+    inline ParentPointerBlock *allocateNewParentBlock()
+    {
+        return reinterpret_cast<ParentPointerBlock *>(
+            mPoolAllocator->fastAllocate(sizeof(ParentPointerBlock)));
+    }
+    inline void getParentNodes(std::vector<CommandGraphNode *> *parentsOut) const
+    {
+        parentsOut->reserve(mParentCount);
+        const ParentPointerBlock *parentBlockIter = mParentsList;
+        for (size_t i = 0; i < mParentCount; i++)
+        {
+            ASSERT(parentBlockIter);
+            parentsOut->emplace_back(parentBlockIter->parent);
+            parentBlockIter = parentBlockIter->next;
+        }
+    }
 
     // If this is true, other commands exist that must be submitted after 'this' command.
     bool mHasChildren;

@@ -16,7 +16,6 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
-
 #include "libANGLE/trace.h"
 
 namespace rx
@@ -349,6 +348,8 @@ CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function,
       mQueryPool(VK_NULL_HANDLE),
       mQueryIndex(0),
       mFenceSyncEvent(VK_NULL_HANDLE),
+      mParentsList(nullptr),
+      mParentCount(0),
       mHasChildren(false),
       mVisitedState(VisitedState::Unvisited),
       mGlobalMemoryBarrierSrcAccess(0),
@@ -433,16 +434,23 @@ void CommandGraphNode::SetHappensBeforeDependencies(CommandGraphNode **beforeNod
                                                     size_t beforeNodesCount,
                                                     CommandGraphNode *afterNode)
 {
-    afterNode->mParents.insert(afterNode->mParents.end(), beforeNodes,
-                               beforeNodes + beforeNodesCount);
-
+    ParentPointerBlock *parentsListBackup = afterNode->mParentsList;
+    ParentPointerBlock **listTail         = &(afterNode->mParentsList);
     // TODO(jmadill): is there a faster way to do this?
     for (size_t i = 0; i < beforeNodesCount; ++i)
     {
+        *listTail                       = afterNode->allocateNewParentBlock();
+        ParentPointerBlock *activeBlock = *listTail;
+        listTail                        = &(activeBlock->next);
+
+        activeBlock->parent = beforeNodes[i];
         beforeNodes[i]->setHasChildren();
+        afterNode->mParentCount++;
 
         ASSERT(beforeNodes[i] != afterNode && !beforeNodes[i]->isChildOf(afterNode));
     }
+
+    *listTail = parentsListBackup;
 }
 
 void CommandGraphNode::SetHappensBeforeDependencies(CommandGraphNode *beforeNode,
@@ -457,7 +465,7 @@ void CommandGraphNode::SetHappensBeforeDependencies(CommandGraphNode *beforeNode
 
 bool CommandGraphNode::hasParents() const
 {
-    return !mParents.empty();
+    return mParentsList != nullptr;
 }
 
 void CommandGraphNode::setQueryPool(const QueryPool *queryPool, uint32_t queryIndex)
@@ -491,7 +499,7 @@ bool CommandGraphNode::isChildOf(CommandGraphNode *parent)
 {
     std::set<CommandGraphNode *> visitedList;
     std::vector<CommandGraphNode *> openList;
-    openList.insert(openList.begin(), mParents.begin(), mParents.end());
+    getParentNodes(&openList);
     while (!openList.empty())
     {
         CommandGraphNode *current = openList.back();
@@ -503,7 +511,7 @@ bool CommandGraphNode::isChildOf(CommandGraphNode *parent)
                 return true;
             }
             visitedList.insert(current);
-            openList.insert(openList.end(), current->mParents.begin(), current->mParents.end());
+            current->getParentNodes(&openList);
         }
     }
 
@@ -518,7 +526,7 @@ VisitedState CommandGraphNode::visitedState() const
 void CommandGraphNode::visitParents(std::vector<CommandGraphNode *> *stack)
 {
     ASSERT(mVisitedState == VisitedState::Unvisited);
-    stack->insert(stack->end(), mParents.begin(), mParents.end());
+    getParentNodes(stack);
     mVisitedState = VisitedState::Ready;
 }
 
@@ -693,9 +701,11 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
     return angle::Result::Continue;
 }
 
-const std::vector<CommandGraphNode *> &CommandGraphNode::getParentsForDiagnostics() const
+std::vector<CommandGraphNode *> CommandGraphNode::getParentsForDiagnostics() const
 {
-    return mParents;
+    std::vector<CommandGraphNode *> parents;
+    getParentNodes(&parents);
+    return parents;
 }
 
 void CommandGraphNode::setDiagnosticInfo(CommandGraphResourceType resourceType,
