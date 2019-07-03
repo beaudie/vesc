@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ce51f3cb_7b0473e7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T13:05:32Z",
+      "side": 1,
+      "message": "This doesn\u0027t look like how I would have done it. Why can\u0027t you ensure the pipeline cache is created before this call?",
+      "parentUuid": "2b6a9c44_664d7e1f",
+      "revId": "47efb479567c442010f7300962fc1cbd5021fd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "864dc6bb_20772dc2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
