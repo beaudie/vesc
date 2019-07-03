@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71baeea4_aa7f66e2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-03T21:43:50Z",
+      "side": 1,
+      "message": "Why did you remove updating mCurrentReadAccess/mCurrentWriteAccess?\n\nHow do those get updated if they are both 0 to begin with, so onWriteAccess() doesn\u0027t get called?",
+      "revId": "b26f1b9b2881a214989e7988c8c54b7c8614d648",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
