@@ -430,6 +430,24 @@
       "revId": "a466885ba670f533811cc71829348ad5038da332",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5ca7e80e_cae1b8b6",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-03T16:21:52Z",
+      "side": 1,
+      "message": "This version makes the correction code much simpler and allows us to pass all of the tests.   Thanks much for the help.\n\nI opened an issue to use non-zero .x values in the dFdy() testing:\n\nhttps://gitlab.khronos.org/Tracker/vk-gl-cts/issues/1865",
+      "parentUuid": "64dd3f03_d89bc2aa",
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
