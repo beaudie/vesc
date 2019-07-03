@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ab7a17b_fccd7dde",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-03T19:10:58Z",
+      "side": 1,
+      "message": "You can keep pointers to `sh::Uniform` and `sh::InterfaceBlock` instead to avoid copying. (If we had C++17, you could also use a string_view for the keys)",
+      "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4058ddc9_ebd732d6",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3702,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-03T19:10:58Z",
+      "side": 1,
+      "message": "You can negate the condition and use `continue` to keep the code from indenting so much.",
+      "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65b87bb7_a5ae39fb",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3706,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-03T19:10:58Z",
+      "side": 1,
+      "message": "Same here: `if (count() \u003d\u003d 0) { add(); continue; }`",
+      "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7df285cc_9b518c4a",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3711,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-03T19:10:58Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "624f4b67_b62c2c33",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3714,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-03T19:10:58Z",
+      "side": 1,
+      "message": "I was hoping to avoid this `for` loop. The `auto`s make it a bit hard to follow what exactly is going on. `uniformBlock` is `sh::InterfaceBlock`, what\u0027s the type of `field`? I would like to see `uniformBlockFieldMap` have both the `sh::InterfaceBlock` and the field type, so that with the result of one lookup, you could test both `isSameInterfaceBlockAtLinkTime` and the type matching.",
+      "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
