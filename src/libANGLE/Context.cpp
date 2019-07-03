@@ -3160,6 +3160,7 @@ Extensions Context::generateSupportedExtensions() const
         supportedExtensions.pointSprite           = true;
         supportedExtensions.drawTexture           = true;
         supportedExtensions.parallelShaderCompile = false;
+        supportedExtensions.texture3DOES          = false;
     }
 
     if (getClientVersion() < ES_3_0)
