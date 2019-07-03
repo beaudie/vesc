@@ -46,14 +46,18 @@ class Sync final : public angle::RefCountObject<Display, angle::Result>
     Error serverWait(const Display *display, const gl::Context *context, EGLint flags);
     Error getStatus(const Display *display, EGLint *outStatus) const;
 
+    Error dupNativeFenceFD(const Display *display, EGLint *result) const;
+
     EGLenum getType() const { return mType; }
     EGLint getCondition() const { return mCondition; }
+    EGLint getNativeFenceFD() const { return mNativeFenceFD; }
 
   private:
     std::unique_ptr<rx::EGLSyncImpl> mFence;
 
     EGLenum mType;
     static constexpr EGLint mCondition = EGL_SYNC_PRIOR_COMMANDS_COMPLETE_KHR;
+    EGLint mNativeFenceFD;
 };
 
 }  // namespace egl
