@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc6307e1_cfdce0de",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T13:03:32Z",
+      "side": 1,
+      "message": "This seems fine. I think maybe the best solution is to use a map from the raw bit value of the active shader mask to image layout. With tess/geometry shaders though the map might get quite large.",
+      "range": {
+        "startLine": 2104,
+        "startChar": 0,
+        "endLine": 2111,
+        "endChar": 9
+      },
+      "revId": "cbace6f1bd8d7683380ce8e5cb18e25517db1641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
