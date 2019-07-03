@@ -22,6 +22,30 @@
       "revId": "27be72051924db28708f5b65328e1f2dfff5f00b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "522f04d6_d5a6f9e4",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-03T13:22:12Z",
+      "side": 0,
+      "message": "I believe I\u0027m addressing the TODO by enabling 3D with an extension.  Does the comment also apply to 2DArray?",
+      "parentUuid": "10a2de3b_d7c3e6ac",
+      "range": {
+        "startLine": 364,
+        "startChar": 8,
+        "endLine": 364,
+        "endChar": 58
+      },
+      "revId": "27be72051924db28708f5b65328e1f2dfff5f00b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
