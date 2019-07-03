@@ -394,6 +394,24 @@
       "revId": "a466885ba670f533811cc71829348ad5038da332",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccf5ee67_8967513c",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T14:48:29Z",
+      "side": 1,
+      "message": "Good job all round. If there\u0027s missing test coverage for the x coordinate we could add an ANGLE test and loop Chris Forbes in with a dEQP bug.",
+      "parentUuid": "484da68a_0ac3aad5",
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
