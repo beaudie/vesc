@@ -694,7 +694,7 @@ void ProgramVk::setUniformMatrixfv(GLint location,
             continue;
         }
 
-        bool updated = SetFloatUniformMatrixGLSL<cols, rows>(
+        bool updated = SetFloatUniformMatrixGLSL<cols, rows>::run(
             locationInfo.arrayIndex, linkedUniform.getArraySizeProduct(), count, transpose, value,
             uniformBlock.uniformData.data() + layoutInfo.offset);
 

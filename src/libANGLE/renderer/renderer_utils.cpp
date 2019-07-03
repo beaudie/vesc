@@ -101,10 +101,10 @@ void WriteFloatColor(const gl::ColorF &color,
     colorWriteFunction(reinterpret_cast<const uint8_t *>(&color), destPixelData);
 }
 
-template <int cols, int rows>
-int GetFlattenedIndex(bool isColumnMajor, int col, int row)
+template <int cols, int rows, bool IsColumnMajor>
+inline int GetFlattenedIndex(int col, int row)
 {
-    if (isColumnMajor)
+    if (IsColumnMajor)
     {
         return col * rows + row;
     }
@@ -114,8 +114,14 @@ int GetFlattenedIndex(bool isColumnMajor, int col, int row)
     }
 }
 
-template <typename T, int colsSrc, int rowsSrc, bool IsDstColumnMajor, int colsDst, int rowsDst>
-bool ExpandMatrix(T *target, const GLfloat *value, bool isSrcColumnMajor)
+template <typename T,
+          bool IsSrcColumnMajor,
+          int colsSrc,
+          int rowsSrc,
+          bool IsDstColumnMajor,
+          int colsDst,
+          int rowsDst>
+bool ExpandMatrix(T *target, const GLfloat *value)
 {
     static_assert(colsSrc <= colsDst && rowsSrc <= rowsDst, "Can only expand!");
 
@@ -126,27 +132,81 @@ bool ExpandMatrix(T *target, const GLfloat *value, bool isSrcColumnMajor)
     {
         for (int c = 0; c < colsSrc; c++)
         {
-            int srcIndex = GetFlattenedIndex<colsSrc, rowsSrc>(isSrcColumnMajor, c, r);
-            int dstIndex = GetFlattenedIndex<colsDst, rowsDst>(IsDstColumnMajor, c, r);
+            int srcIndex = GetFlattenedIndex<colsSrc, rowsSrc, IsSrcColumnMajor>(c, r);
+            int dstIndex = GetFlattenedIndex<colsDst, rowsDst, IsDstColumnMajor>(c, r);
 
             staging[dstIndex] = static_cast<T>(value[srcIndex]);
         }
     }
 
-    if (memcmp(target, staging, kDstFlatSize * sizeof(T)) == 0)
-    {
-        return false;
-    }
-
     memcpy(target, staging, kDstFlatSize * sizeof(T));
+
+    // Always return dirty,
+    // profiling shows it is faster to update the uniform to GPU than do a memcmp hereere
     return true;
 }
 
-template <int colsSrc, int rowsSrc, bool IsDstColumnMajor, int colsDst, int rowsDst>
+bool SetFloatUniformMatrixSingleBlockCopy(unsigned int arrayElementOffset,
+                                          unsigned int elementCount,
+                                          GLsizei countIn,
+                                          size_t matrixSize,
+                                          const GLfloat *value,
+                                          uint8_t *targetData)
+{
+    const unsigned int count =
+        std::min(elementCount - arrayElementOffset, static_cast<unsigned int>(countIn));
+
+    const uint8_t *valueData    = reinterpret_cast<const uint8_t *>(value);
+    uint8_t *targetDataWritePtr = targetData + arrayElementOffset * matrixSize;
+
+    memcpy(targetDataWritePtr, valueData, matrixSize * count);
+
+    return true;
+}
+
+bool SetFloatUniformMatrixFast(unsigned int arrayElementOffset,
+                               unsigned int elementCount,
+                               GLsizei countIn,
+                               size_t matrixSize,
+                               const GLfloat *value,
+                               uint8_t *targetData)
+{
+    const unsigned int count =
+        std::min(elementCount - arrayElementOffset, static_cast<unsigned int>(countIn));
+
+    const uint8_t *valueData    = reinterpret_cast<const uint8_t *>(value);
+    uint8_t *targetDataWritePtr = targetData + arrayElementOffset * matrixSize;
+
+    // Quick path for count == 1, as it is the most common case
+    if (count == 1)
+    {
+        memcpy(targetDataWritePtr, valueData, matrixSize);
+    }
+    else
+    {
+        for (unsigned int i = 0; i < count; i++)
+        {
+            memcpy(targetDataWritePtr, valueData, matrixSize);
+
+            valueData += matrixSize;
+            targetDataWritePtr += matrixSize;
+        }
+    }
+
+    // Always return dirty,
+    // profiling shows it is faster to update the uniform to GPU than do a memcmp here
+    return true;
+}
+
+template <bool IsSrcColumMajor,
+          int colsSrc,
+          int rowsSrc,
+          bool IsDstColumnMajor,
+          int colsDst,
+          int rowsDst>
 bool SetFloatUniformMatrix(unsigned int arrayElementOffset,
                            unsigned int elementCount,
                            GLsizei countIn,
-                           GLboolean transpose,
                            const GLfloat *value,
                            uint8_t *targetData)
 {
@@ -158,13 +218,12 @@ bool SetFloatUniformMatrix(unsigned int arrayElementOffset,
         targetData + arrayElementOffset * sizeof(GLfloat) * targetMatrixStride);
 
     bool dirty = false;
-
     for (unsigned int i = 0; i < count; i++)
     {
-        const bool isSrcColumnMajor = !transpose;
-        dirty = ExpandMatrix<GLfloat, colsSrc, rowsSrc, IsDstColumnMajor, colsDst, rowsDst>(
-                    target, value, isSrcColumnMajor) ||
+        dirty = ExpandMatrix<GLfloat, IsSrcColumMajor, colsSrc, rowsSrc, IsDstColumnMajor, colsDst,
+                             rowsDst>(target, value) ||
                 dirty;
+
         target += targetMatrixStride;
         value += colsSrc * rowsSrc;
     }
@@ -485,57 +544,223 @@ angle::Result IncompleteTextureSet::getIncompleteTexture(
     return angle::Result::Continue;
 }
 
-#define ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(api, cols, rows)                            \
-    template bool SetFloatUniformMatrix##api<cols, rows>(unsigned int, unsigned int, GLsizei, \
-                                                         GLboolean, const GLfloat *, uint8_t *)
+#define ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(api, cols, rows) \
+    template bool SetFloatUniformMatrix##api<cols, rows>::run(     \
+        unsigned int, unsigned int, GLsizei, GLboolean, const GLfloat *, uint8_t *)
 
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(GLSL, 2, 2);
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(GLSL, 3, 3);
-ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(GLSL, 4, 4);
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(GLSL, 2, 3);
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(GLSL, 3, 2);
-ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(GLSL, 2, 4);
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(GLSL, 4, 2);
-ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(GLSL, 3, 4);
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(GLSL, 4, 3);
 
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(HLSL, 2, 2);
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(HLSL, 3, 3);
-ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(HLSL, 4, 4);
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(HLSL, 2, 3);
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(HLSL, 3, 2);
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(HLSL, 2, 4);
-ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(HLSL, 4, 2);
 ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(HLSL, 3, 4);
-ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC(HLSL, 4, 3);
 
 #undef ANGLE_INSTANTIATE_SET_UNIFORM_MATRIX_FUNC
 
-template <int cols, int rows>
-bool SetFloatUniformMatrixGLSL(unsigned int arrayElementOffset,
-                               unsigned int elementCount,
-                               GLsizei countIn,
-                               GLboolean transpose,
-                               const GLfloat *value,
-                               uint8_t *targetData)
+#define ANGLE_SPECIALIZATION_ROWS_SET_UNIFORM_MATRIX_FUNC(api, cols, rows)                      \
+    template bool SetFloatUniformMatrix##api<cols, 4>::run(unsigned int, unsigned int, GLsizei, \
+                                                           GLboolean, const GLfloat *, uint8_t *)
+
+template <int cols>
+struct SetFloatUniformMatrixGLSL<cols, 4>
 {
-    // GLSL expects matrix uniforms to be column-major, and each column is padded to 4 rows.
-    return SetFloatUniformMatrix<cols, rows, true, cols, 4>(arrayElementOffset, elementCount,
-                                                            countIn, transpose, value, targetData);
+    static bool run(unsigned int arrayElementOffset,
+                    unsigned int elementCount,
+                    GLsizei countIn,
+                    GLboolean transpose,
+                    const GLfloat *value,
+                    uint8_t *targetData);
+};
+
+ANGLE_SPECIALIZATION_ROWS_SET_UNIFORM_MATRIX_FUNC(GLSL, 2, 4);
+ANGLE_SPECIALIZATION_ROWS_SET_UNIFORM_MATRIX_FUNC(GLSL, 3, 4);
+
+#undef ANGLE_SPECIALIZATION_ROWS_SET_UNIFORM_MATRIX_FUNC
+
+#define ANGLE_SPECIALIZATION_COLS_SET_UNIFORM_MATRIX_FUNC(api, cols, rows)                      \
+    template bool SetFloatUniformMatrix##api<4, rows>::run(unsigned int, unsigned int, GLsizei, \
+                                                           GLboolean, const GLfloat *, uint8_t *)
+
+template <int rows>
+struct SetFloatUniformMatrixHLSL<4, rows>
+{
+    static bool run(unsigned int arrayElementOffset,
+                    unsigned int elementCount,
+                    GLsizei countIn,
+                    GLboolean transpose,
+                    const GLfloat *value,
+                    uint8_t *targetData);
+};
+ANGLE_SPECIALIZATION_COLS_SET_UNIFORM_MATRIX_FUNC(HLSL, 4, 2);
+ANGLE_SPECIALIZATION_COLS_SET_UNIFORM_MATRIX_FUNC(HLSL, 4, 3);
+
+#undef ANGLE_SPECIALIZATION_COLS_SET_UNIFORM_MATRIX_FUNC
+
+#define ANGLE_SPECIALIZATION_FULL_SET_UNIFORM_MATRIX_FUNC(api, cols, rows) \
+    template <>                                                            \
+    struct SetFloatUniformMatrix##api<4, 4>                                \
+    {                                                                      \
+        static bool run(unsigned int arrayElementOffset,                   \
+                        unsigned int elementCount,                         \
+                        GLsizei countIn,                                   \
+                        GLboolean transpose,                               \
+                        const GLfloat *value,                              \
+                        uint8_t *targetData);                              \
+    }
+
+ANGLE_SPECIALIZATION_FULL_SET_UNIFORM_MATRIX_FUNC(GLSL, 4, 4);
+ANGLE_SPECIALIZATION_FULL_SET_UNIFORM_MATRIX_FUNC(HLSL, 4, 4);
+
+#undef ANGLE_SPECIALIZATION_FULL_SET_UNIFORM_MATRIX_FUNC
+
+bool SetFloatUniformMatrixGLSL<4, 4>::run(unsigned int arrayElementOffset,
+                                          unsigned int elementCount,
+                                          GLsizei countIn,
+                                          GLboolean transpose,
+                                          const GLfloat *value,
+                                          uint8_t *targetData)
+{
+    const bool isSrcColumnMajor = !transpose;
+    if (isSrcColumnMajor)
+    {
+        // The src and dst matrix both are column major and both are 4x4,
+        // so a simple block copy updates all the matrices
+        constexpr size_t matrixSize = sizeof(GLfloat) * 4 * 4;
+        return SetFloatUniformMatrixSingleBlockCopy(arrayElementOffset, elementCount, countIn,
+                                                    matrixSize, value, targetData);
+    }
+    else
+    {
+        // fallback to general cases
+        return SetFloatUniformMatrix<false, 4, 4, true, 4, 4>(arrayElementOffset, elementCount,
+                                                              countIn, value, targetData);
+    }
+}
+
+template <int cols>
+bool SetFloatUniformMatrixGLSL<cols, 4>::run(unsigned int arrayElementOffset,
+                                             unsigned int elementCount,
+                                             GLsizei countIn,
+                                             GLboolean transpose,
+                                             const GLfloat *value,
+                                             uint8_t *targetData)
+{
+    const bool isSrcColumnMajor = !transpose;
+    if (isSrcColumnMajor)
+    {
+        // Both src and dst matrixs are column major and has 4 cols,
+        // a single memcpy for each matrix can do the job
+        constexpr size_t srcMatrixSize = sizeof(GLfloat) * cols * 4;
+        return SetFloatUniformMatrixFast(arrayElementOffset, elementCount, countIn, srcMatrixSize,
+                                         value, targetData);
+    }
+    else
+    {
+        // fallback to general cases
+        return SetFloatUniformMatrix<false, cols, 4, true, cols, 4>(
+            arrayElementOffset, elementCount, countIn, value, targetData);
+    }
 }
 
 template <int cols, int rows>
-bool SetFloatUniformMatrixHLSL(unsigned int arrayElementOffset,
-                               unsigned int elementCount,
-                               GLsizei countIn,
-                               GLboolean transpose,
-                               const GLfloat *value,
-                               uint8_t *targetData)
+bool SetFloatUniformMatrixGLSL<cols, rows>::run(unsigned int arrayElementOffset,
+                                                unsigned int elementCount,
+                                                GLsizei countIn,
+                                                GLboolean transpose,
+                                                const GLfloat *value,
+                                                uint8_t *targetData)
 {
+    const bool isSrcColumnMajor = !transpose;
+    // GLSL expects matrix uniforms to be column-major, and each column is padded to 4 rows.
+    if (isSrcColumnMajor)
+    {
+        return SetFloatUniformMatrix<true, cols, rows, true, cols, 4>(
+            arrayElementOffset, elementCount, countIn, value, targetData);
+    }
+    else
+    {
+        return SetFloatUniformMatrix<false, cols, rows, true, cols, 4>(
+            arrayElementOffset, elementCount, countIn, value, targetData);
+    }
+}
+
+bool SetFloatUniformMatrixHLSL<4, 4>::run(unsigned int arrayElementOffset,
+                                          unsigned int elementCount,
+                                          GLsizei countIn,
+                                          GLboolean transpose,
+                                          const GLfloat *value,
+                                          uint8_t *targetData)
+{
+    const bool isSrcColumnMajor = !transpose;
+    if (!isSrcColumnMajor)
+    {
+        // Both src and dst matrix both are row major and size 4x4,
+        // so a simple block copy updates all the matrices
+        constexpr size_t matrixSize = sizeof(GLfloat) * 4 * 4;
+        return SetFloatUniformMatrixSingleBlockCopy(arrayElementOffset, elementCount, countIn,
+                                                    matrixSize, value, targetData);
+    }
+    else
+    {
+        // fallback to general cases
+        return SetFloatUniformMatrix<true, 4, 4, false, 4, 4>(arrayElementOffset, elementCount,
+                                                              countIn, value, targetData);
+    }
+}
+
+template <int rows>
+bool SetFloatUniformMatrixHLSL<4, rows>::run(unsigned int arrayElementOffset,
+                                             unsigned int elementCount,
+                                             GLsizei countIn,
+                                             GLboolean transpose,
+                                             const GLfloat *value,
+                                             uint8_t *targetData)
+{
+    const bool isSrcColumnMajor = !transpose;
+    if (!isSrcColumnMajor)
+    {
+        // Both src and dst matrixs are row major and has 4 cols,
+        // a single memcpy for each matrix can do the job
+        constexpr size_t srcMatrixSize = sizeof(GLfloat) * 4 * rows;
+        return SetFloatUniformMatrixFast(arrayElementOffset, elementCount, countIn, srcMatrixSize,
+                                         value, targetData);
+    }
+    else
+    {
+        // fallback to general cases
+        return SetFloatUniformMatrix<true, 4, rows, false, 4, rows>(
+            arrayElementOffset, elementCount, countIn, value, targetData);
+    }
+}
+
+template <int cols, int rows>
+bool SetFloatUniformMatrixHLSL<cols, rows>::run(unsigned int arrayElementOffset,
+                                                unsigned int elementCount,
+                                                GLsizei countIn,
+                                                GLboolean transpose,
+                                                const GLfloat *value,
+                                                uint8_t *targetData)
+{
+    const bool isSrcColumnMajor = !transpose;
     // Internally store matrices as row-major to accomodate HLSL matrix indexing.  Each row is
     // padded to 4 columns.
-    return SetFloatUniformMatrix<cols, rows, false, 4, rows>(arrayElementOffset, elementCount,
-                                                             countIn, transpose, value, targetData);
+    if (isSrcColumnMajor)
+    {
+        return SetFloatUniformMatrix<true, cols, rows, false, 4, rows>(
+            arrayElementOffset, elementCount, countIn, value, targetData);
+    }
+    else
+    {
+        return SetFloatUniformMatrix<false, cols, rows, false, 4, rows>(
+            arrayElementOffset, elementCount, countIn, value, targetData);
+    }
 }
 
 template void GetMatrixUniform<GLint>(GLenum, GLint *, const GLint *, bool);
