@@ -412,6 +412,24 @@
       "revId": "a466885ba670f533811cc71829348ad5038da332",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64dd3f03_d89bc2aa",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-03T15:08:38Z",
+      "side": 1,
+      "message": "On the same note, the code can be further simplified if you just generate:\n\n    vec3 _ures \u003d (((dFdy(_uv_coord) * ANGLEUniforms.viewportYScale) * _uu_scale) + _uu_bias);\n\nThat is, replace `dFdy(?)` with the `(dFdy(?) * yscale)` expression (no temp variable needed, though you can have one if you find it simpler)",
+      "parentUuid": "ccf5ee67_8967513c",
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
