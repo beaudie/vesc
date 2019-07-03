@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "40aefc16_a38852f7",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 3
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-03T16:42:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91aa88ac_f56ef1bf",
+      "range": {
+        "startLine": 557,
+        "startChar": 67,
+        "endLine": 557,
+        "endChar": 105
+      },
+      "revId": "27be72051924db28708f5b65328e1f2dfff5f00b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28a5974c_33f31815",
         "filename": "src/compiler/translator/glslang.l",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "d709fc93_a3d20942",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 3
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-03T16:42:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28a5974c_33f31815",
+      "range": {
+        "startLine": 558,
+        "startChar": 8,
+        "endLine": 558,
+        "endChar": 47
+      },
+      "revId": "27be72051924db28708f5b65328e1f2dfff5f00b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab2d8c7e_fbe166c3",
         "filename": "src/tests/compiler_tests/HLSLOutput_test.cpp",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "27be72051924db28708f5b65328e1f2dfff5f00b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d135b44e_2057331b",
+        "filename": "src/tests/compiler_tests/HLSLOutput_test.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-03T16:42:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ab2d8c7e_fbe166c3",
+      "range": {
+        "startLine": 202,
+        "startChar": 3,
+        "endLine": 202,
+        "endChar": 44
+      },
+      "revId": "27be72051924db28708f5b65328e1f2dfff5f00b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
