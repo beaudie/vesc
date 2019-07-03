@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b7bb02b_dfd2d52a",
+        "filename": "src/libANGLE/renderer/Format.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-03T14:46:21Z",
+      "side": 0,
+      "message": "Why not keep this logic but move it to the constructor?",
+      "revId": "108b1c05047810207d18718574e53e9351c4b17a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

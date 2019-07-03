@@ -136,6 +136,40 @@
       "revId": "cb9bd9e984ab458814338c8cc7510a737c38f458",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "842e67ed_c5242e9e",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-03T14:46:21Z",
+      "side": 1,
+      "message": "Comment needs to be updated",
+      "revId": "cb9bd9e984ab458814338c8cc7510a737c38f458",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1915e4c9_e1d5f5b4",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-03T14:46:21Z",
+      "side": 1,
+      "message": "I\u0027m a little confused by the language. In Format, you make it very explicit: GL_INT -\u003e Sint, GL_UNSIGNED_INT -\u003eUint. and Int means either.\nBut then in ConvertVertex, BufferUtils, and potentially elsewhere, it switches back to Int explicitly meaning signed.",
+      "revId": "cb9bd9e984ab458814338c8cc7510a737c38f458",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
