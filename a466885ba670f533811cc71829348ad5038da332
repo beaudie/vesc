@@ -376,6 +376,24 @@
       "revId": "a466885ba670f533811cc71829348ad5038da332",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "484da68a_0ac3aad5",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-03T01:29:02Z",
+      "side": 1,
+      "message": "Good find! In fact, I think you need to flip x too! The reason is this:\n\nSay pixel (0, 0) has value V0 and pixel (0, 1) has value V1. If not flipped, dFdy would give you V1-V0. If flipped, you still want to get V1-V0, but you end up with V0-V1. So you need to negate all channels to get back to the desired value.\n\nMaybe the tests generate their variants in such a way that dFdy(?).x is 0, which would hide this error.",
+      "parentUuid": "b50efd43_49974c8f",
+      "revId": "a466885ba670f533811cc71829348ad5038da332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
