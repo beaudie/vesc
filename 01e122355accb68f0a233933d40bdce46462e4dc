@@ -57,6 +57,30 @@
       "revId": "01e122355accb68f0a233933d40bdce46462e4dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43abcb32_32d322f0",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2961,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T13:08:19Z",
+      "side": 1,
+      "message": "Framebuffer looks correct. See the spec:\n\n\"FRAMEBUFFER_BARRIER_BIT: Reads and writes via framebuffer object attachments after the barrier will reflect data written by shaders prior to the barrier\"\n\nReadPixels is a framebuffer read. So yeah.",
+      "parentUuid": "82076eee_aa3cf5c0",
+      "range": {
+        "startLine": 2961,
+        "startChar": 4,
+        "endLine": 2961,
+        "endChar": 47
+      },
+      "revId": "01e122355accb68f0a233933d40bdce46462e4dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
