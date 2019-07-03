@@ -25,6 +25,98 @@
     },
     {
       "key": {
+        "uuid": "4f59e20e_234fa724",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T12:10:12Z",
+      "side": 1,
+      "message": "can you fix the typos here? qualilfier -\u003e qualifier",
+      "range": {
+        "startLine": 436,
+        "startChar": 0,
+        "endLine": 438,
+        "endChar": 46
+      },
+      "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3980ce12_cf5b8c5a",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T12:10:12Z",
+      "side": 1,
+      "message": "can\u0027t you go 1.instanceName.empty() !\u003d 2.instanceName.empty()?",
+      "range": {
+        "startLine": 497,
+        "startChar": 3,
+        "endLine": 498,
+        "endChar": 88
+      },
+      "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6af16f0_c6c7ed6b",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3674,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T12:10:12Z",
+      "side": 1,
+      "message": "fyi, good practice is to pass vectors by const \u0026. it will avoid an implicit copy.",
+      "range": {
+        "startLine": 3674,
+        "startChar": 4,
+        "endLine": 3674,
+        "endChar": 47
+      },
+      "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bc6437d_a2fb61ff",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3704,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T12:10:12Z",
+      "side": 1,
+      "message": "this should also be const \u0026.",
+      "range": {
+        "startLine": 3704,
+        "startChar": 3,
+        "endLine": 3704,
+        "endChar": 37
+      },
+      "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e0f49977_51b8291c",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 3
@@ -36,6 +128,24 @@
       "writtenOn": "2019-07-03T01:39:21Z",
       "side": 1,
       "message": "I would at least create a (hash)map for uniformBlockIn fields and do a name lookup in that map here.",
+      "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b22762c5_6a4b243e",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3722,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T12:10:12Z",
+      "side": 1,
+      "message": "agree. you can combine these two functions and use a map.",
+      "parentUuid": "e0f49977_51b8291c",
       "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
