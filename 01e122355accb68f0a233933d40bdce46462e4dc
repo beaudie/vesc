@@ -16,6 +16,24 @@
       "revId": "01e122355accb68f0a233933d40bdce46462e4dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4aaeae7_b06a426b",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-07-03T06:23:12Z",
+      "side": 1,
+      "message": "Refer Memory Model of OpenGL, https://www.khronos.org/opengl/wiki/Memory_Model\nUsing glTexSubImage2D to upload texture data is coherent memory access, it is visible to subsequent reads from that texture, so it is not neccessary to synchronize texture data upload before the first dispatch.\n\"Image Load Store\" operation is \"incoherent memory access\". If memory has been modified in an incoherent fashion, any subsequent reads from that memory are not automotically guaranteed to see these changes. Furthermore, any subsequent writes to those memory locations are not guaranteed to overwrite the value written incoherently.\nIn this test case, the first \"glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT)\" ensures to finish to write texA to mTexture, and then write texB to mTexture. if there is no barrier, After the second \"glDispatchCompute\", mTexture content may be texA content, or may be mixture with texA content and texB content.\nThe second \"glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT)\" is the same.",
+      "parentUuid": "b6388f84_fd5efdc6",
+      "revId": "01e122355accb68f0a233933d40bdce46462e4dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
