@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de63bf9a_f30f8ac2",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T16:43:34Z",
+      "side": 1,
+      "message": "functions",
+      "range": {
+        "startLine": 393,
+        "startChar": 60,
+        "endLine": 393,
+        "endChar": 70
+      },
+      "revId": "6a84f9a675d72242aa31ffff50bd4a554e78f1ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64770aee_e5241fe9",
+        "filename": "src/compiler/translator/tree_util/FindFunction.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T16:43:34Z",
+      "side": 1,
+      "message": "I feel like you could merge FindMain into this as they\u0027re similar but this is more general.",
+      "revId": "6a84f9a675d72242aa31ffff50bd4a554e78f1ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e205969_24ae6de1",
+        "filename": "src/compiler/translator/tree_util/FindFunction.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T16:43:34Z",
+      "side": 1,
+      "message": "missed this one",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 17
+      },
+      "revId": "6a84f9a675d72242aa31ffff50bd4a554e78f1ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c940a51_5d7ab8fd",
+        "filename": "src/compiler/translator/tree_util/FindFunction.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T16:43:34Z",
+      "side": 1,
+      "message": "FindFirstFunctionDefinitionIndex?",
+      "range": {
+        "startLine": 18,
+        "startChar": 7,
+        "endLine": 18,
+        "endChar": 29
+      },
+      "revId": "6a84f9a675d72242aa31ffff50bd4a554e78f1ba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
