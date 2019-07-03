@@ -101,36 +101,102 @@ void WriteFloatColor(const gl::ColorF &color,
     colorWriteFunction(reinterpret_cast<const uint8_t *>(&color), destPixelData);
 }
 
-template <int cols, int rows>
-int GetFlattenedIndex(bool isColumnMajor, int col, int row)
-{
-    if (isColumnMajor)
-    {
-        return col * rows + row;
-    }
-    else
-    {
-        return row * cols + col;
-    }
-}
-
-template <typename T, int colsSrc, int rowsSrc, bool IsDstColumnMajor, int colsDst, int rowsDst>
-bool ExpandMatrix(T *target, const GLfloat *value, bool isSrcColumnMajor)
+template <typename T, int colsSrc, int rowsSrc, int colsDst, int rowsDst>
+void AssignMatrixSrcCmDstRm(T *dst, const GLfloat *src)
 {
     static_assert(colsSrc <= colsDst && rowsSrc <= rowsDst, "Can only expand!");
 
-    constexpr int kDstFlatSize = colsDst * rowsDst;
-    T staging[kDstFlatSize]    = {0};
+    int srcIndex = 0;
+    for (int c = 0; c < colsSrc; c++)
+    {
+        for (int r = 0; r < rowsSrc; r++)
+        {
+            dst[r * colsDst + c] = static_cast<T>(src[srcIndex]);
+            srcIndex++;
+        }
+    }
+}
 
+template <typename T, int colsSrc, int rowsSrc, int colsDst, int rowsDst>
+void AssignMatrixSrcCmDstCm(T *dst, const GLfloat *src)
+{
+    static_assert(colsSrc <= colsDst && rowsSrc <= rowsDst, "Can only expand!");
+
+    int srcIndex = 0;
+    for (int c = 0; c < colsSrc; c++)
+    {
+        for (int r = 0; r < rowsSrc; r++)
+        {
+            dst[rowsDst * c + r] = static_cast<T>(src[srcIndex]);
+            srcIndex++;
+        }
+    }
+}
+
+template <typename T, int colsSrc, int rowsSrc, int colsDst, int rowsDst>
+void AssignMatrixSrcRmDstCm(T *dst, const GLfloat *src)
+{
+    static_assert(colsSrc <= colsDst && rowsSrc <= rowsDst, "Can only expand!");
+
+    int srcIndex = 0;
     for (int r = 0; r < rowsSrc; r++)
     {
         for (int c = 0; c < colsSrc; c++)
         {
-            int srcIndex = GetFlattenedIndex<colsSrc, rowsSrc>(isSrcColumnMajor, c, r);
-            int dstIndex = GetFlattenedIndex<colsDst, rowsDst>(IsDstColumnMajor, c, r);
-
-            staging[dstIndex] = static_cast<T>(value[srcIndex]);
+            dst[c * rowsDst + r] = static_cast<T>(src[srcIndex]);
+            srcIndex++;
         }
+    }
+}
+
+template <typename T, int colsSrc, int rowsSrc, int colsDst, int rowsDst>
+void AssignMatrixSrcRmDstRm(T *dst, const GLfloat *src)
+{
+    static_assert(colsSrc <= colsDst && rowsSrc <= rowsDst, "Can only expand!");
+
+    int srcIndex = 0;
+    for (int r = 0; r < rowsSrc; r++)
+    {
+        for (int c = 0; c < colsSrc; c++)
+        {
+            dst[colsDst * r + c] = static_cast<T>(src[srcIndex]);
+            srcIndex++;
+        }
+    }
+}
+
+template <typename T,
+          bool IsSrcColumnMajor,
+          int colsSrc,
+          int rowsSrc,
+          bool IsDstColumnMajor,
+          int colsDst,
+          int rowsDst>
+bool AssignMatrixIfDirty(T *target, const GLfloat *value)
+{
+    constexpr int kDstFlatSize = colsDst * rowsDst;
+    T staging[kDstFlatSize]    = {0};
+
+    // Wish we could have function template specialization
+    if (IsSrcColumnMajor && IsDstColumnMajor)
+    {
+        AssignMatrixSrcCmDstCm<T, colsSrc, rowsSrc, colsDst, rowsDst>(staging, value);
+    }
+    else if (IsSrcColumnMajor && !IsDstColumnMajor)
+    {
+        AssignMatrixSrcCmDstRm<T, colsSrc, rowsSrc, colsDst, rowsDst>(staging, value);
+    }
+    else if (!IsSrcColumnMajor && !IsDstColumnMajor)
+    {
+        AssignMatrixSrcRmDstRm<T, colsSrc, rowsSrc, colsDst, rowsDst>(staging, value);
+    }
+    else if (!IsSrcColumnMajor && IsDstColumnMajor)
+    {
+        AssignMatrixSrcRmDstCm<T, colsSrc, rowsSrc, colsDst, rowsDst>(staging, value);
+    }
+    else
+    {
+        UNREACHABLE();
     }
 
     if (memcmp(target, staging, kDstFlatSize * sizeof(T)) == 0)
@@ -142,6 +208,22 @@ bool ExpandMatrix(T *target, const GLfloat *value, bool isSrcColumnMajor)
     return true;
 }
 
+template <typename T, int colsSrc, int rowsSrc, int colsDst, int rowsDst>
+bool AssignSameLayoutMatrixIfDirty(T *target, const GLfloat *value)
+{
+    static_assert(colsSrc <= colsDst && rowsSrc <= rowsDst, "Can only expand!");
+
+    constexpr int kWritableSize = colsDst * rowsDst;
+
+    if (memcmp(target, value, kWritableSize * sizeof(T)) == 0)
+    {
+        return false;
+    }
+
+    memcpy(target, value, kWritableSize * sizeof(T));
+    return true;
+}
+
 template <int colsSrc, int rowsSrc, bool IsDstColumnMajor, int colsDst, int rowsDst>
 bool SetFloatUniformMatrix(unsigned int arrayElementOffset,
                            unsigned int elementCount,
@@ -150,21 +232,44 @@ bool SetFloatUniformMatrix(unsigned int arrayElementOffset,
                            const GLfloat *value,
                            uint8_t *targetData)
 {
-    unsigned int count =
+    const unsigned int count =
         std::min(elementCount - arrayElementOffset, static_cast<unsigned int>(countIn));
 
     const unsigned int targetMatrixStride = colsDst * rowsDst;
     GLfloat *target                       = reinterpret_cast<GLfloat *>(
         targetData + arrayElementOffset * sizeof(GLfloat) * targetMatrixStride);
 
+    const bool isSrcColumnMajor = !transpose;
+
     bool dirty = false;
 
     for (unsigned int i = 0; i < count; i++)
     {
-        const bool isSrcColumnMajor = !transpose;
-        dirty = ExpandMatrix<GLfloat, colsSrc, rowsSrc, IsDstColumnMajor, colsDst, rowsDst>(
-                    target, value, isSrcColumnMajor) ||
-                dirty;
+        bool matrixDirty = false;
+        if (IsDstColumnMajor && isSrcColumnMajor && rowsDst == rowsSrc)
+        {
+            matrixDirty =
+                AssignSameLayoutMatrixIfDirty<GLfloat, colsSrc, rowsSrc, colsDst, rowsDst>(target,
+                                                                                           value);
+        }
+        else if (!IsDstColumnMajor && !isSrcColumnMajor && colsDst == colsSrc)
+        {
+            matrixDirty =
+                AssignSameLayoutMatrixIfDirty<GLfloat, colsSrc, rowsSrc, colsDst, rowsDst>(target,
+                                                                                           value);
+        }
+        else if (isSrcColumnMajor)
+        {
+            matrixDirty = AssignMatrixIfDirty<GLfloat, true, colsSrc, rowsSrc, IsDstColumnMajor,
+                                              colsDst, rowsDst>(target, value);
+        }
+        else
+        {
+            matrixDirty = AssignMatrixIfDirty<GLfloat, false, colsSrc, rowsSrc, IsDstColumnMajor,
+                                              colsDst, rowsDst>(target, value);
+        }
+
+        dirty = matrixDirty || dirty;
         target += targetMatrixStride;
         value += colsSrc * rowsSrc;
     }
