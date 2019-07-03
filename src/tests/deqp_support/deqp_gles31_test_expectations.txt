@@ -664,14 +664,14 @@
 3572 VULKAN : dEQP-GLES31.functional.tessellation_geometry_interaction.* = FAIL
 
 // SSBO:
-3561 VULKAN : dEQP-GLES31.functional.ssbo.* = SKIP
-3561 VULKAN : dEQP-GLES31.functional.state_query.integer.max_*shader_storage_block* = SKIP
-3561 VULKAN : dEQP-GLES31.functional.state_query.*shader_storage_buffer* = SKIP
-3561 VULKAN : dEQP-GLES31.functional.synchronization.*.ssbo* = SKIP
-3561 VULKAN : dEQP-GLES31.functional.shaders.opaque_type_indexing.ssbo.* = SKIP
-3561 VULKAN : dEQP-GLES31.functional.shaders.linkage*shader_storage_block* = SKIP
-3561 VULKAN : dEQP-GLES31.functional.program_interface_query.shader_storage_block.* = SKIP
-3561 VULKAN : dEQP-GLES31.functional.program_interface_query.buffer_variable.* = SKIP
+//3561 VULKAN : dEQP-GLES31.functional.ssbo.* = FAIL
+//3561 VULKAN : dEQP-GLES31.functional.state_query.integer.max_*shader_storage_block* = FAIL
+//3561 VULKAN : dEQP-GLES31.functional.state_query.*shader_storage_buffer* = FAIL
+//3561 VULKAN : dEQP-GLES31.functional.synchronization.*.ssbo* = FAIL
+//3561 VULKAN : dEQP-GLES31.functional.shaders.opaque_type_indexing.ssbo.* = FAIL
+//3561 VULKAN : dEQP-GLES31.functional.shaders.linkage*shader_storage_block* = FAIL
+//3561 VULKAN : dEQP-GLES31.functional.program_interface_query.shader_storage_block.* = FAIL
+//3561 VULKAN : dEQP-GLES31.functional.program_interface_query.buffer_variable.* = SKIP
 
 // Atomic counters:
 3566 VULKAN : dEQP-GLES31.functional.atomic_counter.* = FAIL

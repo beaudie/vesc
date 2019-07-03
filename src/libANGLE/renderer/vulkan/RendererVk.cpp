@@ -1340,6 +1340,12 @@ uint32_t RendererVk::getMaxUniformBlocks() const
                               gl::IMPLEMENTATION_MAX_UNIFORM_BUFFER_BINDINGS);
 }
 
+uint32_t RendererVk::getMaxStorageBlocks() const
+{
+    return std::min<uint32_t>(mPhysicalDeviceProperties.limits.maxDescriptorSetStorageBuffers,
+                              gl::IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS);
+}
+
 uint32_t RendererVk::getMaxActiveTextures() const
 {
     // TODO(lucferron): expose this limitation to GL in Context Caps
