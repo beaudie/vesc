@@ -407,7 +407,7 @@ class ProgramState final : angle::NonCopyable
     UniformBlockBindingMask mActiveUniformBlockBindings;
 
     std::vector<sh::Attribute> mAttributes;
-    angle::BitSet<MAX_VERTEX_ATTRIBS> mActiveAttribLocationsMask;
+    AttributesMask mActiveAttribLocationsMask;
     unsigned int mMaxActiveAttribLocation;
     ComponentTypeMask mAttributesTypeMask;
     // mAttributesMask is identical to mActiveAttribLocationsMask with built-in attributes removed.

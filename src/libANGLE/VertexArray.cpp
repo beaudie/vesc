@@ -443,6 +443,11 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
     mState.mEnabledAttributesMask.set(attribIndex, enabledState);
     mState.mCachedEnabledMappedArrayBuffers =
         mState.mCachedMappedArrayBuffers & mState.mEnabledAttributesMask;
+
+    ComponentTypeMask doubleMask(mState.mEnabledAttributesMask.to_ulong());
+    doubleMask |= doubleMask << kMaxComponentTypeMaskIndex;
+    mState.mCachedEnabledAttributesTypeMask     = mState.mVertexAttributesTypeMask & doubleMask;
+    mState.mDisabledAttributesComponentTypeMask = ~doubleMask;
 }
 
 ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context,

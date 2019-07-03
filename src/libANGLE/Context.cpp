@@ -8458,6 +8458,24 @@ void StateCache::initialize(Context *context)
     updateVertexAttribTypesValidation(context);
 }
 
+ANGLE_INLINE void StateCache::updateMismatchedAttribsMask(const State &glState)
+{
+    const VertexArray *vao = glState.getVertexArray();
+
+    ComponentTypeMask programAttribTypeBits = glState.getProgram()->getAttributesTypeMask();
+    ComponentTypeMask currentValueTypeBits =
+        glState.getCurrentValuesTypeMask() & vao->getDisabledAttributesComponentTypeMask();
+
+    ComponentTypeMask attribTypeBits = vao->getEnabledAttributesTypeMask() | currentValueTypeBits;
+
+    ComponentTypeMask mismatchedTypeBits = attribTypeBits ^ programAttribTypeBits;
+    AttributesMask mismatchedAttribBits(
+        (mismatchedTypeBits | (mismatchedTypeBits >> kMaxComponentTypeMaskIndex)).to_ulong());
+
+    mCachedMismatchedAttribsMask =
+        mismatchedAttribBits & glState.getProgram()->getActiveAttribLocationsMask();
+}
+
 void StateCache::updateActiveAttribsMask(Context *context)
 {
     bool isGLES1         = context->isGLES1();
@@ -8485,6 +8503,8 @@ void StateCache::updateActiveAttribsMask(Context *context)
     mCachedActiveBufferedAttribsMask = activeEnabled & ~clientAttribs;
     mCachedActiveDefaultAttribsMask  = activeAttribs & ~enabledAttribs;
     mCachedHasAnyEnabledClientAttrib = (clientAttribs & enabledAttribs).any();
+
+    updateMismatchedAttribsMask(glState);
 }
 
 void StateCache::updateVertexElementLimitsImpl(Context *context)
@@ -8614,6 +8634,9 @@ void StateCache::onStencilStateChange(Context *context)
 void StateCache::onDefaultVertexAttributeChange(Context *context)
 {
     updateBasicDrawStatesError();
+
+    const State &glState = context->getState();
+    updateMismatchedAttribsMask(glState);
 }
 
 void StateCache::onActiveTextureChange(Context *context)

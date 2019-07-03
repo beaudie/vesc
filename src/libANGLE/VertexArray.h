@@ -78,6 +78,7 @@ class VertexArrayState final : angle::NonCopyable
     SubjectBindingPointer<Buffer> mElementArrayBuffer;
     std::vector<VertexBinding> mVertexBindings;
     AttributesMask mEnabledAttributesMask;
+    ComponentTypeMask mDisabledAttributesComponentTypeMask;
     ComponentTypeMask mVertexAttributesTypeMask;
 
     // This is a performance optimization for buffer binding. Allows element array buffer updates.
@@ -93,6 +94,7 @@ class VertexArrayState final : angle::NonCopyable
     // Used for validation cache. Indexed by attribute.
     AttributesMask mCachedMappedArrayBuffers;
     AttributesMask mCachedEnabledMappedArrayBuffers;
+    ComponentTypeMask mCachedEnabledAttributesTypeMask;
 };
 
 class VertexArray final : public angle::ObserverInterface,
@@ -257,7 +259,14 @@ class VertexArray final : public angle::ObserverInterface,
     angle::Result syncState(const Context *context);
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
 
-    ComponentTypeMask getAttributesTypeMask() const { return mState.mVertexAttributesTypeMask; }
+    ComponentTypeMask getEnabledAttributesTypeMask() const
+    {
+        return mState.mCachedEnabledAttributesTypeMask;
+    }
+    ComponentTypeMask getDisabledAttributesComponentTypeMask() const
+    {
+        return mState.mDisabledAttributesComponentTypeMask;
+    }
     AttributesMask getAttributesMask() const { return mState.mEnabledAttributesMask; }
 
     void onBindingChanged(const Context *context, int incr);
