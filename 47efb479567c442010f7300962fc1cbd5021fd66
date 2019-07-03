@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b6a9c44_664d7e1f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-07-03T02:55:01Z",
+      "side": 1,
+      "message": "Only do the merge if we have set the blob cache callbacks.",
+      "revId": "47efb479567c442010f7300962fc1cbd5021fd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "864dc6bb_20772dc2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1302,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-07-03T02:55:01Z",
+      "side": 1,
+      "message": "I can add a return value check here if we have done a merge inside onGetPipelineCache, and then leave mPipelineCacheInitialized still false.\nIn this way, we will try to init the pipeline cache every time when creating a pipeline, if it is not initialized.\nBut I think maybe it is unnecessary, as the blob cache callbacks setting should suppose to happen at EGL init stage, so we don\u0027t expect app will do this setting when it has start to build pipeline.\nHow do you think?",
+      "revId": "47efb479567c442010f7300962fc1cbd5021fd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
