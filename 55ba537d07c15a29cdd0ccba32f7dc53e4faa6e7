@@ -262,6 +262,30 @@
     },
     {
       "key": {
+        "uuid": "3ddd5f9d_2dd44273",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7686,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T13:35:55Z",
+      "side": 1,
+      "message": "Yeah, Intellisense is pretty bad. I recommend Visual Assist: https://www.wholetomato.com/",
+      "parentUuid": "36625263_32c248a6",
+      "range": {
+        "startLine": 7686,
+        "startChar": 46,
+        "endLine": 7686,
+        "endChar": 71
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a63b54cb_61c49be6",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 9
@@ -898,6 +922,30 @@
       "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1dcacc0_da24314a",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T13:35:55Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6c797f33_46c8c81e",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 62
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

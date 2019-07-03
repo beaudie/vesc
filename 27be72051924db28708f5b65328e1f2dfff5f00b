@@ -46,6 +46,30 @@
       "revId": "27be72051924db28708f5b65328e1f2dfff5f00b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19e5dcbe_4c689ace",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T13:35:55Z",
+      "side": 0,
+      "message": "Yeah, exactly. Applies to 2D array.",
+      "parentUuid": "522f04d6_d5a6f9e4",
+      "range": {
+        "startLine": 364,
+        "startChar": 8,
+        "endLine": 364,
+        "endChar": 58
+      },
+      "revId": "27be72051924db28708f5b65328e1f2dfff5f00b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
