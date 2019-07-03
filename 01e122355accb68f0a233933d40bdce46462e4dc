@@ -34,6 +34,29 @@
       "revId": "01e122355accb68f0a233933d40bdce46462e4dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82076eee_aa3cf5c0",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2961,
+      "author": {
+        "id": 1166444
+      },
+      "writtenOn": "2019-07-03T10:13:33Z",
+      "side": 1,
+      "message": "@Jamie, Do  you think it is right to use GL_FRAMEBUFFER_BARRIER_BIT here? In previous cases, GL_TEXTURE_UPDATE_BARRIER_BIT was used between glDispatchCompute(with image load store operations) and glReadPixels. I think GL_FRAMEBUFFER_BARRIER_BIT is correct, but when I correct them in https://chromium-review.googlesource.com/c/angle/angle/+/1687591, bots will fail.",
+      "range": {
+        "startLine": 2961,
+        "startChar": 4,
+        "endLine": 2961,
+        "endChar": 47
+      },
+      "revId": "01e122355accb68f0a233933d40bdce46462e4dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
