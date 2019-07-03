@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fed55999_3ed0ccc3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-03T18:13:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1067c553_d560ca68",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 65
+      },
+      "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f59e20e_234fa724",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e79ca0b_ee9289bc",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-03T18:13:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f59e20e_234fa724",
+      "range": {
+        "startLine": 436,
+        "startChar": 0,
+        "endLine": 438,
+        "endChar": 46
+      },
+      "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "174d0cfc_bc2bb847",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-03T18:13:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3980ce12_cf5b8c5a",
+      "range": {
+        "startLine": 497,
+        "startChar": 3,
+        "endLine": 498,
+        "endChar": 88
+      },
+      "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b6af16f0_c6c7ed6b",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 3
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "6157eb2f_c77d1598",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3674,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-03T18:13:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6af16f0_c6c7ed6b",
+      "range": {
+        "startLine": 3674,
+        "startChar": 4,
+        "endLine": 3674,
+        "endChar": 47
+      },
+      "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2bc6437d_a2fb61ff",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 3
@@ -114,6 +210,30 @@
       "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51d5a6ad_093a8f29",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3704,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-03T18:13:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bc6437d_a2fb61ff",
+      "range": {
+        "startLine": 3704,
+        "startChar": 3,
+        "endLine": 3704,
+        "endChar": 37
+      },
+      "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -146,6 +266,24 @@
       "side": 1,
       "message": "agree. you can combine these two functions and use a map.",
       "parentUuid": "e0f49977_51b8291c",
+      "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "923ca27e_f362f4cb",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3722,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-03T18:13:13Z",
+      "side": 1,
+      "message": "Yup, using maps here simplifies the code quite a bit and should speed things up.",
+      "parentUuid": "b22762c5_6a4b243e",
       "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
