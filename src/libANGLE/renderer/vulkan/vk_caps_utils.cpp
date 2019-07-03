@@ -210,9 +210,11 @@ void RendererVk::ensureCapsInitialized() const
 
     const uint32_t maxPerStageStorageBuffers =
         mPhysicalDeviceProperties.limits.maxPerStageDescriptorStorageBuffers;
-    mNativeCaps.maxShaderStorageBlocks[gl::ShaderType::Vertex]   = maxPerStageStorageBuffers;
-    mNativeCaps.maxShaderStorageBlocks[gl::ShaderType::Fragment] = maxPerStageStorageBuffers;
-    mNativeCaps.maxCombinedShaderStorageBlocks                   = maxPerStageStorageBuffers;
+    mNativeCaps.maxShaderStorageBlocks[gl::ShaderType::Vertex] =
+        mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics ? maxPerStageStorageBuffers : 0;
+    mNativeCaps.maxShaderStorageBlocks[gl::ShaderType::Fragment] =
+        mPhysicalDeviceFeatures.fragmentStoresAndAtomics ? maxPerStageStorageBuffers : 0;
+    mNativeCaps.maxCombinedShaderStorageBlocks = maxPerStageStorageBuffers;
 
     // Fill in additional limits for UBOs and SSBOs.
     mNativeCaps.maxUniformBufferBindings = maxPerStageUniformBuffers;
