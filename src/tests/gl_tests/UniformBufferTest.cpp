@@ -1513,6 +1513,25 @@ TEST_P(UniformBufferTest, DependentBufferChange)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// If a buffer is used without calling glBufferData, when glBindBufferRange is called with an
+// offset that's a non-zero multiple of the buffer offset alignment, it should still be handled
+// by ANGLE. This triggered a crash on the Vulkan backend: http://anglebug.com/3642
+TEST_P(UniformBufferTest, InvalidUniformRangeValidNonZeroOffset)
+{
+    // http://anglebug.com/3642
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
+    GLint alignment = 0;
+    glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &alignment);
+
+    glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, mUniformBuffer, alignment, 4);
+
+    glUniformBlockBinding(mProgram, mUniformBufferIndex, 0);
+    drawQuad(mProgram, essl3_shaders::PositionAttrib(), 0.5f);
+    // Draw call triggered a crash in Vulkan, this test shouldn't crash
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(UniformBufferTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES(), ES3_VULKAN());
