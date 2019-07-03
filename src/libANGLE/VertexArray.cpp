@@ -70,6 +70,9 @@ VertexArrayState::VertexArrayState(VertexArray *vertexArray,
 
     // Initially all attributes start as "client" with no buffer bound.
     mClientMemoryAttribsMask.set();
+
+    // Initially all attributes are disabled.
+    mDisabledAttributesComponentTypeMask.set();
 }
 
 VertexArrayState::~VertexArrayState() {}
@@ -443,6 +446,11 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
     mState.mEnabledAttributesMask.set(attribIndex, enabledState);
     mState.mCachedEnabledMappedArrayBuffers =
         mState.mCachedMappedArrayBuffers & mState.mEnabledAttributesMask;
+
+    ComponentTypeMask enabledTypeMask(mState.mEnabledAttributesMask.to_ulong());
+    enabledTypeMask |= enabledTypeMask << kMaxComponentTypeMaskIndex;
+    mState.mEnabledAttributesComponentTypeMask  = enabledTypeMask;
+    mState.mDisabledAttributesComponentTypeMask = ~enabledTypeMask;
 }
 
 ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context,

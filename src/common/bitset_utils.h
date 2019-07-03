@@ -543,6 +543,15 @@ inline angle::BitSetT<N, BitsT, ParamT> operator&(const angle::BitSetT<N, BitsT,
 }
 
 template <size_t N, typename BitsT, typename ParamT>
+inline angle::BitSetT<N, BitsT, ParamT> operator&(const angle::BitSetT<N, BitsT, ParamT> &lhs,
+                                                  BitsT rhs)
+{
+    angle::BitSetT<N, BitsT, ParamT> result(lhs);
+    result &= rhs;
+    return result;
+}
+
+template <size_t N, typename BitsT, typename ParamT>
 inline angle::BitSetT<N, BitsT, ParamT> operator|(const angle::BitSetT<N, BitsT, ParamT> &lhs,
                                                   const angle::BitSetT<N, BitsT, ParamT> &rhs)
 {
@@ -552,11 +561,29 @@ inline angle::BitSetT<N, BitsT, ParamT> operator|(const angle::BitSetT<N, BitsT,
 }
 
 template <size_t N, typename BitsT, typename ParamT>
+inline angle::BitSetT<N, BitsT, ParamT> operator|(const angle::BitSetT<N, BitsT, ParamT> &lhs,
+                                                  BitsT rhs)
+{
+    angle::BitSetT<N, BitsT, ParamT> result(lhs);
+    result |= rhs;
+    return result;
+}
+
+template <size_t N, typename BitsT, typename ParamT>
 inline angle::BitSetT<N, BitsT, ParamT> operator^(const angle::BitSetT<N, BitsT, ParamT> &lhs,
                                                   const angle::BitSetT<N, BitsT, ParamT> &rhs)
 {
     angle::BitSetT<N, BitsT, ParamT> result(lhs);
     result ^= rhs.bits();
+    return result;
+}
+
+template <size_t N, typename BitsT, typename ParamT>
+inline angle::BitSetT<N, BitsT, ParamT> operator^(const angle::BitSetT<N, BitsT, ParamT> &lhs,
+                                                  BitsT rhs)
+{
+    angle::BitSetT<N, BitsT, ParamT> result(lhs);
+    result ^= rhs;
     return result;
 }
 

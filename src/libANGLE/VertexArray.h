@@ -78,6 +78,8 @@ class VertexArrayState final : angle::NonCopyable
     SubjectBindingPointer<Buffer> mElementArrayBuffer;
     std::vector<VertexBinding> mVertexBindings;
     AttributesMask mEnabledAttributesMask;
+    ComponentTypeMask mEnabledAttributesComponentTypeMask;
+    ComponentTypeMask mDisabledAttributesComponentTypeMask;
     ComponentTypeMask mVertexAttributesTypeMask;
 
     // This is a performance optimization for buffer binding. Allows element array buffer updates.
@@ -198,7 +200,7 @@ class VertexArray final : public angle::ObserverInterface,
     // Observer implementation
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
-    // Dirty bits for VertexArrays use a heirarchical design. At the top level, each attribute
+    // Dirty bits for VertexArrays use a hierarchical design. At the top level, each attribute
     // has a single dirty bit. Then an array of MAX_ATTRIBS dirty bits each has a dirty bit for
     // enabled/pointer/format/binding. Bindings are handled similarly. Note that because the
     // total number of dirty bits is 33, it will not be as fast on a 32-bit machine, which
@@ -257,7 +259,14 @@ class VertexArray final : public angle::ObserverInterface,
     angle::Result syncState(const Context *context);
     bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
 
-    ComponentTypeMask getAttributesTypeMask() const { return mState.mVertexAttributesTypeMask; }
+    ComponentTypeMask getEnabledAttributesTypeMask() const
+    {
+        return mState.mEnabledAttributesComponentTypeMask & mState.mVertexAttributesTypeMask;
+    }
+    ComponentTypeMask getDisabledAttributesComponentTypeMask() const
+    {
+        return mState.mDisabledAttributesComponentTypeMask;
+    }
     AttributesMask getAttributesMask() const { return mState.mEnabledAttributesMask; }
 
     void onBindingChanged(const Context *context, int incr);

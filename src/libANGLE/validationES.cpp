@@ -390,21 +390,7 @@ bool ValidateFragmentShaderColorBufferTypeMatch(Context *context)
 
 bool ValidateVertexShaderAttributeTypeMatch(Context *context)
 {
-    const auto &glState    = context->getState();
-    const Program *program = context->getState().getLinkedProgram(context);
-    const VertexArray *vao = context->getState().getVertexArray();
-
-    unsigned long stateCurrentValuesTypeBits = glState.getCurrentValuesTypeMask().to_ulong();
-    unsigned long vaoAttribTypeBits          = vao->getAttributesTypeMask().to_ulong();
-    unsigned long vaoAttribEnabledMask       = vao->getAttributesMask().to_ulong();
-
-    vaoAttribEnabledMask |= vaoAttribEnabledMask << kMaxComponentTypeMaskIndex;
-    vaoAttribTypeBits = (vaoAttribEnabledMask & vaoAttribTypeBits);
-    vaoAttribTypeBits |= (~vaoAttribEnabledMask & stateCurrentValuesTypeBits);
-
-    return ValidateComponentTypeMasks(program->getAttributesTypeMask().to_ulong(),
-                                      vaoAttribTypeBits, program->getAttributesMask().to_ulong(),
-                                      0xFFFF);
+    return !context->getStateCache().hasAnyMismatchedAttrib();
 }
 
 bool IsCompatibleDrawModeWithGeometryShader(PrimitiveMode drawMode,
