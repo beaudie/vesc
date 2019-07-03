@@ -1374,7 +1374,7 @@ void main()
     glUseProgram(computeProgram);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, testBuffer);
     glDispatchCompute(1, 1, 1);
-    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+    glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 
     // Draw again to verify that testBuffer has been changed.
     glUseProgram(mProgram);
