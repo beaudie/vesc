@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "d92d1ec3_d5c0b136",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T12:43:48Z",
+      "side": 1,
+      "message": "see the TODO you removed.",
+      "parentUuid": "5f529cd5_6c665f52",
+      "range": {
+        "startLine": 369,
+        "startChar": 17,
+        "endLine": 369,
+        "endChar": 35
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "90b5c2ba_747a1b7e",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 9
@@ -178,6 +202,30 @@
       "side": 1,
       "message": "This comes from gl2ext.h",
       "parentUuid": "90b5c2ba_747a1b7e",
+      "range": {
+        "startLine": 7686,
+        "startChar": 46,
+        "endLine": 7686,
+        "endChar": 71
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "235219d3_8e93bc1f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7686,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T12:43:48Z",
+      "side": 1,
+      "message": "It\u0027s duplicated with the non _OES in gl3.h. We don\u0027t qualify the extension suffixes when they aren\u0027t necessary. Probably should make this into a minor style rule in the style guide.",
+      "parentUuid": "288a8b6c_97e11190",
       "range": {
         "startLine": 7686,
         "startChar": 46,
@@ -402,6 +450,30 @@
     },
     {
       "key": {
+        "uuid": "b2343fff_5294d170",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1655,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T12:43:48Z",
+      "side": 1,
+      "message": "If you don\u0027t mind too much could you enable the extension and just skip the test? It\u0027s a bug we\u0027ll need to fix for the Vulkan milestone. You could also address this in a follow-up patch.",
+      "parentUuid": "871e7a5f_00e66310",
+      "range": {
+        "startLine": 1655,
+        "startChar": 4,
+        "endLine": 1655,
+        "endChar": 57
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "343499f5_21555924",
         "filename": "src/libANGLE/renderer/d3d/d3d9/renderer9_utils.cpp",
         "patchSetId": 9
@@ -508,6 +580,30 @@
       "side": 1,
       "message": "Geoff, this is causing TextureParameterTest.NegativeEnum/ES1_OpenGLES to fail because it allows it to query GL_TEXTURE_3D.\n\nShould the test be updated somehow?  It looks like the glTexParameteri call is being routed to entry_points_gles_2_0_autogen.cpp instead of entry_points_gles_1_0_autogen.cpp, so we can\u0027t validate it against ES1 limitations.\n\nI\u0027d like to leave this off until we figure out that cause.  Filed anglebug.com/3638 to track it.",
       "parentUuid": "5ee97bbf_bbb18a11",
+      "range": {
+        "startLine": 1415,
+        "startChar": 45,
+        "endLine": 1415,
+        "endChar": 50
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c37b3f1e_05b67654",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1415,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T12:43:48Z",
+      "side": 1,
+      "message": "Same comment here.",
+      "parentUuid": "8adecbf7_abc466c5",
       "range": {
         "startLine": 1415,
         "startChar": 45,
@@ -685,6 +781,30 @@
     },
     {
       "key": {
+        "uuid": "a8d68de0_c5e29d4e",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T12:43:48Z",
+      "side": 1,
+      "message": "Right. I just didn\u0027t think rgba8 was a new format in ES 3.0.",
+      "parentUuid": "d042ea05_71b62848",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 62
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4330330e_4a47662d",
         "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
         "patchSetId": 9
@@ -744,6 +864,30 @@
       "side": 1,
       "message": "Narrowed this down to PIXEL 2 devices.  Will try some more Android devices.",
       "parentUuid": "afd0adeb_f3ffc2ab",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 80
+      },
+      "revId": "55ba537d07c15a29cdd0ccba32f7dc53e4faa6e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5d1f320_9ddada7c",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T12:43:48Z",
+      "side": 1,
+      "message": "I thought Shabi added support for ASTC but I could be mistaken.",
+      "parentUuid": "607aaa60_80d6d073",
       "range": {
         "startLine": 51,
         "startChar": 0,
