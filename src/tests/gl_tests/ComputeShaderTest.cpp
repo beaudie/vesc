@@ -54,7 +54,7 @@ class ComputeShaderTest : public ANGLETest
         glDispatchCompute(1, 1, 1);
         EXPECT_GL_NO_ERROR();
 
-        glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+        glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
 
         T outputValues[kWidth * kHeight] = {};
         glUseProgram(0);
@@ -425,7 +425,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_ATOMIC_COUNTER_BARRIER_BIT);
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
     void *mappedBuffer =
         glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint) * 3, GL_MAP_READ_BIT);
     memcpy(bufferData, mappedBuffer, sizeof(bufferData));
@@ -451,7 +451,7 @@ void main()
 
     glUseProgram(program0);
     glDispatchCompute(1, 1, 1);
-    glMemoryBarrier(GL_ATOMIC_COUNTER_BARRIER_BIT);
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
     mappedBuffer =
         glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(GLuint) * 3, GL_MAP_READ_BIT);
     memcpy(bufferData, mappedBuffer, sizeof(bufferData));
@@ -624,7 +624,7 @@ void main()
     glDispatchComputeIndirect(0);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     glUseProgram(0);
     GLuint outputValues[kWidth][kHeight];
     GLuint expectedValue = 100u;
@@ -689,7 +689,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     glUseProgram(0);
     GLuint outputValues[2][1];
     GLuint expectedValue = 100;
@@ -752,7 +752,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     glUseProgram(0);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, mFramebuffer);
 
@@ -1032,7 +1032,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     GLuint outputValues[kWidth * kHeight];
     constexpr GLuint expectedValue = 150;
     glUseProgram(0);
@@ -1094,7 +1094,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     GLuint outputValues[kWidth * kHeight];
     constexpr GLuint expectedValue = 200;
     glUseProgram(0);
@@ -1156,7 +1156,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     GLuint outputValues[kWidth * kHeight];
     constexpr GLuint expectedValue = 200;
     glUseProgram(0);
@@ -1226,7 +1226,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     GLuint outputValues[kWidth * kHeight];
     constexpr GLuint expectedValue = 200;
     glUseProgram(0);
@@ -1307,7 +1307,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     GLuint outputValues[kWidth * kHeight];
     constexpr GLuint expectedValue = 200;
     glUseProgram(0);
@@ -1376,7 +1376,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     glUseProgram(0);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
     glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture[1], 0, 0);
@@ -1446,7 +1446,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     glUseProgram(0);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
     glFramebufferTextureLayer(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture[1], 0, 0);
@@ -1473,7 +1473,7 @@ void main()
 TEST_P(ComputeShaderTest, BindImageTextureWithOneLayerTextureCube)
 {
     // Missing image support in Vulkan.  http://anglebug.com/3563
-    ANGLE_SKIP_TEST_IF(IsVulkan());
+    ANGLE_SKIP_TEST_IF(IsVulkan() || (IsNVIDIA() && IsOpenGL() && IsLinux()));
 
     GLTexture texture[2];
     GLFramebuffer framebuffer;
@@ -1524,7 +1524,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     glUseProgram(0);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
 
@@ -1558,7 +1558,7 @@ void main()
 TEST_P(ComputeShaderTest, BindImageTextureWithMixTextureTypes)
 {
     // Missing image support in Vulkan.  http://anglebug.com/3563
-    ANGLE_SKIP_TEST_IF(IsVulkan());
+    ANGLE_SKIP_TEST_IF(IsVulkan() || (IsNVIDIA() && IsOpenGL() && IsLinux()));
 
     GLTexture texture[4];
     GLFramebuffer framebuffer;
@@ -1630,7 +1630,7 @@ TEST_P(ComputeShaderTest, BindImageTextureWithMixTextureTypes)
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     glUseProgram(0);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
 
@@ -1754,7 +1754,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     GLuint outputValues[kWidth * kHeight];
     constexpr GLuint kExpectedValue = 4;
     glUseProgram(0);
@@ -2282,7 +2282,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     GLuint outputValues[kWidth * kHeight * 4];
     glUseProgram(0);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
@@ -2338,14 +2338,14 @@ void main()
     glBindImageTexture(1, texture[1], 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI);
 
     glDispatchCompute(1, 1, 1);
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
     EXPECT_GL_NO_ERROR();
 
     glBindImageTexture(0, texture[1], 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
     glBindImageTexture(1, texture[2], 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI);
 
     glDispatchCompute(1, 1, 1);
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     EXPECT_GL_NO_ERROR();
 
     GLuint outputValue;
@@ -2398,14 +2398,14 @@ void main()
     glBindImageTexture(1, texture[1], 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI);
 
     glDispatchCompute(1, 1, 1);
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
     EXPECT_GL_NO_ERROR();
 
     glBindImageTexture(0, texture[2], 0, GL_FALSE, 0, GL_READ_ONLY, GL_R32UI);
     glBindImageTexture(1, texture[0], 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_R32UI);
 
     glDispatchCompute(1, 1, 1);
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     EXPECT_GL_NO_ERROR();
 
     GLuint outputValue;
@@ -2796,7 +2796,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 
     glUniform1ui(glGetUniformLocation(program, "factor"), 3);
     EXPECT_GL_NO_ERROR();
@@ -2804,7 +2804,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     GLuint outputValues[kWidth * kHeight];
     GLuint expectedValue = 600;
     glUseProgram(0);
@@ -2946,7 +2946,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     GLuint outputValues[kWidth2 * kHeight2 * 4];
     constexpr GLuint expectedValue[] = {4, 2};
     glUseProgram(0);
@@ -3013,7 +3013,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     GLuint outputValues;
     constexpr GLuint expectedValue = 2;
     glUseProgram(0);
@@ -3075,7 +3075,7 @@ void main()
     glDispatchCompute(1, 1, 1);
     EXPECT_GL_NO_ERROR();
 
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
     GLuint outputValues;
     constexpr GLuint expectedValue = 3;
     glUseProgram(0);
@@ -3252,7 +3252,6 @@ void main(void) {
     glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
 
     glDispatchCompute(1, 1, 1);
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
     EXPECT_GL_NO_ERROR();
 
     glUseProgram(program);
@@ -3326,12 +3325,12 @@ void main(void) {
     EXPECT_GL_NO_ERROR();
 
     glDispatchCompute(1, 1, 1);
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
     EXPECT_GL_NO_ERROR();
 
     glUniform1f(glGetUniformLocation(csProgram, "factor"), 1.0);
     glDispatchCompute(1, 1, 1);
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_TEXTURE_FETCH_BARRIER_BIT);
     EXPECT_GL_NO_ERROR();
 
     glUseProgram(program);
@@ -3401,7 +3400,7 @@ void main(void) {
     glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
 
     glDispatchCompute(1, 1, 1);
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_TEXTURE_FETCH_BARRIER_BIT);
     EXPECT_GL_NO_ERROR();
 
     glUseProgram(program);
@@ -3415,7 +3414,7 @@ void main(void) {
 
     glUseProgram(csProgram);
     glDispatchCompute(1, 1, 1);
-    glMemoryBarrier(GL_TEXTURE_UPDATE_BARRIER_BIT);
+    glMemoryBarrier(GL_TEXTURE_FETCH_BARRIER_BIT);
     EXPECT_GL_NO_ERROR();
 
     glUseProgram(program);
