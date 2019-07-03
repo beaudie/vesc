@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1067c553_d560ca68",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-03T01:39:21Z",
+      "side": 1,
+      "message": "Vulkan: fix ...",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 65
+      },
+      "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0f49977_51b8291c",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3722,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-03T01:39:21Z",
+      "side": 1,
+      "message": "I would at least create a (hash)map for uniformBlockIn fields and do a name lookup in that map here.",
+      "revId": "0d6558c0f97a5bbbdd608b27367ba07afc654a6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
