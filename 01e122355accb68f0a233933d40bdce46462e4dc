@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "c30d5d2e_be323153",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2957,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-03T14:16:10Z",
+      "side": 1,
+      "message": "Good to know data upload synchronization is automatic.\n\nRegarding the barrier, I do agree that there should be an execution barrier. Thinking in Vulkan though, they shouldn\u0027t need a **memory** barrier (hence why I was thinking of glMemoryBarrier(0), if that exists).\n\nThe Memory_Model wiki page is not very detailed, and if the spec is just as underspecified, then perhaps in OpenGL world this is what should be done indeed.",
+      "parentUuid": "d4aaeae7_b06a426b",
+      "revId": "01e122355accb68f0a233933d40bdce46462e4dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "82076eee_aa3cf5c0",
         "filename": "src/tests/gl_tests/StateChangeTest.cpp",
         "patchSetId": 2
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "Framebuffer looks correct. See the spec:\n\n\"FRAMEBUFFER_BARRIER_BIT: Reads and writes via framebuffer object attachments after the barrier will reflect data written by shaders prior to the barrier\"\n\nReadPixels is a framebuffer read. So yeah.",
       "parentUuid": "82076eee_aa3cf5c0",
+      "range": {
+        "startLine": 2961,
+        "startChar": 4,
+        "endLine": 2961,
+        "endChar": 47
+      },
+      "revId": "01e122355accb68f0a233933d40bdce46462e4dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51761972_97d9857e",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2961,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-03T14:16:10Z",
+      "side": 1,
+      "message": "You probably need both `GL_SHADER_IMAGE_ACCESS_BARRIER_BIT` and `FRAMEBUFFER_BARRIER_BIT`",
+      "parentUuid": "43abcb32_32d322f0",
       "range": {
         "startLine": 2961,
         "startChar": 4,
