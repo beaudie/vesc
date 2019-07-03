@@ -84,6 +84,24 @@
       "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c795789_ea98f69e",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3714,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-03T19:46:51Z",
+      "side": 1,
+      "message": "The style guide has some advice on what to do with auto in for loops:\n\nhttps://google.github.io/styleguide/cppguide.html#auto",
+      "parentUuid": "624f4b67_b62c2c33",
+      "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
