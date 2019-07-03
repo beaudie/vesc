@@ -285,4 +285,10 @@ egl::Error EGLSyncVk::getStatus(const egl::Display *display, EGLint *outStatus)
     return egl::NoError();
 }
 
+egl::Error EGLSyncVk::dupNativeFenceFD(const egl::Display *display, EGLint *result) const
+{
+    UNREACHABLE();
+    return egl::EglBadDisplay();
+}
+
 }  // namespace rx
