@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "cbb9c9a6_7fbb753e",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3676,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-03T21:17:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ab7a17b_fccd7dde",
+      "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4058ddc9_ebd732d6",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "f143e607_c101c12e",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3702,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-03T21:17:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4058ddc9_ebd732d6",
+      "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "65b87bb7_a5ae39fb",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 4
@@ -50,6 +86,24 @@
       "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4180fc5_d9c647b7",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3706,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-03T21:17:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65b87bb7_a5ae39fb",
+      "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -99,6 +153,24 @@
       "side": 1,
       "message": "The style guide has some advice on what to do with auto in for loops:\n\nhttps://google.github.io/styleguide/cppguide.html#auto",
       "parentUuid": "624f4b67_b62c2c33",
+      "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dca3245_ce23e246",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3714,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-03T21:17:55Z",
+      "side": 1,
+      "message": "While typing out the explanation I found a bug in this version.   I actually need to be storing a list of all of the non-matching uniform blocks that contain the same field name, since it\u0027s required that the name, type, and precision of a field match for it to be a name conflict error.   Presumably it\u0027s possible for multiple uniform blocks to exist across each of the shaders with the same field name, but different types for those fields, where I was just keep the first uniform block I found.\n\nHowever, even in the new version, I\u0027ll still need to loop through each of the uniform blocks field\u0027s to find the field name that matches.   This is because I need 2 pieces of information for each field name:\n1.) The uniform block, so I can determine if it\u0027s the same uniform block, but in a different shader.\n2.) The field, so I can determine if the name, type, and precision all match.\n\nIMO, the simplest version is to keep a handle on the uniform block and look for the field when I find a potential conflict.   If I just keep a list of uniform block fields, I don\u0027t know which uniform block they belong to, so I don\u0027t know if they are the matching uniform blocks (which would not be an error).   As you point out though, this could be a lot of extra looping if a lot of non-matching unnamed uniform blocks have a lot of fields with matching names.   I don\u0027t know how common that case is though.\n\nFor an more concrete example:\ndEQP-GLES31.functional.shaders.linkage.es31.uniform.block.differing_precision\n\nVertex shader:\n    #version 310 es\n\n    uniform Block\n    {\n        highp vec4 val;\n    };\n\n    in highp vec4 dEQP_Position;\n\n    out mediump float res;\n    void main()\n    {\n        res \u003d val.x;\n        gl_Position \u003d dEQP_Position;\n\n    }\n\nFragment shader:\n    #version 310 es\n\n    uniform Block\n    {\n        mediump vec4 val;\n    };\n\n    precision mediump float;\n    layout(location \u003d 0) out mediump vec4 dEQP_FragColor;\n\n    in mediump float res;\n    void main()\n    {\n        dEQP_FragColor \u003d val;\n    }\n\nThis compiles successfully (no name conflict errors), because the precision qualifiers are different, and the test passes.\n\nHowever, I image another (geometry?) shader could then contain:\n\nuniform BadBlock\n{\n\tmediump vec4 val;\n\tmediump vec4 val2;\n};\n\nThis should create a name conflict, since \u0027BadBlock.val\u0027 has the same name/type/precision, but in a different uniform block.   The only way to detect this is to check all \u0027val\u0027s (of each of the uniform blocks that contain a \u0027val\u0027) to compare the details for a conflict.",
+      "parentUuid": "7c795789_ea98f69e",
       "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
