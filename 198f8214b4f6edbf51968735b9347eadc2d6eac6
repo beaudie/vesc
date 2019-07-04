@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "99b2150c_326ff16a",
+        "filename": "src/libANGLE/entry_points_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-04T19:07:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4af6e07d_b2124385",
+      "range": {
+        "startLine": 9,
+        "startChar": 8,
+        "endLine": 9,
+        "endChar": 28
+      },
+      "revId": "198f8214b4f6edbf51968735b9347eadc2d6eac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c300e2b5_c9281eb8",
         "filename": "src/libGLESv2.gni",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "f88bda13_7b36c8af",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-04T19:07:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c300e2b5_c9281eb8",
+      "range": {
+        "startLine": 955,
+        "startChar": 0,
+        "endLine": 979,
+        "endChar": 35
+      },
+      "revId": "198f8214b4f6edbf51968735b9347eadc2d6eac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca7e8bff_34df5156",
         "filename": "src/libGLESv2.gni",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "198f8214b4f6edbf51968735b9347eadc2d6eac6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af43f89d_32abb003",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-04T19:07:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca7e8bff_34df5156",
+      "range": {
+        "startLine": 997,
+        "startChar": 0,
+        "endLine": 1012,
+        "endChar": 40
+      },
+      "revId": "198f8214b4f6edbf51968735b9347eadc2d6eac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
