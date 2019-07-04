@@ -899,6 +899,10 @@ class PipelineLayoutCache final : angle::NonCopyable
 // - Set 3 contains the ANGLE driver uniforms at binding 0.  Note that driver uniforms are updated
 //   only under rare circumstances, such as viewport or depth range change.  However, there is only
 //   one binding in this set.
+//
+// If the pipeline has N stages, every buffer or image resource is bound to the descriptor set a
+// maximum of N times.  This is to allow a higher total number of a resource type while maintaining
+// the per-stage limit.  The bindings of each stage are packed together.
 
 // Uniforms set index:
 constexpr uint32_t kUniformsAndXfbDescriptorSetIndex = 0;
@@ -911,12 +915,11 @@ constexpr uint32_t kDriverUniformsDescriptorSetIndex = 3;
 
 // Only 1 driver uniform binding is used.
 constexpr uint32_t kReservedDriverUniformBindingCount = 1;
-// Binding index for default uniforms in the vertex shader:
-constexpr uint32_t kVertexUniformsBindingIndex = 0;
-// Binding index for default uniforms in the fragment shader:
-constexpr uint32_t kFragmentUniformsBindingIndex = 1;
+// There is 1 default uniform binding used per stage.  Currently, a maxium of two stages are
+// supported.
+constexpr uint32_t kReservedDefaultUniformBindingCount = 2;
 // Binding index start for transform feedback buffers:
-constexpr uint32_t kXfbBindingIndexStart = 2;
+constexpr uint32_t kXfbBindingIndexStart = kReservedDefaultUniformBindingCount;
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_VULKAN_VK_CACHE_UTILS_H_

@@ -31,7 +31,11 @@ struct ActiveVariable
     ShaderType getFirstShaderTypeWhereActive() const;
     void setActive(ShaderType shaderType, bool used);
     void unionReferencesWith(const ActiveVariable &other);
-    bool isActive(ShaderType shaderType) const;
+    bool isActive(ShaderType shaderType) const
+    {
+        ASSERT(shaderType != ShaderType::InvalidEnum);
+        return mActiveUseBits[shaderType];
+    }
     GLuint activeShaderCount() const;
 
   private:

@@ -715,6 +715,16 @@ void LoadInterfaceBlock(BinaryInputStream *stream, InterfaceBlock *block)
     LoadShaderVariableBuffer(stream, block);
 }
 
+void UpdateActiveResourceCounts(const ActiveVariable &resource, ShaderMap<uint32_t> *counts)
+{
+    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        if (resource.isActive(shaderType))
+        {
+            ++(*counts)[shaderType];
+        }
+    }
+}
 }  // anonymous namespace
 
 // Saves the linking context for later use in resolveLink().
@@ -948,12 +958,18 @@ ImageBinding::~ImageBinding() = default;
 // ProgramState implementation.
 ProgramState::ProgramState()
     : mLabel(),
-      mAttachedShaders({}),
+      mAttachedShaders{},
       mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS),
       mMaxActiveAttribLocation(0),
       mSamplerUniformRange(0, 0),
       mImageUniformRange(0, 0),
       mAtomicCounterUniformRange(0, 0),
+      mActiveSamplerCounts{},
+      mActiveBufferVariableCounts{},
+      mActiveImageCounts{},
+      mActiveUniformBlockCounts{},
+      mActiveShaderStorageBlockCounts{},
+      mActiveAtomicCounterBufferCounts{},
       mBinaryRetrieveableHint(false),
       mNumViews(-1),
       // [GL_EXT_geometry_shader] Table 20.22
@@ -1570,6 +1586,52 @@ void ProgramState::updateActiveImages()
         {
             mActiveImagesMask.set(imageUnit);
         }
+    }
+}
+
+void ProgramState::updateActiveResourceCounts()
+{
+    mActiveSamplerCounts.fill(0);
+    mActiveBufferVariableCounts.fill(0);
+    mActiveImageCounts.fill(0);
+    mActiveUniformBlockCounts.fill(0);
+    mActiveShaderStorageBlockCounts.fill(0);
+    mActiveAtomicCounterBufferCounts.fill(0);
+
+    // Active samplers:
+    for (unsigned int uniformIndex : mSamplerUniformRange)
+    {
+        UpdateActiveResourceCounts(mUniforms[uniformIndex], &mActiveSamplerCounts);
+    }
+
+    // Active buffer variables:
+    for (const BufferVarialbe &bufferVariable : mBufferVariables)
+    {
+        UpdateActiveResourceCounts(bufferVariable, &mActiveBufferVariableCounts);
+    }
+
+    // Active images:
+    for (unsigned int uniformIndex : mImageUniformRange)
+    {
+        UpdateActiveResourceCounts(mUniforms[uniformIndex], &mActiveImageCounts);
+    }
+
+    // Active UBOs:
+    for (const InterfaceBlock &block : mUniformBlocks)
+    {
+        UpdateActiveResourceCounts(block, &mActiveUniformBlockCounts);
+    }
+
+    // Active SSBOs:
+    for (const InterfaceBlock &block : mShaderStorageBlocks)
+    {
+        UpdateActiveResourceCounts(block, &mActiveShaderStorageBlockCounts);
+    }
+
+    // Active atomic counter buffers:
+    for (const AtomicCounterBuffer &buffer : mAtomicCounterBuffers)
+    {
+        UpdateActiveResourceCounts(buffer, &mActiveAtomicCounterBufferCounts);
     }
 }
 
@@ -4816,6 +4878,7 @@ void Program::postResolveLink(const gl::Context *context)
 {
     mState.updateActiveSamplers();
     mState.updateActiveImages();
+    mState.updateActiveResourceCounts();
 
     if (context->getExtensions().multiDraw)
     {
