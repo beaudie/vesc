@@ -2567,6 +2567,11 @@ void FramebufferHelper::release(ContextVk *contextVk)
     contextVk->releaseObject(getStoredQueueSerial(), &mFramebuffer);
 }
 
+// FramebufferHelper implementation.
+DispatchHelper::DispatchHelper() : CommandGraphResource(CommandGraphResourceType::Dispatcher) {}
+
+DispatchHelper::~DispatchHelper() = default;
+
 // ShaderProgramHelper implementation.
 ShaderProgramHelper::ShaderProgramHelper() = default;
 
