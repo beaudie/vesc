@@ -351,54 +351,6 @@ angle::Result ContextVk::finish(const gl::Context *context)
     return finishImpl();
 }
 
-angle::Result ContextVk::waitSemaphore(const gl::Context *context,
-                                       const gl::Semaphore *semaphore,
-                                       GLuint numBufferBarriers,
-                                       const GLuint *buffers,
-                                       GLuint numTextureBarriers,
-                                       const GLuint *textures,
-                                       const GLenum *srcLayouts)
-{
-    mWaitSemaphores.push_back(vk::GetImpl(semaphore)->getHandle());
-
-    if (numBufferBarriers != 0)
-    {
-        // Buffers in external memory are not implemented yet.
-        UNIMPLEMENTED();
-    }
-
-    if (numTextureBarriers != 0)
-    {
-        // Texture barriers are not implemented yet.
-        UNIMPLEMENTED();
-    }
-
-    return angle::Result::Continue;
-}
-
-angle::Result ContextVk::signalSemaphore(const gl::Context *context,
-                                         const gl::Semaphore *semaphore,
-                                         GLuint numBufferBarriers,
-                                         const GLuint *buffers,
-                                         GLuint numTextureBarriers,
-                                         const GLuint *textures,
-                                         const GLenum *dstLayouts)
-{
-    if (numBufferBarriers != 0)
-    {
-        // Buffers in external memory are not implemented yet.
-        UNIMPLEMENTED();
-    }
-
-    if (numTextureBarriers != 0)
-    {
-        // Texture barriers are not implemented yet.
-        UNIMPLEMENTED();
-    }
-
-    return flushImpl(semaphore);
-}
-
 angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    gl::PrimitiveMode mode,
                                    GLint firstVertex,
@@ -2126,9 +2078,15 @@ const gl::ActiveTextureArray<TextureVk *> &ContextVk::getActiveTextures() const
     return mActiveTextures;
 }
 
-angle::Result ContextVk::flushImpl(const gl::Semaphore *clientSignalSemaphore)
+void ContextVk::insertWaitSemaphore(const vk::Semaphore *waitSemaphore)
 {
-    if (mCommandGraph.empty() && !clientSignalSemaphore && mWaitSemaphores.empty())
+    ASSERT(waitSemaphore);
+    mWaitSemaphores.push_back(waitSemaphore->getHandle());
+}
+
+angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
+{
+    if (mCommandGraph.empty() && !signalSemaphore && mWaitSemaphores.empty())
     {
         return angle::Result::Continue;
     }
@@ -2144,9 +2102,9 @@ angle::Result ContextVk::flushImpl(const gl::Semaphore *clientSignalSemaphore)
     SignalSemaphoreVector signalSemaphores;
     ANGLE_TRY(generateSurfaceSemaphores(&signalSemaphores));
 
-    if (clientSignalSemaphore)
+    if (signalSemaphore)
     {
-        signalSemaphores.push_back(vk::GetImpl(clientSignalSemaphore)->getHandle());
+        signalSemaphores.push_back(signalSemaphore->getHandle());
     }
 
     VkSubmitInfo submitInfo = {};
