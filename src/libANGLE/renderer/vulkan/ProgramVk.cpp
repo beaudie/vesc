@@ -17,6 +17,8 @@
 #include "libANGLE/renderer/vulkan/GlslangWrapper.h"
 #include "libANGLE/renderer/vulkan/TextureVk.h"
 
+#include <numeric>
+
 namespace rx
 {
 
@@ -26,7 +28,6 @@ namespace
 constexpr size_t kUniformBlockDynamicBufferMinSize = 256 * 128;
 
 void InitDefaultUniformBlock(const std::vector<sh::Uniform> &uniforms,
-                             gl::Shader *shader,
                              sh::BlockLayoutMap *blockLayoutMapOut,
                              size_t *blockSizeOut)
 {
@@ -165,18 +166,47 @@ uint32_t GetInterfaceBlockArraySize(const std::vector<gl::InterfaceBlock> &block
 }
 
 void AddInterfaceBlockDescriptorSetDesc(const std::vector<gl::InterfaceBlock> &blocks,
-                                        uint32_t bindingStart,
+                                        const gl::ShaderBitSet shaderStages,
+                                        const gl::ShaderMap<uint32_t> &bindingOffsets,
+                                        uint32_t globalBindingOffset,
                                         VkDescriptorType descType,
                                         vk::DescriptorSetLayoutDesc *descOut)
 {
+    gl::ShaderMap<uint32_t> currentBindings = {};
+
     for (uint32_t bufferIndex = 0; bufferIndex < blocks.size();)
     {
         const uint32_t arraySize = GetInterfaceBlockArraySize(blocks, bufferIndex);
 
-        descOut->update(bindingStart + bufferIndex, descType, arraySize,
-                        VK_SHADER_STAGE_ALL_GRAPHICS);
+        for (const gl::ShaderType shaderType : shaderStages)
+        {
+            if (!blocks[bufferIndex].isActive(shaderType))
+            {
+                continue;
+            }
+
+            const uint32_t bindingIndex =
+                globalBindingOffset + bindingOffsets[shaderType] + currentBindings[shaderType];
+
+            descOut->update(bindingIndex, descType, arraySize, gl_vk::kShaderStageMap[shaderType]);
+
+            currentBindings[shaderType] += arraySize;
+        }
 
         bufferIndex += arraySize;
+    }
+}
+
+void CalculateResourceStageBindingOffests(const gl::ShaderMap<uint32_t> resourceCounts,
+                                          gl::ShaderMap<uint32_t> *bindingOffsets)
+{
+    uint32_t nextStageBindingOffset = 0;
+
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        (*bindingOffsets)[shaderType] = nextStageBindingOffset;
+
+        nextStageBindingOffset += resourceCounts[shaderType];
     }
 }
 
@@ -219,7 +249,7 @@ angle::Result ProgramVk::ShaderInfo::initShaders(ContextVk *contextVk,
 angle::Result ProgramVk::loadShaderSource(ContextVk *contextVk, gl::BinaryInputStream *stream)
 {
     // Read in shader sources for all shader types
-    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         mShaderSource[shaderType] = stream->readString();
     }
@@ -230,7 +260,7 @@ angle::Result ProgramVk::loadShaderSource(ContextVk *contextVk, gl::BinaryInputS
 void ProgramVk::saveShaderSource(gl::BinaryOutputStream *stream)
 {
     // Write out shader sources for all shader types
-    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         stream->writeString(mShaderSource[shaderType]);
     }
@@ -251,7 +281,9 @@ ProgramVk::DefaultUniformBlock::DefaultUniformBlock() {}
 
 ProgramVk::DefaultUniformBlock::~DefaultUniformBlock() = default;
 
-ProgramVk::ProgramVk(const gl::ProgramState &state) : ProgramImpl(state), mDynamicBufferOffsets{} {}
+ProgramVk::ProgramVk(const gl::ProgramState &state)
+    : ProgramImpl(state), mDynamicBufferOffsets{}, mStorageBlockBindingsOffset(0)
+{}
 
 ProgramVk::~ProgramVk() = default;
 
@@ -293,6 +325,9 @@ void ProgramVk::reset(ContextVk *contextVk)
     }
 
     mTextureDescriptorsCache.clear();
+
+    mShaderStages.reset();
+    mShaderStageCount = 0;
 }
 
 std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
@@ -350,19 +385,28 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext, gl::InfoLog &inf
     gl::TransformFeedback *transformFeedback = glState.getCurrentTransformFeedback();
 
     reset(contextVk);
+    updateBindingOffsets();
+
+    // Cache a bitset of attached shaders for quick iteration.
+    mShaderStages     = mState.getLinkedShaderStages();
+    mShaderStageCount = mShaderStages.count();
 
     ANGLE_TRY(initDefaultUniformBlocks(glContext));
 
     // Store a reference to the pipeline and descriptor set layouts. This will create them if they
     // don't already exist in the cache.
+
+    // Default uniforms and transform feedback:
     vk::DescriptorSetLayoutDesc uniformsAndXfbSetDesc;
-    uniformsAndXfbSetDesc.update(kVertexUniformsBindingIndex,
-                                 VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1,
-                                 VK_SHADER_STAGE_VERTEX_BIT);
-    uniformsAndXfbSetDesc.update(kFragmentUniformsBindingIndex,
-                                 VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1,
-                                 VK_SHADER_STAGE_FRAGMENT_BIT);
-    if (transformFeedback && !mState.getLinkedTransformFeedbackVaryings().empty())
+    uint32_t uniformBindingIndex = 0;
+    for (const gl::ShaderType shaderType : mShaderStages)
+    {
+        uniformsAndXfbSetDesc.update(uniformBindingIndex++,
+                                     VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1,
+                                     gl_vk::kShaderStageMap[shaderType]);
+    }
+    if (mShaderStages.test(gl::ShaderType::Vertex) && transformFeedback &&
+        !mState.getLinkedTransformFeedbackVaryings().empty())
     {
         vk::GetImpl(transformFeedback)->updateDescriptorSetLayout(mState, &uniformsAndXfbSetDesc);
     }
@@ -371,28 +415,50 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext, gl::InfoLog &inf
         contextVk, uniformsAndXfbSetDesc,
         &mDescriptorSetLayouts[kUniformsAndXfbDescriptorSetIndex]));
 
+    // Uniform and storage buffers:
     vk::DescriptorSetLayoutDesc buffersSetDesc;
 
-    AddInterfaceBlockDescriptorSetDesc(mState.getUniformBlocks(), getUniformBuffersBindingStart(),
+    AddInterfaceBlockDescriptorSetDesc(mState.getUniformBlocks(), mShaderStages,
+                                       mUniformBlockBindingOffsets, getUniformBlockBindingsOffset(),
                                        VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &buffersSetDesc);
-    AddInterfaceBlockDescriptorSetDesc(mState.getShaderStorageBlocks(),
-                                       getStorageBuffersBindingStart(),
-                                       VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &buffersSetDesc);
+    AddInterfaceBlockDescriptorSetDesc(
+        mState.getShaderStorageBlocks(), mShaderStages, mShaderStorageBlockBindingOffsets,
+        getStorageBlockBindingsOffset(), VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &buffersSetDesc);
 
     ANGLE_TRY(renderer->getDescriptorSetLayout(contextVk, buffersSetDesc,
                                                &mDescriptorSetLayouts[kBufferDescriptorSetIndex]));
 
+    // Textures:
     vk::DescriptorSetLayoutDesc texturesSetDesc;
+
+    gl::ShaderMap<uint32_t> currentBindings = {};
 
     for (uint32_t textureIndex = 0; textureIndex < mState.getSamplerBindings().size();
          ++textureIndex)
     {
         const gl::SamplerBinding &samplerBinding = mState.getSamplerBindings()[textureIndex];
 
+        uint32_t uniformIndex = mState.getUniformIndexFromSamplerIndex(textureIndex);
+        const gl::LinkedUniform &samplerUniform = mState.getUniforms()[uniformIndex];
+
         // The front-end always binds array sampler units sequentially.
-        const uint32_t count = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
-        texturesSetDesc.update(textureIndex, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, count,
-                               VK_SHADER_STAGE_ALL_GRAPHICS);
+        const uint32_t arraySize = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
+
+        for (const gl::ShaderType shaderType : mShaderStages)
+        {
+            if (!samplerUniform.isActive(shaderType))
+            {
+                continue;
+            }
+
+            const uint32_t bindingIndex =
+                mSamplerBindingOffsets[shaderType] + currentBindings[shaderType];
+
+            texturesSetDesc.update(bindingIndex, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                   arraySize, gl_vk::kShaderStageMap[shaderType]);
+
+            ++currentBindings[shaderType];
+        }
     }
 
     ANGLE_TRY(renderer->getDescriptorSetLayout(contextVk, texturesSetDesc,
@@ -415,24 +481,65 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext, gl::InfoLog &inf
     ANGLE_TRY(renderer->getPipelineLayout(contextVk, pipelineLayoutDesc, mDescriptorSetLayouts,
                                           &mPipelineLayout));
 
-    // Note that this may reserve more sets than strictly necessary for a particular layout.
-    // TODO(jmadill): Optimize descriptor counts. http://anglebug.com/3117
     std::array<VkDescriptorPoolSize, 2> uniformAndXfbSetSize = {
-        {{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, GetUniformBufferDescriptorCount()},
+        {{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, kReservedDefaultUniformBindingCount},
          {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS}}};
-    std::array<VkDescriptorPoolSize, 2> bufferSetSize = {
-        {{VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, renderer->getMaxUniformBlocks()},
-         {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, renderer->getMaxStorageBlocks()}}};
-    VkDescriptorPoolSize textureSetSize = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                           renderer->getMaxActiveTextures()};
+
+    const gl::ShaderMap<uint32_t> &activeUniformBlockCounts = mState.getActiveUniformBlockCounts();
+    const gl::ShaderMap<uint32_t> &activeStorageBlockCounts =
+        mState.getActiveShaderStorageBlockCounts();
+    const gl::ShaderMap<uint32_t> &activeSamplerCounts = mState.getActiveSamplerCounts();
+
+    uint32_t uniformBlockCount =
+        std::accumulate(activeUniformBlockCounts.begin(), activeUniformBlockCounts.end(), 0);
+    uint32_t storageBlockCount =
+        std::accumulate(activeStorageBlockCounts.begin(), activeStorageBlockCounts.end(), 0);
+    uint32_t textureCount =
+        std::accumulate(activeSamplerCounts.begin(), activeSamplerCounts.end(), 0);
+
+    angle::FixedVector<VkDescriptorPoolSize, 2> bufferSetSize;
+    if (uniformBlockCount > 0)
+    {
+        bufferSetSize.push_back({VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, uniformBlockCount});
+    }
+    if (storageBlockCount > 0)
+    {
+        bufferSetSize.push_back({VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, storageBlockCount});
+    }
+
+    VkDescriptorPoolSize textureSetSize = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, textureCount};
+
     ANGLE_TRY(mDynamicDescriptorPools[kUniformsAndXfbDescriptorSetIndex].init(
         contextVk, uniformAndXfbSetSize.data(), uniformAndXfbSetSize.size()));
-    ANGLE_TRY(mDynamicDescriptorPools[kBufferDescriptorSetIndex].init(
-        contextVk, bufferSetSize.data(), bufferSetSize.size()));
-    ANGLE_TRY(
-        mDynamicDescriptorPools[kTextureDescriptorSetIndex].init(contextVk, &textureSetSize, 1));
+    if (bufferSetSize.size() > 0)
+    {
+        ANGLE_TRY(mDynamicDescriptorPools[kBufferDescriptorSetIndex].init(
+            contextVk, bufferSetSize.data(), bufferSetSize.size()));
+    }
+    if (textureCount > 0)
+    {
+        ANGLE_TRY(mDynamicDescriptorPools[kTextureDescriptorSetIndex].init(contextVk,
+                                                                           &textureSetSize, 1));
+    }
 
     return angle::Result::Continue;
+}
+
+void ProgramVk::updateBindingOffsets()
+{
+    const gl::ShaderMap<uint32_t> &activeUniformBlockCounts = mState.getActiveUniformBlockCounts();
+
+    mStorageBlockBindingsOffset =
+        std::accumulate(activeUniformBlockCounts.begin(), activeUniformBlockCounts.end(), 0);
+
+    CalculateResourceStageBindingOffests(mState.getActiveSamplerCounts(), &mSamplerBindingOffsets);
+    CalculateResourceStageBindingOffests(mState.getActiveImageCounts(), &mImageBindingOffsets);
+    CalculateResourceStageBindingOffests(mState.getActiveUniformBlockCounts(),
+                                         &mUniformBlockBindingOffsets);
+    CalculateResourceStageBindingOffests(mState.getActiveShaderStorageBlockCounts(),
+                                         &mShaderStorageBlockBindingOffsets);
+    CalculateResourceStageBindingOffests(mState.getActiveAtomicCounterBufferCounts(),
+                                         &mAtomicCounterBufferBindingOffsets);
 }
 
 void ProgramVk::linkResources(const gl::ProgramLinkedResources &resources)
@@ -453,13 +560,14 @@ angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
     gl::ShaderMap<size_t> requiredBufferSize;
     requiredBufferSize.fill(0);
 
-    for (gl::ShaderType shaderType : gl::AllGLES2ShaderTypes())
+    for (const gl::ShaderType shaderType : mShaderStages)
     {
         gl::Shader *shader = mState.getAttachedShader(shaderType);
+
         if (shader)
         {
             const std::vector<sh::Uniform> &uniforms = shader->getUniforms();
-            InitDefaultUniformBlock(uniforms, shader, &layoutMap[shaderType],
+            InitDefaultUniformBlock(uniforms, &layoutMap[shaderType],
                                     &requiredBufferSize[shaderType]);
         }
     }
@@ -484,7 +592,7 @@ angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
 
                 bool found = false;
 
-                for (gl::ShaderType shaderType : gl::AllGLES2ShaderTypes())
+                for (const gl::ShaderType shaderType : mShaderStages)
                 {
                     auto it = layoutMap[shaderType].find(uniformName);
                     if (it != layoutMap[shaderType].end())
@@ -498,13 +606,13 @@ angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
             }
         }
 
-        for (gl::ShaderType shaderType : gl::AllGLES2ShaderTypes())
+        for (const gl::ShaderType shaderType : mShaderStages)
         {
             mDefaultUniformBlocks[shaderType].uniformLayout.push_back(layoutInfo[shaderType]);
         }
     }
 
-    for (gl::ShaderType shaderType : gl::AllGLES2ShaderTypes())
+    for (const gl::ShaderType shaderType : mShaderStages)
     {
         if (requiredBufferSize[shaderType] > 0)
         {
@@ -569,7 +677,7 @@ void ProgramVk::setUniformImpl(GLint location, GLsizei count, const T *v, GLenum
 
     if (linkedUniform.typeInfo->type == entryPointType)
     {
-        for (gl::ShaderType shaderType : gl::AllGLES2ShaderTypes())
+        for (const gl::ShaderType shaderType : mShaderStages)
         {
             DefaultUniformBlock &uniformBlock     = mDefaultUniformBlocks[shaderType];
             const sh::BlockMemberInfo &layoutInfo = uniformBlock.uniformLayout[location];
@@ -588,7 +696,7 @@ void ProgramVk::setUniformImpl(GLint location, GLsizei count, const T *v, GLenum
     }
     else
     {
-        for (gl::ShaderType shaderType : gl::AllGLES2ShaderTypes())
+        for (const gl::ShaderType shaderType : mShaderStages)
         {
             DefaultUniformBlock &uniformBlock     = mDefaultUniformBlocks[shaderType];
             const sh::BlockMemberInfo &layoutInfo = uniformBlock.uniformLayout[location];
@@ -722,7 +830,7 @@ void ProgramVk::setUniformMatrixfv(GLint location,
     const gl::VariableLocation &locationInfo = mState.getUniformLocations()[location];
     const gl::LinkedUniform &linkedUniform   = mState.getUniforms()[locationInfo.index];
 
-    for (gl::ShaderType shaderType : gl::AllGLES2ShaderTypes())
+    for (const gl::ShaderType shaderType : mShaderStages)
     {
         DefaultUniformBlock &uniformBlock     = mDefaultUniformBlocks[shaderType];
         const sh::BlockMemberInfo &layoutInfo = uniformBlock.uniformLayout[location];
@@ -875,15 +983,16 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
     ASSERT(dirtyUniforms());
 
     bool anyNewBufferAllocated = false;
+    uint32_t offsetIndex       = 0;
+
     // Update buffer memory by immediate mapping. This immediate update only works once.
-    for (gl::ShaderType shaderType : gl::AllGLES2ShaderTypes())
+    for (const gl::ShaderType shaderType : mShaderStages)
     {
         DefaultUniformBlock &uniformBlock = mDefaultUniformBlocks[shaderType];
 
         if (mDefaultUniformBlocksDirty[shaderType])
         {
-            bool bufferModified  = false;
-            uint32_t offsetIndex = static_cast<uint32_t>(shaderType) - kShaderTypeMin;
+            bool bufferModified = false;
             ANGLE_TRY(
                 SyncDefaultUniformBlock(contextVk, &uniformBlock.storage, uniformBlock.uniformData,
                                         &mDynamicBufferOffsets[offsetIndex], &bufferModified));
@@ -894,6 +1003,8 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
                 anyNewBufferAllocated = true;
             }
         }
+
+        ++offsetIndex;
     }
 
     if (anyNewBufferAllocated)
@@ -910,15 +1021,17 @@ angle::Result ProgramVk::updateUniforms(ContextVk *contextVk)
 
 void ProgramVk::updateDefaultUniformsDescriptorSet(ContextVk *contextVk)
 {
-    gl::ShaderMap<VkDescriptorBufferInfo> descriptorBufferInfo;
-    gl::ShaderMap<VkWriteDescriptorSet> writeDescriptorInfo;
+    gl::ShaderArray<VkDescriptorBufferInfo> descriptorBufferInfo;
+    gl::ShaderArray<VkWriteDescriptorSet> writeDescriptorInfo;
+
+    uint32_t writeCount = 0;
 
     // Write default uniforms for each shader type.
-    for (gl::ShaderType shaderType : gl::AllGLES2ShaderTypes())
+    for (const gl::ShaderType shaderType : mShaderStages)
     {
         DefaultUniformBlock &uniformBlock  = mDefaultUniformBlocks[shaderType];
-        VkDescriptorBufferInfo &bufferInfo = descriptorBufferInfo[shaderType];
-        VkWriteDescriptorSet &writeInfo    = writeDescriptorInfo[shaderType];
+        VkDescriptorBufferInfo &bufferInfo = descriptorBufferInfo[writeCount];
+        VkWriteDescriptorSet &writeInfo    = writeDescriptorInfo[writeCount];
 
         if (!uniformBlock.uniformData.empty())
         {
@@ -936,23 +1049,28 @@ void ProgramVk::updateDefaultUniformsDescriptorSet(ContextVk *contextVk)
         writeInfo.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         writeInfo.pNext            = nullptr;
         writeInfo.dstSet           = mDescriptorSets[kUniformsAndXfbDescriptorSetIndex];
-        writeInfo.dstBinding       = static_cast<uint32_t>(shaderType);
+        writeInfo.dstBinding       = writeCount;
         writeInfo.dstArrayElement  = 0;
         writeInfo.descriptorCount  = 1;
         writeInfo.descriptorType   = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
         writeInfo.pImageInfo       = nullptr;
         writeInfo.pBufferInfo      = &bufferInfo;
         writeInfo.pTexelBufferView = nullptr;
+
+        ++writeCount;
     }
 
     VkDevice device = contextVk->getDevice();
 
-    vkUpdateDescriptorSets(device, kShaderTypeCount, writeDescriptorInfo.data(), 0, nullptr);
+    ASSERT(writeCount <= kReservedDefaultUniformBindingCount);
+
+    vkUpdateDescriptorSets(device, writeCount, writeDescriptorInfo.data(), 0, nullptr);
 }
 
 void ProgramVk::updateBuffersDescriptorSet(ContextVk *contextVk,
                                            vk::FramebufferHelper *framebufferVk,
                                            const std::vector<gl::InterfaceBlock> &blocks,
+                                           const gl::ShaderMap<uint32_t> &bindingOffsets,
                                            VkDescriptorType descriptorType)
 {
     VkDescriptorSet descriptorSet = mDescriptorSets[kBufferDescriptorSetIndex];
@@ -960,23 +1078,45 @@ void ProgramVk::updateBuffersDescriptorSet(ContextVk *contextVk,
     ASSERT(descriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER ||
            descriptorType == VK_DESCRIPTOR_TYPE_STORAGE_BUFFER);
     const bool isStorageBuffer = descriptorType == VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    const uint32_t bindingStart =
-        isStorageBuffer ? getStorageBuffersBindingStart() : getUniformBuffersBindingStart();
+    const uint32_t globalBindingOffset =
+        isStorageBuffer ? getStorageBlockBindingsOffset() : getUniformBlockBindingsOffset();
 
     static_assert(
         gl::IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS >=
             gl::IMPLEMENTATION_MAX_UNIFORM_BUFFER_BINDINGS,
         "The descriptor arrays here would have inadequate size for uniform buffer objects");
-    gl::StorageBuffersArray<VkDescriptorBufferInfo> descriptorBufferInfo;
-    gl::StorageBuffersArray<VkWriteDescriptorSet> writeDescriptorInfo;
-    uint32_t writeCount     = 0;
-    uint32_t currentBinding = 0;
+
+    gl::ShaderMap<gl::StorageBuffersArray<VkDescriptorBufferInfo>> descriptorBufferInfo;
+    gl::ShaderMap<gl::StorageBuffersArray<VkWriteDescriptorSet>> writeDescriptorInfo;
+
+    gl::ShaderMap<uint32_t> writeCounts       = {};
+    gl::ShaderMap<uint32_t> currentBindings   = {};
+    gl::ShaderMap<uint32_t> currentArraySizes = {};
 
     // Write uniform or storage buffers.
     const gl::State &glState = contextVk->getState();
     for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
     {
         const gl::InterfaceBlock &block = blocks[bufferIndex];
+
+        for (const gl::ShaderType shaderType : mShaderStages)
+        {
+            // Array indices of the same buffer binding are placed sequentially in `blocks`.
+            // Thus, the block binding is updated only when array index 0 is encountered.
+            if (!block.isArray || block.arrayElement == 0)
+            {
+                currentBindings[shaderType] += currentArraySizes[shaderType];
+                currentArraySizes[shaderType] = 0;
+            }
+
+            if (!block.isActive(shaderType))
+            {
+                continue;
+            }
+
+            ++currentArraySizes[shaderType];
+        }
+
         const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
             isStorageBuffer ? glState.getIndexedShaderStorageBuffer(block.binding)
                             : glState.getIndexedUniformBuffer(block.binding);
@@ -1016,39 +1156,51 @@ void ProgramVk::updateBuffersDescriptorSet(ContextVk *contextVk,
         // shader.
         size = std::min(size > 0 ? size : (bufferHelper.getSize() - offset), blockSize);
 
-        VkDescriptorBufferInfo &bufferInfo = descriptorBufferInfo[writeCount];
-
-        bufferInfo.buffer = bufferHelper.getBuffer().getHandle();
-        bufferInfo.offset = offset;
-        bufferInfo.range  = size;
-
-        if (!block.isArray || block.arrayElement == 0)
+        for (const gl::ShaderType shaderType : mShaderStages)
         {
-            // Array indices of the same buffer binding are placed sequentially in `blocks`.
-            // Thus, the block binding is updated only when array index 0 is encountered.
-            currentBinding = bufferIndex;
+            if (!block.isActive(shaderType))
+            {
+                continue;
+            }
+
+            const uint32_t writeCount          = writeCounts[shaderType];
+            VkDescriptorBufferInfo &bufferInfo = descriptorBufferInfo[shaderType][writeCount];
+
+            bufferInfo.buffer = bufferHelper.getBuffer().getHandle();
+            bufferInfo.offset = offset;
+            bufferInfo.range  = size;
+
+            VkWriteDescriptorSet &writeInfo = writeDescriptorInfo[shaderType][writeCount];
+
+            const uint32_t bindingIndex =
+                globalBindingOffset + bindingOffsets[shaderType] + currentBindings[shaderType];
+
+            writeInfo.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            writeInfo.pNext            = nullptr;
+            writeInfo.dstSet           = descriptorSet;
+            writeInfo.dstBinding       = bindingIndex;
+            writeInfo.dstArrayElement  = block.isArray ? block.arrayElement : 0;
+            writeInfo.descriptorCount  = 1;
+            writeInfo.descriptorType   = descriptorType;
+            writeInfo.pImageInfo       = nullptr;
+            writeInfo.pBufferInfo      = &bufferInfo;
+            writeInfo.pTexelBufferView = nullptr;
+            ASSERT(writeInfo.pBufferInfo[0].buffer != VK_NULL_HANDLE);
+
+            ++writeCounts[shaderType];
         }
-
-        VkWriteDescriptorSet &writeInfo = writeDescriptorInfo[writeCount];
-
-        writeInfo.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        writeInfo.pNext            = nullptr;
-        writeInfo.dstSet           = descriptorSet;
-        writeInfo.dstBinding       = bindingStart + currentBinding;
-        writeInfo.dstArrayElement  = block.isArray ? block.arrayElement : 0;
-        writeInfo.descriptorCount  = 1;
-        writeInfo.descriptorType   = descriptorType;
-        writeInfo.pImageInfo       = nullptr;
-        writeInfo.pBufferInfo      = &bufferInfo;
-        writeInfo.pTexelBufferView = nullptr;
-        ASSERT(writeInfo.pBufferInfo[0].buffer != VK_NULL_HANDLE);
-
-        ++writeCount;
     }
 
     VkDevice device = contextVk->getDevice();
 
-    vkUpdateDescriptorSets(device, writeCount, writeDescriptorInfo.data(), 0, nullptr);
+    for (const gl::ShaderType shaderType : mShaderStages)
+    {
+        if (writeCounts[shaderType] > 0)
+        {
+            vkUpdateDescriptorSets(device, writeCounts[shaderType],
+                                   writeDescriptorInfo[shaderType].data(), 0, nullptr);
+        }
+    }
 }
 
 angle::Result ProgramVk::updateUniformAndStorageBuffersDescriptorSet(
@@ -1058,8 +1210,9 @@ angle::Result ProgramVk::updateUniformAndStorageBuffersDescriptorSet(
     ANGLE_TRY(allocateDescriptorSet(contextVk, kBufferDescriptorSetIndex));
 
     updateBuffersDescriptorSet(contextVk, framebufferVk, mState.getUniformBlocks(),
-                               VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER);
+                               mUniformBlockBindingOffsets, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER);
     updateBuffersDescriptorSet(contextVk, framebufferVk, mState.getShaderStorageBlocks(),
+                               mShaderStorageBlockBindingOffsets,
                                VK_DESCRIPTOR_TYPE_STORAGE_BUFFER);
 
     return angle::Result::Continue;
@@ -1094,8 +1247,8 @@ void ProgramVk::updateTransformFeedbackDescriptorSetImpl(ContextVk *contextVk)
     }
 
     TransformFeedbackVk *transformFeedbackVk = vk::GetImpl(glState.getCurrentTransformFeedback());
-    transformFeedbackVk->updateDescriptorSet(
-        contextVk, mState, mDescriptorSets[kUniformsAndXfbDescriptorSetIndex], kShaderTypeCount);
+    transformFeedbackVk->updateDescriptorSet(contextVk, mState,
+                                             mDescriptorSets[kUniformsAndXfbDescriptorSetIndex]);
 }
 
 angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
@@ -1123,9 +1276,11 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
 
     VkDescriptorSet descriptorSet = mDescriptorSets[kTextureDescriptorSetIndex];
 
-    gl::ActiveTextureArray<VkDescriptorImageInfo> descriptorImageInfo;
-    gl::ActiveTextureArray<VkWriteDescriptorSet> writeDescriptorInfo;
-    uint32_t writeCount = 0;
+    gl::ShaderMap<gl::ActiveTextureArray<VkDescriptorImageInfo>> descriptorImageInfo;
+    gl::ShaderMap<gl::ActiveTextureArray<VkWriteDescriptorSet>> writeDescriptorInfo;
+
+    gl::ShaderMap<uint32_t> writeCounts     = {};
+    gl::ShaderMap<uint32_t> currentBindings = {};
 
     const gl::ActiveTextureArray<TextureVk *> &activeTextures = contextVk->getActiveTextures();
 
@@ -1133,6 +1288,9 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
          ++textureIndex)
     {
         const gl::SamplerBinding &samplerBinding = mState.getSamplerBindings()[textureIndex];
+
+        uint32_t uniformIndex = mState.getUniformIndexFromSamplerIndex(textureIndex);
+        const gl::LinkedUniform &samplerUniform = mState.getUniforms()[uniformIndex];
 
         ASSERT(!samplerBinding.unreferenced);
 
@@ -1144,33 +1302,61 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk,
 
             vk::ImageHelper &image = textureVk->getImage();
 
-            VkDescriptorImageInfo &imageInfo = descriptorImageInfo[writeCount];
+            for (const gl::ShaderType shaderType : mShaderStages)
+            {
+                if (!samplerUniform.isActive(shaderType))
+                {
+                    continue;
+                }
 
-            imageInfo.sampler     = textureVk->getSampler().getHandle();
-            imageInfo.imageView   = textureVk->getReadImageView().getHandle();
-            imageInfo.imageLayout = image.getCurrentLayout();
+                const uint32_t writeCount        = writeCounts[shaderType];
+                VkDescriptorImageInfo &imageInfo = descriptorImageInfo[shaderType][writeCount];
 
-            VkWriteDescriptorSet &writeInfo = writeDescriptorInfo[writeCount];
+                imageInfo.sampler     = textureVk->getSampler().getHandle();
+                imageInfo.imageView   = textureVk->getReadImageView().getHandle();
+                imageInfo.imageLayout = image.getCurrentLayout();
 
-            writeInfo.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            writeInfo.pNext            = nullptr;
-            writeInfo.dstSet           = descriptorSet;
-            writeInfo.dstBinding       = textureIndex;
-            writeInfo.dstArrayElement  = arrayElement;
-            writeInfo.descriptorCount  = 1;
-            writeInfo.descriptorType   = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            writeInfo.pImageInfo       = &imageInfo;
-            writeInfo.pBufferInfo      = nullptr;
-            writeInfo.pTexelBufferView = nullptr;
+                VkWriteDescriptorSet &writeInfo = writeDescriptorInfo[shaderType][writeCount];
 
-            writeCount++;
+                const uint32_t bindingIndex =
+                    mSamplerBindingOffsets[shaderType] + currentBindings[shaderType];
+
+                writeInfo.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                writeInfo.pNext            = nullptr;
+                writeInfo.dstSet           = descriptorSet;
+                writeInfo.dstBinding       = bindingIndex;
+                writeInfo.dstArrayElement  = arrayElement;
+                writeInfo.descriptorCount  = 1;
+                writeInfo.descriptorType   = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                writeInfo.pImageInfo       = &imageInfo;
+                writeInfo.pBufferInfo      = nullptr;
+                writeInfo.pTexelBufferView = nullptr;
+
+                writeCounts[shaderType]++;
+            }
+        }
+
+        for (const gl::ShaderType shaderType : mShaderStages)
+        {
+            if (!samplerUniform.isActive(shaderType))
+            {
+                continue;
+            }
+
+            currentBindings[shaderType] += samplerBinding.boundTextureUnits.size();
         }
     }
 
     VkDevice device = contextVk->getDevice();
 
-    ASSERT(writeCount > 0);
-    vkUpdateDescriptorSets(device, writeCount, writeDescriptorInfo.data(), 0, nullptr);
+    for (const gl::ShaderType shaderType : mShaderStages)
+    {
+        if (writeCounts[shaderType] > 0)
+        {
+            vkUpdateDescriptorSets(device, writeCounts[shaderType],
+                                   writeDescriptorInfo[shaderType].data(), 0, nullptr);
+        }
+    }
 
     mTextureDescriptorsCache.emplace(texturesDesc, descriptorSet);
 
@@ -1236,11 +1422,11 @@ angle::Result ProgramVk::updateDescriptorSets(ContextVk *contextVk,
         // through dynamic uniform buffers (requiring dynamic offsets).  No other descriptor
         // requires a dynamic offset.
         const uint32_t uniformBlockOffsetCount =
-            descriptorSetIndex == kUniformsAndXfbDescriptorSetIndex ? kShaderTypeCount : 0;
+            descriptorSetIndex == kUniformsAndXfbDescriptorSetIndex ? mShaderStageCount : 0;
 
         commandBuffer->bindGraphicsDescriptorSets(mPipelineLayout.get(), descriptorSetIndex, 1,
                                                   &descSet, uniformBlockOffsetCount,
-                                                  mDynamicBufferOffsets.data() + kShaderTypeMin);
+                                                  mDynamicBufferOffsets.data());
     }
 
     return angle::Result::Continue;
