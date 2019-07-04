@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "26d9b7af_826e893d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-04T17:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98355d37_9eab8225",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "493c52b013b1fbb409032119b0937edd311a1f6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "555050f5_d5081cf7",
         "filename": "src/libANGLE/Caps.h",
         "patchSetId": 11
@@ -94,6 +118,54 @@
     },
     {
       "key": {
+        "uuid": "014189ac_8ff5b809",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-04T17:20:37Z",
+      "side": 1,
+      "message": "It\u0027s required in C/the entry points.  Removed it in the ANGLE internals.",
+      "parentUuid": "5b129d01_59d0fae7",
+      "range": {
+        "startLine": 162,
+        "startChar": 55,
+        "endLine": 162,
+        "endChar": 61
+      },
+      "revId": "493c52b013b1fbb409032119b0937edd311a1f6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2efa20c3_6e6eadfd",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-04T17:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b428d5d8_2911874d",
+      "range": {
+        "startLine": 162,
+        "startChar": 27,
+        "endLine": 162,
+        "endChar": 48
+      },
+      "revId": "493c52b013b1fbb409032119b0937edd311a1f6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33d2f0f4_2de0b8a2",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 11
@@ -111,6 +183,24 @@
     },
     {
       "key": {
+        "uuid": "3f242578_c5732b99",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3865,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-04T17:20:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33d2f0f4_2de0b8a2",
+      "revId": "493c52b013b1fbb409032119b0937edd311a1f6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec4678df_79916c69",
         "filename": "src/libEGL/libEGL.def",
         "patchSetId": 11
@@ -125,6 +215,24 @@
       "revId": "493c52b013b1fbb409032119b0937edd311a1f6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "264cf581_12417d95",
+        "filename": "src/libEGL/libEGL.def",
+        "patchSetId": 11
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-04T17:20:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ec4678df_79916c69",
+      "revId": "493c52b013b1fbb409032119b0937edd311a1f6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
