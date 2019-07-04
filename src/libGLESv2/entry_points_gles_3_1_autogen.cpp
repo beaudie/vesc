@@ -12,8 +12,8 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"
+#include "libANGLE/entry_points_utils.h"
 #include "libANGLE/validationES31.h"
-#include "libGLESv2/entry_points_utils.h"
 #include "libGLESv2/global_state.h"
 
 namespace gl
