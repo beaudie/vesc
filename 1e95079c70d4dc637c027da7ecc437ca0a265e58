@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9bbb0ea3_e04b5a5c",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-04T15:19:49Z",
+      "side": 1,
+      "message": "Could you refactor this into a flag? I think the useful flags would be something like:\n\n   SEARCH_APPLICATION_DIR\n   SEARCH_SYSTEM_DIR\n\nThis will make us more future proof and let us add more parameters later if we need.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 16
+      },
+      "revId": "1e95079c70d4dc637c027da7ecc437ca0a265e58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82e3e784_223df7fe",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-04T15:19:49Z",
+      "side": 1,
+      "message": "nit: remove this",
+      "range": {
+        "startLine": 248,
+        "startChar": 57,
+        "endLine": 248,
+        "endChar": 65
+      },
+      "revId": "1e95079c70d4dc637c027da7ecc437ca0a265e58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "126e682e_d1d307f3",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-04T15:19:49Z",
+      "side": 1,
+      "message": "nit: nullptr",
+      "range": {
+        "startLine": 256,
+        "startChar": 49,
+        "endLine": 256,
+        "endChar": 53
+      },
+      "revId": "1e95079c70d4dc637c027da7ecc437ca0a265e58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
