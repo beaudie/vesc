@@ -2670,6 +2670,11 @@ void DispatchTableGL::initProcsSharedExtensions(const std::set<std::string> &ext
         ASSIGN("glTextureStorageMem3DMultisampleEXT", textureStorageMem3DMultisampleEXT);
     }
 
+    if (extensions.count("GL_EXT_memory_object_fd") != 0)
+    {
+        ASSIGN("glImportMemoryFdEXT", importMemoryFdEXT);
+    }
+
     if (extensions.count("GL_EXT_multi_draw_arrays") != 0)
     {
         ASSIGN("glMultiDrawArraysEXT", multiDrawArrays);
@@ -2687,6 +2692,11 @@ void DispatchTableGL::initProcsSharedExtensions(const std::set<std::string> &ext
         ASSIGN("glSemaphoreParameterui64vEXT", semaphoreParameterui64vEXT);
         ASSIGN("glSignalSemaphoreEXT", signalSemaphoreEXT);
         ASSIGN("glWaitSemaphoreEXT", waitSemaphoreEXT);
+    }
+
+    if (extensions.count("GL_EXT_semaphore_fd") != 0)
+    {
+        ASSIGN("glImportSemaphoreFdEXT", importSemaphoreFdEXT);
     }
 
     if (extensions.count("GL_EXT_separate_shader_objects") != 0)
@@ -5439,6 +5449,11 @@ void DispatchTableGL::initProcsSharedExtensionsNULL(const std::set<std::string> 
         textureStorageMem3DMultisampleEXT = &glTextureStorageMem3DMultisampleEXTNULL;
     }
 
+    if (extensions.count("GL_EXT_memory_object_fd") != 0)
+    {
+        importMemoryFdEXT = &glImportMemoryFdEXTNULL;
+    }
+
     if (extensions.count("GL_EXT_multi_draw_arrays") != 0)
     {
         multiDrawArrays   = &glMultiDrawArraysNULL;
@@ -5456,6 +5471,11 @@ void DispatchTableGL::initProcsSharedExtensionsNULL(const std::set<std::string> 
         semaphoreParameterui64vEXT    = &glSemaphoreParameterui64vEXTNULL;
         signalSemaphoreEXT            = &glSignalSemaphoreEXTNULL;
         waitSemaphoreEXT              = &glWaitSemaphoreEXTNULL;
+    }
+
+    if (extensions.count("GL_EXT_semaphore_fd") != 0)
+    {
+        importSemaphoreFdEXT = &glImportSemaphoreFdEXTNULL;
     }
 
     if (extensions.count("GL_EXT_separate_shader_objects") != 0)
