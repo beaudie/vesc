@@ -386,6 +386,18 @@ Display *Display::GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay
 }
 
 // static
+Display *Display::GetExistingDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay)
+{
+    ANGLEPlatformDisplayMap *displays = GetANGLEPlatformDisplayMap();
+    const auto &iter                  = displays->find(nativeDisplay);
+
+    // Check that there is a matching display
+    ASSERT(iter != displays->end());
+
+    return iter->second;
+}
+
+// static
 Display *Display::GetDisplayFromDevice(Device *device, const AttributeMap &attribMap)
 {
     Display *display = nullptr;
@@ -446,6 +458,7 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
       mDisplayExtensionString(),
       mVendorString(),
       mDevice(eglDevice),
+      mSurface(nullptr),
       mPlatform(platform),
       mTextureManager(nullptr),
       mBlobCache(gl::kDefaultMaxProgramCacheMemoryBytes),
@@ -737,6 +750,8 @@ Error Display::createWindowSurface(const Config *configuration,
     WindowSurfaceMap *windowSurfaces = GetWindowSurfaces();
     ASSERT(windowSurfaces && windowSurfaces->find(window) == windowSurfaces->end());
     windowSurfaces->insert(std::make_pair(window, *outSurface));
+
+    mSurface = *outSurface;
 
     return NoError();
 }
@@ -1387,6 +1402,11 @@ const std::string &Display::getVendorString() const
 Device *Display::getDevice() const
 {
     return mDevice;
+}
+
+Surface *Display::getSurface() const
+{
+    return mSurface;
 }
 
 gl::Version Display::getMaxSupportedESVersion() const

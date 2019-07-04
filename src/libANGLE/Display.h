@@ -81,6 +81,7 @@ class Display final : public LabeledObject, angle::NonCopyable
     static Display *GetDisplayFromDevice(Device *device, const AttributeMap &attribMap);
     static Display *GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay,
                                                 const AttributeMap &attribMap);
+    static Display *GetExistingDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay);
 
     static const ClientExtensions &GetClientExtensions();
     static const std::string &GetClientExtensionString();
@@ -190,6 +191,7 @@ class Display final : public LabeledObject, angle::NonCopyable
 
     rx::DisplayImpl *getImplementation() const { return mImplementation; }
     Device *getDevice() const;
+    Surface *getSurface() const;
     EGLenum getPlatform() const { return mPlatform; }
 
     gl::Version getMaxSupportedESVersion() const;
@@ -251,6 +253,7 @@ class Display final : public LabeledObject, angle::NonCopyable
     std::string mVendorString;
 
     Device *mDevice;
+    Surface *mSurface;
     EGLenum mPlatform;
     angle::LoggingAnnotator mAnnotator;
 
