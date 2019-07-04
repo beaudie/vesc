@@ -22,6 +22,30 @@
       "revId": "cbace6f1bd8d7683380ce8e5cb18e25517db1641",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65a36169_8ccf9052",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-07-04T00:34:05Z",
+      "side": 1,
+      "message": "Sorry, did not get your point...\nbut as we already have geometry stage defined, maybe it\u0027s better to add this stage.",
+      "parentUuid": "cc6307e1_cfdce0de",
+      "range": {
+        "startLine": 2104,
+        "startChar": 0,
+        "endLine": 2111,
+        "endChar": 9
+      },
+      "revId": "cbace6f1bd8d7683380ce8e5cb18e25517db1641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
