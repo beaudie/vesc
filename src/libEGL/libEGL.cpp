@@ -33,7 +33,8 @@ void EnsureEGLLoaded()
     if (gLoaded)
         return;
 
-    gEntryPointsLib.reset(angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME));
+    gEntryPointsLib.reset(
+        angle::OpenSharedLibrary(ANGLE_GLESV2_LIBRARY_NAME, angle::SEARCH_APPLICATION_DIR));
     angle::LoadEGL_EGL(GlobalLoad);
     if (!EGL_GetPlatformDisplay)
     {

@@ -1340,7 +1340,7 @@ Library *ANGLETestEnvironment::GetEGLLibrary()
 #if defined(ANGLE_USE_UTIL_LOADER)
     if (!gEGLLibrary)
     {
-        gEGLLibrary.reset(OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
+        gEGLLibrary.reset(OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, SEARCH_APPLICATION_DIR));
     }
 #endif  // defined(ANGLE_USE_UTIL_LOADER)
     return gEGLLibrary.get();
@@ -1351,7 +1351,7 @@ Library *ANGLETestEnvironment::GetWGLLibrary()
 #if defined(ANGLE_USE_UTIL_LOADER) && defined(ANGLE_PLATFORM_WINDOWS)
     if (!gWGLLibrary)
     {
-        gWGLLibrary.reset(OpenSharedLibrary("opengl32"));
+        gWGLLibrary.reset(OpenSharedLibrary("opengl32", SEARCH_SYSTEM_DIR));
     }
 #endif  // defined(ANGLE_USE_UTIL_LOADER) && defined(ANGLE_PLATFORM_WINDOWS)
     return gWGLLibrary.get();
