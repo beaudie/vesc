@@ -186,6 +186,7 @@ class Display final : public LabeledObject, angle::NonCopyable
     rx::DisplayImpl *getImplementation() const { return mImplementation; }
     Device *getDevice() const;
     EGLenum getPlatform() const { return mPlatform; }
+    Surface *getSurface(EGLNativeWindowType window) const;
 
     gl::Version getMaxSupportedESVersion() const;
 
