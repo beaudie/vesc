@@ -363,8 +363,10 @@ class ProgramState final : angle::NonCopyable
     Optional<GLuint> getSamplerIndex(GLint location) const;
     bool isSamplerUniformIndex(GLuint index) const;
     GLuint getSamplerIndexFromUniformIndex(GLuint uniformIndex) const;
+    GLuint getUniformIndexFromSamplerIndex(GLuint samplerIndex) const;
     bool isImageUniformIndex(GLuint index) const;
     GLuint getImageIndexFromUniformIndex(GLuint uniformIndex) const;
+    GLuint getUniformIndexFromImageIndex(GLuint imageIndex) const;
     GLuint getAttributeLocation(const std::string &name) const;
 
     GLuint getBufferVariableIndexFromName(const std::string &name) const;
