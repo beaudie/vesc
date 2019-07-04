@@ -356,6 +356,7 @@ angle::Result ContextVk::finish(const gl::Context *context)
     return finishImpl();
 }
 
+<<<<<<< HEAD
 angle::Result ContextVk::waitSemaphore(const gl::Context *context,
                                        const gl::Semaphore *semaphore,
                                        GLuint numBufferBarriers,
@@ -404,6 +405,8 @@ angle::Result ContextVk::signalSemaphore(const gl::Context *context,
     return flushImpl(vk::GetImpl(semaphore)->ptr());
 }
 
+=======
+>>>>>>> 2d7fb7b2a... Refactor the wait/signalSemaphore entry points to be on the Semaphore object
 angle::Result ContextVk::setupDraw(const gl::Context *context,
                                    gl::PrimitiveMode mode,
                                    GLint firstVertex,
@@ -2131,6 +2134,12 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context)
 const gl::ActiveTextureArray<TextureVk *> &ContextVk::getActiveTextures() const
 {
     return mActiveTextures;
+}
+
+void ContextVk::insertWaitSemaphore(const vk::Semaphore *waitSemaphore)
+{
+    ASSERT(waitSemaphore);
+    mWaitSemaphores.push_back(waitSemaphore->getHandle());
 }
 
 angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)

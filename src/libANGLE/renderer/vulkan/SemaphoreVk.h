@@ -25,6 +25,14 @@ class SemaphoreVk : public SemaphoreImpl
 
     angle::Result importFd(gl::Context *context, gl::HandleType handleType, GLint fd) override;
 
+    angle::Result wait(gl::Context *context,
+                       const gl::BufferBarrierVector &bufferBarriers,
+                       const gl::TextureBarrierVector &textureBarriers) override;
+
+    angle::Result signal(gl::Context *context,
+                         const gl::BufferBarrierVector &bufferBarriers,
+                         const gl::TextureBarrierVector &textureBarriers) override;
+
     VkSemaphore getHandle() const { return mSemaphore.getHandle(); }
 
     const vk::Semaphore *ptr() const { return &mSemaphore; }
