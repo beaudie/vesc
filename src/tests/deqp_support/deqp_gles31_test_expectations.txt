@@ -628,7 +628,7 @@
 3605 VULKAN : dEQP-GLES31.functional.texture.gather.offset.* = FAIL
 
 // Compute shaders:
-3562 VULKAN : dEQP-GLES31.functional.shaders.builtin_var.compute.* = FAIL
+//3562 VULKAN : dEQP-GLES31.functional.shaders.builtin_var.compute.* = FAIL
 3562 VULKAN : dEQP-GLES31.functional.compute.* = FAIL
 3566 VULKAN : dEQP-GLES31.functional.ssbo.* = FAIL
 3561 VULKAN : dEQP-GLES31.functional.synchronization.*.ssbo* = FAIL

@@ -195,25 +195,26 @@ ProgramVk::ShaderInfo::ShaderInfo() {}
 ProgramVk::ShaderInfo::~ShaderInfo() = default;
 
 angle::Result ProgramVk::ShaderInfo::initShaders(ContextVk *contextVk,
-                                                 const std::string &vertexSource,
-                                                 const std::string &fragmentSource,
+                                                 const gl::ShaderMap<std::string> &shaderSources,
                                                  bool enableLineRasterEmulation)
 {
     ASSERT(!valid());
 
-    std::vector<uint32_t> vertexCode;
-    std::vector<uint32_t> fragmentCode;
-    ANGLE_TRY(GlslangWrapper::GetShaderCode(contextVk, contextVk->getCaps(),
-                                            enableLineRasterEmulation, vertexSource, fragmentSource,
-                                            &vertexCode, &fragmentCode));
+    gl::ShaderMap<std::vector<uint32_t>> shaderCodes;
+    ANGLE_TRY(GlslangWrapper::GetShaderCode(
+        contextVk, contextVk->getCaps(), enableLineRasterEmulation, shaderSources, &shaderCodes));
 
-    ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[gl::ShaderType::Vertex].get(),
-                                      vertexCode.data(), vertexCode.size() * sizeof(uint32_t)));
-    ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[gl::ShaderType::Fragment].get(),
-                                      fragmentCode.data(), fragmentCode.size() * sizeof(uint32_t)));
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        if (!shaderSources[shaderType].empty())
+        {
+            ANGLE_TRY(vk::InitShaderAndSerial(contextVk, &mShaders[shaderType].get(),
+                                              shaderCodes[shaderType].data(),
+                                              shaderCodes[shaderType].size() * sizeof(uint32_t)));
 
-    mProgramHelper.setShader(gl::ShaderType::Vertex, &mShaders[gl::ShaderType::Vertex]);
-    mProgramHelper.setShader(gl::ShaderType::Fragment, &mShaders[gl::ShaderType::Fragment]);
+            mProgramHelper.setShader(shaderType, &mShaders[shaderType]);
+        }
+    }
 
     return angle::Result::Continue;
 }
@@ -223,7 +224,7 @@ angle::Result ProgramVk::loadShaderSource(ContextVk *contextVk, gl::BinaryInputS
     // Read in shader sources for all shader types
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        mShaderSource[shaderType] = stream->readString();
+        mShaderSources[shaderType] = stream->readString();
     }
 
     return angle::Result::Continue;
@@ -234,7 +235,7 @@ void ProgramVk::saveShaderSource(gl::BinaryOutputStream *stream)
     // Write out shader sources for all shader types
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        stream->writeString(mShaderSource[shaderType]);
+        stream->writeString(mShaderSources[shaderType]);
     }
 }
 
@@ -341,8 +342,7 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
     // assignment done in that function.
     linkResources(resources);
 
-    GlslangWrapper::GetShaderSource(mState, resources, &mShaderSource[gl::ShaderType::Vertex],
-                                    &mShaderSource[gl::ShaderType::Fragment]);
+    GlslangWrapper::GetShaderSource(mState, resources, &mShaderSources);
 
     // TODO(jie.a.chen@intel.com): Parallelize linking.
     // http://crbug.com/849576

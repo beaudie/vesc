@@ -147,6 +147,16 @@ class ProgramVk : public ProgramImpl
             descPtrOut, pipelineOut);
     }
 
+    angle::Result getComputePipeline(ContextVk *contextVk, vk::PipelineHelper **pipelineOut)
+    {
+        vk::ShaderProgramHelper *shaderProgram;
+        ANGLE_TRY(initShaders(contextVk, mode, &shaderProgram));
+        ASSERT(!shaderProgram->isGraphicsProgram());
+        RendererVk *renderer = contextVk->getRenderer();
+        return shaderProgram->getComputePipeline(contextVk, renderer->getPipelineCache(),
+                                                 mPipelineLayout.get(), pipelineOut);
+    }
+
     // Used in testing only.
     vk::DynamicDescriptorPool *getDynamicDescriptorPool(uint32_t poolIndex)
     {
@@ -197,9 +207,7 @@ class ProgramVk : public ProgramImpl
 
         if (!shaderInfo.valid())
         {
-            ANGLE_TRY(shaderInfo.initShaders(contextVk, mShaderSource[gl::ShaderType::Vertex],
-                                             mShaderSource[gl::ShaderType::Fragment],
-                                             enableLineRasterEmulation));
+            ANGLE_TRY(shaderInfo.initShaders(contextVk, mShaderSources, enableLineRasterEmulation));
         }
 
         ASSERT(shaderInfo.valid());
@@ -260,8 +268,7 @@ class ProgramVk : public ProgramImpl
         ~ShaderInfo();
 
         angle::Result initShaders(ContextVk *contextVk,
-                                  const std::string &vertexSource,
-                                  const std::string &fragmentSource,
+                                  const gl::ShaderMap<std::string> &shaderSources,
                                   bool enableLineRasterEmulation);
         void release(ContextVk *contextVk);
 
@@ -278,7 +285,7 @@ class ProgramVk : public ProgramImpl
     ShaderInfo mLineRasterShaderInfo;
 
     // We keep the translated linked shader sources to use with shader draw call patching.
-    gl::ShaderMap<std::string> mShaderSource;
+    gl::ShaderMap<std::string> mShaderSources;
 
     // A bitset is used to quickly iterate over shaders of this program.
     gl::ShaderBitSet mShaderStages;
