@@ -384,14 +384,14 @@ if (build_angle_gles1_conform_tests) {
 
     testonly = true
 
-    deps = [
-      "${angle_root}:angle_common",
-      "${angle_root}:angle_util_static",
-      "${angle_root}:libEGL_static",
-      "${angle_root}:libGLESv1_CM_static",
-      "${angle_root}:libGLESv2_static",
-      "${angle_root}:preprocessor",
-      "${angle_root}:translator",
+    public_deps = [
+      "$angle_root:angle_common",
+      "$angle_root:angle_util_static",
+      "$angle_root:libEGL_static",
+      "$angle_root:libGLESv1_CM_static",
+      "$angle_root:libGLESv2_static",
+      "$angle_root:preprocessor",
+      "$angle_root:translator",
     ]
 
     sources = [
