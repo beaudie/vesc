@@ -84,8 +84,8 @@ template_entry_points_enum_header = """// GENERATED FILE - DO NOT EDIT.
 // entry_points_enum_autogen.h:
 //   Defines the {lib} entry points enumeration.
 
-#ifndef {lib_name}_ENTRYPOINTSENUM_AUTOGEN_H_
-#define {lib_name}_ENTRYPOINTSENUM_AUTOGEN_H_
+#ifndef ENTRYPOINTSENUM_AUTOGEN_H_
+#define ENTRYPOINTSENUM_AUTOGEN_H_
 
 namespace gl
 {{
@@ -94,7 +94,7 @@ enum class EntryPoint
 {entry_points_list}
 }};
 }}  // namespace gl
-#endif  // {lib_name}_ENTRY_POINTS_ENUM_AUTOGEN_H_
+#endif  // ENTRY_POINTS_ENUM_AUTOGEN_H_
 """
 
 template_lib_entry_point_source = """// GENERATED FILE - DO NOT EDIT.
@@ -255,7 +255,7 @@ template_sources_includes = """#include "libGLESv2/entry_points_{}_autogen.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"
 #include "libANGLE/validationES{}{}.h"
-#include "libGLESv2/entry_points_utils.h"
+#include "libANGLE/entry_points_utils.h"
 #include "libGLESv2/global_state.h"
 """
 
@@ -278,7 +278,7 @@ template_sources_includes_gl32 = """#include "openGL32/entry_points_{}_autogen.h
 #include "libANGLE/validationES31.h"
 #include "libANGLE/validationESEXT.h"
 #include "libANGLE/validationGL{}{}_autogen.h"
-#include "openGL32/entry_points_utils.h"
+#include "libANGLE/entry_points_utils.h"
 #include "libGLESv2/global_state.h"
 """
 
@@ -800,6 +800,7 @@ def main():
             '../src/libANGLE/Context_gles_3_0_autogen.h',
             '../src/libANGLE/Context_gles_3_1_autogen.h',
             '../src/libANGLE/Context_gles_ext_autogen.h',
+            '../src/libANGLE/entry_points_enum_autogen.h',
             '../src/libANGLE/validationES1_autogen.h',
             '../src/libANGLE/validationES2_autogen.h',
             '../src/libANGLE/validationES31_autogen.h',
@@ -815,7 +816,6 @@ def main():
             '../src/libANGLE/validationGL15_autogen.h',
             '../src/libANGLE/validationGL21_autogen.h',
             '../src/libANGLE/validationGL31_autogen.h',
-            '../src/libGLESv2/entry_points_enum_autogen.h',
             '../src/libGLESv2/entry_points_gles_1_0_autogen.cpp',
             '../src/libGLESv2/entry_points_gles_1_0_autogen.h',
             '../src/libGLESv2/entry_points_gles_2_0_autogen.cpp',
@@ -828,7 +828,6 @@ def main():
             '../src/libGLESv2/entry_points_gles_ext_autogen.h',
             '../src/libGLESv2/libGLESv2_autogen.cpp',
             '../src/libGLESv2/libGLESv2_autogen.def',
-            '../src/openGL32/entry_points_enum_autogen.h',
             '../src/openGL32/entry_points_gl_1_0_autogen.cpp',
             '../src/openGL32/entry_points_gl_1_0_autogen.h',
             '../src/openGL32/entry_points_gl_1_1_autogen.cpp',
@@ -1165,38 +1164,22 @@ def main():
     write_context_api_decls(context_header, glesdecls, "gles")
     write_context_api_decls(context_header, gldecls, "gl")
 
-    # Entry points enum for GLES
-    sorted_cmd_names = ["Invalid"
-                       ] + [cmd[2:] for cmd in sorted(xml.all_cmd_names.get_all_commands())]
+    # Entry point enum
+    cmd_names = ["Invalid"] + [cmd[2:] for cmd in xml.all_cmd_names.get_all_commands()]
+    gl_cmd_names = [cmd[2:] for cmd in glxml.all_cmd_names.get_all_commands()]
+    cmd_names.extend([cmd for cmd in gl_cmd_names if cmd not in cmd_names])
+    sorted_cmd_names = sorted(cmd_names)
 
-    entry_points_enum_gles = template_entry_points_enum_header.format(
+    entry_points_enum = template_entry_points_enum_header.format(
         script_name=os.path.basename(sys.argv[0]),
         data_source_name="gl.xml and gl_angle_ext.xml",
         year=date.today().year,
-        lib="GLES",
-        lib_name="LIBGLESV2",
+        lib="GL/GLES",
         entry_points_list=",\n".join(["    " + cmd for cmd in sorted_cmd_names]))
 
-    entry_points_enum_gles_header_path = path_to("libGLESv2", "entry_points_enum_autogen.h")
-    with open(entry_points_enum_gles_header_path, "w") as out:
-        out.write(entry_points_enum_gles)
-        out.close()
-
-    # Entry points enum for GL
-    sorted_cmd_names = ["Invalid"
-                       ] + [cmd[2:] for cmd in sorted(glxml.all_cmd_names.get_all_commands())]
-
-    entry_points_enum_gl = template_entry_points_enum_header.format(
-        script_name=os.path.basename(sys.argv[0]),
-        data_source_name="gl.xml and gl_angle_ext.xml",
-        year=date.today().year,
-        lib="GL",
-        lib_name="OPENGL32",
-        entry_points_list=",\n".join(["    " + cmd for cmd in sorted_cmd_names]))
-
-    entry_points_enum_gl_header_path = path_to("openGL32", "entry_points_enum_autogen.h")
-    with open(entry_points_enum_gl_header_path, "w") as out:
-        out.write(entry_points_enum_gl)
+    entry_points_enum_header_path = path_to("libANGLE", "entry_points_enum_autogen.h")
+    with open(entry_points_enum_header_path, "w") as out:
+        out.write(entry_points_enum)
         out.close()
 
     source_includes = """

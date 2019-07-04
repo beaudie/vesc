@@ -4,17 +4,17 @@
 // found in the LICENSE file.
 //
 // entry_point_utils:
-//   These helpers are used in GL entry point routines.
+//   These helpers are used in GL/GLES entry point routines.
 
-#ifndef OPENGL32_ENTRY_POINT_UTILS_H_
-#define OPENGL32_ENTRY_POINT_UTILS_H_
+#ifndef ENTRY_POINT_UTILS_H_
+#define ENTRY_POINT_UTILS_H_
 
 #include "angle_gl.h"
 #include "common/Optional.h"
 #include "common/PackedEnums.h"
 #include "common/angleutils.h"
 #include "common/mathutil.h"
-#include "openGL32/entry_points_enum_autogen.h"
+#include "libANGLE/entry_points_enum_autogen.h"
 
 namespace gl
 {
@@ -62,6 +62,20 @@ struct DefaultReturnValue<EntryPoint::GetUniformBlockIndex, GLuint>
     static constexpr GLuint kValue = GL_INVALID_INDEX;
 };
 
+// Specialized enum error value.
+template <>
+struct DefaultReturnValue<EntryPoint::ClientWaitSync, GLenum>
+{
+    static constexpr GLenum kValue = GL_WAIT_FAILED;
+};
+
+// glTestFenceNV should still return TRUE for an invalid fence.
+template <>
+struct DefaultReturnValue<EntryPoint::TestFenceNV, GLboolean>
+{
+    static constexpr GLboolean kValue = GL_TRUE;
+};
+
 template <EntryPoint EP, typename ReturnType>
 constexpr ANGLE_INLINE ReturnType GetDefaultReturnValue()
 {
@@ -69,4 +83,4 @@ constexpr ANGLE_INLINE ReturnType GetDefaultReturnValue()
 }
 }  // namespace gl
 
-#endif  // OPENGL32_ENTRY_POINT_UTILS_H_
+#endif  // ENTRY_POINT_UTILS_H_
