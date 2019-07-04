@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "b76ae888_a994317f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-04T13:13:05Z",
+      "side": 1,
+      "message": "Why can\u0027t it be an error if the blob cache function set fails?",
+      "parentUuid": "2c235255_d30ebc15",
+      "revId": "47efb479567c442010f7300962fc1cbd5021fd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "864dc6bb_20772dc2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
