@@ -541,6 +541,13 @@ constexpr angle::PackedEnumMap<gl::DrawElementsType, VkIndexType> kIndexTypeMap 
     {gl::DrawElementsType::UnsignedInt, VK_INDEX_TYPE_UINT32},
 };
 
+constexpr gl::ShaderMap<VkShaderStageFlagBits> kShaderStageMap = {
+    {gl::ShaderType::Vertex, VK_SHADER_STAGE_VERTEX_BIT},
+    {gl::ShaderType::Fragment, VK_SHADER_STAGE_FRAGMENT_BIT},
+    {gl::ShaderType::Geometry, VK_SHADER_STAGE_GEOMETRY_BIT},
+    {gl::ShaderType::Compute, VK_SHADER_STAGE_COMPUTE_BIT},
+};
+
 void GetOffset(const gl::Offset &glOffset, VkOffset3D *vkOffset);
 void GetExtent(const gl::Extents &glExtent, VkExtent3D *vkExtent);
 VkImageType GetImageType(gl::TextureType textureType);

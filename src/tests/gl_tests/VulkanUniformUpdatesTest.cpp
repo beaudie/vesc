@@ -23,6 +23,8 @@
 #include "util/EGLWindow.h"
 #include "util/shader_utils.h"
 
+#include <numeric>
+
 using namespace angle;
 
 namespace
@@ -66,15 +68,23 @@ class VulkanUniformUpdatesTest : public ANGLETest
             programVk->getDynamicDescriptorPool(rx::kUniformsAndXfbDescriptorSetIndex);
         uniformPool->setMaxSetsPerPoolForTesting(kMaxSetsForTesting);
         VkDescriptorPoolSize uniformSetSize = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
-                                               rx::GetUniformBufferDescriptorCount()};
+                                               rx::kReservedDefaultUniformBindingCount};
         (void)uniformPool->init(contextVk, &uniformSetSize, 1);
 
-        rx::vk::DynamicDescriptorPool *texturePool =
-            programVk->getDynamicDescriptorPool(rx::kTextureDescriptorSetIndex);
-        texturePool->setMaxSetsPerPoolForTesting(kMaxSetsForTesting);
-        VkDescriptorPoolSize textureSetSize = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                               contextVk->getRenderer()->getMaxActiveTextures()};
-        (void)texturePool->init(contextVk, &textureSetSize, 1);
+        const gl::ShaderMap<uint32_t> &activeSamplerCounts =
+            programVk->getState().getActiveSamplerCounts();
+        uint32_t textureCount =
+            std::accumulate(activeSamplerCounts.begin(), activeSamplerCounts.end(), 0);
+
+        if (textureCount > 0)
+        {
+            rx::vk::DynamicDescriptorPool *texturePool =
+                programVk->getDynamicDescriptorPool(rx::kTextureDescriptorSetIndex);
+            texturePool->setMaxSetsPerPoolForTesting(kMaxSetsForTesting);
+            VkDescriptorPoolSize textureSetSize = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                                   textureCount};
+            (void)texturePool->init(contextVk, &textureSetSize, 1);
+        }
     }
 
     static constexpr size_t kTextureStagingBufferSizeForTesting = 128;

@@ -714,7 +714,6 @@ void LoadInterfaceBlock(BinaryInputStream *stream, InterfaceBlock *block)
 
     LoadShaderVariableBuffer(stream, block);
 }
-
 }  // anonymous namespace
 
 // Saves the linking context for later use in resolveLink().
@@ -948,12 +947,17 @@ ImageBinding::~ImageBinding() = default;
 // ProgramState implementation.
 ProgramState::ProgramState()
     : mLabel(),
-      mAttachedShaders({}),
+      mAttachedShaders{},
       mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS),
       mMaxActiveAttribLocation(0),
       mSamplerUniformRange(0, 0),
       mImageUniformRange(0, 0),
       mAtomicCounterUniformRange(0, 0),
+      mActiveSamplerCounts{},
+      mActiveImageCounts{},
+      mActiveUniformBlockCounts{},
+      mActiveShaderStorageBlockCounts{},
+      mActiveAtomicCounterBufferCounts{},
       mBinaryRetrieveableHint(false),
       mNumViews(-1),
       // [GL_EXT_geometry_shader] Table 20.22
@@ -1022,6 +1026,12 @@ GLuint ProgramState::getSamplerIndexFromUniformIndex(GLuint uniformIndex) const
     return uniformIndex - mSamplerUniformRange.low();
 }
 
+GLuint ProgramState::getUniformIndexFromSamplerIndex(GLuint samplerIndex) const
+{
+    ASSERT(samplerIndex < mSamplerUniformRange.length());
+    return samplerIndex + mSamplerUniformRange.low();
+}
+
 bool ProgramState::isImageUniformIndex(GLuint index) const
 {
     return mImageUniformRange.contains(index);
@@ -1031,6 +1041,12 @@ GLuint ProgramState::getImageIndexFromUniformIndex(GLuint uniformIndex) const
 {
     ASSERT(isImageUniformIndex(uniformIndex));
     return uniformIndex - mImageUniformRange.low();
+}
+
+GLuint ProgramState::getUniformIndexFromImageIndex(GLuint imageIndex) const
+{
+    ASSERT(imageIndex < mImageUniformRange.length());
+    return imageIndex + mImageUniformRange.low();
 }
 
 GLuint ProgramState::getAttributeLocation(const std::string &name) const
@@ -1305,13 +1321,33 @@ angle::Result Program::link(const Context *context)
     // Re-link shaders after the unlink call.
     ASSERT(linkValidateShaders(mInfoLog));
 
-    std::unique_ptr<ProgramLinkedResources> resources;
+    bool isCompute             = mState.mAttachedShaders[ShaderType::Compute];
+    uint32_t maxVaryingVectors = isCompute ? 0 : data.getCaps().maxVaryingVectors;
+
+    // Map the varyings to the register file
+    // In WebGL, we use a slightly different handling for packing variables.
+    gl::PackMode packMode = PackMode::ANGLE_RELAXED;
+    if (!isCompute)
+    {
+        if (data.getLimitations().noFlexibleVaryingPacking)
+        {
+            // D3D9 pack mode is strictly more strict than WebGL, so takes priority.
+            packMode = PackMode::ANGLE_NON_CONFORMANT_D3D9;
+        }
+        else if (data.getExtensions().webglCompatibility)
+        {
+            packMode = PackMode::WEBGL_STRICT;
+        }
+    }
+
+    std::unique_ptr<ProgramLinkedResources> resources(new ProgramLinkedResources(
+        maxVaryingVectors, packMode, &mState.mUniformBlocks, &mState.mUniforms,
+        &mState.mShaderStorageBlocks, &mState.mBufferVariables, &mState.mAtomicCounterBuffers,
+        &mState.mActiveSamplerCounts, &mState.mActiveImageCounts, &mState.mActiveUniformBlockCounts,
+        &mState.mActiveShaderStorageBlockCounts, &mState.mActiveAtomicCounterBufferCounts));
+
     if (mState.mAttachedShaders[ShaderType::Compute])
     {
-        resources.reset(new ProgramLinkedResources(
-            0, PackMode::ANGLE_RELAXED, &mState.mUniformBlocks, &mState.mUniforms,
-            &mState.mShaderStorageBlocks, &mState.mBufferVariables, &mState.mAtomicCounterBuffers));
-
         GLuint combinedImageUniforms = 0u;
         if (!linkUniforms(context->getCaps(), mInfoLog, mUniformLocationBindings,
                           &combinedImageUniforms, &resources->unusedUniforms))
@@ -1348,23 +1384,6 @@ angle::Result Program::link(const Context *context)
     }
     else
     {
-        // Map the varyings to the register file
-        // In WebGL, we use a slightly different handling for packing variables.
-        gl::PackMode packMode = PackMode::ANGLE_RELAXED;
-        if (data.getLimitations().noFlexibleVaryingPacking)
-        {
-            // D3D9 pack mode is strictly more strict than WebGL, so takes priority.
-            packMode = PackMode::ANGLE_NON_CONFORMANT_D3D9;
-        }
-        else if (data.getExtensions().webglCompatibility)
-        {
-            packMode = PackMode::WEBGL_STRICT;
-        }
-
-        resources.reset(new ProgramLinkedResources(
-            data.getCaps().maxVaryingVectors, packMode, &mState.mUniformBlocks, &mState.mUniforms,
-            &mState.mShaderStorageBlocks, &mState.mBufferVariables, &mState.mAtomicCounterBuffers));
-
         if (!linkAttributes(context, mInfoLog))
         {
             return angle::Result::Continue;
@@ -1426,6 +1445,8 @@ angle::Result Program::link(const Context *context)
         mState.updateTransformFeedbackStrides();
     }
 
+    updateLinkedShaderStages();
+
     mLinkingState.reset(new LinkingState());
     mLinkingState->context           = context;
     mLinkingState->linkingFromBinary = false;
@@ -1467,7 +1488,6 @@ void Program::resolveLinkImpl(const Context *context)
     // According to GLES 3.0/3.1 spec for LinkProgram and UseProgram,
     // Only successfully linked program can replace the executables.
     ASSERT(mLinked);
-    updateLinkedShaderStages();
 
     // Mark implementation-specific unreferenced uniforms as ignored.
     mProgram->markUnusedUniformLocations(&mState.mUniformLocations, &mState.mSamplerBindings,
@@ -4555,6 +4575,15 @@ void Program::serialize(const Context *context, angle::MemoryBuffer *binaryOut) 
 
     stream.writeInt(mState.getLinkedShaderStages().to_ulong());
 
+    for (ShaderType shaderType : gl::AllShaderTypes())
+    {
+        stream.writeInt(mState.mActiveSamplerCounts[shaderType]);
+        stream.writeInt(mState.mActiveImageCounts[shaderType]);
+        stream.writeInt(mState.mActiveUniformBlockCounts[shaderType]);
+        stream.writeInt(mState.mActiveShaderStorageBlockCounts[shaderType]);
+        stream.writeInt(mState.mActiveAtomicCounterBufferCounts[shaderType]);
+    }
+
     mProgram->save(context, &stream);
 
     ASSERT(binaryOut);
@@ -4801,6 +4830,15 @@ angle::Result Program::deserialize(const Context *context,
     static_assert(static_cast<unsigned long>(ShaderType::EnumCount) <= sizeof(unsigned long) * 8,
                   "Too many shader types");
     mState.mLinkedShaderStages = ShaderBitSet(stream.readInt<uint8_t>());
+
+    for (ShaderType shaderType : gl::AllShaderTypes())
+    {
+        mState.mActiveSamplerCounts[shaderType]             = stream.readInt<uint32_t>();
+        mState.mActiveImageCounts[shaderType]               = stream.readInt<uint32_t>();
+        mState.mActiveUniformBlockCounts[shaderType]        = stream.readInt<uint32_t>();
+        mState.mActiveShaderStorageBlockCounts[shaderType]  = stream.readInt<uint32_t>();
+        mState.mActiveAtomicCounterBufferCounts[shaderType] = stream.readInt<uint32_t>();
+    }
 
     if (!mState.mAttachedShaders[ShaderType::Compute])
     {
