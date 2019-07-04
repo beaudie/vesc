@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "885bec37_a6fe0902",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-04T14:38:48Z",
+      "side": 1,
+      "message": "probably should clarify that it works for other libraries .. something like\n\n\"to bypass loading ANGLE libraries with the same name as system DLLs (e.g. opengl32.dll).\"",
+      "range": {
+        "startLine": 54,
+        "startChar": 37,
+        "endLine": 54,
+        "endChar": 50
+      },
+      "revId": "008f64e60d2a083627dffde4922fd0e5da22e62a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5bc6828_b420fd30",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-04T14:38:48Z",
+      "side": 1,
+      "message": "could you remove the \u003d false default argument and change all the call sites? Makes the code clearer to the caller.",
+      "range": {
+        "startLine": 55,
+        "startChar": 51,
+        "endLine": 55,
+        "endChar": 75
+      },
+      "revId": "008f64e60d2a083627dffde4922fd0e5da22e62a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
