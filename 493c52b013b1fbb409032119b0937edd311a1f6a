@@ -91,6 +91,40 @@
       "revId": "493c52b013b1fbb409032119b0937edd311a1f6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33d2f0f4_2de0b8a2",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3865,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-04T15:40:05Z",
+      "side": 1,
+      "message": "despite*",
+      "revId": "493c52b013b1fbb409032119b0937edd311a1f6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec4678df_79916c69",
+        "filename": "src/libEGL/libEGL.def",
+        "patchSetId": 11
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-04T15:40:05Z",
+      "side": 1,
+      "message": "Oops, I missed this file a while back. One of us is going to have conflicts: https://chromium-review.googlesource.com/c/angle/angle/+/1688498",
+      "revId": "493c52b013b1fbb409032119b0937edd311a1f6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
