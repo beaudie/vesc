@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf5409e7_60068a6d",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-04T18:14:59Z",
+      "side": 1,
+      "message": "nit: ApplicationDir and SystemDir - the ALL_CAPS is only necessary for values that populate the namespace. With enum class they are scoped to SearchType.",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 58,
+        "endChar": 19
+      },
+      "revId": "cdfb29c78cba5309a5478a0666e16eeca3380359",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
