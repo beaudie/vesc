@@ -26,6 +26,29 @@ ANGLE_INLINE bool UseLineRaster(const ContextVk *contextVk, gl::PrimitiveMode mo
     return contextVk->getFeatures().basicGLLineRasterization.enabled && gl::IsLineMode(mode);
 }
 
+#if 0
+struct ProgramResourceBindingsVk
+{
+    // Map resources to their assigned binding in each stage.  If the resource is bound to multiple
+    // stages, it will have the same binding in all those stages.  Bindings are guaranteed to be
+    // monotonic in the ,
+    // Maps ProgramState.mSamplerUniformRange (converted to sampler index) to the assigned binding
+    // in each stage.
+    std::vector<gl::ShaderMap<uint32_t>> samplerBindings;
+    // Map
+    std::vector<gl::ShaderMap<uint32_t>> imageBindings;
+    std::vector<gl::ShaderMap<uint32_t>> uniformBlockBindings;
+    std::vector<gl::ShaderMap<uint32_t>> storageBlockBindings;
+    std::vector<gl::ShaderMap<uint32_t>> atomicCounterBufferBindings;
+
+    uint32_t totalSamplerBindingCount;
+    uint32_t totalImageBindingCount;
+    uint32_t totalUniformBlockBindingCount;
+    uint32_t totalStorageBlockBindingCount;
+    uint32_t totalAtomicCounterBufferBindingCount;
+};
+#endif
+
 class ProgramVk : public ProgramImpl
 {
   public:
@@ -182,11 +205,9 @@ class ProgramVk : public ProgramImpl
     angle::Result linkImpl(const gl::Context *glContext, gl::InfoLog &infoLog);
     void linkResources(const gl::ProgramLinkedResources &resources);
 
-    uint32_t getUniformBuffersBindingStart() const { return 0; }
-    uint32_t getStorageBuffersBindingStart() const
-    {
-        return static_cast<uint32_t>(mState.getUniformBlocks().size());
-    }
+    void updateBindingOffsets();
+    uint32_t getUniformBlockBindingsOffset() const { return 0; }
+    uint32_t getStorageBlockBindingsOffset() const { return mStorageBlockBindingsOffset; }
 
     ANGLE_INLINE angle::Result initShaders(ContextVk *contextVk,
                                            gl::PrimitiveMode mode,
@@ -233,10 +254,7 @@ class ProgramVk : public ProgramImpl
     gl::ShaderMap<DefaultUniformBlock> mDefaultUniformBlocks;
     gl::ShaderBitSet mDefaultUniformBlocksDirty;
 
-    static constexpr uint32_t kShaderTypeMin   = static_cast<uint32_t>(gl::kGLES2ShaderTypeMin);
-    static constexpr uint32_t kShaderTypeMax   = static_cast<uint32_t>(gl::kGLES2ShaderTypeMax);
-    static constexpr uint32_t kShaderTypeCount = kShaderTypeMax - kShaderTypeMin + 1;
-    std::array<uint32_t, kShaderTypeCount> mDynamicBufferOffsets;
+    gl::ShaderArray<uint32_t> mDynamicBufferOffsets;
 
     // This is a special "empty" placeholder buffer for when a shader has no uniforms.
     // It is necessary because we want to keep a compatible pipeline layout in all cases,
@@ -284,6 +302,24 @@ class ProgramVk : public ProgramImpl
 
     // We keep the translated linked shader sources to use with shader draw call patching.
     gl::ShaderMap<std::string> mShaderSource;
+
+    // A bitset is used to quickly iterate over shaders of this program.
+    gl::ShaderBitSet mShaderStages;
+    size_t mShaderStageCount;
+
+    // Storage buffers are placed after uniform buffers in their descriptor set.  This cached value
+    // contains the offset where storage buffer bindings start.
+    uint32_t mStorageBlockBindingsOffset;
+
+#if 0
+    // Cache the binding offset of each resource type for each stage.  This is the running sum of
+    // ProgramState::mActive*Counts
+    gl::ShaderMap<uint32_t> mSamplerBindingOffsets;
+    gl::ShaderMap<uint32_t> mImageBindingOffsets;
+    gl::ShaderMap<uint32_t> mUniformBlockBindingOffsets;
+    gl::ShaderMap<uint32_t> mShaderStorageBlockBindingOffsets;
+    gl::ShaderMap<uint32_t> mAtomicCounterBufferBindingOffsets;
+#endif
 
     // Store descriptor pools here. We store the descriptors in the Program to facilitate descriptor
     // cache management. It can also allow fewer descriptors for shaders which use fewer
