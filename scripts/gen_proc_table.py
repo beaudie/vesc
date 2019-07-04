@@ -94,10 +94,6 @@ def main():
 
     glesxml = registry_xml.RegistryXML('gl.xml', 'gl_angle_ext.xml')
 
-    # Track the GLES commands so we don't add them to wgl proc table
-    gles_commands = []
-    gles_commands = []
-
     for annotation in ["2_0", "3_0", "3_1", "1_0"]:
 
         name_prefix = "GL_ES_VERSION_"
@@ -105,8 +101,6 @@ def main():
             name_prefix = "GL_VERSION_ES_CM_"
         feature_name = "{}{}".format(name_prefix, annotation)
         glesxml.AddCommands(feature_name, annotation)
-
-        gles_commands.extend(glesxml.commands[annotation])
 
     glesxml.AddExtensionCommands(registry_xml.supported_extensions, ['gles2', 'gles1'])
 
@@ -119,7 +113,6 @@ def main():
         for suffix in strip_suffixes:
             if name_no_suffix.endswith(suffix):
                 name_no_suffix = name_no_suffix[0:-len(suffix)]
-        gles_commands.append(name_no_suffix)
 
     gles_data = glesxml.all_cmd_names.get_all_commands()
 
@@ -176,7 +169,7 @@ def main():
         feature_name = "{}{}".format(name_prefix, annotation)
         glxml.AddCommands(feature_name, annotation)
 
-    wgl_data = [cmd for cmd in glxml.all_cmd_names.get_all_commands() if cmd not in gles_commands]
+    wgl_data = [cmd for cmd in glxml.all_cmd_names.get_all_commands()]
 
     wglxml = registry_xml.RegistryXML('wgl.xml')
 
