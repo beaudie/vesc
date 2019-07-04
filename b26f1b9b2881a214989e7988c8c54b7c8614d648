@@ -16,6 +16,24 @@
       "revId": "b26f1b9b2881a214989e7988c8c54b7c8614d648",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4809ad7a_caf3fda3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-04T14:12:50Z",
+      "side": 1,
+      "message": "Nice bug catching!",
+      "parentUuid": "71baeea4_aa7f66e2",
+      "revId": "b26f1b9b2881a214989e7988c8c54b7c8614d648",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
