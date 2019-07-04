@@ -46,6 +46,30 @@
       "revId": "cbace6f1bd8d7683380ce8e5cb18e25517db1641",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e4d5e7c_d033d1df",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2111,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-04T11:51:03Z",
+      "side": 1,
+      "message": "Let\u0027s keep the code like it is in this patch set for now. And we can revisit it in the future if we need to. Is that OK?",
+      "parentUuid": "65a36169_8ccf9052",
+      "range": {
+        "startLine": 2104,
+        "startChar": 0,
+        "endLine": 2111,
+        "endChar": 9
+      },
+      "revId": "cbace6f1bd8d7683380ce8e5cb18e25517db1641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
