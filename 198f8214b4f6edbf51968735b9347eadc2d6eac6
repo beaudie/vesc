@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4af6e07d_b2124385",
+        "filename": "src/libANGLE/entry_points_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-04T18:59:53Z",
+      "side": 1,
+      "message": "missed this in the first review - should be LIBANGLE_ENTRY_POINT_UTILS_H_ for this too",
+      "range": {
+        "startLine": 9,
+        "startChar": 8,
+        "endLine": 9,
+        "endChar": 28
+      },
+      "revId": "198f8214b4f6edbf51968735b9347eadc2d6eac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c300e2b5_c9281eb8",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-04T18:59:53Z",
+      "side": 1,
+      "message": "nit: sort",
+      "range": {
+        "startLine": 955,
+        "startChar": 0,
+        "endLine": 979,
+        "endChar": 35
+      },
+      "revId": "198f8214b4f6edbf51968735b9347eadc2d6eac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca7e8bff_34df5156",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 1012,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-04T18:59:53Z",
+      "side": 1,
+      "message": "nit: sort",
+      "range": {
+        "startLine": 997,
+        "startChar": 0,
+        "endLine": 1012,
+        "endChar": 40
+      },
+      "revId": "198f8214b4f6edbf51968735b9347eadc2d6eac6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
