@@ -245,13 +245,20 @@ bool RunApp(const std::vector<const char *> &args,
 class Win32Library : public Library
 {
   public:
-    Win32Library(const char *libraryName)
+    Win32Library(const char *libraryName, bool fromSystem = false)
     {
         char buffer[MAX_PATH];
         int ret = snprintf(buffer, MAX_PATH, "%s.%s", libraryName, GetSharedLibraryExtension());
         if (ret > 0 && ret < MAX_PATH)
         {
-            mModule = LoadLibraryA(buffer);
+            if (fromSystem)
+            {
+                mModule = LoadLibraryExA(buffer, NULL, LOAD_LIBRARY_SEARCH_SYSTEM32);
+            }
+            else
+            {
+                mModule = LoadLibraryA(buffer);
+            }
         }
     }
 
@@ -279,9 +286,9 @@ class Win32Library : public Library
     HMODULE mModule = nullptr;
 };
 
-Library *OpenSharedLibrary(const char *libraryName)
+Library *OpenSharedLibrary(const char *libraryName, bool fromSystem)
 {
-    return new Win32Library(libraryName);
+    return new Win32Library(libraryName, fromSystem);
 }
 
 bool IsDirectory(const char *filename)

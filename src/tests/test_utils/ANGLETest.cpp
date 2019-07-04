@@ -1351,7 +1351,7 @@ Library *ANGLETestEnvironment::GetWGLLibrary()
 #if defined(ANGLE_USE_UTIL_LOADER) && defined(ANGLE_PLATFORM_WINDOWS)
     if (!gWGLLibrary)
     {
-        gWGLLibrary.reset(OpenSharedLibrary("opengl32"));
+        gWGLLibrary.reset(OpenSharedLibrary("opengl32", true));
     }
 #endif  // defined(ANGLE_USE_UTIL_LOADER) && defined(ANGLE_PLATFORM_WINDOWS)
     return gWGLLibrary.get();
