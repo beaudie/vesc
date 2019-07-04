@@ -66,15 +66,21 @@ class VulkanUniformUpdatesTest : public ANGLETest
             programVk->getDynamicDescriptorPool(rx::kUniformsAndXfbDescriptorSetIndex);
         uniformPool->setMaxSetsPerPoolForTesting(kMaxSetsForTesting);
         VkDescriptorPoolSize uniformSetSize = {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,
-                                               rx::GetUniformBufferDescriptorCount()};
+                                               rx::kReservedDefaultUniformBindingCount};
         (void)uniformPool->init(contextVk, &uniformSetSize, 1);
 
-        rx::vk::DynamicDescriptorPool *texturePool =
-            programVk->getDynamicDescriptorPool(rx::kTextureDescriptorSetIndex);
-        texturePool->setMaxSetsPerPoolForTesting(kMaxSetsForTesting);
-        VkDescriptorPoolSize textureSetSize = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                               contextVk->getRenderer()->getMaxActiveTextures()};
-        (void)texturePool->init(contextVk, &textureSetSize, 1);
+        uint32_t textureCount =
+            static_cast<uint32_t>(programVk->getState().getSamplerBindings().size());
+
+        if (textureCount > 0)
+        {
+            rx::vk::DynamicDescriptorPool *texturePool =
+                programVk->getDynamicDescriptorPool(rx::kTextureDescriptorSetIndex);
+            texturePool->setMaxSetsPerPoolForTesting(kMaxSetsForTesting);
+            VkDescriptorPoolSize textureSetSize = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                                   textureCount};
+            (void)texturePool->init(contextVk, &textureSetSize, 1);
+        }
     }
 
     static constexpr size_t kTextureStagingBufferSizeForTesting = 128;
