@@ -386,6 +386,18 @@ Display *Display::GetDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay
 }
 
 // static
+Display *Display::GetExistingDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay)
+{
+    ANGLEPlatformDisplayMap *displays = GetANGLEPlatformDisplayMap();
+    const auto &iter                  = displays->find(nativeDisplay);
+
+    // Check that there is a matching display
+    ASSERT(iter != displays->end());
+
+    return iter->second;
+}
+
+// static
 Display *Display::GetDisplayFromDevice(Device *device, const AttributeMap &attribMap)
 {
     Display *display = nullptr;
@@ -1387,6 +1399,15 @@ const std::string &Display::getVendorString() const
 Device *Display::getDevice() const
 {
     return mDevice;
+}
+
+Surface *Display::getExistingWindowSurface(EGLNativeWindowType window) const
+{
+    WindowSurfaceMap *windowSurfaces = GetWindowSurfaces();
+    ASSERT(windowSurfaces);
+
+    auto s = windowSurfaces->find(window);
+    return (s != windowSurfaces->end()) ? s->second : nullptr;
 }
 
 gl::Version Display::getMaxSupportedESVersion() const
