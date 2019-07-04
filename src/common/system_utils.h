@@ -51,7 +51,8 @@ class Library : angle::NonCopyable
     }
 };
 
-Library *OpenSharedLibrary(const char *libraryName);
+// Use fromSystem = true when loading openGL32.dll on Windows
+Library *OpenSharedLibrary(const char *libraryName, bool fromSystem = false);
 
 // Returns true if the process is currently being debugged.
 bool IsDebuggerAttached();
