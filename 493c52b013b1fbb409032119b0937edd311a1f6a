@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98355d37_9eab8225",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-04T14:32:11Z",
+      "side": 1,
+      "message": "nit: typo",
+      "range": {
+        "startLine": 9,
+        "startChar": 4,
+        "endLine": 9,
+        "endChar": 16
+      },
+      "revId": "493c52b013b1fbb409032119b0937edd311a1f6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "555050f5_d5081cf7",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-04T14:32:11Z",
+      "side": 1,
+      "message": "for consistency can you move all the inits in the header?",
+      "range": {
+        "startLine": 901,
+        "startChar": 9,
+        "endLine": 901,
+        "endChar": 37
+      },
+      "revId": "493c52b013b1fbb409032119b0937edd311a1f6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b428d5d8_2911874d",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-04T14:32:11Z",
+      "side": 1,
+      "message": "nit: Caps for static methods.",
+      "range": {
+        "startLine": 162,
+        "startChar": 27,
+        "endLine": 162,
+        "endChar": 48
+      },
+      "revId": "493c52b013b1fbb409032119b0937edd311a1f6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b129d01_59d0fae7",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-04T14:32:11Z",
+      "side": 1,
+      "message": "is it actually necessary to say struct here? I thought that was some old idiom.",
+      "range": {
+        "startLine": 162,
+        "startChar": 55,
+        "endLine": 162,
+        "endChar": 61
+      },
+      "revId": "493c52b013b1fbb409032119b0937edd311a1f6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
