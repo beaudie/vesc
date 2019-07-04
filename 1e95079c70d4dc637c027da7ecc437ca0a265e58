@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e5fa59a3_32e968a5",
+        "filename": "src/common/system_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-04T16:40:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bbb0ea3_e04b5a5c",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 16
+      },
+      "revId": "1e95079c70d4dc637c027da7ecc437ca0a265e58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82e3e784_223df7fe",
         "filename": "src/common/system_utils_win.cpp",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "42a8e9bd_a7e5dc58",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-04T16:40:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82e3e784_223df7fe",
+      "range": {
+        "startLine": 248,
+        "startChar": 57,
+        "endLine": 248,
+        "endChar": 65
+      },
+      "revId": "1e95079c70d4dc637c027da7ecc437ca0a265e58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "126e682e_d1d307f3",
         "filename": "src/common/system_utils_win.cpp",
         "patchSetId": 4
@@ -68,6 +116,30 @@
       "revId": "1e95079c70d4dc637c027da7ecc437ca0a265e58",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5704b78b_d73734ae",
+        "filename": "src/common/system_utils_win.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-04T16:40:02Z",
+      "side": 1,
+      "message": "https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibraryexa\nThis says to use NULL",
+      "parentUuid": "126e682e_d1d307f3",
+      "range": {
+        "startLine": 256,
+        "startChar": 49,
+        "endLine": 256,
+        "endChar": 53
+      },
+      "revId": "1e95079c70d4dc637c027da7ecc437ca0a265e58",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
