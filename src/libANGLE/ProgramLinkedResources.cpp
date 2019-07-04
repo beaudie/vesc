@@ -410,7 +410,7 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
         bool isSampler                              = IsSamplerType(variable.type);
         bool isImage                                = IsImageType(variable.type);
         bool isAtomicCounter                        = IsAtomicCounterType(variable.type);
-        std::vector<gl::LinkedUniform> *uniformList = mUniforms;
+        std::vector<LinkedUniform> *uniformList     = mUniforms;
         if (isSampler)
         {
             uniformList = mSamplerUniforms;
@@ -618,7 +618,7 @@ bool InterfaceBlockInfo::getBlockSize(const std::string &name,
                                       size_t *sizeOut)
 {
     size_t nameLengthWithoutArrayIndex;
-    gl::ParseArrayIndex(name, &nameLengthWithoutArrayIndex);
+    ParseArrayIndex(name, &nameLengthWithoutArrayIndex);
     std::string baseName = name.substr(0u, nameLengthWithoutArrayIndex);
     auto sizeIter        = mBlockSizes.find(baseName);
     if (sizeIter == mBlockSizes.end())
@@ -644,6 +644,17 @@ bool InterfaceBlockInfo::getBlockMemberInfo(const std::string &name,
 
     *infoOut = infoIter->second;
     return true;
+}
+
+void UpdateActiveResourceCounts(const ActiveVariable &resource, ShaderMap<uint32_t> *counts)
+{
+    for (const ShaderType shaderType : AllShaderTypes())
+    {
+        if (resource.isActive(shaderType))
+        {
+            ++(*counts)[shaderType];
+        }
+    }
 }
 }  // anonymous namespace
 
@@ -699,7 +710,7 @@ bool UniformLinker::validateGraphicsUniforms(InfoLog &infoLog) const
     // Check that uniforms defined in the graphics shaders are identical
     std::map<std::string, ShaderUniform> linkedUniforms;
 
-    for (ShaderType shaderType : kAllGraphicsShaderTypes)
+    for (const ShaderType shaderType : kAllGraphicsShaderTypes)
     {
         Shader *currentShader = mState.getAttachedShader(shaderType);
         if (currentShader)
@@ -988,7 +999,7 @@ bool UniformLinker::flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoL
     std::vector<LinkedUniform> atomicCounterUniforms;
     std::vector<UnusedUniform> unusedUniforms;
 
-    for (ShaderType shaderType : AllShaderTypes())
+    for (const ShaderType shaderType : AllShaderTypes())
     {
         Shader *shader = mState.getAttachedShader(shaderType);
         if (!shader)
@@ -1050,7 +1061,7 @@ void InterfaceBlockLinker::linkBlocks(const GetBlockSizeFunc &getBlockSize,
 
     std::set<std::string> visitedList;
 
-    for (ShaderType shaderType : AllShaderTypes())
+    for (const ShaderType shaderType : AllShaderTypes())
     {
         if (!mShaderBlocks[shaderType])
         {
@@ -1226,6 +1237,62 @@ void AtomicCounterBufferLinker::link(const std::map<int, unsigned int> &sizeMap)
     }
 }
 
+ActiveResourceCounter::ActiveResourceCounter(
+    ShaderMap<uint32_t> *activeSamplerCountsOut,
+    ShaderMap<uint32_t> *activeImageCountsOut,
+    ShaderMap<uint32_t> *activeUniformBlockCountsOut,
+    ShaderMap<uint32_t> *activeShaderStorageBlockCountsOut,
+    ShaderMap<uint32_t> *activeAtomicCounterBufferCountsOut)
+    : mActiveSamplerCountsOut(activeSamplerCountsOut),
+      mActiveImageCountsOut(activeImageCountsOut),
+      mActiveUniformBlockCountsOut(activeUniformBlockCountsOut),
+      mActiveShaderStorageBlockCountsOut(activeShaderStorageBlockCountsOut),
+      mActiveAtomicCounterBufferCountsOut(activeAtomicCounterBufferCountsOut)
+{}
+
+ActiveResourceCounter::~ActiveResourceCounter() {}
+
+void ActiveResourceCounter::countActiveResources(const ProgramState &programState) const
+{
+    mActiveSamplerCountsOut->fill(0);
+    mActiveImageCountsOut->fill(0);
+    mActiveUniformBlockCountsOut->fill(0);
+    mActiveShaderStorageBlockCountsOut->fill(0);
+    mActiveAtomicCounterBufferCountsOut->fill(0);
+
+    const std::vector<LinkedUniform> &uniforms = programState.getUniforms();
+
+    // Active samplers:
+    for (unsigned int uniformIndex : programState.getSamplerUniformRange())
+    {
+        UpdateActiveResourceCounts(uniforms[uniformIndex], mActiveSamplerCountsOut);
+    }
+
+    // Active images:
+    for (unsigned int uniformIndex : programState.getImageUniformRange())
+    {
+        UpdateActiveResourceCounts(uniforms[uniformIndex], mActiveImageCountsOut);
+    }
+
+    // Active UBOs:
+    for (const InterfaceBlock &block : programState.getUniformBlocks())
+    {
+        UpdateActiveResourceCounts(block, mActiveUniformBlockCountsOut);
+    }
+
+    // Active SSBOs:
+    for (const InterfaceBlock &block : programState.getShaderStorageBlocks())
+    {
+        UpdateActiveResourceCounts(block, mActiveShaderStorageBlockCountsOut);
+    }
+
+    // Active atomic counter buffers:
+    for (const AtomicCounterBuffer &buffer : programState.getAtomicCounterBuffers())
+    {
+        UpdateActiveResourceCounts(buffer, mActiveAtomicCounterBufferCountsOut);
+    }
+}
+
 ProgramLinkedResources::ProgramLinkedResources(
     GLuint maxVaryingVectors,
     PackMode packMode,
@@ -1233,23 +1300,33 @@ ProgramLinkedResources::ProgramLinkedResources(
     std::vector<LinkedUniform> *uniformsOut,
     std::vector<InterfaceBlock> *shaderStorageBlocksOut,
     std::vector<BufferVariable> *bufferVariablesOut,
-    std::vector<AtomicCounterBuffer> *atomicCounterBuffersOut)
+    std::vector<AtomicCounterBuffer> *atomicCounterBuffersOut,
+    ShaderMap<uint32_t> *activeSamplerCountsOut,
+    ShaderMap<uint32_t> *activeImageCountsOut,
+    ShaderMap<uint32_t> *activeUniformBlockCountsOut,
+    ShaderMap<uint32_t> *activeShaderStorageBlockCountsOut,
+    ShaderMap<uint32_t> *activeAtomicCounterBufferCountsOut)
     : varyingPacking(maxVaryingVectors, packMode),
       uniformBlockLinker(uniformBlocksOut, uniformsOut, &unusedInterfaceBlocks),
       shaderStorageBlockLinker(shaderStorageBlocksOut, bufferVariablesOut, &unusedInterfaceBlocks),
-      atomicCounterBufferLinker(atomicCounterBuffersOut)
+      atomicCounterBufferLinker(atomicCounterBuffersOut),
+      activeResourceCounter(activeSamplerCountsOut,
+                            activeImageCountsOut,
+                            activeUniformBlockCountsOut,
+                            activeShaderStorageBlockCountsOut,
+                            activeAtomicCounterBufferCountsOut)
 {}
 
 ProgramLinkedResources::~ProgramLinkedResources() = default;
 
-void ProgramLinkedResourcesLinker::linkResources(const gl::ProgramState &programState,
-                                                 const gl::ProgramLinkedResources &resources) const
+void ProgramLinkedResourcesLinker::linkResources(const ProgramState &programState,
+                                                 const ProgramLinkedResources &resources) const
 {
     // Gather uniform interface block info.
     InterfaceBlockInfo uniformBlockInfo(mCustomEncoderFactory);
-    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const ShaderType shaderType : AllShaderTypes())
     {
-        gl::Shader *shader = programState.getAttachedShader(shaderType);
+        Shader *shader = programState.getAttachedShader(shaderType);
         if (shader)
         {
             uniformBlockInfo.getShaderBlockInfo(shader->getUniformBlocks());
@@ -1272,9 +1349,9 @@ void ProgramLinkedResourcesLinker::linkResources(const gl::ProgramState &program
 
     // Gather storage bufer interface block info.
     InterfaceBlockInfo shaderStorageBlockInfo(mCustomEncoderFactory);
-    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    for (const ShaderType shaderType : AllShaderTypes())
     {
-        gl::Shader *shader = programState.getAttachedShader(shaderType);
+        Shader *shader = programState.getAttachedShader(shaderType);
         if (shader)
         {
             shaderStorageBlockInfo.getShaderBlockInfo(shader->getShaderStorageBlocks());
@@ -1300,15 +1377,17 @@ void ProgramLinkedResourcesLinker::linkResources(const gl::ProgramState &program
     std::map<int, unsigned int> sizeMap;
     getAtomicCounterBufferSizeMap(programState, sizeMap);
     resources.atomicCounterBufferLinker.link(sizeMap);
+
+    resources.activeResourceCounter.countActiveResources(programState);
 }
 
 void ProgramLinkedResourcesLinker::getAtomicCounterBufferSizeMap(
-    const gl::ProgramState &programState,
+    const ProgramState &programState,
     std::map<int, unsigned int> &sizeMapOut) const
 {
     for (unsigned int index : programState.getAtomicCounterUniformRange())
     {
-        const gl::LinkedUniform &glUniform = programState.getUniforms()[index];
+        const LinkedUniform &glUniform = programState.getUniforms()[index];
 
         auto &bufferDataSize = sizeMapOut[glUniform.binding];
 

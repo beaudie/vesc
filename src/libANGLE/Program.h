@@ -344,6 +344,18 @@ class ProgramState final : angle::NonCopyable
     const RangeUI &getImageUniformRange() const { return mImageUniformRange; }
     const RangeUI &getAtomicCounterUniformRange() const { return mAtomicCounterUniformRange; }
 
+    ShaderMap<uint32_t> getActiveSamplerCounts() const { return mActiveSamplerCounts; }
+    ShaderMap<uint32_t> getActiveImageCounts() const { return mActiveImageCounts; }
+    ShaderMap<uint32_t> getActiveUniformBlockCounts() const { return mActiveUniformBlockCounts; }
+    ShaderMap<uint32_t> getActiveShaderStorageBlockCounts() const
+    {
+        return mActiveShaderStorageBlockCounts;
+    }
+    ShaderMap<uint32_t> getActiveAtomicCounterBufferCounts() const
+    {
+        return mActiveAtomicCounterBufferCounts;
+    }
+
     const std::vector<TransformFeedbackVarying> &getLinkedTransformFeedbackVaryings() const
     {
         return mLinkedTransformFeedbackVaryings;
@@ -363,8 +375,10 @@ class ProgramState final : angle::NonCopyable
     Optional<GLuint> getSamplerIndex(GLint location) const;
     bool isSamplerUniformIndex(GLuint index) const;
     GLuint getSamplerIndexFromUniformIndex(GLuint uniformIndex) const;
+    GLuint getUniformIndexFromSamplerIndex(GLuint samplerIndex) const;
     bool isImageUniformIndex(GLuint index) const;
     GLuint getImageIndexFromUniformIndex(GLuint uniformIndex) const;
+    GLuint getUniformIndexFromImageIndex(GLuint imageIndex) const;
     GLuint getAttributeLocation(const std::string &name) const;
 
     GLuint getBufferVariableIndexFromName(const std::string &name) const;
@@ -434,6 +448,14 @@ class ProgramState final : angle::NonCopyable
     RangeUI mSamplerUniformRange;
     RangeUI mImageUniformRange;
     RangeUI mAtomicCounterUniformRange;
+
+    // Cache a count of the number of active resources in each stage.  This can be used to assign
+    // offsets to resource bindings in each stage.
+    ShaderMap<uint32_t> mActiveSamplerCounts;
+    ShaderMap<uint32_t> mActiveImageCounts;
+    ShaderMap<uint32_t> mActiveUniformBlockCounts;
+    ShaderMap<uint32_t> mActiveShaderStorageBlockCounts;
+    ShaderMap<uint32_t> mActiveAtomicCounterBufferCounts;
 
     // An array of the samplers that are used by the program
     std::vector<SamplerBinding> mSamplerBindings;
