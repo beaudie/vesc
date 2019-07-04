@@ -244,6 +244,8 @@ format_dict = {
     "HGLRC": "0x%016\" PRIxPTR \"",
     "LPCSTR": "0x%016\" PRIxPTR \"",
     "LPGLYPHMETRICSFLOAT": "0x%016\" PRIxPTR \"",
+    "LPPIXELFORMATDESCRIPTOR": "0x%016\" PRIxPTR \"",
+    "LPLAYERPLANEDESCRIPTOR": "0x%016\" PRIxPTR \"",
     "UINT": "%u",
 }
 

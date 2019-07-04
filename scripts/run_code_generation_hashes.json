@@ -94,7 +94,7 @@
   "GL/EGL entry points:scripts/entry_point_packed_gl_enums.json":
     "08665ca9ebf22fa759c1ce0e965a200d",
   "GL/EGL entry points:scripts/generate_entry_points.py":
-    "d4b4c2c5a2a0ad11eda1f7516076e4aa",
+    "f8b5ab55c6c5a1f6e1118e8b583df4e8",
   "GL/EGL entry points:scripts/gl.xml":
     "b470cb06b06cbbe7adb2c8129ec85708",
   "GL/EGL entry points:scripts/gl_angle_ext.xml":
@@ -102,7 +102,7 @@
   "GL/EGL entry points:scripts/registry_xml.py":
     "683a498150204f16c44264714e2bed07",
   "GL/EGL entry points:scripts/wgl.xml":
-    "aa96419c582af2f6673430e2847693f4",
+    "dfc00d5410b6ff475e7f3bbbe71f9a99",
   "GL/EGL entry points:src/libANGLE/Context_gl_1_0_autogen.h":
     "57231b5bc958327034059eb7e5cd6636",
   "GL/EGL entry points:src/libANGLE/Context_gl_1_1_autogen.h":
@@ -244,7 +244,7 @@
   "GL/EGL/WGL loader:scripts/registry_xml.py":
     "683a498150204f16c44264714e2bed07",
   "GL/EGL/WGL loader:scripts/wgl.xml":
-    "aa96419c582af2f6673430e2847693f4",
+    "dfc00d5410b6ff475e7f3bbbe71f9a99",
   "GL/EGL/WGL loader:src/libEGL/egl_loader_autogen.cpp":
     "0ebe5668fba36b5b4ad5abb64c21ca32",
   "GL/EGL/WGL loader:src/libEGL/egl_loader_autogen.h":
@@ -552,7 +552,7 @@
   "proc table:scripts/registry_xml.py":
     "683a498150204f16c44264714e2bed07",
   "proc table:scripts/wgl.xml":
-    "aa96419c582af2f6673430e2847693f4",
+    "dfc00d5410b6ff475e7f3bbbe71f9a99",
   "proc table:src/libGLESv2/proc_table_egl_autogen.cpp":
     "6ab624dce9ebcdeaea091b27d98ed1ce",
   "proc table:src/openGL32/proc_table_wgl_autogen.cpp":
