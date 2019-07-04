@@ -118,6 +118,22 @@ class FrameCapture final : angle::NonCopyable
     size_t mReadBufferSize;
 };
 
+template <typename CaptureFuncT, typename ValidationFuncT, typename... ArgsT>
+void CaptureCallToFrameCapture(gl::Context *context,
+                               const char *entryPointName,
+                               CaptureFuncT captureFunc,
+                               ValidationFuncT validationFunc,
+                               ArgsT... captureParams)
+{
+    FrameCapture *frameCapture = context->getFrameCapture();
+    if (!frameCapture->enabled())
+        return;
+
+    bool isCallValid        = validationFunc(context, captureParams...);
+    ParamBuffer paramBuffer = captureFunc(context, isCallValid, captureParams...);
+    frameCapture->captureCall(context, entryPointName, std::move(paramBuffer), isCallValid);
+}
+
 template <typename T>
 void ParamBuffer::addValueParam(const char *paramName, ParamType paramType, T paramValue)
 {
