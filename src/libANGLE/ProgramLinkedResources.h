@@ -181,6 +181,29 @@ class AtomicCounterBufferLinker final : angle::NonCopyable
     std::vector<AtomicCounterBuffer> *mAtomicCounterBuffersOut;
 };
 
+// A post-processing step after interface blocks are linked to count resources that are active in
+// each stage.  This will allow the backends to quickly determine how many of each resource will be
+// present in each stage and allocate bindings accordingly.
+class ActiveResourceCounter final : angle::NonCopyable
+{
+  public:
+    ActiveResourceCounter(ShaderMap<uint32_t> *activeSamplerCountsOut,
+                          ShaderMap<uint32_t> *activeImageCountsOut,
+                          ShaderMap<uint32_t> *activeUniformBlockCountsOut,
+                          ShaderMap<uint32_t> *activeShaderStorageBlockCountsOut,
+                          ShaderMap<uint32_t> *activeAtomicCounterBufferCountsOut);
+    ~ActiveResourceCounter();
+
+    void countActiveResources(const ProgramState &programState) const;
+
+  private:
+    ShaderMap<uint32_t> *mActiveSamplerCountsOut;
+    ShaderMap<uint32_t> *mActiveImageCountsOut;
+    ShaderMap<uint32_t> *mActiveUniformBlockCountsOut;
+    ShaderMap<uint32_t> *mActiveShaderStorageBlockCountsOut;
+    ShaderMap<uint32_t> *mActiveAtomicCounterBufferCountsOut;
+};
+
 // The link operation is responsible for finishing the link of uniform and interface blocks.
 // This way it can filter out unreferenced resources and still have access to the info.
 // TODO(jmadill): Integrate uniform linking/filtering as well as interface blocks.
@@ -204,7 +227,12 @@ struct ProgramLinkedResources
                            std::vector<LinkedUniform> *uniformsOut,
                            std::vector<InterfaceBlock> *shaderStorageBlocksOut,
                            std::vector<BufferVariable> *bufferVariablesOut,
-                           std::vector<AtomicCounterBuffer> *atomicCounterBuffersOut);
+                           std::vector<AtomicCounterBuffer> *atomicCounterBuffersOut,
+                           ShaderMap<uint32_t> *activeSamplerCountsOut,
+                           ShaderMap<uint32_t> *activeImageCountsOut,
+                           ShaderMap<uint32_t> *activeUniformBlockCountsOut,
+                           ShaderMap<uint32_t> *activeShaderStorageBlockCountsOut,
+                           ShaderMap<uint32_t> *activeAtomicCounterBufferCountsOut);
     ~ProgramLinkedResources();
 
     VaryingPacking varyingPacking;
@@ -213,6 +241,7 @@ struct ProgramLinkedResources
     AtomicCounterBufferLinker atomicCounterBufferLinker;
     std::vector<UnusedUniform> unusedUniforms;
     std::vector<std::string> unusedInterfaceBlocks;
+    ActiveResourceCounter activeResourceCounter;
 };
 
 class CustomBlockLayoutEncoderFactory : angle::NonCopyable
@@ -232,11 +261,11 @@ class ProgramLinkedResourcesLinker final : angle::NonCopyable
         : mCustomEncoderFactory(customEncoderFactory)
     {}
 
-    void linkResources(const gl::ProgramState &programState,
-                       const gl::ProgramLinkedResources &resources) const;
+    void linkResources(const ProgramState &programState,
+                       const ProgramLinkedResources &resources) const;
 
   private:
-    void getAtomicCounterBufferSizeMap(const gl::ProgramState &programState,
+    void getAtomicCounterBufferSizeMap(const ProgramState &programState,
                                        std::map<int, unsigned int> &sizeMapOut) const;
 
     CustomBlockLayoutEncoderFactory *mCustomEncoderFactory;

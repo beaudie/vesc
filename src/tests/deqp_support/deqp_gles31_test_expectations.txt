@@ -714,12 +714,6 @@
 3520 VULKAN : dEQP-GLES31.functional.state_query.texture_level.texture_2d.compressed_integer = SKIP
 3520 VULKAN : dEQP-GLES31.functional.state_query.texture_level.texture_2d.compressed_float = SKIP
 
-// Vulkan limits lower than GLES minimum:
-3633 VULKAN : dEQP-GLES31.functional.state_query.integer.max_uniform_buffer_bindings_get* = FAIL
-3633 VULKAN : dEQP-GLES31.functional.state_query.integer.max_combined_uniform_blocks_get* = FAIL
-3633 VULKAN : dEQP-GLES31.functional.ubo.random.all_per_block_buffers.20 = FAIL
-3633 VULKAN : dEQP-GLES31.functional.ubo.random.all_per_block_buffers.31 = FAIL
-
 // column/row_major specified on struct member:
 3443 VULKAN : dEQP-GLES31.functional.ubo.random.all_per_block_buffers.12 = FAIL
 
