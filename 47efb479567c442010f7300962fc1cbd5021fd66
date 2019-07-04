@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "2c235255_d30ebc15",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-07-04T00:56:23Z",
+      "side": 1,
+      "message": "Sorry, not quite understand what you mean.\nThe cache is indeed created before calling getPipelineCache, we have called initPipelineCache in initializeDevice.\nBut the problem is the cache created at that time maybe empty, as the callback functions are not set yet.\nonGetPipelineCache wants to recreate cache if we have set callback functions, but it can\u0027t be an error if we fail to create a non-empty cache, right? We can still use the previous created empty cache to create pipeline.",
+      "parentUuid": "510b9d7b_6ecdfcc9",
+      "revId": "47efb479567c442010f7300962fc1cbd5021fd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "864dc6bb_20772dc2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
