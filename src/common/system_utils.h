@@ -51,7 +51,7 @@ class Library : angle::NonCopyable
     }
 };
 
-Library *OpenSharedLibrary(const char *libraryName);
+Library *OpenSharedLibrary(const char *libraryName, bool fromSystem = false);
 
 // Returns true if the process is currently being debugged.
 bool IsDebuggerAttached();

@@ -123,7 +123,7 @@ def get_results(metric, extra_args=[]):
         print("Did not find the metric '%s' in the test output:" % metric)
         print(output)
         sys.exit(1)
-
+    print m
     return [float(value) for value in m]
 
 
