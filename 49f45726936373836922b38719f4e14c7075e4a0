@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "998cf269_e976a6ab",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-04T14:49:18Z",
+      "side": 1,
+      "message": "You can surround this with `if (signalSemaphore)`. The struct is already cleared.",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 90
+      },
+      "revId": "49f45726936373836922b38719f4e14c7075e4a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2f569c4_47b65f45",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-04T14:49:18Z",
+      "side": 1,
+      "message": "Please add a comment here explaining that we don\u0027t need to wait on the acquire semaphore because this function is always generating commands, so there\u0027s always something to flush (and ContextVk::flushImpl will use that semaphore).\n\nIf in the future this function is changed in such a way that may not generate commands, there would be a bug. You could even `ASSERT(!contextVk-\u003egetCommandGraph()-\u003eempty());`.\n\nAn example of such a change would be to avoid the layout transition if the layout is already Present.",
+      "revId": "49f45726936373836922b38719f4e14c7075e4a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50fc8e6d_5b0cce08",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-04T14:49:18Z",
+      "side": 1,
+      "message": "This is incremented in `present` before a call to `nextSwapchainImage`. It basically means you are waiting on the previous frame instead of the one before previous. This should be put back in `present` before `mSwapHistory[mCurrentSwapHistroyIndex]` and `mCurrentSwapHistroyIndex` are modified.",
+      "range": {
+        "startLine": 1004,
+        "startChar": 37,
+        "endLine": 1004,
+        "endChar": 61
+      },
+      "revId": "49f45726936373836922b38719f4e14c7075e4a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
