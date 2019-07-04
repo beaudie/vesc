@@ -51,7 +51,9 @@ class Library : angle::NonCopyable
     }
 };
 
-Library *OpenSharedLibrary(const char *libraryName);
+// Use fromSystem = true to bypass loading ANGLE libraries with the same name as system DLLS (e.g.
+// opengl32.dll)
+Library *OpenSharedLibrary(const char *libraryName, bool fromSystem);
 
 // Returns true if the process is currently being debugged.
 bool IsDebuggerAttached();

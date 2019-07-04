@@ -64,7 +64,7 @@ SampleApplication::SampleApplication(std::string name,
     }
 
     // Load EGL library so we can initialize the display.
-    mEntryPointsLib.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
+    mEntryPointsLib.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, false));
 
     mEGLWindow = EGLWindow::New(glesMajorVersion, glesMinorVersion);
     mTimer.reset(CreateTimer());

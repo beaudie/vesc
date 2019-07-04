@@ -63,7 +63,7 @@ EGLMakeCurrentPerfTest::EGLMakeCurrentPerfTest()
     mOSWindow = OSWindow::New();
     mOSWindow->initialize("EGLMakeCurrent Test", 64, 64);
 
-    mEGLLibrary.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME));
+    mEGLLibrary.reset(angle::OpenSharedLibrary(ANGLE_EGL_LIBRARY_NAME, false));
 
     angle::LoadProc getProc =
         reinterpret_cast<angle::LoadProc>(mEGLLibrary->getSymbol("eglGetProcAddress"));
