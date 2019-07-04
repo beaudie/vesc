@@ -760,6 +760,9 @@ class DispatchTableGL : angle::NonCopyable
     PFNGLTEXTURESTORAGEMEM3DEXTPROC textureStorageMem3DEXT = nullptr;
     PFNGLTEXTURESTORAGEMEM3DMULTISAMPLEEXTPROC textureStorageMem3DMultisampleEXT = nullptr;
 
+    // GL_EXT_memory_object_fd
+    PFNGLIMPORTMEMORYFDEXTPROC importMemoryFdEXT = nullptr;
+
     // GL_EXT_semaphore
     PFNGLDELETESEMAPHORESEXTPROC deleteSemaphoresEXT = nullptr;
     PFNGLGENSEMAPHORESEXTPROC genSemaphoresEXT = nullptr;
@@ -768,6 +771,9 @@ class DispatchTableGL : angle::NonCopyable
     PFNGLSEMAPHOREPARAMETERUI64VEXTPROC semaphoreParameterui64vEXT = nullptr;
     PFNGLSIGNALSEMAPHOREEXTPROC signalSemaphoreEXT = nullptr;
     PFNGLWAITSEMAPHOREEXTPROC waitSemaphoreEXT = nullptr;
+
+    // GL_EXT_semaphore_fd
+    PFNGLIMPORTSEMAPHOREFDEXTPROC importSemaphoreFdEXT = nullptr;
 
     // GL_KHR_parallel_shader_compile
     PFNGLMAXSHADERCOMPILERTHREADSKHRPROC maxShaderCompilerThreadsKHR = nullptr;

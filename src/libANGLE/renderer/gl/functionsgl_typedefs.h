@@ -2000,6 +2000,17 @@ typedef void(INTERNAL_GL_APIENTRY *PFNGLSIGNALSEMAPHOREEXTPROC)(GLuint semaphore
                                                                 const GLuint *textures,
                                                                 const GLenum *dstLayouts);
 
+// GL_EXT_memory_object_fd
+typedef void(INTERNAL_GL_APIENTRY *PFNGLIMPORTMEMORYFDEXTPROC)(GLuint memory,
+                                                               GLuint64 size,
+                                                               GLenum handleType,
+                                                               GLint fd);
+
+// GL_EXT_semaphore_fd
+typedef void(INTERNAL_GL_APIENTRY *PFNGLIMPORTSEMAPHOREFDEXTPROC)(GLuint semaphore,
+                                                                  GLenum handleType,
+                                                                  GLint fd);
+
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_GL_FUNCTIONSGLTYPEDEFS_H_

@@ -837,5 +837,15 @@
         "GetSemaphoreParameterui64vEXT",
         "WaitSemaphoreEXT",
         "SignalSemaphoreEXT"
+    ],
+
+    "GL_EXT_memory_object_fd":
+    [
+        "ImportMemoryFdEXT"
+    ],
+
+    "GL_EXT_semaphore_fd":
+    [
+        "ImportSemaphoreFdEXT"
     ]
 }

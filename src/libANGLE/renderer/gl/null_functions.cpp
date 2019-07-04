@@ -1545,6 +1545,15 @@ void INTERNAL_GL_APIENTRY glGetnUniformuivNULL(GLuint program,
 
 void INTERNAL_GL_APIENTRY glHintNULL(GLenum target, GLenum mode) {}
 
+void INTERNAL_GL_APIENTRY glImportMemoryFdEXTNULL(GLuint memory,
+                                                  GLuint64 size,
+                                                  GLenum handleType,
+                                                  GLint fd)
+{}
+
+void INTERNAL_GL_APIENTRY glImportSemaphoreFdEXTNULL(GLuint semaphore, GLenum handleType, GLint fd)
+{}
+
 void INTERNAL_GL_APIENTRY glInsertEventMarkerEXTNULL(GLsizei length, const GLchar *marker) {}
 
 void INTERNAL_GL_APIENTRY glInvalidateBufferDataNULL(GLuint buffer) {}
