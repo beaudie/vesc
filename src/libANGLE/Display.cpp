@@ -1349,7 +1349,7 @@ void Display::initVendorString()
 void Display::initializeFrontendFeatures()
 {
     // Enable on all Impls
-    mFrontendFeatures.loseContextOnOutOfMemory.enabled = true;
+    mFrontendFeatures.loseContextOnOutOfMemory.enabled          = true;
     mFrontendFeatures.scalarizeVecAndMatConstructorArgs.enabled = true;
 
     mImplementation->initializeFrontendFeatures(&mFrontendFeatures);
@@ -1375,6 +1375,15 @@ const std::string &Display::getVendorString() const
 Device *Display::getDevice() const
 {
     return mDevice;
+}
+
+Surface *Display::getSurface(EGLNativeWindowType window) const
+{
+    WindowSurfaceMap *windowSurfaces = GetWindowSurfaces();
+    ASSERT(windowSurfaces);
+
+    auto s = windowSurfaces->find(window);
+    return (s != windowSurfaces->end()) ? s->second : nullptr;
 }
 
 gl::Version Display::getMaxSupportedESVersion() const
