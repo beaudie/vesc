@@ -68,11 +68,8 @@ constexpr ANGLE_INLINE ReturnType GetDefaultReturnValue()
     return DefaultReturnValue<EP, ReturnType>::kValue;
 }
 
-#if ANGLE_CAPTURE_ENABLED
-#    define ANGLE_CAPTURE(Func, ...) Capture##Func(__VA_ARGS__)
-#else
-#    define ANGLE_CAPTURE(...)
-#endif  // ANGLE_CAPTURE_ENABLED
+// Will need to be implemented in a future version.
+#define ANGLE_CAPTURE(...)
 }  // namespace gl
 
 #endif  // OPENGL32_ENTRY_POINT_UTILS_H_
