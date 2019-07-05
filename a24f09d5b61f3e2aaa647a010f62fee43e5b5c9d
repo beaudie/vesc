@@ -63,6 +63,30 @@
       "revId": "a24f09d5b61f3e2aaa647a010f62fee43e5b5c9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70d390b8_b8a8fd9c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T18:28:39Z",
+      "side": 1,
+      "message": "Did you run into this on your local testing? Feels like a driver bug.",
+      "parentUuid": "b21af58f_a1076e79",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 264,
+        "endChar": 74
+      },
+      "revId": "a24f09d5b61f3e2aaa647a010f62fee43e5b5c9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
