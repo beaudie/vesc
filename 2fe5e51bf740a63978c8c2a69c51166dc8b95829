@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cbdd2aae_1aacc2f9",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 1168,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-05T15:21:59Z",
+      "side": 1,
+      "message": "Could be helpful to have the standard prefix for both gles and gl (for example, `gles_cmd_names` and `gles_xml`, but that could be a future cleanup)",
+      "range": {
+        "startLine": 1168,
+        "startChar": 4,
+        "endLine": 1168,
+        "endChar": 13
+      },
+      "revId": "2fe5e51bf740a63978c8c2a69c51166dc8b95829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c377d7cc_85ea7e36",
+        "filename": "src/openGL32/entry_points_gl_1_0_autogen.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-05T15:21:59Z",
+      "side": 1,
+      "message": "Can we name this directory libGL instead? Windows is stuck with the opengl32.dll name, but we don\u0027t have to suffer that too.",
+      "range": {
+        "startLine": 11,
+        "startChar": 10,
+        "endLine": 11,
+        "endChar": 18
+      },
+      "revId": "2fe5e51bf740a63978c8c2a69c51166dc8b95829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
