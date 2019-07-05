@@ -16,6 +16,24 @@
       "revId": "9b5c6b7d96149747f1ada06a1acd401bf0a3918a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5b74835_642e5d7c",
+        "filename": "src/libGLESv2/entry_points_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T18:35:35Z",
+      "side": 1,
+      "message": "I did consider this before going with this approach. I think it\u0027s tricky enough I\u0027d prefer to defer it as a future optimization. For now the double validation is only when capture is enabled. Which is rare enough. It should have no visible effect on the call.\n\nI\u0027d either have to call capture twice in each call (one for the valid call, one for invalid) or pass around a bool indicating that validation succeeded. And with \"skipValidation\" it gets a bit more convoluted too.",
+      "parentUuid": "3c4cdebe_54eac048",
+      "revId": "9b5c6b7d96149747f1ada06a1acd401bf0a3918a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
