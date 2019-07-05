@@ -45,6 +45,30 @@
       "revId": "2fe5e51bf740a63978c8c2a69c51166dc8b95829",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6707c276_4d08e9de",
+        "filename": "src/openGL32/entry_points_gl_1_0_autogen.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T15:34:28Z",
+      "side": 1,
+      "message": "I filed http://anglebug.com/3651 for this. I\u0027d suggest we do this as a separate piece of work.",
+      "parentUuid": "c377d7cc_85ea7e36",
+      "range": {
+        "startLine": 11,
+        "startChar": 10,
+        "endLine": 11,
+        "endChar": 18
+      },
+      "revId": "2fe5e51bf740a63978c8c2a69c51166dc8b95829",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
