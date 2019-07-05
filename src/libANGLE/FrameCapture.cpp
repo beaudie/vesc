@@ -237,7 +237,7 @@ void FrameCapture::captureClientArraySnapshot(const gl::Context *context,
             ParamCapture &param = call.params.getClientArrayPointerParameter();
             ASSERT(param.type == ParamType::TvoidConstPointer);
 
-            ParamBuffer updateParamBuffer("UpdateClientArrayPointer");
+            ParamBuffer updateParamBuffer;
             updateParamBuffer.addValueParam<GLint>("arrayIndex", ParamType::TGLint, attribIndex);
 
             ParamCapture updateMemory("pointer", ParamType::TvoidConstPointer);
