@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04fd7871_d944d252",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T15:20:21Z",
+      "side": 1,
+      "message": "here can you also check that getExistingWindowSurface returns a valid result? And if nullptr return FALSE/error?",
+      "range": {
+        "startLine": 108,
+        "startChar": 4,
+        "endLine": 108,
+        "endChar": 81
+      },
+      "revId": "3600557336ac4cafb77cf80f686d377531611dfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e28b1ab_c44f802b",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T15:20:21Z",
+      "side": 1,
+      "message": "still need to fix this. it\u0027s not a valid call.",
+      "range": {
+        "startLine": 164,
+        "startChar": 0,
+        "endLine": 165,
+        "endChar": 43
+      },
+      "revId": "3600557336ac4cafb77cf80f686d377531611dfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "faf5052d_ff1188b2",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T15:20:21Z",
+      "side": 1,
+      "message": "you\u0027ll likely need to use reinterpret_cast here.",
+      "range": {
+        "startLine": 246,
+        "startChar": 28,
+        "endLine": 247,
+        "endChar": 67
+      },
+      "revId": "3600557336ac4cafb77cf80f686d377531611dfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
