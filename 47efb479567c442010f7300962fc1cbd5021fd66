@@ -91,6 +91,24 @@
     },
     {
       "key": {
+        "uuid": "f4f7528d_292f95cc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-07-05T01:27:42Z",
+      "side": 1,
+      "message": "initPipelineCache is also called in initializeDevice, an error will result in device init fail.\nAnd, I think it is okay for application not to use blob cache, right?",
+      "parentUuid": "b76ae888_a994317f",
+      "revId": "47efb479567c442010f7300962fc1cbd5021fd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "864dc6bb_20772dc2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
