@@ -277,6 +277,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
                  const Context *shareContext,
                  TextureManager *shareTextures,
                  MemoryProgramCache *memoryProgramCache,
+                 const EGLenum api,
                  const egl::AttributeMap &attribs,
                  const egl::DisplayExtensions &displayExtensions,
                  const egl::ClientExtensions &clientExtensions)
@@ -296,7 +297,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mLabel(nullptr),
       mCompiler(),
       mConfig(config),
-      mClientType(EGL_OPENGL_ES_API),
+      mClientType(api),
       mHasBeenCurrent(false),
       mContextLost(false),
       mResetStatus(GraphicsResetStatus::NoError),
@@ -2973,9 +2974,15 @@ void Context::initRendererString()
 void Context::initVersionStrings()
 {
     const Version &clientVersion = getClientVersion();
+    std::string clientString     = "OpenGL ES ";
+
+    if (mClientType == EGL_OPENGL_API)
+    {
+        clientString = "OpenGL ";
+    }
 
     std::ostringstream versionString;
-    versionString << "OpenGL ES " << clientVersion.major << "." << clientVersion.minor << " (ANGLE "
+    versionString << clientString << clientVersion.major << "." << clientVersion.minor << " (ANGLE "
                   << ANGLE_VERSION_STRING << ")";
     mVersionString = MakeStaticString(versionString.str());
 
