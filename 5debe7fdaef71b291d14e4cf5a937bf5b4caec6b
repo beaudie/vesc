@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "adee60c5_d7bd818d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2994,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T20:22:25Z",
+      "side": 1,
+      "message": "here too - conditionally append \"ES \" to the GLSL version.",
+      "range": {
+        "startLine": 2994,
+        "startChar": 4,
+        "endLine": 2994,
+        "endChar": 46
+      },
+      "revId": "5debe7fdaef71b291d14e4cf5a937bf5b4caec6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
