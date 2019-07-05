@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d404053b_b87b8974",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 727,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-05T19:48:19Z",
+      "side": 1,
+      "message": "`resources.unusedInterfaceBlocks` includes UBOs, SSBOs and other interface blocks. This is already done.\n\nFYI, most of the changes in this file is a break up of `GlslangWrapper::GetShaderSource` into smaller functions. Previously, these little clean ups where done after each `Assign*` section, but I aggregated them into one function (the reason for which is to avoid awkwardness in placing the code that cleans interface blocks).\n\nLooking back, I can merge the two `Assign*BufferLocations` functions (which is already done in the next CL) and have each cleanup in its relevant function (similar to how `GlslangWrapper::GetShaderSource` was previously sectioned.",
+      "parentUuid": "c72900ee_dac152e0",
+      "range": {
+        "startLine": 727,
+        "startChar": 5,
+        "endLine": 727,
+        "endChar": 26
+      },
+      "revId": "e46d4b521ca2f1270161aab14a24559fc48b0e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4108d62e_a150fe54",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2019-07-05T19:05:12Z",
       "side": 1,
       "message": "can we make this an assert that there are no unused entities?",
+      "range": {
+        "startLine": 831,
+        "startChar": 4,
+        "endLine": 831,
+        "endChar": 25
+      },
+      "revId": "e46d4b521ca2f1270161aab14a24559fc48b0e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b852332_9b9546c6",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-05T19:48:19Z",
+      "side": 1,
+      "message": "The cleanup was always here, and there are unused stuff as indicated by `resources.varyingPacking.getInactiveVaryingNames()`, `resources.unusedInterfaceBlocks` and `resources.unusedUniforms` for example)",
+      "parentUuid": "4108d62e_a150fe54",
       "range": {
         "startLine": 831,
         "startChar": 4,
