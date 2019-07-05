@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ab157c4c_6e5c6980",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-05T20:17:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24a105df_649f0a75",
+      "range": {
+        "startLine": 280,
+        "startChar": 31,
+        "endLine": 280,
+        "endChar": 34
+      },
+      "revId": "6093a4ba4a4e4f56b0c608ac5625d404e1e1de06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ac246bc0_43dbce7e",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "6093a4ba4a4e4f56b0c608ac5625d404e1e1de06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5d2cf94_269640d6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2986,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-05T20:17:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac246bc0_43dbce7e",
+      "range": {
+        "startLine": 2977,
+        "startChar": 0,
+        "endLine": 2986,
+        "endChar": 49
+      },
+      "revId": "6093a4ba4a4e4f56b0c608ac5625d404e1e1de06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d08cef58_02c4d592",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2990,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-05T20:17:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f41162d_89b03999",
+      "range": {
+        "startLine": 2990,
+        "startChar": 4,
+        "endLine": 2990,
+        "endChar": 56
+      },
+      "revId": "6093a4ba4a4e4f56b0c608ac5625d404e1e1de06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3a2c7d2_14e271a6",
         "filename": "src/libANGLE/Context.h",
         "patchSetId": 3
@@ -91,6 +163,30 @@
       "revId": "6093a4ba4a4e4f56b0c608ac5625d404e1e1de06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78048efe_6a4461a8",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-05T20:17:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3a2c7d2_14e271a6",
+      "range": {
+        "startLine": 315,
+        "startChar": 26,
+        "endLine": 315,
+        "endChar": 29
+      },
+      "revId": "6093a4ba4a4e4f56b0c608ac5625d404e1e1de06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "33263a00_b1b17de2",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-05T20:17:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f1d1793_6d53686b",
+      "range": {
+        "startLine": 877,
+        "startChar": 37,
+        "endLine": 877,
+        "endChar": 40
+      },
+      "revId": "6093a4ba4a4e4f56b0c608ac5625d404e1e1de06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e81d0277_74f2d53a",
         "filename": "src/libANGLE/Display.h",
         "patchSetId": 3
@@ -137,6 +257,30 @@
       "revId": "6093a4ba4a4e4f56b0c608ac5625d404e1e1de06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9415379c_5daeedda",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-05T20:17:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e81d0277_74f2d53a",
+      "range": {
+        "startLine": 118,
+        "startChar": 38,
+        "endLine": 118,
+        "endChar": 41
+      },
+      "revId": "6093a4ba4a4e4f56b0c608ac5625d404e1e1de06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "63cb38c1_59dab435",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-05T20:17:18Z",
+      "side": 1,
+      "message": "Will update this file in wgl entry points patch once this patch is merged",
+      "parentUuid": "05782a05_5cb46be6",
+      "range": {
+        "startLine": 142,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 37
+      },
+      "revId": "6093a4ba4a4e4f56b0c608ac5625d404e1e1de06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c456d126_584743b2",
         "filename": "src/openGL32/entry_points_wgl.cpp",
         "patchSetId": 3
@@ -183,6 +351,30 @@
       "revId": "6093a4ba4a4e4f56b0c608ac5625d404e1e1de06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b732875_a5a0afbf",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-05T20:17:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c456d126_584743b2",
+      "range": {
+        "startLine": 184,
+        "startChar": 82,
+        "endLine": 184,
+        "endChar": 98
+      },
+      "revId": "6093a4ba4a4e4f56b0c608ac5625d404e1e1de06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
