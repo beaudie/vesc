@@ -1848,4 +1848,14 @@ void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
         notifySiblings(message);
     }
 }
+
+bool Texture::canGetDataForCapture() const
+{
+    return mTexture->canGetDataForCapture();
+}
+
+angle::Result Texture::getDataForCapture(angle::MemoryBuffer *dataOut) const
+{
+    return mTexture->getDataForCapture(dataOut);
+}
 }  // namespace gl
