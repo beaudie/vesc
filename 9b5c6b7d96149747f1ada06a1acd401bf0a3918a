@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c4cdebe_54eac048",
+        "filename": "src/libGLESv2/entry_points_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-05T17:19:46Z",
+      "side": 1,
+      "message": "I think it would be better to change the entry points generation a bit so we don\u0027t duplicate a call to ValidateX\nEdit: Unless you\u0027re worried about moving the ANGLE_CAPTURE to after the validation, would that be a problem?",
+      "revId": "9b5c6b7d96149747f1ada06a1acd401bf0a3918a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
