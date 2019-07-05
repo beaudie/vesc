@@ -148,6 +148,18 @@ Version GetClientVersion(const egl::AttributeMap &attribs)
     return Version(GetClientMajorVersion(attribs), GetClientMinorVersion(attribs));
 }
 
+Version GetClientGLVersion(const egl::AttributeMap &attribs)
+{
+    EGLint major = GetClientMajorVersion(attribs);
+    EGLint minor = GetClientMinorVersion(attribs);
+
+    if (major == 3 && minor == 0)
+    {
+        return Version(3, 3);
+    }
+    return Version(0, 0);
+}
+
 GLenum GetResetStrategy(const egl::AttributeMap &attribs)
 {
     EGLAttrib attrib =
@@ -279,11 +291,13 @@ Context::Context(rx::EGLImplFactory *implFactory,
                  MemoryProgramCache *memoryProgramCache,
                  const egl::AttributeMap &attribs,
                  const egl::DisplayExtensions &displayExtensions,
-                 const egl::ClientExtensions &clientExtensions)
+                 const egl::ClientExtensions &clientExtensions,
+                 const EGLenum api)
     : mState(reinterpret_cast<ContextID>(this),
              shareContext ? &shareContext->mState : nullptr,
              shareTextures,
              GetClientVersion(attribs),
+             GetClientGLVersion(attribs),
              GetDebug(attribs),
              GetBindGeneratesResource(attribs),
              GetClientArraysEnabled(attribs),
@@ -296,7 +310,7 @@ Context::Context(rx::EGLImplFactory *implFactory,
       mLabel(nullptr),
       mCompiler(),
       mConfig(config),
-      mClientType(EGL_OPENGL_ES_API),
+      mClientType(api),
       mHasBeenCurrent(false),
       mContextLost(false),
       mResetStatus(GraphicsResetStatus::NoError),
@@ -2979,6 +2993,13 @@ void Context::initVersionStrings()
                   << ANGLE_VERSION_STRING << ")";
     mVersionString = MakeStaticString(versionString.str());
 
+    const Version &clientGLVersion = getClientGLVersion();
+
+    std::ostringstream versionStringGL;
+    versionStringGL << "OpenGL " << clientGLVersion.major << "." << clientGLVersion.minor
+                    << " (ANGLE " << ANGLE_VERSION_STRING << ")";
+    mGLVersionString = MakeStaticString(versionStringGL.str());
+
     std::ostringstream shadingLanguageVersionString;
     shadingLanguageVersionString << "OpenGL ES GLSL ES "
                                  << (clientVersion.major == 2 ? 1 : clientVersion.major) << "."
@@ -3037,6 +3058,10 @@ const GLubyte *Context::getString(GLenum name) const
             return reinterpret_cast<const GLubyte *>(mRendererString);
 
         case GL_VERSION:
+            if (mClientType == EGL_OPENGL_API)
+            {
+                return reinterpret_cast<const GLubyte *>(mGLVersionString);
+            }
             return reinterpret_cast<const GLubyte *>(mVersionString);
 
         case GL_SHADING_LANGUAGE_VERSION:

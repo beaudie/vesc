@@ -313,7 +313,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
             MemoryProgramCache *memoryProgramCache,
             const egl::AttributeMap &attribs,
             const egl::DisplayExtensions &displayExtensions,
-            const egl::ClientExtensions &clientExtensions);
+            const egl::ClientExtensions &clientExtensions,
+            const EGLenum api = EGL_OPENGL_ES_API);
 
     egl::Error onDestroy(const egl::Display *display);
     ~Context() override;
@@ -463,6 +464,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     GLint getClientMajorVersion() const { return mState.getClientMajorVersion(); }
     GLint getClientMinorVersion() const { return mState.getClientMinorVersion(); }
     const Version &getClientVersion() const { return mState.getClientVersion(); }
+    const Version &getClientGLVersion() const { return mState.getClientGLVersion(); }
     const Caps &getCaps() const { return mState.getCaps(); }
     const TextureCapsMap &getTextureCaps() const { return mState.getTextureCaps(); }
     const Extensions &getExtensions() const { return mState.getExtensions(); }
@@ -619,6 +621,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     HandleAllocator mTransformFeedbackHandleAllocator;
 
     const char *mVersionString;
+    const char *mGLVersionString;
     const char *mShadingLanguageString;
     const char *mRendererString;
     const char *mExtensionString;

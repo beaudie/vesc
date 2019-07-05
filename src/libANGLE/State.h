@@ -59,6 +59,7 @@ class State : angle::NonCopyable
           const State *shareContextState,
           TextureManager *shareTextures,
           const Version &clientVersion,
+          const Version &clientGLVersion,
           bool debug,
           bool bindGeneratesResource,
           bool clientArraysEnabled,
@@ -74,6 +75,7 @@ class State : angle::NonCopyable
     GLint getClientMajorVersion() const { return mClientVersion.major; }
     GLint getClientMinorVersion() const { return mClientVersion.minor; }
     const Version &getClientVersion() const { return mClientVersion; }
+    const Version &getClientGLVersion() const { return mClientGLVersion; }
     const Caps &getCaps() const { return mCaps; }
     const TextureCapsMap &getTextureCaps() const { return mTextureCaps; }
     const Extensions &getExtensions() const { return mExtensions; }
@@ -723,6 +725,7 @@ class State : angle::NonCopyable
     static const angle::PackedEnumMap<BufferBinding, BufferBindingSetter> kBufferSetters;
 
     Version mClientVersion;
+    Version mClientGLVersion;
     ContextID mContext;
 
     // Caps to use for validation
