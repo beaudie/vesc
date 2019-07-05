@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cc9cca9c_99ae7e77",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T18:31:32Z",
+      "side": 1,
+      "message": "I think we have the mapping backwards. When we bind a desktop GL api, we want to request 3.3 and get 3.0 ES internally. you have something that requests 3.0 and gets 3.3.",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 162,
+        "endChar": 0
+      },
+      "revId": "47967449a4e72921344e5e62fcd814531cdeabfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28f0215c_4f5815d1",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3001,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T18:31:32Z",
+      "side": 1,
+      "message": "I think here would want to keep a single version string, but check the client API",
+      "range": {
+        "startLine": 2991,
+        "startChar": 0,
+        "endLine": 3001,
+        "endChar": 63
+      },
+      "revId": "47967449a4e72921344e5e62fcd814531cdeabfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b384aba_744f00fa",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T18:31:32Z",
+      "side": 1,
+      "message": "avoid default arguments when possible. e.g. here.",
+      "range": {
+        "startLine": 317,
+        "startChar": 12,
+        "endLine": 317,
+        "endChar": 49
+      },
+      "revId": "47967449a4e72921344e5e62fcd814531cdeabfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
