@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "56ea7fd5_1e4676c6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-05T17:06:52Z",
+      "side": 1,
+      "message": "(On the same note) A similar issue seems to have been observed in the past.",
+      "revId": "a24f09d5b61f3e2aaa647a010f62fee43e5b5c9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "95454a26_26bb5501",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 11
@@ -13,6 +30,30 @@
       "writtenOn": "2019-07-05T16:55:14Z",
       "side": 1,
       "message": "could realistically be an ASSERT. I find it hard to imagine a driver returning something that could trigger an overflow here. But LGTM",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 264,
+        "endChar": 74
+      },
+      "revId": "a24f09d5b61f3e2aaa647a010f62fee43e5b5c9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b21af58f_a1076e79",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-05T17:06:52Z",
+      "side": 1,
+      "message": "They do unfortunately, more than one of them:\n\nhttps://vulkan.gpuinfo.org/displaydevicelimit.php?name\u003dmaxPerStageResources",
+      "parentUuid": "95454a26_26bb5501",
       "range": {
         "startLine": 260,
         "startChar": 0,
