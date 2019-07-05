@@ -1,0 +1,458 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af3a60bd_13b578c5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "nit: formatting",
+      "range": {
+        "startLine": 13,
+        "startChar": 4,
+        "endLine": 13,
+        "endChar": 23
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "858e4c97_afbedcaa",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1380,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "nit: getExistingWindowSurface to match hasExistingWindowSurface.",
+      "range": {
+        "startLine": 1380,
+        "startChar": 18,
+        "endLine": 1380,
+        "endChar": 28
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f39fed5_94ac6a2c",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "I would probably add a GetExistingDisplayFromNativeDisplay method as well specifically for this. you could also could error out if there is no matching display.",
+      "range": {
+        "startLine": 108,
+        "startChar": 29,
+        "endLine": 108,
+        "endChar": 90
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "845f790c_86c22765",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "nit: naming style",
+      "range": {
+        "startLine": 108,
+        "startChar": 15,
+        "endLine": 108,
+        "endChar": 26
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "462d8cf8_1aacbd85",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "nit: TRUE. Also you should probably check for error and return TRUE/FALSE",
+      "range": {
+        "startLine": 113,
+        "startChar": 11,
+        "endLine": 113,
+        "endChar": 15
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bb434ae_3b82a94e",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "nit: can remove extra space",
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0617666f_288d39c3",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "sorry I missed the review for this function before.\n\nyou can omit all these as they\u0027re defaults.",
+      "range": {
+        "startLine": 130,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 79
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b8e376d_5e69acbe",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "nit: naming. Also I don\u0027t think you need the static cast as GetDisplayFromNativeDisplay returns a Display*",
+      "range": {
+        "startLine": 140,
+        "startChar": 15,
+        "endLine": 140,
+        "endChar": 24
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4767b80_9fce20f6",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "nit: don\u0027t use auto here. Also if it generates an error, return an error code.",
+      "range": {
+        "startLine": 143,
+        "startChar": 4,
+        "endLine": 143,
+        "endChar": 9
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5f0bf0f_14014cb8",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "pretty sure these are all defaults and can be omitted for now. all but the EGL_NONE.",
+      "range": {
+        "startLine": 149,
+        "startChar": 0,
+        "endLine": 164,
+        "endChar": 0
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01d8a232_14a84ae1",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "nit: naming",
+      "range": {
+        "startLine": 167,
+        "startChar": 14,
+        "endLine": 167,
+        "endChar": 21
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0cb9f4f_54d9f648",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "again avoid auto and check for error.",
+      "range": {
+        "startLine": 181,
+        "startChar": 4,
+        "endLine": 181,
+        "endChar": 15
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9373278f_72373789",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "we should fix this hack before proceeding.",
+      "range": {
+        "startLine": 185,
+        "startChar": 0,
+        "endLine": 186,
+        "endChar": 43
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "006ab68a_90bd82d0",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "same comments.",
+      "range": {
+        "startLine": 192,
+        "startChar": 2,
+        "endLine": 192,
+        "endChar": 15
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99421bf4_80b517eb",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "nit: naming.",
+      "range": {
+        "startLine": 194,
+        "startChar": 15,
+        "endLine": 194,
+        "endChar": 24
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "702087e0_6e397936",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "nit: use c++ style casts.",
+      "range": {
+        "startLine": 196,
+        "startChar": 10,
+        "endLine": 196,
+        "endChar": 19
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9203eebc_87299eaa",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "nit: naming and you can store egl::Display * directly.",
+      "range": {
+        "startLine": 263,
+        "startChar": 15,
+        "endLine": 263,
+        "endChar": 24
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "709aa9cd_902a98d4",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "nit: use c++ casts here directly.",
+      "range": {
+        "startLine": 268,
+        "startChar": 28,
+        "endLine": 268,
+        "endChar": 67
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70f30766_ea9ccb37",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "same comments",
+      "range": {
+        "startLine": 270,
+        "startChar": 4,
+        "endLine": 270,
+        "endChar": 13
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3a61e35_195050e7",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-05T12:37:37Z",
+      "side": 1,
+      "message": "nit: TRUE",
+      "range": {
+        "startLine": 275,
+        "startChar": 11,
+        "endLine": 275,
+        "endChar": 15
+      },
+      "revId": "3af9091b68c654e90a8a8bec225053cd103668b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
