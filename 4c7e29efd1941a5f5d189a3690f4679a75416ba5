@@ -46,6 +46,52 @@
       "revId": "4c7e29efd1941a5f5d189a3690f4679a75416ba5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b96f273e_852b174b",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-08T15:06:53Z",
+      "side": 1,
+      "message": "Probably can cast directly from context to HGLRC.",
+      "range": {
+        "startLine": 180,
+        "startChar": 0,
+        "endLine": 182,
+        "endChar": 42
+      },
+      "revId": "4c7e29efd1941a5f5d189a3690f4679a75416ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c585aba_a278c2f1",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-08T15:06:53Z",
+      "side": 1,
+      "message": "I think the surfaces should be grabbed from the display instead of the thread.  It wont ever change like this.",
+      "range": {
+        "startLine": 253,
+        "startChar": 54,
+        "endLine": 254,
+        "endChar": 77
+      },
+      "revId": "4c7e29efd1941a5f5d189a3690f4679a75416ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b97ed0d_3b86bd48",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-08T15:06:53Z",
+      "side": 1,
+      "message": "WGL has a tight coupling of the display/surface.  I think you could add a new member to our egl::Display that is the WGL surface associated with it.  You can then use that for all the calls to makeCurrent, swapBuffers, etc.",
+      "range": {
+        "startLine": 195,
+        "startChar": 4,
+        "endLine": 195,
+        "endChar": 72
+      },
+      "revId": "8a758fd9e055c9a096e62d56e00998c738ae7e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
