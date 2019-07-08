@@ -82,7 +82,7 @@ class FrameCapture final : angle::NonCopyable
     ~FrameCapture();
 
     void captureCall(const gl::Context *context, CallCapture &&call);
-    void onEndFrame();
+    void onEndFrame(const gl::Context *context);
     bool enabled() const;
 
   private:
@@ -101,8 +101,11 @@ class FrameCapture final : angle::NonCopyable
     int getAndIncrementCounter(const std::string &callName, const std::string &paramName);
     bool anyClientArray() const;
     void saveCapturedFrameAsCpp();
+    void captureMidExecutionSetup(const gl::Context *context);
 
-    std::vector<CallCapture> mCalls;
+    std::vector<CallCapture> mSetupCalls;
+    std::vector<CallCapture> mFrameCalls;
+    std::vector<CallCapture> mTearDownCalls;
     gl::AttribArray<int> mClientVertexArrayMap;
     size_t mFrameIndex;
     gl::AttribArray<size_t> mClientArraySizes;

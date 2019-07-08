@@ -13,6 +13,7 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/VertexArray.h"
+#include "libANGLE/capture_gles_2_0_autogen.h"
 
 namespace angle
 {
@@ -150,7 +151,7 @@ void FrameCapture::captureCall(const gl::Context *context, CallCapture &&call)
 
         if (call.params.hasClientArrayData())
         {
-            mClientVertexArrayMap[index] = mCalls.size();
+            mClientVertexArrayMap[index] = mFrameCalls.size();
         }
         else
         {
@@ -201,7 +202,7 @@ void FrameCapture::captureCall(const gl::Context *context, CallCapture &&call)
     }
 
     mReadBufferSize = std::max(mReadBufferSize, call.params.getReadBufferSize());
-    mCalls.emplace_back(std::move(call));
+    mFrameCalls.emplace_back(std::move(call));
 }
 
 void FrameCapture::captureClientArraySnapshot(const gl::Context *context,
@@ -230,7 +231,7 @@ void FrameCapture::captureClientArraySnapshot(const gl::Context *context,
             // The last capture element doesn't take up the full stride.
             size_t bytesToCapture = (count - 1) * binding.getStride() + attrib.format->pixelBytes;
 
-            CallCapture &call   = mCalls[callIndex];
+            CallCapture &call   = mFrameCalls[callIndex];
             ParamCapture &param = call.params.getClientArrayPointerParameter();
             ASSERT(param.type == ParamType::TvoidConstPointer);
 
@@ -241,7 +242,7 @@ void FrameCapture::captureClientArraySnapshot(const gl::Context *context,
             CaptureMemory(param.value.voidConstPointerVal, bytesToCapture, &updateMemory);
             updateParamBuffer.addParam(std::move(updateMemory));
 
-            mCalls.emplace_back("UpdateClientArrayPointer", std::move(updateParamBuffer));
+            mFrameCalls.emplace_back("UpdateClientArrayPointer", std::move(updateParamBuffer));
 
             mClientArraySizes[attribIndex] =
                 std::max(mClientArraySizes[attribIndex], bytesToCapture);
@@ -260,15 +261,20 @@ bool FrameCapture::anyClientArray() const
     return false;
 }
 
-void FrameCapture::onEndFrame()
+void FrameCapture::onEndFrame(const gl::Context *context)
 {
-    if (!mCalls.empty())
+    if (!mFrameCalls.empty())
     {
         saveCapturedFrameAsCpp();
     }
 
     reset();
     mFrameIndex++;
+
+    if (enabled())
+    {
+        captureMidExecutionSetup(context);
+    }
 }
 
 void FrameCapture::saveCapturedFrameAsCpp()
@@ -318,7 +324,7 @@ void FrameCapture::saveCapturedFrameAsCpp()
         out << "    gReadBuffer.resize(" << mReadBufferSize << ");\n";
     }
 
-    for (const CallCapture &call : mCalls)
+    for (const CallCapture &call : mFrameCalls)
     {
         out << "    ";
         writeCallReplay(call, out, header, &binaryData);
@@ -490,16 +496,162 @@ void FrameCapture::writeCallReplay(const CallCapture &call,
 
 bool FrameCapture::enabled() const
 {
-    return mFrameIndex < 100;
+    return mFrameIndex < 20;
 }
 
 void FrameCapture::reset()
 {
-    mCalls.clear();
+    mFrameCalls.clear();
     mClientVertexArrayMap.fill(-1);
     mClientArraySizes.fill(0);
     mDataCounters.clear();
     mReadBufferSize = 0;
+}
+
+void FrameCapture::captureMidExecutionSetup(const gl::Context *context)
+{
+    const gl::State &glState = context->getState();
+
+    // Currently this code assumes we can use create-on-bind. It does not support 'Gen' usage.
+    // TODO(jmadill): Use handle mapping for captured objects. http://anglebug.com/3662
+
+    // Capture buffers.
+    const gl::BufferManager &buffers       = glState.getBufferManagerForCapture();
+    const gl::BoundBufferMap &boundBuffers = glState.getBoundBuffersForCapture();
+
+    auto cap = [&mSetupCalls](CallCapture &&call) { mSetupCalls.emplace_back(std::move(call)); };
+
+    // a) Capture buffer data.
+    bool boundArrayBuffer = false;
+    for (const auto &bufferIter : buffers)
+    {
+        GLuint handle      = bufferIter.first;
+        gl::Buffer *buffer = bufferIter.second;
+
+        if (handle == 0)
+        {
+            continue;
+        }
+
+        // glBufferData. Would possibly be better implemented using a getData impl method.
+        // Saving buffers that are mapped during a swap is not yet handled.
+        if (buffer->getSize() == 0)
+        {
+            continue;
+        }
+        ASSERT(!buffer->isMapped());
+        (void)buffer->map(context, GL_MAP_READ_BIT);
+
+        // Always use the array buffer binding point to upload data to keep things simple.
+        cap(CaptureBindBuffer(context, true, gl::BufferBinding::Array, handle));
+
+        boundArrayBuffer = true;
+
+        cap(CaptureBufferData(context, true, gl::BufferBinding::Array, buffer->getSize(),
+                              buffer->getMapPointer(), buffer->getUsage()));
+
+        GLboolean dontCare;
+        (void)buffer->unmap(context, &dontCare);
+    }
+
+    // b) Capture buffer bindings.
+    for (gl::BufferBinding binding : angle::AllEnums<gl::BufferBinding>())
+    {
+        gl::Buffer *buffer = boundBuffers[binding].get();
+        GLuint bufferID    = buffer ? buffer->id() : 0;
+        cap(CaptureBindBuffer(context, true, binding, bufferID));
+    }
+
+    // Capture textures.
+    const gl::TextureManager &textures         = glState.getTextureManagerForCapture();
+    const gl::TextureBindingMap &boundTextures = glState.getBoundTexturesForCapture();
+
+    // a) Capture texture data.
+    for (const auto &textureIter : textures)
+    {
+        GLuint handle              = textureIter.first;
+        const gl::Texture *texture = textureIter.second;
+
+        if (handle == 0)
+        {
+            continue;
+        }
+
+        // glBindTexture.
+        cap(CaptureBindTexture(context, true, texture->getType(), handle));
+
+        // Iterate texture levels and layers.
+        gl::ImageIndexIterator imageIter = gl::ImageIndexIterator::MakeGeneric(
+            texture->getType(), 0, texture->getMaxLevel(), gl::ImageIndex::kEntireLevel,
+            gl::ImageIndex::kEntireLevel);
+        while (imageIter.hasNext())
+        {
+            gl::ImageIndex index = imageIter.next();
+
+            const gl::ImageDesc &desc = texture->getTextureState().getImageDesc(index);
+
+            // Assume 2D for now.
+            ASSERT(!index.hasLayer());
+
+            // Use back-end to read back pixel data.
+            ASSERT(texture->canGetDataForCapture(index));
+            angle::MemoryBuffer data;
+            (void)texture->getDataForCapture(context, index, &data);
+
+            const gl::InternalFormat &format = *desc.format.info;
+            cap(CaptureTexImage2D(context, true, index.getTarget(), index.getLevelIndex(),
+                                  format.internalFormat, desc.size.width, desc.size.height, 0,
+                                  format.format, format.type, data.data()));
+        }
+    }
+
+    // b) Capture texture bindings.
+    for (gl::TextureType textureType : angle::AllEnums<gl::TextureType>())
+    {
+        const gl::TextureBindingVector bindings = boundTextures[textureType];
+        for (size_t bindingIndex = 0; bindingIndex < bindings.size(); ++bindingIndex)
+        {
+            cap(CaptureActiveTexture(context, true, bindingIndex));
+            GLuint textureID = bindings[bindingIndex].get() ? bindings[bindingIndex].id() : 0;
+        }
+    }
+
+    // c) Active texture.
+    cap(CaptureActiveTexture(context, true, glState.getActiveSampler()));
+
+    // Capture renderbuffers.
+    const gl::RenderbufferManager &renderbuffers = glState.getRenderbufferManagerForCapture();
+
+    // a) Capture renderbuffers.
+    for (const auto &renderbufIter : renderbuffers)
+    {
+        GLuint handle = renderbufIter.first;
+
+        cap(CaptureBindRenderbuffer(context, true, 1, handle));
+
+        // TODO(jmadill): Capture contents. http://anglebug.com/3662
+    }
+
+    // b) Capture renderbuffer binding.
+    cap(CaptureBindRenderbuffer(context, true, GL_RENDERBUFFER, glState.getRenderbufferId()));
+
+    // Capture framebuffers.
+    const gl::FramebufferManager &framebuffers = glState.getFramebufferManagerForCapture();
+
+    for (const auto &framebufferIter : framebuffers)
+    {
+        GLuint handle                      = framebufferIter.first;
+        const gl::Framebuffer *framebuffer = framebufferIter.second;
+
+        cap(CaptureBindFramebuffer(context, true, GL_FRAMEBUFFER, handle));
+
+        // Attachments.
+
+        const std::vector<gl::FramebufferAttachment> &colorAttachments =
+            framebuffer->getColorAttachments();
+
+        // TODO(jmadill): Draw buffer states. http://anglebug.com/3662
+    }
 }
 
 std::ostream &operator<<(std::ostream &os, const ParamCapture &capture)

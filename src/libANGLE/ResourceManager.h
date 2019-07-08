@@ -72,6 +72,9 @@ class TypedResourceManager : public ResourceManagerBase<HandleAllocatorType>
         return handle == 0 || mObjectMap.contains(handle);
     }
 
+    typename ResourceMap<ResourceType>::Iterator begin() const { return mObjectMap.begin(); }
+    typename ResourceMap<ResourceType>::Iterator end() const { return mObjectMap.end(); }
+
   protected:
     ~TypedResourceManager() override;
 
