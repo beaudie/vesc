@@ -190,6 +190,7 @@ void RendererVk::ensureCapsInitialized() const
     mNativeCaps.maxShaderUniformComponents[gl::ShaderType::Vertex]   = maxUniformComponents;
     mNativeCaps.maxFragmentUniformVectors                            = maxUniformVectors;
     mNativeCaps.maxShaderUniformComponents[gl::ShaderType::Fragment] = maxUniformComponents;
+    mNativeCaps.maxUniformLocations                                  = maxUniformVectors;
 
     // We use the same bindings on each stage, so the texture, UBO and SSBO limitations are the same
     // as the per-stage limits.
@@ -292,6 +293,7 @@ void RendererVk::ensureCapsInitialized() const
                                   limits.framebufferStencilSampleCounts;
 
     mNativeCaps.maxSamples = vk_gl::GetMaxSampleCount(sampleCounts);
+    mNativeCaps.maxFramebufferSamples = mNativeCaps.maxSamples;
 
     mNativeCaps.subPixelBits = mPhysicalDeviceProperties.limits.subPixelPrecisionBits;
 

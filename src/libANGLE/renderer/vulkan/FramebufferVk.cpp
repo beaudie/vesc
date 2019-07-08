@@ -1198,6 +1198,13 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk, vk::Framebuffe
         attachmentsSize = depthStencilRenderTarget->getExtents();
     }
 
+    if (attachmentsSize.empty())
+    {
+        // No attachments, so use the default values.
+        attachmentsSize.height = mState.getDefaultHeight();
+        attachmentsSize.width  = mState.getDefaultWidth();
+    }
+
     VkFramebufferCreateInfo framebufferInfo = {};
 
     framebufferInfo.sType           = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
