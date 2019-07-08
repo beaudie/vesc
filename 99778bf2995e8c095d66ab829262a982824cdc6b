@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2eedfdae_4e246df3",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2993,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-08T14:14:47Z",
+      "side": 1,
+      "message": "nit: can be else (no if) then you ASSERT(mClientType \u003d\u003d EGL_OPENGL_API)",
+      "range": {
+        "startLine": 2993,
+        "startChar": 4,
+        "endLine": 2993,
+        "endChar": 7
+      },
+      "revId": "99778bf2995e8c095d66ab829262a982824cdc6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
