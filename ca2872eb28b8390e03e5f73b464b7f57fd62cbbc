@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7b88a41a_8e984fc9",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-08T18:07:07Z",
+      "side": 1,
+      "message": "Good question. The comment is probably fine, as I see this in the code:\n\n    if (shaderVersion \u003e\u003d 300)\n    {\n        // In GLSL ES 3.00.6, aliasing checks should be done with all declared attributes - see GLSL\n        // ES 3.00.6 section 12.46. Inactive attributes will be pruned after aliasing checks.\n        mState.mAttributes \u003d vertexShader-\u003egetAllAttributes();\n    }\n    else\n    {\n        // In GLSL ES 1.00.17 we only do aliasing checks for active attributes.\n        mState.mAttributes \u003d vertexShader-\u003egetActiveAttributes();\n    }\n\nI don\u0027t really know why we are not hitting this though. Maybe some end2end test that covers this is not enabled yet.",
+      "parentUuid": "d7b2ddc9_2e2e5c42",
+      "revId": "ca2872eb28b8390e03e5f73b464b7f57fd62cbbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ff65b4d3_e311f6aa",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 6
@@ -39,6 +57,30 @@
       "revId": "ca2872eb28b8390e03e5f73b464b7f57fd62cbbc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "963c6d67_440540bd",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-08T18:07:07Z",
+      "side": 1,
+      "message": "That\u0027s a function of ProgramVk, not available here.\n\nThe next CL reworks these areas a bit, by the way.",
+      "parentUuid": "ff65b4d3_e311f6aa",
+      "range": {
+        "startLine": 677,
+        "startChar": 67,
+        "endLine": 677,
+        "endChar": 68
+      },
+      "revId": "ca2872eb28b8390e03e5f73b464b7f57fd62cbbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "5beab908_6651275e",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 682,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-08T18:07:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "01ab5aac_ef4d1e49",
+      "range": {
+        "startLine": 682,
+        "startChar": 68,
+        "endLine": 682,
+        "endChar": 77
+      },
+      "revId": "ca2872eb28b8390e03e5f73b464b7f57fd62cbbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81a7a972_8caa937d",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 6
@@ -85,6 +151,30 @@
       "revId": "ca2872eb28b8390e03e5f73b464b7f57fd62cbbc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3df3879b_d20761dd",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-08T18:07:07Z",
+      "side": 1,
+      "message": "Same comment.",
+      "parentUuid": "81a7a972_8caa937d",
+      "range": {
+        "startLine": 687,
+        "startChar": 34,
+        "endLine": 687,
+        "endChar": 94
+      },
+      "revId": "ca2872eb28b8390e03e5f73b464b7f57fd62cbbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "3111d50b_19092d82",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 956,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-08T18:07:07Z",
+      "side": 1,
+      "message": "Done (the next CL already includes this change, so pulled it here)",
+      "parentUuid": "01e5730b_c12434e1",
+      "range": {
+        "startLine": 956,
+        "startChar": 43,
+        "endLine": 956,
+        "endChar": 64
+      },
+      "revId": "ca2872eb28b8390e03e5f73b464b7f57fd62cbbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e55bbd3_70dd4d7a",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 6
@@ -131,6 +245,30 @@
       "revId": "ca2872eb28b8390e03e5f73b464b7f57fd62cbbc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdf16f6d_c954a10a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-08T18:07:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e55bbd3_70dd4d7a",
+      "range": {
+        "startLine": 957,
+        "startChar": 43,
+        "endLine": 957,
+        "endChar": 63
+      },
+      "revId": "ca2872eb28b8390e03e5f73b464b7f57fd62cbbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
