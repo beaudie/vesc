@@ -22,6 +22,30 @@
       "revId": "31b186226e1ab180e6d630313d8b3cc1054ef39d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25bb66d9_d7339320",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-08T15:30:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce59b303_cc919ca5",
+      "range": {
+        "startLine": 155,
+        "startChar": 5,
+        "endLine": 155,
+        "endChar": 19
+      },
+      "revId": "31b186226e1ab180e6d630313d8b3cc1054ef39d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
