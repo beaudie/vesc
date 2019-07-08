@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0698809c_3e59a9ef",
+        "filename": "src/openGL32/entry_points_wgl.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-08T14:17:04Z",
+      "side": 1,
+      "message": "you should bind the OPENGL_API here. or in the other CL. but right now neither of them do that.",
+      "range": {
+        "startLine": 142,
+        "startChar": 19,
+        "endLine": 142,
+        "endChar": 36
+      },
+      "revId": "4c7e29efd1941a5f5d189a3690f4679a75416ba5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
