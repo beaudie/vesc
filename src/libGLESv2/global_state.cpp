@@ -155,6 +155,10 @@ void DealocateDebug()
 void DealocateMutex()
 {
     std::mutex *mutex = g_Mutex.exchange(nullptr);
+    {
+        // Wait for the mutex to become released by other threads before deleting.
+        std::lock_guard<std::mutex> lock(*mutex);
+    }
     SafeDelete(mutex);
 }
 
