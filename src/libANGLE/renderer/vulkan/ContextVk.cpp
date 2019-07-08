@@ -1414,7 +1414,18 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
                                bool invertViewport)
 {
     VkViewport vkViewport;
-    gl_vk::GetViewport(viewport, nearPlane, farPlane, invertViewport,
+    const gl::Caps &caps = getCaps();
+
+    // Clamp the viewport to what the HW can support
+    GLsizei correctedWidth =
+        std::min<GLsizei>(static_cast<GLuint>(viewport.width), caps.maxViewportWidth);
+    GLsizei correctedHeight =
+        std::min<GLsizei>(static_cast<GLuint>(viewport.height), caps.maxViewportHeight);
+
+    gl::Rectangle correctedRect =
+        gl::Rectangle(viewport.x, viewport.y, correctedWidth, correctedHeight);
+
+    gl_vk::GetViewport(correctedRect, nearPlane, farPlane, invertViewport,
                        framebufferVk->getState().getDimensions().height, &vkViewport);
     mGraphicsPipelineDesc->updateViewport(&mGraphicsPipelineTransition, vkViewport);
     invalidateDriverUniforms();
