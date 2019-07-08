@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 208
+#define ANGLE_SH_VERSION 209
 
 enum ShShaderSpec
 {
@@ -38,6 +38,8 @@ enum ShShaderSpec
 
     SH_GLES3_1_SPEC,
     SH_WEBGL3_SPEC,
+
+    SH_GL3_3_SPEC,
 };
 
 enum ShShaderOutput
@@ -665,6 +667,14 @@ int GetGeometryShaderMaxVertices(const ShHandle handle);
 inline bool IsWebGLBasedSpec(ShShaderSpec spec)
 {
     return (spec == SH_WEBGL_SPEC || spec == SH_WEBGL2_SPEC || spec == SH_WEBGL3_SPEC);
+}
+
+//
+// Helper function to identify DesktopGL specs
+//
+inline bool IsDesktopGLSpec(ShShaderSpec spec)
+{
+    return spec == SH_GL3_3_SPEC;
 }
 }  // namespace sh
 
