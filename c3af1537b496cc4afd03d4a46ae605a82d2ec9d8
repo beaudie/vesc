@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "242f9425_1aae48c2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-08T18:14:40Z",
+      "side": 1,
+      "message": "Since this is always VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, why don\u0027t we have an always-growing vector of `VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT` values that\u0027s never cleared (and only grow if necessary), so we don\u0027t need to reset and rebuild this list every frame.\n\nFeel free to ignore, I\u0027m mostly thinking out loud.",
+      "range": {
+        "startLine": 361,
+        "startChar": 58,
+        "endLine": 361,
+        "endChar": 94
+      },
+      "revId": "c3af1537b496cc4afd03d4a46ae605a82d2ec9d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
