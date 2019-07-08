@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "6629e2ff_e41176c4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-07-08T17:24:01Z",
+      "side": 1,
+      "message": "We provide a semaphore, and flushImpl will always submit it, even if the command graph is empty. Therefore, it would not be a bug if we could skip the layout transition because the image was already in present layout. Callers shouldn\u0027t need to worry about this any more.",
+      "parentUuid": "e2f569c4_47b65f45",
+      "revId": "49f45726936373836922b38719f4e14c7075e4a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "50fc8e6d_5b0cce08",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 3
@@ -62,6 +80,30 @@
       "revId": "49f45726936373836922b38719f4e14c7075e4a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81f01482_d1a5f94f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1001794
+      },
+      "writtenOn": "2019-07-08T17:24:01Z",
+      "side": 1,
+      "message": "Good point, we would need to enlarge the swap history to 3 if we wait here to keep the same amount of submitted work if the throttling is done here.\n\nThis was just saving having to later move acquire semaphore into SwapHistory by placing it there initially. I guess it didn\u0027t really save much.",
+      "parentUuid": "50fc8e6d_5b0cce08",
+      "range": {
+        "startLine": 1004,
+        "startChar": 37,
+        "endLine": 1004,
+        "endChar": 61
+      },
+      "revId": "49f45726936373836922b38719f4e14c7075e4a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
