@@ -192,6 +192,24 @@
       "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5548e4c_f4a4221e",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3714,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-08T18:02:52Z",
+      "side": 1,
+      "message": "Oh, std::pair is pretty nice.   I didn\u0027t know about that one.   I think I\u0027ve got what you described to eliminate the last bit of looping I can.\n\nI do think we still need to hang on to each uniform block that has a particular field name, so there will still be one last loop to check them all for each matching field name.   Using the example above, the map would contain:\n\nuniformBlockFieldMap[\"val\"] \u003d [(Block, highp vec4 val), (Block, mediump vec4 val)]\n\nWe need to validate that \"val\" doesn\u0027t match in 2 differing uniform blocks by looping through the list of uniform blocks that contain a field named \"val\" and checking the attributes of the fields.",
+      "parentUuid": "968c280a_0f0d1879",
+      "revId": "ed726859bb7efb9bee9d8739966934cacb85d802",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
