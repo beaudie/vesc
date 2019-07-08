@@ -238,17 +238,39 @@ PROC GL_APIENTRY wglGetProcAddress(LPCSTR lpszProc)
 
 BOOL GL_APIENTRY wglMakeCurrent(HDC hDc, HGLRC newContext)
 {
-    Thread *thread = egl::GetCurrentThread();
-
+    Thread *thread          = egl::GetCurrentThread();
     egl::Display *display = egl::Display::GetExistingDisplayFromNativeDisplay(hDc);
+    gl::Context *oldContext = thread->getContext();
+
+    if (newContext == NULL)
+    {
+        if (oldContext)
+        {
+            ANGLE_EGL_TRY_RETURN(thread, oldContext->unMakeCurrent(display), "wglMakeCurrent",
+                                 GetContextIfValid(display, oldContext), EGL_FALSE);
+        }
+        thread->setCurrent(NULL);
+        return TRUE;
+    }
+
+    egl::Surface *surface = nullptr;
+    if (display)
+    {
+        surface = display->getWGLSurface();
+    }
     gl::Context *context  = reinterpret_cast<gl::Context *>(newContext);
 
-    ANGLE_EGL_TRY_RETURN(
-        thread,
-        display->makeCurrent(thread, display->getWGLSurface(), display->getWGLSurface(), context),
-        "wglMakeCurrent", display, FALSE);
+    Surface *previousDraw        = thread->getCurrentDrawSurface();
+    Surface *previousRead        = thread->getCurrentReadSurface();
+    gl::Context *previousContext = thread->getContext();
 
-    SetContextCurrent(thread, context);
+    if (previousDraw != surface || previousRead != surface || previousContext != context)
+    {
+        ANGLE_EGL_TRY_RETURN(thread, display->makeCurrent(thread, surface, surface, context),
+                             "wglMakeCurrent", GetContextIfValid(display, context), EGL_FALSE);
+
+        SetContextCurrent(thread, context);
+    }
 
     return TRUE;
 }
