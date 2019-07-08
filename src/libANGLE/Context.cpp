@@ -4884,7 +4884,14 @@ void Context::vertexBindingDivisor(GLuint bindingIndex, GLuint divisor)
 
 void Context::viewport(GLint x, GLint y, GLsizei width, GLsizei height)
 {
-    mState.setViewportParams(x, y, width, height);
+    const Caps &caps = getCaps();
+
+    // Clamp the viewport to what the HW can support
+    GLsizei correctedWidth = std::min<GLsizei>(static_cast<GLuint>(width), caps.maxViewportWidth);
+    GLsizei correctedHeight =
+        std::min<GLsizei>(static_cast<GLuint>(height), caps.maxViewportHeight);
+
+    mState.setViewportParams(x, y, correctedWidth, correctedHeight);
 }
 
 void Context::vertexAttribIPointer(GLuint index,
