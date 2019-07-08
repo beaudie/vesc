@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "44a80716_d6e720d0",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1892,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-08T15:23:01Z",
+      "side": 1,
+      "message": "This sets all of the render targets to null but only below only updates mRTVs at resourceIndex to null.  I think you need to call mRTVs.clear() before updating any elements (here and above).",
+      "range": {
+        "startLine": 1892,
+        "startChar": 12,
+        "endLine": 1892,
+        "endChar": 68
+      },
+      "revId": "507ee1417577a4dd99f5d751b94d2b34f7989800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3751c869_d8c1fe08",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-08T15:23:01Z",
+      "side": 1,
+      "message": "nit: mCurRTVs",
+      "range": {
+        "startLine": 542,
+        "startChar": 13,
+        "endLine": 542,
+        "endChar": 18
+      },
+      "revId": "507ee1417577a4dd99f5d751b94d2b34f7989800",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
