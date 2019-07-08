@@ -799,7 +799,9 @@ TEST_P(FramebufferTest_ES31, IncompleteMultisampleFixedSampleLocationsTex)
 TEST_P(FramebufferTest_ES31, RenderingLimitToDefaultFBOSizeWithNoAttachments)
 {
     // anglebug.com/2253
-    ANGLE_SKIP_TEST_IF(IsLinux() && IsAMD() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsAMD() && IsDesktopOpenGL() || IsAndroid());
+    // Occlusion query reports fragments outside the render area are still rendered
+    ANGLE_SKIP_TEST_IF(IsAndroid());
 
     constexpr char kVS1[] = R"(#version 310 es
 in layout(location = 0) highp vec2 a_position;
@@ -909,7 +911,11 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
-ANGLE_INSTANTIATE_TEST(FramebufferTest_ES31, ES31_D3D11(), ES31_OPENGL(), ES31_OPENGLES());
+ANGLE_INSTANTIATE_TEST(FramebufferTest_ES31,
+                       ES31_D3D11(),
+                       ES31_OPENGL(),
+                       ES31_OPENGLES(),
+                       ES31_VULKAN());
 
 class AddDummyTextureNoRenderTargetTest : public ANGLETest
 {
