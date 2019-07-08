@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ac7e031_b19008c6",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3679,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-08T18:37:51Z",
+      "side": 1,
+      "message": "It would be nice if you use a `using XX \u003d std::pair\u003c..\u003e` to keep this declaration a bit simpler. That type is used multiple times below too.",
+      "range": {
+        "startLine": 3679,
+        "startChar": 8,
+        "endLine": 3679,
+        "endChar": 94
+      },
+      "revId": "d7e495027953a10e5416da94e401fbc128d4c70c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
