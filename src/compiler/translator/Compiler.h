@@ -207,6 +207,8 @@ class TCompiler : public TShHandleBase
 
     void collectInterfaceBlocks();
 
+    bool IsDesktopGLSpec();
+
     bool mVariablesCollected;
 
     bool mGLPositionInitialized;
