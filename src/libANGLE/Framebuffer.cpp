@@ -609,7 +609,10 @@ Box FramebufferState::getDimensions() const
 Extents FramebufferState::getExtents() const
 {
     ASSERT(attachmentsHaveSameDimensions());
-    ASSERT(getFirstNonNullAttachment() != nullptr);
+    // If the framebuffer doesn't have any attachments, use the default width/height
+    Extents extents = (getFirstNonNullAttachment() != nullptr)
+                          ? getFirstNonNullAttachment()->getSize()
+                          : Extents(getDefaultWidth(), getDefaultHeight(), 0);
     return getFirstNonNullAttachment()->getSize();
 }
 
