@@ -705,6 +705,7 @@ void DirectiveParser::parseVersion(Token *token)
 
     bool valid  = true;
     int version = 0;
+    ClientType clientType = ClientType::GLES;
     int state   = VERSION_NUMBER;
 
     mTokenizer->lex(token);
@@ -731,9 +732,23 @@ void DirectiveParser::parseVersion(Token *token)
                 }
                 break;
             case VERSION_PROFILE:
-                if (token->type != Token::IDENTIFIER || token->text != "es")
+                if (token->type != Token::IDENTIFIER ||
+                    (token->text != "es" && token->text != "core"))
                 {
                     mDiagnostics->report(Diagnostics::PP_INVALID_VERSION_DIRECTIVE, token->location,
+                                         token->text);
+                    valid = false;
+                }
+                if (valid)
+                {
+                    clientType = token->text == "core" ? ClientType::GL : ClientType::GLES;
+                }
+                if ((valid && clientType == ClientType::GL &&
+                     mSettings.shaderSpec != SH_GL3_3_SPEC) ||
+                    (valid && clientType == ClientType::GLES &&
+                     mSettings.shaderSpec == SH_GL3_3_SPEC))
+                {
+                    mDiagnostics->report(Diagnostics::PP_INVALID_VERSION_NUMBER, token->location,
                                          token->text);
                     valid = false;
                 }
@@ -765,7 +780,7 @@ void DirectiveParser::parseVersion(Token *token)
 
     if (valid)
     {
-        mDirectiveHandler->handleVersion(token->location, version);
+        mDirectiveHandler->handleVersion(token->location, version, clientType);
         mShaderVersion = version;
         PredefineMacro(mMacroSet, "__VERSION__", version);
     }

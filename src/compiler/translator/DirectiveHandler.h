@@ -41,13 +41,16 @@ class TDirectiveHandler : public angle::pp::DirectiveHandler, angle::NonCopyable
                          const std::string &name,
                          const std::string &behavior) override;
 
-    void handleVersion(const angle::pp::SourceLocation &loc, int version) override;
+    void handleVersion(const angle::pp::SourceLocation &loc,
+                       int version,
+                       angle::pp::ClientType client) override;
 
   private:
     TPragma mPragma;
     TExtensionBehavior &mExtensionBehavior;
     TDiagnostics &mDiagnostics;
     int &mShaderVersion;
+    angle::pp::ClientType mClientType;
     sh::GLenum mShaderType;
     bool mDebugShaderPrecisionSupported;
 };
