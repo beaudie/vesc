@@ -679,12 +679,6 @@
 3563 VULKAN : dEQP-GLES31.functional.state_query.*image* = FAIL
 3563 VULKAN : dEQP-GLES31.functional.synchronization.*.image* = FAIL
 
-// Framebuffer parameters (FRAMEBUFFER_DEFAULT_SAMPLES):
-3520 VULKAN : dEQP-GLES31.functional.state_query.framebuffer_default.framebuffer_default_samples_get_framebuffer_parameteriv = FAIL
-
-// Framebuffer without attachments:
-3579 VULKAN : dEQP-GLES31.functional.fbo.no_attachments.* = SKIP
-
 // Separate shader objects:
 3570 VULKAN : dEQP-GLES31.functional.program_interface_query.*separable_* = FAIL
 3570 VULKAN : dEQP-GLES31.functional.program_interface_query.uniform.random.* = FAIL
