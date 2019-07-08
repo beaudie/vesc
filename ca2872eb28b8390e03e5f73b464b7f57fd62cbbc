@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "a6772f7a_c1cc72f6",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-08T18:14:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7b88a41a_8e984fc9",
+      "revId": "ca2872eb28b8390e03e5f73b464b7f57fd62cbbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff65b4d3_e311f6aa",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 6
