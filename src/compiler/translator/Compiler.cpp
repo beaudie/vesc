@@ -216,6 +216,8 @@ int MapSpecToShaderVersion(ShShaderSpec spec)
         case SH_GLES3_1_SPEC:
         case SH_WEBGL3_SPEC:
             return 310;
+        case SH_GL3_3_SPEC:
+            return 330;
         default:
             UNREACHABLE();
             return 0;
@@ -364,8 +366,10 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
         ++firstSource;
     }
 
+    bool checkPrecisionErrors = IsDesktopGLSpec();
+
     TParseContext parseContext(mSymbolTable, mExtensionBehavior, mShaderType, mShaderSpec,
-                               compileOptions, true, &mDiagnostics, getResources());
+                               compileOptions, checkPrecisionErrors, &mDiagnostics, getResources());
 
     parseContext.setFragmentPrecisionHighOnESSL1(mResources.FragmentPrecisionHigh == 1);
 
@@ -1378,6 +1382,11 @@ bool TCompiler::isVaryingDefined(const char *varyingName)
     }
 
     return false;
+}
+
+bool TCompiler::IsDesktopGLSpec()
+{
+    return mShaderSpec == SH_GL3_3_SPEC;
 }
 
 void EmitMultiviewGLSL(const TCompiler &compiler,

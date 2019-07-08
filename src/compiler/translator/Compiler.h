@@ -37,7 +37,7 @@ class TranslatorHLSL;
 #endif  // ANGLE_ENABLE_HLSL
 
 //
-// Helper function to check if the shader type is GLSL.
+// Helper function to check if the shader type is DesktopGL or GLSL.
 //
 bool IsGLSL130OrNewer(ShShaderOutput output);
 bool IsGLSL420OrNewer(ShShaderOutput output);
@@ -206,6 +206,8 @@ class TCompiler : public TShHandleBase
     void internalTagUsedFunction(size_t index);
 
     void collectInterfaceBlocks();
+
+    bool IsDesktopGLSpec();
 
     bool mVariablesCollected;
 
