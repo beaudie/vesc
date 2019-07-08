@@ -5929,6 +5929,7 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
         symbol = symbolTable.findBuiltIn(fnCall->getMangledName(), mShaderVersion);
         if (symbol == nullptr)
         {
+            symbol = symbolTable.findBuiltIn(fnCall->getMangledName(), mShaderVersion);
             error(loc, "no matching overloaded function found", fnCall->name());
         }
         else

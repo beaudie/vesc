@@ -183,18 +183,23 @@ void TDirectiveHandler::handleExtension(const angle::pp::SourceLocation &loc,
     }
 }
 
-void TDirectiveHandler::handleVersion(const angle::pp::SourceLocation &loc, int version)
+void TDirectiveHandler::handleVersion(const angle::pp::SourceLocation &loc,
+                                      int version,
+                                      angle::pp::ClientType client)
 {
-    if (version == 100 || version == 300 || version == 310)
+    if (((version == 100 || version == 300 || version == 310) &&
+         client == angle::pp::ClientType::GLES) ||
+        (version == 330 && client == angle::pp::ClientType::GL))
     {
         mShaderVersion = version;
+        mClientType    = client;
     }
     else
     {
         std::stringstream stream = sh::InitializeStream<std::stringstream>();
         stream << version;
         std::string str = stream.str();
-        mDiagnostics.error(loc, "version number not supported", str.c_str());
+        mDiagnostics.error(loc, "client/version number not supported", str.c_str());
     }
 }
 

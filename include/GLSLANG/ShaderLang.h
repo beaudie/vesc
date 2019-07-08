@@ -38,6 +38,8 @@ enum ShShaderSpec
 
     SH_GLES3_1_SPEC,
     SH_WEBGL3_SPEC,
+
+    SH_GL3_3_SPEC,
 };
 
 enum ShShaderOutput

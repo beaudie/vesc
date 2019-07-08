@@ -17,6 +17,12 @@ namespace pp
 
 struct SourceLocation;
 
+enum class ClientType
+{
+    GL,
+    GLES,
+};
+
 // Base class for handling directives.
 // Preprocessor uses this class to notify the clients about certain
 // preprocessor directives. Derived classes are responsible for
@@ -38,7 +44,7 @@ class DirectiveHandler
                                  const std::string &name,
                                  const std::string &behavior) = 0;
 
-    virtual void handleVersion(const SourceLocation &loc, int version) = 0;
+    virtual void handleVersion(const SourceLocation &loc, int version, ClientType client) = 0;
 };
 
 }  // namespace pp
