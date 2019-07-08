@@ -22,6 +22,30 @@
       "revId": "8a758fd9e055c9a096e62d56e00998c738ae7e57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6514a04_14f8b077",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-08T15:57:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b97ed0d_3b86bd48",
+      "range": {
+        "startLine": 195,
+        "startChar": 4,
+        "endLine": 195,
+        "endChar": 72
+      },
+      "revId": "8a758fd9e055c9a096e62d56e00998c738ae7e57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
