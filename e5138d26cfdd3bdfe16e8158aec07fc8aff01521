@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "046c3f5f_b95607d3",
+        "filename": "src/compiler/translator/tree_ops/EmulateGLBaseInstance.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-08T17:41:29Z",
+      "side": 1,
+      "message": "could could consider putting all these traversers in a single multi-draw related utility file. They are all closely related. Same for EmulateGLDrawID.",
+      "range": {
+        "startLine": 51,
+        "startChar": 5,
+        "endLine": 51,
+        "endChar": 26
+      },
+      "revId": "e5138d26cfdd3bdfe16e8158aec07fc8aff01521",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
