@@ -603,8 +603,10 @@ int FramebufferState::getBaseViewIndex() const
 Box FramebufferState::getDimensions() const
 {
     ASSERT(attachmentsHaveSameDimensions());
-    ASSERT(getFirstNonNullAttachment() != nullptr);
-    Extents extents = getFirstNonNullAttachment()->getSize();
+    // If the framebuffer doesn't have any attachments, use the default width/height
+    Extents extents = (getFirstNonNullAttachment() != nullptr)
+                          ? getFirstNonNullAttachment()->getSize()
+                          : Extents(getDefaultWidth(), getDefaultHeight(), 0);
     return Box(0, 0, 0, extents.width, extents.height, extents.depth);
 }
 
