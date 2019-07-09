@@ -22,6 +22,30 @@
       "revId": "9bf80f604a1e81d3cc30740fd041efb220afa59a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0579baa2_84b40f49",
+        "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-09T20:35:41Z",
+      "side": 1,
+      "message": "They both need it for different reasons, the backend needs to pass it to the native egl function and the frontend needs it for validation.  There is no shared state for the EGL Sync objects yet.",
+      "parentUuid": "4d97b2d2_88393e25",
+      "range": {
+        "startLine": 49,
+        "startChar": 11,
+        "endLine": 49,
+        "endChar": 25
+      },
+      "revId": "9bf80f604a1e81d3cc30740fd041efb220afa59a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
