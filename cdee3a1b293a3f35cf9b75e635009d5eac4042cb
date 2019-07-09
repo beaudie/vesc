@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e105fbe4_e4a68eab",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-09T03:21:45Z",
+      "side": 1,
+      "message": "You should be able to remove this too. The previous line would still mark it as FAIL, but at least it would get run.",
+      "range": {
+        "startLine": 104,
+        "startChar": 0,
+        "endLine": 104,
+        "endChar": 72
+      },
+      "revId": "cdee3a1b293a3f35cf9b75e635009d5eac4042cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
