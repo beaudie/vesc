@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "566a1546_4885f011",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2330,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-09T17:22:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a79c57cd_b73819b7",
+      "range": {
+        "startLine": 2316,
+        "startChar": 0,
+        "endLine": 2330,
+        "endChar": 10
+      },
+      "revId": "a073498095934b6a7299ad25d7d6b9421776fae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ee689958_4ca31484",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 6
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "f51f2837_9a2226c6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-09T17:22:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee689958_4ca31484",
+      "range": {
+        "startLine": 337,
+        "startChar": 0,
+        "endLine": 347,
+        "endChar": 1
+      },
+      "revId": "a073498095934b6a7299ad25d7d6b9421776fae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9eb40320_7e9b7f09",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 6
@@ -68,6 +116,30 @@
       "revId": "a073498095934b6a7299ad25d7d6b9421776fae7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cda57d3e_be70d484",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-09T17:22:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9eb40320_7e9b7f09",
+      "range": {
+        "startLine": 514,
+        "startChar": 0,
+        "endLine": 518,
+        "endChar": 0
+      },
+      "revId": "a073498095934b6a7299ad25d7d6b9421776fae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
