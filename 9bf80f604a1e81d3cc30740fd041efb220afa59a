@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4d97b2d2_88393e25",
+        "filename": "src/libANGLE/renderer/gl/egl/SyncEGL.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-09T18:52:02Z",
+      "side": 1,
+      "message": "Why is this both here and in egl::Sync?",
+      "range": {
+        "startLine": 49,
+        "startChar": 11,
+        "endLine": 49,
+        "endChar": 25
+      },
+      "revId": "9bf80f604a1e81d3cc30740fd041efb220afa59a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
