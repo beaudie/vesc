@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c69f806c_f7a5f3cf",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8527,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-09T16:24:27Z",
+      "side": 1,
+      "message": "This is a lot of code to inline.   Are you sure this is necessary and/or a good idea?",
+      "range": {
+        "startLine": 8527,
+        "startChar": 0,
+        "endLine": 8527,
+        "endChar": 12
+      },
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e17ba68_e87623cd",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8531,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-09T16:24:27Z",
+      "side": 1,
+      "message": "These should probably be uint32_t:\n\nhttps://google.github.io/styleguide/cppguide.html#Integer_Types\n\u003cstdint.h\u003e defines types like int16_t, uint32_t, int64_t, etc. You should always use those in preference to short, unsigned long long and the like, when you need a guarantee on the size of an integer. Of the C integer types, only int should be used. When appropriate, you are welcome to use standard types like size_t and ptrdiff_t.",
+      "range": {
+        "startLine": 8531,
+        "startChar": 4,
+        "endLine": 8531,
+        "endChar": 17
+      },
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ca18b69_92effb5d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8538,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-09T16:24:27Z",
+      "side": 1,
+      "message": "Why are you duplicating these values so the same 16b value is in both the upper and lower 16b?",
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d03e2ab9_cda4102b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8544,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-09T16:24:27Z",
+      "side": 1,
+      "message": "Can you break this line up and explain what information you\u0027re collecting with these operations?   As in, what does \"(arrayAttribTypeBits ^ currentValueTypeBits) \u0026 currentValueActiveBits\" mean in plain english?",
+      "range": {
+        "startLine": 8542,
+        "startChar": 0,
+        "endLine": 8544,
+        "endChar": 80
+      },
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "043c627e_c8176972",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8549,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-09T16:24:27Z",
+      "side": 1,
+      "message": "Same as above.   Why are you duplicating these values into both halves of the uint32?   Can you skip the duplication and just do shifts into either the upper or lower halves?",
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a5b1df8_e950bbae",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-09T16:24:27Z",
+      "side": 1,
+      "message": "Using a cached value implies we call this more than onDefaultVertexAttributeChange() + onDefaultVertexAttributeChange().   Is that the case?\n\nSince Jamie\u0027s concerned about performance, what does it look like if you just do all the work in here to check the value rather than computing a cached value?",
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
