@@ -75,8 +75,11 @@ ScenicWindow::~ScenicWindow()
 
 bool ScenicWindow::initialize(const std::string &name, size_t width, size_t height)
 {
+    mScenicSession.set_error_handler(fit::bind_member(this, &ScenicWindow::OnScenicError));
+    mScenicSession.set_event_handler(fit::bind_member(this, &ScenicWindow::OnScenicEvents));
+
     // Set up scenic resources.
-    mShape.SetShape(scenic::Rectangle(&mScenicSession, width, height));
+    mShape.SetEventMask(fuchsia::ui::gfx::kMetricsEventMask);
     mShape.SetMaterial(mMaterial);
 
     fuchsia::ui::views::ViewToken viewToken;
@@ -93,6 +96,12 @@ bool ScenicWindow::initialize(const std::string &name, size_t width, size_t heig
 
     mWidth  = width;
     mHeight = height;
+
+    // Block until initial view dimensions are known.
+    while (!mDisplayWidthDips || !mDisplayHeightDips || !mDisplayScaleX || !mDisplayScaleY)
+    {
+        mLoop->Run(zx::time::infinite(), true /* once */);
+    }
 
     resetNativeWindow();
 
@@ -129,7 +138,7 @@ EGLNativeDisplayType ScenicWindow::getNativeDisplay() const
 
 void ScenicWindow::messageLoop()
 {
-    mLoop->Run(zx::deadline_after({}), true /* once */);
+    mLoop->Run(zx::deadline_after({}), false /* once */);
 }
 
 void ScenicWindow::setMousePosition(int x, int y)
@@ -150,6 +159,8 @@ bool ScenicWindow::resize(int width, int height)
 
     fuchsia_egl_window_resize(mFuchsiaEGLWindow.get(), width, height);
 
+    UpdateViewSize();
+
     return true;
 }
 
@@ -159,7 +170,64 @@ void ScenicWindow::signalTestEvent() {}
 
 void ScenicWindow::OnScenicEvents(std::vector<fuchsia::ui::scenic::Event> events)
 {
-    UNIMPLEMENTED();
+    for (const auto &event : events)
+    {
+        if (event.is_gfx())
+        {
+            if (event.gfx().is_metrics())
+            {
+                if (event.gfx().metrics().node_id != mShape.id())
+                    continue;
+                OnViewMetrics(event.gfx().metrics().metrics);
+            }
+            else if (event.gfx().is_view_properties_changed())
+            {
+                if (event.gfx().view_properties_changed().view_id != mView->id())
+                    continue;
+                OnViewProperties(event.gfx().view_properties_changed().properties);
+            }
+        }
+    }
+}
+
+void ScenicWindow::OnViewMetrics(const fuchsia::ui::gfx::Metrics &metrics)
+{
+    mDisplayScaleX = metrics.scale_x;
+    mDisplayScaleY = metrics.scale_y;
+
+    UpdateViewSize();
+}
+
+void ScenicWindow::OnViewProperties(const fuchsia::ui::gfx::ViewProperties &properties)
+{
+    float width = properties.bounding_box.max.x - properties.bounding_box.min.x -
+                  properties.inset_from_min.x - properties.inset_from_max.x;
+    float height = properties.bounding_box.max.y - properties.bounding_box.min.y -
+                   properties.inset_from_min.y - properties.inset_from_max.y;
+
+    mDisplayWidthDips  = width;
+    mDisplayHeightDips = height;
+
+    UpdateViewSize();
+}
+
+void ScenicWindow::UpdateViewSize()
+{
+    if (!mDisplayWidthDips || !mDisplayHeightDips || !mDisplayScaleX || !mDisplayScaleY)
+    {
+        return;
+    }
+
+    // Surface size in pixels is
+    //   (mWidth, mHeight)
+    //
+    // View size in pixels is
+    //   (mDisplayWidthDips * mDisplayScaleX) x (mDisplayHeightDips * mDisplayScaleY)
+
+    mShape.SetShape(
+        scenic::Rectangle(&mScenicSession, mWidth / mDisplayScaleX, mHeight / mDisplayScaleY));
+    mShape.SetTranslation(0.5f * mWidth / mDisplayScaleX, 0.5f * mHeight / mDisplayScaleY, 0.f);
+    mScenicSession.Present(0, [](fuchsia::images::PresentationInfo info) {});
 }
 
 void ScenicWindow::OnScenicError(zx_status_t status)

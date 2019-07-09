@@ -47,11 +47,16 @@ class ANGLE_UTIL_EXPORT ScenicWindow : public OSWindow
     void setVisible(bool isVisible) override;
     void signalTestEvent() override;
 
+  private:
     // FIDL callbacks:
     void OnScenicEvents(std::vector<fuchsia::ui::scenic::Event> events);
     void OnScenicError(zx_status_t status);
 
-  private:
+    void OnViewMetrics(const fuchsia::ui::gfx::Metrics &metrics);
+    void OnViewProperties(const fuchsia::ui::gfx::ViewProperties &properties);
+
+    void UpdateViewSize();
+
     // Default message loop.
     async::Loop *mLoop;
 
@@ -67,6 +72,12 @@ class ANGLE_UTIL_EXPORT ScenicWindow : public OSWindow
 
     // Scenic view.
     std::unique_ptr<scenic::View> mView;
+
+    // View geometry.
+    float mDisplayHeightDips = 0.f;
+    float mDisplayWidthDips  = 0.f;
+    float mDisplayScaleX     = 0.f;
+    float mDisplayScaleY     = 0.f;
 
     // EGL native window.
     std::unique_ptr<fuchsia_egl_window, FuchsiaEGLWindowDeleter> mFuchsiaEGLWindow;
