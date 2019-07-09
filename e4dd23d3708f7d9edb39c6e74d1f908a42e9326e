@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "44cc2fb4_a94cb39a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8527,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-09T16:50:11Z",
+      "side": 1,
+      "message": "This function is called in two places, so it\u0027s not a major detriment to code size. After benchmarking both, there doesn\u0027t seem to be a major performance benefit either way (208.45 -\u003e 208.38, within measurement error).",
+      "parentUuid": "c69f806c_f7a5f3cf",
+      "range": {
+        "startLine": 8527,
+        "startChar": 0,
+        "endLine": 8527,
+        "endChar": 12
+      },
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e17ba68_e87623cd",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 4
@@ -60,6 +84,30 @@
       "writtenOn": "2019-07-09T16:24:27Z",
       "side": 1,
       "message": "These should probably be uint32_t:\n\nhttps://google.github.io/styleguide/cppguide.html#Integer_Types\n\u003cstdint.h\u003e defines types like int16_t, uint32_t, int64_t, etc. You should always use those in preference to short, unsigned long long and the like, when you need a guarantee on the size of an integer. Of the C integer types, only int should be used. When appropriate, you are welcome to use standard types like size_t and ptrdiff_t.",
+      "range": {
+        "startLine": 8531,
+        "startChar": 4,
+        "endLine": 8531,
+        "endChar": 17
+      },
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "135f1504_737fa02b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8531,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-09T16:50:11Z",
+      "side": 1,
+      "message": "Changed to uint_fast32_t (which seems to be unsigned long under the hood). uint32_t gives a perf hit (208.38 -\u003e 209.58).",
+      "parentUuid": "2e17ba68_e87623cd",
       "range": {
         "startLine": 8531,
         "startChar": 4,
@@ -130,6 +178,30 @@
     },
     {
       "key": {
+        "uuid": "46292801_d334efb7",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8544,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-09T16:50:11Z",
+      "side": 1,
+      "message": "a ^ ((a ^ b) \u0026 m) \u003d b \u0026 m | a \u0026 ~m, but saves one operation. Basically, when the current value should be used, we select the corresponding bits from the current value type bits, and otherwise we use the array attrib type bits.",
+      "parentUuid": "d03e2ab9_cda4102b",
+      "range": {
+        "startLine": 8542,
+        "startChar": 0,
+        "endLine": 8544,
+        "endChar": 80
+      },
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "043c627e_c8176972",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 4
@@ -141,6 +213,24 @@
       "writtenOn": "2019-07-09T16:24:27Z",
       "side": 1,
       "message": "Same as above.   Why are you duplicating these values into both halves of the uint32?   Can you skip the duplication and just do shifts into either the upper or lower halves?",
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "460fe372_bd99453e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8549,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-09T16:50:11Z",
+      "side": 1,
+      "message": "Explained above; this OR makes it so for each index the lower bit is 1 if either bit is mismatched.",
+      "parentUuid": "043c627e_c8176972",
       "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
