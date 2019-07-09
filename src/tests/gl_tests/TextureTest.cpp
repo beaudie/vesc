@@ -4100,6 +4100,135 @@ class Texture2DRGTest : public Texture2DTest
     GLuint mRenderbuffer;
 };
 
+class Texture2DFloatTest : public Texture2DTest
+{
+  protected:
+    Texture2DFloatTest()
+        : Texture2DTest(), mRenderableTexture(0), mTestTexture(0), mFBO(0), mRenderbuffer(0)
+    {}
+
+    void testSetUp() override
+    {
+        Texture2DTest::testSetUp();
+
+        glActiveTexture(GL_TEXTURE0);
+        glGenTextures(1, &mRenderableTexture);
+        glGenTextures(1, &mTestTexture);
+        glGenFramebuffers(1, &mFBO);
+        glGenRenderbuffers(1, &mRenderbuffer);
+
+        setUpProgram();
+        glUseProgram(mProgram);
+        glUniform1i(mTexture2DUniformLocation, 0);
+
+        glBindTexture(GL_TEXTURE_2D, mRenderableTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                               mRenderableTexture, 0);
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void testTearDown() override
+    {
+        glDeleteTextures(1, &mRenderableTexture);
+        glDeleteTextures(1, &mTestTexture);
+        glDeleteFramebuffers(1, &mFBO);
+        glDeleteRenderbuffers(1, &mRenderbuffer);
+
+        Texture2DTest::testTearDown();
+    }
+
+    void testFloatTextureLinear(GLenum internalFormat)
+    {
+        GLfloat imageData[] = {
+            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        };
+
+        glBindTexture(GL_TEXTURE_2D, mTestTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, 2, 2, 0, GL_RGBA, GL_FLOAT, imageData);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+        drawQuad(mProgram, "position", 0.5f);
+
+        EXPECT_GL_NO_ERROR();
+        EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(127u, 127u, 127u, 255u), kPixelTolerance);
+    }
+
+    void performFloatTextureRender(GLenum internalFormat)
+    {
+        glBindTexture(GL_TEXTURE_2D, mTestTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, 1, 1, 0, GL_RGBA, GL_FLOAT, nullptr);
+
+        glBindRenderbuffer(GL_RENDERBUFFER, mRenderbuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, internalFormat, 1, 1);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                  mRenderbuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        EXPECT_GL_NO_ERROR();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
+
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, 1, 1);
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    GLuint mRenderableTexture;
+    GLuint mTestTexture;
+    GLuint mFBO;
+    GLuint mRenderbuffer;
+};
+
+// Test linear sampling for 32F textures
+TEST_P(Texture2DFloatTest, TextureFloatLinearTest)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_float_linear"));
+
+    testFloatTextureLinear(GL_RGBA32F);
+}
+
+// Test linear sampling for 16F textures
+TEST_P(Texture2DFloatTest, TextureHalfFloatLinear32Test)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_half_float_linear"));
+
+    testFloatTextureLinear(GL_RGBA16F);
+}
+
+// Test color-renderability for 32F textures
+TEST_P(Texture2DFloatTest, TextureFloatRenderTest)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_color_buffer_float"));
+
+    performFloatTextureRender(GL_RGBA32F);
+    EXPECT_PIXEL_32F_NEAR(0, 0, 1.0f, 1.0f, 1.0f, 1.0f, 0.01f);
+}
+
+// Test color-renderability for 16F textures
+TEST_P(Texture2DFloatTest, TextureHalfFloatRenderTest)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_color_buffer_half_float"));
+
+    performFloatTextureRender(GL_RGBA16F);
+
+    GLhalf color[4];
+    glReadPixels(0, 0, 1, 1, GL_RGBA, GL_HALF_FLOAT, &color[0]);
+    for (int i = 0; i < 4; i++)
+    {
+        EXPECT_NEAR(color[i], 0x3C00, kPixelTolerance);
+    }
+}
+
 // Test unorm texture formats enabled by the GL_EXT_texture_rg extension.
 TEST_P(Texture2DRGTest, TextureRGUNormTest)
 {
@@ -5098,6 +5227,7 @@ ANGLE_INSTANTIATE_TEST(Texture2DRGTest,
                        ES3_OPENGLES(),
                        ES2_VULKAN(),
                        ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST(Texture2DFloatTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES(), ES3_VULKAN());
 ANGLE_INSTANTIATE_TEST(TextureCubeTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
 ANGLE_INSTANTIATE_TEST(Texture2DIntegerTestES3, ES3_D3D11(), ES3_OPENGL());
 ANGLE_INSTANTIATE_TEST(TextureCubeIntegerTestES3, ES3_D3D11(), ES3_OPENGL());
