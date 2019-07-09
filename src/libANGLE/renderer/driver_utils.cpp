@@ -136,4 +136,38 @@ const char *GetVendorString(uint32_t vendorId)
     }
 }
 
+MacOSVersion::MacOSVersion() {}
+MacOSVersion::MacOSVersion(int major, int minor, int patch)
+    : majorVersion(major), minorVersion(minor), patchVersion(patch)
+{}
+
+bool operator==(const MacOSVersion &a, const MacOSVersion &b)
+{
+    return std::tie(a.majorVersion, a.minorVersion, a.patchVersion) ==
+           std::tie(b.majorVersion, b.minorVersion, b.patchVersion);
+}
+bool operator!=(const MacOSVersion &a, const MacOSVersion &b)
+{
+    return std::tie(a.majorVersion, a.minorVersion, a.patchVersion) !=
+           std::tie(b.majorVersion, b.minorVersion, b.patchVersion);
+}
+bool operator<(const MacOSVersion &a, const MacOSVersion &b)
+{
+    return std::tie(a.majorVersion, a.minorVersion, a.patchVersion) <
+           std::tie(b.majorVersion, b.minorVersion, b.patchVersion);
+}
+bool operator>=(const MacOSVersion &a, const MacOSVersion &b)
+{
+    return std::tie(a.majorVersion, a.minorVersion, a.patchVersion) >=
+           std::tie(b.majorVersion, b.minorVersion, b.patchVersion);
+}
+
+#if !defined(ANGLE_PLATFORM_APPLE)
+MacOSVersion GetMacOSVersion()
+{
+    // Return a default version
+    return MacOSVersion(0, 0, 0);
+}
+#endif
+
 }  // namespace rx
