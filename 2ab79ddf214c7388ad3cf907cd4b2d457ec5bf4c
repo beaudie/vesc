@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "0d860fa4_9bd46d4b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T19:54:27Z",
+      "side": 1,
+      "message": "I\u0027m probably being too nit picky here. Don\u0027t worry about it.",
+      "parentUuid": "3519e0d9_18b6c15b",
+      "range": {
+        "startLine": 717,
+        "startChar": 4,
+        "endLine": 717,
+        "endChar": 17
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4617c78_257cfcd1",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 7
