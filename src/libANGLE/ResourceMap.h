@@ -78,6 +78,9 @@ class ResourceMap final : angle::NonCopyable
     // Not a constant-time operation, should only be used for verification.
     bool empty() const;
 
+    // Gets the index of the maximum element.
+    size_t maxElement() const;
+
   private:
     friend class Iterator;
 
@@ -218,6 +221,12 @@ template <typename ResourceType>
 bool ResourceMap<ResourceType>::empty() const
 {
     return (begin() == end());
+}
+
+template <typename ResourceType>
+size_t ResourceMap<ResourceType>::maxElement() const
+{
+    return (end()->first - begin()->first);
 }
 
 template <typename ResourceType>

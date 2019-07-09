@@ -213,7 +213,6 @@ class Display final : public LabeledObject, angle::NonCopyable
     EGLAttrib queryAttrib(const EGLint attribute);
 
     angle::FrameCapture *getFrameCapture() { return mFrameCapture; }
-    void onPostSwap() const;
 
   private:
     Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice);

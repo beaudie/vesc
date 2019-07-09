@@ -1563,12 +1563,4 @@ EGLAttrib Display::queryAttrib(const EGLint attribute)
     }
     return value;
 }
-
-void Display::onPostSwap() const
-{
-#if ANGLE_CAPTURE_ENABLED
-    // Dump frame capture if enabled.
-    mFrameCapture->onEndFrame();
-#endif  // ANGLE_CAPTURE_ENABLED
-}
 }  // namespace egl
