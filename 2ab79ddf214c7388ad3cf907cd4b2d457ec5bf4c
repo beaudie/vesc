@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af3f1ab1_f3053e6e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T17:48:32Z",
+      "side": 1,
+      "message": "nit: mRenderer",
+      "range": {
+        "startLine": 717,
+        "startChar": 4,
+        "endLine": 717,
+        "endChar": 17
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4617c78_257cfcd1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T17:48:32Z",
+      "side": 1,
+      "message": "nit: can omit braces around fences-\u003eback()",
+      "range": {
+        "startLine": 476,
+        "startChar": 50,
+        "endLine": 476,
+        "endChar": 66
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7596d89b_bd76a966",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T17:48:32Z",
+      "side": 1,
+      "message": "omit, use mDevice",
+      "range": {
+        "startLine": 1478,
+        "startChar": 4,
+        "endLine": 1478,
+        "endChar": 43
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bde4cd95_b1270ab1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T17:48:32Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 1490,
+        "startChar": 5,
+        "endLine": 1490,
+        "endChar": 6
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "765dd35d_1f39e865",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T17:48:32Z",
+      "side": 1,
+      "message": "can you please tag open TODOs with an open ANGLE bug so we can track the work?",
+      "range": {
+        "startLine": 208,
+        "startChar": 8,
+        "endLine": 208,
+        "endChar": 25
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d70c9f18_0783c843",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T17:48:32Z",
+      "side": 1,
+      "message": "nit: you can remove this.",
+      "range": {
+        "startLine": 215,
+        "startChar": 8,
+        "endLine": 215,
+        "endChar": 38
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "268a2685_f7be4b6e",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T17:48:32Z",
+      "side": 1,
+      "message": "maybe you should merge these two. also watch out for typos (drier)",
+      "range": {
+        "startLine": 358,
+        "startChar": 0,
+        "endLine": 362,
+        "endChar": 48
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
