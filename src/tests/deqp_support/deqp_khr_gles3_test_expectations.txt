@@ -35,9 +35,34 @@
 3633 VULKAN : KHR-GLES3.shaders.uniform_block.random.all_shared_buffer.1 = FAIL
 
 // Crashes trying to load non-existent texture load function.
-3455 VULKAN : KHR-GLES3.copy_tex_image_conversions.forbidden.* = SKIP
-3455 VULKAN : KHR-GLES3.copy_tex_image_conversions.required.renderbuffer_* = SKIP
-3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.r* = SKIP
+// The following only crash on Android:
+3455 VULKAN ANDROID : KHR-GLES3.copy_tex_image_conversions.forbidden.* = SKIP
+3455 VULKAN WIN : KHR-GLES3.copy_tex_image_conversions.forbidden.* = FAIL
+3455 VULKAN WIN : KHR-GLES3.copy_tex_image_conversions.forbidden.texture_array_* = SKIP
+3455 VULKAN WIN : KHR-GLES3.copy_tex_image_conversions.forbidden.texture3d_* = SKIP
+3455 VULKAN WIN : KHR-GLES3.copy_tex_image_conversions.required.renderbuffer_* = SKIP
+3455 VULKAN LINUX : KHR-GLES3.copy_tex_image_conversions.forbidden.* = FAIL
+3455 VULKAN LINUX : KHR-GLES3.copy_tex_image_conversions.forbidden.texture_array_* = SKIP
+3455 VULKAN LINUX : KHR-GLES3.copy_tex_image_conversions.forbidden.texture3d_* = SKIP
+3455 VULKAN LINUX : KHR-GLES3.copy_tex_image_conversions.required.renderbuffer_* = SKIP
+// The following mostly pass, except on Android where they crash:
+3455 VULKAN ANDROID : KHR-GLES3.packed_pixels.rectangle.r* = SKIP
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.rgb = FAIL
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.rgba = FAIL
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.r8 = FAIL
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.rg8 = FAIL
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.rgb8 = FAIL
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.rgba8 = FAIL
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.rgb10_a2 = FAIL
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.r16f = FAIL
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.rg16f = FAIL
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.rgba16f = FAIL
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.r32f = FAIL
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.rg32f = FAIL
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.rgb32f = FAIL
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.rgba32f = FAIL
+3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.r11f_g11f_b10f = FAIL
+// PBO's are not fully implemented:
 3455 VULKAN : KHR-GLES3.packed_pixels.pbo_rectangle.r* = SKIP
 3455 VULKAN : KHR-GLES3.packed_pixels.pbo_rectangle.srgb8_alpha8 = SKIP
 
