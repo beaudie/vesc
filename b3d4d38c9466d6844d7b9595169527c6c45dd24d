@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0e70ac7_5abc5791",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3679,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-09T03:12:49Z",
+      "side": 1,
+      "message": "Typo. This shouldn\u0027t be a pointer and you would be keeping pointers to variables that are about to go out of scope.",
+      "range": {
+        "startLine": 3679,
+        "startChar": 66,
+        "endLine": 3679,
+        "endChar": 67
+      },
+      "revId": "b3d4d38c9466d6844d7b9595169527c6c45dd24d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
