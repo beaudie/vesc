@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "14d62982_08211801",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8531,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T17:13:45Z",
+      "side": 1,
+      "message": "It is possible that uint_fast32_t is using 64 bits, and that ulong is 64 bits on some archs. From previous conversations with James I\u0027m pretty confident in his measurements.",
+      "parentUuid": "1cfd1db6_882bf1fa",
+      "range": {
+        "startLine": 8531,
+        "startChar": 4,
+        "endLine": 8531,
+        "endChar": 17
+      },
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ca18b69_92effb5d",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 4
