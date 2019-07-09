@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f0861be_322c457b",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T20:40:45Z",
+      "side": 1,
+      "message": "nit: update",
+      "range": {
+        "startLine": 29,
+        "startChar": 8,
+        "endLine": 29,
+        "endChar": 25
+      },
+      "revId": "05b0a79434393da219a7d6d0d1f7741823510b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97b50c39_c6036e5e",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 708,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T20:40:45Z",
+      "side": 1,
+      "message": "in this file, stick to just checking the spec. a client type isn\u0027t necessary here. you know that from the spec. GL 3.3 can use \u0027core\u0027, but ES versions cannot.",
+      "range": {
+        "startLine": 708,
+        "startChar": 4,
+        "endLine": 708,
+        "endChar": 45
+      },
+      "revId": "05b0a79434393da219a7d6d0d1f7741823510b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bdb1a9c_0e124a7a",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 369,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T20:40:45Z",
+      "side": 1,
+      "message": "can you make this a helper function IsDesktopGLSpec?",
+      "range": {
+        "startLine": 369,
+        "startChar": 32,
+        "endLine": 369,
+        "endChar": 78
+      },
+      "revId": "05b0a79434393da219a7d6d0d1f7741823510b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7db58f52_65ab4c76",
+        "filename": "src/compiler/translator/DirectiveHandler.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T20:40:45Z",
+      "side": 1,
+      "message": "again you shouldn\u0027t need a client type here. the spec should determine everything. you can pass the spec to TDirectiveHandler from the TParseContext init.",
+      "range": {
+        "startLine": 46,
+        "startChar": 23,
+        "endLine": 46,
+        "endChar": 51
+      },
+      "revId": "05b0a79434393da219a7d6d0d1f7741823510b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1403ed95_24fee3ad",
+        "filename": "src/compiler/translator/util.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T20:40:45Z",
+      "side": 1,
+      "message": "can you add a comment here and below that desktop specs don\u0027t use precision?",
+      "range": {
+        "startLine": 456,
+        "startChar": 23,
+        "endLine": 456,
+        "endChar": 30
+      },
+      "revId": "05b0a79434393da219a7d6d0d1f7741823510b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e0c1147_891a4604",
+        "filename": "src/libANGLE/Compiler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T20:40:45Z",
+      "side": 1,
+      "message": "can you instead ASSERT(majorVersion \u003d\u003d 3 and minorVersion \u003d\u003d 3)? We then can catch future apps that use different versions.",
+      "range": {
+        "startLine": 31,
+        "startChar": 36,
+        "endLine": 31,
+        "endChar": 78
+      },
+      "revId": "05b0a79434393da219a7d6d0d1f7741823510b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "353d7f85_992f9f89",
+        "filename": "src/tests/preprocessor_tests/version_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T20:40:45Z",
+      "side": 1,
+      "message": "can you add comment here as well?",
+      "range": {
+        "startLine": 30,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 6
+      },
+      "revId": "05b0a79434393da219a7d6d0d1f7741823510b3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
