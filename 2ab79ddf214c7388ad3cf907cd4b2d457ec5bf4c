@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3519e0d9_18b6c15b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-09T19:43:56Z",
+      "side": 1,
+      "message": "Done. Also there are other places use \u0027getRenderer()\u0027 instead of \u0027mRenderer\u0027 in ContextVk, maybe we should another CL to change them all?",
+      "parentUuid": "af3f1ab1_f3053e6e",
+      "range": {
+        "startLine": 717,
+        "startChar": 4,
+        "endLine": 717,
+        "endChar": 17
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4617c78_257cfcd1",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 7
@@ -45,6 +69,54 @@
       "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a800a213_a08d2339",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-09T19:43:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4617c78_257cfcd1",
+      "range": {
+        "startLine": 476,
+        "startChar": 50,
+        "endLine": 476,
+        "endChar": 66
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d912ee28_d3a9b6a4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-09T19:43:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4617c78_257cfcd1",
+      "range": {
+        "startLine": 476,
+        "startChar": 50,
+        "endLine": 476,
+        "endChar": 66
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +143,54 @@
     },
     {
       "key": {
+        "uuid": "596aa674_4ccbbbac",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-09T19:43:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7596d89b_bd76a966",
+      "range": {
+        "startLine": 1478,
+        "startChar": 4,
+        "endLine": 1478,
+        "endChar": 43
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a4ec622e_d1f27a81",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1478,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-09T19:43:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7596d89b_bd76a966",
+      "range": {
+        "startLine": 1478,
+        "startChar": 4,
+        "endLine": 1478,
+        "endChar": 43
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bde4cd95_b1270ab1",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 7
@@ -91,6 +211,54 @@
       "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb8ba45f_ceee4849",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-09T19:43:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bde4cd95_b1270ab1",
+      "range": {
+        "startLine": 1490,
+        "startChar": 5,
+        "endLine": 1490,
+        "endChar": 6
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a91378b_26d4972f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-09T19:43:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bde4cd95_b1270ab1",
+      "range": {
+        "startLine": 1490,
+        "startChar": 5,
+        "endLine": 1490,
+        "endChar": 6
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +285,30 @@
     },
     {
       "key": {
+        "uuid": "420c9b39_f8b8b2ca",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-09T19:43:56Z",
+      "side": 1,
+      "message": "Issue opened at anglebug.com/3670. Remove TODO because the Semaphore recycler may not go here.",
+      "parentUuid": "765dd35d_1f39e865",
+      "range": {
+        "startLine": 208,
+        "startChar": 8,
+        "endLine": 208,
+        "endChar": 25
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d70c9f18_0783c843",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
         "patchSetId": 7
@@ -140,6 +332,30 @@
     },
     {
       "key": {
+        "uuid": "a3d45aae_f54185f7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-09T19:43:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d70c9f18_0783c843",
+      "range": {
+        "startLine": 215,
+        "startChar": 8,
+        "endLine": 215,
+        "endChar": 38
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "268a2685_f7be4b6e",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 7
@@ -160,6 +376,30 @@
       "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7316e411_9dc8289a",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-09T19:43:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "268a2685_f7be4b6e",
+      "range": {
+        "startLine": 358,
+        "startChar": 0,
+        "endLine": 362,
+        "endChar": 48
+      },
+      "revId": "2ab79ddf214c7388ad3cf907cd4b2d457ec5bf4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
