@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1b8bcb7a_fa66df09",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8527,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T16:33:29Z",
+      "side": 1,
+      "message": "This is on my suggestion. I\u0027d keep it for now to minimize the perf hit.",
+      "parentUuid": "c69f806c_f7a5f3cf",
+      "range": {
+        "startLine": 8527,
+        "startChar": 0,
+        "endLine": 8527,
+        "endChar": 12
+      },
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e17ba68_e87623cd",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 4
@@ -59,6 +83,24 @@
       "writtenOn": "2019-07-09T16:24:27Z",
       "side": 1,
       "message": "Why are you duplicating these values so the same 16b value is in both the upper and lower 16b?",
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3912e58_08b94f0c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8538,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T16:33:29Z",
+      "side": 1,
+      "message": "Long explanation but essentially the \"ComponentTypeMask\" is a 2-bits-per-element bit mask with the second bits in the upper word. The duplicated masks here allow us to use bitwise operations on the component type masks.",
+      "parentUuid": "1ca18b69_92effb5d",
       "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
