@@ -316,6 +316,30 @@
     },
     {
       "key": {
+        "uuid": "8947cb51_23acfb04",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8544,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-09T17:20:41Z",
+      "side": 1,
+      "message": "How is the following explanation:\n\nSince a ^ (a ^ b) \u003d b and a ^ 0 \u003d a, we can mask (arrayAttribTypeBits ^ currentValueTypeBits) with currentValueActiveBits and then XOR with arrayAttribTypeBits to perform the selection.",
+      "parentUuid": "43c7e080_9f7f3025",
+      "range": {
+        "startLine": 8542,
+        "startChar": 0,
+        "endLine": 8544,
+        "endChar": 80
+      },
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "043c627e_c8176972",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 4
