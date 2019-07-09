@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "30917a44_ba73721a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T12:20:06Z",
+      "side": 1,
+      "message": "nit: can omit _",
+      "range": {
+        "startLine": 460,
+        "startChar": 23,
+        "endLine": 460,
+        "endChar": 33
+      },
+      "revId": "f91e60c455709ceb8b3c8ef3dd392e1d4e6f3ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

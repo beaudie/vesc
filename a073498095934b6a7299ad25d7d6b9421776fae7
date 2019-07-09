@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a79c57cd_b73819b7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2330,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T12:20:06Z",
+      "side": 1,
+      "message": "As a cleanup, could you please add a method to the RendererVk class to initialize vk::Shared\u003cvk::Fence\u003e *sharedFenceOut?",
+      "range": {
+        "startLine": 2316,
+        "startChar": 0,
+        "endLine": 2330,
+        "endChar": 10
+      },
+      "revId": "a073498095934b6a7299ad25d7d6b9421776fae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee689958_4ca31484",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T12:20:06Z",
+      "side": 1,
+      "message": "is it possible to remove this?",
+      "range": {
+        "startLine": 337,
+        "startChar": 0,
+        "endLine": 347,
+        "endChar": 1
+      },
+      "revId": "a073498095934b6a7299ad25d7d6b9421776fae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9eb40320_7e9b7f09",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-09T12:20:06Z",
+      "side": 1,
+      "message": "I\u0027d suggest you reset the fence when you add a Fence to the list. Then there would be no error condition on fetch. And then reset could be called outside of the Recycler class.",
+      "range": {
+        "startLine": 514,
+        "startChar": 0,
+        "endLine": 518,
+        "endChar": 0
+      },
+      "revId": "a073498095934b6a7299ad25d7d6b9421776fae7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
