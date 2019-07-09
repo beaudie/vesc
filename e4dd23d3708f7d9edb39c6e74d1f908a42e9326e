@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "3abde792_ffce07d4",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8527,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-09T17:09:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "44cc2fb4_a94cb39a",
+      "range": {
+        "startLine": 8527,
+        "startChar": 0,
+        "endLine": 8527,
+        "endChar": 12
+      },
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e17ba68_e87623cd",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 4
@@ -120,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "1cfd1db6_882bf1fa",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8531,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-09T17:09:11Z",
+      "side": 1,
+      "message": "Hm, I suspect the change in performance is just noise since uint32_t is most likely typedef\u0027ed to unsigned long under the covers anyway (or at least some other functionally equivalent 32b type).\n\nI\u0027ve never heard of uint_fast32_t before though, so that\u0027s good to learn about.   It doesn\u0027t look like you\u0027re relying on the value being exactly 32b, so it should be safe to use.",
+      "parentUuid": "135f1504_737fa02b",
+      "range": {
+        "startLine": 8531,
+        "startChar": 4,
+        "endLine": 8531,
+        "endChar": 17
+      },
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ca18b69_92effb5d",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 4
@@ -152,6 +200,24 @@
       "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c72efcb_6667c1b6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8538,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-09T17:09:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a3912e58_08b94f0c",
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -202,6 +268,30 @@
     },
     {
       "key": {
+        "uuid": "43c7e080_9f7f3025",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8544,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-09T17:09:11Z",
+      "side": 1,
+      "message": "I\u0027m more interested in why you\u0027re doing these particular operations.   With a pen and paper we can figure out that you\u0027re doing \"Selects bits from arrayAttribTypeBits where the bit in currentValueActiveBits is 0 and the bits from currentValueTypeBits where the bit is 1\", but not why you\u0027re doing that or what these particular operations mean.\n\nI think it would be helpful to explain each step along the way so we don\u0027t lose what you\u0027re learned in here:\n// The resulting value indicates which attribute types...something something...\noutputTypeBits \u003d arrayAttribTypeBits ^ currentValueTypeBits;\n// We only care about the attributes that are currently active\noutputTypeBits \u0026\u003d currentValueActiveBits;\n\netc.\n\nThe code should still be optimized and compiled down to the same instructions, but it would help make it clearer to us what\u0027s going on the next time someone is in here.",
+      "parentUuid": "46292801_d334efb7",
+      "range": {
+        "startLine": 8542,
+        "startChar": 0,
+        "endLine": 8544,
+        "endChar": 80
+      },
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "043c627e_c8176972",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 4
@@ -234,6 +324,24 @@
       "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c80afc6_148e3e37",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8549,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-09T17:09:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "460fe372_bd99453e",
+      "revId": "e4dd23d3708f7d9edb39c6e74d1f908a42e9326e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
