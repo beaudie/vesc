@@ -1636,6 +1636,22 @@ angle::FormatID GetVertexFormatID(const VertexAttribute &attrib, VertexAttribTyp
     return attrib.format->id;
 }
 
+angle::FormatID GetCurrentValueFormatID(VertexAttribType currentValueType)
+{
+    switch (currentValueType)
+    {
+        case VertexAttribType::Float:
+            return angle::FormatID::R32G32B32A32_FLOAT;
+        case VertexAttribType::Int:
+            return angle::FormatID::R32G32B32A32_SINT;
+        case VertexAttribType::UnsignedInt:
+            return angle::FormatID::R32G32B32A32_UINT;
+        default:
+            UNREACHABLE();
+            return angle::FormatID::NONE;
+    }
+}
+
 const VertexFormat &GetVertexFormatFromID(angle::FormatID vertexFormatID)
 {
     switch (vertexFormatID)
