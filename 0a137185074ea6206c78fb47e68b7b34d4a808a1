@@ -19,6 +19,42 @@
     },
     {
       "key": {
+        "uuid": "c722b9ee_39f7d490",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-10T23:37:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ae4e03f_8f269bdf",
+      "revId": "0a137185074ea6206c78fb47e68b7b34d4a808a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6313e183_1171fb85",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-10T23:37:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ae4e03f_8f269bdf",
+      "revId": "0a137185074ea6206c78fb47e68b7b34d4a808a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a1d727e_651b9bc3",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 10
