@@ -74,7 +74,6 @@ TConstantUnion::TConstantUnion()
 
 int TConstantUnion::getIConst() const
 {
-    ASSERT(type == EbtInt);
     return iConst;
 }
 
@@ -86,7 +85,6 @@ unsigned int TConstantUnion::getUConst() const
 
 float TConstantUnion::getFConst() const
 {
-    ASSERT(type == EbtFloat);
     return fConst;
 }
 
@@ -333,7 +331,6 @@ TConstantUnion TConstantUnion::add(const TConstantUnion &lhs,
                                    const TSourceLoc &line)
 {
     TConstantUnion returnValue;
-    ASSERT(lhs.type == rhs.type);
     switch (lhs.type)
     {
         case EbtInt:
@@ -359,7 +356,6 @@ TConstantUnion TConstantUnion::sub(const TConstantUnion &lhs,
                                    const TSourceLoc &line)
 {
     TConstantUnion returnValue;
-    ASSERT(lhs.type == rhs.type);
     switch (lhs.type)
     {
         case EbtInt:
@@ -385,7 +381,6 @@ TConstantUnion TConstantUnion::mul(const TConstantUnion &lhs,
                                    const TSourceLoc &line)
 {
     TConstantUnion returnValue;
-    ASSERT(lhs.type == rhs.type);
     switch (lhs.type)
     {
         case EbtInt:
