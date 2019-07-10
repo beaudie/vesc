@@ -129,6 +129,14 @@ constexpr char GetBasicMangledName(TBasicType t)
 
 const char *getBasicString(TBasicType t);
 
+enum class Conversion
+{
+    Same,
+    Left,
+    Right,
+    Invalid,
+};
+
 inline bool IsSampler(TBasicType type)
 {
     return type >= EbtGuardSamplerBegin && type <= EbtGuardSamplerEnd;

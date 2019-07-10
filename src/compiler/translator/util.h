@@ -70,6 +70,9 @@ bool IsInShaderStorageBlock(TIntermTyped *node);
 GLenum GetImageInternalFormatType(TLayoutImageInternalFormat iifq);
 // ESSL 1.00 shaders nest function body scope within function parameter scope
 bool IsSpecWithFunctionBodyNewScope(ShShaderSpec shaderSpec, int shaderVersion);
+
+// Helper functions for implicit conversions
+Conversion GetConversion(TBasicType t1, TBasicType t2);
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_UTIL_H_
