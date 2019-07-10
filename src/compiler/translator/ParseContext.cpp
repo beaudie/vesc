@@ -5217,9 +5217,11 @@ bool TParseContext::binaryOpCommonCheck(TOperator op,
             break;
     }
 
-    // GLSL ES 1.00 and 3.00 do not support implicit type casting.
-    // So the basic type should usually match.
-    if (!isBitShift && left->getBasicType() != right->getBasicType())
+    Conversion conversion = GetConversion(left->getBasicType(), right->getBasicType());
+
+    // Implicit type casting only supported for GL shaders
+    if (!isBitShift && conversion != Conversion::Same &&
+        (!IsDesktopGLSpec(mShaderSpec) || IsValidImplicitConversion(conversion, op)))
     {
         return false;
     }
@@ -5913,6 +5915,13 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
         // There are no inner functions, so it's enough to look for user-defined functions in the
         // global scope.
         const TSymbol *symbol = symbolTable.findGlobal(fnCall->getMangledName());
+
+        if (symbol == nullptr && IsDesktopGLSpec(mShaderSpec))
+        {
+            // If using Desktop GL spec, need to check for implicit conversion
+            symbol = symbolTable.findGlobal(fnCall->getMangledNamesForImplicitConversions());
+        }
+
         if (symbol != nullptr)
         {
             // A user-defined function - could be an overloaded built-in as well.
@@ -5927,11 +5936,15 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
         }
 
         symbol = symbolTable.findBuiltIn(fnCall->getMangledName(), mShaderVersion);
-        if (symbol == nullptr)
+
+        if (symbol == nullptr && IsDesktopGLSpec(mShaderSpec))
         {
-            error(loc, "no matching overloaded function found", fnCall->name());
+            // If using Desktop GL spec, need to check for implicit conversion
+            symbol = symbolTable.findBuiltIn(fnCall->getMangledNamesForImplicitConversions(),
+                                             mShaderVersion);
         }
-        else
+
+        if (symbol != nullptr)
         {
             // A built-in function.
             ASSERT(symbol->symbolType() == SymbolType::BuiltIn);
@@ -5978,6 +5991,10 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
             checkImageMemoryAccessForBuiltinFunctions(callNode);
             functionCallRValueLValueErrorCheck(fnCandidate, callNode);
             return callNode;
+        }
+        else
+        {
+            error(loc, "no matching overloaded function found", fnCall->name());
         }
     }
 
