@@ -378,6 +378,30 @@
     },
     {
       "key": {
+        "uuid": "5eb08fc7_128849c9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-10T17:46:41Z",
+      "side": 1,
+      "message": "Right, but these don\u0027t have a static storage duration (they are neither static nor globals).   Every other local const variable in this function doesn\u0027t have a \u0027k\u0027 prefix, like maxPerStageUniformBuffers and maxCombinedUniformBuffers just below here.   The constexpr just indicates the value is computed at compile time, not the type of storage that\u0027s used to hold the value.",
+      "parentUuid": "88e6a0f9_e91e78ff",
+      "range": {
+        "startLine": 197,
+        "startChar": 23,
+        "endLine": 197,
+        "endChar": 24
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "21694cbc_196b9ba3",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 12
