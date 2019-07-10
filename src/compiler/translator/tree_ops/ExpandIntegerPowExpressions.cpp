@@ -79,8 +79,25 @@ bool Traverser::visitAggregate(Visit visit, TIntermAggregate *node)
         return true;
     }
 
-    ASSERT(constantExponent->getBasicType() == EbtFloat);
-    float exponentValue = constantExponent->getConstantValue()->getFConst();
+    ASSERT(constantExponent->getBasicType() == EbtFloat ||
+           constantExponent->getBasicType() == EbtInt ||
+           constantExponent->getBasicType() == EbtUInt);
+    float exponentValue;
+    switch (constantExponent->getBasicType())
+    {
+        case EbtFloat:
+            exponentValue = constantExponent->getConstantValue()->getFConst();
+            break;
+        case EbtInt:
+            exponentValue = (float)constantExponent->getConstantValue()->getIConst();
+            break;
+        case EbtUInt:
+            exponentValue = (float)constantExponent->getConstantValue()->getUConst();
+            break;
+        default:
+            exponentValue = 0;
+            UNREACHABLE();
+    }
 
     // Test 2: exponentValue is in the problematic range.
     if (exponentValue < -5.0f || exponentValue > 9.0f)
