@@ -2105,132 +2105,176 @@ const TConstantUnion *TIntermConstantUnion::FoldBinary(TOperator op,
             resultArray = new TConstantUnion[objectSize];
             for (size_t i = 0; i < objectSize; i++)
             {
-                switch (leftType.getBasicType())
+                bool floatDivision = false;
+                Conversion conversion =
+                    getConversion(leftType.getBasicType(), rightType.getBasicType());
+                ASSERT(conversion != Invalid);
+                if (conversion == Same)
                 {
-                    case EbtFloat:
+                    switch (leftType.getBasicType())
                     {
-                        ASSERT(op == EOpDiv);
-                        float dividend = leftArray[i].getFConst();
-                        float divisor  = rightArray[i].getFConst();
-                        if (divisor == 0.0f)
+                        case EbtFloat:
                         {
-                            if (dividend == 0.0f)
+                            floatDivision = true;
+                            break;
+                        }
+                        case EbtInt:
+                        {
+                            if (rightArray[i] == 0)
                             {
                                 diagnostics->warning(
-                                    line,
-                                    "Zero divided by zero during constant folding generated NaN",
-                                    "/");
-                                resultArray[i].setFConst(std::numeric_limits<float>::quiet_NaN());
+                                    line, "Divide by zero error during constant folding", "/");
+                                resultArray[i].setIConst(INT_MAX);
                             }
                             else
                             {
-                                diagnostics->warning(line, "Divide by zero during constant folding",
-                                                     "/");
-                                bool negativeResult =
-                                    std::signbit(dividend) != std::signbit(divisor);
-                                resultArray[i].setFConst(
-                                    negativeResult ? -std::numeric_limits<float>::infinity()
-                                                   : std::numeric_limits<float>::infinity());
+                                int lhs     = leftArray[i].getIConst();
+                                int divisor = rightArray[i].getIConst();
+                                if (op == EOpDiv)
+                                {
+                                    // Check for the special case where the minimum
+                                    // representable number is divided by -1. If left alone this
+                                    // leads to integer overflow in C++. ESSL 3.00.6
+                                    // section 4.1.3 Integers: "However, for the case where the
+                                    // minimum representable value is divided by -1, it is
+                                    // allowed to return either the minimum representable value
+                                    // or the maximum representable value."
+                                    if (lhs == -0x7fffffff - 1 && divisor == -1)
+                                    {
+                                        resultArray[i].setIConst(0x7fffffff);
+                                    }
+                                    else
+                                    {
+                                        resultArray[i].setIConst(lhs / divisor);
+                                    }
+                                }
+                                else
+                                {
+                                    ASSERT(op == EOpIMod);
+                                    if (lhs < 0 || divisor < 0)
+                                    {
+                                        // ESSL 3.00.6 section 5.9: Results of modulus are
+                                        // undefined when either one of the operands is
+                                        // negative.
+                                        diagnostics->warning(line,
+                                                             "Negative modulus operator operand "
+                                                             "encountered during constant folding. "
+                                                             "Results are undefined.",
+                                                             "%");
+                                        resultArray[i].setIConst(0);
+                                    }
+                                    else
+                                    {
+                                        resultArray[i].setIConst(lhs % divisor);
+                                    }
+                                }
                             }
+                            break;
                         }
-                        else if (gl::isInf(dividend) && gl::isInf(divisor))
+                        case EbtUInt:
+                        {
+                            if (rightArray[i] == 0)
+                            {
+                                diagnostics->warning(
+                                    line, "Divide by zero error during constant folding", "/");
+                                resultArray[i].setUConst(UINT_MAX);
+                            }
+                            else
+                            {
+                                if (op == EOpDiv)
+                                {
+                                    resultArray[i].setUConst(leftArray[i].getUConst() /
+                                                             rightArray[i].getUConst());
+                                }
+                                else
+                                {
+                                    ASSERT(op == EOpIMod);
+                                    resultArray[i].setUConst(leftArray[i].getUConst() %
+                                                             rightArray[i].getUConst());
+                                }
+                            }
+                            break;
+                        }
+                        default:
+                            UNREACHABLE();
+                            return nullptr;
+                    }
+                }
+                else
+                {
+                    floatDivision = true;
+                }
+                if (floatDivision)
+                {
+                    // Float division requested, possibly with implicit conversion
+                    ASSERT(op == EOpDiv);
+                    float dividend;
+                    float divisor;
+                    switch (conversion)
+                    {
+                        case Same:
+                            dividend = leftArray[i].getFConst();
+                            divisor  = rightArray[i].getFConst();
+                            break;
+                        case LeftI:
+                            dividend = (float)leftArray[i].getIConst();
+                            divisor  = rightArray[i].getFConst();
+                            break;
+                        case LeftU:
+                            dividend = (float)leftArray[i].getUConst();
+                            divisor  = rightArray[i].getFConst();
+                            break;
+                        case RightI:
+                            dividend = leftArray[i].getFConst();
+                            divisor  = (float)rightArray[i].getIConst();
+                            break;
+                        case RightU:
+                            dividend = leftArray[i].getFConst();
+                            divisor  = (float)rightArray[i].getUConst();
+                            break;
+                        default:
+                            UNREACHABLE();
+                            return nullptr;
+                    }
+
+                    if (divisor == 0.0f)
+                    {
+                        if (dividend == 0.0f)
                         {
                             diagnostics->warning(line,
-                                                 "Infinity divided by infinity during constant "
+                                                 "Zero divided by zero during constant "
                                                  "folding generated NaN",
                                                  "/");
                             resultArray[i].setFConst(std::numeric_limits<float>::quiet_NaN());
                         }
                         else
                         {
-                            float result = dividend / divisor;
-                            if (!gl::isInf(dividend) && gl::isInf(result))
-                            {
-                                diagnostics->warning(
-                                    line, "Constant folded division overflowed to infinity", "/");
-                            }
-                            resultArray[i].setFConst(result);
+                            diagnostics->warning(line, "Divide by zero during constant folding",
+                                                 "/");
+                            bool negativeResult = std::signbit(dividend) != std::signbit(divisor);
+                            resultArray[i].setFConst(negativeResult
+                                                         ? -std::numeric_limits<float>::infinity()
+                                                         : std::numeric_limits<float>::infinity());
                         }
-                        break;
                     }
-                    case EbtInt:
-                        if (rightArray[i] == 0)
+                    else if (gl::isInf(dividend) && gl::isInf(divisor))
+                    {
+                        diagnostics->warning(line,
+                                             "Infinity divided by infinity during constant "
+                                             "folding generated NaN",
+                                             "/");
+                        resultArray[i].setFConst(std::numeric_limits<float>::quiet_NaN());
+                    }
+                    else
+                    {
+                        float result = dividend / divisor;
+                        if (!gl::isInf(dividend) && gl::isInf(result))
                         {
                             diagnostics->warning(
-                                line, "Divide by zero error during constant folding", "/");
-                            resultArray[i].setIConst(INT_MAX);
+                                line, "Constant folded division overflowed to infinity", "/");
                         }
-                        else
-                        {
-                            int lhs     = leftArray[i].getIConst();
-                            int divisor = rightArray[i].getIConst();
-                            if (op == EOpDiv)
-                            {
-                                // Check for the special case where the minimum representable number
-                                // is
-                                // divided by -1. If left alone this leads to integer overflow in
-                                // C++.
-                                // ESSL 3.00.6 section 4.1.3 Integers:
-                                // "However, for the case where the minimum representable value is
-                                // divided by -1, it is allowed to return either the minimum
-                                // representable value or the maximum representable value."
-                                if (lhs == -0x7fffffff - 1 && divisor == -1)
-                                {
-                                    resultArray[i].setIConst(0x7fffffff);
-                                }
-                                else
-                                {
-                                    resultArray[i].setIConst(lhs / divisor);
-                                }
-                            }
-                            else
-                            {
-                                ASSERT(op == EOpIMod);
-                                if (lhs < 0 || divisor < 0)
-                                {
-                                    // ESSL 3.00.6 section 5.9: Results of modulus are undefined
-                                    // when either one of the operands is negative.
-                                    diagnostics->warning(line,
-                                                         "Negative modulus operator operand "
-                                                         "encountered during constant folding. "
-                                                         "Results are undefined.",
-                                                         "%");
-                                    resultArray[i].setIConst(0);
-                                }
-                                else
-                                {
-                                    resultArray[i].setIConst(lhs % divisor);
-                                }
-                            }
-                        }
-                        break;
-
-                    case EbtUInt:
-                        if (rightArray[i] == 0)
-                        {
-                            diagnostics->warning(
-                                line, "Divide by zero error during constant folding", "/");
-                            resultArray[i].setUConst(UINT_MAX);
-                        }
-                        else
-                        {
-                            if (op == EOpDiv)
-                            {
-                                resultArray[i].setUConst(leftArray[i].getUConst() /
-                                                         rightArray[i].getUConst());
-                            }
-                            else
-                            {
-                                ASSERT(op == EOpIMod);
-                                resultArray[i].setUConst(leftArray[i].getUConst() %
-                                                         rightArray[i].getUConst());
-                            }
-                        }
-                        break;
-
-                    default:
-                        UNREACHABLE();
-                        return nullptr;
+                        resultArray[i].setFConst(result);
+                    }
                 }
             }
         }
