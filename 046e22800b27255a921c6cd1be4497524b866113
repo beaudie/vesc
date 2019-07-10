@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b79c89a0_872495df",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T20:05:18Z",
+      "side": 1,
+      "message": "I think maybe we should call your method here as well. it looks incorrect at the moment.",
+      "range": {
+        "startLine": 1634,
+        "startChar": 15,
+        "endLine": 1634,
+        "endChar": 51
+      },
+      "revId": "046e22800b27255a921c6cd1be4497524b866113",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
