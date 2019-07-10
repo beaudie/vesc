@@ -28,6 +28,9 @@ class TFunctionLookup : angle::NonCopyable
     ImmutableString getMangledName() const;
     static ImmutableString GetMangledName(const char *functionName,
                                           const TIntermSequence &arguments);
+    std::vector<ImmutableString> getMangledNames() const;
+    static std::vector<ImmutableString> GetMangledNames(const char *functionName,
+                                                        const TIntermSequence &arguments);
 
     bool isConstructor() const;
     const TType &constructorType() const;
