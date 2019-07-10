@@ -129,6 +129,74 @@ constexpr char GetBasicMangledName(TBasicType t)
 
 const char *getBasicString(TBasicType t);
 
+enum Conversion
+{
+    Same,
+    LeftI,
+    LeftU,
+    RightI,
+    RightU,
+    Invalid,
+};
+
+inline bool isLeft(Conversion conversion)
+{
+    return conversion == LeftI || conversion == LeftU;
+}
+
+inline bool isRight(Conversion conversion)
+{
+    return conversion == RightI || conversion == RightU;
+}
+
+inline Conversion getConversion(TBasicType t1, TBasicType t2)
+{
+    if (t1 == t2)
+        return Same;
+
+    switch (t1)
+    {
+        case EbtInt:
+            switch (t2)
+            {
+                case EbtInt:
+                    return Same;
+                case EbtUInt:
+                    return Invalid;
+                case EbtFloat:
+                    return LeftI;
+                default:
+                    return Invalid;
+            }
+        case EbtUInt:
+            switch (t2)
+            {
+                case EbtInt:
+                    return Invalid;
+                case EbtUInt:
+                    return Same;
+                case EbtFloat:
+                    return LeftU;
+                default:
+                    return Invalid;
+            }
+        case EbtFloat:
+            switch (t2)
+            {
+                case EbtInt:
+                    return RightI;
+                case EbtUInt:
+                    return RightU;
+                case EbtFloat:
+                    return Same;
+                default:
+                    return Invalid;
+            }
+        default:
+            return Invalid;
+    }
+}
+
 inline bool IsSampler(TBasicType type)
 {
     return type >= EbtGuardSamplerBegin && type <= EbtGuardSamplerEnd;
