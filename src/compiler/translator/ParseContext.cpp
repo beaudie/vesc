@@ -5217,9 +5217,14 @@ bool TParseContext::binaryOpCommonCheck(TOperator op,
             break;
     }
 
-    // GLSL ES 1.00 and 3.00 do not support implicit type casting.
-    // So the basic type should usually match.
-    if (!isBitShift && left->getBasicType() != right->getBasicType())
+    Conversion conversion = getConversion(left->getBasicType(), right->getBasicType());
+
+    // Implicit type casting only supported for GL shaders
+    if (!IsDesktopGLSpec(mShaderSpec) && !isBitShift && conversion != Same)
+    {
+        return false;
+    }
+    if (IsDesktopGLSpec(mShaderSpec) && conversion == Invalid)
     {
         return false;
     }
@@ -5256,6 +5261,12 @@ bool TParseContext::binaryOpCommonCheck(TOperator op,
                 (left->getSecondarySize() != right->getSecondarySize()))
             {
                 error(loc, "dimension mismatch", GetOperatorString(op));
+                return false;
+            }
+
+            if (isLeft(conversion) && (op == EOpAssign || op == EOpInitialize))
+            {
+                error(loc, "type mismatch", GetOperatorString(op));
                 return false;
             }
             break;
@@ -5309,6 +5320,16 @@ bool TParseContext::binaryOpCommonCheck(TOperator op,
                     (IsAssignment(op) || op == EOpBitShiftLeft || op == EOpBitShiftRight))
                     return false;
             }
+
+            if (op == EOpAddAssign || op == EOpSubAssign || op == EOpDivAssign)
+            {
+                if (isLeft(conversion))
+                    return false;
+            }
+            else if (conversion != Same && !isBitShift && op != EOpAdd && op != EOpSub &&
+                     op != EOpDiv)
+                return false;
+
             break;
         default:
             break;
@@ -5912,8 +5933,27 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
     {
         // There are no inner functions, so it's enough to look for user-defined functions in the
         // global scope.
+        bool found            = false;
         const TSymbol *symbol = symbolTable.findGlobal(fnCall->getMangledName());
         if (symbol != nullptr)
+        {
+            found = true;
+        }
+        else if (IsDesktopGLSpec(mShaderSpec))
+        {
+            // If using Desktop GL spec, need to check for implicit conversion
+            std::vector<ImmutableString> mangledNames = fnCall->getMangledNames();
+            for (ImmutableString mangledName : mangledNames)
+            {
+                symbol = symbolTable.findGlobal(mangledName);
+                if (symbol != nullptr)
+                {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (found)
         {
             // A user-defined function - could be an overloaded built-in as well.
             ASSERT(symbol->symbolType() == SymbolType::UserDefined);
@@ -5927,11 +5967,25 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
         }
 
         symbol = symbolTable.findBuiltIn(fnCall->getMangledName(), mShaderVersion);
-        if (symbol == nullptr)
+        if (symbol != nullptr)
         {
-            error(loc, "no matching overloaded function found", fnCall->name());
+            found = true;
         }
-        else
+        else if (IsDesktopGLSpec(mShaderSpec))
+        {
+            // If using Desktop GL spec, need to check for implicit conversion
+            std::vector<ImmutableString> mangledNames = fnCall->getMangledNames();
+            for (ImmutableString mangledName : mangledNames)
+            {
+                symbol = symbolTable.findBuiltIn(mangledName, mShaderVersion);
+                if (symbol != nullptr)
+                {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (found)
         {
             // A built-in function.
             ASSERT(symbol->symbolType() == SymbolType::BuiltIn);
@@ -5978,6 +6032,10 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
             checkImageMemoryAccessForBuiltinFunctions(callNode);
             functionCallRValueLValueErrorCheck(fnCandidate, callNode);
             return callNode;
+        }
+        else
+        {
+            error(loc, "no matching overloaded function found", fnCall->name());
         }
     }
 
