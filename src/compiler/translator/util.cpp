@@ -825,4 +825,51 @@ bool IsSpecWithFunctionBodyNewScope(ShShaderSpec shaderSpec, int shaderVersion)
     return (shaderVersion == 100 && !sh::IsWebGLBasedSpec(shaderSpec));
 }
 
+Conversion GetConversion(TBasicType t1, TBasicType t2)
+{
+    if (t1 == t2)
+        return Conversion::Same;
+
+    switch (t1)
+    {
+        case EbtInt:
+            switch (t2)
+            {
+                case EbtInt:
+                    return Conversion::Same;
+                case EbtUInt:
+                    return Conversion::Invalid;
+                case EbtFloat:
+                    return Conversion::Left;
+                default:
+                    return Conversion::Invalid;
+            }
+        case EbtUInt:
+            switch (t2)
+            {
+                case EbtInt:
+                    return Conversion::Invalid;
+                case EbtUInt:
+                    return Conversion::Same;
+                case EbtFloat:
+                    return Conversion::Left;
+                default:
+                    return Conversion::Invalid;
+            }
+        case EbtFloat:
+            switch (t2)
+            {
+                case EbtInt:
+                case EbtUInt:
+                    return Conversion::Right;
+                case EbtFloat:
+                    return Conversion::Same;
+                default:
+                    return Conversion::Invalid;
+            }
+        default:
+            return Conversion::Invalid;
+    }
+}
+
 }  // namespace sh

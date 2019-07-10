@@ -7,6 +7,13 @@
 #ifndef COMPILER_TRANSLATOR_OPERATOR_H_
 #define COMPILER_TRANSLATOR_OPERATOR_H_
 
+#include "compiler/translator/util.h"
+
+namespace sh
+{
+enum class Conversion;
+}
+
 //
 // Operators used by the high-level (parse tree) representation.
 //
@@ -264,5 +271,7 @@ bool IsAssignment(TOperator op);
 
 // Say whether or not an operator represents an atomic function.
 bool IsAtomicFunction(TOperator op);
+
+bool IsValidImplicitConversion(sh::Conversion conversion, TOperator op);
 
 #endif  // COMPILER_TRANSLATOR_OPERATOR_H_
