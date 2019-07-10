@@ -815,7 +815,14 @@ angle::Result TextureGL::copySubTextureHelper(const gl::Context *context,
 
     // Check if the destination is renderable and copy on the GPU
     const LevelInfoGL &destLevelInfo = getLevelInfo(target, level);
-    if (!destSRGB &&
+    // todo(jonahr): http://crbug.com/773861
+    // Behavior for now is to fallback to CPU readback implementation if the destination texture
+    // is a luminance format. The correct solution is to handle both source and destination in the
+    // luma workaround.
+    bool destLuminance = destLevelInfo.sourceFormat == GL_LUMINANCE ||
+                         destLevelInfo.sourceFormat == GL_LUMINANCE_ALPHA ||
+                         destLevelInfo.sourceFormat == GL_ALPHA;
+    if (!destSRGB && !destLuminance &&
         nativegl::SupportsNativeRendering(functions, getType(), destLevelInfo.nativeInternalFormat))
     {
         bool copySucceeded = false;
