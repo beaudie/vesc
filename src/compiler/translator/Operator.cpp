@@ -418,3 +418,54 @@ bool IsAtomicFunction(TOperator op)
             return false;
     }
 }
+
+bool IsValidImplicitConversion(sh::Conversion conversion, TOperator op)
+{
+    switch (conversion)
+    {
+        case sh::Conversion::Same:
+            return true;
+        case sh::Conversion::Left:
+            switch (op)
+            {
+                case EOpEqual:
+                case EOpNotEqual:
+                case EOpLessThan:
+                case EOpGreaterThan:
+                case EOpLessThanEqual:
+                case EOpGreaterThanEqual:
+                case EOpAdd:
+                case EOpSub:
+                case EOpDiv:
+                    return true;
+                default:
+                    break;
+            }
+            break;
+        case sh::Conversion::Right:
+            switch (op)
+            {
+                case EOpAssign:
+                case EOpInitialize:
+                case EOpEqual:
+                case EOpNotEqual:
+                case EOpLessThan:
+                case EOpGreaterThan:
+                case EOpLessThanEqual:
+                case EOpGreaterThanEqual:
+                case EOpAdd:
+                case EOpSub:
+                case EOpDiv:
+                case EOpAddAssign:
+                case EOpSubAssign:
+                case EOpDivAssign:
+                    return true;
+                default:
+                    break;
+            }
+            break;
+        case sh::Conversion::Invalid:
+            break;
+    }
+    return false;
+}
