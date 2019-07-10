@@ -22,6 +22,30 @@
       "revId": "f49904e237a6f125d6aa186a771bd53d0835755b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09b2f696_0be045e6",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-07-10T23:55:16Z",
+      "side": 1,
+      "message": "Thanks for that tip. Done.",
+      "parentUuid": "795f3ec5_1de9eba6",
+      "range": {
+        "startLine": 374,
+        "startChar": 22,
+        "endLine": 374,
+        "endChar": 51
+      },
+      "revId": "f49904e237a6f125d6aa186a771bd53d0835755b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
