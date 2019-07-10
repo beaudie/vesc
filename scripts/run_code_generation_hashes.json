@@ -1,22 +1,22 @@
 {
   "ANGLE format:src/libANGLE/renderer/FormatID_autogen.h":
-    "083c08bb743bf72a900079890b14184f",
+    "5e017d47bc2eb942cf5717e05e7d072a",
   "ANGLE format:src/libANGLE/renderer/Format_table_autogen.cpp":
-    "24a7e010def51eb4342caa5392536ea9",
+    "d696378917e290bc41487a7e2311d555",
   "ANGLE format:src/libANGLE/renderer/angle_format.py":
     "7ce0869650454e1eebc93658d4d96844",
   "ANGLE format:src/libANGLE/renderer/angle_format_data.json":
-    "288d2f350948f8b1928c249234a44b25",
+    "e39704d451d108335e737c39ad423113",
   "ANGLE format:src/libANGLE/renderer/angle_format_map.json":
-    "be9f9bdbdf785dda05920146e8c55dbb",
+    "947fe0a2c3ca1a819a68b4a94bfcf614",
   "ANGLE format:src/libANGLE/renderer/gen_angle_format_table.py":
     "37f4654bca2bebc7fdec1fc7ca9bc622",
   "ANGLE load functions table:src/libANGLE/renderer/gen_load_functions_table.py":
     "e65c50e84fc38ad34d0eb0bebb84aab6",
   "ANGLE load functions table:src/libANGLE/renderer/load_functions_data.json":
-    "4b8a2d1b1f7038e04f51b587f0e98231",
+    "480a050e1942845fae8452ba53d01fbe",
   "ANGLE load functions table:src/libANGLE/renderer/load_functions_table_autogen.cpp":
-    "5bfde353048f843718b296c5b32faf73",
+    "d53e77115c5a5715a5c9b416d8488d38",
   "D3D11 blit shader selection:src/libANGLE/renderer/d3d/d3d11/Blit11Helper_autogen.inc":
     "f69cf03a3d868a977fad9e9c0eb0652a",
   "D3D11 blit shader selection:src/libANGLE/renderer/d3d/d3d11/d3d11_blit_shaders_autogen.gni":
@@ -42,7 +42,7 @@
   "DXGI format:src/libANGLE/renderer/angle_format.py":
     "7ce0869650454e1eebc93658d4d96844",
   "DXGI format:src/libANGLE/renderer/angle_format_map.json":
-    "be9f9bdbdf785dda05920146e8c55dbb",
+    "947fe0a2c3ca1a819a68b4a94bfcf614",
   "DXGI format:src/libANGLE/renderer/d3d/d3d11/dxgi_format_data.json":
     "24f525b05dc665fbbc8c6d68fb863719",
   "DXGI format:src/libANGLE/renderer/d3d/d3d11/dxgi_format_map_autogen.cpp":
@@ -304,13 +304,13 @@
   "Vulkan format:src/libANGLE/renderer/angle_format.py":
     "7ce0869650454e1eebc93658d4d96844",
   "Vulkan format:src/libANGLE/renderer/angle_format_map.json":
-    "be9f9bdbdf785dda05920146e8c55dbb",
+    "947fe0a2c3ca1a819a68b4a94bfcf614",
   "Vulkan format:src/libANGLE/renderer/vulkan/gen_vk_format_table.py":
     "09340e3ba114b4acef6460ac8b242040",
   "Vulkan format:src/libANGLE/renderer/vulkan/vk_format_map.json":
     "9e0a57bee62f7b0603c7431c815d1be2",
   "Vulkan format:src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp":
-    "8d7f42c646e4b05017552e5af1b3bc84",
+    "90a43248b071bf880aaa43a0142eac1b",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py":
     "a528a53197ea6c8eaa3bb42a7cdf0a17",
   "Vulkan internal shader programs:src/libANGLE/renderer/vulkan/shaders/gen/BlitResolve.frag.00000000.inc":
