@@ -2944,7 +2944,7 @@ bool Program::linkVaryings(InfoLog &infoLog) const
     return true;
 }
 
-// [OpenGL ES 3.1] Chapter 7.4.1 "Shader Interface Matchining" Page 91
+// [OpenGL ES 3.1] Chapter 7.4.1 "Shader Interface Matching" Page 91
 // TODO(jiawei.shao@intel.com): add validation on input/output blocks matching
 bool Program::linkValidateShaderInterfaceMatching(gl::Shader *generatingShader,
                                                   gl::Shader *consumingShader,
@@ -2967,9 +2967,15 @@ bool Program::linkValidateShaderInterfaceMatching(gl::Shader *generatingShader,
             continue;
         }
 
+        // An output variable is considered to match an input variable in the subsequent
+        // shader if:
+        // - the two variables match in name, type, and qualification; or
+        // - the two variables are declared with the same location qualifier and
+        //   match in type and qualification.
         for (const sh::Varying &output : outputVaryings)
         {
-            if (input.name == output.name)
+            if ((input.name == output.name) || ((input.location != -1) && (output.location != -1) &&
+                                                (input.location == output.location)))
             {
                 ASSERT(!output.isBuiltIn());
 
