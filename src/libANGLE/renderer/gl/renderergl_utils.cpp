@@ -1084,6 +1084,9 @@ void GenerateCaps(const FunctionsGL *functions,
 
     // Extension support
     extensions->setTextureExtensionSupport(*textureCapsMap);
+    extensions->textureCompressionASTCHDRKHR =
+        extensions->textureCompressionASTCLDRKHR &&
+        functions->hasGLESExtension("GL_KHR_texture_compression_astc_hdr");
     extensions->elementIndexUint = functions->standard == STANDARD_GL_DESKTOP ||
                                    functions->isAtLeastGLES(gl::Version(3, 0)) ||
                                    functions->hasGLESExtension("GL_OES_element_index_uint");
