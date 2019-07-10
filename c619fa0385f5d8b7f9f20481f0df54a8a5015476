@@ -402,6 +402,30 @@
     },
     {
       "key": {
+        "uuid": "b2be841f_9233eb6d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T18:26:04Z",
+      "side": 1,
+      "message": "\"This convention is optional for variables of other storage classes, e.g. automatic variables, otherwise the usual variable naming rules apply.\"\n\nI guess it\u0027s whatever we like. I personally like it. But up to y\u0027all.",
+      "parentUuid": "5eb08fc7_128849c9",
+      "range": {
+        "startLine": 197,
+        "startChar": 23,
+        "endLine": 197,
+        "endChar": 24
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "21694cbc_196b9ba3",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 12
