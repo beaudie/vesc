@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e30e4062_48e42587",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-10T16:22:33Z",
+      "side": 1,
+      "message": "This is a reference below in AssignOutputLocations(), so it should probably be one here too.",
+      "range": {
+        "startLine": 492,
+        "startChar": 78,
+        "endLine": 492,
+        "endChar": 91
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bc45ea4_1d2a5d1e",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-10T16:22:33Z",
+      "side": 1,
+      "message": "Why do you have each of these blocks in their own scope?",
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eed0a2c2_a3fc4aaa",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-10T16:22:33Z",
+      "side": 1,
+      "message": "mShaderStages?",
+      "range": {
+        "startLine": 944,
+        "startChar": 37,
+        "endLine": 944,
+        "endChar": 62
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fe75f3d_0ef2012a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-10T16:22:33Z",
+      "side": 1,
+      "message": "Can this block be moved to the end of this for-loop (down below with \u0027++writeCount;\u0027)?   It looks like that would fix 2 issues:\n1.) currentBinding can be initialized to 0, which feels cleaner.\n2.) You don\u0027t increment currentBinding when bufferBinding.get() \u003d\u003d nullptr, which just continues to the next iteration of the loop.",
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15e36714_760acace",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-10T16:22:33Z",
+      "side": 1,
+      "message": "nit: Is prefixing these with a \u0027k\u0027 the right thing?   It feels like that\u0027s typically reserved for more global constants, rather than things that just live for a short time within a function.",
+      "range": {
+        "startLine": 197,
+        "startChar": 23,
+        "endLine": 197,
+        "endChar": 24
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21694cbc_196b9ba3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-10T16:22:33Z",
+      "side": 1,
+      "message": "Can this be moved closer to where \u0027maxUniformBlockSize\u0027 is declared?   I think it\u0027s easy to lose why mNativeCaps.maxUniformBlockSize is set to maxUniformBlockSize vs mPhysicalDeviceProperties.limits.maxUniformBufferRange with the comment explaining it so far away.",
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
