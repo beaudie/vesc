@@ -106,8 +106,9 @@ struct Extensions
     // GL_EXT_texture_rg
     // GL_EXT_texture_compression_dxt1, GL_ANGLE_texture_compression_dxt3,
     // GL_ANGLE_texture_compression_dxt5
-    // GL_KHR_texture_compression_astc_hdr, GL_KHR_texture_compression_astc_ldr
-    // GL_OES_compressed_ETC1_RGB8_texture
+    // GL_KHR_texture_compression_astc_ldr, GL_OES_texture_compression_astc. NOTE:
+    // GL_KHR_texture_compression_astc_hdr must be enabled separately. Support for the HDR profile
+    // cannot be determined from the format enums alone. GL_OES_compressed_ETC1_RGB8_texture
     // GL_EXT_sRGB
     // GL_ANGLE_depth_texture, GL_OES_depth32
     // GL_EXT_color_buffer_float
@@ -183,11 +184,14 @@ struct Extensions
     // GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT
     bool textureCompressionS3TCsRGB = false;
 
-    // GL_KHR_texture_compression_astc_hdr
-    bool textureCompressionASTCHDR = false;
-
     // GL_KHR_texture_compression_astc_ldr
-    bool textureCompressionASTCLDR = false;
+    bool textureCompressionASTCLDRKHR = false;
+
+    // GL_KHR_texture_compression_astc_hdr
+    bool textureCompressionASTCHDRKHR = false;
+
+    // GL_OES_texture_compression_astc
+    bool textureCompressionASTCOES = false;
 
     // GL_EXT_texture_compression_bptc
     bool textureCompressionBPTC = false;

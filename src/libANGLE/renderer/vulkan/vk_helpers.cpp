@@ -2083,18 +2083,23 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     size_t outputDepthPitch;
     uint32_t bufferRowLength;
     uint32_t bufferImageHeight;
+    size_t allocationSize;
 
     if (storageFormat.isBlock)
     {
         const gl::InternalFormat &storageFormatInfo = vkFormat.getInternalFormatInfo(type);
         GLuint rowPitch;
         GLuint depthPitch;
+        GLuint totalSize;
 
         ANGLE_VK_CHECK_MATH(contextVk, storageFormatInfo.computeCompressedImageSize(
                                            gl::Extents(extents.width, 1, 1), &rowPitch));
         ANGLE_VK_CHECK_MATH(contextVk,
                             storageFormatInfo.computeCompressedImageSize(
                                 gl::Extents(extents.width, extents.height, 1), &depthPitch));
+
+        ANGLE_VK_CHECK_MATH(contextVk,
+                            storageFormatInfo.computeCompressedImageSize(extents, &totalSize));
 
         outputRowPitch   = rowPitch;
         outputDepthPitch = depthPitch;
@@ -2109,6 +2114,7 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
 
         bufferRowLength   = checkedRowLength.ValueOrDie();
         bufferImageHeight = checkedImageHeight.ValueOrDie();
+        allocationSize    = totalSize;
     }
     else
     {
@@ -2119,13 +2125,14 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
 
         bufferRowLength   = extents.width;
         bufferImageHeight = extents.height;
+
+        allocationSize = outputDepthPitch * extents.depth;
     }
 
     VkBuffer bufferHandle = VK_NULL_HANDLE;
 
     uint8_t *stagingPointer    = nullptr;
     VkDeviceSize stagingOffset = 0;
-    size_t allocationSize      = outputDepthPitch * extents.depth;
     ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
                                       &stagingOffset, nullptr));
 
