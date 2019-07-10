@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7c1e1e1_63da01ee",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 824,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-10T18:36:55Z",
+      "side": 1,
+      "message": "I think this will only be a problem when we\u0027re doing the LUMA workaround in the destination, we can check that specifically with getLevelInfo(target, level).lumaWorkaround.enabled",
+      "range": {
+        "startLine": 822,
+        "startChar": 25,
+        "endLine": 824,
+        "endChar": 64
+      },
+      "revId": "54ed067b51f864ac7b9a1ad5dd298d15f80022a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
