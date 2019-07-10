@@ -341,13 +341,16 @@ void TSymbolTable::initializeBuiltIns(sh::GLenum type,
     switch (type)
     {
         case GL_FRAGMENT_SHADER:
-            setDefaultPrecision(EbtInt, EbpMedium);
+            IsDesktopGLSpec(spec) ? setDefaultPrecision(EbtInt, EbpUndefined)
+                                  : setDefaultPrecision(EbtInt, EbpMedium);
             break;
         case GL_VERTEX_SHADER:
         case GL_COMPUTE_SHADER:
         case GL_GEOMETRY_SHADER_EXT:
-            setDefaultPrecision(EbtInt, EbpHigh);
-            setDefaultPrecision(EbtFloat, EbpHigh);
+            IsDesktopGLSpec(spec) ? setDefaultPrecision(EbtInt, EbpUndefined)
+                                  : setDefaultPrecision(EbtInt, EbpHigh);
+            IsDesktopGLSpec(spec) ? setDefaultPrecision(EbtFloat, EbpUndefined)
+                                  : setDefaultPrecision(EbtFloat, EbpHigh);
             break;
         default:
             UNREACHABLE();

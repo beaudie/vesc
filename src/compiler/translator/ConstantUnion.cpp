@@ -86,6 +86,14 @@ unsigned int TConstantUnion::getUConst() const
 
 float TConstantUnion::getFConst() const
 {
+    if (type == EbtInt)
+    {
+        return (float)iConst;
+    }
+    else if (type == EbtUInt)
+    {
+        return (float)uConst;
+    }
     ASSERT(type == EbtFloat);
     return fConst;
 }
@@ -219,17 +227,42 @@ bool TConstantUnion::cast(TBasicType newType, const TConstantUnion &constant)
 
 bool TConstantUnion::operator==(const int i) const
 {
-    return i == iConst;
+    if (type == EbtFloat)
+    {
+        return (float)i == fConst;
+    }
+    else
+    {
+        return i == iConst;
+    }
 }
 
 bool TConstantUnion::operator==(const unsigned int u) const
 {
-    return u == uConst;
+    if (type == EbtFloat)
+    {
+        return (float)u == fConst;
+    }
+    else
+    {
+        return u == uConst;
+    }
 }
 
 bool TConstantUnion::operator==(const float f) const
 {
-    return f == fConst;
+    if (type == EbtInt)
+    {
+        return f == (float)iConst;
+    }
+    else if (type == EbtUInt)
+    {
+        return f == (float)uConst;
+    }
+    else
+    {
+        return f == fConst;
+    }
 }
 
 bool TConstantUnion::operator==(const bool b) const
@@ -244,22 +277,37 @@ bool TConstantUnion::operator==(const TYuvCscStandardEXT s) const
 
 bool TConstantUnion::operator==(const TConstantUnion &constant) const
 {
-    if (constant.type != type)
-        return false;
+    Conversion conversion = getConversion(constant.type, type);
+    ASSERT(conversion != Invalid);
 
-    switch (type)
+    switch (conversion)
     {
-        case EbtInt:
-            return constant.iConst == iConst;
-        case EbtUInt:
-            return constant.uConst == uConst;
-        case EbtFloat:
-            return constant.fConst == fConst;
-        case EbtBool:
-            return constant.bConst == bConst;
-        case EbtYuvCscStandardEXT:
-            return constant.yuvCscStandardEXTConst == yuvCscStandardEXTConst;
+        case Same:
+            switch (type)
+            {
+                case EbtInt:
+                    return constant.iConst == iConst;
+                case EbtUInt:
+                    return constant.uConst == uConst;
+                case EbtFloat:
+                    return constant.fConst == fConst;
+                case EbtBool:
+                    return constant.bConst == bConst;
+                case EbtYuvCscStandardEXT:
+                    return constant.yuvCscStandardEXTConst == yuvCscStandardEXTConst;
+                default:
+                    return false;
+            }
+        case LeftI:
+            return (float)constant.iConst == fConst;
+        case LeftU:
+            return (float)constant.uConst == fConst;
+        case RightI:
+            return constant.fConst == (float)iConst;
+        case RightU:
+            return constant.fConst == (float)uConst;
         default:
+            UNREACHABLE();
             return false;
     }
 }
@@ -296,33 +344,67 @@ bool TConstantUnion::operator!=(const TConstantUnion &constant) const
 
 bool TConstantUnion::operator>(const TConstantUnion &constant) const
 {
-    ASSERT(type == constant.type);
-    switch (type)
+    Conversion conversion = getConversion(constant.type, type);
+    ASSERT(conversion != Invalid);
+
+    switch (conversion)
     {
-        case EbtInt:
-            return iConst > constant.iConst;
-        case EbtUInt:
-            return uConst > constant.uConst;
-        case EbtFloat:
-            return fConst > constant.fConst;
+        case Same:
+            switch (type)
+            {
+                case EbtInt:
+                    return iConst > constant.iConst;
+                case EbtUInt:
+                    return uConst > constant.uConst;
+                case EbtFloat:
+                    return fConst > constant.fConst;
+                default:
+                    return false;  // Invalid operation, handled at semantic analysis
+            }
+        case LeftI:
+            return (float)constant.iConst > fConst;
+        case LeftU:
+            return (float)constant.uConst > fConst;
+        case RightI:
+            return constant.fConst > (float)iConst;
+        case RightU:
+            return constant.fConst > (float)uConst;
         default:
-            return false;  // Invalid operation, handled at semantic analysis
+            UNREACHABLE();
+            return false;
     }
 }
 
 bool TConstantUnion::operator<(const TConstantUnion &constant) const
 {
-    ASSERT(type == constant.type);
-    switch (type)
+    Conversion conversion = getConversion(constant.type, type);
+    ASSERT(conversion != Invalid);
+
+    switch (conversion)
     {
-        case EbtInt:
-            return iConst < constant.iConst;
-        case EbtUInt:
-            return uConst < constant.uConst;
-        case EbtFloat:
-            return fConst < constant.fConst;
+        case Same:
+            switch (type)
+            {
+                case EbtInt:
+                    return iConst < constant.iConst;
+                case EbtUInt:
+                    return uConst < constant.uConst;
+                case EbtFloat:
+                    return fConst < constant.fConst;
+                default:
+                    return false;  // Invalid operation, handled at semantic analysis
+            }
+        case LeftI:
+            return (float)constant.iConst < fConst;
+        case LeftU:
+            return (float)constant.uConst < fConst;
+        case RightI:
+            return constant.fConst < (float)iConst;
+        case RightU:
+            return constant.fConst < (float)uConst;
         default:
-            return false;  // Invalid operation, handled at semantic analysis
+            UNREACHABLE();
+            return false;
     }
 }
 
@@ -333,17 +415,38 @@ TConstantUnion TConstantUnion::add(const TConstantUnion &lhs,
                                    const TSourceLoc &line)
 {
     TConstantUnion returnValue;
-    ASSERT(lhs.type == rhs.type);
-    switch (lhs.type)
+    Conversion conversion = getConversion(lhs.type, rhs.type);
+    ASSERT(conversion != Invalid);
+
+    switch (conversion)
     {
-        case EbtInt:
-            returnValue.setIConst(gl::WrappingSum<int>(lhs.iConst, rhs.iConst));
+        case Same:
+            switch (lhs.type)
+            {
+                case EbtInt:
+                    returnValue.setIConst(gl::WrappingSum<int>(lhs.iConst, rhs.iConst));
+                    break;
+                case EbtUInt:
+                    returnValue.setUConst(gl::WrappingSum<unsigned int>(lhs.uConst, rhs.uConst));
+                    break;
+                case EbtFloat:
+                    returnValue.setFConst(CheckedSum(lhs.fConst, rhs.fConst, diag, line));
+                    break;
+                default:
+                    UNREACHABLE();
+            }
             break;
-        case EbtUInt:
-            returnValue.setUConst(gl::WrappingSum<unsigned int>(lhs.uConst, rhs.uConst));
+        case LeftI:
+            returnValue.setFConst(CheckedSum((float)lhs.iConst, rhs.fConst, diag, line));
             break;
-        case EbtFloat:
-            returnValue.setFConst(CheckedSum(lhs.fConst, rhs.fConst, diag, line));
+        case LeftU:
+            returnValue.setFConst(CheckedSum((float)lhs.uConst, rhs.fConst, diag, line));
+            break;
+        case RightI:
+            returnValue.setFConst(CheckedSum(lhs.fConst, (float)rhs.iConst, diag, line));
+            break;
+        case RightU:
+            returnValue.setFConst(CheckedSum(lhs.fConst, (float)rhs.uConst, diag, line));
             break;
         default:
             UNREACHABLE();
@@ -359,17 +462,38 @@ TConstantUnion TConstantUnion::sub(const TConstantUnion &lhs,
                                    const TSourceLoc &line)
 {
     TConstantUnion returnValue;
-    ASSERT(lhs.type == rhs.type);
-    switch (lhs.type)
+    Conversion conversion = getConversion(lhs.type, rhs.type);
+    ASSERT(conversion != Invalid);
+
+    switch (conversion)
     {
-        case EbtInt:
-            returnValue.setIConst(gl::WrappingDiff<int>(lhs.iConst, rhs.iConst));
+        case Same:
+            switch (lhs.type)
+            {
+                case EbtInt:
+                    returnValue.setIConst(gl::WrappingDiff<int>(lhs.iConst, rhs.iConst));
+                    break;
+                case EbtUInt:
+                    returnValue.setUConst(gl::WrappingDiff<unsigned int>(lhs.uConst, rhs.uConst));
+                    break;
+                case EbtFloat:
+                    returnValue.setFConst(CheckedDiff(lhs.fConst, rhs.fConst, diag, line));
+                    break;
+                default:
+                    UNREACHABLE();
+            }
             break;
-        case EbtUInt:
-            returnValue.setUConst(gl::WrappingDiff<unsigned int>(lhs.uConst, rhs.uConst));
+        case LeftI:
+            returnValue.setFConst(CheckedDiff((float)lhs.iConst, rhs.fConst, diag, line));
             break;
-        case EbtFloat:
-            returnValue.setFConst(CheckedDiff(lhs.fConst, rhs.fConst, diag, line));
+        case LeftU:
+            returnValue.setFConst(CheckedDiff((float)lhs.uConst, rhs.fConst, diag, line));
+            break;
+        case RightI:
+            returnValue.setFConst(CheckedDiff(lhs.fConst, (float)rhs.iConst, diag, line));
+            break;
+        case RightU:
+            returnValue.setFConst(CheckedDiff(lhs.fConst, (float)rhs.uConst, diag, line));
             break;
         default:
             UNREACHABLE();
@@ -385,19 +509,40 @@ TConstantUnion TConstantUnion::mul(const TConstantUnion &lhs,
                                    const TSourceLoc &line)
 {
     TConstantUnion returnValue;
-    ASSERT(lhs.type == rhs.type);
-    switch (lhs.type)
+    Conversion conversion = getConversion(lhs.type, rhs.type);
+    ASSERT(conversion != Invalid);
+
+    switch (conversion)
     {
-        case EbtInt:
-            returnValue.setIConst(gl::WrappingMul(lhs.iConst, rhs.iConst));
+        case Same:
+            switch (lhs.type)
+            {
+                case EbtInt:
+                    returnValue.setIConst(gl::WrappingMul(lhs.iConst, rhs.iConst));
+                    break;
+                case EbtUInt:
+                    // Unsigned integer math in C++ is defined to be done in modulo 2^n, so we rely
+                    // on that to implement wrapping multiplication.
+                    returnValue.setUConst(lhs.uConst * rhs.uConst);
+                    break;
+                case EbtFloat:
+                    returnValue.setFConst(CheckedMul(lhs.fConst, rhs.fConst, diag, line));
+                    break;
+                default:
+                    UNREACHABLE();
+            }
             break;
-        case EbtUInt:
-            // Unsigned integer math in C++ is defined to be done in modulo 2^n, so we rely on that
-            // to implement wrapping multiplication.
-            returnValue.setUConst(lhs.uConst * rhs.uConst);
+        case LeftI:
+            returnValue.setFConst(CheckedMul((float)lhs.iConst, rhs.fConst, diag, line));
             break;
-        case EbtFloat:
-            returnValue.setFConst(CheckedMul(lhs.fConst, rhs.fConst, diag, line));
+        case LeftU:
+            returnValue.setFConst(CheckedMul((float)lhs.uConst, rhs.fConst, diag, line));
+            break;
+        case RightI:
+            returnValue.setFConst(CheckedMul(lhs.fConst, (float)rhs.iConst, diag, line));
+            break;
+        case RightU:
+            returnValue.setFConst(CheckedMul(lhs.fConst, (float)rhs.uConst, diag, line));
             break;
         default:
             UNREACHABLE();
