@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "476b1b1d_246767af",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1172,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 0,
+      "message": "This is surprising. Why are we getting past the checks at the start of this function and not writing any descriptors? Can you keep the assert?",
+      "range": {
+        "startLine": 1172,
+        "startChar": 4,
+        "endLine": 1172,
+        "endChar": 27
+      },
+      "revId": "4e71b2bc254677bdeac521a371402a92f6747776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c827842d_22484733",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 0,
+      "message": "nice that we can remove these.",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 42
+      },
+      "revId": "4e71b2bc254677bdeac521a371402a92f6747776",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}

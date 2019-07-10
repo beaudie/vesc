@@ -25,6 +25,76 @@
     },
     {
       "key": {
+        "uuid": "56619280_05db3428",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 1,
+      "message": "and here I\u0027d just pass the input source.",
+      "parentUuid": "e30e4062_48e42587",
+      "range": {
+        "startLine": 492,
+        "startChar": 78,
+        "endLine": 492,
+        "endChar": 91
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "932180ae_55c84575",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 1,
+      "message": "I\u0027d just pass the output (fragment/compute) source here.",
+      "range": {
+        "startLine": 512,
+        "startChar": 26,
+        "endLine": 512,
+        "endChar": 89
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b0e74a5_a63e2d2a",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 1,
+      "message": "I feel like here we\u0027d probably pass input/output for one stage pair. and call this multiple times for multiple stage pairs. wdyt?",
+      "range": {
+        "startLine": 551,
+        "startChar": 28,
+        "endLine": 551,
+        "endChar": 90
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2bc45ea4_1d2a5d1e",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 12
@@ -36,6 +106,75 @@
       "writtenOn": "2019-07-10T16:22:33Z",
       "side": 1,
       "message": "Why do you have each of these blocks in their own scope?",
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3affc0db_6adecf22",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 1,
+      "message": "I don\u0027t see any place where these differ from mState.getLinkedShaderStages. Can you remove them? If this is related to a bug in ANGLE, maybe we can fix that instead.",
+      "range": {
+        "startLine": 301,
+        "startChar": 4,
+        "endLine": 302,
+        "endChar": 26
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "664a7978_0a6126a1",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 1,
+      "message": "can you make hasLinkedShaderStage a member of ProgramState and use that?",
+      "range": {
+        "startLine": 380,
+        "startChar": 4,
+        "endLine": 380,
+        "endChar": 50
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29fd4c34_6ba9d9d2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 1,
+      "message": "maybe make this a helper in ProgramState: getUniqueUniformBlockCount() ?",
+      "range": {
+        "startLine": 486,
+        "startChar": 16,
+        "endLine": 486,
+        "endChar": 36
+      },
       "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -65,6 +204,52 @@
     },
     {
       "key": {
+        "uuid": "b92ab360_0a5a084f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 1,
+      "message": "these could be ShaderVectors, see other comment.",
+      "range": {
+        "startLine": 979,
+        "startChar": 8,
+        "endLine": 979,
+        "endChar": 19
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab8bbc56_c3f57547",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 1,
+      "message": "more of a wording suggestion, but what does global mean here? consider a different name?",
+      "range": {
+        "startLine": 1035,
+        "startChar": 19,
+        "endLine": 1035,
+        "endChar": 39
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0fe75f3d_0ef2012a",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 12
@@ -76,6 +261,70 @@
       "writtenOn": "2019-07-10T16:22:33Z",
       "side": 1,
       "message": "Can this block be moved to the end of this for-loop (down below with \u0027++writeCount;\u0027)?   It looks like that would fix 2 issues:\n1.) currentBinding can be initialized to 0, which feels cleaner.\n2.) You don\u0027t increment currentBinding when bufferBinding.get() \u003d\u003d nullptr, which just continues to the next iteration of the loop.",
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "443c4e07_ec3e2330",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 1,
+      "message": "would be nice to fix the -1 + 1 \u003d 0 thing",
+      "parentUuid": "0fe75f3d_0ef2012a",
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52ef1c97_10b68a9e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1776,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 1,
+      "message": "I think you should replace this with ShaderVector, using FixedVector. And use push_back. You can then get the count for free.",
+      "range": {
+        "startLine": 1776,
+        "startChar": 4,
+        "endLine": 1776,
+        "endChar": 40
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de24ffb2_033dfa00",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 1,
+      "message": "nit: can you use 0xFFFF ? or 0x10000? Just clearer to the reader.",
+      "range": {
+        "startLine": 181,
+        "startChar": 40,
+        "endLine": 181,
+        "endChar": 47
+      },
       "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -105,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "88e6a0f9_e91e78ff",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 1,
+      "message": "It is the right thing.\n\nhttps://google.github.io/styleguide/cppguide.html#Constant_Names\n\n(More info there as well)",
+      "parentUuid": "15e36714_760acace",
+      "range": {
+        "startLine": 197,
+        "startChar": 23,
+        "endLine": 197,
+        "endChar": 24
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "21694cbc_196b9ba3",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 12
@@ -119,6 +392,29 @@
       "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "975c74b8_f6b4ccdf",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:29:49Z",
+      "side": 1,
+      "message": "funny that these weren\u0027t failing before. because of limits?",
+      "range": {
+        "startLine": 657,
+        "startChar": 47,
+        "endLine": 657,
+        "endChar": 68
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
