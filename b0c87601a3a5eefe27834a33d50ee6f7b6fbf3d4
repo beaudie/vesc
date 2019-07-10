@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "953cce4e_22862270",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-10T21:02:28Z",
+      "side": 1,
+      "message": "New allocator will be used in this case to allocate the command graph nodes. Can remove this comment.",
+      "revId": "b0c87601a3a5eefe27834a33d50ee6f7b6fbf3d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e99d8c1a_25ed181f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-10T21:02:28Z",
+      "side": 1,
+      "message": "a -\u003e An",
+      "revId": "b0c87601a3a5eefe27834a33d50ee6f7b6fbf3d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "caf1f769_8cb1790b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-10T21:02:28Z",
+      "side": 1,
+      "message": "Apply the custom allocator here. This is where all of the nodes in the command graph live.",
+      "revId": "b0c87601a3a5eefe27834a33d50ee6f7b6fbf3d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
