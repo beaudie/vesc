@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2838487_864a3824",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-10T15:33:41Z",
+      "side": 1,
+      "message": "I think this can be removed, see comments below.",
+      "range": {
+        "startLine": 317,
+        "startChar": 0,
+        "endLine": 321,
+        "endChar": 2
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c824f5a5_52e5900a",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2330,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-10T15:33:41Z",
+      "side": 1,
+      "message": "I don\u0027t think this can ever be false, it can be changed to an assert instead.",
+      "range": {
+        "startLine": 2330,
+        "startChar": 4,
+        "endLine": 2330,
+        "endChar": 44
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8264b507_f0861664",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-10T15:33:41Z",
+      "side": 1,
+      "message": "textureIndex should contain the level (below too)",
+      "range": {
+        "startLine": 183,
+        "startChar": 34,
+        "endLine": 183,
+        "endChar": 45
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb7a95a3_4c79c874",
+        "filename": "src/libANGLE/FramebufferAttachment.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-10T15:33:41Z",
+      "side": 1,
+      "message": "0 is a valid sample count.  Maybe you want to use -1 to represent that the multisampled-render-to-texture is not being used.",
+      "range": {
+        "startLine": 30,
+        "startChar": 68,
+        "endLine": 30,
+        "endChar": 69
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa260edf_83616b54",
+        "filename": "src/libANGLE/FramebufferAttachment.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-10T15:33:41Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need this, mipLevel() is the same.",
+      "range": {
+        "startLine": 121,
+        "startChar": 4,
+        "endLine": 121,
+        "endChar": 75
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c65300a5_4ce0a900",
+        "filename": "src/libANGLE/FramebufferAttachment.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-10T15:33:41Z",
+      "side": 1,
+      "message": "Instead of usage, could this be a sample count that TextureStorage11_2D::getRenderTarget uses to initialize the multisample storage?\n\nThis would mean we wouldn\u0027t need the Texture::setMultisampledTextureInfo function chain because all of the info would be in this call.",
+      "range": {
+        "startLine": 222,
+        "startChar": 44,
+        "endLine": 222,
+        "endChar": 66
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "194ceb70_1b0ba38d",
+        "filename": "src/libANGLE/FramebufferAttachment.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-10T15:33:41Z",
+      "side": 1,
+      "message": "nit: compare against kDefaultRenderToTextureSamples",
+      "range": {
+        "startLine": 245,
+        "startChar": 35,
+        "endLine": 245,
+        "endChar": 36
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "640f343b_58e5fc32",
+        "filename": "src/libANGLE/Observer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-10T15:33:41Z",
+      "side": 1,
+      "message": "I think we could skip these notifications and just leave the multisampled version of the textures alive until they\u0027re needed for reading or another framebuffer for writing.",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 24
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a35bf81_ed5a29f3",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1201,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-10T15:33:41Z",
+      "side": 1,
+      "message": "Because this function is doing some complex caching and resolving, we may want to make sure all higher level caches are invalidated when we make new render targets or resolve.  I think we can do this by making TextureStorage inherit from angle::Subject and TextureD3D will observe the storage for SubjectMessage::SubjectChanged messages and forward them to it\u0027s own onStateChange function.\n\nThis should essentially tell all users of this TextureD3D/TextureStorage that it\u0027s internals have changed and they should invalidate any caches they have.\n\nI think this may eliminate any need for the frontend layer to tell the backend to resolve or release the MS storage.",
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdb4e8f1_a472d45c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-10T15:33:41Z",
+      "side": 1,
+      "message": "This function can handle all the transitions between the MS and non-MS versions.  Something like:\n\n    bool needsMS \u003d samples !\u003d 0;\n    if (needsMS)\n    {\n        if (mMSTexInfo \u0026\u0026 mMSTexInfo matches level/samples)\n        {\n            return mMSTexInfo-\u003emsRenderTarget;\n        }\n        else\n        {\n            if (mMSTexInfo)\n            {\n                resolve mMSTexInfo;\n                delete mMSTexInfo;\n            }\n\n            create new mMSTexInfo;\n            copy data into mMSTexInfo;\n            return mMSTexInfo-\u003emsRenderTarget;\n        }\n    }\n    else\n    {\n        if (mMSTexInfo)\n        {\n            resolve mMSTexInfo;\n            delete mMSTexInfo;\n        }\n\n        old render target path;\n    }\n\nI think we have to update a few additional places in this class that would want the non-ms resource (such as getResource, getMippedResource, copyToStorage, getSRVForSampler) to have some small logic to check if the MS texture exists and resolve it.",
+      "range": {
+        "startLine": 1211,
+        "startChar": 4,
+        "endLine": 1211,
+        "endChar": 66
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
