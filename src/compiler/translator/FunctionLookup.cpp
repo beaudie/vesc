@@ -65,6 +65,85 @@ ImmutableString TFunctionLookup::GetMangledName(const char *functionName,
     return ImmutableString(newName);
 }
 
+std::vector<ImmutableString> TFunctionLookup::getMangledNames() const
+{
+    return GetMangledNames(mName.data(), mArguments);
+}
+
+// Helper function for GetMangledNames
+// Gets all ordered combinations of elements in list[currentIndex, end]
+std::vector<std::vector<int>> getCombinations(std::vector<int> list, int currentIndex)
+{
+    std::vector<std::vector<int>> target;
+
+    // Base case
+    if (currentIndex == -1)
+    {
+        target.push_back(std::vector<int>());
+        return target;
+    }
+
+    std::vector<std::vector<int>> combinations = getCombinations(list, currentIndex - 1);
+    // All combinations without current element
+    target.insert(target.end(), combinations.begin(), combinations.end());
+    // All combinations with current element
+    for (std::vector<int> combination : combinations)
+    {
+        combination.push_back(list[currentIndex]);
+        target.push_back(combination);
+    }
+
+    return target;
+}
+
+std::vector<ImmutableString> TFunctionLookup::GetMangledNames(const char *functionName,
+                                                              const TIntermSequence &arguments)
+{
+    std::vector<ImmutableString> target;
+
+    std::vector<int> indexes;
+    for (int i = 0; i < (int)arguments.size(); i++)
+    {
+        TIntermNode *argument = arguments[i];
+        TBasicType argType    = argument->getAsTyped()->getType().getBasicType();
+        if (argType == EbtInt || argType == EbtUInt)
+        {
+            indexes.push_back(i);
+        }
+    }
+
+    std::vector<std::vector<int>> combinations = getCombinations(indexes, indexes.size() - 1);
+    for (std::vector<int> combination : combinations)
+    {
+        // combination: ordered list of indexes for arguments that should be converted to int
+        std::string newName(functionName);
+        newName += kFunctionMangledNameSeparator;
+        // combination[currentIndex] represents index of next argument to be converted
+        int currentIndex = 0;
+        for (int i = 0; i < (int)arguments.size(); i++)
+        {
+            TIntermNode *argument = arguments[i];
+
+            if (currentIndex != (int)combination.size() && combination[currentIndex] == i)
+            {
+                // Convert
+                TType type = argument->getAsTyped()->getType();
+                type.setBasicType(EbtFloat);
+                newName += type.getMangledName();
+                currentIndex++;
+            }
+            else
+            {
+                // Don't convert
+                newName += argument->getAsTyped()->getType().getMangledName();
+            }
+        }
+        target.push_back(ImmutableString(newName));
+    }
+
+    return target;
+}
+
 bool TFunctionLookup::isConstructor() const
 {
     return mConstructorType != nullptr;

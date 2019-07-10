@@ -272,13 +272,16 @@ TEST_F(ShCompileDesktopGLTest, FragmentShaderCoreVersion)
 }
 
 // Test calling sh::Compile with core version
-TEST_F(ShCompileDesktopGLTest, DISABLED_FragmentShaderAdditionConversion)
+TEST_F(ShCompileDesktopGLTest, DISABLED_FragmentShaderBasicOperationConversion)
 {
     constexpr char kComputeShaderString[] =
         R"(#version 330 core
         void main()
         {
-            float f = 1 + 1.5;
+            float a = 1 + 1.5;
+            float b = 1 - 1.5;
+            float c = 1 * 1.5;
+            float d = 1 / 1.5;
         })";
 
     const char *shaderStrings[] = {kComputeShaderString};

@@ -5221,7 +5221,7 @@ bool TParseContext::binaryOpCommonCheck(TOperator op,
     // So the basic type should usually match.
     if (!isBitShift && left->getBasicType() != right->getBasicType())
     {
-        return false;
+        // return false;
     }
 
     // Check that:
@@ -5912,8 +5912,27 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
     {
         // There are no inner functions, so it's enough to look for user-defined functions in the
         // global scope.
+        bool found            = false;
         const TSymbol *symbol = symbolTable.findGlobal(fnCall->getMangledName());
         if (symbol != nullptr)
+        {
+            found = true;
+        }
+        else if (IsDesktopGLSpec(mShaderSpec))
+        {
+            // If using Desktop GL spec, need to check for implicit conversion
+            std::vector<ImmutableString> mangledNames = fnCall->getMangledNames();
+            for (ImmutableString mangledName : mangledNames)
+            {
+                symbol = symbolTable.findGlobal(mangledName);
+                if (symbol != nullptr)
+                {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (found)
         {
             // A user-defined function - could be an overloaded built-in as well.
             ASSERT(symbol->symbolType() == SymbolType::UserDefined);
@@ -5927,11 +5946,25 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
         }
 
         symbol = symbolTable.findBuiltIn(fnCall->getMangledName(), mShaderVersion);
-        if (symbol == nullptr)
+        if (symbol != nullptr)
         {
-            error(loc, "no matching overloaded function found", fnCall->name());
+            found = true;
         }
-        else
+        else if (IsDesktopGLSpec(mShaderSpec))
+        {
+            // If using Desktop GL spec, need to check for implicit conversion
+            std::vector<ImmutableString> mangledNames = fnCall->getMangledNames();
+            for (ImmutableString mangledName : mangledNames)
+            {
+                symbol = symbolTable.findBuiltIn(mangledName, mShaderVersion);
+                if (symbol != nullptr)
+                {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if (found)
         {
             // A built-in function.
             ASSERT(symbol->symbolType() == SymbolType::BuiltIn);
@@ -5978,6 +6011,10 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
             checkImageMemoryAccessForBuiltinFunctions(callNode);
             functionCallRValueLValueErrorCheck(fnCandidate, callNode);
             return callNode;
+        }
+        else
+        {
+            error(loc, "no matching overloaded function found", fnCall->name());
         }
     }
 
