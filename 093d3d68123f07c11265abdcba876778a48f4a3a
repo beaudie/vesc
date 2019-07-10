@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e06864a0_6605d5ea",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T15:42:07Z",
+      "side": 1,
+      "message": "We also need to support compatibility profile. i.e. \n\n#version 330\n\ninstead of \n\n#version 330 core\n\nCan you add a test for this?\n\nAlso please use IsDesktopGLSpec instead of the specific spec number.\n\nAlso the error should probably remain PP_INVALID_VERSION_DIRECTIVE.",
+      "range": {
+        "startLine": 734,
+        "startChar": 0,
+        "endLine": 752,
+        "endChar": 17
+      },
+      "revId": "093d3d68123f07c11265abdcba876778a48f4a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5bfcee0_4f20852b",
+        "filename": "src/compiler/translator/Compiler.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T15:42:07Z",
+      "side": 1,
+      "message": "can you move this to ShaderLang.h? See IsWebGLBasedSpec.",
+      "range": {
+        "startLine": 210,
+        "startChar": 3,
+        "endLine": 210,
+        "endChar": 27
+      },
+      "revId": "093d3d68123f07c11265abdcba876778a48f4a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49e2623f_afab56cb",
+        "filename": "src/compiler/translator/DirectiveHandler.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T15:42:07Z",
+      "side": 1,
+      "message": "can you check IsDesktopGLSpec instead of SH_GL3_3_SPEC? seems more robust.",
+      "range": {
+        "startLine": 190,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 50
+      },
+      "revId": "093d3d68123f07c11265abdcba876778a48f4a3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
