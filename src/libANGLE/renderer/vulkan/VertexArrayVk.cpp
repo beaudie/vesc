@@ -27,7 +27,7 @@ namespace
 constexpr size_t kDynamicVertexDataSize = 1024 * 1024;
 constexpr size_t kDynamicIndexDataSize  = 1024 * 8;
 
-ANGLE_INLINE bool BindingIsAligned(const gl::VertexBinding &binding,
+ANGLE_INLINE bool BindingIsAligned(const gl::VertexBindingState &binding,
                                    const angle::Format &angleFormat,
                                    unsigned int attribSize)
 {
@@ -66,7 +66,9 @@ angle::Result StreamVertexData(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-size_t GetVertexCount(BufferVk *srcBuffer, const gl::VertexBinding &binding, uint32_t srcFormatSize)
+size_t GetVertexCount(BufferVk *srcBuffer,
+                      const gl::VertexBindingState &binding,
+                      uint32_t srcFormatSize)
 {
     // Bytes usable for vertex data.
     GLint64 bytes = srcBuffer->getSize() - binding.getOffset();
@@ -230,7 +232,7 @@ angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
 // overhead.
 angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
                                                     BufferVk *srcBuffer,
-                                                    const gl::VertexBinding &binding,
+                                                    const gl::VertexBindingState &binding,
                                                     size_t attribIndex,
                                                     const vk::Format &vertexFormat,
                                                     ConversionBuffer *conversion)
@@ -275,7 +277,7 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
 
 angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
                                                     BufferVk *srcBuffer,
-                                                    const gl::VertexBinding &binding,
+                                                    const gl::VertexBindingState &binding,
                                                     size_t attribIndex,
                                                     const vk::Format &vertexFormat,
                                                     ConversionBuffer *conversion)
@@ -359,33 +361,58 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
                 mDirtyLineLoopTranslation = true;
                 break;
 
-#define ANGLE_VERTEX_DIRTY_ATTRIB_FUNC(INDEX)                                     \
-    case gl::VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                             \
-        ANGLE_TRY(syncDirtyAttrib(contextVk, attribs[INDEX],                      \
-                                  bindings[attribs[INDEX].bindingIndex], INDEX)); \
-        invalidateContext = true;                                                 \
-        (*attribBits)[INDEX].reset();                                             \
-        break;
+#define ANGLE_VERTEX_DIRTY_ATTRIB_FUNC(INDEX)                                                   \
+    case gl::VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                                           \
+    {                                                                                           \
+        const gl::VertexAttribute &attrib = attribs[INDEX];                                     \
+        const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];                      \
+        if (mCurrentVkVertexAttribs.size() > INDEX &&                                           \
+            mCurrentVkVertexAttribs[INDEX] == attrib.getInnerState())                           \
+        {                                                                                       \
+            break;                                                                              \
+        }                                                                                       \
+        ANGLE_TRY(syncDirtyAttrib(contextVk, binding.getBuffer().get(), attrib.getInnerState(), \
+                                  binding.getInnerState(), INDEX));                             \
+        invalidateContext = true;                                                               \
+        break;                                                                                  \
+    }
 
                 ANGLE_VERTEX_INDEX_CASES(ANGLE_VERTEX_DIRTY_ATTRIB_FUNC)
 
-#define ANGLE_VERTEX_DIRTY_BINDING_FUNC(INDEX)                                    \
-    case gl::VertexArray::DIRTY_BIT_BINDING_0 + INDEX:                            \
-        ANGLE_TRY(syncDirtyAttrib(contextVk, attribs[INDEX],                      \
-                                  bindings[attribs[INDEX].bindingIndex], INDEX)); \
-        invalidateContext = true;                                                 \
-        (*bindingBits)[INDEX].reset();                                            \
-        break;
+#undef ANGLE_VERTEX_DIRTY_ATTRIB_FUNC
+
+#define ANGLE_VERTEX_DIRTY_BINDING_FUNC(INDEX)                                                  \
+    case gl::VertexArray::DIRTY_BIT_BINDING_0 + INDEX:                                          \
+    {                                                                                           \
+        const gl::VertexAttribute &attrib = attribs[INDEX];                                     \
+        const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];                      \
+        if (mCurrentVkVertexBindings.size() > INDEX &&                                          \
+            mCurrentVkVertexBindings[INDEX] == binding.getInnerState())                         \
+        {                                                                                       \
+            break;                                                                              \
+        }                                                                                       \
+        ANGLE_TRY(syncDirtyAttrib(contextVk, binding.getBuffer().get(), attrib.getInnerState(), \
+                                  binding.getInnerState(), INDEX));                             \
+        break;                                                                                  \
+    }
 
                 ANGLE_VERTEX_INDEX_CASES(ANGLE_VERTEX_DIRTY_BINDING_FUNC)
 
-#define ANGLE_VERTEX_DIRTY_BUFFER_DATA_FUNC(INDEX)                                \
-    case gl::VertexArray::DIRTY_BIT_BUFFER_DATA_0 + INDEX:                        \
-        ANGLE_TRY(syncDirtyAttrib(contextVk, attribs[INDEX],                      \
-                                  bindings[attribs[INDEX].bindingIndex], INDEX)); \
-        break;
+#undef ANGLE_VERTEX_DIRTY_BINDING_FUNC
+
+#define ANGLE_VERTEX_DIRTY_BUFFER_DATA_FUNC(INDEX)                                              \
+    case gl::VertexArray::DIRTY_BIT_BUFFER_DATA_0 + INDEX:                                      \
+    {                                                                                           \
+        const gl::VertexAttribute &attrib = attribs[INDEX];                                     \
+        const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];                      \
+        ANGLE_TRY(syncDirtyAttrib(contextVk, binding.getBuffer().get(), attrib.getInnerState(), \
+                                  binding.getInnerState(), INDEX));                             \
+        break;                                                                                  \
+    }
 
                 ANGLE_VERTEX_INDEX_CASES(ANGLE_VERTEX_DIRTY_BUFFER_DATA_FUNC)
+
+#undef ANGLE_VERTEX_DIRTY_BUFFER_DATA_FUNC
 
             default:
                 UNREACHABLE();
@@ -398,8 +425,36 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
         contextVk->invalidateVertexAndIndexBuffers();
     }
 
+    mCurrentVkVertexAttribs.resize(attribs.size());
+    mCurrentVkVertexBindings.resize(bindings.size());
+    for (size_t dirtyBit : dirtyBits)
+    {
+        switch (dirtyBit)
+        {
+#define ANGLE_VERTEX_ATTRIB_STATE_UPDATE_FUNC(INDEX)                     \
+    case gl::VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                    \
+    {                                                                    \
+        mCurrentVkVertexAttribs[INDEX] = attribs[INDEX].getInnerState(); \
+        (*attribBits)[INDEX].reset();                                    \
+        break;                                                           \
+    }
+            ANGLE_VERTEX_INDEX_CASES(ANGLE_VERTEX_ATTRIB_STATE_UPDATE_FUNC)
+#undef ANGLE_VERTEX_ATTRIB_STATE_UPDATE_FUNC
+
+#define ANGLE_VERTEX_DIRTY_BINDING_FUNC(INDEX)                             \
+    case gl::VertexArray::DIRTY_BIT_BINDING_0 + INDEX:                     \
+    {                                                                      \
+        mCurrentVkVertexBindings[INDEX] = bindings[INDEX].getInnerState(); \
+        (*bindingBits)[INDEX].reset();                                     \
+        break;                                                             \
+    }
+            ANGLE_VERTEX_INDEX_CASES(ANGLE_VERTEX_DIRTY_BINDING_FUNC)
+#undef ANGLE_VERTEX_DIRTY_BINDING_FUNC
+        }
+    }
+
     return angle::Result::Continue;
-}
+}  // namespace rx
 
 ANGLE_INLINE void VertexArrayVk::setDefaultPackedInput(ContextVk *contextVk, size_t attribIndex)
 {
@@ -428,8 +483,9 @@ ANGLE_INLINE void VertexArrayVk::setDefaultPackedInput(ContextVk *contextVk, siz
 }
 
 angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
-                                             const gl::VertexAttribute &attrib,
-                                             const gl::VertexBinding &binding,
+                                             gl::Buffer *bufferGL,
+                                             const gl::VertexAttributeState &attrib,
+                                             const gl::VertexBindingState &binding,
                                              size_t attribIndex)
 {
     RendererVk *renderer               = contextVk->getRenderer();
@@ -437,7 +493,6 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
 
     if (attrib.enabled)
     {
-        gl::Buffer *bufferGL           = binding.getBuffer().get();
         const vk::Format &vertexFormat = renderer->getFormat(attrib.format->id);
         GLuint stride;
 
@@ -555,14 +610,14 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
     {
         const gl::VertexAttribute &attrib = attribs[attribIndex];
         const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];
-        ASSERT(attrib.enabled && binding.getBuffer().get() == nullptr);
+        ASSERT(attrib.isEnabled() && binding.getBuffer().get() == nullptr);
 
-        const vk::Format &vertexFormat = renderer->getFormat(attrib.format->id);
+        const vk::Format &vertexFormat = renderer->getFormat(attrib.getFormat()->id);
         GLuint stride                  = vertexFormat.bufferFormat().pixelBytes;
 
         ASSERT(GetVertexInputAlignment(vertexFormat) <= vk::kVertexBufferAlignment);
 
-        const uint8_t *src = static_cast<const uint8_t *>(attrib.pointer);
+        const uint8_t *src = static_cast<const uint8_t *>(attrib.getPointer());
         if (binding.getDivisor() > 0)
         {
             // instanced attrib

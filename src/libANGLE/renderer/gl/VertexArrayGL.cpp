@@ -30,7 +30,7 @@ namespace
 {
 bool SameVertexAttribFormat(const VertexAttribute &a, const VertexAttribute &b)
 {
-    return a.format == b.format && a.relativeOffset == b.relativeOffset;
+    return a.getFormat() == b.getFormat() && a.getRelativeOffset() == b.getRelativeOffset();
 }
 
 bool SameVertexBuffer(const VertexBinding &a, const VertexBinding &b)
@@ -41,7 +41,7 @@ bool SameVertexBuffer(const VertexBinding &a, const VertexBinding &b)
 
 bool IsVertexAttribPointerSupported(size_t attribIndex, const VertexAttribute &attrib)
 {
-    return (attribIndex == attrib.bindingIndex && attrib.relativeOffset == 0);
+    return (attribIndex == attrib.bindingIndex && attrib.getRelativeOffset() == 0);
 }
 
 GLuint GetAdjustedDivisor(GLuint numViews, GLuint divisor)
@@ -340,7 +340,7 @@ angle::Result VertexArrayGL::streamAttributes(const gl::Context *context,
 
             // Attributes using client memory ignore the VERTEX_ATTRIB_BINDING state.
             // https://www.opengl.org/registry/specs/ARB/vertex_attrib_binding.txt
-            const uint8_t *inputPointer = static_cast<const uint8_t *>(attrib.pointer);
+            const uint8_t *inputPointer = static_cast<const uint8_t *>(attrib.getPointer());
 
             // Pack the data when copying it, user could have supplied a very large stride that
             // would cause the buffer to be much larger than needed.
@@ -396,9 +396,9 @@ GLuint VertexArrayGL::getAppliedElementArrayBufferID() const
 
 void VertexArrayGL::updateAttribEnabled(size_t attribIndex)
 {
-    const bool enabled = mState.getVertexAttribute(attribIndex).enabled &
+    const bool enabled = mState.getVertexAttribute(attribIndex).isEnabled() &
                          mProgramActiveAttribLocationsMask.test(attribIndex);
-    if (mAppliedAttributes[attribIndex].enabled == enabled)
+    if (mAppliedAttributes[attribIndex].isEnabled() == enabled)
     {
         return;
     }
@@ -412,7 +412,7 @@ void VertexArrayGL::updateAttribEnabled(size_t attribIndex)
         mFunctions->disableVertexAttribArray(static_cast<GLuint>(attribIndex));
     }
 
-    mAppliedAttributes[attribIndex].enabled = enabled;
+    mAppliedAttributes[attribIndex].updateEnabled(enabled);
 }
 
 void VertexArrayGL::updateAttribPointer(const gl::Context *context, size_t attribIndex)
@@ -459,14 +459,14 @@ void VertexArrayGL::updateAttribPointer(const gl::Context *context, size_t attri
     callVertexAttribPointer(static_cast<GLuint>(attribIndex), attrib, binding.getStride(),
                             binding.getOffset());
 
-    mAppliedAttributes[attribIndex].format = attrib.format;
+    mAppliedAttributes[attribIndex].setFormat(attrib.getFormat());
 
     // After VertexAttribPointer, attrib.relativeOffset is set to 0 and attrib.bindingIndex is set
     // to attribIndex in driver. If attrib.relativeOffset != 0 or attrib.bindingIndex !=
     // attribIndex, they should be set in updateAttribFormat and updateAttribBinding. The cache
     // should be consistent with driver so that we won't miss anything.
-    mAppliedAttributes[attribIndex].relativeOffset = 0;
-    mAppliedAttributes[attribIndex].bindingIndex   = static_cast<GLuint>(attribIndex);
+    mAppliedAttributes[attribIndex].setRelativeOffset(0);
+    mAppliedAttributes[attribIndex].bindingIndex = static_cast<GLuint>(attribIndex);
 
     mAppliedBindings[attribIndex].setStride(binding.getStride());
     mAppliedBindings[attribIndex].setOffset(binding.getOffset());
@@ -479,7 +479,7 @@ void VertexArrayGL::callVertexAttribPointer(GLuint attribIndex,
                                             GLintptr offset) const
 {
     const GLvoid *pointer       = reinterpret_cast<const GLvoid *>(offset);
-    const angle::Format &format = *attrib.format;
+    const angle::Format &format = *attrib.getFormat();
     if (format.isPureInt())
     {
         ASSERT(!format.isNorm());
@@ -510,23 +510,23 @@ void VertexArrayGL::updateAttribFormat(size_t attribIndex)
         return;
     }
 
-    const angle::Format &format = *attrib.format;
+    const angle::Format &format = *attrib.getFormat();
     if (format.isPureInt())
     {
         ASSERT(!format.isNorm());
         mFunctions->vertexAttribIFormat(static_cast<GLuint>(attribIndex), format.channelCount,
                                         gl::ToGLenum(format.vertexAttribType),
-                                        attrib.relativeOffset);
+                                        attrib.getRelativeOffset());
     }
     else
     {
         mFunctions->vertexAttribFormat(static_cast<GLuint>(attribIndex), format.channelCount,
                                        gl::ToGLenum(format.vertexAttribType), format.isNorm(),
-                                       attrib.relativeOffset);
+                                       attrib.getRelativeOffset());
     }
 
-    mAppliedAttributes[attribIndex].format         = attrib.format;
-    mAppliedAttributes[attribIndex].relativeOffset = attrib.relativeOffset;
+    mAppliedAttributes[attribIndex].setFormat(attrib.getFormat());
+    mAppliedAttributes[attribIndex].setRelativeOffset(attrib.getRelativeOffset());
 }
 
 void VertexArrayGL::updateAttribBinding(size_t attribIndex)

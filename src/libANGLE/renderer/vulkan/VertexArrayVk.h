@@ -92,20 +92,21 @@ class VertexArrayVk : public VertexArrayImpl
 
     angle::Result convertVertexBufferGPU(ContextVk *contextVk,
                                          BufferVk *srcBuffer,
-                                         const gl::VertexBinding &binding,
+                                         const gl::VertexBindingState &binding,
                                          size_t attribIndex,
                                          const vk::Format &vertexFormat,
                                          ConversionBuffer *conversion);
     angle::Result convertVertexBufferCPU(ContextVk *contextVk,
                                          BufferVk *srcBuffer,
-                                         const gl::VertexBinding &binding,
+                                         const gl::VertexBindingState &binding,
                                          size_t attribIndex,
                                          const vk::Format &vertexFormat,
                                          ConversionBuffer *conversion);
 
     angle::Result syncDirtyAttrib(ContextVk *contextVk,
-                                  const gl::VertexAttribute &attrib,
-                                  const gl::VertexBinding &binding,
+                                  gl::Buffer *bufferGL,
+                                  const gl::VertexAttributeState &attrib,
+                                  const gl::VertexBindingState &binding,
                                   size_t attribIndex);
 
     gl::AttribArray<VkBuffer> mCurrentArrayBufferHandles;
@@ -125,6 +126,9 @@ class VertexArrayVk : public VertexArrayImpl
 
     // Vulkan does not allow binding a null vertex buffer. We use a dummy as a placeholder.
     vk::BufferHelper mTheNullBuffer;
+
+    std::vector<gl::VertexBindingState> mCurrentVkVertexBindings;
+    std::vector<gl::VertexAttributeState> mCurrentVkVertexAttribs;
 };
 }  // namespace rx
 

@@ -15,7 +15,7 @@ namespace gl
 // Table 20.2: Vertex Array Object State
 VertexBinding::VertexBinding() : VertexBinding(0) {}
 
-VertexBinding::VertexBinding(GLuint boundAttribute) : mStride(16u), mDivisor(0), mOffset(0)
+VertexBinding::VertexBinding(GLuint boundAttribute)
 {
     mBoundAttributesMask.set(boundAttribute);
 }
@@ -31,9 +31,7 @@ VertexBinding &VertexBinding::operator=(VertexBinding &&binding)
 {
     if (this != &binding)
     {
-        mStride              = binding.mStride;
-        mDivisor             = binding.mDivisor;
-        mOffset              = binding.mOffset;
+        mState               = binding.mState;
         mBoundAttributesMask = binding.mBoundAttributesMask;
         std::swap(binding.mBuffer, mBuffer);
     }
@@ -47,22 +45,12 @@ void VertexBinding::onContainerBindingChanged(const Context *context, int incr) 
 }
 
 VertexAttribute::VertexAttribute(GLuint bindingIndex)
-    : enabled(false),
-      format(&angle::Format::Get(angle::FormatID::R32G32B32A32_FLOAT)),
-      pointer(nullptr),
-      relativeOffset(0),
-      vertexAttribArrayStride(0),
-      bindingIndex(bindingIndex),
-      mCachedElementLimit(0)
+    : bindingIndex(bindingIndex), mCachedElementLimit(0)
 {}
 
 VertexAttribute::VertexAttribute(VertexAttribute &&attrib)
-    : enabled(attrib.enabled),
-      format(attrib.format),
-      pointer(attrib.pointer),
-      relativeOffset(attrib.relativeOffset),
-      vertexAttribArrayStride(attrib.vertexAttribArrayStride),
-      bindingIndex(attrib.bindingIndex),
+    : bindingIndex(attrib.bindingIndex),
+      mState(attrib.mState),
       mCachedElementLimit(attrib.mCachedElementLimit)
 {}
 
@@ -70,13 +58,9 @@ VertexAttribute &VertexAttribute::operator=(VertexAttribute &&attrib)
 {
     if (this != &attrib)
     {
-        enabled                 = attrib.enabled;
-        format                  = attrib.format;
-        pointer                 = attrib.pointer;
-        relativeOffset          = attrib.relativeOffset;
-        vertexAttribArrayStride = attrib.vertexAttribArrayStride;
-        bindingIndex            = attrib.bindingIndex;
-        mCachedElementLimit     = attrib.mCachedElementLimit;
+        mState              = attrib.mState;
+        bindingIndex        = attrib.bindingIndex;
+        mCachedElementLimit = attrib.mCachedElementLimit;
     }
     return *this;
 }
@@ -92,7 +76,7 @@ void VertexAttribute::updateCachedElementLimit(const VertexBinding &binding)
 
     angle::CheckedNumeric<GLint64> bufferSize(buffer->getSize());
     angle::CheckedNumeric<GLint64> bufferOffset(binding.getOffset());
-    angle::CheckedNumeric<GLint64> attribOffset(relativeOffset);
+    angle::CheckedNumeric<GLint64> attribOffset(mState.relativeOffset);
     angle::CheckedNumeric<GLint64> attribSize(ComputeVertexAttributeTypeSize(*this));
 
     // (buffer.size - buffer.offset - attrib.relativeOffset - attrib.size) / binding.stride
@@ -140,13 +124,13 @@ size_t ComputeVertexAttributeStride(const VertexAttribute &attrib, const VertexB
 {
     // In ES 3.1, VertexAttribPointer will store the type size in the binding stride.
     // Hence, rendering always uses the binding's stride.
-    return attrib.enabled ? binding.getStride() : 16u;
+    return attrib.isEnabled() ? binding.getStride() : 16u;
 }
 
 // Warning: you should ensure binding really matches attrib.bindingIndex before using this function.
 GLintptr ComputeVertexAttributeOffset(const VertexAttribute &attrib, const VertexBinding &binding)
 {
-    return attrib.relativeOffset + binding.getOffset();
+    return attrib.getRelativeOffset() + binding.getOffset();
 }
 
 size_t ComputeVertexBindingElementCount(GLuint divisor, size_t drawCount, size_t instanceCount)

@@ -117,7 +117,7 @@ void VertexArrayState::setAttribBinding(const Context *context,
 
     bool isMapped = newBinding.getBuffer().get() && newBinding.getBuffer()->isMapped();
     mCachedMappedArrayBuffers.set(attribIndex, isMapped);
-    mCachedEnabledMappedArrayBuffers.set(attribIndex, isMapped && attrib.enabled);
+    mCachedEnabledMappedArrayBuffers.set(attribIndex, isMapped && attrib.isEnabled());
 }
 
 // VertexArray implementation.
@@ -393,8 +393,8 @@ ANGLE_INLINE void VertexArray::setVertexAttribFormatImpl(VertexAttribute *attrib
                                                          GLuint relativeOffset)
 {
     angle::FormatID formatID = gl::GetVertexFormatID(type, normalized, size, pureInteger);
-    attrib->format           = &angle::Format::Get(formatID);
-    attrib->relativeOffset   = relativeOffset;
+    attrib->setFormat(&angle::Format::Get(formatID));
+    attrib->setRelativeOffset(relativeOffset);
 }
 
 void VertexArray::setVertexAttribFormat(size_t attribIndex,
@@ -434,7 +434,7 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
         return;
     }
 
-    attrib.enabled = enabledState;
+    attrib.updateEnabled(enabledState);
 
     setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_ENABLED);
 
@@ -468,8 +468,8 @@ ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context
 
     GLsizei effectiveStride =
         stride != 0 ? stride : static_cast<GLsizei>(ComputeVertexAttributeTypeSize(attrib));
-    attrib.pointer                 = pointer;
-    attrib.vertexAttribArrayStride = stride;
+    attrib.setPointer(pointer);
+    attrib.setArrayStride(stride);
 
     bindVertexBufferImpl(context, attribIndex, boundBuffer, offset, effectiveStride);
 

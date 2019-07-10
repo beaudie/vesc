@@ -1629,11 +1629,11 @@ angle::FormatID GetVertexFormatID(VertexAttribType type,
 
 angle::FormatID GetVertexFormatID(const VertexAttribute &attrib, VertexAttribType currentValueType)
 {
-    if (!attrib.enabled)
+    if (!attrib.isEnabled())
     {
         return angle::FormatID::R32G32B32A32_FLOAT;
     }
-    return attrib.format->id;
+    return attrib.getFormat()->id;
 }
 
 const VertexFormat &GetVertexFormatFromID(angle::FormatID vertexFormatID)

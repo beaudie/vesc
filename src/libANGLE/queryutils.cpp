@@ -517,21 +517,21 @@ void QueryVertexAttribBase(const VertexAttribute &attrib,
             }
             break;
         case GL_VERTEX_ATTRIB_ARRAY_ENABLED:
-            *params = CastFromStateValue<ParamType>(pname, static_cast<GLint>(attrib.enabled));
+            *params = CastFromStateValue<ParamType>(pname, static_cast<GLint>(attrib.isEnabled()));
             break;
         case GL_VERTEX_ATTRIB_ARRAY_SIZE:
-            *params = CastFromGLintStateValue<ParamType>(pname, attrib.format->channelCount);
+            *params = CastFromGLintStateValue<ParamType>(pname, attrib.getFormat()->channelCount);
             break;
         case GL_VERTEX_ATTRIB_ARRAY_STRIDE:
-            *params = CastFromGLintStateValue<ParamType>(pname, attrib.vertexAttribArrayStride);
+            *params = CastFromGLintStateValue<ParamType>(pname, attrib.getArrayStride());
             break;
         case GL_VERTEX_ATTRIB_ARRAY_TYPE:
             *params = CastFromGLintStateValue<ParamType>(
-                pname, gl::ToGLenum(attrib.format->vertexAttribType));
+                pname, gl::ToGLenum(attrib.getFormat()->vertexAttribType));
             break;
         case GL_VERTEX_ATTRIB_ARRAY_NORMALIZED:
-            *params =
-                CastFromStateValue<ParamType>(pname, static_cast<GLint>(attrib.format->isNorm()));
+            *params = CastFromStateValue<ParamType>(
+                pname, static_cast<GLint>(attrib.getFormat()->isNorm()));
             break;
         case GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING:
             *params = CastFromGLintStateValue<ParamType>(pname, binding.getBuffer().id());
@@ -540,13 +540,13 @@ void QueryVertexAttribBase(const VertexAttribute &attrib,
             *params = CastFromStateValue<ParamType>(pname, binding.getDivisor());
             break;
         case GL_VERTEX_ATTRIB_ARRAY_INTEGER:
-            *params = CastFromGLintStateValue<ParamType>(pname, attrib.format->isPureInt());
+            *params = CastFromGLintStateValue<ParamType>(pname, attrib.getFormat()->isPureInt());
             break;
         case GL_VERTEX_ATTRIB_BINDING:
             *params = CastFromGLintStateValue<ParamType>(pname, attrib.bindingIndex);
             break;
         case GL_VERTEX_ATTRIB_RELATIVE_OFFSET:
-            *params = CastFromGLintStateValue<ParamType>(pname, attrib.relativeOffset);
+            *params = CastFromGLintStateValue<ParamType>(pname, attrib.getRelativeOffset());
             break;
         default:
             UNREACHABLE();
@@ -1400,7 +1400,7 @@ void QueryVertexAttribPointerv(const VertexAttribute &attrib, GLenum pname, void
     switch (pname)
     {
         case GL_VERTEX_ATTRIB_ARRAY_POINTER:
-            *pointer = const_cast<void *>(attrib.pointer);
+            *pointer = const_cast<void *>(attrib.getPointer());
             break;
 
         default:

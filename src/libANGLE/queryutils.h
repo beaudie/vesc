@@ -30,7 +30,7 @@ class Shader;
 class Texture;
 struct TextureCaps;
 struct UniformBlock;
-struct VertexAttribute;
+class VertexAttribute;
 class VertexBinding;
 struct VertexAttribCurrentValueData;
 

@@ -49,7 +49,7 @@ struct RasterizerState;
 struct Rectangle;
 class State;
 struct SwizzleState;
-struct VertexAttribute;
+class VertexAttribute;
 class VertexBinding;
 
 ANGLE_GL_OBJECTS_X(ANGLE_PRE_DECLARE_OBJECT)

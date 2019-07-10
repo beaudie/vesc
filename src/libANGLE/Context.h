@@ -84,7 +84,7 @@ class Sync;
 class Texture;
 class TransformFeedback;
 class VertexArray;
-struct VertexAttribute;
+class VertexAttribute;
 
 class ErrorSet : angle::NonCopyable
 {

@@ -1659,7 +1659,7 @@ void State::setVertexAttribDivisor(const Context *context, GLuint index, GLuint 
 
 const void *State::getVertexAttribPointer(unsigned int attribNum) const
 {
-    return getVertexArray()->getVertexAttribute(attribNum).pointer;
+    return getVertexArray()->getVertexAttribute(attribNum).getPointer();
 }
 
 void State::setPackAlignment(GLint alignment)

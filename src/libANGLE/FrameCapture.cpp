@@ -228,7 +228,8 @@ void FrameCapture::captureClientArraySnapshot(const gl::Context *context,
             }
 
             // The last capture element doesn't take up the full stride.
-            size_t bytesToCapture = (count - 1) * binding.getStride() + attrib.format->pixelBytes;
+            size_t bytesToCapture =
+                (count - 1) * binding.getStride() + attrib.getFormat()->pixelBytes;
 
             CallCapture &call   = mCalls[callIndex];
             ParamCapture &param = call.params.getClientArrayPointerParameter();
