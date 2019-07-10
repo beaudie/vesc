@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7ea16dc_29ebb217",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:16:11Z",
+      "side": 1,
+      "message": "instead check IsDekstopGLSpec here. You can do this before the version \u003c 300 check.",
+      "range": {
+        "startLine": 736,
+        "startChar": 29,
+        "endLine": 736,
+        "endChar": 43
+      },
+      "revId": "33ad14cba6232e1fd24bca04b272ee71532e7996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "929ec626_2c0bf1bd",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:16:11Z",
+      "side": 1,
+      "message": "this can be an ASSERT",
+      "range": {
+        "startLine": 748,
+        "startChar": 20,
+        "endLine": 748,
+        "endChar": 61
+      },
+      "revId": "33ad14cba6232e1fd24bca04b272ee71532e7996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1540cf2_0cee83ec",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:16:11Z",
+      "side": 1,
+      "message": "this can also be an ASSERT",
+      "range": {
+        "startLine": 758,
+        "startChar": 20,
+        "endLine": 758,
+        "endChar": 62
+      },
+      "revId": "33ad14cba6232e1fd24bca04b272ee71532e7996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf1f4d82_b493af74",
+        "filename": "src/tests/compiler_tests/ShCompile_test.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-10T17:16:11Z",
+      "side": 1,
+      "message": "does this test pass? we can\u0027t land code that has failing tests. you can use DISABLED_FragmentShaderImplicitConversion to disable the test temporarily.",
+      "range": {
+        "startLine": 276,
+        "startChar": 31,
+        "endLine": 276,
+        "endChar": 63
+      },
+      "revId": "33ad14cba6232e1fd24bca04b272ee71532e7996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
