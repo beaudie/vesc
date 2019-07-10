@@ -271,14 +271,17 @@ TEST_F(ShCompileDesktopGLTest, FragmentShaderCoreVersion)
     testCompile(shaderStrings, 1, true);
 }
 
-// Test calling sh::Compile with core version
-TEST_F(ShCompileDesktopGLTest, DISABLED_FragmentShaderAdditionConversion)
+// Implicit conversions in basic operations
+TEST_F(ShCompileDesktopGLTest, FragmentShaderBasicOperationConversion)
 {
     constexpr char kComputeShaderString[] =
         R"(#version 330 core
         void main()
         {
-            float f = 1 + 1.5;
+            float a = 1 + 1.5;
+            float b = 1 - 1.5;
+            float c = 1 * 1.5;
+            float d = 1 / 1.5;
         })";
 
     const char *shaderStrings[] = {kComputeShaderString};
@@ -286,9 +289,43 @@ TEST_F(ShCompileDesktopGLTest, DISABLED_FragmentShaderAdditionConversion)
     testCompile(shaderStrings, 1, true);
 }
 
+// Implicit conversions when assigning
+TEST_F(ShCompileDesktopGLTest, FragmentShaderAssignConversion)
+{
+    constexpr char kComputeShaderString[] =
+        R"(#version 330 core
+        void main()
+        {
+            float a = 1;
+            uint b = 2u;
+            a = b;
+        })";
+
+    const char *shaderStrings[] = {kComputeShaderString};
+
+    testCompile(shaderStrings, 1, true);
+}
+
+// Implicit conversions should not convert between ints and uints
+TEST_F(ShCompileDesktopGLTest, FragmentShaderAssignFailedConversion)
+{
+    constexpr char kComputeShaderString[] =
+        R"(#version 330 core
+        void main()
+        {
+            int a = 1;
+            uint b = 2;
+            a = b;
+        })";
+
+    const char *shaderStrings[] = {kComputeShaderString};
+
+    testCompile(shaderStrings, 1, false);
+}
+
 // GL shaders use implicit conversions between types
 // Testing internal implicit conversions
-TEST_F(ShCompileDesktopGLTest, DISABLED_FragmentShaderFunctionConversion)
+TEST_F(ShCompileDesktopGLTest, FragmentShaderFunctionConversion)
 {
     constexpr char kFragmentShaderString[] =
         R"(#version 330 core
