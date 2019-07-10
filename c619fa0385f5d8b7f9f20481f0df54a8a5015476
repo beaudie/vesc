@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "f6ced4e9_99a34f3f",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56619280_05db3428",
+      "range": {
+        "startLine": 492,
+        "startChar": 78,
+        "endLine": 492,
+        "endChar": 91
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "932180ae_55c84575",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 12
@@ -69,6 +93,30 @@
       "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "420f2cc0_ae0c5c1c",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "932180ae_55c84575",
+      "range": {
+        "startLine": 512,
+        "startChar": 26,
+        "endLine": 512,
+        "endChar": 89
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -95,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "c1bec498_d9898c2a",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "Makes sense, I hadn\u0027t paid attention to this function much. Done",
+      "parentUuid": "1b0e74a5_a63e2d2a",
+      "range": {
+        "startLine": 551,
+        "startChar": 28,
+        "endLine": 551,
+        "endChar": 90
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2bc45ea4_1d2a5d1e",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 12
@@ -109,6 +181,24 @@
       "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f52013de_b2920c8d",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "No reason. During WIP there were more stuff in the blocks. Removed the blocks.",
+      "parentUuid": "2bc45ea4_1d2a5d1e",
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -135,6 +225,30 @@
     },
     {
       "key": {
+        "uuid": "2d93da85_4ba21191",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "mShaderStages is identical, I thought about removing it too. mShaderStageCount is a cache for the sake of descriptor set dynamic offsets (to avoid calling count()), but I\u0027m not sure if it\u0027s worth it either.",
+      "parentUuid": "3affc0db_6adecf22",
+      "range": {
+        "startLine": 301,
+        "startChar": 4,
+        "endLine": 302,
+        "endChar": 26
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "664a7978_0a6126a1",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 12
@@ -155,6 +269,30 @@
       "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38289cb5_13384ef9",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "664a7978_0a6126a1",
+      "range": {
+        "startLine": 380,
+        "startChar": 4,
+        "endLine": 380,
+        "endChar": 50
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -181,6 +319,30 @@
     },
     {
       "key": {
+        "uuid": "cd783c51_d276e9e2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "Done. But keeping this function as it will calculate similar offsets for atomic counter buffers and images too.",
+      "parentUuid": "29fd4c34_6ba9d9d2",
+      "range": {
+        "startLine": 486,
+        "startChar": 16,
+        "endLine": 486,
+        "endChar": 36
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "eed0a2c2_a3fc4aaa",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 12
@@ -201,6 +363,30 @@
       "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c51adcc8_b63da6ba",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eed0a2c2_a3fc4aaa",
+      "range": {
+        "startLine": 944,
+        "startChar": 37,
+        "endLine": 944,
+        "endChar": 62
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -227,6 +413,30 @@
     },
     {
       "key": {
+        "uuid": "c219a771_446d2ef2",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 979,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b92ab360_0a5a084f",
+      "range": {
+        "startLine": 979,
+        "startChar": 8,
+        "endLine": 979,
+        "endChar": 19
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab8bbc56_c3f57547",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 12
@@ -247,6 +457,30 @@
       "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "990ade45_6053cb37",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "`global` as in \"all buffers of this type have this offset\". Renamed it back to bindingStart.",
+      "parentUuid": "ab8bbc56_c3f57547",
+      "range": {
+        "startLine": 1035,
+        "startChar": 19,
+        "endLine": 1035,
+        "endChar": 39
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -285,6 +519,24 @@
     },
     {
       "key": {
+        "uuid": "b4329ee3_5a7dda8a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "1. I would have loved it, but starting from 0 means the increment should be done when `arrayElement \u003d\u003d arraySize - 1`. Which is fine, except we don\u0027t have arraySize. This is a compromise to avoid having that value calculated. If this block is moved to end of the loop, then arrayElements \u003e 0 would be bound to a different binding from element 0.\n2. I very much should increment it. The binding indices are calculated regardless of whether there\u0027s a binding. I don\u0027t know actually how a nullptr binding is possible here (wouldn\u0027t that be an API validation error somehow?)\n\nI don\u0027t like the -1 start value, or the int32_t type, but this is the cleanest I could get this working. The only alternative I see is `block` caching `arraySize` next to `arrayElement`, what do you think?",
+      "parentUuid": "443c4e07_ec3e2330",
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "52ef1c97_10b68a9e",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 12
@@ -308,6 +560,30 @@
     },
     {
       "key": {
+        "uuid": "b40a41d8_c4c485cc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1776,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52ef1c97_10b68a9e",
+      "range": {
+        "startLine": 1776,
+        "startChar": 4,
+        "endLine": 1776,
+        "endChar": 40
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de24ffb2_033dfa00",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 12
@@ -328,6 +604,30 @@
       "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e42b5ba_6ca7f71e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de24ffb2_033dfa00",
+      "range": {
+        "startLine": 181,
+        "startChar": 40,
+        "endLine": 181,
+        "endChar": 47
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -426,6 +726,30 @@
     },
     {
       "key": {
+        "uuid": "bf7086eb_1c0c51db",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "We have this pattern all over angle, where `constexpr` expressions start with `k`.",
+      "parentUuid": "b2be841f_9233eb6d",
+      "range": {
+        "startLine": 197,
+        "startChar": 23,
+        "endLine": 197,
+        "endChar": 24
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "21694cbc_196b9ba3",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 12
@@ -443,6 +767,24 @@
     },
     {
       "key": {
+        "uuid": "1286961d_a603b156",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21694cbc_196b9ba3",
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "975c74b8_f6b4ccdf",
         "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
         "patchSetId": 12
@@ -454,6 +796,30 @@
       "writtenOn": "2019-07-10T17:29:49Z",
       "side": 1,
       "message": "funny that these weren\u0027t failing before. because of limits?",
+      "range": {
+        "startLine": 657,
+        "startChar": 47,
+        "endLine": 657,
+        "endChar": 68
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8c068605_64961ec2",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-10T21:09:07Z",
+      "side": 1,
+      "message": "Not exactly. Currently, we output our blocks like this:\n\nlayout(..., column_major) uniform Block\n{\n   layout(column_major) vec4 member;\n};\n\nNow this by itself is an error, `layout(column_major)` is not allowed on `member`, but glslang is accepting it as long as it matches the block.\n\nThese start failing now because if Block was used only in one of the stages, previously we assigned the set/binding in all stages, but now we only assign it in the stage where it\u0027s active. It means that these tests had blocks that previously had binding, but now don\u0027t (and therefore are prefixed with \"struct\"). The error is caught because there\u0027s `layout` on a struct member.",
+      "parentUuid": "975c74b8_f6b4ccdf",
       "range": {
         "startLine": 657,
         "startChar": 47,
