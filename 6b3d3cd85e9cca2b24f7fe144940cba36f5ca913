@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54043d82_cb06e057",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-11T21:23:04Z",
+      "side": 1,
+      "message": "Did you perf test with and without IsSrcColumnMajor as a template member? Is that the perf gains you referenced in your \"Jul 03 5:50 PM\" comment about \"if\" checks being optimized out?",
+      "revId": "6b3d3cd85e9cca2b24f7fe144940cba36f5ca913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a42c42a8_56bb779b",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-11T21:23:04Z",
+      "side": 1,
+      "message": "If 3x3 is showing a big gain by skipping memcmp then we should either skip it entirely and always return dirty or specialize 3x3 case and remove memcmp.",
+      "revId": "6b3d3cd85e9cca2b24f7fe144940cba36f5ca913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e75e8582_223078a0",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-11T21:23:04Z",
+      "side": 1,
+      "message": "Should init dirty to false in event loop gets skipped.",
+      "revId": "6b3d3cd85e9cca2b24f7fe144940cba36f5ca913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e836b527_5157347e",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-11T21:23:04Z",
+      "side": 1,
+      "message": "Should add a comment to indicate that this is to account for manually implemented specialized cases.",
+      "revId": "6b3d3cd85e9cca2b24f7fe144940cba36f5ca913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af4222b2_ee074e4e",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-11T21:23:04Z",
+      "side": 1,
+      "message": "Separate this specialization decl apart for clarity.\n\nCould add a placeholder comment in this ANGLE_INSTANTIATE_SET* block to indicate 4x4 is specialized above or below.",
+      "revId": "6b3d3cd85e9cca2b24f7fe144940cba36f5ca913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc3604cc_29aea199",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-11T21:23:04Z",
+      "side": 1,
+      "message": "These two lines can be constexpr",
+      "revId": "6b3d3cd85e9cca2b24f7fe144940cba36f5ca913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "511c0de0_84ba4ffc",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 572,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-11T21:23:04Z",
+      "side": 1,
+      "message": "Based on your comment it sounds like the memcmp showed no measurable perf difference for 4x4 in which case we should just kill it, do the single memcpy, and always return dirty for this case.",
+      "revId": "6b3d3cd85e9cca2b24f7fe144940cba36f5ca913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb42bafd_d646318e",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-11T21:23:04Z",
+      "side": 1,
+      "message": "Could potentially fast-path the count \u003d\u003d 1 case in order to avoid these two increments.",
+      "revId": "6b3d3cd85e9cca2b24f7fe144940cba36f5ca913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbad1b79_b15eb8ae",
+        "filename": "src/tests/perf_tests/UniformsPerf.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-11T21:23:04Z",
+      "side": 1,
+      "message": "Could default this to true above the switch statement and set to \"false\" in default case of switch.",
+      "revId": "6b3d3cd85e9cca2b24f7fe144940cba36f5ca913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
