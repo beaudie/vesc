@@ -747,10 +747,13 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::EAC_R11_UNORM_BLOCK:
-            internalFormat               = GL_COMPRESSED_R11_EAC;
-            imageFormatID                = angle::FormatID::EAC_R11_UNORM_BLOCK;
-            vkImageFormat                = VK_FORMAT_EAC_R11_UNORM_BLOCK;
-            imageInitializerFunction     = nullptr;
+            internalFormat = GL_COMPRESSED_R11_EAC;
+            {
+                static constexpr ImageFormatInitInfo kInfo[] = {
+                    {angle::FormatID::EAC_R11_UNORM_BLOCK, VK_FORMAT_EAC_R11_UNORM_BLOCK, nullptr},
+                    {angle::FormatID::R16_UNORM, VK_FORMAT_R16_UNORM, nullptr}};
+                initImageFallback(renderer, kInfo, ArraySize(kInfo));
+            }
             bufferFormatID               = angle::FormatID::EAC_R11_UNORM_BLOCK;
             vkBufferFormat               = VK_FORMAT_EAC_R11_UNORM_BLOCK;
             vkBufferFormatIsPacked       = false;
@@ -763,15 +766,8 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::ETC1_R8G8B8_UNORM_BLOCK:
-            internalFormat               = GL_ETC1_RGB8_OES;
-            imageFormatID                = angle::FormatID::ETC2_R8G8B8_UNORM_BLOCK;
-            vkImageFormat                = VK_FORMAT_ETC2_R8G8B8_UNORM_BLOCK;
-            imageInitializerFunction     = nullptr;
-            bufferFormatID               = angle::FormatID::NONE;
-            vkBufferFormat               = VK_FORMAT_UNDEFINED;
-            vkBufferFormatIsPacked       = false;
-            vertexLoadFunction           = nullptr;
-            vertexLoadRequiresConversion = true;
+            internalFormat = GL_ETC1_RGB8_OES;
+
             break;
 
         case angle::FormatID::ETC2_R8G8B8A1_SRGB_BLOCK:
