@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b460f929_9d214a23",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2979,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-11T14:15:06Z",
+      "side": 1,
+      "message": "nit: remove this.",
+      "range": {
+        "startLine": 2979,
+        "startChar": 4,
+        "endLine": 2979,
+        "endChar": 34
+      },
+      "revId": "fd3aa79267a4ba06dc55f951cfd240f058810a2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "713f5dde_094c25dd",
+        "filename": "src/libGL/entry_points_wgl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-11T14:15:06Z",
+      "side": 1,
+      "message": "I would do something like:\n\n   gl::Context *context \u003d GetContextIfValid(display, reinterpret_cast\u003cgl::Context *\u003e(newContext));\n\nhere and use that for the null check.  wglMakeCurrent says \"If an error occurs, the wglMakeCurrent function makes the thread\u0027s current rendering context not current before returning.\" so if the context is invalid we should also follow this path.\n\nI think this case really only needs to check if display is nullptr (newContext is invalid in that case), then we can assume Display is valid below.",
+      "revId": "fd3aa79267a4ba06dc55f951cfd240f058810a2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7c679d6_27f44541",
+        "filename": "src/libGL/entry_points_wgl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-11T14:15:06Z",
+      "side": 1,
+      "message": "I think this needs to be SetContextCurrent(thread, nullptr);",
+      "range": {
+        "startLine": 252,
+        "startChar": 8,
+        "endLine": 252,
+        "endChar": 33
+      },
+      "revId": "fd3aa79267a4ba06dc55f951cfd240f058810a2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bebe15fc_79eb500c",
+        "filename": "src/libGL/entry_points_wgl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-11T14:15:06Z",
+      "side": 1,
+      "message": "This check can be skipped if display is checked above.",
+      "range": {
+        "startLine": 257,
+        "startChar": 4,
+        "endLine": 257,
+        "endChar": 16
+      },
+      "revId": "fd3aa79267a4ba06dc55f951cfd240f058810a2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0fb775c_f7665f79",
+        "filename": "src/libGL/entry_points_wgl.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-11T14:15:06Z",
+      "side": 1,
+      "message": "This assumed display is valid before.",
+      "range": {
+        "startLine": 269,
+        "startChar": 37,
+        "endLine": 269,
+        "endChar": 44
+      },
+      "revId": "fd3aa79267a4ba06dc55f951cfd240f058810a2f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
