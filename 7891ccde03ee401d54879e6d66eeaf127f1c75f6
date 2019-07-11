@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "743fb17a_0a7ced6d",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-11T20:22:33Z",
+      "side": 1,
+      "message": "I got this error message from linux-clang-dbg (likely other clang CQ builds also though):\n\nERROR at //src/tests/deqp_support/tes31Context_override.cpp:13:11: Include not allowed.\n#include \"tes31Context.hpp\"\n          ^---------------\nIt is not in any dependency of\n  //src/tests:angle_deqp_libtester\nThe include file is in the target(s):\n  //src/tests:angle_deqp_khr_common\n  //src/tests:angle_deqp_libgles31\nat least one of which should somehow be reachable.\n\n\nHowever, with your suggestion to move the source file into deqp_gles31_sources, this is no longer necessary.",
+      "parentUuid": "de298b07_d30f7a9e",
+      "range": {
+        "startLine": 820,
+        "startChar": 8,
+        "endLine": 820,
+        "endChar": 29
+      },
+      "revId": "7891ccde03ee401d54879e6d66eeaf127f1c75f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2edf8266_5b6d4fe6",
         "filename": "src/tests/deqp.gni",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "fb455905_217aa592",
+        "filename": "src/tests/deqp.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-11T20:22:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2edf8266_5b6d4fe6",
+      "range": {
+        "startLine": 527,
+        "startChar": 0,
+        "endLine": 527,
+        "endChar": 19
+      },
+      "revId": "7891ccde03ee401d54879e6d66eeaf127f1c75f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d8303981_7be76ead",
         "filename": "src/tests/deqp_support/tes31Context_override.cpp",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "7891ccde03ee401d54879e6d66eeaf127f1c75f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "007400e5_c5f8fae2",
+        "filename": "src/tests/deqp_support/tes31Context_override.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-11T20:22:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8303981_7be76ead",
+      "range": {
+        "startLine": 67,
+        "startChar": 52,
+        "endLine": 67,
+        "endChar": 58
+      },
+      "revId": "7891ccde03ee401d54879e6d66eeaf127f1c75f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
