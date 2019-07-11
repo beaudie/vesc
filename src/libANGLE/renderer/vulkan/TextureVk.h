@@ -13,6 +13,7 @@
 #include "libANGLE/renderer/TextureImpl.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
+#include "libANGLE/renderer/vulkan/SamplerVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 namespace rx
@@ -160,6 +161,7 @@ class TextureVk : public TextureImpl
                                              size_t level,
                                              vk::ImageView **imageViewOut);
     const vk::Sampler &getSampler() const;
+    void setSampler(ContextVk *contextVk, SamplerVk *sampler);
 
     angle::Result ensureImageInitialized(ContextVk *contextVk);
 
@@ -309,7 +311,10 @@ class TextureVk : public TextureImpl
     vk::ImageView mFetchBaseLevelImageView;
     vk::ImageView mFetchMipmapImageView;
     std::vector<std::vector<vk::ImageView>> mLayerLevelDrawImageViews;
+    // Texture object's built-in state
     vk::Sampler mSampler;
+    // Sampler object bound to this texture object, if any
+    SamplerVk *mBoundSampler;
 
     RenderTargetVk mRenderTarget;
     std::vector<vk::ImageView> mLayerFetchImageView;
