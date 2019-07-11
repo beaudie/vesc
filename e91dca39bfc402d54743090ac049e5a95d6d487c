@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "e8f77460_e5a33984",
+        "filename": "scripts/registry_xml.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-11T17:40:25Z",
+      "side": 1,
+      "message": "Will let Geoff do the main review. But would suggest you split this off into a separate change to refactor our some of the code generation boilerplate. Leaving UNIMPLEMENTED() where necessary.",
+      "range": {
+        "startLine": 67,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 44
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d2838487_864a3824",
         "filename": "src/common/PackedEnums.h",
         "patchSetId": 5
