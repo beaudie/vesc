@@ -274,6 +274,8 @@ class TextureVk : public TextureImpl
     void releaseImage(ContextVk *context);
     void releaseImageViews(ContextVk *contextVk);
     void releaseStagingBuffer(ContextVk *context);
+    uint32_t getImageLayerCount() const;
+    uint32_t getLayerCount(const gl::Extents &extents) const;
     uint32_t getLevelCount() const;
     angle::Result initImageViews(ContextVk *contextVk,
                                  const vk::Format &format,
@@ -318,6 +320,9 @@ class TextureVk : public TextureImpl
 
     // Overridden in some tests.
     size_t mStagingBufferInitialSize;
+
+    // Track extents so we can modify depth for 2Darray textures
+    gl::Extents mExtents;
 };
 
 }  // namespace rx
