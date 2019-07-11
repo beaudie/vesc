@@ -22,6 +22,23 @@
       "revId": "0b37713f293a9dfc432eb39a4b6ead666d600ce9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f687c9e4_fe64ae83",
+        "filename": "include/platform/FeaturesGL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-11T14:17:25Z",
+      "side": 1,
+      "message": "I think the comment/description should be \"when the clear color is made up of only zeros and ones\": https://bugs.chromium.org/p/chromium/issues/detail?id\u003d710443#c40",
+      "revId": "0b37713f293a9dfc432eb39a4b6ead666d600ce9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
