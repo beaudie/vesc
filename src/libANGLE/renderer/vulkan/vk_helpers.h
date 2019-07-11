@@ -647,8 +647,7 @@ class ImageHelper final : public CommandGraphResource
                        const Format &format,
                        GLint samples,
                        VkImageUsageFlags usage,
-                       uint32_t mipLevels,
-                       uint32_t layerCount);
+                       uint32_t mipLevels);
     angle::Result initExternal(Context *context,
                                gl::TextureType textureType,
                                const gl::Extents &extents,
@@ -657,8 +656,7 @@ class ImageHelper final : public CommandGraphResource
                                VkImageUsageFlags usage,
                                ImageLayout initialLayout,
                                const void *externalImageCreateInfo,
-                               uint32_t mipLevels,
-                               uint32_t layerCount);
+                               uint32_t mipLevels);
     angle::Result initMemory(Context *context,
                              const MemoryProperties &memoryProperties,
                              VkMemoryPropertyFlags flags);
@@ -724,6 +722,9 @@ class ImageHelper final : public CommandGraphResource
     GLint getSamples() const { return mSamples; }
 
     VkImageLayout getCurrentLayout() const;
+
+    uint32_t getEffectiveDepth(gl::TextureType textureType, const gl::Extents &extents);
+    uint32_t getEffectiveLayerCount(gl::TextureType textureType, const gl::Extents &extents);
 
     // Helper function to calculate the extents of a render target created for a certain mip of the
     // image.

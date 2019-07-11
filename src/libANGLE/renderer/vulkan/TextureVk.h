@@ -176,6 +176,7 @@ class TextureVk : public TextureImpl
     gl::ImageIndex getNativeImageIndex(const gl::ImageIndex &inputImageIndex) const;
     uint32_t getNativeImageLevel(uint32_t frontendLevel) const;
     uint32_t getNativeImageLayer(uint32_t frontendLayer) const;
+    uint32_t getNativeImageLayerCount() const;
 
     void releaseAndDeleteImage(ContextVk *contextVk);
     angle::Result ensureImageAllocated(ContextVk *contextVk, const vk::Format &format);
