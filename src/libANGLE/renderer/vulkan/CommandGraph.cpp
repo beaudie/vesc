@@ -112,6 +112,8 @@ const char *GetResourceTypeName(CommandGraphResourceType resourceType,
                     UNREACHABLE();
                     return "FenceSync";
             }
+        case CommandGraphResourceType::GraphBarrier:
+            return "GraphBarrier";
         case CommandGraphResourceType::DebugMarker:
             switch (function)
             {
@@ -355,6 +357,7 @@ CommandGraphNode::CommandGraphNode(CommandGraphNodeFunction function,
       mVisitedState(VisitedState::Unvisited),
       mGlobalMemoryBarrierSrcAccess(0),
       mGlobalMemoryBarrierDstAccess(0),
+      mGlobalMemoryBarrierStages(0),
       mRenderPassOwner(nullptr)
 {}
 
@@ -529,25 +532,23 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
                                                 RenderPassCache *renderPassCache,
                                                 PrimaryCommandBuffer *primaryCommandBuffer)
 {
+    // Record the deferred pipeline barrier if necessary.
+    ASSERT((mGlobalMemoryBarrierDstAccess == 0) == (mGlobalMemoryBarrierSrcAccess == 0));
+    if (mGlobalMemoryBarrierSrcAccess)
+    {
+        VkMemoryBarrier memoryBarrier = {};
+        memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+        memoryBarrier.srcAccessMask   = mGlobalMemoryBarrierSrcAccess;
+        memoryBarrier.dstAccessMask   = mGlobalMemoryBarrierDstAccess;
+
+        primaryCommandBuffer->memoryBarrier(mGlobalMemoryBarrierStages, mGlobalMemoryBarrierStages,
+                                            &memoryBarrier);
+    }
+
     switch (mFunction)
     {
         case CommandGraphNodeFunction::Generic:
             ASSERT(mQueryPool == VK_NULL_HANDLE && mFenceSyncEvent == VK_NULL_HANDLE);
-
-            // Record the deferred pipeline barrier if necessary.
-            ASSERT((mGlobalMemoryBarrierDstAccess == 0) == (mGlobalMemoryBarrierSrcAccess == 0));
-            if (mGlobalMemoryBarrierSrcAccess)
-            {
-                VkMemoryBarrier memoryBarrier = {};
-                memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
-                memoryBarrier.srcAccessMask   = mGlobalMemoryBarrierSrcAccess;
-                memoryBarrier.dstAccessMask   = mGlobalMemoryBarrierDstAccess;
-
-                // Use the all pipe stage to keep the state management simple.
-                primaryCommandBuffer->memoryBarrier(VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-                                                    VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
-                                                    &memoryBarrier);
-            }
 
             if (mOutsideRenderPassCommands.valid())
             {
@@ -637,6 +638,11 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
                 1, &mFenceSyncEvent, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
                 VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, nullptr, 0, nullptr, 0, nullptr);
 
+            break;
+
+        case CommandGraphNodeFunction::GraphBarrier:
+            // Nothing to do.  The memory barrier, if any, is already handled above through global
+            // memory barrier flags.
             break;
 
         case CommandGraphNodeFunction::InsertDebugMarker:
@@ -989,6 +995,13 @@ void CommandGraph::waitFenceSync(const vk::Event &event)
     newNode->setFenceSync(event);
 }
 
+void CommandGraph::memoryBarrier(VkFlags srcAccess, VkFlags dstAccess, VkPipelineStageFlags stages)
+{
+    CommandGraphNode *newNode = allocateBarrierNode(CommandGraphNodeFunction::GraphBarrier,
+                                                    CommandGraphResourceType::GraphBarrier, 0);
+    newNode->addGlobalMemoryBarrier(srcAccess, dstAccess, stages);
+}
+
 void CommandGraph::insertDebugMarker(GLenum source, std::string &&marker)
 {
     CommandGraphNode *newNode = allocateBarrierNode(CommandGraphNodeFunction::InsertDebugMarker,
@@ -1079,9 +1092,10 @@ void CommandGraph::dumpGraphDotFile(std::ostream &out) const
             }
         }
         else if (node->getResourceTypeForDiagnostics() ==
-                 CommandGraphResourceType::HostAvailabilityOperation)
+                     CommandGraphResourceType::HostAvailabilityOperation ||
+                 node->getResourceTypeForDiagnostics() == CommandGraphResourceType::GraphBarrier)
         {
-            // Nothing to append for this special node.  The name is sufficient.
+            // Nothing to append for these special nodes.  The name is sufficient.
         }
         else
         {
