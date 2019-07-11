@@ -26,7 +26,8 @@ class SamplerGL : public SamplerImpl
               StateManagerGL *stateManager);
     ~SamplerGL() override;
 
-    angle::Result syncState(const gl::Context *context) override;
+    angle::Result syncState(const gl::Context *context,
+                            const gl::Sampler::DirtyBits &dirtyBits) override;
 
     GLuint getSamplerID() const;
 

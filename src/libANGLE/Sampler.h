@@ -75,11 +75,34 @@ class Sampler final : public RefCountObject, public LabeledObject, public angle:
 
     rx::SamplerImpl *getImplementation() const;
 
+    enum DirtyBitType
+    {
+        DIRTY_BIT_MIN_FILTER,
+        DIRTY_BIT_MAG_FILTER,
+        DIRTY_BIT_WRAP_S,
+        DIRTY_BIT_WRAP_T,
+        DIRTY_BIT_WRAP_R,
+        DIRTY_BIT_MAX_ANISOTROPY,
+        DIRTY_BIT_MIN_LOD,
+        DIRTY_BIT_MAX_LOD,
+        DIRTY_BIT_COMPARE_MODE,
+        DIRTY_BIT_COMPARE_FUNC,
+        DIRTY_BIT_SRGB_DECODE,
+        DIRTY_BIT_BORDER_COLOR,
+        DIRTY_BIT_IMPLEMENTATION,
+
+        DIRTY_BIT_COUNT,
+    };
+    using DirtyBits = angle::BitSet<DIRTY_BIT_COUNT>;
+
     angle::Result syncState(const Context *context);
+    bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
 
   private:
+    void signalDirtyState(size_t dirtyBit);
     SamplerState mState;
-    rx::SamplerImpl *mImpl;
+    DirtyBits mDirtyBits;
+    rx::SamplerImpl *mSampler;
 
     std::string mLabel;
 };
