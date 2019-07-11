@@ -124,6 +124,7 @@ TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
       mImageLayerOffset(0),
       mImageLevelOffset(0),
       mImage(nullptr),
+      mBoundSampler(nullptr),
       mStagingBufferInitialSize(vk::kStagingBufferSize)
 {}
 
@@ -1362,8 +1363,22 @@ angle::Result TextureVk::getLayerLevelDrawImageView(vk::Context *context,
 
 const vk::Sampler &TextureVk::getSampler() const
 {
-    ASSERT(mSampler.valid());
-    return mSampler;
+    ASSERT(mSampler.valid() || (mBoundSampler != nullptr));
+    return (mBoundSampler != nullptr) ? mBoundSampler->getSampler() : mSampler;
+}
+
+void TextureVk::setSampler(ContextVk *contextVk, SamplerVk *sampler)
+{
+    if ((mBoundSampler != sampler) || sampler != nullptr)
+    {
+        // Need to update the serial on any sampler change
+        // TODO: Need texture to get new serial if the bound sampler gets a state
+        //  update. Currently just getting new serial anytime bound sampler is non-null
+        //  but really need to make some tie from sampler to bound textures and
+        //  update serials for all bound textures when sampler object is updated.
+        mSerial = contextVk->generateTextureSerial();
+    }
+    mBoundSampler = sampler;
 }
 
 angle::Result TextureVk::initImage(ContextVk *contextVk,
