@@ -532,7 +532,6 @@
 // Limits:
 3676 VULKAN : dEQP-GLES3.functional.implementation_limits.max_elements_indices = FAIL
 3676 VULKAN : dEQP-GLES3.functional.implementation_limits.max_elements_vertices = FAIL
-3676 VULKAN : dEQP-GLES3.functional.implementation_limits.compressed_texture_formats = FAIL
 3676 VULKAN : dEQP-GLES3.functional.implementation_limits.max_fragment_input_components = FAIL
 3676 VULKAN : dEQP-GLES3.functional.implementation_limits.max_program_texel_offset = FAIL
 3676 VULKAN : dEQP-GLES3.functional.implementation_limits.min_program_texel_offset = FAIL
