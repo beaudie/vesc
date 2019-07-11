@@ -2651,7 +2651,7 @@ angle::Result State::syncSamplers(const Context *context)
     for (size_t samplerIndex : mDirtySamplers)
     {
         BindingPointer<Sampler> &sampler = mSamplers[samplerIndex];
-        if (sampler.get())
+        if (sampler.get() && sampler->isDirty())
         {
             ANGLE_TRY(sampler->syncState(context));
         }
