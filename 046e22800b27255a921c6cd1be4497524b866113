@@ -70,6 +70,30 @@
       "revId": "046e22800b27255a921c6cd1be4497524b866113",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41390b5d_92128a58",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-11T15:44:39Z",
+      "side": 1,
+      "message": "How about we try the suggested change on the bots, and if it fails, you can file an issue for future investigation with a TODO. But I\u0027m hopeful it\u0027ll pass.",
+      "parentUuid": "bb685d22_271233a8",
+      "range": {
+        "startLine": 1634,
+        "startChar": 15,
+        "endLine": 1634,
+        "endChar": 51
+      },
+      "revId": "046e22800b27255a921c6cd1be4497524b866113",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
