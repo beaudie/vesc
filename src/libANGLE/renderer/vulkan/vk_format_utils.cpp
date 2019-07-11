@@ -270,9 +270,9 @@ VkImageUsageFlags GetMaximalImageUsageFlags(RendererVk *renderer, VkFormat forma
 
 bool HasFullTextureFormatSupport(RendererVk *renderer, VkFormat vkFormat)
 {
-    constexpr uint32_t kBitsColor = VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT |
-                                    VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT |
-                                    VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT;
+    constexpr uint32_t kBitsColor = VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT |
+                                    VK_FORMAT_FEATURE_BLIT_SRC_BIT |
+                                    VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT;
     constexpr uint32_t kBitsDepth = VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT;
 
     return renderer->hasImageFormatFeatureBits(vkFormat, kBitsColor) ||
