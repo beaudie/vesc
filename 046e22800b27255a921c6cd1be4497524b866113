@@ -22,6 +22,30 @@
       "revId": "046e22800b27255a921c6cd1be4497524b866113",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25bbd833_eac6d6c9",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-11T15:37:47Z",
+      "side": 1,
+      "message": "This overload seems to be used only in the D3D9/11 frontend. I\u0027m not sure I should be touching this code unless we can verify that the behavior is incorrect.",
+      "parentUuid": "b79c89a0_872495df",
+      "range": {
+        "startLine": 1634,
+        "startChar": 15,
+        "endLine": 1634,
+        "endChar": 51
+      },
+      "revId": "046e22800b27255a921c6cd1be4497524b866113",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
