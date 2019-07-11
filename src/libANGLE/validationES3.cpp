@@ -792,10 +792,8 @@ static bool IsValidES3CopyTexImageCombination(const InternalFormat &textureForma
         return false;
     }
 
-    if (((textureFormatInfo.componentType == GL_INT) !=
-         (framebufferFormatInfo.componentType == GL_INT)) ||
-        ((textureFormatInfo.componentType == GL_UNSIGNED_INT) !=
-         (framebufferFormatInfo.componentType == GL_UNSIGNED_INT)))
+    // FIXME/TODO: Make sure the following is correct, per the spec
+    if (textureFormatInfo.componentType != framebufferFormatInfo.componentType)
     {
         return false;
     }
@@ -806,6 +804,16 @@ static bool IsValidES3CopyTexImageCombination(const InternalFormat &textureForma
         !(framebufferFormatInfo.componentType == GL_UNSIGNED_NORMALIZED ||
           framebufferFormatInfo.componentType == GL_SIGNED_NORMALIZED ||
           framebufferFormatInfo.componentType == GL_FLOAT))
+    {
+        return false;
+    }
+
+    // Section 3.8.5 of the GLES 3.0.3 spec has a caveat, that the KHR dEQP tests enforces:
+    //
+    // Note that the above rules disallow matches where some components sizes are smaller and
+    // others are larger (such as RGB10_A2).
+    // FIXME/TODO: Make a cleaner version of this test, that works for other internal formats:
+    if (!textureFormatInfo.sized && (framebufferFormatInfo.internalFormat == GL_RGB10_A2))
     {
         return false;
     }
