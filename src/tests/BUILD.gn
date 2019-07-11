@@ -817,6 +817,7 @@ if (build_angle_deqp_tests && !is_fuchsia) {
       ":angle_deqp_framework_common",
       ":angle_deqp_framework_egl",
       ":angle_deqp_glshared",
+      ":angle_deqp_khr_common",
       "${angle_root}:angle_common",
       "${angle_root}:angle_util",
       "${angle_root}:libEGL",
