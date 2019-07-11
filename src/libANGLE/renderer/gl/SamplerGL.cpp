@@ -83,7 +83,7 @@ SamplerGL::~SamplerGL()
     mSamplerID = 0;
 }
 
-angle::Result SamplerGL::syncState(const gl::Context *context)
+angle::Result SamplerGL::syncState(const gl::Context *context, const bool dirty)
 {
     // clang-format off
     SyncSamplerStateMember(mFunctions, mSamplerID, mState, mAppliedSamplerState, GL_TEXTURE_MIN_FILTER, &gl::SamplerState::getMinFilter, &gl::SamplerState::setMinFilter);

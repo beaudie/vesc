@@ -2194,6 +2194,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context,
     for (size_t textureUnit : activeTextures)
     {
         gl::Texture *texture        = textures[textureUnit];
+        gl::Sampler *sampler        = mState.getSampler(textureUnit);
         gl::TextureType textureType = textureTypes[textureUnit];
 
         // Null textures represent incomplete textures.
@@ -2203,6 +2204,9 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context,
         }
 
         TextureVk *textureVk = vk::GetImpl(texture);
+        // Always update sampler object binding in texture object
+        SamplerVk *samplerVk = (sampler != nullptr) ? vk::GetImpl(sampler) : nullptr;
+        textureVk->setSampler(this, samplerVk);
 
         vk::ImageHelper &image = textureVk->getImage();
 
