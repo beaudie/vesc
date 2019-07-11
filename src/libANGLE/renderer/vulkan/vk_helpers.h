@@ -724,6 +724,7 @@ class ImageHelper final : public CommandGraphResource
     GLint getSamples() const { return mSamples; }
 
     VkImageLayout getCurrentLayout() const;
+    uint32_t getEffectiveDepth(gl::TextureType textureType, const gl::Extents &extents) const;
 
     // Helper function to calculate the extents of a render target created for a certain mip of the
     // image.

@@ -128,6 +128,25 @@ bool ImageIndex::valid() const
     return mType != TextureType::InvalidEnum;
 }
 
+template <typename area>
+GLint ImageIndex::determineLayerCount(TextureTarget target, area dimensions)
+{
+    TextureType textureType = TextureTargetToType(target);
+
+    switch (textureType)
+    {
+        case TextureType::_2DArray:
+        case TextureType::_2DMultisampleArray:
+            return dimensions.depth;
+
+        default:
+            return 1;
+    }
+}
+
+template GLint ImageIndex::determineLayerCount<Extents>(TextureTarget target, Extents extents);
+template GLint ImageIndex::determineLayerCount<Box>(TextureTarget target, Box area);
+
 bool ImageIndex::isEntireLevelCubeMap() const
 {
     return mType == TextureType::CubeMap && mLayerIndex == ImageIndex::kEntireLevel;
@@ -167,6 +186,12 @@ ImageIndex ImageIndex::Make3D(GLint levelIndex, GLint layerIndex)
 ImageIndex ImageIndex::MakeFromTarget(TextureTarget target, GLint levelIndex)
 {
     return ImageIndex(TextureTargetToType(target), levelIndex, TextureTargetToLayer(target), 1);
+}
+
+ImageIndex ImageIndex::MakeFromTarget(TextureTarget target, GLint levelIndex, GLint layerCount)
+{
+    return ImageIndex(TextureTargetToType(target), levelIndex, TextureTargetToLayer(target),
+                      layerCount);
 }
 
 ImageIndex ImageIndex::MakeFromType(TextureType type,

@@ -1510,11 +1510,13 @@ angle::Result ImageHelper::initExternal(Context *context,
     ASSERT(textureType != gl::TextureType::Rectangle || layerCount == 1);
     ASSERT(textureType != gl::TextureType::CubeMap || layerCount == gl::kCubeFaceCount);
 
-    mExtents    = extents;
-    mFormat     = &format;
-    mSamples    = samples;
-    mLayerCount = layerCount;
-    mLevelCount = mipLevels;
+    mExtents.width  = extents.width;
+    mExtents.height = extents.height;
+    mExtents.depth  = getEffectiveDepth(textureType, extents);
+    mFormat         = &format;
+    mSamples        = samples;
+    mLayerCount     = layerCount;
+    mLevelCount     = mipLevels;
 
     VkImageCreateInfo imageInfo     = {};
     imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -1522,9 +1524,9 @@ angle::Result ImageHelper::initExternal(Context *context,
     imageInfo.flags                 = GetImageCreateFlags(textureType);
     imageInfo.imageType             = gl_vk::GetImageType(textureType);
     imageInfo.format                = format.vkImageFormat;
-    imageInfo.extent.width          = static_cast<uint32_t>(extents.width);
-    imageInfo.extent.height         = static_cast<uint32_t>(extents.height);
-    imageInfo.extent.depth          = static_cast<uint32_t>(extents.depth);
+    imageInfo.extent.width          = static_cast<uint32_t>(mExtents.width);
+    imageInfo.extent.height         = static_cast<uint32_t>(mExtents.height);
+    imageInfo.extent.depth          = static_cast<uint32_t>(mExtents.depth);
     imageInfo.mipLevels             = mipLevels;
     imageInfo.arrayLayers           = mLayerCount;
     imageInfo.samples               = gl_vk::GetSamples(samples);
@@ -1745,6 +1747,22 @@ VkImageLayout ImageHelper::getCurrentLayout() const
     return kImageMemoryBarrierData[mCurrentLayout].layout;
 }
 
+uint32_t ImageHelper::getEffectiveDepth(gl::TextureType textureType,
+                                        const gl::Extents &extents) const
+{
+    switch (textureType)
+    {
+        case gl::TextureType::_2DArray:
+        case gl::TextureType::_2DMultisampleArray:
+            return 1;
+            break;
+
+        default:
+            return extents.depth;
+            break;
+    }
+}
+
 gl::Extents ImageHelper::getLevelExtents2D(uint32_t level) const
 {
     int width  = std::max(mExtents.width >> level, 1);
@@ -1910,7 +1928,8 @@ gl::Extents ImageHelper::getSize(const gl::ImageIndex &index) const
     // Level 0 should be the size of the extents, after that every time you increase a level
     // you shrink the extents by half.
     return gl::Extents(std::max(1, mExtents.width >> mipLevel),
-                       std::max(1, mExtents.height >> mipLevel), mExtents.depth);
+                       std::max(1, mExtents.height >> mipLevel),
+                       mLayerCount > 1 ? mLayerCount : mExtents.depth);
 }
 
 // static
@@ -2167,7 +2186,10 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     copy.imageSubresource.layerCount     = index.getLayerCount();
 
     gl_vk::GetOffset(offset, &copy.imageOffset);
-    gl_vk::GetExtent(extents, &copy.imageExtent);
+
+    copy.imageExtent.width  = extents.width;
+    copy.imageExtent.height = extents.height;
+    copy.imageExtent.depth  = getEffectiveDepth(index.getType(), extents);
 
     if (stencilAllocationSize > 0)
     {
@@ -2195,7 +2217,9 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
         stencilCopy.imageSubresource.layerCount     = index.getLayerCount();
 
         gl_vk::GetOffset(offset, &stencilCopy.imageOffset);
-        gl_vk::GetExtent(extents, &stencilCopy.imageExtent);
+        stencilCopy.imageExtent.width           = extents.width;
+        stencilCopy.imageExtent.height          = extents.height;
+        stencilCopy.imageExtent.depth           = getEffectiveDepth(index.getType(), extents);
         stencilCopy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
         mSubresourceUpdates.emplace_back(bufferHandle, stencilCopy);
 
