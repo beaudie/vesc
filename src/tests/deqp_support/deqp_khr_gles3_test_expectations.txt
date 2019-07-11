@@ -32,9 +32,13 @@
 // For now we only log Vulkan test expectations. More back-ends can follow as we need them.
 
 // Crashes trying to load non-existent texture load function.
+// The following mostly pass, except on Android where they crash:
 3455 VULKAN : KHR-GLES3.copy_tex_image_conversions.forbidden.* = SKIP
-3455 VULKAN : KHR-GLES3.copy_tex_image_conversions.required.renderbuffer_* = SKIP
-3455 VULKAN : KHR-GLES3.packed_pixels.rectangle.r* = SKIP
+// The following crash on Android:
+3455 VULKAN ANDROID : KHR-GLES3.packed_pixels.rectangle.r* = SKIP
+3455 VULKAN WIN : KHR-GLES3.packed_pixels.rectangle.rgb*32f = FAIL
+3455 VULKAN LINUX : KHR-GLES3.packed_pixels.rectangle.rgb*32f = FAIL
+// PBO's are not fully implemented:
 3455 VULKAN : KHR-GLES3.packed_pixels.pbo_rectangle.r* = SKIP
 3455 VULKAN : KHR-GLES3.packed_pixels.pbo_rectangle.srgb8_alpha8 = SKIP
 
