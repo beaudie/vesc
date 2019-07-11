@@ -16,15 +16,21 @@ namespace gl
 {
 
 Sampler::Sampler(rx::GLImplFactory *factory, GLuint id)
-    : RefCountObject(id), mState(), mImpl(factory->createSampler(mState)), mLabel()
+    : RefCountObject(id), mState(), mSampler(factory->createSampler(mState)), mLabel()
 {}
 
 Sampler::~Sampler()
 {
-    SafeDelete(mImpl);
+    SafeDelete(mSampler);
 }
 
-void Sampler::onDestroy(const Context *context) {}
+void Sampler::onDestroy(const Context *context)
+{
+    if (mSampler)
+    {
+        mSampler->onDestroy(context);
+    }
+}
 
 void Sampler::setLabel(const Context *context, const std::string &label)
 {
@@ -175,13 +181,13 @@ const SamplerState &Sampler::getSamplerState() const
 
 rx::SamplerImpl *Sampler::getImplementation() const
 {
-    return mImpl;
+    return mSampler;
 }
 
 void Sampler::syncState(const Context *context)
 {
     // TODO(jmadill): Use actual dirty bits for sampler.
-    mImpl->syncState(context);
+    mSampler->syncState(context);
 }
 
 }  // namespace gl
