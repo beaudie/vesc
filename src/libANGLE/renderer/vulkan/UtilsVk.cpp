@@ -558,9 +558,11 @@ angle::Result UtilsVk::setupProgram(ContextVk *contextVk,
         const vk::GraphicsPipelineDesc *descPtr;
         vk::PipelineHelper *helper;
 
+        std::vector<sh::Attribute> attributes;
         ANGLE_TRY(program->getGraphicsPipeline(
             contextVk, &contextVk->getRenderPassCache(), renderer->getPipelineCache(), serial,
-            pipelineLayout.get(), *pipelineDesc, gl::AttributesMask(), &descPtr, &helper));
+            pipelineLayout.get(), *pipelineDesc, gl::AttributesMask(), attributes, &descPtr,
+            &helper));
         helper->updateSerial(serial);
         commandBuffer->bindGraphicsPipeline(helper->getPipeline());
         if (descriptorSet != VK_NULL_HANDLE)
