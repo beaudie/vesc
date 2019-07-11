@@ -637,6 +637,7 @@ void VertexArrayGL::syncDirtyBinding(const gl::Context *context,
     {
         switch (dirtyBit)
         {
+            case VertexArray::DIRTY_BINDING_ONLY_BUFFER_AND_OFFSET:
             case VertexArray::DIRTY_BINDING_BUFFER:
                 ASSERT(supportVertexAttribBinding());
                 updateBindingBuffer(context, bindingIndex);
