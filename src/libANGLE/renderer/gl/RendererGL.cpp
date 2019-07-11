@@ -157,6 +157,13 @@ static void INTERNAL_GL_APIENTRY LogGLDebugMessage(GLenum source,
 
     if (type == GL_DEBUG_TYPE_ERROR)
     {
+        // Ignore wrong error message on Android, occurs on Q Pixel 2. http://anglebug.com/3491
+        if (rx::IsAndroid() &&
+            std::string(message, length)
+                    .compare("FreeAllocationOnTimestamp - Reference to buffer created from "
+                             "different context without a share list. Application failed to pass "
+                             "share_context to eglCreateContext. Results are undefined.") == 0)
+            return;
         ERR() << std::endl
               << "\tSource: " << sourceText << std::endl
               << "\tType: " << typeText << std::endl
