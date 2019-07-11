@@ -58,6 +58,9 @@ class ImageIndex
     static ImageIndex Make2DMultisampleArray(GLint layerIndex = kEntireLevel);
     static ImageIndex Make2DMultisampleArrayRange(GLint layerIndex, GLint layerCount);
 
+    template <typename area>
+    static ImageIndex MakeFromTarget(TextureTarget target, GLint levelIndex, area dimensions);
+
     static constexpr GLint kEntireLevel = static_cast<GLint>(-1);
 
     bool operator<(const ImageIndex &b) const;
