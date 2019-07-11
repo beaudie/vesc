@@ -10,6 +10,7 @@
 #define LIBANGLE_RENDERER_SAMPLERIMPL_H_
 
 #include "common/angleutils.h"
+#include "libANGLE/Sampler.h"
 
 namespace gl
 {
@@ -25,8 +26,11 @@ class SamplerImpl : angle::NonCopyable
   public:
     SamplerImpl(const gl::SamplerState &state) : mState(state) {}
     virtual ~SamplerImpl() {}
-
-    virtual void syncState(const gl::Context *context)
+    virtual void onDestroy(const gl::Context *context)
+    {
+        // Default implementation: no-op.
+    }
+    virtual void syncState(const gl::Context *context, const gl::Sampler::DirtyBits &dirtyBits)
     {
         // Default implementation: no-op.
     }

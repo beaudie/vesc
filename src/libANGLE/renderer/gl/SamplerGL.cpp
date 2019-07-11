@@ -83,7 +83,7 @@ SamplerGL::~SamplerGL()
     mSamplerID = 0;
 }
 
-void SamplerGL::syncState(const gl::Context *context)
+void SamplerGL::syncState(const gl::Context *context, const gl::Sampler::DirtyBits &dirtyBits)
 {
     // clang-format off
     SyncSamplerStateMember(mFunctions, mSamplerID, mState, mAppliedSamplerState, GL_TEXTURE_MIN_FILTER, &gl::SamplerState::getMinFilter, &gl::SamplerState::setMinFilter);
