@@ -209,6 +209,52 @@
     },
     {
       "key": {
+        "uuid": "2f6755a7_6edc15e6",
+        "filename": "src/libANGLE/renderer/FramebufferAttachmentObjectImpl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-11T17:41:40Z",
+      "side": 1,
+      "message": "I might also split this into a refactoring-only CL if that aligns with Geoff\u0027s suggestions.",
+      "range": {
+        "startLine": 36,
+        "startChar": 51,
+        "endLine": 36,
+        "endChar": 77
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "110da7b9_88f34b04",
+        "filename": "src/libANGLE/renderer/TextureImpl.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-11T17:41:40Z",
+      "side": 1,
+      "message": "these can also go into refactoring CLs. again to simplify the review process and make the changes more atomic.",
+      "range": {
+        "startLine": 190,
+        "startChar": 0,
+        "endLine": 193,
+        "endChar": 79
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6a35bf81_ed5a29f3",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
         "patchSetId": 5
