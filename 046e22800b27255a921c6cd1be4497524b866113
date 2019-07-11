@@ -46,6 +46,30 @@
       "revId": "046e22800b27255a921c6cd1be4497524b866113",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb685d22_271233a8",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-11T15:43:29Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure we could write some tests that would trigger existing bugs. Mind you the bugs are a bit convoluted.\n\nSee ProgramD3D::updateCachedInputLayout, we call\n\n            mCachedInputLayout[d3dSemantic] \u003d\n                GetVertexFormatID(vertexAttributes[locationIndex],\n                                  state.getVertexAttribCurrentValue(locationIndex).Type);\n\nThe cached input layout will have the wrong vertex format ID if the attribute is disabled and the current value type is int/uint. This could theoretically lead to program or input layout errors. Similarly in InputLayoutCache::getInputLayout.\n\nNote that in the D3D9 back-end the type will always be float. So any errors here would only affect a couple uses in D3D11.",
+      "parentUuid": "25bbd833_eac6d6c9",
+      "range": {
+        "startLine": 1634,
+        "startChar": 15,
+        "endLine": 1634,
+        "endChar": 51
+      },
+      "revId": "046e22800b27255a921c6cd1be4497524b866113",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
