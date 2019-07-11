@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "684baf9b_9bdad5a3",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 791,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-11T17:27:36Z",
+      "side": 1,
+      "message": "can you mention why we needed to do this? i.e. \"On Windows we noticed the NVIDIA driver was internally loading the wrong opengl32.dll.\"",
+      "range": {
+        "startLine": 791,
+        "startChar": 4,
+        "endLine": 791,
+        "endChar": 50
+      },
+      "revId": "d3df270b514601e52f5a9c7f7b8f33f84acb9330",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
