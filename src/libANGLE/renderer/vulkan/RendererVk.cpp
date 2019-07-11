@@ -12,6 +12,9 @@
 // Placing this first seems to solve an intellisense bug.
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
+#include <dlfcn.h>
+#include "../../../../../renderdoc/renderdoc/api/app/renderdoc_app.h"
+
 #include <EGL/eglext.h>
 
 #include "common/debug.h"
@@ -40,6 +43,8 @@ const uint32_t kMockVendorID                              = 0xba5eba11;
 const uint32_t kMockDeviceID                              = 0xf005ba11;
 constexpr char kMockDeviceName[]                          = "Vulkan Mock Device";
 constexpr VkFormatFeatureFlags kInvalidFormatFeatureFlags = static_cast<VkFormatFeatureFlags>(-1);
+
+RENDERDOC_API_1_4_0 *rdoc = nullptr;
 }  // anonymous namespace
 
 namespace rx
@@ -510,6 +515,11 @@ void RendererVk::onDestroy(vk::Context *context)
 {
     (void)cleanupGarbage(context, true);
 
+    if (rdoc)
+    {
+        rdoc->EndFrameCapture(nullptr, nullptr);
+    }
+
     mFenceRecycler.destroy(mDevice);
 
     mPipelineLayoutCache.destroy(mDevice);
@@ -564,6 +574,17 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                                      const char *wsiExtension,
                                      const char *wsiLayer)
 {
+    void *renderdocModule = dlopen("librenderdoc.so", RTLD_NOW | RTLD_NOLOAD);
+    if (renderdocModule)
+    {
+        pRENDERDOC_GetAPI RENDERDOC_GetAPI =
+            (pRENDERDOC_GetAPI)dlsym(renderdocModule, "RENDERDOC_GetAPI");
+
+        int ret = RENDERDOC_GetAPI(eRENDERDOC_API_Version_1_4_0, (void **)&rdoc);
+        if (ret != 1)
+            rdoc = nullptr;
+    }
+
     mDisplay                         = display;
     const egl::AttributeMap &attribs = mDisplay->getAttributeMap();
     ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseDebugLayers(attribs),
@@ -1017,6 +1038,11 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
 
     // Initialize the vulkan pipeline cache.
     ANGLE_TRY(initPipelineCache(displayVk));
+
+    if (rdoc)
+    {
+        rdoc->StartFrameCapture(nullptr, nullptr);
+    }
 
     return angle::Result::Continue;
 }
