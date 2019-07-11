@@ -361,9 +361,11 @@ class GraphicsPipelineDesc final
                                      const RenderPass &compatibleRenderPass,
                                      const PipelineLayout &pipelineLayout,
                                      const gl::AttributesMask &activeAttribLocationsMask,
+                                     const gl::ComponentTypeMask &programAttribsTypeMask,
                                      const ShaderModule *vertexModule,
                                      const ShaderModule *fragmentModule,
-                                     Pipeline *pipelineOut) const;
+                                     Pipeline *pipelineOut,
+                                     gl::AttributesMask *mismatchedAttribsMaskOut) const;
 
     // Vertex input state. For ES 3.1 this should be separated into binding and attribute.
     void updateVertexInput(GraphicsPipelineTransitionBits *transition,
@@ -678,10 +680,18 @@ class PipelineHelper final : angle::NonCopyable
                        const GraphicsPipelineDesc *desc,
                        PipelineHelper *pipeline);
 
+    void setMismatchedAttribsMask(gl::AttributesMask mask) { mMismatchedAttribsMask = mask; }
+    const gl::AttributesMask &getMismatchedAttribsMask() { return mMismatchedAttribsMask; }
+
+    void setProgramAttribsTypeMask(gl::ComponentTypeMask mask) { mProgramAttribsTypeMask = mask; }
+    const gl::ComponentTypeMask &getProgramAttribsTypeMask() { return mProgramAttribsTypeMask; }
+
   private:
     std::vector<GraphicsPipelineTransition> mTransitions;
     Serial mSerial;
     Pipeline mPipeline;
+    gl::AttributesMask mMismatchedAttribsMask;
+    gl::ComponentTypeMask mProgramAttribsTypeMask;
 };
 
 ANGLE_INLINE PipelineHelper::PipelineHelper(Pipeline &&pipeline) : mPipeline(std::move(pipeline)) {}
@@ -819,6 +829,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                            const vk::RenderPass &compatibleRenderPass,
                                            const vk::PipelineLayout &pipelineLayout,
                                            const gl::AttributesMask &activeAttribLocationsMask,
+                                           const gl::ComponentTypeMask &programAttribsTypeMask,
                                            const vk::ShaderModule *vertexModule,
                                            const vk::ShaderModule *fragmentModule,
                                            const vk::GraphicsPipelineDesc &desc,
@@ -834,8 +845,8 @@ class GraphicsPipelineCache final : angle::NonCopyable
         }
 
         return insertPipeline(context, pipelineCacheVk, compatibleRenderPass, pipelineLayout,
-                              activeAttribLocationsMask, vertexModule, fragmentModule, desc,
-                              descPtrOut, pipelineOut);
+                              activeAttribLocationsMask, programAttribsTypeMask, vertexModule,
+                              fragmentModule, desc, descPtrOut, pipelineOut);
     }
 
   private:
@@ -844,6 +855,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                  const vk::RenderPass &compatibleRenderPass,
                                  const vk::PipelineLayout &pipelineLayout,
                                  const gl::AttributesMask &activeAttribLocationsMask,
+                                 const gl::ComponentTypeMask &programAttribsTypeMask,
                                  const vk::ShaderModule *vertexModule,
                                  const vk::ShaderModule *fragmentModule,
                                  const vk::GraphicsPipelineDesc &desc,
