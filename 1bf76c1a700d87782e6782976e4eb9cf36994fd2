@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "358beb8b_dc81373e",
+        "filename": "src/libANGLE/ImageIndex.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-11T20:23:04Z",
+      "side": 1,
+      "message": "I\u0027m hoping we don\u0027t have to add the MakeFromTarget you have here. Let\u0027s see if we can fix it.",
+      "revId": "1bf76c1a700d87782e6782976e4eb9cf36994fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "036e65c5_95957a43",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-11T20:23:04Z",
+      "side": 1,
+      "message": "I don\u0027t think we want to make the changes to this file. Let\u0027s see if we can get what you need specifically for the Vulkan back-end.",
+      "revId": "1bf76c1a700d87782e6782976e4eb9cf36994fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d4e4914_a8b40c1f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-11T20:23:04Z",
+      "side": 1,
+      "message": "the extents should be available either from the image helper or from the image desc structure. we shouldn\u0027t need to duplicate the info here I hope.",
+      "range": {
+        "startLine": 324,
+        "startChar": 0,
+        "endLine": 325,
+        "endChar": 25
+      },
+      "revId": "1bf76c1a700d87782e6782976e4eb9cf36994fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67b18845_01ad602d",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-11T20:23:04Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "1bf76c1a700d87782e6782976e4eb9cf36994fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
