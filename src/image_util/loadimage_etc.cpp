@@ -93,18 +93,23 @@ struct ETC2Block
     {
         for (size_t j = 0; j < 4 && (y + j) < h; j++)
         {
-            uint16_t *row = reinterpret_cast<uint16_t *>(reinterpret_cast<uint8_t *>(dest) +
-                                                         (j * destRowPitch));
+            auto *row = reinterpret_cast<uint16_t *>(reinterpret_cast<uint8_t *>(dest) +
+                                                     (j * destRowPitch));
             for (size_t i = 0; i < 4 && (x + i) < w; i++)
             {
                 uint16_t *pixel = row + (i * destPixelStride);
                 if (isSigned)
                 {
-                    *pixel = renormalizeSignedEAC(getSingleEACChannel(i, j, isSigned));
+                    int16_t tempPixel  = renormalizeSignedEAC(getSingleEACChannel(i, j, isSigned));
+                    auto normTempPixel = gl::normalize(tempPixel);
+                    *pixel             = gl::float32ToFloat16(float(normTempPixel));
                 }
                 else
                 {
-                    *pixel = renormalizeUnsignedEAC(getSingleEACChannel(i, j, isSigned));
+                    uint16_t tempPixel =
+                        renormalizeUnsignedEAC(getSingleEACChannel(i, j, isSigned));
+                    auto normTempPixel = gl::normalize(tempPixel);
+                    *pixel             = gl::float32ToFloat16(float(normTempPixel));
                 }
             }
         }
@@ -1457,16 +1462,16 @@ void LoadRG11EACToRG8(size_t width,
     }
 }
 
-void LoadR11EACToR16(size_t width,
-                     size_t height,
-                     size_t depth,
-                     const uint8_t *input,
-                     size_t inputRowPitch,
-                     size_t inputDepthPitch,
-                     uint8_t *output,
-                     size_t outputRowPitch,
-                     size_t outputDepthPitch,
-                     bool isSigned)
+void LoadR11EACToR16F(size_t width,
+                      size_t height,
+                      size_t depth,
+                      const uint8_t *input,
+                      size_t inputRowPitch,
+                      size_t inputDepthPitch,
+                      uint8_t *output,
+                      size_t outputRowPitch,
+                      size_t outputDepthPitch,
+                      bool isSigned)
 {
     for (size_t z = 0; z < depth; z++)
     {
@@ -1489,16 +1494,16 @@ void LoadR11EACToR16(size_t width,
     }
 }
 
-void LoadRG11EACToRG16(size_t width,
-                       size_t height,
-                       size_t depth,
-                       const uint8_t *input,
-                       size_t inputRowPitch,
-                       size_t inputDepthPitch,
-                       uint8_t *output,
-                       size_t outputRowPitch,
-                       size_t outputDepthPitch,
-                       bool isSigned)
+void LoadRG11EACToRG16F(size_t width,
+                        size_t height,
+                        size_t depth,
+                        const uint8_t *input,
+                        size_t inputRowPitch,
+                        size_t inputDepthPitch,
+                        uint8_t *output,
+                        size_t outputRowPitch,
+                        size_t outputDepthPitch,
+                        bool isSigned)
 {
     for (size_t z = 0; z < depth; z++)
     {
@@ -1713,21 +1718,7 @@ void LoadEACRG11SToRG8(size_t width,
                      outputRowPitch, outputDepthPitch, true);
 }
 
-void LoadEACR11ToR16(size_t width,
-                     size_t height,
-                     size_t depth,
-                     const uint8_t *input,
-                     size_t inputRowPitch,
-                     size_t inputDepthPitch,
-                     uint8_t *output,
-                     size_t outputRowPitch,
-                     size_t outputDepthPitch)
-{
-    LoadR11EACToR16(width, height, depth, input, inputRowPitch, inputDepthPitch, output,
-                    outputRowPitch, outputDepthPitch, false);
-}
-
-void LoadEACR11SToR16(size_t width,
+void LoadEACR11ToR16F(size_t width,
                       size_t height,
                       size_t depth,
                       const uint8_t *input,
@@ -1737,11 +1728,11 @@ void LoadEACR11SToR16(size_t width,
                       size_t outputRowPitch,
                       size_t outputDepthPitch)
 {
-    LoadR11EACToR16(width, height, depth, input, inputRowPitch, inputDepthPitch, output,
-                    outputRowPitch, outputDepthPitch, true);
+    LoadR11EACToR16F(width, height, depth, input, inputRowPitch, inputDepthPitch, output,
+                     outputRowPitch, outputDepthPitch, false);
 }
 
-void LoadEACRG11ToRG16(size_t width,
+void LoadEACR11SToR16F(size_t width,
                        size_t height,
                        size_t depth,
                        const uint8_t *input,
@@ -1751,11 +1742,11 @@ void LoadEACRG11ToRG16(size_t width,
                        size_t outputRowPitch,
                        size_t outputDepthPitch)
 {
-    LoadRG11EACToRG16(width, height, depth, input, inputRowPitch, inputDepthPitch, output,
-                      outputRowPitch, outputDepthPitch, false);
+    LoadR11EACToR16F(width, height, depth, input, inputRowPitch, inputDepthPitch, output,
+                     outputRowPitch, outputDepthPitch, true);
 }
 
-void LoadEACRG11SToRG16(size_t width,
+void LoadEACRG11ToRG16F(size_t width,
                         size_t height,
                         size_t depth,
                         const uint8_t *input,
@@ -1765,8 +1756,22 @@ void LoadEACRG11SToRG16(size_t width,
                         size_t outputRowPitch,
                         size_t outputDepthPitch)
 {
-    LoadRG11EACToRG16(width, height, depth, input, inputRowPitch, inputDepthPitch, output,
-                      outputRowPitch, outputDepthPitch, true);
+    LoadRG11EACToRG16F(width, height, depth, input, inputRowPitch, inputDepthPitch, output,
+                       outputRowPitch, outputDepthPitch, false);
+}
+
+void LoadEACRG11SToRG16F(size_t width,
+                         size_t height,
+                         size_t depth,
+                         const uint8_t *input,
+                         size_t inputRowPitch,
+                         size_t inputDepthPitch,
+                         uint8_t *output,
+                         size_t outputRowPitch,
+                         size_t outputDepthPitch)
+{
+    LoadRG11EACToRG16F(width, height, depth, input, inputRowPitch, inputDepthPitch, output,
+                       outputRowPitch, outputDepthPitch, true);
 }
 
 void LoadETC2RGB8ToRGBA8(size_t width,
