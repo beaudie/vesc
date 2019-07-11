@@ -11,6 +11,7 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_VK_CACHE_UTILS_H_
 #define LIBANGLE_RENDERER_VULKAN_VK_CACHE_UTILS_H_
 
+#include "GLSLANG/ShaderVars.h"
 #include "common/Color.h"
 #include "common/FixedVector.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
@@ -361,6 +362,7 @@ class GraphicsPipelineDesc final
                                      const RenderPass &compatibleRenderPass,
                                      const PipelineLayout &pipelineLayout,
                                      const gl::AttributesMask &activeAttribLocationsMask,
+                                     const std::vector<sh::Attribute> &programAttribs,
                                      const ShaderModule *vertexModule,
                                      const ShaderModule *fragmentModule,
                                      Pipeline *pipelineOut) const;
@@ -818,6 +820,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                            const vk::RenderPass &compatibleRenderPass,
                                            const vk::PipelineLayout &pipelineLayout,
                                            const gl::AttributesMask &activeAttribLocationsMask,
+                                           const std::vector<sh::Attribute> &programAttribs,
                                            const vk::ShaderModule *vertexModule,
                                            const vk::ShaderModule *fragmentModule,
                                            const vk::GraphicsPipelineDesc &desc,
@@ -833,8 +836,8 @@ class GraphicsPipelineCache final : angle::NonCopyable
         }
 
         return insertPipeline(context, pipelineCacheVk, compatibleRenderPass, pipelineLayout,
-                              activeAttribLocationsMask, vertexModule, fragmentModule, desc,
-                              descPtrOut, pipelineOut);
+                              activeAttribLocationsMask, programAttribs, vertexModule,
+                              fragmentModule, desc, descPtrOut, pipelineOut);
     }
 
   private:
@@ -843,6 +846,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
                                  const vk::RenderPass &compatibleRenderPass,
                                  const vk::PipelineLayout &pipelineLayout,
                                  const gl::AttributesMask &activeAttribLocationsMask,
+                                 const std::vector<sh::Attribute> &programAttribs,
                                  const vk::ShaderModule *vertexModule,
                                  const vk::ShaderModule *fragmentModule,
                                  const vk::GraphicsPipelineDesc &desc,
