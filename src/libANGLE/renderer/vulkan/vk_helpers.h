@@ -725,6 +725,14 @@ class ImageHelper final : public CommandGraphResource
 
     VkImageLayout getCurrentLayout() const;
 
+    uint32_t getEffectiveDepth(gl::TextureType textureType, const gl::Extents &extents) const;
+    uint32_t getEffectiveLayerCount(gl::TextureType textureType,
+                                    const gl::Extents &extents,
+                                    uint32_t baseLayer) const;
+    uint32_t getEffectiveIndexLayerCount(const gl::ImageIndex &index,
+                                         const gl::Extents &extents,
+                                         uint32_t baseLayer) const;
+
     // Helper function to calculate the extents of a render target created for a certain mip of the
     // image.
     gl::Extents getLevelExtents2D(uint32_t level) const;
