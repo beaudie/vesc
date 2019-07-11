@@ -79,7 +79,7 @@ class Sampler final : public RefCountObject, public LabeledObject, public angle:
 
   private:
     SamplerState mState;
-    rx::SamplerImpl *mImpl;
+    rx::SamplerImpl *mSampler;
 
     std::string mLabel;
 };

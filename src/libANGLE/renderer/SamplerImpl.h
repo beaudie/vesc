@@ -25,7 +25,10 @@ class SamplerImpl : angle::NonCopyable
   public:
     SamplerImpl(const gl::SamplerState &state) : mState(state) {}
     virtual ~SamplerImpl() {}
-
+    virtual void onDestroy(const gl::Context *context)
+    {
+        // Default implementation: no-op.
+    }
     virtual void syncState(const gl::Context *context)
     {
         // Default implementation: no-op.

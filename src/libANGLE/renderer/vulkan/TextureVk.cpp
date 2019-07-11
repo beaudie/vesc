@@ -121,6 +121,7 @@ TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
     : TextureImpl(state),
       mOwnsImage(false),
       mImage(nullptr),
+      mBoundSampler(nullptr),
       mStagingBufferInitialSize(vk::kStagingBufferSize)
 {}
 
@@ -1330,8 +1331,18 @@ angle::Result TextureVk::getLayerLevelDrawImageView(vk::Context *context,
 
 const vk::Sampler &TextureVk::getSampler() const
 {
-    ASSERT(mSampler.valid());
-    return mSampler;
+    ASSERT(mSampler.valid() || (mBoundSampler != nullptr));
+    return (mBoundSampler != nullptr) ? mBoundSampler->getSampler() : mSampler;
+}
+
+void TextureVk::setSampler(ContextVk *contextVk, SamplerVk *sampler)
+{
+    if (mBoundSampler != sampler)
+    {
+        // Need to update the serial on any sampler change
+        mSerial = contextVk->generateTextureSerial();
+    }
+    mBoundSampler = sampler;
 }
 
 angle::Result TextureVk::initImage(ContextVk *contextVk,

@@ -2796,9 +2796,6 @@ TEST_P(SimpleStateChangeTest, ReleaseShaderInUseThatReadsFromUniforms)
 // Tests that sampler sync isn't masked by program textures.
 TEST_P(SimpleStateChangeTestES3, SamplerSyncNotTiedToProgram)
 {
-    // glBindSampler is available only if the GLES version is 3.0 or higher - anglebug.com/3208
-    ANGLE_SKIP_TEST_IF(IsVulkan());
-
     // Create a sampler with NEAREST filtering.
     GLSampler sampler;
     glBindSampler(0, sampler);
