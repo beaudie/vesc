@@ -537,6 +537,24 @@
     },
     {
       "key": {
+        "uuid": "3917d9ba_a1b36f3e",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1063,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-11T13:03:44Z",
+      "side": 1,
+      "message": "Not a big deal to me either way.",
+      "parentUuid": "b4329ee3_5a7dda8a",
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "52ef1c97_10b68a9e",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 12
@@ -820,6 +838,30 @@
       "side": 1,
       "message": "Not exactly. Currently, we output our blocks like this:\n\nlayout(..., column_major) uniform Block\n{\n   layout(column_major) vec4 member;\n};\n\nNow this by itself is an error, `layout(column_major)` is not allowed on `member`, but glslang is accepting it as long as it matches the block.\n\nThese start failing now because if Block was used only in one of the stages, previously we assigned the set/binding in all stages, but now we only assign it in the stage where it\u0027s active. It means that these tests had blocks that previously had binding, but now don\u0027t (and therefore are prefixed with \"struct\"). The error is caught because there\u0027s `layout` on a struct member.",
       "parentUuid": "975c74b8_f6b4ccdf",
+      "range": {
+        "startLine": 657,
+        "startChar": 47,
+        "endLine": 657,
+        "endChar": 68
+      },
+      "revId": "c619fa0385f5d8b7f9f20481f0df54a8a5015476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "89bc760f_d29f41e7",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-11T13:03:44Z",
+      "side": 1,
+      "message": "Good to know. If you feel like it you could file a glslang bug about it not catching the original error.",
+      "parentUuid": "8c068605_64961ec2",
       "range": {
         "startLine": 657,
         "startChar": 47,
