@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "de298b07_d30f7a9e",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-11T19:31:30Z",
+      "side": 1,
+      "message": "why is this necessary? seems like it shouldn\u0027t be part of this change.",
+      "range": {
+        "startLine": 820,
+        "startChar": 8,
+        "endLine": 820,
+        "endChar": 29
+      },
+      "revId": "7891ccde03ee401d54879e6d66eeaf127f1c75f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2edf8266_5b6d4fe6",
+        "filename": "src/tests/deqp.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-11T19:31:30Z",
+      "side": 1,
+      "message": "could you instead put the override in this list?",
+      "range": {
+        "startLine": 527,
+        "startChar": 0,
+        "endLine": 527,
+        "endChar": 19
+      },
+      "revId": "7891ccde03ee401d54879e6d66eeaf127f1c75f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d8303981_7be76ead",
         "filename": "src/tests/deqp_support/tes31Context_override.cpp",
         "patchSetId": 3
