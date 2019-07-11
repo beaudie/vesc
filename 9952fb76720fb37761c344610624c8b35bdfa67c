@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c0575b4_834b71ea",
+        "filename": "src/libANGLE/renderer/driver_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-11T01:34:47Z",
+      "side": 1,
+      "message": "This might as well turn into a generic `Version` struct. When we get to the point of using workarounds based on driver version, this would come in handy.",
+      "range": {
+        "startLine": 132,
+        "startChar": 7,
+        "endLine": 132,
+        "endChar": 19
+      },
+      "revId": "9952fb76720fb37761c344610624c8b35bdfa67c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
