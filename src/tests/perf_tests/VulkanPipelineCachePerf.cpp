@@ -33,6 +33,8 @@ class VulkanPipelineCachePerfTest : public ANGLEPerfTest
     std::vector<vk::GraphicsPipelineDesc> mCacheMisses;
     size_t mMissIndex = 0;
 
+    std::vector<sh::Attribute> mEmptyAttributes;
+
   private:
     void randomizeDesc(vk::GraphicsPipelineDesc *desc);
 };
@@ -86,12 +88,14 @@ void VulkanPipelineCachePerfTest::step()
     const vk::GraphicsPipelineDesc *desc = nullptr;
     vk::PipelineHelper *result           = nullptr;
     gl::AttributesMask am;
+    const std::vector<sh::Attribute> &at = mEmptyAttributes;
 
     for (unsigned int iteration = 0; iteration < kIterationsPerStep; ++iteration)
     {
         for (const auto &hit : mCacheHits)
         {
-            (void)mCache.getPipeline(VK_NULL_HANDLE, pc, rp, pl, am, &sm, &sm, hit, &desc, &result);
+            (void)mCache.getPipeline(VK_NULL_HANDLE, pc, rp, pl, am, at, &sm, &sm, hit, &desc,
+                                     &result);
         }
     }
 
@@ -99,7 +103,8 @@ void VulkanPipelineCachePerfTest::step()
          ++missCount, ++mMissIndex)
     {
         const auto &miss = mCacheMisses[mMissIndex];
-        (void)mCache.getPipeline(VK_NULL_HANDLE, pc, rp, pl, am, &sm, &sm, miss, &desc, &result);
+        (void)mCache.getPipeline(VK_NULL_HANDLE, pc, rp, pl, am, at, &sm, &sm, miss, &desc,
+                                 &result);
     }
 }
 
