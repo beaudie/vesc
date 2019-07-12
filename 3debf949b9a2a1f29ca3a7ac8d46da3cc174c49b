@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f72399a0_94186b5b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-12T15:57:49Z",
+      "side": 1,
+      "message": "Done. I was reassigning to format if mismatched, but I changed it to assign to vkFormat instead.",
+      "parentUuid": "7dedaf10_291c09c2",
+      "range": {
+        "startLine": 654,
+        "startChar": 25,
+        "endLine": 654,
+        "endChar": 32
+      },
+      "revId": "3debf949b9a2a1f29ca3a7ac8d46da3cc174c49b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "583498ff_d04feb4e",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "3debf949b9a2a1f29ca3a7ac8d46da3cc174c49b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f720275e_4b0c2416",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-12T15:57:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "583498ff_d04feb4e",
+      "range": {
+        "startLine": 655,
+        "startChar": 0,
+        "endLine": 686,
+        "endChar": 9
+      },
+      "revId": "3debf949b9a2a1f29ca3a7ac8d46da3cc174c49b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
