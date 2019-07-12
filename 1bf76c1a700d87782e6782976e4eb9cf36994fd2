@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "d5cbd541_4b2445b0",
+        "filename": "src/libANGLE/ImageIndex.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-12T13:46:49Z",
+      "side": 1,
+      "message": "The other back-ends certainly support 2D array textures, yes.",
+      "parentUuid": "a48b175b_644a72ca",
+      "revId": "1bf76c1a700d87782e6782976e4eb9cf36994fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "036e65c5_95957a43",
         "filename": "src/libANGLE/Texture.cpp",
         "patchSetId": 2
