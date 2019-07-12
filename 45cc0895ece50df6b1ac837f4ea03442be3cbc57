@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "d0f1fb32_4dcb4aee",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-12T15:38:51Z",
+      "side": 1,
+      "message": "we always need to call bindVertexBufferImpl. Even if attribDirty.",
+      "parentUuid": "8b31762b_da7e0494",
+      "revId": "45cc0895ece50df6b1ac837f4ea03442be3cbc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "148f6ea7_e55ca37d",
         "filename": "src/libANGLE/VertexArray.h",
         "patchSetId": 8
