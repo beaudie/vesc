@@ -2361,16 +2361,24 @@ GLuint GL_APIENTRY GenPathsCHROMIUM(GLsizei range)
     EVENT("(GLsizei range = %d)", range);
 
     Context *context = GetValidGlobalContext();
+    GLuint returnValue;
     if (context)
     {
         ANGLE_CAPTURE(GenPathsCHROMIUM, context, range);
         if (context->skipValidation() || ValidateGenPathsCHROMIUM(context, range))
         {
-            return context->genPaths(range);
+            returnValue = context->genPaths(range);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GenPathsCHROMIUM, GLuint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GenPathsCHROMIUM, GLuint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GenPathsCHROMIUM, GLuint>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY DeletePathsCHROMIUM(GLuint first, GLsizei range)
@@ -2393,16 +2401,24 @@ GLboolean GL_APIENTRY IsPathCHROMIUM(GLuint path)
     EVENT("(GLuint path = %u)", path);
 
     Context *context = GetValidGlobalContext();
+    GLboolean returnValue;
     if (context)
     {
         ANGLE_CAPTURE(IsPathCHROMIUM, context, path);
         if (context->skipValidation() || ValidateIsPathCHROMIUM(context, path))
         {
-            return context->isPath(path);
+            returnValue = context->isPath(path);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsPathCHROMIUM, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsPathCHROMIUM, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsPathCHROMIUM, GLboolean>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY PathCommandsCHROMIUM(GLuint path,
@@ -2889,16 +2905,24 @@ GLint GL_APIENTRY GetFragDataIndexEXT(GLuint program, const GLchar *name)
           (uintptr_t)name);
 
     Context *context = GetValidGlobalContext();
+    GLint returnValue;
     if (context)
     {
         ANGLE_CAPTURE(GetFragDataIndexEXT, context, program, name);
         if (context->skipValidation() || ValidateGetFragDataIndexEXT(context, program, name))
         {
-            return context->getFragDataIndex(program, name);
+            returnValue = context->getFragDataIndex(program, name);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetFragDataIndexEXT, GLint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetFragDataIndexEXT, GLint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetFragDataIndexEXT, GLint>();
+    }
+    return returnValue;
 }
 
 GLint GL_APIENTRY GetProgramResourceLocationIndexEXT(GLuint program,
@@ -2911,17 +2935,27 @@ GLint GL_APIENTRY GetProgramResourceLocationIndexEXT(GLuint program,
         program, programInterface, (uintptr_t)name);
 
     Context *context = GetValidGlobalContext();
+    GLint returnValue;
     if (context)
     {
         ANGLE_CAPTURE(GetProgramResourceLocationIndexEXT, context, program, programInterface, name);
         if (context->skipValidation() ||
             ValidateGetProgramResourceLocationIndexEXT(context, program, programInterface, name))
         {
-            return context->getProgramResourceLocationIndex(program, programInterface, name);
+            returnValue = context->getProgramResourceLocationIndex(program, programInterface, name);
+        }
+        else
+        {
+            returnValue =
+                GetDefaultReturnValue<EntryPoint::GetProgramResourceLocationIndexEXT, GLint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetProgramResourceLocationIndexEXT, GLint>();
+    else
+    {
+        returnValue =
+            GetDefaultReturnValue<EntryPoint::GetProgramResourceLocationIndexEXT, GLint>();
+    }
+    return returnValue;
 }
 
 // GL_EXT_debug_marker
@@ -3150,16 +3184,24 @@ GLboolean GL_APIENTRY IsQueryEXT(GLuint id)
     EVENT("(GLuint id = %u)", id);
 
     Context *context = GetValidGlobalContext();
+    GLboolean returnValue;
     if (context)
     {
         ANGLE_CAPTURE(IsQueryEXT, context, id);
         if (context->skipValidation() || ValidateIsQueryEXT(context, id))
         {
-            return context->isQuery(id);
+            returnValue = context->isQuery(id);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsQueryEXT, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsQueryEXT, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsQueryEXT, GLboolean>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY QueryCounterEXT(GLuint id, GLenum target)
@@ -3307,6 +3349,7 @@ void *GL_APIENTRY MapBufferRangeEXT(GLenum target,
         access);
 
     Context *context = GetValidGlobalContext();
+    void *returnValue;
     if (context)
     {
         BufferBinding targetPacked = FromGL<BufferBinding>(target);
@@ -3314,11 +3357,18 @@ void *GL_APIENTRY MapBufferRangeEXT(GLenum target,
         if (context->skipValidation() ||
             ValidateMapBufferRangeEXT(context, targetPacked, offset, length, access))
         {
-            return context->mapBufferRange(targetPacked, offset, length, access);
+            returnValue = context->mapBufferRange(targetPacked, offset, length, access);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::MapBufferRangeEXT, void *>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::MapBufferRangeEXT, void *>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::MapBufferRangeEXT, void *>();
+    }
+    return returnValue;
 }
 
 // GL_EXT_memory_object
@@ -3429,16 +3479,24 @@ GLboolean GL_APIENTRY IsMemoryObjectEXT(GLuint memoryObject)
     EVENT("(GLuint memoryObject = %u)", memoryObject);
 
     Context *context = GetValidGlobalContext();
+    GLboolean returnValue;
     if (context)
     {
         ANGLE_CAPTURE(IsMemoryObjectEXT, context, memoryObject);
         if (context->skipValidation() || ValidateIsMemoryObjectEXT(context, memoryObject))
         {
-            return context->isMemoryObject(memoryObject);
+            returnValue = context->isMemoryObject(memoryObject);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsMemoryObjectEXT, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsMemoryObjectEXT, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsMemoryObjectEXT, GLboolean>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY MemoryObjectParameterivEXT(GLuint memoryObject, GLenum pname, const GLint *params)
@@ -3626,16 +3684,24 @@ GLenum GL_APIENTRY GetGraphicsResetStatusEXT()
     EVENT("()");
 
     Context *context = GetGlobalContext();
+    GLenum returnValue;
     if (context)
     {
         ANGLE_CAPTURE(GetGraphicsResetStatusEXT, context);
         if (context->skipValidation() || ValidateGetGraphicsResetStatusEXT(context))
         {
-            return context->getGraphicsResetStatus();
+            returnValue = context->getGraphicsResetStatus();
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetGraphicsResetStatusEXT, GLenum>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetGraphicsResetStatusEXT, GLenum>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetGraphicsResetStatusEXT, GLenum>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY GetnUniformfvEXT(GLuint program, GLint location, GLsizei bufSize, GLfloat *params)
@@ -3756,16 +3822,24 @@ GLboolean GL_APIENTRY IsSemaphoreEXT(GLuint semaphore)
     EVENT("(GLuint semaphore = %u)", semaphore);
 
     Context *context = GetValidGlobalContext();
+    GLboolean returnValue;
     if (context)
     {
         ANGLE_CAPTURE(IsSemaphoreEXT, context, semaphore);
         if (context->skipValidation() || ValidateIsSemaphoreEXT(context, semaphore))
         {
-            return context->isSemaphore(semaphore);
+            returnValue = context->isSemaphore(semaphore);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsSemaphoreEXT, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsSemaphoreEXT, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsSemaphoreEXT, GLboolean>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY SemaphoreParameterui64vEXT(GLuint semaphore, GLenum pname, const GLuint64 *params)
@@ -4023,6 +4097,7 @@ GLuint GL_APIENTRY GetDebugMessageLogKHR(GLuint count,
           (uintptr_t)severities, (uintptr_t)lengths, (uintptr_t)messageLog);
 
     Context *context = GetValidGlobalContext();
+    GLuint returnValue;
     if (context)
     {
         ANGLE_CAPTURE(GetDebugMessageLogKHR, context, count, bufSize, sources, types, ids,
@@ -4031,12 +4106,19 @@ GLuint GL_APIENTRY GetDebugMessageLogKHR(GLuint count,
             ValidateGetDebugMessageLogKHR(context, count, bufSize, sources, types, ids, severities,
                                           lengths, messageLog))
         {
-            return context->getDebugMessageLog(count, bufSize, sources, types, ids, severities,
-                                               lengths, messageLog);
+            returnValue = context->getDebugMessageLog(count, bufSize, sources, types, ids,
+                                                      severities, lengths, messageLog);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetDebugMessageLogKHR, GLuint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetDebugMessageLogKHR, GLuint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetDebugMessageLogKHR, GLuint>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY
@@ -4249,16 +4331,24 @@ GLboolean GL_APIENTRY IsFenceNV(GLuint fence)
     EVENT("(GLuint fence = %u)", fence);
 
     Context *context = GetValidGlobalContext();
+    GLboolean returnValue;
     if (context)
     {
         ANGLE_CAPTURE(IsFenceNV, context, fence);
         if (context->skipValidation() || ValidateIsFenceNV(context, fence))
         {
-            return context->isFenceNV(fence);
+            returnValue = context->isFenceNV(fence);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsFenceNV, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsFenceNV, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsFenceNV, GLboolean>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY SetFenceNV(GLuint fence, GLenum condition)
@@ -4281,16 +4371,24 @@ GLboolean GL_APIENTRY TestFenceNV(GLuint fence)
     EVENT("(GLuint fence = %u)", fence);
 
     Context *context = GetValidGlobalContext();
+    GLboolean returnValue;
     if (context)
     {
         ANGLE_CAPTURE(TestFenceNV, context, fence);
         if (context->skipValidation() || ValidateTestFenceNV(context, fence))
         {
-            return context->testFenceNV(fence);
+            returnValue = context->testFenceNV(fence);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::TestFenceNV, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::TestFenceNV, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::TestFenceNV, GLboolean>();
+    }
+    return returnValue;
 }
 
 // GL_OES_EGL_image
@@ -4496,16 +4594,24 @@ GLenum GL_APIENTRY CheckFramebufferStatusOES(GLenum target)
     EVENT("(GLenum target = 0x%X)", target);
 
     Context *context = GetValidGlobalContext();
+    GLenum returnValue;
     if (context)
     {
         ANGLE_CAPTURE(CheckFramebufferStatusOES, context, target);
         if (context->skipValidation() || ValidateCheckFramebufferStatusOES(context, target))
         {
-            return context->checkFramebufferStatus(target);
+            returnValue = context->checkFramebufferStatus(target);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::CheckFramebufferStatusOES, GLenum>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::CheckFramebufferStatusOES, GLenum>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::CheckFramebufferStatusOES, GLenum>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY DeleteFramebuffersOES(GLsizei n, const GLuint *framebuffers)
@@ -4688,16 +4794,24 @@ GLboolean GL_APIENTRY IsFramebufferOES(GLuint framebuffer)
     EVENT("(GLuint framebuffer = %u)", framebuffer);
 
     Context *context = GetValidGlobalContext();
+    GLboolean returnValue;
     if (context)
     {
         ANGLE_CAPTURE(IsFramebufferOES, context, framebuffer);
         if (context->skipValidation() || ValidateIsFramebufferOES(context, framebuffer))
         {
-            return context->isFramebuffer(framebuffer);
+            returnValue = context->isFramebuffer(framebuffer);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsFramebufferOES, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsFramebufferOES, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsFramebufferOES, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsRenderbufferOES(GLuint renderbuffer)
@@ -4705,17 +4819,25 @@ GLboolean GL_APIENTRY IsRenderbufferOES(GLuint renderbuffer)
     EVENT("(GLuint renderbuffer = %u)", renderbuffer);
 
     Context *context = GetValidGlobalContext();
+    GLboolean returnValue;
     if (context)
     {
         RenderbufferID renderbufferPacked = FromGL<RenderbufferID>(renderbuffer);
         ANGLE_CAPTURE(IsRenderbufferOES, context, renderbufferPacked);
         if (context->skipValidation() || ValidateIsRenderbufferOES(context, renderbufferPacked))
         {
-            return context->isRenderbuffer(renderbufferPacked);
+            returnValue = context->isRenderbuffer(renderbufferPacked);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsRenderbufferOES, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsRenderbufferOES, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsRenderbufferOES, GLboolean>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY RenderbufferStorageOES(GLenum target,
@@ -4808,17 +4930,25 @@ void *GL_APIENTRY MapBufferOES(GLenum target, GLenum access)
     EVENT("(GLenum target = 0x%X, GLenum access = 0x%X)", target, access);
 
     Context *context = GetValidGlobalContext();
+    void *returnValue;
     if (context)
     {
         BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(MapBufferOES, context, targetPacked, access);
         if (context->skipValidation() || ValidateMapBufferOES(context, targetPacked, access))
         {
-            return context->mapBuffer(targetPacked, access);
+            returnValue = context->mapBuffer(targetPacked, access);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::MapBufferOES, void *>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::MapBufferOES, void *>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::MapBufferOES, void *>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY UnmapBufferOES(GLenum target)
@@ -4826,17 +4956,25 @@ GLboolean GL_APIENTRY UnmapBufferOES(GLenum target)
     EVENT("(GLenum target = 0x%X)", target);
 
     Context *context = GetValidGlobalContext();
+    GLboolean returnValue;
     if (context)
     {
         BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(UnmapBufferOES, context, targetPacked);
         if (context->skipValidation() || ValidateUnmapBufferOES(context, targetPacked))
         {
-            return context->unmapBuffer(targetPacked);
+            returnValue = context->unmapBuffer(targetPacked);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::UnmapBufferOES, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::UnmapBufferOES, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::UnmapBufferOES, GLboolean>();
+    }
+    return returnValue;
 }
 
 // GL_OES_matrix_palette
@@ -4935,16 +5073,24 @@ GLbitfield GL_APIENTRY QueryMatrixxOES(GLfixed *mantissa, GLint *exponent)
           (uintptr_t)mantissa, (uintptr_t)exponent);
 
     Context *context = GetValidGlobalContext();
+    GLbitfield returnValue;
     if (context)
     {
         ANGLE_CAPTURE(QueryMatrixxOES, context, mantissa, exponent);
         if (context->skipValidation() || ValidateQueryMatrixxOES(context, mantissa, exponent))
         {
-            return context->queryMatrixx(mantissa, exponent);
+            returnValue = context->queryMatrixx(mantissa, exponent);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::QueryMatrixxOES, GLbitfield>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::QueryMatrixxOES, GLbitfield>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::QueryMatrixxOES, GLbitfield>();
+    }
+    return returnValue;
 }
 
 // GL_OES_texture_3D
@@ -5508,16 +5654,24 @@ GLboolean GL_APIENTRY IsVertexArrayOES(GLuint array)
     EVENT("(GLuint array = %u)", array);
 
     Context *context = GetValidGlobalContext();
+    GLboolean returnValue;
     if (context)
     {
         ANGLE_CAPTURE(IsVertexArrayOES, context, array);
         if (context->skipValidation() || ValidateIsVertexArrayOES(context, array))
         {
-            return context->isVertexArray(array);
+            returnValue = context->isVertexArray(array);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsVertexArrayOES, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsVertexArrayOES, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsVertexArrayOES, GLboolean>();
+    }
+    return returnValue;
 }
 
 // GL_OVR_multiview
@@ -6277,17 +6431,25 @@ GLenum GL_APIENTRY CheckFramebufferStatusContextANGLE(GLeglContext ctx, GLenum t
     EVENT("(GLenum target = 0x%X)", target);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLenum returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(CheckFramebufferStatus, context, target);
         if (context->skipValidation() || ValidateCheckFramebufferStatus(context, target))
         {
-            return context->checkFramebufferStatus(target);
+            returnValue = context->checkFramebufferStatus(target);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::CheckFramebufferStatus, GLenum>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::CheckFramebufferStatus, GLenum>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::CheckFramebufferStatus, GLenum>();
+    }
+    return returnValue;
 }
 
 GLenum GL_APIENTRY CheckFramebufferStatusOESContextANGLE(GLeglContext ctx, GLenum target)
@@ -6295,17 +6457,25 @@ GLenum GL_APIENTRY CheckFramebufferStatusOESContextANGLE(GLeglContext ctx, GLenu
     EVENT("(GLenum target = 0x%X)", target);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLenum returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(CheckFramebufferStatusOES, context, target);
         if (context->skipValidation() || ValidateCheckFramebufferStatusOES(context, target))
         {
-            return context->checkFramebufferStatus(target);
+            returnValue = context->checkFramebufferStatus(target);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::CheckFramebufferStatusOES, GLenum>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::CheckFramebufferStatusOES, GLenum>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::CheckFramebufferStatusOES, GLenum>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY ClearContextANGLE(GLeglContext ctx, GLbitfield mask)
@@ -6515,17 +6685,25 @@ GLenum GL_APIENTRY ClientWaitSyncContextANGLE(GLeglContext ctx,
           (uintptr_t)sync, flags, static_cast<unsigned long long>(timeout));
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLenum returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(ClientWaitSync, context, sync, flags, timeout);
         if (context->skipValidation() || ValidateClientWaitSync(context, sync, flags, timeout))
         {
-            return context->clientWaitSync(sync, flags, timeout);
+            returnValue = context->clientWaitSync(sync, flags, timeout);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::ClientWaitSync, GLenum>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::ClientWaitSync, GLenum>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::ClientWaitSync, GLenum>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY ClipPlanefContextANGLE(GLeglContext ctx, GLenum p, const GLfloat *eqn)
@@ -7071,17 +7249,25 @@ GLuint GL_APIENTRY CreateProgramContextANGLE(GLeglContext ctx)
     EVENT("()");
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLuint returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(CreateProgram, context);
         if (context->skipValidation() || ValidateCreateProgram(context))
         {
-            return context->createProgram();
+            returnValue = context->createProgram();
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::CreateProgram, GLuint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::CreateProgram, GLuint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::CreateProgram, GLuint>();
+    }
+    return returnValue;
 }
 
 GLuint GL_APIENTRY CreateShaderContextANGLE(GLeglContext ctx, GLenum type)
@@ -7089,6 +7275,7 @@ GLuint GL_APIENTRY CreateShaderContextANGLE(GLeglContext ctx, GLenum type)
     EVENT("(GLenum type = 0x%X)", type);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLuint returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -7096,11 +7283,18 @@ GLuint GL_APIENTRY CreateShaderContextANGLE(GLeglContext ctx, GLenum type)
         ANGLE_CAPTURE(CreateShader, context, typePacked);
         if (context->skipValidation() || ValidateCreateShader(context, typePacked))
         {
-            return context->createShader(typePacked);
+            returnValue = context->createShader(typePacked);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::CreateShader, GLuint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::CreateShader, GLuint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::CreateShader, GLuint>();
+    }
+    return returnValue;
 }
 
 GLuint GL_APIENTRY CreateShaderProgramvContextANGLE(GLeglContext ctx,
@@ -7113,6 +7307,7 @@ GLuint GL_APIENTRY CreateShaderProgramvContextANGLE(GLeglContext ctx,
           type, count, (uintptr_t)strings);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLuint returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -7121,11 +7316,18 @@ GLuint GL_APIENTRY CreateShaderProgramvContextANGLE(GLeglContext ctx,
         if (context->skipValidation() ||
             ValidateCreateShaderProgramv(context, typePacked, count, strings))
         {
-            return context->createShaderProgramv(typePacked, count, strings);
+            returnValue = context->createShaderProgramv(typePacked, count, strings);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::CreateShaderProgramv, GLuint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::CreateShaderProgramv, GLuint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::CreateShaderProgramv, GLuint>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY CullFaceContextANGLE(GLeglContext ctx, GLenum mode)
@@ -8355,17 +8557,25 @@ GLsync GL_APIENTRY FenceSyncContextANGLE(GLeglContext ctx, GLenum condition, GLb
     EVENT("(GLenum condition = 0x%X, GLbitfield flags = 0x%X)", condition, flags);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLsync returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(FenceSync, context, condition, flags);
         if (context->skipValidation() || ValidateFenceSync(context, condition, flags))
         {
-            return context->fenceSync(condition, flags);
+            returnValue = context->fenceSync(condition, flags);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::FenceSync, GLsync>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::FenceSync, GLsync>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::FenceSync, GLsync>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY FinishContextANGLE(GLeglContext ctx)
@@ -9276,17 +9486,25 @@ GLint GL_APIENTRY GetAttribLocationContextANGLE(GLeglContext ctx,
           (uintptr_t)name);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLint returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(GetAttribLocation, context, program, name);
         if (context->skipValidation() || ValidateGetAttribLocation(context, program, name))
         {
-            return context->getAttribLocation(program, name);
+            returnValue = context->getAttribLocation(program, name);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetAttribLocation, GLint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetAttribLocation, GLint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetAttribLocation, GLint>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY GetBooleani_vContextANGLE(GLeglContext ctx,
@@ -9465,6 +9683,7 @@ GLuint GL_APIENTRY GetDebugMessageLogKHRContextANGLE(GLeglContext ctx,
           (uintptr_t)severities, (uintptr_t)lengths, (uintptr_t)messageLog);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLuint returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -9474,12 +9693,19 @@ GLuint GL_APIENTRY GetDebugMessageLogKHRContextANGLE(GLeglContext ctx,
             ValidateGetDebugMessageLogKHR(context, count, bufSize, sources, types, ids, severities,
                                           lengths, messageLog))
         {
-            return context->getDebugMessageLog(count, bufSize, sources, types, ids, severities,
-                                               lengths, messageLog);
+            returnValue = context->getDebugMessageLog(count, bufSize, sources, types, ids,
+                                                      severities, lengths, messageLog);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetDebugMessageLogKHR, GLuint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetDebugMessageLogKHR, GLuint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetDebugMessageLogKHR, GLuint>();
+    }
+    return returnValue;
 }
 
 GLenum GL_APIENTRY GetErrorContextANGLE(GLeglContext ctx)
@@ -9487,17 +9713,25 @@ GLenum GL_APIENTRY GetErrorContextANGLE(GLeglContext ctx)
     EVENT("()");
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLenum returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(GetError, context);
         if (context->skipValidation() || ValidateGetError(context))
         {
-            return context->getError();
+            returnValue = context->getError();
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetError, GLenum>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetError, GLenum>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetError, GLenum>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY GetFenceivNVContextANGLE(GLeglContext ctx,
@@ -9560,17 +9794,25 @@ GLint GL_APIENTRY GetFragDataIndexEXTContextANGLE(GLeglContext ctx,
           (uintptr_t)name);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLint returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(GetFragDataIndexEXT, context, program, name);
         if (context->skipValidation() || ValidateGetFragDataIndexEXT(context, program, name))
         {
-            return context->getFragDataIndex(program, name);
+            returnValue = context->getFragDataIndex(program, name);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetFragDataIndexEXT, GLint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetFragDataIndexEXT, GLint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetFragDataIndexEXT, GLint>();
+    }
+    return returnValue;
 }
 
 GLint GL_APIENTRY GetFragDataLocationContextANGLE(GLeglContext ctx,
@@ -9581,17 +9823,25 @@ GLint GL_APIENTRY GetFragDataLocationContextANGLE(GLeglContext ctx,
           (uintptr_t)name);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLint returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(GetFragDataLocation, context, program, name);
         if (context->skipValidation() || ValidateGetFragDataLocation(context, program, name))
         {
-            return context->getFragDataLocation(program, name);
+            returnValue = context->getFragDataLocation(program, name);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetFragDataLocation, GLint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetFragDataLocation, GLint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetFragDataLocation, GLint>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY GetFramebufferAttachmentParameterivContextANGLE(GLeglContext ctx,
@@ -9670,17 +9920,25 @@ GLenum GL_APIENTRY GetGraphicsResetStatusEXTContextANGLE(GLeglContext ctx)
     EVENT("()");
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLenum returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(GetGraphicsResetStatusEXT, context);
         if (context->skipValidation() || ValidateGetGraphicsResetStatusEXT(context))
         {
-            return context->getGraphicsResetStatus();
+            returnValue = context->getGraphicsResetStatus();
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetGraphicsResetStatusEXT, GLenum>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetGraphicsResetStatusEXT, GLenum>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetGraphicsResetStatusEXT, GLenum>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY GetInteger64i_vContextANGLE(GLeglContext ctx,
@@ -10136,6 +10394,7 @@ GLuint GL_APIENTRY GetProgramResourceIndexContextANGLE(GLeglContext ctx,
         program, programInterface, (uintptr_t)name);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLuint returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -10143,11 +10402,18 @@ GLuint GL_APIENTRY GetProgramResourceIndexContextANGLE(GLeglContext ctx,
         if (context->skipValidation() ||
             ValidateGetProgramResourceIndex(context, program, programInterface, name))
         {
-            return context->getProgramResourceIndex(program, programInterface, name);
+            returnValue = context->getProgramResourceIndex(program, programInterface, name);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetProgramResourceIndex, GLuint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetProgramResourceIndex, GLuint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetProgramResourceIndex, GLuint>();
+    }
+    return returnValue;
 }
 
 GLint GL_APIENTRY GetProgramResourceLocationContextANGLE(GLeglContext ctx,
@@ -10161,6 +10427,7 @@ GLint GL_APIENTRY GetProgramResourceLocationContextANGLE(GLeglContext ctx,
         program, programInterface, (uintptr_t)name);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLint returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -10168,11 +10435,18 @@ GLint GL_APIENTRY GetProgramResourceLocationContextANGLE(GLeglContext ctx,
         if (context->skipValidation() ||
             ValidateGetProgramResourceLocation(context, program, programInterface, name))
         {
-            return context->getProgramResourceLocation(program, programInterface, name);
+            returnValue = context->getProgramResourceLocation(program, programInterface, name);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetProgramResourceLocation, GLint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetProgramResourceLocation, GLint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetProgramResourceLocation, GLint>();
+    }
+    return returnValue;
 }
 
 GLint GL_APIENTRY GetProgramResourceLocationIndexEXTContextANGLE(GLeglContext ctx,
@@ -10186,6 +10460,7 @@ GLint GL_APIENTRY GetProgramResourceLocationIndexEXTContextANGLE(GLeglContext ct
         program, programInterface, (uintptr_t)name);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLint returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -10193,11 +10468,20 @@ GLint GL_APIENTRY GetProgramResourceLocationIndexEXTContextANGLE(GLeglContext ct
         if (context->skipValidation() ||
             ValidateGetProgramResourceLocationIndexEXT(context, program, programInterface, name))
         {
-            return context->getProgramResourceLocationIndex(program, programInterface, name);
+            returnValue = context->getProgramResourceLocationIndex(program, programInterface, name);
+        }
+        else
+        {
+            returnValue =
+                GetDefaultReturnValue<EntryPoint::GetProgramResourceLocationIndexEXT, GLint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetProgramResourceLocationIndexEXT, GLint>();
+    else
+    {
+        returnValue =
+            GetDefaultReturnValue<EntryPoint::GetProgramResourceLocationIndexEXT, GLint>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY GetProgramResourceNameContextANGLE(GLeglContext ctx,
@@ -10668,17 +10952,25 @@ const GLubyte *GL_APIENTRY GetStringContextANGLE(GLeglContext ctx, GLenum name)
     EVENT("(GLenum name = 0x%X)", name);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    const GLubyte *returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(GetString, context, name);
         if (context->skipValidation() || ValidateGetString(context, name))
         {
-            return context->getString(name);
+            returnValue = context->getString(name);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetString, const GLubyte *>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetString, const GLubyte *>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetString, const GLubyte *>();
+    }
+    return returnValue;
 }
 
 const GLubyte *GL_APIENTRY GetStringiContextANGLE(GLeglContext ctx, GLenum name, GLuint index)
@@ -10686,17 +10978,25 @@ const GLubyte *GL_APIENTRY GetStringiContextANGLE(GLeglContext ctx, GLenum name,
     EVENT("(GLenum name = 0x%X, GLuint index = %u)", name, index);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    const GLubyte *returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(GetStringi, context, name, index);
         if (context->skipValidation() || ValidateGetStringi(context, name, index))
         {
-            return context->getStringi(name, index);
+            returnValue = context->getStringi(name, index);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetStringi, const GLubyte *>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetStringi, const GLubyte *>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetStringi, const GLubyte *>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY GetSyncivContextANGLE(GLeglContext ctx,
@@ -11075,6 +11375,7 @@ GLuint GL_APIENTRY GetUniformBlockIndexContextANGLE(GLeglContext ctx,
           (uintptr_t)uniformBlockName);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLuint returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -11082,11 +11383,18 @@ GLuint GL_APIENTRY GetUniformBlockIndexContextANGLE(GLeglContext ctx,
         if (context->skipValidation() ||
             ValidateGetUniformBlockIndex(context, program, uniformBlockName))
         {
-            return context->getUniformBlockIndex(program, uniformBlockName);
+            returnValue = context->getUniformBlockIndex(program, uniformBlockName);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetUniformBlockIndex, GLuint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetUniformBlockIndex, GLuint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetUniformBlockIndex, GLuint>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY GetUniformIndicesContextANGLE(GLeglContext ctx,
@@ -11122,17 +11430,25 @@ GLint GL_APIENTRY GetUniformLocationContextANGLE(GLeglContext ctx,
           (uintptr_t)name);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLint returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(GetUniformLocation, context, program, name);
         if (context->skipValidation() || ValidateGetUniformLocation(context, program, name))
         {
-            return context->getUniformLocation(program, name);
+            returnValue = context->getUniformLocation(program, name);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GetUniformLocation, GLint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GetUniformLocation, GLint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GetUniformLocation, GLint>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY GetUniformfvContextANGLE(GLeglContext ctx,
@@ -11521,17 +11837,25 @@ GLboolean GL_APIENTRY IsBufferContextANGLE(GLeglContext ctx, GLuint buffer)
     EVENT("(GLuint buffer = %u)", buffer);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsBuffer, context, buffer);
         if (context->skipValidation() || ValidateIsBuffer(context, buffer))
         {
-            return context->isBuffer(buffer);
+            returnValue = context->isBuffer(buffer);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsBuffer, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsBuffer, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsBuffer, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsEnabledContextANGLE(GLeglContext ctx, GLenum cap)
@@ -11539,17 +11863,25 @@ GLboolean GL_APIENTRY IsEnabledContextANGLE(GLeglContext ctx, GLenum cap)
     EVENT("(GLenum cap = 0x%X)", cap);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsEnabled, context, cap);
         if (context->skipValidation() || ValidateIsEnabled(context, cap))
         {
-            return context->isEnabled(cap);
+            returnValue = context->isEnabled(cap);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsEnabled, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsEnabled, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsEnabled, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsFenceNVContextANGLE(GLeglContext ctx, GLuint fence)
@@ -11557,17 +11889,25 @@ GLboolean GL_APIENTRY IsFenceNVContextANGLE(GLeglContext ctx, GLuint fence)
     EVENT("(GLuint fence = %u)", fence);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsFenceNV, context, fence);
         if (context->skipValidation() || ValidateIsFenceNV(context, fence))
         {
-            return context->isFenceNV(fence);
+            returnValue = context->isFenceNV(fence);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsFenceNV, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsFenceNV, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsFenceNV, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsFramebufferContextANGLE(GLeglContext ctx, GLuint framebuffer)
@@ -11575,17 +11915,25 @@ GLboolean GL_APIENTRY IsFramebufferContextANGLE(GLeglContext ctx, GLuint framebu
     EVENT("(GLuint framebuffer = %u)", framebuffer);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsFramebuffer, context, framebuffer);
         if (context->skipValidation() || ValidateIsFramebuffer(context, framebuffer))
         {
-            return context->isFramebuffer(framebuffer);
+            returnValue = context->isFramebuffer(framebuffer);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsFramebuffer, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsFramebuffer, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsFramebuffer, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsFramebufferOESContextANGLE(GLeglContext ctx, GLuint framebuffer)
@@ -11593,17 +11941,25 @@ GLboolean GL_APIENTRY IsFramebufferOESContextANGLE(GLeglContext ctx, GLuint fram
     EVENT("(GLuint framebuffer = %u)", framebuffer);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsFramebufferOES, context, framebuffer);
         if (context->skipValidation() || ValidateIsFramebufferOES(context, framebuffer))
         {
-            return context->isFramebuffer(framebuffer);
+            returnValue = context->isFramebuffer(framebuffer);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsFramebufferOES, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsFramebufferOES, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsFramebufferOES, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsMemoryObjectEXTContextANGLE(GLeglContext ctx, GLuint memoryObject)
@@ -11611,17 +11967,25 @@ GLboolean GL_APIENTRY IsMemoryObjectEXTContextANGLE(GLeglContext ctx, GLuint mem
     EVENT("(GLuint memoryObject = %u)", memoryObject);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsMemoryObjectEXT, context, memoryObject);
         if (context->skipValidation() || ValidateIsMemoryObjectEXT(context, memoryObject))
         {
-            return context->isMemoryObject(memoryObject);
+            returnValue = context->isMemoryObject(memoryObject);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsMemoryObjectEXT, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsMemoryObjectEXT, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsMemoryObjectEXT, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsProgramContextANGLE(GLeglContext ctx, GLuint program)
@@ -11629,17 +11993,25 @@ GLboolean GL_APIENTRY IsProgramContextANGLE(GLeglContext ctx, GLuint program)
     EVENT("(GLuint program = %u)", program);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsProgram, context, program);
         if (context->skipValidation() || ValidateIsProgram(context, program))
         {
-            return context->isProgram(program);
+            returnValue = context->isProgram(program);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsProgram, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsProgram, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsProgram, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsProgramPipelineContextANGLE(GLeglContext ctx, GLuint pipeline)
@@ -11647,17 +12019,25 @@ GLboolean GL_APIENTRY IsProgramPipelineContextANGLE(GLeglContext ctx, GLuint pip
     EVENT("(GLuint pipeline = %u)", pipeline);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsProgramPipeline, context, pipeline);
         if (context->skipValidation() || ValidateIsProgramPipeline(context, pipeline))
         {
-            return context->isProgramPipeline(pipeline);
+            returnValue = context->isProgramPipeline(pipeline);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsProgramPipeline, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsProgramPipeline, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsProgramPipeline, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsQueryContextANGLE(GLeglContext ctx, GLuint id)
@@ -11665,17 +12045,25 @@ GLboolean GL_APIENTRY IsQueryContextANGLE(GLeglContext ctx, GLuint id)
     EVENT("(GLuint id = %u)", id);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsQuery, context, id);
         if (context->skipValidation() || ValidateIsQuery(context, id))
         {
-            return context->isQuery(id);
+            returnValue = context->isQuery(id);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsQuery, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsQuery, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsQuery, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsQueryEXTContextANGLE(GLeglContext ctx, GLuint id)
@@ -11683,17 +12071,25 @@ GLboolean GL_APIENTRY IsQueryEXTContextANGLE(GLeglContext ctx, GLuint id)
     EVENT("(GLuint id = %u)", id);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsQueryEXT, context, id);
         if (context->skipValidation() || ValidateIsQueryEXT(context, id))
         {
-            return context->isQuery(id);
+            returnValue = context->isQuery(id);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsQueryEXT, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsQueryEXT, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsQueryEXT, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsRenderbufferContextANGLE(GLeglContext ctx, GLuint renderbuffer)
@@ -11701,6 +12097,7 @@ GLboolean GL_APIENTRY IsRenderbufferContextANGLE(GLeglContext ctx, GLuint render
     EVENT("(GLuint renderbuffer = %u)", renderbuffer);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -11708,11 +12105,18 @@ GLboolean GL_APIENTRY IsRenderbufferContextANGLE(GLeglContext ctx, GLuint render
         ANGLE_CAPTURE(IsRenderbuffer, context, renderbufferPacked);
         if (context->skipValidation() || ValidateIsRenderbuffer(context, renderbufferPacked))
         {
-            return context->isRenderbuffer(renderbufferPacked);
+            returnValue = context->isRenderbuffer(renderbufferPacked);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsRenderbuffer, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsRenderbuffer, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsRenderbuffer, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsRenderbufferOESContextANGLE(GLeglContext ctx, GLuint renderbuffer)
@@ -11720,6 +12124,7 @@ GLboolean GL_APIENTRY IsRenderbufferOESContextANGLE(GLeglContext ctx, GLuint ren
     EVENT("(GLuint renderbuffer = %u)", renderbuffer);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -11727,11 +12132,18 @@ GLboolean GL_APIENTRY IsRenderbufferOESContextANGLE(GLeglContext ctx, GLuint ren
         ANGLE_CAPTURE(IsRenderbufferOES, context, renderbufferPacked);
         if (context->skipValidation() || ValidateIsRenderbufferOES(context, renderbufferPacked))
         {
-            return context->isRenderbuffer(renderbufferPacked);
+            returnValue = context->isRenderbuffer(renderbufferPacked);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsRenderbufferOES, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsRenderbufferOES, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsRenderbufferOES, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsSemaphoreEXTContextANGLE(GLeglContext ctx, GLuint semaphore)
@@ -11739,17 +12151,25 @@ GLboolean GL_APIENTRY IsSemaphoreEXTContextANGLE(GLeglContext ctx, GLuint semaph
     EVENT("(GLuint semaphore = %u)", semaphore);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsSemaphoreEXT, context, semaphore);
         if (context->skipValidation() || ValidateIsSemaphoreEXT(context, semaphore))
         {
-            return context->isSemaphore(semaphore);
+            returnValue = context->isSemaphore(semaphore);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsSemaphoreEXT, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsSemaphoreEXT, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsSemaphoreEXT, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsSamplerContextANGLE(GLeglContext ctx, GLuint sampler)
@@ -11757,17 +12177,25 @@ GLboolean GL_APIENTRY IsSamplerContextANGLE(GLeglContext ctx, GLuint sampler)
     EVENT("(GLuint sampler = %u)", sampler);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsSampler, context, sampler);
         if (context->skipValidation() || ValidateIsSampler(context, sampler))
         {
-            return context->isSampler(sampler);
+            returnValue = context->isSampler(sampler);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsSampler, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsSampler, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsSampler, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsShaderContextANGLE(GLeglContext ctx, GLuint shader)
@@ -11775,17 +12203,25 @@ GLboolean GL_APIENTRY IsShaderContextANGLE(GLeglContext ctx, GLuint shader)
     EVENT("(GLuint shader = %u)", shader);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsShader, context, shader);
         if (context->skipValidation() || ValidateIsShader(context, shader))
         {
-            return context->isShader(shader);
+            returnValue = context->isShader(shader);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsShader, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsShader, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsShader, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsSyncContextANGLE(GLeglContext ctx, GLsync sync)
@@ -11793,17 +12229,25 @@ GLboolean GL_APIENTRY IsSyncContextANGLE(GLeglContext ctx, GLsync sync)
     EVENT("(GLsync sync = 0x%016" PRIxPTR ")", (uintptr_t)sync);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsSync, context, sync);
         if (context->skipValidation() || ValidateIsSync(context, sync))
         {
-            return context->isSync(sync);
+            returnValue = context->isSync(sync);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsSync, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsSync, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsSync, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsTextureContextANGLE(GLeglContext ctx, GLuint texture)
@@ -11811,17 +12255,25 @@ GLboolean GL_APIENTRY IsTextureContextANGLE(GLeglContext ctx, GLuint texture)
     EVENT("(GLuint texture = %u)", texture);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsTexture, context, texture);
         if (context->skipValidation() || ValidateIsTexture(context, texture))
         {
-            return context->isTexture(texture);
+            returnValue = context->isTexture(texture);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsTexture, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsTexture, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsTexture, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsTransformFeedbackContextANGLE(GLeglContext ctx, GLuint id)
@@ -11829,17 +12281,25 @@ GLboolean GL_APIENTRY IsTransformFeedbackContextANGLE(GLeglContext ctx, GLuint i
     EVENT("(GLuint id = %u)", id);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsTransformFeedback, context, id);
         if (context->skipValidation() || ValidateIsTransformFeedback(context, id))
         {
-            return context->isTransformFeedback(id);
+            returnValue = context->isTransformFeedback(id);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsTransformFeedback, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsTransformFeedback, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsTransformFeedback, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsVertexArrayContextANGLE(GLeglContext ctx, GLuint array)
@@ -11847,17 +12307,25 @@ GLboolean GL_APIENTRY IsVertexArrayContextANGLE(GLeglContext ctx, GLuint array)
     EVENT("(GLuint array = %u)", array);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsVertexArray, context, array);
         if (context->skipValidation() || ValidateIsVertexArray(context, array))
         {
-            return context->isVertexArray(array);
+            returnValue = context->isVertexArray(array);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsVertexArray, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsVertexArray, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsVertexArray, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY IsVertexArrayOESContextANGLE(GLeglContext ctx, GLuint array)
@@ -11865,17 +12333,25 @@ GLboolean GL_APIENTRY IsVertexArrayOESContextANGLE(GLeglContext ctx, GLuint arra
     EVENT("(GLuint array = %u)", array);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsVertexArrayOES, context, array);
         if (context->skipValidation() || ValidateIsVertexArrayOES(context, array))
         {
-            return context->isVertexArray(array);
+            returnValue = context->isVertexArray(array);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsVertexArrayOES, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsVertexArrayOES, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsVertexArrayOES, GLboolean>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY LightModelfContextANGLE(GLeglContext ctx, GLenum pname, GLfloat param)
@@ -12154,6 +12630,7 @@ void *GL_APIENTRY MapBufferOESContextANGLE(GLeglContext ctx, GLenum target, GLen
     EVENT("(GLenum target = 0x%X, GLenum access = 0x%X)", target, access);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    void *returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -12161,11 +12638,18 @@ void *GL_APIENTRY MapBufferOESContextANGLE(GLeglContext ctx, GLenum target, GLen
         ANGLE_CAPTURE(MapBufferOES, context, targetPacked, access);
         if (context->skipValidation() || ValidateMapBufferOES(context, targetPacked, access))
         {
-            return context->mapBuffer(targetPacked, access);
+            returnValue = context->mapBuffer(targetPacked, access);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::MapBufferOES, void *>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::MapBufferOES, void *>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::MapBufferOES, void *>();
+    }
+    return returnValue;
 }
 
 void *GL_APIENTRY MapBufferRangeContextANGLE(GLeglContext ctx,
@@ -12181,6 +12665,7 @@ void *GL_APIENTRY MapBufferRangeContextANGLE(GLeglContext ctx,
         access);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    void *returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -12189,11 +12674,18 @@ void *GL_APIENTRY MapBufferRangeContextANGLE(GLeglContext ctx,
         if (context->skipValidation() ||
             ValidateMapBufferRange(context, targetPacked, offset, length, access))
         {
-            return context->mapBufferRange(targetPacked, offset, length, access);
+            returnValue = context->mapBufferRange(targetPacked, offset, length, access);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::MapBufferRange, void *>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::MapBufferRange, void *>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::MapBufferRange, void *>();
+    }
+    return returnValue;
 }
 
 void *GL_APIENTRY MapBufferRangeEXTContextANGLE(GLeglContext ctx,
@@ -12209,6 +12701,7 @@ void *GL_APIENTRY MapBufferRangeEXTContextANGLE(GLeglContext ctx,
         access);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    void *returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -12217,11 +12710,18 @@ void *GL_APIENTRY MapBufferRangeEXTContextANGLE(GLeglContext ctx,
         if (context->skipValidation() ||
             ValidateMapBufferRangeEXT(context, targetPacked, offset, length, access))
         {
-            return context->mapBufferRange(targetPacked, offset, length, access);
+            returnValue = context->mapBufferRange(targetPacked, offset, length, access);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::MapBufferRangeEXT, void *>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::MapBufferRangeEXT, void *>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::MapBufferRangeEXT, void *>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY MaterialfContextANGLE(GLeglContext ctx, GLenum face, GLenum pname, GLfloat param)
@@ -13817,17 +14317,25 @@ GLbitfield GL_APIENTRY QueryMatrixxOESContextANGLE(GLeglContext ctx,
           (uintptr_t)mantissa, (uintptr_t)exponent);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLbitfield returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(QueryMatrixxOES, context, mantissa, exponent);
         if (context->skipValidation() || ValidateQueryMatrixxOES(context, mantissa, exponent))
         {
-            return context->queryMatrixx(mantissa, exponent);
+            returnValue = context->queryMatrixx(mantissa, exponent);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::QueryMatrixxOES, GLbitfield>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::QueryMatrixxOES, GLbitfield>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::QueryMatrixxOES, GLbitfield>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY ReadBufferContextANGLE(GLeglContext ctx, GLenum src)
@@ -14532,17 +15040,25 @@ GLboolean GL_APIENTRY TestFenceNVContextANGLE(GLeglContext ctx, GLuint fence)
     EVENT("(GLuint fence = %u)", fence);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(TestFenceNV, context, fence);
         if (context->skipValidation() || ValidateTestFenceNV(context, fence))
         {
-            return context->testFenceNV(fence);
+            returnValue = context->testFenceNV(fence);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::TestFenceNV, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::TestFenceNV, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::TestFenceNV, GLboolean>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY TexCoordPointerContextANGLE(GLeglContext ctx,
@@ -16264,6 +16780,7 @@ GLboolean GL_APIENTRY UnmapBufferContextANGLE(GLeglContext ctx, GLenum target)
     EVENT("(GLenum target = 0x%X)", target);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -16271,11 +16788,18 @@ GLboolean GL_APIENTRY UnmapBufferContextANGLE(GLeglContext ctx, GLenum target)
         ANGLE_CAPTURE(UnmapBuffer, context, targetPacked);
         if (context->skipValidation() || ValidateUnmapBuffer(context, targetPacked))
         {
-            return context->unmapBuffer(targetPacked);
+            returnValue = context->unmapBuffer(targetPacked);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::UnmapBuffer, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::UnmapBuffer, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::UnmapBuffer, GLboolean>();
+    }
+    return returnValue;
 }
 
 GLboolean GL_APIENTRY UnmapBufferOESContextANGLE(GLeglContext ctx, GLenum target)
@@ -16283,6 +16807,7 @@ GLboolean GL_APIENTRY UnmapBufferOESContextANGLE(GLeglContext ctx, GLenum target
     EVENT("(GLenum target = 0x%X)", target);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
@@ -16290,11 +16815,18 @@ GLboolean GL_APIENTRY UnmapBufferOESContextANGLE(GLeglContext ctx, GLenum target
         ANGLE_CAPTURE(UnmapBufferOES, context, targetPacked);
         if (context->skipValidation() || ValidateUnmapBufferOES(context, targetPacked))
         {
-            return context->unmapBuffer(targetPacked);
+            returnValue = context->unmapBuffer(targetPacked);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::UnmapBufferOES, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::UnmapBufferOES, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::UnmapBufferOES, GLboolean>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY UseProgramContextANGLE(GLeglContext ctx, GLuint program)
@@ -16960,17 +17492,25 @@ GLuint GL_APIENTRY GenPathsCHROMIUMContextANGLE(GLeglContext ctx, GLsizei range)
     EVENT("(GLsizei range = %d)", range);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLuint returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(GenPathsCHROMIUM, context, range);
         if (context->skipValidation() || ValidateGenPathsCHROMIUM(context, range))
         {
-            return context->genPaths(range);
+            returnValue = context->genPaths(range);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::GenPathsCHROMIUM, GLuint>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::GenPathsCHROMIUM, GLuint>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::GenPathsCHROMIUM, GLuint>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY DeletePathsCHROMIUMContextANGLE(GLeglContext ctx, GLuint first, GLsizei range)
@@ -16994,17 +17534,25 @@ GLboolean GL_APIENTRY IsPathCHROMIUMContextANGLE(GLeglContext ctx, GLuint path)
     EVENT("(GLuint path = %u)", path);
 
     Context *context = static_cast<gl::Context *>(ctx);
+    GLboolean returnValue;
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
         ANGLE_CAPTURE(IsPathCHROMIUM, context, path);
         if (context->skipValidation() || ValidateIsPathCHROMIUM(context, path))
         {
-            return context->isPath(path);
+            returnValue = context->isPath(path);
+        }
+        else
+        {
+            returnValue = GetDefaultReturnValue<EntryPoint::IsPathCHROMIUM, GLboolean>();
         }
     }
-
-    return GetDefaultReturnValue<EntryPoint::IsPathCHROMIUM, GLboolean>();
+    else
+    {
+        returnValue = GetDefaultReturnValue<EntryPoint::IsPathCHROMIUM, GLboolean>();
+    }
+    return returnValue;
 }
 
 void GL_APIENTRY PathCommandsCHROMIUMContextANGLE(GLeglContext ctx,
