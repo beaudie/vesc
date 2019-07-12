@@ -295,7 +295,7 @@ GLenum GL_APIENTRY CheckFramebufferStatus(GLenum target)
         {
             returnValue = GetDefaultReturnValue<EntryPoint::CheckFramebufferStatus, GLenum>();
         }
-        ANGLE_CAPTURE(CheckFramebufferStatus, isCallValid, context, target);
+        ANGLE_CAPTURE(CheckFramebufferStatus, isCallValid, context, target, returnValue);
     }
     else
     {
@@ -549,7 +549,7 @@ GLuint GL_APIENTRY CreateProgram()
         {
             returnValue = GetDefaultReturnValue<EntryPoint::CreateProgram, GLuint>();
         }
-        ANGLE_CAPTURE(CreateProgram, isCallValid, context);
+        ANGLE_CAPTURE(CreateProgram, isCallValid, context, returnValue);
     }
     else
     {
@@ -576,7 +576,7 @@ GLuint GL_APIENTRY CreateShader(GLenum type)
         {
             returnValue = GetDefaultReturnValue<EntryPoint::CreateShader, GLuint>();
         }
-        ANGLE_CAPTURE(CreateShader, isCallValid, context, typePacked);
+        ANGLE_CAPTURE(CreateShader, isCallValid, context, typePacked, returnValue);
     }
     else
     {
@@ -1166,7 +1166,7 @@ GLint GL_APIENTRY GetAttribLocation(GLuint program, const GLchar *name)
         {
             returnValue = GetDefaultReturnValue<EntryPoint::GetAttribLocation, GLint>();
         }
-        ANGLE_CAPTURE(GetAttribLocation, isCallValid, context, program, name);
+        ANGLE_CAPTURE(GetAttribLocation, isCallValid, context, program, name, returnValue);
     }
     else
     {
@@ -1227,7 +1227,7 @@ GLenum GL_APIENTRY GetError()
         {
             returnValue = GetDefaultReturnValue<EntryPoint::GetError, GLenum>();
         }
-        ANGLE_CAPTURE(GetError, isCallValid, context);
+        ANGLE_CAPTURE(GetError, isCallValid, context, returnValue);
     }
     else
     {
@@ -1448,7 +1448,7 @@ const GLubyte *GL_APIENTRY GetString(GLenum name)
         {
             returnValue = GetDefaultReturnValue<EntryPoint::GetString, const GLubyte *>();
         }
-        ANGLE_CAPTURE(GetString, isCallValid, context, name);
+        ANGLE_CAPTURE(GetString, isCallValid, context, name, returnValue);
     }
     else
     {
@@ -1514,7 +1514,7 @@ GLint GL_APIENTRY GetUniformLocation(GLuint program, const GLchar *name)
         {
             returnValue = GetDefaultReturnValue<EntryPoint::GetUniformLocation, GLint>();
         }
-        ANGLE_CAPTURE(GetUniformLocation, isCallValid, context, program, name);
+        ANGLE_CAPTURE(GetUniformLocation, isCallValid, context, program, name, returnValue);
     }
     else
     {
@@ -1646,7 +1646,7 @@ GLboolean GL_APIENTRY IsBuffer(GLuint buffer)
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsBuffer, GLboolean>();
         }
-        ANGLE_CAPTURE(IsBuffer, isCallValid, context, buffer);
+        ANGLE_CAPTURE(IsBuffer, isCallValid, context, buffer, returnValue);
     }
     else
     {
@@ -1672,7 +1672,7 @@ GLboolean GL_APIENTRY IsEnabled(GLenum cap)
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsEnabled, GLboolean>();
         }
-        ANGLE_CAPTURE(IsEnabled, isCallValid, context, cap);
+        ANGLE_CAPTURE(IsEnabled, isCallValid, context, cap, returnValue);
     }
     else
     {
@@ -1699,7 +1699,7 @@ GLboolean GL_APIENTRY IsFramebuffer(GLuint framebuffer)
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsFramebuffer, GLboolean>();
         }
-        ANGLE_CAPTURE(IsFramebuffer, isCallValid, context, framebuffer);
+        ANGLE_CAPTURE(IsFramebuffer, isCallValid, context, framebuffer, returnValue);
     }
     else
     {
@@ -1725,7 +1725,7 @@ GLboolean GL_APIENTRY IsProgram(GLuint program)
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsProgram, GLboolean>();
         }
-        ANGLE_CAPTURE(IsProgram, isCallValid, context, program);
+        ANGLE_CAPTURE(IsProgram, isCallValid, context, program, returnValue);
     }
     else
     {
@@ -1753,7 +1753,7 @@ GLboolean GL_APIENTRY IsRenderbuffer(GLuint renderbuffer)
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsRenderbuffer, GLboolean>();
         }
-        ANGLE_CAPTURE(IsRenderbuffer, isCallValid, context, renderbufferPacked);
+        ANGLE_CAPTURE(IsRenderbuffer, isCallValid, context, renderbufferPacked, returnValue);
     }
     else
     {
@@ -1779,7 +1779,7 @@ GLboolean GL_APIENTRY IsShader(GLuint shader)
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsShader, GLboolean>();
         }
-        ANGLE_CAPTURE(IsShader, isCallValid, context, shader);
+        ANGLE_CAPTURE(IsShader, isCallValid, context, shader, returnValue);
     }
     else
     {
@@ -1805,7 +1805,7 @@ GLboolean GL_APIENTRY IsTexture(GLuint texture)
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsTexture, GLboolean>();
         }
-        ANGLE_CAPTURE(IsTexture, isCallValid, context, texture);
+        ANGLE_CAPTURE(IsTexture, isCallValid, context, texture, returnValue);
     }
     else
     {
