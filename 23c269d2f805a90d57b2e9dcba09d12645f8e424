@@ -25,6 +25,53 @@
     },
     {
       "key": {
+        "uuid": "6ebfbdf2_ea4aa08a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-12T13:20:42Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "ea5bde5e_b46ba61c",
+      "range": {
+        "startLine": 373,
+        "startChar": 4,
+        "endLine": 373,
+        "endChar": 27
+      },
+      "revId": "23c269d2f805a90d57b2e9dcba09d12645f8e424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f31aba24_c318e85c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-12T13:20:42Z",
+      "side": 1,
+      "message": "Ideall we could only support one method of calling initDefaultUniformBlocks. If initting works in load with mState.getUniforms, it should work here as well. Can you see if you can try that? Then also you might not need to move the code out of linkImpl.",
+      "range": {
+        "startLine": 375,
+        "startChar": 0,
+        "endLine": 380,
+        "endChar": 0
+      },
+      "revId": "23c269d2f805a90d57b2e9dcba09d12645f8e424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a12f7008_92cf99e8",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 2
