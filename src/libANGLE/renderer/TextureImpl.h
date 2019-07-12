@@ -185,6 +185,12 @@ class TextureImpl : public FramebufferAttachmentObjectImpl, public angle::Subjec
 
     virtual GLint getNativeID() const;
 
+    // For frame capture only.
+    virtual bool canGetDataForCapture(const gl::ImageIndex &index) const;
+    virtual angle::Result getDataForCapture(const gl::Context *context,
+                                            const gl::ImageIndex &index,
+                                            angle::MemoryBuffer *dataOut);
+
     virtual angle::Result syncState(const gl::Context *context,
                                     const gl::Texture::DirtyBits &dirtyBits) = 0;
 
