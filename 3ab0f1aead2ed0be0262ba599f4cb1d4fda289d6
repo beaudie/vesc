@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "39ff132e_0c8ceb78",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-12T16:12:17Z",
+      "side": 1,
+      "message": "one other cleanup suggestion here. You can use:\n\nconstexpr angle::PackedEnumMap\u003cgl::ComponentType, VkFormat\u003e kMismatchedComponentTypeMap \u003d {{  }};\n\nAnd retrieve a VkFormat from programAttribType directly. See Context.cpp / kValidBasicDrawModes for example init.",
+      "range": {
+        "startLine": 665,
+        "startChar": 0,
+        "endLine": 684,
+        "endChar": 56
+      },
+      "revId": "3ab0f1aead2ed0be0262ba599f4cb1d4fda289d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
