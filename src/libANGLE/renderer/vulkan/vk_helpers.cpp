@@ -2383,6 +2383,13 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     std::vector<SubresourceUpdate> updatesToKeep;
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(mFormat->imageFormat());
 
+    // Upload levels and layers that don't conflict in parallel.  The (level, layer) pair is hashed
+    // to `(level * mLayerCount + layer) % 64` and used to track whether that subresource is
+    // currently in transfer.  If so, a barrier is inserted.  If mLayerCount * mLevelCount > 64,
+    // there will be a few unnecessary barriers.
+    constexpr uint32_t kMaxParallelSubresourceUpload = 64;
+    angle::BitSet64<kMaxParallelSubresourceUpload> subresourceUploadsInProgress;
+
     for (SubresourceUpdate &update : mSubresourceUpdates)
     {
         ASSERT(update.updateSource == SubresourceUpdate::UpdateSource::Clear ||
@@ -2425,10 +2432,28 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             continue;
         }
 
-        // Conservatively add a barrier between every update.  This is to avoid races when updating
-        // the same subresource.  A possible optimization could be to only issue this barrier when
-        // an overlap in updates is observed.
-        changeLayout(aspectFlags, vk::ImageLayout::TransferDst, commandBuffer);
+        if (updateLayerCount >= kMaxParallelSubresourceUpload)
+        {
+            // If there are more subresources than bits we can track, always insert a barrier.
+            changeLayout(aspectFlags, vk::ImageLayout::TransferDst, commandBuffer);
+            subresourceUploadsInProgress.set();
+        }
+        else
+        {
+            const uint64_t subresourceHashRange = (1 << updateLayerCount) - 1;
+            const uint64_t subresourceHashOffset =
+                (updateMipLevel * mLayerCount + updateBaseLayer) % kMaxParallelSubresourceUpload;
+            const uint64_t subresourceHash =
+                ANGLE_ROTL64(subresourceHashRange, subresourceHashOffset);
+
+            if ((subresourceUploadsInProgress.bits() & subresourceHash) != 0)
+            {
+                // If there's overlap in subresource upload, issue a barrier.
+                changeLayout(aspectFlags, vk::ImageLayout::TransferDst, commandBuffer);
+                subresourceUploadsInProgress.reset();
+            }
+            subresourceUploadsInProgress |= subresourceHash;
+        }
 
         if (update.updateSource == SubresourceUpdate::UpdateSource::Clear)
         {
