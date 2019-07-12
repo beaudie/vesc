@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea5bde5e_b46ba61c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-12T02:04:23Z",
+      "side": 1,
+      "message": "This could stay in `linkImpl`, you wouldn\u0027t need to save/load `mStorageBlockBindingsOffset` either.",
+      "range": {
+        "startLine": 373,
+        "startChar": 4,
+        "endLine": 373,
+        "endChar": 27
+      },
+      "revId": "23c269d2f805a90d57b2e9dcba09d12645f8e424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a12f7008_92cf99e8",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-12T02:04:23Z",
+      "side": 1,
+      "message": "Make this a pointer to vector, to avoid unnecessary copies.\n\n`ProgramVk::load` could have its `ShaderMap\u003cvector *\u003e`\u0027s elements point to elements of a local `ShaderMap\u003cvector\u003e` that get filled as they do already.",
+      "range": {
+        "startLine": 535,
+        "startChar": 24,
+        "endLine": 535,
+        "endChar": 48
+      },
+      "revId": "23c269d2f805a90d57b2e9dcba09d12645f8e424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
