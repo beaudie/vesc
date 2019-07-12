@@ -165,7 +165,9 @@ class ProgramVk : public ProgramImpl
     angle::Result allocateDescriptorSetAndGetInfo(ContextVk *contextVk,
                                                   uint32_t descriptorSetIndex,
                                                   bool *newPoolAllocatedOut);
-    angle::Result initDefaultUniformBlocks(const gl::Context *glContext);
+    angle::Result initDefaultUniformBlocks(
+        const gl::Context *glContext,
+        const gl::ShaderMap<std::vector<sh::Uniform>> &uniformMap);
 
     void updateDefaultUniformsDescriptorSet(ContextVk *contextVk);
     void updateTransformFeedbackDescriptorSetImpl(ContextVk *contextVk);

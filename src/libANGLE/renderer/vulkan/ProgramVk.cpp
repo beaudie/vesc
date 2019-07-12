@@ -225,6 +225,8 @@ angle::Result ProgramVk::loadShaderSource(ContextVk *contextVk, gl::BinaryInputS
     {
         mShaderSource[shaderType] = stream->readString();
     }
+    // Read in the offset where storage buffer bindings start
+    mStorageBlockBindingsOffset = stream->readInt<uint32_t>();
 
     return angle::Result::Continue;
 }
@@ -236,6 +238,8 @@ void ProgramVk::saveShaderSource(gl::BinaryOutputStream *stream)
     {
         stream->writeString(mShaderSource[shaderType]);
     }
+    // Write out the offset where storage buffer bindings start
+    stream->writeInt(mStorageBlockBindingsOffset);
 }
 
 void ProgramVk::ShaderInfo::release(ContextVk *contextVk)
@@ -303,8 +307,30 @@ std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
                                                gl::BinaryInputStream *stream,
                                                gl::InfoLog &infoLog)
 {
+    gl::ShaderMap<std::vector<sh::Uniform>> uniformMap;
     ContextVk *contextVk = vk::GetImpl(context);
     angle::Result status = loadShaderSource(contextVk, stream);
+    if (status != angle::Result::Continue)
+    {
+        return std::make_unique<LinkEventDone>(status);
+    }
+
+    reset(contextVk);
+
+    for (const gl::ShaderType shaderType : mState.getLinkedShaderStages())
+    {
+        std::vector<sh::Uniform> uniforms;
+        for (const gl::LinkedUniform &uniform : mState.getUniforms())
+        {
+            if (uniform.isActive(shaderType))
+            {
+                uniforms.push_back(uniform);
+            }
+        }
+        uniformMap[shaderType] = uniforms;
+    }
+
+    status = initDefaultUniformBlocks(context, uniformMap);
     if (status != angle::Result::Continue)
     {
         return std::make_unique<LinkEventDone>(status);
@@ -334,12 +360,29 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
                                            const gl::ProgramLinkedResources &resources,
                                            gl::InfoLog &infoLog)
 {
+    gl::ShaderMap<std::vector<sh::Uniform>> uniformMap;
+    ContextVk *contextVk = vk::GetImpl(context);
     // Link resources before calling GetShaderSource to make sure they are ready for the set/binding
     // assignment done in that function.
     linkResources(resources);
 
     GlslangWrapper::GetShaderSource(mState, resources, &mShaderSource[gl::ShaderType::Vertex],
                                     &mShaderSource[gl::ShaderType::Fragment]);
+
+    reset(contextVk);
+    updateBindingOffsets();
+
+    for (const gl::ShaderType shaderType : mState.getLinkedShaderStages())
+    {
+        gl::Shader *shader     = mState.getAttachedShader(shaderType);
+        uniformMap[shaderType] = shader->getUniforms();
+    }
+
+    angle::Result status = initDefaultUniformBlocks(context, uniformMap);
+    if (status != angle::Result::Continue)
+    {
+        return std::make_unique<LinkEventDone>(status);
+    }
 
     // TODO(jie.a.chen@intel.com): Parallelize linking.
     // http://crbug.com/849576
@@ -352,11 +395,6 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext, gl::InfoLog &inf
     ContextVk *contextVk                     = vk::GetImpl(glContext);
     RendererVk *renderer                     = contextVk->getRenderer();
     gl::TransformFeedback *transformFeedback = glState.getCurrentTransformFeedback();
-
-    reset(contextVk);
-    updateBindingOffsets();
-
-    ANGLE_TRY(initDefaultUniformBlocks(glContext));
 
     // Store a reference to the pipeline and descriptor set layouts. This will create them if they
     // don't already exist in the cache.
@@ -492,7 +530,9 @@ void ProgramVk::linkResources(const gl::ProgramLinkedResources &resources)
     linker.linkResources(mState, resources);
 }
 
-angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
+angle::Result ProgramVk::initDefaultUniformBlocks(
+    const gl::Context *glContext,
+    const gl::ShaderMap<std::vector<sh::Uniform>> &uniformMap)
 {
     ContextVk *contextVk = vk::GetImpl(glContext);
     RendererVk *renderer = contextVk->getRenderer();
@@ -504,14 +544,8 @@ angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
 
     for (const gl::ShaderType shaderType : mState.getLinkedShaderStages())
     {
-        gl::Shader *shader = mState.getAttachedShader(shaderType);
-
-        if (shader)
-        {
-            const std::vector<sh::Uniform> &uniforms = shader->getUniforms();
-            InitDefaultUniformBlock(uniforms, &layoutMap[shaderType],
-                                    &requiredBufferSize[shaderType]);
-        }
+        InitDefaultUniformBlock(uniformMap[shaderType], &layoutMap[shaderType],
+                                &requiredBufferSize[shaderType]);
     }
 
     // Init the default block layout info.
