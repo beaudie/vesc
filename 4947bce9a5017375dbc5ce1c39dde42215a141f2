@@ -131,6 +131,30 @@
     },
     {
       "key": {
+        "uuid": "9ee49a45_105ab440",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-12T15:11:05Z",
+      "side": 1,
+      "message": "Yeah it\u0027s okay that we aren\u0027t checking for the blit bit. The way Shabi coded the blit routines we don\u0027t actually require driver support to implement blit. It can fall back in various ways.",
+      "parentUuid": "6c11fb40_5c9d873c",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 25
+      },
+      "revId": "4947bce9a5017375dbc5ce1c39dde42215a141f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "43a01e7a_80647c6e",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 3
