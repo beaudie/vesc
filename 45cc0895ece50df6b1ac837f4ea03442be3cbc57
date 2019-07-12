@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "b96c1335_36e9b24c",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-12T15:05:41Z",
+      "side": 1,
+      "message": "Can potentially streamline this a bit. Since bools are only used for comparison here, could kill the temp vars and just put the 3 statements above directly in the if compare. I *think* that would save a few instructions depending on how well compiler optimizes.\nAlternatively declaring temp bools \"const\" may result in similar optimization from compiler if it\u0027s not doing it already.",
+      "revId": "45cc0895ece50df6b1ac837f4ea03442be3cbc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "148f6ea7_e55ca37d",
+        "filename": "src/libANGLE/VertexArray.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-12T15:05:41Z",
+      "side": 1,
+      "message": "pointer-buffer is new dirty bit type not included in this original list in comment.",
+      "revId": "45cc0895ece50df6b1ac837f4ea03442be3cbc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3971f1b4_6f60c9a3",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 8
@@ -13,6 +47,23 @@
       "writtenOn": "2019-07-12T14:15:23Z",
       "side": 1,
       "message": "You can `#undef` these macros after use",
+      "revId": "45cc0895ece50df6b1ac837f4ea03442be3cbc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca619fca_172d8244",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-12T15:05:41Z",
+      "side": 1,
+      "message": "Could declare this as \"vk::BufferHelper vkBufferHelper \u003d vk::GetImpl(bufferGL)-\u003egetBuffer();\" and avoid duplicate indirections on following two lines.",
       "revId": "45cc0895ece50df6b1ac837f4ea03442be3cbc57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
