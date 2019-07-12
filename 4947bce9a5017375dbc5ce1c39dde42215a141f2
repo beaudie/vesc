@@ -102,6 +102,24 @@
     },
     {
       "key": {
+        "uuid": "431d9603_62bfce2a",
+        "filename": "scripts/run_code_generation_hashes.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-12T15:35:12Z",
+      "side": 1,
+      "message": "Yup, exactly what you described.   And your fix worked.   Thanks.",
+      "parentUuid": "03718b96_cd8cee34",
+      "revId": "4947bce9a5017375dbc5ce1c39dde42215a141f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b57e0a23_98587d2e",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 3
@@ -185,6 +203,30 @@
       "side": 1,
       "message": "\u003e Is there a concern that we aren\u0027t checking for the VK_FORMAT_FEATURE_BLIT_SRC_BIT bit for compressed formats\n\nWhy would we care about BLIT for compressed formats?",
       "parentUuid": "9ee49a45_105ab440",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 25
+      },
+      "revId": "4947bce9a5017375dbc5ce1c39dde42215a141f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a1b42d28_e2bab32e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-12T15:35:12Z",
+      "side": 1,
+      "message": "No idea (which is why I\u0027m asking).   It\u0027s just a bit that\u0027s on for all of these formats so I wanted to double check.",
+      "parentUuid": "f1b4a0f9_016362eb",
       "range": {
         "startLine": 119,
         "startChar": 8,
