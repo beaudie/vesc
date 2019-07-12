@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58c77b57_ea856bfd",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-12T15:21:47Z",
+      "side": 1,
+      "message": "newline missing?\n\nThese three lines look weird, maybe add some indentation in the lines after NOTE, to make it clear they are not items in this list.",
+      "range": {
+        "startLine": 111,
+        "startChar": 56,
+        "endLine": 111,
+        "endChar": 57
+      },
+      "revId": "32d93ce178a7a46f9f4f583a09ca671735590350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "217e3740_dea2b706",
+        "filename": "src/libANGLE/renderer/null/ContextNULL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-12T15:21:47Z",
+      "side": 1,
+      "message": "Set the new extension too",
+      "revId": "32d93ce178a7a46f9f4f583a09ca671735590350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddcb8a05_7cb1f5cf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-12T15:21:47Z",
+      "side": 1,
+      "message": "Please add a comment that says this is a hack, and link to this: https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d1185#c8",
+      "revId": "32d93ce178a7a46f9f4f583a09ca671735590350",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
