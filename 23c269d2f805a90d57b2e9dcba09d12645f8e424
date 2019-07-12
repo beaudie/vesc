@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "ab9637c1_13fa5cf5",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-12T16:49:23Z",
+      "side": 1,
+      "message": "To me it seems like this extension is precisely intended to store as much state as possible so as to avoid as many recomputations as possible on subsequent reuse\n\nthough if you guys feel strongly about it i can revert it back to recomputing all the time",
+      "parentUuid": "5d169072_b68b9c70",
+      "range": {
+        "startLine": 373,
+        "startChar": 4,
+        "endLine": 373,
+        "endChar": 27
+      },
+      "revId": "23c269d2f805a90d57b2e9dcba09d12645f8e424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f31aba24_c318e85c",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 2
