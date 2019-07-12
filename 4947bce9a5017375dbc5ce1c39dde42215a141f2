@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "9655c1de_5998934c",
+        "filename": "scripts/run_code_generation_hashes.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-12T14:07:11Z",
+      "side": 1,
+      "message": "This file is deleted now",
+      "revId": "4947bce9a5017375dbc5ce1c39dde42215a141f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b57e0a23_98587d2e",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 3
