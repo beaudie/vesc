@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "49913cec_760e654c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-12T15:08:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb92650d_fea25cac",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 14
+      },
+      "revId": "4947bce9a5017375dbc5ce1c39dde42215a141f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9655c1de_5998934c",
         "filename": "scripts/run_code_generation_hashes.json",
         "patchSetId": 3
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "476a0b21_3ca90773",
+        "filename": "scripts/run_code_generation_hashes.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-12T15:08:24Z",
+      "side": 1,
+      "message": "Weird, good catch.   It\u0027s empty here so I\u0027m not sure why git added it back.   How do I delete it from git locally so I don\u0027t re-add it?",
+      "parentUuid": "9655c1de_5998934c",
+      "revId": "4947bce9a5017375dbc5ce1c39dde42215a141f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b57e0a23_98587d2e",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 3
@@ -53,6 +95,30 @@
       "writtenOn": "2019-07-12T12:48:54Z",
       "side": 1,
       "message": "you can also add is format.isBlock here to trap compressed formats, see below comment.",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 25
+      },
+      "revId": "4947bce9a5017375dbc5ce1c39dde42215a141f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c11fb40_5c9d873c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-12T15:08:24Z",
+      "side": 1,
+      "message": "Ah, nice, that does work.\n\nIs there a concern that we aren\u0027t checking for the VK_FORMAT_FEATURE_BLIT_SRC_BIT bit for compressed formats?   HasNonRenderableTextureFormatSupport() only looks for VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT and VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT.",
+      "parentUuid": "b57e0a23_98587d2e",
       "range": {
         "startLine": 119,
         "startChar": 8,
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "997ad553_8d4ffd2b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-12T15:08:24Z",
+      "side": 1,
+      "message": "Cool, it looks like adding format.isBlock is what was necessary to prevent needing this.   \n\nThe problem before was that the compressed texture formats don\u0027t have these bits set, so Android wasn\u0027t finding that the formats were supported.",
+      "parentUuid": "43a01e7a_80647c6e",
+      "range": {
+        "startLine": 271,
+        "startChar": 5,
+        "endLine": 271,
+        "endChar": 32
+      },
+      "revId": "4947bce9a5017375dbc5ce1c39dde42215a141f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "feb869a9_e89656e4",
         "filename": "src/libANGLE/renderer/vulkan/vk_mandatory_format_support_data.json",
         "patchSetId": 3
@@ -99,6 +189,30 @@
       "writtenOn": "2019-07-12T12:48:54Z",
       "side": 1,
       "message": "this is incorrect. it isn\u0027t mandatory. see table 60 in https://renderdoc.org/vkspec_chunked/chap37.html#features-required-format-support\n\nAny idea why you had to add this?",
+      "range": {
+        "startLine": 134,
+        "startChar": 9,
+        "endLine": 134,
+        "endChar": 44
+      },
+      "revId": "4947bce9a5017375dbc5ce1c39dde42215a141f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4fba6092_17a374b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mandatory_format_support_data.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-12T15:08:24Z",
+      "side": 1,
+      "message": "Hm, I thought I was hitting an assert without this on linux, but trying again without it looks good.   Removed.",
+      "parentUuid": "feb869a9_e89656e4",
       "range": {
         "startLine": 134,
         "startChar": 9,
