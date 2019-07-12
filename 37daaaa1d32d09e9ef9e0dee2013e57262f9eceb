@@ -16,6 +16,24 @@
       "revId": "37daaaa1d32d09e9ef9e0dee2013e57262f9eceb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a396420b_917e257b",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1160,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-12T19:44:28Z",
+      "side": 1,
+      "message": "Compressed formats are valid for all of the texture types except 3D. THe 2DArray type is the intended way to make \u00273d\u0027 compressed textures.",
+      "parentUuid": "225db43d_6e44e62a",
+      "revId": "37daaaa1d32d09e9ef9e0dee2013e57262f9eceb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
