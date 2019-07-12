@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb92650d_fea25cac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-12T12:48:54Z",
+      "side": 1,
+      "message": "nit: Desktop",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 14
+      },
+      "revId": "4947bce9a5017375dbc5ce1c39dde42215a141f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b57e0a23_98587d2e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-12T12:48:54Z",
+      "side": 1,
+      "message": "you can also add is format.isBlock here to trap compressed formats, see below comment.",
+      "range": {
+        "startLine": 119,
+        "startChar": 8,
+        "endLine": 119,
+        "endChar": 25
+      },
+      "revId": "4947bce9a5017375dbc5ce1c39dde42215a141f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43a01e7a_80647c6e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-12T12:48:54Z",
+      "side": 1,
+      "message": "This change also looks wrong to me. You\u0027re concerned because compressed formats can\u0027t be RTs? You might want to use \"HasNonRenderableTextureFormatSupport\" below for compressed formats.",
+      "range": {
+        "startLine": 271,
+        "startChar": 5,
+        "endLine": 271,
+        "endChar": 32
+      },
+      "revId": "4947bce9a5017375dbc5ce1c39dde42215a141f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "feb869a9_e89656e4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mandatory_format_support_data.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-12T12:48:54Z",
+      "side": 1,
+      "message": "this is incorrect. it isn\u0027t mandatory. see table 60 in https://renderdoc.org/vkspec_chunked/chap37.html#features-required-format-support\n\nAny idea why you had to add this?",
+      "range": {
+        "startLine": 134,
+        "startChar": 9,
+        "endLine": 134,
+        "endChar": 44
+      },
+      "revId": "4947bce9a5017375dbc5ce1c39dde42215a141f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
