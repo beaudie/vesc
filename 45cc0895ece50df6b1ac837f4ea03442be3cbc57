@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "8b31762b_da7e0494",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-12T15:33:44Z",
+      "side": 1,
+      "message": "Is this equivalent to \nif (attribDirty) {\n   set DIRTY_ATTRIB_POINTER\n} \nelse if(bindVertexBufferImpl(context, attribIndex, boundBuffer, offset, effectiveStride)){\n   set DIRTY_ATTRIB_POINTER_BUFFER\n}\n, or maybe I missed something",
+      "revId": "45cc0895ece50df6b1ac837f4ea03442be3cbc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "148f6ea7_e55ca37d",
         "filename": "src/libANGLE/VertexArray.h",
         "patchSetId": 8
