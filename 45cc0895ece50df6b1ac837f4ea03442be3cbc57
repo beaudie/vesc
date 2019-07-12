@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "c5eab01b_897c11c9",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-12T15:54:28Z",
+      "side": 1,
+      "message": "Could be nice to call `bindVertexBufferImpl` outside the `if` to avoid this confusion.",
+      "parentUuid": "d0f1fb32_4dcb4aee",
+      "revId": "45cc0895ece50df6b1ac837f4ea03442be3cbc57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "148f6ea7_e55ca37d",
         "filename": "src/libANGLE/VertexArray.h",
         "patchSetId": 8
