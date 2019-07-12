@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aede1a35_049ae966",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-12T21:53:20Z",
+      "side": 1,
+      "message": "Yes, much nicer below.",
+      "revId": "a1a9533e907e9f5b13a5039c88d9a5f93eb605ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

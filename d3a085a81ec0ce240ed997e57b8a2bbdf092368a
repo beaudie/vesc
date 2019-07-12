@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7dce4548_8b3a857f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3328,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-12T21:53:20Z",
+      "side": 1,
+      "message": "These various switches to AllShaderTypes() also bring GS into the fold. I\u0027m assuming that\u0027s intentional and doesn\u0027t pose and immediate issues but serves as an early step to enabling GSs?",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f780bef_12623337",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-12T21:53:20Z",
+      "side": 1,
+      "message": "Is this bind necessary? I see that updateDescriptorSets() also binds DescriptorSets. I\u0027m suspecting that this may be redundant although the binding params are sufficiently different that it\u0027s not immediately obvious that this bind is redundant.",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "873a47ed_1b08c385",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-12T21:53:20Z",
+      "side": 1,
+      "message": "So if glState.getProgram() \u003d\u003d nullptr we always invalidate Vtx/Idx buffers? Is there a case when that could be true but we would be in this function due to Compute setting a dirty bit in mPipelineDirtyBitsMask? If so we shouldn\u0027t invalidate Vtx/Idx buffers in that case.",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9274477_c283ab64",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-12T21:53:20Z",
+      "side": 1,
+      "message": "Perhaps \"ASSERT(!intermediateSources[gl::ShaderType::Fragment].empty());\" here. I have a vague memory of a tricky case or two (perhaps GL_RASTERIZER_DISCARD?) where VS can exist w/o an FS. If you know this to be untrue or irrelevant for ANGLE please disregard.",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55eb3894_2b1e95ed",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-12T21:53:20Z",
+      "side": 1,
+      "message": "Could hoist this above the previous \"if\" block to simplify that code a bit.",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

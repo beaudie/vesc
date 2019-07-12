@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b509c558_7e76d8be",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-12T21:53:20Z",
+      "side": 1,
+      "message": "Does \"external means\" mean the host wrote the memory? Or is that assumed and instead it\u0027s host-accessible memory that was written by GPU while mapped? Or something else?",
+      "revId": "cc59d7326217a33b7b68f427f42dc284aabcaedf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78a48f02_012cb5c4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-12T21:53:20Z",
+      "side": 1,
+      "message": "Just to clarify, this is now a cmd buffer that necessarily includes a render pass? Meaning, for example, a cmd buffer that only copies buffers on transfer queue apart from a render pass is excluded.",
+      "revId": "cc59d7326217a33b7b68f427f42dc284aabcaedf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92fa2872_75495608",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-12T21:53:20Z",
+      "side": 1,
+      "message": "I see that updateUniforms() has a path where it doesn\u0027t allocate a new buffer. In that case we should skip dirtying the DSs here (and in setupDraw()) as well, right? Would need to pipe the anyNewBufferAllocated bool back out of updateUniforms().",
+      "revId": "cc59d7326217a33b7b68f427f42dc284aabcaedf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
