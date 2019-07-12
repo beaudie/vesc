@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "4db8ca13_84079850",
+        "filename": "include/platform/FeaturesGL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-12T14:01:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f687c9e4_fe64ae83",
+      "revId": "0b37713f293a9dfc432eb39a4b6ead666d600ce9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "15c72ec4_e486391d",
         "filename": "src/libANGLE/renderer/gl/StateManagerGL.h",
         "patchSetId": 2
@@ -56,6 +74,24 @@
       "revId": "0b37713f293a9dfc432eb39a4b6ead666d600ce9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7157c023_447ec154",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-12T14:01:20Z",
+      "side": 1,
+      "message": "I could store it by pointer but this works too.  It\u0027s not passed into any of the functions that need it though.",
+      "parentUuid": "15c72ec4_e486391d",
+      "revId": "0b37713f293a9dfc432eb39a4b6ead666d600ce9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
