@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7dedaf10_291c09c2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-12T15:32:19Z",
+      "side": 1,
+      "message": "nit: can use a reference type",
+      "range": {
+        "startLine": 654,
+        "startChar": 25,
+        "endLine": 654,
+        "endChar": 32
+      },
+      "revId": "3debf949b9a2a1f29ca3a7ac8d46da3cc174c49b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "583498ff_d04feb4e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-12T15:32:19Z",
+      "side": 1,
+      "message": "I feel like the code would be clearer if you just passed the vector of sh::Attribute you get from Program::getAttributes. Then you can use:\n\n                ComponentType componentType \u003d\n                    GLenumToComponentType(VariableComponentType(attribute.type));\n\nOr make that into another helper in formatutils.h that returns the ComponentType of a GLenum.\n\nAt that point you could use ComponenType in the switch instead of raw bit values.\n\nJust a thought on how to clean this up a bit.",
+      "range": {
+        "startLine": 655,
+        "startChar": 0,
+        "endLine": 686,
+        "endChar": 9
+      },
+      "revId": "3debf949b9a2a1f29ca3a7ac8d46da3cc174c49b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
