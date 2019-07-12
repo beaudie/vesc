@@ -473,8 +473,13 @@ void GenerateCaps(const FunctionsGL *functions,
     if (functions->isAtLeastGL(gl::Version(1, 2)) || functions->isAtLeastGLES(gl::Version(3, 0)) ||
         functions->hasGLESExtension("GL_OES_texture_3D"))
     {
-        caps->max3DTextureSize =
-            std::min(QuerySingleGLInt(functions, GL_MAX_3D_TEXTURE_SIZE), textureSizeLimit);
+        GLint max3dArrayTextureSizeLimit = textureSizeLimit;
+        if (features.limitMax3dArrayTextureSizeTo1024)
+        {
+            max3dArrayTextureSizeLimit = 1024;
+        }
+        caps->max3DTextureSize = std::min(QuerySingleGLInt(functions, GL_MAX_3D_TEXTURE_SIZE),
+                                          max3dArrayTextureSizeLimit);
     }
     else
     {
@@ -1506,8 +1511,9 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     features->disableWorkerContexts.enabled =
         (IsWindows() && (IsIntel(vendor) || IsAMD(vendor))) || (IsLinux() && IsNvidia(vendor));
 
-    features->limitMaxTextureSizeTo4096.enabled = IsAndroid();
+    features->limitMaxTextureSizeTo4096.enabled        = IsAndroid() || (IsIntel() && IsLinux());
     features->limitMaxMSAASamplesTo4.enabled    = IsAndroid();
+    features->limitMax3dArrayTextureSizeTo1024.enabled = IsIntel() && IsLinux();
 
     features->allowClearForRobustResourceInit.enabled = IsApple();
 
