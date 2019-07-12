@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "19712717_e62329fa",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-12T17:16:17Z",
+      "side": 1,
+      "message": "Not a big deal for me. In this particular case, it\u0027s cheaper to actually recalculate these (they are basically `vector::size()` calls) than load/store them and have the binary be larger.",
+      "parentUuid": "ab9637c1_13fa5cf5",
+      "range": {
+        "startLine": 373,
+        "startChar": 4,
+        "endLine": 373,
+        "endChar": 27
+      },
+      "revId": "23c269d2f805a90d57b2e9dcba09d12645f8e424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f31aba24_c318e85c",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 2
