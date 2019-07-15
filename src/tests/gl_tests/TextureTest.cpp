@@ -4499,6 +4499,28 @@ TEST_P(Texture3DTestES3, BasicUnpackBufferOOB)
         glTexImage3D(GL_TEXTURE_3D, 0, GL_RGBA8, 2, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
         ASSERT_GL_NO_ERROR();
     }
+
+    // Compressed texture tests
+    {
+        GLTexture tex;
+        glBindTexture(GL_TEXTURE_2D, tex.get());
+        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
+        glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGB8_ETC2, 2048, 2048, 0, 2097152,
+                               nullptr);
+        ASSERT_GL_NO_ERROR();
+
+        GLBuffer pbo;
+        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo.get());
+        glBufferData(GL_PIXEL_UNPACK_BUFFER, 2796216, nullptr, GL_STATIC_DRAW);
+
+        glCompressedTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 2048, 2048, GL_COMPRESSED_RGB8_ETC2,
+                                  2097152, nullptr);
+        ASSERT_GL_NO_ERROR();
+
+        glCompressedTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1024, 1024, GL_COMPRESSED_RGB8_ETC2,
+                                  524288, reinterpret_cast<const void *>(0x0000000000200000));
+        ASSERT_GL_NO_ERROR();
+    }
 }
 
 // Tests behaviour with a single texture and multiple sampler objects.
@@ -5020,8 +5042,8 @@ ANGLE_INSTANTIATE_TEST(SamplerArrayAsFunctionParameterTest,
                        ES2_OPENGL(),
                        ES2_OPENGLES(),
                        ES2_VULKAN());
-ANGLE_INSTANTIATE_TEST(Texture2DTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
-ANGLE_INSTANTIATE_TEST(Texture3DTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+ANGLE_INSTANTIATE_TEST(Texture2DTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES(), ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST(Texture3DTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES(), ES3_VULKAN());
 ANGLE_INSTANTIATE_TEST(Texture2DIntegerAlpha1TestES3,
                        ES3_D3D11(),
                        ES3_OPENGL(),
