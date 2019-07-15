@@ -145,6 +145,30 @@
     },
     {
       "key": {
+        "uuid": "9cdf4fb6_04908d86",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-15T13:11:09Z",
+      "side": 1,
+      "message": "Yes, I think it is more consistent with the current design in ANGLE to not store values that can be recalculated. I don\u0027t think extensions generally specify how they should be implemented but rather they specify a certain set of functionality.\n\nThe less in the binary the better. Less to remember to keep track of.",
+      "parentUuid": "19712717_e62329fa",
+      "range": {
+        "startLine": 373,
+        "startChar": 4,
+        "endLine": 373,
+        "endChar": 27
+      },
+      "revId": "23c269d2f805a90d57b2e9dcba09d12645f8e424",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f31aba24_c318e85c",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 2
