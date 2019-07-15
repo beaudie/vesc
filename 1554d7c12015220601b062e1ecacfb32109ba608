@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff4867d5_72080c2c",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-07-15T23:18:06Z",
+      "side": 1,
+      "message": "nit: vk_buffer_format instead? E.g. avoid dereferencing array again since we already did it on line 164. If make that change here, probably want to change 165 as well.",
+      "range": {
+        "startLine": 166,
+        "startChar": 73,
+        "endLine": 166,
+        "endChar": 87
+      },
+      "revId": "1554d7c12015220601b062e1ecacfb32109ba608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ecc4f78_243d1b67",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertVertex.comp",
+        "patchSetId": 6
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-07-15T23:18:06Z",
+      "side": 1,
+      "message": "nit: This looks like dead code, not a comment to me. Maybe add \u0027Note:\u0027 at beginning to make it more obvious?",
+      "revId": "1554d7c12015220601b062e1ecacfb32109ba608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4338e519_6baaa4d0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-07-15T23:18:06Z",
+      "side": 1,
+      "message": "Looks suspicious. imageFormatID is float, but we have uint here. Is that correct?\nSince this is a deliberate change, I assume so but it looks odd. Probably worth putting a comment to explain why it says float but type is uint.",
+      "range": {
+        "startLine": 1045,
+        "startChar": 64,
+        "endLine": 1045,
+        "endChar": 70
+      },
+      "revId": "1554d7c12015220601b062e1ecacfb32109ba608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
