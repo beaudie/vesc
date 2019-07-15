@@ -22,6 +22,30 @@
       "revId": "ef5ad95d7be9194fd36870ff7f21316ae64ade48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2794810d_0b887b6f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2171,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-15T14:16:44Z",
+      "side": 1,
+      "message": "Fixed, poor merge by me :(",
+      "parentUuid": "1253818d_74f1e3f3",
+      "range": {
+        "startLine": 2171,
+        "startChar": 8,
+        "endLine": 2171,
+        "endChar": 29
+      },
+      "revId": "ef5ad95d7be9194fd36870ff7f21316ae64ade48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
