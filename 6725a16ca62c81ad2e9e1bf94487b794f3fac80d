@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9310675_dcfe7b4f",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-15T16:52:55Z",
+      "side": 1,
+      "message": "I see what you\u0027ve done with i\u003d1 here to skip first copy above. However, with this code we\u0027ll end up with 2 compares for the fast-path (count \u003d\u003d 1) case. Instead if you check \"if (count \u003d\u003d 1)\" you can then put the for loop in an \"else\" block and the fast-path will only have a single cmp.\nIt\u0027s only a slight difference, but should be faster in fast-path case and a bit easier to follow than having the loop start at 1.",
+      "revId": "6725a16ca62c81ad2e9e1bf94487b794f3fac80d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f30c13f8_b892ba6a",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-15T16:52:55Z",
+      "side": 1,
+      "message": "You don\u0027t need the if/else block here. Can just have a single call and pass \"isSrcColumnMajor\" as second template arg.",
+      "revId": "6725a16ca62c81ad2e9e1bf94487b794f3fac80d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
