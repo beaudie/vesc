@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "337e11a5_0f8b7d6c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2465,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-15T16:14:19Z",
+      "side": 1,
+      "message": "In looking through the code I was curious why we only have this check in the Clear case. Do we know that kEntireLevel is only set for Clear? Should we at least assert in non-clear case that dstSubresource.layerCount !\u003d kEntireLevel?",
+      "revId": "002db1d4960b45dbee47259e04ea27c982e064d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7baae81_429c0db0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2495,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-15T16:14:19Z",
+      "side": 1,
+      "message": "I\u0027m confused about why setting to max() here vs. 0 as is done before the loop and below when setting barrier.\nI\u0027m thinking it\u0027s to make sure any follow-on subresources that hit \"else\" case below are guaranteed to overlap and set their own barrier. However, if that happens, the first follow-on subresource will cause this flag to get set to 0 so resources after that would no longer hit the overlap case.\nIs there a hole here?",
+      "revId": "002db1d4960b45dbee47259e04ea27c982e064d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a8724ef_49753f6a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2499,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-15T16:14:19Z",
+      "side": 1,
+      "message": "Is the \"-1\" here b/c it\u0027s a zero-based layer count?",
+      "revId": "002db1d4960b45dbee47259e04ea27c982e064d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
