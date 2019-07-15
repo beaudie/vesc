@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c68b815_3fc742ea",
+        "filename": "src/tests/deqp_support/deqp_khr_gles3_test_expectations.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-15T13:16:52Z",
+      "side": 1,
+      "message": "why is this commented out if it crashes?",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 67
+      },
+      "revId": "d4bbadc9896a4dde7b04b360d6b1b2158f676473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
