@@ -69,6 +69,24 @@
       "revId": "6725a16ca62c81ad2e9e1bf94487b794f3fac80d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da88d049_1774bbe3",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-15T17:53:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "25340323_9e0bfc2b",
+      "revId": "6725a16ca62c81ad2e9e1bf94487b794f3fac80d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
