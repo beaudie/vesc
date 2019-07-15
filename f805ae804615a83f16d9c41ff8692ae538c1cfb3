@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "39376c65_a3935292",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-15T19:03:42Z",
+      "side": 1,
+      "message": "I\u0027d like to keep GetComponentTypeMask in the header so all the magic numbers are close to where they are defined",
+      "parentUuid": "b8c6711b_ccdec4c9",
+      "range": {
+        "startLine": 436,
+        "startChar": 0,
+        "endLine": 436,
+        "endChar": 92
+      },
+      "revId": "f805ae804615a83f16d9c41ff8692ae538c1cfb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "05ba0961_61829822",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "f805ae804615a83f16d9c41ff8692ae538c1cfb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bef44072_2610e6bf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-15T19:03:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05ba0961_61829822",
+      "range": {
+        "startLine": 666,
+        "startChar": 0,
+        "endLine": 681,
+        "endChar": 13
+      },
+      "revId": "f805ae804615a83f16d9c41ff8692ae538c1cfb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
