@@ -3352,6 +3352,11 @@ void Context::initCaps()
 
     LimitCap(&mState.mCaps.maxImageUnits, IMPLEMENTATION_MAX_IMAGE_UNITS);
 
+    for (ShaderType shaderType : AllShaderTypes())
+    {
+        LimitCap(&mState.mCaps.maxShaderAtomicCounterBuffers[shaderType],
+                 IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS);
+    }
     LimitCap(&mState.mCaps.maxCombinedAtomicCounterBuffers,
              IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS);
 
