@@ -9310,30 +9310,67 @@ void StateCache::updateVertexAttribTypesValidation(Context *context)
 {
     if (context->getClientMajorVersion() <= 2)
     {
-        mCachedVertexAttribTypesValidation = {{
-            {VertexAttribType::Byte, VertexAttribTypeCase::Valid},
-            {VertexAttribType::Short, VertexAttribTypeCase::Valid},
-            {VertexAttribType::UnsignedByte, VertexAttribTypeCase::Valid},
-            {VertexAttribType::UnsignedShort, VertexAttribTypeCase::Valid},
-            {VertexAttribType::Float, VertexAttribTypeCase::Valid},
-            {VertexAttribType::Fixed, VertexAttribTypeCase::Valid},
-        }};
+        if (context->getExtensions().vertexAttribType101010102)
+        {
+            mCachedVertexAttribTypesValidation = {{
+                {VertexAttribType::Byte, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Short, VertexAttribTypeCase::Valid},
+                {VertexAttribType::UnsignedByte, VertexAttribTypeCase::Valid},
+                {VertexAttribType::UnsignedShort, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Float, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Fixed, VertexAttribTypeCase::Valid},
+                {VertexAttribType::UnsignedInt1010102, VertexAttribTypeCase::ValidSize3or4},
+                {VertexAttribType::Int1010102, VertexAttribTypeCase::ValidSize3or4},
+            }};
+        }
+        else
+        {
+            mCachedVertexAttribTypesValidation = {{
+                {VertexAttribType::Byte, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Short, VertexAttribTypeCase::Valid},
+                {VertexAttribType::UnsignedByte, VertexAttribTypeCase::Valid},
+                {VertexAttribType::UnsignedShort, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Float, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Fixed, VertexAttribTypeCase::Valid},
+            }};
+        }
     }
     else
     {
-        mCachedVertexAttribTypesValidation = {{
-            {VertexAttribType::Byte, VertexAttribTypeCase::Valid},
-            {VertexAttribType::Short, VertexAttribTypeCase::Valid},
-            {VertexAttribType::Int, VertexAttribTypeCase::Valid},
-            {VertexAttribType::UnsignedByte, VertexAttribTypeCase::Valid},
-            {VertexAttribType::UnsignedShort, VertexAttribTypeCase::Valid},
-            {VertexAttribType::UnsignedInt, VertexAttribTypeCase::Valid},
-            {VertexAttribType::Float, VertexAttribTypeCase::Valid},
-            {VertexAttribType::HalfFloat, VertexAttribTypeCase::Valid},
-            {VertexAttribType::Fixed, VertexAttribTypeCase::Valid},
-            {VertexAttribType::Int2101010, VertexAttribTypeCase::ValidSize4Only},
-            {VertexAttribType::UnsignedInt2101010, VertexAttribTypeCase::ValidSize4Only},
-        }};
+        if (context->getExtensions().vertexAttribType101010102)
+        {
+            mCachedVertexAttribTypesValidation = {{
+                {VertexAttribType::Byte, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Short, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Int, VertexAttribTypeCase::Valid},
+                {VertexAttribType::UnsignedByte, VertexAttribTypeCase::Valid},
+                {VertexAttribType::UnsignedShort, VertexAttribTypeCase::Valid},
+                {VertexAttribType::UnsignedInt, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Float, VertexAttribTypeCase::Valid},
+                {VertexAttribType::HalfFloat, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Fixed, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Int2101010, VertexAttribTypeCase::ValidSize4Only},
+                {VertexAttribType::UnsignedInt2101010, VertexAttribTypeCase::ValidSize4Only},
+                {VertexAttribType::Int1010102, VertexAttribTypeCase::ValidSize3or4},
+                {VertexAttribType::UnsignedInt1010102, VertexAttribTypeCase::ValidSize3or4},
+            }};
+        }
+        else
+        {
+            mCachedVertexAttribTypesValidation = {{
+                {VertexAttribType::Byte, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Short, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Int, VertexAttribTypeCase::Valid},
+                {VertexAttribType::UnsignedByte, VertexAttribTypeCase::Valid},
+                {VertexAttribType::UnsignedShort, VertexAttribTypeCase::Valid},
+                {VertexAttribType::UnsignedInt, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Float, VertexAttribTypeCase::Valid},
+                {VertexAttribType::HalfFloat, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Fixed, VertexAttribTypeCase::Valid},
+                {VertexAttribType::Int2101010, VertexAttribTypeCase::ValidSize4Only},
+                {VertexAttribType::UnsignedInt2101010, VertexAttribTypeCase::ValidSize4Only},
+            }};
+        }
 
         mCachedIntegerVertexAttribTypesValidation = {{
             {VertexAttribType::Byte, VertexAttribTypeCase::Valid},

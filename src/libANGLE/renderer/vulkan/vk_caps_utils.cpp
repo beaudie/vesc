@@ -92,6 +92,8 @@ void RendererVk::ensureCapsInitialized() const
 
     mNativeExtensions.eglSync = true;
 
+    mNativeExtensions.vertexAttribType101010102 = true;
+
     // We use secondary command buffers almost everywhere and they require a feature to be
     // able to execute in the presence of queries.  As a result, we won't support queries
     // unless that feature is available.
@@ -206,14 +208,14 @@ void RendererVk::ensureCapsInitialized() const
 
     // Uniforms are implemented using a uniform buffer, so the max number of uniforms we can
     // support is the max buffer range divided by the size of a single uniform (4X float).
-    mNativeCaps.maxVertexUniformVectors                              = maxUniformVectors;
-    mNativeCaps.maxFragmentUniformVectors                            = maxUniformVectors;
-    mNativeCaps.maxFragmentInputComponents                           = maxUniformComponents;
+    mNativeCaps.maxVertexUniformVectors    = maxUniformVectors;
+    mNativeCaps.maxFragmentUniformVectors  = maxUniformVectors;
+    mNativeCaps.maxFragmentInputComponents = maxUniformComponents;
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         mNativeCaps.maxShaderUniformComponents[shaderType] = maxUniformComponents;
     }
-    mNativeCaps.maxUniformLocations                                  = maxUniformVectors;
+    mNativeCaps.maxUniformLocations = maxUniformVectors;
 
     // Every stage has 1 reserved uniform buffer for the default uniforms, and 1 for the driver
     // uniforms.
@@ -230,7 +232,7 @@ void RendererVk::ensureCapsInitialized() const
     {
         mNativeCaps.maxShaderUniformBlocks[shaderType] = maxPerStageUniformBuffers;
     }
-    mNativeCaps.maxCombinedUniformBlocks                         = maxCombinedUniformBuffers;
+    mNativeCaps.maxCombinedUniformBlocks = maxCombinedUniformBuffers;
 
     mNativeCaps.maxUniformBufferBindings = maxCombinedUniformBuffers;
     mNativeCaps.maxUniformBlockSize      = maxUniformBlockSize;
@@ -247,7 +249,7 @@ void RendererVk::ensureCapsInitialized() const
     {
         mNativeCaps.maxShaderTextureImageUnits[shaderType] = maxPerStageTextures;
     }
-    mNativeCaps.maxCombinedTextureImageUnits                         = maxCombinedTextures;
+    mNativeCaps.maxCombinedTextureImageUnits = maxCombinedTextures;
 
     uint32_t maxPerStageStorageBuffers    = limitsVk.maxPerStageDescriptorStorageBuffers;
     uint32_t maxVertexStageStorageBuffers = maxPerStageStorageBuffers;
