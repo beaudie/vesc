@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "95a84a1e_633be696",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-15T23:59:19Z",
+      "side": 1,
+      "message": "You are right. Fixed",
+      "parentUuid": "7ee6d983_2cbdcc24",
+      "range": {
+        "startLine": 161,
+        "startChar": 0,
+        "endLine": 176,
+        "endChar": 5
+      },
+      "revId": "0ba1e7c9aa631519ec7efeff867cc8a0f72ad394",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ff8418c_478ac8ed",
         "filename": "src/libANGLE/renderer/renderer_utils.cpp",
         "patchSetId": 7
@@ -68,6 +92,30 @@
       "revId": "0ba1e7c9aa631519ec7efeff867cc8a0f72ad394",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d666f45b_884ba084",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-15T23:59:19Z",
+      "side": 1,
+      "message": "Fixed. Made a partial specification for col-4 HLSL and row-4 GLSL",
+      "parentUuid": "f1606774_3a08d3fa",
+      "range": {
+        "startLine": 564,
+        "startChar": 0,
+        "endLine": 566,
+        "endChar": 56
+      },
+      "revId": "0ba1e7c9aa631519ec7efeff867cc8a0f72ad394",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
