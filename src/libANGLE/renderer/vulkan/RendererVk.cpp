@@ -1112,6 +1112,18 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
     // Current highest supported version
     gl::Version maxVersion = gl::Version(3, 1);
 
+    // Limit to ES3.0 if there are any blockers for 3.1.
+
+    // ES3.1 requires at least one atomic counter buffer and four storage buffers in compute.
+    // Atomic counter buffers are emulated with storage buffers, so if Vulkan doesn't support at
+    // least 5 storage buffers in compute, we cannot support 3.1.
+    if (mPhysicalDeviceProperties.limits.maxPerStageDescriptorStorageBuffers < 5)
+    {
+        maxVersion = std::min(maxVersion, gl::Version(3, 0));
+    }
+
+    // Limit to ES2.0 if there are any blockers for 3.0.
+
 #if ANGLE_VULKAN_CONFORMANT_CONFIGS_ONLY
     // TODO: Disallow ES 3.0+ until supported. http://crbug.com/angleproject/2950
     maxVersion = gl::Version(2, 0);
