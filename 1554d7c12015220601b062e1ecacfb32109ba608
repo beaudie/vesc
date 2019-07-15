@@ -128,6 +128,30 @@
       "revId": "1554d7c12015220601b062e1ecacfb32109ba608",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7b8efa1_f2bdbb33",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_table_autogen.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1045,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-07-15T23:30:27Z",
+      "side": 1,
+      "message": "Make sense.",
+      "parentUuid": "eb585718_462819e5",
+      "range": {
+        "startLine": 1045,
+        "startChar": 64,
+        "endLine": 1045,
+        "endChar": 70
+      },
+      "revId": "1554d7c12015220601b062e1ecacfb32109ba608",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
