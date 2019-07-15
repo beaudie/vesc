@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a7985909_740c4633",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-15T17:40:50Z",
+      "side": 1,
+      "message": "Good point. Fixed",
+      "parentUuid": "a9310675_dcfe7b4f",
+      "revId": "6725a16ca62c81ad2e9e1bf94487b794f3fac80d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f30c13f8_b892ba6a",
         "filename": "src/libANGLE/renderer/renderer_utils.cpp",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2019-07-15T16:52:55Z",
       "side": 1,
       "message": "You don\u0027t need the if/else block here. Can just have a single call and pass \"isSrcColumnMajor\" as second template arg.",
+      "revId": "6725a16ca62c81ad2e9e1bf94487b794f3fac80d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25340323_9e0bfc2b",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-15T17:40:50Z",
+      "side": 1,
+      "message": "isSrcColumnMajor is a runtime value, so it can not be put in to template parameter. I am also hoping there is simpler way to \u0027convert this runtime bool to a const bool\u0027, but unfortunately I can not find anything simpler than an if-else branch :(",
+      "parentUuid": "f30c13f8_b892ba6a",
       "revId": "6725a16ca62c81ad2e9e1bf94487b794f3fac80d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
