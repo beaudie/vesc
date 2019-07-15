@@ -844,6 +844,7 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
         if (glShader)
         {
             intermediateSources[shaderType].init(glShader->getTranslatedSource());
+            fprintf(stderr, "%hhu:\n%s\n", shaderType, glShader->getTranslatedSource().c_str());
         }
     }
 
@@ -881,6 +882,8 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        //        fprintf(stderr, "%hhu:\n%s\n", shaderType,
+        //        (*shaderSourcesOut)[shaderType].c_str());
     }
 }
 

@@ -677,8 +677,8 @@
 3572 VULKAN : dEQP-GLES31.functional.tessellation_geometry_interaction.* = FAIL
 
 // Atomic counters:
-3566 VULKAN : dEQP-GLES31.functional.*atomic_counter* = FAIL
-3566 VULKAN : dEQP-GLES31.functional.ssbo.layout.* = FAIL
+//3566 VULKAN : dEQP-GLES31.functional.*atomic_counter* = FAIL
+//3566 VULKAN : dEQP-GLES31.functional.ssbo.layout.* = FAIL
 
 // Storage image:
 3563 VULKAN : dEQP-GLES31.functional.state_query.*image* = FAIL
