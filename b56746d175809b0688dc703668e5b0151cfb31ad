@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "936c17c3_7885fb96",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1244,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-15T19:30:24Z",
+      "side": 1,
+      "message": "are you sure this is safe? I don\u0027t see where we clamp in the front end.",
+      "range": {
+        "startLine": 1241,
+        "startChar": 0,
+        "endLine": 1244,
+        "endChar": 34
+      },
+      "revId": "b56746d175809b0688dc703668e5b0151cfb31ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
