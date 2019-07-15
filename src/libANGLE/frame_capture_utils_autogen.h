@@ -23,6 +23,7 @@ enum class ParamType
     TClientVertexArrayType,
     TCullFaceMode,
     TDrawElementsType,
+    TGLDEBUGPROC,
     TGLDEBUGPROCKHR,
     TGLbitfield,
     TGLboolean,
@@ -52,12 +53,14 @@ enum class ParamType
     TGLintConstPointer,
     TGLintPointer,
     TGLintptr,
+    TGLintptrConstPointer,
     TGLshort,
     TGLshortConstPointer,
     TGLsizei,
     TGLsizeiConstPointer,
     TGLsizeiPointer,
     TGLsizeiptr,
+    TGLsizeiptrConstPointer,
     TGLsync,
     TGLubyte,
     TGLubyteConstPointer,
@@ -82,6 +85,7 @@ enum class ParamType
     TPointParameter,
     TPrimitiveMode,
     TProvokingVertex,
+    TProvokingVertexConvention,
     TQueryType,
     TShaderType,
     TShadingModel,
@@ -104,6 +108,7 @@ union ParamValue
     gl::ClientVertexArrayType ClientVertexArrayTypeVal;
     gl::CullFaceMode CullFaceModeVal;
     gl::DrawElementsType DrawElementsTypeVal;
+    GLDEBUGPROC GLDEBUGPROCVal;
     GLDEBUGPROCKHR GLDEBUGPROCKHRVal;
     GLbitfield GLbitfieldVal;
     GLboolean GLbooleanVal;
@@ -133,12 +138,14 @@ union ParamValue
     const GLint *GLintConstPointerVal;
     GLint *GLintPointerVal;
     GLintptr GLintptrVal;
+    const GLintptr *GLintptrConstPointerVal;
     GLshort GLshortVal;
     const GLshort *GLshortConstPointerVal;
     GLsizei GLsizeiVal;
     const GLsizei *GLsizeiConstPointerVal;
     GLsizei *GLsizeiPointerVal;
     GLsizeiptr GLsizeiptrVal;
+    const GLsizeiptr *GLsizeiptrConstPointerVal;
     GLsync GLsyncVal;
     GLubyte GLubyteVal;
     const GLubyte *GLubyteConstPointerVal;
@@ -163,6 +170,7 @@ union ParamValue
     gl::PointParameter PointParameterVal;
     gl::PrimitiveMode PrimitiveModeVal;
     gl::ProvokingVertex ProvokingVertexVal;
+    gl::ProvokingVertexConvention ProvokingVertexConventionVal;
     gl::QueryType QueryTypeVal;
     gl::ShaderType ShaderTypeVal;
     gl::ShadingModel ShadingModelVal;
@@ -216,6 +224,12 @@ inline void SetParamVal<ParamType::TDrawElementsType>(gl::DrawElementsType value
                                                       ParamValue *valueOut)
 {
     valueOut->DrawElementsTypeVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TGLDEBUGPROC>(GLDEBUGPROC valueIn, ParamValue *valueOut)
+{
+    valueOut->GLDEBUGPROCVal = valueIn;
 }
 
 template <>
@@ -398,6 +412,13 @@ inline void SetParamVal<ParamType::TGLintptr>(GLintptr valueIn, ParamValue *valu
 }
 
 template <>
+inline void SetParamVal<ParamType::TGLintptrConstPointer>(const GLintptr *valueIn,
+                                                          ParamValue *valueOut)
+{
+    valueOut->GLintptrConstPointerVal = valueIn;
+}
+
+template <>
 inline void SetParamVal<ParamType::TGLshort>(GLshort valueIn, ParamValue *valueOut)
 {
     valueOut->GLshortVal = valueIn;
@@ -433,6 +454,13 @@ template <>
 inline void SetParamVal<ParamType::TGLsizeiptr>(GLsizeiptr valueIn, ParamValue *valueOut)
 {
     valueOut->GLsizeiptrVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TGLsizeiptrConstPointer>(const GLsizeiptr *valueIn,
+                                                            ParamValue *valueOut)
+{
+    valueOut->GLsizeiptrConstPointerVal = valueIn;
 }
 
 template <>
@@ -590,6 +618,14 @@ inline void SetParamVal<ParamType::TProvokingVertex>(gl::ProvokingVertex valueIn
 }
 
 template <>
+inline void SetParamVal<ParamType::TProvokingVertexConvention>(
+    gl::ProvokingVertexConvention valueIn,
+    ParamValue *valueOut)
+{
+    valueOut->ProvokingVertexConventionVal = valueIn;
+}
+
+template <>
 inline void SetParamVal<ParamType::TQueryType>(gl::QueryType valueIn, ParamValue *valueOut)
 {
     valueOut->QueryTypeVal = valueIn;
@@ -694,6 +730,9 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
         case ParamType::TDrawElementsType:
             SetParamVal<ParamType::TDrawElementsType>(valueIn, valueOut);
             break;
+        case ParamType::TGLDEBUGPROC:
+            SetParamVal<ParamType::TGLDEBUGPROC>(valueIn, valueOut);
+            break;
         case ParamType::TGLDEBUGPROCKHR:
             SetParamVal<ParamType::TGLDEBUGPROCKHR>(valueIn, valueOut);
             break;
@@ -781,6 +820,9 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
         case ParamType::TGLintptr:
             SetParamVal<ParamType::TGLintptr>(valueIn, valueOut);
             break;
+        case ParamType::TGLintptrConstPointer:
+            SetParamVal<ParamType::TGLintptrConstPointer>(valueIn, valueOut);
+            break;
         case ParamType::TGLshort:
             SetParamVal<ParamType::TGLshort>(valueIn, valueOut);
             break;
@@ -798,6 +840,9 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
             break;
         case ParamType::TGLsizeiptr:
             SetParamVal<ParamType::TGLsizeiptr>(valueIn, valueOut);
+            break;
+        case ParamType::TGLsizeiptrConstPointer:
+            SetParamVal<ParamType::TGLsizeiptrConstPointer>(valueIn, valueOut);
             break;
         case ParamType::TGLsync:
             SetParamVal<ParamType::TGLsync>(valueIn, valueOut);
@@ -870,6 +915,9 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
             break;
         case ParamType::TProvokingVertex:
             SetParamVal<ParamType::TProvokingVertex>(valueIn, valueOut);
+            break;
+        case ParamType::TProvokingVertexConvention:
+            SetParamVal<ParamType::TProvokingVertexConvention>(valueIn, valueOut);
             break;
         case ParamType::TQueryType:
             SetParamVal<ParamType::TQueryType>(valueIn, valueOut);
