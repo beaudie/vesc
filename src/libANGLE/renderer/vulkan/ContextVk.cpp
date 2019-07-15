@@ -1389,8 +1389,14 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 break;
             }
             case gl::State::DIRTY_BIT_DEPTH_RANGE:
-                updateDepthRange(glState.getNearPlane(), glState.getFarPlane());
+            {
+                if (glState.getNearPlane() != mGraphicsPipelineDesc->getViewportDesc().minDepth ||
+                    glState.getFarPlane() != mGraphicsPipelineDesc->getViewportDesc().maxDepth)
+                {
+                    updateDepthRange(glState.getNearPlane(), glState.getFarPlane());
+                }
                 break;
+            }
             case gl::State::DIRTY_BIT_BLEND_ENABLED:
                 mGraphicsPipelineDesc->updateBlendEnabled(&mGraphicsPipelineTransition,
                                                           glState.isBlendEnabled());

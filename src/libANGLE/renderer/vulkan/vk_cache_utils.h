@@ -400,6 +400,7 @@ class GraphicsPipelineDesc final
 
     // RenderPass description.
     const RenderPassDesc &getRenderPassDesc() const { return mRenderPassDesc; }
+    const VkViewport &getViewportDesc() const { return mViewport; }
 
     void setRenderPassDesc(const RenderPassDesc &renderPassDesc);
     void updateRenderPassDesc(GraphicsPipelineTransitionBits *transition,
