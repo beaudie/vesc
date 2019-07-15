@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c747bbd_40a3deea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-15T18:23:09Z",
+      "side": 1,
+      "message": "triggerring-\u003etriggering",
+      "revId": "a65c9b35ad0b009391437211ed0d239a6f9bcac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cdb8a66_a46e9d78",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-15T18:23:09Z",
+      "side": 1,
+      "message": "Need to remove the check from here and put it in the frontend so that DIRTY_BIT_DEPTH_RANGE is not being set unless the state is actually changing.",
+      "revId": "a65c9b35ad0b009391437211ed0d239a6f9bcac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
