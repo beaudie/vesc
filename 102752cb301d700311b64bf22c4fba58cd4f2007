@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6305ec78_2255e4bf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2181,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-07-15T23:28:38Z",
+      "side": 1,
+      "message": "Is this really unreachable? Probably should early exit, if there is no pixel data to setup, nothing to do here.",
+      "revId": "102752cb301d700311b64bf22c4fba58cd4f2007",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
