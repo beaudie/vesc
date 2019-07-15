@@ -151,6 +151,336 @@ class DeclareDefaultUniformsTraverser : public TIntermTraverser
     bool mInDefaultUniform;
 };
 
+TIntermBinary *CreateAtomicCounterRef(const TVariable *atomicCounters, TIntermTyped *offset)
+{
+    TIntermSymbol *atomicCountersRef = new TIntermSymbol(atomicCounters);
+    TConstantUnion *firstFieldIndex  = new TConstantUnion;
+    firstFieldIndex->setIConst(0);
+    TIntermConstantUnion *firstFieldRef =
+        new TIntermConstantUnion(firstFieldIndex, *StaticType::GetBasic<EbtUInt>());
+    TIntermBinary *firstField =
+        new TIntermBinary(EOpIndexDirectInterfaceBlock, atomicCountersRef, firstFieldRef);
+    return new TIntermBinary(EOpIndexDirect, firstField, offset);
+}
+
+TIntermConstantUnion *CreateFloatConstant(float value)
+{
+    const TType *constantType     = StaticType::GetBasic<EbtFloat, 1>();
+    TConstantUnion *constantValue = new TConstantUnion;
+    constantValue->setFConst(value);
+    return new TIntermConstantUnion(constantValue, *constantType);
+}
+
+TIntermConstantUnion *CreateUIntConstant(uint32_t value)
+{
+    const TType *constantType     = StaticType::GetBasic<EbtUInt, 1>();
+    TConstantUnion *constantValue = new TConstantUnion;
+    constantValue->setUConst(value);
+    return new TIntermConstantUnion(constantValue, *constantType);
+}
+
+// First pass that converts the |atomic_uint| types to |uint|, substituting the
+// |uniform atomic_uint| declarations with a global declaration that holds the offset, as well as
+// substituting |atomicVar[n]| with |offset + n|.
+class ReplaceAtomicCountersTraverser : public TIntermTraverser
+{
+  public:
+    ReplaceAtomicCountersTraverser(TSymbolTable *symbolTable)
+        : TIntermTraverser(true, true, true, symbolTable),
+          mCurrentAtomicCounterOffset(0),
+          mCurrentAtomicCounterDecl(nullptr),
+          mCurrentAtomicCounterDeclParent(nullptr),
+          mIsInFunctionDefinition(false)
+    {}
+
+    bool visitDeclaration(Visit visit, TIntermDeclaration *node) override
+    {
+        const TIntermSequence &sequence = *(node->getSequence());
+
+        TIntermTyped *variable = sequence.front()->getAsTyped();
+        const TType &type      = variable->getType();
+        bool isAtomicCounter =
+            type.getQualifier() == EvqUniform && IsAtomicCounter(type.getBasicType());
+
+        if (visit == PreVisit || visit == InVisit)
+        {
+            if (isAtomicCounter)
+            {
+                // We only support one atomic counter buffer, so the binding should necessarily be
+                // 0.
+                ASSERT(type.getLayoutQualifier().binding == 0);
+
+                mCurrentAtomicCounterDecl       = node;
+                mCurrentAtomicCounterDeclParent = getParentNode()->getAsBlock();
+                mCurrentAtomicCounterOffset     = type.getLayoutQualifier().offset;
+            }
+        }
+        else if (visit == PostVisit)
+        {
+            mCurrentAtomicCounterDecl       = nullptr;
+            mCurrentAtomicCounterDeclParent = nullptr;
+            mCurrentAtomicCounterOffset     = 0;
+        }
+        return true;
+    }
+
+    void visitFunctionPrototype(TIntermFunctionPrototype *node) override
+    {
+        // Go over the parameters and replace the atomic arguments with a uint version.  If this is
+        // the function definition, keep the replaced variable for future encounters.
+        for (size_t paramIndex = 0; paramIndex < node->getChildCount(); ++paramIndex)
+        {
+            TIntermNode *param     = node->getChildNode(paramIndex);
+            TVariable *replacement = convertFunctionParameter(node, param);
+            if (replacement && mIsInFunctionDefinition)
+            {
+                mAtomicCounterOffsets[&param->getAsSymbolNode()->variable()] = replacement;
+            }
+        }
+    }
+
+    bool visitFunctionDefinition(Visit visit, TIntermFunctionDefinition *node) override
+    {
+        mIsInFunctionDefinition = visit == PreVisit;
+        return true;
+    }
+
+    void visitSymbol(TIntermSymbol *symbol) override
+    {
+        const TVariable *symbolVariable = &symbol->variable();
+
+        if (mCurrentAtomicCounterDecl)
+        {
+            // Create a global variable that contains the offset of this atomic counter declaration.
+            TType *uintType = new TType(*StaticType::GetBasic<EbtUInt, 1>());
+            uintType->setQualifier(EvqConst);
+            TVariable *offset = new TVariable(mSymbolTable, symbolVariable->name(), uintType,
+                                              SymbolType::UserDefined);
+
+            ASSERT(mCurrentAtomicCounterOffset % 4 == 0);
+            TIntermConstantUnion *offsetInitValue =
+                CreateIndexNode(mCurrentAtomicCounterOffset / 4);
+
+            TIntermSymbol *offsetSymbol = new TIntermSymbol(offset);
+            TIntermBinary *offsetInit =
+                new TIntermBinary(EOpInitialize, offsetSymbol, offsetInitValue);
+
+            TIntermDeclaration *offsetDeclaration = new TIntermDeclaration();
+            offsetDeclaration->appendDeclarator(offsetInit);
+
+            // Replace the atomic_uint declaration with the offset declaration.
+            TIntermSequence replacement;
+            replacement.push_back(offsetDeclaration);
+            mMultiReplacements.emplace_back(mCurrentAtomicCounterDeclParent,
+                                            mCurrentAtomicCounterDecl, replacement);
+
+            // Remember the offset variable.
+            mAtomicCounterOffsets[symbolVariable] = offset;
+
+            return;
+        }
+
+        // Otherwise, if this symbol is a reference to an atomic counter, replace it with the actual
+        // offset.  Note that until the next pass, |atomicCounter*| functions will temporarily
+        // contain the offset expression as parameter, which is invalid, but is temporary.
+        if (!IsAtomicCounter(symbol->getType().getBasicType()))
+        {
+            return;
+        }
+
+        ASSERT(mAtomicCounterOffsets.count(symbolVariable) != 0);
+        TIntermTyped *offset = new TIntermSymbol(mAtomicCounterOffsets[symbolVariable]);
+
+        TIntermNode *parent = getParentNode();
+        ASSERT(parent);
+
+        TIntermBinary *arrayExpression = parent->getAsBinaryNode();
+        if (arrayExpression)
+        {
+            ASSERT(arrayExpression->getOp() == EOpIndexDirect ||
+                   arrayExpression->getOp() == EOpIndexIndirect);
+
+            offset = new TIntermBinary(EOpAdd, offset, arrayExpression->getRight()->deepCopy());
+
+            ASSERT(getAncestorNode(1) != nullptr);
+            queueReplacementWithParent(getAncestorNode(1), arrayExpression, offset,
+                                       OriginalNode::IS_DROPPED);
+        }
+        else
+        {
+            queueReplacement(offset, OriginalNode::IS_DROPPED);
+        }
+    }
+
+  private:
+    TVariable *convertFunctionParameter(TIntermNode *parent, TIntermNode *param)
+    {
+        if (!IsAtomicCounter(param->getAsTyped()->getType().getBasicType()))
+        {
+            return nullptr;
+        }
+
+        TIntermSymbol *atomicCounterParam = param->getAsSymbolNode();
+        ASSERT(atomicCounterParam);
+
+        TType *newType = new TType(atomicCounterParam->getType());
+        newType->setBasicType(EbtUInt);
+
+        TVariable *replacementVar = new TVariable(
+            mSymbolTable, atomicCounterParam->variable().name(), newType, SymbolType::UserDefined);
+        TIntermSymbol *replacement = new TIntermSymbol(replacementVar);
+
+        queueReplacementWithParent(parent, param, replacement, OriginalNode::IS_DROPPED);
+
+        return replacementVar;
+    }
+
+  private:
+    // A map from the atomic_uint variable to the offset declaration.
+    std::map<const TVariable *, TVariable *> mAtomicCounterOffsets;
+
+    uint32_t mCurrentAtomicCounterOffset;
+    TIntermDeclaration *mCurrentAtomicCounterDecl;
+    TIntermAggregateBase *mCurrentAtomicCounterDeclParent;
+    bool mIsInFunctionDefinition;
+};
+
+class ReplaceAtomicCounterFunctionsTraverser : public TIntermTraverser
+{
+  public:
+    ReplaceAtomicCounterFunctionsTraverser(TSymbolTable *symbolTable,
+                                           const TVariable *atomicCounters)
+        : TIntermTraverser(true, true, true, symbolTable), mAtomicCounters(atomicCounters)
+    {}
+
+    bool visitAggregate(Visit visit, TIntermAggregate *node) override
+    {
+        if (visit != PostVisit || node->getOp() != EOpCallBuiltInFunction)
+        {
+            return true;
+        }
+
+        // If the function is |memoryBarrierAtomicCounter|, simply replace it with
+        // |memoryBarrierBuffer|.
+        if (node->getFunction()->name() == "memoryBarrierAtomicCounter")
+        {
+            TIntermTyped *substituteCall = CreateBuiltInFunctionCallNode(
+                "memoryBarrierBuffer", new TIntermSequence, *mSymbolTable, 310);
+            queueReplacement(substituteCall, OriginalNode::IS_DROPPED);
+            return true;
+        }
+
+        // If it's an |atomicCounter*| function, replace the function with an |atomic*| equivalent.
+        // Note that in the previous pass, the first argument of the function is changed to contain
+        // the offset of the atomic counter.
+        if (!node->getFunction()->isAtomicCounterFunction())
+        {
+            return true;
+        }
+
+        const ImmutableString &functionName = node->getFunction()->name();
+        TIntermSequence *arguments          = node->getSequence();
+
+        // Note: atomicAdd(0) is used for atomic reads.
+        uint32_t valueChange                = 0;
+        constexpr char kAtomicAddFunction[] = "atomicAdd";
+        bool isDecrement                    = false;
+
+        if (functionName == "atomicCounterIncrement")
+        {
+            valueChange = 1;
+        }
+        else if (functionName == "atomicCounterDecrement")
+        {
+            // uint values are required to wrap around, so 0xFFFFFFFFu is used as -1.
+            valueChange = std::numeric_limits<uint32_t>::max();
+            static_assert(static_cast<uint32_t>(-1) == std::numeric_limits<uint32_t>::max(),
+                          "uint32_t max is not -1");
+
+            isDecrement = true;
+        }
+        else
+        {
+            ASSERT(functionName == "atomicCounter");
+        }
+
+        TIntermTyped *offset = (*arguments)[0]->getAsTyped()->deepCopy();
+
+        TIntermSequence *substituteArguments = new TIntermSequence;
+        substituteArguments->push_back(CreateAtomicCounterRef(mAtomicCounters, offset));
+        substituteArguments->push_back(CreateUIntConstant(valueChange));
+
+        TIntermTyped *substituteCall = CreateBuiltInFunctionCallNode(
+            kAtomicAddFunction, substituteArguments, *mSymbolTable, 310);
+
+        // Note that atomicCounterDecrement returns the *new* value instead of the prior value,
+        // unlike atomicAdd.  So we need to do a -1 on the result as well.
+        if (isDecrement)
+        {
+            substituteCall = new TIntermBinary(EOpSub, substituteCall, CreateUIntConstant(1));
+        }
+
+        queueReplacement(substituteCall, OriginalNode::IS_DROPPED);
+
+        return true;
+    }
+
+  private:
+    const TVariable *mAtomicCounters;
+};
+
+const TVariable *DeclareInterfaceBlock(TIntermBlock *root,
+                                       TSymbolTable *symbolTable,
+                                       TFieldList *fieldList,
+                                       TQualifier qualifier,
+                                       const char *blockTypeName,
+                                       const char *blockVariableName)
+{
+    // Define an interface block.
+    TLayoutQualifier layoutQualifier = TLayoutQualifier::Create();
+    TInterfaceBlock *interfaceBlock =
+        new TInterfaceBlock(symbolTable, ImmutableString(blockTypeName), fieldList, layoutQualifier,
+                            SymbolType::AngleInternal);
+
+    // Turn the inteface block into a declaration.
+    TType *interfaceBlockType              = new TType(interfaceBlock, qualifier, layoutQualifier);
+    TIntermDeclaration *interfaceBlockDecl = new TIntermDeclaration;
+    TVariable *interfaceBlockVar = new TVariable(symbolTable, ImmutableString(blockVariableName),
+                                                 interfaceBlockType, SymbolType::AngleInternal);
+    TIntermSymbol *interfaceBlockDeclarator = new TIntermSymbol(interfaceBlockVar);
+    interfaceBlockDecl->appendDeclarator(interfaceBlockDeclarator);
+
+    // Insert the declarations before the first function.
+    TIntermSequence *insertSequence = new TIntermSequence;
+    insertSequence->push_back(interfaceBlockDecl);
+
+    size_t firstFunctionIndex = FindFirstFunctionDefinitionIndex(root);
+    root->insertChildNodes(firstFunctionIndex, *insertSequence);
+
+    return interfaceBlockVar;
+}
+
+// DeclareAtomicCountersBuffer adds a storage buffer that's used with atomic counters.
+const TVariable *DeclareAtomicCountersBuffer(TIntermBlock *root, TSymbolTable *symbolTable)
+{
+    // Define `uint counters[];` as the only field in the interface block.
+    TFieldList *fieldList = new TFieldList;
+    TType *counterType    = new TType(EbtUInt);
+    counterType->makeArray(0);
+
+    TField *countersField = new TField(counterType, ImmutableString("counters"), TSourceLoc(),
+                                       SymbolType::AngleInternal);
+
+    fieldList->push_back(countersField);
+
+    // TODO: may need coherent or something like that. Somewhere says they are all coherent by
+    // default!  Maybe a barrier before reads? Maybe atomic read can be atomicAdd(0)?
+
+    // Define a storage block "ANGLEAtomicCounters" with instance name "atomicCounters".
+    return DeclareInterfaceBlock(root, symbolTable, fieldList, EvqBuffer, "ANGLEAtomicCounters",
+                                 "atomicCounters");
+}
+
 constexpr ImmutableString kFlippedPointCoordName    = ImmutableString("flippedPointCoord");
 constexpr ImmutableString kFlippedFragCoordName     = ImmutableString("flippedFragCoord");
 constexpr ImmutableString kEmulatedDepthRangeParams = ImmutableString("ANGLEDepthRangeParams");
@@ -167,18 +497,6 @@ constexpr size_t kNumDriverUniforms                                        = 7;
 constexpr std::array<const char *, kNumDriverUniforms> kDriverUniformNames = {
     {kViewport, kHalfRenderAreaHeight, kViewportYScale, kNegViewportYScale, kXfbActiveUnpaused,
      kXfbBufferOffsets, kDepthRange}};
-
-template <TBasicType BasicType = EbtFloat, unsigned char PrimarySize = 1>
-TIntermConstantUnion *CreateBasicConstant(float value)
-{
-    const TType *constantType     = StaticType::GetBasic<BasicType, PrimarySize>();
-    TConstantUnion *constantValue = new TConstantUnion[PrimarySize];
-    for (unsigned char sizeIndex = 0; sizeIndex < PrimarySize; ++sizeIndex)
-    {
-        constantValue[sizeIndex].setFConst(value);
-    }
-    return new TIntermConstantUnion(constantValue, *constantType);
-}
 
 size_t FindFieldIndex(const TFieldList &fieldList, const char *fieldName)
 {
@@ -297,7 +615,7 @@ void AppendVertexShaderDepthCorrectionToMain(TIntermBlock *root, TSymbolTable *s
     TIntermSwizzle *positionZ = new TIntermSwizzle(positionRef, swizzleOffsetZ);
 
     // Create a constant "0.5"
-    TIntermConstantUnion *oneHalf = CreateBasicConstant(0.5f);
+    TIntermConstantUnion *oneHalf = CreateFloatConstant(0.5f);
 
     // Create a swizzle to "gl_Position.w"
     TVector<int> swizzleOffsetW;
@@ -376,29 +694,9 @@ const TVariable *AddDriverUniformsToShader(TIntermBlock *root, TSymbolTable *sym
         driverFieldList->push_back(driverUniformField);
     }
 
-    // Define a driver uniform block "ANGLEUniformBlock".
-    TLayoutQualifier driverLayoutQualifier = TLayoutQualifier::Create();
-    TInterfaceBlock *interfaceBlock =
-        new TInterfaceBlock(symbolTable, ImmutableString("ANGLEUniformBlock"), driverFieldList,
-                            driverLayoutQualifier, SymbolType::AngleInternal);
-
-    // Make the inteface block into a declaration. Use instance name "ANGLEUniforms".
-    TType *interfaceBlockType = new TType(interfaceBlock, EvqUniform, driverLayoutQualifier);
-    TIntermDeclaration *driverUniformsDecl = new TIntermDeclaration;
-    TVariable *driverUniformsVar = new TVariable(symbolTable, ImmutableString("ANGLEUniforms"),
-                                                 interfaceBlockType, SymbolType::AngleInternal);
-    TIntermSymbol *driverUniformsDeclarator = new TIntermSymbol(driverUniformsVar);
-    driverUniformsDecl->appendDeclarator(driverUniformsDeclarator);
-
-    // Insert the declarations before first function, since functions before main() may refer to
-    // these values.
-    TIntermSequence *insertSequence = new TIntermSequence;
-    insertSequence->push_back(driverUniformsDecl);
-
-    size_t firstFunctionIndex = FindFirstFunctionDefinitionIndex(root);
-    root->insertChildNodes(firstFunctionIndex, *insertSequence);
-
-    return driverUniformsVar;
+    // Define a driver uniform block "ANGLEUniformBlock" with instance name "ANGLEUniforms".
+    return DeclareInterfaceBlock(root, symbolTable, driverFieldList, EvqUniform,
+                                 "ANGLEUniformBlock", "ANGLEUniforms");
 }
 
 TIntermPreprocessorDirective *GenerateLineRasterIfDef()
@@ -524,7 +822,7 @@ void AddLineSegmentRasterizationEmulation(TInfoSinkBase &sink,
     TIntermBinary *positionNDC = new TIntermBinary(EOpDiv, positionXY, positionW);
 
     // ANGLEPosition * 0.5
-    TIntermConstantUnion *oneHalf = CreateBasicConstant(0.5f);
+    TIntermConstantUnion *oneHalf = CreateFloatConstant(0.5f);
     TIntermBinary *halfPosition   = new TIntermBinary(EOpVectorTimesScalar, positionNDC, oneHalf);
 
     // (ANGLEPosition * 0.5) + 0.5
@@ -562,7 +860,7 @@ void AddLineSegmentRasterizationEmulation(TInfoSinkBase &sink,
     TIntermBinary *baSq = new TIntermBinary(EOpMul, ba, ba->deepCopy());
 
     // 2.0 * ba * ba
-    TIntermTyped *two      = CreateBasicConstant(2.0f);
+    TIntermTyped *two      = CreateFloatConstant(2.0f);
     TIntermBinary *twoBaSq = new TIntermBinary(EOpVectorTimesScalar, baSq, two);
 
     // Assign to a temporary "ba2".
@@ -593,7 +891,7 @@ void AddLineSegmentRasterizationEmulation(TInfoSinkBase &sink,
     // Using a small epsilon value ensures that we don't suffer from numerical instability when
     // lines are exactly vertical or horizontal.
     static constexpr float kEpisilon = 0.00001f;
-    TIntermConstantUnion *epsilon    = CreateBasicConstant(kEpisilon);
+    TIntermConstantUnion *epsilon    = CreateFloatConstant(kEpisilon);
 
     // bp.x > epsilon
     TIntermBinary *checkX = new TIntermBinary(EOpGreaterThan, bpX, epsilon);
@@ -654,6 +952,7 @@ void TranslatorVulkan::translate(TIntermBlock *root,
     // Write out default uniforms into a uniform block assigned to a specific set/binding.
     int defaultUniformCount        = 0;
     int structTypesUsedForUniforms = 0;
+    int atomicCounterCount         = 0;
     for (const auto &uniform : getUniforms())
     {
         if (!uniform.isBuiltIn() && uniform.staticUse && !gl::IsOpaqueType(uniform.type))
@@ -664,6 +963,11 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         if (uniform.isStruct())
         {
             ++structTypesUsedForUniforms;
+        }
+
+        if (gl::IsAtomicCounterType(uniform.type))
+        {
+            ++atomicCounterCount;
         }
     }
 
@@ -690,6 +994,24 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         defaultTraverser.updateTree();
 
         sink << "};\n";
+    }
+
+    if (atomicCounterCount > 0)
+    {
+        const TVariable *atomicCounters = DeclareAtomicCountersBuffer(root, &getSymbolTable());
+
+        // Change atomic_uint types to uint, and replace usages of the atomic_uint variables with a
+        // constant offset calculation.
+        ReplaceAtomicCountersTraverser replaceAtomicCounters(&getSymbolTable());
+        root->traverse(&replaceAtomicCounters);
+        replaceAtomicCounters.updateTree();
+
+        // Go through atomic counter functions and replace them with storage buffer atomic functions
+        // using the offsets substituted in the previous pass.
+        ReplaceAtomicCounterFunctionsTraverser replaceAtomicCounterFunctions(&getSymbolTable(),
+                                                                             atomicCounters);
+        root->traverse(&replaceAtomicCounterFunctions);
+        replaceAtomicCounterFunctions.updateTree();
     }
 
     const TVariable *driverUniforms = nullptr;
@@ -762,7 +1084,7 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         {
             TIntermBinary *viewportYScale =
                 CreateDriverUniformRef(driverUniforms, kNegViewportYScale);
-            TIntermConstantUnion *pivot = CreateBasicConstant(0.5f);
+            TIntermConstantUnion *pivot = CreateFloatConstant(0.5f);
             FlipBuiltinVariable(root, GetMainSequence(root), viewportYScale, &getSymbolTable(),
                                 BuiltInVariable::gl_PointCoord(), kFlippedPointCoordName, pivot);
         }
