@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "fb124165_fcf8f2b0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2495,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-16T16:06:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5598c93c_3fd25b03",
+      "revId": "002db1d4960b45dbee47259e04ea27c982e064d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a8724ef_49753f6a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "angle::Bit(N) would give 0b100...0. The -1 turns it into N consecutive 1 bits: 0b11...1\n\nSay instead of 64, the bitset here was 8 bits wide. If layer count is 5, firstly this would give 0b00011111. If the calculated offset below is for example 4, the bits are rotated by that amount to become 0b11110001. That value is then tested against the bitset.\n\nEssentially, the subresource bits wrap around 64 for simplicity.",
       "parentUuid": "5a8724ef_49753f6a",
+      "revId": "002db1d4960b45dbee47259e04ea27c982e064d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "393b1c0d_e6f00acd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2499,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-16T16:06:40Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1f36cdf2_32773a17",
       "revId": "002db1d4960b45dbee47259e04ea27c982e064d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
