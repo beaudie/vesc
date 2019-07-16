@@ -390,6 +390,7 @@ bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
     // For multismaple texture, filter state of multisample texture is ignored(11.1.3.3).
     // So it shouldn't be judged as incomplete texture. So, we ignore filtering for multisample
     // texture completeness here.
+    // TODO: baseImageDesc.format.info->depthBits doesn't seem right,
     if (!IsMultisampled(mType) && baseImageDesc.format.info->depthBits > 0 &&
         mDepthStencilTextureMode == GL_STENCIL_INDEX)
     {
