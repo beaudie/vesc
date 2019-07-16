@@ -535,6 +535,406 @@ void main()
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), kFS);
 }
 
+TEST_P(GLSLTest_ES3, Manhattan)
+{
+    constexpr char kVS[] = R"(#version 300 es
+#define FOG
+#define SHADOW_MAP
+#define SOFT_SHADOW
+#define SV_30
+#ifdef GL_ES
+precision highp float;
+#endif
+#ifndef GL_ES
+#define highp
+#define mediump
+#define lowp
+#endif
+#ifdef USE_UBOs
+	#include cameraConsts;
+	#include meshConsts;
+	#include staticMeshConsts;
+	#include translateConsts;
+#else
+	uniform highp mat4 mvp;
+	uniform highp mat4 mv;
+	uniform highp mat4 model;
+	uniform highp mat4 inv_model;
+	uniform highp mat4 inv_modelview;
+	
+	uniform highp vec3 view_pos;
+	uniform mediump float time;
+	
+	uniform mediump vec2 translate_uv;
+#endif
+
+#ifdef SKELETAL
+uniform vec4 bones[3*SKELETAL];
+#endif 
+
+in vec3 in_position;
+in vec4 in_bone_index;
+in vec4 in_bone_weight;
+in vec3 in_normal;
+in vec3 in_tangent;
+in vec2 in_texcoord0;
+in vec2 in_texcoord1;
+
+#ifdef INSTANCING
+//in mat4 in_instance_mv;
+in vec4 in_instance_mv0;
+in vec4 in_instance_mv1;
+in vec4 in_instance_mv2;
+in vec4 in_instance_mv3;
+in mat4 in_instance_inv_mv;
+#endif
+
+out vec2 out_texcoord0;
+out vec2 out_texcoord1;
+out vec3 out_texcoord4;
+out vec3 out_view_dir;
+out vec3 out_normal;
+out vec3 out_tangent;
+out vec2 out_texcoord01;
+out vec2 out_texcoord02;
+out vec2 out_texcoord03;
+out vec2 out_texcoord04;
+out vec3 out_eye_space_normal;
+out vec3 out_world_pos;
+
+vec2 wave0 = vec2(  1.01, 1.08);
+vec2 wave1 = vec2(  -1.02,   -1.02 );
+vec2 wave2 = vec2( -1.03,  1.03 );
+vec2 wave3 = vec2(  1.05,  -1.07 );
+
+void decodeFromByteVec3(inout vec3 myVec)
+{
+#ifdef UBYTE_NORMAL_TANGENT
+	myVec = 2.0 * myVec - 1.0;
+#endif
+}
+
+void main()
+{    
+	vec4 tmp;
+	vec3 position;
+	vec3 normal = in_normal;
+	vec3 tangent = in_tangent;
+	
+#ifdef INSTANCING
+	mat4 in_instance_mv = mat4(in_instance_mv0, in_instance_mv1, in_instance_mv2, in_instance_mv3);
+#endif
+	
+	decodeFromByteVec3(normal);
+	decodeFromByteVec3(tangent);
+
+#ifdef SKELETAL
+	mat4 M4;
+
+#define RESULT M4
+#define BONE bones
+	{ ivec4 I = ivec4(in_bone_index); mat4 M0 = mat4( BONE[I.x * 3 + 0],BONE[I.x * 3 + 1],BONE[I.x * 3 + 2],vec4( 0.0, 0.0, 0.0, 1.0)); mat4 M1 = mat4( BONE[I.y * 3 + 0],BONE[I.y * 3 + 1],BONE[I.y * 3 + 2],vec4( 0.0, 0.0, 0.0, 1.0)); mat4 M2 = mat4( BONE[I.z 
+ 3 + 0],BONE[I.z * 3 + 1],BONE[I.z * 3 + 2],vec4( 0.0, 0.0, 0.0, 1.0)); mat4 M3 = mat4( BONE[I.w * 3 + 0],BONE[I.w * 3 + 1],BONE[I.w * 3 + 2],vec4( 0.0, 0.0, 0.0, 1.0)); RESULT = M0 * in_bone_weight.x + M1 * in_bone_weight.y + M2 * in_bone_weight.z + M3 * 
+n_bone_weight.w; }
+
+	position = (vec4( in_position, 1.0) * M4).xyz;
+	normal = (vec4( normal, 0.0) * M4).xyz;
+	tangent = (vec4( tangent, 0.0) * M4).xyz;
+#else
+	position = in_position;
+#endif
+
+	mat4 mvp_1 = mvp;
+#ifdef INSTANCING
+    mat4 mvp2 = mvp_1 * in_instance_mv;
+	gl_Position = mvp2 * vec4( position, 1.0);
+#else
+	gl_Position = mvp_1 * vec4( position, 1.0);
+#endif
+
+	out_texcoord0 = in_texcoord0;
+
+#if defined TRANSLATE_UV	
+	#ifdef USE_UBOs
+		out_texcoord0 += translate_uv_pad2.xy;
+	#else
+		out_texcoord0 += translate_uv;
+	#endif
+#endif
+
+#ifdef INSTANCING
+	vec4 world_position = in_instance_mv * vec4( position, 1.0);
+
+	#ifdef USE_UBOs
+		out_view_dir = view_posXYZ_normalized_time.xyz - world_position.xyz;
+	#else
+		out_view_dir = view_pos - world_position.xyz;
+	#endif
+
+	tmp = vec4( normal, 0.0) * in_instance_inv_mv;
+	out_normal = tmp.xyz;
+
+	tmp = vec4( tangent, 0.0) * in_instance_inv_mv;
+	out_tangent = tmp.xyz;
+
+#else
+	//vec4 world_position = model * vec4( position, 1.0);
+	mat4 model_1 = model;
+	vec4 world_position = model_1 * vec4( position, 1.0);
+
+	#ifdef USE_UBOs
+		out_view_dir = view_posXYZ_normalized_time.xyz - world_position.xyz;
+	#else
+		out_view_dir = view_pos - world_position.xyz;
+	#endif
+
+	//tmp = vec4( normal, 0.0) * inv_model;
+	mat4 inv_model_1 = inv_model;
+	tmp = vec4( normal, 0.0) * inv_model_1;
+	out_normal = tmp.xyz;
+
+	//tmp = vec4( tangent, 0.0) * inv_model;
+	tmp = vec4( tangent, 0.0) * inv_model_1;
+	out_tangent = tmp.xyz;
+#endif
+
+#ifdef ANIMATE_NORMAL
+
+	#ifdef USE_UBOs
+		out_texcoord01 = out_texcoord0 * 1.3 + (4.0 * view_posXYZ_normalized_time.w) * wave0;
+		out_texcoord02 = out_texcoord0 * 1.5 + (4.0 * view_posXYZ_normalized_time.w) * wave1;
+		out_texcoord03 = out_texcoord0 * 3.0 + (4.0 * view_posXYZ_normalized_time.w) * wave2;
+		out_texcoord04 = out_texcoord0 * 1.1 + (4.0 * view_posXYZ_normalized_time.w) * wave3;	
+	#else
+		out_texcoord01 = out_texcoord0 * 1.3 + (4.0 * time) * wave0;
+		out_texcoord02 = out_texcoord0 * 1.5 + (4.0 * time) * wave1;
+		out_texcoord03 = out_texcoord0 * 3.0 + (4.0 * time) * wave2;
+		out_texcoord04 = out_texcoord0 * 1.1 + (4.0 * time) * wave3;
+	#endif
+
+#endif
+
+#ifdef TRANSITION_EFFECT	
+	//out_eye_space_normal = (vec4( normal, 0.0) * inv_modelview).xyz;
+	mat4 inv_modelview_1 = inv_modelview;
+	out_eye_space_normal = (vec4( normal, 0.0) * inv_modelview_1).xyz;
+	
+	out_world_pos = position.xyz * 0.3;
+#endif
+}
+)";
+
+    constexpr char kFS[] = R"(#version 300 es
+#define FOG
+#define SHADOW_MAP
+#define SOFT_SHADOW
+#define SV_30
+#ifdef GL_ES
+precision mediump float;
+#endif
+#ifndef GL_ES
+#define highp
+#define mediump
+#define lowp
+#endif
+#ifdef GL_ES
+#if defined LIGHTING || defined REFLECTION || defined DEP_TEXTURING || defined TRANSITION_EFFECT
+precision mediump float;
+#else
+precision lowp float;
+#endif
+#endif
+#ifdef GL_ES
+#if defined NEED_HIGHP
+precision highp float;
+#endif
+#endif
+uniform lowp sampler2D texture_unit0;
+uniform lowp sampler2D texture_unit3;
+uniform lowp sampler2D texture_unit2;
+uniform lowp sampler2D texture_unit1;
+uniform lowp sampler2D texture_unit4;
+uniform lowp samplerCube envmap0;
+uniform lowp samplerCube envmap1;
+uniform lowp sampler2DArray texture_array_unit0;
+
+#ifdef USE_UBOs
+	#include cameraConsts;
+	#include matConsts;
+	#include envmapsInterpolatorConsts;
+#else
+	uniform mediump float specular_intensity;
+	uniform mediump float specular_exponent;
+	uniform mediump vec3 fresnel_params;
+	
+	uniform mediump float time;
+	uniform highp vec3 view_dir;
+	uniform lowp float envmaps_interpolator;
+#endif
+
+in vec2 out_texcoord0;
+in vec3 out_normal;
+in vec3 out_tangent;
+in vec3 out_view_dir;
+
+in vec3 out_eye_space_normal;
+in vec3 out_world_pos;
+
+out vec4 frag_color[4];
+
+vec2 EncodeFloatRG( highp float value, float max_value) 
+{
+	const highp float max16int = 256.0 * 256.0 - 1.0;
+
+	value = clamp( value / max_value, 0.0, 1.0);
+
+	value *= max16int;
+	highp vec2 result = floor(value / vec2(256.0, 1.0));
+	result.g -= result.r * 256.0;
+	result /= 255.0;
+	
+	return result;
+} 
+
+void main()
+{
+#ifdef MASK
+	vec4 mask = texture( texture_unit2, out_texcoord0);
+#if defined ALPHA_TEST
+	if( mask.x < 0.25)
+	{
+		discard;
+	}
+#endif
+#else
+	vec4 mask = vec4(0.0, 0.0, 0.0, 1.0);
+#if defined ALPHA_TEST
+	// The mask is always (0, 0, 0, 1) if no mask is defined, so (mask.x < 0.25) would always be hit.
+	discard;
+#endif
+#endif
+
+#ifdef EMISSION
+	vec4 emission = texture( texture_unit4, out_texcoord0);
+#endif
+	vec3 normal = normalize( out_normal);
+	vec3 vtx_normal = normal;
+	vec3 tangent = normalize( out_tangent);
+	vec3 bitangent = cross( tangent, normal);
+
+	vec3 texel_color = texture( texture_unit0, out_texcoord0).xyz;
+	vec3 ts_normal = texture( texture_unit3, out_texcoord0).xyz;
+
+	ts_normal.xyz = ts_normal.xyz * 2.0 - 1.0;
+		
+	mat3 mat = mat3( tangent, bitangent, normal); 
+
+	normal = mat * ts_normal;
+	
+	vec3 reflect_vector = reflect( out_view_dir, normal);
+	vec3 env_color0 = texture( envmap0, reflect_vector).xyz;
+	vec3 env_color1 = texture( envmap1, reflect_vector).xyz;
+
+#ifdef USE_UBOs
+	vec3 env_color = mix( env_color1.xyz, env_color0.xyz, envmaps_interpolator_pad3.x);
+#else
+	vec3 env_color = mix( env_color1.xyz, env_color0.xyz, envmaps_interpolator);
+#endif
+
+	vec3 normal_enc = normal * 0.5 + 0.5;
+	
+	frag_color[0] = vec4( texel_color, 0.0);
+	frag_color[1] = vec4( normal_enc, 0.0);
+	frag_color[2] = vec4( env_color, mask.z);
+	#ifdef USE_UBOs
+		frag_color[3].xy = EncodeFloatRG( mask.y * matparams_disiseri.y, 128.0); 
+	#else
+		frag_color[3].xy = EncodeFloatRG( mask.y * specular_intensity, 128.0); 
+	#endif
+	#ifdef USE_UBOs
+		frag_color[3].zw = EncodeFloatRG( matparams_disiseri.z, 4096.0); 
+	#else
+		frag_color[3].zw = EncodeFloatRG( specular_exponent, 4096.0); 
+	#endif
+
+#ifdef EMISSION
+	frag_color[1].w = emission.x * 8.0;
+#endif
+
+#ifdef TRANSITION_EFFECT
+	float t = 0.0;
+
+	#ifdef USE_UBOs
+		if( view_posXYZ_normalized_time.w > 0.37)
+		{
+			t = (view_posXYZ_normalized_time.w - 0.37) * 9.0;
+		}
+
+		t = clamp( t, 0.0, 1.0);
+	#else
+		if( time > 0.37)
+		{
+			t = (time - 0.37) * 9.0;
+		}
+
+		t = clamp( t, 0.0, 1.0);
+	#endif
+
+	vec3 nnn = normalize( out_eye_space_normal);
+	
+	float idx = fract( t * 10.0) * 95.0;
+	
+	vec3 normal2 = normal * normal;
+	vec3 secondary_color0 = texture( texture_array_unit0, vec3( out_world_pos.yz, idx)).xyz;
+	vec3 secondary_color1 = texture( texture_array_unit0, vec3( out_world_pos.xz, idx)).xyz;
+	vec3 secondary_color2 = texture( texture_array_unit0, vec3( out_world_pos.xy, idx)).xyz;
+	vec3 secondary_color = secondary_color0 * normal2.x + secondary_color1 * normal2.y + secondary_color2 * normal2.z;
+
+	float a = 2.5 * t + secondary_color.x;
+	
+	secondary_color *= vec3( 1.0 - nnn.z);
+	secondary_color = 64.0 * pow( secondary_color, vec3( 2.0));
+
+	frag_color[0].xyz = mix( texel_color, secondary_color * vec3( 0.2, 0.7, 1.0), (1.0 - pow( t, 8.0)));
+	
+	if(a < 1.0)
+	{
+		discard;
+	}
+	
+	
+#ifdef EMISSION
+	frag_color[1].w = mix( secondary_color.x * 128.0, emission.x, t);
+#endif
+
+#endif
+
+#ifdef FRESNEL
+	#ifdef USE_UBOs
+		float val = pow(1.0-dot(vtx_normal, -view_dirXYZ_pad.xyz), fresnelXYZ_transp.x);
+	#else
+		float val = pow(1.0-dot(vtx_normal, -view_dir), fresnel_params.x);
+	#endif
+	
+	float texLum = dot(frag_color[0].xyz, vec3(0.3, 0.59, 0.11));
+	vec3 diffColNorm = frag_color[0].xyz / (texLum + 0.001); //avoid divide by zero
+	
+	val *= mask.x;
+
+	#ifdef USE_UBOs
+		frag_color[0].xyz = mix(frag_color[0].xyz, diffColNorm, fresnelXYZ_transp.z * clamp(val * 1.0,0.0,1.0));
+		frag_color[1].w = val * fresnelXYZ_transp.y; //emissive
+	#else
+		frag_color[0].xyz = mix(frag_color[0].xyz, diffColNorm, fresnel_params.z * clamp(val * 1.0,0.0,1.0));
+		frag_color[1].w = val * fresnel_params.y; //emissive
+	#endif
+#endif
+}
+)";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+}
+
 TEST_P(GLSLTest, ScopedStructsOrderBug)
 {
     // TODO(geofflang): Find out why this doesn't compile on Apple OpenGL drivers
