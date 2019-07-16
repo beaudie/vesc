@@ -535,6 +535,32 @@ void main()
     ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), kFS);
 }
 
+TEST_P(GLSLTest_ES3, FragmentShaderOutputArray)
+{
+    constexpr char kVS[] = R"(#version 300 es
+
+void main()
+{
+}
+)";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+
+out vec4 frag_color[4];
+
+void main()
+{
+    frag_color[0] = vec4(0.0);
+    frag_color[1] = vec4(0.0);
+    frag_color[2] = vec4(0.0);
+    frag_color[3] = vec4(0.0);
+}
+)";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+}
+
 TEST_P(GLSLTest, ScopedStructsOrderBug)
 {
     // TODO(geofflang): Find out why this doesn't compile on Apple OpenGL drivers
