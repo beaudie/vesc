@@ -137,7 +137,7 @@ class ProgramD3DMetadata final : angle::NonCopyable
     bool usesTransformFeedbackGLPosition() const;
     bool usesSystemValuePointSize() const;
     bool usesMultipleFragmentOuts() const;
-    GLint getMajorShaderVersion() const;
+    bool usesCustomOutVars() const;
     const ShaderD3D *getFragmentShader() const;
 
   private:

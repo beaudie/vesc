@@ -47,6 +47,14 @@
 #include "libANGLE/renderer/Format.h"
 #include "libANGLE/validationES.h"
 
+// HACK: Defines for queries that are not in GLES
+#ifndef GL_QUERIES
+#    define GL_QUERIES
+#    define GL_CONTEXT_PROFILE_MASK 0x9126
+#    define GL_CONTEXT_COMPATIBILITY_PROFILE_BIT 0x00000002
+#    define GL_CONTEXT_CORE_PROFILE_BIT 0x00000001
+#endif
+
 namespace gl
 {
 namespace
@@ -1558,6 +1566,16 @@ void Context::getIntegervImpl(GLenum pname, GLint *params)
             break;
         case GL_NUM_EXTENSIONS:
             *params = static_cast<GLint>(mExtensionStrings.size());
+            break;
+
+        // Desktop client flags
+        case GL_CONTEXT_FLAGS:
+            ASSERT(getClientType() == EGL_OPENGL_API);
+            *params = 0;
+            break;
+        case GL_CONTEXT_PROFILE_MASK:
+            ASSERT(getClientType() == EGL_OPENGL_API);
+            *params = GL_CONTEXT_COMPATIBILITY_PROFILE_BIT;
             break;
 
         // GL_ANGLE_request_extension
@@ -3300,7 +3318,7 @@ void Context::initCaps()
     mState.mLimitations = mImplementation->getNativeLimitations();
 
     // GLES1 emulation: Initialize caps (Table 6.20 / 6.22 in the ES 1.1 spec)
-    if (getClientVersion() < Version(2, 0))
+    if (getClientType() == EGL_OPENGL_API || getClientVersion() < Version(2, 0))
     {
         mState.mCaps.maxMultitextureUnits          = 4;
         mState.mCaps.maxClipPlanes                 = 6;
@@ -3412,7 +3430,7 @@ void Context::updateCaps()
         // OpenGL ES 3.0 or prior does not support multisampling with integer formats
         if (!formatCaps.renderbuffer ||
             (getClientVersion() < ES_3_1 && !mSupportedExtensions.textureMultisample &&
-             (formatInfo.componentType == GL_INT || formatInfo.componentType == GL_UNSIGNED_INT)))
+             (formatInfo.isIntegerFormat())))
         {
             formatCaps.sampleCounts.clear();
         }
@@ -3425,7 +3443,7 @@ void Context::updateCaps()
             // GLES 3.0.5 section 4.4.2.2: "Implementations must support creation of renderbuffers
             // in these required formats with up to the value of MAX_SAMPLES multisamples, with the
             // exception of signed and unsigned integer formats."
-            if (formatInfo.componentType != GL_INT && formatInfo.componentType != GL_UNSIGNED_INT &&
+            if (!formatInfo.isIntegerFormat() &&
                 formatInfo.isRequiredRenderbufferFormat(getClientVersion()))
             {
                 ASSERT(getClientVersion() < ES_3_0 || formatMaxSamples >= 4);
@@ -3440,8 +3458,7 @@ void Context::updateCaps()
                 // the exception that the signed and unsigned integer formats are required only to
                 // support creation of renderbuffers with up to the value of MAX_INTEGER_SAMPLES
                 // multisamples, which must be at least one."
-                if (formatInfo.componentType == GL_INT ||
-                    formatInfo.componentType == GL_UNSIGNED_INT)
+                if (formatInfo.isIntegerFormat())
                 {
                     mState.mCaps.maxIntegerSamples =
                         std::min(mState.mCaps.maxIntegerSamples, formatMaxSamples);
@@ -7635,6 +7652,25 @@ bool Context::getQueryParameterInfo(GLenum pname, GLenum *type, unsigned int *nu
             return true;
     }
 
+    if (getClientType() == EGL_OPENGL_API)
+    {
+        switch (pname)
+        {
+            case GL_CONTEXT_FLAGS:
+            {
+                *type      = GL_INT;
+                *numParams = 1;
+                return true;
+            }
+            case GL_CONTEXT_PROFILE_MASK:
+            {
+                *type      = GL_INT;
+                *numParams = 1;
+                return true;
+            }
+        }
+    }
+
     if (getExtensions().debug)
     {
         switch (pname)
@@ -8264,10 +8300,12 @@ bool Context::usingDisplayTextureShareGroup() const
 
 GLenum Context::getConvertedRenderbufferFormat(GLenum internalformat) const
 {
-    return mState.mExtensions.webglCompatibility && mState.mClientVersion.major == 2 &&
-                   internalformat == GL_DEPTH_STENCIL
-               ? GL_DEPTH24_STENCIL8
-               : internalformat;
+    if (mState.mExtensions.webglCompatibility && mState.mClientVersion.major == 2 &&
+        internalformat == GL_DEPTH_STENCIL)
+        return GL_DEPTH24_STENCIL8;
+    if (getClientType() == EGL_OPENGL_API && internalformat == GL_DEPTH_COMPONENT)
+        return GL_DEPTH_COMPONENT24;
+    return internalformat;
 }
 
 void Context::maxShaderCompilerThreads(GLuint count)
