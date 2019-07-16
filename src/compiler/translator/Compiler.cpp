@@ -216,8 +216,9 @@ int MapSpecToShaderVersion(ShShaderSpec spec)
         case SH_GLES3_1_SPEC:
         case SH_WEBGL3_SPEC:
             return 310;
-        case SH_GL3_3_SPEC:
-            return 330;
+        case SH_GL_CORE_SPEC:
+        case SH_GL_COMPATIBILITY_SPEC:
+            return 460;
         default:
             UNREACHABLE();
             return 0;
