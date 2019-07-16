@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "65683ff4_6258e504",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-16T15:49:30Z",
+      "side": 1,
+      "message": "I don\u0027t understand what you\u0027re asking. From what I can tell, vk_buffer_format is not used anywhere else in the code.",
+      "parentUuid": "843c5c4b_7c2c52d9",
+      "revId": "0248fa1a5d9b27df188c82732dd320ed2c2767df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "38cf16a2_a298bf02",
         "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
         "patchSetId": 7
@@ -30,6 +48,24 @@
       "writtenOn": "2019-07-16T00:09:40Z",
       "side": 1,
       "message": "Is there a better key or value we can use here rather than the same value twice?",
+      "revId": "0248fa1a5d9b27df188c82732dd320ed2c2767df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adf5ff00_53c1b290",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-16T15:49:30Z",
+      "side": 1,
+      "message": "This is passing in vk_buffer_format as a named argument with the same name.",
+      "parentUuid": "38cf16a2_a298bf02",
       "revId": "0248fa1a5d9b27df188c82732dd320ed2c2767df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "c4189a86_6ba2ab50",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertVertex.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-16T15:49:30Z",
+      "side": 1,
+      "message": "Done, though it wouldn\u0027t make sense for valueBits to be greater than 32.",
+      "parentUuid": "1516eb9c_47d65c77",
+      "range": {
+        "startLine": 217,
+        "startChar": 79,
+        "endLine": 217,
+        "endChar": 81
+      },
+      "revId": "0248fa1a5d9b27df188c82732dd320ed2c2767df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "20ed5d0d_bb736b18",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
         "patchSetId": 7
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "5e0edbfa_5de6eb73",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-16T15:49:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20ed5d0d_bb736b18",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 224,
+        "endChar": 1
+      },
+      "revId": "0248fa1a5d9b27df188c82732dd320ed2c2767df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6ec28a3f_e1c929a0",
         "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
         "patchSetId": 7
@@ -102,6 +186,30 @@
       "revId": "0248fa1a5d9b27df188c82732dd320ed2c2767df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb825a39_2723bdc6",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-07-16T15:49:30Z",
+      "side": 1,
+      "message": "Yes.",
+      "parentUuid": "6ec28a3f_e1c929a0",
+      "range": {
+        "startLine": 726,
+        "startChar": 0,
+        "endLine": 729,
+        "endChar": 121
+      },
+      "revId": "0248fa1a5d9b27df188c82732dd320ed2c2767df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
