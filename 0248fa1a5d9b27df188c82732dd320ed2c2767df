@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "f1c41c97_1a4ae9a7",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-16T17:51:26Z",
+      "side": 1,
+      "message": "Ah, looking at Python\u0027s Dict constructor stuff:\n\nhttps://docs.python.org/2/tutorial/datastructures.html#dictionaries\nWhen the keys are simple strings, it is sometimes easier to specify pairs using keyword arguments:\n\u003e\u003e\u003e dict(sape\u003d4139, guido\u003d4127, jack\u003d4098)\n{\u0027sape\u0027: 4139, \u0027jack\u0027: 4098, \u0027guido\u0027: 4127}\n\n\nSo those aren\u0027t variables containing keys, they are turned into strings for keys.",
+      "parentUuid": "65683ff4_6258e504",
+      "revId": "0248fa1a5d9b27df188c82732dd320ed2c2767df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38cf16a2_a298bf02",
         "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
         "patchSetId": 7
@@ -69,6 +87,24 @@
       "revId": "0248fa1a5d9b27df188c82732dd320ed2c2767df",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc8a9b62_2146ba3e",
+        "filename": "src/libANGLE/renderer/vulkan/gen_vk_format_table.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-16T17:51:26Z",
+      "side": 1,
+      "message": "Ok, I see.   It looks a little funny, but it should turn into:\n{\n...\n\u0027vk_buffer_format\u0027: vk_map[format],\n...\n}",
+      "parentUuid": "adf5ff00_53c1b290",
+      "revId": "0248fa1a5d9b27df188c82732dd320ed2c2767df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
