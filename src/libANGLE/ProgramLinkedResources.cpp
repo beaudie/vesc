@@ -468,7 +468,7 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
             linkedUniform.mappedName = fullMappedNameWithArrayIndex;
             linkedUniform.active     = mMarkActive;
             linkedUniform.staticUse  = mMarkStaticUse;
-            linkedUniform.setParentArrayIndex(variable.parentArrayIndex());
+            linkedUniform.setParentArrayIndex(variable.getParentArrayIndex());
             if (mMarkActive)
             {
                 linkedUniform.setActive(mShaderType, true);
