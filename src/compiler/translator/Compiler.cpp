@@ -203,7 +203,7 @@ class TScopedSymbolTableLevel
     TSymbolTable *mTable;
 };
 
-int MapSpecToShaderVersion(ShShaderSpec spec)
+int GetMaxShaderVersionForSpec(ShShaderSpec spec)
 {
     switch (spec)
     {
@@ -216,8 +216,9 @@ int MapSpecToShaderVersion(ShShaderSpec spec)
         case SH_GLES3_1_SPEC:
         case SH_WEBGL3_SPEC:
             return 310;
-        case SH_GL3_3_SPEC:
-            return 330;
+        case SH_GL_CORE_SPEC:
+        case SH_GL_COMPATIBILITY_SPEC:
+            return 460;
         default:
             UNREACHABLE();
             return 0;
@@ -284,10 +285,10 @@ TShHandleBase::~TShHandleBase()
 }
 
 TCompiler::TCompiler(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output)
-    : mVariablesCollected(false),
+    : mShaderSpec(spec),
+      mVariablesCollected(false),
       mGLPositionInitialized(false),
       mShaderType(type),
-      mShaderSpec(spec),
       mOutputType(output),
       mBuiltInFunctionEmulator(),
       mDiagnostics(mInfoSink.info),
@@ -418,7 +419,7 @@ TIntermBlock *TCompiler::compileTreeImpl(const char *const shaderStrings[],
 
 bool TCompiler::checkShaderVersion(TParseContext *parseContext)
 {
-    if (MapSpecToShaderVersion(mShaderSpec) < mShaderVersion)
+    if (GetMaxShaderVersionForSpec(mShaderSpec) < mShaderVersion)
     {
         mDiagnostics.globalError("unsupported shader version");
         return false;
