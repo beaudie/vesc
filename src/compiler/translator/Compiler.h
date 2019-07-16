@@ -121,7 +121,6 @@ class TCompiler : public TShHandleBase
     ShHashFunction64 getHashFunction() const { return mResources.HashFunction; }
     NameMap &getNameMap() { return mNameMap; }
     TSymbolTable &getSymbolTable() { return mSymbolTable; }
-    ShShaderSpec getShaderSpec() const { return mShaderSpec; }
     ShShaderOutput getOutputType() const { return mOutputType; }
     const std::string &getBuiltInResourcesString() const { return mBuiltInResourcesString; }
 
@@ -178,6 +177,8 @@ class TCompiler : public TShHandleBase
     std::vector<sh::InterfaceBlock> mShaderStorageBlocks;
     std::vector<sh::InterfaceBlock> mInBlocks;
 
+    ShShaderSpec mShaderSpec;
+
   private:
     // Initialize symbol-table with built-in symbols.
     bool initBuiltInSymbolTable(const ShBuiltInResources &resources);
@@ -232,7 +233,6 @@ class TCompiler : public TShHandleBase
                              ShCompileOptions compileOptions);
 
     sh::GLenum mShaderType;
-    ShShaderSpec mShaderSpec;
     ShShaderOutput mOutputType;
 
     struct FunctionMetadata

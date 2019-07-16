@@ -138,7 +138,7 @@ void TranslatorHLSL::translate(TIntermBlock *root,
     }
 
     sh::OutputHLSL outputHLSL(
-        getShaderType(), getShaderVersion(), getExtensionBehavior(), getSourcePath(),
+        getShaderType(), mShaderSpec, getShaderVersion(), getExtensionBehavior(), getSourcePath(),
         getOutputType(), numRenderTargets, maxDualSourceDrawBuffers, getUniforms(), compileOptions,
         getComputeShaderLocalSize(), &getSymbolTable(), perfDiagnostics, mShaderStorageBlocks);
 
