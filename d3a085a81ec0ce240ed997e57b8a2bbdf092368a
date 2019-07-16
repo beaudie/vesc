@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a9983d13_a82bb586",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3328,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-16T03:02:53Z",
+      "side": 1,
+      "message": "Yes, these are intentional. Basically per-stage limits apply to all stages, including any future ones.",
+      "parentUuid": "7dce4548_8b3a857f",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f780bef_12623337",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "0381c249_e14867da",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-16T03:02:53Z",
+      "side": 1,
+      "message": "Yes, the driver uniforms are not bound by the program (they belong to the context and they are updated at a different frequency from the program DSs).",
+      "parentUuid": "2f780bef_12623337",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "873a47ed_1b08c385",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
@@ -47,6 +83,24 @@
       "writtenOn": "2019-07-12T21:53:20Z",
       "side": 1,
       "message": "So if glState.getProgram() \u003d\u003d nullptr we always invalidate Vtx/Idx buffers? Is there a case when that could be true but we would be in this function due to Compute setting a dirty bit in mPipelineDirtyBitsMask? If so we shouldn\u0027t invalidate Vtx/Idx buffers in that case.",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "03f66ba4_65cb4403",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-16T03:02:53Z",
+      "side": 1,
+      "message": "Only if any of `mPipelineDirtyBitsMask` is set (which currently actually covers most dirty bits, but should be narrowed down). If there\u0027s an overlap, it\u0027s true that the graphics pipeline (and vertex/index buffers) are dirtied for no reason.\n\nIf that\u0027s ok, let\u0027s leave that optimization for another time.",
+      "parentUuid": "873a47ed_1b08c385",
       "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "17d88ac4_56058428",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-16T03:02:53Z",
+      "side": 1,
+      "message": "`AssignOutputLocations` already does this assert.\n\nI do recall the rasterizer discard situation, but this assert was always here, so it was never hit. I don\u0027t know if the front-end is somehow sending us an empty FS or something in that situation, but so far we have never hit a case where there is VS but not FS here.",
+      "parentUuid": "d9274477_c283ab64",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55eb3894_2b1e95ed",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 8
@@ -84,6 +156,24 @@
       "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "398aba6f_d8f13167",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-16T03:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55eb3894_2b1e95ed",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3f1e6062_4e33599a",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-16T03:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d919b26_011ccc25",
+      "range": {
+        "startLine": 798,
+        "startChar": 0,
+        "endLine": 803,
+        "endChar": 9
+      },
+      "revId": "a1a9533e907e9f5b13a5039c88d9a5f93eb605ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "633d247a_9d452ec6",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 9
@@ -45,6 +69,30 @@
       "revId": "a1a9533e907e9f5b13a5039c88d9a5f93eb605ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e4c543e_4d1ba36f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-16T03:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "633d247a_9d452ec6",
+      "range": {
+        "startLine": 65,
+        "startChar": 6,
+        "endLine": 65,
+        "endChar": 21
+      },
+      "revId": "a1a9533e907e9f5b13a5039c88d9a5f93eb605ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "63892c4f_64a1c6ce",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-16T03:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8045a4c8_c084a036",
+      "range": {
+        "startLine": 463,
+        "startChar": 14,
+        "endLine": 463,
+        "endChar": 32
+      },
+      "revId": "a1a9533e907e9f5b13a5039c88d9a5f93eb605ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3c2e0a52_8015a8d3",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 9
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "79e942ad_56f98dbd",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-16T03:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c2e0a52_8015a8d3",
+      "range": {
+        "startLine": 812,
+        "startChar": 0,
+        "endLine": 833,
+        "endChar": 24
+      },
+      "revId": "a1a9533e907e9f5b13a5039c88d9a5f93eb605ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d461d1f8_16306a82",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 9
@@ -114,6 +210,30 @@
       "revId": "a1a9533e907e9f5b13a5039c88d9a5f93eb605ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d17fde91_32bb4cfb",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-16T03:02:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d461d1f8_16306a82",
+      "range": {
+        "startLine": 937,
+        "startChar": 42,
+        "endLine": 937,
+        "endChar": 56
+      },
+      "revId": "a1a9533e907e9f5b13a5039c88d9a5f93eb605ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
