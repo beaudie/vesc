@@ -434,7 +434,7 @@ void State::initialize(Context *context)
 
     // GLES1 emulation: Initialize state for GLES1 if version
     // applies
-    if (clientVersion < Version(2, 0))
+    if (clientVersion < Version(2, 0) || mClientType == EGL_OPENGL_API)
     {
         mGLES1State.initialize(context, this);
     }
