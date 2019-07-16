@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "abafc467_03e0bd56",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-16T16:34:27Z",
+      "side": 1,
+      "message": "Yeah, I guess \"screen mode\" is the user changing the resolution and/or color depth of screen.",
+      "parentUuid": "829f4d2d_26dffe91",
+      "revId": "cc59d7326217a33b7b68f427f42dc284aabcaedf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "78a48f02_012cb5c4",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 7
@@ -72,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "d4e92dbc_5779c388",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-16T16:34:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "869dcdd4_cfca77d6",
+      "revId": "cc59d7326217a33b7b68f427f42dc284aabcaedf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "92fa2872_75495608",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -101,6 +137,24 @@
       "side": 1,
       "message": "Unfortunately no, if `updateUniforms()` doesn\u0027t allocate a new buffer, it will allocate at a different (dynamic) offset from the old one. We still need to bind the DS for the sake of the dynamic offsets.",
       "parentUuid": "92fa2872_75495608",
+      "revId": "cc59d7326217a33b7b68f427f42dc284aabcaedf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8f20e90e_e0c47ec4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-16T16:34:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "335ed1a8_5e491e0f",
       "revId": "cc59d7326217a33b7b68f427f42dc284aabcaedf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false

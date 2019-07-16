@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "caa1693e_c4a21f4a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3328,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-16T16:34:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a9983d13_a82bb586",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f780bef_12623337",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "Yes, the driver uniforms are not bound by the program (they belong to the context and they are updated at a different frequency from the program DSs).",
       "parentUuid": "2f780bef_12623337",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90b171ca_b9c4ef19",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-16T16:34:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0381c249_e14867da",
       "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -107,6 +143,24 @@
     },
     {
       "key": {
+        "uuid": "cb15124a_3acf839e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1470,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-16T16:34:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "03f66ba4_65cb4403",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d9274477_c283ab64",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 8
@@ -142,6 +196,24 @@
     },
     {
       "key": {
+        "uuid": "e77b483e_a233bc6c",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 867,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-16T16:34:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "17d88ac4_56058428",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "55eb3894_2b1e95ed",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 8
@@ -171,6 +243,24 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "55eb3894_2b1e95ed",
+      "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "94150f41_c0c3aff4",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-16T16:34:27Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "398aba6f_d8f13167",
       "revId": "d3a085a81ec0ce240ed997e57b8a2bbdf092368a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
