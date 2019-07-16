@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "888ecfd7_7a9af958",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-16T19:28:39Z",
+      "side": 1,
+      "message": "An error should be popped up to the application layer if a Vk error ever occurs.",
+      "parentUuid": "f4f7528d_292f95cc",
+      "revId": "47efb479567c442010f7300962fc1cbd5021fd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "864dc6bb_20772dc2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
