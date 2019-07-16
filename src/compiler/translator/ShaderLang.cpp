@@ -365,6 +365,13 @@ void ClearResults(const ShHandle handle)
     compiler->clearResults();
 }
 
+ShShaderSpec GetShaderSpec(const ShHandle handle)
+{
+    TCompiler *compiler = GetCompilerFromHandle(handle);
+    ASSERT(compiler);
+    return compiler->getShaderSpec();
+}
+
 int GetShaderVersion(const ShHandle handle)
 {
     TCompiler *compiler = GetCompilerFromHandle(handle);

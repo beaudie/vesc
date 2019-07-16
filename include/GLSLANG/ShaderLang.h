@@ -39,6 +39,7 @@ enum ShShaderSpec
     SH_GLES3_1_SPEC,
     SH_WEBGL3_SPEC,
 
+    SH_GL1_5_SPEC,
     SH_GL3_3_SPEC,
 };
 
@@ -566,6 +567,8 @@ bool Compile(const ShHandle handle,
 // Clears the results from the previous compilation.
 void ClearResults(const ShHandle handle);
 
+ShShaderSpec GetShaderSpec(const ShHandle handle);
+
 // Return the version of the shader language.
 int GetShaderVersion(const ShHandle handle);
 
@@ -678,7 +681,7 @@ inline bool IsWebGLBasedSpec(ShShaderSpec spec)
 //
 inline bool IsDesktopGLSpec(ShShaderSpec spec)
 {
-    return spec == SH_GL3_3_SPEC;
+    return spec == SH_GL3_3_SPEC || spec == SH_GL1_5_SPEC;
 }
 }  // namespace sh
 
