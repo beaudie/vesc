@@ -95,6 +95,7 @@ class TCompiler : public TShHandleBase
                  ShCompileOptions compileOptions);
 
     // Get results of the last compilation.
+    ShShaderSpec getShaderSpec() const { return mShaderSpec; }
     int getShaderVersion() const { return mShaderVersion; }
     TInfoSink &getInfoSink() { return mInfoSink; }
 
@@ -121,7 +122,6 @@ class TCompiler : public TShHandleBase
     ShHashFunction64 getHashFunction() const { return mResources.HashFunction; }
     NameMap &getNameMap() { return mNameMap; }
     TSymbolTable &getSymbolTable() { return mSymbolTable; }
-    ShShaderSpec getShaderSpec() const { return mShaderSpec; }
     ShShaderOutput getOutputType() const { return mOutputType; }
     const std::string &getBuiltInResourcesString() const { return mBuiltInResourcesString; }
 

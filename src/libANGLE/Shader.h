@@ -68,6 +68,7 @@ class ShaderState final : angle::NonCopyable
     const std::string &getTranslatedSource() const { return mTranslatedSource; }
 
     ShaderType getShaderType() const { return mShaderType; }
+    ShShaderSpec getShaderSpec() const { return mShaderSpec; }
     int getShaderVersion() const { return mShaderVersion; }
 
     const std::vector<sh::Varying> &getInputVaryings() const { return mInputVaryings; }
@@ -93,6 +94,7 @@ class ShaderState final : angle::NonCopyable
     std::string mLabel;
 
     ShaderType mShaderType;
+    ShShaderSpec mShaderSpec;
     int mShaderVersion;
     std::string mTranslatedSource;
     std::string mSource;

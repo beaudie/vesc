@@ -117,6 +117,7 @@ struct Shader::CompilingState
 ShaderState::ShaderState(ShaderType shaderType)
     : mLabel(),
       mShaderType(shaderType),
+      mShaderSpec(SH_GLES2_SPEC),
       mShaderVersion(100),
       mNumViews(-1),
       mGeometryShaderInvocations(1),
@@ -305,6 +306,7 @@ void Shader::compile(const Context *context)
 
     mState.mTranslatedSource.clear();
     mInfoLog.clear();
+    mState.mShaderSpec    = SH_GLES2_SPEC;
     mState.mShaderVersion = 100;
     mState.mInputVaryings.clear();
     mState.mOutputVaryings.clear();
@@ -414,6 +416,7 @@ void Shader::resolveCompile()
 #endif  // !defined(NDEBUG)
 
     // Gather the shader information
+    mState.mShaderSpec    = sh::GetShaderSpec(compilerHandle);
     mState.mShaderVersion = sh::GetShaderVersion(compilerHandle);
 
     mState.mUniforms            = GetShaderVariables(sh::GetUniforms(compilerHandle));

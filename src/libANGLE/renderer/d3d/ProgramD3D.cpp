@@ -492,9 +492,19 @@ bool ProgramD3DMetadata::usesMultipleFragmentOuts() const
     return mAttachedShaders[gl::ShaderType::Fragment]->usesMultipleRenderTargets();
 }
 
-GLint ProgramD3DMetadata::getMajorShaderVersion() const
+bool ProgramD3DMetadata::usesCustomOutVars() const
 {
-    return mAttachedShaders[gl::ShaderType::Vertex]->getData().getShaderVersion();
+    int version       = mAttachedShaders[gl::ShaderType::Vertex]->getData().getShaderVersion();
+    ShShaderSpec spec = mAttachedShaders[gl::ShaderType::Vertex]->getData().getShaderSpec();
+
+    switch (spec)
+    {
+        case SH_GL1_5_SPEC:
+        case SH_GL3_3_SPEC:
+            return version >= 130 ? true : false;
+        default:
+            return version >= 300 ? true : false;
+    }
 }
 
 const ShaderD3D *ProgramD3DMetadata::getFragmentShader() const
