@@ -210,6 +210,8 @@ int MapSpecToShaderVersion(ShShaderSpec spec)
         case SH_GLES2_SPEC:
         case SH_WEBGL_SPEC:
             return 100;
+        case SH_GL1_5_SPEC:
+            return 150;
         case SH_GLES3_SPEC:
         case SH_WEBGL2_SPEC:
             return 300;

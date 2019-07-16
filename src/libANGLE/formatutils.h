@@ -126,6 +126,8 @@ struct InternalFormat
     // extension formats are conservatively not included.
     bool isRequiredRenderbufferFormat(const Version &version) const;
 
+    bool isIntegerFormat() const;
+
     bool operator==(const InternalFormat &other) const;
     bool operator!=(const InternalFormat &other) const;
 
@@ -266,6 +268,11 @@ bool ValidES3InternalFormat(GLenum internalFormat);
 bool ValidES3Format(GLenum format);
 bool ValidES3Type(GLenum type);
 bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat);
+
+// Implemented in format_map_desktop.cpp
+bool ValidDesktopFormat(GLenum format);
+bool ValidDesktopType(GLenum type);
+bool ValidDesktopFormatCombination(GLenum format, GLenum type, GLenum internalFormat);
 
 // Implemented in es3_copy_conversion_table_autogen.cpp
 bool ValidES3CopyConversion(GLenum textureFormat, GLenum framebufferFormat);
