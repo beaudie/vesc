@@ -16,6 +16,24 @@
       "revId": "102752cb301d700311b64bf22c4fba58cd4f2007",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9ffcdd3_c37fe5d7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2181,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-16T00:20:27Z",
+      "side": 1,
+      "message": "i thought either one must be valid but on re-reading the spec, you are right, my bad -\n\n     \"If the data argument of TexImage2D is a NULL pointer, and the\n     pixel unpack buffer object is zero, a two- or three-dimensional\n     texel array is created with the specified target, level, internalformat,\n     border, width, height, and depth, but with unspecified image contents.\"",
+      "parentUuid": "6305ec78_2255e4bf",
+      "revId": "102752cb301d700311b64bf22c4fba58cd4f2007",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
