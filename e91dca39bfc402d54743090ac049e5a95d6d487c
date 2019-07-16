@@ -163,6 +163,30 @@
     },
     {
       "key": {
+        "uuid": "4fa7869e_e6191ac3",
+        "filename": "src/libANGLE/FramebufferAttachment.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-07-16T19:15:14Z",
+      "side": 1,
+      "message": "Hey Geoff, \n\nI was finally able to chat with Rafael today since he was off last week. I\u0027ve been having a hard time understanding this comment. \n\nI believe that RenderTargetUse will mostly be effective on subsequent calls such as copyTexImage2D or readPixels or drawArrays or clear. In which, some cases we will need the single sampled texture back (readPixels) in others we will need the multisampled texture back (drawArrays, clear). \n\nI originally had a version where I passed samples down to the textureStorage object and it would use that value. Rafael had a comment about that saying that, I\u0027ve added this sample number to quite a number of getRenderTarget/getAttachmentRenderTarget methods (TextureStorage11_xxx, TextureD3D_xxx, RenderbufferD3D, SurfaceD3D, basically any class that inherits from FramebufferAttachmentObjectImpl). He was worried that this sample number in so many different places may be a likely source of errors in the future. From what I can tell, getAttachmentRenderTarget is only called once outside the Framebuffer chain in EGLImageD3D::getRenderTarget. However since getAttachmentRenderTarget will pass through the samples to getRenderTarget at the TextureImpl and the TextureStorage level, anything now that directly calls TextureD3D/TextureStorage11 will also need to know what samples they are looking for. \nAlthough most calls go though the framebuffer chain, but there are still some that call into textured3d/texturestorage directly:\nContext11::intializeMultisampleTextureToBlack\nRenderer11::copyImage2D/Cube/3D/2DArray\n\nThe other thing we were discussing, is that would the samples indicate which texture is expected SS vs MS and then textureStorage still does the resolution or are we always going to be returning the multisampled one based on that sample count and then the caller will do the resolution outside? Either way it seems that the sample count itself isn\u0027t enough to determine the use, we will need logic somewhere in that path to determine what it will be used for and what number we need to pass through.",
+      "parentUuid": "c65300a5_4ce0a900",
+      "range": {
+        "startLine": 222,
+        "startChar": 44,
+        "endLine": 222,
+        "endChar": 66
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "194ceb70_1b0ba38d",
         "filename": "src/libANGLE/FramebufferAttachment.h",
         "patchSetId": 5
