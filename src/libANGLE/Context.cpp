@@ -5528,7 +5528,7 @@ void Context::multiDrawElementsInstanced(PrimitiveMode mode,
     }
 }
 
-void Context::provokingVertex(ProvokingVertex provokeMode)
+void Context::provokingVertex(ProvokingVertexConvention provokeMode)
 {
     mState.setProvokingVertex(provokeMode);
 }
