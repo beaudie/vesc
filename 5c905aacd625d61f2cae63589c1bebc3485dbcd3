@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32305a15_9457be02",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-16T13:43:40Z",
+      "side": 1,
+      "message": "can\u0027t you also use this for all your new cases? isn\u0027t matrix size \u003d\u003d matrix stride for the new specializations?",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 0
+      },
+      "revId": "5c905aacd625d61f2cae63589c1bebc3485dbcd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "164c0ee7_8a91fd78",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-16T13:43:40Z",
+      "side": 1,
+      "message": "nit: caps Run",
+      "range": {
+        "startLine": 272,
+        "startChar": 16,
+        "endLine": 272,
+        "endChar": 19
+      },
+      "revId": "5c905aacd625d61f2cae63589c1bebc3485dbcd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28a60507_76b77fd3",
+        "filename": "src/libANGLE/renderer/renderer_utils.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-16T13:43:40Z",
+      "side": 1,
+      "message": "nit: caps Run",
+      "range": {
+        "startLine": 283,
+        "startChar": 3,
+        "endLine": 283,
+        "endChar": 19
+      },
+      "revId": "5c905aacd625d61f2cae63589c1bebc3485dbcd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
