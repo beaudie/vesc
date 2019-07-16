@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a83ca873_3fe2dc0c",
+        "filename": "BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-16T18:16:37Z",
+      "side": 0,
+      "message": "please keep the comments here",
+      "range": {
+        "startLine": 796,
+        "startChar": 5,
+        "endLine": 796,
+        "endChar": 91
+      },
+      "revId": "ec9ff8ce3909ec618842d1922aacf6c6cd961b2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
