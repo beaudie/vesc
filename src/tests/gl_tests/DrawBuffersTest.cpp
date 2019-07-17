@@ -639,6 +639,119 @@ TEST_P(DrawBuffersTestES3, 2DArrayTextures)
     glDeleteProgram(program);
 }
 
+class DrawBuffersWithConversion : public DrawBuffersTest
+{};
+
+TEST_P(DrawBuffersWithConversion, VboChange)
+{
+    GLuint frameTextures[2];
+    GLuint frameBuffers[2];
+    GLuint buffers[2];
+    const GLsizei kRenderWidth = 100, kRenderHeight = 100;
+    glGenFramebuffers(2, frameBuffers);
+    glGenTextures(2, frameTextures);
+
+    for (uint32_t i = 0; i < 2; i++)
+    {
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffers[i]);
+        glBindTexture(GL_TEXTURE_2D, frameTextures[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kRenderWidth, kRenderHeight, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                               frameTextures[i], 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+    constexpr char kVS[] = R"(attribute vec3 vColor;
+varying vec3 colorOut;
+void main()
+{
+    gl_Position = vec4(0.5, 0.5, 0.0, 1.0);
+    colorOut = vColor;
+})";
+
+    constexpr char kFS[] = R"(precision mediump float;
+varying vec3 colorOut;
+void main()
+{
+    gl_FragColor = vec4(colorOut, 0.0);
+})";
+    GLuint program       = CompileProgram(kVS, kFS);
+    if (program == 0)
+    {
+        FAIL() << "shader compilation failed.";
+    }
+    glUseProgram(program);
+
+    std::vector<GLfloat> floatData;
+    floatData.push_back(0.515f);
+    floatData.push_back(0.515f);
+    floatData.push_back(0.515f);
+    for (uint32_t i = 0; i < 2; i++)
+    {
+        glGenBuffers(1, &buffers[i]);
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[i]);
+        glBufferData(GL_ARRAY_BUFFER, floatData.size() * sizeof(GLfloat), floatData.data(),
+                     GL_STATIC_DRAW);
+    }
+
+    GLint colorLocation = glGetAttribLocation(program, "vColor");
+    ASSERT_GE(colorLocation, 0);
+    glEnableVertexAttribArray(colorLocation);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, frameBuffers[0]);
+    glViewport(0, 0, kRenderWidth, kRenderHeight);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+    glVertexAttribPointer(colorLocation, 3, GL_FIXED, GL_FALSE, 0, 0);
+    glDrawArrays(GL_POINTS, 0, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, frameBuffers[1]);
+    glViewport(0, 0, kRenderWidth, kRenderHeight);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+    glVertexAttribPointer(colorLocation, 3, GL_FIXED, GL_FALSE, 0, 0);
+    glDrawArrays(GL_POINTS, 0, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    EXPECT_GL_NO_ERROR();
+
+    // EXPECT_PXL_EQ(frameTextures[0], frameTexture[1]);
+
+    // RGBA
+    constexpr size_t kBufSize   = 4 * kRenderHeight * kRenderWidth;
+    GLubyte pixelBuf1[kBufSize] = {0};
+    GLubyte pixelBuf2[kBufSize] = {0};
+    ASSERT_EQ(memcmp(pixelBuf1, pixelBuf2, kBufSize * sizeof(GLubyte)), 0);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, frameBuffers[0]);
+    glReadPixels(0, 0, kRenderWidth, kRenderHeight, GL_RGBA, GL_UNSIGNED_BYTE, pixelBuf1);
+    EXPECT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, frameBuffers[1]);
+    glReadPixels(0, 0, kRenderWidth, kRenderHeight, GL_RGBA, GL_UNSIGNED_BYTE, pixelBuf2);
+    EXPECT_GL_NO_ERROR();
+
+    bool nonZero = false;
+    for (uint32_t i = 0; i < kBufSize; i++)
+    {
+        if (pixelBuf1[i] != 0)
+        {
+            nonZero = true;
+            break;
+        }
+    }
+    ASSERT_EQ(nonZero, true);
+
+    ASSERT_EQ(memcmp(pixelBuf1, pixelBuf2, kBufSize * sizeof(GLubyte)), 0);
+
+    glDeleteBuffers(2, buffers);
+    glDeleteTextures(2, frameTextures);
+    glDeleteFramebuffers(2, frameBuffers);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(DrawBuffersTest,
@@ -654,3 +767,5 @@ ANGLE_INSTANTIATE_TEST(DrawBuffersTest,
 ANGLE_INSTANTIATE_TEST(DrawBuffersWebGL2Test, ES3_D3D11(), ES3_OPENGL(), ES3_VULKAN());
 
 ANGLE_INSTANTIATE_TEST(DrawBuffersTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+
+ANGLE_INSTANTIATE_TEST(DrawBuffersWithConversion, ES2_VULKAN());

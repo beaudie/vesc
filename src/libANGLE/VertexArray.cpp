@@ -453,8 +453,6 @@ ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context
 {
     ASSERT(attribIndex < getMaxAttribs());
 
-    GLintptr offset = boundBuffer ? reinterpret_cast<GLintptr>(pointer) : 0;
-
     VertexAttribute &attrib = mState.mVertexAttributes[attribIndex];
 
     SetComponentTypeMask(componentType, attribIndex, &mState.mVertexAttributesTypeMask);
@@ -469,22 +467,26 @@ ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context
     GLsizei effectiveStride =
         stride != 0 ? stride : static_cast<GLsizei>(ComputeVertexAttributeTypeSize(attrib));
 
-    if (pointer != attrib.pointer || attrib.vertexAttribArrayStride != static_cast<GLuint>(stride))
+    if (attrib.vertexAttribArrayStride != static_cast<GLuint>(stride))
     {
         attribDirty = true;
     }
-
-    attrib.pointer                 = pointer;
     attrib.vertexAttribArrayStride = stride;
 
-    if (bindVertexBufferImpl(context, attribIndex, boundBuffer, offset, effectiveStride) &&
-        !attribDirty)
-    {
-        setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_POINTER_BUFFER);
-    }
-    else if (attribDirty)
+    // Change of attrib.pointer is not part of attribDirty. Pointer is actually the buffer offset
+    // which being handled within bindVertexBufferImpl and reflected in bufferDirty.
+    attrib.pointer  = pointer;
+    GLintptr offset = boundBuffer ? reinterpret_cast<GLintptr>(pointer) : 0;
+    const bool bufferDirty =
+        bindVertexBufferImpl(context, attribIndex, boundBuffer, offset, effectiveStride);
+
+    if (attribDirty)
     {
         setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_POINTER);
+    }
+    else if (bufferDirty)
+    {
+        setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_POINTER_BUFFER);
     }
 
     mState.mNullPointerClientMemoryAttribsMask.set(attribIndex,
