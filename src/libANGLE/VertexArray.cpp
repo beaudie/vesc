@@ -469,7 +469,7 @@ ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context
     GLsizei effectiveStride =
         stride != 0 ? stride : static_cast<GLsizei>(ComputeVertexAttributeTypeSize(attrib));
 
-    if (pointer != attrib.pointer || attrib.vertexAttribArrayStride != static_cast<GLuint>(stride))
+    if (attrib.vertexAttribArrayStride != static_cast<GLuint>(stride))
     {
         attribDirty = true;
     }
@@ -477,14 +477,15 @@ ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context
     attrib.pointer                 = pointer;
     attrib.vertexAttribArrayStride = stride;
 
-    if (bindVertexBufferImpl(context, attribIndex, boundBuffer, offset, effectiveStride) &&
-        !attribDirty)
-    {
-        setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_POINTER_BUFFER);
-    }
-    else if (attribDirty)
+    const bool bufferDirty =
+        bindVertexBufferImpl(context, attribIndex, boundBuffer, offset, effectiveStride);
+    if (attribDirty)
     {
         setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_POINTER);
+    }
+    else if (bufferDirty)
+    {
+        setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_POINTER_BUFFER);
     }
 
     mState.mNullPointerClientMemoryAttribsMask.set(attribIndex,

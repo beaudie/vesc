@@ -573,7 +573,7 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
 
         ASSERT(GetVertexInputAlignment(vertexFormat) <= vk::kVertexBufferAlignment);
 
-        const uint8_t *src = static_cast<const uint8_t *>(attrib.pointer);
+        const uint8_t *src = reinterpret_cast<const uint8_t *>(binding.getOffset());
         if (binding.getDivisor() > 0)
         {
             // instanced attrib
