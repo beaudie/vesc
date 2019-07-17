@@ -13,6 +13,7 @@
 
 #include "common/Color.h"
 #include "common/FixedVector.h"
+#include "libANGLE/State.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
