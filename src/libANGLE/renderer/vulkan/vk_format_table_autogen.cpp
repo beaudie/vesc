@@ -1054,7 +1054,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R16G16B16A16_FLOAT;
             vkBufferFormat               = VK_FORMAT_R16G16B16A16_SFLOAT;
             vkBufferFormatIsPacked       = false;
-            vertexLoadFunction           = CopyNativeVertexData<GLfloat, 4, 4, 0>;
+            vertexLoadFunction           = CopyNativeVertexData<GLhalf, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -1154,7 +1154,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R16G16B16_FLOAT;
             vkBufferFormat               = VK_FORMAT_R16G16B16_SFLOAT;
             vkBufferFormatIsPacked       = false;
-            vertexLoadFunction           = CopyNativeVertexData<GLfloat, 3, 3, 0>;
+            vertexLoadFunction           = CopyNativeVertexData<GLhalf, 3, 3, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -1258,7 +1258,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R16G16_FLOAT;
             vkBufferFormat               = VK_FORMAT_R16G16_SFLOAT;
             vkBufferFormatIsPacked       = false;
-            vertexLoadFunction           = CopyNativeVertexData<GLfloat, 2, 2, 0>;
+            vertexLoadFunction           = CopyNativeVertexData<GLhalf, 2, 2, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
@@ -1354,7 +1354,7 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R16_FLOAT;
             vkBufferFormat               = VK_FORMAT_R16_SFLOAT;
             vkBufferFormatIsPacked       = false;
-            vertexLoadFunction           = CopyNativeVertexData<GLfloat, 1, 1, 0>;
+            vertexLoadFunction           = CopyNativeVertexData<GLhalf, 1, 1, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
