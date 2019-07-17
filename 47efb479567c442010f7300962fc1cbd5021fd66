@@ -127,6 +127,24 @@
     },
     {
       "key": {
+        "uuid": "13544be9_8af2be70",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-07-17T00:57:12Z",
+      "side": 1,
+      "message": "It\u0027s not an error, ss I said previously, application can decide to not use blob cache, we can\u0027t return an error in this scenario.",
+      "parentUuid": "888ecfd7_7a9af958",
+      "revId": "47efb479567c442010f7300962fc1cbd5021fd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "864dc6bb_20772dc2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
