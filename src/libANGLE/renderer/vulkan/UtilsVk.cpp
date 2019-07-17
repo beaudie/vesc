@@ -1344,7 +1344,7 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     ASSERT(src->getSamples() == 1 && dest->getSamples() == 1);
 
     vk::GraphicsPipelineDesc pipelineDesc;
-    pipelineDesc.initDefaults();
+    pipelineDesc.initDummy();
     pipelineDesc.setRenderPassDesc(renderPassDesc);
 
     gl::Rectangle renderArea;
