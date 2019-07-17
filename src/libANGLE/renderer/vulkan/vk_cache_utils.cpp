@@ -567,6 +567,105 @@ void GraphicsPipelineDesc::initDefaults()
     inputAndBlend.primitive.restartEnable = 0;
 }
 
+// Because frontend GL filters out unnecessary dirty bits,
+// we must sync vulkan pipeline desc with GL state at init time
+void GraphicsPipelineDesc::initFromGLState(const gl::State &glState)
+{
+    initDefaults();
+
+    // At init time, there is no framebuffer binded, when framebuffer binding happens,
+    // state would be dirty and some of the following states will be reset to match framebuffer.
+    const gl::Rectangle &viewport = glState.getViewport();
+    mViewport.x                   = static_cast<float>(viewport.x);
+    mViewport.y                   = static_cast<float>(viewport.y);
+    mViewport.width               = static_cast<float>(viewport.width);
+    mViewport.height              = static_cast<float>(viewport.height);
+    mViewport.minDepth            = glState.getNearPlane();
+    mViewport.maxDepth            = glState.getFarPlane();
+
+    const gl::Rectangle &scissor = glState.getScissor();
+    mScissor.offset.x            = scissor.x;
+    mScissor.offset.y            = scissor.y;
+    mScissor.extent.width        = scissor.width;
+    mScissor.extent.height       = scissor.height;
+
+    const gl::BlendState &blendState = glState.getBlendState();
+    for (size_t attachmentIndex = 0; attachmentIndex < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
+         ++attachmentIndex)
+    {
+        PackedColorBlendAttachmentState &blendAttachmentState =
+            mInputAssemblyAndColorBlendStateInfo.attachments[attachmentIndex];
+        blendAttachmentState.srcColorBlendFactor = PackGLBlendFactor(blendState.sourceBlendRGB);
+        blendAttachmentState.dstColorBlendFactor = PackGLBlendFactor(blendState.destBlendRGB);
+        blendAttachmentState.srcAlphaBlendFactor = PackGLBlendFactor(blendState.sourceBlendAlpha);
+        blendAttachmentState.dstAlphaBlendFactor = PackGLBlendFactor(blendState.destBlendAlpha);
+        blendAttachmentState.colorBlendOp        = PackGLBlendOp(blendState.blendEquationRGB);
+        blendAttachmentState.alphaBlendOp        = PackGLBlendOp(blendState.blendEquationAlpha);
+    }
+    mInputAssemblyAndColorBlendStateInfo.blendEnableMask   = glState.isBlendEnabled() ? 0xffu : 0u;
+    const gl::ColorF &color                                = glState.getBlendColor();
+    mInputAssemblyAndColorBlendStateInfo.blendConstants[0] = color.red;
+    mInputAssemblyAndColorBlendStateInfo.blendConstants[1] = color.green;
+    mInputAssemblyAndColorBlendStateInfo.blendConstants[2] = color.blue;
+    mInputAssemblyAndColorBlendStateInfo.blendConstants[3] = color.alpha;
+    mInputAssemblyAndColorBlendStateInfo.logic.opEnable    = 0;
+    mInputAssemblyAndColorBlendStateInfo.logic.op = static_cast<uint32_t>(VK_LOGIC_OP_CLEAR);
+    const uint8_t colorMask                       = static_cast<uint8_t>(
+        gl_vk::GetColorComponentFlags(blendState.colorMaskRed, blendState.colorMaskGreen,
+                                      blendState.colorMaskBlue, blendState.colorMaskAlpha));
+
+    for (size_t colorIndexGL = 0; colorIndexGL < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
+         colorIndexGL++)
+    {
+        Int4Array_Set(mInputAssemblyAndColorBlendStateInfo.colorWriteMaskBits, colorIndexGL,
+                      colorMask);
+    }
+
+    mRasterizationAndMultisampleStateInfo.bits.alphaToCoverageEnable =
+        glState.isSampleAlphaToCoverageEnabled();
+    for (uint32_t maskNumber = 0; maskNumber < glState.getMaxSampleMaskWords(); ++maskNumber)
+    {
+        uint32_t mask = glState.isSampleMaskEnabled() ? glState.getSampleMaskWord(maskNumber)
+                                                      : std::numeric_limits<uint32_t>::max();
+        mRasterizationAndMultisampleStateInfo.sampleMask[maskNumber] = mask;
+    }
+
+    const auto &rasterState = glState.getRasterizerState();
+    mRasterizationAndMultisampleStateInfo.bits.cullMode =
+        static_cast<uint16_t>(gl_vk::GetCullMode(rasterState));
+    mRasterizationAndMultisampleStateInfo.bits.frontFace =
+        static_cast<uint16_t>(gl_vk::GetFrontFace(rasterState.frontFace, false));
+    mRasterizationAndMultisampleStateInfo.bits.rasterizationDiscardEnable =
+        static_cast<uint32_t>(glState.isRasterizerDiscardEnabled());
+    mRasterizationAndMultisampleStateInfo.lineWidth = glState.getLineWidth();
+    mInputAssemblyAndColorBlendStateInfo.primitive.restartEnable =
+        static_cast<uint16_t>(glState.isPrimitiveRestartEnabled());
+    mRasterizationAndMultisampleStateInfo.bits.depthBiasEnable =
+        glState.isPolygonOffsetFillEnabled();
+    mRasterizationAndMultisampleStateInfo.depthBiasSlopeFactor    = rasterState.polygonOffsetFactor;
+    mRasterizationAndMultisampleStateInfo.depthBiasConstantFactor = rasterState.polygonOffsetUnits;
+
+    const gl::DepthStencilState &depthStencilState = glState.getDepthStencilState();
+    setDepthWriteEnabled(depthStencilState.depthTest);
+    setDepthFunc(PackGLCompareFunc(depthStencilState.depthFunc));
+    setDepthWriteEnabled(depthStencilState.depthMask);
+    setStencilTestEnabled(depthStencilState.stencilTest);
+    setStencilFrontFuncs(static_cast<uint8_t>(glState.getStencilRef()),
+                         PackGLCompareFunc(depthStencilState.stencilFunc),
+                         static_cast<uint8_t>(depthStencilState.stencilMask));
+    setStencilBackFuncs(static_cast<uint8_t>(glState.getStencilBackRef()),
+                        PackGLCompareFunc(depthStencilState.stencilBackFunc),
+                        static_cast<uint8_t>(depthStencilState.stencilBackMask));
+    setStencilFrontOps(PackGLStencilOp(depthStencilState.stencilFail),
+                       PackGLStencilOp(depthStencilState.stencilPassDepthPass),
+                       PackGLStencilOp(depthStencilState.stencilPassDepthFail));
+    setStencilBackOps(PackGLStencilOp(depthStencilState.stencilBackFail),
+                      PackGLStencilOp(depthStencilState.stencilBackPassDepthPass),
+                      PackGLStencilOp(depthStencilState.stencilBackPassDepthFail));
+    setStencilFrontWriteMask(static_cast<uint8_t>(depthStencilState.stencilWritemask));
+    setStencilBackWriteMask(static_cast<uint8_t>(depthStencilState.stencilBackWritemask));
+}
+
 angle::Result GraphicsPipelineDesc::initializePipeline(
     vk::Context *context,
     const vk::PipelineCache &pipelineCacheVk,
