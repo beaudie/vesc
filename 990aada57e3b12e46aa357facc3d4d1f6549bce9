@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0dd4ab1e_44aca388",
+        "filename": "src/libANGLE/ProgramLinkedResources.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-17T15:52:56Z",
+      "side": 1,
+      "message": "instead of adding a setter, can you modify this to \n\nif (hasParentIndex)\n{\n   setParentIndex()\n}\n\nI think the default is -1.\n\nThis way you don\u0027t have to modify ShaderVars.h.",
+      "range": {
+        "startLine": 471,
+        "startChar": 12,
+        "endLine": 471,
+        "endChar": 78
+      },
+      "revId": "990aada57e3b12e46aa357facc3d4d1f6549bce9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
