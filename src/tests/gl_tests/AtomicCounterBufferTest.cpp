@@ -130,6 +130,10 @@ TEST_P(AtomicCounterBufferTest31, AtomicCounterReadCompute)
     // Causes crashes in the subsequent OpenGL testing of this function.  http://anglebug.com/3738
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsWindows() && IsAMD());
 
+    // Skipping due to a bug on the Qualcomm Vulkan Android driver.
+    // http://anglebug.com/3726
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
+
     // Skipping due to a bug on the Adreno OpenGLES Android driver.
     // http://anglebug.com/2925
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
@@ -160,6 +164,10 @@ TEST_P(AtomicCounterBufferTest31, AtomicCounterRead)
 {
     // Causes crashes in the subsequent OpenGL testing of this function.  http://anglebug.com/3738
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsWindows() && IsAMD());
+
+    // Skipping due to a bug on the Qualcomm Vulkan Android driver.
+    // http://anglebug.com/3726
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
 
     // Skipping test while we work on enabling atomic counter buffer support in th D3D renderer.
     // http://anglebug.com/1729
@@ -199,6 +207,10 @@ TEST_P(AtomicCounterBufferTest31, AtomicCounterIncrementAndDecrement)
 {
     // Causes crashes in the subsequent OpenGL testing of this function.  http://anglebug.com/3738
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsWindows() && IsAMD());
+
+    // Skipping due to a bug on the Qualcomm Vulkan Android driver.
+    // http://anglebug.com/3726
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
 
     constexpr char kCS[] =
         "#version 310 es\n"
@@ -243,6 +255,10 @@ TEST_P(AtomicCounterBufferTest31, AtomicCounterMultipleBuffers)
 {
     // Causes crashes in the subsequent OpenGL testing of this function.  http://anglebug.com/3738
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsWindows() && IsAMD());
+
+    // Skipping due to a bug on the Qualcomm Vulkan Android driver.
+    // http://anglebug.com/3726
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
 
     GLint maxAtomicCounterBuffers = 0;
     glGetIntegerv(GL_MAX_COMPUTE_ATOMIC_COUNTER_BUFFERS, &maxAtomicCounterBuffers);
