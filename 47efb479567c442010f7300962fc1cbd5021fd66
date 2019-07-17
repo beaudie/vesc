@@ -145,6 +145,24 @@
     },
     {
       "key": {
+        "uuid": "96927fc5_29aa2a38",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-17T13:27:41Z",
+      "side": 1,
+      "message": "I had this discussion with Jamie in the past, and I kind of agree with him now. If this function fails, yes the application could do without the cache, but the failure would generally mean something more serious is wrong, and we\u0027d want to find out what that is and fix it, instead of silently disabling the pipeline cache.",
+      "parentUuid": "13544be9_8af2be70",
+      "revId": "47efb479567c442010f7300962fc1cbd5021fd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "864dc6bb_20772dc2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
