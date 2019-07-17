@@ -639,6 +639,195 @@ TEST_P(DrawBuffersTestES3, 2DArrayTextures)
     glDeleteProgram(program);
 }
 
+class DrawBuffersWithConversion : public ANGLETest
+{
+  protected:
+    DrawBuffersWithConversion()
+    {
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+        setConfigDepthBits(24);
+    }
+
+    void testTearDown() override
+    {
+        glDeleteFramebuffers(2, mFrameBuffers);
+        glDeleteTextures(2, mFrameBuffers);
+        glDeleteProgram(mProgram);
+    }
+
+    void setDrawFramebuffer(GLuint *framebuffer, GLuint *frameTexture)
+    {
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, *framebuffer);
+        glBindTexture(GL_TEXTURE_2D, *frameTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kRenderWidth, kRenderHeight, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *frameTexture,
+                               0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+    void setProgram()
+    {
+
+        constexpr char kVS[] = R"(attribute vec3 vColor;
+varying vec3 colorOut;
+void main()
+{
+    gl_Position = vec4(0.5, 0.5, 0.0, 1.0);
+    colorOut = vColor;
+})";
+
+        constexpr char kFS[] = R"(precision mediump float;
+varying vec3 colorOut;
+void main()
+{
+    gl_FragColor = vec4(colorOut, 0.0);
+})";
+        mProgram             = CompileProgram(kVS, kFS);
+        if (mProgram == 0)
+        {
+            FAIL() << "shader compilation failed.";
+        }
+        glUseProgram(mProgram);
+    }
+
+    // Use this method to filter if we can support these tests.
+    bool setupTest()
+    {
+        glGenFramebuffers(2, mFrameBuffers);
+        glGenTextures(2, mFrameTextures);
+
+        setProgram();
+        for (uint32_t i = 0; i < 2; i++)
+        {
+            setDrawFramebuffer(&mFrameBuffers[i], &mFrameTextures[i]);
+        }
+
+        return true;
+    }
+
+    void setDrawingContext(uint32_t index)
+    {
+        uint32_t id = index % 2;
+
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[id]);
+        glViewport(0, 0, kRenderWidth, kRenderHeight);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    void verifyFramebuffers()
+    {
+        // RGBA
+        constexpr size_t kBufSize   = 4 * kRenderHeight * kRenderWidth;
+        GLubyte pixelBuf1[kBufSize] = {0};
+        GLubyte pixelBuf2[kBufSize] = {0};
+        ASSERT_EQ(memcmp(pixelBuf1, pixelBuf2, kBufSize * sizeof(GLubyte)), 0);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[0]);
+        glReadPixels(0, 0, kRenderWidth, kRenderHeight, GL_RGBA, GL_UNSIGNED_BYTE, pixelBuf1);
+        EXPECT_GL_NO_ERROR();
+
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[1]);
+        glReadPixels(0, 0, kRenderWidth, kRenderHeight, GL_RGBA, GL_UNSIGNED_BYTE, pixelBuf2);
+        EXPECT_GL_NO_ERROR();
+
+        bool nonZero = false;
+        for (uint32_t i = 0; i < kBufSize; i++)
+        {
+            if (pixelBuf1[i] != 0)
+            {
+                nonZero = true;
+                break;
+            }
+        }
+        ASSERT_EQ(nonZero, true);
+
+        ASSERT_EQ(memcmp(pixelBuf1, pixelBuf2, kBufSize * sizeof(GLubyte)), 0);
+    }
+
+    static const GLsizei kRenderWidth = 128, kRenderHeight = 128;
+    GLuint mFrameTextures[2];
+    GLuint mFrameBuffers[2];
+    GLuint mProgram;
+};
+
+TEST_P(DrawBuffersWithConversion, VboChange)
+{
+    setupTest();
+
+    GLuint buffers[2];
+    glGenBuffers(2, buffers);
+
+    std::vector<GLfloat> floatData;
+    floatData.push_back(0.515f);
+    floatData.push_back(0.515f);
+    floatData.push_back(0.515f);
+    for (uint32_t i = 0; i < 2; i++)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[i]);
+        glBufferData(GL_ARRAY_BUFFER, floatData.size() * sizeof(GLfloat), floatData.data(),
+                     GL_STATIC_DRAW);
+    }
+
+    GLint colorLocation = glGetAttribLocation(mProgram, "vColor");
+    ASSERT_GE(colorLocation, 0);
+    glEnableVertexAttribArray(colorLocation);
+
+    setDrawingContext(0);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+    glVertexAttribPointer(colorLocation, 3, GL_FIXED, GL_FALSE, 0, 0);
+    glDrawArrays(GL_POINTS, 0, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    setDrawingContext(0);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+    glVertexAttribPointer(colorLocation, 3, GL_FIXED, GL_FALSE, 0, 0);
+    glDrawArrays(GL_POINTS, 0, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    EXPECT_GL_NO_ERROR();
+
+    glDeleteBuffers(2, buffers);
+}
+
+TEST_P(DrawBuffersWithConversion, OffsetChange)
+{
+    setupTest();
+
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+
+    std::vector<GLfloat> floatData;
+    floatData.push_back(0.515f);
+    floatData.push_back(0.515f);
+    floatData.push_back(0.515f);
+    floatData.push_back(0.515f);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, floatData.size() * sizeof(GLfloat), floatData.data(),
+                 GL_STATIC_DRAW);
+
+    GLint colorLocation = glGetAttribLocation(mProgram, "vColor");
+    ASSERT_GE(colorLocation, 0);
+    glEnableVertexAttribArray(colorLocation);
+
+    setDrawingContext(0);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glVertexAttribPointer(colorLocation, 3, GL_FIXED, GL_FALSE, 0, 0);
+    glDrawArrays(GL_POINTS, 0, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    setDrawingContext(0);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glVertexAttribPointer(colorLocation, 3, GL_FIXED, GL_FALSE, 0, (void *)1);
+    glDrawArrays(GL_POINTS, 0, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(DrawBuffersTest,
@@ -654,3 +843,5 @@ ANGLE_INSTANTIATE_TEST(DrawBuffersTest,
 ANGLE_INSTANTIATE_TEST(DrawBuffersWebGL2Test, ES3_D3D11(), ES3_OPENGL(), ES3_VULKAN());
 
 ANGLE_INSTANTIATE_TEST(DrawBuffersTestES3, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES());
+
+ANGLE_INSTANTIATE_TEST(DrawBuffersWithConversion, ES2_VULKAN());

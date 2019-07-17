@@ -108,9 +108,10 @@ class VertexArrayVk : public VertexArrayImpl
                                   const gl::VertexBinding &binding,
                                   size_t attribIndex);
 
-    void syncDirtyBuffer(ContextVk *contextVk,
-                         const gl::VertexBinding &binding,
-                         size_t bindingIndex);
+    angle::Result syncDirtyAttribBuffer(ContextVk *contextVk,
+                                        const gl::VertexAttribute &attrib,
+                                        const gl::VertexBinding &binding,
+                                        size_t attribIndex);
 
     gl::AttribArray<VkBuffer> mCurrentArrayBufferHandles;
     gl::AttribArray<VkDeviceSize> mCurrentArrayBufferOffsets;
