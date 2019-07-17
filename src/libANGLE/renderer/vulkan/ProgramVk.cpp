@@ -25,6 +25,26 @@ namespace
 
 constexpr size_t kUniformBlockDynamicBufferMinSize = 256 * 128;
 
+// Identical to Std140 encoder in all aspects, except it ignores opaque uniform types.
+class VulkanDefaultBlockEncoder : public sh::Std140BlockEncoder
+{
+  public:
+    void advanceOffset(GLenum type,
+                       const std::vector<unsigned int> &arraySizes,
+                       bool isRowMajorMatrix,
+                       int arrayStride,
+                       int matrixStride) override
+    {
+        if (gl::IsAtomicCounterType(type))
+        {
+            return;
+        }
+
+        sh::Std140BlockEncoder::advanceOffset(type, arraySizes, isRowMajorMatrix, arrayStride,
+                                              matrixStride);
+    }
+};
+
 void InitDefaultUniformBlock(const std::vector<sh::Uniform> &uniforms,
                              sh::BlockLayoutMap *blockLayoutMapOut,
                              size_t *blockSizeOut)
@@ -35,7 +55,7 @@ void InitDefaultUniformBlock(const std::vector<sh::Uniform> &uniforms,
         return;
     }
 
-    sh::Std140BlockEncoder blockEncoder;
+    VulkanDefaultBlockEncoder blockEncoder;
     sh::GetUniformBlockInfo(uniforms, "", &blockEncoder, blockLayoutMapOut);
 
     size_t blockSize = blockEncoder.getCurrentOffset();
@@ -187,15 +207,20 @@ void AddAtomicCounterBufferDescriptorSetDesc(
     uint32_t bindingStart,
     vk::DescriptorSetLayoutDesc *descOut)
 {
-    uint32_t bindingIndex = 0;
-    for (uint32_t bufferIndex = 0; bufferIndex < atomicCounterBuffers.size(); ++bufferIndex)
+    if (atomicCounterBuffers.size() == 0)
     {
-        VkShaderStageFlags activeStages =
-            gl_vk::GetShaderStageFlags(atomicCounterBuffers[bufferIndex].activeShaders());
-
-        descOut->update(bindingStart + bindingIndex, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1,
-                        activeStages);
+        return;
     }
+
+    VkShaderStageFlags activeStages = 0;
+    for (const gl::AtomicCounterBuffer &buffer : atomicCounterBuffers)
+    {
+        activeStages |= gl_vk::GetShaderStageFlags(buffer.activeShaders());
+    }
+
+    // A single storage buffer array is used for all stages for simplicity.
+    descOut->update(bindingStart, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                    gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS, activeStages);
 }
 
 void WriteBufferDescriptorSetBinding(const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding,
@@ -583,8 +608,8 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext, gl::InfoLog &inf
     }
     if (storageBlockCount > 0 || atomicCounterBufferCount > 0)
     {
-        bufferSetSize.push_back(
-            {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, storageBlockCount + atomicCounterBufferCount});
+        const uint32_t storageBufferDescCount = storageBlockCount + atomicCounterBufferCount;
+        bufferSetSize.push_back({VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, storageBufferDescCount});
     }
 
     VkDescriptorPoolSize textureSetSize = {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, textureCount};
@@ -1162,6 +1187,11 @@ void ProgramVk::updateBuffersDescriptorSet(ContextVk *contextVk,
                                            const std::vector<gl::InterfaceBlock> &blocks,
                                            VkDescriptorType descriptorType)
 {
+    if (blocks.size() == 0)
+    {
+        return;
+    }
+
     VkDescriptorSet descriptorSet = mDescriptorSets[kShaderResourceDescriptorSetIndex];
 
     ASSERT(descriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER ||
@@ -1237,38 +1267,43 @@ void ProgramVk::updateBuffersDescriptorSet(ContextVk *contextVk,
 void ProgramVk::updateAtomicCounterBuffersDescriptorSet(ContextVk *contextVk,
                                                         vk::CommandGraphResource *recorder)
 {
+    const gl::State &glState = contextVk->getState();
+    const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers =
+        mState.getAtomicCounterBuffers();
+
+    if (atomicCounterBuffers.size() == 0)
+    {
+        return;
+    }
+
     VkDescriptorSet descriptorSet = mDescriptorSets[kShaderResourceDescriptorSetIndex];
 
     const uint32_t bindingStart = getAtomicCounterBufferBindingsOffset();
 
     gl::AtomicCounterBuffersArray<VkDescriptorBufferInfo> descriptorBufferInfo;
     gl::AtomicCounterBuffersArray<VkWriteDescriptorSet> writeDescriptorInfo;
-    uint32_t writeCount = 0;
+    gl::AtomicCounterBufferMask writtenBindings;
 
     // Write atomic counter buffers.
-    const gl::State &glState = contextVk->getState();
-    const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers =
-        mState.getAtomicCounterBuffers();
-
+    const gl::OffsetBindingPointer<gl::Buffer> *anyValidBufferBinding = nullptr;
     for (uint32_t bufferIndex = 0; bufferIndex < atomicCounterBuffers.size(); ++bufferIndex)
     {
         const gl::AtomicCounterBuffer &atomicCounterBuffer = atomicCounterBuffers[bufferIndex];
+        uint32_t binding                                   = atomicCounterBuffer.binding;
         const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
-            glState.getIndexedAtomicCounterBuffer(atomicCounterBuffer.binding);
+            glState.getIndexedAtomicCounterBuffer(binding);
 
         if (bufferBinding.get() == nullptr)
         {
             continue;
         }
 
-        uint32_t binding = bindingStart + bufferIndex;
-
-        VkDescriptorBufferInfo &bufferInfo = descriptorBufferInfo[writeCount];
-        VkWriteDescriptorSet &writeInfo    = writeDescriptorInfo[writeCount];
+        VkDescriptorBufferInfo &bufferInfo = descriptorBufferInfo[binding];
+        VkWriteDescriptorSet &writeInfo    = writeDescriptorInfo[binding];
 
         WriteBufferDescriptorSetBinding(bufferBinding, 0, descriptorSet,
-                                        VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, binding, 0, &bufferInfo,
-                                        &writeInfo);
+                                        VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, bindingStart, binding,
+                                        &bufferInfo, &writeInfo);
 
         BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
         vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
@@ -1276,12 +1311,33 @@ void ProgramVk::updateAtomicCounterBuffersDescriptorSet(ContextVk *contextVk,
         bufferHelper.onWrite(contextVk, recorder, VK_ACCESS_SHADER_READ_BIT,
                              VK_ACCESS_SHADER_WRITE_BIT);
 
-        ++writeCount;
+        writtenBindings.set(binding);
+
+        anyValidBufferBinding = &bufferBinding;
+    }
+
+    // Bind any of the valid atomic counter buffers, and bind it to every array slot that's unused.
+    ASSERT(anyValidBufferBinding);
+
+    for (uint32_t binding = 0; binding < gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS; ++binding)
+    {
+        if (writtenBindings[binding])
+        {
+            continue;
+        }
+
+        VkDescriptorBufferInfo &bufferInfo = descriptorBufferInfo[binding];
+        VkWriteDescriptorSet &writeInfo    = writeDescriptorInfo[binding];
+
+        WriteBufferDescriptorSetBinding(*anyValidBufferBinding, 0, descriptorSet,
+                                        VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, bindingStart, binding,
+                                        &bufferInfo, &writeInfo);
     }
 
     VkDevice device = contextVk->getDevice();
 
-    vkUpdateDescriptorSets(device, writeCount, writeDescriptorInfo.data(), 0, nullptr);
+    vkUpdateDescriptorSets(device, gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS,
+                           writeDescriptorInfo.data(), 0, nullptr);
 }
 
 angle::Result ProgramVk::updateShaderResourcesDescriptorSet(ContextVk *contextVk,
