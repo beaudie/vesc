@@ -115,6 +115,10 @@ TEST_P(AtomicCounterBufferTest31, OffsetNotAllSpecifiedWithSameValue)
 // Tests atomic counter reads using compute shaders. Used as a sanity check for the translator.
 TEST_P(AtomicCounterBufferTest31, AtomicCounterReadCompute)
 {
+    // Skipping due to a bug on the Qualcomm Vulkan Android driver.
+    // http://anglebug.com/3726
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
+
     // Skipping due to a bug on the Adreno OpenGLES Android driver.
     // http://anglebug.com/2925
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
@@ -179,6 +183,10 @@ TEST_P(AtomicCounterBufferTest31, AtomicCounterRead)
 // Test atomic counter increment and decrement.
 TEST_P(AtomicCounterBufferTest31, AtomicCounterIncrementAndDecrement)
 {
+    // Skipping due to a bug on the Qualcomm Vulkan Android driver.
+    // http://anglebug.com/3726
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
+
     constexpr char kCS[] =
         "#version 310 es\n"
         "layout(local_size_x=1, local_size_y=1, local_size_z=1) in;\n"
@@ -220,6 +228,10 @@ TEST_P(AtomicCounterBufferTest31, AtomicCounterIncrementAndDecrement)
 // Tests multiple atomic counter buffers.
 TEST_P(AtomicCounterBufferTest31, AtomicCounterMultipleBuffers)
 {
+    // Skipping due to a bug on the Qualcomm Vulkan Android driver.
+    // http://anglebug.com/3726
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
+
     GLint maxAtomicCounterBuffers = 0;
     glGetIntegerv(GL_MAX_COMPUTE_ATOMIC_COUNTER_BUFFERS, &maxAtomicCounterBuffers);
     constexpr unsigned int kBufferCount = 3;
