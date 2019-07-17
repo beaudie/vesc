@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "805dd78a_c8e787b0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2181,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-17T12:43:52Z",
+      "side": 1,
+      "message": "We probably shouldn\u0027t be in this function if we don\u0027t have data. It\u0027s valid to pass nullptr, but it\u0027s not valid to upload data with nullptr. Somewhere up in the stack most likely.",
+      "parentUuid": "0443071d_57f3bf00",
+      "revId": "102752cb301d700311b64bf22c4fba58cd4f2007",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4514634c_6b02d047",
         "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
         "patchSetId": 1
