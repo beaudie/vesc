@@ -282,6 +282,30 @@
     },
     {
       "key": {
+        "uuid": "48629d50_32b1c847",
+        "filename": "src/libANGLE/FramebufferAttachment.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-17T18:42:24Z",
+      "side": 1,
+      "message": "I can answer most of these because I\u0027m familiar with the code but I don\u0027t think there will be a single answer that works everywhere.  I think that the various Framebuffer/FramebufferAttachment::getSamples functions should return the emulated sample count as you have it but a couple cases may need to be updated to a bit more complicated check of something like... \"if (attachment-\u003eisTexture \u0026\u0026 attachment-\u003egetTexture()-\u003egetsamples \u003e 0)\" or an equivalent helper function.\n\n\u003e I had originally added this here because getCachedSamples (which internally calls getSamples()) below was setting a flag in the rasterizer state that allowed for the renderTarget to know that it was multisample and therefore to draw with antialiasing. \n\u003e  bool multiSample \u003d (fbo-\u003egetCachedSamples(context) !\u003d 0);\n\u003e     if (multiSample !\u003d mCurRasterState.multiSample)\n\u003e     {\n\u003e         mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);\n\u003e         mCurRasterState.multiSample \u003d multiSample;\n\u003e     }\n\nThis should stay as is, using the emulated sample count.\n\n\u003e Single sampled: \n\u003e FramebufferGL::blit() -- readAttachmentSamples \u003d colorReadAttachment-\u003egetSamples(), this readAttachmentSamples is later used to determine a split between blitColorBufferWithShader or blitFramebuffer.\n\nI believe the intent is to determine if the framebuffer can be sampled from so we really care about the texture\u0027s real sample count, not the emulated one.\n\n\u003e validationES ValidateBlitFramebufferParameters -- readColorBuffer-\u003egetSamples() \u003e 0 and readBuffer-\u003egetSamples \u003e 0 both instances are used to determine an error in validation. But because the samples that we are getting returned should not really be \u003e 0, the validation shouldn\u0027t fail. \n\u003e \n\u003e similar case in validationES2 ValidateBlitFramebufferANGLE\n\u003e \n\u003e ValidationES ValidateFramebufferNotMultisampled\n\nI believe the spec says that the framebuffer is multisampled so validation should treat it that way.  We would return the emulated sample count here.\n\n\u003e Multisampled:\n\u003e queryutils.cpp\n\u003e  case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_SAMPLES_EXT:\n\u003e             if (attachmentObject-\u003etype() \u003d\u003d GL_TEXTURE)\n\u003e             {\n\u003e                 *params \u003d attachmentObject-\u003egetSamples();\n\u003e             }\n\u003e             else\n\nFrom the EXT_multisampled_render_to_texture spec:\n\n    TEXTURE_SAMPLES is used in desktop GL to refer to the number of samples in\n    a multisampled texture. This extension does not introduce multisampled\n    textures, but rather allows multisampled rendering to non-multisampled\n    textures. For the purposes of this extension, the texture sample count\n    should be considered framebuffer attachment state rather than texture\n    state, thus FRAMEBUFFER_ATTACHMENT_TEXTURE_SAMPLES_EXT is a more\n    appropriate name.\n\n\u003e Framebuffer11::getSamplePosition\n\nEmulated count.\n\n\u003e ContextVK::GetCoverageSampleCount\n\nEmulated count.\n\n\u003e ContextVK::syncState \n\u003e mGraphicsPipelineDesc-\u003eupdateRasterizationSamples(\u0026mGraphicsPipelineTransition,\n\u003e                                                          mDrawFramebuffer-\u003egetSamples());\n\nI\u0027m not sure.  Vulkan doesn\u0027t support these yet so I\u0027d leave it as is.\n\n\u003e State::getIntegerv\n\u003e     Framebuffer *framebuffer \u003d mDrawFramebuffer;\n\u003e     if (framebuffer-\u003eisComplete(context))\n\u003e     {\n\u003e         GLint samples \u003d framebuffer-\u003egetSamples(context);\n\nEmulated count because this is for validation.\n\n\u003e validationES::ValidateGetMultisamplefvBase\n\nEmulated count because this is for validation.",
+      "parentUuid": "b9d388e9_2a2afe74",
+      "range": {
+        "startLine": 245,
+        "startChar": 35,
+        "endLine": 245,
+        "endChar": 36
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "640f343b_58e5fc32",
         "filename": "src/libANGLE/Observer.h",
         "patchSetId": 5
