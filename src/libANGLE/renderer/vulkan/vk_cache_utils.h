@@ -893,11 +893,10 @@ class PipelineLayoutCache final : angle::NonCopyable
 //
 // The set/binding assignment is done as following:
 //
-// - Set 0 contains uniform blocks created to encompass default uniforms.  Bindings 0 and 1
-//   correspond to default uniforms in the vertex and fragment shaders respectively.  Additionally,
-//   transform feedback buffers are bound from binding 2 and up.
+// - Set 0 contains uniform blocks created to encompass default uniforms.  1 binding is used per
+//   pipeline stage.  Additionally, transform feedback buffers are bound from binding 2 and up.
 // - Set 1 contains all textures.
-// - Set 2 contains all uniform and storage blocks.
+// - Set 2 contains all uniform and storage blocks and atomic counter buffers.
 // - Set 3 contains the ANGLE driver uniforms at binding 0.  Note that driver uniforms are updated
 //   only under rare circumstances, such as viewport or depth range change.  However, there is only
 //   one binding in this set.

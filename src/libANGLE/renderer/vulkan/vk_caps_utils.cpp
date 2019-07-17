@@ -256,31 +256,34 @@ void RendererVk::ensureCapsInitialized() const
         maxPerStageStorageBuffers = std::min(maxPerStageStorageBuffers, maxCombinedStorageBuffers);
     }
 
-    // Reserve one storage buffer in the fragment and compute stages for atomic counters.  This is
-    // only possible if the number of per-stage storage buffers is greater than 4, which is the
-    // required GLES minimum for compute.  We use the same value for fragment, to avoid giving one
-    // of the precious few storage buffers available to an atomic counter buffer.  The spec allows
-    // there to be zero of either of these resources in the fragment stage.
-    constexpr uint32_t kMinimumRequiredStorageBuffers = 4;
-    uint32_t maxVertexStageAtomicCounterBuffers       = 0;
-    uint32_t maxPerStageAtomicCounterBuffers          = 0;
-    uint32_t maxCombinedAtomicCounterBuffers          = 0;
+    // Reserve up to IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS storage buffers in the fragment and
+    // compute stages for atomic counters.  This is only possible if the number of per-stage storage
+    // buffers is greater than 4, which is the required GLES minimum for compute.
+    //
+    // For each stage, we'll give one atomic counter buffer for every 4 storage buffer.  This is
+    // completely arbitrary.  In GLES, both of these resources can have a limit of zero in vertex
+    // and fragment stages.  In compute, if there aren't at least 5 storage buffers, we don't
+    // declare support for GLES3.1.
+    constexpr uint32_t kMinimumRequiredComputeStorageBuffers = 4;
+    constexpr uint32_t kAtomicCounterRatio      = kMinimumRequiredComputeStorageBuffers + 1;
+    uint32_t maxVertexStageAtomicCounterBuffers = 0;
+    uint32_t maxPerStageAtomicCounterBuffers    = 0;
+    uint32_t maxCombinedAtomicCounterBuffers    = 0;
 
-    if (maxPerStageStorageBuffers > kMinimumRequiredStorageBuffers)
-    {
-        --maxPerStageStorageBuffers;
-        --maxCombinedStorageBuffers;
-        maxPerStageAtomicCounterBuffers = 1;
-        maxCombinedAtomicCounterBuffers = 1;
-    }
+    maxVertexStageAtomicCounterBuffers = maxVertexStageStorageBuffers / kAtomicCounterRatio;
+    maxPerStageAtomicCounterBuffers    = maxPerStageStorageBuffers / kAtomicCounterRatio;
+    maxCombinedAtomicCounterBuffers    = maxCombinedStorageBuffers / kAtomicCounterRatio;
 
-    // For the vertex stage, similarly reserve one storage buffer for atomic counters, if there are
-    // excess storage buffers.
-    if (maxVertexStageStorageBuffers > kMinimumRequiredStorageBuffers)
-    {
-        --maxVertexStageStorageBuffers;
-        maxVertexStageAtomicCounterBuffers = 1;
-    }
+    maxVertexStageAtomicCounterBuffers = std::min<uint32_t>(
+        maxVertexStageAtomicCounterBuffers, gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS);
+    maxPerStageAtomicCounterBuffers = std::min<uint32_t>(
+        maxPerStageAtomicCounterBuffers, gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS);
+    maxCombinedAtomicCounterBuffers = std::min<uint32_t>(
+        maxCombinedAtomicCounterBuffers, gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS);
+
+    maxVertexStageStorageBuffers -= maxVertexStageAtomicCounterBuffers;
+    maxPerStageStorageBuffers -= maxPerStageAtomicCounterBuffers;
+    maxCombinedStorageBuffers -= maxCombinedAtomicCounterBuffers;
 
     mNativeCaps.maxShaderStorageBlocks[gl::ShaderType::Vertex] =
         mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics ? maxVertexStageStorageBuffers : 0;

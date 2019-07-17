@@ -740,20 +740,22 @@ uint32_t AssignAtomicCounterBufferBindings(const std::vector<gl::AtomicCounterBu
                                            uint32_t bindingStart,
                                            gl::ShaderMap<IntermediateShaderSource> *shaderSources)
 {
-    const std::string buffersDescriptorSet = "set = " + Str(kBufferDescriptorSetIndex);
+    constexpr char kAtomicCounterBlockName[] = "ANGLEAtomicCounters";
+    const std::string buffersDescriptorSet   = "set = " + Str(kBufferDescriptorSetIndex);
 
-    // Currently, we only support a single atomic counter buffer binding.
-    ASSERT(buffers.size() <= 1);
-
+    // All atomic counter buffers are placed under one binding, per stage.
     uint32_t bindingIndex = bindingStart;
-    for (const gl::AtomicCounterBuffer &buffer : buffers)
+    for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        const std::string bindingString =
-            buffersDescriptorSet + ", binding = " + Str(bindingIndex++);
+        IntermediateShaderSource &shaderSource = (*shaderSources)[shaderType];
+        if (!shaderSource.empty())
+        {
+            const std::string bindingString =
+                buffersDescriptorSet + ", binding = " + Str(bindingIndex++);
 
-        constexpr char kAtomicCounterBlockName[] = "ANGLEAtomicCounters";
-        AssignResourceBinding(buffer.activeShaders(), kAtomicCounterBlockName, bindingString,
-                              qualifier, kUnusedBlockSubstitution, shaderSources);
+            shaderSource.insertLayoutSpecifier(kAtomicCounterBlockName, bindingString);
+            shaderSource.insertQualifierSpecifier(kAtomicCounterBlockName, qualifier);
+        }
     }
 
     return bindingIndex;
@@ -893,6 +895,7 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
         if (glShader)
         {
             intermediateSources[shaderType].init(glShader->getTranslatedSource());
+            // fprintf(stderr, "%hhu:\n%s\n", shaderType, glShader->getTranslatedSource().c_str());
         }
     }
 
@@ -930,6 +933,7 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        // fprintf(stderr, "%hhu:\n%s\n", shaderType, (*shaderSourcesOut)[shaderType].c_str());
     }
 }
 
