@@ -567,6 +567,38 @@ void GraphicsPipelineDesc::initDefaults()
     inputAndBlend.primitive.restartEnable = 0;
 }
 
+// Because frontend GL filters out unnecessary dirty bits,
+// we must sync vulkan pipeline desc with GL state at init time
+void GraphicsPipelineDesc::initFromGLState(const gl::State &glState)
+{
+    initDefaults();
+
+    // Depth range
+    mViewport.minDepth = glState.getNearPlane();
+    mViewport.maxDepth = glState.getFarPlane();
+
+    // DepthAndStencil states
+    const gl::DepthStencilState &depthStencilState = glState.getDepthStencilState();
+    setDepthWriteEnabled(depthStencilState.depthTest);
+    setDepthFunc(PackGLCompareFunc(depthStencilState.depthFunc));
+    setDepthWriteEnabled(depthStencilState.depthMask);
+    setStencilTestEnabled(depthStencilState.stencilTest);
+    setStencilFrontFuncs(static_cast<uint8_t>(glState.getStencilRef()),
+                         PackGLCompareFunc(depthStencilState.stencilFunc),
+                         static_cast<uint8_t>(depthStencilState.stencilMask));
+    setStencilBackFuncs(static_cast<uint8_t>(glState.getStencilBackRef()),
+                        PackGLCompareFunc(depthStencilState.stencilBackFunc),
+                        static_cast<uint8_t>(depthStencilState.stencilBackMask));
+    setStencilFrontOps(PackGLStencilOp(depthStencilState.stencilFail),
+                       PackGLStencilOp(depthStencilState.stencilPassDepthPass),
+                       PackGLStencilOp(depthStencilState.stencilPassDepthFail));
+    setStencilBackOps(PackGLStencilOp(depthStencilState.stencilBackFail),
+                      PackGLStencilOp(depthStencilState.stencilBackPassDepthPass),
+                      PackGLStencilOp(depthStencilState.stencilBackPassDepthFail));
+    setStencilFrontWriteMask(static_cast<uint8_t>(depthStencilState.stencilWritemask));
+    setStencilBackWriteMask(static_cast<uint8_t>(depthStencilState.stencilBackWritemask));
+}
+
 angle::Result GraphicsPipelineDesc::initializePipeline(
     vk::Context *context,
     const vk::PipelineCache &pipelineCacheVk,
