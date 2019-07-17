@@ -13,6 +13,7 @@
 
 #include "common/Color.h"
 #include "common/FixedVector.h"
+#include "libANGLE/State.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace rx
@@ -348,6 +349,7 @@ class GraphicsPipelineDesc final
     bool operator==(const GraphicsPipelineDesc &other) const;
 
     void initDefaults();
+    void initFromGLState(const gl::State &glState);
 
     // For custom comparisons.
     template <typename T>
