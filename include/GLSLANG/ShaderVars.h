@@ -136,6 +136,8 @@ struct ShaderVariable
         return hasParentArrayIndex() ? flattenedOffsetInParentArrays : 0;
     }
 
+    int getParentArrayIndex() const { return flattenedOffsetInParentArrays; }
+
     void setParentArrayIndex(int index) { flattenedOffsetInParentArrays = index; }
 
     bool hasParentArrayIndex() const { return flattenedOffsetInParentArrays != -1; }
