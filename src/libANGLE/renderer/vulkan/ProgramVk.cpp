@@ -504,14 +504,15 @@ angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
 
     for (const gl::ShaderType shaderType : mState.getLinkedShaderStages())
     {
-        gl::Shader *shader = mState.getAttachedShader(shaderType);
-
-        if (shader)
+        std::vector<sh::Uniform> uniforms;
+        for (const gl::LinkedUniform &uniform : mState.getUniforms())
         {
-            const std::vector<sh::Uniform> &uniforms = shader->getUniforms();
-            InitDefaultUniformBlock(uniforms, &layoutMap[shaderType],
-                                    &requiredBufferSize[shaderType]);
+            if (uniform.isActive(shaderType))
+            {
+                uniforms.push_back(uniform);
+            }
         }
+        InitDefaultUniformBlock(uniforms, &layoutMap[shaderType], &requiredBufferSize[shaderType]);
     }
 
     // Init the default block layout info.
@@ -526,12 +527,6 @@ angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
             if (uniform.isInDefaultBlock() && !uniform.isSampler())
             {
                 std::string uniformName = uniform.name;
-                if (uniform.isArray())
-                {
-                    // Gets the uniform name without the [0] at the end.
-                    uniformName = gl::ParseResourceName(uniformName, nullptr);
-                }
-
                 bool found = false;
 
                 for (const gl::ShaderType shaderType : mState.getLinkedShaderStages())
