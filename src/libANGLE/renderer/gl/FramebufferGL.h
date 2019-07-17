@@ -115,6 +115,13 @@ class FramebufferGL : public FramebufferImpl
     void maskOutInactiveOutputDrawBuffersImpl(const gl::Context *context,
                                               gl::DrawBufferMask targetAppliedDrawBuffers);
 
+    angle::Result adjustSrcDstRegion(const gl::Framebuffer *sourceFramebuffer,
+                                     const gl::Framebuffer *destFramebuffer,
+                                     const gl::Rectangle &sourceArea,
+                                     const gl::Rectangle &destArea,
+                                     gl::Rectangle *newSourceArea,
+                                     gl::Rectangle *newDestArea);
+
     GLuint mFramebufferID;
     bool mIsDefault;
 
