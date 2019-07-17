@@ -152,6 +152,10 @@ void WriteParamValueToStream<ParamType::TvoidConstPointer>(std::ostream &os, con
 template <>
 void WriteParamValueToStream<ParamType::TGLDEBUGPROCKHR>(std::ostream &os, GLDEBUGPROCKHR value);
 
+template <>
+void WriteParamValueToStream<ParamType::TRenderbufferID>(std::ostream &os,
+                                                         gl::RenderbufferID value);
+
 // General fallback for any unspecific type.
 template <ParamType ParamT, typename T>
 void WriteParamValueToStream(std::ostream &os, T value)

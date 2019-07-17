@@ -32,7 +32,7 @@ void GL_APIENTRY BeginQuery(GLenum target, GLuint id)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        QueryType targetPacked = FromGLenum<QueryType>(target);
+        QueryType targetPacked = FromGL<QueryType>(target);
         ANGLE_CAPTURE(BeginQuery, context, targetPacked, id);
         if (context->skipValidation() || ValidateBeginQuery(context, targetPacked, id))
         {
@@ -48,7 +48,7 @@ void GL_APIENTRY BindBuffer(GLenum target, GLuint buffer)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(BindBuffer, context, targetPacked, buffer);
         if (context->skipValidation() || ValidateBindBuffer(context, targetPacked, buffer))
         {
@@ -66,8 +66,8 @@ void GL_APIENTRY BufferData(GLenum target, GLsizeiptr size, const void *data, GL
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
-        BufferUsage usagePacked    = FromGLenum<BufferUsage>(usage);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
+        BufferUsage usagePacked    = FromGL<BufferUsage>(usage);
         ANGLE_CAPTURE(BufferData, context, targetPacked, size, data, usagePacked);
         if (context->skipValidation() ||
             ValidateBufferData(context, targetPacked, size, data, usagePacked))
@@ -88,7 +88,7 @@ void GL_APIENTRY BufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, 
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(BufferSubData, context, targetPacked, offset, size, data);
         if (context->skipValidation() ||
             ValidateBufferSubData(context, targetPacked, offset, size, data))
@@ -135,7 +135,7 @@ void GL_APIENTRY EndQuery(GLenum target)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        QueryType targetPacked = FromGLenum<QueryType>(target);
+        QueryType targetPacked = FromGL<QueryType>(target);
         ANGLE_CAPTURE(EndQuery, context, targetPacked);
         if (context->skipValidation() || ValidateEndQuery(context, targetPacked))
         {
@@ -182,7 +182,7 @@ void GL_APIENTRY GetBufferParameteriv(GLenum target, GLenum pname, GLint *params
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(GetBufferParameteriv, context, targetPacked, pname, params);
         if (context->skipValidation() ||
             ValidateGetBufferParameteriv(context, targetPacked, pname, params))
@@ -200,7 +200,7 @@ void GL_APIENTRY GetBufferPointerv(GLenum target, GLenum pname, void **params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(GetBufferPointerv, context, targetPacked, pname, params);
         if (context->skipValidation() ||
             ValidateGetBufferPointerv(context, targetPacked, pname, params))
@@ -270,7 +270,7 @@ void GL_APIENTRY GetQueryiv(GLenum target, GLenum pname, GLint *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        QueryType targetPacked = FromGLenum<QueryType>(target);
+        QueryType targetPacked = FromGL<QueryType>(target);
         ANGLE_CAPTURE(GetQueryiv, context, targetPacked, pname, params);
         if (context->skipValidation() || ValidateGetQueryiv(context, targetPacked, pname, params))
         {
@@ -320,7 +320,7 @@ void *GL_APIENTRY MapBuffer(GLenum target, GLenum access)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(MapBuffer, context, targetPacked, access);
         if (context->skipValidation() || ValidateMapBuffer(context, targetPacked, access))
         {
@@ -338,7 +338,7 @@ GLboolean GL_APIENTRY UnmapBuffer(GLenum target)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(UnmapBuffer, context, targetPacked);
         if (context->skipValidation() || ValidateUnmapBuffer(context, targetPacked))
         {

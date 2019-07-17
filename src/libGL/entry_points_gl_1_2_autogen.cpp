@@ -43,7 +43,7 @@ void GL_APIENTRY CopyTexSubImage3D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
         ANGLE_CAPTURE(CopyTexSubImage3D, context, targetPacked, level, xoffset, yoffset, zoffset, x,
                       y, width, height);
         if (context->skipValidation() ||
@@ -71,8 +71,8 @@ void GL_APIENTRY DrawRangeElements(GLenum mode,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
-        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
+        PrimitiveMode modePacked    = FromGL<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGL<DrawElementsType>(type);
         ANGLE_CAPTURE(DrawRangeElements, context, modePacked, start, end, count, typePacked,
                       indices);
         if (context->skipValidation() ||
@@ -104,7 +104,7 @@ void GL_APIENTRY TexImage3D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
         ANGLE_CAPTURE(TexImage3D, context, targetPacked, level, internalformat, width, height,
                       depth, border, format, type, pixels);
         if (context->skipValidation() ||
@@ -139,7 +139,7 @@ void GL_APIENTRY TexSubImage3D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
         ANGLE_CAPTURE(TexSubImage3D, context, targetPacked, level, xoffset, yoffset, zoffset, width,
                       height, depth, format, type, pixels);
         if (context->skipValidation() ||

@@ -40,8 +40,8 @@ void GL_APIENTRY CopyBufferSubData(GLenum readTarget,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding readTargetPacked  = FromGLenum<BufferBinding>(readTarget);
-        BufferBinding writeTargetPacked = FromGLenum<BufferBinding>(writeTarget);
+        BufferBinding readTargetPacked  = FromGL<BufferBinding>(readTarget);
+        BufferBinding writeTargetPacked = FromGL<BufferBinding>(writeTarget);
         ANGLE_CAPTURE(CopyBufferSubData, context, readTargetPacked, writeTargetPacked, readOffset,
                       writeOffset, size);
         if (context->skipValidation() ||
@@ -62,7 +62,7 @@ void GL_APIENTRY DrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GL
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        PrimitiveMode modePacked = FromGL<PrimitiveMode>(mode);
         ANGLE_CAPTURE(DrawArraysInstanced, context, modePacked, first, count, instancecount);
         if (context->skipValidation() ||
             ValidateDrawArraysInstanced(context, modePacked, first, count, instancecount))
@@ -86,8 +86,8 @@ void GL_APIENTRY DrawElementsInstanced(GLenum mode,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
-        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
+        PrimitiveMode modePacked    = FromGL<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGL<DrawElementsType>(type);
         ANGLE_CAPTURE(DrawElementsInstanced, context, modePacked, count, typePacked, indices,
                       instancecount);
         if (context->skipValidation() ||

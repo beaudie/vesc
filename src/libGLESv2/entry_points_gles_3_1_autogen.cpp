@@ -106,7 +106,7 @@ GLuint GL_APIENTRY CreateShaderProgramv(GLenum type, GLsizei count, const GLchar
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        ShaderType typePacked = FromGLenum<ShaderType>(type);
+        ShaderType typePacked = FromGL<ShaderType>(type);
         ANGLE_CAPTURE(CreateShaderProgramv, context, typePacked, count, strings);
         if (context->skipValidation() ||
             ValidateCreateShaderProgramv(context, typePacked, count, strings))
@@ -173,7 +173,7 @@ void GL_APIENTRY DrawArraysIndirect(GLenum mode, const void *indirect)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        PrimitiveMode modePacked = FromGL<PrimitiveMode>(mode);
         ANGLE_CAPTURE(DrawArraysIndirect, context, modePacked, indirect);
         if (context->skipValidation() || ValidateDrawArraysIndirect(context, modePacked, indirect))
         {
@@ -190,8 +190,8 @@ void GL_APIENTRY DrawElementsIndirect(GLenum mode, GLenum type, const void *indi
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
-        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
+        PrimitiveMode modePacked    = FromGL<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGL<DrawElementsType>(type);
         ANGLE_CAPTURE(DrawElementsIndirect, context, modePacked, typePacked, indirect);
         if (context->skipValidation() ||
             ValidateDrawElementsIndirect(context, modePacked, typePacked, indirect))
@@ -456,7 +456,7 @@ void GL_APIENTRY GetTexLevelParameterfv(GLenum target, GLint level, GLenum pname
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
         ANGLE_CAPTURE(GetTexLevelParameterfv, context, targetPacked, level, pname, params);
         if (context->skipValidation() ||
             ValidateGetTexLevelParameterfv(context, targetPacked, level, pname, params))
@@ -476,7 +476,7 @@ void GL_APIENTRY GetTexLevelParameteriv(GLenum target, GLint level, GLenum pname
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
         ANGLE_CAPTURE(GetTexLevelParameteriv, context, targetPacked, level, pname, params);
         if (context->skipValidation() ||
             ValidateGetTexLevelParameteriv(context, targetPacked, level, pname, params))
@@ -1252,7 +1252,7 @@ void GL_APIENTRY TexStorage2DMultisample(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureType targetPacked = FromGLenum<TextureType>(target);
+        TextureType targetPacked = FromGL<TextureType>(target);
         ANGLE_CAPTURE(TexStorage2DMultisample, context, targetPacked, samples, internalformat,
                       width, height, fixedsamplelocations);
         if (context->skipValidation() ||
@@ -1327,7 +1327,7 @@ void GL_APIENTRY VertexAttribFormat(GLuint attribindex,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        VertexAttribType typePacked = FromGLenum<VertexAttribType>(type);
+        VertexAttribType typePacked = FromGL<VertexAttribType>(type);
         ANGLE_CAPTURE(VertexAttribFormat, context, attribindex, size, typePacked, normalized,
                       relativeoffset);
         if (context->skipValidation() ||
@@ -1352,7 +1352,7 @@ void GL_APIENTRY VertexAttribIFormat(GLuint attribindex,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        VertexAttribType typePacked = FromGLenum<VertexAttribType>(type);
+        VertexAttribType typePacked = FromGL<VertexAttribType>(type);
         ANGLE_CAPTURE(VertexAttribIFormat, context, attribindex, size, typePacked, relativeoffset);
         if (context->skipValidation() ||
             ValidateVertexAttribIFormat(context, attribindex, size, typePacked, relativeoffset))

@@ -1362,7 +1362,7 @@ angle::CallCapture CaptureBindFramebufferOES(const Context *context,
 angle::CallCapture CaptureBindRenderbufferOES(const Context *context,
                                               bool isCallValid,
                                               GLenum target,
-                                              GLuint renderbuffer);
+                                              RenderbufferID renderbufferPacked);
 angle::CallCapture CaptureCheckFramebufferStatusOES(const Context *context,
                                                     bool isCallValid,
                                                     GLenum target);
@@ -1373,13 +1373,13 @@ angle::CallCapture CaptureDeleteFramebuffersOES(const Context *context,
 angle::CallCapture CaptureDeleteRenderbuffersOES(const Context *context,
                                                  bool isCallValid,
                                                  GLsizei n,
-                                                 const GLuint *renderbuffers);
+                                                 const RenderbufferID *renderbuffersPacked);
 angle::CallCapture CaptureFramebufferRenderbufferOES(const Context *context,
                                                      bool isCallValid,
                                                      GLenum target,
                                                      GLenum attachment,
                                                      GLenum renderbuffertarget,
-                                                     GLuint renderbuffer);
+                                                     RenderbufferID renderbufferPacked);
 angle::CallCapture CaptureFramebufferTexture2DOES(const Context *context,
                                                   bool isCallValid,
                                                   GLenum target,
@@ -1394,7 +1394,7 @@ angle::CallCapture CaptureGenFramebuffersOES(const Context *context,
 angle::CallCapture CaptureGenRenderbuffersOES(const Context *context,
                                               bool isCallValid,
                                               GLsizei n,
-                                              GLuint *renderbuffers);
+                                              RenderbufferID *renderbuffersPacked);
 angle::CallCapture CaptureGenerateMipmapOES(const Context *context,
                                             bool isCallValid,
                                             TextureType targetPacked);
@@ -1414,7 +1414,7 @@ angle::CallCapture CaptureIsFramebufferOES(const Context *context,
                                            GLuint framebuffer);
 angle::CallCapture CaptureIsRenderbufferOES(const Context *context,
                                             bool isCallValid,
-                                            GLuint renderbuffer);
+                                            RenderbufferID renderbufferPacked);
 angle::CallCapture CaptureRenderbufferStorageOES(const Context *context,
                                                  bool isCallValid,
                                                  GLenum target,
@@ -3434,21 +3434,21 @@ void CaptureDeleteFramebuffersOES_framebuffers(const Context *context,
                                                GLsizei n,
                                                const GLuint *framebuffers,
                                                angle::ParamCapture *paramCapture);
-void CaptureDeleteRenderbuffersOES_renderbuffers(const Context *context,
-                                                 bool isCallValid,
-                                                 GLsizei n,
-                                                 const GLuint *renderbuffers,
-                                                 angle::ParamCapture *paramCapture);
+void CaptureDeleteRenderbuffersOES_renderbuffersPacked(const Context *context,
+                                                       bool isCallValid,
+                                                       GLsizei n,
+                                                       const RenderbufferID *renderbuffersPacked,
+                                                       angle::ParamCapture *paramCapture);
 void CaptureGenFramebuffersOES_framebuffers(const Context *context,
                                             bool isCallValid,
                                             GLsizei n,
                                             GLuint *framebuffers,
                                             angle::ParamCapture *paramCapture);
-void CaptureGenRenderbuffersOES_renderbuffers(const Context *context,
-                                              bool isCallValid,
-                                              GLsizei n,
-                                              GLuint *renderbuffers,
-                                              angle::ParamCapture *paramCapture);
+void CaptureGenRenderbuffersOES_renderbuffersPacked(const Context *context,
+                                                    bool isCallValid,
+                                                    GLsizei n,
+                                                    RenderbufferID *renderbuffersPacked,
+                                                    angle::ParamCapture *paramCapture);
 void CaptureGetFramebufferAttachmentParameterivOES_params(const Context *context,
                                                           bool isCallValid,
                                                           GLenum target,

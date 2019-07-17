@@ -167,7 +167,7 @@ void GL_APIENTRY MultiDrawArrays(GLenum mode,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        PrimitiveMode modePacked = FromGL<PrimitiveMode>(mode);
         ANGLE_CAPTURE(MultiDrawArrays, context, modePacked, first, count, drawcount);
         if (context->skipValidation() ||
             ValidateMultiDrawArrays(context, modePacked, first, count, drawcount))
@@ -191,8 +191,8 @@ void GL_APIENTRY MultiDrawElements(GLenum mode,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
-        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
+        PrimitiveMode modePacked    = FromGL<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGL<DrawElementsType>(type);
         ANGLE_CAPTURE(MultiDrawElements, context, modePacked, count, typePacked, indices,
                       drawcount);
         if (context->skipValidation() ||
@@ -210,7 +210,7 @@ void GL_APIENTRY PointParameterf(GLenum pname, GLfloat param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PointParameter pnamePacked = FromGLenum<PointParameter>(pname);
+        PointParameter pnamePacked = FromGL<PointParameter>(pname);
         ANGLE_CAPTURE(PointParameterf, context, pnamePacked, param);
         if (context->skipValidation() || ValidatePointParameterf(context, pnamePacked, param))
         {
@@ -227,7 +227,7 @@ void GL_APIENTRY PointParameterfv(GLenum pname, const GLfloat *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PointParameter pnamePacked = FromGLenum<PointParameter>(pname);
+        PointParameter pnamePacked = FromGL<PointParameter>(pname);
         ANGLE_CAPTURE(PointParameterfv, context, pnamePacked, params);
         if (context->skipValidation() || ValidatePointParameterfv(context, pnamePacked, params))
         {

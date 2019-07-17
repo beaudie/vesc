@@ -101,7 +101,7 @@ void GL_APIENTRY CompressedTexImage2D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
         ANGLE_CAPTURE(CompressedTexImage2D, context, targetPacked, level, internalformat, width,
                       height, border, imageSize, data);
         if (context->skipValidation() ||
@@ -133,7 +133,7 @@ void GL_APIENTRY CompressedTexImage3D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
         ANGLE_CAPTURE(CompressedTexImage3D, context, targetPacked, level, internalformat, width,
                       height, depth, border, imageSize, data);
         if (context->skipValidation() ||
@@ -193,7 +193,7 @@ void GL_APIENTRY CompressedTexSubImage2D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
         ANGLE_CAPTURE(CompressedTexSubImage2D, context, targetPacked, level, xoffset, yoffset,
                       width, height, format, imageSize, data);
         if (context->skipValidation() ||
@@ -228,7 +228,7 @@ void GL_APIENTRY CompressedTexSubImage3D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
         ANGLE_CAPTURE(CompressedTexSubImage3D, context, targetPacked, level, xoffset, yoffset,
                       zoffset, width, height, depth, format, imageSize, data);
         if (context->skipValidation() ||

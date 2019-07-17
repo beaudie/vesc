@@ -553,4 +553,11 @@ void WriteParamValueToStream<ParamType::TvoidConstPointer>(std::ostream &os, con
 template <>
 void WriteParamValueToStream<ParamType::TGLDEBUGPROCKHR>(std::ostream &os, GLDEBUGPROCKHR value)
 {}
+
+// TODO(jmadill): Use renderbuffer ID map. http://anglebug.com/3611
+template <>
+void WriteParamValueToStream<ParamType::TRenderbufferID>(std::ostream &os, gl::RenderbufferID value)
+{
+    os << value.value;
+}
 }  // namespace angle

@@ -26,7 +26,7 @@ void GL_APIENTRY AlphaFunc(GLenum func, GLfloat ref)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        AlphaTestFunc funcPacked = FromGLenum<AlphaTestFunc>(func);
+        AlphaTestFunc funcPacked = FromGL<AlphaTestFunc>(func);
         ANGLE_CAPTURE(AlphaFunc, context, funcPacked, ref);
         if (context->skipValidation() || ValidateAlphaFunc(context, funcPacked, ref))
         {
@@ -42,7 +42,7 @@ void GL_APIENTRY AlphaFuncx(GLenum func, GLfixed ref)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        AlphaTestFunc funcPacked = FromGLenum<AlphaTestFunc>(func);
+        AlphaTestFunc funcPacked = FromGL<AlphaTestFunc>(func);
         ANGLE_CAPTURE(AlphaFuncx, context, funcPacked, ref);
         if (context->skipValidation() || ValidateAlphaFuncx(context, funcPacked, ref))
         {
@@ -186,7 +186,7 @@ void GL_APIENTRY ColorPointer(GLint size, GLenum type, GLsizei stride, const voi
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        VertexAttribType typePacked = FromGLenum<VertexAttribType>(type);
+        VertexAttribType typePacked = FromGL<VertexAttribType>(type);
         ANGLE_CAPTURE(ColorPointer, context, size, typePacked, stride, pointer);
         if (context->skipValidation() ||
             ValidateColorPointer(context, size, typePacked, stride, pointer))
@@ -218,7 +218,7 @@ void GL_APIENTRY DisableClientState(GLenum array)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        ClientVertexArrayType arrayPacked = FromGLenum<ClientVertexArrayType>(array);
+        ClientVertexArrayType arrayPacked = FromGL<ClientVertexArrayType>(array);
         ANGLE_CAPTURE(DisableClientState, context, arrayPacked);
         if (context->skipValidation() || ValidateDisableClientState(context, arrayPacked))
         {
@@ -234,7 +234,7 @@ void GL_APIENTRY EnableClientState(GLenum array)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        ClientVertexArrayType arrayPacked = FromGLenum<ClientVertexArrayType>(array);
+        ClientVertexArrayType arrayPacked = FromGL<ClientVertexArrayType>(array);
         ANGLE_CAPTURE(EnableClientState, context, arrayPacked);
         if (context->skipValidation() || ValidateEnableClientState(context, arrayPacked))
         {
@@ -396,7 +396,7 @@ void GL_APIENTRY GetLightfv(GLenum light, GLenum pname, GLfloat *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
+        LightParameter pnamePacked = FromGL<LightParameter>(pname);
         ANGLE_CAPTURE(GetLightfv, context, light, pnamePacked, params);
         if (context->skipValidation() || ValidateGetLightfv(context, light, pnamePacked, params))
         {
@@ -413,7 +413,7 @@ void GL_APIENTRY GetLightxv(GLenum light, GLenum pname, GLfixed *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
+        LightParameter pnamePacked = FromGL<LightParameter>(pname);
         ANGLE_CAPTURE(GetLightxv, context, light, pnamePacked, params);
         if (context->skipValidation() || ValidateGetLightxv(context, light, pnamePacked, params))
         {
@@ -430,7 +430,7 @@ void GL_APIENTRY GetMaterialfv(GLenum face, GLenum pname, GLfloat *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
+        MaterialParameter pnamePacked = FromGL<MaterialParameter>(pname);
         ANGLE_CAPTURE(GetMaterialfv, context, face, pnamePacked, params);
         if (context->skipValidation() || ValidateGetMaterialfv(context, face, pnamePacked, params))
         {
@@ -447,7 +447,7 @@ void GL_APIENTRY GetMaterialxv(GLenum face, GLenum pname, GLfixed *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
+        MaterialParameter pnamePacked = FromGL<MaterialParameter>(pname);
         ANGLE_CAPTURE(GetMaterialxv, context, face, pnamePacked, params);
         if (context->skipValidation() || ValidateGetMaterialxv(context, face, pnamePacked, params))
         {
@@ -479,8 +479,8 @@ void GL_APIENTRY GetTexEnvfv(GLenum target, GLenum pname, GLfloat *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
-        TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
+        TextureEnvTarget targetPacked   = FromGL<TextureEnvTarget>(target);
+        TextureEnvParameter pnamePacked = FromGL<TextureEnvParameter>(pname);
         ANGLE_CAPTURE(GetTexEnvfv, context, targetPacked, pnamePacked, params);
         if (context->skipValidation() ||
             ValidateGetTexEnvfv(context, targetPacked, pnamePacked, params))
@@ -498,8 +498,8 @@ void GL_APIENTRY GetTexEnviv(GLenum target, GLenum pname, GLint *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
-        TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
+        TextureEnvTarget targetPacked   = FromGL<TextureEnvTarget>(target);
+        TextureEnvParameter pnamePacked = FromGL<TextureEnvParameter>(pname);
         ANGLE_CAPTURE(GetTexEnviv, context, targetPacked, pnamePacked, params);
         if (context->skipValidation() ||
             ValidateGetTexEnviv(context, targetPacked, pnamePacked, params))
@@ -517,8 +517,8 @@ void GL_APIENTRY GetTexEnvxv(GLenum target, GLenum pname, GLfixed *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
-        TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
+        TextureEnvTarget targetPacked   = FromGL<TextureEnvTarget>(target);
+        TextureEnvParameter pnamePacked = FromGL<TextureEnvParameter>(pname);
         ANGLE_CAPTURE(GetTexEnvxv, context, targetPacked, pnamePacked, params);
         if (context->skipValidation() ||
             ValidateGetTexEnvxv(context, targetPacked, pnamePacked, params))
@@ -536,7 +536,7 @@ void GL_APIENTRY GetTexParameterxv(GLenum target, GLenum pname, GLfixed *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureType targetPacked = FromGLenum<TextureType>(target);
+        TextureType targetPacked = FromGL<TextureType>(target);
         ANGLE_CAPTURE(GetTexParameterxv, context, targetPacked, pname, params);
         if (context->skipValidation() ||
             ValidateGetTexParameterxv(context, targetPacked, pname, params))
@@ -615,7 +615,7 @@ void GL_APIENTRY Lightf(GLenum light, GLenum pname, GLfloat param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
+        LightParameter pnamePacked = FromGL<LightParameter>(pname);
         ANGLE_CAPTURE(Lightf, context, light, pnamePacked, param);
         if (context->skipValidation() || ValidateLightf(context, light, pnamePacked, param))
         {
@@ -632,7 +632,7 @@ void GL_APIENTRY Lightfv(GLenum light, GLenum pname, const GLfloat *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
+        LightParameter pnamePacked = FromGL<LightParameter>(pname);
         ANGLE_CAPTURE(Lightfv, context, light, pnamePacked, params);
         if (context->skipValidation() || ValidateLightfv(context, light, pnamePacked, params))
         {
@@ -648,7 +648,7 @@ void GL_APIENTRY Lightx(GLenum light, GLenum pname, GLfixed param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
+        LightParameter pnamePacked = FromGL<LightParameter>(pname);
         ANGLE_CAPTURE(Lightx, context, light, pnamePacked, param);
         if (context->skipValidation() || ValidateLightx(context, light, pnamePacked, param))
         {
@@ -665,7 +665,7 @@ void GL_APIENTRY Lightxv(GLenum light, GLenum pname, const GLfixed *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        LightParameter pnamePacked = FromGLenum<LightParameter>(pname);
+        LightParameter pnamePacked = FromGL<LightParameter>(pname);
         ANGLE_CAPTURE(Lightxv, context, light, pnamePacked, params);
         if (context->skipValidation() || ValidateLightxv(context, light, pnamePacked, params))
         {
@@ -741,7 +741,7 @@ void GL_APIENTRY LogicOp(GLenum opcode)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        LogicalOperation opcodePacked = FromGLenum<LogicalOperation>(opcode);
+        LogicalOperation opcodePacked = FromGL<LogicalOperation>(opcode);
         ANGLE_CAPTURE(LogicOp, context, opcodePacked);
         if (context->skipValidation() || ValidateLogicOp(context, opcodePacked))
         {
@@ -757,7 +757,7 @@ void GL_APIENTRY Materialf(GLenum face, GLenum pname, GLfloat param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
+        MaterialParameter pnamePacked = FromGL<MaterialParameter>(pname);
         ANGLE_CAPTURE(Materialf, context, face, pnamePacked, param);
         if (context->skipValidation() || ValidateMaterialf(context, face, pnamePacked, param))
         {
@@ -774,7 +774,7 @@ void GL_APIENTRY Materialfv(GLenum face, GLenum pname, const GLfloat *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
+        MaterialParameter pnamePacked = FromGL<MaterialParameter>(pname);
         ANGLE_CAPTURE(Materialfv, context, face, pnamePacked, params);
         if (context->skipValidation() || ValidateMaterialfv(context, face, pnamePacked, params))
         {
@@ -790,7 +790,7 @@ void GL_APIENTRY Materialx(GLenum face, GLenum pname, GLfixed param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
+        MaterialParameter pnamePacked = FromGL<MaterialParameter>(pname);
         ANGLE_CAPTURE(Materialx, context, face, pnamePacked, param);
         if (context->skipValidation() || ValidateMaterialx(context, face, pnamePacked, param))
         {
@@ -807,7 +807,7 @@ void GL_APIENTRY Materialxv(GLenum face, GLenum pname, const GLfixed *param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        MaterialParameter pnamePacked = FromGLenum<MaterialParameter>(pname);
+        MaterialParameter pnamePacked = FromGL<MaterialParameter>(pname);
         ANGLE_CAPTURE(Materialxv, context, face, pnamePacked, param);
         if (context->skipValidation() || ValidateMaterialxv(context, face, pnamePacked, param))
         {
@@ -823,7 +823,7 @@ void GL_APIENTRY MatrixMode(GLenum mode)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        MatrixType modePacked = FromGLenum<MatrixType>(mode);
+        MatrixType modePacked = FromGL<MatrixType>(mode);
         ANGLE_CAPTURE(MatrixMode, context, modePacked);
         if (context->skipValidation() || ValidateMatrixMode(context, modePacked))
         {
@@ -934,7 +934,7 @@ void GL_APIENTRY NormalPointer(GLenum type, GLsizei stride, const void *pointer)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        VertexAttribType typePacked = FromGLenum<VertexAttribType>(type);
+        VertexAttribType typePacked = FromGL<VertexAttribType>(type);
         ANGLE_CAPTURE(NormalPointer, context, typePacked, stride, pointer);
         if (context->skipValidation() ||
             ValidateNormalPointer(context, typePacked, stride, pointer))
@@ -987,7 +987,7 @@ void GL_APIENTRY PointParameterf(GLenum pname, GLfloat param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PointParameter pnamePacked = FromGLenum<PointParameter>(pname);
+        PointParameter pnamePacked = FromGL<PointParameter>(pname);
         ANGLE_CAPTURE(PointParameterf, context, pnamePacked, param);
         if (context->skipValidation() || ValidatePointParameterf(context, pnamePacked, param))
         {
@@ -1004,7 +1004,7 @@ void GL_APIENTRY PointParameterfv(GLenum pname, const GLfloat *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PointParameter pnamePacked = FromGLenum<PointParameter>(pname);
+        PointParameter pnamePacked = FromGL<PointParameter>(pname);
         ANGLE_CAPTURE(PointParameterfv, context, pnamePacked, params);
         if (context->skipValidation() || ValidatePointParameterfv(context, pnamePacked, params))
         {
@@ -1020,7 +1020,7 @@ void GL_APIENTRY PointParameterx(GLenum pname, GLfixed param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PointParameter pnamePacked = FromGLenum<PointParameter>(pname);
+        PointParameter pnamePacked = FromGL<PointParameter>(pname);
         ANGLE_CAPTURE(PointParameterx, context, pnamePacked, param);
         if (context->skipValidation() || ValidatePointParameterx(context, pnamePacked, param))
         {
@@ -1037,7 +1037,7 @@ void GL_APIENTRY PointParameterxv(GLenum pname, const GLfixed *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PointParameter pnamePacked = FromGLenum<PointParameter>(pname);
+        PointParameter pnamePacked = FromGL<PointParameter>(pname);
         ANGLE_CAPTURE(PointParameterxv, context, pnamePacked, params);
         if (context->skipValidation() || ValidatePointParameterxv(context, pnamePacked, params))
         {
@@ -1204,7 +1204,7 @@ void GL_APIENTRY ShadeModel(GLenum mode)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        ShadingModel modePacked = FromGLenum<ShadingModel>(mode);
+        ShadingModel modePacked = FromGL<ShadingModel>(mode);
         ANGLE_CAPTURE(ShadeModel, context, modePacked);
         if (context->skipValidation() || ValidateShadeModel(context, modePacked))
         {
@@ -1223,7 +1223,7 @@ void GL_APIENTRY TexCoordPointer(GLint size, GLenum type, GLsizei stride, const 
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        VertexAttribType typePacked = FromGLenum<VertexAttribType>(type);
+        VertexAttribType typePacked = FromGL<VertexAttribType>(type);
         ANGLE_CAPTURE(TexCoordPointer, context, size, typePacked, stride, pointer);
         if (context->skipValidation() ||
             ValidateTexCoordPointer(context, size, typePacked, stride, pointer))
@@ -1240,8 +1240,8 @@ void GL_APIENTRY TexEnvf(GLenum target, GLenum pname, GLfloat param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
-        TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
+        TextureEnvTarget targetPacked   = FromGL<TextureEnvTarget>(target);
+        TextureEnvParameter pnamePacked = FromGL<TextureEnvParameter>(pname);
         ANGLE_CAPTURE(TexEnvf, context, targetPacked, pnamePacked, param);
         if (context->skipValidation() || ValidateTexEnvf(context, targetPacked, pnamePacked, param))
         {
@@ -1258,8 +1258,8 @@ void GL_APIENTRY TexEnvfv(GLenum target, GLenum pname, const GLfloat *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
-        TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
+        TextureEnvTarget targetPacked   = FromGL<TextureEnvTarget>(target);
+        TextureEnvParameter pnamePacked = FromGL<TextureEnvParameter>(pname);
         ANGLE_CAPTURE(TexEnvfv, context, targetPacked, pnamePacked, params);
         if (context->skipValidation() ||
             ValidateTexEnvfv(context, targetPacked, pnamePacked, params))
@@ -1276,8 +1276,8 @@ void GL_APIENTRY TexEnvi(GLenum target, GLenum pname, GLint param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
-        TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
+        TextureEnvTarget targetPacked   = FromGL<TextureEnvTarget>(target);
+        TextureEnvParameter pnamePacked = FromGL<TextureEnvParameter>(pname);
         ANGLE_CAPTURE(TexEnvi, context, targetPacked, pnamePacked, param);
         if (context->skipValidation() || ValidateTexEnvi(context, targetPacked, pnamePacked, param))
         {
@@ -1294,8 +1294,8 @@ void GL_APIENTRY TexEnviv(GLenum target, GLenum pname, const GLint *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
-        TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
+        TextureEnvTarget targetPacked   = FromGL<TextureEnvTarget>(target);
+        TextureEnvParameter pnamePacked = FromGL<TextureEnvParameter>(pname);
         ANGLE_CAPTURE(TexEnviv, context, targetPacked, pnamePacked, params);
         if (context->skipValidation() ||
             ValidateTexEnviv(context, targetPacked, pnamePacked, params))
@@ -1313,8 +1313,8 @@ void GL_APIENTRY TexEnvx(GLenum target, GLenum pname, GLfixed param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
-        TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
+        TextureEnvTarget targetPacked   = FromGL<TextureEnvTarget>(target);
+        TextureEnvParameter pnamePacked = FromGL<TextureEnvParameter>(pname);
         ANGLE_CAPTURE(TexEnvx, context, targetPacked, pnamePacked, param);
         if (context->skipValidation() || ValidateTexEnvx(context, targetPacked, pnamePacked, param))
         {
@@ -1331,8 +1331,8 @@ void GL_APIENTRY TexEnvxv(GLenum target, GLenum pname, const GLfixed *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureEnvTarget targetPacked   = FromGLenum<TextureEnvTarget>(target);
-        TextureEnvParameter pnamePacked = FromGLenum<TextureEnvParameter>(pname);
+        TextureEnvTarget targetPacked   = FromGL<TextureEnvTarget>(target);
+        TextureEnvParameter pnamePacked = FromGL<TextureEnvParameter>(pname);
         ANGLE_CAPTURE(TexEnvxv, context, targetPacked, pnamePacked, params);
         if (context->skipValidation() ||
             ValidateTexEnvxv(context, targetPacked, pnamePacked, params))
@@ -1350,7 +1350,7 @@ void GL_APIENTRY TexParameterx(GLenum target, GLenum pname, GLfixed param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureType targetPacked = FromGLenum<TextureType>(target);
+        TextureType targetPacked = FromGL<TextureType>(target);
         ANGLE_CAPTURE(TexParameterx, context, targetPacked, pname, param);
         if (context->skipValidation() || ValidateTexParameterx(context, targetPacked, pname, param))
         {
@@ -1367,7 +1367,7 @@ void GL_APIENTRY TexParameterxv(GLenum target, GLenum pname, const GLfixed *para
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureType targetPacked = FromGLenum<TextureType>(target);
+        TextureType targetPacked = FromGL<TextureType>(target);
         ANGLE_CAPTURE(TexParameterxv, context, targetPacked, pname, params);
         if (context->skipValidation() ||
             ValidateTexParameterxv(context, targetPacked, pname, params))
@@ -1417,7 +1417,7 @@ void GL_APIENTRY VertexPointer(GLint size, GLenum type, GLsizei stride, const vo
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        VertexAttribType typePacked = FromGLenum<VertexAttribType>(type);
+        VertexAttribType typePacked = FromGL<VertexAttribType>(type);
         ANGLE_CAPTURE(VertexPointer, context, size, typePacked, stride, pointer);
         if (context->skipValidation() ||
             ValidateVertexPointer(context, size, typePacked, stride, pointer))

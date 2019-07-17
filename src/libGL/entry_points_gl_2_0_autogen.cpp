@@ -110,7 +110,7 @@ GLuint GL_APIENTRY CreateShader(GLenum type)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        ShaderType typePacked = FromGLenum<ShaderType>(type);
+        ShaderType typePacked = FromGL<ShaderType>(type);
         ANGLE_CAPTURE(CreateShader, context, typePacked);
         if (context->skipValidation() || ValidateCreateShader(context, typePacked))
         {
@@ -1535,7 +1535,7 @@ void GL_APIENTRY VertexAttribPointer(GLuint index,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        VertexAttribType typePacked = FromGLenum<VertexAttribType>(type);
+        VertexAttribType typePacked = FromGL<VertexAttribType>(type);
         ANGLE_CAPTURE(VertexAttribPointer, context, index, size, typePacked, normalized, stride,
                       pointer);
         if (context->skipValidation() ||

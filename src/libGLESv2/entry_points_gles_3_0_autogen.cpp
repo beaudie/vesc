@@ -26,7 +26,7 @@ void GL_APIENTRY BeginQuery(GLenum target, GLuint id)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        QueryType targetPacked = FromGLenum<QueryType>(target);
+        QueryType targetPacked = FromGL<QueryType>(target);
         ANGLE_CAPTURE(BeginQuery, context, targetPacked, id);
         if (context->skipValidation() || ValidateBeginQuery(context, targetPacked, id))
         {
@@ -42,7 +42,7 @@ void GL_APIENTRY BeginTransformFeedback(GLenum primitiveMode)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PrimitiveMode primitiveModePacked = FromGLenum<PrimitiveMode>(primitiveMode);
+        PrimitiveMode primitiveModePacked = FromGL<PrimitiveMode>(primitiveMode);
         ANGLE_CAPTURE(BeginTransformFeedback, context, primitiveModePacked);
         if (context->skipValidation() ||
             ValidateBeginTransformFeedback(context, primitiveModePacked))
@@ -59,7 +59,7 @@ void GL_APIENTRY BindBufferBase(GLenum target, GLuint index, GLuint buffer)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(BindBufferBase, context, targetPacked, index, buffer);
         if (context->skipValidation() ||
             ValidateBindBufferBase(context, targetPacked, index, buffer))
@@ -81,7 +81,7 @@ BindBufferRange(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLs
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(BindBufferRange, context, targetPacked, index, buffer, offset, size);
         if (context->skipValidation() ||
             ValidateBindBufferRange(context, targetPacked, index, buffer, offset, size))
@@ -270,7 +270,7 @@ void GL_APIENTRY CompressedTexImage3D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
         ANGLE_CAPTURE(CompressedTexImage3D, context, targetPacked, level, internalformat, width,
                       height, depth, border, imageSize, data);
         if (context->skipValidation() ||
@@ -305,7 +305,7 @@ void GL_APIENTRY CompressedTexSubImage3D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
         ANGLE_CAPTURE(CompressedTexSubImage3D, context, targetPacked, level, xoffset, yoffset,
                       zoffset, width, height, depth, format, imageSize, data);
         if (context->skipValidation() ||
@@ -333,8 +333,8 @@ void GL_APIENTRY CopyBufferSubData(GLenum readTarget,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding readTargetPacked  = FromGLenum<BufferBinding>(readTarget);
-        BufferBinding writeTargetPacked = FromGLenum<BufferBinding>(writeTarget);
+        BufferBinding readTargetPacked  = FromGL<BufferBinding>(readTarget);
+        BufferBinding writeTargetPacked = FromGL<BufferBinding>(writeTarget);
         ANGLE_CAPTURE(CopyBufferSubData, context, readTargetPacked, writeTargetPacked, readOffset,
                       writeOffset, size);
         if (context->skipValidation() ||
@@ -365,7 +365,7 @@ void GL_APIENTRY CopyTexSubImage3D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
         ANGLE_CAPTURE(CopyTexSubImage3D, context, targetPacked, level, xoffset, yoffset, zoffset, x,
                       y, width, height);
         if (context->skipValidation() ||
@@ -462,7 +462,7 @@ void GL_APIENTRY DrawArraysInstanced(GLenum mode, GLint first, GLsizei count, GL
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
+        PrimitiveMode modePacked = FromGL<PrimitiveMode>(mode);
         ANGLE_CAPTURE(DrawArraysInstanced, context, modePacked, first, count, instancecount);
         if (context->skipValidation() ||
             ValidateDrawArraysInstanced(context, modePacked, first, count, instancecount))
@@ -501,8 +501,8 @@ void GL_APIENTRY DrawElementsInstanced(GLenum mode,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
-        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
+        PrimitiveMode modePacked    = FromGL<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGL<DrawElementsType>(type);
         ANGLE_CAPTURE(DrawElementsInstanced, context, modePacked, count, typePacked, indices,
                       instancecount);
         if (context->skipValidation() ||
@@ -529,8 +529,8 @@ void GL_APIENTRY DrawRangeElements(GLenum mode,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        PrimitiveMode modePacked    = FromGLenum<PrimitiveMode>(mode);
-        DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
+        PrimitiveMode modePacked    = FromGL<PrimitiveMode>(mode);
+        DrawElementsType typePacked = FromGL<DrawElementsType>(type);
         ANGLE_CAPTURE(DrawRangeElements, context, modePacked, start, end, count, typePacked,
                       indices);
         if (context->skipValidation() ||
@@ -548,7 +548,7 @@ void GL_APIENTRY EndQuery(GLenum target)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        QueryType targetPacked = FromGLenum<QueryType>(target);
+        QueryType targetPacked = FromGL<QueryType>(target);
         ANGLE_CAPTURE(EndQuery, context, targetPacked);
         if (context->skipValidation() || ValidateEndQuery(context, targetPacked))
         {
@@ -597,7 +597,7 @@ void GL_APIENTRY FlushMappedBufferRange(GLenum target, GLintptr offset, GLsizeip
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(FlushMappedBufferRange, context, targetPacked, offset, length);
         if (context->skipValidation() ||
             ValidateFlushMappedBufferRange(context, targetPacked, offset, length))
@@ -767,7 +767,7 @@ void GL_APIENTRY GetBufferParameteri64v(GLenum target, GLenum pname, GLint64 *pa
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(GetBufferParameteri64v, context, targetPacked, pname, params);
         if (context->skipValidation() ||
             ValidateGetBufferParameteri64v(context, targetPacked, pname, params))
@@ -785,7 +785,7 @@ void GL_APIENTRY GetBufferPointerv(GLenum target, GLenum pname, void **params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(GetBufferPointerv, context, targetPacked, pname, params);
         if (context->skipValidation() ||
             ValidateGetBufferPointerv(context, targetPacked, pname, params))
@@ -929,7 +929,7 @@ void GL_APIENTRY GetQueryiv(GLenum target, GLenum pname, GLint *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        QueryType targetPacked = FromGLenum<QueryType>(target);
+        QueryType targetPacked = FromGL<QueryType>(target);
         ANGLE_CAPTURE(GetQueryiv, context, targetPacked, pname, params);
         if (context->skipValidation() || ValidateGetQueryiv(context, targetPacked, pname, params))
         {
@@ -1276,7 +1276,7 @@ void *GL_APIENTRY MapBufferRange(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(MapBufferRange, context, targetPacked, offset, length, access);
         if (context->skipValidation() ||
             ValidateMapBufferRange(context, targetPacked, offset, length, access))
@@ -1477,7 +1477,7 @@ void GL_APIENTRY TexImage3D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
         ANGLE_CAPTURE(TexImage3D, context, targetPacked, level, internalformat, width, height,
                       depth, border, format, type, pixels);
         if (context->skipValidation() ||
@@ -1501,7 +1501,7 @@ TexStorage2D(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureType targetPacked = FromGLenum<TextureType>(target);
+        TextureType targetPacked = FromGL<TextureType>(target);
         ANGLE_CAPTURE(TexStorage2D, context, targetPacked, levels, internalformat, width, height);
         if (context->skipValidation() ||
             ValidateTexStorage2D(context, targetPacked, levels, internalformat, width, height))
@@ -1526,7 +1526,7 @@ void GL_APIENTRY TexStorage3D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureType targetPacked = FromGLenum<TextureType>(target);
+        TextureType targetPacked = FromGL<TextureType>(target);
         ANGLE_CAPTURE(TexStorage3D, context, targetPacked, levels, internalformat, width, height,
                       depth);
         if (context->skipValidation() || ValidateTexStorage3D(context, targetPacked, levels,
@@ -1559,7 +1559,7 @@ void GL_APIENTRY TexSubImage3D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        TextureTarget targetPacked = FromGLenum<TextureTarget>(target);
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
         ANGLE_CAPTURE(TexSubImage3D, context, targetPacked, level, xoffset, yoffset, zoffset, width,
                       height, depth, format, type, pixels);
         if (context->skipValidation() ||
@@ -1878,7 +1878,7 @@ GLboolean GL_APIENTRY UnmapBuffer(GLenum target)
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
+        BufferBinding targetPacked = FromGL<BufferBinding>(target);
         ANGLE_CAPTURE(UnmapBuffer, context, targetPacked);
         if (context->skipValidation() || ValidateUnmapBuffer(context, targetPacked))
         {
@@ -1977,7 +1977,7 @@ VertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, cons
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        VertexAttribType typePacked = FromGLenum<VertexAttribType>(type);
+        VertexAttribType typePacked = FromGL<VertexAttribType>(type);
         ANGLE_CAPTURE(VertexAttribIPointer, context, index, size, typePacked, stride, pointer);
         if (context->skipValidation() ||
             ValidateVertexAttribIPointer(context, index, size, typePacked, stride, pointer))
