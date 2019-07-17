@@ -823,7 +823,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     shaderParams.clearValue = params.colorClearValue;
 
     vk::GraphicsPipelineDesc pipelineDesc;
-    pipelineDesc.initDefaults();
+    pipelineDesc.initDummy();
     pipelineDesc.setColorWriteMask(0, gl::DrawBufferMask());
     pipelineDesc.setSingleColorWriteMask(params.colorAttachmentIndexGL, params.colorMaskFlags);
     pipelineDesc.setRasterizationSamples(framebuffer->getSamples());
@@ -990,7 +990,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
         VK_COLOR_COMPONENT_A_BIT;
 
     vk::GraphicsPipelineDesc pipelineDesc;
-    pipelineDesc.initDefaults();
+    pipelineDesc.initDummy();
     if (blitColor)
     {
         pipelineDesc.setColorWriteMask(kAllColorComponents,
@@ -1344,7 +1344,7 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     ASSERT(src->getSamples() == 1 && dest->getSamples() == 1);
 
     vk::GraphicsPipelineDesc pipelineDesc;
-    pipelineDesc.initDefaults();
+    pipelineDesc.initDummy();
     pipelineDesc.setRenderPassDesc(renderPassDesc);
 
     gl::Rectangle renderArea;

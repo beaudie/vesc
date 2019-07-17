@@ -488,7 +488,7 @@ bool GraphicsPipelineDesc::operator==(const GraphicsPipelineDesc &other) const
 
 // TODO(jmadill): We should prefer using Packed GLenums. http://anglebug.com/2169
 
-void GraphicsPipelineDesc::initDefaults()
+void GraphicsPipelineDesc::initDummy()
 {
     mRasterizationAndMultisampleStateInfo.bits.depthClampEnable           = 0;
     mRasterizationAndMultisampleStateInfo.bits.rasterizationDiscardEnable = 0;
@@ -565,6 +565,122 @@ void GraphicsPipelineDesc::initDefaults()
 
     inputAndBlend.primitive.topology = static_cast<uint16_t>(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
     inputAndBlend.primitive.restartEnable = 0;
+}
+
+void GraphicsPipelineDesc::initDefaults(const gl::State &glState)
+{
+    // set vertex attributes to default
+    for (uint32_t attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; attribIndex++)
+    {
+        const gl::VertexAttribCurrentValueData &defaultValue =
+            glState.getVertexAttribCurrentValues()[attribIndex];
+        angle::FormatID format = GetCurrentValueFormatID(defaultValue.Type);
+
+        PackedAttribDesc &packedAttrib = mVertexInputAttribs.attribs[attribIndex];
+        SetBitField(packedAttrib.stride, 0);
+        SetBitField(packedAttrib.divisor, 0);
+        SetBitField(packedAttrib.format, format);
+        SetBitField(packedAttrib.offset, 0);
+    }
+
+    // RenderPassDesc has its own constructor
+
+    const gl::RasterizerState &glRasterState = glState.getRasterizerState();
+    auto &rasterStateWrite                   = mRasterizationAndMultisampleStateInfo;
+    SetBitField(rasterStateWrite.bits.depthClampEnable, 0);
+    SetBitField(rasterStateWrite.bits.rasterizationDiscardEnable,
+                glState.isRasterizerDiscardEnabled());
+    SetBitField(rasterStateWrite.bits.polygonMode, VK_POLYGON_MODE_FILL);
+    SetBitField(rasterStateWrite.bits.cullMode, gl_vk::GetCullMode(glRasterState));
+    SetBitField(rasterStateWrite.bits.frontFace,
+                gl_vk::GetFrontFace(glRasterState.frontFace, false));
+    SetBitField(rasterStateWrite.bits.depthBiasEnable, glState.isPolygonOffsetFillEnabled());
+    SetBitField(rasterStateWrite.bits.sampleShadingEnable, 0);
+    SetBitField(rasterStateWrite.bits.alphaToCoverageEnable,
+                glState.isSampleAlphaToCoverageEnabled());
+    SetBitField(rasterStateWrite.bits.alphaToOneEnable, 0);
+    SetBitField(rasterStateWrite.bits.rasterizationSamples, 1);
+    rasterStateWrite.minSampleShading = 0.0f;
+    for (uint32_t maskNumber = 0; maskNumber < glState.getMaxSampleMaskWords(); ++maskNumber)
+    {
+        uint32_t mask = glState.isSampleMaskEnabled() ? glState.getSampleMaskWord(maskNumber)
+                                                      : std::numeric_limits<uint32_t>::max();
+        rasterStateWrite.sampleMask[maskNumber] = mask;
+    }
+    rasterStateWrite.depthBiasClamp       = 0.0f;
+    rasterStateWrite.depthBiasSlopeFactor = static_cast<float>(glRasterState.polygonOffsetFactor);
+    rasterStateWrite.depthBiasConstantFactor = static_cast<float>(glRasterState.polygonOffsetUnits);
+    rasterStateWrite.lineWidth               = glState.getLineWidth();
+
+    const gl::DepthStencilState &glDepthStencilState = glState.getDepthStencilState();
+    setDepthTestEnabled(glDepthStencilState.depthTest);
+    setDepthWriteEnabled(glDepthStencilState.depthMask);
+    mDepthStencilStateInfo.enable.depthBoundsTest = 0;
+    setStencilTestEnabled(glDepthStencilState.stencilTest);
+    setDepthFunc(PackGLCompareFunc(glDepthStencilState.depthFunc));
+    setStencilFrontFuncs(static_cast<uint8_t>(glState.getStencilRef()),
+                         PackGLCompareFunc(glDepthStencilState.stencilFunc),
+                         static_cast<uint8_t>(glDepthStencilState.stencilMask));
+    setStencilBackFuncs(static_cast<uint8_t>(glState.getStencilBackRef()),
+                        PackGLCompareFunc(glDepthStencilState.stencilBackFunc),
+                        static_cast<uint8_t>(glDepthStencilState.stencilBackMask));
+    setStencilFrontOps(PackGLStencilOp(glDepthStencilState.stencilFail),
+                       PackGLStencilOp(glDepthStencilState.stencilPassDepthPass),
+                       PackGLStencilOp(glDepthStencilState.stencilPassDepthFail));
+    setStencilBackOps(PackGLStencilOp(glDepthStencilState.stencilBackFail),
+                      PackGLStencilOp(glDepthStencilState.stencilBackPassDepthPass),
+                      PackGLStencilOp(glDepthStencilState.stencilBackPassDepthFail));
+    mDepthStencilStateInfo.minDepthBounds = 0.0f;
+    mDepthStencilStateInfo.maxDepthBounds = 0.0f;
+    setStencilFrontWriteMask(static_cast<uint8_t>(glDepthStencilState.stencilWritemask));
+    setStencilBackWriteMask(static_cast<uint8_t>(glDepthStencilState.stencilBackWritemask));
+
+    const gl::BlendState &glBlendState = glState.getBlendState();
+    const uint8_t colorMask            = static_cast<uint8_t>(
+        gl_vk::GetColorComponentFlags(glBlendState.colorMaskRed, glBlendState.colorMaskGreen,
+                                      glBlendState.colorMaskBlue, glBlendState.colorMaskAlpha));
+    for (size_t colorIdx = 0; colorIdx < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; colorIdx++)
+    {
+        Int4Array_Set(mInputAssemblyAndColorBlendStateInfo.colorWriteMaskBits, colorIdx, colorMask);
+    }
+    for (size_t attachIdx = 0; attachIdx < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS; ++attachIdx)
+    {
+        PackedColorBlendAttachmentState &blendAttachmentState =
+            mInputAssemblyAndColorBlendStateInfo.attachments[attachIdx];
+        blendAttachmentState.srcColorBlendFactor = PackGLBlendFactor(glBlendState.sourceBlendRGB);
+        blendAttachmentState.dstColorBlendFactor = PackGLBlendFactor(glBlendState.destBlendRGB);
+        blendAttachmentState.colorBlendOp        = PackGLBlendOp(glBlendState.blendEquationRGB);
+        blendAttachmentState.srcAlphaBlendFactor = PackGLBlendFactor(glBlendState.sourceBlendAlpha);
+        blendAttachmentState.dstAlphaBlendFactor = PackGLBlendFactor(glBlendState.destBlendAlpha);
+        blendAttachmentState.alphaBlendOp        = PackGLBlendOp(glBlendState.blendEquationAlpha);
+    }
+    mInputAssemblyAndColorBlendStateInfo.blendConstants[0] = glState.getBlendColor().red;
+    mInputAssemblyAndColorBlendStateInfo.blendConstants[1] = glState.getBlendColor().green;
+    mInputAssemblyAndColorBlendStateInfo.blendConstants[2] = glState.getBlendColor().blue;
+    mInputAssemblyAndColorBlendStateInfo.blendConstants[3] = glState.getBlendColor().alpha;
+    mInputAssemblyAndColorBlendStateInfo.logic.opEnable    = 0;
+    mInputAssemblyAndColorBlendStateInfo.logic.op        = static_cast<uint32_t>(VK_LOGIC_OP_CLEAR);
+    mInputAssemblyAndColorBlendStateInfo.blendEnableMask = glState.isBlendEnabled() ? 0xffu : 0u;
+    SetBitField(mInputAssemblyAndColorBlendStateInfo.primitive.restartEnable,
+                glState.isPrimitiveRestartEnabled());
+    SetBitField(mInputAssemblyAndColorBlendStateInfo.primitive.topology,
+                VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+
+    // At init time, there is no framebuffer binded, when framebuffer binding happens,
+    // state would be dirty and some of the following states will be reset to match framebuffer.
+    const gl::Rectangle &viewport = glState.getViewport();
+    mViewport.x                   = static_cast<float>(viewport.x);
+    mViewport.y                   = static_cast<float>(viewport.y);
+    mViewport.width               = static_cast<float>(viewport.width);
+    mViewport.height              = static_cast<float>(viewport.height);
+    mViewport.minDepth            = glState.getNearPlane();
+    mViewport.maxDepth            = glState.getFarPlane();
+
+    const gl::Rectangle &scissor = glState.getScissor();
+    mScissor.offset.x            = scissor.x;
+    mScissor.offset.y            = scissor.y;
+    mScissor.extent.width        = scissor.width;
+    mScissor.extent.height       = scissor.height;
 }
 
 angle::Result GraphicsPipelineDesc::initializePipeline(
