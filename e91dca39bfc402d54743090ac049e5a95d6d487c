@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "0421c208_a9052d7a",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-07-17T00:04:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d2838487_864a3824",
+      "range": {
+        "startLine": 317,
+        "startChar": 0,
+        "endLine": 321,
+        "endChar": 2
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c824f5a5_52e5900a",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 5
@@ -91,6 +115,30 @@
       "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6342bb17_91b667e9",
+        "filename": "src/libANGLE/Framebuffer.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-07-17T00:04:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8264b507_f0861664",
+      "range": {
+        "startLine": 183,
+        "startChar": 34,
+        "endLine": 183,
+        "endChar": 45
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -198,6 +246,30 @@
       "writtenOn": "2019-07-10T15:33:41Z",
       "side": 1,
       "message": "nit: compare against kDefaultRenderToTextureSamples",
+      "range": {
+        "startLine": 245,
+        "startChar": 35,
+        "endLine": 245,
+        "endChar": 36
+      },
+      "revId": "e91dca39bfc402d54743090ac049e5a95d6d487c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9d388e9_2a2afe74",
+        "filename": "src/libANGLE/FramebufferAttachment.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-07-17T00:04:21Z",
+      "side": 1,
+      "message": "Hey Geoff, \n\nI realized in my investigation about passing samples around that this piece of code I added here has some implication that I overlooked.\n\nI had originally added this here because getCachedSamples (which internally calls getSamples()) below was setting a flag in the rasterizer state that allowed for the renderTarget to know that it was multisample and therefore to draw with antialiasing. \n bool multiSample \u003d (fbo-\u003egetCachedSamples(context) !\u003d 0);\n    if (multiSample !\u003d mCurRasterState.multiSample)\n    {\n        mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);\n        mCurRasterState.multiSample \u003d multiSample;\n    }\n\nHowever getSamples is called from many different places, some of which I believe we would want to return the MS samples and some of which I don\u0027t think we should.\n\nSingle sampled: \nFramebufferGL::blit() -- readAttachmentSamples \u003d colorReadAttachment-\u003egetSamples(), this readAttachmentSamples is later used to determine a split between blitColorBufferWithShader or blitFramebuffer.\n\nvalidationES ValidateBlitFramebufferParameters -- readColorBuffer-\u003egetSamples() \u003e 0 and readBuffer-\u003egetSamples \u003e 0 both instances are used to determine an error in validation. But because the samples that we are getting returned should not really be \u003e 0, the validation shouldn\u0027t fail. \n\nsimilar case in validationES2 ValidateBlitFramebufferANGLE\n\nValidationES ValidateFramebufferNotMultisampled\n\n\nMultisampled:\nqueryutils.cpp\n case GL_FRAMEBUFFER_ATTACHMENT_TEXTURE_SAMPLES_EXT:\n            if (attachmentObject-\u003etype() \u003d\u003d GL_TEXTURE)\n            {\n                *params \u003d attachmentObject-\u003egetSamples();\n            }\n            else\n\n\nFramebuffer11::getSamplePosition\n\nContextVK::GetCoverageSampleCount\n\nContextVK::syncState \nmGraphicsPipelineDesc-\u003eupdateRasterizationSamples(\u0026mGraphicsPipelineTransition,\n                                                         mDrawFramebuffer-\u003egetSamples());\n\nState::getIntegerv\n    Framebuffer *framebuffer \u003d mDrawFramebuffer;\n    if (framebuffer-\u003eisComplete(context))\n    {\n        GLint samples \u003d framebuffer-\u003egetSamples(context);\n\n\nvalidationES::ValidateGetMultisamplefvBase\n\n\nBasically I just wanted to highlight that there are places where we may want to expose the fact that the underlying texture is multisampled and sometimes we don\u0027t. Any suggestions on how we can do this cleanly?",
+      "parentUuid": "194ceb70_1b0ba38d",
       "range": {
         "startLine": 245,
         "startChar": 35,
