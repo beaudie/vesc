@@ -6,6 +6,9 @@
 // AtomicCounterBufferTest:
 //   Various tests related for atomic counter buffers.
 //
+// TODO: add a test with VS and FS having different bindings and make sure there is no validation
+// error
+//
 
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
