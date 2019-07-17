@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cce7b983_fa66437b",
+        "filename": "doc/ContributingCode.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-17T18:20:33Z",
+      "side": 1,
+      "message": "Could add in an \u0027at least\u0027 but it might get people adding all 4 reviewers to everything.",
+      "range": {
+        "startLine": 99,
+        "startChar": 238,
+        "endLine": 99,
+        "endChar": 239
+      },
+      "revId": "4cdf5fdaec66623850729247ca4714a704f58e24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
