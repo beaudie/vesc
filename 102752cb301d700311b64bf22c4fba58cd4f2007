@@ -34,6 +34,41 @@
       "revId": "102752cb301d700311b64bf22c4fba58cd4f2007",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0443071d_57f3bf00",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2181,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-07-17T03:11:18Z",
+      "side": 1,
+      "message": "Yes, I\u0027m hitting this path.  Just curious ... Do you have a solution for this?",
+      "parentUuid": "f9ffcdd3_c37fe5d7",
+      "revId": "102752cb301d700311b64bf22c4fba58cd4f2007",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4514634c_6b02d047",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-07-17T03:11:18Z",
+      "side": 1,
+      "message": "The merge conflict is because of a recent CL of mine (some of the tests are working as a result of other CLs).  I\u0027m at home now, but I will reply to this comment tomorrow with my temporary version of the relevant lines.",
+      "revId": "102752cb301d700311b64bf22c4fba58cd4f2007",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
