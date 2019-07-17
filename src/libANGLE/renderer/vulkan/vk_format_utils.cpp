@@ -346,18 +346,24 @@ void MapSwizzleState(const ContextVk *contextVk,
     switch (format.internalFormat)
     {
         case GL_LUMINANCE8_OES:
+        case GL_LUMINANCE16F_EXT:
+        case GL_LUMINANCE32F_EXT:
             internalSwizzle.swizzleRed   = GL_RED;
             internalSwizzle.swizzleGreen = GL_RED;
             internalSwizzle.swizzleBlue  = GL_RED;
             internalSwizzle.swizzleAlpha = GL_ONE;
             break;
         case GL_LUMINANCE8_ALPHA8_OES:
+        case GL_LUMINANCE_ALPHA16F_EXT:
+        case GL_LUMINANCE_ALPHA32F_EXT:
             internalSwizzle.swizzleRed   = GL_RED;
             internalSwizzle.swizzleGreen = GL_RED;
             internalSwizzle.swizzleBlue  = GL_RED;
             internalSwizzle.swizzleAlpha = GL_GREEN;
             break;
         case GL_ALPHA8_OES:
+        case GL_ALPHA16F_EXT:
+        case GL_ALPHA32F_EXT:
             internalSwizzle.swizzleRed   = GL_ZERO;
             internalSwizzle.swizzleGreen = GL_ZERO;
             internalSwizzle.swizzleBlue  = GL_ZERO;
