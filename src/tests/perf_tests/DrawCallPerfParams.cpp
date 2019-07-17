@@ -102,18 +102,4 @@ DrawCallPerfParams DrawCallWGL()
     params.driver = angle::GLESDriverType::SystemWGL;
     return params;
 }
-
-DrawCallPerfParams Offscreen(const DrawCallPerfParams &input)
-{
-    DrawCallPerfParams output = input;
-    output.offscreen          = true;
-    return output;
-}
-
-DrawCallPerfParams NullDevice(const DrawCallPerfParams &input)
-{
-    DrawCallPerfParams output       = input;
-    output.eglParameters.deviceType = EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE;
-    return output;
-}
 }  // namespace params
