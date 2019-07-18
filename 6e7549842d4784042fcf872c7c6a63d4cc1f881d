@@ -94,6 +94,30 @@
       "revId": "6e7549842d4784042fcf872c7c6a63d4cc1f881d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fb8e1b1_c2d87700",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-18T19:17:26Z",
+      "side": 1,
+      "message": "we can definitely cache it but massaging it in for already existing code will be a big change, right?\n\nIf we do add a member that only this specific format uses, it will be an unnecessary increase in struct size for just one format. Need to think about this a little bit. It might be better if we convert this check into one that uses a clever bitwise trick?",
+      "parentUuid": "dccee623_65e57614",
+      "range": {
+        "startLine": 34,
+        "startChar": 21,
+        "endLine": 34,
+        "endChar": 28
+      },
+      "revId": "6e7549842d4784042fcf872c7c6a63d4cc1f881d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
