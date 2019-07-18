@@ -19,6 +19,70 @@
     },
     {
       "key": {
+        "uuid": "5f4ce459_676b89b2",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-18T17:01:35Z",
+      "side": 1,
+      "message": "I think this just says if the extension is present.\n\nAlso, `createContextBackwardsCompatibleANGLE`",
+      "parentUuid": "f72f54db_f8490d33",
+      "revId": "37022e84d0b1a8c1ee34e088381b18113b768696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16d2c2ee_36b335f1",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-18T17:01:35Z",
+      "side": 1,
+      "message": "@Tim, this is where the default value is set.",
+      "range": {
+        "startLine": 147,
+        "startChar": 70,
+        "endLine": 147,
+        "endChar": 78
+      },
+      "revId": "37022e84d0b1a8c1ee34e088381b18113b768696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "914b7e5b_cbd99469",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-18T17:01:35Z",
+      "side": 1,
+      "message": "3.0 is also in progress. A comment on why we return 3.0 nevertheless would be good.\n\nOn the same note, maybe we should split the switch from 2.0 to 3.0 into another CL (along with the expectations change).\n\nSo this change would be purely the extension implementation and the other would be the functional change.",
+      "range": {
+        "startLine": 1142,
+        "startChar": 4,
+        "endLine": 1142,
+        "endChar": 34
+      },
+      "revId": "37022e84d0b1a8c1ee34e088381b18113b768696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f88e345_7105f3d7",
         "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
         "patchSetId": 13
