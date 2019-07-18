@@ -50,9 +50,24 @@ const int COMMON_BUILTINS  = 0;
 const int ESSL1_BUILTINS   = 1;
 const int ESSL3_BUILTINS   = 2;
 const int ESSL3_1_BUILTINS = 3;
+// GLSL builtins for desktop implementation
+const int GLSL1_1_BUILTINS = 4;
+const int GLSL1_2_BUILTINS = 5;
+const int GLSL1_3_BUILTINS = 6;
+const int GLSL1_4_BUILTINS = 7;
+const int GLSL1_5_BUILTINS = 8;
+const int GLSL3_3_BUILTINS = 9;
+const int GLSL4_BUILTINS   = 10;
+const int GLSL4_1_BUILTINS = 11;
+const int GLSL4_2_BUILTINS = 12;
+const int GLSL4_3_BUILTINS = 13;
+const int GLSL4_4_BUILTINS = 14;
+const int GLSL4_5_BUILTINS = 15;
+const int GLSL4_6_BUILTINS = 16;
+
 // GLSL_BUILTINS are desktop GLSL builtins that don't exist in ESSL but are used to implement
 // features in ANGLE's GLSL backend. They're not visible to the parser.
-const int GLSL_BUILTINS      = 4;
+const int GLSL_BUILTINS      = 17;
 const int LAST_BUILTIN_LEVEL = GLSL_BUILTINS;
 
 struct UnmangledBuiltIn
@@ -186,6 +201,7 @@ class TSymbolTable : angle::NonCopyable, TSymbolTableBase
     static const int kLastBuiltInId;
 
     sh::GLenum mShaderType;
+    ShShaderSpec mShaderSpec;
     ShBuiltInResources mResources;
 
     // Indexed by unique id. Map instead of vector since the variables are fairly sparse.

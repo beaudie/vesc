@@ -43,15 +43,20 @@ TEST(Type, VectorAndMatrixMangledNameConsistent)
 // Verify that basic type mangled names are unique.
 TEST(Type, BaseTypeMangledNamesUnique)
 {
-    std::set<char> uniqueNames;
+    std::set<std::string> uniqueNames;
     for (int i = static_cast<int>(EbtVoid); i < static_cast<int>(EbtLast); ++i)
     {
         if (i == static_cast<int>(EbtStruct) || i == static_cast<int>(EbtInterfaceBlock))
         {
             continue;
         }
-        char mangledName = GetBasicMangledName(static_cast<TBasicType>(i));
-        if (mangledName != '{')
+        bool hasZeroPrefix;
+        char mangledNameChar = GetBasicMangledName(static_cast<TBasicType>(i), hasZeroPrefix);
+        std::string mangledName("");
+        if (hasZeroPrefix)
+            mangledName += '0';
+        mangledName += mangledNameChar;
+        if (mangledName.back() != '{')
         {
             ASSERT_TRUE(uniqueNames.insert(mangledName).second);
         }
