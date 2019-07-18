@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "df5fab2e_5411181a",
+        "filename": "src/libANGLE/ImageIndex.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-18T13:26:37Z",
+      "side": 1,
+      "message": "This is the function that determines the depth to pass in to ImageIndex::MakeFromTarget.  Replicating this logic everywhere is fairly ugly.",
+      "parentUuid": "bee7a445_79730aa6",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 149,
+        "endChar": 0
+      },
+      "revId": "6e60b81d5c3134a8e639ee913a1b8643457145f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ff395e16_f090ad02",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
@@ -36,6 +60,30 @@
       "writtenOn": "2019-07-18T12:32:04Z",
       "side": 1,
       "message": "you introduced 3 new functions which are very similar. I\u0027m wondering if you can get rid of 1 or 2 of them.",
+      "range": {
+        "startLine": 1493,
+        "startChar": 0,
+        "endLine": 1493,
+        "endChar": 52
+      },
+      "revId": "6e60b81d5c3134a8e639ee913a1b8643457145f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87e2de28_712f57b7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-18T13:26:37Z",
+      "side": 1,
+      "message": "I\u0027ve gone back and forth trying to find a more streamlined, easy to understand way of separating out this information.  Should I go back to checking the image type directly in the function, like what\u0027s being done for CubeMap, rather than try to encapsulate it?",
+      "parentUuid": "ff395e16_f090ad02",
       "range": {
         "startLine": 1493,
         "startChar": 0,
