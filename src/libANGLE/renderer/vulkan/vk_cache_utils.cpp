@@ -723,8 +723,22 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     inputAssemblyState.flags = 0;
     inputAssemblyState.topology =
         static_cast<VkPrimitiveTopology>(mInputAssemblyAndColorBlendStateInfo.primitive.topology);
-    inputAssemblyState.primitiveRestartEnable =
-        static_cast<VkBool32>(mInputAssemblyAndColorBlendStateInfo.primitive.restartEnable);
+    if (inputAssemblyState.topology == VK_PRIMITIVE_TOPOLOGY_POINT_LIST ||
+        inputAssemblyState.topology == VK_PRIMITIVE_TOPOLOGY_LINE_LIST ||
+        inputAssemblyState.topology == VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST ||
+        inputAssemblyState.topology == VK_PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY ||
+        inputAssemblyState.topology == VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY ||
+        inputAssemblyState.topology == VK_PRIMITIVE_TOPOLOGY_PATCH_LIST)
+    {
+        // Vulkan Valid Usage:
+        // https://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/vkspec.html#VUID-VkPipelineInputAssemblyStateCreateInfo-topology-00428
+        inputAssemblyState.primitiveRestartEnable = VK_FALSE;
+    }
+    else
+    {
+        inputAssemblyState.primitiveRestartEnable =
+            static_cast<VkBool32>(mInputAssemblyAndColorBlendStateInfo.primitive.restartEnable);
+    }
 
     // Set initial viewport and scissor state.
 
