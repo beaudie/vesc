@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "7b0ac380_b2c72160",
+        "filename": "src/libANGLE/ImageIndex.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-18T16:37:08Z",
+      "side": 1,
+      "message": "This breaks things because 3D textures end up with a layercount \u003e 1, which is illegal in Vulkan.",
+      "parentUuid": "fea3b54c_1f04ea02",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 149,
+        "endChar": 0
+      },
+      "revId": "6e60b81d5c3134a8e639ee913a1b8643457145f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1f972498_b87fb4e9",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "I\u0027ve seen them differ, but that might have been during efforts to not touch ImageIndex.  I\u0027ll do a run that asserts equality, see what pops out.",
       "parentUuid": "1f972498_b87fb4e9",
+      "range": {
+        "startLine": 1401,
+        "startChar": 26,
+        "endLine": 1401,
+        "endChar": 53
+      },
+      "revId": "6e60b81d5c3134a8e639ee913a1b8643457145f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46ef4c4d_af2ffc77",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1401,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-18T16:37:08Z",
+      "side": 1,
+      "message": "An example of a failure I get when using mImage-\u003egetLayerCount here:\n\n  ImageTest.SourceCubeTarget2D/ES2_Vulkan\n\nWe get a 2D image with a layer count of 6, triggering a validation error:\n\n../../src/tests/test_utils/ANGLETest.cpp(58): error: DebugUtilsMessenger(286):\n[ VUID-VkImageViewCreateInfo-subresourceRange-01483 ] vkCreateImageView:\npCreateInfo-\u003esubresourceRange.baseArrayLayer + .layerCount (\u003d 1 + 6 \u003d 7) is greater than the\narrayLayers of the image when it was created (i.e. greater than 6). The Vulkan spec states:\nIf subresourceRange::layerCount is not VK_REMAINING_ARRAY_LAYERS, image is not a 3D image\ncreated with VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT set, or viewType is not\nVK_IMAGE_VIEW_TYPE_2D or VK_IMAGE_VIEW_TYPE_2D_ARRAY, subresourceRange::layerCount must be\nnon-zero and subresourceRange::baseArrayLayer + subresourceRange::layerCount must be less\nthan or equal to the arrayLayers specified in VkImageCreateInfo when image was created\n(https://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/vkspec.html#VUID-VkImageViewCreateInfo-subresourceRange-01483)\n\nIt isn\u0027t immediately clear to me how we\u0027re getting an index like that.  I\u0027ll dig around, see if I can find if this points to a different problem, rather than overriding the value.",
+      "parentUuid": "ebca20c5_e1ef8cbf",
       "range": {
         "startLine": 1401,
         "startChar": 26,
