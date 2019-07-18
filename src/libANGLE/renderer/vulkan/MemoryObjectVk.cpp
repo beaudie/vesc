@@ -96,9 +96,13 @@ angle::Result MemoryObjectVk::createImage(const gl::Context *context,
     externalMemoryImageCreateInfo.sType       = VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO;
     externalMemoryImageCreateInfo.handleTypes = VK_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD_BIT;
 
-    ANGLE_TRY(image->initExternal(contextVk, type, size, vkFormat, 1, imageUsageFlags,
+    uint32_t layerCount;
+    gl::Extents newExtents;
+    gl_vk::GetExtentsAndLayerCount(type, size, &newExtents, &layerCount);
+
+    ANGLE_TRY(image->initExternal(contextVk, type, newExtents, vkFormat, 1, imageUsageFlags,
                                   vk::ImageLayout::ExternalPreInitialized,
-                                  &externalMemoryImageCreateInfo, levels, 1));
+                                  &externalMemoryImageCreateInfo, levels, layerCount));
 
     VkMemoryRequirements externalMemoryRequirements;
     image->getImage().getMemoryRequirements(renderer->getDevice(), &externalMemoryRequirements);

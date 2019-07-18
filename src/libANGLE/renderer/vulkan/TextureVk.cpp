@@ -236,9 +236,16 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
 
     if (pixels)
     {
-        ANGLE_TRY(mImage->stageSubresourceUpdate(
-            contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
-            gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels, vkFormat));
+        uint32_t layerCount;
+        gl::Extents newExtents;
+        gl_vk::GetExtentsAndLayerCount(mState.getType(),
+                                       gl::Extents(area.width, area.height, area.depth),
+                                       &newExtents, &layerCount);
+
+        gl::ImageIndex newIndex = getNativeImageIndex(index);
+        ANGLE_TRY(mImage->stageSubresourceUpdate(contextVk, newIndex, newExtents,
+                                                 gl::Offset(area.x, area.y, area.z), formatInfo,
+                                                 unpack, type, pixels, vkFormat));
         onStagingBufferChange();
     }
 
@@ -1356,9 +1363,12 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
         imageUsageFlags |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     }
 
-    ANGLE_TRY(mImage->init(contextVk, mState.getType(), extents, format, 1, imageUsageFlags,
-                           levelCount,
-                           mState.getType() == gl::TextureType::CubeMap ? gl::kCubeFaceCount : 1));
+    uint32_t layerCount;
+    gl::Extents newExtents;
+    gl_vk::GetExtentsAndLayerCount(mState.getType(), extents, &newExtents, &layerCount);
+
+    ANGLE_TRY(mImage->init(contextVk, mState.getType(), newExtents, format, 1, imageUsageFlags,
+                           levelCount, layerCount));
 
     const VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
@@ -1399,7 +1409,8 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
     // http://anglebug.com/3148
     uint32_t baseLevel  = getNativeImageLevel(0);
     uint32_t baseLayer  = getNativeImageLayer(0);
-    uint32_t layerCount = mState.getType() == gl::TextureType::CubeMap ? gl::kCubeFaceCount : 1;
+    uint32_t layerCount = mImage->getLayerCount();
+
     VkImageAspectFlags aspectFlags = vk::GetFormatAspectFlags(format.angleFormat());
     // If we are reading a depth buffer, select only the depth component/aspect
     if (aspectFlags & VK_IMAGE_ASPECT_DEPTH_BIT)
@@ -1413,7 +1424,9 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
     ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), aspectFlags, mappedSwizzle,
                                          &mReadBaseLevelImageView, baseLevel, 1, baseLayer,
                                          layerCount));
-    if (mState.getType() == gl::TextureType::CubeMap)
+    if (mState.getType() == gl::TextureType::CubeMap ||
+        mState.getType() == gl::TextureType::_2DArray ||
+        mState.getType() == gl::TextureType::_2DMultisampleArray)
     {
         gl::TextureType arrayType = vk::Get2DTextureType(layerCount, mImage->getSamples());
 

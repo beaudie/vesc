@@ -1504,17 +1504,18 @@ angle::Result ImageHelper::initExternal(Context *context,
 {
     ASSERT(!valid());
 
-    // Validate that the input layerCount is compatible with the texture type
-    ASSERT(textureType != gl::TextureType::_3D || layerCount == 1);
-    ASSERT(textureType != gl::TextureType::External || layerCount == 1);
-    ASSERT(textureType != gl::TextureType::Rectangle || layerCount == 1);
-    ASSERT(textureType != gl::TextureType::CubeMap || layerCount == gl::kCubeFaceCount);
-
     mExtents    = extents;
     mFormat     = &format;
     mSamples    = samples;
     mLayerCount = layerCount;
     mLevelCount = mipLevels;
+
+    // Validate that mLayerCount is compatible with the texture type
+    ASSERT(textureType != gl::TextureType::_3D || mLayerCount == 1);
+    ASSERT(textureType != gl::TextureType::_2DArray || mExtents.depth == 1);
+    ASSERT(textureType != gl::TextureType::External || mLayerCount == 1);
+    ASSERT(textureType != gl::TextureType::Rectangle || mLayerCount == 1);
+    ASSERT(textureType != gl::TextureType::CubeMap || mLayerCount == gl::kCubeFaceCount);
 
     VkImageCreateInfo imageInfo     = {};
     imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -1910,7 +1911,8 @@ gl::Extents ImageHelper::getSize(const gl::ImageIndex &index) const
     // Level 0 should be the size of the extents, after that every time you increase a level
     // you shrink the extents by half.
     return gl::Extents(std::max(1, mExtents.width >> mipLevel),
-                       std::max(1, mExtents.height >> mipLevel), mExtents.depth);
+                       std::max(1, mExtents.height >> mipLevel),
+                       mLayerCount > 1 ? mLayerCount : mExtents.depth);
 }
 
 // static
@@ -2164,10 +2166,14 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     copy.bufferImageHeight               = bufferImageHeight;
     copy.imageSubresource.mipLevel       = index.getLevelIndex();
     copy.imageSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;
-    copy.imageSubresource.layerCount     = index.getLayerCount();
+
+    copy.imageSubresource.layerCount = index.getLayerCount() - copy.imageSubresource.baseArrayLayer;
 
     gl_vk::GetOffset(offset, &copy.imageOffset);
-    gl_vk::GetExtent(extents, &copy.imageExtent);
+
+    copy.imageExtent.width  = extents.width;
+    copy.imageExtent.height = extents.height;
+    copy.imageExtent.depth  = extents.depth;
 
     if (stencilAllocationSize > 0)
     {
@@ -2192,10 +2198,12 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
         stencilCopy.bufferImageHeight               = bufferImageHeight;
         stencilCopy.imageSubresource.mipLevel       = index.getLevelIndex();
         stencilCopy.imageSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;
-        stencilCopy.imageSubresource.layerCount     = index.getLayerCount();
+        stencilCopy.imageSubresource.layerCount =
+            index.getLayerCount() - stencilCopy.imageSubresource.baseArrayLayer;
 
         gl_vk::GetOffset(offset, &stencilCopy.imageOffset);
         gl_vk::GetExtent(extents, &stencilCopy.imageExtent);
+        stencilCopy.imageExtent.depth           = extents.depth;
         stencilCopy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
         mSubresourceUpdates.emplace_back(bufferHandle, stencilCopy);
 
