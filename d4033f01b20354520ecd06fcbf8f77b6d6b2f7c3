@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71253c91_3f226147",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-18T12:18:34Z",
+      "side": 1,
+      "message": "also this is a good catch - could be part of the prior fix CL",
+      "range": {
+        "startLine": 634,
+        "startChar": 4,
+        "endLine": 634,
+        "endChar": 53
+      },
+      "revId": "d4033f01b20354520ecd06fcbf8f77b6d6b2f7c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
