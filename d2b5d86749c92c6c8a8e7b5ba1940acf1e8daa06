@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6410d641_047d7431",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2209,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-18T02:37:35Z",
+      "side": 1,
+      "message": "Could simplified a bit like:\n\n        SamplerVk *samplerVk \u003d nullptr;\n        if (sampler !\u003d nullptr)\n        {\n            SamplerVk *samplerVk \u003d vk::GetImpl(sampler);\n        }\n        textureVk-\u003esetSampler(this, samplerVk);\n\nOr with ?:",
+      "range": {
+        "startLine": 2201,
+        "startChar": 0,
+        "endLine": 2209,
+        "endChar": 9
+      },
+      "revId": "d2b5d86749c92c6c8a8e7b5ba1940acf1e8daa06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e9b478e_e58430e0",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-18T02:37:35Z",
+      "side": 1,
+      "message": "I\u0027d generally avoid acronyms like this (which aren\u0027t used or defined anywhere else) for clarity.",
+      "range": {
+        "startLine": 34,
+        "startChar": 36,
+        "endLine": 34,
+        "endChar": 38
+      },
+      "revId": "d2b5d86749c92c6c8a8e7b5ba1940acf1e8daa06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c645947e_8a46c18a",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-18T02:37:35Z",
+      "side": 1,
+      "message": "Could you please add a single dirty bit in the front end that gets set in every setter? This is recreating every sampler object every frame!",
+      "revId": "d2b5d86749c92c6c8a8e7b5ba1940acf1e8daa06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de938f9f_e6792124",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-18T02:37:35Z",
+      "side": 1,
+      "message": "Is this comment valid?",
+      "range": {
+        "startLine": 49,
+        "startChar": 7,
+        "endLine": 49,
+        "endChar": 62
+      },
+      "revId": "d2b5d86749c92c6c8a8e7b5ba1940acf1e8daa06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66be3da0_823ee7d0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1343,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-18T02:37:35Z",
+      "side": 1,
+      "message": "What if the sampler object is the same, but the sampler state has changed? Shouldn\u0027t there be a new serial for the texture?",
+      "revId": "d2b5d86749c92c6c8a8e7b5ba1940acf1e8daa06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
