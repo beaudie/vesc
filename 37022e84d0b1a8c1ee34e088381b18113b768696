@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5436feae_777c18ff",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-18T20:33:05Z",
+      "side": 1,
+      "message": "This value is if the extension is enabled at all which defaults to false until either the backend or frontend say they support it. You\u0027ll see the default value being used here: https://chromium-review.googlesource.com/c/angle/angle/+/1601560/13/src/libANGLE/Context.cpp#147 as an argument to attribs.get",
+      "parentUuid": "f72f54db_f8490d33",
+      "revId": "37022e84d0b1a8c1ee34e088381b18113b768696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16d2c2ee_36b335f1",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 13
@@ -71,6 +89,30 @@
       "writtenOn": "2019-07-18T17:01:35Z",
       "side": 1,
       "message": "3.0 is also in progress. A comment on why we return 3.0 nevertheless would be good.\n\nOn the same note, maybe we should split the switch from 2.0 to 3.0 into another CL (along with the expectations change).\n\nSo this change would be purely the extension implementation and the other would be the functional change.",
+      "range": {
+        "startLine": 1142,
+        "startChar": 4,
+        "endLine": 1142,
+        "endChar": 34
+      },
+      "revId": "37022e84d0b1a8c1ee34e088381b18113b768696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32bbce98_72115882",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-18T20:33:05Z",
+      "side": 1,
+      "message": "reworded it and split the patch.",
+      "parentUuid": "914b7e5b_cbd99469",
       "range": {
         "startLine": 1142,
         "startChar": 4,
