@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "11752e17_62ae8c6a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-18T22:55:59Z",
+      "side": 1,
+      "message": "Could potentially kill the comment but I think it\u0027s good to have as it explains why this code is different than surrounding code.\nSuggest updating wording on comment here and everywhere else that it\u0027s used to:\n// Depth and stencil redundant state changes are guarded in the\n// frontend so for related cases here just set the dirty bit.",
+      "revId": "dcbeb1ec9fb541884114d17ed941b5d38a5ea768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a84128dc_b2d31a4c",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/StateManager9.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-18T22:55:59Z",
+      "side": 1,
+      "message": "Update this comment same as previous",
+      "revId": "dcbeb1ec9fb541884114d17ed941b5d38a5ea768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0aa7bbc_d65a4823",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-18T22:55:59Z",
+      "side": 1,
+      "message": "Update this comment same as previous",
+      "revId": "dcbeb1ec9fb541884114d17ed941b5d38a5ea768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4ed9537_f6374eab",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-18T22:55:59Z",
+      "side": 1,
+      "message": "Move comment above the function decl and update to:\n// Because frontend GL filters out unnecessary dirty bits,\n// we must sync vulkan pipeline desc with GL state at init time",
+      "revId": "dcbeb1ec9fb541884114d17ed941b5d38a5ea768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
