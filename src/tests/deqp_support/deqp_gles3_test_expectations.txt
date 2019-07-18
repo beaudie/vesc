@@ -643,11 +643,9 @@
 3443 VULKAN : dEQP-GLES3.functional.ubo.random.nested_structs_instance_arrays.24 = FAIL
 
 // New vertex attribute formats:
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.*.int2_10_10_10.* = SKIP
 3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.*.unsigned_int.components* = SKIP
 3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.*.int.components* = SKIP
 3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.*.half.components* = SKIP
-3193 VULKAN : dEQP-GLES3.functional.vertex_arrays.single_attribute.*.usigned_int2_10_10_10.components* = SKIP
 3193 VULKAN : dEQP-GLES3.functional.vertex_array_objects.all_attributes = SKIP
 
 3221 VULKAN : dEQP-GLES3.functional.instanced.* = SKIP

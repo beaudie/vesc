@@ -963,51 +963,63 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::R10G10B10A2_SINT:
-            internalFormat               = GL_RGB10_A2_SINT_ANGLEX;
-            imageFormatID                = angle::FormatID::R10G10B10A2_SINT;
-            vkImageFormat                = VK_FORMAT_A2B10G10R10_SINT_PACK32;
-            imageInitializerFunction     = nullptr;
-            bufferFormatID               = angle::FormatID::R10G10B10A2_SINT;
-            vkBufferFormat               = VK_FORMAT_A2B10G10R10_SINT_PACK32;
-            vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
-            vertexLoadRequiresConversion = false;
+            internalFormat           = GL_RGB10_A2_SINT_ANGLEX;
+            imageFormatID            = angle::FormatID::R10G10B10A2_SINT;
+            vkImageFormat            = VK_FORMAT_A2B10G10R10_SINT_PACK32;
+            imageInitializerFunction = nullptr;
+            {
+                static constexpr BufferFormatInitInfo kInfo[] = {
+                    {angle::FormatID::R10G10B10A2_SINT, VK_FORMAT_A2B10G10R10_SINT_PACK32, true,
+                     CopyNativeVertexData<GLbyte, 4, 4, 0>, false},
+                    {angle::FormatID::R16G16B16A16_SINT, VK_FORMAT_R16G16B16A16_SINT, false,
+                     CopyXYZ10W2ToXYZW32FVertexData<true, false, false>, true}};
+                initBufferFallback(renderer, kInfo, ArraySize(kInfo));
+            }
             break;
 
         case angle::FormatID::R10G10B10A2_SNORM:
-            internalFormat               = GL_RGB10_A2_SNORM_ANGLEX;
-            imageFormatID                = angle::FormatID::R10G10B10A2_SNORM;
-            vkImageFormat                = VK_FORMAT_A2B10G10R10_SNORM_PACK32;
-            imageInitializerFunction     = nullptr;
-            bufferFormatID               = angle::FormatID::R10G10B10A2_SNORM;
-            vkBufferFormat               = VK_FORMAT_A2B10G10R10_SNORM_PACK32;
-            vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
-            vertexLoadRequiresConversion = false;
+            internalFormat           = GL_RGB10_A2_SNORM_ANGLEX;
+            imageFormatID            = angle::FormatID::R10G10B10A2_SNORM;
+            vkImageFormat            = VK_FORMAT_A2B10G10R10_SNORM_PACK32;
+            imageInitializerFunction = nullptr;
+            {
+                static constexpr BufferFormatInitInfo kInfo[] = {
+                    {angle::FormatID::R10G10B10A2_SNORM, VK_FORMAT_A2B10G10R10_SNORM_PACK32, true,
+                     CopyNativeVertexData<GLbyte, 4, 4, 0>, false},
+                    {angle::FormatID::R32G32B32A32_FLOAT, VK_FORMAT_R32G32B32A32_SFLOAT, false,
+                     CopyXYZ10W2ToXYZW32FVertexData<true, true, true>, true}};
+                initBufferFallback(renderer, kInfo, ArraySize(kInfo));
+            }
             break;
 
         case angle::FormatID::R10G10B10A2_SSCALED:
-            internalFormat               = GL_RGB10_A2_SSCALED_ANGLEX;
-            imageFormatID                = angle::FormatID::R10G10B10A2_SSCALED;
-            vkImageFormat                = VK_FORMAT_A2B10G10R10_SSCALED_PACK32;
-            imageInitializerFunction     = nullptr;
-            bufferFormatID               = angle::FormatID::R10G10B10A2_SSCALED;
-            vkBufferFormat               = VK_FORMAT_A2B10G10R10_SSCALED_PACK32;
-            vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
-            vertexLoadRequiresConversion = false;
+            internalFormat           = GL_RGB10_A2_SSCALED_ANGLEX;
+            imageFormatID            = angle::FormatID::R10G10B10A2_SSCALED;
+            vkImageFormat            = VK_FORMAT_A2B10G10R10_SSCALED_PACK32;
+            imageInitializerFunction = nullptr;
+            {
+                static constexpr BufferFormatInitInfo kInfo[] = {
+                    {angle::FormatID::R10G10B10A2_SSCALED, VK_FORMAT_A2B10G10R10_SSCALED_PACK32,
+                     true, CopyNativeVertexData<GLbyte, 4, 4, 0>, false},
+                    {angle::FormatID::R32G32B32A32_FLOAT, VK_FORMAT_R32G32B32A32_SFLOAT, false,
+                     CopyXYZ10W2ToXYZW32FVertexData<true, false, true>, true}};
+                initBufferFallback(renderer, kInfo, ArraySize(kInfo));
+            }
             break;
 
         case angle::FormatID::R10G10B10A2_UINT:
-            internalFormat               = GL_RGB10_A2UI;
-            imageFormatID                = angle::FormatID::R10G10B10A2_UINT;
-            vkImageFormat                = VK_FORMAT_A2B10G10R10_UINT_PACK32;
-            imageInitializerFunction     = nullptr;
-            bufferFormatID               = angle::FormatID::R10G10B10A2_UINT;
-            vkBufferFormat               = VK_FORMAT_A2B10G10R10_UINT_PACK32;
-            vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
-            vertexLoadRequiresConversion = false;
+            internalFormat           = GL_RGB10_A2UI;
+            imageFormatID            = angle::FormatID::R10G10B10A2_UINT;
+            vkImageFormat            = VK_FORMAT_A2B10G10R10_UINT_PACK32;
+            imageInitializerFunction = nullptr;
+            {
+                static constexpr BufferFormatInitInfo kInfo[] = {
+                    {angle::FormatID::R10G10B10A2_UINT, VK_FORMAT_A2B10G10R10_UINT_PACK32, true,
+                     CopyNativeVertexData<GLubyte, 4, 4, 0>, false},
+                    {angle::FormatID::R16G16B16A16_UINT, VK_FORMAT_R16G16B16A16_UINT, false,
+                     CopyXYZ10W2ToXYZW32FVertexData<false, false, false>, true}};
+                initBufferFallback(renderer, kInfo, ArraySize(kInfo));
+            }
             break;
 
         case angle::FormatID::R10G10B10A2_UNORM:
@@ -1018,20 +1030,23 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             bufferFormatID               = angle::FormatID::R10G10B10A2_UNORM;
             vkBufferFormat               = VK_FORMAT_A2B10G10R10_UNORM_PACK32;
             vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
+            vertexLoadFunction           = CopyNativeVertexData<GLubyte, 4, 4, 0>;
             vertexLoadRequiresConversion = false;
             break;
 
         case angle::FormatID::R10G10B10A2_USCALED:
-            internalFormat               = GL_RGB10_A2_USCALED_ANGLEX;
-            imageFormatID                = angle::FormatID::R10G10B10A2_USCALED;
-            vkImageFormat                = VK_FORMAT_A2B10G10R10_USCALED_PACK32;
-            imageInitializerFunction     = nullptr;
-            bufferFormatID               = angle::FormatID::R10G10B10A2_USCALED;
-            vkBufferFormat               = VK_FORMAT_A2B10G10R10_USCALED_PACK32;
-            vkBufferFormatIsPacked       = true;
-            vertexLoadFunction           = nullptr;
-            vertexLoadRequiresConversion = false;
+            internalFormat           = GL_RGB10_A2_USCALED_ANGLEX;
+            imageFormatID            = angle::FormatID::R10G10B10A2_USCALED;
+            vkImageFormat            = VK_FORMAT_A2B10G10R10_USCALED_PACK32;
+            imageInitializerFunction = nullptr;
+            {
+                static constexpr BufferFormatInitInfo kInfo[] = {
+                    {angle::FormatID::R10G10B10A2_USCALED, VK_FORMAT_A2B10G10R10_USCALED_PACK32,
+                     true, CopyNativeVertexData<GLubyte, 4, 4, 0>, false},
+                    {angle::FormatID::R32G32B32A32_FLOAT, VK_FORMAT_R32G32B32A32_SFLOAT, false,
+                     CopyXYZ10W2ToXYZW32FVertexData<false, false, true>, true}};
+                initBufferFallback(renderer, kInfo, ArraySize(kInfo));
+            }
             break;
 
         case angle::FormatID::R11G11B10_FLOAT:
