@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <code-assistance-data xmlns="http://www.netbeans.org/ns/make-project-private/1">
+        <code-model-enabled>true</code-model-enabled>
+    </code-assistance-data>
+    <data xmlns="http://www.netbeans.org/ns/make-project-private/1">
+        <activeConfTypeElem>0</activeConfTypeElem>
+        <activeConfIndexElem>3</activeConfIndexElem>
+    </data>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/tests/gl_tests/StateChangeTest.cpp</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/null/SamplerNULL.cpp</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/Sampler.cpp</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/Caps.cpp</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/BufferVk.h</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/gl/SamplerGL.cpp</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/CommandGraph.cpp</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/d3d/SamplerD3D.h</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/renderer_utils.h</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/renderer_utils.cpp</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/gl/SamplerGL.h</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/SamplerVk.cpp</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/tests/gl_tests/BindUniformLocationTest.cpp</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/null/SamplerNULL.h</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/SamplerImpl.h</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/ProgramVk.cpp</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/State.cpp</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/ContextVk.cpp</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.h</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/Sampler.h</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/SamplerVk.h</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/CommandGraph.h</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/common/PackedEnums.h</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/common/PackedGLEnums_autogen.h</file>
+            <file>file:/usr/local/google/home/tobine/chromium_dev/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp</file>
+        </group>
+    </open-files>
+</project-private>
