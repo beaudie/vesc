@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4a82cde_7cce8060",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-18T21:50:12Z",
+      "side": 1,
+      "message": "Why are you hard-coding the shader version here?",
+      "range": {
+        "startLine": 368,
+        "startChar": 75,
+        "endLine": 368,
+        "endChar": 78
+      },
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60c09540_fe9396e2",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-18T21:50:12Z",
+      "side": 1,
+      "message": "Is this just for simplicity?   \n\nIn a CPU, a R/M/W will be slower than just a read, since (presumably) there will be a sync after the write to make sure it lands before any other work is done.   GPUs may behave differently though.",
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36955e5b_253430bc",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-18T21:50:12Z",
+      "side": 1,
+      "message": "Since the data must be stored in a buffer object, is there a way to know which buffer is being used to store the data and mark that buffer as coherent so the rest of the code handles the necessary barriers?",
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d89f5cc_8b53a64c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-18T21:50:12Z",
+      "side": 1,
+      "message": "This can be removed so only 1 function call is performed, since the result is checked later.",
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6aa85118_973a5271",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-18T21:50:12Z",
+      "side": 1,
+      "message": "Assuming you can know this is for the buffer that\u0027s holding the atomic counters, can you set bufferHelper.mMemoryPropertyFlags to indicate the memory needs to be coherent?",
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d37cae3_45ed57fc",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-18T21:50:12Z",
+      "side": 1,
+      "message": "Ah, ok, you do know what the buffer is for here.   Maybe you can mark it coherent here instead.",
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
