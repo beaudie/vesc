@@ -303,15 +303,20 @@ PixelCopyFunction FastCopyFunctionMap::get(angle::FormatID formatID) const
 
 bool ShouldUseDebugLayers(const egl::AttributeMap &attribs)
 {
+// Layers aren't built when thread sanitizer enabled
+#if defined(THREAD_SANITIZER)
+    return false;
+#else
     EGLAttrib debugSetting =
         attribs.get(EGL_PLATFORM_ANGLE_DEBUG_LAYERS_ENABLED_ANGLE, EGL_DONT_CARE);
 
 // Prefer to enable debug layers if compiling in Debug, and disabled in Release.
-#if defined(ANGLE_ENABLE_ASSERTS)
+#    if defined(ANGLE_ENABLE_ASSERTS)
     return (debugSetting != EGL_FALSE);
-#else
+#    else
     return (debugSetting == EGL_TRUE);
-#endif  // defined(ANGLE_ENABLE_ASSERTS)
+#    endif  // defined(ANGLE_ENABLE_ASSERTS)
+#endif      // defined(THREAD_SANITIZER)
 }
 
 bool ShouldUseVirtualizedContexts(const egl::AttributeMap &attribs, bool defaultValue)
