@@ -12,6 +12,7 @@
 #include "compiler/translator/Diagnostics.h"
 #include "compiler/translator/DirectiveHandler.h"
 #include "compiler/translator/FunctionLookup.h"
+#include "compiler/translator/ParseContext_autogen.h"
 #include "compiler/translator/QualifierTypes.h"
 #include "compiler/translator/SymbolTable.h"
 

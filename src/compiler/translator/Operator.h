@@ -253,7 +253,13 @@ enum TOperator
 
     //  Geometry only
     EOpEmitVertex,
-    EOpEndPrimitive
+    EOpEndPrimitive,
+
+    // GLSL functions
+    EOpFTransform,
+    EOpFma,
+    EOpPackDouble2x32,
+    EOpUnpackDouble2x32,
 };
 
 // Returns the string corresponding to the operator in GLSL

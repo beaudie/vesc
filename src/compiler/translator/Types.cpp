@@ -454,9 +454,12 @@ const char *TType::buildMangledName() const
 {
     TString mangledName(1, GetSizeMangledName(primarySize, secondarySize));
 
-    char basicMangledName = GetBasicMangledName(type);
+    bool hasZeroPrefix;
+    char basicMangledName = GetBasicMangledName(type, hasZeroPrefix);
     if (basicMangledName != '{')
     {
+        if (hasZeroPrefix)
+            mangledName += '0';
         mangledName += basicMangledName;
     }
     else
