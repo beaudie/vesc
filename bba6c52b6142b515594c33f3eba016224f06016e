@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aaeb446_3073a92a",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-18T19:55:56Z",
+      "side": 1,
+      "message": "nit: TextureAndLayoutBarrierVector? A bit wordy so it\u0027s up to you",
+      "revId": "bba6c52b6142b515594c33f3eba016224f06016e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
