@@ -283,6 +283,30 @@
       "revId": "6e60b81d5c3134a8e639ee913a1b8643457145f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32aabd71_98695da4",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-18T14:06:39Z",
+      "side": 1,
+      "message": "I think it\u0027s better as a function as there are three special values. I would just make it private to this this cpp file in the namespace {} block at the top.",
+      "parentUuid": "c9ba2de2_0bcaa4f7",
+      "range": {
+        "startLine": 1509,
+        "startChar": 0,
+        "endLine": 1523,
+        "endChar": 1
+      },
+      "revId": "6e60b81d5c3134a8e639ee913a1b8643457145f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
