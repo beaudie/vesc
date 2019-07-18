@@ -22,6 +22,30 @@
       "revId": "6e7549842d4784042fcf872c7c6a63d4cc1f881d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02cf38f6_7d73d165",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-18T18:16:21Z",
+      "side": 1,
+      "message": "GPU conversion does not work if it involves 8bit unaligned data. GPU can swizzle if channels are 8bit aligned though. Unless we want to do something fancy with compute shaders a CPU convert was the simpler approach",
+      "parentUuid": "1611dff6_381f7965",
+      "range": {
+        "startLine": 34,
+        "startChar": 21,
+        "endLine": 34,
+        "endChar": 28
+      },
+      "revId": "6e7549842d4784042fcf872c7c6a63d4cc1f881d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
