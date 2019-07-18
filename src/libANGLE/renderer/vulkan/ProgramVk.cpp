@@ -230,12 +230,70 @@ angle::Result ProgramVk::loadShaderSource(ContextVk *contextVk, gl::BinaryInputS
     return angle::Result::Continue;
 }
 
+angle::Result ProgramVk::loadUniformLayouts(gl::BinaryInputStream *stream)
+{
+    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        const size_t uniformCount = stream->readInt<size_t>();
+        for (unsigned int uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
+        {
+            sh::BlockMemberInfo blockInfo;
+            blockInfo.arrayStride         = stream->readInt<int>();
+            blockInfo.isRowMajorMatrix    = stream->readBool();
+            blockInfo.matrixStride        = stream->readInt<int>();
+            blockInfo.offset              = stream->readInt<int>();
+            blockInfo.topLevelArrayStride = stream->readInt<int>();
+            mDefaultUniformBlocks[shaderType].uniformLayout.push_back(blockInfo);
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ProgramVk::loadRequiredBufferSizes(gl::BinaryInputStream *stream,
+                                                 gl::ShaderMap<size_t> &requiredBufferSize)
+{
+    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        requiredBufferSize[shaderType] = stream->readInt<size_t>();
+    }
+
+    return angle::Result::Continue;
+}
+
 void ProgramVk::saveShaderSource(gl::BinaryOutputStream *stream)
 {
     // Write out shader sources for all shader types
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         stream->writeString(mShaderSources[shaderType]);
+    }
+}
+
+void ProgramVk::saveUniformLayouts(gl::BinaryOutputStream *stream)
+{
+    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        const size_t uniformCount = mDefaultUniformBlocks[shaderType].uniformLayout.size();
+        stream->writeInt<size_t>(uniformCount);
+        for (unsigned int uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
+        {
+            sh::BlockMemberInfo &blockInfo =
+                mDefaultUniformBlocks[shaderType].uniformLayout[uniformIndex];
+            stream->writeInt(blockInfo.arrayStride);
+            stream->writeInt(blockInfo.isRowMajorMatrix);
+            stream->writeInt(blockInfo.matrixStride);
+            stream->writeInt(blockInfo.offset);
+            stream->writeInt(blockInfo.topLevelArrayStride);
+        }
+    }
+}
+
+void ProgramVk::saveRequiredBufferSizes(gl::BinaryOutputStream *stream)
+{
+    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        stream->writeInt(mDefaultUniformBlocks[shaderType].uniformData.size());
     }
 }
 
@@ -305,7 +363,31 @@ std::unique_ptr<rx::LinkEvent> ProgramVk::load(const gl::Context *context,
                                                gl::InfoLog &infoLog)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+    gl::ShaderMap<size_t> requiredBufferSize;
+    requiredBufferSize.fill(0);
+
     angle::Result status = loadShaderSource(contextVk, stream);
+    if (status != angle::Result::Continue)
+    {
+        return std::make_unique<LinkEventDone>(status);
+    }
+
+    // Deserializes the uniformLayout data of mDefaultUniformBlocks
+    status = loadUniformLayouts(stream);
+    if (status != angle::Result::Continue)
+    {
+        return std::make_unique<LinkEventDone>(status);
+    }
+
+    // Deserializes required uniform block memory sizes
+    status = loadRequiredBufferSizes(stream, requiredBufferSize);
+    if (status != angle::Result::Continue)
+    {
+        return std::make_unique<LinkEventDone>(status);
+    }
+
+    // Initialize and resize the mDefaultUniformBlocks' memory
+    status = resizeUniformBlockMemory(contextVk, requiredBufferSize);
     if (status != angle::Result::Continue)
     {
         return std::make_unique<LinkEventDone>(status);
@@ -319,6 +401,12 @@ void ProgramVk::save(const gl::Context *context, gl::BinaryOutputStream *stream)
     // (geofflang): Look into saving shader modules in ShaderInfo objects (keep in mind that we
     // compile shaders lazily)
     saveShaderSource(stream);
+
+    // Serializes the uniformLayout data of mDefaultUniformBlocks
+    saveUniformLayouts(stream);
+
+    // Serializes required uniform block memory sizes
+    saveRequiredBufferSizes(stream);
 }
 
 void ProgramVk::setBinaryRetrievableHint(bool retrievable)
@@ -335,11 +423,20 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
                                            const gl::ProgramLinkedResources &resources,
                                            gl::InfoLog &infoLog)
 {
+    ContextVk *contextVk = vk::GetImpl(context);
     // Link resources before calling GetShaderSource to make sure they are ready for the set/binding
     // assignment done in that function.
     linkResources(resources);
 
     GlslangWrapper::GetShaderSource(mState, resources, &mShaderSources);
+
+    reset(contextVk);
+
+    angle::Result status = initDefaultUniformBlocks(context);
+    if (status != angle::Result::Continue)
+    {
+        return std::make_unique<LinkEventDone>(status);
+    }
 
     // TODO(jie.a.chen@intel.com): Parallelize linking.
     // http://crbug.com/849576
@@ -353,10 +450,7 @@ angle::Result ProgramVk::linkImpl(const gl::Context *glContext, gl::InfoLog &inf
     RendererVk *renderer                     = contextVk->getRenderer();
     gl::TransformFeedback *transformFeedback = glState.getCurrentTransformFeedback();
 
-    reset(contextVk);
     updateBindingOffsets();
-
-    ANGLE_TRY(initDefaultUniformBlocks(glContext));
 
     // Store a reference to the pipeline and descriptor set layouts. This will create them if they
     // don't already exist in the cache.
@@ -495,13 +589,22 @@ void ProgramVk::linkResources(const gl::ProgramLinkedResources &resources)
 angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
 {
     ContextVk *contextVk = vk::GetImpl(glContext);
-    RendererVk *renderer = contextVk->getRenderer();
 
     // Process vertex and fragment uniforms into std140 packing.
     gl::ShaderMap<sh::BlockLayoutMap> layoutMap;
     gl::ShaderMap<size_t> requiredBufferSize;
     requiredBufferSize.fill(0);
 
+    generateUniformLayoutMapping(layoutMap, requiredBufferSize);
+    initDefaultUniformLayoutMapping(layoutMap);
+
+    // All uniform initializations are complete, now resize the buffers accordingly and return
+    return resizeUniformBlockMemory(contextVk, requiredBufferSize);
+}
+
+void ProgramVk::generateUniformLayoutMapping(gl::ShaderMap<sh::BlockLayoutMap> &layoutMap,
+                                             gl::ShaderMap<size_t> &requiredBufferSize)
+{
     for (const gl::ShaderType shaderType : mState.getLinkedShaderStages())
     {
         gl::Shader *shader = mState.getAttachedShader(shaderType);
@@ -513,7 +616,10 @@ angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
                                     &requiredBufferSize[shaderType]);
         }
     }
+}
 
+void ProgramVk::initDefaultUniformLayoutMapping(gl::ShaderMap<sh::BlockLayoutMap> &layoutMap)
+{
     // Init the default block layout info.
     const auto &uniforms = mState.getUniforms();
     for (const gl::VariableLocation &location : mState.getUniformLocations())
@@ -553,7 +659,12 @@ angle::Result ProgramVk::initDefaultUniformBlocks(const gl::Context *glContext)
             mDefaultUniformBlocks[shaderType].uniformLayout.push_back(layoutInfo[shaderType]);
         }
     }
+}
 
+angle::Result ProgramVk::resizeUniformBlockMemory(ContextVk *contextVk,
+                                                  gl::ShaderMap<size_t> &requiredBufferSize)
+{
+    RendererVk *renderer = contextVk->getRenderer();
     for (const gl::ShaderType shaderType : mState.getLinkedShaderStages())
     {
         if (requiredBufferSize[shaderType] > 0)

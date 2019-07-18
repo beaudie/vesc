@@ -173,6 +173,11 @@ class ProgramVk : public ProgramImpl
                                                   uint32_t descriptorSetIndex,
                                                   bool *newPoolAllocatedOut);
     angle::Result initDefaultUniformBlocks(const gl::Context *glContext);
+    void generateUniformLayoutMapping(gl::ShaderMap<sh::BlockLayoutMap> &layoutMap,
+                                      gl::ShaderMap<size_t> &requiredBufferSize);
+    void initDefaultUniformLayoutMapping(gl::ShaderMap<sh::BlockLayoutMap> &layoutMap);
+    angle::Result resizeUniformBlockMemory(ContextVk *contextVk,
+                                           gl::ShaderMap<size_t> &requiredBufferSize);
 
     void updateDefaultUniformsDescriptorSet(ContextVk *contextVk);
     void updateTransformFeedbackDescriptorSetImpl(ContextVk *contextVk);
@@ -231,7 +236,12 @@ class ProgramVk : public ProgramImpl
 
     // Save and load implementation for GLES Program Binary support.
     angle::Result loadShaderSource(ContextVk *contextVk, gl::BinaryInputStream *stream);
+    angle::Result loadUniformLayouts(gl::BinaryInputStream *stream);
+    angle::Result loadRequiredBufferSizes(gl::BinaryInputStream *stream,
+                                          gl::ShaderMap<size_t> &requiredBufferSize);
     void saveShaderSource(gl::BinaryOutputStream *stream);
+    void saveUniformLayouts(gl::BinaryOutputStream *stream);
+    void saveRequiredBufferSizes(gl::BinaryOutputStream *stream);
 
     // State for the default uniform blocks.
     struct DefaultUniformBlock final : private angle::NonCopyable
