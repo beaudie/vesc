@@ -16,6 +16,24 @@
       "revId": "bba6c52b6142b515594c33f3eba016224f06016e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57d3dc78_f2eb9e3b",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-18T20:00:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5aaeb446_3073a92a",
+      "revId": "bba6c52b6142b515594c33f3eba016224f06016e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
