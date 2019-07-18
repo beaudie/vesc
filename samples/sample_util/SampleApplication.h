@@ -30,7 +30,7 @@ class SampleApplication
     SampleApplication(std::string name,
                       int argc,
                       char **argv,
-                      EGLint glesMajorVersion = 2,
+                      EGLint glesMajorVersion = 3,
                       EGLint glesMinorVersion = 0,
                       size_t width            = 1280,
                       size_t height           = 720);

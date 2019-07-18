@@ -12,6 +12,7 @@
 GLuint CreateSimpleTexture2D();
 GLuint CreateSimpleTextureCubemap();
 GLuint CreateSimpleTexture3D();
+GLuint CreateSimpleTexture2DArray();
 
 GLuint CreateMipMappedTexture2D();
 

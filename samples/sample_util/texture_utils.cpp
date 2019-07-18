@@ -173,3 +173,48 @@ GLuint CreateSimpleTexture3D()
 
     return texture;
 }
+
+GLuint CreateSimpleTexture2DArray()
+{
+    // Use tightly packed data
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    // Generate a texture object
+    GLuint texture;
+    glGenTextures(1, &texture);
+
+    // Bind the texture object
+    glBindTexture(GL_TEXTURE_2D_ARRAY, texture);
+
+    // Load the texture: 2x2x4 Image, 4 bytes per pixel (R, G, B, A)
+    const size_t width                           = 2;
+    const size_t height                          = 2;
+    const size_t depth                           = 4;
+    const size_t bpp                             = 4;
+    GLubyte pixels[width * height * depth * bpp] = {
+        255, 0,   0,   255,  // Red
+        255, 0,   0,   255,  // Red
+        255, 0,   0,   255,  // Red
+        255, 0,   0,   255,  // Red
+        0,   255, 0,   255,  // Green
+        0,   255, 0,   255,  // Green
+        0,   255, 0,   255,  // Green
+        0,   255, 0,   255,  // Green
+        0,   0,   255, 255,  // Blue
+        0,   0,   255, 255,  // Blue
+        0,   0,   255, 255,  // Blue
+        0,   0,   255, 255,  // Blue
+        255, 255, 0,   255,  // Yellow
+        255, 255, 0,   255,  // Yellow
+        255, 255, 0,   255,  // Yellow
+        255, 255, 0,   255,  // Yellow
+    };
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, width, height, depth, 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, pixels);
+
+    // Set the filtering mode
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    return texture;
+}

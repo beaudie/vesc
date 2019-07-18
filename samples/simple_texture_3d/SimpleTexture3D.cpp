@@ -26,22 +26,24 @@ class SimpleTexture3DSample : public SampleApplication
 
     bool initialize() override
     {
-        constexpr char kVS[] = R"(attribute vec4 a_position;
-attribute vec3 a_texCoord;
-varying vec3 v_texCoord;
+        constexpr char kVS[] = R"(#version 300 es
+in vec4 a_position;
+in vec3 a_texCoord;
+out vec3 v_texCoord;
 void main()
 {
     gl_Position = a_position;
     v_texCoord = a_texCoord;
 })";
 
-        constexpr char kFS[] = R"(#extension GL_OES_texture_3D:require
+        constexpr char kFS[] = R"(#version 300 es
 precision mediump float;
-varying vec3 v_texCoord;
-uniform mediump sampler3D s_texture;
+in vec3 v_texCoord;
+out vec4 fragColor;
+uniform mediump sampler2DArray s_texture;
 void main()
 {
-    gl_FragColor = texture3D(s_texture, v_texCoord);
+    fragColor = texture(s_texture, vec3(v_texCoord.xy, 1.0));
 })";
 
         mProgram = CompileProgram(kVS, kFS);
@@ -58,7 +60,7 @@ void main()
         mSamplerLoc = glGetUniformLocation(mProgram, "s_texture");
 
         // Load the texture
-        mTexture = CreateSimpleTexture3D();
+        mTexture = CreateSimpleTexture2DArray();
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -107,7 +109,7 @@ void main()
 
         // Bind the texture
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_3D, mTexture);
+        glBindTexture(GL_TEXTURE_2D_ARRAY, mTexture);
 
         // Set the texture sampler to texture unit to 0
         glUniform1i(mSamplerLoc, 0);
