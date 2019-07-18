@@ -70,6 +70,30 @@
       "revId": "6e7549842d4784042fcf872c7c6a63d4cc1f881d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dccee623_65e57614",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-18T18:23:28Z",
+      "side": 1,
+      "message": "Or not necessarily a split CL. Just this check is quite expensive as it is doing four divisions and several other boolean ops.",
+      "parentUuid": "4dc2c55b_4971019a",
+      "range": {
+        "startLine": 34,
+        "startChar": 21,
+        "endLine": 34,
+        "endChar": 28
+      },
+      "revId": "6e7549842d4784042fcf872c7c6a63d4cc1f881d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
