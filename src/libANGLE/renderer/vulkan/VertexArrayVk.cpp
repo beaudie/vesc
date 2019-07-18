@@ -26,6 +26,21 @@ namespace
 {
 constexpr size_t kDynamicVertexDataSize = 1024 * 1024;
 constexpr size_t kDynamicIndexDataSize  = 1024 * 8;
+constexpr size_t kByteSize              = 8;
+
+ANGLE_INLINE bool ChannelsAreAligned(const angle::Format &angleFormat,
+                                     const size_t desiredAlignment)
+{
+    if ((angleFormat.redBits % desiredAlignment) != 0 ||
+        (angleFormat.blueBits % desiredAlignment) != 0 ||
+        (angleFormat.greenBits % desiredAlignment) != 0 ||
+        (angleFormat.alphaBits % desiredAlignment) != 0)
+    {
+        return false;
+    }
+
+    return true;
+}
 
 ANGLE_INLINE bool BindingIsAligned(const gl::VertexBinding &binding,
                                    const angle::Format &angleFormat,
@@ -443,7 +458,8 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                     renderer, angleFormat.id, binding.getStride(), binding.getOffset());
                 if (conversion->dirty)
                 {
-                    if (bindingIsAligned)
+                    bool channelsAreAligned = ChannelsAreAligned(angleFormat, kByteSize);
+                    if (bindingIsAligned && channelsAreAligned)
                     {
                         ANGLE_TRY(convertVertexBufferGPU(contextVk, bufferVk, binding, attribIndex,
                                                          vertexFormat, conversion));

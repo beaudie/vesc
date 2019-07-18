@@ -232,6 +232,12 @@ def get_vertex_copy_function(src_format, dst_format):
         if 'UINT' in src_format or 'UNORM' in src_format or 'USCALED' in src_format:
             sign = 'u'
 
+    if 'R10G10B10A2' in src_format:
+        # R10G10B10A2 type channels are not aligned to 8 bits
+        # so if conversion is not needed we copy it by faking it as a
+        # type with 4 (num_channel) channels of 8 bit each.
+        base_type = 'byte'
+
     if base_type is None:
         return "nullptr"
 
@@ -240,7 +246,15 @@ def get_vertex_copy_function(src_format, dst_format):
     if src_format == dst_format:
         return 'CopyNativeVertexData<%s, %d, %d, 0>' % (gl_type, num_channel, num_channel)
 
+    normalized = 'true' if 'NORM' in src_format else 'false'
+
+    if 'R10G10B10A2' in src_format:
+        # When the R10G10B10A2 type can't be used by the vertex buffer,
+        # it needs to be convert to the type which can be used by it.
+        is_signed = 'false' if sign == 'u' else 'true'
+        to_float = 'false' if 'INT' in src_format else 'true'
+        return 'CopyXYZ10W2ToXYZW32FVertexData<%s, %s, %s>' % (is_signed, normalized, to_float)
+
     assert 'FLOAT' in dst_format, (
         'get_vertex_copy_function: can only convert to float,' + ' not to ' + dst_format)
-    normalized = 'true' if 'NORM' in src_format else 'false'
     return "CopyTo32FVertexData<%s, %d, %d, %s>" % (gl_type, num_channel, num_channel, normalized)
