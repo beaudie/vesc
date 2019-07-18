@@ -104,7 +104,70 @@ enum TBasicType
     EbtUImageCube,
     EbtGuardImageEnd = EbtUImageCube,
 
-    EbtLastSimpleType = EbtGuardImageEnd,
+    // GLSL types
+    EbtGuardGLSLBegin,
+    EbtDouble = EbtGuardGLSLBegin,
+
+    EbtGuardGLSLSamplerBegin,
+    EbtSampler1D = EbtGuardGLSLSamplerBegin,
+    EbtSampler1DArray,
+    EbtSampler1DArrayShadow,
+    EbtSamplerBuffer,
+    EbtSamplerCubeArray,
+    EbtSamplerCubeArrayShadow,
+    EbtSampler1DShadow,
+    EbtSampler2DRectShadow,
+    EbtISampler1D,
+    EbtISampler1DArray,
+    EbtISampler2DRect,
+    EbtISamplerBuffer,
+    EbtISamplerCubeArray,
+    EbtUSampler1D,
+    EbtUSampler1DArray,
+    EbtUSampler2DRect,
+    EbtUSamplerBuffer,
+    EbtUSamplerCubeArray,
+    EbtGuardGLSLSamplerEnd = EbtUSamplerCubeArray,
+
+    EbtGuardSubpassBegin,
+    EbtSubpassInput = EbtGuardSubpassBegin,
+    EbtISubpassInput,
+    EbtUSubpassInput,
+    EbtSubpassInputMS,
+    EbtISubpassInputMS,
+    EbtUSubpassInputMS,
+    EbtGuardSubpassEnd = EbtUSubpassInputMS,
+
+    EbtGuardGLSLImageBegin,
+    EbtImage1D = EbtGuardGLSLImageBegin,
+    EbtIImage1D,
+    EbtUImage1D,
+    EbtImage1DArray,
+    EbtIImage1DArray,
+    EbtUImage1DArray,
+    EbtImage2DMS,
+    EbtIImage2DMS,
+    EbtUImage2DMS,
+    EbtImage2DMSArray,
+    EbtIImage2DMSArray,
+    EbtUImage2DMSArray,
+    EbtImage2DRect,
+    EbtIImage2DRect,
+    EbtUImage2DRect,
+    EbtImageCubeArray,
+    EbtIImageCubeArray,
+    EbtUImageCubeArray,
+    EbtImageRect,
+    EbtIImageRect,
+    EbtUImageRect,
+    EbtImageBuffer,
+    EbtIImageBuffer,
+    EbtUImageBuffer,
+    EbtGuardGLSLImageEnd = EbtUImageBuffer,
+
+    EbtGuardGLSLEnd = EbtGuardGLSLImageEnd,
+
+    EbtLastSimpleType = EbtGuardGLSLEnd,
 
     EbtStruct,
     EbtInterfaceBlock,
@@ -113,18 +176,29 @@ enum TBasicType
     EbtLast = EbtInterfaceBlock
 };
 
-constexpr char GetBasicMangledName(TBasicType t)
+constexpr char GetBasicMangledName(TBasicType t, bool &hasZeroPrefix)
 {
+    hasZeroPrefix = false;
     if (t > EbtLastSimpleType)
     {
         return '{';
     }
-    static_assert(EbtLastSimpleType < 52, "We only use alphabetic characters for mangled names");
+    static_assert(EbtLastSimpleType < 104,
+                  "We only use alphabetic characters and a '0' prefix for mangled names");
     if (t < 26)
     {
         return static_cast<char>('A' + t);
     }
-    return static_cast<char>('a' - 26 + t);
+    if (t < 52)
+    {
+        return static_cast<char>('a' - 26 + t);
+    }
+    hasZeroPrefix = true;
+    if (t < 78)
+    {
+        return static_cast<char>('A' - 52 + t);
+    }
+    return static_cast<char>('a' - 78 + t);
 }
 
 const char *getBasicString(TBasicType t);
