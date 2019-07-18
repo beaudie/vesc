@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5bf219d4_8b724d78",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2209,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-18T17:01:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6410d641_047d7431",
+      "range": {
+        "startLine": 2201,
+        "startChar": 0,
+        "endLine": 2209,
+        "endChar": 9
+      },
+      "revId": "d2b5d86749c92c6c8a8e7b5ba1940acf1e8daa06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5e9b478e_e58430e0",
         "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "6f9fd660_4868d107",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-18T17:01:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5e9b478e_e58430e0",
+      "range": {
+        "startLine": 34,
+        "startChar": 36,
+        "endLine": 34,
+        "endChar": 38
+      },
+      "revId": "d2b5d86749c92c6c8a8e7b5ba1940acf1e8daa06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c645947e_8a46c18a",
         "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
         "patchSetId": 2
@@ -62,6 +110,24 @@
       "revId": "d2b5d86749c92c6c8a8e7b5ba1940acf1e8daa06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8308a0d7_bcd4e6ef",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-18T17:01:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c645947e_8a46c18a",
+      "revId": "d2b5d86749c92c6c8a8e7b5ba1940acf1e8daa06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "d4e31f91_bdb912ad",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-18T17:01:03Z",
+      "side": 1,
+      "message": "No. Cut-n-paste remnant. Killed.",
+      "parentUuid": "de938f9f_e6792124",
+      "range": {
+        "startLine": 49,
+        "startChar": 7,
+        "endLine": 49,
+        "endChar": 62
+      },
+      "revId": "d2b5d86749c92c6c8a8e7b5ba1940acf1e8daa06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "66be3da0_823ee7d0",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -99,6 +189,24 @@
       "writtenOn": "2019-07-18T02:37:35Z",
       "side": 1,
       "message": "What if the sampler object is the same, but the sampler state has changed? Shouldn\u0027t there be a new serial for the texture?",
+      "revId": "d2b5d86749c92c6c8a8e7b5ba1940acf1e8daa06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bef5a797_b0cacd0b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1343,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-18T17:01:03Z",
+      "side": 1,
+      "message": "Hm, yeah. As a safety net I\u0027m updating this to generate a new serial for any case that\u0027s not a nullptr-\u003enullptr transition.\nIf all the serial updates are bad, we need a better solution.\nPotentially sampler objs set some dirty state that triggers tex obj serial update. Or could hook up TexObj as observers of bound sampler objs \u0026 update such textures serials if a new sampler is created in the sampler obj.\nLet me know if you have any ideas here.",
+      "parentUuid": "66be3da0_823ee7d0",
       "revId": "d2b5d86749c92c6c8a8e7b5ba1940acf1e8daa06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
