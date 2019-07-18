@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "fea3b54c_1f04ea02",
+        "filename": "src/libANGLE/ImageIndex.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-18T14:01:17Z",
+      "side": 1,
+      "message": "Maybe a misguided effort to not perturb existing functionality, which is always hard coded to \u00271\u0027 for MakeFromTarget.  I\u0027ll give it a try.",
+      "parentUuid": "1198e425_73664894",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 149,
+        "endChar": 0
+      },
+      "revId": "6e60b81d5c3134a8e639ee913a1b8643457145f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1f972498_b87fb4e9",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
@@ -84,6 +108,30 @@
       "writtenOn": "2019-07-18T13:45:55Z",
       "side": 1,
       "message": "can\u0027t you just call mImage-\u003egetLayerCount here?",
+      "range": {
+        "startLine": 1401,
+        "startChar": 26,
+        "endLine": 1401,
+        "endChar": 53
+      },
+      "revId": "6e60b81d5c3134a8e639ee913a1b8643457145f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebca20c5_e1ef8cbf",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1401,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-18T14:01:17Z",
+      "side": 1,
+      "message": "I\u0027ve seen them differ, but that might have been during efforts to not touch ImageIndex.  I\u0027ll do a run that asserts equality, see what pops out.",
+      "parentUuid": "1f972498_b87fb4e9",
       "range": {
         "startLine": 1401,
         "startChar": 26,
@@ -167,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "7639469a_79a857a1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-18T14:01:17Z",
+      "side": 1,
+      "message": "I\u0027ll switch back to inlining as much as I can.  I agree that having so many functions to determine layer counts isn\u0027t satisfying (there are already two different ones in use).",
+      "parentUuid": "136c8a84_258aae0f",
+      "range": {
+        "startLine": 1493,
+        "startChar": 0,
+        "endLine": 1493,
+        "endChar": 52
+      },
+      "revId": "6e60b81d5c3134a8e639ee913a1b8643457145f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f5a30555_b7a052f9",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 6
@@ -178,6 +250,30 @@
       "writtenOn": "2019-07-18T13:45:55Z",
       "side": 1,
       "message": "this could be a static helper function, it doesn\u0027t use any \"m\" values.",
+      "range": {
+        "startLine": 1509,
+        "startChar": 0,
+        "endLine": 1523,
+        "endChar": 1
+      },
+      "revId": "6e60b81d5c3134a8e639ee913a1b8643457145f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9ba2de2_0bcaa4f7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-18T14:01:17Z",
+      "side": 1,
+      "message": "Let\u0027s see how it looks inlined first.",
+      "parentUuid": "f5a30555_b7a052f9",
       "range": {
         "startLine": 1509,
         "startChar": 0,
