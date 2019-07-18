@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f72f54db_f8490d33",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-18T16:23:22Z",
+      "side": 1,
+      "message": "The documentation above states:\n\n    The default value of EGL_CONTEXT_OPENGL_BACKWARDS_COMPATIBLE_ANGLE is EGL_TRUE.\n\nShould this be initialized to \u0027true\u0027?",
+      "revId": "37022e84d0b1a8c1ee34e088381b18113b768696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f88e345_7105f3d7",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-18T16:23:22Z",
+      "side": 1,
+      "message": "Can you try turning these 3243 VULKAN tests on now that you\u0027re returning a 3.0 context?   They should pass without any other changes.",
+      "revId": "37022e84d0b1a8c1ee34e088381b18113b768696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d79f47b_f37197c9",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 13
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-18T16:23:22Z",
+      "side": 1,
+      "message": "Same with these 3240 VULKAN tests.",
+      "revId": "37022e84d0b1a8c1ee34e088381b18113b768696",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
