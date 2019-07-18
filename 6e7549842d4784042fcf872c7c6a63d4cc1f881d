@@ -46,6 +46,30 @@
       "revId": "6e7549842d4784042fcf872c7c6a63d4cc1f881d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4dc2c55b_4971019a",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-18T18:21:31Z",
+      "side": 1,
+      "message": "I think we should probably cache the \"is-buffer-format-gpu-convertible\" property in vk::Format. but that could be a split prior CL.",
+      "parentUuid": "02cf38f6_7d73d165",
+      "range": {
+        "startLine": 34,
+        "startChar": 21,
+        "endLine": 34,
+        "endChar": 28
+      },
+      "revId": "6e7549842d4784042fcf872c7c6a63d4cc1f881d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
