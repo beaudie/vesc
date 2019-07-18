@@ -27,7 +27,7 @@ namespace Helpers
 
 // Size of the constexpr-generated mangled name.
 // If this value is too small, the compiler will produce errors.
-static constexpr size_t kStaticMangledNameLength = 2;
+static constexpr size_t kStaticMangledNameLength = 3;
 
 // Type which holds the mangled names for constexpr-generated TTypes.
 // This simple struct is needed so that a char array can be returned by value.
@@ -46,8 +46,17 @@ constexpr StaticMangledName BuildStaticMangledName(TBasicType basicType,
 {
     StaticMangledName name = {};
     name.name[0]           = TType::GetSizeMangledName(primarySize, secondarySize);
-    name.name[1]           = GetBasicMangledName(basicType);
-    name.name[2]           = '\0';
+    bool hasZeroPrefix     = false;
+    char mangledChar       = GetBasicMangledName(basicType, hasZeroPrefix);
+    if (hasZeroPrefix)
+    {
+        name.name[1] = '0';
+        name.name[2] = mangledChar;
+        name.name[3] = '\0';
+        return name;
+    }
+    name.name[1] = mangledChar;
+    name.name[2] = '\0';
     return name;
 }
 
