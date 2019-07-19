@@ -4948,6 +4948,24 @@ angle::Result Program::deserialize(const Context *context,
     return angle::Result::Continue;
 }
 
+void Program::WriteBlockMemberInfo(BinaryOutputStream *stream, const sh::BlockMemberInfo &var)
+{
+    stream->writeInt(var.arrayStride);
+    stream->writeInt(var.isRowMajorMatrix);
+    stream->writeInt(var.matrixStride);
+    stream->writeInt(var.offset);
+    stream->writeInt(var.topLevelArrayStride);
+}
+
+void Program::LoadBlockMemberInfo(BinaryInputStream *stream, sh::BlockMemberInfo *var)
+{
+    var->arrayStride         = stream->readInt<int>();
+    var->isRowMajorMatrix    = stream->readBool();
+    var->matrixStride        = stream->readInt<int>();
+    var->offset              = stream->readInt<int>();
+    var->topLevelArrayStride = stream->readInt<int>();
+}
+
 void Program::postResolveLink(const gl::Context *context)
 {
     mState.updateActiveSamplers();

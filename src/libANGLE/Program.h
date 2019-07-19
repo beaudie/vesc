@@ -43,6 +43,7 @@ namespace gl
 {
 class Buffer;
 class BinaryInputStream;
+class BinaryOutputStream;
 struct Caps;
 class Context;
 struct Extensions;
@@ -918,6 +919,9 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     // Writes a program's binary to the output memory buffer.
     void serialize(const Context *context, angle::MemoryBuffer *binaryOut) const;
+
+    static void WriteBlockMemberInfo(BinaryOutputStream *stream, const sh::BlockMemberInfo &var);
+    static void LoadBlockMemberInfo(BinaryInputStream *stream, sh::BlockMemberInfo *var);
 
   private:
     struct LinkingState;
