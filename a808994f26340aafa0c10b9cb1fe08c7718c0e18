@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2b4603d_c4d8daeb",
+        "filename": "src/libANGLE/Sampler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T20:08:45Z",
+      "side": 1,
+      "message": "You can probably skip the if check here. I see that Texture is doing it, but not sure why.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 5
+      },
+      "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd7870a1_06e9e67c",
+        "filename": "src/libANGLE/Sampler.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T20:08:45Z",
+      "side": 1,
+      "message": "long-standing maintenance issue, but could we converge on using mImplementation? Maybe you could ask Jiacheng to make a small refactor CL that renames all the inconsistent members?",
+      "range": {
+        "startLine": 105,
+        "startChar": 21,
+        "endLine": 105,
+        "endChar": 29
+      },
+      "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "799b84ec_20357e10",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T20:08:45Z",
+      "side": 1,
+      "message": "you aren\u0027t actually using the dirty bits here. I\u0027m not sure if they actually add much value. Up to you but you could consider just using a single bool dirty bit or something.",
+      "range": {
+        "startLine": 34,
+        "startChar": 55,
+        "endLine": 34,
+        "endChar": 92
+      },
+      "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f086646c_ba5afa90",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T20:08:45Z",
+      "side": 1,
+      "message": "feels like this should return angle::Result now. Are you dropping a VkResult? Maybe add a prior refactor patch to set this up.",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 4
+      },
+      "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aabe07f_df23f10e",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T20:08:45Z",
+      "side": 1,
+      "message": "probably dropping a VkResult here.",
+      "range": {
+        "startLine": 71,
+        "startChar": 13,
+        "endLine": 71,
+        "endChar": 17
+      },
+      "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42dddd72_9f033d1c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T20:08:45Z",
+      "side": 1,
+      "message": "I feel like this might be suspicious if things are failing in sequence. I\u0027d recommend checking for the presence of an overriding sampler instead of using this cache variable for now.",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 29
+      },
+      "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
