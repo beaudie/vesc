@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2595eadf_ba358faf",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-19T19:10:05Z",
+      "side": 1,
+      "message": "This is a direct port from the chromium workaround except for 2 changes noted below\n\noriginal workaround:\nhttps://cs.chromium.org/chromium/src/gpu/command_buffer/service/gles2_cmd_decoder.cc?type\u003dcs\u0026q\u003dadjust_src_dst_region_for_blitframebuffer\u0026g\u003d0\u0026l\u003d8997",
+      "revId": "6e3c7090bb82008e53603fa4f6431ebbb35250b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "54696cfa_a67473c7",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-19T19:10:05Z",
+      "side": 1,
+      "message": "Change #1: In this case we need to scale from the center, not from the edges. Some cases exists in the chromium workaround where a region completely spanning bounds could be resized to one with an edge in-bounds, which messed up the blit call.",
+      "revId": "6e3c7090bb82008e53603fa4f6431ebbb35250b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ee6d72f3_69a1f639",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-19T19:10:05Z",
+      "side": 1,
+      "message": "Change #1 for y",
+      "revId": "6e3c7090bb82008e53603fa4f6431ebbb35250b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9e995fae_f40f74ae",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-19T19:10:05Z",
+      "side": 1,
+      "message": "Change #1 carried to offset",
+      "revId": "6e3c7090bb82008e53603fa4f6431ebbb35250b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4a47a698_26d561c5",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 785,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-19T19:10:05Z",
+      "side": 1,
+      "message": "Change #2: Originally we modified the sourceRegion with a naive clip, but this causes problems like the comment suggests. Instead, we do nearly the same thing as above, except we allow the dest region to have width/height 0.",
+      "revId": "6e3c7090bb82008e53603fa4f6431ebbb35250b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d029851a_fe130ddf",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 836,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-19T19:10:05Z",
+      "side": 1,
+      "message": "Change #1 also applies here and below",
+      "revId": "6e3c7090bb82008e53603fa4f6431ebbb35250b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    }
+  ]
+}
