@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "006aa3c7_d81ccdb9",
+        "filename": "scripts/apply_clang_format_on_all_resources.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-19T16:04:10Z",
+      "side": 1,
+      "message": "Made print and subprocess compatible between py2 and py3",
+      "parentUuid": "e44d1f2f_e715484c",
+      "range": {
+        "startLine": 1,
+        "startChar": 11,
+        "endLine": 1,
+        "endChar": 18
+      },
+      "revId": "648927d1783c5d4290b91027577deccadd3a0fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d0f4e3c9_d266b50e",
         "filename": "scripts/apply_clang_format_on_all_resources.py",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "648927d1783c5d4290b91027577deccadd3a0fde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30c9c865_6d5199b3",
+        "filename": "scripts/apply_clang_format_on_all_resources.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-19T16:04:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0f4e3c9_d266b50e",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 28
+      },
+      "revId": "648927d1783c5d4290b91027577deccadd3a0fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9e38849e_eecce19a",
+        "filename": "scripts/apply_clang_format_on_all_resources.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-19T16:04:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f234a51_d07b4241",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 68
+      },
+      "revId": "648927d1783c5d4290b91027577deccadd3a0fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c6903ad_3366736b",
         "filename": "scripts/apply_clang_format_on_all_resources.py",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "648927d1783c5d4290b91027577deccadd3a0fde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00d8846f_0922b509",
+        "filename": "scripts/apply_clang_format_on_all_resources.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-19T16:04:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c6903ad_3366736b",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 20
+      },
+      "revId": "648927d1783c5d4290b91027577deccadd3a0fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
