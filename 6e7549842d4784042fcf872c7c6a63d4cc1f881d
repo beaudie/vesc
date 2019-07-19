@@ -214,6 +214,30 @@
       "revId": "6e7549842d4784042fcf872c7c6a63d4cc1f881d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ecff5b34_42935fd4",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-19T16:47:50Z",
+      "side": 1,
+      "message": "Sorry I didn\u0027t notice this earlier.\n\n\u003e GPU conversion does not work if it involves 8bit unaligned data. GPU can swizzle if channels are 8bit aligned though. Unless we want to do something fancy with compute shaders a CPU convert was the simpler approach\n\nHave you actually looked at the GPU conversion code? We read the vertex attributes as `uint` values, so there\u0027s nothing stopping us from supporting a format like this. In `ConvertVertex.comp.json`, you can add another enum value like `UnormRGB10A2ToFloat` for example  and add a special path for it in `ConvertVertex.comp`? Something like this in loadSourceComponent:\n\n#if UnormRGB10A2ToFloat\n    valueBits \u003d 10;\n    shiftBits \u003d valueBits * component;\n    valueMask \u003d component \u003d\u003d 3 ? 0x03 : 0x3FF;\n    valueAsUint \u003d (block \u003e\u003e shiftBits) \u0026 valueMask\n#else\n    uint shiftBits \u003d getShiftBits(offset, Bs);\n    uint valueBits \u003d Bs * 8;\n    uint valueMask \u003d valueBits \u003d\u003d 32 ? -1 : (1 \u003c\u003c valueBits) - 1;\n    uint valueAsUint \u003d (block \u003e\u003e shiftBits) \u0026 valueMask;\n#endif\n\nand later:\n\n#elif UnormToFloat || UniformRGB10A2ToFloat\n    float positiveMax \u003d valueMask;\n    // Scale [0, P] to [0, 1]\n    SrcType value \u003d valueAsUint / positiveMax;\n\nThat should take care of it, won\u0027t it? In `UtilsVk`, you may need to special case this format too.",
+      "parentUuid": "1cba422d_27e0f142",
+      "range": {
+        "startLine": 34,
+        "startChar": 21,
+        "endLine": 34,
+        "endChar": 28
+      },
+      "revId": "6e7549842d4784042fcf872c7c6a63d4cc1f881d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
