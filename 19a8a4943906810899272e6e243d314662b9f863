@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "93c499f4_2089a876",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T12:20:51Z",
+      "side": 1,
+      "message": "can you make this \n\nhasParentArrayIndex ? parentArrayIndex : -1\n\nThe remove changes to ShaderVars.h?",
+      "range": {
+        "startLine": 624,
+        "startChar": 22,
+        "endLine": 624,
+        "endChar": 45
+      },
+      "revId": "19a8a4943906810899272e6e243d314662b9f863",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
