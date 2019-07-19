@@ -2653,7 +2653,7 @@ angle::Result State::syncSamplers(const Context *context)
         BindingPointer<Sampler> &sampler = mSamplers[samplerIndex];
         if (sampler.get())
         {
-            sampler->syncState(context);
+            ANGLE_TRY(sampler->syncState(context));
         }
     }
 
