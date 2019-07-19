@@ -2122,7 +2122,15 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     {
         ASSERT(storageFormat.pixelBytes != 0);
 
-        outputRowPitch   = storageFormat.pixelBytes * extents.width;
+        if (storageFormat.depthBits == 32 && storageFormat.stencilBits > 0)
+        {
+            // If depth is D32FLOAT_S8, we must pack D32F tightly (no stencil) for CopyBufferToImage
+            outputRowPitch = 4 * extents.width;
+        }
+        else
+        {
+            outputRowPitch = storageFormat.pixelBytes * extents.width;
+        }
         outputDepthPitch = outputRowPitch * extents.height;
 
         bufferRowLength   = extents.width;
@@ -2153,8 +2161,20 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
 
     LoadImageFunctionInfo loadFunction = vkFormat.textureLoadFunctions(type);
 
-    loadFunction.loadFunction(extents.width, extents.height, extents.depth, source, inputRowPitch,
-                              inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
+    if (storageFormat.depthBits == 32 && storageFormat.stencilBits == 8)
+    {
+        // The generic load functions don't handle tightly packing D32FS8 to D32F so call special
+        // case load function.
+        angle::LoadD32FS8X24ToD32F(extents.width, extents.height, extents.depth, source,
+                                   inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                                   outputDepthPitch);
+    }
+    else
+    {
+        loadFunction.loadFunction(extents.width, extents.height, extents.depth, source,
+                                  inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                                  outputDepthPitch);
+    }
 
     VkBufferImageCopy copy         = {};
     VkImageAspectFlags aspectFlags = GetFormatAspectFlags(vkFormat.imageFormat());
@@ -2182,8 +2202,18 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
         outputRowPitch   = extents.width;
         outputDepthPitch = outputRowPitch * extents.height;
 
-        angle::LoadX24S8ToS8(extents.width, extents.height, extents.depth, source, inputRowPitch,
-                             inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
+        if (formatInfo.pixelBytes > 4)
+        {
+            angle::LoadX32S8ToS8(extents.width, extents.height, extents.depth, source,
+                                 inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                                 outputDepthPitch);
+        }
+        else
+        {
+            angle::LoadX24S8ToS8(extents.width, extents.height, extents.depth, source,
+                                 inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                                 outputDepthPitch);
+        }
 
         VkBufferImageCopy stencilCopy = {};
 
