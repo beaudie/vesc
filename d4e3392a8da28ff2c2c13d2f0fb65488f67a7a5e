@@ -22,6 +22,30 @@
       "revId": "d4e3392a8da28ff2c2c13d2f0fb65488f67a7a5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3c82597_0432cdbb",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1193,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T20:10:54Z",
+      "side": 1,
+      "message": "Seems like copyTexture is copying everything instead of one layer. While most other places are only copying one layer. But it might not be used in this path.",
+      "parentUuid": "9c13092a_48aaec5e",
+      "range": {
+        "startLine": 1193,
+        "startChar": 77,
+        "endLine": 1193,
+        "endChar": 89
+      },
+      "revId": "d4e3392a8da28ff2c2c13d2f0fb65488f67a7a5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
