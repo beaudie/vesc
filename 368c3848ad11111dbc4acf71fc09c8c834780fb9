@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d2a96623_50e29b48",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-19T14:56:15Z",
+      "side": 1,
+      "message": "That\u0027s the version in which this function was introduced. Hard coding looks like the common practice as seen in `tree_ops/ClampFragDepth.cpp`, `tree_ops/ClampPointSize.cpp`, `tree_ops/RemovePow.cpp` etc.\n\nWould you rather I pass in the current shader version to the traverser?",
+      "parentUuid": "b4a82cde_7cce8060",
+      "range": {
+        "startLine": 368,
+        "startChar": 75,
+        "endLine": 368,
+        "endChar": 78
+      },
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60c09540_fe9396e2",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 4
@@ -36,6 +60,24 @@
       "writtenOn": "2019-07-18T21:50:12Z",
       "side": 1,
       "message": "Is this just for simplicity?   \n\nIn a CPU, a R/M/W will be slower than just a read, since (presumably) there will be a sync after the write to make sure it lands before any other work is done.   GPUs may behave differently though.",
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd7e3163_fca7ca4d",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-19T14:56:15Z",
+      "side": 1,
+      "message": "Yes. I would have preferred the \"atomic read\" wouldn\u0027t need to write to memory, but I\u0027m not sure what\u0027s the best way to achieve that. In particular, I\u0027m afraid just reading the value may end up caching it. The answer to the coherent question below might answer this too.",
+      "parentUuid": "60c09540_fe9396e2",
       "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "65f3e378_2dc46a1b",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-19T14:56:15Z",
+      "side": 1,
+      "message": "See the other comment regarding host coherency (which I believe is what you are talking about here).\n\nI\u0027m convinced now, reading more, that the `coherent` qualifier is indeed needed here. It\u0027s still not clear to me if reading the variable without an `atomic*` function would be equivalent to `atomicCounter()`.",
+      "parentUuid": "36955e5b_253430bc",
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2d89f5cc_8b53a64c",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 4
@@ -73,6 +133,24 @@
       "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7295ef5_9fc1449f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-19T14:56:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d89f5cc_8b53a64c",
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "48f2bcb7_e7c68849",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-19T14:56:15Z",
+      "side": 1,
+      "message": "I believe there\u0027s a small confusion here. We don\u0027t need the buffer to be \"host\" coherent. The other comment about coherent was regarding the GLSL `coherent` qualifier, which I believe controls how the resource data is cached on the GPU.",
+      "parentUuid": "6aa85118_973a5271",
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d37cae3_45ed57fc",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 4
@@ -107,6 +203,24 @@
       "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "281e0132_a8193ce5",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-19T14:56:15Z",
+      "side": 1,
+      "message": "See other comments.",
+      "parentUuid": "8d37cae3_45ed57fc",
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
