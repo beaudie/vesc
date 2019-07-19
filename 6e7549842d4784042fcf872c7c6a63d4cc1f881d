@@ -166,6 +166,30 @@
       "revId": "6e7549842d4784042fcf872c7c6a63d4cc1f881d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c97b3677_c1d66fa5",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-19T15:44:02Z",
+      "side": 1,
+      "message": "jamie, i was just wondering if we can reuse vkBufferFormatIsPacked in some way?\n\nCan we massage it so that if vkBufferFormatIsPacked is true and it is a vertex buffer then we go the CPU transfer route?",
+      "parentUuid": "18bd5f16_a956d233",
+      "range": {
+        "startLine": 34,
+        "startChar": 21,
+        "endLine": 34,
+        "endChar": 28
+      },
+      "revId": "6e7549842d4784042fcf872c7c6a63d4cc1f881d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
