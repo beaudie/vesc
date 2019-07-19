@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e44d1f2f_e715484c",
+        "filename": "scripts/apply_clang_format_on_all_resources.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T15:41:59Z",
+      "side": 1,
+      "message": "does this need python 3 currently? could we make it 2 compatible?",
+      "range": {
+        "startLine": 1,
+        "startChar": 11,
+        "endLine": 1,
+        "endChar": 18
+      },
+      "revId": "648927d1783c5d4290b91027577deccadd3a0fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0f4e3c9_d266b50e",
+        "filename": "scripts/apply_clang_format_on_all_resources.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T15:41:59Z",
+      "side": 1,
+      "message": "please use the ANGLE copyright header and add a file-level comment description.",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 28
+      },
+      "revId": "648927d1783c5d4290b91027577deccadd3a0fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f234a51_d07b4241",
+        "filename": "scripts/apply_clang_format_on_all_resources.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T15:41:59Z",
+      "side": 1,
+      "message": "I think you should be able to support Mac as well using clang-format. Maybe you could refactor this to be \n\nclang_format_exe \u003d \u0027clang-format\u0027\nif windows:\n  clang_format_exe +\u003d \u0027.bat\u0027",
+      "range": {
+        "startLine": 20,
+        "startChar": 4,
+        "endLine": 25,
+        "endChar": 68
+      },
+      "revId": "648927d1783c5d4290b91027577deccadd3a0fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c6903ad_3366736b",
+        "filename": "scripts/apply_clang_format_on_all_resources.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T15:41:59Z",
+      "side": 1,
+      "message": "I think you could do \" if \u0027third_party\u0027 in subdir: \" instead",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 20
+      },
+      "revId": "648927d1783c5d4290b91027577deccadd3a0fde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
