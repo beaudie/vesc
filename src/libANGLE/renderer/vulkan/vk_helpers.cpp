@@ -2182,8 +2182,18 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
         outputRowPitch   = extents.width;
         outputDepthPitch = outputRowPitch * extents.height;
 
-        angle::LoadX24S8ToS8(extents.width, extents.height, extents.depth, source, inputRowPitch,
-                             inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
+        if (formatInfo.pixelBytes > 4)
+        {
+            angle::LoadX32S8ToS8(extents.width, extents.height, extents.depth, source,
+                                 inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                                 outputDepthPitch);
+        }
+        else
+        {
+            angle::LoadX24S8ToS8(extents.width, extents.height, extents.depth, source,
+                                 inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                                 outputDepthPitch);
+        }
 
         VkBufferImageCopy stencilCopy = {};
 
