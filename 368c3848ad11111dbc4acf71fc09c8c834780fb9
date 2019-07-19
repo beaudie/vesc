@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "46daec1e_bfb889f1",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-19T17:58:56Z",
+      "side": 1,
+      "message": "If it has atomic counters, it must necessarily be at least 310.",
+      "parentUuid": "994eaf34_8304ddd4",
+      "range": {
+        "startLine": 368,
+        "startChar": 75,
+        "endLine": 368,
+        "endChar": 78
+      },
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60c09540_fe9396e2",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 4
