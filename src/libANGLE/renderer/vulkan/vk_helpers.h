@@ -644,7 +644,7 @@ class ImageHelper final : public CommandGraphResource
 
     angle::Result init(Context *context,
                        gl::TextureType textureType,
-                       const gl::Extents &extents,
+                       const gl::Extents &glExtents,
                        const Format &format,
                        GLint samples,
                        VkImageUsageFlags usage,
@@ -652,7 +652,7 @@ class ImageHelper final : public CommandGraphResource
                        uint32_t layerCount);
     angle::Result initExternal(Context *context,
                                gl::TextureType textureType,
-                               const gl::Extents &extents,
+                               const gl::Extents &glExtents,
                                const Format &format,
                                GLint samples,
                                VkImageUsageFlags usage,
@@ -759,7 +759,7 @@ class ImageHelper final : public CommandGraphResource
 
     angle::Result stageSubresourceUpdate(ContextVk *contextVk,
                                          const gl::ImageIndex &index,
-                                         const gl::Extents &extents,
+                                         const gl::Extents &glExtents,
                                          const gl::Offset &offset,
                                          const gl::InternalFormat &formatInfo,
                                          const gl::PixelUnpackState &unpack,
