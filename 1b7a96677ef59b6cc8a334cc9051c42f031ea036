@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e30a8ad6_9ad7fc62",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T19:31:57Z",
+      "side": 1,
+      "message": "nit: gl:: is redundant, you can omit it.",
+      "range": {
+        "startLine": 680,
+        "startChar": 4,
+        "endLine": 680,
+        "endChar": 8
+      },
+      "revId": "1b7a96677ef59b6cc8a334cc9051c42f031ea036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ffc3cbdc_6418e944",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T19:31:57Z",
+      "side": 1,
+      "message": "nit: gl:: is redundant, you can omit it.",
+      "range": {
+        "startLine": 694,
+        "startChar": 4,
+        "endLine": 694,
+        "endChar": 8
+      },
+      "revId": "1b7a96677ef59b6cc8a334cc9051c42f031ea036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7a4817c_11cdeba0",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4578,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T19:31:57Z",
+      "side": 1,
+      "message": "can you use the util function here?",
+      "range": {
+        "startLine": 4574,
+        "startChar": 6,
+        "endLine": 4578,
+        "endChar": 0
+      },
+      "revId": "1b7a96677ef59b6cc8a334cc9051c42f031ea036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3278fcd7_e0eb6d34",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4775,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T19:31:57Z",
+      "side": 1,
+      "message": "can you use the util function here?",
+      "range": {
+        "startLine": 4773,
+        "startChar": 1,
+        "endLine": 4775,
+        "endChar": 67
+      },
+      "revId": "1b7a96677ef59b6cc8a334cc9051c42f031ea036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
