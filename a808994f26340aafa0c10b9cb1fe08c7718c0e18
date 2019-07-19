@@ -94,6 +94,54 @@
     },
     {
       "key": {
+        "uuid": "bbf3bb01_c24e59ca",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-19T21:55:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f086646c_ba5afa90",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 4
+      },
+      "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa174027_25ce9360",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-19T21:55:11Z",
+      "side": 1,
+      "message": "Yes, I\u0027ll switch this to a single bool.",
+      "parentUuid": "799b84ec_20357e10",
+      "range": {
+        "startLine": 34,
+        "startChar": 55,
+        "endLine": 34,
+        "endChar": 92
+      },
+      "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8aabe07f_df23f10e",
         "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
         "patchSetId": 3
@@ -117,6 +165,30 @@
     },
     {
       "key": {
+        "uuid": "2f39e6bb_55914b84",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-19T21:55:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8aabe07f_df23f10e",
+      "range": {
+        "startLine": 71,
+        "startChar": 13,
+        "endLine": 71,
+        "endChar": 17
+      },
+      "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "42dddd72_9f033d1c",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 3
@@ -128,6 +200,30 @@
       "writtenOn": "2019-07-19T20:08:45Z",
       "side": 1,
       "message": "I feel like this might be suspicious if things are failing in sequence. I\u0027d recommend checking for the presence of an overriding sampler instead of using this cache variable for now.",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 29
+      },
+      "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c2aef2b_cbad4af5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-19T21:55:11Z",
+      "side": 1,
+      "message": "I\u0027ve been debugging this today and found that the fail is actually in the reference image that\u0027s generated without the sampler. I verified that the same fail occurs with or without sampler objects implemented. So there seems to be some state that\u0027s not getting reset related to 3d textures. The samplers are the same. I tried killing a couple caches but no luck yet. Will post details in a bug when I\u0027m able, but it appears that sampler objects are functioning well and not the cause of the fails I see.",
+      "parentUuid": "42dddd72_9f033d1c",
       "range": {
         "startLine": 314,
         "startChar": 0,
