@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "051e7692_b2091994",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T18:22:55Z",
+      "side": 1,
+      "message": "could you instead make initDefaults initialize the pipeline to OpenGL defaults like it is supposed to be doing?",
+      "range": {
+        "startLine": 351,
+        "startChar": 9,
+        "endLine": 351,
+        "endChar": 21
+      },
+      "revId": "752b8a5f83ffa14ccecb6d5e959a7f6588617425",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
