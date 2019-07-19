@@ -121,6 +121,30 @@
     },
     {
       "key": {
+        "uuid": "0d3e6c61_c057a36c",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-19T18:22:28Z",
+      "side": 1,
+      "message": "I believe the translator will give a compile error on this long before we get here.",
+      "parentUuid": "7c514864_1a9f9921",
+      "range": {
+        "startLine": 368,
+        "startChar": 75,
+        "endLine": 368,
+        "endChar": 78
+      },
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60c09540_fe9396e2",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 4
