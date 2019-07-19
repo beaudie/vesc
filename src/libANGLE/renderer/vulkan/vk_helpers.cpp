@@ -2132,7 +2132,15 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     {
         ASSERT(storageFormat.pixelBytes != 0);
 
-        outputRowPitch   = storageFormat.pixelBytes * glExtents.width;
+        if (storageFormat.depthBits == 32 && storageFormat.stencilBits > 0)
+        {
+            // If depth is D32FLOAT_S8, we must pack D32F tightly (no stencil) for CopyBufferToImage
+            outputRowPitch = 4 * glExtents.width;
+        }
+        else
+        {
+            outputRowPitch = storageFormat.pixelBytes * glExtents.width;
+        }
         outputDepthPitch = outputRowPitch * glExtents.height;
 
         bufferRowLength   = glExtents.width;
@@ -2163,9 +2171,20 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
 
     LoadImageFunctionInfo loadFunction = vkFormat.textureLoadFunctions(type);
 
-    loadFunction.loadFunction(glExtents.width, glExtents.height, glExtents.depth, source,
-                              inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
-                              outputDepthPitch);
+    if (storageFormat.depthBits == 32 && storageFormat.stencilBits == 8)
+    {
+        // The generic load functions don't handle tightly packing D32FS8 to D32F so call special
+        // case load function.
+        angle::LoadD32FS8X24ToD32F(glExtents.width, glExtents.height, glExtents.depth, source,
+                                   inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                                   outputDepthPitch);
+    }
+    else
+    {
+        loadFunction.loadFunction(glExtents.width, glExtents.height, glExtents.depth, source,
+                                  inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                                  outputDepthPitch);
+    }
 
     VkBufferImageCopy copy         = {};
     VkImageAspectFlags aspectFlags = GetFormatAspectFlags(vkFormat.imageFormat());
@@ -2204,9 +2223,18 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
         outputRowPitch   = glExtents.width;
         outputDepthPitch = outputRowPitch * glExtents.height;
 
-        angle::LoadX24S8ToS8(glExtents.width, glExtents.height, glExtents.depth, source,
-                             inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
-                             outputDepthPitch);
+        if (formatInfo.pixelBytes > 4)
+        {
+            angle::LoadX32S8ToS8(glExtents.width, glExtents.height, glExtents.depth, source,
+                                 inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                                 outputDepthPitch);
+        }
+        else
+        {
+            angle::LoadX24S8ToS8(glExtents.width, glExtents.height, glExtents.depth, source,
+                                 inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                                 outputDepthPitch);
+        }
 
         VkBufferImageCopy stencilCopy = {};
 
