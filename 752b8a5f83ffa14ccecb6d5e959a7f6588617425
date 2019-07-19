@@ -22,6 +22,30 @@
       "revId": "752b8a5f83ffa14ccecb6d5e959a7f6588617425",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69c9028c_dc5f61f5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-19T22:25:05Z",
+      "side": 1,
+      "message": "I made pipeline desc initFromGLState complete. \n\nHowever I don\u0027t think we should remove the current `initDefaults`, it is used \n\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/renderer/vulkan/UtilsVk.cpp#1347\n\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/renderer/vulkan/UtilsVk.cpp#826\n\nIf we do initFromGLState, it does not guarantee it works well.  Maybe we should rename the current `initDefaults` to something else.",
+      "parentUuid": "051e7692_b2091994",
+      "range": {
+        "startLine": 351,
+        "startChar": 9,
+        "endLine": 351,
+        "endChar": 21
+      },
+      "revId": "752b8a5f83ffa14ccecb6d5e959a7f6588617425",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
