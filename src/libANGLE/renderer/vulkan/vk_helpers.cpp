@@ -1484,11 +1484,10 @@ angle::Result ImageHelper::init(Context *context,
                                 const Format &format,
                                 GLint samples,
                                 VkImageUsageFlags usage,
-                                uint32_t mipLevels,
-                                uint32_t layerCount)
+                                uint32_t mipLevels)
 {
     return initExternal(context, textureType, glExtents, format, samples, usage,
-                        ImageLayout::Undefined, nullptr, mipLevels, layerCount);
+                        ImageLayout::Undefined, nullptr, mipLevels);
 }
 
 angle::Result ImageHelper::initExternal(Context *context,
@@ -1499,22 +1498,21 @@ angle::Result ImageHelper::initExternal(Context *context,
                                         VkImageUsageFlags usage,
                                         ImageLayout initialLayout,
                                         const void *externalImageCreateInfo,
-                                        uint32_t mipLevels,
-                                        uint32_t layerCount)
+                                        uint32_t mipLevels)
 {
     ASSERT(!valid());
 
-    // Validate that the input layerCount is compatible with the texture type
-    ASSERT(textureType != gl::TextureType::_3D || layerCount == 1);
-    ASSERT(textureType != gl::TextureType::External || layerCount == 1);
-    ASSERT(textureType != gl::TextureType::Rectangle || layerCount == 1);
-    ASSERT(textureType != gl::TextureType::CubeMap || layerCount == gl::kCubeFaceCount);
-
-    gl_vk::GetExtent(glExtents, &mExtents);
     mFormat     = &format;
     mSamples    = samples;
-    mLayerCount = layerCount;
     mLevelCount = mipLevels;
+    gl_vk::GetExtentsAndLayerCount(textureType, glExtents, &mExtents, &mLayerCount);
+
+    // Validate that mLayerCount is compatible with the texture type
+    ASSERT(textureType != gl::TextureType::_3D || mLayerCount == 1);
+    ASSERT(textureType != gl::TextureType::_2DArray || mExtents.depth == 1);
+    ASSERT(textureType != gl::TextureType::External || mLayerCount == 1);
+    ASSERT(textureType != gl::TextureType::Rectangle || mLayerCount == 1);
+    ASSERT(textureType != gl::TextureType::CubeMap || mLayerCount == gl::kCubeFaceCount);
 
     VkImageCreateInfo imageInfo     = {};
     imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -2167,8 +2165,10 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     copy.imageSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;
     copy.imageSubresource.layerCount     = index.getLayerCount();
 
+    uint32_t unusedLayerCount;
     gl_vk::GetOffset(offset, &copy.imageOffset);
-    gl_vk::GetExtent(glExtents, &copy.imageExtent);
+    gl_vk::GetExtentsAndLayerCount(index.getType(), glExtents, &copy.imageExtent,
+                                   &unusedLayerCount);
 
     if (stencilAllocationSize > 0)
     {
@@ -2194,11 +2194,10 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
         stencilCopy.bufferImageHeight               = bufferImageHeight;
         stencilCopy.imageSubresource.mipLevel       = index.getLevelIndex();
         stencilCopy.imageSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;
-        stencilCopy.imageSubresource.layerCount     = index.getLayerCount();
-
-        gl_vk::GetOffset(offset, &stencilCopy.imageOffset);
-        gl_vk::GetExtent(glExtents, &stencilCopy.imageExtent);
-        stencilCopy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
+        stencilCopy.imageSubresource.layerCount     = copy.imageSubresource.layerCount;
+        stencilCopy.imageOffset                     = copy.imageOffset;
+        stencilCopy.imageExtent                     = copy.imageExtent;
+        stencilCopy.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_STENCIL_BIT;
         mSubresourceUpdates.emplace_back(bufferHandle, stencilCopy);
 
         aspectFlags &= ~VK_IMAGE_ASPECT_STENCIL_BIT;

@@ -648,8 +648,7 @@ class ImageHelper final : public CommandGraphResource
                        const Format &format,
                        GLint samples,
                        VkImageUsageFlags usage,
-                       uint32_t mipLevels,
-                       uint32_t layerCount);
+                       uint32_t mipLevels);
     angle::Result initExternal(Context *context,
                                gl::TextureType textureType,
                                const gl::Extents &glExtents,
@@ -658,8 +657,7 @@ class ImageHelper final : public CommandGraphResource
                                VkImageUsageFlags usage,
                                ImageLayout initialLayout,
                                const void *externalImageCreateInfo,
-                               uint32_t mipLevels,
-                               uint32_t layerCount);
+                               uint32_t mipLevels);
     angle::Result initMemory(Context *context,
                              const MemoryProperties &memoryProperties,
                              VkMemoryPropertyFlags flags);
