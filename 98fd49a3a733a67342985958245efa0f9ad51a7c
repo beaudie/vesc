@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0c455c6b_9c8e8e45",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4567,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T16:49:45Z",
+      "side": 1,
+      "message": "nit: can you use the block member info writer here?",
+      "range": {
+        "startLine": 4564,
+        "startChar": 0,
+        "endLine": 4567,
+        "endChar": 60
+      },
+      "revId": "98fd49a3a733a67342985958245efa0f9ad51a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f55c3214_bafaf8bf",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4766,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T16:49:45Z",
+      "side": 1,
+      "message": "can you load the block member info here using your new meethods?",
+      "range": {
+        "startLine": 4763,
+        "startChar": 0,
+        "endLine": 4766,
+        "endChar": 63
+      },
+      "revId": "98fd49a3a733a67342985958245efa0f9ad51a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "514a8a8e_331204f0",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 924,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-19T16:49:45Z",
+      "side": 1,
+      "message": "nit: you can make these non-Program functions if you like.",
+      "range": {
+        "startLine": 923,
+        "startChar": 0,
+        "endLine": 924,
+        "endChar": 89
+      },
+      "revId": "98fd49a3a733a67342985958245efa0f9ad51a7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
