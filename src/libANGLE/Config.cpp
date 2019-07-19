@@ -69,6 +69,14 @@ Config::Config(const Config &other) = default;
 
 Config &Config::operator=(const Config &other) = default;
 
+// NoConfig (singleton) to represent EGL_NO_CONFIG,
+struct NoConfig final : Config
+{
+    NoConfig() { renderableType = EGL_OPENGL_ES3_BIT | EGL_OPENGL_ES2_BIT; };
+} g_NoConfigInstance;
+
+Config *Config::noConfig = static_cast<Config *>(&g_NoConfigInstance);
+
 ConfigSet::ConfigSet() = default;
 
 ConfigSet::ConfigSet(const ConfigSet &other) = default;

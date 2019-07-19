@@ -6,7 +6,7 @@
   "scripts/generate_loader.py":
     "48c60c668bec42a80378179aae2acc61",
   "scripts/registry_xml.py":
-    "a7e47030109f0275cd58909c088f2816",
+    "d42ddfacad8c0756bb3aa9f016f9eb1f",
   "scripts/wgl.xml":
     "aa96419c582af2f6673430e2847693f4",
   "src/libEGL/egl_loader_autogen.cpp":

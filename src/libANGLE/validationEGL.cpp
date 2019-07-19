@@ -1195,6 +1195,10 @@ Error ValidateCreateContext(Display *display,
             {
                 return EglBadMatch();
             }
+            if (configuration->configID == 0)
+            {
+                return EglBadMatch();
+            }
             break;
 
         case 2:
@@ -1797,6 +1801,16 @@ Error ValidateCompatibleConfigs(const Display *display,
                                 const Config *contextConfig,
                                 EGLint surfaceType)
 {
+    // EGL KHR no config context
+    if (contextConfig == Config::noConfig)
+    {
+        const DisplayExtensions &displayExtensions = display->getExtensions();
+        if (displayExtensions.noConfigContext)
+        {
+            return NoError();
+        }
+        return EglBadMatch() << "Context with no config is not supported.";
+    }
 
     if (!surface->flexibleSurfaceCompatibilityRequested())
     {

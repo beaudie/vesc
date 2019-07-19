@@ -372,8 +372,9 @@ EGLContext EGLAPIENTRY EGL_CreateContext(EGLDisplay dpy,
           (uintptr_t)dpy, (uintptr_t)config, (uintptr_t)share_context, (uintptr_t)attrib_list);
     Thread *thread = egl::GetCurrentThread();
 
-    egl::Display *display        = static_cast<egl::Display *>(dpy);
-    Config *configuration        = static_cast<Config *>(config);
+    egl::Display *display = static_cast<egl::Display *>(dpy);
+    Config *configuration =
+        (config == EGL_NO_CONFIG_KHR) ? Config::noConfig : static_cast<Config *>(config);
     gl::Context *sharedGLContext = static_cast<gl::Context *>(share_context);
     AttributeMap attributes      = AttributeMap::CreateFromIntArray(attrib_list);
 

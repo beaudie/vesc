@@ -70,6 +70,8 @@ struct Config
     EGLint optimalOrientation;     // Optimal window surface orientation
     EGLenum colorComponentType;    // Color component type
     EGLBoolean recordable;         // EGL_TRUE if a surface can support recording on Android
+
+    static Config *noConfig;  // This member represent EGL_NO_CONFIG for EGL_KHR_no_config_context
 };
 
 class ConfigSet
