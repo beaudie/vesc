@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "994eaf34_8304ddd4",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-19T16:01:47Z",
+      "side": 1,
+      "message": "Ah, ok.   When I was working on the dFdy() stuff, I came across tree_ops/RewriteTexelFetchOffset.cpp which passed the value around.\n\nShould there be checking that the shader that this work is being done for is at least 310 before going through all of these steps?   Or is that protected somewhere else beforehand?   Otherwise, CreateBuiltInFunctionCallNode() will return null and it\u0027ll segfault in the next call to queueReplacement().\n\nSomething like:\n\n    if (shaderVersion \u003c 300)\n        return;",
+      "parentUuid": "d2a96623_50e29b48",
+      "range": {
+        "startLine": 368,
+        "startChar": 75,
+        "endLine": 368,
+        "endChar": 78
+      },
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "60c09540_fe9396e2",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 4
@@ -78,6 +102,24 @@
       "side": 1,
       "message": "Yes. I would have preferred the \"atomic read\" wouldn\u0027t need to write to memory, but I\u0027m not sure what\u0027s the best way to achieve that. In particular, I\u0027m afraid just reading the value may end up caching it. The answer to the coherent question below might answer this too.",
       "parentUuid": "60c09540_fe9396e2",
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4375ff43_a22ff267",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-19T16:01:47Z",
+      "side": 1,
+      "message": "I don\u0027t know how GPUs work, but assuming they are anything like CPUs, a write to the value will invalidate the cache line containing the data which forces a read by the next time it\u0027s accessed by anyone.   Otherwise, if you really want to avoid reading the cached value, you\u0027d need to add a \u0027volatile\u0027 to ensure it\u0027s always re-read.   Volatile accesses are different than atomic accesses to data though.   \n\nIn the atomic access case, marking the data as coherent (which CPU caches typically are) will cause the cache invalidation to occur if the value changes.   This is why the writer requires a sync to be performed, so it flushes any pending memory writes before releasing locks to tell the memory controller to invalidate everyone else\u0027s caches.   If no one is writing the data though, it\u0027s perfectly safe for everyone to keep a locally cached copy and use that value.\n\nIt looks like the \u0027coherent\u0027 qualifier may do what you\u0027re looking for also, but I\u0027m still learning the memory models for this stuff.",
+      "parentUuid": "cd7e3163_fca7ca4d",
       "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -116,6 +158,24 @@
       "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd37ad23_7f4cf05b",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-19T16:01:47Z",
+      "side": 1,
+      "message": "Yup, I was thinking along the lines of host coherency.",
+      "parentUuid": "65f3e378_2dc46a1b",
+      "revId": "368c3848ad11111dbc4acf71fc09c8c834780fb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
