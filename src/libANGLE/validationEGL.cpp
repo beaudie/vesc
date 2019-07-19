@@ -968,7 +968,22 @@ Error ValidateCreateContext(Display *display,
                             gl::Context *shareContext,
                             const AttributeMap &attributes)
 {
-    ANGLE_TRY(ValidateConfig(display, configuration));
+    Error error = ValidateConfig(display, configuration);
+    if (error.getCode() != EGL_SUCCESS)
+    {
+        if ((error.getCode() == EGL_BAD_CONFIG) && (configuration == EGL_NO_CONFIG_KHR))
+        {
+            const DisplayExtensions &displayExtensions = display->getExtensions();
+            if (!displayExtensions.noConfigContext)
+            {
+                return EglBadConfig();
+            }
+        }
+        else
+        {
+            return error;
+        }
+    }
 
     // Get the requested client version (default is 1) and check it is 2 or 3.
     EGLAttrib clientMajorVersion = 1;
@@ -1191,7 +1206,12 @@ Error ValidateCreateContext(Display *display,
             {
                 return EglBadAttribute();
             }
-            if (!(configuration->renderableType & EGL_OPENGL_ES_BIT))
+            if (configuration == EGL_NO_CONFIG_KHR)
+            {
+                return EglBadMatch();
+            }
+            if ((configuration != EGL_NO_CONFIG_KHR) &&
+                !(configuration->renderableType & EGL_OPENGL_ES_BIT))
             {
                 return EglBadMatch();
             }
@@ -1202,7 +1222,8 @@ Error ValidateCreateContext(Display *display,
             {
                 return EglBadAttribute();
             }
-            if (!(configuration->renderableType & EGL_OPENGL_ES2_BIT))
+            if ((configuration != EGL_NO_CONFIG_KHR) &&
+                !(configuration->renderableType & EGL_OPENGL_ES2_BIT))
             {
                 return EglBadMatch();
             }
@@ -1212,7 +1233,8 @@ Error ValidateCreateContext(Display *display,
             {
                 return EglBadAttribute();
             }
-            if (!(configuration->renderableType & EGL_OPENGL_ES3_BIT))
+            if ((configuration != EGL_NO_CONFIG_KHR) &&
+                !(configuration->renderableType & EGL_OPENGL_ES3_BIT))
             {
                 return EglBadMatch();
             }
@@ -1800,6 +1822,16 @@ Error ValidateCompatibleConfigs(const Display *display,
                                 const Config *contextConfig,
                                 EGLint surfaceType)
 {
+    // EGL KHR no config context
+    if (contextConfig == EGL_NO_CONFIG_KHR)
+    {
+        const DisplayExtensions &displayExtensions = display->getExtensions();
+        if (displayExtensions.noConfigContext)
+        {
+            return NoError();
+        }
+        return EglBadMatch() << "Context with no config is not supported.";
+    }
 
     if (!surface->flexibleSurfaceCompatibilityRequested())
     {
