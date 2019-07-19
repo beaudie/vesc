@@ -1169,7 +1169,8 @@ bool Display::isInitialized() const
 
 bool Display::isValidConfig(const Config *config) const
 {
-    return mConfigSet.contains(config);
+    return (config == EGL_NO_CONFIG_KHR) ? (mDisplayExtensions.noConfigContext)
+                                         : mConfigSet.contains(config);
 }
 
 bool Display::isValidContext(const gl::Context *context) const

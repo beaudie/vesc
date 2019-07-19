@@ -117,6 +117,7 @@ supported_egl_extensions = [
     "EGL_KHR_wait_sync",
     "EGL_NV_post_sub_buffer",
     "EGL_NV_stream_consumer_gltexture_yuv",
+    "EGL_KHR_no_config_context",
 ]
 
 # Strip these suffixes from Context entry point names. NV is excluded (for now).
