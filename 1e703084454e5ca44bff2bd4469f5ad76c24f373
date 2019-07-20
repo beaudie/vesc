@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "8fb502eb_9da10eb9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-20T17:57:38Z",
+      "side": 1,
+      "message": "i did mean \"transfer\" and the format table that gets populated does all the work of checking if a format is renderable, sampleable and filterable. The final formats that gets cached will be identical if there are no fallbacks needed for image operations. We could expand this function to re-query (format, usage) combination but wasn\u0027t sure if we needed that",
+      "parentUuid": "ecea4b56_1669d334",
+      "range": {
+        "startLine": 196,
+        "startChar": 72,
+        "endLine": 196,
+        "endChar": 76
+      },
+      "revId": "1e703084454e5ca44bff2bd4469f5ad76c24f373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a007ce1c_baf81049",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -59,6 +83,24 @@
       "writtenOn": "2019-07-19T18:19:40Z",
       "side": 1,
       "message": "Remember to update the queue serial of this buffer.\n\nEven then, if the texture\u0027s staged updates are not flushed in this submission, the serial will be stale and the buffer could get deleted!",
+      "revId": "1e703084454e5ca44bff2bd4469f5ad76c24f373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "caff4467_902bb844",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2157,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-20T17:57:38Z",
+      "side": 1,
+      "message": "Shabby, while flushing all subresource updates it ends up calling copyBufferToImage. Shouldn\u0027t we delegate the responsibility of updating serials to that function? Is there a reason we need to do it here when we dont even have a command buffer with a new serial?",
+      "parentUuid": "a007ce1c_baf81049",
       "revId": "1e703084454e5ca44bff2bd4469f5ad76c24f373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
