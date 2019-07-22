@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31d0a815_f012b026",
+        "filename": "src/common/mathutil.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1258,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:32:20Z",
+      "side": 1,
+      "message": "nit: ANGLE_HAS_BUILTIN",
+      "range": {
+        "startLine": 1258,
+        "startChar": 12,
+        "endLine": 1258,
+        "endChar": 23
+      },
+      "revId": "470b0bba9750598da731a09dc44e4b46b926e066",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
