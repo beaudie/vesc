@@ -188,6 +188,24 @@
       "revId": "1e703084454e5ca44bff2bd4469f5ad76c24f373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5d1432d_0949e758",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2157,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-22T17:38:23Z",
+      "side": 1,
+      "message": "Do you know if unpack buffer copies require the texture to be well-defined (as in, we can allocate the image already)?. If so, this case could be simplified to not go through staging and simply `ensureImageInitialized` and record the copy.",
+      "parentUuid": "fc0d085d_fdd6ada6",
+      "revId": "1e703084454e5ca44bff2bd4469f5ad76c24f373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
