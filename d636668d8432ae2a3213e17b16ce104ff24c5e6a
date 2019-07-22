@@ -117,6 +117,30 @@
       "revId": "d636668d8432ae2a3213e17b16ce104ff24c5e6a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f4a64889_223861ff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-22T18:20:08Z",
+      "side": 1,
+      "message": "It\u0027s 6% for DataMode::UPDATE and 2% for DataMode::REPEAT with vulkan backend, which is result for both mat4x4 and mat3x3.",
+      "parentUuid": "54c17f23_a42a4721",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 28
+      },
+      "revId": "d636668d8432ae2a3213e17b16ce104ff24c5e6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
