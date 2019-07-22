@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1db779d6_6fe9bd9f",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1347,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:37:00Z",
+      "side": 1,
+      "message": "shouldn\u0027t this still be initDefaults?",
+      "range": {
+        "startLine": 1347,
+        "startChar": 17,
+        "endLine": 1347,
+        "endChar": 26
+      },
+      "revId": "0658377a9a5e859efe442dd2877deb7df19f06fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "863049a5_13a14150",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 10
@@ -47,6 +70,29 @@
       "writtenOn": "2019-07-22T19:30:22Z",
       "side": 1,
       "message": "ref\n\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/master/src/libANGLE/angletypes.cpp#42",
+      "revId": "0658377a9a5e859efe442dd2877deb7df19f06fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85cb3827_27df2e38",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:37:00Z",
+      "side": 1,
+      "message": "no longer needed I think.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 27
+      },
       "revId": "0658377a9a5e859efe442dd2877deb7df19f06fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
