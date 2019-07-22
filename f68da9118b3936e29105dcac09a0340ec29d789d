@@ -33,6 +33,24 @@
       "revId": "f68da9118b3936e29105dcac09a0340ec29d789d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d110b49_7b776f12",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:46:25Z",
+      "side": 1,
+      "message": "\"An INVALID_VALUE error is generated if indirect is negative or is not a multiple of the size, in basic machine units, of uint.\"\n\nIt\u0027s from the parameter to the function.",
+      "parentUuid": "b796f23f_ecd00c7f",
+      "revId": "f68da9118b3936e29105dcac09a0340ec29d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
