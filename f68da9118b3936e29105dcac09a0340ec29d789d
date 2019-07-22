@@ -69,6 +69,24 @@
       "revId": "f68da9118b3936e29105dcac09a0340ec29d789d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f32e2594_83820ea6",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-22T19:58:48Z",
+      "side": 1,
+      "message": "Ah, I was so focused on glBindBufferBase, didn\u0027t notice the offset is just passed here.\n\nCool.",
+      "parentUuid": "2d110b49_7b776f12",
+      "revId": "f68da9118b3936e29105dcac09a0340ec29d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
