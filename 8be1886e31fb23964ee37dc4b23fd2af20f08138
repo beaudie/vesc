@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "078e36e0_9461841a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-22T19:18:58Z",
+      "side": 1,
+      "message": "Is this a cut-and-paste error? The same bits are being masked with themselves in both cases.\nShould it be \"VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT?\"",
+      "parentUuid": "49965119_7d9fa833",
+      "revId": "8be1886e31fb23964ee37dc4b23fd2af20f08138",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9d251641_91898ea1",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
