@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa4e64ce_ac892058",
+        "filename": "src/common/matrix_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T21:37:37Z",
+      "side": 1,
+      "message": "how about det !\u003d T(0) ? or det !\u003d static_cast\u003cT\u003e(0)",
+      "range": {
+        "startLine": 338,
+        "startChar": 31,
+        "endLine": 338,
+        "endChar": 53
+      },
+      "revId": "de349c56c44ee34a0f072ae14bf1ff367ea6350f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a1f03ae_3456c9ce",
+        "filename": "src/compiler/translator/IntermNode.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2950,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T21:37:37Z",
+      "side": 1,
+      "message": "how about length !\u003d 0.0f",
+      "range": {
+        "startLine": 2950,
+        "startChar": 20,
+        "endLine": 2950,
+        "endChar": 45
+      },
+      "revId": "de349c56c44ee34a0f072ae14bf1ff367ea6350f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
