@@ -1,0 +1,326 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f027897_687052f1",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:29:36Z",
+      "side": 1,
+      "message": "nit: version increment",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "1fee4d44417c07a915371075d4567f2cb3c84200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "419f1a60_b0c257c5",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:29:36Z",
+      "side": 1,
+      "message": "I think we might want to only have two GL specs for now - SH_GL_COMPATIBILITY_SPEC and SH_GL_CORE_SPEC. And then we accept all versions for core and/or compatibility profile.\n\nThe GLES3/GLES31/GLES2 differences were mainly to reject shaders for higher context versions. e.g. a 300 shader is invalid for a 2.0-only context. But a lower version is always okay - we accept 100 shaders in GLES 3, and 300 in 3.1.\n\nI suggest we rename SH_GL3_3_SPEC to SH_GL_COMPATIBILITY_SPEC and also define SH_GL_CORE_SPEC. And then to make our lives simple: SH_GL_CORE_SPEC \u003d SH_GL_COMPATIBILITY_SPEC . We can worry about implementation details later. But having a set API is good.",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 18
+      },
+      "revId": "1fee4d44417c07a915371075d4567f2cb3c84200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e60c8f00_9b1f4c7f",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:29:36Z",
+      "side": 1,
+      "message": "we should aim to remove this method.",
+      "range": {
+        "startLine": 570,
+        "startChar": 0,
+        "endLine": 570,
+        "endChar": 50
+      },
+      "revId": "1fee4d44417c07a915371075d4567f2cb3c84200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63ca15a8_49d3772f",
+        "filename": "src/libANGLE/Compiler.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:29:36Z",
+      "side": 1,
+      "message": "here we can just switch to compatiblity spec.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 33
+      },
+      "revId": "1fee4d44417c07a915371075d4567f2cb3c84200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f136b7a_e29e4053",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:29:36Z",
+      "side": 1,
+      "message": "see other comment about the TODO. file an issue and leave a link to it with http://anglebug.com/####\n\nWe can address it near the end of your internship if we have time.",
+      "range": {
+        "startLine": 50,
+        "startChar": 1,
+        "endLine": 50,
+        "endChar": 49
+      },
+      "revId": "1fee4d44417c07a915371075d4567f2cb3c84200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e29237e_dc3eb2d5",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:29:36Z",
+      "side": 1,
+      "message": "interesting. does this do things?",
+      "range": {
+        "startLine": 437,
+        "startChar": 41,
+        "endLine": 437,
+        "endChar": 70
+      },
+      "revId": "1fee4d44417c07a915371075d4567f2cb3c84200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "056c71ea_5db2b19d",
+        "filename": "src/libANGLE/format_map_desktop.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:29:36Z",
+      "side": 1,
+      "message": "nit: format_map_desktop",
+      "range": {
+        "startLine": 5,
+        "startChar": 3,
+        "endLine": 5,
+        "endChar": 13
+      },
+      "revId": "1fee4d44417c07a915371075d4567f2cb3c84200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5ea1e6f_dac85e01",
+        "filename": "src/libANGLE/format_map_desktop.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:29:36Z",
+      "side": 1,
+      "message": "can you leave a TODO here indicating that we should probably switch ANGLE to generate its own GL enum types from gl.xml? And file a bug for this? We shouldn\u0027t be including files from the GL back-end here as this is a layering violation.",
+      "range": {
+        "startLine": 12,
+        "startChar": 8,
+        "endLine": 12,
+        "endChar": 42
+      },
+      "revId": "1fee4d44417c07a915371075d4567f2cb3c84200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d70bb70_25c4ac84",
+        "filename": "src/libANGLE/format_map_desktop.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:29:36Z",
+      "side": 1,
+      "message": "use const \u0026 for these so they don\u0027t copy.",
+      "range": {
+        "startLine": 84,
+        "startChar": 3,
+        "endLine": 84,
+        "endChar": 25
+      },
+      "revId": "1fee4d44417c07a915371075d4567f2cb3c84200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beeedd2b_7a7bcb36",
+        "filename": "src/libANGLE/format_map_desktop.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:29:36Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 85,
+        "startChar": 4,
+        "endLine": 85,
+        "endChar": 36
+      },
+      "revId": "1fee4d44417c07a915371075d4567f2cb3c84200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35f62549_32e935fd",
+        "filename": "src/libANGLE/format_map_desktop.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:29:36Z",
+      "side": 1,
+      "message": "can you add \"bool isDepthOrStencil() const\" to struct InternalFormat?\n\nthen use isDepthOrStencil !\u003d isDepthOrStencil instead to validate.",
+      "range": {
+        "startLine": 115,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 13
+      },
+      "revId": "1fee4d44417c07a915371075d4567f2cb3c84200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33d4fae1_a5789ca3",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:29:36Z",
+      "side": 1,
+      "message": "not necessary",
+      "range": {
+        "startLine": 493,
+        "startChar": 71,
+        "endLine": 493,
+        "endChar": 85
+      },
+      "revId": "1fee4d44417c07a915371075d4567f2cb3c84200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0409d17e_64fe79e4",
+        "filename": "src/libANGLE/formatutils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:29:36Z",
+      "side": 1,
+      "message": "nit: isInt -\u003e can you move this to a small separate refactor CL.",
+      "range": {
+        "startLine": 129,
+        "startChar": 9,
+        "endLine": 129,
+        "endChar": 24
+      },
+      "revId": "1fee4d44417c07a915371075d4567f2cb3c84200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd8edd83_be77a1ab",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T19:29:36Z",
+      "side": 1,
+      "message": "here instead of checking the shader spec, I would use the client type from the context. you can cache that in the constructor. you might need to pass another variable to the ProgramD3DMetadata constructor.",
+      "range": {
+        "startLine": 502,
+        "startChar": 7,
+        "endLine": 503,
+        "endChar": 27
+      },
+      "revId": "1fee4d44417c07a915371075d4567f2cb3c84200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
