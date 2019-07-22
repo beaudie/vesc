@@ -59,9 +59,7 @@ struct ImageMemoryBarrierData
 
     // If access is read-only, the execution barrier can be skipped altogether if retransitioning to
     // the same layout.  This is because read-after-read does not need an execution or memory
-    // barrier.  Vulkan additionally guarantees color attachment and depth/stencil attachment
-    // read/writes to be in execution order, so they too won't need a barrier if transitioning to
-    // the same layout.
+    // barrier.
     //
     // Otherwise, same-layout transitions only require an execution barrier (and not a memory
     // barrier).
@@ -171,7 +169,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-            false,
+            true,
         },
     },
     {
@@ -184,7 +182,7 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
             // Transition from: all writes must finish before barrier.
             VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-            false,
+            true,
         },
     },
     {
