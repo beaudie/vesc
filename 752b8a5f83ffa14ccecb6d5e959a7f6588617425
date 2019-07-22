@@ -70,6 +70,30 @@
       "revId": "752b8a5f83ffa14ccecb6d5e959a7f6588617425",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc6aeb4f_a6ad0136",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-22T16:26:58Z",
+      "side": 1,
+      "message": "Ah I see what you mean.  But I am a little hesitated to do so, because in that case we need human effort to always keep frontend and vulkan backend states consistent if either of them changed later.\n\nWhy is it not recommended to pass in a gl::State and automatically sync vulkan backend?",
+      "parentUuid": "2a1452ce_809f2214",
+      "range": {
+        "startLine": 351,
+        "startChar": 9,
+        "endLine": 351,
+        "endChar": 21
+      },
+      "revId": "752b8a5f83ffa14ccecb6d5e959a7f6588617425",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
