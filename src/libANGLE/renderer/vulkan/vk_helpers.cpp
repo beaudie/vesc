@@ -1480,20 +1480,20 @@ void ImageHelper::initStagingBuffer(RendererVk *renderer,
 
 angle::Result ImageHelper::init(Context *context,
                                 gl::TextureType textureType,
-                                const gl::Extents &extents,
+                                const gl::Extents &glExtents,
                                 const Format &format,
                                 GLint samples,
                                 VkImageUsageFlags usage,
                                 uint32_t mipLevels,
                                 uint32_t layerCount)
 {
-    return initExternal(context, textureType, extents, format, samples, usage,
+    return initExternal(context, textureType, glExtents, format, samples, usage,
                         ImageLayout::Undefined, nullptr, mipLevels, layerCount);
 }
 
 angle::Result ImageHelper::initExternal(Context *context,
                                         gl::TextureType textureType,
-                                        const gl::Extents &extents,
+                                        const gl::Extents &glExtents,
                                         const Format &format,
                                         GLint samples,
                                         VkImageUsageFlags usage,
@@ -1510,7 +1510,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     ASSERT(textureType != gl::TextureType::Rectangle || layerCount == 1);
     ASSERT(textureType != gl::TextureType::CubeMap || layerCount == gl::kCubeFaceCount);
 
-    gl_vk::GetExtent(extents, &mExtents);
+    gl_vk::GetExtent(glExtents, &mExtents);
     mFormat     = &format;
     mSamples    = samples;
     mLayerCount = layerCount;
@@ -2053,7 +2053,7 @@ void ImageHelper::removeStagedUpdates(ContextVk *contextVk, const gl::ImageIndex
 
 angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
                                                   const gl::ImageIndex &index,
-                                                  const gl::Extents &extents,
+                                                  const gl::Extents &glExtents,
                                                   const gl::Offset &offset,
                                                   const gl::InternalFormat &formatInfo,
                                                   const gl::PixelUnpackState &unpack,
@@ -2062,12 +2062,14 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
                                                   const vk::Format &vkFormat)
 {
     GLuint inputRowPitch = 0;
-    ANGLE_VK_CHECK_MATH(contextVk, formatInfo.computeRowPitch(type, extents.width, unpack.alignment,
-                                                              unpack.rowLength, &inputRowPitch));
+    ANGLE_VK_CHECK_MATH(contextVk,
+                        formatInfo.computeRowPitch(type, glExtents.width, unpack.alignment,
+                                                   unpack.rowLength, &inputRowPitch));
 
     GLuint inputDepthPitch = 0;
-    ANGLE_VK_CHECK_MATH(contextVk, formatInfo.computeDepthPitch(extents.height, unpack.imageHeight,
-                                                                inputRowPitch, &inputDepthPitch));
+    ANGLE_VK_CHECK_MATH(
+        contextVk, formatInfo.computeDepthPitch(glExtents.height, unpack.imageHeight, inputRowPitch,
+                                                &inputDepthPitch));
 
     bool applySkipImages = false;
 
@@ -2093,21 +2095,21 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
         GLuint totalSize;
 
         ANGLE_VK_CHECK_MATH(contextVk, storageFormatInfo.computeCompressedImageSize(
-                                           gl::Extents(extents.width, 1, 1), &rowPitch));
+                                           gl::Extents(glExtents.width, 1, 1), &rowPitch));
         ANGLE_VK_CHECK_MATH(contextVk,
                             storageFormatInfo.computeCompressedImageSize(
-                                gl::Extents(extents.width, extents.height, 1), &depthPitch));
+                                gl::Extents(glExtents.width, glExtents.height, 1), &depthPitch));
 
         ANGLE_VK_CHECK_MATH(contextVk,
-                            storageFormatInfo.computeCompressedImageSize(extents, &totalSize));
+                            storageFormatInfo.computeCompressedImageSize(glExtents, &totalSize));
 
         outputRowPitch   = rowPitch;
         outputDepthPitch = depthPitch;
 
         angle::CheckedNumeric<uint32_t> checkedRowLength =
-            rx::CheckedRoundUp<uint32_t>(extents.width, storageFormatInfo.compressedBlockWidth);
+            rx::CheckedRoundUp<uint32_t>(glExtents.width, storageFormatInfo.compressedBlockWidth);
         angle::CheckedNumeric<uint32_t> checkedImageHeight =
-            rx::CheckedRoundUp<uint32_t>(extents.height, storageFormatInfo.compressedBlockHeight);
+            rx::CheckedRoundUp<uint32_t>(glExtents.height, storageFormatInfo.compressedBlockHeight);
 
         ANGLE_VK_CHECK_MATH(contextVk, checkedRowLength.IsValid());
         ANGLE_VK_CHECK_MATH(contextVk, checkedImageHeight.IsValid());
@@ -2120,13 +2122,13 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     {
         ASSERT(storageFormat.pixelBytes != 0);
 
-        outputRowPitch   = storageFormat.pixelBytes * extents.width;
-        outputDepthPitch = outputRowPitch * extents.height;
+        outputRowPitch   = storageFormat.pixelBytes * glExtents.width;
+        outputDepthPitch = outputRowPitch * glExtents.height;
 
-        bufferRowLength   = extents.width;
-        bufferImageHeight = extents.height;
+        bufferRowLength   = glExtents.width;
+        bufferImageHeight = glExtents.height;
 
-        allocationSize = outputDepthPitch * extents.depth;
+        allocationSize = outputDepthPitch * glExtents.depth;
 
         // Note: because the LoadImageFunctionInfo functions are limited to copying a single
         // component, we have to special case packed depth/stencil use and send the stencil as a
@@ -2135,7 +2137,7 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
             formatInfo.depthBits > 0 && formatInfo.stencilBits > 0)
         {
             // Note: Stencil is always one byte
-            stencilAllocationSize = extents.width * extents.height * extents.depth;
+            stencilAllocationSize = glExtents.width * glExtents.height * glExtents.depth;
             allocationSize += stencilAllocationSize;
         }
     }
@@ -2151,8 +2153,9 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
 
     LoadImageFunctionInfo loadFunction = vkFormat.textureLoadFunctions(type);
 
-    loadFunction.loadFunction(extents.width, extents.height, extents.depth, source, inputRowPitch,
-                              inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
+    loadFunction.loadFunction(glExtents.width, glExtents.height, glExtents.depth, source,
+                              inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                              outputDepthPitch);
 
     VkBufferImageCopy copy         = {};
     VkImageAspectFlags aspectFlags = GetFormatAspectFlags(vkFormat.imageFormat());
@@ -2165,7 +2168,7 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     copy.imageSubresource.layerCount     = index.getLayerCount();
 
     gl_vk::GetOffset(offset, &copy.imageOffset);
-    gl_vk::GetExtent(extents, &copy.imageExtent);
+    gl_vk::GetExtent(glExtents, &copy.imageExtent);
 
     if (stencilAllocationSize > 0)
     {
@@ -2173,15 +2176,16 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
         ASSERT((aspectFlags & VK_IMAGE_ASPECT_STENCIL_BIT) != 0);
 
         // Skip over depth data.
-        stagingPointer += outputDepthPitch * extents.depth;
-        stagingOffset += outputDepthPitch * extents.depth;
+        stagingPointer += outputDepthPitch * glExtents.depth;
+        stagingOffset += outputDepthPitch * glExtents.depth;
 
         // recompute pitch for stencil data
-        outputRowPitch   = extents.width;
-        outputDepthPitch = outputRowPitch * extents.height;
+        outputRowPitch   = glExtents.width;
+        outputDepthPitch = outputRowPitch * glExtents.height;
 
-        angle::LoadX24S8ToS8(extents.width, extents.height, extents.depth, source, inputRowPitch,
-                             inputDepthPitch, stagingPointer, outputRowPitch, outputDepthPitch);
+        angle::LoadX24S8ToS8(glExtents.width, glExtents.height, glExtents.depth, source,
+                             inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                             outputDepthPitch);
 
         VkBufferImageCopy stencilCopy = {};
 
@@ -2193,7 +2197,7 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
         stencilCopy.imageSubresource.layerCount     = index.getLayerCount();
 
         gl_vk::GetOffset(offset, &stencilCopy.imageOffset);
-        gl_vk::GetExtent(extents, &stencilCopy.imageExtent);
+        gl_vk::GetExtent(glExtents, &stencilCopy.imageExtent);
         stencilCopy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_STENCIL_BIT;
         mSubresourceUpdates.emplace_back(bufferHandle, stencilCopy);
 
