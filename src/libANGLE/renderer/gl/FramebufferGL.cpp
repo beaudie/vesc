@@ -619,6 +619,12 @@ angle::Result FramebufferGL::adjustSrcDstRegion(const gl::Context *context,
     gl::Extents readSize = sourceFramebuffer->getExtents();
     gl::Extents drawSize = destFramebuffer->getExtents();
 
+    printf("read_size: %d %d\n", readSize.width, readSize.height);
+    printf("draw_size: %d %d\n", drawSize.width, drawSize.height);
+    printf("before src: %d %d %d %d\n", sourceArea.x, sourceArea.y, sourceArea.x1(),
+           sourceArea.y1());
+    printf("before dst: %d %d %d %d\n", destArea.x, destArea.y, destArea.x1(), destArea.y1());
+
     CheckedNumeric<GLint> sourceWidthTemp = sourceArea.x1();
     sourceWidthTemp -= sourceArea.x;
     CheckedNumeric<GLint> sourceHeightTemp = sourceArea.y1();
@@ -890,6 +896,43 @@ angle::Result FramebufferGL::adjustSrcDstRegion(const gl::Context *context,
             destX + (xOffset >> sourceXHalvings), destY + (yOffset >> sourceYHalvings),
             destRegion.width >> sourceXHalvings, destRegion.height >> sourceYHalvings);
     }
+
+    if (!sourceBounds.encloses(sourceRegion))
+    {
+        // If pixels lying outside the read framebuffer, adjust src region
+        // and dst region to appropriate in-bounds regions respectively.
+        ClipRectangle(sourceRegion, sourceBounds, &sourceRegion);
+        GLuint sourceRealWidth  = sourceRegion.width;
+        GLuint sourceRealHeight = sourceRegion.height;
+        GLuint xOffset          = sourceRegion.x - sourceX;
+        GLuint yOffset          = sourceRegion.y - sourceY;
+
+        // if X/Y is reversed, use the top/right out-of-bounds region for mapping
+        // to dst region, instead of left/bottom out-of-bounds region for mapping.
+        if (xFlipped)
+        {
+            xOffset = sourceX + sourceWidth - sourceRegion.x - sourceRegion.width;
+        }
+        if (yFlipped)
+        {
+            yOffset = sourceY + sourceHeight - sourceRegion.y - sourceRegion.height;
+        }
+
+        GLfloat destMappingWidth = static_cast<GLfloat>(sourceRealWidth) * destWidth / sourceWidth;
+        GLfloat destMappingHeight =
+            static_cast<GLfloat>(sourceRealHeight) * destHeight / sourceHeight;
+        GLfloat destMappingXOffset = static_cast<GLfloat>(xOffset) * destWidth / sourceWidth;
+        GLfloat destMappingYOffset = static_cast<GLfloat>(yOffset) * destHeight / sourceHeight;
+
+        GLuint destMappingX0 = std::round(destX + destMappingXOffset);
+        GLuint destMappingY0 = std::round(destY + destMappingYOffset);
+
+        GLuint destMappingX1 = std::round(destX + destMappingXOffset + destMappingWidth);
+        GLuint destMappingY1 = std::round(destY + destMappingYOffset + destMappingHeight);
+
+        destRegion = gl::Rectangle(destMappingX0, destMappingY0, destMappingX1 - destMappingX0,
+                                   destMappingY1 - destMappingY0);
+    }
     // Set the src and dst endpoints. If they were previously flipped,
     // set them as flipped.
     *newSourceArea = gl::Rectangle(
@@ -903,6 +946,11 @@ angle::Result FramebufferGL::adjustSrcDstRegion(const gl::Context *context,
                       destArea.y0() < destArea.y1() ? destRegion.y0() : destRegion.y1(),
                       destArea.x0() < destArea.x1() ? destRegion.width : -destRegion.width,
                       destArea.y0() < destArea.y1() ? destRegion.height : -destRegion.height);
+
+    printf("after src: %d %d %d %d\n", newSourceArea->x, newSourceArea->y, newSourceArea->x1(),
+           newSourceArea->y1());
+    printf("after dst: %d %d %d %d\n", newDestArea->x, newDestArea->y, newDestArea->x1(),
+           newDestArea->y1());
 
     return angle::Result::Continue;
 }
