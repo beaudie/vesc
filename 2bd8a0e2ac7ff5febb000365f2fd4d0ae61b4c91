@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "908de016_4d513a61",
+        "filename": "src/libANGLE/renderer/d3d/SamplerD3D.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T17:56:11Z",
+      "side": 1,
+      "message": "nit: \"dirty\" for consistency.",
+      "range": {
+        "startLine": 23,
+        "startChar": 67,
+        "endLine": 23,
+        "endChar": 76
+      },
+      "revId": "2bd8a0e2ac7ff5febb000365f2fd4d0ae61b4c91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

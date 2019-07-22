@@ -305,6 +305,30 @@
       "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "897277c5_5ae3b2bd",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T17:56:11Z",
+      "side": 1,
+      "message": "Thinking about this more, I don\u0027t know if it\u0027s going to work. I think the same texture can be bound to two different texture units. With two different samplers. This would cause an conflict as the second sampler would overwite the first.\n\nHow about you keep an array of active samplers in ContextVk, like we do with active textures. Then you use that in the ProgramVk.\n\nAlso a regression test for this situation would be welcome. Either in SamplersTest or StateChangeTest.",
+      "parentUuid": "309261a3_a12bc3df",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 29
+      },
+      "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
