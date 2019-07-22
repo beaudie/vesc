@@ -218,8 +218,6 @@ void AddAtomicCounterBufferDescriptorSetDesc(
         activeStages |= gl_vk::GetShaderStageFlags(buffer.activeShaders());
     }
 
-    // fprintf(stderr, "Atomic counters will be at binding %u (%u of them)\n",
-    //         bindingStart, gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS);
     // A single storage buffer array is used for all stages for simplicity.
     descOut->update(bindingStart, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
                     gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS, activeStages);
@@ -231,6 +229,7 @@ void WriteBufferDescriptorSetBinding(const gl::OffsetBindingPointer<gl::Buffer> 
                                      VkDescriptorType descType,
                                      uint32_t bindingIndex,
                                      uint32_t arrayElement,
+                                     VkDeviceSize offsetAlignment,
                                      VkDescriptorBufferInfo *bufferInfoOut,
                                      VkWriteDescriptorSet *writeInfoOut)
 {
@@ -257,6 +256,19 @@ void WriteBufferDescriptorSetBinding(const gl::OffsetBindingPointer<gl::Buffer> 
         size = std::min(size, maxSize);
     }
 
+    // If offsetAlignment is 0, the buffer offset is guaranteed to have the necessary alignment
+    // through other means (the backend specifying the alignment through a GLES limit that the
+    // frontend then enforces).  If it's not 0, we need to bind the buffer at an offset that's
+    // aligned.  The difference in offsets is communicated to the shader via driver uniforms.
+    if (offsetAlignment)
+    {
+        VkDeviceSize alignedOffset = (offset / offsetAlignment) * offsetAlignment;
+        VkDeviceSize offsetDiff    = offset - alignedOffset;
+
+        offset = alignedOffset;
+        size += offsetDiff;
+    }
+
     bufferInfoOut->buffer = bufferHelper.getBuffer().getHandle();
     bufferInfoOut->offset = offset;
     bufferInfoOut->range  = size;
@@ -272,9 +284,6 @@ void WriteBufferDescriptorSetBinding(const gl::OffsetBindingPointer<gl::Buffer> 
     writeInfoOut->pBufferInfo      = bufferInfoOut;
     writeInfoOut->pTexelBufferView = nullptr;
     ASSERT(writeInfoOut->pBufferInfo[0].buffer != VK_NULL_HANDLE);
-
-    // fprintf(stderr, " - Bound buffer to binding %u[%u]\n",
-    //        bindingIndex, arrayElement);
 }
 
 class Std140BlockLayoutEncoderFactory : public gl::CustomBlockLayoutEncoderFactory
@@ -1248,7 +1257,7 @@ void ProgramVk::updateBuffersDescriptorSet(ContextVk *contextVk,
         VkWriteDescriptorSet &writeInfo    = writeDescriptorInfo[writeCount];
 
         WriteBufferDescriptorSetBinding(bufferBinding, maxBlockSize, descriptorSet, descriptorType,
-                                        binding, arrayElement, &bufferInfo, &writeInfo);
+                                        binding, arrayElement, 0, &bufferInfo, &writeInfo);
 
         BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
         vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
@@ -1291,6 +1300,10 @@ void ProgramVk::updateAtomicCounterBuffersDescriptorSet(ContextVk *contextVk,
     gl::AtomicCounterBuffersArray<VkWriteDescriptorSet> writeDescriptorInfo;
     gl::AtomicCounterBufferMask writtenBindings;
 
+    RendererVk *rendererVk = contextVk->getRenderer();
+    const VkDeviceSize offsetAlignment =
+        rendererVk->getPhysicalDeviceProperties().limits.minStorageBufferOffsetAlignment;
+
     // Write atomic counter buffers.
     const gl::OffsetBindingPointer<gl::Buffer> *anyValidBufferBinding = nullptr;
     for (uint32_t bufferIndex = 0; bufferIndex < atomicCounterBuffers.size(); ++bufferIndex)
@@ -1310,7 +1323,7 @@ void ProgramVk::updateAtomicCounterBuffersDescriptorSet(ContextVk *contextVk,
 
         WriteBufferDescriptorSetBinding(bufferBinding, 0, descriptorSet,
                                         VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, bindingStart, binding,
-                                        &bufferInfo, &writeInfo);
+                                        offsetAlignment, &bufferInfo, &writeInfo);
 
         BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
         vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
@@ -1338,7 +1351,7 @@ void ProgramVk::updateAtomicCounterBuffersDescriptorSet(ContextVk *contextVk,
 
         WriteBufferDescriptorSetBinding(*anyValidBufferBinding, 0, descriptorSet,
                                         VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, bindingStart, binding,
-                                        &bufferInfo, &writeInfo);
+                                        offsetAlignment, &bufferInfo, &writeInfo);
     }
 
     VkDevice device = contextVk->getDevice();

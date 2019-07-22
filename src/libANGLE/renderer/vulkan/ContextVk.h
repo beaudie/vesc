@@ -385,6 +385,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     void invalidateCurrentTextures();
     void invalidateCurrentShaderResources();
+    void invalidateGraphicsDriverUniforms();
     void invalidateDriverUniforms();
 
     // Handlers for graphics pipeline dirty bits.
@@ -398,8 +399,6 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                                    vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsIndexBuffer(const gl::Context *context,
                                                  vk::CommandBuffer *commandBuffer);
-    angle::Result handleDirtyGraphicsDriverUniforms(const gl::Context *context,
-                                                    vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsShaderResources(const gl::Context *context,
                                                      vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyGraphicsTransformFeedbackBuffers(const gl::Context *context,
@@ -418,12 +417,20 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                                    vk::CommandBuffer *commandBuffer);
 
     // Common parts of the common dirty bit handlers.
+    angle::Result handleDirtyDriverUniforms(const gl::Context *context,
+                                            vk::CommandBuffer *commandBuffer);
     angle::Result handleDirtyTexturesImpl(const gl::Context *context,
                                           vk::CommandBuffer *commandBuffer,
                                           vk::CommandGraphResource *recorder);
     angle::Result handleDirtyShaderResourcesImpl(const gl::Context *context,
                                                  vk::CommandBuffer *commandBuffer,
                                                  vk::CommandGraphResource *recorder);
+    angle::Result handleDirtyDescriptorSetsImpl(vk::CommandBuffer *commandBuffer,
+                                                VkPipelineBindPoint bindPoint);
+
+    void writeAtomicCounterBufferDriverUniformOffsets(const gl::Context *context,
+                                                      uint32_t *offsetsOut,
+                                                      size_t offsetsSize);
 
     angle::Result submitFrame(const VkSubmitInfo &submitInfo,
                               vk::PrimaryCommandBuffer &&commandBuffer);
@@ -513,6 +520,13 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
         uint32_t xfbActiveUnpaused;
 
         std::array<int32_t, 4> xfbBufferOffsets;
+
+        // .xy contain packed 8-bit values for atomic counter buffer offsets.  These offsets are
+        // within Vulkan's minStorageBufferOffsetAlignment limit and are used to support unaligned
+        // offsets allowed in GL.
+        //
+        // .zw are unused.
+        std::array<uint32_t, 4> acbBufferOffsets;
 
         // We'll use x, y, z for near / far / diff respectively.
         std::array<float, 4> depthRange;
