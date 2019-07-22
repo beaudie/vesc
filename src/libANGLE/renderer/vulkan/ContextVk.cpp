@@ -716,23 +716,30 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffers(
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::handleDirtyGraphicsDescriptorSets(const gl::Context *context,
-                                                           vk::CommandBuffer *commandBuffer)
+ANGLE_INLINE angle::Result ContextVk::handleDirtyDescriptorSetsImpl(
+    vk::CommandBuffer *commandBuffer,
+    VkPipelineBindPoint bindPoint)
 {
     ANGLE_TRY(mProgram->updateDescriptorSets(this, commandBuffer));
 
-    // Bind the graphics descriptor sets.
+    // Bind the driver descriptor set.
     commandBuffer->bindDescriptorSets(
-        mProgram->getPipelineLayout(), VK_PIPELINE_BIND_POINT_GRAPHICS,
-        kDriverUniformsDescriptorSetIndex, 1, &mDriverUniformsDescriptorSet, 1,
-        &mDriverUniformsDynamicOffset);
+        mProgram->getPipelineLayout(), bindPoint, kDriverUniformsDescriptorSetIndex, 1,
+        &mDriverUniformsDescriptorSet, 1, &mDriverUniformsDynamicOffset);
+
     return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyGraphicsDescriptorSets(const gl::Context *context,
+                                                           vk::CommandBuffer *commandBuffer)
+{
+    return handleDirtyDescriptorSetsImpl(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS);
 }
 
 angle::Result ContextVk::handleDirtyComputeDescriptorSets(const gl::Context *context,
                                                           vk::CommandBuffer *commandBuffer)
 {
-    return mProgram->updateDescriptorSets(this, commandBuffer);
+    return handleDirtyDescriptorSetsImpl(commandBuffer, VK_PIPELINE_BIND_POINT_COMPUTE);
 }
 
 angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
@@ -2114,6 +2121,8 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(const gl::Context *co
                                               driverUniforms->xfbBufferOffsets.data(),
                                               driverUniforms->xfbBufferOffsets.size());
     }
+
+    // TODO: update driverUniforms->acbBufferOffsets
 
     ANGLE_TRY(mDriverUniformsBuffer.flush(this));
 

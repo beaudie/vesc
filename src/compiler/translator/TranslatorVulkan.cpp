@@ -172,12 +172,13 @@ constexpr const char kViewportYScale[]       = "viewportYScale";
 constexpr const char kNegViewportYScale[]    = "negViewportYScale";
 constexpr const char kXfbActiveUnpaused[]    = "xfbActiveUnpaused";
 constexpr const char kXfbBufferOffsets[]     = "xfbBufferOffsets";
+constexpr const char kAcbBufferOffsets[]     = "acbBufferOffsets";
 constexpr const char kDepthRange[]           = "depthRange";
 
-constexpr size_t kNumDriverUniforms                                        = 7;
+constexpr size_t kNumDriverUniforms                                        = 8;
 constexpr std::array<const char *, kNumDriverUniforms> kDriverUniformNames = {
     {kViewport, kHalfRenderAreaHeight, kViewportYScale, kNegViewportYScale, kXfbActiveUnpaused,
-     kXfbBufferOffsets, kDepthRange}};
+     kXfbBufferOffsets, kAcbBufferOffsets, kDepthRange}};
 
 size_t FindFieldIndex(const TFieldList &fieldList, const char *fieldName)
 {
@@ -364,6 +365,7 @@ const TVariable *AddDriverUniformsToShader(TIntermBlock *root, TSymbolTable *sym
         new TType(EbtFloat),
         new TType(EbtUInt),
         new TType(EbtInt, 4),
+        new TType(EbtUInt, 4),
         emulatedDepthRangeType,
     }};
 
@@ -653,7 +655,7 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         }
     }
 
-    // TODO(lucferron): Refactor this function to do less tree traversals.
+    // TODO(lucferron): Refactor this function to do fewer tree traversals.
     // http://anglebug.com/2461
     if (structTypesUsedForUniforms > 0)
     {
@@ -683,10 +685,10 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         RewriteAtomicCounters(root, &getSymbolTable());
     }
 
-    const TVariable *driverUniforms = nullptr;
+    const TVariable *driverUniforms = AddDriverUniformsToShader(root, &getSymbolTable());
+
     if (getShaderType() != GL_COMPUTE_SHADER)
     {
-        driverUniforms = AddDriverUniformsToShader(root, &getSymbolTable());
         ReplaceGLDepthRangeWithDriverUniform(root, driverUniforms, &getSymbolTable());
     }
 

@@ -424,6 +424,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     angle::Result handleDirtyShaderResourcesImpl(const gl::Context *context,
                                                  vk::CommandBuffer *commandBuffer,
                                                  vk::CommandGraphResource *recorder);
+    angle::Result handleDirtyDescriptorSetsImpl(vk::CommandBuffer *commandBuffer,
+                                                VkPipelineBindPoint bindPoint);
 
     angle::Result submitFrame(const VkSubmitInfo &submitInfo,
                               vk::PrimaryCommandBuffer &&commandBuffer);
@@ -513,6 +515,13 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
         uint32_t xfbActiveUnpaused;
 
         std::array<int32_t, 4> xfbBufferOffsets;
+
+        // .xy contain packed 8-bit values for atomic counter buffer offsets.  These offsets are
+        // within Vulkan's minStorageBufferOffsetAlignment limit and are used to support unaligned
+        // offsets allowed in GL.
+        //
+        // .zw are unused.
+        std::array<uint32_t, 4> acbBufferOffsets;
 
         // We'll use x, y, z for near / far / diff respectively.
         std::array<float, 4> depthRange;
