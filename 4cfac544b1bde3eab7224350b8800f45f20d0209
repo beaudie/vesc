@@ -331,6 +331,30 @@
     },
     {
       "key": {
+        "uuid": "782c7edd_272bb2cf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T17:50:34Z",
+      "side": 1,
+      "message": "I was also thinking about OTHER_SHADER_RESOURCES but it seemed too long. Anyway SGTM",
+      "parentUuid": "f71014bc_345c53ea",
+      "range": {
+        "startLine": 322,
+        "startChar": 8,
+        "endLine": 322,
+        "endChar": 36
+      },
+      "revId": "4cfac544b1bde3eab7224350b8800f45f20d0209",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c5ac20f_935ca2d6",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 7
