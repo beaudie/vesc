@@ -16,6 +16,24 @@
       "revId": "48b7cab17f0148d700e59658d5745e3dc60920a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70e35250_daf1583a",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-22T18:29:07Z",
+      "side": 1,
+      "message": "They are testing two different maps! It\u0027s an assertion of \"if not found there, it should be found here\".",
+      "parentUuid": "33d7ccf2_61d1f43a",
+      "revId": "48b7cab17f0148d700e59658d5745e3dc60920a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
