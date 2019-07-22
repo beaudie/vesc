@@ -1510,7 +1510,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     ASSERT(textureType != gl::TextureType::Rectangle || layerCount == 1);
     ASSERT(textureType != gl::TextureType::CubeMap || layerCount == gl::kCubeFaceCount);
 
-    mExtents    = extents;
+    gl_vk::GetExtent(extents, &mExtents);
     mFormat     = &format;
     mSamples    = samples;
     mLayerCount = layerCount;
@@ -1522,9 +1522,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     imageInfo.flags                 = GetImageCreateFlags(textureType);
     imageInfo.imageType             = gl_vk::GetImageType(textureType);
     imageInfo.format                = format.vkImageFormat;
-    imageInfo.extent.width          = static_cast<uint32_t>(extents.width);
-    imageInfo.extent.height         = static_cast<uint32_t>(extents.height);
-    imageInfo.extent.depth          = static_cast<uint32_t>(extents.depth);
+    imageInfo.extent                = mExtents;
     imageInfo.mipLevels             = mipLevels;
     imageInfo.arrayLayers           = mLayerCount;
     imageInfo.samples               = gl_vk::GetSamples(samples);
@@ -1675,7 +1673,7 @@ void ImageHelper::init2DWeakReference(VkImage handle,
 {
     ASSERT(!valid());
 
-    mExtents       = extents;
+    gl_vk::GetExtent(extents, &mExtents);
     mFormat        = &format;
     mSamples       = samples;
     mCurrentLayout = ImageLayout::Undefined;
@@ -1694,7 +1692,7 @@ angle::Result ImageHelper::init2DStaging(Context *context,
 {
     ASSERT(!valid());
 
-    mExtents    = extents;
+    gl_vk::GetExtent(extents, &mExtents);
     mFormat     = &format;
     mSamples    = 1;
     mLayerCount = layerCount;
@@ -1747,8 +1745,8 @@ VkImageLayout ImageHelper::getCurrentLayout() const
 
 gl::Extents ImageHelper::getLevelExtents2D(uint32_t level) const
 {
-    int width  = std::max(mExtents.width >> level, 1);
-    int height = std::max(mExtents.height >> level, 1);
+    uint32_t width  = std::max(mExtents.width >> level, 1u);
+    uint32_t height = std::max(mExtents.height >> level, 1u);
 
     return gl::Extents(width, height, 1);
 }
@@ -1909,8 +1907,8 @@ gl::Extents ImageHelper::getSize(const gl::ImageIndex &index) const
     GLint mipLevel = index.getLevelIndex();
     // Level 0 should be the size of the extents, after that every time you increase a level
     // you shrink the extents by half.
-    return gl::Extents(std::max(1, mExtents.width >> mipLevel),
-                       std::max(1, mExtents.height >> mipLevel), mExtents.depth);
+    return gl::Extents(std::max(1u, mExtents.width >> mipLevel),
+                       std::max(1u, mExtents.height >> mipLevel), mExtents.depth);
 }
 
 // static
