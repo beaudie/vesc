@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33d7ccf2_61d1f43a",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-22T18:26:49Z",
+      "side": 1,
+      "message": "This can probably be removed, since the original \u0027if\u0027 can be trusted to work correctly.",
+      "revId": "48b7cab17f0148d700e59658d5745e3dc60920a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
