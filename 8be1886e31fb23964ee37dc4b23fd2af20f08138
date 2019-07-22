@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49965119_7d9fa833",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-22T17:55:34Z",
+      "side": 1,
+      "message": "Should be functionally the same. If `dstStage` needs to be EARLY, it doesn\u0027t matter if it includes LATE. If `srcStage` needs to be LATE, it doesn\u0027t matter if it includes EARLY.\n\nThis fixes an ASSERT with same-layout transitions that requires the two masks to match (for purely an API reason where we store a single mask for execution barriers)",
+      "revId": "8be1886e31fb23964ee37dc4b23fd2af20f08138",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d251641_91898ea1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-22T17:55:34Z",
+      "side": 1,
+      "message": "Should also be functionally the same: If `dstStage` needs to be VS, it doesn\u0027t matter if it\u0027s VS or ALL. Similarly, if `srcStage` needs to be FS, it doesn\u0027t matter if it\u0027s FS or ALL.\n\nI didn\u0027t need to change this though, it was \"by accident\".",
+      "revId": "8be1886e31fb23964ee37dc4b23fd2af20f08138",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
