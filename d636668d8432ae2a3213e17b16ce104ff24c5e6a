@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a0bdd1a_ce1862fa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T12:52:00Z",
+      "side": 1,
+      "message": "nit: updates",
+      "range": {
+        "startLine": 7,
+        "startChar": 43,
+        "endLine": 7,
+        "endChar": 50
+      },
+      "revId": "d636668d8432ae2a3213e17b16ce104ff24c5e6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7493b902_1c49af95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T12:52:00Z",
+      "side": 1,
+      "message": "which microbenchmark? The ones with uniform data changing or staying the same, or both?",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 28
+      },
+      "revId": "d636668d8432ae2a3213e17b16ce104ff24c5e6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
