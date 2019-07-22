@@ -233,6 +233,30 @@
       "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eeb27fe8_9e873857",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T13:16:19Z",
+      "side": 1,
+      "message": "Cool. Could you remove mBoundSampler? It looks like we only use TextureVk::getSampler in one place where you are calling setSampler.",
+      "parentUuid": "5c2aef2b_cbad4af5",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 29
+      },
+      "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
