@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56d1cc52_8416be8e",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-22T19:42:12Z",
+      "side": 1,
+      "message": "Please add this to `vk::CommandBuffer` in vk_wrapper.h too",
+      "revId": "f68da9118b3936e29105dcac09a0340ec29d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b796f23f_ecd00c7f",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-22T19:42:12Z",
+      "side": 1,
+      "message": "Can you figure out how the indirect buffer offset is set in GL? I don\u0027t see the 3.1 or 3.2 spec saying it\u0027s valid to call glBindBufferBase for `GL_DISPATCH_INDIRECT_BUFFER`. Vulkan requires this offset to be aligned to 4 bytes. I just want to make sure GL requires the same alignment.",
+      "revId": "f68da9118b3936e29105dcac09a0340ec29d789d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
