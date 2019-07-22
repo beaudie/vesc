@@ -1805,6 +1805,90 @@ TEST_P(BlitFramebufferTest, BlitFramebufferSizeOverflow)
     EXPECT_GL_ERROR(GL_INVALID_VALUE);
 }
 
+// Test blitFramebuffer size overflow checks. WebGL 2.0 spec section 5.41. We do validation for
+// overflows also in non-WebGL mode to avoid triggering driver bugs.
+TEST_P(BlitFramebufferTest, BlitFramebufferSizeOverflow2)
+{
+    GLTexture textures[2];
+    glBindTexture(GL_TEXTURE_2D, textures[0]);
+    glTexStorage2D(GL_TEXTURE_2D, 3, GL_RGBA8, 4, 4);
+    glBindTexture(GL_TEXTURE_2D, textures[1]);
+    glTexStorage2D(GL_TEXTURE_2D, 3, GL_RGBA8, 4, 4);
+
+    GLFramebuffer framebuffers[2];
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffers[0]);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebuffers[1]);
+
+    ASSERT_GL_NO_ERROR();
+
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textures[0],
+                           0);
+    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textures[1],
+                           0);
+    ASSERT_GL_NO_ERROR();
+
+    GLint width  = 8;
+    GLint height = 8;
+
+    GLTexture tex0;
+    glBindTexture(GL_TEXTURE_2D, tex0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+    GLFramebuffer fb0;
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fb0);
+    glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex0, 0);
+
+    GLTexture tex1;
+    glBindTexture(GL_TEXTURE_2D, tex1);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+
+    GLFramebuffer fb1;
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fb1);
+    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex1, 0);
+
+    GLint max = 0x7fffffff;  // std::numeric_limits<GLint>::max();
+    // Using max 32-bit integer as blitFramebuffer parameter should succeed.
+    glBlitFramebuffer(0, 0, max, max, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBlitFramebuffer(0, 0, width, height, 0, 0, max, max, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBlitFramebuffer(0, 0, max, max, 0, 0, max, max, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    EXPECT_GL_NO_ERROR();
+
+    // Using blitFramebuffer parameters where calculated width/height matches max 32-bit integer
+    // should succeed
+    glBlitFramebuffer(-1, -1, max - 1, max - 1, 0, 0, width, height, GL_COLOR_BUFFER_BIT,
+                      GL_NEAREST);
+    glBlitFramebuffer(0, 0, width, height, -1, -1, max - 1, max - 1, GL_COLOR_BUFFER_BIT,
+                      GL_NEAREST);
+    glBlitFramebuffer(-1, -1, max - 1, max - 1, -1, -1, max - 1, max - 1, GL_COLOR_BUFFER_BIT,
+                      GL_NEAREST);
+    EXPECT_GL_NO_ERROR();
+
+    // Using source width/height greater than max 32-bit integer should fail.
+    glBlitFramebuffer(-1, -1, max, max, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+    // Using source width/height greater than max 32-bit integer should fail.
+    glBlitFramebuffer(max, max, -1, -1, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+    // Using destination width/height greater than max 32-bit integer should fail.
+    glBlitFramebuffer(0, 0, width, height, -1, -1, max, max, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+    // Using destination width/height greater than max 32-bit integer should fail.
+    glBlitFramebuffer(0, 0, width, height, max, max, -1, -1, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+    // Using both source and destination width/height greater than max 32-bit integer should fail.
+    glBlitFramebuffer(-1, -1, max, max, -1, -1, max, max, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+
+    // Using minimum and maximum integers for all boundaries should fail.
+    glBlitFramebuffer(-max - 1, -max - 1, max, max, -max - 1, -max - 1, max, max,
+                      GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    EXPECT_GL_ERROR(GL_INVALID_VALUE);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(BlitFramebufferANGLETest,

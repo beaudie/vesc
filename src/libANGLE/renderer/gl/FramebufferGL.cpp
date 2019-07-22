@@ -584,25 +584,31 @@ angle::Result FramebufferGL::blit(const gl::Context *context,
     stateManager->bindFramebuffer(GL_READ_FRAMEBUFFER, sourceFramebufferGL->getFramebufferID());
     stateManager->bindFramebuffer(GL_DRAW_FRAMEBUFFER, mFramebufferID);
 
+    gl::Rectangle finalSourceArea(sourceArea);
+    gl::Rectangle finalDestArea(destArea);
+
     if (features.adjustSrcDstRegionBlitFramebuffer.enabled)
     {
-        gl::Rectangle newSourceArea;
-        gl::Rectangle newDestArea;
-        // This workaround is taken from chromium: http://crbug.com/830046
-        if (adjustSrcDstRegion(context, sourceArea, destArea, &newSourceArea, &newDestArea) ==
-            angle::Result::Continue)
+        angle::Result result =
+            adjustSrcDstRegion(context, sourceArea, destArea, &newSourceArea, &newDestArea);
+        if (result != angle::Result::Continue)
         {
-            functions->blitFramebuffer(newSourceArea.x, newSourceArea.y, newSourceArea.x1(),
-                                       newSourceArea.y1(), newDestArea.x, newDestArea.y,
-                                       newDestArea.x1(), newDestArea.y1(), blitMask, filter);
+            return result;
         }
     }
-    else
+    if (features.clipSrcRegionBlitFramebuffer.enabled)
     {
-        functions->blitFramebuffer(sourceArea.x, sourceArea.y, sourceArea.x1(), sourceArea.y1(),
-                                   destArea.x, destArea.y, destArea.x1(), destArea.y1(), blitMask,
-                                   filter);
+        angle::Result result =
+            clipSrcRegion(context, sourceArea, destArea, &newSourceArea, &newDestArea);
+        if (result != angle::Result::Continue)
+        {
+            return result;
+        }
     }
+
+    functions->blitFramebuffer(finalSourceArea.x, finalSourceArea.y, finalSourceArea.x1(),
+                               finalSourceArea.y1(), finalDestArea.x, finalDestArea.y,
+                               finalDestArea.x1(), finalDestArea.y1(), blitMask, filter);
 
     return angle::Result::Continue;
 }
@@ -889,6 +895,112 @@ angle::Result FramebufferGL::adjustSrcDstRegion(const gl::Context *context,
         destRegion = gl::Rectangle(
             destX + (xOffset >> sourceXHalvings), destY + (yOffset >> sourceYHalvings),
             destRegion.width >> sourceXHalvings, destRegion.height >> sourceYHalvings);
+    }
+    // Set the src and dst endpoints. If they were previously flipped,
+    // set them as flipped.
+    *newSourceArea = gl::Rectangle(
+        sourceArea.x0() < sourceArea.x1() ? sourceRegion.x0() : sourceRegion.x1(),
+        sourceArea.y0() < sourceArea.y1() ? sourceRegion.y0() : sourceRegion.y1(),
+        sourceArea.x0() < sourceArea.x1() ? sourceRegion.width : -sourceRegion.width,
+        sourceArea.y0() < sourceArea.y1() ? sourceRegion.height : -sourceRegion.height);
+
+    *newDestArea =
+        gl::Rectangle(destArea.x0() < destArea.x1() ? destRegion.x0() : destRegion.x1(),
+                      destArea.y0() < destArea.y1() ? destRegion.y0() : destRegion.y1(),
+                      destArea.x0() < destArea.x1() ? destRegion.width : -destRegion.width,
+                      destArea.y0() < destArea.y1() ? destRegion.height : -destRegion.height);
+
+    return angle::Result::Continue;
+}
+
+angle::Result FramebufferGL::clipSrcRegion(const gl::Context *context,
+                                           const gl::Rectangle &sourceArea,
+                                           const gl::Rectangle &destArea,
+                                           gl::Rectangle *newSourceArea,
+                                           gl::Rectangle *newDestArea)
+{
+    const Framebuffer *sourceFramebuffer = context->getState().getReadFramebuffer();
+    const Framebuffer *destFramebuffer   = context->getState().getDrawFramebuffer();
+
+    gl::Extents readSize = sourceFramebuffer->getExtents();
+    gl::Extents drawSize = destFramebuffer->getExtents();
+
+    CheckedNumeric<GLint> sourceWidthTemp = sourceArea.x1();
+    sourceWidthTemp -= sourceArea.x;
+    CheckedNumeric<GLint> sourceHeightTemp = sourceArea.y1();
+    sourceHeightTemp -= sourceArea.y;
+    CheckedNumeric<GLint> destWidthTemp = destArea.x1();
+    destWidthTemp -= destArea.x;
+    CheckedNumeric<GLint> destHeightTemp = destArea.y1();
+    destHeightTemp -= destArea.y;
+
+    GLint sourceX      = sourceArea.x1() > sourceArea.x ? sourceArea.x : sourceArea.x1();
+    GLint sourceY      = sourceArea.y1() > sourceArea.y ? sourceArea.y : sourceArea.y1();
+    GLuint sourceWidth = angle::base::checked_cast<GLuint>(sourceWidthTemp.Abs().ValueOrDefault(0));
+    GLuint sourceHeight =
+        angle::base::checked_cast<GLuint>(sourceHeightTemp.Abs().ValueOrDefault(0));
+
+    GLint destX       = destArea.x1() > destArea.x ? destArea.x : destArea.x1();
+    GLint destY       = destArea.y1() > destArea.y ? destArea.y : destArea.y1();
+    GLuint destWidth  = angle::base::checked_cast<GLuint>(destWidthTemp.Abs().ValueOrDefault(0));
+    GLuint destHeight = angle::base::checked_cast<GLuint>(destHeightTemp.Abs().ValueOrDefault(0));
+
+    if (destWidth == 0 || sourceWidth == 0 || destHeight == 0 || sourceHeight == 0)
+    {
+        return angle::Result::Stop;
+    }
+
+    gl::Rectangle sourceBounds(0, 0, readSize.width, readSize.height);
+    gl::Rectangle sourceRegion(sourceX, sourceY, sourceWidth, sourceHeight);
+
+    gl::Rectangle destBounds(0, 0, drawSize.width, drawSize.height);
+    gl::Rectangle destRegion(destX, destY, destWidth, destHeight);
+
+    if (!ClipRectangle(destBounds, destRegion, nullptr))
+    {
+        return angle::Result::Stop;
+    }
+
+    bool xFlipped = ((sourceArea.x1() > sourceArea.x) && (destArea.x1() < destArea.x)) ||
+                    ((sourceArea.x1() < sourceArea.x) && (destArea.x1() > destArea.x));
+    bool yFlipped = ((sourceArea.y1() > sourceArea.y) && (destArea.y1() < destArea.y)) ||
+                    ((sourceArea.y1() < sourceArea.y) && (destArea.y1() > destArea.y));
+
+    if (!sourceBounds.encloses(sourceRegion))
+    {
+        // If pixels lying outside the read framebuffer, adjust src region
+        // and dst region to appropriate in-bounds regions respectively.
+        ClipRectangle(sourceRegion, sourceBounds, &sourceRegion);
+        GLuint sourceRealWidth  = sourceRegion.width;
+        GLuint sourceRealHeight = sourceRegion.height;
+        GLuint xOffset          = sourceRegion.x - sourceX;
+        GLuint yOffset          = sourceRegion.y - sourceY;
+
+        // if X/Y is reversed, use the top/right out-of-bounds region for mapping
+        // to dst region, instead of left/bottom out-of-bounds region for mapping.
+        if (xFlipped)
+        {
+            xOffset = sourceX + sourceWidth - sourceRegion.x - sourceRegion.width;
+        }
+        if (yFlipped)
+        {
+            yOffset = sourceY + sourceHeight - sourceRegion.y - sourceRegion.height;
+        }
+
+        GLfloat destMappingWidth = static_cast<GLfloat>(sourceRealWidth) * destWidth / sourceWidth;
+        GLfloat destMappingHeight =
+            static_cast<GLfloat>(sourceRealHeight) * destHeight / sourceHeight;
+        GLfloat destMappingXOffset = static_cast<GLfloat>(xOffset) * destWidth / sourceWidth;
+        GLfloat destMappingYOffset = static_cast<GLfloat>(yOffset) * destHeight / sourceHeight;
+
+        GLuint destMappingX0 = std::round(destX + destMappingXOffset);
+        GLuint destMappingY0 = std::round(destY + destMappingYOffset);
+
+        GLuint destMappingX1 = std::round(destX + destMappingXOffset + destMappingWidth);
+        GLuint destMappingY1 = std::round(destY + destMappingYOffset + destMappingHeight);
+
+        destRegion = gl::Rectangle(destMappingX0, destMappingY0, destMappingX1 - destMappingX0,
+                                   destMappingY1 - destMappingY0);
     }
     // Set the src and dst endpoints. If they were previously flipped,
     // set them as flipped.
