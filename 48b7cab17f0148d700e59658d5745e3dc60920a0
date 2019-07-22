@@ -34,6 +34,24 @@
       "revId": "48b7cab17f0148d700e59658d5745e3dc60920a0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0181ccd0_b4d5a867",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-22T18:31:38Z",
+      "side": 1,
+      "message": "Bah, you\u0027re right.   I thought I stared close enough to check that but still missed.  I\u0027m too used to being able to cheat with my IDE I guess.",
+      "parentUuid": "70e35250_daf1583a",
+      "revId": "48b7cab17f0148d700e59658d5745e3dc60920a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
