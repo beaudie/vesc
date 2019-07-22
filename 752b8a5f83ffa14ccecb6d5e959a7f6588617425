@@ -94,6 +94,30 @@
       "revId": "752b8a5f83ffa14ccecb6d5e959a7f6588617425",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "66ff288e_b88fa2e8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T17:49:14Z",
+      "side": 1,
+      "message": "The GL spec values shouldn\u0027t change. So you should be confident if we initialize them correctly once it should remain consistent. I\u0027d rather ANGLE only has to maintain one initialization function.",
+      "parentUuid": "dc6aeb4f_a6ad0136",
+      "range": {
+        "startLine": 351,
+        "startChar": 9,
+        "endLine": 351,
+        "endChar": 21
+      },
+      "revId": "752b8a5f83ffa14ccecb6d5e959a7f6588617425",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
