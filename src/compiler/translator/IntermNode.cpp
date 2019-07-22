@@ -2947,7 +2947,7 @@ TConstantUnion *TIntermConstantUnion::foldUnaryComponentWise(TOperator op,
                 ASSERT(getType().getBasicType() == EbtFloat);
                 float x      = operandArray[i].getFConst();
                 float length = VectorLength(operandArray, objectSize);
-                if (length)
+                if (length != 0.0f)
                     resultArray[i].setFConst(x / length);
                 else
                     UndefinedConstantFoldingError(getLine(), op, getType().getBasicType(),
