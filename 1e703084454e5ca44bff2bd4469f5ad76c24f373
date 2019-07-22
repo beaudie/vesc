@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "db769e99_bad74ea0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-07-22T16:00:47Z",
+      "side": 1,
+      "message": "I\u0027ll update the comment.",
+      "parentUuid": "dd20613e_b466755d",
+      "range": {
+        "startLine": 196,
+        "startChar": 72,
+        "endLine": 196,
+        "endChar": 76
+      },
+      "revId": "1e703084454e5ca44bff2bd4469f5ad76c24f373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a007ce1c_baf81049",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
