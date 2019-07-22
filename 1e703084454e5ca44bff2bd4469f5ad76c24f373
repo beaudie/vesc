@@ -170,6 +170,24 @@
       "revId": "1e703084454e5ca44bff2bd4469f5ad76c24f373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc0d085d_fdd6ada6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2157,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T17:11:06Z",
+      "side": 1,
+      "message": "It gets a bit tricky because these updates currently aren\u0027t in the graph. So I\u0027d recommend we put them in the graph by writing a buffer-\u003ebuffer copy first. We can figure out a performant solution after. Maybe we shouldn\u0027t be using subresource updates for unpack buffers at all for the \"production\" code.",
+      "parentUuid": "0e941de8_b50ab901",
+      "revId": "1e703084454e5ca44bff2bd4469f5ad76c24f373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
