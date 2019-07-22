@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fcb350c1_f786588d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2011,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-22T18:54:51Z",
+      "side": 1,
+      "message": "nit: can you use one or two temporaries to make this a bit more readable?",
+      "range": {
+        "startLine": 2011,
+        "startChar": 8,
+        "endLine": 2011,
+        "endChar": 97
+      },
+      "revId": "d2de6d40873091a7484f2589ac10d53545ffa77c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
