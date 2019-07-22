@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "dd20613e_b466755d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-22T14:53:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8fb502eb_9da10eb9",
+      "range": {
+        "startLine": 196,
+        "startChar": 72,
+        "endLine": 196,
+        "endChar": 76
+      },
+      "revId": "1e703084454e5ca44bff2bd4469f5ad76c24f373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a007ce1c_baf81049",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 2
@@ -101,6 +125,24 @@
       "side": 1,
       "message": "Shabby, while flushing all subresource updates it ends up calling copyBufferToImage. Shouldn\u0027t we delegate the responsibility of updating serials to that function? Is there a reason we need to do it here when we dont even have a command buffer with a new serial?",
       "parentUuid": "a007ce1c_baf81049",
+      "revId": "1e703084454e5ca44bff2bd4469f5ad76c24f373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e941de8_b50ab901",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2157,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-22T14:53:53Z",
+      "side": 1,
+      "message": "We absolutely shouldn\u0027t do it here.\n\nImagine the following sequence of actions (from GL):\n\n1. Copy from unpack buffer B to texture T\n2. Delete B\n3. Some draw calls not involving T\n4. glFlush() (or swap buffers, or anything that results in a flush)\n5. Draw with T\n\nIn the Vulkan backend, this translates to:\n\nA. (Corresponding to 1) Stage a copy from B to T, store it in T\nB. (Corresponding to 2) Look at the serial (S) of B, if it\u0027s in flight (or not yet submitted), add it to a garbage list to be cleared when S is finished\nC. (Corresponding to 3) Draw (we don\u0027t flush T\u0027s changes because it\u0027s not accessed)\nD. (Corresponding to 4) vkQueueSubmit with serial S\u0027\nE. (Corresponding to 4) Check to see if any serial is finished, if so free some garbage.\nF. (Corresponding to 5) Flush changes to T\n\nNow if S \u003c S\u0027, and you don\u0027t update B\u0027s serial here (which does S \u003d S\u0027), then the buffer gets deleted in stage B immediately, and there would be a crash in stage F.\n\nIf you do however update the serial here, you can still get a crash if GL does something like this:\n\n1. Copy from unpack buffer B to texture T\n2. Delete B\n3. Some draw calls not involving T\n4. glFlush()\n5. Some draw calls not involving T\n6. glFlush()\n7. Some draw calls not involving T\n8. glFlush()\n9. Some draw calls not involving T\n10. glFlush()\n11. Draw with T\n\nif at step 8 or 10, we detect that B\u0027s serial (S) has already finished, we would delete B before step 11 has a chance to flush it to T (at stage E in the Vulkan steps).\n\n---\n\nThere are a number of options here, but probably the most efficient would be for B to notify someone (the front end Context?) to mark T to be `syncState`d so the flush happens in this frame no matter what. You need to update B\u0027s serial here still.\n\nProbably Jamie can advise better on the notification system (there\u0027s something already in place, but I\u0027m not sure if it ensures T gets `syncState`d)",
+      "parentUuid": "caff4467_902bb844",
       "revId": "1e703084454e5ca44bff2bd4469f5ad76c24f373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
