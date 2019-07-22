@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7186950d_150f71d9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-22T16:16:35Z",
+      "side": 1,
+      "message": "I like this direction, but there are several other spots in the file that use extents.  Can we rename them all while we\u0027re at it, to help in the future when trying to differentiate these?",
+      "revId": "75147bc778451323508c966852b2c5d236b9c768",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
