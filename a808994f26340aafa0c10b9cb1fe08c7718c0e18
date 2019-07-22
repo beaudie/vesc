@@ -142,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "614f483c_9f9e551c",
+        "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-22T17:27:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa174027_25ce9360",
+      "range": {
+        "startLine": 34,
+        "startChar": 55,
+        "endLine": 34,
+        "endChar": 92
+      },
+      "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8aabe07f_df23f10e",
         "filename": "src/libANGLE/renderer/vulkan/SamplerVk.cpp",
         "patchSetId": 3
@@ -248,6 +272,30 @@
       "side": 1,
       "message": "Cool. Could you remove mBoundSampler? It looks like we only use TextureVk::getSampler in one place where you are calling setSampler.",
       "parentUuid": "5c2aef2b_cbad4af5",
+      "range": {
+        "startLine": 314,
+        "startChar": 0,
+        "endLine": 315,
+        "endChar": 29
+      },
+      "revId": "a808994f26340aafa0c10b9cb1fe08c7718c0e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "309261a3_a12bc3df",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-22T17:27:03Z",
+      "side": 1,
+      "message": "Key use of getSamlper() already exists in ProgramVk.cpp:\nhttps://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/ProgramVk.cpp?g\u003d0\u0026l\u003d1289\n\nI set up the code so that line didn\u0027t change but the program will now assign the correct sampler into the descriptor if sampler objects are used.",
+      "parentUuid": "eeb27fe8_9e873857",
       "range": {
         "startLine": 314,
         "startChar": 0,
