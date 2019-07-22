@@ -206,6 +206,24 @@
       "revId": "1e703084454e5ca44bff2bd4469f5ad76c24f373",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c0da123_07e99df7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2157,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-22T17:45:20Z",
+      "side": 1,
+      "message": "Talked with Jamie offline, unfortunately we may not necessarily be able to allocate the image yet.\n\nFor simplicity, we can just go ahead and do this:\n\n- If the image is already allocated, directly copy (after calling ensureImageInitialized, which in turn flushes any pending updates).\n- If the image is not there, copy the unpack buffer into a temporary buffer and stage that. Not ideal, but should get us quickly unblocked in this feature.\n\nWe can revisit the latter case for optimization in the future.",
+      "parentUuid": "b5d1432d_0949e758",
+      "revId": "1e703084454e5ca44bff2bd4469f5ad76c24f373",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
