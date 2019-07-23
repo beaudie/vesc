@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9145815c_2b3379a6",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2861,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-23T19:32:29Z",
+      "side": 1,
+      "message": "nit: Multiple",
+      "range": {
+        "startLine": 2861,
+        "startChar": 34,
+        "endLine": 2861,
+        "endChar": 38
+      },
+      "revId": "9d73ba1bd95d11af214f4fce663c40df4694f9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "113e907f_cfcf6bf3",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2863,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-23T19:32:29Z",
+      "side": 1,
+      "message": "nit: with",
+      "range": {
+        "startLine": 2863,
+        "startChar": 70,
+        "endLine": 2863,
+        "endChar": 74
+      },
+      "revId": "9d73ba1bd95d11af214f4fce663c40df4694f9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63ec851b_a834a84b",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2865,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-23T19:32:29Z",
+      "side": 1,
+      "message": "nit: in FS-speak this would be \"samples from two samplers\"",
+      "range": {
+        "startLine": 2865,
+        "startChar": 12,
+        "endLine": 2865,
+        "endChar": 61
+      },
+      "revId": "9d73ba1bd95d11af214f4fce663c40df4694f9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a5419b2_8416ca87",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2866,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-23T19:32:29Z",
+      "side": 1,
+      "message": "nit: object (to emphasize a single texture)",
+      "range": {
+        "startLine": 2866,
+        "startChar": 78,
+        "endLine": 2866,
+        "endChar": 85
+      },
+      "revId": "9d73ba1bd95d11af214f4fce663c40df4694f9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e35b210c_633c064e",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2911,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-23T19:32:29Z",
+      "side": 1,
+      "message": "you can use ess1_shaders::vs::Texture2D",
+      "range": {
+        "startLine": 2904,
+        "startChar": 0,
+        "endLine": 2911,
+        "endChar": 0
+      },
+      "revId": "9d73ba1bd95d11af214f4fce663c40df4694f9e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
