@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "06a92cc0_3731045e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3206,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-23T15:53:27Z",
+      "side": 1,
+      "message": "No, Caps.cpp can report float linear support without reporting float texture support, which is valid for GLES 3.0",
+      "parentUuid": "959c4d2d_8baf7d30",
+      "revId": "3fd5d17dd3364e2844c8d4970c4e0be0841cce87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a50da4ef_7495da35",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 2
@@ -30,6 +48,30 @@
       "writtenOn": "2019-07-22T18:20:10Z",
       "side": 1,
       "message": "We can go ahead and make this more generic:\n\nif (format.isLUMA())\n{\n    if (angleFormat.luminanceBits)\n    {\n        swizzleRGB \u003d GL_RED;\n        swizzleA \u003d angleFormat.alphaBits ? GL_GREEN : GL_ONE;\n    }\n    else\n    {\n        swizzleRGB \u003d GL_ZERO;\n        swizzleA \u003d GL_RED;\n    }\n    \n    internalSwizzle.swizzleRed   \u003d swizzleRGB;\n    internalSwizzle.swizzleGreen \u003d swizzleRGB;\n    internalSwizzle.swizzleBlue  \u003d swizzleRGB;\n    internalSwizzle.swizzleAlpha \u003d swizzleA;\n\n}\nelse\n{\n    // what\u0027s now in default:\n}",
+      "range": {
+        "startLine": 346,
+        "startChar": 0,
+        "endLine": 366,
+        "endChar": 29
+      },
+      "revId": "3fd5d17dd3364e2844c8d4970c4e0be0841cce87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ccf58df_e7e137eb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-23T15:53:27Z",
+      "side": 1,
+      "message": "agreed, working on it",
+      "parentUuid": "a50da4ef_7495da35",
       "range": {
         "startLine": 346,
         "startChar": 0,
