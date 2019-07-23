@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "6a09a59e_03a6ebcf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-23T19:44:39Z",
+      "side": 1,
+      "message": "more appropriate to say \"multiple of the texel size or block size, in case of compressed formats\"",
+      "revId": "fa9e3826ce4cdab8f88444ac6d7be1126bc78e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "62a32242_5159e82f",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 2
