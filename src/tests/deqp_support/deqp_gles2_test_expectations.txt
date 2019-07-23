@@ -308,7 +308,7 @@
 2549 VULKAN ANDROID : dEQP-GLES2.functional.fragment_ops.depth_stencil.stencil* = SKIP
 
 // Line segment rasterization has a bug that affects Android configs.
-2830 VULKAN ANDROID : dEQP-GLES2.functional.rasterization.primitives.line* = SKIP
+2830 VULKAN ANDROID : dEQP-GLES2.functional.rasterization.primitives.line* = FAIL
 
 // Passes on Pixel XL. Fails on 5x and Pixel 2. Might be fixed in latest driver.
 2609 VULKAN ANDROID : dEQP-GLES2.functional.texture.mipmap.cube.generate.* = SKIP
