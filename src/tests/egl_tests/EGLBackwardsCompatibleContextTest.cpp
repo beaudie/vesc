@@ -190,7 +190,6 @@ ANGLE_INSTANTIATE_TEST(EGLBackwardsCompatibleContextTest,
                        WithNoFixture(ES2_D3D9()),
                        WithNoFixture(ES2_D3D11()),
                        WithNoFixture(ES2_OPENGL()),
-                       WithNoFixture(ES2_OPENGLES()),
-                       WithNoFixture(ES2_VULKAN()));
+                       WithNoFixture(ES2_OPENGLES()));
 
 }  // namespace angle
