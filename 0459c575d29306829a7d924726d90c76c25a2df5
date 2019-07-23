@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d24ec620_e2bab105",
+        "filename": "src/libGL/entry_points_gl_1_0_autogen.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-07-23T23:32:24Z",
+      "side": 1,
+      "message": "What is std::unique_lock\u003cstd::mutex\u003e() locking?\nIs it the same thing as the same statement elsewhere?\nWhy isn\u0027t there a name inside the parenthesis, say a context specific mutex vs. the global mutex.",
+      "revId": "0459c575d29306829a7d924726d90c76c25a2df5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
