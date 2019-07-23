@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f55dec3a_c3925838",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-23T23:14:00Z",
+      "side": 1,
+      "message": "Can this just be set to gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS ?",
+      "revId": "44c2b88b8e00f987356c67757f4773602f4e2092",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8db388f6_0c116cb8",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-23T23:14:00Z",
+      "side": 1,
+      "message": "remove",
+      "revId": "44c2b88b8e00f987356c67757f4773602f4e2092",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de973b35_6b76cfaf",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 938,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-23T23:14:00Z",
+      "side": 1,
+      "message": "remove",
+      "revId": "44c2b88b8e00f987356c67757f4773602f4e2092",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46a285d6_dcd20571",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-23T23:14:00Z",
+      "side": 1,
+      "message": "remove",
+      "revId": "44c2b88b8e00f987356c67757f4773602f4e2092",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e360235d_ba71b767",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-23T23:14:00Z",
+      "side": 1,
+      "message": "remove",
+      "revId": "44c2b88b8e00f987356c67757f4773602f4e2092",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
