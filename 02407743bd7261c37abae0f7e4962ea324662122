@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8441da9_4767422a",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-23T12:45:53Z",
+      "side": 0,
+      "message": "this is regressing d3d11:\n\n[ RUN      ] dEQP.GLES3/functional_texture_format_compressed_eac_signed_r11_2d_pot\ndEQP-GLES3.functional.texture.format.compressed.eac_signed_r11_2d_pot\n../../third_party/angle/src/tests/deqp_support/angle_deqp_gtest.cpp(44): error: Failed\nGetLoadFunctionsMap(4112): \t! Assert failed in GetLoadFunctionsMap (../../third_party/angle/src/libANGLE/renderer/load_functions_table_autogen.cpp:4112): internalFormat \u003d\u003d GL_NONE || angleFormat \u003d\u003d angle::FormatID::NONE\nStack trace:\nBacktrace:\n\nCould you instead add new load functions instead of changing the old types?",
+      "range": {
+        "startLine": 75,
+        "startChar": 5,
+        "endLine": 75,
+        "endChar": 14
+      },
+      "revId": "02407743bd7261c37abae0f7e4962ea324662122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "13255cba_404be9e3",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-23T12:45:53Z",
+      "side": 0,
+      "message": "same here",
+      "range": {
+        "startLine": 210,
+        "startChar": 5,
+        "endLine": 210,
+        "endChar": 17
+      },
+      "revId": "02407743bd7261c37abae0f7e4962ea324662122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae95e5d5_8a330cf1",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-23T12:45:53Z",
+      "side": 0,
+      "message": "and here",
+      "range": {
+        "startLine": 505,
+        "startChar": 5,
+        "endLine": 505,
+        "endChar": 17
+      },
+      "revId": "02407743bd7261c37abae0f7e4962ea324662122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f3a27b4_5ad5baee",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-23T12:45:53Z",
+      "side": 0,
+      "message": "and here",
+      "range": {
+        "startLine": 576,
+        "startChar": 5,
+        "endLine": 576,
+        "endChar": 14
+      },
+      "revId": "02407743bd7261c37abae0f7e4962ea324662122",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
