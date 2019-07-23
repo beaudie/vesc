@@ -166,12 +166,7 @@ size_t Format::getImageCopyBufferAlignment() const
     //
     const angle::Format &format = imageFormat();
 
-    if (!format.isBlock)
-    {
-        // Currently, 4 is sufficient for any known non-block format.
-        return 4;
-    }
-
+    ASSERT(format.pixelBytes != 0);
     const size_t blockSize  = format.pixelBytes;
     const size_t multiplier = blockSize % 2 != 0 ? 4 : blockSize % 4 != 0 ? 2 : 1;
     const size_t alignment  = multiplier * blockSize;
