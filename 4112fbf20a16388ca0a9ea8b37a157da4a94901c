@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bf34db77_d59da814",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-07-23T17:43:44Z",
+      "side": 1,
+      "message": "1u is more consistent with your other changes",
+      "revId": "4112fbf20a16388ca0a9ea8b37a157da4a94901c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
