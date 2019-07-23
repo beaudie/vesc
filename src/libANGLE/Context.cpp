@@ -298,7 +298,7 @@ enum SubjectIndexes : angle::SubjectIndex
 
 Context::Context(egl::Display *display,
                  const egl::Config *config,
-                 const Context *shareContext,
+                 Context *shareContext,
                  TextureManager *shareTextures,
                  MemoryProgramCache *memoryProgramCache,
                  const EGLenum clientType,
@@ -315,6 +315,7 @@ Context::Context(egl::Display *display,
              GetClientArraysEnabled(attribs),
              GetRobustResourceInit(attribs),
              memoryProgramCache != nullptr),
+      mShared(shareContext ? true : false),
       mSkipValidation(GetNoError(attribs)),
       mDisplayTextureShareGroup(shareTextures != nullptr),
       mErrors(this),
@@ -354,6 +355,12 @@ Context::Context(egl::Display *display,
          samplerIndex < kSamplerMaxSubjectIndex; ++samplerIndex)
     {
         mSamplerObserverBindings.emplace_back(this, samplerIndex);
+    }
+
+    if (mShared)
+    {
+        ASSERT(shareContext != nullptr);
+        shareContext->setShared();
     }
 }
 

@@ -34,6 +34,9 @@ void GL_APIENTRY BlendColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat al
     if (context)
     {
         ANGLE_CAPTURE(BlendColor, context, red, green, blue, alpha);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateBlendColor(context, red, green, blue, alpha))
         {
             context->blendColor(red, green, blue, alpha);
@@ -49,6 +52,9 @@ void GL_APIENTRY BlendEquation(GLenum mode)
     if (context)
     {
         ANGLE_CAPTURE(BlendEquation, context, mode);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateBlendEquation(context, mode))
         {
             context->blendEquation(mode);
@@ -71,6 +77,9 @@ void GL_APIENTRY BlendFuncSeparate(GLenum sfactorRGB,
     {
         ANGLE_CAPTURE(BlendFuncSeparate, context, sfactorRGB, dfactorRGB, sfactorAlpha,
                       dfactorAlpha);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateBlendFuncSeparate(context, sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha))
         {
@@ -88,6 +97,9 @@ void GL_APIENTRY FogCoordPointer(GLenum type, GLsizei stride, const void *pointe
     if (context)
     {
         ANGLE_CAPTURE(FogCoordPointer, context, type, stride, pointer);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateFogCoordPointer(context, type, stride, pointer))
         {
             context->fogCoordPointer(type, stride, pointer);
@@ -103,6 +115,9 @@ void GL_APIENTRY FogCoordd(GLdouble coord)
     if (context)
     {
         ANGLE_CAPTURE(FogCoordd, context, coord);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateFogCoordd(context, coord))
         {
             context->fogCoordd(coord);
@@ -118,6 +133,9 @@ void GL_APIENTRY FogCoorddv(const GLdouble *coord)
     if (context)
     {
         ANGLE_CAPTURE(FogCoorddv, context, coord);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateFogCoorddv(context, coord))
         {
             context->fogCoorddv(coord);
@@ -133,6 +151,9 @@ void GL_APIENTRY FogCoordf(GLfloat coord)
     if (context)
     {
         ANGLE_CAPTURE(FogCoordf, context, coord);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateFogCoordf(context, coord))
         {
             context->fogCoordf(coord);
@@ -148,6 +169,9 @@ void GL_APIENTRY FogCoordfv(const GLfloat *coord)
     if (context)
     {
         ANGLE_CAPTURE(FogCoordfv, context, coord);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateFogCoordfv(context, coord))
         {
             context->fogCoordfv(coord);
@@ -169,6 +193,9 @@ void GL_APIENTRY MultiDrawArrays(GLenum mode,
     {
         PrimitiveMode modePacked = FromGLenum<PrimitiveMode>(mode);
         ANGLE_CAPTURE(MultiDrawArrays, context, modePacked, first, count, drawcount);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateMultiDrawArrays(context, modePacked, first, count, drawcount))
         {
@@ -195,6 +222,9 @@ void GL_APIENTRY MultiDrawElements(GLenum mode,
         DrawElementsType typePacked = FromGLenum<DrawElementsType>(type);
         ANGLE_CAPTURE(MultiDrawElements, context, modePacked, count, typePacked, indices,
                       drawcount);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateMultiDrawElements(context, modePacked, count, typePacked, indices, drawcount))
         {
@@ -212,6 +242,9 @@ void GL_APIENTRY PointParameterf(GLenum pname, GLfloat param)
     {
         PointParameter pnamePacked = FromGLenum<PointParameter>(pname);
         ANGLE_CAPTURE(PointParameterf, context, pnamePacked, param);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidatePointParameterf(context, pnamePacked, param))
         {
             context->pointParameterf(pnamePacked, param);
@@ -229,6 +262,9 @@ void GL_APIENTRY PointParameterfv(GLenum pname, const GLfloat *params)
     {
         PointParameter pnamePacked = FromGLenum<PointParameter>(pname);
         ANGLE_CAPTURE(PointParameterfv, context, pnamePacked, params);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidatePointParameterfv(context, pnamePacked, params))
         {
             context->pointParameterfv(pnamePacked, params);
@@ -244,6 +280,9 @@ void GL_APIENTRY PointParameteri(GLenum pname, GLint param)
     if (context)
     {
         ANGLE_CAPTURE(PointParameteri, context, pname, param);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidatePointParameteri(context, pname, param))
         {
             context->pointParameteri(pname, param);
@@ -260,6 +299,9 @@ void GL_APIENTRY PointParameteriv(GLenum pname, const GLint *params)
     if (context)
     {
         ANGLE_CAPTURE(PointParameteriv, context, pname, params);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidatePointParameteriv(context, pname, params))
         {
             context->pointParameteriv(pname, params);
@@ -275,6 +317,9 @@ void GL_APIENTRY SecondaryColor3b(GLbyte red, GLbyte green, GLbyte blue)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3b, context, red, green, blue);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3b(context, red, green, blue))
         {
             context->secondaryColor3b(red, green, blue);
@@ -290,6 +335,9 @@ void GL_APIENTRY SecondaryColor3bv(const GLbyte *v)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3bv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3bv(context, v))
         {
             context->secondaryColor3bv(v);
@@ -305,6 +353,9 @@ void GL_APIENTRY SecondaryColor3d(GLdouble red, GLdouble green, GLdouble blue)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3d, context, red, green, blue);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3d(context, red, green, blue))
         {
             context->secondaryColor3d(red, green, blue);
@@ -320,6 +371,9 @@ void GL_APIENTRY SecondaryColor3dv(const GLdouble *v)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3dv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3dv(context, v))
         {
             context->secondaryColor3dv(v);
@@ -335,6 +389,9 @@ void GL_APIENTRY SecondaryColor3f(GLfloat red, GLfloat green, GLfloat blue)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3f, context, red, green, blue);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3f(context, red, green, blue))
         {
             context->secondaryColor3f(red, green, blue);
@@ -350,6 +407,9 @@ void GL_APIENTRY SecondaryColor3fv(const GLfloat *v)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3fv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3fv(context, v))
         {
             context->secondaryColor3fv(v);
@@ -365,6 +425,9 @@ void GL_APIENTRY SecondaryColor3i(GLint red, GLint green, GLint blue)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3i, context, red, green, blue);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3i(context, red, green, blue))
         {
             context->secondaryColor3i(red, green, blue);
@@ -380,6 +443,9 @@ void GL_APIENTRY SecondaryColor3iv(const GLint *v)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3iv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3iv(context, v))
         {
             context->secondaryColor3iv(v);
@@ -395,6 +461,9 @@ void GL_APIENTRY SecondaryColor3s(GLshort red, GLshort green, GLshort blue)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3s, context, red, green, blue);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3s(context, red, green, blue))
         {
             context->secondaryColor3s(red, green, blue);
@@ -410,6 +479,9 @@ void GL_APIENTRY SecondaryColor3sv(const GLshort *v)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3sv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3sv(context, v))
         {
             context->secondaryColor3sv(v);
@@ -425,6 +497,9 @@ void GL_APIENTRY SecondaryColor3ub(GLubyte red, GLubyte green, GLubyte blue)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3ub, context, red, green, blue);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3ub(context, red, green, blue))
         {
             context->secondaryColor3ub(red, green, blue);
@@ -440,6 +515,9 @@ void GL_APIENTRY SecondaryColor3ubv(const GLubyte *v)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3ubv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3ubv(context, v))
         {
             context->secondaryColor3ubv(v);
@@ -455,6 +533,9 @@ void GL_APIENTRY SecondaryColor3ui(GLuint red, GLuint green, GLuint blue)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3ui, context, red, green, blue);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3ui(context, red, green, blue))
         {
             context->secondaryColor3ui(red, green, blue);
@@ -470,6 +551,9 @@ void GL_APIENTRY SecondaryColor3uiv(const GLuint *v)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3uiv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3uiv(context, v))
         {
             context->secondaryColor3uiv(v);
@@ -485,6 +569,9 @@ void GL_APIENTRY SecondaryColor3us(GLushort red, GLushort green, GLushort blue)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3us, context, red, green, blue);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3us(context, red, green, blue))
         {
             context->secondaryColor3us(red, green, blue);
@@ -500,6 +587,9 @@ void GL_APIENTRY SecondaryColor3usv(const GLushort *v)
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColor3usv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSecondaryColor3usv(context, v))
         {
             context->secondaryColor3usv(v);
@@ -518,6 +608,9 @@ void GL_APIENTRY SecondaryColorPointer(GLint size, GLenum type, GLsizei stride, 
     if (context)
     {
         ANGLE_CAPTURE(SecondaryColorPointer, context, size, type, stride, pointer);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateSecondaryColorPointer(context, size, type, stride, pointer))
         {
@@ -534,6 +627,9 @@ void GL_APIENTRY WindowPos2d(GLdouble x, GLdouble y)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos2d, context, x, y);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2d(context, x, y))
         {
             context->windowPos2d(x, y);
@@ -549,6 +645,9 @@ void GL_APIENTRY WindowPos2dv(const GLdouble *v)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos2dv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2dv(context, v))
         {
             context->windowPos2dv(v);
@@ -564,6 +663,9 @@ void GL_APIENTRY WindowPos2f(GLfloat x, GLfloat y)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos2f, context, x, y);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2f(context, x, y))
         {
             context->windowPos2f(x, y);
@@ -579,6 +681,9 @@ void GL_APIENTRY WindowPos2fv(const GLfloat *v)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos2fv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2fv(context, v))
         {
             context->windowPos2fv(v);
@@ -594,6 +699,9 @@ void GL_APIENTRY WindowPos2i(GLint x, GLint y)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos2i, context, x, y);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2i(context, x, y))
         {
             context->windowPos2i(x, y);
@@ -609,6 +717,9 @@ void GL_APIENTRY WindowPos2iv(const GLint *v)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos2iv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2iv(context, v))
         {
             context->windowPos2iv(v);
@@ -624,6 +735,9 @@ void GL_APIENTRY WindowPos2s(GLshort x, GLshort y)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos2s, context, x, y);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2s(context, x, y))
         {
             context->windowPos2s(x, y);
@@ -639,6 +753,9 @@ void GL_APIENTRY WindowPos2sv(const GLshort *v)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos2sv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos2sv(context, v))
         {
             context->windowPos2sv(v);
@@ -654,6 +771,9 @@ void GL_APIENTRY WindowPos3d(GLdouble x, GLdouble y, GLdouble z)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos3d, context, x, y, z);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3d(context, x, y, z))
         {
             context->windowPos3d(x, y, z);
@@ -669,6 +789,9 @@ void GL_APIENTRY WindowPos3dv(const GLdouble *v)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos3dv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3dv(context, v))
         {
             context->windowPos3dv(v);
@@ -684,6 +807,9 @@ void GL_APIENTRY WindowPos3f(GLfloat x, GLfloat y, GLfloat z)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos3f, context, x, y, z);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3f(context, x, y, z))
         {
             context->windowPos3f(x, y, z);
@@ -699,6 +825,9 @@ void GL_APIENTRY WindowPos3fv(const GLfloat *v)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos3fv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3fv(context, v))
         {
             context->windowPos3fv(v);
@@ -714,6 +843,9 @@ void GL_APIENTRY WindowPos3i(GLint x, GLint y, GLint z)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos3i, context, x, y, z);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3i(context, x, y, z))
         {
             context->windowPos3i(x, y, z);
@@ -729,6 +861,9 @@ void GL_APIENTRY WindowPos3iv(const GLint *v)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos3iv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3iv(context, v))
         {
             context->windowPos3iv(v);
@@ -744,6 +879,9 @@ void GL_APIENTRY WindowPos3s(GLshort x, GLshort y, GLshort z)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos3s, context, x, y, z);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3s(context, x, y, z))
         {
             context->windowPos3s(x, y, z);
@@ -759,6 +897,9 @@ void GL_APIENTRY WindowPos3sv(const GLshort *v)
     if (context)
     {
         ANGLE_CAPTURE(WindowPos3sv, context, v);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWindowPos3sv(context, v))
         {
             context->windowPos3sv(v);

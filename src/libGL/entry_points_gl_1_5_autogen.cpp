@@ -34,6 +34,9 @@ void GL_APIENTRY BeginQuery(GLenum target, GLuint id)
     {
         QueryType targetPacked = FromGLenum<QueryType>(target);
         ANGLE_CAPTURE(BeginQuery, context, targetPacked, id);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateBeginQuery(context, targetPacked, id))
         {
             context->beginQuery(targetPacked, id);
@@ -50,6 +53,9 @@ void GL_APIENTRY BindBuffer(GLenum target, GLuint buffer)
     {
         BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
         ANGLE_CAPTURE(BindBuffer, context, targetPacked, buffer);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateBindBuffer(context, targetPacked, buffer))
         {
             context->bindBuffer(targetPacked, buffer);
@@ -69,6 +75,9 @@ void GL_APIENTRY BufferData(GLenum target, GLsizeiptr size, const void *data, GL
         BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
         BufferUsage usagePacked    = FromGLenum<BufferUsage>(usage);
         ANGLE_CAPTURE(BufferData, context, targetPacked, size, data, usagePacked);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateBufferData(context, targetPacked, size, data, usagePacked))
         {
@@ -90,6 +99,9 @@ void GL_APIENTRY BufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, 
     {
         BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
         ANGLE_CAPTURE(BufferSubData, context, targetPacked, offset, size, data);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateBufferSubData(context, targetPacked, offset, size, data))
         {
@@ -106,6 +118,9 @@ void GL_APIENTRY DeleteBuffers(GLsizei n, const GLuint *buffers)
     if (context)
     {
         ANGLE_CAPTURE(DeleteBuffers, context, n, buffers);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateDeleteBuffers(context, n, buffers))
         {
             context->deleteBuffers(n, buffers);
@@ -121,6 +136,9 @@ void GL_APIENTRY DeleteQueries(GLsizei n, const GLuint *ids)
     if (context)
     {
         ANGLE_CAPTURE(DeleteQueries, context, n, ids);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateDeleteQueries(context, n, ids))
         {
             context->deleteQueries(n, ids);
@@ -137,6 +155,9 @@ void GL_APIENTRY EndQuery(GLenum target)
     {
         QueryType targetPacked = FromGLenum<QueryType>(target);
         ANGLE_CAPTURE(EndQuery, context, targetPacked);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateEndQuery(context, targetPacked))
         {
             context->endQuery(targetPacked);
@@ -152,6 +173,9 @@ void GL_APIENTRY GenBuffers(GLsizei n, GLuint *buffers)
     if (context)
     {
         ANGLE_CAPTURE(GenBuffers, context, n, buffers);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateGenBuffers(context, n, buffers))
         {
             context->genBuffers(n, buffers);
@@ -167,6 +191,9 @@ void GL_APIENTRY GenQueries(GLsizei n, GLuint *ids)
     if (context)
     {
         ANGLE_CAPTURE(GenQueries, context, n, ids);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateGenQueries(context, n, ids))
         {
             context->genQueries(n, ids);
@@ -184,6 +211,9 @@ void GL_APIENTRY GetBufferParameteriv(GLenum target, GLenum pname, GLint *params
     {
         BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
         ANGLE_CAPTURE(GetBufferParameteriv, context, targetPacked, pname, params);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateGetBufferParameteriv(context, targetPacked, pname, params))
         {
@@ -202,6 +232,9 @@ void GL_APIENTRY GetBufferPointerv(GLenum target, GLenum pname, void **params)
     {
         BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
         ANGLE_CAPTURE(GetBufferPointerv, context, targetPacked, pname, params);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateGetBufferPointerv(context, targetPacked, pname, params))
         {
@@ -222,6 +255,9 @@ void GL_APIENTRY GetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr siz
     if (context)
     {
         ANGLE_CAPTURE(GetBufferSubData, context, target, offset, size, data);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateGetBufferSubData(context, target, offset, size, data))
         {
@@ -239,6 +275,9 @@ void GL_APIENTRY GetQueryObjectiv(GLuint id, GLenum pname, GLint *params)
     if (context)
     {
         ANGLE_CAPTURE(GetQueryObjectiv, context, id, pname, params);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateGetQueryObjectiv(context, id, pname, params))
         {
             context->getQueryObjectiv(id, pname, params);
@@ -255,6 +294,9 @@ void GL_APIENTRY GetQueryObjectuiv(GLuint id, GLenum pname, GLuint *params)
     if (context)
     {
         ANGLE_CAPTURE(GetQueryObjectuiv, context, id, pname, params);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateGetQueryObjectuiv(context, id, pname, params))
         {
             context->getQueryObjectuiv(id, pname, params);
@@ -272,6 +314,9 @@ void GL_APIENTRY GetQueryiv(GLenum target, GLenum pname, GLint *params)
     {
         QueryType targetPacked = FromGLenum<QueryType>(target);
         ANGLE_CAPTURE(GetQueryiv, context, targetPacked, pname, params);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateGetQueryiv(context, targetPacked, pname, params))
         {
             context->getQueryiv(targetPacked, pname, params);
@@ -287,6 +332,9 @@ GLboolean GL_APIENTRY IsBuffer(GLuint buffer)
     if (context)
     {
         ANGLE_CAPTURE(IsBuffer, context, buffer);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateIsBuffer(context, buffer))
         {
             return context->isBuffer(buffer);
@@ -304,6 +352,9 @@ GLboolean GL_APIENTRY IsQuery(GLuint id)
     if (context)
     {
         ANGLE_CAPTURE(IsQuery, context, id);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateIsQuery(context, id))
         {
             return context->isQuery(id);
@@ -322,6 +373,9 @@ void *GL_APIENTRY MapBuffer(GLenum target, GLenum access)
     {
         BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
         ANGLE_CAPTURE(MapBuffer, context, targetPacked, access);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateMapBuffer(context, targetPacked, access))
         {
             return context->mapBuffer(targetPacked, access);
@@ -340,6 +394,9 @@ GLboolean GL_APIENTRY UnmapBuffer(GLenum target)
     {
         BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
         ANGLE_CAPTURE(UnmapBuffer, context, targetPacked);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateUnmapBuffer(context, targetPacked))
         {
             return context->unmapBuffer(targetPacked);

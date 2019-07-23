@@ -892,7 +892,7 @@ Error Display::createStream(const AttributeMap &attribs, Stream **outStream)
 }
 
 Error Display::createContext(const Config *configuration,
-                             const gl::Context *shareContext,
+                             gl::Context *shareContext,
                              EGLenum clientType,
                              const AttributeMap &attribs,
                              gl::Context **outContext)

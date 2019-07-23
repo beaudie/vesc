@@ -34,6 +34,9 @@ GLenum GL_APIENTRY ClientWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeou
     if (context)
     {
         ANGLE_CAPTURE(ClientWaitSync, context, sync, flags, timeout);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateClientWaitSync(context, sync, flags, timeout))
         {
             return context->clientWaitSync(sync, flags, timeout);
@@ -51,6 +54,9 @@ void GL_APIENTRY DeleteSync(GLsync sync)
     if (context)
     {
         ANGLE_CAPTURE(DeleteSync, context, sync);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateDeleteSync(context, sync))
         {
             context->deleteSync(sync);
@@ -73,6 +79,9 @@ void GL_APIENTRY DrawElementsBaseVertex(GLenum mode,
     if (context)
     {
         ANGLE_CAPTURE(DrawElementsBaseVertex, context, mode, count, type, indices, basevertex);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateDrawElementsBaseVertex(context, mode, count, type, indices, basevertex))
         {
@@ -98,6 +107,9 @@ void GL_APIENTRY DrawElementsInstancedBaseVertex(GLenum mode,
     {
         ANGLE_CAPTURE(DrawElementsInstancedBaseVertex, context, mode, count, type, indices,
                       instancecount, basevertex);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateDrawElementsInstancedBaseVertex(context, mode, count, type, indices,
                                                     instancecount, basevertex))
@@ -126,6 +138,9 @@ void GL_APIENTRY DrawRangeElementsBaseVertex(GLenum mode,
     {
         ANGLE_CAPTURE(DrawRangeElementsBaseVertex, context, mode, start, end, count, type, indices,
                       basevertex);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateDrawRangeElementsBaseVertex(context, mode, start, end, count, type, indices,
                                                 basevertex))
@@ -144,6 +159,9 @@ GLsync GL_APIENTRY FenceSync(GLenum condition, GLbitfield flags)
     if (context)
     {
         ANGLE_CAPTURE(FenceSync, context, condition, flags);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateFenceSync(context, condition, flags))
         {
             return context->fenceSync(condition, flags);
@@ -162,6 +180,9 @@ void GL_APIENTRY FramebufferTexture(GLenum target, GLenum attachment, GLuint tex
     if (context)
     {
         ANGLE_CAPTURE(FramebufferTexture, context, target, attachment, texture, level);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateFramebufferTexture(context, target, attachment, texture, level))
         {
@@ -180,6 +201,9 @@ void GL_APIENTRY GetBufferParameteri64v(GLenum target, GLenum pname, GLint64 *pa
     {
         BufferBinding targetPacked = FromGLenum<BufferBinding>(target);
         ANGLE_CAPTURE(GetBufferParameteri64v, context, targetPacked, pname, params);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateGetBufferParameteri64v(context, targetPacked, pname, params))
         {
@@ -197,6 +221,9 @@ void GL_APIENTRY GetInteger64i_v(GLenum target, GLuint index, GLint64 *data)
     if (context)
     {
         ANGLE_CAPTURE(GetInteger64i_v, context, target, index, data);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateGetInteger64i_v(context, target, index, data))
         {
             context->getInteger64i_v(target, index, data);
@@ -212,6 +239,9 @@ void GL_APIENTRY GetInteger64v(GLenum pname, GLint64 *data)
     if (context)
     {
         ANGLE_CAPTURE(GetInteger64v, context, pname, data);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateGetInteger64v(context, pname, data))
         {
             context->getInteger64v(pname, data);
@@ -228,6 +258,9 @@ void GL_APIENTRY GetMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
     if (context)
     {
         ANGLE_CAPTURE(GetMultisamplefv, context, pname, index, val);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateGetMultisamplefv(context, pname, index, val))
         {
             context->getMultisamplefv(pname, index, val);
@@ -247,6 +280,9 @@ GetSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *va
     if (context)
     {
         ANGLE_CAPTURE(GetSynciv, context, sync, pname, bufSize, length, values);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateGetSynciv(context, sync, pname, bufSize, length, values))
         {
@@ -263,6 +299,9 @@ GLboolean GL_APIENTRY IsSync(GLsync sync)
     if (context)
     {
         ANGLE_CAPTURE(IsSync, context, sync);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateIsSync(context, sync))
         {
             return context->isSync(sync);
@@ -289,6 +328,9 @@ void GL_APIENTRY MultiDrawElementsBaseVertex(GLenum mode,
     {
         ANGLE_CAPTURE(MultiDrawElementsBaseVertex, context, mode, count, type, indices, drawcount,
                       basevertex);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateMultiDrawElementsBaseVertex(context, mode, count, type, indices, drawcount,
                                                 basevertex))
@@ -307,6 +349,9 @@ void GL_APIENTRY ProvokingVertex(GLenum mode)
     {
         ProvokingVertexConvention modePacked = FromGLenum<ProvokingVertexConvention>(mode);
         ANGLE_CAPTURE(ProvokingVertex, context, modePacked);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateProvokingVertex(context, modePacked))
         {
             context->provokingVertex(modePacked);
@@ -322,6 +367,9 @@ void GL_APIENTRY SampleMaski(GLuint maskNumber, GLbitfield mask)
     if (context)
     {
         ANGLE_CAPTURE(SampleMaski, context, maskNumber, mask);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateSampleMaski(context, maskNumber, mask))
         {
             context->sampleMaski(maskNumber, mask);
@@ -346,6 +394,9 @@ void GL_APIENTRY TexImage2DMultisample(GLenum target,
     {
         ANGLE_CAPTURE(TexImage2DMultisample, context, target, samples, internalformat, width,
                       height, fixedsamplelocations);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateTexImage2DMultisample(context, target, samples, internalformat, width, height,
                                           fixedsamplelocations))
@@ -374,6 +425,9 @@ void GL_APIENTRY TexImage3DMultisample(GLenum target,
     {
         ANGLE_CAPTURE(TexImage3DMultisample, context, target, samples, internalformat, width,
                       height, depth, fixedsamplelocations);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateTexImage3DMultisample(context, target, samples, internalformat, width, height,
                                           depth, fixedsamplelocations))
@@ -393,6 +447,9 @@ void GL_APIENTRY WaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout)
     if (context)
     {
         ANGLE_CAPTURE(WaitSync, context, sync, flags, timeout);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidateWaitSync(context, sync, flags, timeout))
         {
             context->waitSync(sync, flags, timeout);

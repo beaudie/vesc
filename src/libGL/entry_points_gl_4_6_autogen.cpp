@@ -41,6 +41,9 @@ void GL_APIENTRY MultiDrawArraysIndirectCount(GLenum mode,
     {
         ANGLE_CAPTURE(MultiDrawArraysIndirectCount, context, mode, indirect, drawcount,
                       maxdrawcount, stride);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateMultiDrawArraysIndirectCount(context, mode, indirect, drawcount, maxdrawcount,
                                                  stride))
@@ -67,6 +70,9 @@ void GL_APIENTRY MultiDrawElementsIndirectCount(GLenum mode,
     {
         ANGLE_CAPTURE(MultiDrawElementsIndirectCount, context, mode, type, indirect, drawcount,
                       maxdrawcount, stride);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateMultiDrawElementsIndirectCount(context, mode, type, indirect, drawcount,
                                                    maxdrawcount, stride))
@@ -85,6 +91,9 @@ void GL_APIENTRY PolygonOffsetClamp(GLfloat factor, GLfloat units, GLfloat clamp
     if (context)
     {
         ANGLE_CAPTURE(PolygonOffsetClamp, context, factor, units, clamp);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() || ValidatePolygonOffsetClamp(context, factor, units, clamp))
         {
             context->polygonOffsetClamp(factor, units, clamp);
@@ -109,6 +118,9 @@ void GL_APIENTRY SpecializeShader(GLuint shader,
     {
         ANGLE_CAPTURE(SpecializeShader, context, shader, pEntryPoint, numSpecializationConstants,
                       pConstantIndex, pConstantValue);
+        auto shareContextLock = context->isShared()
+                                    ? std::unique_lock<std::mutex>(egl::GetGlobalMutex())
+                                    : std::unique_lock<std::mutex>();
         if (context->skipValidation() ||
             ValidateSpecializeShader(context, shader, pEntryPoint, numSpecializationConstants,
                                      pConstantIndex, pConstantValue))
