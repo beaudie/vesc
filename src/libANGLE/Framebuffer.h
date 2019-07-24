@@ -82,7 +82,6 @@ class FramebufferState final : angle::NonCopyable
     bool hasSeparateDepthAndStencilAttachments() const;
     bool colorAttachmentsAreUniqueImages() const;
     Box getDimensions() const;
-    Extents getExtents() const;
 
     const FramebufferAttachment *getDrawBuffer(size_t drawBufferIdx) const;
     size_t getDrawBufferCount() const;
@@ -203,7 +202,6 @@ class Framebuffer final : public angle::ObserverInterface,
     bool readDisallowedByMultiview() const;
     GLsizei getNumViews() const;
     GLint getBaseViewIndex() const;
-    Extents getExtents() const;
 
     size_t getDrawbufferStateCount() const;
     GLenum getDrawBufferState(size_t drawBuffer) const;
