@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "21e4c9b9_83e79f03",
+        "filename": "src/libANGLE/renderer/angle_format.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T19:32:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b414844e_256afe99",
+      "range": {
+        "startLine": 13,
+        "startChar": 13,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "fa9e3826ce4cdab8f88444ac6d7be1126bc78e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6a09a59e_03a6ebcf",
         "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
         "patchSetId": 2
@@ -39,6 +63,24 @@
       "revId": "fa9e3826ce4cdab8f88444ac6d7be1126bc78e18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54f3a0bc_c8d7224b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T19:32:01Z",
+      "side": 1,
+      "message": "Done. Revised the comment.",
+      "parentUuid": "6a09a59e_03a6ebcf",
+      "revId": "fa9e3826ce4cdab8f88444ac6d7be1126bc78e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
