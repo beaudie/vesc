@@ -62,6 +62,30 @@
       "revId": "fa9e3826ce4cdab8f88444ac6d7be1126bc78e18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8d5ee5d_7773f240",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T05:06:01Z",
+      "side": 1,
+      "message": "Yeap. That\u0027s used to calculated the lcm.",
+      "parentUuid": "62a32242_5159e82f",
+      "range": {
+        "startLine": 171,
+        "startChar": 3,
+        "endLine": 171,
+        "endChar": 82
+      },
+      "revId": "fa9e3826ce4cdab8f88444ac6d7be1126bc78e18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
