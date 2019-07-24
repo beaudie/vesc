@@ -381,28 +381,30 @@ void AttributeLayoutTest::GetTestCases(void)
     // 4. buffer and memory
     mTestCases.push_back({Float(B0, 0, 8, mCoord), Float(M0, 0, 12, mColor)});
 
-    // 5. stride != size
+    // 5-7. stride != size
+    mTestCases.push_back({Float(B0, 0, 16, mCoord), Float(B1, 0, 12, mColor)});
+    mTestCases.push_back({Float(M0, 0, 16, mCoord), Float(M1, 0, 12, mColor)});
     mTestCases.push_back({Float(B0, 0, 16, mCoord), Float(B1, 0, 12, mColor)});
 
-    // 6-9. byte/short
+    // 8-11. byte/short
     mTestCases.push_back({SByte(M0, 0, 20, mCoord), UByte(M0, 10, 20, mColor)});
     mTestCases.push_back({SShort(M0, 0, 20, mCoord), UShort(M0, 8, 20, mColor)});
     mTestCases.push_back({NormSByte(M0, 0, 8, mCoord), NormUByte(M0, 4, 8, mColor)});
     mTestCases.push_back({NormSShort(M0, 0, 20, mCoord), NormUShort(M0, 8, 20, mColor)});
 
-    // 10. one buffer, sequential
+    // 12. one buffer, sequential
     mTestCases.push_back({Fixed(B0, 0, 8, mCoord), Float(B0, 96, 12, mColor)});
 
-    // 11. one buffer, interleaved
+    // 13. one buffer, interleaved
     mTestCases.push_back({Fixed(B0, 0, 20, mCoord), Float(B0, 8, 20, mColor)});
 
-    // 12. memory and buffer, float and integer
+    // 14. memory and buffer, float and integer
     mTestCases.push_back({Float(M0, 0, 8, mCoord), SByte(B0, 0, 12, mColor)});
 
-    // 13. buffer and memory, unusual offset and stride
+    // 15. buffer and memory, unusual offset and stride
     mTestCases.push_back({Float(B0, 11, 13, mCoord), Float(M0, 23, 17, mColor)});
 
-    // 14-15. remaining ES3 formats
+    // 16-17. remaining ES3 formats
     if (es3)
     {
         mTestCases.push_back({SInt(M0, 0, 40, mCoord), UInt(M0, 16, 40, mColor)});
