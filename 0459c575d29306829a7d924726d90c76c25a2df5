@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "58717f6b_41881d92",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T22:50:35Z",
+      "side": 1,
+      "message": "Unfortunately the scope then finishes in the function and the lock is released.",
+      "parentUuid": "ab897461_279cfacc",
+      "range": {
+        "startLine": 125,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 139
+      },
+      "revId": "0459c575d29306829a7d924726d90c76c25a2df5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a3a6442_124385c8",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 6
@@ -105,6 +129,24 @@
       "writtenOn": "2019-07-23T23:32:24Z",
       "side": 1,
       "message": "What is std::unique_lock\u003cstd::mutex\u003e() locking?\nIs it the same thing as the same statement elsewhere?\nWhy isn\u0027t there a name inside the parenthesis, say a context specific mutex vs. the global mutex.",
+      "revId": "0459c575d29306829a7d924726d90c76c25a2df5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cebb8bdb_a9d873a5",
+        "filename": "src/libGL/entry_points_gl_1_0_autogen.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T22:50:35Z",
+      "side": 1,
+      "message": "It doesn\u0027t lock anything. The CL is trying to introduce locking only to shared contexts.",
+      "parentUuid": "d24ec620_e2bab105",
       "revId": "0459c575d29306829a7d924726d90c76c25a2df5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
