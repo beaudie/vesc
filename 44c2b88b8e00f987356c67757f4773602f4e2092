@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bfd96444_1febf9e1",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T19:44:12Z",
+      "side": 1,
+      "message": "That would mean this file including src/libANGLE/Constants.h. Some feeling tells me I shouldn\u0027t do that. Jamie?",
+      "parentUuid": "f55dec3a_c3925838",
+      "revId": "44c2b88b8e00f987356c67757f4773602f4e2092",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8db388f6_0c116cb8",
         "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
         "patchSetId": 11
@@ -33,6 +51,24 @@
       "revId": "44c2b88b8e00f987356c67757f4773602f4e2092",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6366f8f_defc70dc",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T19:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8db388f6_0c116cb8",
+      "revId": "44c2b88b8e00f987356c67757f4773602f4e2092",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "2160ebf3_4dfc4bac",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 938,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T19:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de973b35_6b76cfaf",
+      "revId": "44c2b88b8e00f987356c67757f4773602f4e2092",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "46a285d6_dcd20571",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 11
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "1c0c3e50_104096bd",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T19:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46a285d6_dcd20571",
+      "revId": "44c2b88b8e00f987356c67757f4773602f4e2092",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e360235d_ba71b767",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 11
@@ -84,6 +156,24 @@
       "revId": "44c2b88b8e00f987356c67757f4773602f4e2092",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "18ea1454_4e66c604",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T19:44:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e360235d_ba71b767",
+      "revId": "44c2b88b8e00f987356c67757f4773602f4e2092",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
