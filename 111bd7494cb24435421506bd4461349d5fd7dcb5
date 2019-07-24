@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "55ee06a4_e9360f35",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-24T20:32:03Z",
+      "side": 1,
+      "message": "They\u0027re doing it in the back-end. I asked them to do this and they kept finding ways to avoid it.",
+      "parentUuid": "4c801449_8970849a",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 79
+      },
+      "revId": "111bd7494cb24435421506bd4461349d5fd7dcb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "373d692d_288f57f5",
         "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
         "patchSetId": 4
