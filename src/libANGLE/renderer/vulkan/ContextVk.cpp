@@ -74,7 +74,7 @@ constexpr uint64_t kMaxFenceWaitTimeNs = 10'000'000'000llu;
 constexpr size_t kInFlightCommandsLimit = 100u;
 
 // Initially dumping the command graphs is disabled.
-constexpr bool kEnableCommandGraphDiagnostics = false;
+constexpr bool kEnableCommandGraphDiagnostics = true;
 
 void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
                           const vk::PrimaryCommandBuffer &commandBuffer,
@@ -519,6 +519,9 @@ angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
 angle::Result ContextVk::setupDispatch(const gl::Context *context,
                                        vk::CommandBuffer **commandBufferOut)
 {
+    // FIXME: put this logic in front-end
+    invalidateSSBOConversionBuffers(context);
+
     ANGLE_TRY(mDispatcher.recordCommands(this, commandBufferOut));
 
     if (mProgram->dirtyUniforms())
@@ -538,6 +541,19 @@ angle::Result ContextVk::setupDispatch(const gl::Context *context,
     mComputeDirtyBits.reset();
 
     return angle::Result::Continue;
+}
+
+void ContextVk::invalidateSSBOConversionBuffers(const gl::Context *context)
+{
+    if (!mProgram->hasStorageBuffers())
+        return;
+    for (const gl::InterfaceBlock &block : mProgram->getState().getShaderStorageBlocks())
+    {
+        const gl::OffsetBindingPointer<gl::Buffer> &buffer =
+            mState.getIndexedShaderStorageBuffer(block.binding);
+        WARN() << "hello: " << block.binding;
+        buffer.get()->onStorageBufferChanged();
+    }
 }
 
 angle::Result ContextVk::handleDirtyGraphicsDefaultAttribs(const gl::Context *context,

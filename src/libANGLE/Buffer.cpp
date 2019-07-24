@@ -226,6 +226,14 @@ void Buffer::onPixelPack()
     onStateChange(angle::SubjectMessage::ContentsChanged);
 }
 
+void Buffer::onStorageBufferChanged()
+{
+    mIndexRangeCache.clear();
+
+    // Notify when data changes.
+    onStateChange(angle::SubjectMessage::ContentsChanged);
+}
+
 angle::Result Buffer::getIndexRange(const gl::Context *context,
                                     DrawElementsType type,
                                     size_t offset,
