@@ -1439,6 +1439,10 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
     size_t level         = renderTarget->getLevelIndex();
     size_t layer         = renderTarget->getLayerIndex();
     VkOffset3D srcOffset = {area.x, area.y, 0};
+
+    // Depth > 1 means this is a 3D texture, and we need to offset by layer
+    srcOffset.z = srcImage->getExtents().depth > 1 ? layer : 0;
+
     VkExtent3D srcExtent = {static_cast<uint32_t>(area.width), static_cast<uint32_t>(area.height),
                             1};
 
@@ -1500,9 +1504,11 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
     region.imageExtent                     = srcExtent;
     region.imageOffset                     = srcOffset;
     region.imageSubresource.aspectMask     = copyAspectFlags;
-    region.imageSubresource.baseArrayLayer = layer;
     region.imageSubresource.layerCount     = 1;
     region.imageSubresource.mipLevel       = level;
+
+    // Depth > 1 means this is a 3D texture and we cannot use baseArrayLayer
+    region.imageSubresource.baseArrayLayer = srcImage->getExtents().depth > 1 ? 0 : layer;
 
     commandBuffer->copyImageToBuffer(srcImage->getImage(), srcImage->getCurrentLayout(),
                                      bufferHandle, 1, &region);

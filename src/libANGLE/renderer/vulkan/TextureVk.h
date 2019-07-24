@@ -280,6 +280,7 @@ class TextureVk : public TextureImpl
                                  const vk::Format &format,
                                  uint32_t levelCount,
                                  uint32_t layerCount);
+    angle::Result init3dRenderTargets(ContextVk *contextVk);
     angle::Result initCubeMapRenderTargets(ContextVk *contextVk);
 
     angle::Result ensureImageInitializedImpl(ContextVk *contextVk,
@@ -313,6 +314,7 @@ class TextureVk : public TextureImpl
 
     RenderTargetVk mRenderTarget;
     std::vector<vk::ImageView> mLayerFetchImageView;
+    std::vector<RenderTargetVk> m3dRenderTargets;
     std::vector<RenderTargetVk> mCubeMapRenderTargets;
 
     // The serial is used for cache indexing.
