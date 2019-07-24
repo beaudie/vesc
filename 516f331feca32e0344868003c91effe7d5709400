@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b129c950_1d6586e4",
+        "filename": "src/common/matrix_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T22:14:20Z",
+      "side": 1,
+      "message": "Should include parens around (det !\u003d static_cast\u003cT\u003e(0)) for clarity.",
+      "revId": "516f331feca32e0344868003c91effe7d5709400",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
