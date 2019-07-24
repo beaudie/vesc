@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "07f310ff_1e4479dc",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-24T19:57:19Z",
+      "side": 1,
+      "message": "you maybe should cache \"any active ssbos\" as a bool in mStateCache. For one thing we aren\u0027t guaranteed that getProgram is valid. ES 1.0 and the path rendering extension both work without a program.",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 79
+      },
+      "revId": "111bd7494cb24435421506bd4461349d5fd7dcb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
