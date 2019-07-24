@@ -536,6 +536,214 @@ TEST_P(BufferDataTestES3, NoBufferInitDataCopyBug)
     ASSERT_GL_NO_ERROR();
 }
 
+class BufferDataDrawingTest : public ANGLETest
+{
+  protected:
+    BufferDataDrawingTest()
+    {
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+        setConfigDepthBits(24);
+    }
+
+    void testTearDown() override
+    {
+        glDeleteFramebuffers(2, mFrameBuffers);
+        glDeleteTextures(2, mFrameBuffers);
+        glDeleteProgram(mProgram);
+    }
+
+    void setDrawFramebuffer(GLuint *framebuffer, GLuint *frameTexture)
+    {
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, *framebuffer);
+        glBindTexture(GL_TEXTURE_2D, *frameTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kRenderWidth, kRenderHeight, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *frameTexture,
+                               0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+    void setProgram()
+    {
+
+        constexpr char kVS[] = R"(attribute vec3 vColor;
+varying vec3 colorOut;
+void main()
+{
+    gl_Position = vec4(0.5, 0.5, 0.0, 1.0);
+    colorOut = vColor;
+})";
+
+        constexpr char kFS[] = R"(precision mediump float;
+varying vec3 colorOut;
+void main()
+{
+    gl_FragColor = vec4(colorOut, 0.0);
+})";
+        mProgram             = CompileProgram(kVS, kFS);
+        if (mProgram == 0)
+        {
+            FAIL() << "shader compilation failed.";
+        }
+        glUseProgram(mProgram);
+
+        mAttribLocation = glGetAttribLocation(mProgram, "vColor");
+        EXPECT_GL_NO_ERROR();
+        ASSERT_GE(mAttribLocation, 0);
+    }
+
+    // Use this method to filter if we can support these tests.
+    bool setupTest()
+    {
+        glGenFramebuffers(2, mFrameBuffers);
+        glGenTextures(2, mFrameTextures);
+
+        setProgram();
+        for (uint32_t i = 0; i < 2; i++)
+        {
+            setDrawFramebuffer(&mFrameBuffers[i], &mFrameTextures[i]);
+        }
+
+        return true;
+    }
+
+    void setDrawingContext(uint32_t index)
+    {
+        uint32_t id = index % 2;
+
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[id]);
+        glViewport(0, 0, kRenderWidth, kRenderHeight);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    void verifySameRenderResult()
+    {
+        // RGBA, 4 components for each pixel
+        constexpr size_t kBufSize      = 4 * kRenderHeight * kRenderWidth;
+        GLubyte pixelBufs[2][kBufSize] = {{0}};
+        ASSERT_EQ(memcmp(pixelBufs[0], pixelBufs[1], kBufSize * sizeof(GLubyte)), 0);
+
+        for (uint32_t bufferIndex = 0; bufferIndex < 2; bufferIndex++)
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffers[bufferIndex]);
+            glReadPixels(0, 0, kRenderWidth, kRenderHeight, GL_RGBA, GL_UNSIGNED_BYTE,
+                         pixelBufs[bufferIndex]);
+            EXPECT_GL_NO_ERROR();
+        }
+
+        // Make sure something has been drawn
+        for (uint32_t bufferIndex = 0; bufferIndex < 2; bufferIndex++)
+        {
+            bool nonZero = false;
+            for (uint32_t i = 0; i < kBufSize; i++)
+            {
+                if (pixelBufs[bufferIndex][i] != 0)
+                {
+                    nonZero = true;
+                    break;
+                }
+            }
+            ASSERT_EQ(nonZero, true);
+        }
+
+        ASSERT_EQ(memcmp(pixelBufs[0], pixelBufs[1], kBufSize * sizeof(GLubyte)), 0);
+    }
+
+    static const GLsizei kRenderWidth = 8, kRenderHeight = 8;
+    GLint mAttribLocation;
+    GLuint mFrameTextures[2];
+    GLuint mFrameBuffers[2];
+    GLuint mProgram;
+};
+
+// Test for vulkan ensures buffer data is format always converted on pure VBO change
+TEST_P(BufferDataDrawingTest, ConvertedVboChange)
+{
+    setupTest();
+
+    GLuint buffers[2];
+    glGenBuffers(2, buffers);
+
+    std::vector<GLfloat> floatData;
+    floatData.push_back(0.515f);
+    floatData.push_back(0.515f);
+    floatData.push_back(0.515f);
+    for (uint32_t i = 0; i < 2; i++)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[i]);
+        glBufferData(GL_ARRAY_BUFFER, floatData.size() * sizeof(GLfloat), floatData.data(),
+                     GL_STATIC_DRAW);
+    }
+
+    glEnableVertexAttribArray(mAttribLocation);
+    EXPECT_GL_NO_ERROR();
+
+    setDrawingContext(0);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+    glVertexAttribPointer(mAttribLocation, 3, GL_FIXED, GL_FALSE, 0, 0);
+    glDrawArrays(GL_POINTS, 0, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    EXPECT_GL_NO_ERROR();
+
+    setDrawingContext(1);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+    glVertexAttribPointer(mAttribLocation, 3, GL_FIXED, GL_FALSE, 0, 0);
+    glDrawArrays(GL_POINTS, 0, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    EXPECT_GL_NO_ERROR();
+
+    verifySameRenderResult();
+
+    glDeleteBuffers(2, buffers);
+}
+
+// Test for vulkan ensures buffer data is format always converted on offset change
+TEST_P(BufferDataDrawingTest, OffsetChange)
+{
+    setupTest();
+
+    GLuint buffer;
+    glGenBuffers(1, &buffer);
+
+    std::vector<GLfloat> floatData;
+    floatData.push_back(0.212f);
+    floatData.push_back(0.212f);
+    floatData.push_back(0.212f);
+    floatData.push_back(0.0);
+    floatData.push_back(0.212f);
+    floatData.push_back(0.212f);
+    floatData.push_back(0.212f);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, floatData.size() * sizeof(GLfloat), floatData.data(),
+                 GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(mAttribLocation);
+    EXPECT_GL_NO_ERROR();
+
+    setDrawingContext(0);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glVertexAttribPointer(mAttribLocation, 3, GL_FIXED, GL_FALSE, 0, 0);
+    glDrawArrays(GL_POINTS, 0, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    EXPECT_GL_NO_ERROR();
+
+    setDrawingContext(1);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glVertexAttribPointer(mAttribLocation, 3, GL_FIXED, GL_FALSE, 0, (void *)(4 * sizeof(GLfloat)));
+    glDrawArrays(GL_POINTS, 0, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    EXPECT_GL_NO_ERROR();
+
+    verifySameRenderResult();
+
+    glDeleteBuffers(1, &buffer);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(BufferDataTest,
@@ -550,6 +758,8 @@ ANGLE_INSTANTIATE_TEST(IndexedBufferCopyTest,
                        ES3_OPENGL(),
                        ES3_OPENGLES(),
                        ES3_VULKAN());
+
+ANGLE_INSTANTIATE_TEST(BufferDataDrawingTest, ES2_VULKAN(), ES3_VULKAN());
 
 #ifdef _WIN64
 
