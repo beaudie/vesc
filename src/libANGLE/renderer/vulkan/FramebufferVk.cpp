@@ -1438,7 +1438,8 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
 
     size_t level         = renderTarget->getLevelIndex();
     size_t layer         = renderTarget->getLayerIndex();
-    VkOffset3D srcOffset = {area.x, area.y, 0};
+
+    VkOffset3D srcOffset = {area.x, area.y, layer};
     VkExtent3D srcExtent = {static_cast<uint32_t>(area.width), static_cast<uint32_t>(area.height),
                             1};
 

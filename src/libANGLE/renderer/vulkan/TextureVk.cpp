@@ -1116,6 +1116,10 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
         case gl::TextureType::_2D:
             *rtOut = &mRenderTarget;
             break;
+        case gl::TextureType::_3D:
+            ANGLE_TRY(init3dRenderTargets(contextVk));
+            *rtOut = &m3dRenderTargets[imageIndex.getLayerIndex()];
+            break;
         case gl::TextureType::CubeMap:
             ANGLE_TRY(initCubeMapRenderTargets(contextVk));
             *rtOut = &mCubeMapRenderTargets[imageIndex.cubeMapFaceIndex()];
@@ -1160,6 +1164,38 @@ angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
     return mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0), mImage->getLevelCount(),
                                       getNativeImageLayer(0), mImage->getLayerCount(),
                                       commandBuffer);
+}
+
+angle::Result TextureVk::init3dRenderTargets(ContextVk *contextVk)
+{
+    // Lazy init. Check if already initialized.
+    if (!m3dRenderTargets.empty())
+        return angle::Result::Continue;
+
+    uint32_t layerCount = mImage->getExtents().depth;
+
+    mLayerFetchImageView.resize(layerCount);
+    m3dRenderTargets.resize(layerCount);
+
+    for (size_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
+    {
+        vk::ImageView *drawView;
+        ANGLE_TRY(getLayerLevelDrawImageView(contextVk, layerIndex, 0, &drawView));
+
+        // Users of the render target expect the views to directly view the desired layer, so we
+        // need create a fetch view for each layer as well.
+        gl::SwizzleState mappedSwizzle;
+        MapSwizzleState(contextVk, mImage->getFormat(), mState.getSwizzleState(), &mappedSwizzle);
+        gl::TextureType arrayType = vk::Get2DTextureType(layerCount, mImage->getSamples());
+        ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, mImage->getAspectFlags(),
+                                             mappedSwizzle, &mLayerFetchImageView[layerIndex],
+                                             getNativeImageLevel(0), 1,
+                                             getNativeImageLayer(layerIndex), 1));
+
+        m3dRenderTargets[layerIndex].init(mImage, drawView, &mLayerFetchImageView[layerIndex],
+                                          getNativeImageLevel(0), getNativeImageLayer(layerIndex));
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result TextureVk::initCubeMapRenderTargets(ContextVk *contextVk)
@@ -1333,10 +1369,20 @@ angle::Result TextureVk::getLayerLevelDrawImageView(vk::Context *context,
     ASSERT(mImage->valid());
     ASSERT(!mImage->getFormat().imageFormat().isBlock);
 
+    gl::Extents glExtent;
+    VkExtent3D vkExtent;
+    uint32_t layerCount;
+    gl_vk::GetExtentsAndLayerCount(mState.getType(), glExtent, &vkExtent, &layerCount);
+
+    if (mState.getType() == gl::TextureType::_3D)
+    {
+        layerCount = mImage->getExtents().depth;
+    }
+
     // Lazily allocate the storage for image views
     if (mLayerLevelDrawImageViews.empty())
     {
-        mLayerLevelDrawImageViews.resize(mImage->getLayerCount());
+        mLayerLevelDrawImageViews.resize(layerCount);
     }
     ASSERT(mLayerLevelDrawImageViews.size() > layer);
 
@@ -1355,7 +1401,8 @@ angle::Result TextureVk::getLayerLevelDrawImageView(vk::Context *context,
     // Lazily allocate the image view itself.
     // Note that these views are specifically made to be used as color attachments, and therefore
     // don't have swizzle.
-    return mImage->initLayerImageView(context, mState.getType(), mImage->getAspectFlags(),
+    gl::TextureType viewType = vk::Get2DTextureType(layerCount, mImage->getSamples());
+    return mImage->initLayerImageView(context, viewType, mImage->getAspectFlags(),
                                       gl::SwizzleState(), *imageViewOut, getNativeImageLevel(level),
                                       1, getNativeImageLayer(layer), 1);
 }
@@ -1449,6 +1496,7 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
                                          &mReadBaseLevelImageView, baseLevel, 1, baseLayer,
                                          layerCount));
     if (mState.getType() == gl::TextureType::CubeMap ||
+        // ?? mState.getType() == gl::TextureType::_3D
         mState.getType() == gl::TextureType::_2DArray ||
         mState.getType() == gl::TextureType::_2DMultisampleArray)
     {
