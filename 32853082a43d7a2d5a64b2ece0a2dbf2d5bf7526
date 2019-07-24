@@ -70,6 +70,30 @@
       "revId": "32853082a43d7a2d5a64b2ece0a2dbf2d5bf7526",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c18e452_6d4cabc3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_map.json",
+        "patchSetId": 9
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-24T18:39:49Z",
+      "side": 1,
+      "message": "I\u0027m going to skip VK_FORMAT_R16_UNORM for now then, since nvidia doesn\u0027t support it so I don\u0027t have anywhere to test it.\n\nIf that\u0027s desirable from a performance standpoint, we can open a bug to implement it later.",
+      "parentUuid": "cd7280e4_4b651df7",
+      "range": {
+        "startLine": 433,
+        "startChar": 22,
+        "endLine": 433,
+        "endChar": 31
+      },
+      "revId": "32853082a43d7a2d5a64b2ece0a2dbf2d5bf7526",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
