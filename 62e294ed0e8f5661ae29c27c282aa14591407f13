@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66bc2492_0224ba0e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-24T21:56:50Z",
+      "side": 1,
+      "message": "FYI - this is the \"safe\" path alternative path we had -\n\n1. Map unpackBufferVk\n2. Use LoadImageFunctionInfo and copy data from unpack to staging buffer\n3. Unmap unpackBufferVk\n4. emplace_back(...) the staging buffer",
+      "revId": "62e294ed0e8f5661ae29c27c282aa14591407f13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
