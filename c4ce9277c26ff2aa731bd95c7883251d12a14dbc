@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f2aef3db_1d28e9d2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T20:05:00Z",
+      "side": 1,
+      "message": "If test is used on other backends can remove \"vulkan\" here.",
+      "revId": "c4ce9277c26ff2aa731bd95c7883251d12a14dbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4f4d58d_46609022",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T20:05:00Z",
+      "side": 1,
+      "message": "wording:\n\"handles correctly in vulkan...\"-\u003e\"is handled correctly. This is important for Vulkan where CPU-side memory is transferred to a tightly packed buffer that may cause a change in stride.\"",
+      "revId": "c4ce9277c26ff2aa731bd95c7883251d12a14dbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25c2569f_c7632253",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T20:05:00Z",
+      "side": 1,
+      "message": "There are a number of \"2\" sized arrays and loops in this class and the tests below. Use const instead of \"2\" throughout. Something like the following:\nconstexpr GLsizei kNumBuffers       \u003d 2;",
+      "revId": "c4ce9277c26ff2aa731bd95c7883251d12a14dbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3457b678_015345df",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T20:05:00Z",
+      "side": 1,
+      "message": "Wording:\n// Test to ensure buffer data format is correctly converted when VBO update is the only state change",
+      "revId": "c4ce9277c26ff2aa731bd95c7883251d12a14dbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8516efd3_8b9783c6",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T20:05:00Z",
+      "side": 1,
+      "message": "Wording:\n// Test to ensure buffer data format is correctly converted when Vtx attribute offset is the only state change",
+      "revId": "c4ce9277c26ff2aa731bd95c7883251d12a14dbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aa11e5fb_70a14c8e",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T20:05:00Z",
+      "side": 1,
+      "message": "Did you try these tests on other backends? Seems beneficial to run them on all the backends even though they were specifically developed for testing VK backend.",
+      "revId": "c4ce9277c26ff2aa731bd95c7883251d12a14dbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
