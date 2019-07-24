@@ -359,6 +359,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                     size_t *numIndicesOut);
     angle::Result setupDispatch(const gl::Context *context, vk::CommandBuffer **commandBufferOut);
 
+    void invalidateSSBOConversionBuffers(const gl::Context *context);
+
     void updateViewport(FramebufferVk *framebufferVk,
                         const gl::Rectangle &viewport,
                         float nearPlane,

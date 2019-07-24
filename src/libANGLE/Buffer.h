@@ -102,6 +102,7 @@ class Buffer final : public RefCountObject,
     // These are called when another operation changes Buffer data.
     void onTransformFeedback();
     void onPixelPack();
+    void onStorageBufferChanged();
 
     angle::Result getIndexRange(const gl::Context *context,
                                 DrawElementsType type,
