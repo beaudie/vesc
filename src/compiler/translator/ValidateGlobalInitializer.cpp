@@ -47,17 +47,7 @@ void ValidateGlobalInitializerTraverser::visitSymbol(TIntermSymbol *node)
         case EvqGlobal:
         case EvqTemporary:
         case EvqUniform:
-            // We allow these cases to be compatible with legacy ESSL 1.00 content.
-            // Implement stricter rules for ESSL 3.00 since there's no legacy content to deal
-            // with.
-            if (mShaderVersion >= 300)
-            {
-                mIsValid = false;
-            }
-            else
-            {
-                mIssueWarning = true;
-            }
+            mIsValid = false;
             break;
         default:
             mIsValid = false;
