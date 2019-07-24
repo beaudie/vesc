@@ -16,6 +16,24 @@
       "revId": "62e294ed0e8f5661ae29c27c282aa14591407f13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8716a6c4_ca0700d7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T22:07:29Z",
+      "side": 1,
+      "message": "Honestly, any path with a CPU readback would be so unbearably slow that we might as well not bother having it (if there are alternatives)",
+      "parentUuid": "66bc2492_0224ba0e",
+      "revId": "62e294ed0e8f5661ae29c27c282aa14591407f13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
