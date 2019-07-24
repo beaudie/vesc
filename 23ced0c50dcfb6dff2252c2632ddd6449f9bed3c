@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a026169c_ecd39634",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-24T20:21:14Z",
+      "side": 1,
+      "message": "can you please define this as StorageBuffersMask in angletypes.h",
+      "range": {
+        "startLine": 252,
+        "startChar": 4,
+        "endLine": 252,
+        "endChar": 68
+      },
+      "revId": "23ced0c50dcfb6dff2252c2632ddd6449f9bed3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
