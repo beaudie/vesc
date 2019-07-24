@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "ab897461_279cfacc",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-24T13:35:52Z",
+      "side": 1,
+      "message": "can you make this an inlined helper function in global_state.h that takes a gl::Context?\n\nANGLE_INLINE std::unique_lock\u003cstd::mutex\u003e GetShareGroupLock(const gl::Context *context)\n{\n   return context-\u003eisShared() ? ....\n}",
+      "range": {
+        "startLine": 125,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 139
+      },
+      "revId": "0459c575d29306829a7d924726d90c76c25a2df5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a3a6442_124385c8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-24T13:35:52Z",
+      "side": 1,
+      "message": "nit: shareContext !\u003d nullptr",
+      "range": {
+        "startLine": 318,
+        "startChar": 14,
+        "endLine": 318,
+        "endChar": 41
+      },
+      "revId": "0459c575d29306829a7d924726d90c76c25a2df5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46348aff_4392a08e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-24T13:35:52Z",
+      "side": 1,
+      "message": "can you move this to Display.cpp?",
+      "range": {
+        "startLine": 360,
+        "startChar": 0,
+        "endLine": 364,
+        "endChar": 5
+      },
+      "revId": "0459c575d29306829a7d924726d90c76c25a2df5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "263b5f1a_a15ff0bb",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-24T13:35:52Z",
+      "side": 1,
+      "message": "instead of passing a non-Const context, can you call setShared in Display.cpp?",
+      "range": {
+        "startLine": 321,
+        "startChar": 12,
+        "endLine": 321,
+        "endChar": 34
+      },
+      "revId": "0459c575d29306829a7d924726d90c76c25a2df5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d24ec620_e2bab105",
         "filename": "src/libGL/entry_points_gl_1_0_autogen.cpp",
         "patchSetId": 6
