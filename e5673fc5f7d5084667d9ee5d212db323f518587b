@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "6a7902a8_cdb84292",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2159,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T19:51:10Z",
+      "side": 1,
+      "message": "Sure.\n\nIan, take a look at `TextureVk::copySubImageImplWithDraw` as an example, there should be two code paths:\n\n    // If destination is valid, copy the source directly into it.\n    if (mImage-\u003evalid())\n    {\n        // Make sure any updates to the image are already flushed.\n        ANGLE_TRY(ensureImageInitialized(contextVk));\n\n        // recordCommands on image, set dependency to buffer and do the copy right now\n    }\n    else\n    {\n        // Allocate staging buffer, copy buffer to staging buffer\n        // Stage the buffer update in the image\n    }\n\nThis should be done outside `ImageHelper::stageSubresourceUpdate`, in `TextureVk::setSubImageImpl` as this CL suggests.\n\nThere is a `stageSubresourceUpdateFromImage` in `ImageHelper` to stage image copies, you would need to add a similar `stageSubresourceUpdateFromBuffer` to stage the prepared buffer in the else case.\n\nYou should be able to undo the changes here.",
+      "parentUuid": "9cca7d02_d9cd31e4",
+      "range": {
+        "startLine": 2157,
+        "startChar": 0,
+        "endLine": 2159,
+        "endChar": 85
+      },
+      "revId": "e5673fc5f7d5084667d9ee5d212db323f518587b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eb04e351_80ed5a8b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 3
