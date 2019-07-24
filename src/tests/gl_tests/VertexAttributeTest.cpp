@@ -1358,7 +1358,11 @@ void main()
     glUseProgram(computeProgram);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, testBuffer);
     glDispatchCompute(1, 1, 1);
-    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
+
+    glBindBuffer(GL_ARRAY_BUFFER, testBuffer);
+    // Manually invalidating translation buffer causes test to pass!
+    glBufferSubData(GL_ARRAY_BUFFER, 0, 4, data.expectedData);
 
     // Draw again to verify that testBuffer has been changed.
     glUseProgram(mProgram);
@@ -2053,7 +2057,11 @@ ANGLE_INSTANTIATE_TEST(VertexAttributeTestES3,
                        ES3_OPENGLES(),
                        ES3_VULKAN());
 
-ANGLE_INSTANTIATE_TEST(VertexAttributeTestES31, ES31_D3D11(), ES31_OPENGL(), ES31_OPENGLES());
+ANGLE_INSTANTIATE_TEST(VertexAttributeTestES31,
+                       ES31_D3D11(),
+                       ES31_OPENGL(),
+                       ES31_OPENGLES(),
+                       ES31_VULKAN());
 
 ANGLE_INSTANTIATE_TEST(VertexAttributeCachingTest,
                        ES2_D3D9(),

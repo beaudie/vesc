@@ -5373,6 +5373,8 @@ void Context::dispatchCompute(GLuint numGroupsX, GLuint numGroupsY, GLuint numGr
 
     ANGLE_CONTEXT_TRY(prepareForDispatch());
     ANGLE_CONTEXT_TRY(mImplementation->dispatchCompute(this, numGroupsX, numGroupsY, numGroupsZ));
+
+    MarkShaderStorageBufferUsage(this);
 }
 
 void Context::dispatchComputeIndirect(GLintptr indirect)
