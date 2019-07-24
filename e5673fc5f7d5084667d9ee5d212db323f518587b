@@ -119,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9cca7d02_d9cd31e4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-24T12:18:59Z",
+      "side": 1,
+      "message": "Direct copy won\u0027t happen here. It\u0027ll bypass the pixel buffer. Since the pixel buffer (here) is mainly for updates that can\u0027t use the graph. The slow-but-secure path will happen here. \n\nShabi can you help Ian work through this?",
+      "parentUuid": "cbabb54d_1f09f476",
+      "range": {
+        "startLine": 2157,
+        "startChar": 0,
+        "endLine": 2159,
+        "endChar": 85
+      },
+      "revId": "e5673fc5f7d5084667d9ee5d212db323f518587b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eb04e351_80ed5a8b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 3
@@ -201,6 +225,30 @@
       "side": 1,
       "message": "Not sure I follow.  Given the \"if\" and \"else if\" code above this \"else\" (the \"else if\" checks what you suggest we assert on), do we really need anything here?",
       "parentUuid": "b228d3aa_73f84b1f",
+      "range": {
+        "startLine": 2168,
+        "startChar": 0,
+        "endLine": 2183,
+        "endChar": 0
+      },
+      "revId": "e5673fc5f7d5084667d9ee5d212db323f518587b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebdcedbc_e7fd8c10",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2183,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-24T12:18:59Z",
+      "side": 1,
+      "message": "yeah... remove the \"else if (pixels !\u003d nullptr)\"\n\njust make it \"else\".\n\nThis will save one \"if\" check.",
+      "parentUuid": "6ef3cf11_414279ef",
       "range": {
         "startLine": 2168,
         "startChar": 0,
