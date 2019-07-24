@@ -247,6 +247,14 @@ class StateCache final : angle::NonCopyable
         return mCachedIntegerVertexAttribTypesValidation[type];
     }
 
+    // Places that can trigger updateActiveShaderStorageBufferIndices:
+    // 1. onProgramExecutableChange.
+    angle::BitSet<IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS>
+    getActiveShaderStorageBufferIndices() const
+    {
+        return mCachedActiveShaderStorageBufferIndices;
+    }
+
     // State change notifications.
     void onVertexArrayBindingChange(Context *context);
     void onProgramExecutableChange(Context *context);
@@ -278,6 +286,7 @@ class StateCache final : angle::NonCopyable
     void updateBasicDrawElementsError();
     void updateTransformFeedbackActiveUnpaused(Context *context);
     void updateVertexAttribTypesValidation(Context *context);
+    void updateActiveShaderStorageBufferIndices(Context *context);
 
     void setValidDrawModes(bool pointsOK, bool linesOK, bool trisOK, bool lineAdjOK, bool triAdjOK);
 
@@ -295,6 +304,8 @@ class StateCache final : angle::NonCopyable
     mutable intptr_t mCachedBasicDrawStatesError;
     mutable intptr_t mCachedBasicDrawElementsError;
     bool mCachedTransformFeedbackActiveUnpaused;
+    angle::BitSet<IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS>
+        mCachedActiveShaderStorageBufferIndices;
 
     // Reserve an extra slot at the end of these maps for invalid enum.
     angle::PackedEnumMap<PrimitiveMode, bool, angle::EnumSize<PrimitiveMode>() + 1>
