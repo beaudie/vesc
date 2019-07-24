@@ -46,6 +46,17 @@ ANGLE_INLINE void MarkTransformFeedbackBufferUsage(const Context *context,
     }
 }
 
+ANGLE_INLINE void MarkShaderStorageBufferUsage(const Context *context)
+{
+    for (const InterfaceBlock &block :
+         context->getState().getProgram()->getState().getShaderStorageBlocks())
+    {
+        const gl::OffsetBindingPointer<gl::Buffer> &buffer =
+            context->getState().getIndexedShaderStorageBuffer(block.binding);
+        buffer.get()->onDataChanged();
+    }
+}
+
 // Return true if the draw is a no-op, else return false.
 //  A no-op draw occurs if the count of vertices is less than the minimum required to
 //  have a valid primitive for this mode (0 for points, 0-1 for lines, 0-2 for tris).
