@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f15ea3a_e833c705",
+        "filename": "src/compiler/translator/ValidateGlobalInitializer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T20:34:15Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this go through the same revert? In that case, basically most of the change would need to be reverted.\n\nAlso, please add tests similar to what was added in that change, but for ESSl1: https://chromium-review.googlesource.com/c/angle/angle/+/829138/3/src/tests/compiler_tests/ShaderValidation_test.cpp\n\nI have a feeling that change was made to allow for common but non-conformant applications to run, despite having non-constant globals. If so, this change could cause regressions. With Olli gone, I don\u0027t know how we can figure that out (maybe the reviewers can remember the reason).",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 13
+      },
+      "revId": "996f76c8f382450fa589ac258ee7140e66732bd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41a8e32e_b630a400",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T20:34:15Z",
+      "side": 1,
+      "message": "You might want to consider using an editor that\u0027s aware of the convention that there should be a new line at the end of text files.\n\nAlmost any editor other than notepad.exe should do.",
+      "revId": "996f76c8f382450fa589ac258ee7140e66732bd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
