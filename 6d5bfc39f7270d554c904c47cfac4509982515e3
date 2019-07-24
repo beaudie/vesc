@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb25f03e_3e34c87f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T23:04:38Z",
+      "side": 1,
+      "message": "Shift this last sentence to be in the positive instead of the negative:\nSo in handling glVertexAttribPointer, ANGLE will will only trigger a \n vulkan graphics pipeline update if attrib.format, attrib.stride and/or attrib.divisor change. If only the VBO pointer changes, then Vulkan can update the state via \"vkCmdBindVertexBuffers()\" without modifying a pipeline update.",
+      "revId": "6d5bfc39f7270d554c904c47cfac4509982515e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbf88f0f_ffabc6bb",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T23:04:38Z",
+      "side": 1,
+      "message": "This comment is tough to understand. Perhaps:\n// Need to set attribDirty whether binding buffer change \"from client side to driver side\" or\n// \"from driver side to client side,\" that is, when only one of oldBuffer or boundBuffer is zero.\n// This is because for client side buffer, backend may transfer it to a tightly packed driver\n// side buffer, causing the stride to change.",
+      "revId": "6d5bfc39f7270d554c904c47cfac4509982515e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ba97b08_25c3350b",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T23:04:38Z",
+      "side": 1,
+      "message": "sied-\u003eside",
+      "revId": "6d5bfc39f7270d554c904c47cfac4509982515e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "580fd5ac_6fad4b3b",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T23:04:38Z",
+      "side": 1,
+      "message": "I believe the logical \"!\u003d\" operator would be a better choice here over bitwise xor:\n((boundBuffer \u003d\u003d 0) !\u003d (binding.getBuffer().get() \u003d\u003d 0))",
+      "revId": "6d5bfc39f7270d554c904c47cfac4509982515e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f1a1dfc_b3c50eee",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T23:04:38Z",
+      "side": 1,
+      "message": "If this is a single function w/ bool for last parameter, can pass in that param as \"(*attribBits)[INDEX].to_ulong() \u003d\u003d angle::Bit\u003cunsigned long\u003e(gl::VertexArray::DIRTY_ATTRIB_POINTER_BUFFER)\"\n\nThen just skip the if/else here, as that check will move into the function.",
+      "revId": "6d5bfc39f7270d554c904c47cfac4509982515e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8fcb258_23edc85b",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T23:04:38Z",
+      "side": 1,
+      "message": "Can just take this path in the unified function based on last bool param, else take path for syncDirtyAttrib() above.",
+      "revId": "6d5bfc39f7270d554c904c47cfac4509982515e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c73ae439_fffe08d3",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T23:04:38Z",
+      "side": 1,
+      "message": "This should be a private function.",
+      "revId": "6d5bfc39f7270d554c904c47cfac4509982515e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0929179_75b61856",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-24T23:04:38Z",
+      "side": 1,
+      "message": "This function now has the exact same params as the function above and most of the heavy lifting for both functions is handled in updateAttribBufferStates.\nI recommend merging these back into a single function. Could update that function to have final param of \"bool bufferOnly\". And pass that bool in based on the check in macro below.",
+      "revId": "6d5bfc39f7270d554c904c47cfac4509982515e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
