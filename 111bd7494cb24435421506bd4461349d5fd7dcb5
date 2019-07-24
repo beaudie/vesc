@@ -46,6 +46,53 @@
       "revId": "111bd7494cb24435421506bd4461349d5fd7dcb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "72bb7297_d4b3c9bc",
+        "filename": "src/libANGLE/Context.inl.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T20:21:25Z",
+      "side": 1,
+      "message": "+1\n\nAlso, did you figure out how d3d does this? If they are doing something in the backend itself, this is good, just add a note that whatever d3d is doing can be removed in favor of this. If they are going through the front-end, then you wouldn\u0027t need to add this call to every draw call and use the same mechanism.",
+      "parentUuid": "07f310ff_1e4479dc",
+      "range": {
+        "startLine": 51,
+        "startChar": 4,
+        "endLine": 52,
+        "endChar": 79
+      },
+      "revId": "111bd7494cb24435421506bd4461349d5fd7dcb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "373d692d_288f57f5",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-24T20:21:25Z",
+      "side": 1,
+      "message": "While you are at it, you can fix this barrier to use GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT.\n\nLooking at the man page for `glMemoryBarrier`, it looks like the src of barriers with `glMemoryBarrier` is always shader writes (ssbo, images) and the destination is what\u0027s in the argument. So the argument should tell what you want to do with the data, rather than how they were produced.\n\nAgain, this will not affect Vulkan as the argument is not actually used, but would be a fix for other platforms (which nevertheless end up working since the vertex attributes end up going through the same cache buffers do and the memory barrier \"accidentally\" works).",
+      "range": {
+        "startLine": 1361,
+        "startChar": 20,
+        "endLine": 1361,
+        "endChar": 49
+      },
+      "revId": "111bd7494cb24435421506bd4461349d5fd7dcb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
