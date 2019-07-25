@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a81f1b93_a1bc22b1",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T12:57:19Z",
+      "side": 1,
+      "message": "2830? Not sure it matters.",
+      "range": {
+        "startLine": 359,
+        "startChar": 0,
+        "endLine": 359,
+        "endChar": 4
+      },
+      "revId": "2e4f929d8c9e60c83c3d98040428091b3fa60e90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eddd456b_8af2a6f6",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T12:57:19Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 680,
+        "startChar": 0,
+        "endLine": 680,
+        "endChar": 4
+      },
+      "revId": "2e4f929d8c9e60c83c3d98040428091b3fa60e90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
