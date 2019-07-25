@@ -99,6 +99,24 @@
       "revId": "996f76c8f382450fa589ac258ee7140e66732bd4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a8e0a7a1_0b526e6a",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-07-25T20:31:18Z",
+      "side": 1,
+      "message": "Okay, I\u0027ll add the newline to this file.  The test run passed, and so I think this is ready to go.",
+      "parentUuid": "17b43768_565621ed",
+      "revId": "996f76c8f382450fa589ac258ee7140e66732bd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
