@@ -21,6 +21,10 @@ declare_args() {
 
   # Link in system libGL, to work with apitrace.  See doc/DebuggingTips.md.
   angle_link_glx = false
+
+  # Defaults to capture building to $root_out_dir/angle_libs/with_capture.
+  # Switch on to build capture to $root_out_dir.
+  angle_with_capture_by_default = false
 }
 
 if (!build_with_chromium) {
@@ -563,158 +567,174 @@ if (angle_enable_vulkan) {
   }
 }
 
-angle_source_set("libANGLE") {
-  sources = libangle_sources
+config("libANGLE_no_capture_config") {
+  defines = [ "ANGLE_CAPTURE_ENABLED=0" ]
+}
 
-  include_dirs = []
-  libs = []
-  defines = []
-  if (angle_link_glx) {
-    libs += [ "GL" ]
-    defines += [ "ANGLE_LINK_GLX" ]
-  }
-  public_deps = [
-    ":angle_common",
-    ":angle_gpu_info_util",
-    ":angle_version",
-    ":translator",
-  ]
-  deps = [
-    ":angle_image_util",
-    ":includes",
-  ]
+config("libANGLE_with_capture_config") {
+  defines = [ "ANGLE_CAPTURE_ENABLED=1" ]
+}
 
-  # Enable extra Chromium style warnings for libANGLE.
-  if (is_clang) {
-    suppressed_configs -= [ "//build/config/clang:find_bad_constructs" ]
-  }
+template("angle_libANGLE") {
+  angle_source_set(target_name) {
+    sources = libangle_sources
 
-  # Shared D3D sources.
-  if (angle_enable_d3d9 || angle_enable_d3d11) {
-    sources += libangle_d3d_shared_sources
-
-    defines += [ "ANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES={ " + "\"d3dcompiler_47.dll\", \"d3dcompiler_46.dll\", \"d3dcompiler_43.dll\" }" ]
-  }
-
-  if (angle_enable_d3d9) {
-    sources += libangle_d3d9_sources
-    libs += [ "d3d9.lib" ]
-  }
-
-  if (angle_enable_d3d11) {
-    sources += libangle_d3d11_sources
-    sources += libangle_d3d11_win32_sources
-    libs += [ "dxguid.lib" ]
-    import("src/libANGLE/renderer/d3d/d3d11/d3d11_blit_shaders_autogen.gni")
-    sources += libangle_d3d11_blit_shaders
-  }
-
-  if (angle_enable_gl) {
-    sources += libangle_gl_sources
-    include_dirs += [ "src/third_party/khronos" ]
-
-    if (angle_enable_gl_null) {
-      sources += libangle_gl_null_sources
+    if (defined(invoker.sources)) {
+      sources += invoker.sources
     }
-    if (is_win) {
-      sources += libangle_gl_wgl_sources
-    }
-    if (use_x11) {
-      sources += libangle_gl_glx_sources
-      deps += [ "src/third_party/libXNVCtrl:libXNVCtrl" ]
-      libs += [
-        "X11",
-        "Xi",
-        "Xext",
-      ]
-    }
-    if (is_mac) {
-      sources += libangle_gl_cgl_sources
-      libs += [
-        "Cocoa.framework",
-        "IOSurface.framework",
-        "OpenGL.framework",
-        "QuartzCore.framework",
-      ]
-    }
-    if (is_android) {
-      sources += libangle_gl_egl_sources
-      sources += libangle_gl_egl_dl_sources
-      sources += libangle_gl_egl_android_sources
-    }
-    if (ozone_platform_gbm) {
-      configs += [ ":libdrm" ]
-      defines += [ "ANGLE_USE_OZONE" ]
-      deps += [ "//third_party/minigbm" ]
-      sources += libangle_gl_egl_sources
-      sources += libangle_gl_egl_dl_sources
-      sources += libangle_gl_ozone_sources
-    }
-  }
 
-  if (angle_enable_vulkan) {
-    sources += libangle_vulkan_sources
-    if (is_win) {
-      sources += libangle_vulkan_win32_sources
+    include_dirs = []
+    libs = []
+    defines = []
+    if (angle_link_glx) {
+      libs += [ "GL" ]
+      defines += [ "ANGLE_LINK_GLX" ]
     }
-    if (is_linux) {
-      sources += libangle_vulkan_xcb_sources
+    public_deps = [
+      ":angle_common",
+      ":angle_gpu_info_util",
+      ":angle_version",
+      ":translator",
+    ]
+    deps = [
+      ":angle_image_util",
+      ":includes",
+    ]
+
+    # Enable extra Chromium style warnings for libANGLE.
+    if (is_clang) {
+      suppressed_configs -= [ "//build/config/clang:find_bad_constructs" ]
     }
-    if (is_fuchsia) {
-      sources += libangle_vulkan_fuchsia_sources
+
+    # Shared D3D sources.
+    if (angle_enable_d3d9 || angle_enable_d3d11) {
+      sources += libangle_d3d_shared_sources
+
+      defines += [ "ANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES={ " + "\"d3dcompiler_47.dll\", \"d3dcompiler_46.dll\", \"d3dcompiler_43.dll\" }" ]
+    }
+
+    if (angle_enable_d3d9) {
+      sources += libangle_d3d9_sources
+      libs += [ "d3d9.lib" ]
+    }
+
+    if (angle_enable_d3d11) {
+      sources += libangle_d3d11_sources
+      sources += libangle_d3d11_win32_sources
+      libs += [ "dxguid.lib" ]
+      import("src/libANGLE/renderer/d3d/d3d11/d3d11_blit_shaders_autogen.gni")
+      sources += libangle_d3d11_blit_shaders
+    }
+
+    if (angle_enable_gl) {
+      sources += libangle_gl_sources
+      include_dirs += [ "src/third_party/khronos" ]
+
+      if (angle_enable_gl_null) {
+        sources += libangle_gl_null_sources
+      }
+      if (is_win) {
+        sources += libangle_gl_wgl_sources
+      }
+      if (use_x11) {
+        sources += libangle_gl_glx_sources
+        deps += [ "src/third_party/libXNVCtrl:libXNVCtrl" ]
+        libs += [
+          "X11",
+          "Xi",
+          "Xext",
+        ]
+      }
+      if (is_mac) {
+        sources += libangle_gl_cgl_sources
+        libs += [
+          "Cocoa.framework",
+          "IOSurface.framework",
+          "OpenGL.framework",
+          "QuartzCore.framework",
+        ]
+      }
+      if (is_android) {
+        sources += libangle_gl_egl_sources
+        sources += libangle_gl_egl_dl_sources
+        sources += libangle_gl_egl_android_sources
+      }
+      if (ozone_platform_gbm) {
+        configs += [ ":libdrm" ]
+        defines += [ "ANGLE_USE_OZONE" ]
+        deps += [ "//third_party/minigbm" ]
+        sources += libangle_gl_egl_sources
+        sources += libangle_gl_egl_dl_sources
+        sources += libangle_gl_ozone_sources
+      }
+    }
+
+    if (angle_enable_vulkan) {
+      sources += libangle_vulkan_sources
+      if (is_win) {
+        sources += libangle_vulkan_win32_sources
+      }
+      if (is_linux) {
+        sources += libangle_vulkan_xcb_sources
+      }
+      if (is_fuchsia) {
+        sources += libangle_vulkan_fuchsia_sources
+        deps += [
+          "$angle_root/src/common/fuchsia_egl",
+          "$angle_root/src/common/fuchsia_egl:backend",
+        ]
+      }
+      if (is_android) {
+        sources += libangle_vulkan_android_sources
+        libs += [ "vulkan" ]
+      }
       deps += [
-        "$angle_root/src/common/fuchsia_egl",
-        "$angle_root/src/common/fuchsia_egl:backend",
+        ":angle_vulkan",
+        "${angle_glslang_dir}:glslang_default_resource_limits_sources",
+        "${angle_glslang_dir}:glslang_sources",
+        "${angle_spirv_tools_dir}:spvtools_val",
+      ]
+      public_deps += [ "$angle_root/third_party/vulkan-headers:vulkan_headers" ]
+
+      # Include generated shaders.
+      import("src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.gni")
+      sources += angle_vulkan_internal_shaders
+    }
+
+    if (angle_enable_null) {
+      sources += libangle_null_sources
+    }
+
+    if (is_mac) {
+      sources += libangle_mac_sources
+    }
+
+    if (is_debug) {
+      defines += [ "ANGLE_GENERATE_SHADER_DEBUG_INFO" ]
+    }
+
+    configs += [ ":debug_annotations_config" ]
+    public_configs += invoker.public_configs + [
+                        ":libANGLE_config",
+                        ":angle_backend_config",
+                      ]
+
+    # Windows ARM64 is available since 10.0.16299 so no need to copy
+    # d3dcompiler_47.dll because this file is available as inbox.
+    if (is_win && target_cpu != "arm64") {
+      data_deps = [
+        ":copy_compiler_dll",
       ]
     }
-    if (is_android) {
-      sources += libangle_vulkan_android_sources
-      libs += [ "vulkan" ]
-    }
-    deps += [
-      ":angle_vulkan",
-      "${angle_glslang_dir}:glslang_default_resource_limits_sources",
-      "${angle_glslang_dir}:glslang_sources",
-      "${angle_spirv_tools_dir}:spvtools_val",
-    ]
-    public_deps += [ "$angle_root/third_party/vulkan-headers:vulkan_headers" ]
-
-    # Include generated shaders.
-    import("src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.gni")
-    sources += angle_vulkan_internal_shaders
-  }
-
-  if (angle_enable_null) {
-    sources += libangle_null_sources
-  }
-
-  if (is_mac) {
-    sources += libangle_mac_sources
-  }
-
-  if (is_debug) {
-    defines += [ "ANGLE_GENERATE_SHADER_DEBUG_INFO" ]
-  }
-
-  configs += [ ":debug_annotations_config" ]
-  public_configs += [
-    ":libANGLE_config",
-    ":angle_backend_config",
-  ]
-
-  # Windows ARM64 is available since 10.0.16299 so no need to copy
-  # d3dcompiler_47.dll because this file is available as inbox.
-  if (is_win && target_cpu != "arm64") {
-    data_deps = [
-      ":copy_compiler_dll",
-    ]
   }
 }
 
-angle_source_set("libANGLE_with_capture") {
-  public_deps = [
-    ":libANGLE",
-  ]
+angle_libANGLE("libANGLE") {
+  public_configs = [ ":libANGLE_no_capture_config" ]
+}
+
+angle_libANGLE("libANGLE_with_capture") {
+  public_configs = [ ":libANGLE_with_capture_config" ]
   sources = libangle_capture_sources
 }
 
@@ -750,7 +770,11 @@ config("angle_static") {
 template("angle_libGLESv2") {
   angle_shared_library(target_name) {
     sources = libglesv2_sources
-    output_name = "${target_name}${angle_libs_suffix}"
+    output_name = "libGLESv2${angle_libs_suffix}"
+
+    if (defined(invoker.output_dir)) {
+      output_dir = invoker.output_dir
+    }
 
     if (is_win) {
       sources += [ "src/libGLESv2/${target_name}_autogen.def" ]
@@ -762,7 +786,7 @@ template("angle_libGLESv2") {
       ":gl_prototypes",
     ]
 
-    defines = [ "LIBGLESV2_IMPLEMENTATION" ] + invoker.defines
+    defines = [ "LIBGLESV2_IMPLEMENTATION" ]
 
     deps = [
       ":includes",
@@ -777,12 +801,18 @@ template("angle_libGLESv2") {
 
 angle_libGLESv2("libGLESv2") {
   libANGLE = ":libANGLE"
-  defines = [ "ANGLE_CAPTURE_ENABLED=0" ]
+
+  if (angle_with_capture_by_default) {
+    output_dir = "$root_out_dir/angle_libs/without_capture"
+  }
 }
 
 angle_libGLESv2("libGLESv2_with_capture") {
   libANGLE = ":libANGLE_with_capture"
-  defines = [ "ANGLE_CAPTURE_ENABLED=1" ]
+
+  if (!angle_with_capture_by_default) {
+    output_dir = "$root_out_dir/angle_libs/with_capture"
+  }
 }
 
 if (is_win) {
