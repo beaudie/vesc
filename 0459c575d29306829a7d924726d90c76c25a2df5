@@ -174,6 +174,24 @@
       "revId": "0459c575d29306829a7d924726d90c76c25a2df5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05609289_7d6e70bd",
+        "filename": "src/libGL/entry_points_gl_1_0_autogen.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-07-25T16:34:15Z",
+      "side": 1,
+      "message": "So, what\u0027s the point of having \"std::unique_lock\u003cstd::mutex\u003e()\" in the code if it does nothing?\nShould this just be: if (context-\u003eisShaded()) { std::unique_lock\u003cstd::mutex\u003e(egl::GetGlobalMutex()) }",
+      "parentUuid": "cebb8bdb_a9d873a5",
+      "revId": "0459c575d29306829a7d924726d90c76c25a2df5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
