@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25f7d2ae_5d6f47f2",
+        "filename": "src/compiler/translator/ValidateGlobalInitializer.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T18:40:05Z",
+      "side": 1,
+      "message": "nit: would be more general to pass the ShaderSpec here",
+      "range": {
+        "startLine": 22,
+        "startChar": 57,
+        "endLine": 22,
+        "endChar": 71
+      },
+      "revId": "88c2ccdd1319b9472090b8bb591a88d946a0bd9e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
