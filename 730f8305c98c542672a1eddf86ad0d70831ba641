@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81f71bae_35c19d0d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T21:18:44Z",
+      "side": 1,
+      "message": "can you add a comment/pointer here to the limit in vk_cache_utils.h?",
+      "range": {
+        "startLine": 146,
+        "startChar": 59,
+        "endLine": 146,
+        "endChar": 67
+      },
+      "revId": "730f8305c98c542672a1eddf86ad0d70831ba641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
