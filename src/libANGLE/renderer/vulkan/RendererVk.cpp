@@ -490,6 +490,7 @@ RendererVk::RendererVk()
       mDebugUtilsMessenger(VK_NULL_HANDLE),
       mDebugReportCallback(VK_NULL_HANDLE),
       mPhysicalDevice(VK_NULL_HANDLE),
+      mPhysicalDeviceSubgroupProperties{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_PROPERTIES},
       mQueue(VK_NULL_HANDLE),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mMaxVertexAttribDivisor(1),
@@ -1003,6 +1004,15 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     else
     {
         createInfo.pEnabledFeatures = &enabledFeatures.features;
+    }
+
+    if (vkGetPhysicalDeviceProperties2KHR)
+    {
+        VkPhysicalDeviceProperties2 deviceProperties = {};
+        deviceProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+        deviceProperties.pNext = &mPhysicalDeviceSubgroupProperties;
+
+        vkGetPhysicalDeviceProperties2KHR(mPhysicalDevice, &deviceProperties);
     }
 
     createInfo.enabledExtensionCount = static_cast<uint32_t>(enabledDeviceExtensions.size());
