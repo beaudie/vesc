@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5d60176b_3a9b66a8",
+        "filename": "src/compiler/translator/ValidateGlobalInitializer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-07-25T18:28:34Z",
+      "side": 1,
+      "message": "Instead of reverting, I \"split\" this to look at whether the application is WebGL vs GLES.  I modified the tests the same way.  I hope that this is appropriate for the original intent (I see that Olli did WebGL work).",
+      "parentUuid": "4f15ea3a_e833c705",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 13
+      },
+      "revId": "996f76c8f382450fa589ac258ee7140e66732bd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "41a8e32e_b630a400",
         "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "996f76c8f382450fa589ac258ee7140e66732bd4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3198d430_a9d3770e",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-07-25T18:28:34Z",
+      "side": 1,
+      "message": "Sorry, I found and turned off a setting in my editor that was doing this.",
+      "parentUuid": "41a8e32e_b630a400",
+      "revId": "996f76c8f382450fa589ac258ee7140e66732bd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
