@@ -312,6 +312,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     void updateScissor(const gl::State &glState);
 
+    bool emulateSeamfulCubeMapSampling() const;
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t

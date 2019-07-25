@@ -184,6 +184,12 @@ struct FeaturesVk : FeatureSetBase
         "On platform with Intel or AMD gpu, vulkan swapchain is not returning VK_ERROR_OUT_OF_DATE"
         "when window resizing",
         &members, "http://anglebug.com/3623, http://anglebug.com/3624, http://anglebug.com/3625"};
+
+    // Seamful cube map emulation misbehaves on the AMD windows driver, so it's disallowed.
+    Feature disallowSeamfulCubeMapEmulation = {
+        "disallow_seamful_cube_map_emulation", FeatureCategory::VulkanWorkarounds,
+        "Seamful cube map emulation misbehaves on the AMD windows driver, so it's disallowed",
+        &members, "http://anglebug.com/3243"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
