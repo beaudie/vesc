@@ -70,6 +70,24 @@
       "revId": "62e294ed0e8f5661ae29c27c282aa14591407f13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7142c361_f7dd8e5e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T14:00:09Z",
+      "side": 1,
+      "message": "Possibly. We\u0027d need to update the path to accept \"unpack\" parameters. See the GL spec for UNPACK_ROW_LENGTH, UNPACK_SKIP_ROWS, etc.\n\nAlso there may be different format conversions for additional texture formats.\n\nThat\u0027s why a map/readback path is good as a functionality placeholder. Since I believe the conversion functions already exist on CPU.",
+      "parentUuid": "92f7039f_71b199db",
+      "revId": "62e294ed0e8f5661ae29c27c282aa14591407f13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
