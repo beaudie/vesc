@@ -1458,6 +1458,13 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk)
             imageInfo.imageView   = textureVk->getReadImageView().getHandle();
             imageInfo.imageLayout = image.getCurrentLayout();
 
+            if (contextVk->emulateSeamfulCubeMapSampling())
+            {
+                // If emulating seamful cubemapping, use the fetch image view.  This is basically
+                // the same image view as read, except it's a 2DArray view for cube maps.
+                imageInfo.imageView = textureVk->getFetchImageView().getHandle();
+            }
+
             VkWriteDescriptorSet &writeInfo = writeDescriptorInfo[writeCount];
 
             writeInfo.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;

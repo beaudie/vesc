@@ -28,6 +28,7 @@ ANGLE_REENABLE_EXTRA_SEMI_WARNING
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
 #include "libANGLE/ProgramLinkedResources.h"
+#include "libANGLE/renderer/vulkan/ContextVk.h"
 #include "libANGLE/renderer/vulkan/vk_cache_utils.h"
 
 namespace rx
@@ -928,11 +929,12 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        // fprintf(stderr, "%s\n", (*shaderSourcesOut)[shaderType].c_str());
     }
 }
 
 // static
-angle::Result GlslangWrapper::GetShaderCode(vk::Context *context,
+angle::Result GlslangWrapper::GetShaderCode(ContextVk *contextVk,
                                             const gl::Caps &glCaps,
                                             bool enableLineRasterEmulation,
                                             const gl::ShaderMap<std::string> &shaderSources,
@@ -945,25 +947,25 @@ angle::Result GlslangWrapper::GetShaderCode(vk::Context *context,
         gl::ShaderMap<std::string> patchedSources = shaderSources;
 
         // #defines must come after the #version directive.
-        ANGLE_VK_CHECK(context,
+        ANGLE_VK_CHECK(contextVk,
                        angle::ReplaceSubstring(&patchedSources[gl::ShaderType::Vertex],
                                                kVersionDefine, kLineRasterDefine),
                        VK_ERROR_INVALID_SHADER_NV);
-        ANGLE_VK_CHECK(context,
+        ANGLE_VK_CHECK(contextVk,
                        angle::ReplaceSubstring(&patchedSources[gl::ShaderType::Fragment],
                                                kVersionDefine, kLineRasterDefine),
                        VK_ERROR_INVALID_SHADER_NV);
 
-        return GetShaderCodeImpl(context, glCaps, patchedSources, shaderCodeOut);
+        return GetShaderCodeImpl(contextVk, glCaps, patchedSources, shaderCodeOut);
     }
     else
     {
-        return GetShaderCodeImpl(context, glCaps, shaderSources, shaderCodeOut);
+        return GetShaderCodeImpl(contextVk, glCaps, shaderSources, shaderCodeOut);
     }
 }
 
 // static
-angle::Result GlslangWrapper::GetShaderCodeImpl(vk::Context *context,
+angle::Result GlslangWrapper::GetShaderCodeImpl(ContextVk *contextVk,
                                                 const gl::Caps &glCaps,
                                                 const gl::ShaderMap<std::string> &shaderSources,
                                                 gl::ShaderMap<std::vector<uint32_t>> *shaderCodeOut)
@@ -1000,6 +1002,11 @@ angle::Result GlslangWrapper::GetShaderCodeImpl(vk::Context *context,
         glslang::TShader *shader = shaders[shaderType];
         shader->setStringsWithLengths(&shaderString, &shaderLength, 1);
         shader->setEntryPoint("main");
+        if (contextVk->emulateSeamfulCubeMapSampling())
+        {
+            // Enable SPIR-V 1.3 if this workaround is used, as it uses subgroup operations.
+            shader->setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_3);
+        }
 
         bool result = shader->parse(&builtInResources, 450, ECoreProfile, false, false, messages);
         if (!result)
@@ -1007,7 +1014,7 @@ angle::Result GlslangWrapper::GetShaderCodeImpl(vk::Context *context,
             ERR() << "Internal error parsing Vulkan shader corresponding to " << shaderType << ":\n"
                   << shader->getInfoLog() << "\n"
                   << shader->getInfoDebugLog() << "\n";
-            ANGLE_VK_CHECK(context, false, VK_ERROR_INVALID_SHADER_NV);
+            ANGLE_VK_CHECK(contextVk, false, VK_ERROR_INVALID_SHADER_NV);
         }
 
         program.addShader(shader);
@@ -1017,7 +1024,7 @@ angle::Result GlslangWrapper::GetShaderCodeImpl(vk::Context *context,
     if (!linkResult)
     {
         ERR() << "Internal error linking Vulkan shaders:\n" << program.getInfoLog() << "\n";
-        ANGLE_VK_CHECK(context, false, VK_ERROR_INVALID_SHADER_NV);
+        ANGLE_VK_CHECK(contextVk, false, VK_ERROR_INVALID_SHADER_NV);
     }
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
