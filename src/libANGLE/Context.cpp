@@ -24,6 +24,7 @@
 #include "libANGLE/Compiler.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Fence.h"
+#include "libANGLE/FrameCapture.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/FramebufferAttachment.h"
 #include "libANGLE/MemoryObject.h"
@@ -342,7 +343,8 @@ Context::Context(egl::Display *display,
       mReadFramebufferObserverBinding(this, kReadFramebufferSubjectIndex),
       mScratchBuffer(1000u),
       mZeroFilledBuffer(1000u),
-      mThreadPool(nullptr)
+      mThreadPool(nullptr),
+      mFrameCapture(nullptr)
 {
     for (angle::SubjectIndex uboIndex = kUniformBuffer0SubjectIndex;
          uboIndex < kUniformBufferMaxSubjectIndex; ++uboIndex)
@@ -355,6 +357,8 @@ Context::Context(egl::Display *display,
     {
         mSamplerObserverBindings.emplace_back(this, samplerIndex);
     }
+
+    mFrameCapture = new angle::FrameCapture;
 }
 
 void Context::initialize()
@@ -601,7 +605,10 @@ egl::Error Context::onDestroy(const egl::Display *display)
     return egl::NoError();
 }
 
-Context::~Context() {}
+Context::~Context()
+{
+    SafeDelete(mFrameCapture);
+}
 
 void Context::setLabel(EGLLabelKHR label)
 {
@@ -8463,9 +8470,12 @@ egl::Error Context::unsetDefaultFramebuffer()
     return egl::NoError();
 }
 
-angle::FrameCapture *Context::getFrameCapture()
+void Context::onPostSwap() const
 {
-    return mDisplay->getFrameCapture();
+#if ANGLE_CAPTURE_ENABLED
+    // Dump frame capture if enabled.
+    mFrameCapture->onEndFrame();
+#endif  // ANGLE_CAPTURE_ENABLED
 }
 
 // ErrorSet implementation.

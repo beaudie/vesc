@@ -549,7 +549,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     const angle::FrontendFeatures &getFrontendFeatures() const;
 
-    angle::FrameCapture *getFrameCapture();
+    angle::FrameCapture *getFrameCapture() { return mFrameCapture; }
+
+    void onPostSwap() const;
 
   private:
     void initialize();
@@ -696,6 +698,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     mutable angle::ScratchBuffer mZeroFilledBuffer;
 
     std::shared_ptr<angle::WorkerThreadPool> mThreadPool;
+
+    // Note: we use a raw pointer here so we can exclude frame capture sources from the build.
+    angle::FrameCapture *mFrameCapture;
 };
 
 }  // namespace gl
