@@ -26,14 +26,14 @@ class GlslangWrapper
                                 const gl::ProgramLinkedResources &resources,
                                 gl::ShaderMap<std::string> *shaderSourcesOut);
 
-    static angle::Result GetShaderCode(vk::Context *context,
+    static angle::Result GetShaderCode(ContextVk *contextVk,
                                        const gl::Caps &glCaps,
                                        bool enableLineRasterEmulation,
                                        const gl::ShaderMap<std::string> &shaderSources,
                                        gl::ShaderMap<std::vector<uint32_t>> *shaderCodesOut);
 
   private:
-    static angle::Result GetShaderCodeImpl(vk::Context *context,
+    static angle::Result GetShaderCodeImpl(ContextVk *contextVk,
                                            const gl::Caps &glCaps,
                                            const gl::ShaderMap<std::string> &shaderSources,
                                            gl::ShaderMap<std::vector<uint32_t>> *shaderCodesOut);
