@@ -6087,6 +6087,7 @@ int PaParseStrings(size_t count,
     if ((count == 0) || (string == nullptr))
         return 1;
 
+    // fprintf(stderr, "%s\n", string[0]);
     if (glslang_initialize(context))
         return 1;
 
