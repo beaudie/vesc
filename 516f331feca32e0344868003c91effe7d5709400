@@ -16,6 +16,24 @@
       "revId": "516f331feca32e0344868003c91effe7d5709400",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "65a34ae3_c431ed14",
+        "filename": "src/common/matrix_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-25T17:05:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b129c950_1d6586e4",
+      "revId": "516f331feca32e0344868003c91effe7d5709400",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
