@@ -236,7 +236,7 @@ template_capture_source = """// GENERATED FILE - DO NOT EDIT.
 // capture_gles_{annotation_with_dash}_autogen.cpp:
 //   Capture functions for the OpenGL ES {comment} entry points.
 
-#include "libANGLE/capture_gles_{annotation_with_dash}_autogen.h"
+#include "libGLESv2/capture_gles_{annotation_with_dash}_autogen.h"
 
 #include "libANGLE/Context.h"
 #include "libANGLE/FrameCapture.h"
@@ -327,9 +327,9 @@ template_sources_includes = """#include "libGLESv2/entry_points_{header_version}
 
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"
-#include "libANGLE/capture_{header_version}_autogen.h"
 #include "libANGLE/validation{validation_header_version}.h"
 #include "libANGLE/entry_points_utils.h"
+#include "libGLESv2/capture_{header_version}_autogen.h"
 #include "libGLESv2/global_state.h"
 """
 
@@ -982,7 +982,7 @@ def write_capture_header(annotation, comment, protos, capture_pointer_funcs):
         prototypes="\n".join(["\n// Method Captures\n"] + protos + ["\n// Parameter Captures\n"] +
                              capture_pointer_funcs))
 
-    path = path_to("libANGLE", "capture_gles_%s_autogen.h" % annotation)
+    path = path_to("libGLESv2", "capture_gles_%s_autogen.h" % annotation)
 
     with open(path, "w") as out:
         out.write(content)
@@ -999,7 +999,7 @@ def write_capture_source(annotation_with_dash, annotation_no_dash, comment, capt
         comment=comment,
         capture_methods="\n".join(capture_methods))
 
-    path = path_to("libANGLE", "capture_gles_%s_autogen.cpp" % annotation_with_dash)
+    path = path_to("libGLESv2", "capture_gles_%s_autogen.cpp" % annotation_with_dash)
 
     with open(path, "w") as out:
         out.write(content)
@@ -1190,16 +1190,6 @@ def main():
             '../src/libANGLE/Context_gles_3_0_autogen.h',
             '../src/libANGLE/Context_gles_3_1_autogen.h',
             '../src/libANGLE/Context_gles_ext_autogen.h',
-            '../src/libANGLE/capture_gles_1_0_autogen.cpp',
-            '../src/libANGLE/capture_gles_1_0_autogen.h',
-            '../src/libANGLE/capture_gles_2_0_autogen.cpp',
-            '../src/libANGLE/capture_gles_2_0_autogen.h',
-            '../src/libANGLE/capture_gles_3_0_autogen.cpp',
-            '../src/libANGLE/capture_gles_3_0_autogen.h',
-            '../src/libANGLE/capture_gles_3_1_autogen.cpp',
-            '../src/libANGLE/capture_gles_3_1_autogen.h',
-            '../src/libANGLE/capture_gles_ext_autogen.cpp',
-            '../src/libANGLE/capture_gles_ext_autogen.h',
             '../src/libANGLE/frame_capture_utils_autogen.cpp',
             '../src/libANGLE/frame_capture_utils_autogen.h',
             '../src/libANGLE/entry_points_enum_autogen.h',
@@ -1227,6 +1217,16 @@ def main():
             '../src/libANGLE/validationGL44_autogen.h',
             '../src/libANGLE/validationGL45_autogen.h',
             '../src/libANGLE/validationGL46_autogen.h',
+            '../src/libGLESv2/capture_gles_1_0_autogen.cpp',
+            '../src/libGLESv2/capture_gles_1_0_autogen.h',
+            '../src/libGLESv2/capture_gles_2_0_autogen.cpp',
+            '../src/libGLESv2/capture_gles_2_0_autogen.h',
+            '../src/libGLESv2/capture_gles_3_0_autogen.cpp',
+            '../src/libGLESv2/capture_gles_3_0_autogen.h',
+            '../src/libGLESv2/capture_gles_3_1_autogen.cpp',
+            '../src/libGLESv2/capture_gles_3_1_autogen.h',
+            '../src/libGLESv2/capture_gles_ext_autogen.cpp',
+            '../src/libGLESv2/capture_gles_ext_autogen.h',
             '../src/libGLESv2/entry_points_gles_1_0_autogen.cpp',
             '../src/libGLESv2/entry_points_gles_1_0_autogen.h',
             '../src/libGLESv2/entry_points_gles_2_0_autogen.cpp',
@@ -1589,10 +1589,10 @@ def main():
     source_includes = template_sources_includes.format(
         header_version="gles_ext", validation_header_version="ESEXT")
     source_includes += """
-    #include "libANGLE/capture_gles_1_0_autogen.h"
-    #include "libANGLE/capture_gles_2_0_autogen.h"
-    #include "libANGLE/capture_gles_3_0_autogen.h"
-    #include "libANGLE/capture_gles_3_1_autogen.h"
+    #include "libGLESv2/capture_gles_1_0_autogen.h"
+    #include "libGLESv2/capture_gles_2_0_autogen.h"
+    #include "libGLESv2/capture_gles_3_0_autogen.h"
+    #include "libGLESv2/capture_gles_3_1_autogen.h"
     #include "libANGLE/validationES1.h"
     #include "libANGLE/validationES2.h"
     #include "libANGLE/validationES3.h"
