@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b3c4e8da_4b342246",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 6
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T12:55:16Z",
+      "side": 1,
+      "message": "Right. Return an rvalue reference.\n\nhttps://en.cppreference.com/w/cpp/thread/unique_lock/operator%3D",
+      "parentUuid": "58717f6b_41881d92",
+      "range": {
+        "startLine": 125,
+        "startChar": 8,
+        "endLine": 125,
+        "endChar": 139
+      },
+      "revId": "0459c575d29306829a7d924726d90c76c25a2df5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4a3a6442_124385c8",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 6
