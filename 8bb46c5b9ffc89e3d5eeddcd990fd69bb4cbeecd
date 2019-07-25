@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fd606651_ed821957",
+        "filename": "src/tests/egl_tests/EGLBackwardsCompatibleContextTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T16:38:47Z",
+      "side": 0,
+      "message": "it might be better for the test to robustly handle this situation than explicitly disable it. if you do want to explicitly disable it please leave a TODO linked to the angle bug to re-enable it.",
+      "range": {
+        "startLine": 194,
+        "startChar": 37,
+        "endLine": 194,
+        "endChar": 47
+      },
+      "revId": "8bb46c5b9ffc89e3d5eeddcd990fd69bb4cbeecd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
