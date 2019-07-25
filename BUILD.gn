@@ -21,6 +21,10 @@ declare_args() {
 
   # Link in system libGL, to work with apitrace.  See doc/DebuggingTips.md.
   angle_link_glx = false
+
+  # Defaults to capture building to $root_out_dir/angle_libs/with_capture.
+  # Switch on to build capture to $root_out_dir.
+  angle_with_capture_by_default = false
 }
 
 if (!build_with_chromium) {
@@ -711,13 +715,6 @@ angle_source_set("libANGLE") {
   }
 }
 
-angle_source_set("libANGLE_with_capture") {
-  public_deps = [
-    ":libANGLE",
-  ]
-  sources = libangle_capture_sources
-}
-
 config("shared_library_public_config") {
   if (is_mac && !is_component_build) {
     # Executable targets that depend on the shared libraries below need to have
@@ -750,10 +747,19 @@ config("angle_static") {
 template("angle_libGLESv2") {
   angle_shared_library(target_name) {
     sources = libglesv2_sources
-    output_name = "${target_name}${angle_libs_suffix}"
+
+    if (defined(invoker.sources)) {
+      sources += invoker.sources
+    }
+
+    output_name = "libGLESv2${angle_libs_suffix}"
+
+    if (defined(invoker.output_dir)) {
+      output_dir = invoker.output_dir
+    }
 
     if (is_win) {
-      sources += [ "src/libGLESv2/${target_name}_autogen.def" ]
+      sources += [ "src/libGLESv2/libGLESv2_autogen.def" ]
     }
 
     configs += [
@@ -762,27 +768,44 @@ template("angle_libGLESv2") {
       ":gl_prototypes",
     ]
 
-    defines = [ "LIBGLESV2_IMPLEMENTATION" ] + invoker.defines
+    defines = [ "LIBGLESV2_IMPLEMENTATION" ]
 
     deps = [
       ":includes",
-      invoker.libANGLE,
+      ":libANGLE",
     ]
 
     public_deps = [
       ":angle_version",
     ]
+
+    public_configs = invoker.public_configs
   }
 }
 
-angle_libGLESv2("libGLESv2") {
-  libANGLE = ":libANGLE"
+config("angle_frame_capture_disabled") {
   defines = [ "ANGLE_CAPTURE_ENABLED=0" ]
 }
 
-angle_libGLESv2("libGLESv2_with_capture") {
-  libANGLE = ":libANGLE_with_capture"
+config("angle_frame_capture_enabled") {
   defines = [ "ANGLE_CAPTURE_ENABLED=1" ]
+}
+
+angle_libGLESv2("libGLESv2") {
+  public_configs = [ ":angle_frame_capture_disabled" ]
+
+  if (angle_with_capture_by_default) {
+    output_dir = "$root_out_dir/angle_libs/without_capture"
+  }
+}
+
+angle_libGLESv2("libGLESv2_with_capture") {
+  public_configs = [ ":angle_frame_capture_enabled" ]
+  sources = libglesv2_capture_sources
+
+  if (!angle_with_capture_by_default) {
+    output_dir = "$root_out_dir/angle_libs/with_capture"
+  }
 }
 
 if (is_win) {
