@@ -88,6 +88,24 @@
       "revId": "62e294ed0e8f5661ae29c27c282aa14591407f13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53f1f2c8_ed659c78",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-07-25T23:17:47Z",
+      "side": 1,
+      "message": "Coming back to this topic ... I agree that a map/readback path is good to have.  It may be sufficiently-fast for some format-type combinations, at least until we can create a shader(s).",
+      "parentUuid": "7142c361_f7dd8e5e",
+      "revId": "62e294ed0e8f5661ae29c27c282aa14591407f13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

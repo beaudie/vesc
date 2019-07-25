@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "5edfa52a_4b497b1d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2159,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-07-25T23:17:47Z",
+      "side": 1,
+      "message": "Coming back to this ... looks like a good direction.  Thanks Shabi!",
+      "parentUuid": "6a7902a8_cdb84292",
+      "range": {
+        "startLine": 2157,
+        "startChar": 0,
+        "endLine": 2159,
+        "endChar": 85
+      },
+      "revId": "e5673fc5f7d5084667d9ee5d212db323f518587b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "eb04e351_80ed5a8b",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 3
