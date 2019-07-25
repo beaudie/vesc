@@ -310,6 +310,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
     Serial generateTextureSerial() { return mTextureSerialFactory.generate(); }
     const vk::TextureDescriptorDesc &getActiveTexturesDesc() const { return mActiveTexturesDesc; }
 
+    bool emulateSeamfulCubeMapSampling() const;
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
