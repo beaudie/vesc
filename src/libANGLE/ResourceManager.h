@@ -197,12 +197,12 @@ class RenderbufferManager
     : public TypedResourceManager<Renderbuffer, HandleAllocator, RenderbufferManager>
 {
   public:
-    GLuint createRenderbuffer();
-    Renderbuffer *getRenderbuffer(GLuint handle) const;
+    RenderbufferID createRenderbuffer();
+    Renderbuffer *getRenderbuffer(RenderbufferID handle) const;
 
-    Renderbuffer *checkRenderbufferAllocation(rx::GLImplFactory *factory, GLuint handle)
+    Renderbuffer *checkRenderbufferAllocation(rx::GLImplFactory *factory, RenderbufferID handle)
     {
-        return checkObjectAllocation(factory, handle);
+        return checkObjectAllocation(factory, handle.value);
     }
 
     static Renderbuffer *AllocateNewObject(rx::GLImplFactory *factory, GLuint handle);

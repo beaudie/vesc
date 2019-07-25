@@ -23,6 +23,12 @@
     "glBindBufferRange": {
         "target": "BufferBinding"
     },
+    "glBindRenderbuffer": {
+        "renderbuffer": "RenderbufferID"
+    },
+    "glBindRenderbufferOES": {
+        "renderbuffer": "RenderbufferID"
+    },
     "glBindTexture": {
         "target": "TextureType"
     },
@@ -103,6 +109,12 @@
     "glCullFace": {
         "mode": "CullFaceMode"
     },
+    "glDeleteRenderbuffers": {
+        "renderbuffers": "const RenderbufferID *"
+    },
+    "glDeleteRenderbuffersOES": {
+        "renderbuffers": "const RenderbufferID *"
+    },
     "glDisableClientState": {
         "array": "ClientVertexArrayType"
     },
@@ -163,6 +175,12 @@
     "glFlushMappedBufferRangeEXT": {
         "target": "BufferBinding"
     },
+    "glFramebufferRenderbuffer": {
+        "renderbuffer": "RenderbufferID"
+    },
+    "glFramebufferRenderbufferOES": {
+        "renderbuffer": "RenderbufferID"
+    },
     "glFramebufferTexture2D": {
         "textarget": "TextureTarget"
     },
@@ -180,6 +198,12 @@
     },
     "glGenerateMipmapOES": {
         "target": "TextureType"
+    },
+    "glGenRenderbuffers": {
+        "renderbuffers": "RenderbufferID *"
+    },
+    "glGenRenderbuffersOES": {
+        "renderbuffers": "RenderbufferID *"
     },
     "glGetBufferParameteriv": {
         "target": "BufferBinding"
@@ -294,6 +318,12 @@
     },
     "glInvalidateTextureANGLE": {
         "target": "TextureType"
+    },
+    "glIsRenderbuffer": {
+        "renderbuffer": "RenderbufferID"
+    },
+    "glIsRenderbufferOES": {
+        "renderbuffer": "RenderbufferID"
     },
     "glLightf" : {
         "pname" : "LightParameter"
