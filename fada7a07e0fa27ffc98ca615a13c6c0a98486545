@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc1d4a01_0539571f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3875,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T20:06:09Z",
+      "side": 1,
+      "message": "this doesn\u0027t look correct. you should fix this in the vulkan back-end rather than the front-end. framebufferTexture2D doesn\u0027t change the GL scissor.",
+      "range": {
+        "startLine": 3874,
+        "startChar": 3,
+        "endLine": 3875,
+        "endChar": 56
+      },
+      "revId": "fada7a07e0fa27ffc98ca615a13c6c0a98486545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0446e5cd_f6eac9e5",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T20:06:09Z",
+      "side": 1,
+      "message": "can you make this look a bit nicer? You don\u0027t have to make a temporary Extents extents... you can return if you find a match.",
+      "range": {
+        "startLine": 613,
+        "startChar": 4,
+        "endLine": 616,
+        "endChar": 19
+      },
+      "revId": "fada7a07e0fa27ffc98ca615a13c6c0a98486545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
