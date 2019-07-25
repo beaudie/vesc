@@ -8,7 +8,7 @@
 // capture_gles_ext_autogen.cpp:
 //   Capture functions for the OpenGL ES extension entry points.
 
-#include "libANGLE/capture_gles_ext_autogen.h"
+#include "libGLESv2/capture_gles_ext_autogen.h"
 
 #include "libANGLE/Context.h"
 #include "libANGLE/FrameCapture.h"
