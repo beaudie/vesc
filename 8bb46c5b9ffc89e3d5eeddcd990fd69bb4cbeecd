@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "82217036_15f1ba39",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-07-25T08:53:58Z",
+      "side": 0,
+      "message": "Do we need to keep this barrier bit since this shader will be called twice in line 454?",
+      "range": {
+        "startLine": 428,
+        "startChar": 20,
+        "endLine": 428,
+        "endChar": 49
+      },
+      "revId": "8bb46c5b9ffc89e3d5eeddcd990fd69bb4cbeecd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c04047a_5a3fb515",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3255,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-07-25T08:53:58Z",
+      "side": 0,
+      "message": "Do you need a TEXTURE_FETCH_BARRIER_BIT here?",
+      "range": {
+        "startLine": 3255,
+        "startChar": 20,
+        "endLine": 3255,
+        "endChar": 49
+      },
+      "revId": "8bb46c5b9ffc89e3d5eeddcd990fd69bb4cbeecd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bb4b43e_9101859c",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1165541
+      },
+      "writtenOn": "2019-07-25T08:53:58Z",
+      "side": 0,
+      "message": "Add glMemoryBarrier(GL_PIXEL_BUFFER_BARRIER_BIT)?",
+      "range": {
+        "startLine": 388,
+        "startChar": 4,
+        "endLine": 388,
+        "endChar": 60
+      },
+      "revId": "8bb46c5b9ffc89e3d5eeddcd990fd69bb4cbeecd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
