@@ -49,6 +49,13 @@ void WriteInlineData(const std::vector<uint8_t> &vec, std::ostream &out)
 }
 
 constexpr size_t kInlineDataThreshold = 128;
+
+void WriteStringParamReplay(std::ostream &out, const ParamCapture &param)
+{
+    const std::vector<uint8_t> &data = param.data[0];
+    std::string str(data.begin(), data.end());
+    out << "\"" << str << "\"";
+}
 }  // anonymous namespace
 
 ParamCapture::ParamCapture() : type(ParamType::TGLenum) {}
@@ -393,6 +400,90 @@ int FrameCapture::getAndIncrementCounter(gl::EntryPoint entryPoint, const std::s
     return mDataCounters[counterKey]++;
 }
 
+void FrameCapture::writeStringPointerParamReplay(std::ostream &out,
+                                                 std::ostream &header,
+                                                 const CallCapture &call,
+                                                 const ParamCapture &param)
+{
+    int counter = getAndIncrementCounter(call.entryPoint, param.name);
+
+    header << "const char *";
+    WriteParamStaticVarName(call, param, counter, header);
+    header << "[] = { \n";
+
+    for (const std::vector<uint8_t> &data : param.data)
+    {
+        std::string str(data.begin(), data.end());
+        header << "    R\"(" << str << ")\",\n";
+    }
+
+    header << " };\n";
+    WriteParamStaticVarName(call, param, counter, out);
+}
+
+void FrameCapture::writeBinaryParamReplay(std::ostream &out,
+                                          std::ostream &header,
+                                          const CallCapture &call,
+                                          const ParamCapture &param,
+                                          std::vector<uint8_t> *binaryData)
+{
+    int counter = getAndIncrementCounter(call.entryPoint, param.name);
+
+    ASSERT(param.data.size() == 1);
+    const std::vector<uint8_t> &data = param.data[0];
+
+    if (data.size() > kInlineDataThreshold)
+    {
+        size_t offset = binaryData->size();
+        binaryData->resize(offset + data.size());
+        memcpy(binaryData->data() + offset, data.data(), data.size());
+        out << "reinterpret_cast<" << ParamTypeToString(param.type) << ">(&gBinaryData[" << offset
+            << "])";
+    }
+    else
+    {
+        ParamType overrideType = param.type;
+        if (param.type == ParamType::TGLvoidConstPointer ||
+            param.type == ParamType::TvoidConstPointer)
+        {
+            overrideType = ParamType::TGLubyteConstPointer;
+        }
+
+        std::string paramTypeString = ParamTypeToString(overrideType);
+        header << paramTypeString.substr(0, paramTypeString.length() - 1);
+        WriteParamStaticVarName(call, param, counter, header);
+
+        header << "[] = { ";
+
+        switch (overrideType)
+        {
+            case ParamType::TGLintConstPointer:
+                WriteInlineData<GLint>(data, header);
+                break;
+            case ParamType::TGLshortConstPointer:
+                WriteInlineData<GLshort>(data, header);
+                break;
+            case ParamType::TGLfloatConstPointer:
+                WriteInlineData<GLfloat>(data, header);
+                break;
+            case ParamType::TGLubyteConstPointer:
+                WriteInlineData<GLubyte, int>(data, header);
+                break;
+            case ParamType::TGLuintConstPointer:
+            case ParamType::TGLenumConstPointer:
+                WriteInlineData<GLuint>(data, header);
+                break;
+            default:
+                UNIMPLEMENTED();
+                break;
+        }
+
+        header << " };\n";
+
+        WriteParamStaticVarName(call, param, counter, out);
+    }
+}
+
 void FrameCapture::writeCallReplay(const CallCapture &call,
                                    std::ostream &out,
                                    std::ostream &header,
@@ -422,86 +513,22 @@ void FrameCapture::writeCallReplay(const CallCapture &call,
         }
         else
         {
-            if (param.type == ParamType::TGLcharConstPointer)
+            switch (param.type)
             {
-                const std::vector<uint8_t> &data = param.data[0];
-                std::string str(data.begin(), data.end());
-                out << "\"" << str << "\"";
-            }
-            else if (param.type == ParamType::TGLcharConstPointerPointer)
-            {
-                int counter = getAndIncrementCounter(call.entryPoint, param.name);
+                case ParamType::TGLcharConstPointer:
+                    WriteStringParamReplay(out, param);
+                    break;
+                case ParamType::TGLcharConstPointerPointer:
+                    writeStringPointerParamReplay(out, header, call, param);
+                    break;
+                case ParamType::TRenderbufferIDPointer:
 
-                header << "const char *";
-                WriteParamStaticVarName(call, param, counter, header);
-                header << "[] = { \n";
-
-                for (const std::vector<uint8_t> &data : param.data)
-                {
-                    std::string str(data.begin(), data.end());
-                    header << "    R\"(" << str << ")\",\n";
-                }
-
-                header << " };\n";
-                WriteParamStaticVarName(call, param, counter, out);
-            }
-            else
-            {
-                int counter = getAndIncrementCounter(call.entryPoint, param.name);
-
-                ASSERT(param.data.size() == 1);
-                const std::vector<uint8_t> &data = param.data[0];
-
-                if (data.size() > kInlineDataThreshold)
-                {
-                    size_t offset = binaryData->size();
-                    binaryData->resize(offset + data.size());
-                    memcpy(binaryData->data() + offset, data.data(), data.size());
-                    out << "reinterpret_cast<" << ParamTypeToString(param.type) << ">(&gBinaryData["
-                        << offset << "])";
-                }
-                else
-                {
-                    ParamType overrideType = param.type;
-                    if (param.type == ParamType::TGLvoidConstPointer ||
-                        param.type == ParamType::TvoidConstPointer)
-                    {
-                        overrideType = ParamType::TGLubyteConstPointer;
-                    }
-
-                    std::string paramTypeString = ParamTypeToString(overrideType);
-                    header << paramTypeString.substr(0, paramTypeString.length() - 1);
-                    WriteParamStaticVarName(call, param, counter, header);
-
-                    header << "[] = { ";
-
-                    switch (overrideType)
-                    {
-                        case ParamType::TGLintConstPointer:
-                            WriteInlineData<GLint>(data, header);
-                            break;
-                        case ParamType::TGLshortConstPointer:
-                            WriteInlineData<GLshort>(data, header);
-                            break;
-                        case ParamType::TGLfloatConstPointer:
-                            WriteInlineData<GLfloat>(data, header);
-                            break;
-                        case ParamType::TGLubyteConstPointer:
-                            WriteInlineData<GLubyte, int>(data, header);
-                            break;
-                        case ParamType::TGLuintConstPointer:
-                        case ParamType::TGLenumConstPointer:
-                            WriteInlineData<GLuint>(data, header);
-                            break;
-                        default:
-                            UNIMPLEMENTED();
-                            break;
-                    }
-
-                    header << " };\n";
-
-                    WriteParamStaticVarName(call, param, counter, out);
-                }
+                    break;
+                case ParamType::TRenderbufferIDConstPointer:
+                    break;
+                default:
+                    writeBinaryParamReplay(out, header, call, param, binaryData);
+                    break;
             }
         }
 
@@ -581,10 +608,9 @@ template <>
 void WriteParamValueToStream<ParamType::TGLDEBUGPROC>(std::ostream &os, GLDEBUGPROC value)
 {}
 
-// TODO(jmadill): Use renderbuffer ID map. http://anglebug.com/3611
 template <>
 void WriteParamValueToStream<ParamType::TRenderbufferID>(std::ostream &os, gl::RenderbufferID value)
 {
-    os << value.value;
+    os << "gRenderbufferMap[" << value.value << "]";
 }
 }  // namespace angle
