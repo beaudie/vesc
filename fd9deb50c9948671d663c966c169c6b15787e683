@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ebd8048b_4f0e7f6a",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T14:44:02Z",
+      "side": 1,
+      "message": "These are put into the gl::Rectangle\u0027s below, so can be removed.",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 0
+      },
+      "revId": "fd9deb50c9948671d663c966c169c6b15787e683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7fa7391_f829e6ae",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T14:44:02Z",
+      "side": 1,
+      "message": "You can just use `{source|dest}Area.{width|height}`. That would simplify some \"checked\" code below too.",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 81,
+        "endChar": 33
+      },
+      "revId": "fd9deb50c9948671d663c966c169c6b15787e683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9128925c_2da812aa",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T14:44:02Z",
+      "side": 1,
+      "message": "I would use `x0()` for consistency with `x1()`",
+      "range": {
+        "startLine": 83,
+        "startChar": 54,
+        "endLine": 83,
+        "endChar": 55
+      },
+      "revId": "fd9deb50c9948671d663c966c169c6b15787e683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2346ddd2_df6fa9d3",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T14:44:02Z",
+      "side": 1,
+      "message": "`gl::Rectangle::removeReversal()`",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 98
+      },
+      "revId": "fd9deb50c9948671d663c966c169c6b15787e683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fe4f854_ca62da1f",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T14:44:02Z",
+      "side": 1,
+      "message": "You can use `gl::Rectangle::isReversedX()` and then xor.",
+      "range": {
+        "startLine": 102,
+        "startChar": 23,
+        "endLine": 102,
+        "endChar": 55
+      },
+      "revId": "fd9deb50c9948671d663c966c169c6b15787e683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99019768_b0405bc6",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T14:44:02Z",
+      "side": 1,
+      "message": "When you remove these source* fields and use the sourceRegion instead (and use a temporary variable for the output of ClipRectangle above, you can just do `sourceRegion.x1() - clippedSourceRegion.x1()`",
+      "range": {
+        "startLine": 995,
+        "startChar": 22,
+        "endLine": 996,
+        "endChar": 48
+      },
+      "revId": "fd9deb50c9948671d663c966c169c6b15787e683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e06c5bd_d12e56c3",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1028,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T14:44:02Z",
+      "side": 1,
+      "message": "Again, `isReversedX`",
+      "range": {
+        "startLine": 1028,
+        "startChar": 8,
+        "endLine": 1028,
+        "endChar": 41
+      },
+      "revId": "fd9deb50c9948671d663c966c169c6b15787e683",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
