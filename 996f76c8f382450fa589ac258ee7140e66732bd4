@@ -81,6 +81,24 @@
       "revId": "996f76c8f382450fa589ac258ee7140e66732bd4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "17b43768_565621ed",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T18:45:48Z",
+      "side": 1,
+      "message": "Wait, the message in gerrit below this comment was confusing. I see that in the new version, it\u0027s clear that both the new and old files don\u0027t have new line at end of file. So it looks like your editor setting was good before.\n\nThe message here is saying the old file didn\u0027t have new line (but the message is placed under the new file).\n\nAnyway, please set the editor setting to *do* add new line at end of file.",
+      "parentUuid": "3198d430_a9d3770e",
+      "revId": "996f76c8f382450fa589ac258ee7140e66732bd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
