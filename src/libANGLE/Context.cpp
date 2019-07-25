@@ -458,7 +458,7 @@ void Context::initialize()
         bindBuffer(type, 0);
     }
 
-    bindRenderbuffer(GL_RENDERBUFFER, 0);
+    bindRenderbuffer(GL_RENDERBUFFER, {0});
 
     for (unsigned int i = 0; i < mState.mCaps.maxUniformBufferBindings; i++)
     {
@@ -699,7 +699,7 @@ GLuint Context::createTexture()
     return mState.mTextureManager->createTexture();
 }
 
-GLuint Context::createRenderbuffer()
+RenderbufferID Context::createRenderbuffer()
 {
     return mState.mRenderbufferManager->createRenderbuffer();
 }
@@ -784,14 +784,14 @@ void Context::deleteTexture(GLuint texture)
     mState.mTextureManager->deleteObject(this, texture);
 }
 
-void Context::deleteRenderbuffer(GLuint renderbuffer)
+void Context::deleteRenderbuffer(RenderbufferID renderbuffer)
 {
     if (mState.mRenderbufferManager->getRenderbuffer(renderbuffer))
     {
         detachRenderbuffer(renderbuffer);
     }
 
-    mState.mRenderbufferManager->deleteObject(this, renderbuffer);
+    mState.mRenderbufferManager->deleteObject(this, renderbuffer.value);
 }
 
 void Context::deleteSync(GLsync sync)
@@ -965,7 +965,7 @@ Buffer *Context::getBuffer(GLuint handle) const
     return mState.mBufferManager->getBuffer(handle);
 }
 
-Renderbuffer *Context::getRenderbuffer(GLuint handle) const
+Renderbuffer *Context::getRenderbuffer(RenderbufferID handle) const
 {
     return mState.mRenderbufferManager->getRenderbuffer(handle);
 }
@@ -1016,7 +1016,7 @@ gl::LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) con
         case GL_TEXTURE:
             return getTexture(name);
         case GL_RENDERBUFFER:
-            return getRenderbuffer(name);
+            return getRenderbuffer({name});
         case GL_FRAMEBUFFER:
             return getFramebuffer(name);
         default:
@@ -2805,7 +2805,7 @@ void Context::detachFramebuffer(GLuint framebuffer)
     }
 }
 
-void Context::detachRenderbuffer(GLuint renderbuffer)
+void Context::detachRenderbuffer(RenderbufferID renderbuffer)
 {
     mState.detachRenderbuffer(this, renderbuffer);
 }
@@ -3900,12 +3900,12 @@ void Context::framebufferTexture3D(GLenum target,
 void Context::framebufferRenderbuffer(GLenum target,
                                       GLenum attachment,
                                       GLenum renderbuffertarget,
-                                      GLuint renderbuffer)
+                                      RenderbufferID renderbuffer)
 {
     Framebuffer *framebuffer = mState.getTargetFramebuffer(target);
     ASSERT(framebuffer);
 
-    if (renderbuffer != 0)
+    if (renderbuffer.value != 0)
     {
         Renderbuffer *renderbufferObject = getRenderbuffer(renderbuffer);
 
@@ -5225,7 +5225,7 @@ void Context::bindFramebuffer(GLenum target, GLuint framebuffer)
     }
 }
 
-void Context::bindRenderbuffer(GLenum target, GLuint renderbuffer)
+void Context::bindRenderbuffer(GLenum target, RenderbufferID renderbuffer)
 {
     ASSERT(target == GL_RENDERBUFFER);
     Renderbuffer *object = mState.mRenderbufferManager->checkRenderbufferAllocation(
@@ -5615,7 +5615,7 @@ void Context::deleteFramebuffers(GLsizei n, const GLuint *framebuffers)
     }
 }
 
-void Context::deleteRenderbuffers(GLsizei n, const GLuint *renderbuffers)
+void Context::deleteRenderbuffers(GLsizei n, const RenderbufferID *renderbuffers)
 {
     for (int i = 0; i < n; i++)
     {
@@ -5661,7 +5661,7 @@ void Context::genFramebuffers(GLsizei n, GLuint *framebuffers)
     }
 }
 
-void Context::genRenderbuffers(GLsizei n, GLuint *renderbuffers)
+void Context::genRenderbuffers(GLsizei n, RenderbufferID *renderbuffers)
 {
     for (int i = 0; i < n; i++)
     {
@@ -6013,9 +6013,9 @@ GLboolean Context::isProgram(GLuint program)
     return ConvertToGLBoolean(getProgramNoResolveLink(program));
 }
 
-GLboolean Context::isRenderbuffer(GLuint renderbuffer)
+GLboolean Context::isRenderbuffer(RenderbufferID renderbuffer)
 {
-    if (renderbuffer == 0)
+    if (renderbuffer.value == 0)
     {
         return GL_FALSE;
     }
@@ -8284,9 +8284,9 @@ const angle::FrontendFeatures &Context::getFrontendFeatures() const
     return mDisplay->getFrontendFeatures();
 }
 
-bool Context::isRenderbufferGenerated(GLuint renderbuffer) const
+bool Context::isRenderbufferGenerated(RenderbufferID renderbuffer) const
 {
-    return mState.mRenderbufferManager->isHandleGenerated(renderbuffer);
+    return mState.mRenderbufferManager->isHandleGenerated(renderbuffer.value);
 }
 
 bool Context::isFramebufferGenerated(GLuint framebuffer) const
