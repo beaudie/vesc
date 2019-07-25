@@ -376,7 +376,7 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
     const vk::Format &srcFormat  = colorReadRT->getImageFormat();
     const vk::Format &destFormat = renderer->getFormat(internalFormat.sizedInternalFormat);
 
-    bool isViewportFlipY = contextVk->isViewportFlipEnabledForDrawFBO();
+    bool isViewportFlipY = contextVk->isViewportFlipEnabledForReadFBO();
 
     // If it's possible to perform the copy with a transfer, that's the best option.
     if (!isViewportFlipY && CanCopyWithTransfer(renderer, srcFormat, destFormat))
