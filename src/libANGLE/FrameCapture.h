@@ -108,6 +108,15 @@ class FrameCapture final : angle::NonCopyable
     int getAndIncrementCounter(gl::EntryPoint entryPoint, const std::string &paramName);
     bool anyClientArray() const;
     void saveCapturedFrameAsCpp();
+    void writeStringPointerParamReplay(std::ostream &out,
+                                       std::ostream &header,
+                                       const CallCapture &call,
+                                       const ParamCapture &param);
+    void writeBinaryParamReplay(std::ostream &out,
+                                std::ostream &header,
+                                const CallCapture &call,
+                                const ParamCapture &param,
+                                std::vector<uint8_t> *binaryData);
 
     std::vector<CallCapture> mCalls;
     gl::AttribArray<int> mClientVertexArrayMap;
