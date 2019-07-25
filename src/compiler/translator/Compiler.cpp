@@ -38,6 +38,7 @@
 #include "compiler/translator/tree_ops/RemoveInvariantDeclaration.h"
 #include "compiler/translator/tree_ops/RemovePow.h"
 #include "compiler/translator/tree_ops/RemoveUnreferencedVariables.h"
+#include "compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.h"
 #include "compiler/translator/tree_ops/RewriteDoWhile.h"
 #include "compiler/translator/tree_ops/RewriteRepeatedAssignToSwizzled.h"
 #include "compiler/translator/tree_ops/ScalarizeVecAndMatConstructorArgs.h"
@@ -523,6 +524,11 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     if (!ValidateAST(root, &mDiagnostics, mValidateASTOptions))
     {
         return false;
+    }
+
+    if (compileOptions & SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING)
+    {
+        RewriteCubeMapSamplersAs2DArray(root, &mSymbolTable);
     }
 
     // Create the function DAG and check there is no recursion

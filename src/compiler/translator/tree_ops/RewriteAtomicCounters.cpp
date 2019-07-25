@@ -13,6 +13,7 @@
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
+#include "compiler/translator/tree_util/ReplaceVariable.h"
 
 namespace sh
 {
@@ -189,18 +190,18 @@ class RewriteAtomicCountersTraverser : public TIntermTraverser
         const TFunction *function = node->getFunction();
         // Go over the parameters and replace the atomic arguments with a uint type.  If this is
         // the function definition, keep the replaced variable for future encounters.
-        mAtomicCounterFunctionParams.clear();
+        mRetyper.visitFunctionPrototype();
         for (size_t paramIndex = 0; paramIndex < function->getParamCount(); ++paramIndex)
         {
             const TVariable *param = function->getParam(paramIndex);
             TVariable *replacement = convertFunctionParameter(node, param);
             if (replacement)
             {
-                mAtomicCounterFunctionParams[param] = replacement;
+                mRetyper.replaceFunctionParam(param, replacement);
             }
         }
 
-        if (mAtomicCounterFunctionParams.empty())
+        if (!mRetyper.anyFunctionParamsReplaced())
         {
             return;
         }
@@ -215,8 +216,7 @@ class RewriteAtomicCountersTraverser : public TIntermTraverser
             TVariable *replacement = nullptr;
             if (param->getType().isAtomicCounter())
             {
-                ASSERT(mAtomicCounterFunctionParams.count(param) != 0);
-                replacement = mAtomicCounterFunctionParams[param];
+                replacement = mRetyper.getFunctionParamReplacement(param);
             }
             else
             {
@@ -230,14 +230,14 @@ class RewriteAtomicCountersTraverser : public TIntermTraverser
             new TIntermFunctionPrototype(replacementFunction);
         queueReplacement(replacementPrototype, OriginalNode::IS_DROPPED);
 
-        mReplacedFunctions[function] = replacementFunction;
+        mRetyper.replaceFunction(function, replacementFunction);
     }
 
     bool visitAggregate(Visit visit, TIntermAggregate *node) override
     {
         if (visit == PreVisit)
         {
-            mAtomicCounterFunctionCallArgs.clear();
+            mRetyper.preVisitAggregate();
         }
 
         if (visit != PostVisit)
@@ -333,22 +333,13 @@ class RewriteAtomicCountersTraverser : public TIntermTraverser
         //         atomicAdd(atomicCounters[ac.binding]counters[ac.offset+n]);
         //     }
         //
-        // In all cases, the argument transformation is stored in |mAtomicCounterFunctionCallArgs|.
-        // In the function call's PostVisit, if it's a builtin, the look up in
-        // |atomicCounters.counters| is done as well as the builtin function change.  Otherwise,
-        // the transformed argument is passed on as is.
+        // In all cases, the argument transformation is stored in mRetyper.  In the function call's
+        // PostVisit, if it's a builtin, the look up in |atomicCounters.counters| is done as well as
+        // the builtin function change.  Otherwise, the transformed argument is passed on as is.
         //
 
-        TIntermTyped *bindingOffset = nullptr;
-        if (mAtomicCounterBindingOffsets.count(symbolVariable) != 0)
-        {
-            bindingOffset = new TIntermSymbol(mAtomicCounterBindingOffsets[symbolVariable]);
-        }
-        else
-        {
-            ASSERT(mAtomicCounterFunctionParams.count(symbolVariable) != 0);
-            bindingOffset = new TIntermSymbol(mAtomicCounterFunctionParams[symbolVariable]);
-        }
+        TIntermTyped *bindingOffset = mRetyper.getVariableReplacement(symbolVariable);
+        ASSERT(bindingOffset != nullptr);
 
         TIntermNode *argument = symbol;
 
@@ -388,7 +379,7 @@ class RewriteAtomicCountersTraverser : public TIntermTraverser
             bindingOffset = modifiedSymbol->deepCopy();
         }
 
-        mAtomicCounterFunctionCallArgs[argument] = bindingOffset;
+        mRetyper.replaceFunctionCallArg(argument, bindingOffset);
     }
 
   private:
@@ -428,7 +419,7 @@ class RewriteAtomicCountersTraverser : public TIntermTraverser
                                         replacement);
 
         // Remember the binding/offset variable.
-        mAtomicCounterBindingOffsets[symbolVariable] = bindingOffset;
+        mRetyper.replaceGlobalVariable(symbolVariable, bindingOffset);
     }
 
     TIntermDeclaration *declareAtomicCounterType()
@@ -520,9 +511,8 @@ class RewriteAtomicCountersTraverser : public TIntermTraverser
         }
 
         const TIntermNode *param = (*arguments)[0];
-        ASSERT(mAtomicCounterFunctionCallArgs.count(param) != 0);
 
-        TIntermTyped *bindingOffset = mAtomicCounterFunctionCallArgs[param];
+        TIntermTyped *bindingOffset = mRetyper.getFunctionCallArgReplacement(param);
 
         TIntermSequence *substituteArguments = new TIntermSequence;
         substituteArguments->push_back(
@@ -546,13 +536,13 @@ class RewriteAtomicCountersTraverser : public TIntermTraverser
     {
         // See if the function needs replacement at all.
         const TFunction *function = node->getFunction();
-        if (mReplacedFunctions.count(function) == 0)
+        if (!mRetyper.isFunctionReplaced(function))
         {
             return;
         }
 
         // atomic_uint arguments to this call are staged to be replaced at the same time.
-        TFunction *substituteFunction        = mReplacedFunctions[function];
+        TFunction *substituteFunction        = mRetyper.getFunctionReplacement(function);
         TIntermSequence *substituteArguments = new TIntermSequence;
 
         for (size_t paramIndex = 0; paramIndex < function->getParamCount(); ++paramIndex)
@@ -562,8 +552,7 @@ class RewriteAtomicCountersTraverser : public TIntermTraverser
             TIntermNode *replacement = nullptr;
             if (param->getAsTyped()->getType().isAtomicCounter())
             {
-                ASSERT(mAtomicCounterFunctionCallArgs.count(param) != 0);
-                replacement = mAtomicCounterFunctionCallArgs[param];
+                replacement = mRetyper.getFunctionCallArgReplacement(param);
             }
             else
             {
@@ -582,16 +571,7 @@ class RewriteAtomicCountersTraverser : public TIntermTraverser
     const TVariable *mAtomicCounters;
     const TIntermTyped *mAcbBufferOffsets;
 
-    // A map from the atomic_uint variable to the binding/offset declaration.
-    std::unordered_map<const TVariable *, TVariable *> mAtomicCounterBindingOffsets;
-    // A map from functions with atomic_uint parameters to one where that's replaced with uint.
-    std::unordered_map<const TFunction *, TFunction *> mReplacedFunctions;
-    // A map from atomic_uint function parameters to their replacement uint parameter for the
-    // current function definition.
-    std::unordered_map<const TVariable *, TVariable *> mAtomicCounterFunctionParams;
-    // A map from atomic_uint function call arguments to their replacement for the current
-    // non-builtin function call.
-    std::unordered_map<const TIntermNode *, TIntermTyped *> mAtomicCounterFunctionCallArgs;
+    RetypeOpaqueVariablesHelper mRetyper;
 
     uint32_t mCurrentAtomicCounterOffset;
     uint32_t mCurrentAtomicCounterBinding;
