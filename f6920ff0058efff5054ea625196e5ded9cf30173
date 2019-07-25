@@ -2,6 +2,98 @@
   "comments": [
     {
       "key": {
+        "uuid": "0fbd45c9_57672b0c",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "can we remove this?",
+      "range": {
+        "startLine": 569,
+        "startChar": 0,
+        "endLine": 570,
+        "endChar": 50
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bffc1fcd_eb741317",
+        "filename": "src/compiler/translator/Compiler.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "I feel like this should be called GetMaxShaderVersionForSpec",
+      "range": {
+        "startLine": 206,
+        "startChar": 4,
+        "endLine": 206,
+        "endChar": 26
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3876c561_08e9f789",
+        "filename": "src/compiler/translator/Compiler.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "and undo this?",
+      "range": {
+        "startLine": 98,
+        "startChar": 4,
+        "endLine": 98,
+        "endChar": 62
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f76690d2_51f3a20a",
+        "filename": "src/compiler/translator/ShaderLang.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "and remove this if possible",
+      "range": {
+        "startLine": 368,
+        "startChar": 0,
+        "endLine": 374,
+        "endChar": 0
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "32207bba_6b78d403",
         "filename": "src/libANGLE/Compiler.cpp",
         "patchSetId": 6
@@ -13,6 +105,70 @@
       "writtenOn": "2019-07-25T14:23:24Z",
       "side": 1,
       "message": "Should this depend on some request by the application?",
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68a93194_88a2ce68",
+        "filename": "src/libANGLE/Compiler.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "clientType is a request of a specific context type. So it does already.",
+      "parentUuid": "32207bba_6b78d403",
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68d09d5b_ec24c281",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "please use a full http://anglebug.com/ link to make it easy to click through.",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 49,
+        "endChar": 25
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c069083_044677ec",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "you shouldn\u0027t really need the #ifndef.",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 18
+      },
       "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -65,6 +221,121 @@
     },
     {
       "key": {
+        "uuid": "19915676_4a0268fd",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "and these",
+      "range": {
+        "startLine": 120,
+        "startChar": 6,
+        "endLine": 120,
+        "endChar": 33
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14d81b20_acdf8789",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "and these",
+      "range": {
+        "startLine": 309,
+        "startChar": 5,
+        "endLine": 309,
+        "endChar": 42
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c5cdd5b4_2ab245bf",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "and these",
+      "range": {
+        "startLine": 418,
+        "startChar": 36,
+        "endLine": 419,
+        "endChar": 4
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3a3fce32_28086b08",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "can we remove these?",
+      "range": {
+        "startLine": 71,
+        "startChar": 4,
+        "endLine": 71,
+        "endChar": 62
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2470803_c5c3e8a9",
+        "filename": "src/libANGLE/Shader.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "and these",
+      "range": {
+        "startLine": 97,
+        "startChar": 4,
+        "endLine": 97,
+        "endChar": 29
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0556bbb1_6c8041f4",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 6
@@ -76,6 +347,30 @@
       "writtenOn": "2019-07-25T14:23:24Z",
       "side": 1,
       "message": "Should this be done only if in compatibility profile?",
+      "range": {
+        "startLine": 437,
+        "startChar": 42,
+        "endLine": 437,
+        "endChar": 70
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0cca6969_3c4ce662",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "Probably leave a TODO here with implementing core profile. We return compat for both compat and core right now.",
+      "parentUuid": "0556bbb1_6c8041f4",
       "range": {
         "startLine": 437,
         "startChar": 42,
@@ -102,6 +397,52 @@
       "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d8718a6c_56c380fc",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "you don\u0027t need to use ?: when returning a bool",
+      "range": {
+        "startLine": 504,
+        "startChar": 33,
+        "endLine": 504,
+        "endChar": 48
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d96a66e_9af2c2ab",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-25T15:07:17Z",
+      "side": 1,
+      "message": "you don\u0027t need to use ?: when returning a bool",
+      "range": {
+        "startLine": 506,
+        "startChar": 17,
+        "endLine": 506,
+        "endChar": 49
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     },
     {
       "key": {
