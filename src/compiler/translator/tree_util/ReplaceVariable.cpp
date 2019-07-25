@@ -61,4 +61,74 @@ void ReplaceVariableWithTyped(TIntermBlock *root,
     traverser.updateTree();
 }
 
+TIntermFunctionPrototype *RetypeOpaqueVariablesHelper::convertFunctionPrototype(
+    const TFunction *oldFunction)
+{
+    if (mReplacedFunctionParams.empty())
+    {
+        return nullptr;
+    }
+
+    // Create a new function prototype for replacement.
+    TFunction *replacementFunction = new TFunction(
+        mSymbolTable, oldFunction->name(), SymbolType::UserDefined,
+        new TType(oldFunction->getReturnType()), oldFunction->isKnownToNotHaveSideEffects());
+    for (size_t paramIndex = 0; paramIndex < oldFunction->getParamCount(); ++paramIndex)
+    {
+        const TVariable *param = oldFunction->getParam(paramIndex);
+        TVariable *replacement = nullptr;
+        auto replaced          = mReplacedFunctionParams.find(param);
+        if (replaced != mReplacedFunctionParams.end())
+        {
+            replacement = replaced->second;
+        }
+        else
+        {
+            replacement = new TVariable(mSymbolTable, param->name(), new TType(param->getType()),
+                                        SymbolType::UserDefined);
+        }
+        replacementFunction->addParameter(replacement);
+    }
+    mReplacedFunctions[oldFunction] = replacementFunction;
+
+    TIntermFunctionPrototype *replacementPrototype =
+        new TIntermFunctionPrototype(replacementFunction);
+
+    return replacementPrototype;
+}
+
+TIntermAggregate *RetypeOpaqueVariablesHelper::convertASTFunction(TIntermAggregate *node)
+{
+    // See if the function needs replacement at all.
+    const TFunction *function = node->getFunction();
+    auto replaced             = mReplacedFunctions.find(function);
+    if (replaced == mReplacedFunctions.end())
+    {
+        return nullptr;
+    }
+
+    // Arguments to this call are staged to be replaced at the same time.
+    TFunction *substituteFunction        = replaced->second;
+    TIntermSequence *substituteArguments = new TIntermSequence;
+
+    for (size_t paramIndex = 0; paramIndex < function->getParamCount(); ++paramIndex)
+    {
+        TIntermNode *param = node->getChildNode(paramIndex);
+
+        TIntermNode *replacement = nullptr;
+        auto replaced            = mReplacedFunctionCallArgs.find(oldArg);
+        if (replaced != mReplacedFunctionCallArgs.end())
+        {
+            replacement = replaced->second;
+        }
+        else
+        {
+            replacement = param->getAsTyped()->deepCopy();
+        }
+        substituteArguments->push_back(replacement);
+    }
+
+    return TIntermAggregate::CreateFunctionCall(*substituteFunction, substituteArguments);
+}
+
 }  // namespace sh
