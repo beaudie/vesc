@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "32207bba_6b78d403",
+        "filename": "src/libANGLE/Compiler.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T14:23:24Z",
+      "side": 1,
+      "message": "Should this depend on some request by the application?",
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "845ee2e9_670983d1",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7700,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T14:23:24Z",
+      "side": 1,
+      "message": "Can merge the two cases, they are identical",
+      "range": {
+        "startLine": 7689,
+        "startChar": 0,
+        "endLine": 7700,
+        "endChar": 13
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6997d980_637246cd",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8337,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T14:23:24Z",
+      "side": 1,
+      "message": "{ } inside if",
+      "range": {
+        "startLine": 8335,
+        "startChar": 0,
+        "endLine": 8337,
+        "endChar": 36
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0556bbb1_6c8041f4",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 437,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T14:23:24Z",
+      "side": 1,
+      "message": "Should this be done only if in compatibility profile?",
+      "range": {
+        "startLine": 437,
+        "startChar": 42,
+        "endLine": 437,
+        "endChar": 70
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f67b3211_a7440ad3",
+        "filename": "src/libANGLE/format_map_desktop.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T14:23:24Z",
+      "side": 1,
+      "message": "Sigh... at some point these functions are going to be full of spec version checks",
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "32f69a53_134ec473",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T14:23:24Z",
+      "side": 1,
+      "message": "No difference here?",
+      "range": {
+        "startLine": 303,
+        "startChar": 9,
+        "endLine": 303,
+        "endChar": 31
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
