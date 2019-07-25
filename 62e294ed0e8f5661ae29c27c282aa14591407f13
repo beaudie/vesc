@@ -52,6 +52,24 @@
       "revId": "62e294ed0e8f5661ae29c27c282aa14591407f13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92f7039f_71b199db",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2166,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-25T13:57:44Z",
+      "side": 1,
+      "message": "Isn\u0027t the ConvertVertex compute shader practically doing the same thing? Perhaps that could be generalized to include the missing pieces if any.",
+      "parentUuid": "49f931f7_11a44946",
+      "revId": "62e294ed0e8f5661ae29c27c282aa14591407f13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
