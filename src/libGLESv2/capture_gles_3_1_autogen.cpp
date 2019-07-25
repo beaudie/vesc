@@ -8,7 +8,7 @@
 // capture_gles_3_1_autogen.cpp:
 //   Capture functions for the OpenGL ES 3.1 entry points.
 
-#include "libANGLE/capture_gles_3_1_autogen.h"
+#include "libGLESv2/capture_gles_3_1_autogen.h"
 
 #include "libANGLE/Context.h"
 #include "libANGLE/FrameCapture.h"
