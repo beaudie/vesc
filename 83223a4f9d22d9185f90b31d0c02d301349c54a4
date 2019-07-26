@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2fd74f4d_e154b9cf",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-07-26T18:17:34Z",
+      "side": 1,
+      "message": "This will collide with crrev/c/1721169 if you can hold off until that lands.",
+      "revId": "83223a4f9d22d9185f90b31d0c02d301349c54a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
