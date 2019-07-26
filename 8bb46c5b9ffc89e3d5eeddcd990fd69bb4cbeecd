@@ -22,6 +22,30 @@
       "revId": "8bb46c5b9ffc89e3d5eeddcd990fd69bb4cbeecd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af0cb404_38f16c6a",
+        "filename": "src/tests/egl_tests/EGLBackwardsCompatibleContextTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-26T20:50:37Z",
+      "side": 0,
+      "message": "I\u0027ve opened anglebug.com/3750 to track revisiting this when 3.0 contexts can be returned for Vulkan.",
+      "parentUuid": "fd606651_ed821957",
+      "range": {
+        "startLine": 194,
+        "startChar": 37,
+        "endLine": 194,
+        "endChar": 47
+      },
+      "revId": "8bb46c5b9ffc89e3d5eeddcd990fd69bb4cbeecd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
