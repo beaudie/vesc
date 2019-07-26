@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "29cddc44_2047134a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-26T19:04:13Z",
+      "side": 1,
+      "message": "Since each component gets its own uint32_t, what does \u0027packed\u0027 mean in this context?   Or does the \u00274\u0027 in the declaration not mean 4 components (x, y, z, w) and is related to something else?",
+      "range": {
+        "startLine": 60,
+        "startChar": 19,
+        "endLine": 60,
+        "endChar": 25
+      },
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "53b61558_2f00e319",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2158,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-26T19:04:13Z",
+      "side": 1,
+      "message": "I think this needs to be \u0027offsetsSize / 4\u0027, since in the following for-loop four 8-bit values are packed into each uint32_t entry, so 4 bufferIndices per offsetsOut entry.",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57577d2f_29395c75",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2182,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-26T19:04:13Z",
+      "side": 1,
+      "message": "Should you rely on the caller doing that for you?   Why not memset() it in this function if this is a requirement?",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29067a09_05e89e53",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2273,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-26T19:04:13Z",
+      "side": 1,
+      "message": "typedef uint64_t VkDeviceSize;\n\nShould driverUniforms-\u003edynamicOffset be a uint64_t too to prevent losing any information (as unlikely as it may be)?",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a662630_82c76671",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-26T19:04:13Z",
+      "side": 1,
+      "message": "What do you think about something like:\n\nenum DriverUniformsDescriptorSets {\n    GRAPHICS_DRIVER_UNIFORM,\n    COMPUTE_DRIVER_UNIFORM,\n    NUM_DRIVER_UNIFORMS\n}\n\nstd::vector\u003cDriverUniformsDescriptorSet\u003e mGraphicsDriverUniforms(NUM_DRIVER_UNIFORMS);\n\nSo that later you can do something like:\n\nfor (const auto\u0026 driverUniforms : mDriverUniforms)\n{\n    driverUniforms.init();\nOR\n    driverUniforms.destroy();\nOR\n    driverUniforms.set(DIRTY_BIT_DRIVER_UNIFORMS);\n    driverUniforms.set(DIRTY_BIT_DESCRIPTOR_SETS);\n}\n\nI\u0027m not sure how much easier/cleaner that really is, but it may help avoid cases where one of the DriverUniformsDescriptorSet gets missed when they all need to do some particular operation.",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3be5c186_e65cde2c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-26T19:04:13Z",
+      "side": 1,
+      "message": "Can offsetAlignment still meet the alignment requirements without needing any adjusting?   For example, if the alignment requirement is 8B, can offsetAlignment \u003d 32B and work correctly?\n\nOr will offsetAlignment always return a value that\u0027s less than the alignment requirement?",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
