@@ -1,0 +1,343 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9dac71f6_bd8c45f8",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "Would it make more sense to move these tests to VertexAttributeTest?",
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ab8e408_429ba474",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "you don\u0027t use depth, you can omit this.",
+      "range": {
+        "startLine": 548,
+        "startChar": 7,
+        "endLine": 548,
+        "endChar": 31
+      },
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc00be07_03bfc937",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "nit: framebufferTexture?",
+      "range": {
+        "startLine": 558,
+        "startChar": 57,
+        "endLine": 558,
+        "endChar": 69
+      },
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "138e6979_9c0a36ce",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "it would be nice to use RAII ANGLE_GL_PROGRAM for this as well. you can share the vs code.",
+      "range": {
+        "startLine": 571,
+        "startChar": 9,
+        "endLine": 571,
+        "endChar": 19
+      },
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "959043e2_e9c8de8e",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "there should be something you can use here in shader_utils.h",
+      "range": {
+        "startLine": 582,
+        "startChar": 0,
+        "endLine": 587,
+        "endChar": 4
+      },
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edeaf2b0_ead75114",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "use GLColor. also use std::vector or std::array so you can use operator\u003d\u003d",
+      "range": {
+        "startLine": 628,
+        "startChar": 8,
+        "endLine": 628,
+        "endChar": 16
+      },
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "deaee953_da124b1e",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "what is this even doing? you just initialized the memory to zero",
+      "range": {
+        "startLine": 629,
+        "startChar": 7,
+        "endLine": 629,
+        "endChar": 85
+      },
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1b8f683_da94a836",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "use EXPECT_PIXEL_RECT_EQ",
+      "range": {
+        "startLine": 634,
+        "startChar": 11,
+        "endLine": 636,
+        "endChar": 33
+      },
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8d8101f_7ecbd5cf",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "ASSERT_TRUE",
+      "range": {
+        "startLine": 651,
+        "startChar": 12,
+        "endLine": 651,
+        "endChar": 21
+      },
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d03fa51_6a7ad145",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "use operator\u003d\u003d",
+      "range": {
+        "startLine": 654,
+        "startChar": 8,
+        "endLine": 654,
+        "endChar": 85
+      },
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef8a8a47_0b6d71ed",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "could you use RAII types and make them local to the test scope? You can use common init functions that take pointers to objects. you won\u0027t need to release them.",
+      "range": {
+        "startLine": 660,
+        "startChar": 0,
+        "endLine": 662,
+        "endChar": 20
+      },
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f6de329_1ad0f3e1",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "use initializer list",
+      "range": {
+        "startLine": 673,
+        "startChar": 4,
+        "endLine": 676,
+        "endChar": 32
+      },
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f076c88_92b58a42",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "use initializer list",
+      "range": {
+        "startLine": 714,
+        "startChar": 5,
+        "endLine": 721,
+        "endChar": 32
+      },
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7e0abb9_642265a0",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "fixed is a bit of a weird format. did you consider an odd alignment to force cpu conversion? see BindingIsAligned in VertexArrayVk.cpp.",
+      "range": {
+        "startLine": 731,
+        "startChar": 46,
+        "endLine": 731,
+        "endChar": 54
+      },
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8315189f_f341a30d",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T18:09:13Z",
+      "side": 1,
+      "message": "always use c++-style casts.",
+      "range": {
+        "startLine": 738,
+        "startChar": 69,
+        "endLine": 738,
+        "endChar": 77
+      },
+      "revId": "0f2f06aef4f1b169764975e5bd5b77fcf17dc8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
