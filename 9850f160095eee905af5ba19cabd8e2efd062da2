@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "844ad3b1_a16d5dae",
+        "filename": "src/compiler/translator/Compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-26T15:13:43Z",
+      "side": 1,
+      "message": "Had to move mShaderSpec from private to protected so that translatorHLSL has access to it and can give it to outputHLSL",
+      "parentUuid": "5f04f65e_ba547e64",
+      "range": {
+        "startLine": 180,
+        "startChar": 4,
+        "endLine": 180,
+        "endChar": 13
+      },
+      "revId": "9850f160095eee905af5ba19cabd8e2efd062da2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "02b2424b_65810e35",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "9850f160095eee905af5ba19cabd8e2efd062da2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9d87199_862c1c9d",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-26T15:13:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02b2424b_65810e35",
+      "range": {
+        "startLine": 436,
+        "startChar": 7,
+        "endLine": 436,
+        "endChar": 11
+      },
+      "revId": "9850f160095eee905af5ba19cabd8e2efd062da2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

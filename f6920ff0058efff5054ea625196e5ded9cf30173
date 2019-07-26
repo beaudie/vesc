@@ -915,6 +915,30 @@
       "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "726c76ff_6df10801",
+        "filename": "src/libGL/entry_points_wgl.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-07-26T15:13:43Z",
+      "side": 1,
+      "message": "Second patch I uploaded (patchset 8) removed this",
+      "parentUuid": "103be11c_f5783e2c",
+      "range": {
+        "startLine": 79,
+        "startChar": 8,
+        "endLine": 79,
+        "endChar": 31
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
