@@ -66,7 +66,7 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const State &state)
       mResources()
 {
     ASSERT(state.getClientMajorVersion() == 1 || state.getClientMajorVersion() == 2 ||
-           state.getClientMajorVersion() == 3);
+           state.getClientMajorVersion() == 3 || state.getClientMajorVersion() == 4);
 
     const gl::Caps &caps             = state.getCaps();
     const gl::Extensions &extensions = state.getExtensions();
