@@ -154,6 +154,12 @@ struct Extensions
     // textures are renderable.
     bool colorBufferHalfFloat = false;
 
+    // If GL_EXT_texture_rg is exposed, GL_EXT_color_buffer_half_float also requires that RG float
+    // textures be renderable. This additional requirement is ignored in WebGL.
+    // colorBufferHalfFloat is only set based on RGB and RGBA formats. The Context is responsible
+    // for considering colorBufferHalfFloatRG and disabling colorBufferHalfFloat if necessary.
+    bool colorBufferHalfFloatRG = false;
+
     // GL_OES_texture_half_float and GL_OES_texture_half_float_linear
     // Implies that TextureCaps for GL_RGB16F, GL_RGBA16F, GL_ALPHA32F_EXT, GL_LUMINANCE32F_EXT and
     // GL_LUMINANCE_ALPHA32F_EXT exist
