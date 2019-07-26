@@ -904,10 +904,6 @@ angle_shared_library("libEGL") {
   public_deps = [
     ":includes",
   ]
-
-  data_deps = [
-    ":libGLESv2",
-  ]
 }
 
 angle_static_library("libEGL_static") {
