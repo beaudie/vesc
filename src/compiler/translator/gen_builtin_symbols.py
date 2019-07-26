@@ -1351,7 +1351,8 @@ def process_single_variable_group(condition, group_name, group, builtin_id_decla
     return &BuiltInVariable::kVar_{name_with_suffix};
 }}"""
                 name_if = template_name_if.format(**template_args)
-                get_builtin_if_statements.add_obj(level, 'COMMON_BUILTINS', condition, template_args['name'],
+                get_builtin_if_statements.add_obj(level, 'COMMON_BUILTINS', condition,
+                                                  template_args['name'],
                                                   {'hash_matched_code': name_if})
 
         if is_member:
@@ -1381,8 +1382,8 @@ def process_single_variable_group(condition, group_name, group, builtin_id_decla
     return mVar_{name_with_suffix};
 }}"""
             name_if = template_name_if.format(**template_args)
-            get_builtin_if_statements.add_obj(level, 'COMMON_BUILTINS', get_condition, variable_name,
-                                              {'hash_matched_code': name_if})
+            get_builtin_if_statements.add_obj(level, 'COMMON_BUILTINS', get_condition,
+                                              variable_name, {'hash_matched_code': name_if})
 
         id_counter += 1
 

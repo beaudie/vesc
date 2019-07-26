@@ -47841,11 +47841,27 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         }
         switch (nameHash)
         {
+            case 0x00000006u:
+            {
+                if (name == BuiltInName::gl_MaxAtomicCounterBindings)
+                {
+                    return mVar_gl_MaxAtomicCounterBindings;
+                }
+                break;
+            }
             case 0x00000013u:
             {
                 if (name == BuiltInName::mix_2B2B0B)
                 {
                     return &BuiltInFunction::kFunction_mix_2B2B0B;
+                }
+                break;
+            }
+            case 0x00000030u:
+            {
+                if (name == BuiltInName::gl_MaxGeometryImageUniforms)
+                {
+                    return mVar_gl_MaxGeometryImageUniforms;
                 }
                 break;
             }
@@ -47945,11 +47961,27 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x000000a0u:
+            {
+                if (name == BuiltInName::gl_MaxComputeTextureImageUnits)
+                {
+                    return mVar_gl_MaxComputeTextureImageUnits;
+                }
+                break;
+            }
             case 0x000000a6u:
             {
                 if (name == BuiltInName::min_2B2B)
                 {
                     return &BuiltInFunction::kFunction_min_2B2B;
+                }
+                break;
+            }
+            case 0x000000a8u:
+            {
+                if (name == BuiltInName::gl_MaxGeometryOutputVertices)
+                {
+                    return mVar_gl_MaxGeometryOutputVertices;
                 }
                 break;
             }
@@ -48105,11 +48137,35 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x0000011au:
+            {
+                if (name == BuiltInName::gl_MaxVaryingVectors)
+                {
+                    return mVar_gl_MaxVaryingVectors;
+                }
+                break;
+            }
             case 0x00000125u:
             {
                 if (name == BuiltInName::abs_2B)
                 {
                     return &BuiltInFunction::kFunction_abs_2B;
+                }
+                break;
+            }
+            case 0x0000012fu:
+            {
+                if (name == BuiltInName::gl_MaxVertexAttribs)
+                {
+                    return mVar_gl_MaxVertexAttribs;
+                }
+                break;
+            }
+            case 0x00000148u:
+            {
+                if (name == BuiltInName::gl_DepthRange)
+                {
+                    return mVar_gl_DepthRange;
                 }
                 break;
             }
@@ -48153,6 +48209,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x00000174u:
+            {
+                if (name == BuiltInName::gl_MaxCombinedShaderOutputResources)
+                {
+                    return mVar_gl_MaxCombinedShaderOutputResources;
+                }
+                break;
+            }
             case 0x0000017au:
             {
                 if (name == BuiltInName::atan_2B)
@@ -48174,6 +48238,22 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::sqrt_3B)
                 {
                     return &BuiltInFunction::kFunction_sqrt_3B;
+                }
+                break;
+            }
+            case 0x00000183u:
+            {
+                if (name == BuiltInName::gl_MaxGeometryInputComponents)
+                {
+                    return mVar_gl_MaxGeometryInputComponents;
+                }
+                break;
+            }
+            case 0x00000188u:
+            {
+                if (name == BuiltInName::gl_MaxVertexAtomicCounters)
+                {
+                    return mVar_gl_MaxVertexAtomicCounters;
                 }
                 break;
             }
@@ -48209,11 +48289,27 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x0000019fu:
+            {
+                if (name == BuiltInName::gl_MaxDualSourceDrawBuffersEXT)
+                {
+                    return mVar_gl_MaxDualSourceDrawBuffersEXT;
+                }
+                break;
+            }
             case 0x000001a0u:
             {
                 if (name == BuiltInName::sin_1B)
                 {
                     return &BuiltInFunction::kFunction_sin_1B;
+                }
+                break;
+            }
+            case 0x000001a5u:
+            {
+                if (name == BuiltInName::gl_MaxFragmentAtomicCounters)
+                {
+                    return mVar_gl_MaxFragmentAtomicCounters;
                 }
                 break;
             }
@@ -48257,6 +48353,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x000001c3u:
+            {
+                if (name == BuiltInName::gl_MaxComputeUniformComponents)
+                {
+                    return mVar_gl_MaxComputeUniformComponents;
+                }
+                break;
+            }
             case 0x000001c5u:
             {
                 if (name == BuiltInName::greaterThan_3B3B)
@@ -48286,6 +48390,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::noise2_2B)
                 {
                     return &BuiltInFunction::kFunction_noise2_2B;
+                }
+                break;
+            }
+            case 0x000001d7u:
+            {
+                if (name == BuiltInName::gl_MaxVertexTextureImageUnits)
+                {
+                    return mVar_gl_MaxVertexTextureImageUnits;
                 }
                 break;
             }
@@ -48345,11 +48457,35 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x00000240u:
+            {
+                if (name == BuiltInName::gl_MaxImageUnits)
+                {
+                    return mVar_gl_MaxImageUnits;
+                }
+                break;
+            }
+            case 0x00000241u:
+            {
+                if (name == BuiltInName::gl_MaxGeometryAtomicCounters)
+                {
+                    return mVar_gl_MaxGeometryAtomicCounters;
+                }
+                break;
+            }
             case 0x00000242u:
             {
                 if (name == BuiltInName::smoothstep_0B0B2B)
                 {
                     return &BuiltInFunction::kFunction_smoothstep_0B0B2B;
+                }
+                break;
+            }
+            case 0x00000254u:
+            {
+                if (name == BuiltInName::gl_MaxComputeImageUniforms)
+                {
+                    return mVar_gl_MaxComputeImageUniforms;
                 }
                 break;
             }
@@ -48385,6 +48521,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x0000028du:
+            {
+                if (name == BuiltInName::gl_MaxVertexAtomicCounterBuffers)
+                {
+                    return mVar_gl_MaxVertexAtomicCounterBuffers;
+                }
+                break;
+            }
             case 0x00000293u:
             {
                 if (name == BuiltInName::notEqual_1E1E)
@@ -48398,6 +48542,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::ceil_3B)
                 {
                     return &BuiltInFunction::kFunction_ceil_3B;
+                }
+                break;
+            }
+            case 0x0000029cu:
+            {
+                if (name == BuiltInName::gl_MaxComputeWorkGroupCount)
+                {
+                    return mVar_gl_MaxComputeWorkGroupCount;
                 }
                 break;
             }
@@ -48457,6 +48609,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x000002f2u:
+            {
+                if (name == BuiltInName::gl_MaxGeometryTextureImageUnits)
+                {
+                    return mVar_gl_MaxGeometryTextureImageUnits;
+                }
+                break;
+            }
             case 0x000002f7u:
             {
                 if (name == BuiltInName::length_1B)
@@ -48470,6 +48630,22 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::normalize_2B)
                 {
                     return &BuiltInFunction::kFunction_normalize_2B;
+                }
+                break;
+            }
+            case 0x0000030cu:
+            {
+                if (name == BuiltInName::gl_MaxVertexUniformVectors)
+                {
+                    return mVar_gl_MaxVertexUniformVectors;
+                }
+                break;
+            }
+            case 0x00000313u:
+            {
+                if (name == BuiltInName::gl_MaxGeometryUniformComponents)
+                {
+                    return mVar_gl_MaxGeometryUniformComponents;
                 }
                 break;
             }
@@ -48521,11 +48697,29 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x0000033bu:
+            {
+                if (name == BuiltInName::gl_FragDepthEXT)
+                {
+                    // Only initialized if (shaderType == GL_FRAGMENT_SHADER) &&
+                    // (mResources.EXT_frag_depth)
+                    return mVar_gl_FragDepthEXT;
+                }
+                break;
+            }
             case 0x00000345u:
             {
                 if (name == BuiltInName::log2_0B)
                 {
                     return &BuiltInFunction::kFunction_log2_0B;
+                }
+                break;
+            }
+            case 0x00000377u:
+            {
+                if (name == BuiltInName::gl_MaxGeometryOutputComponents)
+                {
+                    return mVar_gl_MaxGeometryOutputComponents;
                 }
                 break;
             }
@@ -48542,6 +48736,23 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::mod_2B0B)
                 {
                     return &BuiltInFunction::kFunction_mod_2B0B;
+                }
+                break;
+            }
+            case 0x00000386u:
+            {
+                if (name == BuiltInName::gl_MaxFragmentAtomicCounterBuffers)
+                {
+                    return mVar_gl_MaxFragmentAtomicCounterBuffers;
+                }
+                break;
+            }
+            case 0x00000387u:
+            {
+                if (name == BuiltInName::gl_in)
+                {
+                    // Only initialized if shaderType == GL_GEOMETRY_SHADER_EXT
+                    return mVar_gl_in;
                 }
                 break;
             }
@@ -48630,6 +48841,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::notEqual_1C1C)
                 {
                     return &BuiltInFunction::kFunction_notEqual_1C1C;
+                }
+                break;
+            }
+            case 0x000003fcu:
+            {
+                if (name == BuiltInName::gl_DepthRangeParameters)
+                {
+                    return mVar_gl_DepthRangeParameters;
                 }
                 break;
             }
@@ -48857,6 +49076,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x000004e5u:
+            {
+                if (name == BuiltInName::gl_MaxComputeWorkGroupSize)
+                {
+                    return mVar_gl_MaxComputeWorkGroupSize;
+                }
+                break;
+            }
             case 0x000004e6u:
             {
                 if (name == BuiltInName::exp_3B)
@@ -48894,6 +49121,22 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::notFunc_3E)
                 {
                     return &BuiltInFunction::kFunction_notFunc_3E;
+                }
+                break;
+            }
+            case 0x000004fdu:
+            {
+                if (name == BuiltInName::gl_MaxDrawBuffers)
+                {
+                    return mVar_gl_MaxDrawBuffers;
+                }
+                break;
+            }
+            case 0x00000513u:
+            {
+                if (name == BuiltInName::gl_MaxTextureImageUnits)
+                {
+                    return mVar_gl_MaxTextureImageUnits;
                 }
                 break;
             }
@@ -48945,11 +49188,27 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x00000558u:
+            {
+                if (name == BuiltInName::gl_MaxCombinedTextureImageUnits)
+                {
+                    return mVar_gl_MaxCombinedTextureImageUnits;
+                }
+                break;
+            }
             case 0x0000055fu:
             {
                 if (name == BuiltInName::noise4_1B)
                 {
                     return &BuiltInFunction::kFunction_noise4_1B;
+                }
+                break;
+            }
+            case 0x0000056eu:
+            {
+                if (name == BuiltInName::gl_MaxGeometryTotalOutputComponents)
+                {
+                    return mVar_gl_MaxGeometryTotalOutputComponents;
                 }
                 break;
             }
@@ -48974,6 +49233,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::max_2B2B)
                 {
                     return &BuiltInFunction::kFunction_max_2B2B;
+                }
+                break;
+            }
+            case 0x00000586u:
+            {
+                if (name == BuiltInName::gl_MaxCombinedImageUniforms)
+                {
+                    return mVar_gl_MaxCombinedImageUniforms;
                 }
                 break;
             }
@@ -49017,6 +49284,16 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x000005a7u:
+            {
+                if (name == BuiltInName::gl_SecondaryFragDataEXT)
+                {
+                    // Only initialized if (shaderType == GL_FRAGMENT_SHADER) &&
+                    // (mResources.EXT_blend_func_extended)
+                    return mVar_gl_SecondaryFragDataEXT;
+                }
+                break;
+            }
             case 0x000005aau:
             {
                 if (name == BuiltInName::degrees_1B)
@@ -49046,6 +49323,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::lessThanEqual_1B1B)
                 {
                     return &BuiltInFunction::kFunction_lessThanEqual_1B1B;
+                }
+                break;
+            }
+            case 0x000005b5u:
+            {
+                if (name == BuiltInName::gl_MinProgramTexelOffset)
+                {
+                    return mVar_gl_MinProgramTexelOffset;
                 }
                 break;
             }
@@ -49089,6 +49374,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x000005c4u:
+            {
+                if (name == BuiltInName::gl_MaxGeometryAtomicCounterBuffers)
+                {
+                    return mVar_gl_MaxGeometryAtomicCounterBuffers;
+                }
+                break;
+            }
             case 0x000005d2u:
             {
                 if (name == BuiltInName::fract_0B)
@@ -49102,6 +49395,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::refract_3B3B0B)
                 {
                     return &BuiltInFunction::kFunction_refract_3B3B0B;
+                }
+                break;
+            }
+            case 0x000005e1u:
+            {
+                if (name == BuiltInName::gl_MaxCombinedAtomicCounterBuffers)
+                {
+                    return mVar_gl_MaxCombinedAtomicCounterBuffers;
                 }
                 break;
             }
@@ -49145,6 +49446,22 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x00000631u:
+            {
+                if (name == BuiltInName::gl_MaxComputeAtomicCounterBuffers)
+                {
+                    return mVar_gl_MaxComputeAtomicCounterBuffers;
+                }
+                break;
+            }
+            case 0x0000063fu:
+            {
+                if (name == BuiltInName::gl_MaxFragmentUniformVectors)
+                {
+                    return mVar_gl_MaxFragmentUniformVectors;
+                }
+                break;
+            }
             case 0x00000647u:
             {
                 if (name == BuiltInName::pow_2B2B)
@@ -49182,6 +49499,23 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::degrees_0B)
                 {
                     return &BuiltInFunction::kFunction_degrees_0B;
+                }
+                break;
+            }
+            case 0x0000066du:
+            {
+                if (name == BuiltInName::gl_FragData)
+                {
+                    // Only initialized if shaderType == GL_FRAGMENT_SHADER
+                    return mVar_gl_FragData;
+                }
+                break;
+            }
+            case 0x00000677u:
+            {
+                if (name == BuiltInName::gl_MaxCombinedAtomicCounters)
+                {
+                    return mVar_gl_MaxCombinedAtomicCounters;
                 }
                 break;
             }
@@ -49230,6 +49564,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::reflect_0B0B)
                 {
                     return &BuiltInFunction::kFunction_reflect_0B0B;
+                }
+                break;
+            }
+            case 0x000006b4u:
+            {
+                if (name == BuiltInName::gl_MaxComputeAtomicCounters)
+                {
+                    return mVar_gl_MaxComputeAtomicCounters;
                 }
                 break;
             }
@@ -49369,6 +49711,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x00000798u:
+            {
+                if (name == BuiltInName::gl_MaxFragmentInputVectors)
+                {
+                    return mVar_gl_MaxFragmentInputVectors;
+                }
+                break;
+            }
             case 0x0000079bu:
             {
                 if (name == BuiltInName::notEqual_3E3E)
@@ -49473,6 +49823,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x00000844u:
+            {
+                if (name == BuiltInName::gl_MaxProgramTexelOffset)
+                {
+                    return mVar_gl_MaxProgramTexelOffset;
+                }
+                break;
+            }
             case 0x0000084au:
             {
                 if (name == BuiltInName::any_2E)
@@ -49521,6 +49879,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x0000085fu:
+            {
+                if (name == BuiltInName::gl_MaxFragmentImageUniforms)
+                {
+                    return mVar_gl_MaxFragmentImageUniforms;
+                }
+                break;
+            }
             case 0x0000086du:
             {
                 if (name == BuiltInName::atan_1B)
@@ -49534,6 +49900,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::greaterThan_3C3C)
                 {
                     return &BuiltInFunction::kFunction_greaterThan_3C3C;
+                }
+                break;
+            }
+            case 0x00000888u:
+            {
+                if (name == BuiltInName::gl_MaxAtomicCounterBufferSize)
+                {
+                    return mVar_gl_MaxAtomicCounterBufferSize;
                 }
                 break;
             }
@@ -49561,6 +49935,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 }
                 break;
             }
+            case 0x0000089cu:
+            {
+                if (name == BuiltInName::gl_MaxVertexImageUniforms)
+                {
+                    return mVar_gl_MaxVertexImageUniforms;
+                }
+                break;
+            }
             case 0x000008a1u:
             {
                 if (name == BuiltInName::step_0B0B)
@@ -49582,6 +49964,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                 if (name == BuiltInName::mix_0B0B0B)
                 {
                     return &BuiltInFunction::kFunction_mix_0B0B0B;
+                }
+                break;
+            }
+            case 0x000008bcu:
+            {
+                if (name == BuiltInName::gl_MaxVertexOutputVectors)
+                {
+                    return mVar_gl_MaxVertexOutputVectors;
                 }
                 break;
             }
@@ -49702,11 +50092,43 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
         {
             switch (nameHash)
             {
+                case 0x00000138u:
+                {
+                    if (name == BuiltInName::gl_InstanceID)
+                    {
+                        return &BuiltInVariable::kVar_gl_InstanceID;
+                    }
+                    break;
+                }
+                case 0x0000022eu:
+                {
+                    if (name == BuiltInName::gl_PointSize)
+                    {
+                        return &BuiltInVariable::kVar_gl_PointSize;
+                    }
+                    break;
+                }
                 case 0x00000310u:
                 {
                     if (name == BuiltInName::ftransform_)
                     {
                         return &BuiltInFunction::kFunction_ftransform_;
+                    }
+                    break;
+                }
+                case 0x00000424u:
+                {
+                    if (name == BuiltInName::gl_Position)
+                    {
+                        return &BuiltInVariable::kVar_gl_Position;
+                    }
+                    break;
+                }
+                case 0x0000058bu:
+                {
+                    if (name == BuiltInName::gl_VertexID)
+                    {
+                        return &BuiltInVariable::kVar_gl_VertexID;
                     }
                     break;
                 }
@@ -49724,6 +50146,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                     }
                     break;
                 }
+                case 0x0000034cu:
+                {
+                    if (name == BuiltInName::gl_FragCoord)
+                    {
+                        return &BuiltInVariable::kVar_gl_FragCoord;
+                    }
+                    break;
+                }
                 case 0x000003afu:
                 {
                     if (name == BuiltInName::fwidth_3B)
@@ -49732,11 +50162,27 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                     }
                     break;
                 }
+                case 0x00000413u:
+                {
+                    if (name == BuiltInName::gl_FragDepth)
+                    {
+                        return &BuiltInVariable::kVar_gl_FragDepth;
+                    }
+                    break;
+                }
                 case 0x00000453u:
                 {
                     if (name == BuiltInName::fwidth_0B)
                     {
                         return &BuiltInFunction::kFunction_fwidth_0B;
+                    }
+                    break;
+                }
+                case 0x000004bcu:
+                {
+                    if (name == BuiltInName::gl_FragColor)
+                    {
+                        return &BuiltInVariable::kVar_gl_FragColor;
                     }
                     break;
                 }
@@ -49753,6 +50199,14 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                     if (name == BuiltInName::dFdx_2B)
                     {
                         return &BuiltInFunction::kFunction_dFdx_2B;
+                    }
+                    break;
+                }
+                case 0x00000531u:
+                {
+                    if (name == BuiltInName::gl_PointCoord)
+                    {
+                        return &BuiltInVariable::kVar_gl_PointCoord;
                     }
                     break;
                 }
@@ -49809,6 +50263,261 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name, int shader
                     if (name == BuiltInName::dFdy_0B)
                     {
                         return &BuiltInFunction::kFunction_dFdy_0B;
+                    }
+                    break;
+                }
+                case 0x000007e4u:
+                {
+                    if (name == BuiltInName::gl_FrontFacing)
+                    {
+                        return &BuiltInVariable::kVar_gl_FrontFacing;
+                    }
+                    break;
+                }
+            }
+        }
+        if ((mShaderType == GL_FRAGMENT_SHADER) && (mResources.EXT_blend_func_extended))
+        {
+            switch (nameHash)
+            {
+                case 0x0000091eu:
+                {
+                    if (name == BuiltInName::gl_SecondaryFragColorEXT)
+                    {
+                        return &BuiltInVariable::kVar_gl_SecondaryFragColorEXT;
+                    }
+                    break;
+                }
+            }
+        }
+        if ((mShaderType == GL_FRAGMENT_SHADER) && (mResources.EXT_shader_framebuffer_fetch))
+        {
+            switch (nameHash)
+            {
+                case 0x000007a6u:
+                {
+                    if (name == BuiltInName::gl_LastFragData)
+                    {
+                        return mVar_gl_LastFragData;
+                    }
+                    break;
+                }
+            }
+        }
+        if ((mShaderType == GL_FRAGMENT_SHADER) && (mResources.NV_shader_framebuffer_fetch))
+        {
+            switch (nameHash)
+            {
+                case 0x000007a6u:
+                {
+                    if (name == BuiltInName::gl_LastFragData)
+                    {
+                        return mVar_gl_LastFragDataNV;
+                    }
+                    break;
+                }
+                case 0x000008cdu:
+                {
+                    if (name == BuiltInName::gl_LastFragColor)
+                    {
+                        return &BuiltInVariable::kVar_gl_LastFragColor;
+                    }
+                    break;
+                }
+            }
+        }
+        if ((mShaderType == GL_FRAGMENT_SHADER) &&
+            (!mResources.EXT_shader_framebuffer_fetch && !mResources.NV_shader_framebuffer_fetch &&
+             mResources.ARM_shader_framebuffer_fetch))
+        {
+            switch (nameHash)
+            {
+                case 0x000001edu:
+                {
+                    if (name == BuiltInName::gl_LastFragColorARM)
+                    {
+                        return &BuiltInVariable::kVar_gl_LastFragColorARM;
+                    }
+                    break;
+                }
+            }
+        }
+        if ((mShaderType == GL_FRAGMENT_SHADER) && (mResources.EXT_geometry_shader))
+        {
+            switch (nameHash)
+            {
+                case 0x00000488u:
+                {
+                    if (name == BuiltInName::gl_PrimitiveID)
+                    {
+                        return &BuiltInVariable::kVar_gl_PrimitiveID;
+                    }
+                    break;
+                }
+                case 0x000006dcu:
+                {
+                    if (name == BuiltInName::gl_Layer)
+                    {
+                        return &BuiltInVariable::kVar_gl_Layer;
+                    }
+                    break;
+                }
+            }
+        }
+        if ((mShaderType == GL_VERTEX_SHADER) && (mResources.ANGLE_multi_draw))
+        {
+            switch (nameHash)
+            {
+                case 0x00000476u:
+                {
+                    if (name == BuiltInName::gl_DrawID)
+                    {
+                        return &BuiltInVariable::kVar_gl_DrawIDESSL1;
+                    }
+                    break;
+                }
+            }
+        }
+        if ((mShaderType == GL_VERTEX_SHADER) && (mResources.ANGLE_base_vertex_base_instance))
+        {
+            switch (nameHash)
+            {
+                case 0x00000256u:
+                {
+                    if (name == BuiltInName::gl_BaseInstance)
+                    {
+                        return &BuiltInVariable::kVar_gl_BaseInstance;
+                    }
+                    break;
+                }
+                case 0x0000088du:
+                {
+                    if (name == BuiltInName::gl_BaseVertex)
+                    {
+                        return &BuiltInVariable::kVar_gl_BaseVertex;
+                    }
+                    break;
+                }
+            }
+        }
+        if (mShaderType == GL_COMPUTE_SHADER)
+        {
+            switch (nameHash)
+            {
+                case 0x000003b0u:
+                {
+                    if (name == BuiltInName::gl_WorkGroupSize)
+                    {
+                        return &BuiltInVariable::kVar_gl_WorkGroupSize;
+                    }
+                    break;
+                }
+                case 0x00000589u:
+                {
+                    if (name == BuiltInName::gl_GlobalInvocationID)
+                    {
+                        return &BuiltInVariable::kVar_gl_GlobalInvocationID;
+                    }
+                    break;
+                }
+                case 0x00000626u:
+                {
+                    if (name == BuiltInName::gl_NumWorkGroups)
+                    {
+                        return &BuiltInVariable::kVar_gl_NumWorkGroups;
+                    }
+                    break;
+                }
+                case 0x000007c1u:
+                {
+                    if (name == BuiltInName::gl_LocalInvocationID)
+                    {
+                        return &BuiltInVariable::kVar_gl_LocalInvocationID;
+                    }
+                    break;
+                }
+                case 0x00000801u:
+                {
+                    if (name == BuiltInName::gl_WorkGroupID)
+                    {
+                        return &BuiltInVariable::kVar_gl_WorkGroupID;
+                    }
+                    break;
+                }
+                case 0x00000899u:
+                {
+                    if (name == BuiltInName::gl_LocalInvocationIndex)
+                    {
+                        return &BuiltInVariable::kVar_gl_LocalInvocationIndex;
+                    }
+                    break;
+                }
+            }
+        }
+        if (mShaderType == GL_GEOMETRY_SHADER_EXT)
+        {
+            switch (nameHash)
+            {
+                case 0x000000c4u:
+                {
+                    if (name == BuiltInName::gl_InvocationID)
+                    {
+                        return &BuiltInVariable::kVar_gl_InvocationID;
+                    }
+                    break;
+                }
+                case 0x00000424u:
+                {
+                    if (name == BuiltInName::gl_Position)
+                    {
+                        return mVar_gl_PositionGS;
+                    }
+                    break;
+                }
+                case 0x00000488u:
+                {
+                    if (name == BuiltInName::gl_PrimitiveID)
+                    {
+                        return &BuiltInVariable::kVar_gl_PrimitiveIDGS;
+                    }
+                    break;
+                }
+                case 0x000004bfu:
+                {
+                    if (name == BuiltInName::gl_PerVertex)
+                    {
+                        return mVar_gl_PerVertex;
+                    }
+                    break;
+                }
+                case 0x000006dcu:
+                {
+                    if (name == BuiltInName::gl_Layer)
+                    {
+                        return &BuiltInVariable::kVar_gl_LayerGS;
+                    }
+                    break;
+                }
+                case 0x00000866u:
+                {
+                    if (name == BuiltInName::gl_PrimitiveIDIn)
+                    {
+                        return &BuiltInVariable::kVar_gl_PrimitiveIDIn;
+                    }
+                    break;
+                }
+            }
+        }
+        if ((mResources.OVR_multiview || mResources.OVR_multiview2) &&
+            mShaderType != GL_COMPUTE_SHADER)
+        {
+            switch (nameHash)
+            {
+                case 0x00000247u:
+                {
+                    if (name == BuiltInName::gl_ViewID_OVR)
+                    {
+                        return &BuiltInVariable::kVar_gl_ViewID_OVRESSL1;
                     }
                     break;
                 }
