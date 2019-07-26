@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f04f65e_ba547e64",
+        "filename": "src/compiler/translator/Compiler.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T14:53:30Z",
+      "side": 1,
+      "message": "can you please revert the changes in this file to the prior state?",
+      "range": {
+        "startLine": 180,
+        "startChar": 4,
+        "endLine": 180,
+        "endChar": 13
+      },
+      "revId": "9850f160095eee905af5ba19cabd8e2efd062da2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02b2424b_65810e35",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T14:53:30Z",
+      "side": 1,
+      "message": "when adding TODOs please attach them to an anglebug http link.",
+      "range": {
+        "startLine": 436,
+        "startChar": 7,
+        "endLine": 436,
+        "endChar": 11
+      },
+      "revId": "9850f160095eee905af5ba19cabd8e2efd062da2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

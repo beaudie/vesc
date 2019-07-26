@@ -892,6 +892,29 @@
       "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "103be11c_f5783e2c",
+        "filename": "src/libGL/entry_points_wgl.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-26T14:53:30Z",
+      "side": 1,
+      "message": "what\u0027s up with this? unrelated fix?",
+      "range": {
+        "startLine": 79,
+        "startChar": 8,
+        "endLine": 79,
+        "endChar": 31
+      },
+      "revId": "f6920ff0058efff5054ea625196e5ded9cf30173",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
