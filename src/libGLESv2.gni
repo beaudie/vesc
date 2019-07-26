@@ -908,15 +908,6 @@ libangle_vulkan_sources = [
   "src/libANGLE/renderer/vulkan/vk_wrapper.h",
 ]
 
-# The frame capture headers are always visible to libANGLE.
-libangle_sources += [
-  "src/libANGLE/capture_gles_1_0_autogen.h",
-  "src/libANGLE/capture_gles_2_0_autogen.h",
-  "src/libANGLE/capture_gles_3_0_autogen.h",
-  "src/libANGLE/capture_gles_3_1_autogen.h",
-  "src/libANGLE/capture_gles_ext_autogen.h",
-]
-
 libangle_vulkan_android_sources = [
   "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.cpp",
   "src/libANGLE/renderer/vulkan/android/DisplayVkAndroid.h",
@@ -1050,6 +1041,11 @@ libglesv2_sources = [
   "src/common/debug.h",
   "src/libANGLE/entry_points_enum_autogen.h",
   "src/libANGLE/entry_points_utils.h",
+  "src/libGLESv2/capture_gles_1_0_autogen.h",
+  "src/libGLESv2/capture_gles_2_0_autogen.h",
+  "src/libGLESv2/capture_gles_3_0_autogen.h",
+  "src/libGLESv2/capture_gles_3_1_autogen.h",
+  "src/libGLESv2/capture_gles_ext_autogen.h",
   "src/libGLESv2/entry_points_egl.cpp",
   "src/libGLESv2/entry_points_egl.h",
   "src/libGLESv2/entry_points_egl_ext.cpp",
@@ -1066,24 +1062,24 @@ libglesv2_sources = [
   "src/libGLESv2/entry_points_gles_ext_autogen.h",
   "src/libGLESv2/global_state.cpp",
   "src/libGLESv2/global_state.h",
-  "src/libGLESv2/libGLESv2_autogen.cpp",
   "src/libGLESv2/libGLESv2.rc",
+  "src/libGLESv2/libGLESv2_autogen.cpp",
   "src/libGLESv2/proc_table_egl.h",
   "src/libGLESv2/proc_table_egl_autogen.cpp",
   "src/libGLESv2/resource.h",
 ]
 
 libglesv2_capture_sources = [
-  "src/libANGLE/capture_gles_1_0_autogen.cpp",
-  "src/libANGLE/capture_gles_1_0_params.cpp",
-  "src/libANGLE/capture_gles_2_0_autogen.cpp",
-  "src/libANGLE/capture_gles_2_0_params.cpp",
-  "src/libANGLE/capture_gles_3_0_autogen.cpp",
-  "src/libANGLE/capture_gles_3_0_params.cpp",
-  "src/libANGLE/capture_gles_3_1_autogen.cpp",
-  "src/libANGLE/capture_gles_3_1_params.cpp",
-  "src/libANGLE/capture_gles_ext_autogen.cpp",
-  "src/libANGLE/capture_gles_ext_params.cpp",
+  "src/libGLESv2/capture_gles_1_0_autogen.cpp",
+  "src/libGLESv2/capture_gles_1_0_params.cpp",
+  "src/libGLESv2/capture_gles_2_0_autogen.cpp",
+  "src/libGLESv2/capture_gles_2_0_params.cpp",
+  "src/libGLESv2/capture_gles_3_0_autogen.cpp",
+  "src/libGLESv2/capture_gles_3_0_params.cpp",
+  "src/libGLESv2/capture_gles_3_1_autogen.cpp",
+  "src/libGLESv2/capture_gles_3_1_params.cpp",
+  "src/libGLESv2/capture_gles_ext_autogen.cpp",
+  "src/libGLESv2/capture_gles_ext_params.cpp",
 ]
 
 libglesv1_cm_sources = [

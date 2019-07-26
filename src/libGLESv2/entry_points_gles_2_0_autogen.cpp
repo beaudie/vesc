@@ -12,9 +12,9 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"
-#include "libANGLE/capture_gles_2_0_autogen.h"
 #include "libANGLE/entry_points_utils.h"
 #include "libANGLE/validationES2.h"
+#include "libGLESv2/capture_gles_2_0_autogen.h"
 #include "libGLESv2/global_state.h"
 
 namespace gl
