@@ -16,6 +16,15 @@
 
 namespace angle
 {
+#if !ANGLE_CAPTURE_ENABLED
+CallCapture::~CallCapture() {}
+ParamBuffer::~ParamBuffer() {}
+ParamCapture::~ParamCapture() {}
+
+FrameCapture::FrameCapture() {}
+FrameCapture::~FrameCapture() {}
+void FrameCapture::onEndFrame() {}
+#else
 namespace
 {
 std::string GetCaptureFileName(size_t frameIndex, const char *suffix)
@@ -557,4 +566,5 @@ void WriteParamValueToStream<ParamType::TGLDEBUGPROCKHR>(std::ostream &os, GLDEB
 template <>
 void WriteParamValueToStream<ParamType::TGLDEBUGPROC>(std::ostream &os, GLDEBUGPROC value)
 {}
+#endif  // ANGLE_CAPTURE_ENABLED
 }  // namespace angle
