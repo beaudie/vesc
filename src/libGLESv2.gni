@@ -215,6 +215,8 @@ libangle_sources = [
   "src/libANGLE/ErrorStrings.h",
   "src/libANGLE/Fence.cpp",
   "src/libANGLE/Fence.h",
+  "src/libANGLE/FrameCapture.h",
+  "src/libANGLE/FrameCapture.cpp",
   "src/libANGLE/Framebuffer.cpp",
   "src/libANGLE/Framebuffer.h",
   "src/libANGLE/FramebufferAttachment.cpp",
@@ -300,6 +302,8 @@ libangle_sources = [
   "src/libANGLE/format_map_desktop.cpp",
   "src/libANGLE/formatutils.cpp",
   "src/libANGLE/formatutils.h",
+  "src/libANGLE/frame_capture_utils_autogen.h",
+  "src/libANGLE/frame_capture_utils_autogen.cpp",
   "src/libANGLE/histogram_macros.h",
   "src/libANGLE/queryconversions.cpp",
   "src/libANGLE/queryconversions.h",
@@ -906,28 +910,11 @@ libangle_vulkan_sources = [
 
 # The frame capture headers are always visible to libANGLE.
 libangle_sources += [
-  "src/libANGLE/FrameCapture.h",
   "src/libANGLE/capture_gles_1_0_autogen.h",
   "src/libANGLE/capture_gles_2_0_autogen.h",
   "src/libANGLE/capture_gles_3_0_autogen.h",
   "src/libANGLE/capture_gles_3_1_autogen.h",
   "src/libANGLE/capture_gles_ext_autogen.h",
-  "src/libANGLE/frame_capture_utils_autogen.h",
-]
-
-libangle_capture_sources = [
-  "src/libANGLE/FrameCapture.cpp",
-  "src/libANGLE/capture_gles_1_0_autogen.cpp",
-  "src/libANGLE/capture_gles_1_0_params.cpp",
-  "src/libANGLE/capture_gles_2_0_autogen.cpp",
-  "src/libANGLE/capture_gles_2_0_params.cpp",
-  "src/libANGLE/capture_gles_3_0_autogen.cpp",
-  "src/libANGLE/capture_gles_3_0_params.cpp",
-  "src/libANGLE/capture_gles_3_1_autogen.cpp",
-  "src/libANGLE/capture_gles_3_1_params.cpp",
-  "src/libANGLE/capture_gles_ext_autogen.cpp",
-  "src/libANGLE/capture_gles_ext_params.cpp",
-  "src/libANGLE/frame_capture_utils_autogen.cpp",
 ]
 
 libangle_vulkan_android_sources = [
@@ -1084,6 +1071,19 @@ libglesv2_sources = [
   "src/libGLESv2/proc_table_egl.h",
   "src/libGLESv2/proc_table_egl_autogen.cpp",
   "src/libGLESv2/resource.h",
+]
+
+libglesv2_capture_sources = [
+  "src/libANGLE/capture_gles_1_0_autogen.cpp",
+  "src/libANGLE/capture_gles_1_0_params.cpp",
+  "src/libANGLE/capture_gles_2_0_autogen.cpp",
+  "src/libANGLE/capture_gles_2_0_params.cpp",
+  "src/libANGLE/capture_gles_3_0_autogen.cpp",
+  "src/libANGLE/capture_gles_3_0_params.cpp",
+  "src/libANGLE/capture_gles_3_1_autogen.cpp",
+  "src/libANGLE/capture_gles_3_1_params.cpp",
+  "src/libANGLE/capture_gles_ext_autogen.cpp",
+  "src/libANGLE/capture_gles_ext_params.cpp",
 ]
 
 libglesv1_cm_sources = [
