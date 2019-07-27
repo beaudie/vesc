@@ -149,6 +149,9 @@ class PackedEnumMap
     T *data() noexcept { return mPrivateData.data(); }
     const T *data() const noexcept { return mPrivateData.data(); }
 
+    bool operator==(const PackedEnumMap &rhs) const { return mPrivateData == rhs.mPrivateData; }
+    bool operator!=(const PackedEnumMap &rhs) const { return mPrivateData != rhs.mPrivateData; }
+
   private:
     Storage mPrivateData;
 };

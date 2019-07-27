@@ -108,4 +108,16 @@ GLint TextureImpl::getNativeID() const
     return 0;
 }
 
+bool TextureImpl::canGetDataForCapture(const gl::ImageIndex &index) const
+{
+    return false;
+}
+
+angle::Result TextureImpl::getDataForCapture(const gl::Context *context,
+                                             const gl::ImageIndex &index,
+                                             angle::MemoryBuffer *dataOut)
+{
+    UNREACHABLE();
+    return angle::Result::Stop;
+}
 }  // namespace rx
