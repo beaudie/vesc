@@ -603,7 +603,9 @@ void CaptureReadPixels_pixels(const Context *context,
                               void *pixels,
                               ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    // Use a conservative upper bound instead of an exact size to be simple.
+    static constexpr GLsizei kMaxPixelSize = 32;
+    paramCapture->readBufferSize           = kMaxPixelSize * width * height;
 }
 
 void CaptureShaderBinary_shaders(const Context *context,
