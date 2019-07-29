@@ -13,6 +13,7 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/VertexArray.h"
+#include "libANGLE/gl_enums_autogen.h"
 
 namespace angle
 {
@@ -60,13 +61,14 @@ void WriteInlineData(const std::vector<uint8_t> &vec, std::ostream &out)
 constexpr size_t kInlineDataThreshold = 128;
 }  // anonymous namespace
 
-ParamCapture::ParamCapture() : type(ParamType::TGLenum) {}
+ParamCapture::ParamCapture() : type(ParamType::TGLenum), enumGroup(GLenumGroup::DefaultGroup) {}
 
 ParamCapture::ParamCapture(const char *nameIn, ParamType typeIn) : name(nameIn), type(typeIn) {}
 
 ParamCapture::~ParamCapture() = default;
 
-ParamCapture::ParamCapture(ParamCapture &&other) : type(ParamType::TGLenum)
+ParamCapture::ParamCapture(ParamCapture &&other)
+    : type(ParamType::TGLenum), enumGroup(GLenumGroup::DefaultGroup)
 {
     *this = std::move(other);
 }
@@ -76,6 +78,7 @@ ParamCapture &ParamCapture::operator=(ParamCapture &&other)
     std::swap(name, other.name);
     std::swap(type, other.type);
     std::swap(value, other.value);
+    std::swap(enumGroup, other.enumGroup);
     std::swap(data, other.data);
     std::swap(arrayClientPointerIndex, other.arrayClientPointerIndex);
     std::swap(readBufferSizeBytes, other.readBufferSizeBytes);
@@ -513,7 +516,7 @@ void FrameCapture::reset()
 
 std::ostream &operator<<(std::ostream &os, const ParamCapture &capture)
 {
-    WriteParamTypeToStream(os, capture.type, capture.value);
+    WriteParamTypeToStream(os, capture, capture.value);
     return os;
 }
 
@@ -530,7 +533,9 @@ void CaptureString(const GLchar *str, ParamCapture *paramCapture)
 }
 
 template <>
-void WriteParamValueToStream<ParamType::TGLboolean>(std::ostream &os, GLboolean value)
+void WriteParamValueToStream<ParamType::TGLboolean>(std::ostream &os,
+                                                    const ParamCapture &capture,
+                                                    GLboolean value)
 {
     switch (value)
     {
@@ -546,7 +551,9 @@ void WriteParamValueToStream<ParamType::TGLboolean>(std::ostream &os, GLboolean 
 }
 
 template <>
-void WriteParamValueToStream<ParamType::TvoidConstPointer>(std::ostream &os, const void *value)
+void WriteParamValueToStream<ParamType::TvoidConstPointer>(std::ostream &os,
+                                                           const ParamCapture &capture,
+                                                           const void *value)
 {
     if (value == 0)
     {
@@ -560,11 +567,60 @@ void WriteParamValueToStream<ParamType::TvoidConstPointer>(std::ostream &os, con
 }
 
 template <>
-void WriteParamValueToStream<ParamType::TGLDEBUGPROCKHR>(std::ostream &os, GLDEBUGPROCKHR value)
+void WriteParamValueToStream<ParamType::TGLenum>(std::ostream &os,
+                                                 const ParamCapture &capture,
+                                                 GLenum value)
+{
+    const char *enumString = getGLenumInString(capture.enumGroup, value);
+    if (enumString)
+    {
+        os << enumString;
+    }
+    else
+    {
+        // For trivial GLenum such GL_ONE, GL_ZERO, etc
+        os << value;
+    }
+}
+
+template <>
+void WriteParamValueToStream<ParamType::TGLbitfield>(std::ostream &os,
+                                                     const ParamCapture &capture,
+                                                     GLbitfield value)
+{
+    const angle::BitSet<32> bitSet = static_cast<angle::BitSet<32>>(value);
+    bool first                     = true;
+    for (const auto index : bitSet)
+    {
+        if (!first)
+        {
+            os << " | ";
+        }
+        first = false;
+
+        unsigned int mask      = 1u << index;
+        const char *enumString = getGLenumInString(capture.enumGroup, mask);
+        if (enumString)
+        {
+            os << enumString;
+        }
+        else
+        {
+            os << std::hex << mask << std::dec;
+        }
+    }
+}
+
+template <>
+void WriteParamValueToStream<ParamType::TGLDEBUGPROCKHR>(std::ostream &os,
+                                                         const ParamCapture &capture,
+                                                         GLDEBUGPROCKHR value)
 {}
 
 template <>
-void WriteParamValueToStream<ParamType::TGLDEBUGPROC>(std::ostream &os, GLDEBUGPROC value)
+void WriteParamValueToStream<ParamType::TGLDEBUGPROC>(std::ostream &os,
+                                                      const ParamCapture &capture,
+                                                      GLDEBUGPROC value)
 {}
 #endif  // ANGLE_CAPTURE_ENABLED
 }  // namespace angle
