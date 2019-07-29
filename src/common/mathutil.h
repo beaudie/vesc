@@ -1249,6 +1249,15 @@ T roundUp(const T value, const T alignment)
 }
 
 template <typename T>
+T pow2RoundUp(const T value, const T alignment)
+{
+    ASSERT(alignment != 0);
+    // ensure alignment is power of two
+    ASSERT((alignment & (alignment - 1)) == 0);
+    return (value + alignment - 1) & ~(alignment - 1);
+}
+
+template <typename T>
 angle::CheckedNumeric<T> CheckedRoundUp(const T value, const T alignment)
 {
     angle::CheckedNumeric<T> checkedValue(value);

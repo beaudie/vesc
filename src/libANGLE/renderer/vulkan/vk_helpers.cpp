@@ -345,7 +345,7 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
                                       VkDeviceSize *offsetOut,
                                       bool *newBufferAllocatedOut)
 {
-    size_t sizeToAllocate = roundUp(sizeInBytes, mAlignment);
+    size_t sizeToAllocate = pow2RoundUp(sizeInBytes, mAlignment);
 
     angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextAllocationOffset;
     checkedNextWriteOffset += sizeToAllocate;
@@ -569,7 +569,8 @@ void DynamicBuffer::updateAlignment(RendererVk *renderer, size_t alignment)
     // If alignment has changed, make sure the next allocation is done at an aligned offset.
     if (alignment != mAlignment)
     {
-        mNextAllocationOffset = roundUp(mNextAllocationOffset, static_cast<uint32_t>(alignment));
+        mNextAllocationOffset =
+            pow2RoundUp(mNextAllocationOffset, static_cast<uint32_t>(alignment));
     }
 
     mAlignment = alignment;

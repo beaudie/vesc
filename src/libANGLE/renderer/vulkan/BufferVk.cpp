@@ -109,7 +109,7 @@ angle::Result BufferVk::setData(const gl::Context *context,
         VkBufferCreateInfo createInfo    = {};
         createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
         createInfo.flags                 = 0;
-        createInfo.size                  = roundUp(size, kBufferSizeGranularity);
+        createInfo.size                  = pow2RoundUp(size, kBufferSizeGranularity);
         createInfo.usage                 = usageFlags;
         createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
         createInfo.queueFamilyIndexCount = 0;
