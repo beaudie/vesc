@@ -534,12 +534,6 @@ bool ValidateES3TexImageParametersBase(Context *context,
             return false;
         }
 
-        if (texType == TextureType::_3D)
-        {
-            context->validationError(GL_INVALID_OPERATION, kInvalidTextureTarget);
-            return false;
-        }
-
         // Disallow 3D-only compressed formats from being set on 2D textures
         if (actualFormatInfo.compressedBlockDepth > 1 && texType != TextureType::_2DArray)
         {
