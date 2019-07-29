@@ -97,7 +97,8 @@ def gen_libegl_loader():
     all_cmds = xml.all_cmd_names.get_all_commands()
 
     path = os.path.join("..", "src", "libEGL")
-    write_header(data_source_name, all_cmds, "egl", libegl_preamble, path, "LIBEGL", "", "EGL_")
+    write_header(data_source_name, all_cmds, "egl", libegl_preamble, path, "LIBEGL", "", "EGL_",
+                 "HIDDEN ")
     write_source(data_source_name, all_cmds, "egl", path, "", "EGL_")
 
 
@@ -223,6 +224,8 @@ def main():
 
 libegl_preamble = """#include <EGL/egl.h>
 #include <EGL/eglext.h>
+
+#define HIDDEN __attribute__((visibility("hidden")))
 """
 
 util_gles_preamble = """#if defined(GL_GLES_PROTOTYPES) && GL_GLES_PROTOTYPES
