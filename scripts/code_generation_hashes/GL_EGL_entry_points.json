@@ -6,13 +6,13 @@
   "scripts/entry_point_packed_gl_enums.json":
     "e5282bdef690f0ec652fed0e0723d1e8",
   "scripts/generate_entry_points.py":
-    "bd83bd0337b8f2680ac4520dd7525d54",
+    "f20e7c3230008eff171ac946978af689",
   "scripts/gl.xml":
     "b470cb06b06cbbe7adb2c8129ec85708",
   "scripts/gl_angle_ext.xml":
     "bed6b56a38621721e689ebc19601a556",
   "scripts/registry_xml.py":
-    "97cca309a0561f3bf54e0e2c1cf0708b",
+    "8456c53e2589efa0e6eb46b66607e20b",
   "scripts/wgl.xml":
     "aa96419c582af2f6673430e2847693f4",
   "src/libANGLE/Context_gl_1_0_autogen.h":
@@ -64,31 +64,31 @@
   "src/libANGLE/Context_gles_ext_autogen.h":
     "d924200ebeb9fd0fae9effbc8489d3e1",
   "src/libANGLE/capture_gles_1_0_autogen.cpp":
-    "4eed3706b615e2778f6d7840af8b9a15",
+    "fb29ea48bab0f0a446ca25e420ea52c5",
   "src/libANGLE/capture_gles_1_0_autogen.h":
     "06471d4526e8d0b824f5afc8bc8766fa",
   "src/libANGLE/capture_gles_2_0_autogen.cpp":
-    "6cb02a611b7528f2184a44d1d5c75838",
+    "84b958c520909d36f811058a3add6cfb",
   "src/libANGLE/capture_gles_2_0_autogen.h":
     "1ea9fbd64218b6e256e10723eb81e0c6",
   "src/libANGLE/capture_gles_3_0_autogen.cpp":
-    "c97230a331a8d47499ba16a8daaa4caf",
+    "4802f46c53430a4b2b0ead1ab011c707",
   "src/libANGLE/capture_gles_3_0_autogen.h":
     "ffe4ed9b7e642258b9deb1452875f23b",
   "src/libANGLE/capture_gles_3_1_autogen.cpp":
-    "913f953f661b4e4701ed27c5c89f8f23",
+    "0796a5668404554415538a1ba5a2d625",
   "src/libANGLE/capture_gles_3_1_autogen.h":
     "1be96fed22157c3f591ab362d717de0b",
   "src/libANGLE/capture_gles_ext_autogen.cpp":
-    "cceb57db41012ac31f1b2f91b87a75ca",
+    "6fb6f2529fcf2612dbd3f09f1fb022e7",
   "src/libANGLE/capture_gles_ext_autogen.h":
     "39a05d74a0c3561f301382c0aedf4a4d",
   "src/libANGLE/entry_points_enum_autogen.h":
     "b98241dd6ce96934cc1d6f8edc0725e1",
   "src/libANGLE/frame_capture_utils_autogen.cpp":
-    "ec6ca9dee86e07a0421721f2bab4fb0b",
+    "7b7fc454bdfa049cfb257eece5954c90",
   "src/libANGLE/frame_capture_utils_autogen.h":
-    "711de28342aa33478a5be9db420e7528",
+    "3b4e6b1752c41a446a2df8f7266af63c",
   "src/libANGLE/validationES1_autogen.h":
     "8d3131d2bf2e6f521f46b44e64a6bff9",
   "src/libANGLE/validationES2_autogen.h":

@@ -10,7 +10,8 @@
 # List of supported extensions. Add to this list to enable new extensions
 # available in gl.xml.
 
-import sys, os
+import sys
+import os
 import xml.etree.ElementTree as etree
 
 xml_inputs = [
@@ -124,6 +125,22 @@ strip_suffixes = ["ANGLE", "EXT", "KHR", "OES", "CHROMIUM"]
 # Toggle generation here.
 support_EGL_ANGLE_explicit_context = True
 
+# For ungrouped GLenum types
+default_enum_group_name = "DefaultGroup"
+
+# Group names that appear in command/param, but not present in groups/group
+unsupported_enum_group_names = {
+    'GetMultisamplePNameNV',
+    'BufferPNameARB',
+    'BufferPointerNameARB',
+    'VertexAttribPointerPropertyARB',
+    'VertexAttribPropertyARB',
+    'FenceParameterNameNV',
+    'FenceConditionNV',
+    'BufferPointerNameARB',
+    'MatrixIndexPointerTypeARB',
+}
+
 
 def script_relative(path):
     return os.path.join(os.path.dirname(sys.argv[0]), path)
@@ -203,6 +220,27 @@ class RegistryXML:
         else:
             assert False
             return 'unknown'
+
+    def FindGLenumGroup(self, command_name, param_name):
+        command_xpath = "./commands/command"
+        command_node = None
+        for node in self.root.findall(command_xpath):
+            command_name_xpath = "./proto/name"
+            if node.find(command_name_xpath).text == command_name:
+                command_node = node
+                break
+
+        assert command_node is not None
+        group_name = None
+        for param_node in command_node.findall('./param'):
+            if param_node.find('./name').text == param_name:
+                group_name = param_node.attrib.get('group', None)
+                break
+
+        if group_name is None or group_name in unsupported_enum_group_names:
+            return default_enum_group_name
+
+        return group_name
 
     def AddExtensionCommands(self, supported_extensions, apis):
         # Use a first step to run through the extensions so we can generate them

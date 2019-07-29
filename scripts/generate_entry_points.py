@@ -268,6 +268,7 @@ template_capture_source = """// GENERATED FILE - DO NOT EDIT.
 
 #include "libANGLE/Context.h"
 #include "libANGLE/FrameCapture.h"
+#include "libANGLE/gl_enums_autogen.h"
 #include "libANGLE/validation{annotation_no_dash}.h"
 
 using namespace angle;
@@ -290,6 +291,8 @@ CallCapture Capture{short_name}({params_with_type})
 """
 
 template_parameter_capture_value = """paramBuffer.addValueParam("{name}", ParamType::T{type}, {name});"""
+
+template_parameter_capture_gl_enum = """paramBuffer.addEnumParam("{name}", GLenumGroup::{group}, ParamType::T{type}, {name});"""
 
 template_parameter_capture_pointer = """
     ParamCapture {name}Param("{name}", ParamType::T{type});
@@ -448,7 +451,8 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
     }}
 }}
 
-void WriteParamTypeToStream(std::ostream &os, ParamType paramType, const ParamValue& paramValue);
+struct ParamCapture;
+void WriteParamTypeToStream(std::ostream &os, const ParamCapture &capture, const ParamValue& paramValue);
 const char *ParamTypeToString(ParamType paramType);
 }}  // namespace angle
 
@@ -473,7 +477,7 @@ namespace angle
 {{
 void WriteParamTypeToStream(std::ostream &os, ParamType paramType, const ParamValue& paramValue)
 {{
-    switch (paramType)
+    switch (paramType))
     {{
 {write_param_type_to_stream_cases}
         default:
@@ -689,7 +693,7 @@ def format_entry_point_def(cmd_name, proto, params, is_explicit_context):
         return template_entry_point_with_return.format(**format_params)
 
 
-def format_capture_method(cmd_name, params, all_param_types, capture_pointer_funcs):
+def format_capture_method(xml, cmd_name, params, all_param_types, capture_pointer_funcs):
 
     packed_gl_enums = cmd_packed_gl_enums.get(cmd_name, {})
 
@@ -730,6 +734,10 @@ def format_capture_method(cmd_name, params, all_param_types, capture_pointer_fun
             capture_pointer_func = template_parameter_capture_pointer_func.format(
                 name=capture_name, params=params_with_type + ", angle::ParamCapture *paramCapture")
             capture_pointer_funcs += [capture_pointer_func]
+        elif param_type in ('GLenum', 'GLbitfield'):
+            gl_enum_group = xml.FindGLenumGroup(cmd_name, param_name)
+            capture = template_parameter_capture_gl_enum.format(
+                name=param_name, type=param_type, group=gl_enum_group)
         else:
             capture = template_parameter_capture_value.format(name=param_name, type=param_type)
 
@@ -797,7 +805,7 @@ def path_to(folder, file):
     return os.path.join(script_relative(".."), "src", folder, file)
 
 
-def get_entry_points(all_commands, commands, is_explicit_context, is_wgl, all_param_types):
+def get_entry_points(xml, all_commands, commands, is_explicit_context, is_wgl, all_param_types):
     decls = []
     defs = []
     export_defs = []
@@ -828,7 +836,8 @@ def get_entry_points(all_commands, commands, is_explicit_context, is_wgl, all_pa
         validation_protos.append(format_validation_proto(cmd_name, param_text))
         capture_protos.append(format_capture_proto(cmd_name, param_text))
         capture_methods.append(
-            format_capture_method(cmd_name, param_text, all_param_types, capture_pointer_funcs))
+            format_capture_method(xml, cmd_name, param_text, all_param_types,
+                                  capture_pointer_funcs))
 
     return decls, defs, export_defs, validation_protos, capture_protos, capture_methods, capture_pointer_funcs
 
@@ -1377,7 +1386,7 @@ def main():
         all_commands_with_suffix.extend(xml.commands[version])
 
         decls, defs, libgles_defs, validation_protos, capture_protos, capture_methods, capture_pointer_funcs = get_entry_points(
-            all_commands, gles_commands, False, False, all_gles_param_types)
+            xml, all_commands, gles_commands, False, False, all_gles_param_types)
 
         # Write the version as a comment before the first EP.
         libgles_defs.insert(0, "\n// OpenGL ES %s" % comment)
@@ -1441,7 +1450,7 @@ def main():
 
         # Detect and filter duplicate extensions.
         decls, defs, libgles_defs, validation_protos, capture_protos, capture_methods, capture_param_funcs = get_entry_points(
-            xml.all_commands, ext_cmd_names, False, False, all_gles_param_types)
+            xml, xml.all_commands, ext_cmd_names, False, False, all_gles_param_types)
 
         # Avoid writing out entry points defined by a prior extension.
         for dupe in xml.ext_dupes[extension_name]:
@@ -1493,7 +1502,7 @@ def main():
 
         # Get the explicit context entry points
         decls, defs, libgles_defs, validation_protos, capture_protos, capture_methods, capture_param_funcs = get_entry_points(
-            xml.all_commands, cmds, True, False, all_gles_param_types)
+            xml, xml.all_commands, cmds, True, False, all_gles_param_types)
 
         # Append the explicit context entry points
         extension_decls += decls
@@ -1569,9 +1578,9 @@ def main():
 
         # Validation duplicates handled with suffix
         _, _, _, validation_protos32, _, _, _ = get_entry_points(
-            all_commands32, just_libgl_commands_suffix, False, False, all_gles_param_types)
+            glxml, all_commands32, just_libgl_commands_suffix, False, False, all_gles_param_types)
         decls_gl, defs_gl, libgl_defs, _, _, _, _ = get_entry_points(
-            all_commands32, all_libgl_commands, False, False, all_gles_param_types)
+            glxml, all_commands32, all_libgl_commands, False, False, all_gles_param_types)
 
         # Write the version as a comment before the first EP.
         libgl_defs.insert(0, "\n// GL %s" % comment)
@@ -1615,7 +1624,7 @@ def main():
 
     wgl_param_types = set()
     decls_wgl, defs_wgl, wgl_defs, validation_protos_wgl, _, _, _ = get_entry_points(
-        all_commands32, wgl_commands, False, True, wgl_param_types)
+        wglxml, all_commands32, wgl_commands, False, True, wgl_param_types)
 
     # Write the version as a comment before the first EP.
     libgl_ep_exports.append("\n    ; WGL %s" % comment)
