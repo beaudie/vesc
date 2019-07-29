@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3da5cc64_305d81ca",
+        "filename": "src/common/system_utils_posix.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-07-29T19:39:08Z",
+      "side": 1,
+      "message": "No need to search for \\ in posix.",
+      "range": {
+        "startLine": 227,
+        "startChar": 87,
+        "endLine": 227,
+        "endChar": 89
+      },
+      "revId": "99da31d5fd3b546c8eac523965cfbaeab82c56ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
