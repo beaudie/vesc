@@ -534,7 +534,8 @@ bool ValidateES3TexImageParametersBase(Context *context,
             return false;
         }
 
-        if (texType == TextureType::_3D)
+        // Disallow ETC formats for 3D textures
+        if ((texType == TextureType::_3D) && IsETC2EACFormat(actualInternalFormat))
         {
             context->validationError(GL_INVALID_OPERATION, kInvalidTextureTarget);
             return false;
