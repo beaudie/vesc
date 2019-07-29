@@ -65,7 +65,8 @@ PoolAllocator::PoolAllocator(int growthIncrement, int allocationAlignment)
         mHeaderSkip = minAlign;
         if (mHeaderSkip < sizeof(Header))
         {
-            mHeaderSkip = rx::roundUp(sizeof(Header), mAlignment);
+            ASSERT(gl::isPow2(mAlignment));
+            mHeaderSkip = rx::roundUpPow2(sizeof(Header), mAlignment);
         }
     }
     //

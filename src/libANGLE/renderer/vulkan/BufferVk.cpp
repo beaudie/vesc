@@ -106,10 +106,12 @@ angle::Result BufferVk::setData(const gl::Context *context,
             VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT |
             VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT;
 
+        static_assert(gl::isPow2(kBufferSizeGranularity), "alignment must to be power of two");
+
         VkBufferCreateInfo createInfo    = {};
         createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
         createInfo.flags                 = 0;
-        createInfo.size                  = roundUp(size, kBufferSizeGranularity);
+        createInfo.size                  = roundUpPow2(size, kBufferSizeGranularity);
         createInfo.usage                 = usageFlags;
         createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
         createInfo.queueFamilyIndexCount = 0;
