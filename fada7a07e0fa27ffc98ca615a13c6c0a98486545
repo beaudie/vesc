@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "82b8d5b5_dfbf8d56",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 3875,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-29T18:55:01Z",
+      "side": 1,
+      "message": "I\u0027ve moved this into FramebufferVk::syncState(), but doing that required making ContextVk::updateScissor() public.   Hopefully that\u0027s not too ugly, but let me know.",
+      "parentUuid": "fc1d4a01_0539571f",
+      "range": {
+        "startLine": 3874,
+        "startChar": 3,
+        "endLine": 3875,
+        "endChar": 56
+      },
+      "revId": "fada7a07e0fa27ffc98ca615a13c6c0a98486545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0446e5cd_f6eac9e5",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 12
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "fec3f44f_123c5548",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-29T18:55:01Z",
+      "side": 1,
+      "message": "The base code asserts here when the FBO doesn\u0027t have an attachment:\n\n[ RUN      ] dEQP.GLES31/functional_fbo_no_attachments_size_16x16\ndEQP-GLES31.functional.fbo.no_attachments.size.16x16\n../../third_party/angle/src/tests/deqp_support/angle_deqp_gtest.cpp:44: Failure\nFailed\ngetExtents(619): \t! Assert failed in getExtents (../../third_party/angle/src/libANGLE/Framebuffer.cpp:619): getFirstNonNullAttachment() !\u003d nullptr\n\n\nInstead, I need to create an Extents with the FBO\u0027s default width/height and return that to the caller.\n\nIf it\u0027s the ternary that\u0027s ugly, I can break it apart like this:\n\nExtents FramebufferState::getExtents() const\n{\n    ASSERT(attachmentsHaveSameDimensions());\n    if (getFirstNonNullAttachment() !\u003d nullptr)\n    {\n        return getFirstNonNullAttachment()-\u003egetSize();\n    }\n    else\n    {\n        return Extents(getDefaultWidth(), getDefaultHeight(), 0);\n    }\n}\n\nI don\u0027t know if it helps or not (I\u0027m not enough of a C++ expert yet), but I could also make the local \u0027extents\u0027 a const reference.   I don\u0027t think that makes a difference when the new Extents is constructed, but maybe it saves a copy when getSize() is called?\n\nExtents FramebufferState::getExtents() const\n{\n    ASSERT(attachmentsHaveSameDimensions());\n    const Extents \u0026extents \u003d (getFirstNonNullAttachment() !\u003d nullptr)\n                          ? getFirstNonNullAttachment()-\u003egetSize()\n                          : Extents(getDefaultWidth(), getDefaultHeight(), 0);\n    return extents;\n}\n\nLet me know which you like better.",
+      "parentUuid": "0446e5cd_f6eac9e5",
+      "range": {
+        "startLine": 613,
+        "startChar": 4,
+        "endLine": 616,
+        "endChar": 19
+      },
+      "revId": "fada7a07e0fa27ffc98ca615a13c6c0a98486545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54496735_8f0d4b90",
         "filename": "src/tests/gl_tests/FramebufferTest.cpp",
         "patchSetId": 12
@@ -59,6 +107,30 @@
       "writtenOn": "2019-07-26T14:43:48Z",
       "side": 1,
       "message": "Don\u0027t need this, it\u0027s covered in the previous SKIP test.",
+      "range": {
+        "startLine": 819,
+        "startChar": 23,
+        "endLine": 819,
+        "endChar": 37
+      },
+      "revId": "fada7a07e0fa27ffc98ca615a13c6c0a98486545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dad4550a_88360f1c",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-29T18:55:01Z",
+      "side": 1,
+      "message": "I\u0027m actually going to take this out of the anglebug.com/2253 line and open a new bug to chase these other failures.   I wanted to get these changes looked at first, in case I was doing something obviously wrong before opening more bugs.",
+      "parentUuid": "54496735_8f0d4b90",
       "range": {
         "startLine": 819,
         "startChar": 23,
