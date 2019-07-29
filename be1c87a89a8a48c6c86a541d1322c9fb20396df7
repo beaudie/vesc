@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8466af15_4360418c",
+        "filename": "src/libEGL/egl_loader_autogen.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-29T19:09:06Z",
+      "side": 1,
+      "message": "cleanup suggestion: put this in includes/export.h and call it ANGLE_NO_EXPORT",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 6
+      },
+      "revId": "be1c87a89a8a48c6c86a541d1322c9fb20396df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
