@@ -928,6 +928,7 @@ libangle_capture_sources = [
   "src/libANGLE/capture_gles_ext_params.cpp",
   "src/libANGLE/frame_capture_utils_autogen.cpp",
   "src/libANGLE/frame_capture_utils_autogen.h",
+  "src/libANGLE/gl_enums_table_autogen.h",
 ]
 
 libangle_vulkan_android_sources = [

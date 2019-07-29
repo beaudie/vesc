@@ -13,6 +13,7 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/VertexArray.h"
+#include "libANGLE/gl_enums_table_autogen.h"
 
 namespace angle
 {
@@ -556,6 +557,72 @@ void WriteParamValueToStream<ParamType::TvoidConstPointer>(std::ostream &os, con
     {
         os << "reinterpret_cast<const void *>("
            << static_cast<int>(reinterpret_cast<uintptr_t>(value)) << ")";
+    }
+}
+
+template <>
+void WriteParamValueToStream<ParamType::TGLenum>(std::ostream &os, GLenum value)
+{
+    const auto valueToEnumIter = GLenumValueToStringLookupTable.find(value);
+    if (valueToEnumIter == GLenumValueToStringLookupTable.end())
+    {
+        // For trivial GLenum such GL_ONE, GL_ZERO, etc
+        os << value;
+    }
+    else
+    {
+        const std::vector<std::string> &enumStrings = valueToEnumIter->second;
+        ASSERT(enumStrings.size() > 0);
+        // Some value may have more than one GLenums mapped to them,
+        // it happens for GLenums like
+        //      GL_DRAW_FRAMEBUFFER_BINDING and GL_FRAMEBUFFER_BINDING
+        //      GL_BLEND_EQUATION_RGB and GL_BLEND_EQUATION
+        // so it is safe to output either one of them
+        os << enumStrings[0];
+    }
+}
+
+template <>
+void WriteParamValueToStream<ParamType::TGLbitfield>(std::ostream &os, GLbitfield value)
+{
+    const angle::BitSet<32> bitSet = static_cast<angle::BitSet<32>>(value);
+    bool firstBit                  = true;
+    for (const auto index : bitSet)
+    {
+        if (!firstBit)
+        {
+            os << " | ";
+        }
+        firstBit = false;
+
+        unsigned int mask = 1u << index;
+        const std::vector<std::string> &bitmaskStrings =
+            GLbitmaskValueToStringLookupTable.find(mask)->second;
+
+        // If there is only one GLenum corresponding to the current bitmask,
+        // we output the GLenum, otherwise we output the hex value and providing
+        // all the candidate GLenums in inline comments.
+        bool printGLenumsInComment = false;
+        if (bitmaskStrings.size() == 1)
+        {
+            os << bitmaskStrings[0];
+        }
+        else
+        {
+            printGLenumsInComment = true;
+            os << std::hex << "0x" << mask << std::dec;
+        }
+
+        if (printGLenumsInComment)
+        {
+            os << " // hint: ";
+            for (const std::string &str : bitmaskStrings)
+            {
+                os << str << ",";
+            }
+        }
+
+        os << std::endl;
     }
 }
 
