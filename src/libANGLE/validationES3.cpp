@@ -534,12 +534,6 @@ bool ValidateES3TexImageParametersBase(Context *context,
             return false;
         }
 
-        if (texType == TextureType::_3D)
-        {
-            context->validationError(GL_INVALID_OPERATION, kInvalidTextureTarget);
-            return false;
-        }
-
         // Disallow 3D-only compressed formats from being set on 2D textures
         if (actualFormatInfo.compressedBlockDepth > 1 && texType != TextureType::_2DArray)
         {
@@ -685,7 +679,7 @@ bool ValidateES3TexImage3DParameters(Context *context,
         return false;
     }
 
-    if (IsETC2EACFormat(format) && target != TextureTarget::_2DArray)
+    if (IsETC2EACFormat(internalformat) && target != TextureTarget::_2DArray)
     {
         // ES 3.1, Section 8.7, page 169.
         context->validationError(GL_INVALID_OPERATION, kInternalFormatRequiresTexture2DArray);
