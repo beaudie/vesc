@@ -757,7 +757,7 @@ void ProgramVk::setUniformImpl(GLint location, GLsizei count, const T *v, GLenum
     const gl::VariableLocation &locationInfo = mState.getUniformLocations()[location];
     const gl::LinkedUniform &linkedUniform   = mState.getUniforms()[locationInfo.index];
 
-    if (linkedUniform.isSampler())
+    if (entryPointType == GL_INT && linkedUniform.isSampler())
     {
         // We could potentially cache some indexing here. For now this is a no-op since the mapping
         // is handled entirely in ContextVk.
