@@ -10,7 +10,9 @@
 
 import sys, os, pprint, json
 from datetime import date
+from collections import namedtuple
 import registry_xml
+from gen_gl_enums import default_enum_group_name, unsupported_enum_group_names
 
 # List of GLES1 extensions for which we don't need to add Context.h decls.
 gles1_no_context_decl_extensions = [
@@ -266,6 +268,7 @@ template_capture_source = """// GENERATED FILE - DO NOT EDIT.
 
 #include "libANGLE/Context.h"
 #include "libANGLE/FrameCapture.h"
+#include "libANGLE/gl_enums_autogen.h"
 #include "libANGLE/validation{annotation_no_dash}.h"
 
 using namespace angle;
@@ -288,6 +291,8 @@ CallCapture Capture{short_name}({params_with_type})
 """
 
 template_parameter_capture_value = """paramBuffer.addValueParam("{name}", ParamType::T{type}, {name});"""
+
+template_parameter_capture_gl_enum = """paramBuffer.addEnumParam("{name}", GLenumGroup::{group}, ParamType::T{type}, {name});"""
 
 template_parameter_capture_pointer = """
     ParamCapture {name}Param("{name}", ParamType::T{type});
@@ -446,7 +451,8 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
     }}
 }}
 
-void WriteParamTypeToStream(std::ostream &os, ParamType paramType, const ParamValue& paramValue);
+struct ParamCapture;
+void WriteParamTypeToStream(std::ostream &os, const ParamCapture &capture, const ParamValue& paramValue);
 const char *ParamTypeToString(ParamType paramType);
 }}  // namespace angle
 
@@ -469,9 +475,9 @@ template_frame_capture_utils_source = """// GENERATED FILE - DO NOT EDIT.
 
 namespace angle
 {{
-void WriteParamTypeToStream(std::ostream &os, ParamType paramType, const ParamValue& paramValue)
+void WriteParamTypeToStream(std::ostream &os, const ParamCapture &capture, const ParamValue& paramValue)
 {{
-    switch (paramType)
+    switch (capture.type)
     {{
 {write_param_type_to_stream_cases}
         default:
@@ -504,7 +510,7 @@ template_init_param_value_case = """        case ParamType::T{enum}:
             break;"""
 
 template_write_param_type_to_stream_case = """        case ParamType::T{enum}:
-            WriteParamValueToStream<ParamType::T{enum}>(os, paramValue.{union_name});
+            WriteParamValueToStream<ParamType::T{enum}>(os, capture, paramValue.{union_name});
             break;"""
 
 template_param_type_to_string_case = """        case ParamType::T{enum}:
@@ -524,11 +530,18 @@ def format_entry_point_decl(cmd_name, proto, params, is_explicit_context):
     return template_entry_point_decl.format(
         name=cmd_name[2:],
         return_type=proto[:-len(cmd_name)],
-        params=", ".join(params),
+        params=", ".join([param_to_str(p) for p in params]),
         comma_if_needed=comma_if_needed,
         explicit_context_suffix="ContextANGLE" if is_explicit_context else "",
         explicit_context_param="GLeglContext ctx" if is_explicit_context else "",
         explicit_context_comma=", " if is_explicit_context and len(params) > 0 else "")
+
+
+ParamInfo = namedtuple("ParamInfo", ["type", "name", "group"])
+
+param_context = ParamInfo(type="Context*", name="context", group=None)
+param_const_context = ParamInfo(type="const Context*", name="context", group=None)
+param_is_call_valid = ParamInfo(type="bool", name="isCallValid", group=None)
 
 
 def type_name_sep_index(param):
@@ -537,18 +550,36 @@ def type_name_sep_index(param):
     return max(space, pointer)
 
 
+def build_param_list(command_dom):
+    param_list = list()
+    for param in command_dom.findall('param'):
+        param_text = "".join(param.itertext())
+        name_type_sep = type_name_sep_index(param_text)
+        param_group = param.attrib.get('group', None)
+        if "*" in param_text:
+            param_type = param_text[:name_type_sep + 1]
+        else:
+            param_type = param_text[:name_type_sep]
+        param_list.append(
+            ParamInfo(type=param_type, name=param_text[name_type_sep + 1:], group=param_group))
+
+    return param_list
+
+
 def just_the_type(param):
-    if "*" in param:
-        return param[:type_name_sep_index(param) + 1]
-    return param[:type_name_sep_index(param)]
+    return param.type
 
 
 def just_the_name(param):
-    return param[type_name_sep_index(param) + 1:]
+    return param.name
 
 
 def make_param(param_type, param_name):
     return param_type + " " + param_name
+
+
+def param_to_str(param):
+    return make_param(just_the_type(param), just_the_name(param))
 
 
 def just_the_type_packed(param, entry):
@@ -571,7 +602,7 @@ def param_print_argument(param):
     name_only = just_the_name(param)
     type_only = just_the_type(param)
 
-    if "*" in param:
+    if "*" in param.type:
         return "(uintptr_t)" + name_only
 
     if type_only in reinterpret_cast_to_dict:
@@ -584,14 +615,14 @@ def param_print_argument(param):
 
 
 def param_format_string(param):
-    if "*" in param:
-        return param + " = 0x%016\" PRIxPTR \""
+    if "*" in param.type:
+        return param.type + param.name + " = 0x%016\" PRIxPTR \""
     else:
         type_only = just_the_type(param)
         if type_only not in format_dict:
             raise Exception(type_only + " is not a known type in 'format_dict'")
 
-        return param + " = " + format_dict[type_only]
+        return param.type + " " + param.name + " = " + format_dict[type_only]
 
 
 def default_return_value(cmd_name, return_type):
@@ -654,7 +685,7 @@ def format_entry_point_def(cmd_name, proto, params, is_explicit_context):
         "return_type":
             return_type,
         "params":
-            ", ".join(params),
+            ", ".join([param_to_str(p) for p in params]),
         "internal_params":
             ", ".join(internal_params),
         "packed_gl_enum_conversions":
@@ -692,9 +723,9 @@ def format_capture_method(cmd_name, params, all_param_types, capture_pointer_fun
     packed_gl_enums = cmd_packed_gl_enums.get(cmd_name, {})
 
     params_with_type = get_internal_params(cmd_name,
-                                           ["const Context *context", "bool isCallValid"] + params)
+                                           [param_const_context, param_is_call_valid] + params)
     params_just_name = ", ".join(
-        ["context", "isCallValid"] +
+        [param_const_context.name, param_is_call_valid.name] +
         [just_the_name_packed(param, packed_gl_enums) for param in params])
 
     parameter_captures = []
@@ -728,6 +759,16 @@ def format_capture_method(cmd_name, params, all_param_types, capture_pointer_fun
             capture_pointer_func = template_parameter_capture_pointer_func.format(
                 name=capture_name, params=params_with_type + ", angle::ParamCapture *paramCapture")
             capture_pointer_funcs += [capture_pointer_func]
+        elif param_type in ('GLboolean', 'GLenum', 'GLbitfield'):
+            if param.group is None:
+                group_name = default_enum_group_name
+            elif param.group in unsupported_enum_group_names:
+                group_name = default_enum_group_name
+            else:
+                group_name = param.group
+
+            capture = template_parameter_capture_gl_enum.format(
+                name=param_name, type=param_type, group=group_name)
         else:
             capture = template_parameter_capture_value.format(name=param_name, type=param_type)
 
@@ -772,7 +813,7 @@ def format_libgles_entry_point_def(cmd_name, proto, params, is_explicit_context)
     return libgles_entry_point_def.format(
         name=cmd_name[2:],
         return_type=return_type,
-        params=", ".join(params),
+        params=", ".join([param_to_str(p) for p in params]),
         internal_params=", ".join(internal_params),
         explicit_context_suffix="ContextANGLE" if is_explicit_context else "",
         explicit_context_param="GLeglContext ctx" if is_explicit_context else "",
@@ -781,13 +822,13 @@ def format_libgles_entry_point_def(cmd_name, proto, params, is_explicit_context)
 
 
 def format_validation_proto(cmd_name, params):
-    internal_params = get_internal_params(cmd_name, ["Context *context"] + params)
+    internal_params = get_internal_params(cmd_name, [param_context] + params)
     return template_validation_proto % (cmd_name[2:], internal_params)
 
 
 def format_capture_proto(cmd_name, params):
     internal_params = get_internal_params(cmd_name,
-                                          ["const Context *context", "bool isCallValid"] + params)
+                                          [param_const_context, param_is_call_valid] + params)
     return template_capture_proto % (cmd_name[2:], internal_params)
 
 
@@ -814,19 +855,18 @@ def get_entry_points(all_commands, commands, is_explicit_context, is_wgl, all_pa
         if cmd_name not in commands:
             continue
 
-        param_text = ["".join(param.itertext()) for param in command.findall('param')]
+        params = build_param_list(command)
         proto_text = "".join(proto.itertext())
-        decls.append(
-            format_entry_point_decl(cmd_name, proto_text, param_text, is_explicit_context))
-        defs.append(format_entry_point_def(cmd_name, proto_text, param_text, is_explicit_context))
+        decls.append(format_entry_point_decl(cmd_name, proto_text, params, is_explicit_context))
+        defs.append(format_entry_point_def(cmd_name, proto_text, params, is_explicit_context))
 
         export_defs.append(
-            format_libgles_entry_point_def(cmd_name, proto_text, param_text, is_explicit_context))
+            format_libgles_entry_point_def(cmd_name, proto_text, params, is_explicit_context))
 
-        validation_protos.append(format_validation_proto(cmd_name, param_text))
-        capture_protos.append(format_capture_proto(cmd_name, param_text))
+        validation_protos.append(format_validation_proto(cmd_name, params))
+        capture_protos.append(format_capture_proto(cmd_name, params))
         capture_methods.append(
-            format_capture_method(cmd_name, param_text, all_param_types, capture_pointer_funcs))
+            format_capture_method(cmd_name, params, all_param_types, capture_pointer_funcs))
 
     return decls, defs, export_defs, validation_protos, capture_protos, capture_methods, capture_pointer_funcs
 
@@ -847,9 +887,9 @@ def get_decls(formatter, all_commands, gles_commands, already_included, overload
         if name_no_suffix in already_included:
             continue
 
-        param_text = ["".join(param.itertext()) for param in command.findall('param')]
+        params = build_param_list(command)
         proto_text = "".join(proto.itertext())
-        decls.append(format_context_decl(cmd_name, proto_text, param_text, formatter))
+        decls.append(format_context_decl(cmd_name, proto_text, params, formatter))
 
     return decls
 

@@ -946,7 +946,10 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
     }
 }
 
-void WriteParamTypeToStream(std::ostream &os, ParamType paramType, const ParamValue &paramValue);
+struct ParamCapture;
+void WriteParamTypeToStream(std::ostream &os,
+                            const ParamCapture &capture,
+                            const ParamValue &paramValue);
 const char *ParamTypeToString(ParamType paramType);
 }  // namespace angle
 

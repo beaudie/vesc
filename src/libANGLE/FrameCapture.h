@@ -14,6 +14,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/frame_capture_utils_autogen.h"
+#include "libANGLE/gl_enums_autogen.h"
 
 #include <tuple>
 
@@ -31,6 +32,7 @@ struct ParamCapture : angle::NonCopyable
     std::string name;
     ParamType type;
     ParamValue value;
+    GLenumGroup enumGroup;  // only used for param type GLenum, GLboolean and GLbitfield
     std::vector<std::vector<uint8_t>> data;
     int arrayClientPointerIndex = -1;
     size_t readBufferSizeBytes  = 0;
@@ -47,6 +49,11 @@ class ParamBuffer final : angle::NonCopyable
 
     template <typename T>
     void addValueParam(const char *paramName, ParamType paramType, T paramValue);
+    template <typename T>
+    void addEnumParam(const char *paramName,
+                      GLenumGroup enumGroup,
+                      ParamType paramType,
+                      T paramValue);
 
     ParamCapture &getParam(const char *paramName, ParamType paramType, int index);
 
@@ -134,6 +141,18 @@ void ParamBuffer::addValueParam(const char *paramName, ParamType paramType, T pa
     mParamCaptures.emplace_back(std::move(capture));
 }
 
+template <typename T>
+void ParamBuffer::addEnumParam(const char *paramName,
+                               GLenumGroup enumGroup,
+                               ParamType paramType,
+                               T paramValue)
+{
+    ParamCapture capture(paramName, paramType);
+    InitParamValue(paramType, paramValue, &capture.value);
+    capture.enumGroup = enumGroup;
+    mParamCaptures.emplace_back(std::move(capture));
+}
+
 std::ostream &operator<<(std::ostream &os, const ParamCapture &capture);
 
 // Pointer capture helpers.
@@ -141,23 +160,41 @@ void CaptureMemory(const void *source, size_t size, ParamCapture *paramCapture);
 void CaptureString(const GLchar *str, ParamCapture *paramCapture);
 
 template <ParamType ParamT, typename T>
-void WriteParamValueToStream(std::ostream &os, T value);
+void WriteParamValueToStream(std::ostream &os, const ParamCapture &capture, T value);
 
 template <>
-void WriteParamValueToStream<ParamType::TGLboolean>(std::ostream &os, GLboolean value);
+void WriteParamValueToStream<ParamType::TGLboolean>(std::ostream &os,
+                                                    const ParamCapture &capture,
+                                                    GLboolean value);
 
 template <>
-void WriteParamValueToStream<ParamType::TvoidConstPointer>(std::ostream &os, const void *value);
+void WriteParamValueToStream<ParamType::TvoidConstPointer>(std::ostream &os,
+                                                           const ParamCapture &capture,
+                                                           const void *value);
 
 template <>
-void WriteParamValueToStream<ParamType::TGLDEBUGPROCKHR>(std::ostream &os, GLDEBUGPROCKHR value);
+void WriteParamValueToStream<ParamType::TGLenum>(std::ostream &os,
+                                                 const ParamCapture &capture,
+                                                 GLenum value);
 
 template <>
-void WriteParamValueToStream<ParamType::TGLDEBUGPROC>(std::ostream &os, GLDEBUGPROC value);
+void WriteParamValueToStream<ParamType::TGLbitfield>(std::ostream &os,
+                                                     const ParamCapture &capturem,
+                                                     GLbitfield value);
+
+template <>
+void WriteParamValueToStream<ParamType::TGLDEBUGPROCKHR>(std::ostream &os,
+                                                         const ParamCapture &capture,
+                                                         GLDEBUGPROCKHR value);
+
+template <>
+void WriteParamValueToStream<ParamType::TGLDEBUGPROC>(std::ostream &os,
+                                                      const ParamCapture &capture,
+                                                      GLDEBUGPROC value);
 
 // General fallback for any unspecific type.
 template <ParamType ParamT, typename T>
-void WriteParamValueToStream(std::ostream &os, T value)
+void WriteParamValueToStream(std::ostream &os, const ParamCapture &capture, T value)
 {
     os << value;
 }
