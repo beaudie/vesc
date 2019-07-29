@@ -150,6 +150,12 @@ template <>
 void WriteParamValueToStream<ParamType::TvoidConstPointer>(std::ostream &os, const void *value);
 
 template <>
+void WriteParamValueToStream<ParamType::TGLenum>(std::ostream &os, GLenum value);
+
+template <>
+void WriteParamValueToStream<ParamType::TGLbitfield>(std::ostream &os, GLbitfield value);
+
+template <>
 void WriteParamValueToStream<ParamType::TGLDEBUGPROCKHR>(std::ostream &os, GLDEBUGPROCKHR value);
 
 template <>

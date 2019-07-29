@@ -8,7 +8,7 @@
 #   Generates the OpenGL bindings and entry point layers for ANGLE.
 #   NOTE: don't run this script directly. Run scripts/run_code_generation.py.
 
-import sys, os, pprint, json
+import sys, os, pprint, json, re
 from datetime import date
 import registry_xml
 
@@ -388,6 +388,8 @@ template_frame_capture_utils_header = """// GENERATED FILE - DO NOT EDIT.
 
 #include "common/PackedEnums.h"
 
+#include <map>
+
 namespace angle
 {{
 enum class ParamType
@@ -398,6 +400,10 @@ enum class ParamType
 union ParamValue
 {{
     {param_union_values}
+}};
+
+const std::map<const unsigned int, const std::vector<std::string>> GLenumValueToStringLookupTable = {{
+{glenum_value_to_string_table}
 }};
 
 template <ParamType PType, typename T>
@@ -1050,20 +1056,68 @@ def format_write_param_type_to_stream_case(param_type):
         enum=param_type, union_name=get_param_type_union_name(param_type))
 
 
+def write_glenum_value_to_string_table():
+    kTrivialGLenums = [
+        re.compile(r'GL_FALSE'),
+        re.compile(r'GL_TRUE'),
+        re.compile(r'GL_ZERO'),
+        re.compile(r'GL_ONE'),
+        re.compile(r'GL_NONE'),
+        re.compile(r'GL_NO_ERROR'),
+        re.compile(r'__gl[0-9]+_h_'),
+        re.compile(r'GL_ES_VERSION*'),
+        re.compile(r'GL_GLES*'),
+    ]
+
+    glenum_dict = dict()
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    # using GLenum definitions in gl32.h, as it is the most inclusive one
+    with open(os.path.join(script_dir, "..", "include", "GLES3", "gl32.h"), "r") as f:
+        for line in f.readlines():
+            if not line.startswith("#define"):
+                continue
+
+            try:
+                _, glenum_str, glenum_hex = line.split()
+                glenum_uint = int(glenum_hex, base=16)
+            except ValueError:
+                # filter out non-GLenum macro definitions
+                continue
+
+            if (glenum_uint in (0, 1) and
+                    any(regex.match(glenum_str) for regex in kTrivialGLenums)):
+                continue
+
+            if glenum_uint not in glenum_dict:
+                glenum_dict[glenum_uint] = list()
+            glenum_dict[glenum_uint].append('"%s"' % glenum_str)
+
+    # Dump to string
+    glenum_tuples = sorted(glenum_dict.iteritems(), key=lambda t: t[0])
+    return ",\n".join([
+        "{{ {glenum_val}, {{ {glenum_strs} }} }}".format(
+            glenum_val=hex(t[0]),
+            glenum_strs=", ".join([s for s in t[1]]),
+        ) for t in glenum_tuples
+    ])
+
+
 def write_capture_helper_header(all_param_types):
 
     param_types = "\n    ".join(["T%s," % t for t in all_param_types])
     param_union_values = "\n    ".join([format_param_type_union_type(t) for t in all_param_types])
+    glenum_value_to_string_table = write_glenum_value_to_string_table()
     set_param_val_specializations = "\n\n".join(
         [format_set_param_val_specialization(t) for t in all_param_types])
     init_param_value_cases = "\n".join([format_init_param_value_case(t) for t in all_param_types])
 
     content = template_frame_capture_utils_header.format(
         script_name=os.path.basename(sys.argv[0]),
-        data_source_name="gl.xml and gl_angle_ext.xml",
+        data_source_name="gl32.h, gl.xml and gl_angle_ext.xml",
         year=date.today().year,
         param_types=param_types,
         param_union_values=param_union_values,
+        glenum_value_to_string_table=glenum_value_to_string_table,
         set_param_val_specializations=set_param_val_specializations,
         init_param_value_cases=init_param_value_cases)
 

@@ -560,6 +560,65 @@ void WriteParamValueToStream<ParamType::TvoidConstPointer>(std::ostream &os, con
 }
 
 template <>
+void WriteParamValueToStream<ParamType::TGLenum>(std::ostream &os, GLenum value)
+{
+    const auto valueToEnumIter = GLenumValueToStringLookupTable.find(value);
+    if (valueToEnumIter == GLenumValueToStringLookupTable.end())
+    {
+        os << value;
+    }
+    else
+    {
+        // For a given GLenum value, it may have more than one corresponding GLenums.
+        //  if GLenum number == 1:
+        //      print GLenum
+        //  if GLenum number > 1 && number <= kThreshold:
+        //      print in the form `enum1 | enum2 | ...`
+        //  if GLenum number > kThreshold:
+        //      print the value
+        constexpr size_t kEnumOuputThreshold        = 5;
+        const std::vector<std::string> &enumStrings = valueToEnumIter->second;
+        if (enumStrings.size() == 1)
+        {
+            os << enumStrings[0];
+        }
+        else if (enumStrings.size() <= kEnumOuputThreshold)
+        {
+            bool first = true;
+            for (const std::string s : enumStrings)
+            {
+                if (!first)
+                {
+                    os << " | ";
+                }
+                os << s;
+                first = false;
+            }
+        }
+        else
+        {
+            os << value;
+        }
+    }
+}
+
+template <>
+void WriteParamValueToStream<ParamType::TGLbitfield>(std::ostream &os, GLbitfield value)
+{
+    const angle::BitSet<32> bitSet = static_cast<angle::BitSet<32>>(value);
+    bool first                     = true;
+    for (const auto index : bitSet)
+    {
+        if (!first)
+        {
+            os << " | ";
+        }
+        WriteParamValueToStream<ParamType::TGLenum>(os, static_cast<GLenum>(1 << index));
+        first = false;
+    }
+}
+
+template <>
 void WriteParamValueToStream<ParamType::TGLDEBUGPROCKHR>(std::ostream &os, GLDEBUGPROCKHR value)
 {}
 
