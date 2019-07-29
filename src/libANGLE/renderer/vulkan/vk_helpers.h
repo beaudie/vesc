@@ -783,6 +783,18 @@ class ImageHelper final : public CommandGraphResource
                                                         const gl::InternalFormat &formatInfo,
                                                         FramebufferVk *framebufferVk);
 
+    angle::Result stageSubresourceUpdateFromPBO(ContextVk *contextVk,
+                                                const gl::ImageIndex &index,
+                                                const gl::Rectangle &sourceArea,
+                                                const gl::Offset &dstOffset,
+                                                const gl::Extents &dstExtent,
+                                                const gl::InternalFormat &formatInfo,
+                                                const gl::PixelUnpackState &unpack,
+                                                GLenum type,
+                                                const uint8_t *pixels,
+                                                const vk::Format &vkFormat,
+                                                gl::Buffer *unpackBuffer);
+
     void stageSubresourceUpdateFromImage(vk::ImageHelper *image,
                                          const gl::ImageIndex &index,
                                          const gl::Offset &destOffset,

@@ -2380,6 +2380,144 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     return angle::Result::Continue;
 }
 
+angle::Result ImageHelper::stageSubresourceUpdateFromPBO(ContextVk *contextVk,
+                                                         const gl::ImageIndex &index,
+                                                         const gl::Rectangle &sourceArea,
+                                                         const gl::Offset &dstOffset,
+                                                         const gl::Extents &dstExtent,
+                                                         const gl::InternalFormat &formatInfo,
+                                                         const gl::PixelUnpackState &unpack,
+                                                         GLenum type,
+                                                         const uint8_t *pixels,
+                                                         const vk::Format &vkFormat,
+                                                         gl::Buffer *unpackBuffer)
+{
+#ifdef NEW_CODE
+    // NOTE: This was cloned from ImageHelper::stageSubresourceUpdateFromFramebuffer()
+    // FIXME(ianelliott): FINISH THIS
+    // NOTES:
+    // 1) This method will be a combination of ImageHelper::stageSubresourceUpdate() and
+    //    ImageHelper::stageSubresourceUpdateFromFramebuffer().
+    //
+    // 2) We need to allocate a staging buffer that matches the dst texture, so that we can easily
+    //    use the VkBufferImageCopy approach to copy the result into the dst texture.
+    //
+    // 3) Once we have the staging buffer, we need to either call loadFunction.loadFunction() or
+    //    a ReadPixels function in order to copy and format the src data for the dst.
+    //
+    // 4) Once we have the correct contents in the staging buffer, we can use the bottom part of
+    //    ImageHelper::stageSubresourceUpdateFromFramebuffer().
+    //
+    // Questions:
+    //
+    // - How to deal with unpack values?
+    //
+    // - How to deal with the "pixels" parameter?
+
+#    ifdef DO_NOT_NEED_THIS
+    // If the extents and offset is outside the source image, we need to clip.
+    gl::Rectangle clippedRectangle;
+    const gl::Extents readExtents = framebufferVk->getReadImageExtents();
+    if (!ClipRectangle(sourceArea, gl::Rectangle(0, 0, readExtents.width, readExtents.height),
+                       &clippedRectangle))
+    {
+        // Empty source area, nothing to do.
+        return angle::Result::Continue;
+    }
+
+    bool isViewportFlipEnabled = contextVk->isViewportFlipEnabledForDrawFBO();
+    if (isViewportFlipEnabled)
+    {
+        clippedRectangle.y = readExtents.height - clippedRectangle.y - clippedRectangle.height;
+    }
+#    endif  // DO_NOT_NEED_THIS
+
+    // 1- obtain a buffer handle to copy to
+    RendererVk *renderer = contextVk->getRenderer();
+
+    const vk::Format &vkFormat         = renderer->getFormat(formatInfo.sizedInternalFormat);
+    const angle::Format &storageFormat = vkFormat.imageFormat();
+    LoadImageFunctionInfo loadFunction = vkFormat.textureLoadFunctions(formatInfo.type);
+
+#    ifdef MAY_NOT_NEED_THIS
+    size_t outputRowPitch   = storageFormat.pixelBytes * clippedRectangle.width;
+    size_t outputDepthPitch = outputRowPitch * clippedRectangle.height;
+#    else   // MAY_NOT_NEED_THIS
+    GLuint outputRowPitch = 0;
+    ANGLE_VK_CHECK_MATH(contextVk,
+                        formatInfo.computeRowPitch(type, dstExtent.width, unpack.alignment,
+                                                   unpack.rowLength, &outputRowPitch));
+    size_t outputDepthPitch = 0;
+    ANGLE_VK_CHECK_MATH(contextVk,
+                        formatInfo.computeDepthPitch(dstExtent.height, unpack.imageHeight,
+                                                     outputRowPitch, &outputDepthPitch));
+#    endif  // MAY_NOT_NEED_THIS
+
+    VkBuffer bufferHandle = VK_NULL_HANDLE;
+
+    uint8_t *stagingPointer    = nullptr;
+    VkDeviceSize stagingOffset = 0;
+
+    // The destination is only one layer deep.
+    size_t allocationSize = outputDepthPitch;
+    ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
+                                      &stagingOffset, nullptr));
+#    ifdef MAY_NOT_NEED_THIS
+#    endif  // MAY_NOT_NEED_THIS
+#    ifdef DO_NOT_NEED_THIS
+#    endif  // DO_NOT_NEED_THIS
+
+    const angle::Format &copyFormat =
+        GetFormatFromFormatType(formatInfo.internalFormat, formatInfo.type);
+    PackPixelsParams params(clippedRectangle, copyFormat, static_cast<GLuint>(outputRowPitch),
+                            isViewportFlipEnabled, nullptr, 0);
+
+    // 2- copy the source image region to the pixel buffer using a cpu readback
+    if (loadFunction.requiresConversion)
+    {
+        // When a conversion is required, we need to use the loadFunction to read from a temporary
+        // buffer instead so its an even slower path.
+        size_t bufferSize =
+            storageFormat.pixelBytes * clippedRectangle.width * clippedRectangle.height;
+        angle::MemoryBuffer *memoryBuffer = nullptr;
+        ANGLE_VK_CHECK_ALLOC(contextVk, context->getScratchBuffer(bufferSize, &memoryBuffer));
+
+        // Read into the scratch buffer
+        ANGLE_TRY(framebufferVk->readPixelsImpl(
+            contextVk, clippedRectangle, params, VK_IMAGE_ASPECT_COLOR_BIT,
+            framebufferVk->getColorReadRenderTarget(), memoryBuffer->data()));
+
+        // Load from scratch buffer to our pixel buffer
+        loadFunction.loadFunction(clippedRectangle.width, clippedRectangle.height, 1,
+                                  memoryBuffer->data(), outputRowPitch, 0, stagingPointer,
+                                  outputRowPitch, 0);
+    }
+    else
+    {
+        // We read directly from the framebuffer into our pixel buffer.
+        ANGLE_TRY(framebufferVk->readPixelsImpl(
+            contextVk, clippedRectangle, params, VK_IMAGE_ASPECT_COLOR_BIT,
+            framebufferVk->getColorReadRenderTarget(), stagingPointer));
+    }
+
+    // 3- enqueue the destination image subresource update
+    VkBufferImageCopy copyToImage               = {};
+    copyToImage.bufferOffset                    = static_cast<VkDeviceSize>(stagingOffset);
+    copyToImage.bufferRowLength                 = 0;  // Tightly packed data can be specified as 0.
+    copyToImage.bufferImageHeight               = clippedRectangle.height;
+    copyToImage.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    copyToImage.imageSubresource.mipLevel       = index.getLevelIndex();
+    copyToImage.imageSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;
+    copyToImage.imageSubresource.layerCount     = index.getLayerCount();
+    gl_vk::GetOffset(dstOffset, &copyToImage.imageOffset);
+    gl_vk::GetExtent(dstExtent, &copyToImage.imageExtent);
+
+    // 3- enqueue the destination image subresource update
+    mSubresourceUpdates.emplace_back(bufferHandle, copyToImage);
+#endif  // NEW_CODE
+    return angle::Result::Continue;
+}
+
 void ImageHelper::stageSubresourceUpdateFromImage(vk::ImageHelper *image,
                                                   const gl::ImageIndex &index,
                                                   const gl::Offset &destOffset,
