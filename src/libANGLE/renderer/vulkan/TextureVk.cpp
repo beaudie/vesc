@@ -235,9 +235,22 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                                          const uint8_t *pixels,
                                          const vk::Format &vkFormat)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
+    ContextVk *contextVk     = vk::GetImpl(context);
+    const gl::State &glState = contextVk->getState();
+    gl::Buffer *unpackBuffer = glState.getTargetBuffer(gl::BufferBinding::PixelUnpack);
 
-    if (pixels)
+    if (unpackBuffer)
+    {
+        // TODO(ianelliott): Add multiple PBO paths here (e.g. SW-fallback, fast-GPU, dealing with
+        // unpack state)
+        // http://anglebug.com/3209
+        ANGLE_TRY(mImage->stageSubresourceUpdateFromPBO(
+            contextVk, getNativeImageIndex(index), gl::Rectangle(0, 0, area.width, area.height),
+            gl::Offset(area.x, area.y, area.z), gl::Extents(area.width, area.height, area.depth),
+            formatInfo, unpack, type, pixels, vkFormat, unpackBuffer));
+        onStagingBufferChange();
+    }
+    else if (pixels)
     {
         ANGLE_TRY(mImage->stageSubresourceUpdate(
             contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
