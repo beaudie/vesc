@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7faeefac_3255b34c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-30T16:34:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24ae80a1_e6285d24",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 50
+      },
+      "revId": "269a8d35104fd38bd1d861a8d1a993418e94b123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e0395c42_1f222767",
         "filename": "src/common/PoolAlloc.cpp",
         "patchSetId": 4
