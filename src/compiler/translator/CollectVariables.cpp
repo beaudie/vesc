@@ -82,7 +82,7 @@ void MarkActive(ShaderVariable *variable)
                 MarkActive(&field);
             }
         }
-        ASSERT(variable->staticUse);
+        variable->staticUse = true;
         variable->active = true;
     }
 }
@@ -931,8 +931,7 @@ bool CollectVariablesTraverser::visitBinary(Visit, TIntermBinary *binaryNode)
         // TODO(oetuaho): Would be nicer to record static use of fields of named interface blocks
         // more accurately at parse time - now we only mark the fields statically used if they are
         // active. http://anglebug.com/2440
-        namedBlock->fields[fieldIndex].staticUse = true;
-        namedBlock->fields[fieldIndex].active    = true;
+        MarkActive(&namedBlock->fields[fieldIndex]);
 
         if (traverseIndexExpression)
         {

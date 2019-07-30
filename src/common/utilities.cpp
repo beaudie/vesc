@@ -735,7 +735,9 @@ int VariableSortOrder(GLenum type)
     }
 }
 
-std::string ParseResourceName(const std::string &name, std::vector<unsigned int> *outSubscripts)
+std::string ParseResourceName(const std::string &name,
+                              std::vector<unsigned int> *outSubscripts,
+                              int maxLevels)
 {
     if (outSubscripts)
     {
@@ -744,7 +746,7 @@ std::string ParseResourceName(const std::string &name, std::vector<unsigned int>
     // Strip any trailing array indexing operators and retrieve the subscripts.
     size_t baseNameLength = name.length();
     bool hasIndex         = true;
-    while (hasIndex)
+    for (int level = 0; (level < maxLevels || maxLevels < 0) && hasIndex; level++)
     {
         size_t open  = name.find_last_of('[', baseNameLength - 1);
         size_t close = name.find_last_of(']', baseNameLength - 1);
