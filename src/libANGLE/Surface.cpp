@@ -22,6 +22,10 @@
 #include "libANGLE/renderer/EGLImplFactory.h"
 #include "libANGLE/trace.h"
 
+#if ANGLE_CAPTURE_ENABLED
+#    include "libANGLE/FrameCapture.h"
+#endif  // ANGLE_CAPTURE_ENABLED
+
 namespace egl
 {
 
