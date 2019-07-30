@@ -271,14 +271,14 @@ void RenderbufferManager::DeleteObject(const Context *context, Renderbuffer *ren
     renderbuffer->release(context);
 }
 
-GLuint RenderbufferManager::createRenderbuffer()
+RenderbufferID RenderbufferManager::createRenderbuffer()
 {
-    return AllocateEmptyObject(&mHandleAllocator, &mObjectMap);
+    return {AllocateEmptyObject(&mHandleAllocator, &mObjectMap)};
 }
 
-Renderbuffer *RenderbufferManager::getRenderbuffer(GLuint handle) const
+Renderbuffer *RenderbufferManager::getRenderbuffer(RenderbufferID handle) const
 {
-    return mObjectMap.query(handle);
+    return mObjectMap.query(handle.value);
 }
 
 // SamplerManager Implementation.
