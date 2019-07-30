@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e0395c42_1f222767",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-30T16:16:52Z",
+      "side": 1,
+      "message": "This check is already done in roundUpPow2(), so it can be removed.",
+      "revId": "269a8d35104fd38bd1d861a8d1a993418e94b123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cefd98f5_47b15fab",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-30T16:16:52Z",
+      "side": 1,
+      "message": "Same.   This is redundant checking.",
+      "revId": "269a8d35104fd38bd1d861a8d1a993418e94b123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "715e9e4e_d47c0c68",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-30T16:16:52Z",
+      "side": 1,
+      "message": "Same.   Remove.",
+      "revId": "269a8d35104fd38bd1d861a8d1a993418e94b123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
