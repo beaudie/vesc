@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a35c19c9_13a33f0e",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-07-30T18:58:37Z",
+      "side": 1,
+      "message": "This may have future problems with other compressed formats now being usable for 3D textures (DXT ones for example) but if the tests pass, I\u0027m happy.",
+      "range": {
+        "startLine": 538,
+        "startChar": 45,
+        "endLine": 538,
+        "endChar": 82
+      },
+      "revId": "09aa051dd6f7cf5b6bd9682b546cf246bc1ba3b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
