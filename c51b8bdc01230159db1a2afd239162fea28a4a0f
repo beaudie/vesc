@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8d7fabfb_952e09cc",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4974,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-30T20:31:21Z",
+      "side": 1,
+      "message": "Without this change, the vulkan validation layers give the following error:\n\n[ RUN      ] dEQP.GLES31/functional_fbo_no_attachments_maximums_width\ndEQP-GLES31.functional.fbo.no_attachments.maximums.width\n../../third_party/angle/src/tests/deqp_support/angle_deqp_gtest.cpp:44: Failure\nFailed\nDebugUtilsMessenger(286): [ VUID-VkViewport-width-01771 ] vkCreateGraphicsPipelines: pCreateInfos[0].pViewportState-\u003epViewports[0].width (\u003d65536.000000) exceeds VkPhysicalDeviceLimits::maxViewportDimensions[0] (\u003d32768). The Vulkan spec states: width must be less than or equal to VkPhysicalDeviceLimits::maxViewportDimensions[0] (https://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/vkspec.html#VUID-VkViewport-width-01771)\n                            Object: VK_NULL_HANDLE (type \u003d Pipeline(19))\n\n\nSetting the viewport to something larger than what the HW can handle felt like something each of the backends would want to prevent, but it looks like this can be moved down into ContextVk::updateViewport() for these tests.   Let me know what you think of it in there.",
+      "parentUuid": "788cff33_2b062533",
+      "range": {
+        "startLine": 4967,
+        "startChar": 0,
+        "endLine": 4974,
+        "endChar": 68
+      },
+      "revId": "c51b8bdc01230159db1a2afd239162fea28a4a0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72038032_6309cac9",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 13
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "663ab450_ae34ae32",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-30T20:31:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72038032_6309cac9",
+      "range": {
+        "startLine": 612,
+        "startChar": 4,
+        "endLine": 615,
+        "endChar": 19
+      },
+      "revId": "c51b8bdc01230159db1a2afd239162fea28a4a0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a6b3096c_bf3345ba",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 13
@@ -65,6 +113,47 @@
         "endLine": 1106,
         "endChar": 38
       },
+      "revId": "c51b8bdc01230159db1a2afd239162fea28a4a0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b9478e6_78c8ce27",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-30T20:31:21Z",
+      "side": 1,
+      "message": "I\u0027ve opened anglebug.com/3754 to add a test to verify contextVk-\u003eupdateScissor() is called when the framebuffer\u0027s attachment changes size.\n\nRe: invalidating the pipeline\nI believe that\u0027s being done today already below (see my comment on line 1124).   We are setting the dirty bits DIRTY_BIT_DEFAULT_[WIDTH|HEIGHT] in Framebuffer::setDefault[Width|Height], which get handled here as well, so I think we should be fine there.\n\nDo you think we still need more dirty bit handling with all of that or does this look good?",
+      "parentUuid": "a6b3096c_bf3345ba",
+      "range": {
+        "startLine": 1104,
+        "startChar": 0,
+        "endLine": 1106,
+        "endChar": 38
+      },
+      "revId": "c51b8bdc01230159db1a2afd239162fea28a4a0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6523f5bb_f7632190",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-30T20:31:21Z",
+      "side": 1,
+      "message": "This call invalidates the pipeline:\n\nvoid ContextVk::onDrawFramebufferChange(FramebufferVk *framebufferVk)\n{\n    const vk::RenderPassDesc \u0026renderPassDesc \u003d framebufferVk-\u003egetRenderPassDesc();\n\n    // Ensure that the RenderPass description is updated.\n    invalidateCurrentGraphicsPipeline();\n    mGraphicsPipelineDesc-\u003eupdateRenderPassDesc(\u0026mGraphicsPipelineTransition, renderPassDesc);\n}",
       "revId": "c51b8bdc01230159db1a2afd239162fea28a4a0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
