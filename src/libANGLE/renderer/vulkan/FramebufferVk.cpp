@@ -96,40 +96,6 @@ bool areSrcAndDstDepthStencilChannelsBlitCompatible(RenderTargetVk *srcRenderTar
            (dstFormat.stencilBits > 0 || srcFormat.stencilBits == 0);
 }
 
-// Special rules apply to VkBufferImageCopy with depth/stencil. The components are tightly packed
-// into a depth or stencil section of the destination buffer. See the spec:
-// https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferImageCopy.html
-const angle::Format &GetDepthStencilImageToBufferFormat(const angle::Format &imageFormat,
-                                                        VkImageAspectFlagBits copyAspect)
-{
-    if (copyAspect == VK_IMAGE_ASPECT_STENCIL_BIT)
-    {
-        ASSERT(imageFormat.id == angle::FormatID::D24_UNORM_S8_UINT ||
-               imageFormat.id == angle::FormatID::D32_FLOAT_S8X24_UINT ||
-               imageFormat.id == angle::FormatID::S8_UINT);
-        return angle::Format::Get(angle::FormatID::S8_UINT);
-    }
-
-    ASSERT(copyAspect == VK_IMAGE_ASPECT_DEPTH_BIT);
-
-    switch (imageFormat.id)
-    {
-        case angle::FormatID::D16_UNORM:
-            return imageFormat;
-        case angle::FormatID::D24_UNORM_X8_UINT:
-            return imageFormat;
-        case angle::FormatID::D24_UNORM_S8_UINT:
-            return angle::Format::Get(angle::FormatID::D24_UNORM_X8_UINT);
-        case angle::FormatID::D32_FLOAT:
-            return imageFormat;
-        case angle::FormatID::D32_FLOAT_S8X24_UINT:
-            return angle::Format::Get(angle::FormatID::D32_FLOAT);
-        default:
-            UNREACHABLE();
-            return imageFormat;
-    }
-}
-
 void SetEmulatedAlphaValue(const vk::Format &format, VkClearColorValue *value)
 {
     if (format.vkFormatIsInt)
@@ -1411,23 +1377,19 @@ const gl::DrawBufferMask &FramebufferVk::getEmulatedAlphaAttachmentMask() const
     return mEmulatedAlphaAttachmentMask;
 }
 
-angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
-                                            const gl::Rectangle &area,
-                                            const PackPixelsParams &packPixelsParams,
-                                            VkImageAspectFlagBits copyAspectFlags,
-                                            RenderTargetVk *renderTarget,
-                                            void *pixels)
+angle::Result ReadPixelsFromImage(ContextVk *contextVk,
+                                  const gl::Rectangle &area,
+                                  vk::ImageHelper *srcImage,
+                                  VkImageAspectFlagBits copyAspectFlags,
+                                  size_t levelIn,
+                                  size_t layerIn,
+                                  const PackPixelsParams &packPixelsParams,
+                                  vk::DynamicBuffer *readPixelsBuffer,
+                                  vk::CommandBuffer *commandBuffer,
+                                  gl::Buffer *packBuffer,
+                                  uint8_t *pixelsOut)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "FramebufferVk::readPixelsImpl");
-
     RendererVk *renderer = contextVk->getRenderer();
-
-    vk::CommandBuffer *commandBuffer = nullptr;
-    ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &commandBuffer));
-
-    // Note that although we're reading from the image, we need to update the layout below.
-    vk::ImageHelper *srcImage =
-        renderTarget->getImageForRead(&mFramebuffer, vk::ImageLayout::TransferSrc, commandBuffer);
 
     const angle::Format *readFormat = &srcImage->getFormat().imageFormat();
 
@@ -1436,8 +1398,8 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
         readFormat = &GetDepthStencilImageToBufferFormat(*readFormat, copyAspectFlags);
     }
 
-    size_t level         = renderTarget->getLevelIndex();
-    size_t layer         = renderTarget->getLayerIndex();
+    size_t level         = levelIn;
+    size_t layer         = layerIn;
     VkOffset3D srcOffset = {area.x, area.y, 0};
     VkExtent3D srcExtent = {static_cast<uint32_t>(area.width), static_cast<uint32_t>(area.height),
                             1};
@@ -1490,8 +1452,8 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
     VkDeviceSize stagingOffset = 0;
     size_t allocationSize      = readFormat->pixelBytes * area.width * area.height;
 
-    ANGLE_TRY(mReadPixelBuffer.allocate(contextVk, allocationSize, &readPixelBuffer, &bufferHandle,
-                                        &stagingOffset, nullptr));
+    ANGLE_TRY(readPixelsBuffer->allocate(contextVk, allocationSize, &readPixelBuffer, &bufferHandle,
+                                         &stagingOffset, nullptr));
 
     VkBufferImageCopy region               = {};
     region.bufferImageHeight               = srcExtent.height;
@@ -1513,17 +1475,15 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
 
     // The buffer we copied to needs to be invalidated before we read from it because its not been
     // created with the host coherent bit.
-    ANGLE_TRY(mReadPixelBuffer.invalidate(contextVk));
+    ANGLE_TRY(readPixelsBuffer->invalidate(contextVk));
 
-    const gl::State &glState = contextVk->getState();
-    gl::Buffer *packBuffer   = glState.getTargetBuffer(gl::BufferBinding::PixelPack);
     if (packBuffer != nullptr)
     {
         // Must map the PBO in order to read its contents (and then unmap it later)
         BufferVk *packBufferVk = vk::GetImpl(packBuffer);
         void *mapPtr           = nullptr;
         ANGLE_TRY(packBufferVk->mapImpl(contextVk, &mapPtr));
-        uint8_t *dest = static_cast<uint8_t *>(mapPtr) + reinterpret_cast<ptrdiff_t>(pixels);
+        uint8_t *dest = static_cast<uint8_t *>(mapPtr) + reinterpret_cast<ptrdiff_t>(pixelsOut);
         PackPixels(packPixelsParams, *readFormat, area.width * readFormat->pixelBytes,
                    readPixelBuffer, static_cast<uint8_t *>(dest));
         packBufferVk->unmapImpl(contextVk);
@@ -1531,10 +1491,31 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
     else
     {
         PackPixels(packPixelsParams, *readFormat, area.width * readFormat->pixelBytes,
-                   readPixelBuffer, static_cast<uint8_t *>(pixels));
+                   readPixelBuffer, pixelsOut);
     }
 
     return angle::Result::Continue;
+}
+
+angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
+                                            const gl::Rectangle &area,
+                                            const PackPixelsParams &packPixelsParams,
+                                            VkImageAspectFlagBits copyAspectFlags,
+                                            RenderTargetVk *renderTarget,
+                                            void *pixels)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "FramebufferVk::readPixelsImpl");
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(mFramebuffer.recordCommands(contextVk, &commandBuffer));
+
+    // Note that although we're reading from the image, we need to update the layout below.
+    vk::ImageHelper *srcImage =
+        renderTarget->getImageForRead(&mFramebuffer, vk::ImageLayout::TransferSrc, commandBuffer);
+
+    return srcImage->readPixels(contextVk, area, copyAspectFlags, renderTarget->getLevelIndex(),
+                                renderTarget->getLayerIndex(), packPixelsParams, &mReadPixelBuffer,
+                                commandBuffer, reinterpret_cast<uint8_t *>(pixels));
 }
 
 gl::Extents FramebufferVk::getReadImageExtents() const
