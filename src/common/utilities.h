@@ -57,7 +57,9 @@ int AllocateFirstFreeBits(unsigned int *bits, unsigned int allocationSize, unsig
 // If the provided name indexes an array, the outSubscripts vector will contain indices with
 // outermost array indices in the back. If an array index is invalid, GL_INVALID_INDEX is added to
 // outSubscripts.
-std::string ParseResourceName(const std::string &name, std::vector<unsigned int> *outSubscripts);
+std::string ParseResourceName(const std::string &name,
+                              std::vector<unsigned int> *outSubscripts,
+                              int maxLevels = -1);
 
 // Find the child field which matches 'fullName' == var.name + "." + field.name.
 // Return nullptr if not found.
