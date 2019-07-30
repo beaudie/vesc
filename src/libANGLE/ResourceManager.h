@@ -72,6 +72,9 @@ class TypedResourceManager : public ResourceManagerBase<HandleAllocatorType>
         return handle == 0 || mObjectMap.contains(handle);
     }
 
+    typename ResourceMap<ResourceType>::Iterator begin() const { return mObjectMap.begin(); }
+    typename ResourceMap<ResourceType>::Iterator end() const { return mObjectMap.end(); }
+
   protected:
     ~TypedResourceManager() override;
 
@@ -151,6 +154,10 @@ class ShaderProgramManager : public ResourceManagerBase<HandleAllocator>
     void deleteProgram(const Context *context, GLuint program);
 
     ANGLE_INLINE Program *getProgram(GLuint handle) const { return mPrograms.query(handle); }
+
+    // For capture only.
+    const ResourceMap<Shader> &getShadersForCapture() const { return mShaders; }
+    const ResourceMap<Program> &getProgramsForCapture() const { return mPrograms; }
 
   protected:
     ~ShaderProgramManager() override;
