@@ -121,6 +121,7 @@ const Format gFormatInfoTable[] = {
     { FormatID::L32_FLOAT, GL_LUMINANCE32F_EXT, GL_LUMINANCE32F_EXT, GenerateMip<L32F>, NoCopyFunctions, ReadColor<L32F, GLfloat>, WriteColor<L32F, GLfloat>, GL_FLOAT, 0, 0, 0, 0, 32, 0, 0, 4, std::numeric_limits<GLuint>::max(), false, false, false, gl::VertexAttribType::Float },
     { FormatID::L8A8_UNORM, GL_LUMINANCE8_ALPHA8_EXT, GL_LUMINANCE8_ALPHA8_EXT, GenerateMip<L8A8>, NoCopyFunctions, ReadColor<L8A8, GLfloat>, WriteColor<L8A8, GLfloat>, GL_UNSIGNED_NORMALIZED, 0, 0, 0, 8, 8, 0, 0, 2, std::numeric_limits<GLuint>::max(), false, false, false, gl::VertexAttribType::InvalidEnum },
     { FormatID::L8_UNORM, GL_LUMINANCE8_EXT, GL_LUMINANCE8_EXT, GenerateMip<L8>, NoCopyFunctions, ReadColor<L8, GLfloat>, WriteColor<L8, GLfloat>, GL_UNSIGNED_NORMALIZED, 0, 0, 0, 0, 8, 0, 0, 1, std::numeric_limits<GLuint>::max(), false, false, false, gl::VertexAttribType::InvalidEnum },
+    { FormatID::R10G10B10A0_UNORM, GL_RGB10_UNORM_ANGLEX, GL_RGB10_UNORM_ANGLEX, GenerateMip<R10G10B10A0>, NoCopyFunctions, ReadColor<R10G10B10A0, GLfloat>, WriteColor<R10G10B10A0, GLfloat>, GL_UNSIGNED_NORMALIZED, 10, 10, 10, 0, 0, 0, 0, 3, std::numeric_limits<GLuint>::max(), false, false, false, gl::VertexAttribType::UnsignedInt2101010 },
     { FormatID::R10G10B10A2_SINT, GL_RGB10_A2_SINT_ANGLEX, GL_RGB10_A2_SINT_ANGLEX, GenerateMip<R10G10B10A2S>, NoCopyFunctions, ReadColor<R10G10B10A2S, GLint>, WriteColor<R10G10B10A2S, GLint>, GL_INT, 10, 10, 10, 2, 0, 0, 0, 4, std::numeric_limits<GLuint>::max(), false, false, false, gl::VertexAttribType::Int2101010 },
     { FormatID::R10G10B10A2_SNORM, GL_RGB10_A2_SNORM_ANGLEX, GL_RGB10_A2_SNORM_ANGLEX, GenerateMip<R10G10B10A2S>, NoCopyFunctions, ReadColor<R10G10B10A2S, GLfloat>, WriteColor<R10G10B10A2S, GLfloat>, GL_SIGNED_NORMALIZED, 10, 10, 10, 2, 0, 0, 0, 4, std::numeric_limits<GLuint>::max(), false, false, false, gl::VertexAttribType::Int2101010 },
     { FormatID::R10G10B10A2_SSCALED, GL_RGB10_A2_SSCALED_ANGLEX, GL_RGB10_A2_SSCALED_ANGLEX, GenerateMip<R10G10B10A2S>, NoCopyFunctions, ReadColor<R10G10B10A2S, GLint>, WriteColor<R10G10B10A2S, GLint>, GL_INT, 10, 10, 10, 2, 0, 0, 0, 4, std::numeric_limits<GLuint>::max(), false, false, true, gl::VertexAttribType::Int2101010 },
@@ -523,6 +524,8 @@ FormatID Format::InternalFormatToID(GLenum internalFormat)
             return FormatID::R10G10B10A2_SSCALED;
         case GL_RGB10_A2_USCALED_ANGLEX:
             return FormatID::R10G10B10A2_USCALED;
+        case GL_RGB10_UNORM_ANGLEX:
+            return FormatID::R10G10B10A0_UNORM;
         case GL_RGB16F:
             return FormatID::R16G16B16_FLOAT;
         case GL_RGB16I:

@@ -114,6 +114,7 @@ enum class FormatID
     L32_FLOAT,
     L8A8_UNORM,
     L8_UNORM,
+    R10G10B10A0_UNORM,
     R10G10B10A2_SINT,
     R10G10B10A2_SNORM,
     R10G10B10A2_SSCALED,
@@ -216,7 +217,7 @@ enum class FormatID
     S8_UINT
 };
 
-constexpr uint32_t kNumANGLEFormats = 197;
+constexpr uint32_t kNumANGLEFormats = 198;
 
 }  // namespace angle
 
