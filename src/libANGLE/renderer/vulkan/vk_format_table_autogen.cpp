@@ -1013,6 +1013,18 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             // This format is not implemented in Vulkan.
             break;
 
+        case angle::FormatID::R10G10B10A0_UNORM:
+            internalFormat               = GL_RGB10_UNORM_ANGLEX;
+            imageFormatID                = angle::FormatID::R10G10B10A2_UNORM;
+            vkImageFormat                = VK_FORMAT_A2B10G10R10_UNORM_PACK32;
+            imageInitializerFunction     = nullptr;
+            bufferFormatID               = angle::FormatID::NONE;
+            vkBufferFormat               = VK_FORMAT_UNDEFINED;
+            vkBufferFormatIsPacked       = false;
+            vertexLoadFunction           = nullptr;
+            vertexLoadRequiresConversion = true;
+            break;
+
         case angle::FormatID::R10G10B10A2_SINT:
             internalFormat           = GL_RGB10_A2_SINT_ANGLEX;
             imageFormatID            = angle::FormatID::R10G10B10A2_SINT;
