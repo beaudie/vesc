@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4ca1b70d_c1b9860b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-30T18:36:47Z",
+      "side": 1,
+      "message": "This sentence is confusing. Maybe just kill \"instead module\" so that it\u0027s \"Use bit operation to compute memory alignment round up.\"",
+      "revId": "5c178f03eb9760630a5552ac76ff6dc3c4dda956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e14881bc_f721c3e8",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-07-30T18:36:47Z",
+      "side": 1,
+      "message": "\"must to be\"-\u003e\"must be\"",
+      "revId": "5c178f03eb9760630a5552ac76ff6dc3c4dda956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
