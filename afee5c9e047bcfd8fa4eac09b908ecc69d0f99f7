@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "385889fd_d5a050f9",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 1690,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-30T22:09:11Z",
+      "side": 1,
+      "message": "It looks like the for-loop is generating the following for lib:\nlibGLESv2\nlibGLESv2_no_capture\nlibGLESv2_with_capture\n\nAre these two lines repeating what the for-loop is already doing, and are they still necessary?",
+      "range": {
+        "startLine": 1687,
+        "startChar": 0,
+        "endLine": 1690,
+        "endChar": 59
+      },
+      "revId": "afee5c9e047bcfd8fa4eac09b908ecc69d0f99f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc377242_8a3dc99d",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-30T22:09:11Z",
+      "side": 1,
+      "message": "Can you do something like this in FrameCapture.h also, to reduce how much memory is allocated for mFrameCapture(new angle::FrameCapture)?   It looks like the member variables are only used in the functions you\u0027re #if\u0027ing out (and can be marked private to help guarantee that in the future).",
+      "revId": "afee5c9e047bcfd8fa4eac09b908ecc69d0f99f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85c8c80e_9493b18a",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-30T22:09:11Z",
+      "side": 1,
+      "message": "May be a silly question, but what units does this \u002732\u0027 represent?   Is this the max number of bytes that could be required to represent each pixel (4 channels * 8 Bytes)?",
+      "range": {
+        "startLine": 607,
+        "startChar": 45,
+        "endLine": 607,
+        "endChar": 47
+      },
+      "revId": "afee5c9e047bcfd8fa4eac09b908ecc69d0f99f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
