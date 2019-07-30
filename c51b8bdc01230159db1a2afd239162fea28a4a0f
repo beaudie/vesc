@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "f646888b_74c88518",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4974,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-30T20:48:07Z",
+      "side": 1,
+      "message": "I dug around in the GLES spec a bit. The viewport bounds limits are introduced in ES 3.1. I like what you have coded now because it hides the clamping from the front-end.\n\nIt\u0027s a good piece of evidence that our lives would be simplified by returning the highest valid context version. Because then we wouldn\u0027t have to worry about behaviour in \"earlier\" spec revisions where limits don\u0027t exist.",
+      "parentUuid": "8d7fabfb_952e09cc",
+      "range": {
+        "startLine": 4967,
+        "startChar": 0,
+        "endLine": 4974,
+        "endChar": 68
+      },
+      "revId": "c51b8bdc01230159db1a2afd239162fea28a4a0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "72038032_6309cac9",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 13
