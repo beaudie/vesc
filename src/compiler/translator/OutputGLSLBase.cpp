@@ -1047,9 +1047,18 @@ bool TOutputGLSLBase::visitDeclaration(Visit visit, TIntermDeclaration *node)
         TIntermTyped *variable          = sequence.front()->getAsTyped();
         writeLayoutQualifier(variable);
         TIntermSymbol *symbolNode = variable->getAsSymbolNode();
-        writeVariableType(variable->getType(), symbolNode ? &symbolNode->variable() : nullptr);
-        if (variable->getAsSymbolNode() == nullptr ||
-            variable->getAsSymbolNode()->variable().symbolType() != SymbolType::Empty)
+        if (symbolNode == nullptr)
+        {
+            // The only alternative is a decalration with an initializer.  There would be a binary
+            // node with EOpAssign in that case.
+            TIntermBinary *initNode = variable->getAsBinaryNode();
+            ASSERT(initNode);
+            variable   = initNode->getLeft();
+            symbolNode = variable->getAsSymbolNode();
+            ASSERT(symbolNode);
+        }
+        writeVariableType(variable->getType(), &symbolNode->variable());
+        if (symbolNode->variable().symbolType() != SymbolType::Empty)
         {
             out << " ";
         }
