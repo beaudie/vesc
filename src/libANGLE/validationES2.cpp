@@ -643,6 +643,7 @@ bool ValidateES2CopyTexImageParameters(Context *context,
                 }
                 break;
             case GL_RGB:
+            case GL_RGB8:
                 if (colorbufferFormat != GL_RGB565 && colorbufferFormat != GL_RGB8_OES &&
                     colorbufferFormat != GL_RGBA4 && colorbufferFormat != GL_RGB5_A1 &&
                     colorbufferFormat != GL_BGRA8_EXT && colorbufferFormat != GL_RGBA8_OES &&
@@ -654,6 +655,7 @@ bool ValidateES2CopyTexImageParameters(Context *context,
                 break;
             case GL_LUMINANCE_ALPHA:
             case GL_RGBA:
+            case GL_RGBA8:
                 if (colorbufferFormat != GL_RGBA4 && colorbufferFormat != GL_RGB5_A1 &&
                     colorbufferFormat != GL_BGRA8_EXT && colorbufferFormat != GL_RGBA8_OES &&
                     colorbufferFormat != GL_BGR5_A1_ANGLEX)
@@ -1681,6 +1683,39 @@ bool ValidateES2TexImageParametersBase(Context *context,
                     if (!context->getExtensions().sRGB)
                     {
                         context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
+                        return false;
+                    }
+                    break;
+
+                case GL_RGB8:
+                    if (!context->getExtensions().rgb8rgba8)
+                    {
+                        context->validationError(GL_INVALID_ENUM, kInvalidFormat);
+                        return false;
+                    }
+
+                    nonEqualFormatsAllowed = true;
+
+                    if (format != GL_RGB)
+                    {
+                        context->validationError(GL_INVALID_OPERATION, kMismatchedTypeAndFormat);
+                        return false;
+                    }
+                    break;
+
+                case GL_RGBA8:
+
+                    if (!context->getExtensions().rgb8rgba8)
+                    {
+                        context->validationError(GL_INVALID_ENUM, kInvalidFormat);
+                        return false;
+                    }
+
+                    nonEqualFormatsAllowed = true;
+
+                    if (format != GL_RGBA)
+                    {
+                        context->validationError(GL_INVALID_OPERATION, kMismatchedTypeAndFormat);
                         return false;
                     }
                     break;
