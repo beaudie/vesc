@@ -60,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "6ece4fd7_87935412",
+        "filename": "src/common/PoolAlloc.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-30T16:32:36Z",
+      "side": 1,
+      "message": "This one is a little different. The alignment is set right here in this constructor. Howerver, the current logic does not require the input alignment to be power of two, because it rounds up the input alignment to its closest power of two value.  (see gl::ceilPow2 couple of lines above), so I think maybe this ASSERT can be safely removed?",
+      "parentUuid": "70d5cfb2_c5d80d31",
+      "revId": "269a8d35104fd38bd1d861a8d1a993418e94b123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cefd98f5_47b15fab",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 4
@@ -95,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "2875d32b_f8184268",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-30T16:32:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44f7e1f0_9b80f07e",
+      "revId": "269a8d35104fd38bd1d861a8d1a993418e94b123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "715e9e4e_d47c0c68",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -127,6 +163,24 @@
       "revId": "269a8d35104fd38bd1d861a8d1a993418e94b123",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ac2952c_70f66184",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-30T16:32:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c5bc7d0_b94afc3b",
+      "revId": "269a8d35104fd38bd1d861a8d1a993418e94b123",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
