@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "80db0066_e7b44cdb",
+        "filename": "scripts/gen_gl_enums_table.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-30T23:03:51Z",
+      "side": 1,
+      "message": "Can you implement these a switches instead of std::map? We aren\u0027t allowed to use non-trivial static initializers. We can use constexpr data but we can\u0027t initialize std::map with constexpr.\n\nThe query would become a function instead of a std::map index.",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 3
+      },
+      "revId": "5b693e93192ce97125c49166b7ec7b4ba3792063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb195b6f_e8352582",
+        "filename": "scripts/gen_gl_enums_table.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-30T23:03:51Z",
+      "side": 1,
+      "message": "same comment here.",
+      "range": {
+        "startLine": 45,
+        "startChar": 11,
+        "endLine": 45,
+        "endChar": 14
+      },
+      "revId": "5b693e93192ce97125c49166b7ec7b4ba3792063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24224e82_61fc8635",
+        "filename": "scripts/gen_gl_enums_table.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-30T23:03:51Z",
+      "side": 1,
+      "message": "maybe it would be better to use a method like \"enum value \u003c X\" ?\n\nYou could also include primitive types (POINTS, TRIANGLES, LINES, etc) as we have a specialized output for those.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 17
+      },
+      "revId": "5b693e93192ce97125c49166b7ec7b4ba3792063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baa8ed95_6b5c2d59",
+        "filename": "scripts/gen_gl_enums_table.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-30T23:03:51Z",
+      "side": 1,
+      "message": "can you call registry_xml.script_relative instead? or does that not work for some reason?",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 59
+      },
+      "revId": "5b693e93192ce97125c49166b7ec7b4ba3792063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aea27c89_0d6cf940",
+        "filename": "scripts/gen_gl_enums_table.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-30T23:03:51Z",
+      "side": 1,
+      "message": "for non-bitfields, use the shortest name. we don\u0027t need to store all names.\n\nfor bitfields, can we instead store each type of bitfield differently? and use the context of the function call to determine which bitfield names we need? maybe we could split this into a second patch as it\u0027s a bit more complex.",
+      "range": {
+        "startLine": 68,
+        "startChar": 32,
+        "endLine": 68,
+        "endChar": 37
+      },
+      "revId": "5b693e93192ce97125c49166b7ec7b4ba3792063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0266f046_e817a184",
+        "filename": "scripts/gen_gl_enums_table.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-30T23:03:51Z",
+      "side": 1,
+      "message": "it might be easier to store different lists for bitmasks and normal enums. at that point enums are just a dict from \"enum\" -\u003e \"string\" and we don\u0027t need a custom type.",
+      "range": {
+        "startLine": 89,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 19
+      },
+      "revId": "5b693e93192ce97125c49166b7ec7b4ba3792063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fbc57f9_12afdf4b",
+        "filename": "src/libANGLE/gl_enums_table_autogen.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-30T23:03:51Z",
+      "side": 1,
+      "message": "can you call these gl_enum_utils_autogen.h/cpp? You should also generate a cpp file as well to hide the implementation.",
+      "revId": "5b693e93192ce97125c49166b7ec7b4ba3792063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6991d80a_268ca08f",
+        "filename": "src/libGLESv2.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 931,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-30T23:03:51Z",
+      "side": 1,
+      "message": "should probably go in the block above with the rest of the headers.",
+      "range": {
+        "startLine": 931,
+        "startChar": 16,
+        "endLine": 931,
+        "endChar": 38
+      },
+      "revId": "5b693e93192ce97125c49166b7ec7b4ba3792063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
