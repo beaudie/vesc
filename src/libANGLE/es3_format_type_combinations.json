@@ -74,6 +74,8 @@
         [ "GL_RGBA",               "GL_RGBA",            "GL_UNSIGNED_BYTE" ],
         [ "GL_RGBA",               "GL_RGBA",            "GL_UNSIGNED_SHORT_4_4_4_4" ],
         [ "GL_RGBA",               "GL_RGBA",            "GL_UNSIGNED_SHORT_5_5_5_1" ],
+        [ "GL_RGBA",               "GL_RGBA",            "GL_UNSIGNED_INT_2_10_10_10_REV" ],
+        [ "GL_RGB",                "GL_RGB",             "GL_UNSIGNED_INT_2_10_10_10_REV" ],
         [ "GL_RGB",                "GL_RGB",             "GL_UNSIGNED_BYTE" ],
         [ "GL_RGB",                "GL_RGB",             "GL_UNSIGNED_SHORT_5_6_5" ],
         [ "GL_LUMINANCE_ALPHA",    "GL_LUMINANCE_ALPHA", "GL_UNSIGNED_BYTE" ],
