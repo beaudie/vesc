@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "788cff33_2b062533",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4974,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-30T18:59:25Z",
+      "side": 1,
+      "message": "Are you sure this is spec? I think if the user queries the size of the viewport it\u0027ll give incorrect results after this. Not sure if this is covered by a test. Might be a good idea to add one.\n\nI think the problem you\u0027re solving with this should be solved in the Vulkan back-end.",
+      "range": {
+        "startLine": 4967,
+        "startChar": 0,
+        "endLine": 4974,
+        "endChar": 68
+      },
+      "revId": "c51b8bdc01230159db1a2afd239162fea28a4a0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72038032_6309cac9",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-30T18:59:25Z",
+      "side": 1,
+      "message": "Can you clean this up?\n\nconst FramebufferAttachment *first \u003d getFirstNonNull();\nif (first)\n{\n   return first-\u003egetSize;\n}\nreturn Extents(getDefaultWidth(), ....);\n\nThat\u0027s what I meant by my prior suggestion.",
+      "range": {
+        "startLine": 612,
+        "startChar": 4,
+        "endLine": 615,
+        "endChar": 19
+      },
+      "revId": "c51b8bdc01230159db1a2afd239162fea28a4a0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6b3096c_bf3345ba",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-30T18:59:25Z",
+      "side": 1,
+      "message": "There is a prior bug here that this fixes. If the user binds a different size framebuffer attachment I\u0027m not sure if we were correctly updating the scissor in ContextVk::syncState. Seems like ContextVk::updateScissor would never get called. We could end up with a too-small scissor clipping the wrong framebuffer size. We should file a bug to make a test for that.\n\nAlso this doesn\u0027t currently invalidate the pipeline. A test that just changes framebuffer default width/height between draws might produce incorrect rendering.\n\nUltimately we might want to make viewport and scissor dirty bits in ContextVk::DirtyBits.",
+      "range": {
+        "startLine": 1104,
+        "startChar": 0,
+        "endLine": 1106,
+        "endChar": 38
+      },
+      "revId": "c51b8bdc01230159db1a2afd239162fea28a4a0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
