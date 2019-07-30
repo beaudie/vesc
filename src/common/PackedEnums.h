@@ -374,6 +374,39 @@ ANGLE_VALIDATE_PACKED_ENUM(VertexAttribType, Int2101010, GL_INT_2_10_10_10_REV);
 ANGLE_VALIDATE_PACKED_ENUM(VertexAttribType, UnsignedInt2101010, GL_UNSIGNED_INT_2_10_10_10_REV);
 
 std::ostream &operator<<(std::ostream &os, VertexAttribType value);
+
+// Typesafe object handles.
+struct RenderbufferID
+{
+    GLuint value;
+};
+
+template <typename EnumT, typename FromT>
+EnumT FromGL(FromT from);
+
+template <>
+ANGLE_INLINE RenderbufferID FromGL<RenderbufferID>(GLuint renderbuffer)
+{
+    return {renderbuffer};
+}
+
+template <>
+ANGLE_INLINE RenderbufferID *FromGL<RenderbufferID *>(GLuint *renderbuffers)
+{
+    return reinterpret_cast<RenderbufferID *>(renderbuffers);
+}
+
+template <>
+ANGLE_INLINE const RenderbufferID *FromGL<const RenderbufferID *>(const GLuint *renderbuffers)
+{
+    return reinterpret_cast<const RenderbufferID *>(renderbuffers);
+}
+
+template <typename EnumT, typename FromT>
+EnumT FromGL(FromT from)
+{
+    return FromGLenum<EnumT>(from);
+}
 }  // namespace gl
 
 namespace egl
