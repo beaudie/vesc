@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "991e363e_ecc25170",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-30T22:47:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ca1b70d_c1b9860b",
+      "revId": "5c178f03eb9760630a5552ac76ff6dc3c4dda956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e14881bc_f721c3e8",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 6
@@ -33,6 +51,24 @@
       "revId": "5c178f03eb9760630a5552ac76ff6dc3c4dda956",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ff9bdce_0dc3c442",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-07-30T22:47:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e14881bc_f721c3e8",
+      "revId": "5c178f03eb9760630a5552ac76ff6dc3c4dda956",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
