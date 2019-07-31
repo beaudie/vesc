@@ -1474,6 +1474,7 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
     VkDeviceSize stagingOffset = 0;
     size_t allocationSize      = readFormat->pixelBytes * area.width * area.height;
 
+    mReadPixelBuffer.updateAlignment(renderer, readFormat->pixelBytes);
     ANGLE_TRY(mReadPixelBuffer.allocate(contextVk, allocationSize, &readPixelBuffer, &bufferHandle,
                                         &stagingOffset, nullptr));
 
