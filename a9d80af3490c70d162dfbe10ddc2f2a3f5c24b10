@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "08473868_d0d81cc2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2382,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-31T21:13:15Z",
+      "side": 1,
+      "message": "so we are intentionally replicating a substantial chunk of the code from `stageSubresourceUpdate(...)`?",
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5670c6a3_1463e1dc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2483,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-07-31T21:13:15Z",
+      "side": 1,
+      "message": "wrap this all in a func `canUseGPUForTransfer(gl::InternalFormat, vk::Format)` since it may grow or shrink over time?\n\nwe may pass in usage/layout flags as well, in the future",
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
