@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "e1876ab6_df3436e5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-31T19:03:18Z",
+      "side": 1,
+      "message": "I\u0027ve added the various checking that the Vulkan spec defines.   Let me know what you think.",
+      "parentUuid": "2e3a8a85_11840fb5",
+      "revId": "0f71be90eb25092f9865690d6daf71bed13d65b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "69cc1ddc_ffa21d91",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 14
