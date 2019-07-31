@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f714ad92_b59d11a7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2382,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-07-31T21:21:14Z",
+      "side": 1,
+      "message": "That wasn\u0027t how I started out, but it\u0027s certainly how it ended up.  I\u0027d like Jamie\u0027s/Shabi\u0027s direction on whether to keep this separate for now, or to refactor this.",
+      "parentUuid": "08473868_d0d81cc2",
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5670c6a3_1463e1dc",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2019-07-31T21:13:15Z",
       "side": 1,
       "message": "wrap this all in a func `canUseGPUForTransfer(gl::InternalFormat, vk::Format)` since it may grow or shrink over time?\n\nwe may pass in usage/layout flags as well, in the future",
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9837449_9dd5a85a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2483,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-07-31T21:21:14Z",
+      "side": 1,
+      "message": "Yes.  I quickly hacked this in order to get the tests passing on all OSs/drivers in the test farm.  Since everything passed, I think it\u0027s time for a function:-).",
+      "parentUuid": "5670c6a3_1463e1dc",
       "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
