@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b0720ffe_00328655",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1418,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-31T17:46:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8567d8b6_bd35b822",
+      "revId": "0f71be90eb25092f9865690d6daf71bed13d65b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb22ab66_c704e8b7",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 14
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "2e3a8a85_11840fb5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1426,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-31T17:46:30Z",
+      "side": 1,
+      "message": "We\u0027re passing all of the tests, so we don\u0027t \u0027need\u0027 to from that perspective.\n\nHowever, we can still do so if it\u0027s the right thing to do.   What are the rules and how do we correct the values?\n- X/Y must be \u003e 0, set to 0 otherwise?\n- X/Y must be \u003c width/height, clamp to width/height otherwise?\n\nDoes it matter if we end up with a 0 width/height viewport?",
+      "parentUuid": "bb22ab66_c704e8b7",
+      "revId": "0f71be90eb25092f9865690d6daf71bed13d65b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "69cc1ddc_ffa21d91",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 14
@@ -47,6 +83,24 @@
       "writtenOn": "2019-07-31T16:56:09Z",
       "side": 1,
       "message": "How is this related to the rest of the changes?",
+      "revId": "0f71be90eb25092f9865690d6daf71bed13d65b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ff2c458_5976072e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-31T17:46:30Z",
+      "side": 1,
+      "message": "This value needs to be set to something useful so the dEQP test\u0027s shaders can compile correctly and allow these tests to pass.   Otherwise, every test fails with:\n\nFragment shader (compile failed)\nInfo log:\nERROR: 0:2: \u0027location\u0027 : Uniform location out of range",
+      "parentUuid": "69cc1ddc_ffa21d91",
       "revId": "0f71be90eb25092f9865690d6daf71bed13d65b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
