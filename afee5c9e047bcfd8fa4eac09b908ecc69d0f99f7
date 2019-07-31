@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "886bbca2_b829ae69",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 1690,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-31T00:08:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "385889fd_d5a050f9",
+      "range": {
+        "startLine": 1687,
+        "startChar": 0,
+        "endLine": 1690,
+        "endChar": 59
+      },
+      "revId": "afee5c9e047bcfd8fa4eac09b908ecc69d0f99f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dc377242_8a3dc99d",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 15
@@ -39,6 +63,24 @@
       "revId": "afee5c9e047bcfd8fa4eac09b908ecc69d0f99f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdedb521_67584a0b",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-31T00:08:57Z",
+      "side": 1,
+      "message": "It\u0027s not that easy. Because the header is exposed to the main part of libANGLE I\u0027d need to separate out compilation into two libANGLE variants. And that would increase the number of objects needed for compilation. As far as memory use goes it\u0027s unfortunate we waste a few bytes but it\u0027ll just be a drop in the bucket.\n\nI went through a few design iterations on this.",
+      "parentUuid": "dc377242_8a3dc99d",
+      "revId": "afee5c9e047bcfd8fa4eac09b908ecc69d0f99f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -62,6 +104,30 @@
       "revId": "afee5c9e047bcfd8fa4eac09b908ecc69d0f99f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c328208_0c86bc6c",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-07-31T00:08:57Z",
+      "side": 1,
+      "message": "Bytes. You have it correct. I renamed the value to \"readBufferSizeBytes\"",
+      "parentUuid": "85c8c80e_9493b18a",
+      "range": {
+        "startLine": 607,
+        "startChar": 45,
+        "endLine": 607,
+        "endChar": 47
+      },
+      "revId": "afee5c9e047bcfd8fa4eac09b908ecc69d0f99f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
