@@ -316,7 +316,7 @@ if (is_win || is_linux || is_android || is_mac || is_fuchsia) {
       use_native_activity = true
     }
 
-    if (is_win || is_linux) {
+    if (is_win || is_linux || is_fuchsia) {
       data_deps += [ "${angle_root}/third_party/glmark2:glmark2_angle" ]
     }
     if (is_win && target_cpu != "arm64") {

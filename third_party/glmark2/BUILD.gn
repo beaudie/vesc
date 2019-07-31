@@ -11,6 +11,149 @@ glmark2_glad_common_sources = [
   "src/src/glad/src/egl.c",
 ]
 
+copy("data") {
+  sources = [
+    "src/data/models/asteroid-high.3ds",
+    "src/data/models/asteroid-low.3ds",
+    "src/data/models/bunny.obj",
+    "src/data/models/cat.3ds",
+    "src/data/models/cube.3ds",
+    "src/data/models/horse.3ds",
+    "src/data/models/jellyfish.jobj",
+    "src/data/shaders/README.shaders",
+    "src/data/shaders/buffer-wireframe.frag",
+    "src/data/shaders/buffer-wireframe.vert",
+    "src/data/shaders/bump-height.frag",
+    "src/data/shaders/bump-height.vert",
+    "src/data/shaders/bump-normals-tangent.frag",
+    "src/data/shaders/bump-normals-tangent.vert",
+    "src/data/shaders/bump-normals.frag",
+    "src/data/shaders/bump-normals.vert",
+    "src/data/shaders/bump-poly.frag",
+    "src/data/shaders/bump-poly.vert",
+    "src/data/shaders/conditionals-step-conditional.all",
+    "src/data/shaders/conditionals-step-simple.all",
+    "src/data/shaders/conditionals.frag",
+    "src/data/shaders/conditionals.vert",
+    "src/data/shaders/depth.frag",
+    "src/data/shaders/depth.vert",
+    "src/data/shaders/desktop-blur.frag",
+    "src/data/shaders/desktop.frag",
+    "src/data/shaders/desktop.vert",
+    "src/data/shaders/effect-2d-convolution.frag",
+    "src/data/shaders/effect-2d.vert",
+    "src/data/shaders/function-call.all",
+    "src/data/shaders/function-step-low.all",
+    "src/data/shaders/function-step-medium.all",
+    "src/data/shaders/function.frag",
+    "src/data/shaders/function.vert",
+    "src/data/shaders/gradient.frag",
+    "src/data/shaders/gradient.vert",
+    "src/data/shaders/ideas-lamp-lit.frag",
+    "src/data/shaders/ideas-lamp-lit.vert",
+    "src/data/shaders/ideas-lamp-unlit.frag",
+    "src/data/shaders/ideas-lamp-unlit.vert",
+    "src/data/shaders/ideas-logo-flat.frag",
+    "src/data/shaders/ideas-logo-flat.vert",
+    "src/data/shaders/ideas-logo-shadow.frag",
+    "src/data/shaders/ideas-logo-shadow.vert",
+    "src/data/shaders/ideas-logo.frag",
+    "src/data/shaders/ideas-logo.vert",
+    "src/data/shaders/ideas-paper.frag",
+    "src/data/shaders/ideas-paper.vert",
+    "src/data/shaders/ideas-table.frag",
+    "src/data/shaders/ideas-table.vert",
+    "src/data/shaders/ideas-text.frag",
+    "src/data/shaders/ideas-text.vert",
+    "src/data/shaders/ideas-under-table.frag",
+    "src/data/shaders/ideas-under-table.vert",
+    "src/data/shaders/jellyfish.frag",
+    "src/data/shaders/jellyfish.vert",
+    "src/data/shaders/light-advanced.frag",
+    "src/data/shaders/light-advanced.vert",
+    "src/data/shaders/light-basic-tex-bilinear.frag",
+    "src/data/shaders/light-basic-tex.frag",
+    "src/data/shaders/light-basic-texgen.vert",
+    "src/data/shaders/light-basic.frag",
+    "src/data/shaders/light-basic.vert",
+    "src/data/shaders/light-cel.frag",
+    "src/data/shaders/light-phong.frag",
+    "src/data/shaders/light-phong.vert",
+    "src/data/shaders/light-refract.frag",
+    "src/data/shaders/light-refract.vert",
+    "src/data/shaders/loop-step-loop.all",
+    "src/data/shaders/loop-step-simple.all",
+    "src/data/shaders/loop.frag",
+    "src/data/shaders/loop.vert",
+    "src/data/shaders/pulsar-light.vert",
+    "src/data/shaders/pulsar.vert",
+    "src/data/shaders/shadow.frag",
+    "src/data/shaders/shadow.vert",
+    "src/data/shaders/terrain-blur.frag",
+    "src/data/shaders/terrain-luminance.frag",
+    "src/data/shaders/terrain-noise.frag",
+    "src/data/shaders/terrain-normalmap.frag",
+    "src/data/shaders/terrain-overlay.frag",
+    "src/data/shaders/terrain-texture.vert",
+    "src/data/shaders/terrain.frag",
+    "src/data/shaders/terrain.vert",
+    "src/data/shaders/text-renderer.frag",
+    "src/data/shaders/text-renderer.vert",
+    "src/data/textures/asteroid-height-map.png",
+    "src/data/textures/asteroid-normal-map-tangent.png",
+    "src/data/textures/asteroid-normal-map.png",
+    "src/data/textures/crate-base.png",
+    "src/data/textures/desktop-shadow-corner.png",
+    "src/data/textures/desktop-shadow.png",
+    "src/data/textures/desktop-window.png",
+    "src/data/textures/effect-2d.png",
+    "src/data/textures/glyph-atlas.png",
+    "src/data/textures/jellyfish-caustics-01.png",
+    "src/data/textures/jellyfish-caustics-02.png",
+    "src/data/textures/jellyfish-caustics-03.png",
+    "src/data/textures/jellyfish-caustics-04.png",
+    "src/data/textures/jellyfish-caustics-05.png",
+    "src/data/textures/jellyfish-caustics-06.png",
+    "src/data/textures/jellyfish-caustics-07.png",
+    "src/data/textures/jellyfish-caustics-08.png",
+    "src/data/textures/jellyfish-caustics-09.png",
+    "src/data/textures/jellyfish-caustics-10.png",
+    "src/data/textures/jellyfish-caustics-11.png",
+    "src/data/textures/jellyfish-caustics-12.png",
+    "src/data/textures/jellyfish-caustics-13.png",
+    "src/data/textures/jellyfish-caustics-14.png",
+    "src/data/textures/jellyfish-caustics-15.png",
+    "src/data/textures/jellyfish-caustics-16.png",
+    "src/data/textures/jellyfish-caustics-17.png",
+    "src/data/textures/jellyfish-caustics-18.png",
+    "src/data/textures/jellyfish-caustics-19.png",
+    "src/data/textures/jellyfish-caustics-20.png",
+    "src/data/textures/jellyfish-caustics-21.png",
+    "src/data/textures/jellyfish-caustics-22.png",
+    "src/data/textures/jellyfish-caustics-23.png",
+    "src/data/textures/jellyfish-caustics-24.png",
+    "src/data/textures/jellyfish-caustics-25.png",
+    "src/data/textures/jellyfish-caustics-26.png",
+    "src/data/textures/jellyfish-caustics-27.png",
+    "src/data/textures/jellyfish-caustics-28.png",
+    "src/data/textures/jellyfish-caustics-29.png",
+    "src/data/textures/jellyfish-caustics-30.png",
+    "src/data/textures/jellyfish-caustics-31.png",
+    "src/data/textures/jellyfish-caustics-32.png",
+    "src/data/textures/jellyfish256.png",
+    "src/data/textures/nasa1.png",
+    "src/data/textures/nasa2.png",
+    "src/data/textures/nasa3.png",
+    "src/data/textures/terrain-backgrounddetailed6.jpg",
+    "src/data/textures/terrain-grasslight-512-nm.jpg",
+    "src/data/textures/terrain-grasslight-512.jpg",
+  ]
+
+  outputs = [
+    "{{source_gen_dir}}/{{source_file_part}}",
+  ]
+}
+
 config("glmark2_glad_config") {
   include_dirs = [ "src/src/glad/include" ]
 }
@@ -32,7 +175,12 @@ source_set("glmark2_glad_gl") {
 }
 
 glmark_data_path = "${angle_root}/third_party/glmark2/src/data"
-raw_glmark_data_path = rebase_path(glmark_data_path, root_build_dir)
+
+if (is_fuchsia) {
+  raw_glmark_data_path = "pkg/" + rebase_path(glmark_data_path, "//")
+} else {
+  raw_glmark_data_path = rebase_path(glmark_data_path, root_build_dir)
+}
 
 config("glmark2_common_config") {
   defines = [ "GLMARK_DATA_PATH=\"${raw_glmark_data_path}\"" ]
@@ -309,6 +457,10 @@ template("glmark2_common") {
       "${angle_libpng_dir}:libpng",
       "${angle_root}/third_party:jpeg",
     ]
+
+    data_deps = [
+      ":data",
+    ]
   }
 }
 
@@ -360,6 +512,23 @@ template("glmark2_exe") {
         "src/src/native-state-x11.h",
       ]
       libs = [ "X11" ]
+    }
+    if (is_fuchsia) {
+      defines += [ "GLMARK2_USE_FUCHSIA" ]
+      sources += [
+        "src/src/native-state-fuchsia.cpp",
+        "src/src/native-state-fuchsia.h",
+      ]
+      deps += [
+        "$angle_root/src/common/fuchsia_egl",
+        "//third_party/fuchsia-sdk/sdk:async_loop_cpp",
+        "//third_party/fuchsia-sdk/sdk:fdio",
+        "//third_party/fuchsia-sdk/sdk:images",
+        "//third_party/fuchsia-sdk/sdk:scenic_cpp",
+        "//third_party/fuchsia-sdk/sdk:ui_policy",
+        "//third_party/fuchsia-sdk/sdk:ui_scenic",
+        "//third_party/fuchsia-sdk/sdk:ui_views",
+      ]
     }
   }
 }
@@ -414,5 +583,20 @@ if (is_win && target_cpu != "arm64") {
 
     libs = [ "opengl32.lib" ]
     defines = [ "GLMARK2_USE_WGL" ]
+  }
+}
+
+if (is_fuchsia) {
+  fuchsia_package("glmark2_pkg") {
+    testonly = true
+    binary = ":glmark2_angle"
+    package_name_override = "glmark2"
+    manifest = "//build/config/fuchsia/gfx_tests.cmx"
+  }
+
+  fuchsia_package_runner("glmark2_fuchsia") {
+    testonly = true
+    package = ":glmark2_pkg"
+    package_name_override = "glmark2"
   }
 }
