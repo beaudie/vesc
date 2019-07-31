@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33fa2ee1_ab6ebd4b",
+        "filename": "src/libGL/entry_points_gl_1_0_autogen.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1316,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-07-31T21:52:56Z",
+      "side": 1,
+      "message": "Should these be moved to the end of the function, so the returnValue is output also?   The obvious drawback is that we could crash before the EVENT() data is output, making it harder to know what was passed in that lead to the crash.\n\nOr is that all part of the changes that are coming next?",
+      "revId": "fa2beca1084aa53896dd5b9aa20a2c060408270f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
