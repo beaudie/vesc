@@ -2380,6 +2380,223 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     return angle::Result::Continue;
 }
 
+angle::Result ImageHelper::stageSubresourceUpdateFromPBO(ContextVk *contextVk,
+                                                         const gl::ImageIndex &index,
+                                                         const gl::Rectangle &sourceArea,  // unused
+                                                         const gl::Offset &dstOffset,
+                                                         const gl::Extents &dstExtent,
+                                                         const gl::InternalFormat &formatInfo,
+                                                         const gl::PixelUnpackState &unpack,
+                                                         GLenum type,
+                                                         const uint8_t *pixels,
+                                                         const vk::Format &vkFormat,
+                                                         gl::Buffer *unpackBuffer)
+{
+    // TODO??: maybe deal with layout change, buffer flush, y-flip, etc??
+
+    GLuint inputRowPitch = 0;
+    ANGLE_VK_CHECK_MATH(contextVk,
+                        formatInfo.computeRowPitch(type, dstExtent.width, unpack.alignment,
+                                                   unpack.rowLength, &inputRowPitch));
+
+    GLuint inputDepthPitch = 0;
+    ANGLE_VK_CHECK_MATH(
+        contextVk, formatInfo.computeDepthPitch(dstExtent.height, unpack.imageHeight, inputRowPitch,
+                                                &inputDepthPitch));
+
+    bool applySkipImages = false;
+
+    GLuint inputSkipBytes = 0;
+    ANGLE_VK_CHECK_MATH(contextVk,
+                        formatInfo.computeSkipBytes(type, inputRowPitch, inputDepthPitch, unpack,
+                                                    applySkipImages, &inputSkipBytes));
+
+    const angle::Format &storageFormat = vkFormat.imageFormat();
+
+    size_t outputRowPitch;
+    size_t outputDepthPitch;
+    size_t stencilAllocationSize = 0;
+    uint32_t bufferRowLength;
+    uint32_t bufferImageHeight;
+    size_t allocationSize;
+
+    if (storageFormat.isBlock)
+    {
+        const gl::InternalFormat &storageFormatInfo = vkFormat.getInternalFormatInfo(type);
+        GLuint rowPitch;
+        GLuint depthPitch;
+        GLuint totalSize;
+
+        ANGLE_VK_CHECK_MATH(contextVk, storageFormatInfo.computeCompressedImageSize(
+                                           gl::Extents(dstExtent.width, 1, 1), &rowPitch));
+        ANGLE_VK_CHECK_MATH(contextVk,
+                            storageFormatInfo.computeCompressedImageSize(
+                                gl::Extents(dstExtent.width, dstExtent.height, 1), &depthPitch));
+
+        ANGLE_VK_CHECK_MATH(contextVk,
+                            storageFormatInfo.computeCompressedImageSize(dstExtent, &totalSize));
+
+        outputRowPitch   = rowPitch;
+        outputDepthPitch = depthPitch;
+
+        angle::CheckedNumeric<uint32_t> checkedRowLength =
+            rx::CheckedRoundUp<uint32_t>(dstExtent.width, storageFormatInfo.compressedBlockWidth);
+        angle::CheckedNumeric<uint32_t> checkedImageHeight =
+            rx::CheckedRoundUp<uint32_t>(dstExtent.height, storageFormatInfo.compressedBlockHeight);
+
+        ANGLE_VK_CHECK_MATH(contextVk, checkedRowLength.IsValid());
+        ANGLE_VK_CHECK_MATH(contextVk, checkedImageHeight.IsValid());
+
+        bufferRowLength   = checkedRowLength.ValueOrDie();
+        bufferImageHeight = checkedImageHeight.ValueOrDie();
+        allocationSize    = totalSize;
+    }
+    else
+    {
+        ASSERT(storageFormat.pixelBytes != 0);
+
+        outputRowPitch   = storageFormat.pixelBytes * dstExtent.width;
+        outputDepthPitch = outputRowPitch * dstExtent.height;
+
+        bufferRowLength   = dstExtent.width;
+        bufferImageHeight = dstExtent.height;
+
+        allocationSize = outputDepthPitch * dstExtent.depth;
+
+        // Note: because the LoadImageFunctionInfo functions are limited to copying a single
+        // component, we have to special case packed depth/stencil use and send the stencil as a
+        // separate chunk.
+        if (storageFormat.depthBits > 0 && storageFormat.stencilBits > 0 &&
+            formatInfo.depthBits > 0 && formatInfo.stencilBits > 0)
+        {
+            // Note: Stencil is always one byte
+            stencilAllocationSize = dstExtent.width * dstExtent.height * dstExtent.depth;
+            allocationSize += stencilAllocationSize;
+        }
+    }
+
+    VkBuffer bufferHandle      = VK_NULL_HANDLE;
+    uint8_t *stagingPointer    = nullptr;
+    VkDeviceSize stagingOffset = 0;
+    BufferVk *unpackBufferVk   = vk::GetImpl(unpackBuffer);
+    const uint8_t *source;
+    bool useGPU = (vkFormat.isNative() && (formatInfo.pixelBytes > 2) &&
+                   !((formatInfo.format == GL_DEPTH_STENCIL) ||
+                     ((formatInfo.format == GL_DEPTH_COMPONENT) && (formatInfo.type == GL_FLOAT))));
+
+    if (useGPU)
+    {
+        // Do not need a staging buffer, but can copy directly to the dst
+        bufferHandle  = (unpackBufferVk->getBuffer()).getBuffer().getHandle();
+        stagingOffset = static_cast<VkDeviceSize>((uint64_t)(pixels));
+        source        = pixels + inputSkipBytes;
+    }
+    else
+    {
+        // Must create a staging buffer to copy/transform the pixels into, using a SW loadFunction
+        ANGLE_TRY(mStagingBuffer.allocate(contextVk, allocationSize, &stagingPointer, &bufferHandle,
+                                          &stagingOffset, nullptr));
+
+        // Must map the PBO in order to read its contents (and then unmap it later)
+        void *mapPtr = nullptr;
+        ANGLE_TRY(unpackBufferVk->mapImpl(contextVk, &mapPtr));
+        source =
+            static_cast<uint8_t *>(mapPtr) + reinterpret_cast<uint64_t>(pixels) + inputSkipBytes;
+
+        LoadImageFunctionInfo loadFunction = vkFormat.textureLoadFunctions(type);
+        loadFunction.loadFunction(dstExtent.width, dstExtent.height, dstExtent.depth, source,
+                                  inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                                  outputDepthPitch);
+    }
+
+    VkBufferImageCopy copy         = {};
+    VkImageAspectFlags aspectFlags = GetFormatAspectFlags(vkFormat.imageFormat());
+
+    copy.bufferOffset      = stagingOffset;
+    copy.bufferRowLength   = bufferRowLength;
+    copy.bufferImageHeight = bufferImageHeight;
+
+    copy.imageSubresource.mipLevel   = index.getLevelIndex();
+    copy.imageSubresource.layerCount = index.getLayerCount();
+
+    gl_vk::GetOffset(dstOffset, &copy.imageOffset);
+    gl_vk::GetExtent(dstExtent, &copy.imageExtent);
+
+    if (gl::IsArrayTextureType(index.getType()))
+    {
+        copy.imageSubresource.baseArrayLayer = dstOffset.z;
+        copy.imageOffset.z                   = 0;
+        copy.imageExtent.depth               = 1;
+    }
+    else
+    {
+        copy.imageSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;
+    }
+
+    if (stencilAllocationSize > 0)
+    {
+        // Note: Stencil is always one byte
+        ASSERT((aspectFlags & VK_IMAGE_ASPECT_STENCIL_BIT) != 0);
+
+        // Skip over depth data.
+        stagingPointer += outputDepthPitch * dstExtent.depth;
+        stagingOffset += outputDepthPitch * dstExtent.depth;
+
+        // recompute pitch for stencil data
+        outputRowPitch   = dstExtent.width;
+        outputDepthPitch = outputRowPitch * dstExtent.height;
+
+        angle::LoadX24S8ToS8(dstExtent.width, dstExtent.height, dstExtent.depth, source,
+                             inputRowPitch, inputDepthPitch, stagingPointer, outputRowPitch,
+                             outputDepthPitch);
+
+        VkBufferImageCopy stencilCopy = {};
+
+        stencilCopy.bufferOffset                    = stagingOffset;
+        stencilCopy.bufferRowLength                 = bufferRowLength;
+        stencilCopy.bufferImageHeight               = bufferImageHeight;
+        stencilCopy.imageSubresource.mipLevel       = copy.imageSubresource.mipLevel;
+        stencilCopy.imageSubresource.baseArrayLayer = copy.imageSubresource.baseArrayLayer;
+        stencilCopy.imageSubresource.layerCount     = copy.imageSubresource.layerCount;
+        stencilCopy.imageOffset                     = copy.imageOffset;
+        stencilCopy.imageExtent                     = copy.imageExtent;
+        stencilCopy.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_STENCIL_BIT;
+        mSubresourceUpdates.emplace_back(bufferHandle, stencilCopy);
+
+        aspectFlags &= ~VK_IMAGE_ASPECT_STENCIL_BIT;
+    }
+
+    if (!useGPU)
+    {
+        // Unmap the PBO now that "source" has been used
+        unpackBufferVk->unmapImpl(contextVk);
+    }
+
+    if (IsMaskFlagSet(aspectFlags, static_cast<VkImageAspectFlags>(VK_IMAGE_ASPECT_STENCIL_BIT |
+                                                                   VK_IMAGE_ASPECT_DEPTH_BIT)))
+    {
+        // We still have both depth and stencil aspect bits set. That means we have a destination
+        // buffer that is packed depth stencil and that the application is only loading one aspect.
+        // Figure out which aspect the user is touching and remove the unused aspect bit.
+        if (formatInfo.stencilBits > 0)
+        {
+            aspectFlags &= ~VK_IMAGE_ASPECT_DEPTH_BIT;
+        }
+        else
+        {
+            aspectFlags &= ~VK_IMAGE_ASPECT_STENCIL_BIT;
+        }
+    }
+
+    if (aspectFlags)
+    {
+        copy.imageSubresource.aspectMask = aspectFlags;
+        mSubresourceUpdates.emplace_back(bufferHandle, copy);
+    }
+
+    return angle::Result::Continue;
+}
+
 void ImageHelper::stageSubresourceUpdateFromImage(vk::ImageHelper *image,
                                                   const gl::ImageIndex &index,
                                                   const gl::Offset &destOffset,
