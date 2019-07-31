@@ -650,9 +650,6 @@
 // SSBO and Image qualifiers:
 3602 VULKAN : dEQP-GLES31.functional.synchronization.in_invocation.ssbo_alias_overwrite = FAIL
 
-// Struct referenced by:
-3596 VULKAN : dEQP-GLES31.functional.program_interface_query.*.referenced_by*struct* = FAIL
-3596 VULKAN : dEQP-GLES31.functional.program_interface_query.*random* = FAIL
 
 // Block name matching failure:
 3459 VULKAN : dEQP-GLES31.functional.shaders.linkage.es31.shader_storage_block.mismatch_with_and_without_instance_name = FAIL
@@ -684,7 +681,7 @@
 
 // Separate shader objects:
 3570 VULKAN : dEQP-GLES31.functional.program_interface_query.*separable_* = FAIL
-3570 VULKAN : dEQP-GLES31.functional.program_interface_query.uniform.random.* = FAIL
+3570 VULKAN : dEQP-GLES31.functional.program_interface_query.*.random.* = FAIL
 
 // Debug:
 3590 VULKAN : dEQP-GLES31.functional.debug.negative_coverage.* = SKIP
