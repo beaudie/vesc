@@ -22,6 +22,30 @@
       "revId": "acd4c8bf33a1be52c069fba189415ca7e3aea71f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "01ec0d97_e161230f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-08-01T17:41:51Z",
+      "side": 1,
+      "message": "I\u0027m happy to add the helper. But is there a reason why we can\u0027t do QueryInteface instead?\n\n[I admit the first time I saw DynamicCastComObject, I thought the function performed a C++ dynamic_cast, which wasn\u0027t true either in the function nor is it what happens internally to DirectX. I\u0027ve always thought the name was misleading since the internal implementation doesn\u0027t have to be a cast.]",
+      "parentUuid": "fef309a9_8ae4de3a",
+      "range": {
+        "startLine": 1248,
+        "startChar": 8,
+        "endLine": 1248,
+        "endChar": 66
+      },
+      "revId": "acd4c8bf33a1be52c069fba189415ca7e3aea71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

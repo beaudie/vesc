@@ -22,6 +22,30 @@
       "revId": "1dbbc7b3e23296acc3892e317b1fe668bcb49585",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77247cfb_53bcc0bf",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-08-01T17:41:51Z",
+      "side": 0,
+      "message": "I removed this a cleanup since GetDesc fills every field of the structure. I\u0027ll add it back.",
+      "parentUuid": "5d451e35_1985a568",
+      "range": {
+        "startLine": 1262,
+        "startChar": 32,
+        "endLine": 1262,
+        "endChar": 35
+      },
+      "revId": "1dbbc7b3e23296acc3892e317b1fe668bcb49585",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
