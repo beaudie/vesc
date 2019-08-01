@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "06501d5e_c02870d8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-01T17:03:16Z",
+      "side": 1,
+      "message": "Hmm.  This is for glTexImage*, and so mImage-\u003evalid() typically returns false.\n\nA benefit of copying the top part of stageSubresourceUpdate() into stageSubresourceUpdateFromPBO() was so that I could do a \"GPU path\" for cheap and still get the pixel-unpack functionality.  I see your points about not wanting to do a GPU path in that function (at least not the way Mohan and I did it).\n\nI\u0027m leaning towards landing the SW-only path now, and deal with the GPU path with a seperate commit.  We\u0027d get 3.0 compliance, and can make sure we don\u0027t lose when adding any GPU path (which is what I did before).  Thoughts?",
+      "parentUuid": "2cd39191_6d77fd2b",
+      "range": {
+        "startLine": 244,
+        "startChar": 0,
+        "endLine": 251,
+        "endChar": 32
+      },
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "08473868_d0d81cc2",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -101,6 +125,30 @@
     },
     {
       "key": {
+        "uuid": "885b2f36_ae26f9a1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2385,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-01T17:03:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b16a5149_a20163d6",
+      "range": {
+        "startLine": 2385,
+        "startChar": 0,
+        "endLine": 2385,
+        "endChar": 100
+      },
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9f90fe2d_8938577c",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -115,6 +163,24 @@
       "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "047c2df1_9cd2bc15",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2394,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-01T17:03:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f90fe2d_8938577c",
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -194,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "c0e59162_39525b62",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2487,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-01T17:03:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1b1c44e1_d7b61204",
+      "range": {
+        "startLine": 2487,
+        "startChar": 8,
+        "endLine": 2487,
+        "endChar": 14
+      },
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bece68ad_3cefd137",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -214,6 +304,30 @@
       "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2aa1ed85_f9b845ac",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2490,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-01T17:03:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bece68ad_3cefd137",
+      "range": {
+        "startLine": 2490,
+        "startChar": 8,
+        "endLine": 2490,
+        "endChar": 78
+      },
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
