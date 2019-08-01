@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "1842fe03_038e17bd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2158,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-01T20:14:35Z",
+      "side": 1,
+      "message": "Yup, you\u0027re right, did it backwards in my head.",
+      "parentUuid": "a05f951f_c4460499",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "57577d2f_29395c75",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -116,6 +134,24 @@
       "revId": "229721744874df433837e26d435417578974850a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9eda0459_bef3aab5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2182,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-01T20:14:35Z",
+      "side": 1,
+      "message": "I\u0027m not sure all of those changes need to be done, versus just doing a memset() before the start of the loop:\n\n    memset(offsetsOut, 0, offsetsSize);\n    for (uint32_t bufferIndex \u003d 0; bufferIndex \u003c atomicCounterBufferCount; ++bufferIndex)\n    {\n\nThat doesn\u0027t avoid the extra overhead part though, instead it trades some extra CPU to guarantee the data is in a state you expect and remove that dependency.   This is all internal to ANGLE though, so it should be safe to rely on the initialization zeroing things out for us and the ASSERT() catching if we break that assumption.",
+      "parentUuid": "0ee65551_ef5676c2",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -221,6 +257,24 @@
       "revId": "229721744874df433837e26d435417578974850a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cae6dfa1_e5cb9cec",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-01T20:14:35Z",
+      "side": 1,
+      "message": "Ah, ok, I was misunderstanding what \u0027offsetAlignment\u0027 meant here.   Maybe something like \u0027requiredOffsetAlignment\u0027 based on your description of \"Vulkan required alignment for the offset\".",
+      "parentUuid": "e49aa714_473d910a",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
