@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e878726_8e2681e2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T21:55:32Z",
+      "side": 1,
+      "message": "nit: technically \u0027dest\u0027 not \u0027source\u0027",
+      "range": {
+        "startLine": 1510,
+        "startChar": 17,
+        "endLine": 1510,
+        "endChar": 24
+      },
+      "revId": "3f95f9d8b09ce5eab6492b3072cf1eea4a7b6438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ff7145d_b37074e1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T21:55:32Z",
+      "side": 1,
+      "message": "nit: you can use ptrdiff_t here to specifically represent a pointer offset",
+      "range": {
+        "startLine": 1510,
+        "startChar": 76,
+        "endLine": 1510,
+        "endChar": 84
+      },
+      "revId": "3f95f9d8b09ce5eab6492b3072cf1eea4a7b6438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "395fa75d_0f1d6acf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2268,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T21:55:32Z",
+      "side": 1,
+      "message": "same comment about ptrdiff_t here",
+      "range": {
+        "startLine": 2268,
+        "startChar": 78,
+        "endLine": 2268,
+        "endChar": 86
+      },
+      "revId": "3f95f9d8b09ce5eab6492b3072cf1eea4a7b6438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f917fd5_0db01860",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2268,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T21:55:32Z",
+      "side": 1,
+      "message": "nit: const uint8_t *",
+      "range": {
+        "startLine": 2268,
+        "startChar": 40,
+        "endLine": 2268,
+        "endChar": 48
+      },
+      "revId": "3f95f9d8b09ce5eab6492b3072cf1eea4a7b6438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7f0b268_e3d13fc4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T21:55:32Z",
+      "side": 1,
+      "message": "it would be nice if you could forego adding an ImageHelper function and just move the implementation here into TextureVk. To keep ImageHelper a bit simpler. Otherwise code LGTM",
+      "range": {
+        "startLine": 2253,
+        "startChar": 0,
+        "endLine": 2276,
+        "endChar": 1
+      },
+      "revId": "3f95f9d8b09ce5eab6492b3072cf1eea4a7b6438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
