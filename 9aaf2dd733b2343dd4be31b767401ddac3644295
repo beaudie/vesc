@@ -16,6 +16,24 @@
       "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed0204ec_1a9074ea",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-01T23:37:16Z",
+      "side": 1,
+      "message": "Unfortunately not, since Vulkan requires that the Z offset is 0 for 2D images:\n\nDebugUtilsMessenger(286): [ VUID-VkImageCopy-dstImage-01788 ] vkCmdCopyImage(): pRegion[0] dstOffset.z is 1. For 2D images the z-offset must be 0. The Vulkan spec states: If the calling command\u0027s dstImage is of type VK_IMAGE_TYPE_2D, then dstOffset.z must be 0. (https://www.khronos.org/registry/vulkan/specs/1.1-extensions/html/vkspec.html#VUID-VkImageCopy-dstImage-01788)",
+      "parentUuid": "f2e65479_d287da25",
+      "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
