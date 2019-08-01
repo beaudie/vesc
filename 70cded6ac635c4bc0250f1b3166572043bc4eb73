@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b863fdb2_8f4ed242",
+        "filename": "src/compiler/translator/gen_builtin_symbols.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 1481,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T21:47:43Z",
+      "side": 0,
+      "message": "I see you partially got rid of the hash file here. Might want to totally remove it in this CL then.",
+      "range": {
+        "startLine": 1480,
+        "startChar": 0,
+        "endLine": 1481,
+        "endChar": 35
+      },
+      "revId": "70cded6ac635c4bc0250f1b3166572043bc4eb73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "93596102_f7c28a06",
+        "filename": "src/compiler/translator/builtin_symbols_hash_autogen.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T21:47:43Z",
+      "side": 1,
+      "message": "Yeah, exactly. Get rid of all mentions.",
+      "parentUuid": "9590be52_fa5f1a48",
+      "revId": "4aa8a1fb00176dd7f6cdc0219ad396c938641fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c3fc1b36_e2b1939d",
         "filename": "src/compiler/translator/gen_builtin_symbols.py",
         "patchSetId": 9
@@ -128,6 +146,30 @@
       "revId": "4aa8a1fb00176dd7f6cdc0219ad396c938641fd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e74e1e0_313abd2b",
+        "filename": "src/compiler/translator/gen_builtin_symbols.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T21:47:43Z",
+      "side": 1,
+      "message": "N/M, didn\u0027t realize you didn\u0027t add this.",
+      "parentUuid": "af6fca3e_c48252e3",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 6
+      },
+      "revId": "4aa8a1fb00176dd7f6cdc0219ad396c938641fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -269,6 +311,30 @@
       "revId": "4aa8a1fb00176dd7f6cdc0219ad396c938641fd5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b896cce4_bf6cc631",
+        "filename": "src/compiler/translator/gen_builtin_symbols.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T21:47:43Z",
+      "side": 1,
+      "message": "N/M, it\u0027s still used by the user defined symbol table.",
+      "parentUuid": "67bf762c_d4ef03fa",
+      "range": {
+        "startLine": 75,
+        "startChar": 2,
+        "endLine": 89,
+        "endChar": 47
+      },
+      "revId": "4aa8a1fb00176dd7f6cdc0219ad396c938641fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
