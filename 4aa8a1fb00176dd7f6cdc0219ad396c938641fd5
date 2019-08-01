@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "58dc470e_127240c4",
+        "filename": "src/compiler/translator/SymbolTable_autogen.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 14948,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-01T20:07:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6adc9552_211e50fc",
+      "range": {
+        "startLine": 14948,
+        "startChar": 20,
+        "endLine": 14948,
+        "endChar": 63
+      },
+      "revId": "4aa8a1fb00176dd7f6cdc0219ad396c938641fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "158936b1_c656368a",
         "filename": "src/compiler/translator/builtin_symbols_hash_autogen.txt",
         "patchSetId": 9
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "9590be52_fa5f1a48",
+        "filename": "src/compiler/translator/builtin_symbols_hash_autogen.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-01T20:07:20Z",
+      "side": 1,
+      "message": "Just to confirm:  we should get rid of this hash file and all parts in gen_builtin_symbols that use it",
+      "parentUuid": "158936b1_c656368a",
+      "revId": "4aa8a1fb00176dd7f6cdc0219ad396c938641fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c3fc1b36_e2b1939d",
         "filename": "src/compiler/translator/gen_builtin_symbols.py",
         "patchSetId": 9
@@ -53,6 +95,30 @@
       "writtenOn": "2019-08-01T18:48:56Z",
       "side": 1,
       "message": "do you know what expression triggers this warning? Can we fix it with static_cast or something like that?",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 6
+      },
+      "revId": "4aa8a1fb00176dd7f6cdc0219ad396c938641fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af6fca3e_c48252e3",
+        "filename": "src/compiler/translator/gen_builtin_symbols.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-01T20:07:20Z",
+      "side": 1,
+      "message": "I have no idea tbh",
+      "parentUuid": "c3fc1b36_e2b1939d",
       "range": {
         "startLine": 45,
         "startChar": 0,
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "da883b52_06741950",
+        "filename": "src/compiler/translator/gen_builtin_symbols.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-01T20:07:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5322e6f6_63ad97f2",
+      "range": {
+        "startLine": 50,
+        "startChar": 11,
+        "endLine": 50,
+        "endChar": 13
+      },
+      "revId": "4aa8a1fb00176dd7f6cdc0219ad396c938641fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a0004a0d_63497aeb",
         "filename": "src/compiler/translator/gen_builtin_symbols.py",
         "patchSetId": 9
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "81ce7cef_d4ded259",
+        "filename": "src/compiler/translator/gen_builtin_symbols.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-01T20:07:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0004a0d_63497aeb",
+      "range": {
+        "startLine": 66,
+        "startChar": 11,
+        "endLine": 66,
+        "endChar": 23
+      },
+      "revId": "4aa8a1fb00176dd7f6cdc0219ad396c938641fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "339087a0_b5b04ed5",
         "filename": "src/compiler/translator/gen_builtin_symbols.py",
         "patchSetId": 9
@@ -122,6 +236,30 @@
       "writtenOn": "2019-08-01T18:48:56Z",
       "side": 1,
       "message": "can\u0027t you nuke all this FowlerNullVoHash stuff?",
+      "range": {
+        "startLine": 75,
+        "startChar": 2,
+        "endLine": 89,
+        "endChar": 47
+      },
+      "revId": "4aa8a1fb00176dd7f6cdc0219ad396c938641fd5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67bf762c_d4ef03fa",
+        "filename": "src/compiler/translator/gen_builtin_symbols.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-01T20:07:20Z",
+      "side": 1,
+      "message": "I tried deleting them and played around with it but I couldn\u0027t get it to build. SymbolTable.cpp seems to use it in TSymbolTableLevel, not sure exactly what for / if we still need it",
+      "parentUuid": "339087a0_b5b04ed5",
       "range": {
         "startLine": 75,
         "startChar": 2,
