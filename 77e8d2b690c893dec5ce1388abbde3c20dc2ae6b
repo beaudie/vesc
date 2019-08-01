@@ -128,6 +128,24 @@
       "revId": "77e8d2b690c893dec5ce1388abbde3c20dc2ae6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e164815e_8a693a29",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T18:38:10Z",
+      "side": 1,
+      "message": "Indeed, reading that section of the spec makes me wonder why the [0] is missing from the name!\n\nBut agreed, this change would do for now.",
+      "parentUuid": "3548647a_3b2b38e9",
+      "revId": "77e8d2b690c893dec5ce1388abbde3c20dc2ae6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
