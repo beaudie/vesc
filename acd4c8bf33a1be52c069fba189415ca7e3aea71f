@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fef309a9_8ae4de3a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-01T14:18:05Z",
+      "side": 1,
+      "message": "Could you make a new helper for this beside DynamicCastComObject? Maybe DynamicCastComObjectToComPtr?",
+      "range": {
+        "startLine": 1248,
+        "startChar": 8,
+        "endLine": 1248,
+        "endChar": 66
+      },
+      "revId": "acd4c8bf33a1be52c069fba189415ca7e3aea71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

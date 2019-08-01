@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d451e35_1985a568",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-01T14:18:05Z",
+      "side": 0,
+      "message": "no need to remove the initializer I think.",
+      "range": {
+        "startLine": 1262,
+        "startChar": 32,
+        "endLine": 1262,
+        "endChar": 35
+      },
+      "revId": "1dbbc7b3e23296acc3892e317b1fe668bcb49585",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
