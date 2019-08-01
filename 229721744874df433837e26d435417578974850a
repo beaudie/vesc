@@ -155,6 +155,24 @@
     },
     {
       "key": {
+        "uuid": "03ccbc54_bef0dc2d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2182,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T20:27:38Z",
+      "side": 1,
+      "message": "Without those changes, the `memset` would be purely overhead (0-initializing something we know is already 0-initialized), which is what I\u0027ve been trying to avoid.",
+      "parentUuid": "9eda0459_bef3aab5",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "29067a09_05e89e53",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -272,6 +290,24 @@
       "side": 1,
       "message": "Ah, ok, I was misunderstanding what \u0027offsetAlignment\u0027 meant here.   Maybe something like \u0027requiredOffsetAlignment\u0027 based on your description of \"Vulkan required alignment for the offset\".",
       "parentUuid": "e49aa714_473d910a",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ea31b2f6_45f343c1",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T20:27:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cae6dfa1_e5cb9cec",
       "revId": "229721744874df433837e26d435417578974850a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
