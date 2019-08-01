@@ -2252,6 +2252,33 @@ void ContextVk::insertWaitSemaphore(const vk::Semaphore *waitSemaphore)
     mWaitSemaphores.push_back(waitSemaphore->getHandle());
 }
 
+angle::Result ContextVk::flushCommandGraphToBatch(vk::PrimaryCommandBuffer *commandBatch)
+{
+    if (!mCommandGraph.empty())
+    {
+        ANGLE_TRY(flushCommandGraph(commandBatch));
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::submitBatchToDevice(const vk::Semaphore *signalSemaphore,
+                                             vk::PrimaryCommandBuffer &&commandBatch)
+{
+    ASSERT(signalSemaphore && !mWaitSemaphores.empty());
+    waitForSwapchainImageIfNecessary();
+
+    VkSubmitInfo submitInfo = {};
+    InitializeSubmitInfo(&submitInfo, commandBatch, mWaitSemaphores, &mWaitSemaphoreStageMasks,
+                         signalSemaphore);
+
+    ANGLE_TRY(submitFrame(submitInfo, std::move(commandBatch)));
+
+    mWaitSemaphores.clear();
+
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
 {
     if (mCommandGraph.empty() && !signalSemaphore && mWaitSemaphores.empty())
@@ -2262,20 +2289,9 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore)
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flush");
 
     vk::Scoped<vk::PrimaryCommandBuffer> commandBatch(getDevice());
-    if (!mCommandGraph.empty())
-    {
-        ANGLE_TRY(flushCommandGraph(&commandBatch.get()));
-    }
 
-    waitForSwapchainImageIfNecessary();
-
-    VkSubmitInfo submitInfo = {};
-    InitializeSubmitInfo(&submitInfo, commandBatch.get(), mWaitSemaphores,
-                         &mWaitSemaphoreStageMasks, signalSemaphore);
-
-    ANGLE_TRY(submitFrame(submitInfo, commandBatch.release()));
-
-    mWaitSemaphores.clear();
+    ANGLE_TRY(flushCommandGraphToBatch(&commandBatch.get()));
+    ANGLE_TRY(submitBatchToDevice(signalSemaphore, commandBatch.release()));
 
     return angle::Result::Continue;
 }

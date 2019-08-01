@@ -343,7 +343,7 @@ void WindowSurfaceVk::SwapHistory::destroy(RendererVk *renderer)
     }
 
     renderer->resetSharedFence(&sharedFence);
-    presentImageSemaphore.destroy(renderer->getDevice());
+    // presentImageSemaphore.destroy(renderer->getDevice());
 }
 
 angle::Result WindowSurfaceVk::SwapHistory::waitFence(ContextVk *contextVk)
@@ -857,14 +857,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present");
 
-    // Throttle the submissions to avoid getting too far ahead of the GPU.
-    SwapHistory &swap = mSwapHistory[mCurrentSwapHistoryIndex];
-    {
-        ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present: Throttle CPU");
-        ANGLE_TRY(swap.waitFence(contextVk));
-        swap.destroy(contextVk->getRenderer());
-    }
-
+    vk::Scoped<vk::PrimaryCommandBuffer> commandBatch(contextVk->getDevice());
+    SwapHistory &swap     = mSwapHistory[mCurrentSwapHistoryIndex];
     SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
 
     vk::CommandBuffer *swapCommands = nullptr;
@@ -898,10 +892,10 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         ANGLE_TRY(image.image.recordCommands(contextVk, &swapCommands));
     }
     image.image.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::Present, swapCommands);
+    ANGLE_TRY(contextVk->flushCommandGraphToBatch(&commandBatch.get()));
 
+    swap.presentImageSemaphore.destroy(contextVk->getDevice());
     ANGLE_VK_TRY(contextVk, swap.presentImageSemaphore.init(contextVk->getDevice()));
-
-    ANGLE_TRY(contextVk->flushImpl(&swap.presentImageSemaphore));
 
     VkPresentInfoKHR presentInfo   = {};
     presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -943,6 +937,15 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
 
         presentInfo.pNext = &presentRegions;
     }
+
+    // Throttle the submissions to avoid getting too far ahead of the GPU.
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present: Throttle CPU");
+        ANGLE_TRY(swap.waitFence(contextVk));
+        swap.destroy(contextVk->getRenderer());
+    }
+
+    ANGLE_TRY(contextVk->submitBatchToDevice(&swap.presentImageSemaphore, commandBatch.release()));
 
     // Update the swap history for this presentation
     swap.sharedFence = contextVk->getLastSubmittedFence();

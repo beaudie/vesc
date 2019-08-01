@@ -232,6 +232,10 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     void insertWaitSemaphore(const vk::Semaphore *waitSemaphore);
 
+    angle::Result flushCommandGraphToBatch(vk::PrimaryCommandBuffer *commandBatch);
+    angle::Result submitBatchToDevice(const vk::Semaphore *signalSemaphore,
+                                      vk::PrimaryCommandBuffer &&commandBatch);
+
     angle::Result flushImpl(const vk::Semaphore *semaphore);
     angle::Result finishImpl();
 
