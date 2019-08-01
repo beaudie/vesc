@@ -16,6 +16,24 @@
       "revId": "fa2beca1084aa53896dd5b9aa20a2c060408270f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b104ecc_96ffdc9b",
+        "filename": "src/libGL/entry_points_gl_1_0_autogen.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1316,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-01T14:23:04Z",
+      "side": 1,
+      "message": "Ideally we could have a second print at the end of the function to append the return value and output logs like:\n\n   glGenLists(Glsizei range \u003d [value]) \u003d [return]\n\nThis does get a bit complicated with how we log events in the APIs so I wouldn\u0027t suggest it now.",
+      "parentUuid": "33fa2ee1_ab6ebd4b",
+      "revId": "fa2beca1084aa53896dd5b9aa20a2c060408270f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
