@@ -1,0 +1,354 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2939a6e0_7f810508",
+        "filename": "scripts/gen_gl_enums.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "gen_gl_enum_utils",
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4132d57_305b3af6",
+        "filename": "scripts/gen_gl_enums.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "suggestion: \"Parse groups of GLenums to build a {group,name} -\u003e value mapping.\"\n\nalso wrap to 100 chars.",
+      "range": {
+        "startLine": 161,
+        "startChar": 5,
+        "endLine": 162,
+        "endChar": 76
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e175e393_ec19ab4b",
+        "filename": "scripts/gen_gl_enums.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "suggestion: \"Find relevant GLenums according to enabled APIs and extensions\"",
+      "range": {
+        "startLine": 175,
+        "startChar": 6,
+        "endLine": 175,
+        "endChar": 71
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1c51b61_f0721761",
+        "filename": "scripts/gen_gl_enums.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "nit: For enums \"that\" do not have a group, ...",
+      "range": {
+        "startLine": 193,
+        "startChar": 4,
+        "endLine": 193,
+        "endChar": 64
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "21664518_ea74d353",
+        "filename": "scripts/gen_gl_enums.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "suggestion: Write GLenum groups into the header file.",
+      "range": {
+        "startLine": 200,
+        "startChar": 4,
+        "endLine": 200,
+        "endChar": 65
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b91b21b3_5e3eea21",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "you can likely revert these changes after other comments.",
+      "range": {
+        "startLine": 478,
+        "startChar": 5,
+        "endLine": 478,
+        "endChar": 27
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37eab3a4_68903971",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "I would prefer if we could get the same results without using a namedtuple and changing much code in this function. Would it be a small amount of code to add a function that takes a parameter or two like {call, parameter} and returns an enum group? Maybe a helper function in registry_xml?\n\nBTW, we should share code between generate_entry_points and your new script in registry_xml.",
+      "range": {
+        "startLine": 539,
+        "startChar": 0,
+        "endLine": 544,
+        "endChar": 76
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69fe4a33_fb335364",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to include GLboolean in the relevant types. We can output GLboolean without any autogeneration.",
+      "range": {
+        "startLine": 762,
+        "startChar": 29,
+        "endLine": 762,
+        "endChar": 38
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c61a2fc_1ffeb0aa",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "instead of changing WriteParamValueToStream, add special handling for GLenum and GLbitfield in FrameCapture::writeCallReplay.",
+      "range": {
+        "startLine": 163,
+        "startChar": 5,
+        "endLine": 163,
+        "endChar": 28
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "216212ab_8a2e3460",
+        "filename": "src/libANGLE/gl_enums_autogen.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "similar comments for this file as the other.",
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1769183_4b9099fb",
+        "filename": "src/libANGLE/gl_enums_autogen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "can we call this gl_enum_utils_autogen.h?",
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60108ab1_74c5eab1",
+        "filename": "src/libANGLE/gl_enums_autogen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "nit: should fix this to match the file name",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 42
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7ca5a95_692f2819",
+        "filename": "src/libANGLE/gl_enums_autogen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "nit: gl",
+      "range": {
+        "startLine": 14,
+        "startChar": 10,
+        "endLine": 14,
+        "endChar": 15
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06864b9b_fd7b861d",
+        "filename": "src/libANGLE/gl_enums_autogen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "nit: sort",
+      "range": {
+        "startLine": 17,
+        "startChar": 5,
+        "endLine": 17,
+        "endChar": 16
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be26aa47_c8d741da",
+        "filename": "src/libANGLE/gl_enums_autogen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "nit: GLenum/GLbitfield",
+      "range": {
+        "startLine": 218,
+        "startChar": 53,
+        "endLine": 218,
+        "endChar": 65
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30a59f7c_f615a5a3",
+        "filename": "src/libANGLE/gl_enums_autogen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T17:27:05Z",
+      "side": 1,
+      "message": "nit: GLenumToString\n\ncan you also spit this into two functions:\n\nGLenumToString\nGLbitfieldToString\n\nGLbitfieldToString can return a std::string with all the bitfield values concatenated.",
+      "range": {
+        "startLine": 218,
+        "startChar": 12,
+        "endLine": 218,
+        "endChar": 29
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
