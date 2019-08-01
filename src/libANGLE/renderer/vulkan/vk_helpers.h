@@ -768,6 +768,17 @@ class ImageHelper final : public CommandGraphResource
                                          const uint8_t *pixels,
                                          const vk::Format &vkFormat);
 
+    angle::Result stageSubresourceUpdateFromPBO(ContextVk *contextVk,
+                                                const gl::ImageIndex &index,
+                                                const gl::Extents &dstExtent,
+                                                const gl::Offset &dstOffset,
+                                                const gl::InternalFormat &formatInfo,
+                                                const gl::PixelUnpackState &unpack,
+                                                GLenum type,
+                                                const uint8_t *pixels,
+                                                const vk::Format &vkFormat,
+                                                gl::Buffer *unpackBuffer);
+
     angle::Result stageSubresourceUpdateAndGetData(ContextVk *contextVk,
                                                    size_t allocationSize,
                                                    const gl::ImageIndex &imageIndex,

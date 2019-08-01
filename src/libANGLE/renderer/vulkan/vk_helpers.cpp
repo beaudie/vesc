@@ -2251,6 +2251,30 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result ImageHelper::stageSubresourceUpdateFromPBO(ContextVk *contextVk,
+                                                         const gl::ImageIndex &index,
+                                                         const gl::Extents &dstExtent,
+                                                         const gl::Offset &dstOffset,
+                                                         const gl::InternalFormat &formatInfo,
+                                                         const gl::PixelUnpackState &unpack,
+                                                         GLenum type,
+                                                         const uint8_t *pixels,
+                                                         const vk::Format &vkFormat,
+                                                         gl::Buffer *unpackBuffer)
+{
+    BufferVk *unpackBufferVk = vk::GetImpl(unpackBuffer);
+    void *mapPtr             = nullptr;
+    ANGLE_TRY(unpackBufferVk->mapImpl(contextVk, &mapPtr));
+    const uint8_t *source = static_cast<uint8_t *>(mapPtr) + reinterpret_cast<uint64_t>(pixels);
+
+    ANGLE_TRY(stageSubresourceUpdate(contextVk, index, dstExtent, dstOffset, formatInfo, unpack,
+                                     type, source, vkFormat));
+
+    unpackBufferVk->unmapImpl(contextVk);
+
+    return angle::Result::Continue;
+}
+
 angle::Result ImageHelper::stageSubresourceUpdateAndGetData(ContextVk *contextVk,
                                                             size_t allocationSize,
                                                             const gl::ImageIndex &imageIndex,
