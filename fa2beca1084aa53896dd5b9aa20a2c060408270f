@@ -34,6 +34,24 @@
       "revId": "fa2beca1084aa53896dd5b9aa20a2c060408270f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dafef154_ba23ebb3",
+        "filename": "src/libGL/entry_points_gl_1_0_autogen.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1316,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-01T14:50:22Z",
+      "side": 1,
+      "message": "These are good ideas. It would be nice to print the return value from the logs. Also with Jiacheng\u0027s work we can finally convert enum values to string. Will leave that for future work.",
+      "parentUuid": "7b104ecc_96ffdc9b",
+      "revId": "fa2beca1084aa53896dd5b9aa20a2c060408270f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
