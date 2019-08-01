@@ -2383,15 +2383,26 @@ angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
 void ImageHelper::stageSubresourceUpdateFromImage(vk::ImageHelper *image,
                                                   const gl::ImageIndex &index,
                                                   const gl::Offset &destOffset,
-                                                  const gl::Extents &glExtents)
+                                                  const gl::Extents &glExtents,
+                                                  const VkImageType imageType)
 {
     VkImageCopy copyToImage                   = {};
     copyToImage.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
     copyToImage.srcSubresource.layerCount     = index.getLayerCount();
     copyToImage.dstSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
     copyToImage.dstSubresource.mipLevel       = index.getLevelIndex();
-    copyToImage.dstSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;
-    copyToImage.dstSubresource.layerCount     = index.getLayerCount();
+
+    if (imageType == VK_IMAGE_TYPE_3D)
+    {
+        copyToImage.dstSubresource.baseArrayLayer = 0;
+        copyToImage.dstSubresource.layerCount     = 1;
+    }
+    else
+    {
+        copyToImage.dstSubresource.baseArrayLayer = index.hasLayer() ? index.getLayerIndex() : 0;
+        copyToImage.dstSubresource.layerCount     = index.getLayerCount();
+    }
+
     gl_vk::GetOffset(destOffset, &copyToImage.dstOffset);
     gl_vk::GetExtent(glExtents, &copyToImage.extent);
 
