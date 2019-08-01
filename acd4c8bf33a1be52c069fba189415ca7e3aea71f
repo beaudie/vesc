@@ -46,6 +46,30 @@
       "revId": "acd4c8bf33a1be52c069fba189415ca7e3aea71f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb745b9e_64fe702a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1248,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-01T19:11:04Z",
+      "side": 1,
+      "message": "It\u0027s not a big deal but wrapping that logic into a helper function removes a few lines and some of the platform magic like __uuidof or IID_PPV_ARGS.",
+      "parentUuid": "01ec0d97_e161230f",
+      "range": {
+        "startLine": 1248,
+        "startChar": 8,
+        "endLine": 1248,
+        "endChar": 66
+      },
+      "revId": "acd4c8bf33a1be52c069fba189415ca7e3aea71f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
