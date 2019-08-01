@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "595ee59d_7106ce98",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T19:52:54Z",
+      "side": 1,
+      "message": "Why does depth/stencil fail?",
+      "range": {
+        "startLine": 562,
+        "startChar": 58,
+        "endLine": 562,
+        "endChar": 78
+      },
+      "revId": "a7e46822b22fe4f27cb163de1082b778f0f18826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

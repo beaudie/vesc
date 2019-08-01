@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d9496b95_8ece1b07",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T19:52:54Z",
+      "side": 1,
+      "message": "Definitely can be a follow up. We may not hit it in dEQP, but real applications may still hit it.\n\nLet\u0027s chat a bit before you go down the GPU path. I don\u0027t know PBOs that well, but have ideas on what GPU paths could be taken.",
+      "parentUuid": "06501d5e_c02870d8",
+      "range": {
+        "startLine": 244,
+        "startChar": 0,
+        "endLine": 251,
+        "endChar": 32
+      },
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "08473868_d0d81cc2",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
