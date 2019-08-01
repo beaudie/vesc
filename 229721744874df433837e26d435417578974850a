@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b027bc70_9d219641",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T19:22:11Z",
+      "side": 1,
+      "message": "4 in the declaration means (x, y, z, w). However, each channel is 4 atomic counter buffer offsets packed into one uint32_t (hence \"packed 8-bit values for ... offsets\")",
+      "parentUuid": "29cddc44_2047134a",
+      "range": {
+        "startLine": 60,
+        "startChar": 19,
+        "endLine": 60,
+        "endChar": 25
+      },
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "53b61558_2f00e319",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -36,6 +60,24 @@
       "writtenOn": "2019-07-26T19:04:13Z",
       "side": 1,
       "message": "I think this needs to be \u0027offsetsSize / 4\u0027, since in the following for-loop four 8-bit values are packed into each uint32_t entry, so 4 bufferIndices per offsetsOut entry.",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a05f951f_c4460499",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2158,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T19:22:11Z",
+      "side": 1,
+      "message": "Your understanding is correct, but not sure how you reached that conclusion:\n\n    4 bufferIndices per OffsetsOut entry\n\nimplies:\n   \n    bufferIndex count \u003c\u003d OffsetsOut entry count * 4",
+      "parentUuid": "53b61558_2f00e319",
       "revId": "229721744874df433837e26d435417578974850a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "0ee65551_ef5676c2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2182,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T19:22:11Z",
+      "side": 1,
+      "message": "I could memset it, but this comes from a declaration that\u0027s already initialized with {bla, bla, {}, bla} (the empty {} corresponding to where this data goes in). So to replace that with memset without causing overhead, you have to also change the declaration to set fields one by one (and then make sure they are initialized to 0 if there are no atomic counter buffers or transform feedback buffers, so you won\u0027t leak garbage).\n\nThis was simpler.",
+      "parentUuid": "57577d2f_29395c75",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "29067a09_05e89e53",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 7
@@ -73,6 +133,24 @@
       "revId": "229721744874df433837e26d435417578974850a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f037bb8_b92f39ff",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2273,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T19:22:11Z",
+      "side": 1,
+      "message": "`dynamicOffset` is later fed to `vkCmdBindDescriptorSets` which takes uint32_t values. It\u0027s unfortunate that Vulkan didn\u0027t use VkDeviceSize consistently, but that\u0027s our limitation.\n\nIn this particular case, we know the dynamic buffer \"page\" size is less than 4GB, so the offset should fit!",
+      "parentUuid": "29067a09_05e89e53",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -93,6 +171,24 @@
     },
     {
       "key": {
+        "uuid": "10ddbb49_bfcf350f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T19:22:11Z",
+      "side": 1,
+      "message": "Good idea, done.",
+      "parentUuid": "4a662630_82c76671",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3be5c186_e65cde2c",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 7
@@ -104,6 +200,24 @@
       "writtenOn": "2019-07-26T19:04:13Z",
       "side": 1,
       "message": "Can offsetAlignment still meet the alignment requirements without needing any adjusting?   For example, if the alignment requirement is 8B, can offsetAlignment \u003d 32B and work correctly?\n\nOr will offsetAlignment always return a value that\u0027s less than the alignment requirement?",
+      "revId": "229721744874df433837e26d435417578974850a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e49aa714_473d910a",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T19:22:11Z",
+      "side": 1,
+      "message": "Wait, `offsetAlignment` is the Vulkan required alignment for the offset (if you have a better name suggestion, I\u0027m all ears). The if here effectively tests if Vulkan has a requirement or not.\n\nSo **offsetDiff** always returns a value that\u0027s less than the alignment requirement, if that answers your question. (If it didn\u0027t, everything would still work, except the diff may not fit in 8 bits).",
+      "parentUuid": "3be5c186_e65cde2c",
       "revId": "229721744874df433837e26d435417578974850a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
