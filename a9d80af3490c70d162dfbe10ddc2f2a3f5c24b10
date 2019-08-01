@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "2cd39191_6d77fd2b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T14:42:33Z",
+      "side": 1,
+      "message": "In the very least, please do something like this:\n\nif (mImage-\u003evalid() \u0026\u0026 canCopyWithTransfer())\n{\n    ensureImageInitialized(contextVk);\n    mImage-\u003erecordCommands(\u0026cb);\n    cb-\u003ecopyBuffer(...);\n}\nelse\n{\n    mImage-\u003estageSubresourceUpdateFromPBO();\n    onStagingBufferChange();\n}",
+      "range": {
+        "startLine": 244,
+        "startChar": 0,
+        "endLine": 251,
+        "endChar": 32
+      },
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "08473868_d0d81cc2",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -55,6 +78,46 @@
     },
     {
       "key": {
+        "uuid": "b16a5149_a20163d6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2385,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T14:42:33Z",
+      "side": 1,
+      "message": "Remove unused parameter!",
+      "range": {
+        "startLine": 2385,
+        "startChar": 0,
+        "endLine": 2385,
+        "endChar": 100
+      },
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f90fe2d_8938577c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2394,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T14:42:33Z",
+      "side": 1,
+      "message": "Instead of all of this, can you do something like this?\n\n  void *mapPtr \u003d nullptr;\n  ANGLE_TRY(unpackBufferVk-\u003emapImpl(contextVk, \u0026mapPtr));\n  const uiont8_t *source \u003d static_cast\u003cuint8_t *\u003e(mapPtr) + reinterpret_cast\u003cuint64_t\u003e(pixels);\n\n  ANGLE_TRY(stageSubresourceUpdate(..., source, vkFormat));\n\n  unpackBufferVk-\u003eunmapImpl(contextVk);\n\n  return angle::Result::Continue;\n\nIf there are subtle differences anywhere that I missed, you can always refactor stageSubresourceUpdate to take those into account so you don\u0027t have duplicate all that here.",
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5670c6a3_1463e1dc",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -105,6 +168,52 @@
       "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1b1c44e1_d7b61204",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2487,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T14:42:33Z",
+      "side": 1,
+      "message": "Please move the GPU path out of this function.",
+      "range": {
+        "startLine": 2487,
+        "startChar": 8,
+        "endLine": 2487,
+        "endChar": 14
+      },
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bece68ad_3cefd137",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2490,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-01T14:42:33Z",
+      "side": 1,
+      "message": "You can\u0027t stage an update from the unpack buffer directly because you don\u0027t know when the updates are going to be flushed. By that time, the unpack buffer could be deleted.",
+      "range": {
+        "startLine": 2490,
+        "startChar": 8,
+        "endLine": 2490,
+        "endChar": 78
+      },
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
