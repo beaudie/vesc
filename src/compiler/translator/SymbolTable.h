@@ -51,6 +51,79 @@ struct UnmangledBuiltIn
     TExtension extension;
 };
 
+using VarPointer = TSymbol *(TSymbolTableBase::*);
+
+using ValidateExtension = int(ShBuiltInResources::*);
+
+struct SymbolEntry
+{
+    const TSymbol *symbol;
+    int esslVersion;
+    int glslVersion;
+    sh::GLenum shaderType;
+
+    const TSymbol *esslExtSymbol;
+    int esslExtVersion;
+    ValidateExtension esslExtension;
+
+    const TSymbol *glslExtSymbol;
+    int glslExtVersion;
+    ValidateExtension glslExtension;
+
+    VarPointer var;
+    VarPointer esslExtVar;
+    VarPointer glslExtVar;
+
+    constexpr SymbolEntry(const TSymbol *symbol,
+                          int esslVersion,
+                          int glslVersion,
+                          sh::GLenum shaderType,
+                          const TSymbol *esslExtSymbol,
+                          int esslExtVersion,
+                          ValidateExtension esslExtension,
+                          const TSymbol *glslExtSymbol,
+                          int glslExtVersion,
+                          ValidateExtension glslExtension,
+                          VarPointer var,
+                          VarPointer esslExtVar,
+                          VarPointer glslExtVar)
+        : symbol(symbol),
+          esslVersion(esslVersion),
+          glslVersion(glslVersion),
+          shaderType(shaderType),
+          esslExtSymbol(esslExtSymbol),
+          esslExtVersion(esslExtVersion),
+          esslExtension(esslExtension),
+          glslExtSymbol(glslExtSymbol),
+          glslExtVersion(glslExtVersion),
+          glslExtension(glslExtension),
+          var(var),
+          esslExtVar(esslExtVar),
+          glslExtVar(glslExtVar)
+    {}
+};
+
+struct UnmangledEntry
+{
+    ImmutableString name;
+    const UnmangledBuiltIn *unmangled;
+    int esslVersion;
+    int glslVersion;
+    sh::GLenum shaderType;
+
+    constexpr UnmangledEntry(ImmutableString &&name,
+                             const UnmangledBuiltIn *unmangled,
+                             int esslVersion,
+                             int glslVersion,
+                             sh::GLenum shaderType)
+        : name(std::move(name)),
+          unmangled(unmangled),
+          esslVersion(esslVersion),
+          glslVersion(glslVersion),
+          shaderType(shaderType)
+    {}
+};
+
 class TSymbolTable : angle::NonCopyable, TSymbolTableBase
 {
   public:
@@ -160,6 +233,12 @@ class TSymbolTable : angle::NonCopyable, TSymbolTableBase
                                     const ShBuiltInResources &resources);
 
     VariableMetadata *getOrCreateVariableMetadata(const TVariable &variable);
+
+    const TSymbol *getSymbol(SymbolEntry entry, const ImmutableString &name, int version) const;
+
+    const UnmangledBuiltIn *getUnmangled(UnmangledEntry entry,
+                                         const ImmutableString &name,
+                                         int version) const;
 
     std::vector<std::unique_ptr<TSymbolTableLevel>> mTable;
 

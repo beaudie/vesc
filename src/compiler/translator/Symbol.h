@@ -47,6 +47,7 @@ class TSymbol : angle::NonCopyable
     bool isInterfaceBlock() const { return mSymbolClass == SymbolClass::InterfaceBlock; }
 
     const TSymbolUniqueId &uniqueId() const { return mUniqueId; }
+    ImmutableString getName() const { return mName; }
     SymbolType symbolType() const { return mSymbolType; }
     TExtension extension() const { return mExtension; }
 
