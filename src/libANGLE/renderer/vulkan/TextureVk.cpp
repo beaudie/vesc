@@ -371,8 +371,10 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
     // If negative offsets are given, clippedSourceArea ensures we don't read from those offsets.
     // However, that changes the sourceOffset->destOffset mapping.  Here, destOffset is shifted by
     // the same amount as clipped to correct the error.
+    VkImageType imageType = gl_vk::GetImageType(mState.getType());
+    int zOffset           = (imageType == VK_IMAGE_TYPE_3D) ? destOffset.z : 0;
     const gl::Offset modifiedDestOffset(destOffset.x + clippedSourceArea.x - sourceArea.x,
-                                        destOffset.y + clippedSourceArea.y - sourceArea.y, 0);
+                                        destOffset.y + clippedSourceArea.y - sourceArea.y, zOffset);
 
     RenderTargetVk *colorReadRT = framebufferVk->getColorReadRenderTarget();
 
@@ -587,7 +589,9 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
                               srcSubresource, destSubresource, commandBuffer);
 
         // Stage the copy for when the image storage is actually created.
-        mImage->stageSubresourceUpdateFromImage(stagingImage.release(), index, destOffset, extents);
+        VkImageType imageType = gl_vk::GetImageType(mState.getType());
+        mImage->stageSubresourceUpdateFromImage(stagingImage.release(), index, destOffset, extents,
+                                                imageType);
         onStagingBufferChange();
     }
 
@@ -682,9 +686,10 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         }
 
         // Stage the copy for when the image storage is actually created.
-        mImage->stageSubresourceUpdateFromImage(
-            stagingImage.release(), index, destOffset,
-            gl::Extents(sourceArea.width, sourceArea.height, 1));
+        VkImageType imageType = gl_vk::GetImageType(mState.getType());
+        mImage->stageSubresourceUpdateFromImage(stagingImage.release(), index, destOffset,
+                                                gl::Extents(sourceArea.width, sourceArea.height, 1),
+                                                imageType);
         onStagingBufferChange();
     }
 
@@ -1096,6 +1101,7 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
     switch (imageIndex.getType())
     {
         case gl::TextureType::_2D:
+        case gl::TextureType::_3D:
             *rtOut = &mRenderTarget;
             break;
         case gl::TextureType::CubeMap:
