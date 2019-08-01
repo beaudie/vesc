@@ -51,6 +51,104 @@ struct UnmangledBuiltIn
     TExtension extension;
 };
 
+using VarPointer = TSymbol *(TSymbolTableBase::*);
+
+using ValidateExtension = int(ShBuiltInResources::*);
+
+struct SymbolEntry
+{
+    ImmutableString name;
+
+    const TSymbol *symbol;
+    VarPointer var;
+    int esslVersion;
+    int glslVersion;
+    sh::GLenum shaderType;
+
+    const TSymbol *esslExtSymbol;
+    VarPointer esslExtVar;
+    int esslExtVersion;
+    sh::GLenum esslExtShaderType;
+    ValidateExtension esslExtension;
+
+    const TSymbol *glslExtSymbol;
+    VarPointer glslExtVar;
+    int glslExtVersion;
+    sh::GLenum glslExtShaderType;
+    ValidateExtension glslExtension;
+
+    const TSymbol *esslExtSymbol2;
+    VarPointer esslExtVar2;
+    int esslExtVersion2;
+    sh::GLenum esslExtShaderType2;
+    ValidateExtension esslExtension2;
+
+    constexpr SymbolEntry(ImmutableString &&name,
+                          const TSymbol *symbol,
+                          VarPointer var,
+                          int esslVersion,
+                          int glslVersion,
+                          sh::GLenum shaderType,
+                          const TSymbol *esslExtSymbol,
+                          VarPointer esslExtVar,
+                          int esslExtVersion,
+                          sh::GLenum esslExtShaderType,
+                          ValidateExtension esslExtension,
+                          const TSymbol *glslExtSymbol,
+                          VarPointer glslExtVar,
+                          int glslExtVersion,
+                          sh::GLenum glslExtShaderType,
+                          ValidateExtension glslExtension,
+                          const TSymbol *esslExtSymbol2    = nullptr,
+                          VarPointer esslExtVar2           = nullptr,
+                          int esslExtVersion2              = -1,
+                          sh::GLenum esslExtShaderType2    = 0,
+                          ValidateExtension esslExtension2 = nullptr)
+        : name(std::move(name)),
+          symbol(symbol),
+          var(var),
+          esslVersion(esslVersion),
+          glslVersion(glslVersion),
+          shaderType(shaderType),
+          esslExtSymbol(esslExtSymbol),
+          esslExtVar(esslExtVar),
+          esslExtVersion(esslExtVersion),
+          esslExtShaderType(esslExtShaderType),
+          esslExtension(esslExtension),
+          glslExtSymbol(glslExtSymbol),
+          glslExtVar(glslExtVar),
+          glslExtVersion(glslExtVersion),
+          glslExtShaderType(glslExtShaderType),
+          glslExtension(glslExtension),
+          esslExtSymbol2(esslExtSymbol2),
+          esslExtVar2(esslExtVar2),
+          esslExtVersion2(esslExtVersion2),
+          esslExtShaderType2(esslExtShaderType2),
+          esslExtension2(esslExtension2)
+    {}
+};
+
+struct UnmangledEntry
+{
+    ImmutableString name;
+    const UnmangledBuiltIn *unmangled;
+    int esslVersion;
+    int glslVersion;
+    sh::GLenum shaderType;
+
+    constexpr UnmangledEntry(ImmutableString &&name,
+                             const UnmangledBuiltIn *unmangled,
+                             int esslVersion,
+                             int glslVersion,
+                             sh::GLenum shaderType)
+        : name(std::move(name)),
+          unmangled(unmangled),
+          esslVersion(esslVersion),
+          glslVersion(glslVersion),
+          shaderType(shaderType)
+    {}
+};
+
 class TSymbolTable : angle::NonCopyable, TSymbolTableBase
 {
   public:
@@ -160,6 +258,12 @@ class TSymbolTable : angle::NonCopyable, TSymbolTableBase
                                     const ShBuiltInResources &resources);
 
     VariableMetadata *getOrCreateVariableMetadata(const TVariable &variable);
+
+    const TSymbol *getSymbol(SymbolEntry entry, const ImmutableString &name, int version) const;
+
+    const UnmangledBuiltIn *getUnmangled(UnmangledEntry entry,
+                                         const ImmutableString &name,
+                                         int version) const;
 
     std::vector<std::unique_ptr<TSymbolTableLevel>> mTable;
 
