@@ -22,6 +22,30 @@
       "revId": "a7e46822b22fe4f27cb163de1082b778f0f18826",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd21d4b3_048540a8",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-01T20:36:29Z",
+      "side": 1,
+      "message": "Because of a depth/stencil bug ... see line 582 below, and the few lines above it.\n\nI moved these 2 rows down to that section.",
+      "parentUuid": "595ee59d_7106ce98",
+      "range": {
+        "startLine": 562,
+        "startChar": 58,
+        "endLine": 562,
+        "endChar": 78
+      },
+      "revId": "a7e46822b22fe4f27cb163de1082b778f0f18826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "68ee40de_4b760f24",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-01T20:36:29Z",
+      "side": 1,
+      "message": "Sounds good, will do.",
+      "parentUuid": "d9496b95_8ece1b07",
+      "range": {
+        "startLine": 244,
+        "startChar": 0,
+        "endLine": 251,
+        "endChar": 32
+      },
+      "revId": "a9d80af3490c70d162dfbe10ddc2f2a3f5c24b10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "08473868_d0d81cc2",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
