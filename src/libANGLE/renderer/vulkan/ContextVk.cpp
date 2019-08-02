@@ -2216,7 +2216,8 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context,
         {
             textureLayout = vk::ImageLayout::ComputeShaderReadOnly;
         }
-        else if (uniforms[textureUnit].isActive(gl::ShaderType::Vertex))
+        else if (uniforms[program->getState().getUniformIndexFromSamplerIndex(textureUnit)]
+                     .isActive(gl::ShaderType::Vertex))
         {
             textureLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
         }
