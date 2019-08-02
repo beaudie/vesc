@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "69e75630_46974cfe",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-02T18:26:30Z",
+      "side": 1,
+      "message": "Ah, yup, should have tried it in the interpreter first:\n\n\u003e\u003e\u003e testString \u003d \"other typenameconst\"\n\u003e\u003e\u003e print(\"const\" in testString.split())\nFalse\n\u003e\u003e\u003e testString \u003d \"const other typenameconst\"\n\u003e\u003e\u003e print(\"const\" in testString.split())\nTrue",
+      "parentUuid": "b7fd6cc1_4d2a6830",
+      "revId": "3a7a6978e93d98bd4dae976cbf0c2b3a717e932d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7697656b_3c13a793",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 14

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f2b8128_327e67ed",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-02T18:26:30Z",
+      "side": 1,
+      "message": "Unfortunately, it seems this one isn\u0027t as nice as the \u0027is_const\u0027 checking above:\n\n\u003e\u003e\u003e testString \u003d \"const other typenameconst\"\n\u003e\u003e\u003e print(testString.replace(\"const\", \"\").strip())\nother typename\n\nThis should be updated to something like:\n\n\u003e\u003e\u003e param_type \u003d \"const other typenameconst\"\n\u003e\u003e\u003e words \u003d testString.split()\n\u003e\u003e\u003e for word in words:\n...     if word \u003d\u003d \"const\":\n...         words.remove(word)\n... \n\u003e\u003e\u003e param_type \u003d \" \".join(words)\n\u003e\u003e\u003e print(param_type)\nother typenameconst",
+      "revId": "7daaa4b3d0a7cfa0d633a79170361e2e5fcfcf30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
