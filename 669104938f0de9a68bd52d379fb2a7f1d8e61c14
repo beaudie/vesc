@@ -52,6 +52,24 @@
       "revId": "669104938f0de9a68bd52d379fb2a7f1d8e61c14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c761208_2ceb87f7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2219,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-02T15:13:41Z",
+      "side": 1,
+      "message": "Yes, I have been thinking about it, and I think having AllGraphics as the only option is indeed better (despite what I\u0027ve been advocating previously). Imagine the following:\n\n- Draw: Texture 1 used in FS only\n- Draw: Texture 1 used in VS and FS\n- Draw: Texture 1 used in FS only\n\nThis would incur two barriers, and there\u0027s little we can do to improve the situation there (at least not until we store the layout transitions especially in the graph nodes so we can modify them).",
+      "parentUuid": "800074cd_ccd02e8d",
+      "revId": "669104938f0de9a68bd52d379fb2a7f1d8e61c14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
