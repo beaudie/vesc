@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "04d46d78_2d3cdd72",
+        "filename": "scripts/gen_gl_enums.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2939a6e0_7f810508",
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f4132d57_305b3af6",
         "filename": "scripts/gen_gl_enums.py",
         "patchSetId": 8
@@ -39,6 +57,30 @@
       "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9aad1254_9ca8e3f7",
+        "filename": "scripts/gen_gl_enums.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f4132d57_305b3af6",
+      "range": {
+        "startLine": 161,
+        "startChar": 5,
+        "endLine": 162,
+        "endChar": 76
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "f9465af0_b3d03d80",
+        "filename": "scripts/gen_gl_enums.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e175e393_ec19ab4b",
+      "range": {
+        "startLine": 175,
+        "startChar": 6,
+        "endLine": 175,
+        "endChar": 71
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1c51b61_f0721761",
         "filename": "scripts/gen_gl_enums.py",
         "patchSetId": 8
@@ -85,6 +151,30 @@
       "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f5a9acf_26d3c598",
+        "filename": "scripts/gen_gl_enums.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1c51b61_f0721761",
+      "range": {
+        "startLine": 193,
+        "startChar": 4,
+        "endLine": 193,
+        "endChar": 64
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "2bb2c021_92b89377",
+        "filename": "scripts/gen_gl_enums.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21664518_ea74d353",
+      "range": {
+        "startLine": 200,
+        "startChar": 4,
+        "endLine": 200,
+        "endChar": 65
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b91b21b3_5e3eea21",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 8
@@ -131,6 +245,30 @@
       "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f0f3ae8_93b21790",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b91b21b3_5e3eea21",
+      "range": {
+        "startLine": 478,
+        "startChar": 5,
+        "endLine": 478,
+        "endChar": 27
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -157,6 +295,30 @@
     },
     {
       "key": {
+        "uuid": "38c4f6a0_7f992f5b",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Fixed. Used the command node which calls `format_capture_method` to extract the enum group name, so I think it makes more sense to place it in generate_entry_points.py",
+      "parentUuid": "37eab3a4_68903971",
+      "range": {
+        "startLine": 539,
+        "startChar": 0,
+        "endLine": 544,
+        "endChar": 76
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69fe4a33_fb335364",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 8
@@ -177,6 +339,30 @@
       "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c9234fa_78193d0c",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 762,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69fe4a33_fb335364",
+      "range": {
+        "startLine": 762,
+        "startChar": 29,
+        "endLine": 762,
+        "endChar": 38
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -203,6 +389,30 @@
     },
     {
       "key": {
+        "uuid": "508354db_38b92689",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8c61a2fc_1ffeb0aa",
+      "range": {
+        "startLine": 163,
+        "startChar": 5,
+        "endLine": 163,
+        "endChar": 28
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "216212ab_8a2e3460",
         "filename": "src/libANGLE/gl_enums_autogen.cpp",
         "patchSetId": 8
@@ -220,6 +430,24 @@
     },
     {
       "key": {
+        "uuid": "9cfdcf29_8406ede9",
+        "filename": "src/libANGLE/gl_enums_autogen.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "216212ab_8a2e3460",
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1769183_4b9099fb",
         "filename": "src/libANGLE/gl_enums_autogen.h",
         "patchSetId": 8
@@ -234,6 +462,24 @@
       "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e39d96e0_195046fc",
+        "filename": "src/libANGLE/gl_enums_autogen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1769183_4b9099fb",
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -260,6 +506,30 @@
     },
     {
       "key": {
+        "uuid": "386849a0_5b3fd668",
+        "filename": "src/libANGLE/gl_enums_autogen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60108ab1_74c5eab1",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 42
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c7ca5a95_692f2819",
         "filename": "src/libANGLE/gl_enums_autogen.h",
         "patchSetId": 8
@@ -283,6 +553,30 @@
     },
     {
       "key": {
+        "uuid": "0449f4c4_642833bb",
+        "filename": "src/libANGLE/gl_enums_autogen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7ca5a95_692f2819",
+      "range": {
+        "startLine": 14,
+        "startChar": 10,
+        "endLine": 14,
+        "endChar": 15
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "06864b9b_fd7b861d",
         "filename": "src/libANGLE/gl_enums_autogen.h",
         "patchSetId": 8
@@ -303,6 +597,30 @@
       "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f7e9b65_a1fd21d2",
+        "filename": "src/libANGLE/gl_enums_autogen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done. Also add a prefix to all the group name, as when moving to gl namespace, some of them collide with PackedGLenum type",
+      "parentUuid": "06864b9b_fd7b861d",
+      "range": {
+        "startLine": 17,
+        "startChar": 5,
+        "endLine": 17,
+        "endChar": 16
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -349,6 +667,54 @@
       "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bde01f69_f4100330",
+        "filename": "src/libANGLE/gl_enums_autogen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be26aa47_c8d741da",
+      "range": {
+        "startLine": 218,
+        "startChar": 53,
+        "endLine": 218,
+        "endChar": 65
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f138e1c_240f394b",
+        "filename": "src/libANGLE/gl_enums_autogen.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T00:21:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30a59f7c_f615a5a3",
+      "range": {
+        "startLine": 218,
+        "startChar": 12,
+        "endLine": 218,
+        "endChar": 29
+      },
+      "revId": "b47d7f5a3dc9ea00bc61954af5423cbbb69ab29a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
