@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca62b0a0_81762181",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-02T01:21:01Z",
+      "side": 1,
+      "message": "this is nice and short but I\u0027m concerned it might cause lag on code regen. is there a way to cache the XML queries and only parse the once? Maybe using similar code as your new generator? And putting the shared code in registry_xml?",
+      "range": {
+        "startLine": 634,
+        "startChar": 3,
+        "endLine": 642,
+        "endChar": 0
+      },
+      "revId": "ff1f173736f495d989857a823838d2d5aca3ed38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb31d9ba_69b17a9c",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-02T01:21:01Z",
+      "side": 1,
+      "message": "much better, thanks.",
+      "revId": "ff1f173736f495d989857a823838d2d5aca3ed38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ebdcb450_e4a0966e",
+        "filename": "src/libANGLE/gl_enum_utils_autogen.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3555,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-02T01:21:01Z",
+      "side": 1,
+      "message": "can you return something non-null here, like \"GL_INVALID_ENUM\" or just \"Unknown\" or \"Error\"\n\nsame for the rest of cases.",
+      "range": {
+        "startLine": 3555,
+        "startChar": 27,
+        "endLine": 3555,
+        "endChar": 34
+      },
+      "revId": "ff1f173736f495d989857a823838d2d5aca3ed38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4da47d77_1932a899",
+        "filename": "src/libANGLE/gl_enum_utils_autogen.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3582,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-02T01:21:01Z",
+      "side": 1,
+      "message": "nit: simply this as const angle::BitSet bitSet(value);",
+      "range": {
+        "startLine": 3582,
+        "startChar": 4,
+        "endLine": 3582,
+        "endChar": 75
+      },
+      "revId": "ff1f173736f495d989857a823838d2d5aca3ed38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "df53a7cd_47a1e074",
+        "filename": "src/libANGLE/gl_enum_utils_autogen.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-02T01:21:01Z",
+      "side": 1,
+      "message": "can you make this an \"enum class\" strongly typed enum and remove the \"_EnumGroup\" suffix?",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 16
+      },
+      "revId": "ff1f173736f495d989857a823838d2d5aca3ed38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
