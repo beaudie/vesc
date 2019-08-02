@@ -133,6 +133,30 @@
       "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ea06d2ab_920ea364",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-02T17:49:42Z",
+      "side": 1,
+      "message": "So the front-end puts the 3D textures z in the index layer? What\u0027s destOffset.z then? Can we assert that `destOffset.z \u003d\u003d (index.hasLayer() ? index.getLayerIndex() : 0)` here?",
+      "parentUuid": "199e12ba_fcb889da",
+      "range": {
+        "startLine": 2397,
+        "startChar": 0,
+        "endLine": 2398,
+        "endChar": 54
+      },
+      "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
