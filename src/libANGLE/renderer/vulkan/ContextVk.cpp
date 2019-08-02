@@ -209,6 +209,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_SHADER_RESOURCES);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS);
     mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+    mNewGraphicsCommandBufferDirtyBits.set(DIRTY_BIT_VIEWPORT);
 
     mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_PIPELINE);
     mNewComputeCommandBufferDirtyBits.set(DIRTY_BIT_TEXTURES);
@@ -230,6 +231,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyGraphicsTransformFeedbackBuffers;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] =
         &ContextVk::handleDirtyGraphicsDescriptorSets;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_VIEWPORT] = &ContextVk::handleDirtyViewport;
 
     mComputeDirtyBitHandlers[DIRTY_BIT_PIPELINE] = &ContextVk::handleDirtyComputePipeline;
     mComputeDirtyBitHandlers[DIRTY_BIT_TEXTURES] = &ContextVk::handleDirtyComputeTextures;
@@ -245,6 +247,14 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
 
     mPipelineDirtyBitsMask.set();
     mPipelineDirtyBitsMask.reset(gl::State::DIRTY_BIT_TEXTURE_BINDINGS);
+
+    // Viewport and scissor will be set to valid values when framebuffer being binded
+    mViewport.x        = 0.0f;
+    mViewport.y        = 0.0f;
+    mViewport.width    = 0.0f;
+    mViewport.height   = 0.0f;
+    mViewport.minDepth = 0.0f;
+    mViewport.maxDepth = 1.0f;
 }
 
 ContextVk::~ContextVk() = default;
@@ -551,6 +561,24 @@ angle::Result ContextVk::handleDirtyGraphicsDefaultAttribs(const gl::Context *co
     }
 
     mDirtyDefaultAttribsMask.reset();
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyViewport(const gl::Context *context,
+                                             vk::CommandBuffer *commandBuffer)
+{
+    // 0-sized viewports are invalid in Vulkan.  We always use a scissor that at least matches the
+    // requested viewport, so it's safe to adjust the viewport size here.
+    VkViewport viewport = mViewport;
+    if (viewport.width == 0)
+    {
+        viewport.width = 1;
+    }
+    if (viewport.height == 0)
+    {
+        viewport.height = 1;
+    }
+    commandBuffer->setViewport(viewport);
     return angle::Result::Continue;
 }
 
@@ -1413,7 +1441,6 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
                                float farPlane,
                                bool invertViewport)
 {
-    VkViewport vkViewport;
     const gl::Caps &caps                   = getCaps();
     const VkPhysicalDeviceLimits &limitsVk = mRenderer->getPhysicalDeviceProperties().limits;
     const int viewportBoundsRangeLow       = static_cast<int>(limitsVk.viewportBoundsRange[0]);
@@ -1449,15 +1476,19 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
         gl::Rectangle(correctedX, correctedY, correctedWidth, correctedHeight);
 
     gl_vk::GetViewport(correctedRect, nearPlane, farPlane, invertViewport,
-                       framebufferVk->getState().getDimensions().height, &vkViewport);
-    mGraphicsPipelineDesc->updateViewport(&mGraphicsPipelineTransition, vkViewport);
+                       framebufferVk->getState().getDimensions().height, &mViewport);
+    // mGraphicsPipelineDesc->updateViewport(&mGraphicsPipelineTransition, vkViewport);
+    mGraphicsDirtyBits.set(DIRTY_BIT_VIEWPORT);
     invalidateDriverUniforms();
 }
 
 void ContextVk::updateDepthRange(float nearPlane, float farPlane)
 {
+    mViewport.minDepth = nearPlane;
+    mViewport.maxDepth = farPlane;
+    mGraphicsDirtyBits.set(DIRTY_BIT_VIEWPORT);
     invalidateDriverUniforms();
-    mGraphicsPipelineDesc->updateDepthRange(&mGraphicsPipelineTransition, nearPlane, farPlane);
+    // mGraphicsPipelineDesc->updateDepthRange(&mGraphicsPipelineTransition, nearPlane, farPlane);
 }
 
 void ContextVk::updateScissor(const gl::State &glState)
@@ -1488,8 +1519,16 @@ void ContextVk::updateScissor(const gl::State &glState)
         scissoredArea.width  = 1;
         scissoredArea.height = 1;
     }
-    mGraphicsPipelineDesc->updateScissor(&mGraphicsPipelineTransition,
-                                         gl_vk::GetRect(scissoredArea));
+
+    const VkRect2D vkScissor        = gl_vk::GetRect(scissoredArea);
+    const VkRect2D &pipelineScissor = mGraphicsPipelineDesc->getScissor();
+    if (!(pipelineScissor.extent.width == vkScissor.extent.width &&
+          pipelineScissor.extent.height == vkScissor.extent.height &&
+          pipelineScissor.offset.x == vkScissor.offset.x &&
+          pipelineScissor.offset.y == vkScissor.offset.y))
+    {
+        mGraphicsPipelineDesc->updateScissor(&mGraphicsPipelineTransition, vkScissor);
+    }
 
     framebufferVk->onScissorChange(this);
 }

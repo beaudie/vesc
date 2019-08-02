@@ -855,8 +855,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
     bool invertViewport              = contextVk->isViewportFlipEnabledForDrawFBO();
     gl_vk::GetViewport(completeRenderArea, 0.0f, 1.0f, invertViewport, completeRenderArea.height,
                        &viewport);
-    pipelineDesc.setViewport(viewport);
-
+    contextVk->setViewport(viewport);
     pipelineDesc.setScissor(gl_vk::GetRect(params.clearArea));
 
     vk::ShaderLibrary &shaderLibrary                    = contextVk->getShaderLibrary();
@@ -1028,7 +1027,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     VkViewport viewport;
     gl::Rectangle completeRenderArea = framebuffer->getCompleteRenderArea();
     gl_vk::GetViewport(completeRenderArea, 0.0f, 1.0f, false, completeRenderArea.height, &viewport);
-    pipelineDesc.setViewport(viewport);
+    contextVk->setViewport(viewport);
 
     pipelineDesc.setScissor(gl_vk::GetRect(params.blitArea));
 
@@ -1358,7 +1357,7 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
 
     VkViewport viewport;
     gl_vk::GetViewport(renderArea, 0.0f, 1.0f, false, dest->getExtents().height, &viewport);
-    pipelineDesc.setViewport(viewport);
+    contextVk->setViewport(viewport);
 
     VkRect2D scissor = gl_vk::GetRect(renderArea);
     pipelineDesc.setScissor(scissor);

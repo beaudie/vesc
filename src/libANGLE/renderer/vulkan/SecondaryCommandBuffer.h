@@ -60,6 +60,7 @@ enum class CommandID : uint16_t
     ResetQueryPool,
     ResolveImage,
     SetEvent,
+    SetViewport,
     WaitEvents,
     WriteTimestamp,
 };
@@ -272,6 +273,12 @@ struct SetEventParams
     VkPipelineStageFlags stageMask;
 };
 VERIFY_4_BYTE_ALIGNMENT(SetEventParams)
+
+struct SetViewportParams
+{
+    VkViewport viewport;
+};
+VERIFY_4_BYTE_ALIGNMENT(SetViewportParams)
 
 struct ResetEventParams
 {
@@ -491,6 +498,7 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                       const VkImageResolve *regions);
 
     void setEvent(VkEvent event, VkPipelineStageFlags stageMask);
+    void setViewport(const VkViewport &viewport);
 
     void waitEvents(uint32_t eventCount,
                     const VkEvent *events,
@@ -1015,6 +1023,12 @@ ANGLE_INLINE void SecondaryCommandBuffer::setEvent(VkEvent event, VkPipelineStag
     SetEventParams *paramStruct = initCommand<SetEventParams>(CommandID::SetEvent);
     paramStruct->event          = event;
     paramStruct->stageMask      = stageMask;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::setViewport(const VkViewport &viewport)
+{
+    SetViewportParams *paramStruct = initCommand<SetViewportParams>(CommandID::SetViewport);
+    paramStruct->viewport          = viewport;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::waitEvents(

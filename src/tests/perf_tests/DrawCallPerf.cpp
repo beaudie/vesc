@@ -20,6 +20,7 @@ enum class StateChange
     VertexAttrib,
     VertexBuffer,
     ManyVertexBuffers,
+    Viewport,
     Texture,
 };
 
@@ -51,6 +52,9 @@ std::string DrawArraysPerfParams::suffix() const
             break;
         case StateChange::Texture:
             strstr << "_tex_change";
+            break;
+        case StateChange::Viewport:
+            strstr << "_viewport_change";
             break;
         default:
             break;
@@ -282,6 +286,21 @@ void ChangeTextureThenDraw(unsigned int iterations,
     }
 }
 
+void ChangeViewportThenDraw(unsigned int iterations, GLsizei numElements)
+{
+    for (unsigned int it = 0; it < iterations; it++)
+    {
+        glViewport(0, 0, 64, 64);
+        glDrawArrays(GL_TRIANGLES, 0, numElements);
+
+        glViewport(0, 0, 256, 256);
+        glDrawArrays(GL_TRIANGLES, 0, numElements);
+
+        glViewport(0, 0, 512, 512);
+        glDrawArrays(GL_TRIANGLES, 0, numElements);
+    }
+}
+
 void DrawCallPerfBenchmark::drawBenchmark()
 {
     // This workaround fixes a huge queue of graphics commands accumulating on the GL
@@ -306,6 +325,9 @@ void DrawCallPerfBenchmark::drawBenchmark()
             break;
         case StateChange::Texture:
             ChangeTextureThenDraw(params.iterationsPerStep, numElements, mTexture1, mTexture2);
+            break;
+        case StateChange::Viewport:
+            ChangeViewportThenDraw(params.iterationsPerStep, numElements);
             break;
         case StateChange::NoChange:
             if (eglParams.deviceType != EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE ||
@@ -377,6 +399,7 @@ ANGLE_INSTANTIATE_TEST(DrawCallPerfBenchmark,
                        DrawArrays(DrawCallVulkan(), StateChange::Texture),
                        DrawArrays(Offscreen(DrawCallVulkan()), StateChange::Texture),
                        DrawArrays(NullDevice(DrawCallVulkan()), StateChange::Texture),
+                       DrawArrays(NullDevice(DrawCallVulkan()), StateChange::Viewport),
                        DrawArrays(DrawCallWGL(), StateChange::NoChange),
                        DrawArrays(Offscreen(DrawCallWGL()), StateChange::NoChange),
                        DrawArrays(DrawCallWGL(), StateChange::VertexAttrib),
