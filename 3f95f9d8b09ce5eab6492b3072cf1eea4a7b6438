@@ -48,6 +48,54 @@
     },
     {
       "key": {
+        "uuid": "3703fa50_76303e9b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-02T15:42:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7e878726_8e2681e2",
+      "range": {
+        "startLine": 1510,
+        "startChar": 17,
+        "endLine": 1510,
+        "endChar": 24
+      },
+      "revId": "3f95f9d8b09ce5eab6492b3072cf1eea4a7b6438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "787a9601_7946534a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-02T15:42:01Z",
+      "side": 1,
+      "message": "I see ptrdiff_t being used in other parts of ANGLE, but not in the Vulkan back-end (e.g. this line was cloned-and-modified from ImageHelper::stageSubresourceUpdate()).  It makes sense to use here ptrdiff_t and elsewhere.  I\u0027ll at least go clean-up ImageHelper::stageSubresourceUpdate() as part of this CL?",
+      "parentUuid": "7ff7145d_b37074e1",
+      "range": {
+        "startLine": 1510,
+        "startChar": 76,
+        "endLine": 1510,
+        "endChar": 84
+      },
+      "revId": "3f95f9d8b09ce5eab6492b3072cf1eea4a7b6438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "395fa75d_0f1d6acf",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 7
@@ -94,6 +142,54 @@
     },
     {
       "key": {
+        "uuid": "e9e26041_bf103d24",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2268,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-02T15:42:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "395fa75d_0f1d6acf",
+      "range": {
+        "startLine": 2268,
+        "startChar": 78,
+        "endLine": 2268,
+        "endChar": 86
+      },
+      "revId": "3f95f9d8b09ce5eab6492b3072cf1eea4a7b6438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d4ebbd7f_4626f7ba",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2268,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-02T15:42:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f917fd5_0db01860",
+      "range": {
+        "startLine": 2268,
+        "startChar": 40,
+        "endLine": 2268,
+        "endChar": 48
+      },
+      "revId": "3f95f9d8b09ce5eab6492b3072cf1eea4a7b6438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f7f0b268_e3d13fc4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 7
@@ -114,6 +210,30 @@
       "revId": "3f95f9d8b09ce5eab6492b3072cf1eea4a7b6438",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31342c70_4637fdd8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-02T15:42:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7f0b268_e3d13fc4",
+      "range": {
+        "startLine": 2253,
+        "startChar": 0,
+        "endLine": 2276,
+        "endChar": 1
+      },
+      "revId": "3f95f9d8b09ce5eab6492b3072cf1eea4a7b6438",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
