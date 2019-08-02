@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f303181_fb1bcbc4",
+        "filename": "src/compiler/translator/tree_util/ReplaceVariable.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-02T20:25:12Z",
+      "side": 1,
+      "message": "This block can probably be removed, since these types of comments typically get out of date quickly when new uses are added and the caller has no indication that this should be updated as well.",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 46
+      },
+      "revId": "d28e19c2920ccc72fa3eacb48cd41887cb9dfd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ab537ac_69c2cdc3",
+        "filename": "src/compiler/translator/tree_util/ReplaceVariable.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-02T20:25:12Z",
+      "side": 1,
+      "message": "These replace*() functions should probably check that two callers aren\u0027t trying to replace the same thing.\n\n1.) mReplacedGlobalVariables.count(oldVar) \u003d\u003d 0\nOR\n2.) mReplacedGlobalVariables[oldVar] \u003d\u003d newVar\n\nEither this is the first time we are replacing the global, or we are trying to replace it again but with the same new var (this may be a bug too, but should presumably still end up with the same desired output).",
+      "revId": "d28e19c2920ccc72fa3eacb48cd41887cb9dfd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5857171_37d78003",
+        "filename": "src/compiler/translator/tree_util/ReplaceVariable.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-02T20:25:12Z",
+      "side": 1,
+      "message": "This function can be replaced with just these 2 lines, since the outside conditional does essentially the same thing.",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 54
+      },
+      "revId": "d28e19c2920ccc72fa3eacb48cd41887cb9dfd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6685f01_9b33c2e9",
+        "filename": "src/compiler/translator/tree_util/ReplaceVariable.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-02T20:25:12Z",
+      "side": 1,
+      "message": "Is using [] better here, rather than .at(), since you don\u0027t need to worry about any bounds-checking?",
+      "revId": "d28e19c2920ccc72fa3eacb48cd41887cb9dfd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
