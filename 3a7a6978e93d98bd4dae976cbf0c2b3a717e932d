@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4624daca_34b7eb9a",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-02T02:59:54Z",
+      "side": 1,
+      "message": "Assuming this is passing in the full parameter type string, this could catch parameters with \"const\" anywhere in their name, rather than just as a qualifier.   Instead, since \"const\" is a keyword, this should split the param_type string and look for the full word \"const\" anywhere in the resulting list.\n\nfor word in param_type.split():\n    if word.strip() \u003d\u003d \"const\":\n        is_const \u003d true\n        break",
+      "revId": "3a7a6978e93d98bd4dae976cbf0c2b3a717e932d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7697656b_3c13a793",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-02T02:59:54Z",
+      "side": 1,
+      "message": "This block can be simplified to the following:\n\nif is_const:\n    param_type +\u003d \"Const\"\nfor x in range(pointer_count):\n    param_type +\u003d \"Pointer\"\n\nreturn param_type",
+      "revId": "3a7a6978e93d98bd4dae976cbf0c2b3a717e932d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2ad6647_dcfcfb2a",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-02T02:59:54Z",
+      "side": 1,
+      "message": "nit: For readability, can this be swapped and use positive logic?\n\nif return_type \u003d\u003d \"void\":\n    ...",
+      "revId": "3a7a6978e93d98bd4dae976cbf0c2b3a717e932d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
