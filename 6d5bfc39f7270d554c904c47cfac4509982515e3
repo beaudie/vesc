@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "79c46149_f52e35ec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-02T17:28:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb25f03e_3e34c87f",
+      "revId": "6d5bfc39f7270d554c904c47cfac4509982515e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fbf88f0f_ffabc6bb",
         "filename": "src/libANGLE/VertexArray.cpp",
         "patchSetId": 7
