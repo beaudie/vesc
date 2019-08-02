@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "66fad7d8_7522e1f1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-02T23:26:48Z",
+      "side": 1,
+      "message": "You\u0027re right that this was necessary.   I created the test CopyTexImageTestES3.3DSubImageDrawTextureData that does what you described and it hit the same issue, which is fixed the same way as in stageSubresourceUpdateFromImage().",
+      "parentUuid": "4521f1cb_ab6c3d2d",
+      "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c2221ae_170a1b4d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 1
@@ -83,6 +101,24 @@
       "writtenOn": "2019-08-02T15:37:47Z",
       "side": 1,
       "message": "Same here. In this case, a drawable format that\u0027s different from the framebuffer should be used. Not sure if `getLayerLevelDrawImageView` is doing the right thing for 3d textures (it might)",
+      "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f28a153f_defca069",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-02T23:26:48Z",
+      "side": 1,
+      "message": "You\u0027re right again here.\n\nI created the test CopyTexImageTestES3.3DSubImageDrawMismatchedTextureTypes which uses:\n3D texture type: GL_UNSIGNED_BYTE\n2D texture type: GL_UNSIGNED_SHORT_4_4_4_4\n\nWhich hits the following error:\n\ngetLayerLevelDrawImageView(1336): \t! Assert failed in getLayerLevelDrawImageView (../../third_party/angle/src/libANGLE/renderer/vulkan/TextureVk.cpp:1336): mLayerLevelDrawImageViews.size() \u003e layer\n\nIn this case:\nmLayerLevelDrawImageViews.size() \u003d 1\nlayer \u003d 1\n\nI haven\u0027t dug in at all yet to see what\u0027s going on here, so any ideas are welcome.",
+      "parentUuid": "7c2221ae_170a1b4d",
       "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -148,6 +184,30 @@
       "side": 1,
       "message": "So the front-end puts the 3D textures z in the index layer? What\u0027s destOffset.z then? Can we assert that `destOffset.z \u003d\u003d (index.hasLayer() ? index.getLayerIndex() : 0)` here?",
       "parentUuid": "199e12ba_fcb889da",
+      "range": {
+        "startLine": 2397,
+        "startChar": 0,
+        "endLine": 2398,
+        "endChar": 54
+      },
+      "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "334a8eff_794043ed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2398,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-02T23:26:48Z",
+      "side": 1,
+      "message": "I needed to update TextureVk::copySubImageImpl() to pass along the zOffset, since it was getting lost for 3D texture copies, causing the copy to fail.\n\n\nI added some tracing to see what values are reaching here for my new tests:\n\n    if (imageType \u003d\u003d VK_IMAGE_TYPE_3D)\n    {\n        copyToImage.dstSubresource.baseArrayLayer \u003d 0;\n        copyToImage.dstSubresource.layerCount     \u003d 1;\n\n        int baseArrayLayer \u003d index.hasLayer() ? index.getLayerIndex() : 0;\n        int layerCount     \u003d index.getLayerCount();\n        WARN() \u003c\u003c \"TIMTIM \u003e\u003e \" \u003c\u003c __FILE__ \u003c\u003c \"::\" \u003c\u003c \"__LINE__\" \u003c\u003c \" \u003e\u003e layerCount \u003d \" \u003c\u003c layerCount;\n        WARN() \u003c\u003c \"TIMTIM \u003e\u003e \" \u003c\u003c __FILE__ \u003c\u003c \"::\" \u003c\u003c \"__LINE__\" \u003c\u003c \" \u003e\u003e baseArrayLayer \u003d \" \u003c\u003c baseArrayLayer;\n        WARN() \u003c\u003c \"TIMTIM \u003e\u003e \" \u003c\u003c __FILE__ \u003c\u003c \"::\" \u003c\u003c \"__LINE__\" \u003c\u003c \" \u003e\u003e destOffset.z \u003d \" \u003c\u003c destOffset.z;\n    }\n    else\n    {\n        copyToImage.dstSubresource.baseArrayLayer \u003d index.hasLayer() ? index.getLayerIndex() : 0;\n        copyToImage.dstSubresource.layerCount     \u003d index.getLayerCount();\n    }\n\n\n[ RUN      ] CopyTexImageTestES3.3DSubImageRawTextureData/ES3_Vulkan\nWarning: stageSubresourceUpdateFromImage(2402): TIMTIM \u003e\u003e ../../third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp::__LINE__ \u003e\u003e layerCount \u003d 1\nWarning: stageSubresourceUpdateFromImage(2403): TIMTIM \u003e\u003e ../../third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp::__LINE__ \u003e\u003e baseArrayLayer \u003d 0\nWarning: stageSubresourceUpdateFromImage(2404): TIMTIM \u003e\u003e ../../third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp::__LINE__ \u003e\u003e destOffset.z \u003d 0\nWarning: stageSubresourceUpdateFromImage(2402): TIMTIM \u003e\u003e ../../third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp::__LINE__ \u003e\u003e layerCount \u003d 1\nWarning: stageSubresourceUpdateFromImage(2403): TIMTIM \u003e\u003e ../../third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp::__LINE__ \u003e\u003e baseArrayLayer \u003d 1\nWarning: stageSubresourceUpdateFromImage(2404): TIMTIM \u003e\u003e ../../third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp::__LINE__ \u003e\u003e destOffset.z \u003d 1\nWarning: stageSubresourceUpdateFromImage(2402): TIMTIM \u003e\u003e ../../third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp::__LINE__ \u003e\u003e layerCount \u003d 1\nWarning: stageSubresourceUpdateFromImage(2403): TIMTIM \u003e\u003e ../../third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp::__LINE__ \u003e\u003e baseArrayLayer \u003d 2\nWarning: stageSubresourceUpdateFromImage(2404): TIMTIM \u003e\u003e ../../third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp::__LINE__ \u003e\u003e destOffset.z \u003d 2\nWarning: stageSubresourceUpdateFromImage(2402): TIMTIM \u003e\u003e ../../third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp::__LINE__ \u003e\u003e layerCount \u003d 1\nWarning: stageSubresourceUpdateFromImage(2403): TIMTIM \u003e\u003e ../../third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp::__LINE__ \u003e\u003e baseArrayLayer \u003d 3\nWarning: stageSubresourceUpdateFromImage(2404): TIMTIM \u003e\u003e ../../third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp::__LINE__ \u003e\u003e destOffset.z \u003d 3\n[       OK ] CopyTexImageTestES3.3DSubImageRawTextureData/ES3_Vulkan (1242 ms)\n[ RUN      ] CopyTexImageTestES3.3DSubImageDrawTextureData/ES3_Vulkan\n[       OK ] CopyTexImageTestES3.3DSubImageDrawTextureData/ES3_Vulkan (985 ms)\n\n\n\nI\u0027m not entirely sure what these results are telling us, but it seems to be working.",
+      "parentUuid": "ea06d2ab_920ea364",
       "range": {
         "startLine": 2397,
         "startChar": 0,
