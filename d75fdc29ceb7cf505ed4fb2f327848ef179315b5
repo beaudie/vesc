@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2dca84b4_918519fa",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2932,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-02T18:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b5ecc9b_f6151976",
+      "range": {
+        "startLine": 2932,
+        "startChar": 51,
+        "endLine": 2932,
+        "endChar": 61
+      },
+      "revId": "d75fdc29ceb7cf505ed4fb2f327848ef179315b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cab02174_996a8781",
         "filename": "src/tests/gl_tests/GLSLTest.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "d75fdc29ceb7cf505ed4fb2f327848ef179315b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "684962d8_a5d7a9e9",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2986,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-02T18:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cab02174_996a8781",
+      "range": {
+        "startLine": 2985,
+        "startChar": 0,
+        "endLine": 2986,
+        "endChar": 26
+      },
+      "revId": "d75fdc29ceb7cf505ed4fb2f327848ef179315b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "02a899ea_9b42a44c",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2999,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-02T18:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b2ea2f4_bd99deac",
+      "range": {
+        "startLine": 2999,
+        "startChar": 36,
+        "endLine": 2999,
+        "endChar": 42
+      },
+      "revId": "d75fdc29ceb7cf505ed4fb2f327848ef179315b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "667879bd_ad6f3d21",
         "filename": "src/tests/gl_tests/GLSLTest.cpp",
         "patchSetId": 2
@@ -82,6 +154,24 @@
       "writtenOn": "2019-08-02T18:15:22Z",
       "side": 1,
       "message": "Is that, or the SPIR-V error you mentioned? If you filed a bug for that, please let me know (I\u0027m curious).\n\nYou can also put the comment above, so you don\u0027t have to abbreviate things.",
+      "revId": "d75fdc29ceb7cf505ed4fb2f327848ef179315b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "386b35a1_3c7a20e1",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3001,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-02T18:52:51Z",
+      "side": 1,
+      "message": "I just reused the bug for arrays of arrays.\n\nThis is the same bug as the SPIR-V error. If you try to run the test, you will get a Vulkan validation error complaining about invalid SPIR-V.",
+      "parentUuid": "667879bd_ad6f3d21",
       "revId": "d75fdc29ceb7cf505ed4fb2f327848ef179315b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -108,6 +198,30 @@
       "revId": "d75fdc29ceb7cf505ed4fb2f327848ef179315b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4282dd11_84ce3ba3",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3050,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-02T18:52:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1c35a6c3_6b6ecccd",
+      "range": {
+        "startLine": 3050,
+        "startChar": 28,
+        "endLine": 3050,
+        "endChar": 34
+      },
+      "revId": "d75fdc29ceb7cf505ed4fb2f327848ef179315b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
