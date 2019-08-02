@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "f3169ffb_ef5f3235",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-02T18:03:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "12a015f3_a09fe554",
+      "range": {
+        "startLine": 634,
+        "startChar": 3,
+        "endLine": 642,
+        "endChar": 0
+      },
+      "revId": "ff1f173736f495d989857a823838d2d5aca3ed38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb31d9ba_69b17a9c",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 11
