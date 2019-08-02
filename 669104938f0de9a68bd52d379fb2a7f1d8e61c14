@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3217246_94dda58d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2219,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-08-02T10:38:29Z",
+      "side": 1,
+      "message": "I guess I should first call getSamplerIndex(textureUnit) to get the index, and then pass to getUniformIndexFromSamplerIndex().\n\nBut in getSamplerIndex -\u003e getUniformIndexFromLocation, the location passed in is the sampler location, but seems what it wants is the uniform location, I think they are different.\nSo, any idea about how to get the uniform index from a sampler location? Thanks.",
+      "revId": "669104938f0de9a68bd52d379fb2a7f1d8e61c14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
