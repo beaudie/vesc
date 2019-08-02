@@ -2891,8 +2891,8 @@ TEST_P(GLSLTest_ES3, WriteIntoDynamicIndexingOfSwizzledVector)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
-// Test that array indices for arrays of arrays work as expected.
-TEST_P(GLSLTest_ES31, ArraysOfArrays)
+// Test that array indices for arrays of arrays of primitives work as expected.
+TEST_P(GLSLTest_ES31, ArraysOfArraysPrimitive)
 {
     constexpr char kFS[] =
         "#version 310 es\n"
@@ -2926,6 +2926,57 @@ TEST_P(GLSLTest_ES31, ArraysOfArrays)
         }
     }
     drawQuad(program.get(), essl31_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that arrays of arrays of opaque types work as expected.
+TEST_P(GLSLTest_ES31, ArraysOfArraysOpaque)
+{
+    ANGLE_SKIP_TEST_IF(IsVulkan());  // anglebug.com/3604 - Vulkan doesn't support 2D arr of sampler
+    constexpr char kFS[] =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform mediump isampler2D test[2][2];\n"
+        "void main() {\n"
+        "    bool passed = true;\n"
+        "    for (int i = 0; i < 2; i++) {\n"
+        "        for (int j = 0; j < 2; j++) {\n"
+        "            if (texture(test[i][j], vec2(0.0, 0.0)) != ivec4(i + 1, j + 1, 0, 1)) {\n"
+        "                passed = false;\n"
+        "            }\n"
+        "        }\n"
+        "    }\n"
+        "    my_FragColor = passed ? vec4(0.0, 1.0, 0.0, 1.0) : vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, essl31_shaders::vs::Simple(), kFS);
+    glUseProgram(program.get());
+    GLuint textures[2][2];
+    glGenTextures(4, &textures[0][0]);
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            // First generate the texture
+            int textureUnit = i * 2 + j;
+            glActiveTexture(GL_TEXTURE0 + textureUnit);
+            glBindTexture(GL_TEXTURE_2D, textures[i][j]);
+            GLint texData[2] = {i + 1, j + 1};
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RG32I, 1, 1, 0, GL_RG_INTEGER, GL_INT, &texData[0]);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            // Then send it as a uniform
+            std::stringstream uniformName;
+            uniformName << "test[" << i << "][" << j << "]";
+            GLint uniformLocation = glGetUniformLocation(program.get(), uniformName.str().c_str());
+            // All array indices should be used.
+            EXPECT_NE(uniformLocation, -1);
+            glUniform1i(uniformLocation, textureUnit);
+        }
+    }
+    drawQuad(program.get(), essl31_shaders::PositionAttrib(), 0.5f);
+    glDeleteTextures(4, &textures[0][0]);
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
