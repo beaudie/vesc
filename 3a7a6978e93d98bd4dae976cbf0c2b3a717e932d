@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b7fd6cc1_4d2a6830",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-02T18:01:31Z",
+      "side": 1,
+      "message": "Your code is equivalent to \"const\" in param.type.split(). The strip is automatic AFAIK. Done.",
+      "parentUuid": "4624daca_34b7eb9a",
+      "revId": "3a7a6978e93d98bd4dae976cbf0c2b3a717e932d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7697656b_3c13a793",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 14
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "d4ff5d11_83ba4c74",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-02T18:01:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7697656b_3c13a793",
+      "revId": "3a7a6978e93d98bd4dae976cbf0c2b3a717e932d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2ad6647_dcfcfb2a",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 14
@@ -50,6 +86,24 @@
       "revId": "3a7a6978e93d98bd4dae976cbf0c2b3a717e932d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7184271_27bc315b",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 14
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-02T18:01:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2ad6647_dcfcfb2a",
+      "revId": "3a7a6978e93d98bd4dae976cbf0c2b3a717e932d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
