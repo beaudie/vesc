@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "50801fea_76021133",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-02T18:46:48Z",
+      "side": 1,
+      "message": "The spec doesn\u0027t say that these formats are not filterable so we should assume that they are.",
+      "range": {
+        "startLine": 960,
+        "startChar": 201,
+        "endLine": 960,
+        "endChar": 215
+      },
+      "revId": "d1c372c352a3ebe01a8bfc5953b1ea62d7319b56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb1e851d_d51ae33e",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-02T18:46:48Z",
+      "side": 1,
+      "message": "ditto.",
+      "range": {
+        "startLine": 964,
+        "startChar": 201,
+        "endLine": 964,
+        "endChar": 215
+      },
+      "revId": "d1c372c352a3ebe01a8bfc5953b1ea62d7319b56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
