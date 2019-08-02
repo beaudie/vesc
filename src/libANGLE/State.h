@@ -328,7 +328,7 @@ class State : angle::NonCopyable
     //// Typed buffer binding point manipulation ////
     ANGLE_INLINE void setBufferBinding(const Context *context, BufferBinding target, Buffer *buffer)
     {
-        (this->*(kBufferSetters[target]))(context, buffer);
+        (this->*(kBufferSetters()[target]))(context, buffer);
     }
 
     ANGLE_INLINE Buffer *getTargetBuffer(BufferBinding target) const
@@ -722,7 +722,7 @@ class State : angle::NonCopyable
     static_assert(DIRTY_OBJECT_PROGRAM == 9, "check DIRTY_OBJECT_PROGRAM index");
 
     // Dispatch table for buffer update functions.
-    static const angle::PackedEnumMap<BufferBinding, BufferBindingSetter> kBufferSetters;
+    static const angle::PackedEnumMap<BufferBinding, BufferBindingSetter> &kBufferSetters();
 
     EGLenum mClientType;
     Version mClientVersion;
