@@ -109,6 +109,30 @@
       "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "199e12ba_fcb889da",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2398,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-08-02T16:58:04Z",
+      "side": 1,
+      "message": "I\u0027m running into similar problems with framebuffer attachments that are layers of 3D textures.  Although in my case, layerCount for 3D is always 1 and I have to refer to depth instead.",
+      "parentUuid": "14098c4c_bb62ca91",
+      "range": {
+        "startLine": 2397,
+        "startChar": 0,
+        "endLine": 2398,
+        "endChar": 54
+      },
+      "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
