@@ -2891,8 +2891,8 @@ TEST_P(GLSLTest_ES3, WriteIntoDynamicIndexingOfSwizzledVector)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
-// Test that array indices for arrays of arrays work as expected.
-TEST_P(GLSLTest_ES31, ArraysOfArrays)
+// Test that array indices for arrays of arrays of primitives work as expected.
+TEST_P(GLSLTest_ES31, ArraysOfArraysPrimitive)
 {
     constexpr char kFS[] =
         "#version 310 es\n"
@@ -2927,6 +2927,154 @@ TEST_P(GLSLTest_ES31, ArraysOfArrays)
     }
     drawQuad(program.get(), essl31_shaders::PositionAttrib(), 0.5f);
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that array indices for arrays of arrays of primitives work as expected
+// inside blocks.
+TEST_P(GLSLTest_ES31, ArraysOfArraysBlockPrimitive)
+{
+    constexpr char kFS[] =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "out vec4 my_FragColor;\n"
+        "layout(packed) uniform UBO { ivec2 test[2][2]; } ubo_data;\n"
+        "void main() {\n"
+        "    bool passed = true;\n"
+        "    for (int i = 0; i < 2; i++) {\n"
+        "        for (int j = 0; j < 2; j++) {\n"
+        "            if (ubo_data.test[i][j] != ivec2(i + 1, j + 1)) {\n"
+        "                passed = false;\n"
+        "            }\n"
+        "        }\n"
+        "    }\n"
+        "    my_FragColor = passed ? vec4(0.0, 1.0, 0.0, 1.0) : vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, essl31_shaders::vs::Simple(), kFS);
+    glUseProgram(program.get());
+    // Use interface queries to determine buffer size and offset
+    GLuint uboBlockIndex   = glGetProgramResourceIndex(program.get(), GL_UNIFORM_BLOCK, "UBO");
+    GLenum uboDataSizeProp = GL_BUFFER_DATA_SIZE;
+    GLint uboDataSize;
+    glGetProgramResourceiv(program.get(), GL_UNIFORM_BLOCK, uboBlockIndex, 1, &uboDataSizeProp, 1,
+                           nullptr, &uboDataSize);
+    std::unique_ptr<char[]> uboData(new char[uboDataSize]);
+    for (int i = 0; i < 2; i++)
+    {
+        std::stringstream resourceName;
+        resourceName << "UBO.test[" << i << "][0]";
+        GLenum resourceProps[] = {GL_ARRAY_STRIDE, GL_OFFSET};
+        struct
+        {
+            GLint stride;
+            GLint offset;
+        } values;
+        GLuint resourceIndex =
+            glGetProgramResourceIndex(program.get(), GL_UNIFORM, resourceName.str().c_str());
+        ASSERT_NE(resourceIndex, GL_INVALID_INDEX);
+        glGetProgramResourceiv(program.get(), GL_UNIFORM, resourceIndex, 2, &resourceProps[0], 2,
+                               nullptr, &values.stride);
+        for (int j = 0; j < 2; j++)
+        {
+            GLint(&dataPtr)[2] =
+                *reinterpret_cast<GLint(*)[2]>(&uboData[values.offset + j * values.stride]);
+            dataPtr[0] = i + 1;
+            dataPtr[1] = j + 1;
+        }
+    }
+    GLuint ubo;
+    glGenBuffers(1, &ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+    glBufferData(GL_UNIFORM_BUFFER, uboDataSize, &uboData[0], GL_STATIC_DRAW);
+    GLuint ubo_index = glGetUniformBlockIndex(program.get(), "UBO");
+    ASSERT_NE(ubo_index, GL_INVALID_INDEX);
+    glUniformBlockBinding(program.get(), ubo_index, 5);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 5, ubo);
+    drawQuad(program.get(), essl31_shaders::PositionAttrib(), 0.5f);
+    glDeleteBuffers(1, &ubo);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that arrays of arrays of opaque types work as expected.
+TEST_P(GLSLTest_ES31, ArraysOfArraysOpaque)
+{
+    ANGLE_SKIP_TEST_IF(IsVulkan());  // anglebug.com/3604 - Vulkan doesn't support 2D arr of sampler
+    constexpr char kFS[] =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform mediump isampler2D test[2][2];\n"
+        "void main() {\n"
+        "    bool passed = true;\n"
+        "    for (int i = 0; i < 2; i++) {\n"
+        "        for (int j = 0; j < 2; j++) {\n"
+        "            if (texture(test[i][j], vec2(0.0, 0.0)) != ivec4(i + 1, j + 1, 0, 1)) {\n"
+        "                passed = false;\n"
+        "            }\n"
+        "        }\n"
+        "    }\n"
+        "    my_FragColor = passed ? vec4(0.0, 1.0, 0.0, 1.0) : vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, essl31_shaders::vs::Simple(), kFS);
+    glUseProgram(program.get());
+    GLuint textures[2][2];
+    glGenTextures(4, &textures[0][0]);
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < 2; j++)
+        {
+            // First generate the texture
+            int textureUnit = i * 2 + j;
+            glActiveTexture(GL_TEXTURE0 + textureUnit);
+            glBindTexture(GL_TEXTURE_2D, textures[i][j]);
+            GLint texData[2] = {i + 1, j + 1};
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RG32I, 1, 1, 0, GL_RG_INTEGER, GL_INT, &texData[0]);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            // Then send it as a uniform
+            std::stringstream uniformName;
+            uniformName << "test[" << i << "][" << j << "]";
+            GLint uniformLocation = glGetUniformLocation(program.get(), uniformName.str().c_str());
+            // All array indices should be used.
+            EXPECT_NE(uniformLocation, -1);
+            glUniform1i(uniformLocation, textureUnit);
+        }
+    }
+    drawQuad(program.get(), essl31_shaders::PositionAttrib(), 0.5f);
+    glDeleteTextures(4, &textures[0][0]);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that structs containing opaque types work as expected.
+TEST_P(GLSLTest_ES31, StructOpaque)
+{
+    constexpr char kFS[] =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "out vec4 my_FragColor;\n"
+        "struct Data { mediump sampler2D data; };\n"
+        "uniform Data test;\n"
+        "void main() {\n"
+        "    my_FragColor = texture(test.data, vec2(0.0, 0.0));\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, essl31_shaders::vs::Simple(), kFS);
+    glUseProgram(program.get());
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glActiveTexture(GL_TEXTURE0 + 5);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    GLColor texData = MakeGLColor(32, 64, 96, 255);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, &texData);
+    // Then send it as a uniform
+    GLint uniformLocation = glGetUniformLocation(program.get(), "test.data");
+    // The uniform should be active.
+    EXPECT_NE(uniformLocation, -1);
+    glUniform1i(uniformLocation, 5);
+    drawQuad(program.get(), essl31_shaders::PositionAttrib(), 0.5f);
+    glDeleteTextures(1, &texture);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, texData);
 }
 
 // This test covers a bug (and associated workaround) with nested sampling operations in the HLSL
