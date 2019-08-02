@@ -45,6 +45,23 @@
       "revId": "d1c372c352a3ebe01a8bfc5953b1ea62d7319b56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f521ba0d_8b3afafd",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-02T20:30:14Z",
+      "side": 1,
+      "message": "Since this is in the front-end and the various back-ends could have different capabilities, should these be checking the extension is enabled before returning true?\n\n    if (!context-\u003egetExtensions().textureFormat2101010REV)\n    {\n        context-\u003evalidationError(GL_INVALID_ENUM, kEnumNotSupported);\n        return false;\n    }",
+      "revId": "d1c372c352a3ebe01a8bfc5953b1ea62d7319b56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
