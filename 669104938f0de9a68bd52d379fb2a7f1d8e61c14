@@ -16,6 +16,24 @@
       "revId": "669104938f0de9a68bd52d379fb2a7f1d8e61c14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22017ff0_0b855470",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2219,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-02T13:57:56Z",
+      "side": 1,
+      "message": "Could you please try to isolate the failure into a regression test? I\u0027m not sure I know what the bug is right now.",
+      "parentUuid": "a3217246_94dda58d",
+      "revId": "669104938f0de9a68bd52d379fb2a7f1d8e61c14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
