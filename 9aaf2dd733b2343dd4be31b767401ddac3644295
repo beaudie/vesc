@@ -52,6 +52,63 @@
       "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4521f1cb_ab6c3d2d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-02T15:37:47Z",
+      "side": 1,
+      "message": "If your fix that changes the index to layer 0 (in stageSubresourceUpdate*) is really necessary, it would be missing from here as well.\n\nCould you add a test that takes this path? Initializing the texture, using it in a draw call and doing a copy afterwards should hit it (same format for texture and framebuffer so Transfer is used).",
+      "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c2221ae_170a1b4d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-02T15:37:47Z",
+      "side": 1,
+      "message": "Same here. In this case, a drawable format that\u0027s different from the framebuffer should be used. Not sure if `getLayerLevelDrawImageView` is doing the right thing for 3d textures (it might)",
+      "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14098c4c_bb62ca91",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-02T15:37:47Z",
+      "side": 1,
+      "message": "Why would the front-end given an \"index\" that\u0027s different from these? Could we assert them instead?",
+      "range": {
+        "startLine": 2397,
+        "startChar": 0,
+        "endLine": 2398,
+        "endChar": 54
+      },
+      "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
