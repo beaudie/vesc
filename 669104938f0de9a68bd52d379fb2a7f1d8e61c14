@@ -34,6 +34,24 @@
       "revId": "669104938f0de9a68bd52d379fb2a7f1d8e61c14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "800074cd_ccd02e8d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2219,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-02T13:59:38Z",
+      "side": 1,
+      "message": "Also you try using \"AllGraphicsShadersReadOnly\" instead of Fragment + AllGraphics. Then we wouldn\u0027t need to check the shader mask.",
+      "parentUuid": "22017ff0_0b855470",
+      "revId": "669104938f0de9a68bd52d379fb2a7f1d8e61c14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
