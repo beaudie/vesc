@@ -181,6 +181,24 @@
     },
     {
       "key": {
+        "uuid": "9b727374_f0e9c8ca",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-02T14:00:24Z",
+      "side": 1,
+      "message": "If the blob cache funcs aren\u0027t set, we won\u0027t return an error. We do want an abort if there\u0027s an unexpected error.",
+      "parentUuid": "44e165f5_50df985a",
+      "revId": "47efb479567c442010f7300962fc1cbd5021fd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "864dc6bb_20772dc2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
