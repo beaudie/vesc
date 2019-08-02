@@ -199,6 +199,24 @@
     },
     {
       "key": {
+        "uuid": "50a6dfdd_53708f75",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-02T15:18:03Z",
+      "side": 1,
+      "message": "\u003e If I return an error from getPipelineCache(), which will result in application abortion, is this what you want?\n\nYes exactly, because if you call into the platform and you get an error, the application is likely to abort shortly afterwards anyway because something must be seriously wrong.\n\n\u003e But if we are running on Linux, where it does not set blob cache callback functions, I don\u0027t think we can return an error.\n\nLike Jamie said, blob cache not existing is not an error.",
+      "parentUuid": "9b727374_f0e9c8ca",
+      "revId": "47efb479567c442010f7300962fc1cbd5021fd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "864dc6bb_20772dc2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
