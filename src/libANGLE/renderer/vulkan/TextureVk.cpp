@@ -751,7 +751,7 @@ angle::Result TextureVk::setStorageExternalMemory(const gl::Context *context,
         vk::CommandBuffer *commandBuffer = nullptr;
         ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
         mImage->changeLayoutAndQueue(VK_IMAGE_ASPECT_COLOR_BIT,
-                                     vk::ImageLayout::FragmentShaderReadOnly,
+                                     vk::ImageLayout::AllGraphicsShadersReadOnly,
                                      rendererQueueFamilyIndex, commandBuffer);
     }
 
@@ -783,7 +783,7 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
         vk::CommandBuffer *commandBuffer = nullptr;
         ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
         mImage->changeLayoutAndQueue(VK_IMAGE_ASPECT_COLOR_BIT,
-                                     vk::ImageLayout::FragmentShaderReadOnly,
+                                     vk::ImageLayout::AllGraphicsShadersReadOnly,
                                      rendererQueueFamilyIndex, commandBuffer);
     }
 
