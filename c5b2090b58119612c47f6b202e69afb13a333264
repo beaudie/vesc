@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23f6c29a_47eb8f35",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-02T18:45:08Z",
+      "side": 1,
+      "message": "Why did you switch from std::string to char* here?   Is the concern that you\u0027d be passing around full std::string objects rather than just pointers (would std::string\u0026 work instead)?",
+      "revId": "c5b2090b58119612c47f6b202e69afb13a333264",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
