@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "be4be385_2d25f58a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-03T01:53:15Z",
+      "side": 1,
+      "message": "You may need to change `getLayerLevelDrawImageView` to use depth instead of layer for 3d textures, both to create the view and to query it.",
+      "parentUuid": "f28a153f_defca069",
+      "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14098c4c_bb62ca91",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
