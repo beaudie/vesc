@@ -3387,6 +3387,12 @@ void Context::initCaps()
 
     LimitCap(&mState.mCaps.maxShaderUniformBlocks[ShaderType::Vertex],
              IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS);
+    LimitCap(&mState.mCaps.maxShaderUniformBlocks[ShaderType::Fragment],
+             IMPLEMENTATION_MAX_FRAGMENT_SHADER_UNIFORM_BUFFERS);
+    LimitCap(&mState.mCaps.maxShaderUniformBlocks[ShaderType::Compute],
+             IMPLEMENTATION_MAX_COMPUTE_SHADER_UNIFORM_BUFFERS);
+    LimitCap(&mState.mCaps.maxCombinedUniformBlocks,
+             IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS);
     LimitCap(&mState.mCaps.maxUniformBufferBindings, IMPLEMENTATION_MAX_UNIFORM_BUFFER_BINDINGS);
 
     LimitCap(&mState.mCaps.maxVertexOutputComponents, IMPLEMENTATION_MAX_VARYING_VECTORS * 4);
