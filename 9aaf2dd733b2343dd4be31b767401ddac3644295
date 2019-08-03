@@ -235,6 +235,30 @@
       "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8a9e22b_086f4fbe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-03T01:55:40Z",
+      "side": 1,
+      "message": "Ok, it looks like .z and baseArrayLayer are identical, which means this would work indeed. I\u0027d just add `ASSERT(destOffset.z \u003d\u003d (index.hasLayer() ? index.getLayerIndex() : 0))` to make sure this assumption is not broken. A comment explaining things would be welcome.",
+      "parentUuid": "334a8eff_794043ed",
+      "range": {
+        "startLine": 2397,
+        "startChar": 0,
+        "endLine": 2398,
+        "endChar": 54
+      },
+      "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
