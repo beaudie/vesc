@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "18851f6e_4d9cfa27",
+        "filename": "src/compiler/translator/blocklayout.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-03T01:14:50Z",
+      "side": 1,
+      "message": "Big picture is that opaque types shouldn\u0027t really be being encoded. AFAIK samplers are special because they can be in structs. But otherwise they can\u0027t be in struct uniforms or uniform blocks. Which is what the encoder is used for.\n\nTL;DR, should be fine.",
+      "parentUuid": "eb4f5315_fc8e8974",
+      "range": {
+        "startLine": 121,
+        "startChar": 11,
+        "endLine": 121,
+        "endChar": 49
+      },
+      "revId": "40db0c29391f89c0288d84fe8e2c8ac353b28f5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "628b7fb0_7ab4b418",
         "filename": "src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp",
         "patchSetId": 21
