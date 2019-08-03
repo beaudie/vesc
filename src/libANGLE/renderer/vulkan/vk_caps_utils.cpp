@@ -215,9 +215,11 @@ void RendererVk::ensureCapsInitialized() const
         kReservedDriverUniformBindingCount + kReservedDefaultUniformBindingCount;
 
     const uint32_t maxPerStageUniformBuffers =
-        limitsVk.maxPerStageDescriptorUniformBuffers - kTotalReservedPerStageUniformBuffers;
+        std::min<uint32_t>(std::numeric_limits<int32_t>::max(),
+        limitsVk.maxPerStageDescriptorUniformBuffers - kTotalReservedPerStageUniformBuffers);
     const uint32_t maxCombinedUniformBuffers =
-        limitsVk.maxDescriptorSetUniformBuffers - kTotalReservedUniformBuffers;
+        std::min<uint32_t>(std::numeric_limits<int32_t>::max(),
+        limitsVk.maxDescriptorSetUniformBuffers - kTotalReservedUniformBuffers);
     mNativeCaps.maxShaderUniformBlocks[gl::ShaderType::Vertex]   = maxPerStageUniformBuffers;
     mNativeCaps.maxShaderUniformBlocks[gl::ShaderType::Fragment] = maxPerStageUniformBuffers;
     mNativeCaps.maxShaderUniformBlocks[gl::ShaderType::Compute]  = maxPerStageUniformBuffers;
