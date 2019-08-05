@@ -70,6 +70,24 @@
       "revId": "669104938f0de9a68bd52d379fb2a7f1d8e61c14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9203039e_65089d9d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2219,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-08-05T00:38:32Z",
+      "side": 1,
+      "message": "The root cause is I misused sampler index as uniform index, when trying to get the uniform info. This results in unnecessary dependencies in Angry Bird.\n\nI don\u0027t think we need a regression test here, as the root cause is quite clear: I should convert the sampler index to uniform index first, before getting the active mask.\n\nThe current patch set will cause a regression on end2end tests(SamplerLocation, f.ex).\nWhat I\u0027m asking is, I don\u0027t know how to convert sampler index to uniform index. I was thinking maybe it\u0027s straightforward for you.",
+      "parentUuid": "2c761208_2ceb87f7",
+      "revId": "669104938f0de9a68bd52d379fb2a7f1d8e61c14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
