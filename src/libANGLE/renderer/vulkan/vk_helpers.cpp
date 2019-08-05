@@ -2586,6 +2586,126 @@ angle::Result ImageHelper::flushAllStagedUpdates(ContextVk *contextVk)
     return flushStagedUpdates(contextVk, 0, mLevelCount, 0, mLayerCount, commandBuffer);
 }
 
+angle::Result ImageHelper::readPixels(ContextVk *contextVk,
+                                      const gl::Rectangle &area,
+                                      VkImageAspectFlagBits copyAspectFlags,
+                                      size_t levelIn,
+                                      size_t layerIn,
+                                      const PackPixelsParams &packPixelsParams,
+                                      vk::DynamicBuffer *readPixelsBuffer,
+                                      vk::CommandBuffer *commandBuffer,
+                                      uint8_t *pixelsOut)
+{
+    RendererVk *renderer = contextVk->getRenderer();
+
+    const angle::Format *readFormat = &mFormat->imageFormat();
+
+    if (copyAspectFlags != VK_IMAGE_ASPECT_COLOR_BIT)
+    {
+        readFormat = &GetDepthStencilImageToBufferFormat(*readFormat, copyAspectFlags);
+    }
+
+    size_t level         = levelIn;
+    size_t layer         = layerIn;
+    VkOffset3D srcOffset = {area.x, area.y, 0};
+    VkExtent3D srcExtent = {static_cast<uint32_t>(area.width), static_cast<uint32_t>(area.height),
+                            1};
+
+    // If the source image is multisampled, we need to resolve it into a temporary image before
+    // performing a readback.
+    vk::Scoped<vk::ImageHelper> resolvedImage(contextVk->getDevice());
+    vk::ImageHelper *srcImage = this;
+
+    if (mSamples > 1)
+    {
+        ANGLE_TRY(resolvedImage.get().init2DStaging(
+            contextVk, renderer->getMemoryProperties(), gl::Extents(area.width, area.height, 1),
+            *mFormat, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, 1));
+        resolvedImage.get().updateQueueSerial(contextVk->getCurrentQueueSerial());
+
+        // Note: resolve only works on color images (not depth/stencil).
+        //
+        // TODO: Currently, depth/stencil blit can perform a depth/stencil readback, but that code
+        // path will be optimized away.  http://anglebug.com/3200
+        ASSERT(copyAspectFlags == VK_IMAGE_ASPECT_COLOR_BIT);
+
+        VkImageResolve resolveRegion                = {};
+        resolveRegion.srcSubresource.aspectMask     = copyAspectFlags;
+        resolveRegion.srcSubresource.mipLevel       = level;
+        resolveRegion.srcSubresource.baseArrayLayer = layer;
+        resolveRegion.srcSubresource.layerCount     = 1;
+        resolveRegion.srcOffset                     = srcOffset;
+        resolveRegion.dstSubresource.aspectMask     = copyAspectFlags;
+        resolveRegion.dstSubresource.mipLevel       = 0;
+        resolveRegion.dstSubresource.baseArrayLayer = 0;
+        resolveRegion.dstSubresource.layerCount     = 1;
+        resolveRegion.dstOffset                     = {};
+        resolveRegion.extent                        = srcExtent;
+
+        resolve(&resolvedImage.get(), resolveRegion, commandBuffer);
+
+        resolvedImage.get().changeLayout(copyAspectFlags, vk::ImageLayout::TransferSrc,
+                                         commandBuffer);
+
+        // Make the resolved image the target of buffer copy.
+        srcImage  = &resolvedImage.get();
+        level     = 0;
+        layer     = 0;
+        srcOffset = {0, 0, 0};
+    }
+
+    VkBuffer bufferHandle      = VK_NULL_HANDLE;
+    uint8_t *readPixelBuffer   = nullptr;
+    VkDeviceSize stagingOffset = 0;
+    size_t allocationSize      = readFormat->pixelBytes * area.width * area.height;
+
+    ANGLE_TRY(readPixelsBuffer->allocate(contextVk, allocationSize, &readPixelBuffer, &bufferHandle,
+                                         &stagingOffset, nullptr));
+
+    VkBufferImageCopy region               = {};
+    region.bufferImageHeight               = srcExtent.height;
+    region.bufferOffset                    = stagingOffset;
+    region.bufferRowLength                 = srcExtent.width;
+    region.imageExtent                     = srcExtent;
+    region.imageOffset                     = srcOffset;
+    region.imageSubresource.aspectMask     = copyAspectFlags;
+    region.imageSubresource.baseArrayLayer = layer;
+    region.imageSubresource.layerCount     = 1;
+    region.imageSubresource.mipLevel       = level;
+
+    commandBuffer->copyImageToBuffer(srcImage->getImage(), srcImage->getCurrentLayout(),
+                                     bufferHandle, 1, &region);
+
+    // Triggers a full finish.
+    // TODO(jmadill): Don't block on asynchronous readback.
+    ANGLE_TRY(contextVk->finishImpl());
+
+    // The buffer we copied to needs to be invalidated before we read from it because its not been
+    // created with the host coherent bit.
+    ANGLE_TRY(readPixelsBuffer->invalidate(contextVk));
+
+    PackPixels(packPixelsParams, *readFormat, area.width * readFormat->pixelBytes, readPixelBuffer,
+               pixelsOut);
+
+    return angle::Result::Continue;
+}
+
+angle::Result ImageHelper::readPixelsSelf(ContextVk *contextVk,
+                                          VkImageAspectFlagBits copyAspectFlags,
+                                          size_t levelIn,
+                                          size_t layerIn,
+                                          uint8_t *pixelsOut)
+{
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+
+    gl::Rectangle area(0, 0, std::max(mExtents.width >> levelIn, 1u),
+                       std::max(mExtents.height >> levelIn, 1u));
+
+    return readPixels(contextVk, area, copyAspectFlags, levelIn, layerIn, PackPixelsParams(),
+                      &mStagingBuffer, commandBuffer, pixelsOut);
+}
+
 // ImageHelper::SubresourceUpdate implementation
 ImageHelper::SubresourceUpdate::SubresourceUpdate()
     : updateSource(UpdateSource::Buffer), buffer{VK_NULL_HANDLE}

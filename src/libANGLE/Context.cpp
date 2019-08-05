@@ -8530,7 +8530,7 @@ egl::Error Context::unsetDefaultFramebuffer()
 void Context::onPostSwap() const
 {
     // Dump frame capture if enabled.
-    mFrameCapture->onEndFrame();
+    mFrameCapture->onEndFrame(this);
 }
 
 // ErrorSet implementation.
