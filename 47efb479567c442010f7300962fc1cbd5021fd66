@@ -235,6 +235,24 @@
     },
     {
       "key": {
+        "uuid": "b246c58e_c294176a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-05T14:19:33Z",
+      "side": 1,
+      "message": "1 and 2 should both succeed (if you try to get data out of the callbacks and there are none, it\u0027s still a success).\n\n3 is the same as 2 from the point of view of ANGLE. We don\u0027t know if the blob cache callbacks failed and returned no data, or succeeded and there were actually no data. We just see that there were no data.\n\nThe 3 scenarios we are talking about are:\n\n- The blob cache returns something: angle::Result::Continue is returned\n  * In this case, merge\n- The blob cache doesn\u0027t contain data (or pointers not set): angle::Result::Incomplete is returned.\n  * In this case, do nothing\n- `pipelineCache-\u003einit()` aka vkCreatePipelineCache fails: angle::Result::Stop is returned.\n  * In this case, fail this function too.\n\nWhich means this function becomes:\n\nangle::Result RendererVk::onGetPipelineCache(DisplayVk *display)\n{\n    // We should now recreate the pipeline cache with the blob cache pipeline data.\n    vk::PipelineCache pipelineCache;\n    angle::Result result \u003d initPipelineCache(display, \u0026pipelineCache);\n    ANGLE_TRY(result);\n\n    if (result \u003d\u003d angle::Result::Continue)\n    {\n        // Merge the newly created pipeline cache into the existing one.\n        mPipelineCache.merge(mDevice, mPipelineCache.getHandle(), 1, pipelineCache.ptr());\n    }\n\n    pipelineCache.destroy(mDevice);\n    return angle::Result::Continue;\n}",
+      "parentUuid": "e87ae0e3_8c8f8373",
+      "revId": "47efb479567c442010f7300962fc1cbd5021fd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "864dc6bb_20772dc2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
