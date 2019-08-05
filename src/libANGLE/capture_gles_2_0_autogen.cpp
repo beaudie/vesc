@@ -293,10 +293,10 @@ CallCapture CaptureColorMask(const Context *context,
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addValueParam("red", ParamType::TGLboolean, red);
-    paramBuffer.addValueParam("green", ParamType::TGLboolean, green);
-    paramBuffer.addValueParam("blue", ParamType::TGLboolean, blue);
-    paramBuffer.addValueParam("alpha", ParamType::TGLboolean, alpha);
+    paramBuffer.addEnumParam("red", GLenumGroup::Boolean, ParamType::TGLboolean, red);
+    paramBuffer.addEnumParam("green", GLenumGroup::Boolean, ParamType::TGLboolean, green);
+    paramBuffer.addEnumParam("blue", GLenumGroup::Boolean, ParamType::TGLboolean, blue);
+    paramBuffer.addEnumParam("alpha", GLenumGroup::Boolean, ParamType::TGLboolean, alpha);
 
     return CallCapture("glColorMask", std::move(paramBuffer));
 }
@@ -550,7 +550,7 @@ CallCapture CaptureDepthMask(const Context *context, bool isCallValid, GLboolean
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addValueParam("flag", ParamType::TGLboolean, flag);
+    paramBuffer.addEnumParam("flag", GLenumGroup::Boolean, ParamType::TGLboolean, flag);
 
     return CallCapture("glDepthMask", std::move(paramBuffer));
 }
@@ -1521,7 +1521,7 @@ CallCapture CaptureSampleCoverage(const Context *context,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("value", ParamType::TGLfloat, value);
-    paramBuffer.addValueParam("invert", ParamType::TGLboolean, invert);
+    paramBuffer.addEnumParam("invert", GLenumGroup::Boolean, ParamType::TGLboolean, invert);
 
     return CallCapture("glSampleCoverage", std::move(paramBuffer));
 }
@@ -2103,7 +2103,7 @@ CallCapture CaptureUniformMatrix2fv(const Context *context,
 
     paramBuffer.addValueParam("location", ParamType::TGLint, location);
     paramBuffer.addValueParam("count", ParamType::TGLsizei, count);
-    paramBuffer.addValueParam("transpose", ParamType::TGLboolean, transpose);
+    paramBuffer.addEnumParam("transpose", GLenumGroup::Boolean, ParamType::TGLboolean, transpose);
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
@@ -2125,7 +2125,7 @@ CallCapture CaptureUniformMatrix3fv(const Context *context,
 
     paramBuffer.addValueParam("location", ParamType::TGLint, location);
     paramBuffer.addValueParam("count", ParamType::TGLsizei, count);
-    paramBuffer.addValueParam("transpose", ParamType::TGLboolean, transpose);
+    paramBuffer.addEnumParam("transpose", GLenumGroup::Boolean, ParamType::TGLboolean, transpose);
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
@@ -2147,7 +2147,7 @@ CallCapture CaptureUniformMatrix4fv(const Context *context,
 
     paramBuffer.addValueParam("location", ParamType::TGLint, location);
     paramBuffer.addValueParam("count", ParamType::TGLsizei, count);
-    paramBuffer.addValueParam("transpose", ParamType::TGLboolean, transpose);
+    paramBuffer.addEnumParam("transpose", GLenumGroup::Boolean, ParamType::TGLboolean, transpose);
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
@@ -2319,7 +2319,7 @@ CallCapture CaptureVertexAttribPointer(const Context *context,
     paramBuffer.addValueParam("index", ParamType::TGLuint, index);
     paramBuffer.addValueParam("size", ParamType::TGLint, size);
     paramBuffer.addValueParam("typePacked", ParamType::TVertexAttribType, typePacked);
-    paramBuffer.addValueParam("normalized", ParamType::TGLboolean, normalized);
+    paramBuffer.addEnumParam("normalized", GLenumGroup::Boolean, ParamType::TGLboolean, normalized);
     paramBuffer.addValueParam("stride", ParamType::TGLsizei, stride);
 
     ParamCapture pointerParam("pointer", ParamType::TvoidConstPointer);

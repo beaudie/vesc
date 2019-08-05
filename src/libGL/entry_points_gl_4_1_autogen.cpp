@@ -77,9 +77,8 @@ void GL_APIENTRY ClearDepthf(GLfloat d)
 
 GLuint GL_APIENTRY CreateShaderProgramv(GLenum type, GLsizei count, const GLchar *const *strings)
 {
-    EVENT("(GLenum type = 0x%X, GLsizei count = %d, const GLchar *const*strings = 0x%016" PRIxPTR
-          ")",
-          type, count, (uintptr_t)strings);
+    EVENT("(GLenum type = %s, GLsizei count = %d, const GLchar *const*strings = 0x%016" PRIxPTR ")",
+          GLenumToString(gl::GLenumGroup::ShaderType, type), count, (uintptr_t)strings);
 
     Context *context = GetValidGlobalContext();
     GLuint returnValue;
@@ -192,8 +191,8 @@ void GL_APIENTRY GenProgramPipelines(GLsizei n, GLuint *pipelines)
 
 void GL_APIENTRY GetDoublei_v(GLenum target, GLuint index, GLdouble *data)
 {
-    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLdouble *data = 0x%016" PRIxPTR ")", target,
-          index, (uintptr_t)data);
+    EVENT("(GLenum target = %s, GLuint index = %u, GLdouble *data = 0x%016" PRIxPTR ")",
+          GLenumToString(gl::GLenumGroup::TypeEnum, target), index, (uintptr_t)data);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -210,8 +209,8 @@ void GL_APIENTRY GetDoublei_v(GLenum target, GLuint index, GLdouble *data)
 
 void GL_APIENTRY GetFloati_v(GLenum target, GLuint index, GLfloat *data)
 {
-    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLfloat *data = 0x%016" PRIxPTR ")", target,
-          index, (uintptr_t)data);
+    EVENT("(GLenum target = %s, GLuint index = %u, GLfloat *data = 0x%016" PRIxPTR ")",
+          GLenumToString(gl::GLenumGroup::TypeEnum, target), index, (uintptr_t)data);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -277,8 +276,8 @@ void GL_APIENTRY GetProgramPipelineInfoLog(GLuint pipeline,
 
 void GL_APIENTRY GetProgramPipelineiv(GLuint pipeline, GLenum pname, GLint *params)
 {
-    EVENT("(GLuint pipeline = %u, GLenum pname = 0x%X, GLint *params = 0x%016" PRIxPTR ")",
-          pipeline, pname, (uintptr_t)params);
+    EVENT("(GLuint pipeline = %u, GLenum pname = %s, GLint *params = 0x%016" PRIxPTR ")", pipeline,
+          GLenumToString(gl::GLenumGroup::PipelineParameterName, pname), (uintptr_t)params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -298,9 +297,11 @@ void GL_APIENTRY GetShaderPrecisionFormat(GLenum shadertype,
                                           GLint *range,
                                           GLint *precision)
 {
-    EVENT("(GLenum shadertype = 0x%X, GLenum precisiontype = 0x%X, GLint *range = 0x%016" PRIxPTR
+    EVENT("(GLenum shadertype = %s, GLenum precisiontype = %s, GLint *range = 0x%016" PRIxPTR
           ", GLint *precision = 0x%016" PRIxPTR ")",
-          shadertype, precisiontype, (uintptr_t)range, (uintptr_t)precision);
+          GLenumToString(gl::GLenumGroup::ShaderType, shadertype),
+          GLenumToString(gl::GLenumGroup::PrecisionType, precisiontype), (uintptr_t)range,
+          (uintptr_t)precision);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -319,8 +320,8 @@ void GL_APIENTRY GetShaderPrecisionFormat(GLenum shadertype,
 
 void GL_APIENTRY GetVertexAttribLdv(GLuint index, GLenum pname, GLdouble *params)
 {
-    EVENT("(GLuint index = %u, GLenum pname = 0x%X, GLdouble *params = 0x%016" PRIxPTR ")", index,
-          pname, (uintptr_t)params);
+    EVENT("(GLuint index = %u, GLenum pname = %s, GLdouble *params = 0x%016" PRIxPTR ")", index,
+          GLenumToString(gl::GLenumGroup::VertexAttribEnum, pname), (uintptr_t)params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -367,9 +368,10 @@ void GL_APIENTRY ProgramBinary(GLuint program,
                                const void *binary,
                                GLsizei length)
 {
-    EVENT("(GLuint program = %u, GLenum binaryFormat = 0x%X, const void *binary = 0x%016" PRIxPTR
+    EVENT("(GLuint program = %u, GLenum binaryFormat = %s, const void *binary = 0x%016" PRIxPTR
           ", GLsizei length = %d)",
-          program, binaryFormat, (uintptr_t)binary, length);
+          program, GLenumToString(gl::GLenumGroup::DefaultGroup, binaryFormat), (uintptr_t)binary,
+          length);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -386,7 +388,8 @@ void GL_APIENTRY ProgramBinary(GLuint program,
 
 void GL_APIENTRY ProgramParameteri(GLuint program, GLenum pname, GLint value)
 {
-    EVENT("(GLuint program = %u, GLenum pname = 0x%X, GLint value = %d)", program, pname, value);
+    EVENT("(GLuint program = %u, GLenum pname = %s, GLint value = %d)", program,
+          GLenumToString(gl::GLenumGroup::ProgramParameterPName, pname), value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1080,9 +1083,10 @@ void GL_APIENTRY ProgramUniformMatrix2dv(GLuint program,
                                          const GLdouble *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLdouble *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1106,9 +1110,10 @@ void GL_APIENTRY ProgramUniformMatrix2fv(GLuint program,
                                          const GLfloat *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLfloat *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1132,9 +1137,10 @@ void GL_APIENTRY ProgramUniformMatrix2x3dv(GLuint program,
                                            const GLdouble *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLdouble *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1158,9 +1164,10 @@ void GL_APIENTRY ProgramUniformMatrix2x3fv(GLuint program,
                                            const GLfloat *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLfloat *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1184,9 +1191,10 @@ void GL_APIENTRY ProgramUniformMatrix2x4dv(GLuint program,
                                            const GLdouble *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLdouble *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1210,9 +1218,10 @@ void GL_APIENTRY ProgramUniformMatrix2x4fv(GLuint program,
                                            const GLfloat *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLfloat *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1236,9 +1245,10 @@ void GL_APIENTRY ProgramUniformMatrix3dv(GLuint program,
                                          const GLdouble *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLdouble *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1262,9 +1272,10 @@ void GL_APIENTRY ProgramUniformMatrix3fv(GLuint program,
                                          const GLfloat *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLfloat *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1288,9 +1299,10 @@ void GL_APIENTRY ProgramUniformMatrix3x2dv(GLuint program,
                                            const GLdouble *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLdouble *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1314,9 +1326,10 @@ void GL_APIENTRY ProgramUniformMatrix3x2fv(GLuint program,
                                            const GLfloat *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLfloat *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1340,9 +1353,10 @@ void GL_APIENTRY ProgramUniformMatrix3x4dv(GLuint program,
                                            const GLdouble *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLdouble *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1366,9 +1380,10 @@ void GL_APIENTRY ProgramUniformMatrix3x4fv(GLuint program,
                                            const GLfloat *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLfloat *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1392,9 +1407,10 @@ void GL_APIENTRY ProgramUniformMatrix4dv(GLuint program,
                                          const GLdouble *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLdouble *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1418,9 +1434,10 @@ void GL_APIENTRY ProgramUniformMatrix4fv(GLuint program,
                                          const GLfloat *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLfloat *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1444,9 +1461,10 @@ void GL_APIENTRY ProgramUniformMatrix4x2dv(GLuint program,
                                            const GLdouble *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLdouble *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1470,9 +1488,10 @@ void GL_APIENTRY ProgramUniformMatrix4x2fv(GLuint program,
                                            const GLfloat *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLfloat *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1496,9 +1515,10 @@ void GL_APIENTRY ProgramUniformMatrix4x3dv(GLuint program,
                                            const GLdouble *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLdouble *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1522,9 +1542,10 @@ void GL_APIENTRY ProgramUniformMatrix4x3fv(GLuint program,
                                            const GLfloat *value)
 {
     EVENT(
-        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %u, "
+        "(GLuint program = %u, GLint location = %d, GLsizei count = %d, GLboolean transpose = %s, "
         "const GLfloat *value = 0x%016" PRIxPTR ")",
-        program, location, count, transpose, (uintptr_t)value);
+        program, location, count, GLenumToString(gl::GLenumGroup::Boolean, transpose),
+        (uintptr_t)value);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1620,9 +1641,10 @@ void GL_APIENTRY ShaderBinary(GLsizei count,
                               GLsizei length)
 {
     EVENT("(GLsizei count = %d, const GLuint *shaders = 0x%016" PRIxPTR
-          ", GLenum binaryformat = 0x%X, const void *binary = 0x%016" PRIxPTR
+          ", GLenum binaryformat = %s, const void *binary = 0x%016" PRIxPTR
           ", GLsizei length = %d)",
-          count, (uintptr_t)shaders, binaryformat, (uintptr_t)binary, length);
+          count, (uintptr_t)shaders, GLenumToString(gl::GLenumGroup::DefaultGroup, binaryformat),
+          (uintptr_t)binary, length);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1641,8 +1663,8 @@ void GL_APIENTRY ShaderBinary(GLsizei count,
 
 void GL_APIENTRY UseProgramStages(GLuint pipeline, GLbitfield stages, GLuint program)
 {
-    EVENT("(GLuint pipeline = %u, GLbitfield stages = 0x%X, GLuint program = %u)", pipeline, stages,
-          program);
+    EVENT("(GLuint pipeline = %u, GLbitfield stages = %s, GLuint program = %u)", pipeline,
+          GLbitfieldToString(gl::GLenumGroup::UseProgramStageMask, stages).c_str(), program);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -1815,9 +1837,10 @@ void GL_APIENTRY
 VertexAttribLPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const void *pointer)
 {
     EVENT(
-        "(GLuint index = %u, GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void "
+        "(GLuint index = %u, GLint size = %d, GLenum type = %s, GLsizei stride = %d, const void "
         "*pointer = 0x%016" PRIxPTR ")",
-        index, size, type, stride, (uintptr_t)pointer);
+        index, size, GLenumToString(gl::GLenumGroup::VertexAttribPointerType, type), stride,
+        (uintptr_t)pointer);
 
     Context *context = GetValidGlobalContext();
     if (context)

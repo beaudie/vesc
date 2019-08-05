@@ -42,11 +42,12 @@ CallCapture CaptureCopyTexture3DANGLE(const Context *context,
     paramBuffer.addValueParam("destLevel", ParamType::TGLint, destLevel);
     paramBuffer.addValueParam("internalFormat", ParamType::TGLint, internalFormat);
     paramBuffer.addEnumParam("destType", GLenumGroup::DefaultGroup, ParamType::TGLenum, destType);
-    paramBuffer.addValueParam("unpackFlipY", ParamType::TGLboolean, unpackFlipY);
-    paramBuffer.addValueParam("unpackPremultiplyAlpha", ParamType::TGLboolean,
-                              unpackPremultiplyAlpha);
-    paramBuffer.addValueParam("unpackUnmultiplyAlpha", ParamType::TGLboolean,
-                              unpackUnmultiplyAlpha);
+    paramBuffer.addEnumParam("unpackFlipY", GLenumGroup::DefaultGroup, ParamType::TGLboolean,
+                             unpackFlipY);
+    paramBuffer.addEnumParam("unpackPremultiplyAlpha", GLenumGroup::DefaultGroup,
+                             ParamType::TGLboolean, unpackPremultiplyAlpha);
+    paramBuffer.addEnumParam("unpackUnmultiplyAlpha", GLenumGroup::DefaultGroup,
+                             ParamType::TGLboolean, unpackUnmultiplyAlpha);
 
     return CallCapture("glCopyTexture3DANGLE", std::move(paramBuffer));
 }
@@ -87,11 +88,12 @@ CallCapture CaptureCopySubTexture3DANGLE(const Context *context,
     paramBuffer.addValueParam("width", ParamType::TGLint, width);
     paramBuffer.addValueParam("height", ParamType::TGLint, height);
     paramBuffer.addValueParam("depth", ParamType::TGLint, depth);
-    paramBuffer.addValueParam("unpackFlipY", ParamType::TGLboolean, unpackFlipY);
-    paramBuffer.addValueParam("unpackPremultiplyAlpha", ParamType::TGLboolean,
-                              unpackPremultiplyAlpha);
-    paramBuffer.addValueParam("unpackUnmultiplyAlpha", ParamType::TGLboolean,
-                              unpackUnmultiplyAlpha);
+    paramBuffer.addEnumParam("unpackFlipY", GLenumGroup::DefaultGroup, ParamType::TGLboolean,
+                             unpackFlipY);
+    paramBuffer.addEnumParam("unpackPremultiplyAlpha", GLenumGroup::DefaultGroup,
+                             ParamType::TGLboolean, unpackPremultiplyAlpha);
+    paramBuffer.addEnumParam("unpackUnmultiplyAlpha", GLenumGroup::DefaultGroup,
+                             ParamType::TGLboolean, unpackUnmultiplyAlpha);
 
     return CallCapture("glCopySubTexture3DANGLE", std::move(paramBuffer));
 }
@@ -2324,7 +2326,8 @@ CallCapture CaptureTexStorage2DMultisampleANGLE(const Context *context,
                              internalformat);
     paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
     paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
-    paramBuffer.addValueParam("fixedsamplelocations", ParamType::TGLboolean, fixedsamplelocations);
+    paramBuffer.addEnumParam("fixedsamplelocations", GLenumGroup::DefaultGroup,
+                             ParamType::TGLboolean, fixedsamplelocations);
 
     return CallCapture("glTexStorage2DMultisampleANGLE", std::move(paramBuffer));
 }
@@ -2487,11 +2490,12 @@ CallCapture CaptureCopyTextureCHROMIUM(const Context *context,
     paramBuffer.addValueParam("destLevel", ParamType::TGLint, destLevel);
     paramBuffer.addValueParam("internalFormat", ParamType::TGLint, internalFormat);
     paramBuffer.addEnumParam("destType", GLenumGroup::DefaultGroup, ParamType::TGLenum, destType);
-    paramBuffer.addValueParam("unpackFlipY", ParamType::TGLboolean, unpackFlipY);
-    paramBuffer.addValueParam("unpackPremultiplyAlpha", ParamType::TGLboolean,
-                              unpackPremultiplyAlpha);
-    paramBuffer.addValueParam("unpackUnmultiplyAlpha", ParamType::TGLboolean,
-                              unpackUnmultiplyAlpha);
+    paramBuffer.addEnumParam("unpackFlipY", GLenumGroup::DefaultGroup, ParamType::TGLboolean,
+                             unpackFlipY);
+    paramBuffer.addEnumParam("unpackPremultiplyAlpha", GLenumGroup::DefaultGroup,
+                             ParamType::TGLboolean, unpackPremultiplyAlpha);
+    paramBuffer.addEnumParam("unpackUnmultiplyAlpha", GLenumGroup::DefaultGroup,
+                             ParamType::TGLboolean, unpackUnmultiplyAlpha);
 
     return CallCapture("glCopyTextureCHROMIUM", std::move(paramBuffer));
 }
@@ -2526,11 +2530,12 @@ CallCapture CaptureCopySubTextureCHROMIUM(const Context *context,
     paramBuffer.addValueParam("y", ParamType::TGLint, y);
     paramBuffer.addValueParam("width", ParamType::TGLint, width);
     paramBuffer.addValueParam("height", ParamType::TGLint, height);
-    paramBuffer.addValueParam("unpackFlipY", ParamType::TGLboolean, unpackFlipY);
-    paramBuffer.addValueParam("unpackPremultiplyAlpha", ParamType::TGLboolean,
-                              unpackPremultiplyAlpha);
-    paramBuffer.addValueParam("unpackUnmultiplyAlpha", ParamType::TGLboolean,
-                              unpackUnmultiplyAlpha);
+    paramBuffer.addEnumParam("unpackFlipY", GLenumGroup::DefaultGroup, ParamType::TGLboolean,
+                             unpackFlipY);
+    paramBuffer.addEnumParam("unpackPremultiplyAlpha", GLenumGroup::DefaultGroup,
+                             ParamType::TGLboolean, unpackPremultiplyAlpha);
+    paramBuffer.addEnumParam("unpackUnmultiplyAlpha", GLenumGroup::DefaultGroup,
+                             ParamType::TGLboolean, unpackUnmultiplyAlpha);
 
     return CallCapture("glCopySubTextureCHROMIUM", std::move(paramBuffer));
 }
@@ -3730,7 +3735,8 @@ CallCapture CaptureTexStorageMem2DMultisampleEXT(const Context *context,
                              internalFormat);
     paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
     paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
-    paramBuffer.addValueParam("fixedSampleLocations", ParamType::TGLboolean, fixedSampleLocations);
+    paramBuffer.addEnumParam("fixedSampleLocations", GLenumGroup::DefaultGroup,
+                             ParamType::TGLboolean, fixedSampleLocations);
     paramBuffer.addValueParam("memory", ParamType::TGLuint, memory);
     paramBuffer.addValueParam("offset", ParamType::TGLuint64, offset);
 
@@ -3784,7 +3790,8 @@ CallCapture CaptureTexStorageMem3DMultisampleEXT(const Context *context,
     paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
     paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
     paramBuffer.addValueParam("depth", ParamType::TGLsizei, depth);
-    paramBuffer.addValueParam("fixedSampleLocations", ParamType::TGLboolean, fixedSampleLocations);
+    paramBuffer.addEnumParam("fixedSampleLocations", GLenumGroup::DefaultGroup,
+                             ParamType::TGLboolean, fixedSampleLocations);
     paramBuffer.addValueParam("memory", ParamType::TGLuint, memory);
     paramBuffer.addValueParam("offset", ParamType::TGLuint64, offset);
 
@@ -4164,7 +4171,7 @@ CallCapture CaptureDebugMessageControlKHR(const Context *context,
                                       enabled, &idsParam);
     paramBuffer.addParam(std::move(idsParam));
 
-    paramBuffer.addValueParam("enabled", ParamType::TGLboolean, enabled);
+    paramBuffer.addEnumParam("enabled", GLenumGroup::DefaultGroup, ParamType::TGLboolean, enabled);
 
     return CallCapture("glDebugMessageControlKHR", std::move(paramBuffer));
 }
@@ -5624,7 +5631,8 @@ CallCapture CaptureTexStorage3DMultisampleOES(const Context *context,
     paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
     paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
     paramBuffer.addValueParam("depth", ParamType::TGLsizei, depth);
-    paramBuffer.addValueParam("fixedsamplelocations", ParamType::TGLboolean, fixedsamplelocations);
+    paramBuffer.addEnumParam("fixedsamplelocations", GLenumGroup::Boolean, ParamType::TGLboolean,
+                             fixedsamplelocations);
 
     return CallCapture("glTexStorage3DMultisampleOES", std::move(paramBuffer));
 }

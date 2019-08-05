@@ -1719,7 +1719,7 @@ CallCapture CaptureUniformMatrix2x3fv(const Context *context,
 
     paramBuffer.addValueParam("location", ParamType::TGLint, location);
     paramBuffer.addValueParam("count", ParamType::TGLsizei, count);
-    paramBuffer.addValueParam("transpose", ParamType::TGLboolean, transpose);
+    paramBuffer.addEnumParam("transpose", GLenumGroup::Boolean, ParamType::TGLboolean, transpose);
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
@@ -1741,7 +1741,7 @@ CallCapture CaptureUniformMatrix2x4fv(const Context *context,
 
     paramBuffer.addValueParam("location", ParamType::TGLint, location);
     paramBuffer.addValueParam("count", ParamType::TGLsizei, count);
-    paramBuffer.addValueParam("transpose", ParamType::TGLboolean, transpose);
+    paramBuffer.addEnumParam("transpose", GLenumGroup::Boolean, ParamType::TGLboolean, transpose);
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
@@ -1763,7 +1763,7 @@ CallCapture CaptureUniformMatrix3x2fv(const Context *context,
 
     paramBuffer.addValueParam("location", ParamType::TGLint, location);
     paramBuffer.addValueParam("count", ParamType::TGLsizei, count);
-    paramBuffer.addValueParam("transpose", ParamType::TGLboolean, transpose);
+    paramBuffer.addEnumParam("transpose", GLenumGroup::Boolean, ParamType::TGLboolean, transpose);
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
@@ -1785,7 +1785,7 @@ CallCapture CaptureUniformMatrix3x4fv(const Context *context,
 
     paramBuffer.addValueParam("location", ParamType::TGLint, location);
     paramBuffer.addValueParam("count", ParamType::TGLsizei, count);
-    paramBuffer.addValueParam("transpose", ParamType::TGLboolean, transpose);
+    paramBuffer.addEnumParam("transpose", GLenumGroup::Boolean, ParamType::TGLboolean, transpose);
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
@@ -1807,7 +1807,7 @@ CallCapture CaptureUniformMatrix4x2fv(const Context *context,
 
     paramBuffer.addValueParam("location", ParamType::TGLint, location);
     paramBuffer.addValueParam("count", ParamType::TGLsizei, count);
-    paramBuffer.addValueParam("transpose", ParamType::TGLboolean, transpose);
+    paramBuffer.addEnumParam("transpose", GLenumGroup::Boolean, ParamType::TGLboolean, transpose);
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);
@@ -1829,7 +1829,7 @@ CallCapture CaptureUniformMatrix4x3fv(const Context *context,
 
     paramBuffer.addValueParam("location", ParamType::TGLint, location);
     paramBuffer.addValueParam("count", ParamType::TGLsizei, count);
-    paramBuffer.addValueParam("transpose", ParamType::TGLboolean, transpose);
+    paramBuffer.addEnumParam("transpose", GLenumGroup::Boolean, ParamType::TGLboolean, transpose);
 
     ParamCapture valueParam("value", ParamType::TGLfloatConstPointer);
     InitParamValue(ParamType::TGLfloatConstPointer, value, &valueParam.value);

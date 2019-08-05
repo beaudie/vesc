@@ -1094,7 +1094,7 @@ CallCapture CaptureSampleCoveragex(const Context *context,
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("value", ParamType::TGLclampx, value);
-    paramBuffer.addValueParam("invert", ParamType::TGLboolean, invert);
+    paramBuffer.addEnumParam("invert", GLenumGroup::DefaultGroup, ParamType::TGLboolean, invert);
 
     return CallCapture("glSampleCoveragex", std::move(paramBuffer));
 }
