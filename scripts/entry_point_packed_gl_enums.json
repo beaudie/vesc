@@ -22,13 +22,16 @@
         "target": "QueryType"
     },
     "glBindBuffer": {
-        "target": "BufferBinding"
+        "target": "BufferBinding",
+        "buffer": "BufferID"
     },
     "glBindBufferBase": {
-        "target": "BufferBinding"
+        "target": "BufferBinding",
+        "buffer": "BufferID"
     },
     "glBindBufferRange": {
-        "target": "BufferBinding"
+        "target": "BufferBinding",
+        "buffer": "BufferID"
     },
     "glBindRenderbuffer": {
         "renderbuffer": "RenderbufferID"
@@ -38,6 +41,9 @@
     },
     "glBindTexture": {
         "target": "TextureType"
+    },
+    "glBindVertexBuffer": {
+        "buffer": "BufferID"
     },
     "glBufferData": {
         "target": "BufferBinding",
@@ -107,6 +113,9 @@
     "glCullFace": {
         "mode": "CullFaceMode"
     },
+    "glDeleteBuffers": {
+        "buffers": "const BufferID *"
+    },
     "glDeleteRenderbuffers": {
         "renderbuffers": "const RenderbufferID *"
     },
@@ -164,6 +173,9 @@
     },
     "glGenerateMipmap": {
         "target": "TextureType"
+    },
+    "glGenBuffers": {
+        "buffers": "BufferID *"
     },
     "glGenRenderbuffers": {
         "renderbuffers": "RenderbufferID *"
@@ -264,6 +276,9 @@
     "glInvalidateTexture": {
         "target": "TextureType"
     },
+    "glIsBuffer": {
+        "buffer": "BufferID"
+    },
     "glIsRenderbuffer": {
         "renderbuffer": "RenderbufferID"
     },
@@ -350,6 +365,9 @@
     },
     "glShadeModel": {
         "mode": "ShadingModel"
+    },
+    "glSignalSemaphore": {
+        "buffers": "const BufferID *"
     },
     "glTexCoordPointer": {
         "type": "VertexAttribType"
@@ -485,5 +503,8 @@
     },
     "glVertexPointer": {
         "type": "VertexAttribType"
+    },
+    "glWaitSemaphore": {
+        "buffers": "const BufferID *"
     }
 }

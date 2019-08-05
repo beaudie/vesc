@@ -48,13 +48,13 @@ CallCapture CaptureBindBufferBase(const Context *context,
                                   bool isCallValid,
                                   BufferBinding targetPacked,
                                   GLuint index,
-                                  GLuint buffer)
+                                  BufferID bufferPacked)
 {
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("targetPacked", ParamType::TBufferBinding, targetPacked);
     paramBuffer.addValueParam("index", ParamType::TGLuint, index);
-    paramBuffer.addValueParam("buffer", ParamType::TGLuint, buffer);
+    paramBuffer.addValueParam("bufferPacked", ParamType::TBufferID, bufferPacked);
 
     return CallCapture(gl::EntryPoint::BindBufferBase, std::move(paramBuffer));
 }
@@ -63,7 +63,7 @@ CallCapture CaptureBindBufferRange(const Context *context,
                                    bool isCallValid,
                                    BufferBinding targetPacked,
                                    GLuint index,
-                                   GLuint buffer,
+                                   BufferID bufferPacked,
                                    GLintptr offset,
                                    GLsizeiptr size)
 {
@@ -71,7 +71,7 @@ CallCapture CaptureBindBufferRange(const Context *context,
 
     paramBuffer.addValueParam("targetPacked", ParamType::TBufferBinding, targetPacked);
     paramBuffer.addValueParam("index", ParamType::TGLuint, index);
-    paramBuffer.addValueParam("buffer", ParamType::TGLuint, buffer);
+    paramBuffer.addValueParam("bufferPacked", ParamType::TBufferID, bufferPacked);
     paramBuffer.addValueParam("offset", ParamType::TGLintptr, offset);
     paramBuffer.addValueParam("size", ParamType::TGLsizeiptr, size);
 
