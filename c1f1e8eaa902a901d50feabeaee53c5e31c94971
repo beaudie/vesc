@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f77bbf99_cc9d18fa",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3020,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-05T17:53:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a142ce0d_60d40ee6",
+      "range": {
+        "startLine": 3020,
+        "startChar": 4,
+        "endLine": 3020,
+        "endChar": 10
+      },
+      "revId": "c1f1e8eaa902a901d50feabeaee53c5e31c94971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "01d94730_b27dadd5",
         "filename": "src/tests/gl_tests/GLSLTest.cpp",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2019-08-05T17:27:57Z",
       "side": 1,
       "message": "For completion, can you also add a test that does the opposite?\n\n        \"struct Data { mediump isampler2D data[2][3]; };\\n\"\n        \"uniform Data test[2];\\n\"",
+      "range": {
+        "startLine": 3149,
+        "startChar": 0,
+        "endLine": 3150,
+        "endChar": 36
+      },
+      "revId": "c1f1e8eaa902a901d50feabeaee53c5e31c94971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3b78053_da86f5b0",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3150,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-05T17:53:12Z",
+      "side": 1,
+      "message": "I can, but array of array in struct is already tested by StructArrayArraySampler, and this test should handle struct in array of array. Also I updated the test to make the indices constant instead of dynamically uniform.",
+      "parentUuid": "01d94730_b27dadd5",
       "range": {
         "startLine": 3149,
         "startChar": 0,
