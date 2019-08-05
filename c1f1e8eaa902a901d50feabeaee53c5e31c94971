@@ -93,6 +93,30 @@
       "revId": "c1f1e8eaa902a901d50feabeaee53c5e31c94971",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a18250b8_a83699bf",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3150,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-05T18:47:15Z",
+      "side": 1,
+      "message": "StructArrayArray sampler\u0027s uniform is not an array!",
+      "parentUuid": "b3b78053_da86f5b0",
+      "range": {
+        "startLine": 3149,
+        "startChar": 0,
+        "endLine": 3150,
+        "endChar": 36
+      },
+      "revId": "c1f1e8eaa902a901d50feabeaee53c5e31c94971",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
