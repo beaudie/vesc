@@ -14,6 +14,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/MemoryObject.h"
 #include "libANGLE/State.h"
+#include "libANGLE/Surface.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/queryconversions.h"
@@ -25,6 +26,7 @@
 #include "libANGLE/renderer/gl/ImageGL.h"
 #include "libANGLE/renderer/gl/MemoryObjectGL.h"
 #include "libANGLE/renderer/gl/StateManagerGL.h"
+#include "libANGLE/renderer/gl/SurfaceGL.h"
 #include "libANGLE/renderer/gl/formatutilsgl.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 #include "platform/FeaturesGL.h"
@@ -66,13 +68,19 @@ bool GetDepthStencilWorkaround(GLenum format)
     return format == GL_DEPTH_COMPONENT || format == GL_DEPTH_STENCIL;
 }
 
+bool GetEmulatedAlpha(GLenum originalFormat, GLenum destinationFormat)
+{
+    return destinationFormat == GL_RGBA && originalFormat == GL_RGB;
+}
+
 LevelInfoGL GetLevelInfo(GLenum originalInternalFormat, GLenum destinationInternalFormat)
 {
     GLenum originalFormat    = gl::GetUnsizedFormat(originalInternalFormat);
     GLenum destinationFormat = gl::GetUnsizedFormat(destinationInternalFormat);
     return LevelInfoGL(originalFormat, destinationInternalFormat,
                        GetDepthStencilWorkaround(originalFormat),
-                       GetLUMAWorkaroundInfo(originalFormat, destinationFormat));
+                       GetLUMAWorkaroundInfo(originalFormat, destinationFormat),
+                       GetEmulatedAlpha(originalFormat, destinationFormat));
 }
 
 gl::Texture::DirtyBits GetLevelWorkaroundDirtyBits()
@@ -108,16 +116,18 @@ LUMAWorkaroundGL::LUMAWorkaroundGL(bool enabled_, GLenum workaroundFormat_)
     : enabled(enabled_), workaroundFormat(workaroundFormat_)
 {}
 
-LevelInfoGL::LevelInfoGL() : LevelInfoGL(GL_NONE, GL_NONE, false, LUMAWorkaroundGL()) {}
+LevelInfoGL::LevelInfoGL() : LevelInfoGL(GL_NONE, GL_NONE, false, LUMAWorkaroundGL(), false) {}
 
 LevelInfoGL::LevelInfoGL(GLenum sourceFormat_,
                          GLenum nativeInternalFormat_,
                          bool depthStencilWorkaround_,
-                         const LUMAWorkaroundGL &lumaWorkaround_)
+                         const LUMAWorkaroundGL &lumaWorkaround_,
+                         bool emulatedAlphaChannel_)
     : sourceFormat(sourceFormat_),
       nativeInternalFormat(nativeInternalFormat_),
       depthStencilWorkaround(depthStencilWorkaround_),
-      lumaWorkaround(lumaWorkaround_)
+      lumaWorkaround(lumaWorkaround_),
+      emulatedAlphaChannel(emulatedAlphaChannel_)
 {}
 
 TextureGL::TextureGL(const gl::TextureState &state, GLuint id)
@@ -1177,7 +1187,11 @@ angle::Result TextureGL::bindTexImage(const gl::Context *context, egl::Surface *
     // Make sure this texture is bound
     stateManager->bindTexture(getType(), mTextureID);
 
-    setLevelInfo(context, getType(), 0, 1, LevelInfoGL());
+    SurfaceGL *surfaceGL = GetImplAs<SurfaceGL>(surface);
+
+    setLevelInfo(context, getType(), 0, 1,
+                 LevelInfoGL(GL_NONE, GL_NONE, false, LUMAWorkaroundGL(),
+                             surfaceGL->hasEmulatedAlphaChannel()));
     return angle::Result::Continue;
 }
 
@@ -1484,6 +1498,12 @@ GLenum TextureGL::getNativeInternalFormat(const gl::ImageIndex &index) const
     return getLevelInfo(index.getTarget(), index.getLevelIndex()).nativeInternalFormat;
 }
 
+bool TextureGL::hasEmulatedAlphaChannel(const gl::ImageIndex &index) const
+{
+    return getLevelInfo(index.getTargetOrFirstCubeFace(), index.getLevelIndex())
+        .emulatedAlphaChannel;
+}
+
 void TextureGL::syncTextureStateSwizzle(const gl::Context *context,
                                         const FunctionsGL *functions,
                                         GLenum name,
@@ -1492,8 +1512,6 @@ void TextureGL::syncTextureStateSwizzle(const gl::Context *context,
 {
     const LevelInfoGL &levelInfo = getBaseLevelInfo();
     GLenum resultSwizzle         = value;
-    if (levelInfo.lumaWorkaround.enabled || levelInfo.depthStencilWorkaround)
-    {
         if (levelInfo.lumaWorkaround.enabled)
         {
             switch (value)
@@ -1552,9 +1570,8 @@ void TextureGL::syncTextureStateSwizzle(const gl::Context *context,
                     break;
             }
         }
-        else
+        else if (levelInfo.depthStencilWorkaround)
         {
-            ASSERT(levelInfo.depthStencilWorkaround);
             switch (value)
             {
                 case GL_RED:
@@ -1594,7 +1611,15 @@ void TextureGL::syncTextureStateSwizzle(const gl::Context *context,
                     break;
             }
         }
-    }
+        else if (levelInfo.emulatedAlphaChannel)
+        {
+            switch (value)
+            {
+                case GL_ALPHA:
+                    resultSwizzle = GL_ONE;
+                    break;
+            }
+        }
 
     *outValue = resultSwizzle;
     functions->texParameteri(ToGLenum(getType()), name, resultSwizzle);
