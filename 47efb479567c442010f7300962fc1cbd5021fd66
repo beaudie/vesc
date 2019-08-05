@@ -217,6 +217,24 @@
     },
     {
       "key": {
+        "uuid": "e87ae0e3_8c8f8373",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-08-05T00:49:29Z",
+      "side": 1,
+      "message": "So, we have 3 scenarios which may fail to get a cache from getPipelineCache:\n1. the blob cache callback functions are not set.\n2. callback functions are set, but It\u0027s first time run on the device, where it does not have cached data.\n3. functions are set, and it\u0027s not first the time run, but still failed to get the cached data.\n\nYes, I think we can distinguish the scenarios 1 from the others, but how to distinguish 2 and 3?",
+      "parentUuid": "50a6dfdd_53708f75",
+      "revId": "47efb479567c442010f7300962fc1cbd5021fd66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "864dc6bb_20772dc2",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
