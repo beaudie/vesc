@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "040ef36e_08a6feb6",
+        "filename": "src/compiler/translator/blocklayout.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-05T14:32:10Z",
+      "side": 1,
+      "message": "Tried it. Unfortunately, FlattenUniformVisitor in ProgramLinkedResources.cpp expects opaque types to reach visitNamedVariable (through visitVariable) and uses it to collect resources of various types.",
+      "parentUuid": "18851f6e_4d9cfa27",
+      "range": {
+        "startLine": 121,
+        "startChar": 11,
+        "endLine": 121,
+        "endChar": 49
+      },
+      "revId": "40db0c29391f89c0288d84fe8e2c8ac353b28f5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "628b7fb0_7ab4b418",
         "filename": "src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp",
         "patchSetId": 21
