@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2b41409d_96d5ebe3",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-05T17:54:21Z",
+      "side": 1,
+      "message": "(If this is a pain, than you can forego the split)",
+      "parentUuid": "6a5be07f_3a83afba",
+      "range": {
+        "startLine": 393,
+        "startChar": 17,
+        "endLine": 393,
+        "endChar": 49
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "31f254e6_f2be819c",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 16
