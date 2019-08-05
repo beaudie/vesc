@@ -14,6 +14,7 @@
 
 #include "common/debug.h"
 #include "libANGLE/AttributeMap.h"
+#include "libANGLE/renderer/gl/BlitGL.h"
 #include "libANGLE/renderer/gl/FramebufferGL.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/RendererGL.h"
@@ -44,6 +45,7 @@ static const IOSurfaceFormatInfo kIOSurfaceFormats[] = {
     {GL_RED,      GL_UNSIGNED_BYTE,  1, GL_RED,  GL_RED,  GL_UNSIGNED_BYTE           },
     {GL_R16UI,    GL_UNSIGNED_SHORT, 2, GL_RED,  GL_RED,  GL_UNSIGNED_SHORT          },
     {GL_RG,       GL_UNSIGNED_BYTE,  2, GL_RG,   GL_RG,   GL_UNSIGNED_BYTE           },
+    {GL_RGB,      GL_UNSIGNED_BYTE,  4, GL_BGRA, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV},
     {GL_BGRA_EXT, GL_UNSIGNED_BYTE,  4, GL_BGRA, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV},
     {GL_RGBA,     GL_HALF_FLOAT,     8, GL_RGBA, GL_RGBA, GL_HALF_FLOAT              },
 };
@@ -74,7 +76,8 @@ IOSurfaceSurfaceCGL::IOSurfaceSurfaceCGL(const egl::SurfaceState &state,
       mWidth(0),
       mHeight(0),
       mPlane(0),
-      mFormatIndex(-1)
+      mFormatIndex(-1),
+      mAlphaInitialized(false)
 {
     // Keep reference to the IOSurface so it doesn't get deleted while the pbuffer exists.
     mIOSurface = reinterpret_cast<IOSurfaceRef>(buffer);
@@ -156,6 +159,8 @@ egl::Error IOSurfaceSurfaceCGL::bindTexImage(const gl::Context *context,
     {
         return egl::EglContextLost();
     }
+
+    (void)initializeAlphaChannel(context, textureID);
 
     return egl::NoError();
 }
@@ -247,8 +252,9 @@ class IOSurfaceFramebuffer : public FramebufferGL
     IOSurfaceFramebuffer(const gl::FramebufferState &data,
                          GLuint id,
                          GLuint textureId,
-                         bool isDefault)
-        : FramebufferGL(data, id, isDefault), mTextureId(textureId)
+                         bool isDefault,
+                         bool emulatedAlpha)
+        : FramebufferGL(data, id, isDefault, emulatedAlpha), mTextureId(textureId)
     {}
     void destroy(const gl::Context *context) override
     {
@@ -282,7 +288,27 @@ FramebufferImpl *IOSurfaceSurfaceCGL::createDefaultFramebuffer(const gl::Context
     functions->framebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE,
                                     texture, 0);
 
-    return new IOSurfaceFramebuffer(state, framebuffer, texture, true);
+    return new IOSurfaceFramebuffer(state, framebuffer, texture, true, hasEmulatedAlphaChannel());
+}
+
+angle::Result IOSurfaceSurfaceCGL::initializeAlphaChannel(const gl::Context *context,
+                                                          GLuint texture)
+{
+    if (mAlphaInitialized || !hasEmulatedAlphaChannel())
+    {
+        return angle::Result::Continue;
+    }
+
+    BlitGL *blitter = GetBlitGL(context);
+    ANGLE_TRY(blitter->clearRenderableRectangleTextureAlphaToOne(texture));
+    mAlphaInitialized = true;
+    return angle::Result::Continue;
+}
+
+bool IOSurfaceSurfaceCGL::hasEmulatedAlphaChannel() const
+{
+    const auto &format = kIOSurfaceFormats[mFormatIndex];
+    return format.internalFormat == GL_RGB;
 }
 
 }  // namespace rx
