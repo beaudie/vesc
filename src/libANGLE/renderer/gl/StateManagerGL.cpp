@@ -1496,6 +1496,9 @@ void StateManagerGL::syncState(const gl::Context *context,
         {
             mLocalDirtyBits.set(gl::State::DIRTY_BIT_FRAMEBUFFER_SRGB);
         }
+
+        // If the framebuffer is emulating RGB on top of RGBA, the color mask has to be updated
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_COLOR_MASK);
     }
 
     const gl::State::DirtyBits glAndLocalDirtyBits = (glDirtyBits | mLocalDirtyBits) & bitMask;
@@ -1549,9 +1552,13 @@ void StateManagerGL::syncState(const gl::Context *context,
             }
             case gl::State::DIRTY_BIT_COLOR_MASK:
             {
+                gl::Framebuffer *framebuffer = state.getDrawFramebuffer();
+                FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(framebuffer);
+
                 const auto &blendState = state.getBlendState();
-                setColorMask(blendState.colorMaskRed, blendState.colorMaskGreen,
-                             blendState.colorMaskBlue, blendState.colorMaskAlpha);
+                setColorMaskForFramebuffer(blendState.colorMaskRed, blendState.colorMaskGreen,
+                                           blendState.colorMaskBlue, blendState.colorMaskAlpha,
+                                           framebufferGL);
                 break;
             }
             case gl::State::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED:
@@ -1886,6 +1893,20 @@ void StateManagerGL::setFramebufferSRGBEnabledForFramebuffer(const gl::Context *
     {
         setFramebufferSRGBEnabled(context, enabled);
     }
+}
+
+void StateManagerGL::setColorMaskForFramebuffer(bool red,
+                                                bool green,
+                                                bool blue,
+                                                bool alpha,
+                                                const FramebufferGL *framebuffer)
+{
+    bool modifiedAlphaMask = alpha;
+    if (framebuffer->hasEmulatedAlphaChannelTextureAttachment())
+    {
+        modifiedAlphaMask = false;
+    }
+    setColorMask(red, green, blue, modifiedAlphaMask);
 }
 
 void StateManagerGL::setDitherEnabled(bool enabled)
