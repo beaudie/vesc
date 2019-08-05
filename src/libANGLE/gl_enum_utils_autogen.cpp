@@ -206,6 +206,19 @@ const char *GLenumToString(GLenumGroup enumGroup, unsigned int value)
             }
         }
 
+        case GLenumGroup::Boolean:
+        {
+            switch (value)
+            {
+                case 0x0:
+                    return "GL_FALSE";
+                case 0x1:
+                    return "GL_TRUE";
+                default:
+                    return "EnumUnknown";
+            }
+        }
+
         case GLenumGroup::Buffer:
         {
             switch (value)

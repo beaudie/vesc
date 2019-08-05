@@ -31,10 +31,10 @@ void GL_APIENTRY MultiDrawArraysIndirectCount(GLenum mode,
                                               GLsizei maxdrawcount,
                                               GLsizei stride)
 {
-    EVENT("(GLenum mode = 0x%X, const void *indirect = 0x%016" PRIxPTR
+    EVENT("(GLenum mode = %s, const void *indirect = 0x%016" PRIxPTR
           ", GLintptr drawcount = %llu, GLsizei maxdrawcount = %d, GLsizei stride = %d)",
-          mode, (uintptr_t)indirect, static_cast<unsigned long long>(drawcount), maxdrawcount,
-          stride);
+          GLenumToString(GLenumGroup::PrimitiveType, mode), (uintptr_t)indirect,
+          static_cast<unsigned long long>(drawcount), maxdrawcount, stride);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -58,10 +58,11 @@ void GL_APIENTRY MultiDrawElementsIndirectCount(GLenum mode,
                                                 GLsizei maxdrawcount,
                                                 GLsizei stride)
 {
-    EVENT("(GLenum mode = 0x%X, GLenum type = 0x%X, const void *indirect = 0x%016" PRIxPTR
+    EVENT("(GLenum mode = %s, GLenum type = %s, const void *indirect = 0x%016" PRIxPTR
           ", GLintptr drawcount = %llu, GLsizei maxdrawcount = %d, GLsizei stride = %d)",
-          mode, type, (uintptr_t)indirect, static_cast<unsigned long long>(drawcount), maxdrawcount,
-          stride);
+          GLenumToString(GLenumGroup::PrimitiveType, mode),
+          GLenumToString(GLenumGroup::DefaultGroup, type), (uintptr_t)indirect,
+          static_cast<unsigned long long>(drawcount), maxdrawcount, stride);
 
     Context *context = GetValidGlobalContext();
     if (context)
