@@ -27,8 +27,9 @@ namespace gl
 {
 GLenum GL_APIENTRY ClientWaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout)
 {
-    EVENT("(GLsync sync = 0x%016" PRIxPTR ", GLbitfield flags = 0x%X, GLuint64 timeout = %llu)",
-          (uintptr_t)sync, flags, static_cast<unsigned long long>(timeout));
+    EVENT("(GLsync sync = 0x%016" PRIxPTR ", GLbitfield flags = %s, GLuint64 timeout = %llu)",
+          (uintptr_t)sync, GLbitfieldToString(gl::GLenumGroup::SyncObjectMask, flags).c_str(),
+          static_cast<unsigned long long>(timeout));
 
     Context *context = GetValidGlobalContext();
     GLenum returnValue;
@@ -76,9 +77,10 @@ void GL_APIENTRY DrawElementsBaseVertex(GLenum mode,
                                         GLint basevertex)
 {
     EVENT(
-        "(GLenum mode = 0x%X, GLsizei count = %d, GLenum type = 0x%X, const void *indices = "
+        "(GLenum mode = %s, GLsizei count = %d, GLenum type = %s, const void *indices = "
         "0x%016" PRIxPTR ", GLint basevertex = %d)",
-        mode, count, type, (uintptr_t)indices, basevertex);
+        GLenumToString(gl::GLenumGroup::PrimitiveType, mode), count,
+        GLenumToString(gl::GLenumGroup::DrawElementsType, type), (uintptr_t)indices, basevertex);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -103,9 +105,11 @@ void GL_APIENTRY DrawElementsInstancedBaseVertex(GLenum mode,
                                                  GLint basevertex)
 {
     EVENT(
-        "(GLenum mode = 0x%X, GLsizei count = %d, GLenum type = 0x%X, const void *indices = "
+        "(GLenum mode = %s, GLsizei count = %d, GLenum type = %s, const void *indices = "
         "0x%016" PRIxPTR ", GLsizei instancecount = %d, GLint basevertex = %d)",
-        mode, count, type, (uintptr_t)indices, instancecount, basevertex);
+        GLenumToString(gl::GLenumGroup::PrimitiveType, mode), count,
+        GLenumToString(gl::GLenumGroup::DrawElementsType, type), (uintptr_t)indices, instancecount,
+        basevertex);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -132,9 +136,10 @@ void GL_APIENTRY DrawRangeElementsBaseVertex(GLenum mode,
                                              GLint basevertex)
 {
     EVENT(
-        "(GLenum mode = 0x%X, GLuint start = %u, GLuint end = %u, GLsizei count = %d, GLenum type "
-        "= 0x%X, const void *indices = 0x%016" PRIxPTR ", GLint basevertex = %d)",
-        mode, start, end, count, type, (uintptr_t)indices, basevertex);
+        "(GLenum mode = %s, GLuint start = %u, GLuint end = %u, GLsizei count = %d, GLenum type = "
+        "%s, const void *indices = 0x%016" PRIxPTR ", GLint basevertex = %d)",
+        GLenumToString(gl::GLenumGroup::PrimitiveType, mode), start, end, count,
+        GLenumToString(gl::GLenumGroup::DrawElementsType, type), (uintptr_t)indices, basevertex);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -154,7 +159,9 @@ void GL_APIENTRY DrawRangeElementsBaseVertex(GLenum mode,
 
 GLsync GL_APIENTRY FenceSync(GLenum condition, GLbitfield flags)
 {
-    EVENT("(GLenum condition = 0x%X, GLbitfield flags = 0x%X)", condition, flags);
+    EVENT("(GLenum condition = %s, GLbitfield flags = %s)",
+          GLenumToString(gl::GLenumGroup::SyncCondition, condition),
+          GLbitfieldToString(gl::GLenumGroup::DefaultGroup, flags).c_str());
 
     Context *context = GetValidGlobalContext();
     GLsync returnValue;
@@ -181,8 +188,9 @@ GLsync GL_APIENTRY FenceSync(GLenum condition, GLbitfield flags)
 
 void GL_APIENTRY FramebufferTexture(GLenum target, GLenum attachment, GLuint texture, GLint level)
 {
-    EVENT("(GLenum target = 0x%X, GLenum attachment = 0x%X, GLuint texture = %u, GLint level = %d)",
-          target, attachment, texture, level);
+    EVENT("(GLenum target = %s, GLenum attachment = %s, GLuint texture = %u, GLint level = %d)",
+          GLenumToString(gl::GLenumGroup::FramebufferTarget, target),
+          GLenumToString(gl::GLenumGroup::FramebufferAttachment, attachment), texture, level);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -200,8 +208,9 @@ void GL_APIENTRY FramebufferTexture(GLenum target, GLenum attachment, GLuint tex
 
 void GL_APIENTRY GetBufferParameteri64v(GLenum target, GLenum pname, GLint64 *params)
 {
-    EVENT("(GLenum target = 0x%X, GLenum pname = 0x%X, GLint64 *params = 0x%016" PRIxPTR ")",
-          target, pname, (uintptr_t)params);
+    EVENT("(GLenum target = %s, GLenum pname = %s, GLint64 *params = 0x%016" PRIxPTR ")",
+          GLenumToString(gl::GLenumGroup::BufferTargetARB, target),
+          GLenumToString(gl::GLenumGroup::DefaultGroup, pname), (uintptr_t)params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -219,8 +228,8 @@ void GL_APIENTRY GetBufferParameteri64v(GLenum target, GLenum pname, GLint64 *pa
 
 void GL_APIENTRY GetInteger64i_v(GLenum target, GLuint index, GLint64 *data)
 {
-    EVENT("(GLenum target = 0x%X, GLuint index = %u, GLint64 *data = 0x%016" PRIxPTR ")", target,
-          index, (uintptr_t)data);
+    EVENT("(GLenum target = %s, GLuint index = %u, GLint64 *data = 0x%016" PRIxPTR ")",
+          GLenumToString(gl::GLenumGroup::TypeEnum, target), index, (uintptr_t)data);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -237,7 +246,8 @@ void GL_APIENTRY GetInteger64i_v(GLenum target, GLuint index, GLint64 *data)
 
 void GL_APIENTRY GetInteger64v(GLenum pname, GLint64 *data)
 {
-    EVENT("(GLenum pname = 0x%X, GLint64 *data = 0x%016" PRIxPTR ")", pname, (uintptr_t)data);
+    EVENT("(GLenum pname = %s, GLint64 *data = 0x%016" PRIxPTR ")",
+          GLenumToString(gl::GLenumGroup::GetPName, pname), (uintptr_t)data);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -254,8 +264,8 @@ void GL_APIENTRY GetInteger64v(GLenum pname, GLint64 *data)
 
 void GL_APIENTRY GetMultisamplefv(GLenum pname, GLuint index, GLfloat *val)
 {
-    EVENT("(GLenum pname = 0x%X, GLuint index = %u, GLfloat *val = 0x%016" PRIxPTR ")", pname,
-          index, (uintptr_t)val);
+    EVENT("(GLenum pname = %s, GLuint index = %u, GLfloat *val = 0x%016" PRIxPTR ")",
+          GLenumToString(gl::GLenumGroup::DefaultGroup, pname), index, (uintptr_t)val);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -274,9 +284,10 @@ void GL_APIENTRY
 GetSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values)
 {
     EVENT("(GLsync sync = 0x%016" PRIxPTR
-          ", GLenum pname = 0x%X, GLsizei bufSize = %d, GLsizei *length = 0x%016" PRIxPTR
+          ", GLenum pname = %s, GLsizei bufSize = %d, GLsizei *length = 0x%016" PRIxPTR
           ", GLint *values = 0x%016" PRIxPTR ")",
-          (uintptr_t)sync, pname, bufSize, (uintptr_t)length, (uintptr_t)values);
+          (uintptr_t)sync, GLenumToString(gl::GLenumGroup::SyncParameterName, pname), bufSize,
+          (uintptr_t)length, (uintptr_t)values);
 
     Context *context = GetGlobalContext();
     if (context)
@@ -324,10 +335,12 @@ void GL_APIENTRY MultiDrawElementsBaseVertex(GLenum mode,
                                              GLsizei drawcount,
                                              const GLint *basevertex)
 {
-    EVENT("(GLenum mode = 0x%X, const GLsizei *count = 0x%016" PRIxPTR
-          ", GLenum type = 0x%X, const void *const*indices = 0x%016" PRIxPTR
+    EVENT("(GLenum mode = %s, const GLsizei *count = 0x%016" PRIxPTR
+          ", GLenum type = %s, const void *const*indices = 0x%016" PRIxPTR
           ", GLsizei drawcount = %d, const GLint *basevertex = 0x%016" PRIxPTR ")",
-          mode, (uintptr_t)count, type, (uintptr_t)indices, drawcount, (uintptr_t)basevertex);
+          GLenumToString(gl::GLenumGroup::PrimitiveType, mode), (uintptr_t)count,
+          GLenumToString(gl::GLenumGroup::DrawElementsType, type), (uintptr_t)indices, drawcount,
+          (uintptr_t)basevertex);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -346,7 +359,7 @@ void GL_APIENTRY MultiDrawElementsBaseVertex(GLenum mode,
 
 void GL_APIENTRY ProvokingVertex(GLenum mode)
 {
-    EVENT("(GLenum mode = 0x%X)", mode);
+    EVENT("(GLenum mode = %s)", GLenumToString(gl::GLenumGroup::VertexProvokingMode, mode));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -364,7 +377,8 @@ void GL_APIENTRY ProvokingVertex(GLenum mode)
 
 void GL_APIENTRY SampleMaski(GLuint maskNumber, GLbitfield mask)
 {
-    EVENT("(GLuint maskNumber = %u, GLbitfield mask = 0x%X)", maskNumber, mask);
+    EVENT("(GLuint maskNumber = %u, GLbitfield mask = %s)", maskNumber,
+          GLbitfieldToString(gl::GLenumGroup::DefaultGroup, mask).c_str());
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -387,9 +401,11 @@ void GL_APIENTRY TexImage2DMultisample(GLenum target,
                                        GLboolean fixedsamplelocations)
 {
     EVENT(
-        "(GLenum target = 0x%X, GLsizei samples = %d, GLenum internalformat = 0x%X, GLsizei width "
-        "= %d, GLsizei height = %d, GLboolean fixedsamplelocations = %u)",
-        target, samples, internalformat, width, height, fixedsamplelocations);
+        "(GLenum target = %s, GLsizei samples = %d, GLenum internalformat = %s, GLsizei width = "
+        "%d, GLsizei height = %d, GLboolean fixedsamplelocations = %s)",
+        GLenumToString(gl::GLenumGroup::TextureTarget, target), samples,
+        GLenumToString(gl::GLenumGroup::InternalFormat, internalformat), width, height,
+        GLenumToString(gl::GLenumGroup::Boolean, fixedsamplelocations));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -416,9 +432,11 @@ void GL_APIENTRY TexImage3DMultisample(GLenum target,
                                        GLboolean fixedsamplelocations)
 {
     EVENT(
-        "(GLenum target = 0x%X, GLsizei samples = %d, GLenum internalformat = 0x%X, GLsizei width "
-        "= %d, GLsizei height = %d, GLsizei depth = %d, GLboolean fixedsamplelocations = %u)",
-        target, samples, internalformat, width, height, depth, fixedsamplelocations);
+        "(GLenum target = %s, GLsizei samples = %d, GLenum internalformat = %s, GLsizei width = "
+        "%d, GLsizei height = %d, GLsizei depth = %d, GLboolean fixedsamplelocations = %s)",
+        GLenumToString(gl::GLenumGroup::TextureTarget, target), samples,
+        GLenumToString(gl::GLenumGroup::InternalFormat, internalformat), width, height, depth,
+        GLenumToString(gl::GLenumGroup::Boolean, fixedsamplelocations));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -439,8 +457,9 @@ void GL_APIENTRY TexImage3DMultisample(GLenum target,
 
 void GL_APIENTRY WaitSync(GLsync sync, GLbitfield flags, GLuint64 timeout)
 {
-    EVENT("(GLsync sync = 0x%016" PRIxPTR ", GLbitfield flags = 0x%X, GLuint64 timeout = %llu)",
-          (uintptr_t)sync, flags, static_cast<unsigned long long>(timeout));
+    EVENT("(GLsync sync = 0x%016" PRIxPTR ", GLbitfield flags = %s, GLuint64 timeout = %llu)",
+          (uintptr_t)sync, GLbitfieldToString(gl::GLenumGroup::DefaultGroup, flags).c_str(),
+          static_cast<unsigned long long>(timeout));
 
     Context *context = GetValidGlobalContext();
     if (context)

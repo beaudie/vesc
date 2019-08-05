@@ -318,6 +318,8 @@ template_parameter_capture_pointer = """
 
 template_parameter_capture_pointer_func = """void {name}({params});"""
 
+enum_to_string_set = {"GLenum", "GLbitfield", "GLboolean"}
+
 static_cast_to_dict = {
     "GLintptr": "unsigned long long",
     "GLsizeiptr": "unsigned long long",
@@ -332,15 +334,15 @@ reinterpret_cast_to_dict = {
 }
 
 format_dict = {
-    "GLbitfield": "0x%X",
-    "GLboolean": "%u",
+    "GLbitfield": "%s",
+    "GLboolean": "%s",
     "GLbyte": "%d",
     "GLclampx": "0x%X",
     "GLDEBUGPROC": "0x%016\" PRIxPTR \"",
     "GLDEBUGPROCKHR": "0x%016\" PRIxPTR \"",
     "GLdouble": "%f",
     "GLeglImageOES": "0x%016\" PRIxPTR \"",
-    "GLenum": "0x%X",
+    "GLenum": "%s",
     "GLfixed": "0x%X",
     "GLfloat": "%f",
     "GLint": "%d",
@@ -377,6 +379,10 @@ template_sources_includes = """#include "libGLESv2/entry_points_{header_version}
 #include "libANGLE/validation{validation_header_version}.h"
 #include "libANGLE/entry_points_utils.h"
 #include "libGLESv2/global_state.h"
+
+#if defined(ANGLE_TRACE_ENABLED)
+#    include "libANGLE/gl_enum_utils_autogen.h"
+#endif
 """
 
 template_header_includes_gl32 = """#include <export.h>
@@ -587,7 +593,7 @@ def just_the_name_packed(param, reserved_set):
         return name
 
 
-def param_print_argument(param):
+def param_print_argument(command_node, param):
     name_only = just_the_name(param)
     type_only = just_the_type(param)
 
@@ -599,6 +605,13 @@ def param_print_argument(param):
 
     if type_only in static_cast_to_dict:
         return "static_cast<" + static_cast_to_dict[type_only] + ">(" + name_only + ")"
+
+    if type_only in enum_to_string_set:
+        group_name = find_gl_enum_group_in_command(command_node, name_only)
+        if type_only == "GLbitfield":
+            return "GLbitfieldToString(gl::GLenumGroup::%s, %s).c_str()" % (group_name, name_only)
+        else:
+            return "GLenumToString(gl::GLenumGroup::%s, %s)" % (group_name, name_only)
 
     return name_only
 
@@ -658,7 +671,7 @@ def find_gl_enum_group_in_command(command_node, param_name):
     return group_name
 
 
-def format_entry_point_def(cmd_name, proto, params, is_explicit_context):
+def format_entry_point_def(command_node, cmd_name, proto, params, is_explicit_context):
     packed_gl_enums = cmd_packed_gl_enums.get(cmd_name, {})
     internal_params = [just_the_name_packed(param, packed_gl_enums) for param in params]
     packed_gl_enum_conversions = []
@@ -672,7 +685,7 @@ def format_entry_point_def(cmd_name, proto, params, is_explicit_context):
                 internal_type + ">(" + name + ");"
             ]
 
-    pass_params = [param_print_argument(param) for param in params]
+    pass_params = [param_print_argument(command_node, param) for param in params]
     format_params = [param_format_string(param) for param in params]
     return_type = proto[:-len(cmd_name)]
     default_return = default_return_value(cmd_name, return_type.strip())
@@ -872,7 +885,8 @@ def get_entry_points(all_commands, commands, is_explicit_context, is_wgl, all_pa
         proto_text = "".join(proto.itertext())
         decls.append(
             format_entry_point_decl(cmd_name, proto_text, param_text, is_explicit_context))
-        defs.append(format_entry_point_def(cmd_name, proto_text, param_text, is_explicit_context))
+        defs.append(
+            format_entry_point_def(command, cmd_name, proto_text, param_text, is_explicit_context))
 
         export_defs.append(
             format_libgles_entry_point_def(cmd_name, proto_text, param_text, is_explicit_context))
