@@ -310,6 +310,103 @@ void main()
     }
 }
 
+// Test atomic counter array of array.
+TEST_P(AtomicCounterBufferTest31, AtomicCounterArrayOfArray)
+{
+    // Crashes in older drivers.  http://anglebug.com/3738
+    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsWindows() && IsAMD());
+
+    // Fails on D3D.  Some counters are double-incremented while some are untouched, hinting at a
+    // bug in index translation.  http://anglebug.com/3783
+    ANGLE_SKIP_TEST_IF(IsD3D11());
+
+    // Skipping due to a bug on the Qualcomm Vulkan Android driver.
+    // http://anglebug.com/3726
+    ANGLE_SKIP_TEST_IF(IsAndroid() && IsVulkan());
+
+    constexpr char kCS[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(binding = 0) uniform atomic_uint ac[7][5];
+
+void f(in atomic_uint ac[5])
+{
+    for (int i = 0; i < 4; ++i)
+    {
+        atomicCounterIncrement(ac[i]);
+    }
+    atomicCounterIncrement(ac[4]);
+}
+
+void g(in atomic_uint ac[7][5])
+{
+    f(ac[0]);
+    f(ac[1]);
+    f(ac[2]);
+    f(ac[3]);
+    f(ac[4]);
+    for (int i = 0; i < 4; ++i)
+    {
+        atomicCounterIncrement(ac[6][i]);
+    }
+    atomicCounterIncrement(ac[6][4]);
+}
+
+void main()
+{
+    g(ac);
+    f(ac[5]);
+})";
+
+    constexpr uint32_t kAtomicCounterRows = 7;
+    constexpr uint32_t kAtomicCounterCols = 5;
+
+    GLint maxAtomicCounters = 0;
+    glGetIntegerv(GL_MAX_COMPUTE_ATOMIC_COUNTERS, &maxAtomicCounters);
+    EXPECT_GL_NO_ERROR();
+
+    // Required minimum is 8 by the spec
+    EXPECT_GE(maxAtomicCounters, 8);
+    ANGLE_SKIP_TEST_IF(static_cast<uint32_t>(maxAtomicCounters) <
+                       kAtomicCounterRows * kAtomicCounterCols);
+
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program.get());
+
+    // The initial value of 'ac[0]' is 3u, 'ac[1]' is 1u.
+    unsigned int bufferData[kAtomicCounterRows * kAtomicCounterCols] = {};
+    for (uint32_t row = 0; row < kAtomicCounterRows; ++row)
+    {
+        for (uint32_t col = 0; col < kAtomicCounterCols; ++col)
+        {
+            uint32_t index    = row * kAtomicCounterCols + col;
+            bufferData[index] = index;
+        }
+    }
+
+    GLBuffer atomicCounterBuffer;
+    glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicCounterBuffer);
+    glBufferData(GL_ATOMIC_COUNTER_BUFFER, sizeof(bufferData), bufferData, GL_STATIC_DRAW);
+
+    glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, atomicCounterBuffer);
+
+    glDispatchCompute(1, 1, 1);
+    EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+
+    unsigned int result[kAtomicCounterRows * kAtomicCounterCols] = {};
+    glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, atomicCounterBuffer);
+    void *mappedBuffer =
+        glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(bufferData), GL_MAP_READ_BIT);
+    memcpy(result, mappedBuffer, sizeof(bufferData));
+    glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
+
+    for (uint32_t index = 0; index < kAtomicCounterRows * kAtomicCounterCols; ++index)
+    {
+        EXPECT_EQ(result[index], bufferData[index] + 1) << "index " << index;
+    }
+}
+
 ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest,
                        ES3_OPENGL(),
                        ES3_OPENGLES(),
