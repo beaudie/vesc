@@ -45,7 +45,7 @@ void GL_APIENTRY BlendColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat al
 
 void GL_APIENTRY BlendEquation(GLenum mode)
 {
-    EVENT("(GLenum mode = 0x%X)", mode);
+    EVENT("(GLenum mode = %s)", GLenumToString(GLenumGroup::BlendEquationModeEXT, mode));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -65,9 +65,12 @@ void GL_APIENTRY BlendFuncSeparate(GLenum sfactorRGB,
                                    GLenum dfactorAlpha)
 {
     EVENT(
-        "(GLenum sfactorRGB = 0x%X, GLenum dfactorRGB = 0x%X, GLenum sfactorAlpha = 0x%X, GLenum "
-        "dfactorAlpha = 0x%X)",
-        sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
+        "(GLenum sfactorRGB = %s, GLenum dfactorRGB = %s, GLenum sfactorAlpha = %s, GLenum "
+        "dfactorAlpha = %s)",
+        GLenumToString(GLenumGroup::BlendingFactor, sfactorRGB),
+        GLenumToString(GLenumGroup::BlendingFactor, dfactorRGB),
+        GLenumToString(GLenumGroup::BlendingFactor, sfactorAlpha),
+        GLenumToString(GLenumGroup::BlendingFactor, dfactorAlpha));
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -86,8 +89,8 @@ void GL_APIENTRY BlendFuncSeparate(GLenum sfactorRGB,
 
 void GL_APIENTRY FogCoordPointer(GLenum type, GLsizei stride, const void *pointer)
 {
-    EVENT("(GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = 0x%016" PRIxPTR ")",
-          type, stride, (uintptr_t)pointer);
+    EVENT("(GLenum type = %s, GLsizei stride = %d, const void *pointer = 0x%016" PRIxPTR ")",
+          GLenumToString(GLenumGroup::FogPointerTypeEXT, type), stride, (uintptr_t)pointer);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -171,9 +174,10 @@ void GL_APIENTRY MultiDrawArrays(GLenum mode,
                                  const GLsizei *count,
                                  GLsizei drawcount)
 {
-    EVENT("(GLenum mode = 0x%X, const GLint *first = 0x%016" PRIxPTR
+    EVENT("(GLenum mode = %s, const GLint *first = 0x%016" PRIxPTR
           ", const GLsizei *count = 0x%016" PRIxPTR ", GLsizei drawcount = %d)",
-          mode, (uintptr_t)first, (uintptr_t)count, drawcount);
+          GLenumToString(GLenumGroup::PrimitiveType, mode), (uintptr_t)first, (uintptr_t)count,
+          drawcount);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -195,10 +199,11 @@ void GL_APIENTRY MultiDrawElements(GLenum mode,
                                    const void *const *indices,
                                    GLsizei drawcount)
 {
-    EVENT("(GLenum mode = 0x%X, const GLsizei *count = 0x%016" PRIxPTR
-          ", GLenum type = 0x%X, const void *const*indices = 0x%016" PRIxPTR
+    EVENT("(GLenum mode = %s, const GLsizei *count = 0x%016" PRIxPTR
+          ", GLenum type = %s, const void *const*indices = 0x%016" PRIxPTR
           ", GLsizei drawcount = %d)",
-          mode, (uintptr_t)count, type, (uintptr_t)indices, drawcount);
+          GLenumToString(GLenumGroup::PrimitiveType, mode), (uintptr_t)count,
+          GLenumToString(GLenumGroup::DrawElementsType, type), (uintptr_t)indices, drawcount);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -219,7 +224,8 @@ void GL_APIENTRY MultiDrawElements(GLenum mode,
 
 void GL_APIENTRY PointParameterf(GLenum pname, GLfloat param)
 {
-    EVENT("(GLenum pname = 0x%X, GLfloat param = %f)", pname, param);
+    EVENT("(GLenum pname = %s, GLfloat param = %f)",
+          GLenumToString(GLenumGroup::DefaultGroup, pname), param);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -237,8 +243,8 @@ void GL_APIENTRY PointParameterf(GLenum pname, GLfloat param)
 
 void GL_APIENTRY PointParameterfv(GLenum pname, const GLfloat *params)
 {
-    EVENT("(GLenum pname = 0x%X, const GLfloat *params = 0x%016" PRIxPTR ")", pname,
-          (uintptr_t)params);
+    EVENT("(GLenum pname = %s, const GLfloat *params = 0x%016" PRIxPTR ")",
+          GLenumToString(GLenumGroup::DefaultGroup, pname), (uintptr_t)params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -256,7 +262,8 @@ void GL_APIENTRY PointParameterfv(GLenum pname, const GLfloat *params)
 
 void GL_APIENTRY PointParameteri(GLenum pname, GLint param)
 {
-    EVENT("(GLenum pname = 0x%X, GLint param = %d)", pname, param);
+    EVENT("(GLenum pname = %s, GLint param = %d)", GLenumToString(GLenumGroup::DefaultGroup, pname),
+          param);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -273,8 +280,8 @@ void GL_APIENTRY PointParameteri(GLenum pname, GLint param)
 
 void GL_APIENTRY PointParameteriv(GLenum pname, const GLint *params)
 {
-    EVENT("(GLenum pname = 0x%X, const GLint *params = 0x%016" PRIxPTR ")", pname,
-          (uintptr_t)params);
+    EVENT("(GLenum pname = %s, const GLint *params = 0x%016" PRIxPTR ")",
+          GLenumToString(GLenumGroup::DefaultGroup, pname), (uintptr_t)params);
 
     Context *context = GetValidGlobalContext();
     if (context)
@@ -556,9 +563,9 @@ void GL_APIENTRY SecondaryColor3usv(const GLushort *v)
 void GL_APIENTRY SecondaryColorPointer(GLint size, GLenum type, GLsizei stride, const void *pointer)
 {
     EVENT(
-        "(GLint size = %d, GLenum type = 0x%X, GLsizei stride = %d, const void *pointer = "
+        "(GLint size = %d, GLenum type = %s, GLsizei stride = %d, const void *pointer = "
         "0x%016" PRIxPTR ")",
-        size, type, stride, (uintptr_t)pointer);
+        size, GLenumToString(GLenumGroup::ColorPointerType, type), stride, (uintptr_t)pointer);
 
     Context *context = GetValidGlobalContext();
     if (context)
