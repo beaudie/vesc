@@ -16,6 +16,24 @@
       "revId": "7daaa4b3d0a7cfa0d633a79170361e2e5fcfcf30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2302d216_b9425deb",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-05T12:38:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f2b8128_327e67ed",
+      "revId": "7daaa4b3d0a7cfa0d633a79170361e2e5fcfcf30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
