@@ -598,7 +598,7 @@
 1951 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.get_error.compute.exceed_shared_memory_size_limit = FAIL
 1951 D3D11 : dEQP-GLES31.functional.debug.negative_coverage.log.compute.exceed_shared_memory_size_limit = FAIL
 
-1442 D3D11 : dEQP-GLES31.functional.stencil_texturing.* = SKIP
+// 1442 D3D11 : dEQP-GLES31.functional.stencil_texturing.* = SKIP
 // TODO(xinghua.cao@intel.com): FAIL expectation instead of SKIP should be sufficient for OpenGL, but the
 // test expectations parser doesn't support having FAIL for GL and SKIP for D3D with the same test filter.
 
@@ -696,7 +696,7 @@
 3205 VULKAN : dEQP-GLES31.functional.debug.*transform_feedback = SKIP
 
 // Stencil textures (some missing support for 3D and 2D array textures):
-3585 VULKAN : dEQP-GLES31.functional.stencil_texturing.* = SKIP
+3148 VULKAN : dEQP-GLES31.functional.stencil_texturing.misc.base_level = SKIP
 
 // Multisampled textures:
 3565 VULKAN : dEQP-GLES31.functional.texture.multisample.* = SKIP
