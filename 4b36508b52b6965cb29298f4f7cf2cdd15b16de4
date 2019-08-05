@@ -16,6 +16,24 @@
       "revId": "4b36508b52b6965cb29298f4f7cf2cdd15b16de4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1b0fc0f_6a6ff574",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-05T21:18:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17d2eac1_d3a15b34",
+      "revId": "4b36508b52b6965cb29298f4f7cf2cdd15b16de4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
