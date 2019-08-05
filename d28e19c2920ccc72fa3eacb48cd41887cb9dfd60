@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1dea6c3a_d85df66c",
+        "filename": "src/compiler/translator/tree_util/ReplaceVariable.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-05T18:15:26Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "4f303181_fb1bcbc4",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 46
+      },
+      "revId": "d28e19c2920ccc72fa3eacb48cd41887cb9dfd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ab537ac_69c2cdc3",
         "filename": "src/compiler/translator/tree_util/ReplaceVariable.h",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "d28e19c2920ccc72fa3eacb48cd41887cb9dfd60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25a4af74_dc88fdac",
+        "filename": "src/compiler/translator/tree_util/ReplaceVariable.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-05T18:15:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ab537ac_69c2cdc3",
+      "revId": "d28e19c2920ccc72fa3eacb48cd41887cb9dfd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -79,6 +121,48 @@
       "revId": "d28e19c2920ccc72fa3eacb48cd41887cb9dfd60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0aab2038_9508a111",
+        "filename": "src/compiler/translator/tree_util/ReplaceVariable.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-05T18:15:26Z",
+      "side": 1,
+      "message": "`operator[]` is a non-const function. I had to use `at` because `this` is `const.",
+      "parentUuid": "f6685f01_9b33c2e9",
+      "revId": "d28e19c2920ccc72fa3eacb48cd41887cb9dfd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "21ad0d2f_eef27371",
+        "filename": "src/compiler/translator/tree_util/ReplaceVariable.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-05T18:15:26Z",
+      "side": 1,
+      "message": "No, the look up is in two different maps, mReplacedGlobalVariables and mReplacedGlobalVariables.",
+      "parentUuid": "d5857171_37d78003",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 54
+      },
+      "revId": "d28e19c2920ccc72fa3eacb48cd41887cb9dfd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
