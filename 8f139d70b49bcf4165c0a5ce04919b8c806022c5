@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a5be07f_3a83afba",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-05T17:54:02Z",
+      "side": 1,
+      "message": "could you split out this refactor into its own CL? Feels like it\u0027s a bit risky since it interacts with dirty bits. and logically separable.",
+      "range": {
+        "startLine": 393,
+        "startChar": 17,
+        "endLine": 393,
+        "endChar": 49
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31f254e6_f2be819c",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-05T17:54:02Z",
+      "side": 1,
+      "message": "we should probably remove luc from the TODO since he\u0027s no longer on the team. Maybe just change this to a note instead of a TODO as we don\u0027t have an issue filed for it. And it\u0027s not that big of a deal.",
+      "range": {
+        "startLine": 689,
+        "startChar": 4,
+        "endLine": 689,
+        "endChar": 75
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c41e1d4e_ccd6eb8c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-05T17:54:02Z",
+      "side": 1,
+      "message": "can you try please using a std::array of uint8_t and using static_assert to verify the packing size? Also please try to use a constant in the array size.",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 45
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97258dc0_8c6f0d66",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-05T17:54:02Z",
+      "side": 1,
+      "message": "cute, I like it.",
+      "range": {
+        "startLine": 284,
+        "startChar": 0,
+        "endLine": 285,
+        "endChar": 53
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ccc592ae_0256d8d0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-05T17:54:02Z",
+      "side": 1,
+      "message": "can you move this to vk_utils.h? We could also consider making this part of the front-end types.",
+      "range": {
+        "startLine": 339,
+        "startChar": 0,
+        "endLine": 346,
+        "endChar": 6
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cf972e0_f7f0f746",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-05T17:54:02Z",
+      "side": 1,
+      "message": "nit: define data after member functions. also the type should be first.\n\nhttps://google.github.io/styleguide/cppguide.html#Declaration_Order",
+      "range": {
+        "startLine": 534,
+        "startChar": 0,
+        "endLine": 548,
+        "endChar": 0
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
