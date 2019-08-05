@@ -171,6 +171,19 @@ class TextureVk : public TextureImpl
     }
 
   private:
+    struct TextureVkViews final : angle::NonCopyable
+    {
+        TextureVkViews() {}
+        ~TextureVkViews() {}
+
+        void release(ContextVk *contextVk, Serial currentSerial);
+        vk::ImageView mDrawBaseLevelImageView;
+        vk::ImageView mReadBaseLevelImageView;
+        vk::ImageView mReadMipmapImageView;
+        vk::ImageView mFetchBaseLevelImageView;
+        vk::ImageView mFetchMipmapImageView;
+    };
+
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
     gl::ImageIndex getNativeImageIndex(const gl::ImageIndex &inputImageIndex) const;
@@ -280,6 +293,13 @@ class TextureVk : public TextureImpl
                                  const vk::Format &format,
                                  uint32_t levelCount,
                                  uint32_t layerCount);
+    angle::Result initImageViewImpl(ContextVk *contextVk,
+                                    const vk::Format &format,
+                                    uint32_t levelCount,
+                                    uint32_t layerCount,
+                                    TextureVkViews *views,
+                                    VkImageAspectFlags aspectFlags,
+                                    gl::SwizzleState mappedSwizzle);
     angle::Result initCubeMapRenderTargets(ContextVk *contextVk);
 
     angle::Result ensureImageInitializedImpl(ContextVk *contextVk,
@@ -288,6 +308,10 @@ class TextureVk : public TextureImpl
                                              const vk::Format &format);
 
     void onStagingBufferChange() { onStateChange(angle::SubjectMessage::SubjectChanged); }
+
+    bool isStencilMode() const { return mState.getDepthStencilTextureMode() == GL_STENCIL_INDEX; }
+
+    const TextureVkViews *getTextureViews() const;
 
     bool mOwnsImage;
 
@@ -303,11 +327,8 @@ class TextureVk : public TextureImpl
 
     vk::ImageHelper *mImage;
 
-    vk::ImageView mDrawBaseLevelImageView;
-    vk::ImageView mReadBaseLevelImageView;
-    vk::ImageView mReadMipmapImageView;
-    vk::ImageView mFetchBaseLevelImageView;
-    vk::ImageView mFetchMipmapImageView;
+    TextureVkViews mDefaultViews;
+    TextureVkViews mStencilViews;
     std::vector<std::vector<vk::ImageView>> mLayerLevelDrawImageViews;
     vk::Sampler mSampler;
 
