@@ -22,6 +22,30 @@
       "revId": "f7c9f81f5283969cdd8903c626506cd957381826",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "864a11f6_8eba9385",
+        "filename": "src/libGL/entry_points_gl_1_0_autogen.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-05T19:37:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea594265_f3e196a8",
+      "range": {
+        "startLine": 957,
+        "startChar": 46,
+        "endLine": 957,
+        "endChar": 50
+      },
+      "revId": "f7c9f81f5283969cdd8903c626506cd957381826",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
