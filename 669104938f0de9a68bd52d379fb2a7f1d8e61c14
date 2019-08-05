@@ -88,6 +88,24 @@
       "revId": "669104938f0de9a68bd52d379fb2a7f1d8e61c14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60f037ca_0cd81422",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2219,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-05T12:23:02Z",
+      "side": 1,
+      "message": "Given what I and Shabi suggested already, I\u0027d recommend we remove the check here and use AllGraphicsShaderReadOnly for now.",
+      "parentUuid": "9203039e_65089d9d",
+      "revId": "669104938f0de9a68bd52d379fb2a7f1d8e61c14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
