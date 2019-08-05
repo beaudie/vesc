@@ -871,7 +871,7 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
     mImage->initStagingBuffer(contextVk->getRenderer(), format, vk::kStagingBufferFlags,
                               mStagingBufferInitialSize);
 
-    mRenderTarget.init(mImage, &mDrawBaseLevelImageView, &mFetchBaseLevelImageView,
+    mRenderTarget.init(mImage, &default.mDrawBaseLevelImageView, &default.mFetchBaseLevelImageView,
                        getNativeImageLevel(0), getNativeImageLayer(0));
 
     // Force re-creation of cube map render targets next time they are needed
@@ -1284,15 +1284,15 @@ const vk::ImageView &TextureVk::getReadImageView() const
 
     if (!gl::IsMipmapFiltered(mState.getSamplerState()))
     {
-        return mReadBaseLevelImageView;
+        return default.mReadBaseLevelImageView;
     }
 
-    return mReadMipmapImageView;
+    return default.mReadMipmapImageView;
 }
 
 const vk::ImageView &TextureVk::getFetchImageView() const
 {
-    if (!mFetchBaseLevelImageView.valid())
+    if (!default.mFetchBaseLevelImageView.valid())
     {
         return getReadImageView();
     }
@@ -1301,10 +1301,10 @@ const vk::ImageView &TextureVk::getFetchImageView() const
 
     if (!gl::IsMipmapFiltered(mState.getSamplerState()))
     {
-        return mFetchBaseLevelImageView;
+        return default.mFetchBaseLevelImageView;
     }
 
-    return mFetchMipmapImageView;
+    return default.mFetchMipmapImageView;
 }
 
 angle::Result TextureVk::getLayerLevelDrawImageView(vk::Context *context,
@@ -1402,6 +1402,48 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result TextureVk::createImageViews(ContextVk *contextVk,
+                                          const vk::Format &format,
+                                          uint32_t levelCount,
+                                          uint32_t layerCount,
+                                          TextureVkViews *view,
+                                          VkImageAspectFlags aspectFlags,
+                                          gl::SwizzleState mappedSwizzle)
+{
+    // TODO: Support non-zero base level for ES 3.0 by passing it to getNativeImageLevel.
+    // http://anglebug.com/3148
+    uint32_t baseLevel = getNativeImageLevel(0);
+    uint32_t baseLayer = getNativeImageLayer(0);
+
+    ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), aspectFlags, mappedSwizzle,
+                                         &view->mReadMipmapImageView, baseLevel, levelCount,
+                                         baseLayer, layerCount));
+    ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), aspectFlags, mappedSwizzle,
+                                         &view->mReadBaseLevelImageView, baseLevel, 1, baseLayer,
+                                         layerCount));
+    if (mState.getType() == gl::TextureType::CubeMap ||
+        mState.getType() == gl::TextureType::_2DArray ||
+        mState.getType() == gl::TextureType::_2DMultisampleArray)
+    {
+        gl::TextureType arrayType = vk::Get2DTextureType(layerCount, mImage->getSamples());
+
+        ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, aspectFlags, mappedSwizzle,
+                                             &view->mFetchMipmapImageView, baseLevel, levelCount,
+                                             baseLayer, layerCount));
+        ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, aspectFlags, mappedSwizzle,
+                                             &view->mFetchBaseLevelImageView, baseLevel, 1,
+                                             baseLayer, layerCount));
+    }
+    if (!format.imageFormat().isBlock)
+    {
+        ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), aspectFlags,
+                                             gl::SwizzleState(), &view->mDrawBaseLevelImageView,
+                                             baseLevel, 1, baseLayer, layerCount));
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result TextureVk::initImageViews(ContextVk *contextVk,
                                         const vk::Format &format,
                                         uint32_t levelCount,
@@ -1412,43 +1454,17 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
     gl::SwizzleState mappedSwizzle;
     MapSwizzleState(contextVk, format, mState.getSwizzleState(), &mappedSwizzle);
 
-    // TODO: Support non-zero base level for ES 3.0 by passing it to getNativeImageLevel.
-    // http://anglebug.com/3148
-    uint32_t baseLevel = getNativeImageLevel(0);
-    uint32_t baseLayer = getNativeImageLayer(0);
-
     VkImageAspectFlags aspectFlags = vk::GetFormatAspectFlags(format.angleFormat());
     // If we are reading a depth buffer, select only the depth component/aspect
+    // TODO: Use depth_stencil_texture_mode to decide if using depth or stencil aspect.
     if (aspectFlags & VK_IMAGE_ASPECT_DEPTH_BIT)
     {
+        ANGLE_TRY(createImageViews(contextVk, format, levelCount, layerCount, &stencil,
+                                   VK_IMAGE_ASPECT_STENCIL_BIT, mappedSwizzle));
         aspectFlags = VK_IMAGE_ASPECT_DEPTH_BIT;
     }
-
-    ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), aspectFlags, mappedSwizzle,
-                                         &mReadMipmapImageView, baseLevel, levelCount, baseLayer,
-                                         layerCount));
-    ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), aspectFlags, mappedSwizzle,
-                                         &mReadBaseLevelImageView, baseLevel, 1, baseLayer,
-                                         layerCount));
-    if (mState.getType() == gl::TextureType::CubeMap ||
-        mState.getType() == gl::TextureType::_2DArray ||
-        mState.getType() == gl::TextureType::_2DMultisampleArray)
-    {
-        gl::TextureType arrayType = vk::Get2DTextureType(layerCount, mImage->getSamples());
-
-        ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, aspectFlags, mappedSwizzle,
-                                             &mFetchMipmapImageView, baseLevel, levelCount,
-                                             baseLayer, layerCount));
-        ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, aspectFlags, mappedSwizzle,
-                                             &mFetchBaseLevelImageView, baseLevel, 1, baseLayer,
-                                             layerCount));
-    }
-    if (!format.imageFormat().isBlock)
-    {
-        ANGLE_TRY(mImage->initLayerImageView(contextVk, mState.getType(), aspectFlags,
-                                             gl::SwizzleState(), &mDrawBaseLevelImageView,
-                                             baseLevel, 1, baseLayer, layerCount));
-    }
+    ANGLE_TRY(createImageViews(contextVk, format, levelCount, layerCount, &default, aspectFlags,
+                               mappedSwizzle));
 
     return angle::Result::Continue;
 }
@@ -1478,11 +1494,17 @@ void TextureVk::releaseImageViews(ContextVk *contextVk)
 {
     Serial currentSerial = contextVk->getCurrentQueueSerial();
 
-    contextVk->releaseObject(currentSerial, &mDrawBaseLevelImageView);
-    contextVk->releaseObject(currentSerial, &mReadBaseLevelImageView);
-    contextVk->releaseObject(currentSerial, &mReadMipmapImageView);
-    contextVk->releaseObject(currentSerial, &mFetchBaseLevelImageView);
-    contextVk->releaseObject(currentSerial, &mFetchMipmapImageView);
+    contextVk->releaseObject(currentSerial, &default.mDrawBaseLevelImageView);
+    contextVk->releaseObject(currentSerial, &default.mReadBaseLevelImageView);
+    contextVk->releaseObject(currentSerial, &default.mReadMipmapImageView);
+    contextVk->releaseObject(currentSerial, &default.mFetchBaseLevelImageView);
+    contextVk->releaseObject(currentSerial, &default.mFetchMipmapImageView);
+
+    contextVk->releaseObject(currentSerial, &stencil.mDrawBaseLevelImageView);
+    contextVk->releaseObject(currentSerial, &stencil.mReadBaseLevelImageView);
+    contextVk->releaseObject(currentSerial, &stencil.mReadMipmapImageView);
+    contextVk->releaseObject(currentSerial, &stencil.mFetchBaseLevelImageView);
+    contextVk->releaseObject(currentSerial, &stencil.mFetchMipmapImageView);
 
     for (auto &layerViews : mLayerLevelDrawImageViews)
     {

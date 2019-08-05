@@ -18,6 +18,15 @@
 namespace rx
 {
 
+struct TextureVkViews
+{
+    vk::ImageView mDrawBaseLevelImageView;
+    vk::ImageView mReadBaseLevelImageView;
+    vk::ImageView mReadMipmapImageView;
+    vk::ImageView mFetchBaseLevelImageView;
+    vk::ImageView mFetchMipmapImageView;
+};
+
 class TextureVk : public TextureImpl
 {
   public:
@@ -280,6 +289,13 @@ class TextureVk : public TextureImpl
                                  const vk::Format &format,
                                  uint32_t levelCount,
                                  uint32_t layerCount);
+    angle::Result createImageViews(ContextVk *contextVk,
+                                   const vk::Format &format,
+                                   uint32_t levelCount,
+                                   uint32_t layerCount,
+                                   TextureVkViews *views,
+                                   VkImageAspectFlags aspectFlags,
+                                   gl::SwizzleState mappedSwizzle);
     angle::Result initCubeMapRenderTargets(ContextVk *contextVk);
 
     angle::Result ensureImageInitializedImpl(ContextVk *contextVk,
@@ -303,11 +319,8 @@ class TextureVk : public TextureImpl
 
     vk::ImageHelper *mImage;
 
-    vk::ImageView mDrawBaseLevelImageView;
-    vk::ImageView mReadBaseLevelImageView;
-    vk::ImageView mReadMipmapImageView;
-    vk::ImageView mFetchBaseLevelImageView;
-    vk::ImageView mFetchMipmapImageView;
+    TextureVkViews default;
+    TextureVkViews stencil;
     std::vector<std::vector<vk::ImageView>> mLayerLevelDrawImageViews;
     vk::Sampler mSampler;
 
