@@ -239,6 +239,30 @@
     },
     {
       "key": {
+        "uuid": "b45d4c7b_99ec873a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T17:04:19Z",
+      "side": 1,
+      "message": "It wouldn\u0027t be necessary for the compute driver uniforms, though alignment requirements may end up adding it back when allocating from the DynamicBuffer. Kept it as is for simplicity. Once we have other uniforms to add in that space, we can split it up.",
+      "parentUuid": "5530439f_4bf83e2b",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 45
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "97258dc0_8c6f0d66",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 16
