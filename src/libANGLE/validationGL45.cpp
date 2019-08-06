@@ -297,7 +297,10 @@ bool ValidateGetNamedBufferParameteri64v(Context *context,
     return true;
 }
 
-bool ValidateGetNamedBufferParameteriv(Context *context, BufferID buffer, GLenum pname, GLint *params)
+bool ValidateGetNamedBufferParameteriv(Context *context,
+                                       BufferID buffer,
+                                       GLenum pname,
+                                       GLint *params)
 {
     return true;
 }
@@ -936,7 +939,10 @@ bool ValidateTextureSubImage3D(Context *context,
     return true;
 }
 
-bool ValidateTransformFeedbackBufferBase(Context *context, GLuint xfb, GLuint index, BufferID buffer)
+bool ValidateTransformFeedbackBufferBase(Context *context,
+                                         GLuint xfb,
+                                         GLuint index,
+                                         BufferID buffer)
 {
     return true;
 }
