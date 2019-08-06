@@ -124,6 +124,24 @@
       "revId": "669104938f0de9a68bd52d379fb2a7f1d8e61c14",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d868403_3c4c8a94",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2219,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T02:23:46Z",
+      "side": 1,
+      "message": "If the previous implementation was wrong, there\u0027s little value in its performance.\n\nWhat\u0027s the performance difference between your \"correct\" implementation, and having only AllGraphicsShaderReadOnly? If there\u0027s a significant difference, it may be worth it. But like I mentioned, this approach can also introduce unnecessary barriers.",
+      "parentUuid": "cb516e1c_e8447a66",
+      "revId": "669104938f0de9a68bd52d379fb2a7f1d8e61c14",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
