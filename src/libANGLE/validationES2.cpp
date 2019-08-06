@@ -1349,6 +1349,13 @@ bool ValidateES2TexImageParametersBase(Context *context,
             case GL_HALF_FLOAT_OES:
             case GL_FLOAT:
                 break;
+            case GL_HALF_FLOAT:
+                if (context->getExtensions().webglCompatibility)
+                {
+                    context->validationError(GL_INVALID_ENUM, kInvalidType);
+                    return false;
+                }
+                break;
             default:
                 context->validationError(GL_INVALID_ENUM, kInvalidType);
                 return false;
@@ -1367,6 +1374,7 @@ bool ValidateES2TexImageParametersBase(Context *context,
                     case GL_UNSIGNED_BYTE:
                     case GL_FLOAT:
                     case GL_HALF_FLOAT_OES:
+                    case GL_HALF_FLOAT:
                         break;
                     default:
                         context->validationError(GL_INVALID_OPERATION, kMismatchedTypeAndFormat);
@@ -1386,6 +1394,7 @@ bool ValidateES2TexImageParametersBase(Context *context,
                         break;
                     case GL_FLOAT:
                     case GL_HALF_FLOAT_OES:
+                    case GL_HALF_FLOAT:
                         if (!context->getExtensions().textureFloat)
                         {
                             context->validationError(GL_INVALID_ENUM, kEnumNotSupported);
@@ -1404,6 +1413,7 @@ bool ValidateES2TexImageParametersBase(Context *context,
                     case GL_UNSIGNED_SHORT_5_6_5:
                     case GL_FLOAT:
                     case GL_HALF_FLOAT_OES:
+                    case GL_HALF_FLOAT:
                         break;
                     default:
                         context->validationError(GL_INVALID_OPERATION, kMismatchedTypeAndFormat);
@@ -1418,6 +1428,7 @@ bool ValidateES2TexImageParametersBase(Context *context,
                     case GL_UNSIGNED_SHORT_5_5_5_1:
                     case GL_FLOAT:
                     case GL_HALF_FLOAT_OES:
+                    case GL_HALF_FLOAT:
                         break;
                     default:
                         context->validationError(GL_INVALID_OPERATION, kMismatchedTypeAndFormat);
@@ -1642,6 +1653,48 @@ bool ValidateES2TexImageParametersBase(Context *context,
                     }
                     break;
 
+                case GL_RGBA16F:
+                    if (!context->getExtensions().colorBufferHalfFloat)
+                    {
+                        context->validationError(GL_INVALID_ENUM, kInvalidFormat);
+                        return false;
+                    }
+
+                    nonEqualFormatsAllowed = true;
+
+                    if (type != GL_HALF_FLOAT_OES && type != GL_HALF_FLOAT)
+                    {
+                        context->validationError(GL_INVALID_OPERATION, kMismatchedTypeAndFormat);
+                        return false;
+                    }
+                    if (format != GL_RGBA)
+                    {
+                        context->validationError(GL_INVALID_OPERATION, kMismatchedTypeAndFormat);
+                        return false;
+                    }
+                    break;
+
+                case GL_RGB16F:
+                    if (!context->getExtensions().colorBufferHalfFloat)
+                    {
+                        context->validationError(GL_INVALID_ENUM, kInvalidFormat);
+                        return false;
+                    }
+
+                    nonEqualFormatsAllowed = true;
+
+                    if (type != GL_HALF_FLOAT_OES && type != GL_HALF_FLOAT)
+                    {
+                        context->validationError(GL_INVALID_OPERATION, kMismatchedTypeAndFormat);
+                        return false;
+                    }
+                    if (format != GL_RGB)
+                    {
+                        context->validationError(GL_INVALID_OPERATION, kMismatchedTypeAndFormat);
+                        return false;
+                    }
+                    break;
+
                 case GL_BGRA_EXT:
                     if (!context->getExtensions().textureFormatBGRA8888)
                     {
@@ -1699,7 +1752,7 @@ bool ValidateES2TexImageParametersBase(Context *context,
                 return false;
             }
         }
-        else if (type == GL_HALF_FLOAT_OES)
+        else if (type == GL_HALF_FLOAT_OES || type == GL_HALF_FLOAT)
         {
             if (!context->getExtensions().textureHalfFloat)
             {
