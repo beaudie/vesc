@@ -1264,6 +1264,8 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
         }
 
         mFeatures.bindEmptyForUnusedDescriptorSets.enabled = true;
+
+        mFeatures.forceOldRewriteStructSamplers.enabled = true;
     }
 
     if (IsWindows() && IsIntel(mPhysicalDeviceProperties.vendorID))
