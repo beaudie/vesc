@@ -162,6 +162,8 @@ class DataCounters final : angle::NonCopyable
     std::map<Counter, int> mData;
 };
 
+using ProgramSources = gl::ShaderMap<std::string>;
+
 class FrameCapture final : angle::NonCopyable
 {
   public:
@@ -180,22 +182,24 @@ class FrameCapture final : angle::NonCopyable
 
     void reset();
     void maybeCaptureClientData(const gl::Context *context, const CallCapture &call);
-    void maybeUpdateResourceIDs(const gl::Context *context, const CallCapture &call);
+    void captureMidExecutionSetup(const gl::Context *context);
 
-    template <typename IDType>
-    void captureUpdateResourceIDs(const gl::Context *context,
-                                  const CallCapture &call,
-                                  const ParamCapture &param);
+    static void ReplayCall(gl::Context *context,
+                           ReplayContext *replayContext,
+                           const CallCapture &call);
 
-    std::vector<CallCapture> mCalls;
+    std::vector<CallCapture> mSetupCalls;
+    std::vector<CallCapture> mFrameCalls;
+    std::vector<CallCapture> mTearDownCalls;
+
     gl::AttribArray<int> mClientVertexArrayMap;
     uint32_t mFrameIndex;
     gl::AttribArray<size_t> mClientArraySizes;
     size_t mReadBufferSize;
 
-    static void ReplayCall(gl::Context *context,
-                           ReplayContext *replayContext,
-                           const CallCapture &call);
+    // Cache most recently compiled and linked sources.
+    std::map<gl::ShaderProgramID, std::string> mCachedShaderSources;
+    std::map<gl::ShaderProgramID, ProgramSources> mCachedProgramSources;
 };
 
 template <typename CaptureFuncT, typename... ArgsT>
