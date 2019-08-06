@@ -215,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "5530439f_4bf83e2b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-06T16:35:20Z",
+      "side": 1,
+      "message": "Sure, either\u0027s fine. I guess I was thinking that the padding wouldn\u0027t be necessary.",
+      "parentUuid": "66a26988_de04bac5",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 45
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "97258dc0_8c6f0d66",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 16
