@@ -651,9 +651,9 @@ void TranslatorVulkan::translate(TIntermBlock *root,
     }
 
     // Write out default uniforms into a uniform block assigned to a specific set/binding.
-    int defaultUniformCount        = 0;
-    int structTypesUsedForUniforms = 0;
-    int atomicCounterCount         = 0;
+    int defaultUniformCount           = 0;
+    int aggregateTypesUsedForUniforms = 0;
+    int atomicCounterCount            = 0;
     for (const auto &uniform : getUniforms())
     {
         if (!uniform.isBuiltIn() && uniform.staticUse && !gl::IsOpaqueType(uniform.type))
@@ -661,9 +661,9 @@ void TranslatorVulkan::translate(TIntermBlock *root,
             ++defaultUniformCount;
         }
 
-        if (uniform.isStruct())
+        if (uniform.isStruct() || uniform.isArrayOfArrays())
         {
-            ++structTypesUsedForUniforms;
+            ++aggregateTypesUsedForUniforms;
         }
 
         if (gl::IsAtomicCounterType(uniform.type))
@@ -674,11 +674,24 @@ void TranslatorVulkan::translate(TIntermBlock *root,
 
     // TODO(lucferron): Refactor this function to do fewer tree traversals.
     // http://anglebug.com/2461
-    if (structTypesUsedForUniforms > 0)
+    if (aggregateTypesUsedForUniforms > 0)
     {
         NameEmbeddedStructUniforms(root, &getSymbolTable());
 
-        defaultUniformCount -= RewriteStructSamplers(root, &getSymbolTable());
+        int removedUniforms;
+
+        if (compileOptions & SH_USE_OLD_REWRITE_STRUCT_SAMPLERS)
+        {
+            removedUniforms = RewriteStructSamplersOld(root, &getSymbolTable());
+        }
+        else
+        {
+            removedUniforms = RewriteStructSamplers(root, &getSymbolTable());
+        }
+
+        defaultUniformCount -= removedUniforms;
+
+        ASSERT(validateAST(root));
 
         // We must declare the struct types before using them.
         DeclareStructTypesTraverser structTypesTraverser(&outputGLSL);
