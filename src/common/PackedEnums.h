@@ -376,42 +376,54 @@ ANGLE_VALIDATE_PACKED_ENUM(VertexAttribType, UnsignedInt2101010, GL_UNSIGNED_INT
 std::ostream &operator<<(std::ostream &os, VertexAttribType value);
 
 // Typesafe object handles.
+struct BufferID
+{
+    GLuint value;
+};
+
 struct RenderbufferID
 {
     GLuint value;
 };
 
 // Used to unbox typed values.
-inline GLuint GetIDValue(RenderbufferID id)
-{
-    return id.value;
-}
+template <typename ResourceIDType>
+GLuint GetIDValue(ResourceIDType id);
 
+template <>
 inline GLuint GetIDValue(GLuint id)
 {
     return id;
 }
 
+template <typename ResourceIDType>
+inline GLuint GetIDValue(ResourceIDType id)
+{
+    return id.value;
+}
+
 template <typename EnumT, typename FromT>
 EnumT FromGL(FromT from);
 
-template <>
-ANGLE_INLINE RenderbufferID FromGL<RenderbufferID>(GLuint renderbuffer)
-{
-    return {renderbuffer};
-}
+#define ANGLE_INSTANTIATE_RESOURCE_ID_FUNCS(Type)                                \
+    template <>                                                                  \
+    ANGLE_INLINE Type##ID FromGL<Type##ID>(GLuint handle)                        \
+    {                                                                            \
+        return {handle};                                                         \
+    }                                                                            \
+    template <>                                                                  \
+    ANGLE_INLINE Type##ID *FromGL<Type##ID *>(GLuint * handles)                  \
+    {                                                                            \
+        return reinterpret_cast<Type##ID *>(handles);                            \
+    }                                                                            \
+    template <>                                                                  \
+    ANGLE_INLINE const Type##ID *FromGL<const Type##ID *>(const GLuint *handles) \
+    {                                                                            \
+        return reinterpret_cast<const Type##ID *>(handles);                      \
+    }
 
-template <>
-ANGLE_INLINE RenderbufferID *FromGL<RenderbufferID *>(GLuint *renderbuffers)
-{
-    return reinterpret_cast<RenderbufferID *>(renderbuffers);
-}
-
-template <>
-ANGLE_INLINE const RenderbufferID *FromGL<const RenderbufferID *>(const GLuint *renderbuffers)
-{
-    return reinterpret_cast<const RenderbufferID *>(renderbuffers);
-}
+ANGLE_INSTANTIATE_RESOURCE_ID_FUNCS(Buffer)
+ANGLE_INSTANTIATE_RESOURCE_ID_FUNCS(Renderbuffer)
 
 // Pass-through for resource types that aren't yet represented by IDs.
 // TODO(jmadill): Remove when all resource types use IDs. http://anglebug.com/3611
