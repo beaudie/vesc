@@ -2996,8 +2996,6 @@ TEST_P(GLSLTest_ES31, ArraysOfArraysBlockBasicType)
 // Test that arrays of arrays of samplers work as expected.
 TEST_P(GLSLTest_ES31, ArraysOfArraysSampler)
 {
-    // anglebug.com/3604 - Vulkan doesn't support 2D arrays of samplers
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -3084,8 +3082,6 @@ TEST_P(GLSLTest_ES31, StructArraySampler)
 // Test that arrays of arrays of samplers inside structs work as expected.
 TEST_P(GLSLTest_ES31, StructArrayArraySampler)
 {
-    // anglebug.com/3604 - Vulkan doesn't support 2D arrays of samplers
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -3136,8 +3132,6 @@ TEST_P(GLSLTest_ES31, StructArrayArraySampler)
 // Test that an array of structs with arrays of arrays of samplers works.
 TEST_P(GLSLTest_ES31, ArrayStructArrayArraySampler)
 {
-    // anglebug.com/3604 - Vulkan doesn't support 2D arrays of samplers
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -3203,8 +3197,6 @@ TEST_P(GLSLTest_ES31, ArrayStructArrayArraySampler)
 // Test that a complex chain of structs and arrays of samplers works as expected.
 TEST_P(GLSLTest_ES31, ComplexStructArraySampler)
 {
-    // anglebug.com/3604 - Vulkan doesn't support 2D arrays of samplers
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -3288,8 +3280,6 @@ TEST_P(GLSLTest_ES31, ComplexStructArraySampler)
 // Test that arrays of arrays of samplers as parameters works as expected.
 TEST_P(GLSLTest_ES31, ParameterArraysOfArraysSampler)
 {
-    // anglebug.com/3604 - Vulkan doesn't support 2D arrays of samplers
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -3346,8 +3336,6 @@ TEST_P(GLSLTest_ES31, ParameterArraysOfArraysSampler)
 // Test that structs with arrays of arrays of samplers as parameters works as expected.
 TEST_P(GLSLTest_ES31, ParameterStructArrayArraySampler)
 {
-    // anglebug.com/3604 - Vulkan doesn't support 2D arrays of samplers
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -3406,8 +3394,6 @@ TEST_P(GLSLTest_ES31, ParameterStructArrayArraySampler)
 // as parameters works as expected.
 TEST_P(GLSLTest_ES31, ParameterArrayArrayStructArrayArraySampler)
 {
-    // anglebug.com/3604 - Vulkan doesn't support 2D arrays of samplers
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"

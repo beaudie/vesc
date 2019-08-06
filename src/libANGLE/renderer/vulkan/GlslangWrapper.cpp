@@ -367,7 +367,7 @@ std::string IntermediateShaderSource::getShaderSource()
 
 std::string GetMappedSamplerName(const std::string &originalName)
 {
-    std::string samplerName = gl::ParseResourceName(originalName, nullptr);
+    std::string samplerName = gl::StripLastArrayIndex(originalName);
 
     // Samplers in structs are extracted.
     std::replace(samplerName.begin(), samplerName.end(), '.', '_');
