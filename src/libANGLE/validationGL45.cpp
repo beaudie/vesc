@@ -11,7 +11,7 @@
 namespace gl
 {
 
-bool ValidateBindTextureUnit(Context *context, GLuint unit, GLuint texture)
+bool ValidateBindTextureUnit(Context *context, GLuint unit, TextureID texture)
 {
     return true;
 }
@@ -103,7 +103,7 @@ bool ValidateClipControl(Context *context, GLenum origin, GLenum depth)
 }
 
 bool ValidateCompressedTextureSubImage1D(Context *context,
-                                         GLuint texture,
+                                         TextureID texture,
                                          GLint level,
                                          GLint xoffset,
                                          GLsizei width,
@@ -115,7 +115,7 @@ bool ValidateCompressedTextureSubImage1D(Context *context,
 }
 
 bool ValidateCompressedTextureSubImage2D(Context *context,
-                                         GLuint texture,
+                                         TextureID texture,
                                          GLint level,
                                          GLint xoffset,
                                          GLint yoffset,
@@ -129,7 +129,7 @@ bool ValidateCompressedTextureSubImage2D(Context *context,
 }
 
 bool ValidateCompressedTextureSubImage3D(Context *context,
-                                         GLuint texture,
+                                         TextureID texture,
                                          GLint level,
                                          GLint xoffset,
                                          GLint yoffset,
@@ -155,7 +155,7 @@ bool ValidateCopyNamedBufferSubData(Context *context,
 }
 
 bool ValidateCopyTextureSubImage1D(Context *context,
-                                   GLuint texture,
+                                   TextureID texture,
                                    GLint level,
                                    GLint xoffset,
                                    GLint x,
@@ -166,7 +166,7 @@ bool ValidateCopyTextureSubImage1D(Context *context,
 }
 
 bool ValidateCopyTextureSubImage2D(Context *context,
-                                   GLuint texture,
+                                   TextureID texture,
                                    GLint level,
                                    GLint xoffset,
                                    GLint yoffset,
@@ -179,7 +179,7 @@ bool ValidateCopyTextureSubImage2D(Context *context,
 }
 
 bool ValidateCopyTextureSubImage3D(Context *context,
-                                   GLuint texture,
+                                   TextureID texture,
                                    GLint level,
                                    GLint xoffset,
                                    GLint yoffset,
@@ -255,13 +255,13 @@ bool ValidateFlushMappedNamedBufferRange(Context *context,
     return true;
 }
 
-bool ValidateGenerateTextureMipmap(Context *context, GLuint texture)
+bool ValidateGenerateTextureMipmap(Context *context, TextureID texture)
 {
     return true;
 }
 
 bool ValidateGetCompressedTextureImage(Context *context,
-                                       GLuint texture,
+                                       TextureID texture,
                                        GLint level,
                                        GLsizei bufSize,
                                        void *pixels)
@@ -270,7 +270,7 @@ bool ValidateGetCompressedTextureImage(Context *context,
 }
 
 bool ValidateGetCompressedTextureSubImage(Context *context,
-                                          GLuint texture,
+                                          TextureID texture,
                                           GLint level,
                                           GLint xoffset,
                                           GLint yoffset,
@@ -297,7 +297,10 @@ bool ValidateGetNamedBufferParameteri64v(Context *context,
     return true;
 }
 
-bool ValidateGetNamedBufferParameteriv(Context *context, BufferID buffer, GLenum pname, GLint *params)
+bool ValidateGetNamedBufferParameteriv(Context *context,
+                                       BufferID buffer,
+                                       GLenum pname,
+                                       GLint *params)
 {
     return true;
 }
@@ -378,7 +381,7 @@ bool ValidateGetQueryBufferObjectuiv(Context *context,
 }
 
 bool ValidateGetTextureImage(Context *context,
-                             GLuint texture,
+                             TextureID texture,
                              GLint level,
                              GLenum format,
                              GLenum type,
@@ -389,7 +392,7 @@ bool ValidateGetTextureImage(Context *context,
 }
 
 bool ValidateGetTextureLevelParameterfv(Context *context,
-                                        GLuint texture,
+                                        TextureID texture,
                                         GLint level,
                                         GLenum pname,
                                         GLfloat *params)
@@ -398,7 +401,7 @@ bool ValidateGetTextureLevelParameterfv(Context *context,
 }
 
 bool ValidateGetTextureLevelParameteriv(Context *context,
-                                        GLuint texture,
+                                        TextureID texture,
                                         GLint level,
                                         GLenum pname,
                                         GLint *params)
@@ -406,28 +409,37 @@ bool ValidateGetTextureLevelParameteriv(Context *context,
     return true;
 }
 
-bool ValidateGetTextureParameterIiv(Context *context, GLuint texture, GLenum pname, GLint *params)
+bool ValidateGetTextureParameterIiv(Context *context,
+                                    TextureID texture,
+                                    GLenum pname,
+                                    GLint *params)
 {
     return true;
 }
 
-bool ValidateGetTextureParameterIuiv(Context *context, GLuint texture, GLenum pname, GLuint *params)
+bool ValidateGetTextureParameterIuiv(Context *context,
+                                     TextureID texture,
+                                     GLenum pname,
+                                     GLuint *params)
 {
     return true;
 }
 
-bool ValidateGetTextureParameterfv(Context *context, GLuint texture, GLenum pname, GLfloat *params)
+bool ValidateGetTextureParameterfv(Context *context,
+                                   TextureID texture,
+                                   GLenum pname,
+                                   GLfloat *params)
 {
     return true;
 }
 
-bool ValidateGetTextureParameteriv(Context *context, GLuint texture, GLenum pname, GLint *params)
+bool ValidateGetTextureParameteriv(Context *context, TextureID texture, GLenum pname, GLint *params)
 {
     return true;
 }
 
 bool ValidateGetTextureSubImage(Context *context,
-                                GLuint texture,
+                                TextureID texture,
                                 GLint level,
                                 GLint xoffset,
                                 GLint yoffset,
@@ -734,7 +746,7 @@ bool ValidateNamedFramebufferRenderbuffer(Context *context,
 bool ValidateNamedFramebufferTexture(Context *context,
                                      GLuint framebuffer,
                                      GLenum attachment,
-                                     GLuint texture,
+                                     TextureID texture,
                                      GLint level)
 {
     return true;
@@ -743,7 +755,7 @@ bool ValidateNamedFramebufferTexture(Context *context,
 bool ValidateNamedFramebufferTextureLayer(Context *context,
                                           GLuint framebuffer,
                                           GLenum attachment,
-                                          GLuint texture,
+                                          TextureID texture,
                                           GLint level,
                                           GLint layer)
 {
@@ -787,13 +799,16 @@ bool ValidateTextureBarrier(Context *context)
     return true;
 }
 
-bool ValidateTextureBuffer(Context *context, GLuint texture, GLenum internalformat, BufferID buffer)
+bool ValidateTextureBuffer(Context *context,
+                           TextureID texture,
+                           GLenum internalformat,
+                           BufferID buffer)
 {
     return true;
 }
 
 bool ValidateTextureBufferRange(Context *context,
-                                GLuint texture,
+                                TextureID texture,
                                 GLenum internalformat,
                                 BufferID buffer,
                                 GLintptr offset,
@@ -803,7 +818,7 @@ bool ValidateTextureBufferRange(Context *context,
 }
 
 bool ValidateTextureParameterIiv(Context *context,
-                                 GLuint texture,
+                                 TextureID texture,
                                  GLenum pname,
                                  const GLint *params)
 {
@@ -811,38 +826,41 @@ bool ValidateTextureParameterIiv(Context *context,
 }
 
 bool ValidateTextureParameterIuiv(Context *context,
-                                  GLuint texture,
+                                  TextureID texture,
                                   GLenum pname,
                                   const GLuint *params)
 {
     return true;
 }
 
-bool ValidateTextureParameterf(Context *context, GLuint texture, GLenum pname, GLfloat param)
+bool ValidateTextureParameterf(Context *context, TextureID texture, GLenum pname, GLfloat param)
 {
     return true;
 }
 
 bool ValidateTextureParameterfv(Context *context,
-                                GLuint texture,
+                                TextureID texture,
                                 GLenum pname,
                                 const GLfloat *param)
 {
     return true;
 }
 
-bool ValidateTextureParameteri(Context *context, GLuint texture, GLenum pname, GLint param)
+bool ValidateTextureParameteri(Context *context, TextureID texture, GLenum pname, GLint param)
 {
     return true;
 }
 
-bool ValidateTextureParameteriv(Context *context, GLuint texture, GLenum pname, const GLint *param)
+bool ValidateTextureParameteriv(Context *context,
+                                TextureID texture,
+                                GLenum pname,
+                                const GLint *param)
 {
     return true;
 }
 
 bool ValidateTextureStorage1D(Context *context,
-                              GLuint texture,
+                              TextureID texture,
                               GLsizei levels,
                               GLenum internalformat,
                               GLsizei width)
@@ -851,7 +869,7 @@ bool ValidateTextureStorage1D(Context *context,
 }
 
 bool ValidateTextureStorage2D(Context *context,
-                              GLuint texture,
+                              TextureID texture,
                               GLsizei levels,
                               GLenum internalformat,
                               GLsizei width,
@@ -861,7 +879,7 @@ bool ValidateTextureStorage2D(Context *context,
 }
 
 bool ValidateTextureStorage2DMultisample(Context *context,
-                                         GLuint texture,
+                                         TextureID texture,
                                          GLsizei samples,
                                          GLenum internalformat,
                                          GLsizei width,
@@ -872,7 +890,7 @@ bool ValidateTextureStorage2DMultisample(Context *context,
 }
 
 bool ValidateTextureStorage3D(Context *context,
-                              GLuint texture,
+                              TextureID texture,
                               GLsizei levels,
                               GLenum internalformat,
                               GLsizei width,
@@ -883,7 +901,7 @@ bool ValidateTextureStorage3D(Context *context,
 }
 
 bool ValidateTextureStorage3DMultisample(Context *context,
-                                         GLuint texture,
+                                         TextureID texture,
                                          GLsizei samples,
                                          GLenum internalformat,
                                          GLsizei width,
@@ -895,7 +913,7 @@ bool ValidateTextureStorage3DMultisample(Context *context,
 }
 
 bool ValidateTextureSubImage1D(Context *context,
-                               GLuint texture,
+                               TextureID texture,
                                GLint level,
                                GLint xoffset,
                                GLsizei width,
@@ -907,7 +925,7 @@ bool ValidateTextureSubImage1D(Context *context,
 }
 
 bool ValidateTextureSubImage2D(Context *context,
-                               GLuint texture,
+                               TextureID texture,
                                GLint level,
                                GLint xoffset,
                                GLint yoffset,
@@ -921,7 +939,7 @@ bool ValidateTextureSubImage2D(Context *context,
 }
 
 bool ValidateTextureSubImage3D(Context *context,
-                               GLuint texture,
+                               TextureID texture,
                                GLint level,
                                GLint xoffset,
                                GLint yoffset,
@@ -936,7 +954,10 @@ bool ValidateTextureSubImage3D(Context *context,
     return true;
 }
 
-bool ValidateTransformFeedbackBufferBase(Context *context, GLuint xfb, GLuint index, BufferID buffer)
+bool ValidateTransformFeedbackBufferBase(Context *context,
+                                         GLuint xfb,
+                                         GLuint index,
+                                         BufferID buffer)
 {
     return true;
 }

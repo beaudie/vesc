@@ -386,6 +386,11 @@ struct RenderbufferID
     GLuint value;
 };
 
+struct TextureID
+{
+    GLuint value;
+};
+
 // Used to unbox typed values.
 template <typename ResourceIDType>
 GLuint GetIDValue(ResourceIDType id);
@@ -424,6 +429,7 @@ EnumT FromGL(FromT from);
 
 ANGLE_INSTANTIATE_RESOURCE_ID_FUNCS(Buffer)
 ANGLE_INSTANTIATE_RESOURCE_ID_FUNCS(Renderbuffer)
+ANGLE_INSTANTIATE_RESOURCE_ID_FUNCS(Texture)
 
 // Pass-through for resource types that aren't yet represented by IDs.
 // TODO(jmadill): Remove when all resource types use IDs. http://anglebug.com/3611
