@@ -26,6 +26,7 @@ namespace sh
 class TIntermBlock;
 class TSymbolTable;
 int RewriteStructSamplers(TIntermBlock *root, TSymbolTable *symbolTable);
+int RewriteStructSamplersOld(TIntermBlock *root, TSymbolTable *symbolTable);
 }  // namespace sh
 
 #endif  // COMPILER_TRANSLATOR_TREEOPS_REWRITESTRUCTSAMPLERS_H_
