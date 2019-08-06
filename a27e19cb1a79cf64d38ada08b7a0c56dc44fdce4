@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c8854cc2_cba3e787",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T20:21:38Z",
+      "side": 1,
+      "message": "Done. Added a comment. I think this can also be done for d3d11 (at least after the dependency to subgroupQuadSwap* is removed), but it does require that samplers are moved out of structs (didn\u0027t see HLSL doing that).",
+      "parentUuid": "7b6e590b_c7a5056d",
+      "range": {
+        "startLine": 291,
+        "startChar": 23,
+        "endLine": 291,
+        "endChar": 59
+      },
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4a883a1e_f4447c24",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 15
@@ -39,6 +63,24 @@
       "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b18e1f9_93f51d1d",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T20:21:38Z",
+      "side": 1,
+      "message": "Yes, we do this with many other transformations too.\n\nIn fact, we do many many passes on the shader and I sometimes wondered if it would be worth it to merge some of the rather independent passes, but given that the translator performance never shows up as an issue in the profiler, I figure these passes are pretty cheap.\n\nIf subgroup operations are not supported though, no we don\u0027t go through this pass. I guess a way to avoid it would be to count the number of `samplerCube`s and don\u0027t go through the pass if there aren\u0027t any.\n\nTurned out easily doable in the same loop that counts other stuff above, so done.",
+      "parentUuid": "4a883a1e_f4447c24",
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "087635e9_28590a62",
+        "filename": "src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T20:21:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f8d50d3_8e450a85",
+      "range": {
+        "startLine": 23,
+        "startChar": 26,
+        "endLine": 23,
+        "endChar": 97
+      },
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dc35ff3f_6aad015e",
         "filename": "src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp",
         "patchSetId": 15
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "31b2e672_a413c373",
+        "filename": "src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T20:21:38Z",
+      "side": 1,
+      "message": "Talked offline. Will keep as is, it will likely go away soon with a more universal implementation.",
+      "parentUuid": "dc35ff3f_6aad015e",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 34,
+        "endChar": 92
+      },
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2877a54c_37ded635",
         "filename": "src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp",
         "patchSetId": 15
@@ -105,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "95b08ba2_aa653daa",
+        "filename": "src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T20:21:38Z",
+      "side": 1,
+      "message": "Done. Passed as argument.",
+      "parentUuid": "2877a54c_37ded635",
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ed03c9c9_efbe07ba",
         "filename": "src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp",
         "patchSetId": 15
@@ -119,6 +227,24 @@
       "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a018882_db8d0292",
+        "filename": "src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T20:21:38Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "ed03c9c9_efbe07ba",
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -145,6 +271,30 @@
     },
     {
       "key": {
+        "uuid": "24b54597_5b2fa11b",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T20:21:38Z",
+      "side": 1,
+      "message": "Unfortunately renderdoc doesn\u0027t have support for SPIR-V 1.3 disassembly  (https://github.com/baldurk/renderdoc/issues/1477). Unconditionally setting this would make it harder to debug with renderdoc (as you can no longer see the shader). You will see a similar specialization with the debug overlay change.\n\nDone regarding second point.",
+      "parentUuid": "472b341b_90bca407",
+      "range": {
+        "startLine": 1004,
+        "startChar": 0,
+        "endLine": 1008,
+        "endChar": 9
+      },
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83752615_c714a3c4",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 15
@@ -168,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "aaade6f8_6af9b6a1",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1460,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T20:21:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83752615_c714a3c4",
+      "range": {
+        "startLine": 1460,
+        "startChar": 12,
+        "endLine": 1460,
+        "endChar": 59
+      },
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5db0976_5207554b",
         "filename": "src/tests/gl_tests/CubeMapTextureTest.cpp",
         "patchSetId": 15
@@ -188,6 +362,30 @@
       "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb4787da_ea8340f2",
+        "filename": "src/tests/gl_tests/CubeMapTextureTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T20:21:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5db0976_5207554b",
+      "range": {
+        "startLine": 257,
+        "startChar": 12,
+        "endLine": 257,
+        "endChar": 63
+      },
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
