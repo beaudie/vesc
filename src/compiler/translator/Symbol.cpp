@@ -227,7 +227,8 @@ bool TFunction::hasSamplerInStructParams() const
     for (size_t paramIndex = 0; paramIndex < mParamCount; ++paramIndex)
     {
         const TVariable *param = getParam(paramIndex);
-        if (param->getType().isStructureContainingSamplers())
+        if (param->getType().isStructureContainingSamplers() ||
+            (param->getType().isArrayOfArrays() && param->getType().isSampler()))
         {
             return true;
         }
