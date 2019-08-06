@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "e8f036c6_b072bbb2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-06T13:08:07Z",
+      "side": 1,
+      "message": "Alright. Couldn\u0027t you use IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFERS / sizeof(uint32_t)? And wouldn\u0027t you only need two uints instead of 4?",
+      "parentUuid": "8e447c71_1af2af8f",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 45
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "97258dc0_8c6f0d66",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 16
