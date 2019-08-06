@@ -2081,7 +2081,7 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
         contextVk, formatInfo.computeDepthPitch(glExtents.height, unpack.imageHeight, inputRowPitch,
                                                 &inputDepthPitch));
 
-    bool applySkipImages = false;
+    bool applySkipImages = index.usesTex3D();
 
     GLuint inputSkipBytes = 0;
     ANGLE_VK_CHECK_MATH(contextVk,
