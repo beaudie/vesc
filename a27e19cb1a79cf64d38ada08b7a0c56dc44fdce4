@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b6e590b_c7a5056d",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-06T14:08:38Z",
+      "side": 1,
+      "message": "if you\u0027re going to implement this only on Vulkan, probably should mention that somewhere in the description or the name of the option (or both).",
+      "range": {
+        "startLine": 291,
+        "startChar": 23,
+        "endLine": 291,
+        "endChar": 59
+      },
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f8d50d3_8e450a85",
+        "filename": "src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-06T14:08:38Z",
+      "side": 1,
+      "message": "nit: can delete \" \u003d ImmutableString\"",
+      "range": {
+        "startLine": 23,
+        "startChar": 26,
+        "endLine": 23,
+        "endChar": 97
+      },
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc35ff3f_6aad015e",
+        "filename": "src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-06T14:08:38Z",
+      "side": 1,
+      "message": "feels like we should add these builtins. And forego using \"Raw\" as much as humanly possible.\n\nSee what we did with gl_DrawID. Also since the builtin table is much faster to generate now it might not be so bad.",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 34,
+        "endChar": 92
+      },
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2877a54c_37ded635",
+        "filename": "src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-06T14:08:38Z",
+      "side": 1,
+      "message": "any possibility of reducing code duplication with the swizzle gen here and below?",
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "472b341b_90bca407",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-06T14:08:38Z",
+      "side": 1,
+      "message": "could we just unconditionally enable 1.3?\n\nalso as a layering thing, if you could, pass this as a bool instead. and keep using vk::Context. Just keeps the separation clearer.",
+      "range": {
+        "startLine": 1004,
+        "startChar": 0,
+        "endLine": 1008,
+        "endChar": 9
+      },
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "83752615_c714a3c4",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1460,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-06T14:08:38Z",
+      "side": 1,
+      "message": "nit: cache this outside the loop.\n\nAlso you might want to init this as a cached bool variable in Context init.",
+      "range": {
+        "startLine": 1460,
+        "startChar": 12,
+        "endLine": 1460,
+        "endChar": 59
+      },
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5db0976_5207554b",
+        "filename": "src/tests/gl_tests/CubeMapTextureTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-06T14:08:38Z",
+      "side": 1,
+      "message": "for error saliency it\u0027s helpful to append the mismatched indices,\n\n\u003c\u003c \"face \" \u003c\u003c face \u003c\u003c \", section \" \u003c\u003c section",
+      "range": {
+        "startLine": 257,
+        "startChar": 12,
+        "endLine": 257,
+        "endChar": 63
+      },
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
