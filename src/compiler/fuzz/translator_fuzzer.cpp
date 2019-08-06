@@ -49,10 +49,6 @@ struct TCompilerDeleter
     void operator()(TCompiler *compiler) const { DeleteCompiler(compiler); }
 };
 
-using UniqueTCompiler = std::unique_ptr<TCompiler, TCompilerDeleter>;
-
-static std::unordered_map<TranslatorCacheKey, UniqueTCompiler> translators;
-
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 {
     // Reserve some size for future compile options
@@ -131,6 +127,9 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
     key.type   = type;
     key.spec   = spec;
     key.output = output;
+
+    using UniqueTCompiler = std::unique_ptr<TCompiler, TCompilerDeleter>;
+    static std::unordered_map<TranslatorCacheKey, UniqueTCompiler> translators;
 
     if (translators.find(key) == translators.end())
     {
