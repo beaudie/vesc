@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8464dcba_6f139825",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-06T19:47:25Z",
+      "side": 1,
+      "message": "same comment as below",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 17
+      },
+      "revId": "27e70e70e0c2e8ebb1cc03a9433671c6f2dadf36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60612bce_5cd4a09b",
+        "filename": "scripts/run_code_generation.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-06T19:47:25Z",
+      "side": 1,
+      "message": "can you wrap the python-or-vpython logic in a helper function somehow?",
+      "range": {
+        "startLine": 197,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 0
+      },
+      "revId": "27e70e70e0c2e8ebb1cc03a9433671c6f2dadf36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
