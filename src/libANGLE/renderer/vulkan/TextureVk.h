@@ -171,6 +171,11 @@ class TextureVk : public TextureImpl
         mStagingBufferInitialSize = initialSizeForTesting;
     }
 
+    bool canGetDataForCapture(const gl::ImageIndex &index) const override;
+    angle::Result getDataForCapture(const gl::Context *context,
+                                    const gl::ImageIndex &index,
+                                    angle::MemoryBuffer *dataOut) override;
+
   private:
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
