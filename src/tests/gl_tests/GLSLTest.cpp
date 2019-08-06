@@ -2996,8 +2996,6 @@ TEST_P(GLSLTest_ES31, ArraysOfArraysBlockBasicType)
 // Test that arrays of arrays of samplers work as expected.
 TEST_P(GLSLTest_ES31, ArraysOfArraysSampler)
 {
-    // anglebug.com/3604 - Vulkan doesn't support 2D arrays of samplers
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -3084,8 +3082,6 @@ TEST_P(GLSLTest_ES31, StructArraySampler)
 // Test that arrays of arrays of samplers inside structs work as expected.
 TEST_P(GLSLTest_ES31, StructArrayArraySampler)
 {
-    // anglebug.com/3604 - Vulkan doesn't support 2D arrays of samplers
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -3136,8 +3132,6 @@ TEST_P(GLSLTest_ES31, StructArrayArraySampler)
 // Test that an array of structs with arrays of arrays of samplers works.
 TEST_P(GLSLTest_ES31, ArrayStructArrayArraySampler)
 {
-    // anglebug.com/3604 - Vulkan doesn't support 2D arrays of samplers
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -3203,8 +3197,6 @@ TEST_P(GLSLTest_ES31, ArrayStructArrayArraySampler)
 // Test that a complex chain of structs and arrays of samplers works as expected.
 TEST_P(GLSLTest_ES31, ComplexStructArraySampler)
 {
-    // anglebug.com/3604 - Vulkan doesn't support 2D arrays of samplers
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -3288,8 +3280,6 @@ TEST_P(GLSLTest_ES31, ComplexStructArraySampler)
 // Test that arrays of arrays of samplers as parameters works as expected.
 TEST_P(GLSLTest_ES31, ParameterArraysOfArraysSampler)
 {
-    // anglebug.com/3604 - Vulkan doesn't support 2D arrays of samplers
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -3344,10 +3334,58 @@ TEST_P(GLSLTest_ES31, ParameterArraysOfArraysSampler)
 }
 
 // Test that structs with arrays of arrays of samplers as parameters works as expected.
+TEST_P(GLSLTest_ES31, ParameterStructArraySampler)
+{
+    constexpr char kFS[] =
+        "#version 310 es\n"
+        "precision mediump float;\n"
+        "out vec4 my_FragColor;\n"
+        "struct Data { mediump isampler2D data[2]; };\n"
+        "uniform Data test;\n"
+        "const vec2 ZERO = vec2(0.0, 0.0);\n"
+        "\n"
+        "bool check(Data data) {\n"
+        "#define DO_CHECK(i) \\\n"
+        "    if (texture(data.data[i], ZERO) != ivec4(i+1, 0, 0, 1)) { \\\n"
+        "        return false; \\\n"
+        "    }\n"
+        "    DO_CHECK(0)\n"
+        "    DO_CHECK(1)\n"
+        "    return true;\n"
+        "}\n"
+        "void main() {\n"
+        "    bool passed = check(test);\n"
+        "    my_FragColor = passed ? vec4(0.0, 1.0, 0.0, 1.0) : vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, essl31_shaders::vs::Simple(), kFS);
+    glUseProgram(program.get());
+    GLTexture textures[2];
+    for (int i = 0; i < 2; i++)
+    {
+        // First generate the texture
+        int textureUnit = i;
+        glActiveTexture(GL_TEXTURE0 + textureUnit);
+        glBindTexture(GL_TEXTURE_2D, textures[i]);
+        GLint texData[2] = {i + 1, 0};
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RG32I, 1, 1, 0, GL_RG_INTEGER, GL_INT, &texData[0]);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        // Then send it as a uniform
+        std::stringstream uniformName;
+        uniformName << "test.data[" << i << "]";
+        GLint uniformLocation = glGetUniformLocation(program.get(), uniformName.str().c_str());
+        // All array indices should be used.
+        EXPECT_NE(uniformLocation, -1);
+        glUniform1i(uniformLocation, textureUnit);
+    }
+    drawQuad(program.get(), essl31_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Test that structs with arrays of arrays of samplers as parameters works as expected.
 TEST_P(GLSLTest_ES31, ParameterStructArrayArraySampler)
 {
-    // anglebug.com/3604 - Vulkan doesn't support 2D arrays of samplers
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
@@ -3406,8 +3444,6 @@ TEST_P(GLSLTest_ES31, ParameterStructArrayArraySampler)
 // as parameters works as expected.
 TEST_P(GLSLTest_ES31, ParameterArrayArrayStructArrayArraySampler)
 {
-    // anglebug.com/3604 - Vulkan doesn't support 2D arrays of samplers
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     constexpr char kFS[] =
         "#version 310 es\n"
         "precision mediump float;\n"
