@@ -13,6 +13,7 @@
 #include "image_util/generatemip.h"
 #include "image_util/loadimage.h"
 
+#include "anglebase/no_destructor.h"
 #include "libANGLE/renderer/d3d/d3d9/Renderer9.h"
 #include "libANGLE/renderer/d3d/d3d9/vertexconversion.h"
 
@@ -347,9 +348,9 @@ static D3D9FormatMap BuildD3D9FormatMap()
 
 const TextureFormat &GetTextureFormatInfo(GLenum internalFormat)
 {
-    static const D3D9FormatMap formatMap = BuildD3D9FormatMap();
-    D3D9FormatMap::const_iterator iter   = formatMap.find(internalFormat);
-    if (iter != formatMap.end())
+    static const angle::base::NoDestructor<D3D9FormatMap> formatMap(BuildD3D9FormatMap());
+    D3D9FormatMap::const_iterator iter = formatMap->find(internalFormat);
+    if (iter != formatMap->end())
     {
         return iter->second;
     }
