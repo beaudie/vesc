@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "4a883a1e_f4447c24",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-06T16:52:19Z",
+      "side": 1,
+      "message": "Just to be clear we\u0027ll now call this function anytime we\u0027re in GLES2.0 and it\u0027s not an exception case (currently AMD or correct subgroup operations not supported). Is there any way to \"early-out\" of this path when a cubmap sample is not present in the shader, or do we have to traverse AST for each shader regardless?",
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4f8d50d3_8e450a85",
         "filename": "src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp",
         "patchSetId": 15
@@ -82,6 +99,23 @@
       "writtenOn": "2019-08-06T14:08:38Z",
       "side": 1,
       "message": "any possibility of reducing code duplication with the swizzle gen here and below?",
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed03c9c9_efbe07ba",
+        "filename": "src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-06T16:52:19Z",
+      "side": 1,
+      "message": "Wow, exceptional commenting throughout this function. Setting a standard we should all aspire to. Good job, Shabi!",
       "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
