@@ -39,13 +39,14 @@ void GL_APIENTRY BindBuffersBase(GLenum target, GLuint first, GLsizei count, con
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        bool isCallValid = (context->skipValidation() ||
-                            ValidateBindBuffersBase(context, target, first, count, buffers));
+        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
+        bool isCallValid              = (context->skipValidation() ||
+                            ValidateBindBuffersBase(context, target, first, count, buffersPacked));
         if (isCallValid)
         {
-            context->bindBuffersBase(target, first, count, buffers);
+            context->bindBuffersBase(target, first, count, buffersPacked);
         }
-        ANGLE_CAPTURE(BindBuffersBase, isCallValid, context, target, first, count, buffers);
+        ANGLE_CAPTURE(BindBuffersBase, isCallValid, context, target, first, count, buffersPacked);
     }
 }
 
@@ -66,14 +67,15 @@ void GL_APIENTRY BindBuffersRange(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateBindBuffersRange(context, target, first, count, buffers, offsets, sizes));
+            (context->skipValidation() || ValidateBindBuffersRange(context, target, first, count,
+                                                                   buffersPacked, offsets, sizes));
         if (isCallValid)
         {
-            context->bindBuffersRange(target, first, count, buffers, offsets, sizes);
+            context->bindBuffersRange(target, first, count, buffersPacked, offsets, sizes);
         }
-        ANGLE_CAPTURE(BindBuffersRange, isCallValid, context, target, first, count, buffers,
+        ANGLE_CAPTURE(BindBuffersRange, isCallValid, context, target, first, count, buffersPacked,
                       offsets, sizes);
     }
 }
@@ -146,14 +148,15 @@ void GL_APIENTRY BindVertexBuffers(GLuint first,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateBindVertexBuffers(context, first, count, buffers, offsets, strides));
+             ValidateBindVertexBuffers(context, first, count, buffersPacked, offsets, strides));
         if (isCallValid)
         {
-            context->bindVertexBuffers(first, count, buffers, offsets, strides);
+            context->bindVertexBuffers(first, count, buffersPacked, offsets, strides);
         }
-        ANGLE_CAPTURE(BindVertexBuffers, isCallValid, context, first, count, buffers, offsets,
+        ANGLE_CAPTURE(BindVertexBuffers, isCallValid, context, first, count, buffersPacked, offsets,
                       strides);
     }
 }

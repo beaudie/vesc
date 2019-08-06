@@ -4340,17 +4340,18 @@ void GL_APIENTRY SignalSemaphoreEXT(GLuint semaphore,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateSignalSemaphoreEXT(context, semaphore, numBufferBarriers, buffers,
+             ValidateSignalSemaphoreEXT(context, semaphore, numBufferBarriers, buffersPacked,
                                         numTextureBarriers, textures, dstLayouts));
         if (isCallValid)
         {
-            context->signalSemaphore(semaphore, numBufferBarriers, buffers, numTextureBarriers,
-                                     textures, dstLayouts);
+            context->signalSemaphore(semaphore, numBufferBarriers, buffersPacked,
+                                     numTextureBarriers, textures, dstLayouts);
         }
         ANGLE_CAPTURE(SignalSemaphoreEXT, isCallValid, context, semaphore, numBufferBarriers,
-                      buffers, numTextureBarriers, textures, dstLayouts);
+                      buffersPacked, numTextureBarriers, textures, dstLayouts);
     }
 }
 
@@ -4371,16 +4372,18 @@ void GL_APIENTRY WaitSemaphoreEXT(GLuint semaphore,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        bool isCallValid = (context->skipValidation() ||
-                            ValidateWaitSemaphoreEXT(context, semaphore, numBufferBarriers, buffers,
-                                                     numTextureBarriers, textures, srcLayouts));
+        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateWaitSemaphoreEXT(context, semaphore, numBufferBarriers, buffersPacked,
+                                      numTextureBarriers, textures, srcLayouts));
         if (isCallValid)
         {
-            context->waitSemaphore(semaphore, numBufferBarriers, buffers, numTextureBarriers,
+            context->waitSemaphore(semaphore, numBufferBarriers, buffersPacked, numTextureBarriers,
                                    textures, srcLayouts);
         }
-        ANGLE_CAPTURE(WaitSemaphoreEXT, isCallValid, context, semaphore, numBufferBarriers, buffers,
-                      numTextureBarriers, textures, srcLayouts);
+        ANGLE_CAPTURE(WaitSemaphoreEXT, isCallValid, context, semaphore, numBufferBarriers,
+                      buffersPacked, numTextureBarriers, textures, srcLayouts);
     }
 }
 
@@ -6550,13 +6553,14 @@ void GL_APIENTRY BindBufferContextANGLE(GLeglContext ctx, GLenum target, GLuint 
     {
         ASSERT(context == GetValidGlobalContext());
         BufferBinding targetPacked = FromGL<BufferBinding>(target);
+        BufferID bufferPacked      = FromGL<BufferID>(buffer);
         bool isCallValid =
-            (context->skipValidation() || ValidateBindBuffer(context, targetPacked, buffer));
+            (context->skipValidation() || ValidateBindBuffer(context, targetPacked, bufferPacked));
         if (isCallValid)
         {
-            context->bindBuffer(targetPacked, buffer);
+            context->bindBuffer(targetPacked, bufferPacked);
         }
-        ANGLE_CAPTURE(BindBuffer, isCallValid, context, targetPacked, buffer);
+        ANGLE_CAPTURE(BindBuffer, isCallValid, context, targetPacked, bufferPacked);
     }
 }
 
@@ -6573,13 +6577,14 @@ void GL_APIENTRY BindBufferBaseContextANGLE(GLeglContext ctx,
     {
         ASSERT(context == GetValidGlobalContext());
         BufferBinding targetPacked = FromGL<BufferBinding>(target);
+        BufferID bufferPacked      = FromGL<BufferID>(buffer);
         bool isCallValid           = (context->skipValidation() ||
-                            ValidateBindBufferBase(context, targetPacked, index, buffer));
+                            ValidateBindBufferBase(context, targetPacked, index, bufferPacked));
         if (isCallValid)
         {
-            context->bindBufferBase(targetPacked, index, buffer);
+            context->bindBufferBase(targetPacked, index, bufferPacked);
         }
-        ANGLE_CAPTURE(BindBufferBase, isCallValid, context, targetPacked, index, buffer);
+        ANGLE_CAPTURE(BindBufferBase, isCallValid, context, targetPacked, index, bufferPacked);
     }
 }
 
@@ -6601,15 +6606,16 @@ void GL_APIENTRY BindBufferRangeContextANGLE(GLeglContext ctx,
     {
         ASSERT(context == GetValidGlobalContext());
         BufferBinding targetPacked = FromGL<BufferBinding>(target);
+        BufferID bufferPacked      = FromGL<BufferID>(buffer);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateBindBufferRange(context, targetPacked, index, buffer, offset, size));
+             ValidateBindBufferRange(context, targetPacked, index, bufferPacked, offset, size));
         if (isCallValid)
         {
-            context->bindBufferRange(targetPacked, index, buffer, offset, size);
+            context->bindBufferRange(targetPacked, index, bufferPacked, offset, size);
         }
-        ANGLE_CAPTURE(BindBufferRange, isCallValid, context, targetPacked, index, buffer, offset,
-                      size);
+        ANGLE_CAPTURE(BindBufferRange, isCallValid, context, targetPacked, index, bufferPacked,
+                      offset, size);
     }
 }
 
@@ -6899,14 +6905,16 @@ void GL_APIENTRY BindVertexBufferContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        BufferID bufferPacked = FromGL<BufferID>(buffer);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateBindVertexBuffer(context, bindingindex, buffer, offset, stride));
+             ValidateBindVertexBuffer(context, bindingindex, bufferPacked, offset, stride));
         if (isCallValid)
         {
-            context->bindVertexBuffer(bindingindex, buffer, offset, stride);
+            context->bindVertexBuffer(bindingindex, bufferPacked, offset, stride);
         }
-        ANGLE_CAPTURE(BindVertexBuffer, isCallValid, context, bindingindex, buffer, offset, stride);
+        ANGLE_CAPTURE(BindVertexBuffer, isCallValid, context, bindingindex, bufferPacked, offset,
+                      stride);
     }
 }
 
@@ -8285,13 +8293,14 @@ void GL_APIENTRY DeleteBuffersContextANGLE(GLeglContext ctx, GLsizei n, const GL
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
         bool isCallValid =
-            (context->skipValidation() || ValidateDeleteBuffers(context, n, buffers));
+            (context->skipValidation() || ValidateDeleteBuffers(context, n, buffersPacked));
         if (isCallValid)
         {
-            context->deleteBuffers(n, buffers);
+            context->deleteBuffers(n, buffersPacked);
         }
-        ANGLE_CAPTURE(DeleteBuffers, isCallValid, context, n, buffers);
+        ANGLE_CAPTURE(DeleteBuffers, isCallValid, context, n, buffersPacked);
     }
 }
 
@@ -10047,12 +10056,14 @@ void GL_APIENTRY GenBuffersContextANGLE(GLeglContext ctx, GLsizei n, GLuint *buf
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        bool isCallValid = (context->skipValidation() || ValidateGenBuffers(context, n, buffers));
+        BufferID *buffersPacked = FromGL<BufferID *>(buffers);
+        bool isCallValid =
+            (context->skipValidation() || ValidateGenBuffers(context, n, buffersPacked));
         if (isCallValid)
         {
-            context->genBuffers(n, buffers);
+            context->genBuffers(n, buffersPacked);
         }
-        ANGLE_CAPTURE(GenBuffers, isCallValid, context, n, buffers);
+        ANGLE_CAPTURE(GenBuffers, isCallValid, context, n, buffersPacked);
     }
 }
 
@@ -13112,16 +13123,17 @@ GLboolean GL_APIENTRY IsBufferContextANGLE(GLeglContext ctx, GLuint buffer)
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        bool isCallValid = (context->skipValidation() || ValidateIsBuffer(context, buffer));
+        BufferID bufferPacked = FromGL<BufferID>(buffer);
+        bool isCallValid = (context->skipValidation() || ValidateIsBuffer(context, bufferPacked));
         if (isCallValid)
         {
-            returnValue = context->isBuffer(buffer);
+            returnValue = context->isBuffer(bufferPacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsBuffer, GLboolean>();
         }
-        ANGLE_CAPTURE(IsBuffer, isCallValid, context, buffer, returnValue);
+        ANGLE_CAPTURE(IsBuffer, isCallValid, context, bufferPacked, returnValue);
     }
     else
     {
@@ -16453,17 +16465,18 @@ void GL_APIENTRY SignalSemaphoreEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateSignalSemaphoreEXT(context, semaphore, numBufferBarriers, buffers,
+             ValidateSignalSemaphoreEXT(context, semaphore, numBufferBarriers, buffersPacked,
                                         numTextureBarriers, textures, dstLayouts));
         if (isCallValid)
         {
-            context->signalSemaphore(semaphore, numBufferBarriers, buffers, numTextureBarriers,
-                                     textures, dstLayouts);
+            context->signalSemaphore(semaphore, numBufferBarriers, buffersPacked,
+                                     numTextureBarriers, textures, dstLayouts);
         }
         ANGLE_CAPTURE(SignalSemaphoreEXT, isCallValid, context, semaphore, numBufferBarriers,
-                      buffers, numTextureBarriers, textures, dstLayouts);
+                      buffersPacked, numTextureBarriers, textures, dstLayouts);
     }
 }
 
@@ -19144,16 +19157,18 @@ void GL_APIENTRY WaitSemaphoreEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        bool isCallValid = (context->skipValidation() ||
-                            ValidateWaitSemaphoreEXT(context, semaphore, numBufferBarriers, buffers,
-                                                     numTextureBarriers, textures, srcLayouts));
+        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateWaitSemaphoreEXT(context, semaphore, numBufferBarriers, buffersPacked,
+                                      numTextureBarriers, textures, srcLayouts));
         if (isCallValid)
         {
-            context->waitSemaphore(semaphore, numBufferBarriers, buffers, numTextureBarriers,
+            context->waitSemaphore(semaphore, numBufferBarriers, buffersPacked, numTextureBarriers,
                                    textures, srcLayouts);
         }
-        ANGLE_CAPTURE(WaitSemaphoreEXT, isCallValid, context, semaphore, numBufferBarriers, buffers,
-                      numTextureBarriers, textures, srcLayouts);
+        ANGLE_CAPTURE(WaitSemaphoreEXT, isCallValid, context, semaphore, numBufferBarriers,
+                      buffersPacked, numTextureBarriers, textures, srcLayouts);
     }
 }
 
