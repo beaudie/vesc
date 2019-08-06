@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1672b89_eeb8875d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-06T20:20:56Z",
+      "side": 1,
+      "message": "Could you add a comment saying why this change is needed? is python preferable to vpython?",
+      "revId": "54210d2532f779834a41bd7cfe83784e241e61cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
