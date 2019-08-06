@@ -849,6 +849,22 @@ class ImageHelper final : public CommandGraphResource
                               uint32_t newQueueFamilyIndex,
                               vk::CommandBuffer *commandBuffer);
 
+    angle::Result readPixels(ContextVk *contextVk,
+                             const gl::Rectangle &area,
+                             VkImageAspectFlagBits copyAspectFlags,
+                             size_t levelIn,
+                             size_t layerIn,
+                             const PackPixelsParams &packPixelsParams,
+                             vk::DynamicBuffer *readPixelsBuffer,
+                             vk::CommandBuffer *commandBuffer,
+                             uint8_t *pixelsOut);
+
+    angle::Result readPixelsSelf(ContextVk *contextVk,
+                                 VkImageAspectFlagBits copyAspectFlags,
+                                 size_t levelIn,
+                                 size_t layerIn,
+                                 uint8_t *pixelsOut);
+
   private:
     void forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                    ImageLayout newLayout,

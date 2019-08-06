@@ -172,6 +172,11 @@ class TextureVk : public TextureImpl
         mStagingBufferInitialSize = initialSizeForTesting;
     }
 
+    bool canGetDataForCapture(const gl::ImageIndex &index) const override;
+    angle::Result getDataForCapture(const gl::Context *context,
+                                    const gl::ImageIndex &index,
+                                    angle::MemoryBuffer *dataOut) override;
+
   private:
     struct TextureVkViews final : angle::NonCopyable
     {

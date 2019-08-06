@@ -1649,4 +1649,35 @@ uint32_t TextureVk::getLevelCount() const
     // getMipmapMaxLevel will be 0 here if mipmaps are not used, so the levelCount is always +1.
     return mState.getMipmapMaxLevel() + 1;
 }
+
+bool TextureVk::canGetDataForCapture(const gl::ImageIndex &index) const
+{
+    return true;
+}
+
+angle::Result TextureVk::getDataForCapture(const gl::Context *context,
+                                           const gl::ImageIndex &index,
+                                           angle::MemoryBuffer *dataOut)
+{
+    if (!mImage->valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    if (mImage->getAspectFlags() != VK_IMAGE_ASPECT_COLOR_BIT)
+    {
+        UNIMPLEMENTED();
+        return angle::Result::Continue;
+    }
+
+    ContextVk *contextVk      = vk::GetImpl(context);
+    const gl::ImageDesc &desc = mState.getImageDesc(index);
+    size_t allocationSize =
+        mImage->getFormat().imageFormat().pixelBytes * desc.size.width * desc.size.height;
+    dataOut->resize(allocationSize);
+
+    return mImage->readPixelsSelf(contextVk, VK_IMAGE_ASPECT_COLOR_BIT, index.getLevelIndex(),
+                                  index.getLayerIndex(), dataOut->data());
+}
+
 }  // namespace rx
