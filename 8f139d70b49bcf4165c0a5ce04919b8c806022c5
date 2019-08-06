@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "c7b679ee_50844c76",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T02:53:38Z",
+      "side": 1,
+      "message": "Gave it a shot, but it quickly became very contrived (since without this change, there\u0027s nothing to go in the compute uniforms). I thought about just including the rename of DriverUniforms to GraphicsDriverUniforms, but that wouldn\u0027t capture the \"riskiness\".\n\nFYI, the graphics path is (refactoring aside) unchanged.",
+      "parentUuid": "2b41409d_96d5ebe3",
+      "range": {
+        "startLine": 393,
+        "startChar": 17,
+        "endLine": 393,
+        "endChar": 49
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "31f254e6_f2be819c",
         "filename": "src/compiler/translator/TranslatorVulkan.cpp",
         "patchSetId": 16
@@ -72,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "e17491d2_9bbf17ee",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T02:53:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31f254e6_f2be819c",
+      "range": {
+        "startLine": 689,
+        "startChar": 4,
+        "endLine": 689,
+        "endChar": 75
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c41e1d4e_ccd6eb8c",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 16
@@ -83,6 +131,30 @@
       "writtenOn": "2019-08-05T17:54:02Z",
       "side": 1,
       "message": "can you try please using a std::array of uint8_t and using static_assert to verify the packing size? Also please try to use a constant in the array size.",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 45
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e447c71_1af2af8f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T02:53:38Z",
+      "side": 1,
+      "message": "I\u0027d rather not. This will support little- and big-endian as is. Aliasing the `uint`s as expected by the shader with `uint8_t` would just limit the code to little-endian. We don\u0027t have a big-endian target at the moment, but I\u0027d rather not leave a hidden bug for future!\n\nNot sure how a constant helps, `kChannelsInVec4` and `4` are equally magic numbers.",
+      "parentUuid": "c41e1d4e_ccd6eb8c",
       "range": {
         "startLine": 73,
         "startChar": 0,
@@ -118,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "2c482aba_f97b58f8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T02:53:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "97258dc0_8c6f0d66",
+      "range": {
+        "startLine": 284,
+        "startChar": 0,
+        "endLine": 285,
+        "endChar": 53
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ccc592ae_0256d8d0",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 16
@@ -141,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "547b1a42_21a8b3ac",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T02:53:38Z",
+      "side": 1,
+      "message": "Done. Kept it in vk_utils.h to avoid polluting that namespace. We can always move it if other backends ever need it.",
+      "parentUuid": "ccc592ae_0256d8d0",
+      "range": {
+        "startLine": 339,
+        "startChar": 0,
+        "endLine": 346,
+        "endChar": 6
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9cf972e0_f7f0f746",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 16
@@ -161,6 +281,30 @@
       "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16bda220_be5de3d8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 548,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T02:53:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9cf972e0_f7f0f746",
+      "range": {
+        "startLine": 534,
+        "startChar": 0,
+        "endLine": 548,
+        "endChar": 0
+      },
+      "revId": "8f139d70b49bcf4165c0a5ce04919b8c806022c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
