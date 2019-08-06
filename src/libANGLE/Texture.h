@@ -27,6 +27,11 @@
 #include "libANGLE/angletypes.h"
 #include "libANGLE/formatutils.h"
 
+namespace angle
+{
+class MemoryBuffer;
+}  // namespace angle
+
 namespace egl
 {
 class Surface;
@@ -445,6 +450,12 @@ class Texture final : public RefCountObject<TextureID>,
     GLuint getId() const override;
 
     GLuint getNativeID() const;
+
+    // Used specifically for capture.
+    bool canGetDataForCapture(const gl::ImageIndex &index) const;
+    angle::Result getDataForCapture(const gl::Context *context,
+                                    const gl::ImageIndex &index,
+                                    angle::MemoryBuffer *dataOut) const;
 
     // Needed for robust resource init.
     angle::Result ensureInitialized(const Context *context);
