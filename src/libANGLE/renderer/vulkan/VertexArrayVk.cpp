@@ -33,16 +33,19 @@ ANGLE_INLINE bool BindingIsAligned(const gl::VertexBinding &binding,
                                    GLuint relativeOffset)
 {
     GLintptr totalOffset = binding.getOffset() + relativeOffset;
-    GLuint mask = angleFormat.componentAlignmentMask;
+    GLuint mask          = angleFormat.componentAlignmentMask;
     if (mask != std::numeric_limits<GLuint>::max())
     {
         return ((totalOffset & mask) == 0 && (binding.getStride() & mask) == 0);
     }
     else
     {
+        // To perform the GPU conversion for the component of a vertex format not aligned to byte
+        // (for example, A2BGR10 or RGB10A2), one element has to be placed in 4 bytes to perform
+        // the compute shader. So, binding offset and stride has to be aligned to formatSize for
+        // placing one element in 4 bytes.
         unsigned int formatSize = angleFormat.pixelBytes;
-        return ((totalOffset * attribSize) % formatSize == 0) &&
-               ((binding.getStride() * attribSize) % formatSize == 0);
+        return (totalOffset % formatSize == 0) && (binding.getStride() % formatSize == 0);
     }
 }
 
