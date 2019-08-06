@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2b2091f6_31ecb549",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 17
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-06T22:04:00Z",
+      "side": 1,
+      "message": "Looks like we can remove this comment now.",
+      "revId": "304022744553eb4ed0b8ac56aecaff20e805fff5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
