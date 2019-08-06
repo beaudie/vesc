@@ -10,6 +10,7 @@
 
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/SymbolTable.h"
+#include "compiler/translator/tree_util/IntermNode_util.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 
 namespace sh
@@ -84,6 +85,42 @@ TIntermTyped *ReplaceTypeOfTypedStructNode(TIntermTyped *argument, TSymbolTable 
 // Maximum string size of a hex unsigned int.
 constexpr size_t kHexSize = ImmutableStringBuilder::GetHexCharCount<unsigned int>();
 
+// Generates names for array elements of the form
+// prefix_<index0>_<index1>_...<indexN>
+void GenerateArrayNames(const ImmutableString &prefix,
+                        const TType *baseType,
+                        std::vector<ImmutableStringBuilder> *elementNamesOut)
+{
+    ASSERT(baseType->isArray());
+    const TVector<unsigned int> &arraySizes             = *baseType->getArraySizes();
+    std::vector<ImmutableStringBuilder> &stringBuilders = *elementNamesOut;
+    size_t numArrayElements                             = baseType->getArraySizeProduct();
+    stringBuilders.reserve(numArrayElements);
+    for (size_t i = 0; i < numArrayElements; i++)
+    {
+        stringBuilders.emplace_back(prefix.length() +
+                                    (1 + kHexSize) * baseType->getNumArraySizes());
+        stringBuilders[i] << prefix;
+    }
+    unsigned int stride = 1;
+    for (size_t j = arraySizes.size(); j > 0; j--)
+    {
+        size_t arrayLevel      = j - 1;
+        unsigned int arraySize = arraySizes[arrayLevel];
+        for (unsigned int arrayElement = 0; arrayElement * stride < numArrayElements;
+             arrayElement++)
+        {
+            for (size_t i = 0; i < stride; i++)
+            {
+                ImmutableStringBuilder &stringBuilder = stringBuilders[arrayElement * stride + i];
+                stringBuilder << "_";
+                stringBuilder.appendHex(arrayElement % arraySize);
+            }
+        }
+        stride *= arraySize;
+    }
+}
+
 class Traverser final : public TIntermTraverser
 {
   public:
@@ -91,6 +128,7 @@ class Traverser final : public TIntermTraverser
         : TIntermTraverser(true, false, true, symbolTable), mRemovedUniformsCount(0)
     {
         mSymbolTable->push();
+        mCumulativeArraySizeStack.push_back(1);
     }
 
     ~Traverser() override { mSymbolTable->pop(); }
@@ -133,6 +171,17 @@ class Traverser final : public TIntermTraverser
             mMultiReplacements.emplace_back(getParentNode()->getAsBlock(), decl, *newSequence);
         }
 
+        if (type.isSampler() && type.isArrayOfArrays())
+        {
+            TIntermSequence *newSequence = new TIntermSequence;
+            TIntermSymbol *asSymbol      = declarator->getAsSymbolNode();
+            ASSERT(asSymbol);
+            const TVariable &variable = asSymbol->variable();
+            ASSERT(variable.symbolType() != SymbolType::Empty);
+            extractSampler(variable.name(), variable.getType(), newSequence, 0);
+            mMultiReplacements.emplace_back(getParentNode()->getAsBlock(), decl, *newSequence);
+        }
+
         return true;
     }
 
@@ -141,15 +190,27 @@ class Traverser final : public TIntermTraverser
     {
         if (visit != PreVisit)
             return true;
+        if (!node->getType().isSampler() || node->getType().isArray())
+            return true;
 
-        if (node->getOp() == EOpIndexDirectStruct && node->getType().isSampler())
+        if (node->getOp() == EOpIndexDirect || node->getOp() == EOpIndexIndirect ||
+            node->getOp() == EOpIndexDirectStruct)
         {
             ImmutableString newName = GetStructSamplerNameFromTypedNode(node);
             const TVariable *samplerReplacement =
                 static_cast<const TVariable *>(mSymbolTable->findUserDefined(newName));
             ASSERT(samplerReplacement);
 
-            TIntermSymbol *replacement = new TIntermSymbol(samplerReplacement);
+            TIntermTyped *replacement = new TIntermSymbol(samplerReplacement);
+
+            // Add in an indirect index if contained in an array
+            const auto &strides = mArraySizeMap[newName];
+            ASSERT(!strides.empty());
+            if (strides.size() > 1)
+            {
+                TIntermTyped *index = GetIndexExpressionFromTypedNode(node, strides);
+                replacement         = new TIntermBinary(EOpIndexIndirect, replacement, index);
+            }
 
             queueReplacement(replacement, OriginalNode::IS_DROPPED);
             return true;
@@ -239,20 +300,16 @@ class Traverser final : public TIntermTraverser
 
             switch (asBinary->getOp())
             {
-                case EOpIndexDirect:
-                {
-                    const int index = asBinary->getRight()->getAsConstantUnion()->getIConst(0);
-                    const std::string strInt = Str(index);
-                    stringBuilder.insert(0, strInt);
-                    stringBuilder.insert(0, "_");
-                    break;
-                }
                 case EOpIndexDirectStruct:
                 {
                     stringBuilder.insert(0, asBinary->getIndexStructFieldName().data());
                     stringBuilder.insert(0, "_");
                     break;
                 }
+
+                case EOpIndexDirect:
+                case EOpIndexIndirect:
+                    break;
 
                 default:
                     UNREACHABLE();
@@ -266,6 +323,44 @@ class Traverser final : public TIntermTraverser
         stringBuilder.insert(0, variableName.data());
 
         return stringBuilder;
+    }
+
+    // This returns an expression representing the correct index using the array
+    // index operations in node.
+    static TIntermTyped *GetIndexExpressionFromTypedNode(TIntermTyped *node,
+                                                         const std::vector<size_t> &strides)
+    {
+        TIntermTyped *result      = CreateIndexNode(0);
+        TIntermTyped *currentNode = node;
+
+        auto it = strides.begin();
+        while (currentNode->getAsBinaryNode())
+        {
+            TIntermBinary *asBinary = currentNode->getAsBinaryNode();
+
+            switch (asBinary->getOp())
+            {
+                case EOpIndexDirectStruct:
+                    break;
+
+                case EOpIndexDirect:
+                case EOpIndexIndirect:
+                {
+                    TIntermBinary *multiply =
+                        new TIntermBinary(EOpMul, CreateIndexNode(*it++), asBinary->getRight());
+                    result = new TIntermBinary(EOpAdd, result, multiply);
+                    break;
+                }
+
+                default:
+                    UNREACHABLE();
+                    break;
+            }
+
+            currentNode = asBinary->getLeft();
+        }
+
+        return result;
     }
 
     // Removes all the struct samplers from a struct specifier.
@@ -344,6 +439,8 @@ class Traverser final : public TIntermTraverser
 
         size_t nonSamplerCount = 0;
 
+        enterArray(variable.getType());
+
         for (const TField *field : structure->fields())
         {
             nonSamplerCount +=
@@ -359,6 +456,8 @@ class Traverser final : public TIntermTraverser
         {
             mRemovedUniformsCount++;
         }
+
+        exitArray(variable.getType());
     }
 
     // Extracts samplers from a field of a struct. Works with nested structs and arrays.
@@ -367,23 +466,6 @@ class Traverser final : public TIntermTraverser
                                 const TType &containingType,
                                 TIntermSequence *newSequence)
     {
-        if (containingType.isArray())
-        {
-            size_t nonSamplerCount = 0;
-
-            // Name the samplers internally as varName_<index>_fieldName
-            const TVector<unsigned int> &arraySizes = *containingType.getArraySizes();
-            for (unsigned int arrayElement = 0; arrayElement < arraySizes[0]; ++arrayElement)
-            {
-                ImmutableStringBuilder stringBuilder(prefix.length() + kHexSize + 1);
-                stringBuilder << prefix << "_";
-                stringBuilder.appendHex(arrayElement);
-                nonSamplerCount = extractFieldSamplersImpl(stringBuilder, field, newSequence);
-            }
-
-            return nonSamplerCount;
-        }
-
         return extractFieldSamplersImpl(prefix, field, newSequence);
     }
 
@@ -403,16 +485,18 @@ class Traverser final : public TIntermTraverser
 
             if (fieldType.isSampler())
             {
-                extractSampler(newPrefix, fieldType, newSequence);
+                extractSampler(newPrefix, fieldType, newSequence, 0);
             }
             else
             {
+                enterArray(fieldType);
                 const TStructure *structure = fieldType.getStruct();
                 for (const TField *nestedField : structure->fields())
                 {
                     nonSamplerCount +=
                         extractFieldSamplers(newPrefix, nestedField, fieldType, newSequence);
                 }
+                exitArray(fieldType);
             }
         }
         else
@@ -423,12 +507,47 @@ class Traverser final : public TIntermTraverser
         return nonSamplerCount;
     }
 
+    void enterArray(const TType &arrayType)
+    {
+        if (!arrayType.isArray())
+            return;
+        size_t currentArraySize = mCumulativeArraySizeStack.back();
+        const auto &arraySizes  = *arrayType.getArraySizes();
+        for (auto it = arraySizes.rbegin(); it != arraySizes.rend(); ++it)
+        {
+            unsigned int arraySize = *it;
+            currentArraySize *= arraySize;
+            mArraySizeStack.push_back(arraySize);
+            mCumulativeArraySizeStack.push_back(currentArraySize);
+        }
+    }
+
+    void exitArray(const TType &arrayType)
+    {
+        if (!arrayType.isArray())
+            return;
+        mArraySizeStack.resize(mArraySizeStack.size() - arrayType.getNumArraySizes());
+        mCumulativeArraySizeStack.resize(mCumulativeArraySizeStack.size() -
+                                         arrayType.getNumArraySizes());
+    }
+
     // Extracts a sampler from a struct. Declares the new extracted sampler.
     void extractSampler(const ImmutableString &newName,
                         const TType &fieldType,
-                        TIntermSequence *newSequence) const
+                        TIntermSequence *newSequence,
+                        size_t arrayLevel)
     {
+        enterArray(fieldType);
+
         TType *newType = new TType(fieldType);
+        while (newType->isArray())
+        {
+            newType->toArrayElementType();
+        }
+        if (!mArraySizeStack.empty())
+        {
+            newType->makeArray(static_cast<unsigned int>(mCumulativeArraySizeStack.back()));
+        }
         newType->setQualifier(EvqUniform);
         TVariable *newVariable =
             new TVariable(mSymbolTable, newName, newType, SymbolType::AngleInternal);
@@ -440,22 +559,39 @@ class Traverser final : public TIntermTraverser
         newSequence->push_back(samplerDecl);
 
         mSymbolTable->declareInternal(newVariable);
+
+        auto &strides = mArraySizeMap[newName];
+        ASSERT(strides.empty());
+        strides.reserve(mCumulativeArraySizeStack.size());
+
+        size_t currentStride = 1;
+        strides.push_back(1);
+        for (auto it = mArraySizeStack.rbegin(); it != mArraySizeStack.rend(); ++it)
+        {
+            currentStride *= *it;
+            strides.push_back(currentStride);
+        }
+
+        {
+            // XXX XXX XXX
+            WARN() << newName << " ->";
+            size_t prev = 1;
+            for (size_t a : strides)
+            {
+                WARN() << a << " (" << (a / prev) << ")";
+                prev = a;
+            }
+            // XXX XXX XXX
+        }
+
+        exitArray(fieldType);
     }
 
     // Returns the chained name of a sampler uniform field.
-    static ImmutableString GetFieldName(const ImmutableString &paramName,
-                                        const TField *field,
-                                        unsigned arrayIndex)
+    static ImmutableString GetFieldName(const ImmutableString &paramName, const TField *field)
     {
-        ImmutableStringBuilder nameBuilder(paramName.length() + kHexSize + 2 +
-                                           field->name().length());
+        ImmutableStringBuilder nameBuilder(paramName.length() + 1 + field->name().length());
         nameBuilder << paramName << "_";
-
-        if (arrayIndex < std::numeric_limits<unsigned>::max())
-        {
-            nameBuilder.appendHex(arrayIndex);
-            nameBuilder << "_";
-        }
         nameBuilder << field->name();
 
         return nameBuilder;
@@ -486,6 +622,11 @@ class Traverser final : public TIntermTraverser
                         visitStructParam(function, paramIndex);
                     }
                 }
+                else if (paramType.isArrayOfArrays() && paramType.isSampler())
+                {
+                    const ImmutableString &paramName = getNameFromIndex(function, paramIndex);
+                    traverseLeafSampler(paramName, paramType, 0);
+                }
                 else
                 {
                     visitNonStructParam(function, paramIndex);
@@ -494,8 +635,8 @@ class Traverser final : public TIntermTraverser
         }
 
         virtual ImmutableString getNameFromIndex(const TFunction *function, size_t paramIndex) = 0;
-        virtual void visitSamplerInStructParam(const ImmutableString &name,
-                                               const TField *field)                            = 0;
+        // Also includes samplers in arrays of arrays.
+        virtual void visitSamplerInStructParam(const ImmutableString &name, const TType *type) = 0;
         virtual void visitStructParam(const TFunction *function, size_t paramIndex)            = 0;
         virtual void visitNonStructParam(const TFunction *function, size_t paramIndex)         = 0;
 
@@ -530,12 +671,12 @@ class Traverser final : public TIntermTraverser
 
             if (baseType.isArray())
             {
-                const TVector<unsigned int> &arraySizes = *baseType.getArraySizes();
-                ASSERT(arraySizes.size() == 1);
+                std::vector<ImmutableStringBuilder> elementNames;
+                GenerateArrayNames(baseName, &baseType, &elementNames);
 
-                for (unsigned int arrayIndex = 0; arrayIndex < arraySizes[0]; ++arrayIndex)
+                for (auto &elementName : elementNames)
                 {
-                    ImmutableString name = GetFieldName(baseName, field, arrayIndex);
+                    ImmutableString name = GetFieldName(elementName, field);
 
                     if (field->type()->isStructureContainingSamplers())
                     {
@@ -547,25 +688,50 @@ class Traverser final : public TIntermTraverser
                     else
                     {
                         ASSERT(field->type()->isSampler());
-                        visitSamplerInStructParam(name, field);
+                        traverseLeafSampler(name, *field->type(), 0);
                     }
                 }
             }
             else if (field->type()->isStructureContainingSamplers())
             {
-                ImmutableString name =
-                    GetFieldName(baseName, field, std::numeric_limits<unsigned>::max());
+                ImmutableString name = GetFieldName(baseName, field);
                 hasNonSamplerParams = traverseStructContainingSamplers(name, *field->type());
             }
             else
             {
                 ASSERT(field->type()->isSampler());
-                ImmutableString name =
-                    GetFieldName(baseName, field, std::numeric_limits<unsigned>::max());
-                visitSamplerInStructParam(name, field);
+                ImmutableString name = GetFieldName(baseName, field);
+                traverseLeafSampler(name, *field->type(), 0);
             }
 
             return hasNonSamplerParams;
+        }
+
+        void traverseLeafSampler(const ImmutableString &samplerName,
+                                 const TType &samplerType,
+                                 size_t arrayLevel)
+        {
+            size_t numArraySizes = samplerType.getNumArraySizes();
+            if (numArraySizes <= arrayLevel + 1)
+            {
+                TType *finalType = new TType(samplerType);
+                while (finalType->isArrayOfArrays())
+                {
+                    finalType->toArrayElementType();
+                }
+                visitSamplerInStructParam(samplerName, finalType);
+                return;
+            }
+            unsigned int arraySize = (*samplerType.getArraySizes())[numArraySizes - arrayLevel - 1];
+            for (unsigned int i = 0; i < arraySize; i++)
+            {
+                ImmutableStringBuilder stringBuilder(samplerName.length() + 1 + kHexSize);
+                stringBuilder << samplerName << "_";
+                stringBuilder.appendHex(i);
+                ImmutableString samplerName = stringBuilder;
+                traverseLeafSampler(samplerName, samplerType, arrayLevel + 1);
+            }
+            return;
         }
     };
 
@@ -593,10 +759,10 @@ class Traverser final : public TIntermTraverser
             StructSamplerFunctionVisitor::traverse(function);
         }
 
-        void visitSamplerInStructParam(const ImmutableString &name, const TField *field) override
+        void visitSamplerInStructParam(const ImmutableString &name, const TType *type) override
         {
             TVariable *fieldSampler =
-                new TVariable(mSymbolTable, name, field->type(), SymbolType::AngleInternal);
+                new TVariable(mSymbolTable, name, type, SymbolType::AngleInternal);
             mNewFunction->addParameter(fieldSampler);
             mSymbolTable->declareInternal(fieldSampler);
         }
@@ -644,10 +810,10 @@ class Traverser final : public TIntermTraverser
             return GetStructSamplerNameFromTypedNode(argument);
         }
 
-        void visitSamplerInStructParam(const ImmutableString &name, const TField *field) override
+        void visitSamplerInStructParam(const ImmutableString &name, const TType *type) override
         {
             TVariable *argSampler =
-                new TVariable(mSymbolTable, name, field->type(), SymbolType::AngleInternal);
+                new TVariable(mSymbolTable, name, type, SymbolType::AngleInternal);
             TIntermSymbol *argSymbol = new TIntermSymbol(argSampler);
             mNewArguments->push_back(argSymbol);
         }
@@ -685,6 +851,14 @@ class Traverser final : public TIntermTraverser
 
     int mRemovedUniformsCount;
     std::set<ImmutableString> mRemovedStructs;
+    // The first element is 1; each successive element is the previous
+    // multiplied by the size of the next nested array in the current sampler.
+    // For example, with sampler2D foo[3][6], we would have {1, 3, 18}.
+    std::vector<size_t> mCumulativeArraySizeStack;
+    std::vector<size_t> mArraySizeStack;
+    // The value consists of strides, starting from the outermost array.
+    // For example, with sampler2D foo[3][6], we would have {1, 6, 18}.
+    std::map<ImmutableString, std::vector<size_t>> mArraySizeMap;
 };
 }  // anonymous namespace
 
