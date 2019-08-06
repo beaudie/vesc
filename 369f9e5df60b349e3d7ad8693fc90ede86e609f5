@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8001d68_3fa3e2d6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2214,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-06T16:29:57Z",
+      "side": 0,
+      "message": "Please also remove this enum value from vk::ImageLayout.",
+      "range": {
+        "startLine": 2214,
+        "startChar": 57,
+        "endLine": 2214,
+        "endChar": 79
+      },
+      "revId": "369f9e5df60b349e3d7ad8693fc90ede86e609f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
