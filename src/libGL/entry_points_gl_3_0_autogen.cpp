@@ -522,15 +522,18 @@ void GL_APIENTRY FramebufferTexture1D(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        bool isCallValid =
-            (context->skipValidation() ||
-             ValidateFramebufferTexture1D(context, target, attachment, textarget, texture, level));
+        TextureTarget targetPacked = FromGL<TextureTarget>(target);
+        TextureID texturePacked    = FromGL<TextureID>(texture);
+        bool isCallValid           = (context->skipValidation() ||
+                            ValidateFramebufferTexture1D(context, targetPacked, attachment,
+                                                         textarget, texturePacked, level));
         if (isCallValid)
         {
-            context->framebufferTexture1D(target, attachment, textarget, texture, level);
+            context->framebufferTexture1D(targetPacked, attachment, textarget, texturePacked,
+                                          level);
         }
-        ANGLE_CAPTURE(FramebufferTexture1D, isCallValid, context, target, attachment, textarget,
-                      texture, level);
+        ANGLE_CAPTURE(FramebufferTexture1D, isCallValid, context, targetPacked, attachment,
+                      textarget, texturePacked, level);
     }
 }
 
@@ -549,15 +552,17 @@ void GL_APIENTRY FramebufferTexture2D(GLenum target,
     if (context)
     {
         TextureTarget textargetPacked = FromGL<TextureTarget>(textarget);
+        TextureID texturePacked       = FromGL<TextureID>(texture);
         bool isCallValid              = (context->skipValidation() ||
                             ValidateFramebufferTexture2D(context, target, attachment,
-                                                         textargetPacked, texture, level));
+                                                         textargetPacked, texturePacked, level));
         if (isCallValid)
         {
-            context->framebufferTexture2D(target, attachment, textargetPacked, texture, level);
+            context->framebufferTexture2D(target, attachment, textargetPacked, texturePacked,
+                                          level);
         }
         ANGLE_CAPTURE(FramebufferTexture2D, isCallValid, context, target, attachment,
-                      textargetPacked, texture, level);
+                      textargetPacked, texturePacked, level);
     }
 }
 
@@ -577,16 +582,18 @@ void GL_APIENTRY FramebufferTexture3D(GLenum target,
     if (context)
     {
         TextureTarget textargetPacked = FromGL<TextureTarget>(textarget);
-        bool isCallValid              = (context->skipValidation() ||
-                            ValidateFramebufferTexture3D(context, target, attachment,
-                                                         textargetPacked, texture, level, zoffset));
+        TextureID texturePacked       = FromGL<TextureID>(texture);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateFramebufferTexture3D(context, target, attachment, textargetPacked,
+                                          texturePacked, level, zoffset));
         if (isCallValid)
         {
-            context->framebufferTexture3D(target, attachment, textargetPacked, texture, level,
+            context->framebufferTexture3D(target, attachment, textargetPacked, texturePacked, level,
                                           zoffset);
         }
         ANGLE_CAPTURE(FramebufferTexture3D, isCallValid, context, target, attachment,
-                      textargetPacked, texture, level, zoffset);
+                      textargetPacked, texturePacked, level, zoffset);
     }
 }
 
@@ -601,15 +608,16 @@ FramebufferTextureLayer(GLenum target, GLenum attachment, GLuint texture, GLint 
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        bool isCallValid =
-            (context->skipValidation() ||
-             ValidateFramebufferTextureLayer(context, target, attachment, texture, level, layer));
+        TextureID texturePacked = FromGL<TextureID>(texture);
+        bool isCallValid        = (context->skipValidation() ||
+                            ValidateFramebufferTextureLayer(context, target, attachment,
+                                                            texturePacked, level, layer));
         if (isCallValid)
         {
-            context->framebufferTextureLayer(target, attachment, texture, level, layer);
+            context->framebufferTextureLayer(target, attachment, texturePacked, level, layer);
         }
-        ANGLE_CAPTURE(FramebufferTextureLayer, isCallValid, context, target, attachment, texture,
-                      level, layer);
+        ANGLE_CAPTURE(FramebufferTextureLayer, isCallValid, context, target, attachment,
+                      texturePacked, level, layer);
     }
 }
 

@@ -3520,15 +3520,16 @@ void GL_APIENTRY FramebufferTextureEXT(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        TextureID texturePacked = FromGL<TextureID>(texture);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateFramebufferTextureEXT(context, target, attachment, texture, level));
+             ValidateFramebufferTextureEXT(context, target, attachment, texturePacked, level));
         if (isCallValid)
         {
-            context->framebufferTexture(target, attachment, texture, level);
+            context->framebufferTexture(target, attachment, texturePacked, level);
         }
-        ANGLE_CAPTURE(FramebufferTextureEXT, isCallValid, context, target, attachment, texture,
-                      level);
+        ANGLE_CAPTURE(FramebufferTextureEXT, isCallValid, context, target, attachment,
+                      texturePacked, level);
     }
 }
 
@@ -4205,18 +4206,19 @@ void GL_APIENTRY SignalSemaphoreEXT(GLuint semaphore,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
+        const BufferID *buffersPacked   = FromGL<const BufferID *>(buffers);
+        const TextureID *texturesPacked = FromGL<const TextureID *>(textures);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateSignalSemaphoreEXT(context, semaphore, numBufferBarriers, buffersPacked,
-                                        numTextureBarriers, textures, dstLayouts));
+                                        numTextureBarriers, texturesPacked, dstLayouts));
         if (isCallValid)
         {
             context->signalSemaphore(semaphore, numBufferBarriers, buffersPacked,
-                                     numTextureBarriers, textures, dstLayouts);
+                                     numTextureBarriers, texturesPacked, dstLayouts);
         }
         ANGLE_CAPTURE(SignalSemaphoreEXT, isCallValid, context, semaphore, numBufferBarriers,
-                      buffersPacked, numTextureBarriers, textures, dstLayouts);
+                      buffersPacked, numTextureBarriers, texturesPacked, dstLayouts);
     }
 }
 
@@ -4237,18 +4239,19 @@ void GL_APIENTRY WaitSemaphoreEXT(GLuint semaphore,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
+        const BufferID *buffersPacked   = FromGL<const BufferID *>(buffers);
+        const TextureID *texturesPacked = FromGL<const TextureID *>(textures);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateWaitSemaphoreEXT(context, semaphore, numBufferBarriers, buffersPacked,
-                                      numTextureBarriers, textures, srcLayouts));
+                                      numTextureBarriers, texturesPacked, srcLayouts));
         if (isCallValid)
         {
             context->waitSemaphore(semaphore, numBufferBarriers, buffersPacked, numTextureBarriers,
-                                   textures, srcLayouts);
+                                   texturesPacked, srcLayouts);
         }
         ANGLE_CAPTURE(WaitSemaphoreEXT, isCallValid, context, semaphore, numBufferBarriers,
-                      buffersPacked, numTextureBarriers, textures, srcLayouts);
+                      buffersPacked, numTextureBarriers, texturesPacked, srcLayouts);
     }
 }
 
@@ -5084,15 +5087,17 @@ void GL_APIENTRY FramebufferTexture2DOES(GLenum target,
     if (context)
     {
         TextureTarget textargetPacked = FromGL<TextureTarget>(textarget);
+        TextureID texturePacked       = FromGL<TextureID>(texture);
         bool isCallValid              = (context->skipValidation() ||
                             ValidateFramebufferTexture2DOES(context, target, attachment,
-                                                            textargetPacked, texture, level));
+                                                            textargetPacked, texturePacked, level));
         if (isCallValid)
         {
-            context->framebufferTexture2D(target, attachment, textargetPacked, texture, level);
+            context->framebufferTexture2D(target, attachment, textargetPacked, texturePacked,
+                                          level);
         }
         ANGLE_CAPTURE(FramebufferTexture2DOES, isCallValid, context, target, attachment,
-                      textargetPacked, texture, level);
+                      textargetPacked, texturePacked, level);
     }
 }
 
@@ -5643,17 +5648,18 @@ void GL_APIENTRY FramebufferTexture3DOES(GLenum target,
     if (context)
     {
         TextureTarget textargetPacked = FromGL<TextureTarget>(textarget);
+        TextureID texturePacked       = FromGL<TextureID>(texture);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateFramebufferTexture3DOES(context, target, attachment, textargetPacked, texture,
-                                             level, zoffset));
+             ValidateFramebufferTexture3DOES(context, target, attachment, textargetPacked,
+                                             texturePacked, level, zoffset));
         if (isCallValid)
         {
-            context->framebufferTexture3D(target, attachment, textargetPacked, texture, level,
+            context->framebufferTexture3D(target, attachment, textargetPacked, texturePacked, level,
                                           zoffset);
         }
         ANGLE_CAPTURE(FramebufferTexture3DOES, isCallValid, context, target, attachment,
-                      textargetPacked, texture, level, zoffset);
+                      textargetPacked, texturePacked, level, zoffset);
     }
 }
 
@@ -6165,16 +6171,18 @@ void GL_APIENTRY FramebufferTextureMultiviewOVR(GLenum target,
     Context *context = GetValidGlobalContext();
     if (context)
     {
-        bool isCallValid = (context->skipValidation() || ValidateFramebufferTextureMultiviewOVR(
-                                                             context, target, attachment, texture,
-                                                             level, baseViewIndex, numViews));
+        TextureID texturePacked = FromGL<TextureID>(texture);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateFramebufferTextureMultiviewOVR(context, target, attachment, texturePacked,
+                                                    level, baseViewIndex, numViews));
         if (isCallValid)
         {
-            context->framebufferTextureMultiview(target, attachment, texture, level, baseViewIndex,
-                                                 numViews);
+            context->framebufferTextureMultiview(target, attachment, texturePacked, level,
+                                                 baseViewIndex, numViews);
         }
         ANGLE_CAPTURE(FramebufferTextureMultiviewOVR, isCallValid, context, target, attachment,
-                      texture, level, baseViewIndex, numViews);
+                      texturePacked, level, baseViewIndex, numViews);
     }
 }
 
@@ -6528,15 +6536,16 @@ void GL_APIENTRY BindImageTextureContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        bool isCallValid =
-            (context->skipValidation() || ValidateBindImageTexture(context, unit, texture, level,
-                                                                   layered, layer, access, format));
+        TextureID texturePacked = FromGL<TextureID>(texture);
+        bool isCallValid        = (context->skipValidation() ||
+                            ValidateBindImageTexture(context, unit, texturePacked, level, layered,
+                                                     layer, access, format));
         if (isCallValid)
         {
-            context->bindImageTexture(unit, texture, level, layered, layer, access, format);
+            context->bindImageTexture(unit, texturePacked, level, layered, layer, access, format);
         }
-        ANGLE_CAPTURE(BindImageTexture, isCallValid, context, unit, texture, level, layered, layer,
-                      access, format);
+        ANGLE_CAPTURE(BindImageTexture, isCallValid, context, unit, texturePacked, level, layered,
+                      layer, access, format);
     }
 }
 
@@ -6625,13 +6634,14 @@ void GL_APIENTRY BindTextureContextANGLE(GLeglContext ctx, GLenum target, GLuint
     {
         ASSERT(context == GetValidGlobalContext());
         TextureType targetPacked = FromGL<TextureType>(target);
-        bool isCallValid =
-            (context->skipValidation() || ValidateBindTexture(context, targetPacked, texture));
+        TextureID texturePacked  = FromGL<TextureID>(texture);
+        bool isCallValid         = (context->skipValidation() ||
+                            ValidateBindTexture(context, targetPacked, texturePacked));
         if (isCallValid)
         {
-            context->bindTexture(targetPacked, texture);
+            context->bindTexture(targetPacked, texturePacked);
         }
-        ANGLE_CAPTURE(BindTexture, isCallValid, context, targetPacked, texture);
+        ANGLE_CAPTURE(BindTexture, isCallValid, context, targetPacked, texturePacked);
     }
 }
 
@@ -8345,13 +8355,14 @@ void GL_APIENTRY DeleteTexturesContextANGLE(GLeglContext ctx, GLsizei n, const G
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        const TextureID *texturesPacked = FromGL<const TextureID *>(textures);
         bool isCallValid =
-            (context->skipValidation() || ValidateDeleteTextures(context, n, textures));
+            (context->skipValidation() || ValidateDeleteTextures(context, n, texturesPacked));
         if (isCallValid)
         {
-            context->deleteTextures(n, textures);
+            context->deleteTextures(n, texturesPacked);
         }
-        ANGLE_CAPTURE(DeleteTextures, isCallValid, context, n, textures);
+        ANGLE_CAPTURE(DeleteTextures, isCallValid, context, n, texturesPacked);
     }
 }
 
@@ -9555,15 +9566,17 @@ void GL_APIENTRY FramebufferTexture2DContextANGLE(GLeglContext ctx,
     {
         ASSERT(context == GetValidGlobalContext());
         TextureTarget textargetPacked = FromGL<TextureTarget>(textarget);
+        TextureID texturePacked       = FromGL<TextureID>(texture);
         bool isCallValid              = (context->skipValidation() ||
                             ValidateFramebufferTexture2D(context, target, attachment,
-                                                         textargetPacked, texture, level));
+                                                         textargetPacked, texturePacked, level));
         if (isCallValid)
         {
-            context->framebufferTexture2D(target, attachment, textargetPacked, texture, level);
+            context->framebufferTexture2D(target, attachment, textargetPacked, texturePacked,
+                                          level);
         }
         ANGLE_CAPTURE(FramebufferTexture2D, isCallValid, context, target, attachment,
-                      textargetPacked, texture, level);
+                      textargetPacked, texturePacked, level);
     }
 }
 
@@ -9584,15 +9597,17 @@ void GL_APIENTRY FramebufferTexture2DOESContextANGLE(GLeglContext ctx,
     {
         ASSERT(context == GetValidGlobalContext());
         TextureTarget textargetPacked = FromGL<TextureTarget>(textarget);
+        TextureID texturePacked       = FromGL<TextureID>(texture);
         bool isCallValid              = (context->skipValidation() ||
                             ValidateFramebufferTexture2DOES(context, target, attachment,
-                                                            textargetPacked, texture, level));
+                                                            textargetPacked, texturePacked, level));
         if (isCallValid)
         {
-            context->framebufferTexture2D(target, attachment, textargetPacked, texture, level);
+            context->framebufferTexture2D(target, attachment, textargetPacked, texturePacked,
+                                          level);
         }
         ANGLE_CAPTURE(FramebufferTexture2DOES, isCallValid, context, target, attachment,
-                      textargetPacked, texture, level);
+                      textargetPacked, texturePacked, level);
     }
 }
 
@@ -9614,17 +9629,18 @@ void GL_APIENTRY FramebufferTexture3DOESContextANGLE(GLeglContext ctx,
     {
         ASSERT(context == GetValidGlobalContext());
         TextureTarget textargetPacked = FromGL<TextureTarget>(textarget);
+        TextureID texturePacked       = FromGL<TextureID>(texture);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateFramebufferTexture3DOES(context, target, attachment, textargetPacked, texture,
-                                             level, zoffset));
+             ValidateFramebufferTexture3DOES(context, target, attachment, textargetPacked,
+                                             texturePacked, level, zoffset));
         if (isCallValid)
         {
-            context->framebufferTexture3D(target, attachment, textargetPacked, texture, level,
+            context->framebufferTexture3D(target, attachment, textargetPacked, texturePacked, level,
                                           zoffset);
         }
         ANGLE_CAPTURE(FramebufferTexture3DOES, isCallValid, context, target, attachment,
-                      textargetPacked, texture, level, zoffset);
+                      textargetPacked, texturePacked, level, zoffset);
     }
 }
 
@@ -9641,15 +9657,16 @@ void GL_APIENTRY FramebufferTextureEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        TextureID texturePacked = FromGL<TextureID>(texture);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateFramebufferTextureEXT(context, target, attachment, texture, level));
+             ValidateFramebufferTextureEXT(context, target, attachment, texturePacked, level));
         if (isCallValid)
         {
-            context->framebufferTexture(target, attachment, texture, level);
+            context->framebufferTexture(target, attachment, texturePacked, level);
         }
-        ANGLE_CAPTURE(FramebufferTextureEXT, isCallValid, context, target, attachment, texture,
-                      level);
+        ANGLE_CAPTURE(FramebufferTextureEXT, isCallValid, context, target, attachment,
+                      texturePacked, level);
     }
 }
 
@@ -9669,15 +9686,16 @@ void GL_APIENTRY FramebufferTextureLayerContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        bool isCallValid =
-            (context->skipValidation() ||
-             ValidateFramebufferTextureLayer(context, target, attachment, texture, level, layer));
+        TextureID texturePacked = FromGL<TextureID>(texture);
+        bool isCallValid        = (context->skipValidation() ||
+                            ValidateFramebufferTextureLayer(context, target, attachment,
+                                                            texturePacked, level, layer));
         if (isCallValid)
         {
-            context->framebufferTextureLayer(target, attachment, texture, level, layer);
+            context->framebufferTextureLayer(target, attachment, texturePacked, level, layer);
         }
-        ANGLE_CAPTURE(FramebufferTextureLayer, isCallValid, context, target, attachment, texture,
-                      level, layer);
+        ANGLE_CAPTURE(FramebufferTextureLayer, isCallValid, context, target, attachment,
+                      texturePacked, level, layer);
     }
 }
 
@@ -9698,16 +9716,18 @@ void GL_APIENTRY FramebufferTextureMultiviewOVRContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        bool isCallValid = (context->skipValidation() || ValidateFramebufferTextureMultiviewOVR(
-                                                             context, target, attachment, texture,
-                                                             level, baseViewIndex, numViews));
+        TextureID texturePacked = FromGL<TextureID>(texture);
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateFramebufferTextureMultiviewOVR(context, target, attachment, texturePacked,
+                                                    level, baseViewIndex, numViews));
         if (isCallValid)
         {
-            context->framebufferTextureMultiview(target, attachment, texture, level, baseViewIndex,
-                                                 numViews);
+            context->framebufferTextureMultiview(target, attachment, texturePacked, level,
+                                                 baseViewIndex, numViews);
         }
         ANGLE_CAPTURE(FramebufferTextureMultiviewOVR, isCallValid, context, target, attachment,
-                      texture, level, baseViewIndex, numViews);
+                      texturePacked, level, baseViewIndex, numViews);
     }
 }
 
@@ -9990,12 +10010,14 @@ void GL_APIENTRY GenTexturesContextANGLE(GLeglContext ctx, GLsizei n, GLuint *te
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        bool isCallValid = (context->skipValidation() || ValidateGenTextures(context, n, textures));
+        TextureID *texturesPacked = FromGL<TextureID *>(textures);
+        bool isCallValid =
+            (context->skipValidation() || ValidateGenTextures(context, n, texturesPacked));
         if (isCallValid)
         {
-            context->genTextures(n, textures);
+            context->genTextures(n, texturesPacked);
         }
-        ANGLE_CAPTURE(GenTextures, isCallValid, context, n, textures);
+        ANGLE_CAPTURE(GenTextures, isCallValid, context, n, texturesPacked);
     }
 }
 
@@ -13245,16 +13267,17 @@ GLboolean GL_APIENTRY IsTextureContextANGLE(GLeglContext ctx, GLuint texture)
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        bool isCallValid = (context->skipValidation() || ValidateIsTexture(context, texture));
+        TextureID texturePacked = FromGL<TextureID>(texture);
+        bool isCallValid = (context->skipValidation() || ValidateIsTexture(context, texturePacked));
         if (isCallValid)
         {
-            returnValue = context->isTexture(texture);
+            returnValue = context->isTexture(texturePacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsTexture, GLboolean>();
         }
-        ANGLE_CAPTURE(IsTexture, isCallValid, context, texture, returnValue);
+        ANGLE_CAPTURE(IsTexture, isCallValid, context, texturePacked, returnValue);
     }
     else
     {
@@ -16099,18 +16122,19 @@ void GL_APIENTRY SignalSemaphoreEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
+        const BufferID *buffersPacked   = FromGL<const BufferID *>(buffers);
+        const TextureID *texturesPacked = FromGL<const TextureID *>(textures);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateSignalSemaphoreEXT(context, semaphore, numBufferBarriers, buffersPacked,
-                                        numTextureBarriers, textures, dstLayouts));
+                                        numTextureBarriers, texturesPacked, dstLayouts));
         if (isCallValid)
         {
             context->signalSemaphore(semaphore, numBufferBarriers, buffersPacked,
-                                     numTextureBarriers, textures, dstLayouts);
+                                     numTextureBarriers, texturesPacked, dstLayouts);
         }
         ANGLE_CAPTURE(SignalSemaphoreEXT, isCallValid, context, semaphore, numBufferBarriers,
-                      buffersPacked, numTextureBarriers, textures, dstLayouts);
+                      buffersPacked, numTextureBarriers, texturesPacked, dstLayouts);
     }
 }
 
@@ -18729,18 +18753,19 @@ void GL_APIENTRY WaitSemaphoreEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
-        const BufferID *buffersPacked = FromGL<const BufferID *>(buffers);
+        const BufferID *buffersPacked   = FromGL<const BufferID *>(buffers);
+        const TextureID *texturesPacked = FromGL<const TextureID *>(textures);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateWaitSemaphoreEXT(context, semaphore, numBufferBarriers, buffersPacked,
-                                      numTextureBarriers, textures, srcLayouts));
+                                      numTextureBarriers, texturesPacked, srcLayouts));
         if (isCallValid)
         {
             context->waitSemaphore(semaphore, numBufferBarriers, buffersPacked, numTextureBarriers,
-                                   textures, srcLayouts);
+                                   texturesPacked, srcLayouts);
         }
         ANGLE_CAPTURE(WaitSemaphoreEXT, isCallValid, context, semaphore, numBufferBarriers,
-                      buffersPacked, numTextureBarriers, textures, srcLayouts);
+                      buffersPacked, numTextureBarriers, texturesPacked, srcLayouts);
     }
 }
 

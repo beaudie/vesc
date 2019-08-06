@@ -782,7 +782,7 @@ bool ValidateDrawBuffersEXT(Context *context, GLsizei n, const GLenum *bufs);
 bool ValidateFramebufferTextureEXT(Context *context,
                                    GLenum target,
                                    GLenum attachment,
-                                   GLuint texture,
+                                   TextureID texturePacked,
                                    GLint level);
 
 // GL_EXT_instanced_arrays
@@ -914,14 +914,14 @@ bool ValidateSignalSemaphoreEXT(Context *context,
                                 GLuint numBufferBarriers,
                                 const BufferID *buffersPacked,
                                 GLuint numTextureBarriers,
-                                const GLuint *textures,
+                                const TextureID *texturesPacked,
                                 const GLenum *dstLayouts);
 bool ValidateWaitSemaphoreEXT(Context *context,
                               GLuint semaphore,
                               GLuint numBufferBarriers,
                               const BufferID *buffersPacked,
                               GLuint numTextureBarriers,
-                              const GLuint *textures,
+                              const TextureID *texturesPacked,
                               const GLenum *srcLayouts);
 
 // GL_EXT_semaphore_fd
@@ -1069,7 +1069,7 @@ bool ValidateFramebufferTexture2DOES(Context *context,
                                      GLenum target,
                                      GLenum attachment,
                                      TextureTarget textargetPacked,
-                                     GLuint texture,
+                                     TextureID texturePacked,
                                      GLint level);
 bool ValidateGenFramebuffersOES(Context *context, GLsizei n, GLuint *framebuffers);
 bool ValidateGenRenderbuffersOES(Context *context, GLsizei n, RenderbufferID *renderbuffersPacked);
@@ -1172,7 +1172,7 @@ bool ValidateFramebufferTexture3DOES(Context *context,
                                      GLenum target,
                                      GLenum attachment,
                                      TextureTarget textargetPacked,
-                                     GLuint texture,
+                                     TextureID texturePacked,
                                      GLint level,
                                      GLint zoffset);
 bool ValidateTexImage3DOES(Context *context,
@@ -1264,7 +1264,7 @@ bool ValidateIsVertexArrayOES(Context *context, GLuint array);
 bool ValidateFramebufferTextureMultiviewOVR(Context *context,
                                             GLenum target,
                                             GLenum attachment,
-                                            GLuint texture,
+                                            TextureID texturePacked,
                                             GLint level,
                                             GLint baseViewIndex,
                                             GLsizei numViews);

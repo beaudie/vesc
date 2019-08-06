@@ -33,16 +33,16 @@ bool ValidateDisablei(Context *context, GLenum target, GLuint index);
 bool ValidateEnablei(Context *context, GLenum target, GLuint index);
 bool ValidateEndConditionalRender(Context *context);
 bool ValidateFramebufferTexture1D(Context *context,
-                                  GLenum target,
+                                  TextureTarget targetPacked,
                                   GLenum attachment,
                                   GLenum textarget,
-                                  GLuint texture,
+                                  TextureID texturePacked,
                                   GLint level);
 bool ValidateFramebufferTexture3D(Context *context,
                                   GLenum target,
                                   GLenum attachment,
                                   TextureTarget textargetPacked,
-                                  GLuint texture,
+                                  TextureID texturePacked,
                                   GLint level,
                                   GLint zoffset);
 bool ValidateGetTexParameterIiv(Context *context,
