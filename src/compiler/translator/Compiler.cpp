@@ -1316,6 +1316,11 @@ bool TCompiler::wereVariablesCollected() const
     return mVariablesCollected;
 }
 
+bool TCompiler::validateAST(TIntermBlock *root)
+{
+    return ValidateAST(root, &mDiagnostics, mValidateASTOptions);
+}
+
 void TCompiler::initializeGLPosition(TIntermBlock *root)
 {
     InitVariableList list;

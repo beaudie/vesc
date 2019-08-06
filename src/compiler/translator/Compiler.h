@@ -168,6 +168,9 @@ class TCompiler : public TShHandleBase
     virtual bool shouldCollectVariables(ShCompileOptions compileOptions);
 
     bool wereVariablesCollected() const;
+
+    bool validateAST(TIntermBlock *root);
+
     std::vector<sh::Attribute> mAttributes;
     std::vector<sh::OutputVariable> mOutputVariables;
     std::vector<sh::Uniform> mUniforms;
