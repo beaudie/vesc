@@ -22,6 +22,30 @@
       "revId": "36598fa5d27467387b848c3b121063bd8a3d35cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a5aa593_6ad5072c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2480,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T18:23:29Z",
+      "side": 1,
+      "message": "Sorry, grammar got a bit mangled there but hopefully you get the idea. I can explain in more detail if you like.",
+      "parentUuid": "525ceb1a_244b5e26",
+      "range": {
+        "startLine": 2479,
+        "startChar": 8,
+        "endLine": 2480,
+        "endChar": 91
+      },
+      "revId": "36598fa5d27467387b848c3b121063bd8a3d35cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
