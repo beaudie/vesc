@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6ee82baf_fc08b2cc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T19:23:31Z",
+      "side": 1,
+      "message": "I\u0027m surprised this passes the extra chromium checks clang plugin. I think you\u0027ll need to define default ops in TextureVk.cpp. also this can be final and angle::NonCopyable",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 183,
+        "endChar": 0
+      },
+      "revId": "2f111d7b7176ff5874e50e21e1ffe67710c1b2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16190c0f_a264fe53",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T19:23:31Z",
+      "side": 1,
+      "message": "nit: probably make this a helper on mState.",
+      "range": {
+        "startLine": 309,
+        "startChar": 4,
+        "endLine": 309,
+        "endChar": 98
+      },
+      "revId": "2f111d7b7176ff5874e50e21e1ffe67710c1b2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
