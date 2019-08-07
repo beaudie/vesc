@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "d78c4f99_f78f3a53",
+        "filename": "src/libANGLE/renderer/gl/SamplerGL.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-07T18:25:20Z",
+      "side": 1,
+      "message": "So this could early out if `!dirty`, right? Could be nice to add this little optimization if it\u0027s not making any tests fail.",
+      "revId": "36598fa5d27467387b848c3b121063bd8a3d35cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "525ceb1a_244b5e26",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
