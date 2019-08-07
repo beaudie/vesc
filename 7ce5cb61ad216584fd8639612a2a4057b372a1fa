@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "cf902a77_c375607f",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T18:08:52Z",
+      "side": 1,
+      "message": "nit: subscript chain - to most readers subscription implies a recurring service of some kind.",
+      "range": {
+        "startLine": 442,
+        "startChar": 15,
+        "endLine": 442,
+        "endChar": 27
+      },
+      "revId": "7ce5cb61ad216584fd8639612a2a4057b372a1fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19fe7463_0766a68d",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T18:08:52Z",
+      "side": 1,
+      "message": "might not be a limitation",
+      "range": {
+        "startLine": 493,
+        "startChar": 55,
+        "endLine": 493,
+        "endChar": 97
+      },
+      "revId": "7ce5cb61ad216584fd8639612a2a4057b372a1fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81d3186c_2675f5e2",
         "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
         "patchSetId": 4
