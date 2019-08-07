@@ -476,7 +476,6 @@ angle::Result WaitFences(vk::Context *context,
 
     return angle::Result::Continue;
 }
-
 }  // anonymous namespace
 
 // RendererVk implementation.
@@ -1276,7 +1275,8 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
 
     if (IsWindows() && IsAMD(mPhysicalDeviceProperties.vendorID))
     {
-        mFeatures.disallowSeamfulCubeMapEmulation.enabled = true;
+        // Disabled on AMD/windows due to buggy behavior.
+        mFeatures.disallowSeamfulCubeMapEmulation.enabled = false;
     }
 
     if (IsAndroid() && IsQualcomm(mPhysicalDeviceProperties.vendorID))
