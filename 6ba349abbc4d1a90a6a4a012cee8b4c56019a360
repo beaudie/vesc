@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26f57db3_61638199",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2482,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-07T22:35:59Z",
+      "side": 1,
+      "message": "There was a bug here because samplerVk may be nullptr. Updated to just duplicate the texture serial if samplerVk is null. Does that seem reasonable? A couple alternatives would be to pass in an empty Serial or have some default fallback serial that\u0027s initialized at context creation and always used.",
+      "revId": "6ba349abbc4d1a90a6a4a012cee8b4c56019a360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
