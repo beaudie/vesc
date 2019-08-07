@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dd656c89_06a9b7dd",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-07T21:32:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ee82baf_fc08b2cc",
+      "range": {
+        "startLine": 174,
+        "startChar": 0,
+        "endLine": 183,
+        "endChar": 0
+      },
+      "revId": "2f111d7b7176ff5874e50e21e1ffe67710c1b2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "16190c0f_a264fe53",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 8
@@ -36,6 +60,30 @@
       "writtenOn": "2019-08-07T19:23:31Z",
       "side": 1,
       "message": "nit: probably make this a helper on mState.",
+      "range": {
+        "startLine": 309,
+        "startChar": 4,
+        "endLine": 309,
+        "endChar": 98
+      },
+      "revId": "2f111d7b7176ff5874e50e21e1ffe67710c1b2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1243d851_4835f751",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-07T21:32:00Z",
+      "side": 1,
+      "message": "That\u0027s a change to a front-end file, generally we try to avoid that, right?",
+      "parentUuid": "16190c0f_a264fe53",
       "range": {
         "startLine": 309,
         "startChar": 4,
