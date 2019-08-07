@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8d42fbbe_2600a81b",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T20:24:41Z",
+      "side": 1,
+      "message": "Yah.. although I couldn\u0027t quite prove it. What I found with Markus when looking at angle::Result is that pretty much any \"C++\" stuff (private data, destructors, and possibly constructors in this case) would cause the code gen to include a bunch of extra instructions when the values were used as return values. In this case I went with the simplest option.\n\nI experimented a bit with not much success. I did confirm the entry point code gen is the same with this CL and the prior.",
+      "parentUuid": "c590233b_26f6f702",
+      "range": {
+        "startLine": 381,
+        "startChar": 16,
+        "endLine": 381,
+        "endChar": 17
+      },
+      "revId": "43e39439693bdc67a05a9710ca8085a6e59ace24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a3806d6a_c344fb59",
         "filename": "src/common/PackedEnums.h",
         "patchSetId": 18
@@ -39,6 +63,24 @@
       "revId": "43e39439693bdc67a05a9710ca8085a6e59ace24",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56785100_db9fbfa6",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T20:24:41Z",
+      "side": 1,
+      "message": "Done, but it\u0027ll come back in a later patch when I add more types.",
+      "parentUuid": "a3806d6a_c344fb59",
+      "revId": "43e39439693bdc67a05a9710ca8085a6e59ace24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -62,6 +104,30 @@
       "revId": "43e39439693bdc67a05a9710ca8085a6e59ace24",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1bc1844_eb256c52",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T20:24:41Z",
+      "side": 1,
+      "message": "Good catch, was a prior unfinished refactor. It should be just \u0027handle\u0027.",
+      "parentUuid": "c7f86b17_01595019",
+      "range": {
+        "startLine": 126,
+        "startChar": 8,
+        "endLine": 126,
+        "endChar": 26
+      },
+      "revId": "43e39439693bdc67a05a9710ca8085a6e59ace24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
