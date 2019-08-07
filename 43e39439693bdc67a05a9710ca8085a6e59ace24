@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "c590233b_26f6f702",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-07T18:59:41Z",
+      "side": 1,
+      "message": "Would there be any harm to initializing this inline?",
+      "range": {
+        "startLine": 381,
+        "startChar": 16,
+        "endLine": 381,
+        "endChar": 17
+      },
+      "revId": "43e39439693bdc67a05a9710ca8085a6e59ace24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a3806d6a_c344fb59",
         "filename": "src/common/PackedEnums.h",
         "patchSetId": 18
