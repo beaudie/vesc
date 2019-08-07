@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81e2a683_99f8707b",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2973,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-07T14:33:58Z",
+      "side": 1,
+      "message": "GL_TEXTURE1?",
+      "range": {
+        "startLine": 2973,
+        "startChar": 20,
+        "endLine": 2973,
+        "endChar": 35
+      },
+      "revId": "68e42a692dd89fe428ec70a9bf6764b7b950c962",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6bdeafe_b1bcd1f5",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3025,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-07T14:33:58Z",
+      "side": 1,
+      "message": "From the error it looks like that in the second draw, both s0 and s1 are using NEAREST. If you output more of the data (as opposed to the amount EXPECT_EQ does), we could probably tell if  the previous draw call is using both LINEAR too. Somehow I have the feeling that samplers[0] is being used for both samples.",
+      "revId": "68e42a692dd89fe428ec70a9bf6764b7b950c962",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
