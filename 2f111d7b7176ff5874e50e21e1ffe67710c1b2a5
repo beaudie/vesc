@@ -93,6 +93,30 @@
       "revId": "2f111d7b7176ff5874e50e21e1ffe67710c1b2a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16515033_13704abb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T21:45:20Z",
+      "side": 1,
+      "message": "No, we don\u0027t try to avoid that.",
+      "parentUuid": "1243d851_4835f751",
+      "range": {
+        "startLine": 309,
+        "startChar": 4,
+        "endLine": 309,
+        "endChar": 98
+      },
+      "revId": "2f111d7b7176ff5874e50e21e1ffe67710c1b2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
