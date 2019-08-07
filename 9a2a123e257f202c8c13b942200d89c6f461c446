@@ -71,6 +71,29 @@
     },
     {
       "key": {
+        "uuid": "97708049_786c8a19",
+        "filename": "src/compiler/translator/builtin_function_declarations.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T17:45:21Z",
+      "side": 1,
+      "message": "nit: trim trailing spaces",
+      "range": {
+        "startLine": 24,
+        "startChar": 96,
+        "endLine": 24,
+        "endChar": 97
+      },
+      "revId": "9a2a123e257f202c8c13b942200d89c6f461c446",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "93590280_77ff3294",
         "filename": "src/compiler/translator/builtin_function_declarations.txt",
         "patchSetId": 8
