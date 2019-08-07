@@ -288,9 +288,14 @@ const ShCompileOptions SH_FORCE_ATOMIC_VALUE_RESOLUTION = UINT64_C(1) << 42;
 const ShCompileOptions SH_EMULATE_GL_BASE_VERTEX_BASE_INSTANCE = UINT64_C(1) << 43;
 
 // Emulate seamful cube map sampling for OpenGL ES2.0.  Currently only applies to the Vulkan
-// backend, as subgroup operations are used.  Once that dependency is broken, could be used with
+// backend, as is done after samplers are moved out of structs.  Can likely be made to work on
 // the other backends as well.
+//
+// There are two variations of this.  One using subgroup operations where available, and another
+// that emulates those operations using dFdxFine and dFdyFine.  The latter is more universally
+// available, but is buggy on Nvidia.
 const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING = UINT64_C(1) << 44;
+const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING_WITH_SUBGROUP_OP = UINT64_C(1) << 45;
 
 // Defines alternate strategies for implementing array index clamping.
 enum ShArrayIndexClampingStrategy

@@ -28,6 +28,7 @@ std::shared_ptr<WaitableCompileEvent> ShaderVk::compile(const gl::Context *conte
     ShCompileOptions compileOptions = SH_INITIALIZE_UNINITIALIZED_LOCALS;
 
     ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer = contextVk->getRenderer();
 
     bool isWebGL = context->getExtensions().webglCompatibility;
     if (isWebGL && mData.getShaderType() != gl::ShaderType::Compute)
@@ -40,9 +41,14 @@ std::shared_ptr<WaitableCompileEvent> ShaderVk::compile(const gl::Context *conte
         compileOptions |= SH_CLAMP_POINT_SIZE;
     }
 
+    bool useSubgroupOpsWithSeamfulCubeMapEmulation =
+        renderer->getFeatures().useSubgroupOpsWithSeamfulCubeMapEmulation.enabled;
     if (contextVk->emulateSeamfulCubeMapSampling())
     {
-        compileOptions |= SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING;
+        compileOptions |= useSubgroupOpsWithSeamfulCubeMapEmulation
+                              ? SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING_WITH_SUBGROUP_OP
+                              : SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING;
+        fprintf(stderr, "used compile option %lx\n", compileOptions);
     }
 
     return compileImpl(context, compilerInstance, mData.getSource(), compileOptions | options);

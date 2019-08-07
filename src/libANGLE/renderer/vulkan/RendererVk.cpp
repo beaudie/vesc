@@ -477,6 +477,17 @@ angle::Result WaitFences(vk::Context *context,
     return angle::Result::Continue;
 }
 
+bool HasSeamfulCubeMapEmulationSubgroupOpsSupport(
+    const VkPhysicalDeviceSubgroupProperties &subgroupProperties)
+{
+    constexpr VkSubgroupFeatureFlags kSeamfulCubeMapSubgroupOperations =
+        VK_SUBGROUP_FEATURE_BASIC_BIT | VK_SUBGROUP_FEATURE_QUAD_BIT;
+    const VkSubgroupFeatureFlags supportedOps = subgroupProperties.supportedOperations;
+
+    fprintf(stderr, "Has %x, wants %x\n", supportedOps, kSeamfulCubeMapSubgroupOperations);
+    return (supportedOps & kSeamfulCubeMapSubgroupOperations) == kSeamfulCubeMapSubgroupOperations;
+}
+
 }  // anonymous namespace
 
 // RendererVk implementation.
@@ -1274,10 +1285,15 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
         mFeatures.perFrameWindowSizeQuery.enabled = true;
     }
 
+    mFeatures.useSubgroupOpsWithSeamfulCubeMapEmulation.enabled =
+        HasSeamfulCubeMapEmulationSubgroupOpsSupport(mPhysicalDeviceSubgroupProperties);
     if (IsWindows() && IsAMD(mPhysicalDeviceProperties.vendorID))
     {
-        mFeatures.disallowSeamfulCubeMapEmulation.enabled = true;
+        // Disabled on AMD/windows due to buggy behavior.
+        mFeatures.useSubgroupOpsWithSeamfulCubeMapEmulation.enabled = false;
     }
+    fprintf(stderr, "Using subgroup ops with seamful: %d\n",
+            mFeatures.useSubgroupOpsWithSeamfulCubeMapEmulation.enabled);
 
     if (IsAndroid() && IsQualcomm(mPhysicalDeviceProperties.vendorID))
     {

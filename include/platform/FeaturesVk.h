@@ -195,10 +195,12 @@ struct FeaturesVk : FeatureSetBase
         "vkCommandBuffer",
         &members, "http://b/135763283"};
 
-    // Seamful cube map emulation misbehaves on the AMD windows driver, so it's disallowed.
-    Feature disallowSeamfulCubeMapEmulation = {
-        "disallow_seamful_cube_map_emulation", FeatureCategory::VulkanWorkarounds,
-        "Seamful cube map emulation misbehaves on the AMD windows driver, so it's disallowed",
+    // Seamful cube map emulation can either be done with subgroup ops or dFd*Fine.  We default to
+    // the latter as is universally available and fallback to subgroup ops in buggy drivers.
+    Feature useSubgroupOpsWithSeamfulCubeMapEmulation = {
+        "use_subgroup_ops_with_seamful_cube_map_emulation", FeatureCategory::VulkanWorkarounds,
+        "Seamful cube map emulation can either be done with subgroup ops or dFd*Fine.  We default"
+        "to the latter as is universally available and fallback to subgroup ops in buggy drivers.",
         &members, "http://anglebug.com/3243"};
 };
 
