@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "caf7bbb1_c5476459",
+        "filename": "src/libANGLE/Device.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-07T14:58:46Z",
+      "side": 1,
+      "message": "nit: devices.get()",
+      "range": {
+        "startLine": 44,
+        "startChar": 11,
+        "endLine": 44,
+        "endChar": 20
+      },
+      "revId": "a9ed63fe1f73c340746849162984f6b689e18c92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e03535c6_7748b301",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-07T14:58:46Z",
+      "side": 1,
+      "message": "windowSurfaces.get() (and below)",
+      "range": {
+        "startLine": 94,
+        "startChar": 11,
+        "endLine": 94,
+        "endChar": 27
+      },
+      "revId": "a9ed63fe1f73c340746849162984f6b689e18c92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38183532_edea258c",
+        "filename": "util/osx/OSXWindow.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-07T14:58:46Z",
+      "side": 1,
+      "message": "This file is only used in our testing, not sure if we need to modify.",
+      "revId": "a9ed63fe1f73c340746849162984f6b689e18c92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
