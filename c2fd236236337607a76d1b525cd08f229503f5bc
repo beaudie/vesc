@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "97e8c56b_6a7c6321",
+        "filename": "src/tests/gl_tests/ShaderStorageBufferTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1596,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T15:29:19Z",
+      "side": 1,
+      "message": "nit: can you add a short one line comment before the tests you changed or added?",
+      "range": {
+        "startLine": 1596,
+        "startChar": 0,
+        "endLine": 1596,
+        "endChar": 6
+      },
+      "revId": "c2fd236236337607a76d1b525cd08f229503f5bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
