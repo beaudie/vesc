@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a3806d6a_c344fb59",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-07T18:56:19Z",
+      "side": 1,
+      "message": "Since you don\u0027t have a generic function declaration (only the 2 specialized versions), can these just be normal overloaded functions instead to avoid the chance for a linker error if these are called with something other than a RenderbufferID/GLuint?",
+      "revId": "43e39439693bdc67a05a9710ca8085a6e59ace24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7f86b17_01595019",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-07T18:56:19Z",
+      "side": 1,
+      "message": "Is this correct since it\u0027s essentially doing GetIDValue(GetIDValue(id)), and erase/assign aren\u0027t doing this below?",
+      "range": {
+        "startLine": 126,
+        "startChar": 8,
+        "endLine": 126,
+        "endChar": 26
+      },
+      "revId": "43e39439693bdc67a05a9710ca8085a6e59ace24",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
