@@ -138,7 +138,14 @@ config("extra_warnings") {
       "-Wrange-loop-analysis",
       "-Wstrict-prototypes",
       "-Wunreachable-code",
+      "-Wshorten-64-to-32",
     ]
+  }
+}
+
+config("disable_-Wshorten-64-to-32") {
+  if (is_clang) {
+    cflags = [ "-Wno-shorten-64-to-32" ]
   }
 }
 
@@ -577,6 +584,60 @@ if (angle_enable_vulkan) {
   }
 }
 
+# This is a separate source set from libANGLE_base just so that we can add the
+# :disable_-Wshorten-64-to-32 config. The Vulkan code trips this warning a lot.
+# TODO(anglebug:3799): Fix the warnings and fold this back into libANGLE_base.
+angle_source_set("libANGLE_vulkan") {
+  sources = libangle_vulkan_sources
+
+  # Enable extra Chromium style warnings for libANGLE.
+  if (is_clang) {
+    suppressed_configs -= [ "//build/config/clang:find_bad_constructs" ]
+  }
+  public_deps = [
+    ":angle_common",
+    ":angle_gpu_info_util",
+    ":angle_version",
+    ":translator",
+  ]
+  deps = [
+    ":angle_image_util",
+    ":includes",
+  ]
+  if (is_win) {
+    sources += libangle_vulkan_win32_sources
+  }
+  if (is_linux) {
+    sources += libangle_vulkan_xcb_sources
+  }
+  if (is_fuchsia) {
+    sources += libangle_vulkan_fuchsia_sources
+    deps += [
+      "$angle_root/src/common/fuchsia_egl",
+      "$angle_root/src/common/fuchsia_egl:backend",
+    ]
+  }
+  if (is_android) {
+    sources += libangle_vulkan_android_sources
+    libs += [ "vulkan" ]
+  }
+  deps += [
+    ":angle_vulkan",
+    "${angle_glslang_dir}:glslang_default_resource_limits_sources",
+    "${angle_glslang_dir}:glslang_sources",
+    "${angle_spirv_tools_dir}:spvtools_val",
+  ]
+
+  # Include generated shaders.
+  import("src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.gni")
+  sources += angle_vulkan_internal_shaders
+
+  configs += [
+    ":debug_annotations_config",
+    ":disable_-Wshorten-64-to-32",
+  ]
+}
+
 angle_source_set("libANGLE_base") {
   sources = libangle_sources
 
@@ -667,35 +728,8 @@ angle_source_set("libANGLE_base") {
   }
 
   if (angle_enable_vulkan) {
-    sources += libangle_vulkan_sources
-    if (is_win) {
-      sources += libangle_vulkan_win32_sources
-    }
-    if (is_linux) {
-      sources += libangle_vulkan_xcb_sources
-    }
-    if (is_fuchsia) {
-      sources += libangle_vulkan_fuchsia_sources
-      deps += [
-        "$angle_root/src/common/fuchsia_egl",
-        "$angle_root/src/common/fuchsia_egl:backend",
-      ]
-    }
-    if (is_android) {
-      sources += libangle_vulkan_android_sources
-      libs += [ "vulkan" ]
-    }
-    deps += [
-      ":angle_vulkan",
-      "${angle_glslang_dir}:glslang_default_resource_limits_sources",
-      "${angle_glslang_dir}:glslang_sources",
-      "${angle_spirv_tools_dir}:spvtools_val",
-    ]
+    deps += [ ":libANGLE_vulkan" ]
     public_deps += [ "$angle_root/third_party/vulkan-headers:vulkan_headers" ]
-
-    # Include generated shaders.
-    import("src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.gni")
-    sources += angle_vulkan_internal_shaders
   }
 
   if (angle_enable_null) {
