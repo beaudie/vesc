@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e32252ee_a8ef2442",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1502,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T20:42:07Z",
+      "side": 1,
+      "message": "can you nuke these? Use glAndLocalDirtyBits.setLaterBit in the switch. Note that DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING is dirty bit zero.",
+      "range": {
+        "startLine": 1491,
+        "startChar": 0,
+        "endLine": 1502,
+        "endChar": 5
+      },
+      "revId": "c05d41250954513da3040daec61509a19439db51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
