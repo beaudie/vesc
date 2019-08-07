@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ef37c1f8_9d6f8d89",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1696,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-07T14:47:53Z",
+      "side": 1,
+      "message": "This validation shouldn\u0027t be added, it will allow sized internal formats for glTexImage.",
+      "range": {
+        "startLine": 1656,
+        "startChar": 0,
+        "endLine": 1696,
+        "endChar": 26
+      },
+      "revId": "3ee9163c4dbe8a23ec13e1519712f482ba5fb7f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
