@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "681eb184_6e74107f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-07T19:10:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b16d97a7_8230153d",
+      "range": {
+        "startLine": 1260,
+        "startChar": 4,
+        "endLine": 1263,
+        "endChar": 99
+      },
+      "revId": "aeeb809942f560bf41357da59000c3555dde41af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3b6b1ef2_7f2d9940",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 7
@@ -45,6 +69,30 @@
       "revId": "aeeb809942f560bf41357da59000c3555dde41af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "61ed8ff4_06e71e24",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-07T19:10:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b6b1ef2_7f2d9940",
+      "range": {
+        "startLine": 1329,
+        "startChar": 4,
+        "endLine": 1334,
+        "endChar": 5
+      },
+      "revId": "aeeb809942f560bf41357da59000c3555dde41af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "d60872c4_2d1f5fff",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1518,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-07T19:10:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5d733a1_db0ab710",
+      "range": {
+        "startLine": 1517,
+        "startChar": 8,
+        "endLine": 1518,
+        "endChar": 65
+      },
+      "revId": "aeeb809942f560bf41357da59000c3555dde41af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3826a136_10a54c6f",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 7
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "9fd34fef_69d0071b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-07T19:10:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3826a136_10a54c6f",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 2
+      },
+      "revId": "aeeb809942f560bf41357da59000c3555dde41af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d4d3a7b8_5629dc9b",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
         "patchSetId": 7
@@ -114,6 +210,30 @@
       "revId": "aeeb809942f560bf41357da59000c3555dde41af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fdca4986_6f93d5fd",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-07T19:10:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4d3a7b8_5629dc9b",
+      "range": {
+        "startLine": 309,
+        "startChar": 40,
+        "endLine": 309,
+        "endChar": 64
+      },
+      "revId": "aeeb809942f560bf41357da59000c3555dde41af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
