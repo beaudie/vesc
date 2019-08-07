@@ -117,6 +117,30 @@
       "revId": "2f111d7b7176ff5874e50e21e1ffe67710c1b2a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b435e9d5_f815215a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-07T22:23:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "16515033_13704abb",
+      "range": {
+        "startLine": 309,
+        "startChar": 4,
+        "endLine": 309,
+        "endChar": 98
+      },
+      "revId": "2f111d7b7176ff5874e50e21e1ffe67710c1b2a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
