@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ed0f17e_b799c581",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-07T23:42:51Z",
+      "side": 1,
+      "message": "Does using these 2 functions work instead of this macro?\n\ntemplate \u003ctypename T\u003e\nANGLE_INLINE T FromGL(GLuint handle)\n{\n    return {handle};\n}\n\ntemplate \u003ctypename T\u003e\nANGLE_INLINE T FromGL(const GLuint *handle)\n{\n    return reinterpret_cast\u003cT\u003e(handle);\n}\n\nBased on how these are defined, the code calling them should be able to stay the same.",
+      "revId": "54e5323177a67c2b01fb8d87ca22ca19ab0d0057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
