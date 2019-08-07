@@ -231,6 +231,7 @@ void TransformFeedbackVk::onBeginEnd(const gl::Context *context)
     FramebufferVk *framebufferVk       = vk::GetImpl(context->getState().getDrawFramebuffer());
     vk::FramebufferHelper *framebuffer = framebufferVk->getFramebuffer();
 
+    framebuffer->updateQueueSerial(contextVk->getCurrentQueueSerial());
     if (framebuffer->hasStartedRenderPass())
     {
         framebuffer->finishCurrentCommands(contextVk);
