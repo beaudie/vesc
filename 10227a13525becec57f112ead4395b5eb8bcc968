@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "2276c3ec_99de6deb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2138,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-07T16:48:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "861d9637_1419ab71",
+      "range": {
+        "startLine": 2138,
+        "startChar": 29,
+        "endLine": 2138,
+        "endChar": 30
+      },
+      "revId": "10227a13525becec57f112ead4395b5eb8bcc968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68083f01_6a62e823",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 9
@@ -59,6 +83,30 @@
       "writtenOn": "2019-08-07T16:19:05Z",
       "side": 1,
       "message": "It feels like `vkFormat.textureLoadFunctions(type)` above should be able to return this function. The load functions are not generic at all. There\u0027s a json file that tells what function to use for each type, perhaps all you need is update that file.",
+      "range": {
+        "startLine": 2178,
+        "startChar": 15,
+        "endLine": 2178,
+        "endChar": 34
+      },
+      "revId": "10227a13525becec57f112ead4395b5eb8bcc968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0319858_63eed46a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2178,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-07T16:48:14Z",
+      "side": 1,
+      "message": "Those are generic load functions, used by all backends. For dual-type formats like DEPTH24_STENCIL8 they only know how to copy the depth component and Vulkan\u0027s requirements don\u0027t match the generic expectations. For DEPTH32F_STENCIL8 the generic copy function doesn\u0027t do what Vulkan needs so we have to call a new one for this need.",
+      "parentUuid": "68083f01_6a62e823",
       "range": {
         "startLine": 2178,
         "startChar": 15,
