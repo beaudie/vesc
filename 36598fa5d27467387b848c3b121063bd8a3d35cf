@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "525ceb1a_244b5e26",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2480,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T18:22:41Z",
+      "side": 1,
+      "message": "this is not secure. The serials are used as a hash index. If you use the highest you should be able to trigger an even more tricky bug.\n\nSay you have Textures with Serials 0 and 1. And a samplers with Serial 2.\n\nSay you first render a few times. You end up with one Texture 1 and Sampler 2. The TextureDescriptorIndex will have a stored Serial of 2.\n\nNow you flip to Texture 0. You still have the same TexturesDescriptorDesc because the max of 0 and 2 is 2, the sampler serial. You don\u0027t update the descriptor set and have incorrect rendering.\n\nUnfortunately I don\u0027t see any way around storing both the Texture and Sampler serial.",
+      "range": {
+        "startLine": 2479,
+        "startChar": 8,
+        "endLine": 2480,
+        "endChar": 91
+      },
+      "revId": "36598fa5d27467387b848c3b121063bd8a3d35cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
