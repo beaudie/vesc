@@ -84,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "57e7314f_3e24cfe3",
+        "filename": "src/compiler/translator/TranslatorVulkan.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-07T15:07:30Z",
+      "side": 1,
+      "message": "Ended up reverting the change that tries to see if there are any cube samplers. If the sampler is defined in a struct, it\u0027s not so easy to detect that the way things are at the moment.",
+      "parentUuid": "9b18e1f9_93f51d1d",
+      "revId": "a27e19cb1a79cf64d38ada08b7a0c56dc44fdce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4f8d50d3_8e450a85",
         "filename": "src/compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.cpp",
         "patchSetId": 15
