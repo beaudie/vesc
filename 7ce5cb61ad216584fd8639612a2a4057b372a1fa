@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "81d3186c_2675f5e2",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-07T17:56:51Z",
+      "side": 1,
+      "message": "Can you grab the translated shader code for this test so we can see what the translator is doing?",
+      "revId": "7ce5cb61ad216584fd8639612a2a4057b372a1fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "12f41ffd_64e637e8",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-07T17:56:51Z",
+      "side": 1,
+      "message": "Can you make this batch a loop so the first level isn\u0027t always accessed by constants?\nSomething like:\n\n    for (int i \u003d 1; i \u003c 3; ++i)\n    {\n        f(ac[i]);\n    }",
+      "range": {
+        "startLine": 343,
+        "startChar": 0,
+        "endLine": 344,
+        "endChar": 13
+      },
+      "revId": "7ce5cb61ad216584fd8639612a2a4057b372a1fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "71da3ec7_299d2095",
         "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
         "patchSetId": 4
