@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0fbc9263_e0d9a64b",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T19:37:40Z",
+      "side": 1,
+      "message": "nit: data members last. See style guide:\n\nhttps://google.github.io/styleguide/cppguide.html#Declaration_Order\n\nAlso call this mName.",
+      "range": {
+        "startLine": 118,
+        "startChar": 4,
+        "endLine": 118,
+        "endChar": 14
+      },
+      "revId": "bd9505b935845ef7a2d1a5d42c6653de0d3f1134",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
