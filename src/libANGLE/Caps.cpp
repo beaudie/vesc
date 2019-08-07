@@ -233,17 +233,23 @@ static bool DetermineBGRA8TextureSupport(const TextureCapsMap &textureCaps)
     return GetFormatSupport(textureCaps, requiredFormats, true, true, true, true);
 }
 
-// Checks for GL_OES_color_buffer_half_float support
-static bool DetermineColorBufferHalfFloatSupport(const TextureCapsMap &textureCaps)
+// Checks for GL_EXT_color_buffer_half_float support
+static bool DetermineColorBufferHalfFloatSupport(const TextureCapsMap &textureCaps, bool requireRG)
 {
-    // EXT_color_buffer_half_float issue #2 states that an implementation doesn't need to support
-    // rendering to any of the formats but is expected to be able to render to at least one. WebGL
-    // requires that at least RGBA16F is renderable so we make the same requirement.
-    constexpr GLenum requiredFormats[] = {
-        GL_RGBA16F,
-    };
+    // The specification for this extension does not require that OES_texture_float be exposed,
+    // however this extension would have no effect if it is not exposed. We therefore treat this
+    // extension as depending on OES_texture_float
+    // WebGL makes this dependency explicit as well
 
-    return GetFormatSupport(textureCaps, requiredFormats, false, false, true, true);
+    constexpr GLenum requiredFormatsRGBA[] = {GL_RGB16F, GL_RGBA16F};
+    constexpr GLenum requiredFormatsRG[]   = {GL_R16F, GL_RG16F};
+
+    if (requireRG && !GetFormatSupport(textureCaps, requiredFormatsRG, false, false, true, true))
+    {
+        return false;
+    }
+
+    return GetFormatSupport(textureCaps, requiredFormatsRGBA, false, false, true, true);
 }
 
 // Checks for GL_OES_texture_half_float support
@@ -257,11 +263,20 @@ static bool DetermineHalfFloatTextureSupport(const TextureCapsMap &textureCaps)
 }
 
 // Checks for GL_OES_texture_half_float_linear support
-static bool DetermineHalfFloatTextureFilteringSupport(const TextureCapsMap &textureCaps)
+static bool DetermineHalfFloatTextureFilteringSupport(const TextureCapsMap &textureCaps,
+                                                      bool checkLegacyFormats)
 {
-    constexpr GLenum requiredFormats[] = {
-        GL_RGBA16F, GL_RGB16F, GL_LUMINANCE_ALPHA16F_EXT, GL_LUMINANCE16F_EXT, GL_ALPHA16F_EXT,
-    };
+    constexpr GLenum requiredFormats[] = {GL_RGBA16F, GL_RGB16F};
+    // If GL_OES_texture_half_float is present, this extension must also support legacy formats
+    // introduced by that extension
+    constexpr GLenum requiredFormatsES2[] = {GL_LUMINANCE_ALPHA16F_EXT, GL_LUMINANCE16F_EXT,
+                                             GL_ALPHA16F_EXT};
+
+    if (checkLegacyFormats &&
+        !GetFormatSupport(textureCaps, requiredFormatsES2, false, true, false, false))
+    {
+        return false;
+    }
 
     return GetFormatSupport(textureCaps, requiredFormats, false, true, false, false);
 }
@@ -277,11 +292,26 @@ static bool DetermineFloatTextureSupport(const TextureCapsMap &textureCaps)
 }
 
 // Checks for GL_OES_texture_float_linear support
-static bool DetermineFloatTextureFilteringSupport(const TextureCapsMap &textureCaps)
+static bool DetermineFloatTextureFilteringSupport(const TextureCapsMap &textureCaps,
+                                                  bool checkLegacyFormats)
 {
     constexpr GLenum requiredFormats[] = {
-        GL_RGBA32F, GL_RGB32F, GL_LUMINANCE_ALPHA32F_EXT, GL_LUMINANCE32F_EXT, GL_ALPHA32F_EXT,
+        GL_RGBA32F,
+        GL_RGB32F,
     };
+    // If GL_OES_texture_float is present, this extension must also support legacy formats
+    // introduced by that extension
+    constexpr GLenum requiredFormatsES2[] = {
+        GL_LUMINANCE_ALPHA32F_EXT,
+        GL_LUMINANCE32F_EXT,
+        GL_ALPHA32F_EXT,
+    };
+
+    if (checkLegacyFormats &&
+        !GetFormatSupport(textureCaps, requiredFormatsES2, false, true, false, false))
+    {
+        return false;
+    }
 
     return GetFormatSupport(textureCaps, requiredFormats, false, true, false, false);
 }
@@ -664,14 +694,21 @@ void Extensions::setTextureExtensionSupport(const TextureCapsMap &textureCaps)
     textureFormatBGRA8888 = DetermineBGRA8TextureSupport(textureCaps);
     textureHalfFloat      = DetermineHalfFloatTextureSupport(textureCaps);
     textureHalfFloatLinear =
-        textureHalfFloat && DetermineHalfFloatTextureFilteringSupport(textureCaps);
-    textureFloat           = DetermineFloatTextureSupport(textureCaps);
-    textureFloatLinear     = textureFloat && DetermineFloatTextureFilteringSupport(textureCaps);
-    textureRG              = DetermineRGTextureSupport(textureCaps, textureHalfFloat, textureFloat);
-    colorBufferHalfFloat   = textureHalfFloat && DetermineColorBufferHalfFloatSupport(textureCaps);
-    textureCompressionDXT1 = DetermineDXT1TextureSupport(textureCaps);
-    textureCompressionDXT3 = DetermineDXT3TextureSupport(textureCaps);
-    textureCompressionDXT5 = DetermineDXT5TextureSupport(textureCaps);
+        DetermineHalfFloatTextureFilteringSupport(textureCaps, textureHalfFloat);
+    textureFloat       = DetermineFloatTextureSupport(textureCaps);
+    textureFloatLinear = DetermineFloatTextureFilteringSupport(textureCaps, textureFloat);
+    textureRG          = DetermineRGTextureSupport(textureCaps, textureHalfFloat, textureFloat);
+    {
+        constexpr bool kIgnoreRG  = false;
+        constexpr bool kRequireRG = true;
+        colorBufferHalfFloat =
+            textureFloat && DetermineColorBufferHalfFloatSupport(textureCaps, kIgnoreRG);
+        colorBufferHalfFloatRG =
+            textureFloat && DetermineColorBufferHalfFloatSupport(textureCaps, kRequireRG);
+    }
+    textureCompressionDXT1       = DetermineDXT1TextureSupport(textureCaps);
+    textureCompressionDXT3       = DetermineDXT3TextureSupport(textureCaps);
+    textureCompressionDXT5       = DetermineDXT5TextureSupport(textureCaps);
     textureCompressionS3TCsRGB   = DetermineS3TCsRGBTextureSupport(textureCaps);
     textureCompressionASTCLDRKHR = DetermineASTCLDRTextureSupport(textureCaps);
     textureCompressionASTCOES    = DetermineASTCOESTExtureSupport(textureCaps);
