@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "394f3cf5_427f81b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-07T17:04:25Z",
+      "side": 1,
+      "message": "Same comment here. The Bug: tag makes it a link, and the anglebug.com/NNNN variant makes it easy to copy-paste.",
+      "range": {
+        "startLine": 13,
+        "startChar": 11,
+        "endLine": 13,
+        "endChar": 28
+      },
+      "revId": "ae93f3611a8c838a892e21a4a58f0be29ef9ab41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f703192f_a2d0fb64",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1264,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-07T17:04:25Z",
+      "side": 1,
+      "message": "(Weird formatting)",
+      "range": {
+        "startLine": 1264,
+        "startChar": 36,
+        "endLine": 1264,
+        "endChar": 40
+      },
+      "revId": "ae93f3611a8c838a892e21a4a58f0be29ef9ab41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "65a71257_28f2ebb1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1317,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-07T17:04:25Z",
+      "side": 1,
+      "message": "Make a constexpr constant in the previous line to simplify this `if`.\n\n---\n\nI noticed this in a few places, you can add a global (anonymous namespace) function that takes the aspectFlags and returns this, something like:\n\nbool HasBothDepthAndStencilAspects(VkImageAspectFlags aspectFlags)\n{\n    constexpr VkImageAspectFlags kDepthStencilAspects \u003d ...\n    return (aspectFlags \u0026 kDepthStencilAspects) \u003d\u003d kDepthStencilAspects;\n}",
+      "range": {
+        "startLine": 1317,
+        "startChar": 24,
+        "endLine": 1317,
+        "endChar": 79
+      },
+      "revId": "ae93f3611a8c838a892e21a4a58f0be29ef9ab41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a088425_d74dd1c3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1319,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-07T17:04:25Z",
+      "side": 1,
+      "message": "I see this in a few places, a helper `isStencilMode()` could be introduced.",
+      "range": {
+        "startLine": 1319,
+        "startChar": 8,
+        "endLine": 1319,
+        "endChar": 52
+      },
+      "revId": "ae93f3611a8c838a892e21a4a58f0be29ef9ab41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9f279ae_e23f9605",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-07T17:04:25Z",
+      "side": 1,
+      "message": "You can call this `initImageViewImpl` and make it private. That makes it clear how these functions relate.",
+      "range": {
+        "startLine": 1510,
+        "startChar": 18,
+        "endLine": 1510,
+        "endChar": 34
+      },
+      "revId": "ae93f3611a8c838a892e21a4a58f0be29ef9ab41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f193f9cb_f9f2c787",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-07T17:04:25Z",
+      "side": 1,
+      "message": "You can add a release method to TextureVkViews to avoid duplication.",
+      "revId": "ae93f3611a8c838a892e21a4a58f0be29ef9ab41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57bdcc9d_ec380237",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-07T17:04:25Z",
+      "side": 1,
+      "message": "mDefaultViews and mStencilViews.",
+      "range": {
+        "startLine": 322,
+        "startChar": 0,
+        "endLine": 323,
+        "endChar": 32
+      },
+      "revId": "ae93f3611a8c838a892e21a4a58f0be29ef9ab41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
