@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e854db86_7b002002",
+        "filename": "src/libANGLE/Device.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-08-07T21:33:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "caf7bbb1_c5476459",
+      "range": {
+        "startLine": 44,
+        "startChar": 11,
+        "endLine": 44,
+        "endChar": 20
+      },
+      "revId": "a9ed63fe1f73c340746849162984f6b689e18c92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e03535c6_7748b301",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "33d06460_1b18604b",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-08-07T21:33:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e03535c6_7748b301",
+      "range": {
+        "startLine": 94,
+        "startChar": 11,
+        "endLine": 94,
+        "endChar": 27
+      },
+      "revId": "a9ed63fe1f73c340746849162984f6b689e18c92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "38183532_edea258c",
         "filename": "util/osx/OSXWindow.mm",
         "patchSetId": 7
@@ -62,6 +110,24 @@
       "revId": "a9ed63fe1f73c340746849162984f6b689e18c92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ecb469b9_d12fdbc9",
+        "filename": "util/osx/OSXWindow.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117350
+      },
+      "writtenOn": "2019-08-07T21:33:18Z",
+      "side": 1,
+      "message": "OK, instead of this I\u0027ve removed the extra_warnings config from the angle_utils project.",
+      "parentUuid": "38183532_edea258c",
+      "revId": "a9ed63fe1f73c340746849162984f6b689e18c92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
