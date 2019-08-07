@@ -2905,17 +2905,6 @@ bool ContextVk::shouldEmulateSeamfulCubeMapSampling() const
         return false;
     }
 
-    constexpr VkSubgroupFeatureFlags kSeamfulCubeMapSubgroupOperations =
-        VK_SUBGROUP_FEATURE_BASIC_BIT | VK_SUBGROUP_FEATURE_BALLOT_BIT |
-        VK_SUBGROUP_FEATURE_QUAD_BIT;
-    const VkSubgroupFeatureFlags deviceSupportedOperations =
-        mRenderer->getPhysicalDeviceSubgroupProperties().supportedOperations;
-    bool hasSeamfulCubeMapSubgroupOperations =
-        (deviceSupportedOperations & kSeamfulCubeMapSubgroupOperations) ==
-        kSeamfulCubeMapSubgroupOperations;
-
-    // Only enable seamful cube map emulation if the necessary subgroup operations are supported.
-    // Without them, we cannot remove derivative-related artifacts caused by helper invocations.
-    return hasSeamfulCubeMapSubgroupOperations;
+    return true;
 }
 }  // namespace rx

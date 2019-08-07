@@ -1276,7 +1276,7 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
 
     if (IsWindows() && IsAMD(mPhysicalDeviceProperties.vendorID))
     {
-        mFeatures.disallowSeamfulCubeMapEmulation.enabled = true;
+        // mFeatures.disallowSeamfulCubeMapEmulation.enabled = true;
     }
 
     if (IsAndroid() && IsQualcomm(mPhysicalDeviceProperties.vendorID))
