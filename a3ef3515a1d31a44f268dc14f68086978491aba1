@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89059631_47b26842",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-07T14:13:40Z",
+      "side": 1,
+      "message": "Please limit these to the scope they are used in",
+      "revId": "a3ef3515a1d31a44f268dc14f68086978491aba1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
