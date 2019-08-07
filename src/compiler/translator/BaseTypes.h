@@ -113,19 +113,32 @@ enum TBasicType
     EbtLast = EbtInterfaceBlock
 };
 
-constexpr char GetBasicMangledName(TBasicType t)
+class TBasicMangledName
 {
-    if (t > EbtLastSimpleType)
+    char p[2];
+
+  public:
+    constexpr TBasicMangledName(TBasicType t) : p{'\0', '\0'}
     {
-        return '{';
+        if (t > EbtLastSimpleType)
+        {
+            p[0] = '{';
+            p[1] = '\0';
+        }
+        else if (t < 26)
+        {
+            p[0] = '0';
+            p[1] = static_cast<char>('A' + t);
+        }
+        else if (t < 52)
+        {
+            p[0] = '0';
+            p[1] = static_cast<char>('a' - 26 + t);
+        }
     }
-    static_assert(EbtLastSimpleType < 52, "We only use alphabetic characters for mangled names");
-    if (t < 26)
-    {
-        return static_cast<char>('A' + t);
-    }
-    return static_cast<char>('a' - 26 + t);
-}
+
+    constexpr char *getName() { return p; }
+};
 
 const char *getBasicString(TBasicType t);
 
