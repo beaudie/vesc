@@ -140,6 +140,30 @@
       "revId": "10227a13525becec57f112ead4395b5eb8bcc968",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d04da574_8f1f0c3e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2178,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T17:01:42Z",
+      "side": 1,
+      "message": "Why does the D24 one work and not D32F?",
+      "parentUuid": "6a229932_820b45b9",
+      "range": {
+        "startLine": 2178,
+        "startChar": 15,
+        "endLine": 2178,
+        "endChar": 34
+      },
+      "revId": "10227a13525becec57f112ead4395b5eb8bcc968",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
