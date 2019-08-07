@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b16d97a7_8230153d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1263,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-07T18:24:47Z",
+      "side": 1,
+      "message": "nit: initialize these to the default and then modify them for the stencil mode case instead of two ternary operations.  Also please add a comment about why we\u0027re doing it.",
+      "range": {
+        "startLine": 1260,
+        "startChar": 4,
+        "endLine": 1263,
+        "endChar": 99
+      },
+      "revId": "aeeb809942f560bf41357da59000c3555dde41af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b6b1ef2_7f2d9940",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-07T18:24:47Z",
+      "side": 1,
+      "message": "You could add a helper method:\n\n   const TextureVkViews *getTextureViews(VkImageAspectFlags aspectFlags) const\n\nwhich would save a few lines and duplicated code below.",
+      "range": {
+        "startLine": 1329,
+        "startChar": 4,
+        "endLine": 1334,
+        "endChar": 5
+      },
+      "revId": "aeeb809942f560bf41357da59000c3555dde41af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5d733a1_db0ab710",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1518,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-07T18:24:47Z",
+      "side": 1,
+      "message": "HasBothDepthAndStencilAspects",
+      "range": {
+        "startLine": 1517,
+        "startChar": 8,
+        "endLine": 1518,
+        "endChar": 65
+      },
+      "revId": "aeeb809942f560bf41357da59000c3555dde41af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3826a136_10a54c6f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-07T18:24:47Z",
+      "side": 1,
+      "message": "This can be a private struct in TextureVk.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 2
+      },
+      "revId": "aeeb809942f560bf41357da59000c3555dde41af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d4d3a7b8_5629dc9b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-07T18:24:47Z",
+      "side": 1,
+      "message": "Could we use mState.getDepthStencilTextureMode() instead and remove the mDepthStencilTextureMode member?",
+      "range": {
+        "startLine": 309,
+        "startChar": 40,
+        "endLine": 309,
+        "endChar": 64
+      },
+      "revId": "aeeb809942f560bf41357da59000c3555dde41af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
