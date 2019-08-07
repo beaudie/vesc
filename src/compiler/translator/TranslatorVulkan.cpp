@@ -645,11 +645,6 @@ void TranslatorVulkan::translate(TIntermBlock *root,
 
     sink << "#version 450 core\n";
 
-    if (compileOptions & SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING)
-    {
-        sink << "#extension GL_KHR_shader_subgroup_quad : require\n";
-    }
-
     // Write out default uniforms into a uniform block assigned to a specific set/binding.
     int defaultUniformCount        = 0;
     int structTypesUsedForUniforms = 0;

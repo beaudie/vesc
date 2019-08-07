@@ -306,8 +306,7 @@ angle::Result ProgramVk::ShaderInfo::initShaders(ContextVk *contextVk,
 
     gl::ShaderMap<std::vector<uint32_t>> shaderCodes;
     ANGLE_TRY(GlslangWrapper::GetShaderCode(
-        contextVk, contextVk->getCaps(), enableLineRasterEmulation,
-        contextVk->emulateSeamfulCubeMapSampling(), shaderSources, &shaderCodes));
+        contextVk, contextVk->getCaps(), enableLineRasterEmulation, shaderSources, &shaderCodes));
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
