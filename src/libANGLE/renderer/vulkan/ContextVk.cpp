@@ -127,7 +127,7 @@ void InitializeSubmitInfo(VkSubmitInfo *submitInfo,
                                         VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT);
     }
 
-    submitInfo->waitSemaphoreCount = waitSemaphores.size();
+    submitInfo->waitSemaphoreCount = static_cast<uint32_t>(waitSemaphores.size());
     submitInfo->pWaitSemaphores    = waitSemaphores.data();
     submitInfo->pWaitDstStageMask  = waitSemaphoreStageMasks->data();
 
@@ -1319,7 +1319,7 @@ angle::Result ContextVk::drawArrays(const gl::Context *context,
         size_t numIndices;
         ANGLE_TRY(setupLineLoopDraw(context, mode, first, count, gl::DrawElementsType::InvalidEnum,
                                     nullptr, &commandBuffer, &numIndices));
-        vk::LineLoopHelper::Draw(numIndices, commandBuffer);
+        vk::LineLoopHelper::Draw(static_cast<uint32_t>(numIndices), commandBuffer);
     }
     else
     {
@@ -1363,7 +1363,7 @@ angle::Result ContextVk::drawElements(const gl::Context *context,
         size_t indexCount;
         ANGLE_TRY(
             setupLineLoopDraw(context, mode, 0, count, type, indices, &commandBuffer, &indexCount));
-        vk::LineLoopHelper::Draw(indexCount, commandBuffer);
+        vk::LineLoopHelper::Draw(static_cast<uint32_t>(indexCount), commandBuffer);
     }
     else
     {
@@ -2436,7 +2436,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context,
     for (size_t textureUnit : activeTextures)
     {
         gl::Texture *texture        = textures[textureUnit];
-        gl::Sampler *sampler        = mState.getSampler(textureUnit);
+        gl::Sampler *sampler        = mState.getSampler(static_cast<uint32_t>(textureUnit));
         gl::TextureType textureType = textureTypes[textureUnit];
 
         // Null textures represent incomplete textures.

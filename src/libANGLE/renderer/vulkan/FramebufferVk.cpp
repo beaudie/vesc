@@ -578,14 +578,14 @@ angle::Result FramebufferVk::blitWithCommand(ContextVk *contextVk,
 
     VkImageBlit blit                   = {};
     blit.srcSubresource.aspectMask     = blitAspectMask;
-    blit.srcSubresource.mipLevel       = readRenderTarget->getLevelIndex();
-    blit.srcSubresource.baseArrayLayer = readRenderTarget->getLayerIndex();
+    blit.srcSubresource.mipLevel       = static_cast<uint32_t>(readRenderTarget->getLevelIndex());
+    blit.srcSubresource.baseArrayLayer = static_cast<uint32_t>(readRenderTarget->getLayerIndex());
     blit.srcSubresource.layerCount     = 1;
     blit.srcOffsets[0]                 = {sourceArea.x0(), sourceArea.y0(), 0};
     blit.srcOffsets[1]                 = {sourceArea.x1(), sourceArea.y1(), 1};
     blit.dstSubresource.aspectMask     = blitAspectMask;
-    blit.dstSubresource.mipLevel       = drawRenderTarget->getLevelIndex();
-    blit.dstSubresource.baseArrayLayer = drawRenderTarget->getLayerIndex();
+    blit.dstSubresource.mipLevel       = static_cast<uint32_t>(drawRenderTarget->getLevelIndex());
+    blit.dstSubresource.baseArrayLayer = static_cast<uint32_t>(drawRenderTarget->getLayerIndex());
     blit.dstSubresource.layerCount     = 1;
     blit.dstOffsets[0]                 = {destArea.x0(), destArea.y0(), 0};
     blit.dstOffsets[1]                 = {destArea.x1(), destArea.y1(), 1};
@@ -760,7 +760,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     if (blitColorBuffer)
     {
         RenderTargetVk *readRenderTarget = srcFramebufferVk->getColorReadRenderTarget();
-        params.srcLayer                  = readRenderTarget->getLayerIndex();
+        params.srcLayer                  = static_cast<uint32_t>(readRenderTarget->getLayerIndex());
 
         // Multisampled images are not allowed to have mips.
         ASSERT(!isResolve || readRenderTarget->getLevelIndex() == 0);
@@ -812,7 +812,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     {
         RenderTargetVk *readRenderTarget = srcFramebufferVk->getDepthStencilRenderTarget();
         RenderTargetVk *drawRenderTarget = mRenderTargetCache.getDepthStencil();
-        params.srcLayer                  = readRenderTarget->getLayerIndex();
+        params.srcLayer                  = static_cast<uint32_t>(readRenderTarget->getLayerIndex());
 
         // Multisampled images are not allowed to have mips.
         ASSERT(!isResolve || readRenderTarget->getLevelIndex() == 0);
@@ -838,8 +838,8 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
             vk::Scoped<vk::ImageView> stencilView(contextVk->getDevice());
 
             vk::ImageHelper *depthStencilImage = &readRenderTarget->getImage();
-            uint32_t levelIndex                = readRenderTarget->getLevelIndex();
-            uint32_t layerIndex                = readRenderTarget->getLayerIndex();
+            uint32_t levelIndex         = static_cast<uint32_t>(readRenderTarget->getLevelIndex());
+            uint32_t layerIndex         = static_cast<uint32_t>(readRenderTarget->getLayerIndex());
             gl::TextureType textureType = vk::Get2DTextureType(depthStencilImage->getLayerCount(),
                                                                depthStencilImage->getSamples());
 
@@ -932,8 +932,10 @@ angle::Result FramebufferVk::resolveColorWithCommand(ContextVk *contextVk,
         drawImage->changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::TransferDst,
                                 commandBuffer);
 
-        resolveRegion.dstSubresource.mipLevel       = drawRenderTarget->getLevelIndex();
-        resolveRegion.dstSubresource.baseArrayLayer = drawRenderTarget->getLayerIndex();
+        resolveRegion.dstSubresource.mipLevel =
+            static_cast<uint32_t>(drawRenderTarget->getLevelIndex());
+        resolveRegion.dstSubresource.baseArrayLayer =
+            static_cast<uint32_t>(drawRenderTarget->getLayerIndex());
 
         srcImage->resolve(&drawRenderTarget->getImage(), resolveRegion, commandBuffer);
     }
@@ -1322,7 +1324,7 @@ angle::Result FramebufferVk::clearWithDraw(ContextVk *contextVk,
         ASSERT(colorRenderTarget);
 
         params.colorFormat            = &colorRenderTarget->getImage().getFormat().imageFormat();
-        params.colorAttachmentIndexGL = colorIndexGL;
+        params.colorAttachmentIndexGL = static_cast<uint32_t>(colorIndexGL);
         params.colorMaskFlags         = colorMaskFlags;
         if (mEmulatedAlphaAttachmentMask[colorIndexGL])
         {
@@ -1436,8 +1438,8 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
         readFormat = &GetDepthStencilImageToBufferFormat(*readFormat, copyAspectFlags);
     }
 
-    size_t level         = renderTarget->getLevelIndex();
-    size_t layer         = renderTarget->getLayerIndex();
+    uint32_t level       = static_cast<uint32_t>(renderTarget->getLevelIndex());
+    uint32_t layer       = static_cast<uint32_t>(renderTarget->getLayerIndex());
     VkOffset3D srcOffset = {area.x, area.y, 0};
 
     VkImageSubresourceLayers srcSubresource = {};
