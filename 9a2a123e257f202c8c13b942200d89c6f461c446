@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "580cea6b_92da2c2e",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T17:35:39Z",
+      "side": 1,
+      "message": "nit: desktop GLSL types - but can you merge these with the other blocks when possible?",
+      "range": {
+        "startLine": 107,
+        "startChar": 6,
+        "endLine": 107,
+        "endChar": 17
+      },
+      "revId": "9a2a123e257f202c8c13b942200d89c6f461c446",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25dc12c1_bf5cb839",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T17:35:39Z",
+      "side": 1,
+      "message": "discussed offline - can we replace this with using more ascii characters?",
+      "range": {
+        "startLine": 179,
+        "startChar": 55,
+        "endLine": 179,
+        "endChar": 68
+      },
+      "revId": "9a2a123e257f202c8c13b942200d89c6f461c446",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a452162_636aa5d2",
+        "filename": "src/compiler/translator/Operator.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T17:35:39Z",
+      "side": 1,
+      "message": "nit: desktop GLSL functions",
+      "range": {
+        "startLine": 258,
+        "startChar": 7,
+        "endLine": 258,
+        "endChar": 11
+      },
+      "revId": "9a2a123e257f202c8c13b942200d89c6f461c446",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93590280_77ff3294",
+        "filename": "src/compiler/translator/builtin_function_declarations.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-07T17:35:39Z",
+      "side": 1,
+      "message": "do you recall what it was in the generator that made you want to interleave the two spec types?",
+      "range": {
+        "startLine": 75,
+        "startChar": 16,
+        "endLine": 75,
+        "endChar": 65
+      },
+      "revId": "9a2a123e257f202c8c13b942200d89c6f461c446",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
