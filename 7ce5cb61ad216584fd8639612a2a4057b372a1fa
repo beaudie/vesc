@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ba95d281_3065178e",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-08T14:39:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf902a77_c375607f",
+      "range": {
+        "startLine": 442,
+        "startChar": 15,
+        "endLine": 442,
+        "endChar": 27
+      },
+      "revId": "7ce5cb61ad216584fd8639612a2a4057b372a1fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "19fe7463_0766a68d",
         "filename": "src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "35370469_862a455a",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-08T14:39:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19fe7463_0766a68d",
+      "range": {
+        "startLine": 493,
+        "startChar": 55,
+        "endLine": 493,
+        "endChar": 97
+      },
+      "revId": "7ce5cb61ad216584fd8639612a2a4057b372a1fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81d3186c_2675f5e2",
         "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
         "patchSetId": 4
@@ -59,6 +107,24 @@
       "writtenOn": "2019-08-07T17:56:51Z",
       "side": 1,
       "message": "Can you grab the translated shader code for this test so we can see what the translator is doing?",
+      "revId": "7ce5cb61ad216584fd8639612a2a4057b372a1fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ac74435_d2adda70",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-08T14:39:38Z",
+      "side": 1,
+      "message": "Grabbed the translation from the expanded test. Bleed your eyes at your own risk! :D\n\n// GLSL\n//\n// #version 310 es\n// layout(local_size_x\u003d1, local_size_y\u003d1, local_size_z\u003d1) in;\n// layout(binding \u003d 0) uniform atomic_uint ac[7][5][3];\n// \n// void f0(in atomic_uint ac)\n// {\n//     atomicCounterIncrement(ac);\n// }\n// \n// void f1(in atomic_uint ac[3])\n// {\n//     atomicCounterIncrement(ac[0]);\n//     f0(ac[1]);\n//     int index \u003d 2;\n//     f0(ac[index]);\n// }\n// \n// void f2(in atomic_uint ac[5][3])\n// {\n//     // Increment all in ac[0], ac[1] and ac[2]\n//     for (int i \u003d 0; i \u003c 3; ++i)\n//     {\n//         for (int j \u003d 0; j \u003c 2; ++j)\n//         {\n//             f0(ac[i][j]);\n//         }\n//         f0(ac[i][2]);\n//     }\n// \n//     // Increment all in ac[3]\n//     f1(ac[3]);\n// \n//     // Increment all in ac[4]\n//     for (int i \u003d 0; i \u003c 2; ++i)\n//     {\n//         atomicCounterIncrement(ac[4][i]);\n//     }\n//     f0(ac[4][2]);\n// }\n// \n// void f3(in atomic_uint ac[7][5][3])\n// {\n//     // Increment all in ac[0], ac[1], ac[2] and ac[3]\n//     f2(ac[0]);\n//     for (int i \u003d 1; i \u003c 4; ++i)\n//     {\n//         f2(ac[i]);\n//     }\n// \n//     // Increment all in ac[5][0], ac[5][1], ac[5][2] and ac[5][3]\n//     for (int i \u003d 0; i \u003c 4; ++i)\n//     {\n//         f1(ac[5][i]);\n//     }\n// \n//     // Increment all in ac[5][4][0], ac[5][4][1] and ac[5][4][2]\n//     f0(ac[5][4][0]);\n//     for (int i \u003d 1; i \u003c 3; ++i)\n//     {\n//         f0(ac[5][4][i]);\n//     }\n// \n//     // Increment all in ac[6]\n//     for (int i \u003d 0; i \u003c 5; ++i)\n//     {\n//         for (int j \u003d 0; j \u003c 2; ++j)\n//         {\n//             atomicCounterIncrement(ac[6][i][j]);\n//         }\n//         atomicCounterIncrement(ac[6][i][2]);\n//     }\n// }\n// \n// void main()\n// {\n//     // Increment all in ac except ac[4]\n//     f3(ac);\n// \n//     // Increment all in ac[4]\n//     f2(ac[4]);\n// }\n\n\n#version 450 core\nlayout (local_size_x\u003d1, local_size_y\u003d1, local_size_z\u003d1) in;\nstruct ANGLE_atomic_uint {\n    uint binding;\n    uint arrayIndex;\n};\nconst ANGLE_atomic_uint _uac \u003d ANGLE_atomic_uint(0u, 0u);\nlayout(set \u003d 3, binding \u003d 0)uniform ANGLEUniformBlock{\n    uvec4 acbBufferOffsets;\n} ANGLEUniforms;\nlayout(set \u003d 2, binding \u003d 0)buffer coherent  ANGLEAtomicCounters{\n    uint counters[];\n} atomicCounters[8];\nvoid _uf0(ANGLE_atomic_uint _uac){\n    atomicAdd(atomicCounters[_uac.binding].counters[(_uac.arrayIndex + ((ANGLEUniforms.acbBufferOffsets[(_uac.binding / 4u)] \u003e\u003e ((_uac.binding % 4u) * 8u)) \u0026 255u))], 1u);\n}\nvoid _uf1(ANGLE_atomic_uint _uac){\n    atomicAdd(atomicCounters[_uac.binding].counters[(_uac.arrayIndex + ((ANGLEUniforms.acbBufferOffsets[(_uac.binding / 4u)] \u003e\u003e ((_uac.binding % 4u) * 8u)) \u0026 255u))], 1u);\n    ANGLE_atomic_uint s429 \u003d _uac;\n    (s429.arrayIndex +\u003d 1);\n    _uf0(s429);\n    int _uindex \u003d 2;\n    ANGLE_atomic_uint s42a \u003d _uac;\n    (s42a.arrayIndex +\u003d _uindex);\n    _uf0(s42a);\n}\nvoid _uf2(ANGLE_atomic_uint _uac){\n    for (int _ui \u003d 0; (_ui \u003c 3); (++_ui))\n    {\n        for (int _uj \u003d 0; (_uj \u003c 2); (++_uj))\n        {\n            ANGLE_atomic_uint s42d \u003d _uac;\n            (s42d.arrayIndex +\u003d ((_ui * 3u) + _uj));\n            _uf0(s42d);\n        }\n        ANGLE_atomic_uint s42e \u003d _uac;\n        (s42e.arrayIndex +\u003d ((_ui * 3u) + 2));\n        _uf0(s42e);\n    }\n    ANGLE_atomic_uint s42f \u003d _uac;\n    (s42f.arrayIndex +\u003d (3 * 3u));\n    _uf1(s42f);\n    for (int _ui \u003d 0; (_ui \u003c 2); (++_ui))\n    {\n        ANGLE_atomic_uint s430 \u003d _uac;\n        (s430.arrayIndex +\u003d ((4 * 3u) + _ui));\n        atomicAdd(atomicCounters[s430.binding].counters[(s430.arrayIndex + ((ANGLEUniforms.acbBufferOffsets[(s430.binding / 4u)] \u003e\u003e ((s430.binding % 4u) * 8u)) \u0026 255u))], 1u);\n    }\n    ANGLE_atomic_uint s431 \u003d _uac;\n    (s431.arrayIndex +\u003d ((4 * 3u) + 2));\n    _uf0(s431);\n}\nvoid _uf3(ANGLE_atomic_uint _uac){\n    _uf2(_uac);\n    for (int _ui \u003d 1; (_ui \u003c 4); (++_ui))\n    {\n        ANGLE_atomic_uint s434 \u003d _uac;\n        (s434.arrayIndex +\u003d (_ui * 15u));\n        _uf2(s434);\n    }\n    for (int _ui \u003d 0; (_ui \u003c 4); (++_ui))\n    {\n        ANGLE_atomic_uint s435 \u003d _uac;\n        (s435.arrayIndex +\u003d ((5 * 15u) + (_ui * 3u)));\n        _uf1(s435);\n    }\n    ANGLE_atomic_uint s436 \u003d _uac;\n    (s436.arrayIndex +\u003d ((5 * 15u) + (4 * 3u)));\n    _uf0(s436);\n    for (int _ui \u003d 1; (_ui \u003c 3); (++_ui))\n    {\n        ANGLE_atomic_uint s437 \u003d _uac;\n        (s437.arrayIndex +\u003d (((5 * 15u) + (4 * 3u)) + _ui));\n        _uf0(s437);\n    }\n    for (int _ui \u003d 0; (_ui \u003c 5); (++_ui))\n    {\n        for (int _uj \u003d 0; (_uj \u003c 2); (++_uj))\n        {\n            ANGLE_atomic_uint s438 \u003d _uac;\n            (s438.arrayIndex +\u003d (((6 * 15u) + (_ui * 3u)) + _uj));\n            atomicAdd(atomicCounters[s438.binding].counters[(s438.arrayIndex + ((ANGLEUniforms.acbBufferOffsets[(s438.binding / 4u)] \u003e\u003e ((s438.binding % 4u) * 8u)) \u0026 255u))], 1u);\n        }\n        ANGLE_atomic_uint s439 \u003d _uac;\n        (s439.arrayIndex +\u003d (((6 * 15u) + (_ui * 3u)) + 2));\n        atomicAdd(atomicCounters[s439.binding].counters[(s439.arrayIndex + ((ANGLEUniforms.acbBufferOffsets[(s439.binding / 4u)] \u003e\u003e ((s439.binding % 4u) * 8u)) \u0026 255u))], 1u);\n    }\n}\nvoid main(){\n    _uf3(_uac);\n    ANGLE_atomic_uint s43a \u003d _uac;\n    (s43a.arrayIndex +\u003d (4 * 15u));\n    _uf2(s43a);\n}",
+      "parentUuid": "81d3186c_2675f5e2",
       "revId": "7ce5cb61ad216584fd8639612a2a4057b372a1fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "9d85b3a6_374c2d80",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-08T14:39:38Z",
+      "side": 1,
+      "message": "Good idea, done.\n\nAlso made the array 3 dimensional and expanded the test.",
+      "parentUuid": "12f41ffd_64e637e8",
+      "range": {
+        "startLine": 343,
+        "startChar": 0,
+        "endLine": 344,
+        "endChar": 13
+      },
+      "revId": "7ce5cb61ad216584fd8639612a2a4057b372a1fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "71da3ec7_299d2095",
         "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
         "patchSetId": 4
@@ -102,6 +192,24 @@
       "revId": "7ce5cb61ad216584fd8639612a2a4057b372a1fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f88b9019_3362769b",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-08T14:39:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71da3ec7_299d2095",
+      "revId": "7ce5cb61ad216584fd8639612a2a4057b372a1fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
