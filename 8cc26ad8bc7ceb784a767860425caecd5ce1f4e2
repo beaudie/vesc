@@ -70,6 +70,30 @@
       "revId": "8cc26ad8bc7ceb784a767860425caecd5ce1f4e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "876914fb_daffc099",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-08-08T15:55:23Z",
+      "side": 1,
+      "message": "indeed, irrespective of the backend we use it is a bug in deqp to pass incorrect enum, hence disabling it for all backends and hence removal of any tag\n\nlet me know if you have anything else in mind, otherwise will land this",
+      "parentUuid": "4855d978_4a397807",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 47
+      },
+      "revId": "8cc26ad8bc7ceb784a767860425caecd5ce1f4e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
