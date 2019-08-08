@@ -10,7 +10,8 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_SURFACEVK_H_
 #define LIBANGLE_RENDERER_VULKAN_SURFACEVK_H_
 
-#include <vulkan/vulkan.h>
+//#include <vulkan/vulkan.h>
+#include "volk.h"
 
 #include "libANGLE/renderer/SurfaceImpl.h"
 #include "libANGLE/renderer/vulkan/RenderTargetVk.h"
