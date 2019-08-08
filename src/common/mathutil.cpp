@@ -51,17 +51,17 @@ unsigned int convertRGBFloatsTo999E5(float red, float green, float blue)
     const float exp_p =
         std::max<float>(-g_sharedexp_bias - 1, floor(log2(max_c))) + 1 + g_sharedexp_bias;
     const int max_s = static_cast<int>(
-        floor((max_c / (pow(2.0f, exp_p - g_sharedexp_bias - g_sharedexp_mantissabits))) + 0.5f));
+        floor((max_c / (exp2(exp_p - g_sharedexp_bias - g_sharedexp_mantissabits))) + 0.5f));
     const int exp_s =
-        static_cast<int>((max_s < pow(2.0f, g_sharedexp_mantissabits)) ? exp_p : exp_p + 1);
+        static_cast<int>((max_s < exp2(g_sharedexp_mantissabits)) ? exp_p : exp_p + 1);
 
     RGB9E5Data output;
     output.R = static_cast<unsigned int>(
-        floor((red_c / (pow(2.0f, exp_s - g_sharedexp_bias - g_sharedexp_mantissabits))) + 0.5f));
+        floor((red_c / (exp2(exp_s - g_sharedexp_bias - g_sharedexp_mantissabits))) + 0.5f));
     output.G = static_cast<unsigned int>(
-        floor((green_c / (pow(2.0f, exp_s - g_sharedexp_bias - g_sharedexp_mantissabits))) + 0.5f));
+        floor((green_c / (exp2(exp_s - g_sharedexp_bias - g_sharedexp_mantissabits))) + 0.5f));
     output.B = static_cast<unsigned int>(
-        floor((blue_c / (pow(2.0f, exp_s - g_sharedexp_bias - g_sharedexp_mantissabits))) + 0.5f));
+        floor((blue_c / (exp2(exp_s - g_sharedexp_bias - g_sharedexp_mantissabits))) + 0.5f));
     output.E = exp_s;
 
     return bitCast<unsigned int>(output);
@@ -71,12 +71,9 @@ void convert999E5toRGBFloats(unsigned int input, float *red, float *green, float
 {
     const RGB9E5Data *inputData = reinterpret_cast<const RGB9E5Data *>(&input);
 
-    *red =
-        inputData->R * pow(2.0f, (int)inputData->E - g_sharedexp_bias - g_sharedexp_mantissabits);
-    *green =
-        inputData->G * pow(2.0f, (int)inputData->E - g_sharedexp_bias - g_sharedexp_mantissabits);
-    *blue =
-        inputData->B * pow(2.0f, (int)inputData->E - g_sharedexp_bias - g_sharedexp_mantissabits);
+    *red   = inputData->R * exp2((int)inputData->E - g_sharedexp_bias - g_sharedexp_mantissabits);
+    *green = inputData->G * exp2((int)inputData->E - g_sharedexp_bias - g_sharedexp_mantissabits);
+    *blue  = inputData->B * exp2((int)inputData->E - g_sharedexp_bias - g_sharedexp_mantissabits);
 }
 
 int BitCountPolyfill(uint32_t bits)
