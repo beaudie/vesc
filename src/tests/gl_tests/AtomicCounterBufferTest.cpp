@@ -315,12 +315,7 @@ ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest,
                        ES3_OPENGLES(),
                        ES31_OPENGL(),
                        ES31_OPENGLES(),
-                       ES31_D3D11(),
-                       ES31_VULKAN());
-ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest31,
-                       ES31_OPENGL(),
-                       ES31_OPENGLES(),
-                       ES31_D3D11(),
-                       ES31_VULKAN());
+                       ES31_D3D11());
+ANGLE_INSTANTIATE_TEST(AtomicCounterBufferTest31, ES31_OPENGL(), ES31_OPENGLES(), ES31_D3D11());
 
 }  // namespace
