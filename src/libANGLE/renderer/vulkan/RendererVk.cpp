@@ -565,6 +565,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                                      const char *wsiExtension,
                                      const char *wsiLayer)
 {
+    // Set all vk* function ptrs
+    ANGLE_VK_TRY(displayVk, volkInitialize());
     mDisplay                         = display;
     const egl::AttributeMap &attribs = mDisplay->getAttributeMap();
     ScopedVkLoaderEnvironment scopedEnvironment(ShouldUseDebugLayers(attribs),
@@ -708,11 +710,12 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     instanceInfo.ppEnabledLayerNames = enabledInstanceLayerNames.data();
 
     ANGLE_VK_TRY(displayVk, vkCreateInstance(&instanceInfo, nullptr, &mInstance));
+    volkLoadInstance(mInstance);
 
     if (enableDebugUtils)
     {
         // Try to use the newer EXT_debug_utils if it exists.
-        InitDebugUtilsEXTFunctions(mInstance);
+        // InitDebugUtilsEXTFunctions(mInstance);
 
         // Create the messenger callback.
         VkDebugUtilsMessengerCreateInfoEXT messengerInfo = {};
@@ -738,7 +741,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     else if (enableDebugReport)
     {
         // Fallback to EXT_debug_report.
-        InitDebugReportEXTFunctions(mInstance);
+        // InitDebugReportEXTFunctions(mInstance);
 
         VkDebugReportCallbackCreateInfoEXT debugReportInfo = {};
 
@@ -755,7 +758,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
                   VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME) !=
         enabledInstanceExtensions.end())
     {
-        InitGetPhysicalDeviceProperties2KHRFunctions(mInstance);
+        // InitGetPhysicalDeviceProperties2KHRFunctions(mInstance);
         ASSERT(vkGetPhysicalDeviceProperties2KHR);
     }
 
@@ -929,7 +932,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     if (getFeatures().supportsExternalSemaphoreFd.enabled)
     {
         enabledDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
-        InitExternalSemaphoreFdFunctions(mInstance);
+        // InitExternalSemaphoreFdFunctions(mInstance);
     }
 
     if (getFeatures().supportsExternalSemaphoreFd.enabled)

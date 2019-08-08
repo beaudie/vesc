@@ -178,6 +178,7 @@ if (is_win || is_linux || is_mac || is_android || is_fuchsia) {
     }
     if (angle_enable_vulkan) {
       sources += angle_end2end_tests_vulkan_sources
+      include_dirs += [ "${angle_root}/src/common/third_party/volk" ]
     }
 
     configs += [
@@ -222,6 +223,7 @@ if (is_win || is_linux || is_mac || is_android) {
 
     if (angle_enable_vulkan) {
       sources += angle_white_box_tests_vulkan_sources
+      include_dirs += [ "${angle_root}/src/common/third_party/volk" ]
     }
 
     configs += [
@@ -269,6 +271,7 @@ if (is_win || is_linux || is_android || is_mac) {
     if (angle_enable_vulkan) {
       sources += angle_white_box_perf_tests_vulkan_sources
       deps += [ "${angle_glslang_dir}:glslang_sources" ]
+      include_dirs += [ "${angle_root}/src/common/third_party/volk" ]
     }
 
     configs += [

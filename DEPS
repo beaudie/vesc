@@ -32,7 +32,7 @@ vars = {
   'vulkan_headers_revision': '982f0f84dccf6f281b48318c77261a9028000126',
 
   # Current revision of Khronos Vulkan-Loader.
-  'vulkan_loader_revision': '2f0abfcf9eb04018e6e92125a70bc28665aa17fe',
+  #'vulkan_loader_revision': '2f0abfcf9eb04018e6e92125a70bc28665aa17fe',
 
   # Current revision of Khronos Vulkan-Tools.
   'vulkan_tools_revision': 'f392e71b994036c92b896c2a62cc63d042b7f9b1',
@@ -164,9 +164,9 @@ deps = {
     'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Headers@{vulkan_headers_revision}',
   },
 
-  '{angle_root}/third_party/vulkan-loader/src': {
-    'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Loader@{vulkan_loader_revision}',
-  },
+  #'{angle_root}/third_party/vulkan-loader/src': {
+  #  'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Loader@{vulkan_loader_revision}',
+  #},
 
   '{angle_root}/third_party/vulkan-tools/src': {
     'url': '{chromium_git}/external/github.com/KhronosGroup/Vulkan-Tools@{vulkan_tools_revision}',
