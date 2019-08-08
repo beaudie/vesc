@@ -70,6 +70,24 @@
       "revId": "6ba349abbc4d1a90a6a4a012cee8b4c56019a360",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b79cd983_6dcc324a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2482,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-08T14:22:36Z",
+      "side": 1,
+      "message": "Not necessary. See https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/renderer/renderer_utils.h?q\u003dserialfactorybase\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d109\n\nThe factory starts at 1.",
+      "parentUuid": "8b2ff839_a0af63d8",
+      "revId": "6ba349abbc4d1a90a6a4a012cee8b4c56019a360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
