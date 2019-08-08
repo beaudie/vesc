@@ -22,6 +22,30 @@
       "revId": "8cc26ad8bc7ceb784a767860425caecd5ce1f4e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46dfca56_c2091c7e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-08-08T15:39:24Z",
+      "side": 1,
+      "message": "jamie, I am assuming you meant adding \"Vulkan: \" tag to the commit title but it looks like the rules for commit message length has become much more strict. I had to massage in the message to be within 50 char limit.",
+      "parentUuid": "90f93dd1_8a10338b",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 47
+      },
+      "revId": "8cc26ad8bc7ceb784a767860425caecd5ce1f4e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
