@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7e35b1b2_9b7abda8",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2776,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-08T15:23:38Z",
+      "side": 1,
+      "message": "It\u0027s not exactly equivalent, but how about gating this on mCreateDebugDevice instead?",
+      "range": {
+        "startLine": 2776,
+        "startChar": 4,
+        "endLine": 2776,
+        "endChar": 43
+      },
+      "revId": "1e0243fc14a3ef2132c3fc4614864be092e418d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
