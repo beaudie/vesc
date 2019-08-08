@@ -63,6 +63,7 @@ angle_white_box_perf_tests_win_sources =
 angle_white_box_perf_tests_vulkan_sources = [
   "perf_tests/VulkanCommandBufferPerf.cpp",
   "perf_tests/VulkanPipelineCachePerf.cpp",
+  "perf_tests/VulkanPipelineCreationPerf.cpp",
   "test_utils/third_party/vulkan_command_buffer_utils.cpp",
   "test_utils/third_party/vulkan_command_buffer_utils.h",
 ]

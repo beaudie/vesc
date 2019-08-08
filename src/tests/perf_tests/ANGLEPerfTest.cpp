@@ -50,7 +50,10 @@ constexpr TraceCategory gTraceCategories[2] = {
     {1, "gpu.angle.gpu"},
 };
 
-void EmptyPlatformMethod(angle::PlatformMethods *, const char *) {}
+void EmptyPlatformMethod(angle::PlatformMethods *, const char *msg)
+{
+    // std::cout << msg << std::endl;
+}
 
 void OverrideWorkaroundsD3D(angle::PlatformMethods *platform, angle::FeaturesD3D *featuresD3D)
 {
