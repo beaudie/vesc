@@ -530,6 +530,10 @@ if (angle_enable_vulkan) {
     if (is_android) {
       libs = [ "vulkan" ]
     }
+    defines = [
+      "ANGLE_VK_DATA_DIR=\"$angle_data_dir\"",
+      "ANGLE_VK_ICD_JSON=\"$angle_data_dir/VkICD_mock_icd.json\"",
+    ]
   }
 
   # Use this target to include everything ANGLE needs for Vulkan.
@@ -540,12 +544,7 @@ if (angle_enable_vulkan) {
     public_configs = [ ":vulkan_config" ]
     data_deps = []
     if (!is_android && !is_fuchsia) {
-      deps = [
-        "$angle_root/third_party/vulkan-loader:libvulkan",
-      ]
       data_deps += [ "$angle_root/third_party/vulkan-tools:VkICD_mock_icd" ]
-      public_configs +=
-          [ "$angle_root/third_party/vulkan-loader:vulkan_loader_config" ]
     }
     if (is_fuchsia) {
       public_deps += [
@@ -678,6 +677,7 @@ angle_source_set("libANGLE_base") {
       sources += libangle_vulkan_android_sources
       libs += [ "vulkan" ]
     }
+    include_dirs += [ "${angle_root}/src/common/third_party/volk" ]
     deps += [
       ":angle_vulkan",
       "${angle_glslang_dir}:glslang_default_resource_limits_sources",
