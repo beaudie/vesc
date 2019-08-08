@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ec57903_682ee7fd",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-08T15:17:50Z",
+      "side": 1,
+      "message": "Could you put this into a static constexpr?",
+      "range": {
+        "startLine": 141,
+        "startChar": 15,
+        "endLine": 141,
+        "endChar": 16
+      },
+      "revId": "dd95c90fcb7ac360142ce29cd3f9d4de662f2309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "19529d7f_44c4ceef",
+        "filename": "src/compiler/translator/StaticType.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-08T15:17:50Z",
+      "side": 1,
+      "message": "Add a static assert here that the mangled name size is 2 so we can update this code if it changes.",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 39
+      },
+      "revId": "dd95c90fcb7ac360142ce29cd3f9d4de662f2309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d589df1_2701c6b3",
+        "filename": "src/compiler/translator/Types.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-08T15:17:50Z",
+      "side": 1,
+      "message": "Add a static assert here too.",
+      "range": {
+        "startLine": 461,
+        "startChar": 0,
+        "endLine": 462,
+        "endChar": 43
+      },
+      "revId": "dd95c90fcb7ac360142ce29cd3f9d4de662f2309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b6953da3_d01713fc",
+        "filename": "src/tests/compiler_tests/Type_test.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-08T15:17:50Z",
+      "side": 1,
+      "message": "here as well.",
+      "revId": "dd95c90fcb7ac360142ce29cd3f9d4de662f2309",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
