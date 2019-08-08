@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cb29b752_63fe8146",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-08T18:59:17Z",
+      "side": 1,
+      "message": "nit: can be AlwaysSupported because you can\u0027t make a texture with this format to begin with without the extension.",
+      "range": {
+        "startLine": 961,
+        "startChar": 201,
+        "endLine": 961,
+        "endChar": 248
+      },
+      "revId": "a0bb6b3c9c7ccba5eca9cb5554c61226038325d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
