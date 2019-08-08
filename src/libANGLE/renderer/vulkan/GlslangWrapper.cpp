@@ -357,25 +357,26 @@ std::string IntermediateShaderSource::getShaderSource()
 
     for (Token &block : mTokens)
     {
+        if (block.type == TokenType::Layout)
+        {
+            shaderSource += "/* MISSING LAYOUT: ";
+            shaderSource += block.text;
+            shaderSource += " */";
+            continue;
+        }
+        else if (block.type == TokenType::Qualifier)
+        {
+            shaderSource += "/* MISSING QUALIFIER: ";
+            shaderSource += block.text;
+            shaderSource += " */";
+            continue;
+        }
         // All blocks should have been replaced.
         ASSERT(block.type == TokenType::Text);
         shaderSource += block.text;
     }
 
     return shaderSource;
-}
-
-std::string GetMappedSamplerName(const std::string &originalName)
-{
-    std::string samplerName = gl::StripLastArrayIndex(originalName);
-
-    // Samplers in structs are extracted.
-    std::replace(samplerName.begin(), samplerName.end(), '.', '_');
-
-    // Samplers in arrays of structs are also extracted.
-    std::replace(samplerName.begin(), samplerName.end(), '[', '_');
-    samplerName.erase(std::remove(samplerName.begin(), samplerName.end(), ']'), samplerName.end());
-    return samplerName;
 }
 
 template <typename OutputIter, typename ImplicitIter>
@@ -790,11 +791,22 @@ void AssignTextureBindings(const gl::ProgramState &programState,
     for (unsigned int uniformIndex : programState.getSamplerUniformRange())
     {
         const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
+
+        if (vk::SamplerNameContainsNonZeroArrayElement(samplerUniform.name))
+        {
+            // XXX
+            WARN() << "skipping " << samplerUniform.name;
+            continue;
+        }
+
         const std::string bindingString =
             texturesDescriptorSet + ", binding = " + Str(bindingIndex++);
 
         // Samplers in structs are extracted and renamed.
-        const std::string samplerName = GetMappedSamplerName(samplerUniform.name);
+        const std::string samplerName = vk::GetMappedSamplerName(samplerUniform.name);
+
+        // XXX
+        WARN() << "mapped " << samplerUniform.name << " to " << samplerName;
 
         AssignResourceBinding(samplerUniform.activeShaders(), samplerName, bindingString,
                               kUniformQualifier, kUnusedUniformSubstitution, shaderSources);
@@ -848,8 +860,9 @@ void CleanupUnusedEntities(const gl::ProgramState &programState,
     // uniforms to a single line.
     for (const gl::UnusedUniform &unusedUniform : resources.unusedUniforms)
     {
-        std::string uniformName =
-            unusedUniform.isSampler ? GetMappedSamplerName(unusedUniform.name) : unusedUniform.name;
+        std::string uniformName = unusedUniform.isSampler
+                                      ? vk::GetMappedSamplerName(unusedUniform.name)
+                                      : unusedUniform.name;
 
         for (IntermediateShaderSource &shaderSource : *shaderSources)
         {
@@ -930,6 +943,9 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        // XXX XXX XXX
+        printf("#####\n%s\n######\n", (*shaderSourcesOut)[shaderType].c_str());
+        // XXX XXX XXX
     }
 }
 
