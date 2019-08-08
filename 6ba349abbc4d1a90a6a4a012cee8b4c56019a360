@@ -52,6 +52,24 @@
       "revId": "6ba349abbc4d1a90a6a4a012cee8b4c56019a360",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b2ff839_a0af63d8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2482,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-08T14:12:53Z",
+      "side": 1,
+      "message": "Just checked, if you do put an empty serial, make sure to `generateTextureSerial()` once in ContextVk\u0027s constructor to make sure 0 is not legitimately given to a texture or sampler.",
+      "parentUuid": "06621326_0978d1b0",
+      "revId": "6ba349abbc4d1a90a6a4a012cee8b4c56019a360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
