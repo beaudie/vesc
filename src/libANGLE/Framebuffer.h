@@ -53,6 +53,7 @@ class FramebufferState final : angle::NonCopyable
 {
   public:
     FramebufferState();
+    FramebufferState(GLuint id);
     explicit FramebufferState(const Caps &caps, GLuint id);
     ~FramebufferState();
 
@@ -156,9 +157,9 @@ class Framebuffer final : public angle::ObserverInterface,
     // Constructor to build application-defined framebuffers
     Framebuffer(const Caps &caps, rx::GLImplFactory *factory, GLuint id);
     // Constructor to build default framebuffers for a surface and context pair
-    Framebuffer(const Context *context, egl::Surface *surface);
+    Framebuffer(const Context *context, egl::Surface *surface, GLuint id, bool isDefault);
     // Constructor to build a fake default framebuffer when surfaceless
-    Framebuffer(rx::GLImplFactory *factory);
+    Framebuffer(rx::GLImplFactory *factory, GLuint id, bool isDefault);
 
     ~Framebuffer() override;
     void onDestroy(const Context *context);
@@ -246,8 +247,8 @@ class Framebuffer final : public angle::ObserverInterface,
     {
         // The default framebuffer is always complete except when it is surfaceless in which
         // case it is always unsupported.
-        ASSERT(mState.mId != 0 || mCachedStatus.valid());
-        if (mState.mId == 0 || (!hasAnyDirtyBit() && mCachedStatus.valid()))
+        ASSERT(!isDefault() || mCachedStatus.valid());
+        if (isDefault() || (!hasAnyDirtyBit() && mCachedStatus.valid()))
         {
             return mCachedStatus.value();
         }
@@ -307,7 +308,8 @@ class Framebuffer final : public angle::ObserverInterface,
                        const Rectangle &destArea,
                        GLbitfield mask,
                        GLenum filter);
-    bool isDefault() const;
+    bool isDefault() const { return mIsDefaultFramebuffer; }
+    void setIsDefault(bool isDefaultFramebuffer) { mIsDefaultFramebuffer = isDefaultFramebuffer; }
 
     enum DirtyBitType : size_t
     {
@@ -361,6 +363,9 @@ class Framebuffer final : public angle::ObserverInterface,
     // Conservatively initializes both read color and depth. Blit can access the depth buffer.
     angle::Result ensureReadAttachmentsInitialized(const Context *context);
     Box getDimensions() const;
+
+    static const GLuint kDefaultDrawFramebufferHandle = 0;
+    static const GLuint kDefaultReadFramebufferHandle = 1;
 
   private:
     bool detachResourceById(const Context *context, GLenum resourceType, GLuint resourceId);
@@ -438,6 +443,8 @@ class Framebuffer final : public angle::ObserverInterface,
     // The dirty bits guard is checked when we get a dependent state change message. We verify that
     // we don't set a dirty bit that isn't already set, when inside the dirty bits syncState.
     Optional<DirtyBits> mDirtyBitsGuard;
+
+    bool mIsDefaultFramebuffer;
 };
 
 }  // namespace gl
