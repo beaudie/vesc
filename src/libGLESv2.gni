@@ -912,6 +912,8 @@ libangle_vulkan_sources = [
   "src/libANGLE/renderer/vulkan/vk_utils.cpp",
   "src/libANGLE/renderer/vulkan/vk_utils.h",
   "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+  "src/libANGLE/renderer/vulkan/volk.c",
+  "src/libANGLE/renderer/vulkan/volk.h",
 ]
 
 # The frame capture headers are always visible to libANGLE.
