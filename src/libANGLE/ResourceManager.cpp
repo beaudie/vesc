@@ -414,6 +414,9 @@ Framebuffer *FramebufferManager::AllocateNewObject(rx::GLImplFactory *factory,
                                                    GLuint handle,
                                                    const Caps &caps)
 {
+    // Make sure the caller isn't using a reserved handle.
+    ASSERT((handle != Framebuffer::kDefaultDrawFramebufferHandle) &&
+           (handle != Framebuffer::kDefaultDrawFramebufferHandle));
     return new Framebuffer(caps, factory, handle);
 }
 
@@ -434,13 +437,33 @@ Framebuffer *FramebufferManager::getFramebuffer(GLuint handle) const
     return mObjectMap.query(handle);
 }
 
-void FramebufferManager::setDefaultFramebuffer(Framebuffer *framebuffer)
+void FramebufferManager::setDefaultDrawFramebuffer(Framebuffer *framebuffer)
 {
-    ASSERT(framebuffer == nullptr || framebuffer->id() == 0);
-    mObjectMap.assign(0, framebuffer);
+    ASSERT(framebuffer == nullptr || framebuffer->isDefault());
+    if (framebuffer != nullptr)
+    {
+        mObjectMap.assign(framebuffer->id(), framebuffer);
+    }
+    else
+    {
+        mObjectMap.assign(Framebuffer::kDefaultDrawFramebufferHandle, framebuffer);
+    }
 }
 
-void FramebufferManager::invalidateFramebufferComplenessCache() const
+void FramebufferManager::setDefaultReadFramebuffer(Framebuffer *framebuffer)
+{
+    ASSERT(framebuffer == nullptr || framebuffer->isDefault());
+    if (framebuffer != nullptr)
+    {
+        mObjectMap.assign(framebuffer->id(), framebuffer);
+    }
+    else
+    {
+        mObjectMap.assign(Framebuffer::kDefaultReadFramebufferHandle, framebuffer);
+    }
+}
+
+void FramebufferManager::invalidateFramebufferCompletenessCache() const
 {
     for (const auto &framebuffer : mObjectMap)
     {

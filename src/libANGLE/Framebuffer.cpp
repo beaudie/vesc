@@ -258,8 +258,10 @@ bool IsClearBufferMaskedOut(const Context *context, GLenum buffer)
 }  // anonymous namespace
 
 // This constructor is only used for default framebuffers.
-FramebufferState::FramebufferState()
-    : mId(0),
+FramebufferState::FramebufferState() : FramebufferState(0) {}
+
+FramebufferState::FramebufferState(GLuint id)
+    : mId(id),
       mLabel(),
       mColorAttachments(1),
       mDrawBufferStates(1, GL_BACK),
@@ -290,7 +292,6 @@ FramebufferState::FramebufferState(const Caps &caps, GLuint id)
       mDefaultLayers(0),
       mWebGLDepthStencilConsistent(true)
 {
-    ASSERT(mId != 0);
     ASSERT(mDrawBufferStates.size() > 0);
     mDrawBufferStates[0] = GL_COLOR_ATTACHMENT0_EXT;
 }
@@ -634,8 +635,8 @@ Framebuffer::Framebuffer(const Caps &caps, rx::GLImplFactory *factory, GLuint id
     }
 }
 
-Framebuffer::Framebuffer(const Context *context, egl::Surface *surface)
-    : mState(),
+Framebuffer::Framebuffer(const Context *context, egl::Surface *surface, GLuint id)
+    : mState(id),
       mImpl(surface->getImplementation()->createDefaultFramebuffer(context, mState)),
       mCachedStatus(GL_FRAMEBUFFER_COMPLETE),
       mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
@@ -667,8 +668,8 @@ Framebuffer::Framebuffer(const Context *context, egl::Surface *surface)
     mDirtyBits.set(DIRTY_BIT_COLOR_BUFFER_CONTENTS_0);
 }
 
-Framebuffer::Framebuffer(rx::GLImplFactory *factory)
-    : mState(),
+Framebuffer::Framebuffer(rx::GLImplFactory *factory, GLuint id)
+    : mState(id),
       mImpl(factory->createFramebuffer(mState)),
       mCachedStatus(GL_FRAMEBUFFER_UNDEFINED_OES),
       mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
@@ -964,7 +965,7 @@ bool Framebuffer::usingExtendedDrawBuffers() const
 
 void Framebuffer::invalidateCompletenessCache()
 {
-    if (mState.mId != 0)
+    if (!isDefault())
     {
         mCachedStatus.reset();
     }
@@ -1003,7 +1004,7 @@ GLenum Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
 {
     const State &state = context->getState();
 
-    ASSERT(mState.mId != 0);
+    ASSERT(!isDefault());
 
     bool hasAttachments = false;
     Optional<unsigned int> colorbufferSize;
@@ -1557,7 +1558,7 @@ angle::Result Framebuffer::blit(const Context *context,
 
 bool Framebuffer::isDefault() const
 {
-    return id() == 0;
+    return (id() == kDefaultDrawFramebufferHandle) || (id() == kDefaultReadFramebufferHandle);
 }
 
 int Framebuffer::getSamples(const Context *context)

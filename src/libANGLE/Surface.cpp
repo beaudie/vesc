@@ -471,9 +471,9 @@ GLuint Surface::getId() const
     return 0;
 }
 
-gl::Framebuffer *Surface::createDefaultFramebuffer(const gl::Context *context)
+gl::Framebuffer *Surface::createDefaultFramebuffer(const gl::Context *context, GLuint id)
 {
-    return new gl::Framebuffer(context, this);
+    return new gl::Framebuffer(context, this, id);
 }
 
 gl::InitState Surface::initState(const gl::ImageIndex & /*imageIndex*/) const
