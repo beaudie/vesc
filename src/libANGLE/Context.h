@@ -341,7 +341,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void setLabel(EGLLabelKHR label) override;
     EGLLabelKHR getLabel() const override;
 
-    egl::Error makeCurrent(egl::Display *display, egl::Surface *surface);
+    egl::Error makeCurrent(egl::Display *display,
+                           egl::Surface *drawSurface,
+                           egl::Surface *readSurface);
     egl::Error unMakeCurrent(const egl::Display *display);
 
     // These create  and destroy methods are merely pass-throughs to
@@ -477,8 +479,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     bool hasBeenCurrent() const { return mHasBeenCurrent; }
     egl::Display *getDisplay() const { return mDisplay; }
-    egl::Surface *getCurrentDrawSurface() const { return mCurrentSurface; }
-    egl::Surface *getCurrentReadSurface() const { return mCurrentSurface; }
+    egl::Surface *getCurrentDrawSurface() const { return mCurrentDrawSurface; }
+    egl::Surface *getCurrentReadSurface() const { return mCurrentReadSurface; }
 
     bool isRobustResourceInitEnabled() const { return mState.isRobustResourceInitEnabled(); }
 
@@ -602,7 +604,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     // A small helper method to facilitate using the ANGLE_CONTEXT_TRY macro.
     void tryGenPaths(GLsizei range, GLuint *createdOut);
 
-    egl::Error setDefaultFramebuffer(egl::Surface *surface);
+    egl::Error setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surface *readSurface);
     egl::Error unsetDefaultFramebuffer();
 
     void initRendererString();
@@ -676,7 +678,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     const bool mRobustAccess;
     const bool mSurfacelessSupported;
     const bool mExplicitContextAvailable;
-    egl::Surface *mCurrentSurface;
+    egl::Surface *mCurrentDrawSurface;
+    egl::Surface *mCurrentReadSurface;
+    GLuint mDefaultReadFramebufferHandle;
     egl::Display *mDisplay;
     const bool mWebGLContext;
     bool mBufferAccessValidationEnabled;

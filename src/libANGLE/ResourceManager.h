@@ -48,6 +48,7 @@ class ResourceManagerBase : angle::NonCopyable
 
     void addRef();
     void release(const Context *context);
+    HandleAllocatorType &getHandleAllocator() { return mHandleAllocator; }
 
   protected:
     virtual void reset(const Context *context) = 0;
@@ -275,9 +276,10 @@ class FramebufferManager
   public:
     GLuint createFramebuffer();
     Framebuffer *getFramebuffer(GLuint handle) const;
-    void setDefaultFramebuffer(Framebuffer *framebuffer);
+    void setDefaultDrawFramebuffer(Framebuffer *framebuffer);
+    void setDefaultReadFramebuffer(Framebuffer *framebuffer, GLuint handle);
 
-    void invalidateFramebufferComplenessCache() const;
+    void invalidateFramebufferCompletenessCache() const;
 
     Framebuffer *checkFramebufferAllocation(rx::GLImplFactory *factory,
                                             const Caps &caps,
