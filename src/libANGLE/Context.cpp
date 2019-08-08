@@ -338,7 +338,8 @@ Context::Context(egl::Display *display,
       mRobustAccess(GetRobustAccess(attribs)),
       mSurfacelessSupported(displayExtensions.surfacelessContext),
       mExplicitContextAvailable(clientExtensions.explicitContext),
-      mCurrentSurface(static_cast<egl::Surface *>(EGL_NO_SURFACE)),
+      mCurrentDrawSurface(static_cast<egl::Surface *>(EGL_NO_SURFACE)),
+      mCurrentReadSurface(static_cast<egl::Surface *>(EGL_NO_SURFACE)),
       mDisplay(static_cast<egl::Display *>(EGL_NO_DISPLAY)),
       mWebGLContext(GetWebGLContext(attribs)),
       mBufferAccessValidationEnabled(false),
@@ -622,7 +623,9 @@ EGLLabelKHR Context::getLabel() const
     return mLabel;
 }
 
-egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
+egl::Error Context::makeCurrent(egl::Display *display,
+                                egl::Surface *drawSurface,
+                                egl::Surface *readSurface)
 {
     mDisplay = display;
 
@@ -635,10 +638,10 @@ egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
 
         int width  = 0;
         int height = 0;
-        if (surface != nullptr)
+        if (drawSurface != nullptr)
         {
-            width  = surface->getWidth();
-            height = surface->getHeight();
+            width  = drawSurface->getWidth();
+            height = drawSurface->getHeight();
         }
 
         mState.setViewportParams(0, 0, width, height);
@@ -651,7 +654,7 @@ egl::Error Context::makeCurrent(egl::Display *display, egl::Surface *surface)
     mState.setAllDirtyBits();
     mState.setAllDirtyObjects();
 
-    ANGLE_TRY(setDefaultFramebuffer(surface));
+    ANGLE_TRY(setDefaultFramebuffer(drawSurface, readSurface));
 
     // Notify the renderer of a context switch.
     angle::Result implResult = mImplementation->onMakeCurrent(this);
@@ -2716,7 +2719,8 @@ EGLenum Context::getClientType() const
 
 EGLenum Context::getRenderBuffer() const
 {
-    const Framebuffer *framebuffer = mState.mFramebufferManager->getFramebuffer(0);
+    const Framebuffer *framebuffer =
+        mState.mFramebufferManager->getFramebuffer(Framebuffer::kDefaultDrawFramebufferHandle);
     if (framebuffer == nullptr)
     {
         return EGL_NONE;
@@ -3178,7 +3182,7 @@ void Context::requestExtension(const char *name)
         }
     }
 
-    mState.mFramebufferManager->invalidateFramebufferComplenessCache();
+    mState.mFramebufferManager->invalidateFramebufferCompletenessCache();
 }
 
 size_t Context::getRequestableExtensionStringCount() const
@@ -8458,34 +8462,68 @@ angle::Result Context::onProgramLink(Program *programObject)
     return angle::Result::Continue;
 }
 
-egl::Error Context::setDefaultFramebuffer(egl::Surface *surface)
+egl::Error Context::setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surface *readSurface)
 {
-    ASSERT(mCurrentSurface == nullptr);
+    ASSERT(mCurrentDrawSurface == nullptr);
+    ASSERT(mCurrentReadSurface == nullptr);
 
-    Framebuffer *newDefault = nullptr;
-    if (surface != nullptr)
+    Framebuffer *newDefaultDrawFramebuffer = nullptr;
+    Framebuffer *newDefaultReadFramebuffer = nullptr;
+
+    if (drawSurface != nullptr)
     {
-        ANGLE_TRY(surface->makeCurrent(this));
-        mCurrentSurface = surface;
-        newDefault      = surface->createDefaultFramebuffer(this);
+        ANGLE_TRY(drawSurface->makeCurrent(this));
+        mCurrentDrawSurface = drawSurface;
+        newDefaultDrawFramebuffer =
+            drawSurface->createDefaultFramebuffer(this, Framebuffer::kDefaultDrawFramebufferHandle);
     }
     else
     {
-        newDefault = new Framebuffer(mImplementation.get());
+        newDefaultDrawFramebuffer = new Framebuffer(
+            mImplementation.get(), Framebuffer::kDefaultDrawFramebufferHandle, true);
+    }
+
+    if (readSurface != nullptr)
+    {
+        ANGLE_TRY(readSurface->makeCurrent(this));
+        mCurrentReadSurface = readSurface;
+    }
+
+    // If the Draw and Read surfaces are the same, they will also share the same default Framebuffer
+    if (drawSurface == readSurface)
+    {
+        mDefaultReadFramebufferHandle = newDefaultDrawFramebuffer->id();
+        newDefaultReadFramebuffer     = newDefaultDrawFramebuffer;
+    }
+    else
+    {
+        // Only Framebuffer ID 0 is reserved, so we need to find an available handle for the default
+        // read framebuffer if it's different than the default draw framebuffer.
+        mDefaultReadFramebufferHandle = mState.mFramebufferManager->getHandleAllocator().allocate();
+        if (readSurface != nullptr)
+        {
+            newDefaultReadFramebuffer =
+                readSurface->createDefaultFramebuffer(this, mDefaultReadFramebufferHandle);
+        }
+        else
+        {
+            newDefaultReadFramebuffer =
+                new Framebuffer(mImplementation.get(), mDefaultReadFramebufferHandle, true);
+        }
     }
 
     // Update default framebuffer, the binding of the previous default
     // framebuffer (or lack of) will have a nullptr.
+    mState.mFramebufferManager->setDefaultDrawFramebuffer(newDefaultDrawFramebuffer);
+    if (mState.getDrawFramebuffer() == nullptr)
     {
-        mState.mFramebufferManager->setDefaultFramebuffer(newDefault);
-        if (mState.getReadFramebuffer() == nullptr)
-        {
-            bindReadFramebuffer(0);
-        }
-        if (mState.getDrawFramebuffer() == nullptr)
-        {
-            bindDrawFramebuffer(0);
-        }
+        bindDrawFramebuffer(newDefaultDrawFramebuffer->id());
+    }
+    mState.mFramebufferManager->setDefaultReadFramebuffer(newDefaultReadFramebuffer,
+                                                          newDefaultReadFramebuffer->id());
+    if (mState.getReadFramebuffer() == nullptr)
+    {
+        bindReadFramebuffer(newDefaultReadFramebuffer->id());
     }
 
     return egl::NoError();
@@ -8493,32 +8531,48 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *surface)
 
 egl::Error Context::unsetDefaultFramebuffer()
 {
-    gl::Framebuffer *defaultFramebuffer = mState.mFramebufferManager->getFramebuffer(0);
+    gl::Framebuffer *defaultDrawFramebuffer =
+        mState.mFramebufferManager->getFramebuffer(Framebuffer::kDefaultDrawFramebufferHandle);
+    gl::Framebuffer *defaultReadFramebuffer =
+        mState.mFramebufferManager->getFramebuffer(mDefaultReadFramebufferHandle);
+    GLuint oldReadHandle = defaultReadFramebuffer->id();
 
     // Remove the default framebuffer
-    if (mState.getReadFramebuffer() == defaultFramebuffer)
+    if (mState.getReadFramebuffer() == defaultReadFramebuffer)
     {
         mState.setReadFramebufferBinding(nullptr);
         mReadFramebufferObserverBinding.bind(nullptr);
     }
 
-    if (mState.getDrawFramebuffer() == defaultFramebuffer)
+    if (mState.getDrawFramebuffer() == defaultDrawFramebuffer)
     {
         mState.setDrawFramebufferBinding(nullptr);
         mDrawFramebufferObserverBinding.bind(nullptr);
     }
 
-    if (defaultFramebuffer)
+    if (defaultDrawFramebuffer)
     {
-        defaultFramebuffer->onDestroy(this);
-        delete defaultFramebuffer;
+        defaultDrawFramebuffer->onDestroy(this);
+        delete defaultDrawFramebuffer;
+    }
+    if (defaultReadFramebuffer && (defaultReadFramebuffer != defaultDrawFramebuffer))
+    {
+        defaultReadFramebuffer->onDestroy(this);
+        delete defaultReadFramebuffer;
     }
 
-    mState.mFramebufferManager->setDefaultFramebuffer(nullptr);
+    mState.mFramebufferManager->setDefaultDrawFramebuffer(nullptr);
+    mState.mFramebufferManager->setDefaultReadFramebuffer(nullptr, oldReadHandle);
 
     // Always unset the current surface, even if setIsCurrent fails.
-    egl::Surface *surface = mCurrentSurface;
-    mCurrentSurface       = nullptr;
+    egl::Surface *surface = mCurrentDrawSurface;
+    mCurrentDrawSurface   = nullptr;
+    if (surface)
+    {
+        ANGLE_TRY(surface->unMakeCurrent(this));
+    }
+    surface             = mCurrentReadSurface;
+    mCurrentReadSurface = nullptr;
     if (surface)
     {
         ANGLE_TRY(surface->unMakeCurrent(this));

@@ -96,7 +96,7 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     void setFixedWidth(EGLint width);
     void setFixedHeight(EGLint height);
 
-    gl::Framebuffer *createDefaultFramebuffer(const gl::Context *context);
+    gl::Framebuffer *createDefaultFramebuffer(const gl::Context *context, GLuint id);
 
     const Config *getConfig() const;
 
