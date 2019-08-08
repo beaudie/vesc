@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62fd7549_f3866597",
+        "filename": "infra/config/PRESUBMIT.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-08T13:26:31Z",
+      "side": 1,
+      "message": "non-blocking nit: ANGLE uses a different copyright notice. See https://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#comments",
+      "range": {
+        "startLine": 1,
+        "startChar": 11,
+        "endLine": 1,
+        "endChar": 41
+      },
+      "revId": "865ec5fb5d8cf253219641bc92b965c590eb96a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
