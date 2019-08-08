@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f5766357_c62f7692",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-08T13:40:31Z",
+      "side": 1,
+      "message": "here\u0027s Clang\u0027s pragma.",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 45,
+        "endChar": 53
+      },
+      "revId": "eb91dd354219ff73a5fdde79f27551eb9397a2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95f15570_a484cc85",
+        "filename": "src/compiler/translator/glslang.y",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-08T13:40:31Z",
+      "side": 1,
+      "message": "I think Clang has its own pragma for this.",
+      "range": {
+        "startLine": 32,
+        "startChar": 1,
+        "endLine": 32,
+        "endChar": 51
+      },
+      "revId": "eb91dd354219ff73a5fdde79f27551eb9397a2c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
