@@ -82,6 +82,9 @@ class RendererVk : angle::NonCopyable
     }
     VkDevice getDevice() const { return mDevice; }
 
+    // interface for testing
+    void setDevice(VkDevice device) { mDevice = device; }
+
     angle::Result selectPresentQueueForSurface(DisplayVk *displayVk,
                                                VkSurfaceKHR surface,
                                                uint32_t *presentQueueOut);
