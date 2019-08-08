@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dc4160bf_3c42b493",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6410,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-08T16:51:25Z",
+      "side": 1,
+      "message": "Do we check that the extension that allows this is available/enabled somewhere before this, or does that need to be done here?",
+      "revId": "c319b56c37a2ef44f88609a1cd97e4da9b4d0965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
