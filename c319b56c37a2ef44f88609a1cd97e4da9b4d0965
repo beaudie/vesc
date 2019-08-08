@@ -16,6 +16,24 @@
       "revId": "c319b56c37a2ef44f88609a1cd97e4da9b4d0965",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "045b86a4_e48e2c40",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6410,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-08-08T17:05:50Z",
+      "side": 1,
+      "message": "Ah, good catch.  Most of the other OES_texture_3D functions call into a base validation function which checks for texture3DOES extension.  glFramebufferTexture3D doesn\u0027t exist beyond the extension (it is replaced by glFramebufferTextureLayer in 3.+), so we should check for it here.  I see that ValidateFramebufferTextureLayer is implemented, so we could theoretically route to that, but there are enough differences between the functions (3D is more limited), that I would lean toward keeping the OES version validated by itself.  If anyone thinks otherwise (minimize code duplication at the cost of complexity) let me know.",
+      "parentUuid": "dc4160bf_3c42b493",
+      "revId": "c319b56c37a2ef44f88609a1cd97e4da9b4d0965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
