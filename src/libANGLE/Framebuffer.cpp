@@ -258,8 +258,8 @@ bool IsClearBufferMaskedOut(const Context *context, GLenum buffer)
 }  // anonymous namespace
 
 // This constructor is only used for default framebuffers.
-FramebufferState::FramebufferState()
-    : mId(0),
+FramebufferState::FramebufferState(bool isDefault)
+    : mId(Framebuffer::kDefaultDrawFramebufferHandle),
       mLabel(),
       mColorAttachments(1),
       mDrawBufferStates(1, GL_BACK),
@@ -270,13 +270,14 @@ FramebufferState::FramebufferState()
       mDefaultSamples(0),
       mDefaultFixedSampleLocations(GL_FALSE),
       mDefaultLayers(0),
-      mWebGLDepthStencilConsistent(true)
+      mWebGLDepthStencilConsistent(true),
+      mIsDefault(isDefault)
 {
     ASSERT(mDrawBufferStates.size() > 0);
     mEnabledDrawBuffers.set(0);
 }
 
-FramebufferState::FramebufferState(const Caps &caps, GLuint id)
+FramebufferState::FramebufferState(const Caps &caps, GLuint id, bool isDefault)
     : mId(id),
       mLabel(),
       mColorAttachments(caps.maxColorAttachments),
@@ -288,9 +289,10 @@ FramebufferState::FramebufferState(const Caps &caps, GLuint id)
       mDefaultSamples(0),
       mDefaultFixedSampleLocations(GL_FALSE),
       mDefaultLayers(0),
-      mWebGLDepthStencilConsistent(true)
+      mWebGLDepthStencilConsistent(true),
+      mIsDefault(isDefault)
 {
-    ASSERT(mId != 0);
+    ASSERT(mId != Framebuffer::kDefaultDrawFramebufferHandle);
     ASSERT(mDrawBufferStates.size() > 0);
     mDrawBufferStates[0] = GL_COLOR_ATTACHMENT0_EXT;
 }
@@ -371,8 +373,12 @@ const FramebufferAttachment *FramebufferState::getReadAttachment() const
     {
         return nullptr;
     }
+
     size_t readIndex = getReadIndex();
-    return mColorAttachments[readIndex].isAttached() ? &mColorAttachments[readIndex] : nullptr;
+    const gl::FramebufferAttachment &framebufferAttachment =
+        isDefault() ? mDefaultFramebufferReadAttachment : mColorAttachments[readIndex];
+
+    return framebufferAttachment.isAttached() ? &framebufferAttachment : nullptr;
 }
 
 const FramebufferAttachment *FramebufferState::getFirstNonNullAttachment() const
@@ -618,11 +624,12 @@ Extents FramebufferState::getExtents() const
 }
 
 Framebuffer::Framebuffer(const Caps &caps, rx::GLImplFactory *factory, GLuint id)
-    : mState(caps, id),
+    : mState(caps, id, false),
       mImpl(factory->createFramebuffer(mState)),
       mCachedStatus(),
       mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
-      mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
+      mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT),
+      mIsDefaultFramebuffer(false)
 {
     ASSERT(mImpl != nullptr);
     ASSERT(mState.mColorAttachments.size() == static_cast<size_t>(caps.maxColorAttachments));
@@ -632,21 +639,32 @@ Framebuffer::Framebuffer(const Caps &caps, rx::GLImplFactory *factory, GLuint id
     {
         mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0 + colorIndex);
     }
+    mDirtyBits.set(DIRTY_BIT_READ_BUFFER);
 }
 
-Framebuffer::Framebuffer(const Context *context, egl::Surface *surface)
-    : mState(),
+Framebuffer::Framebuffer(const Context *context,
+                         egl::Surface *surface,
+                         bool isDefault,
+                         egl::Surface *readSurface)
+    : mState(isDefault),
       mImpl(surface->getImplementation()->createDefaultFramebuffer(context, mState)),
       mCachedStatus(GL_FRAMEBUFFER_COMPLETE),
       mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
-      mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
+      mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT),
+      mIsDefaultFramebuffer(isDefault)
 {
     ASSERT(mImpl != nullptr);
-    mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0);
 
+    mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0);
     setAttachmentImpl(context, GL_FRAMEBUFFER_DEFAULT, GL_BACK, ImageIndex(), surface,
                       FramebufferAttachment::kDefaultNumViews,
                       FramebufferAttachment::kDefaultBaseViewIndex, false);
+
+    mState.mDefaultFramebufferReadAttachment.attach(
+        context, GL_FRAMEBUFFER_DEFAULT, GL_BACK, ImageIndex(), readSurface,
+        FramebufferAttachment::kDefaultNumViews, FramebufferAttachment::kDefaultBaseViewIndex,
+        false);
+    mDirtyBits.set(DIRTY_BIT_READ_BUFFER);
 
     if (surface->getConfig()->depthSize > 0)
     {
@@ -667,15 +685,26 @@ Framebuffer::Framebuffer(const Context *context, egl::Surface *surface)
     mDirtyBits.set(DIRTY_BIT_COLOR_BUFFER_CONTENTS_0);
 }
 
-Framebuffer::Framebuffer(rx::GLImplFactory *factory)
-    : mState(),
+Framebuffer::Framebuffer(const Context *context,
+                         rx::GLImplFactory *factory,
+                         bool isDefault,
+                         egl::Surface *readSurface)
+    : mState(isDefault),
       mImpl(factory->createFramebuffer(mState)),
       mCachedStatus(GL_FRAMEBUFFER_UNDEFINED_OES),
       mDirtyDepthAttachmentBinding(this, DIRTY_BIT_DEPTH_ATTACHMENT),
-      mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT)
+      mDirtyStencilAttachmentBinding(this, DIRTY_BIT_STENCIL_ATTACHMENT),
+      mIsDefaultFramebuffer(isDefault)
 {
     mDirtyColorAttachmentBindings.emplace_back(this, DIRTY_BIT_COLOR_ATTACHMENT_0);
     SetComponentTypeMask(getDrawbufferWriteType(0), 0, &mState.mDrawBufferTypeMask);
+
+    // updateAttachment() without mState.mResourceNeedsInit.set()
+    mState.mDefaultFramebufferReadAttachment.attach(
+        context, GL_FRAMEBUFFER_DEFAULT, GL_BACK, ImageIndex(), readSurface,
+        FramebufferAttachment::kDefaultNumViews, FramebufferAttachment::kDefaultBaseViewIndex,
+        false);
+    mDirtyBits.set(DIRTY_BIT_READ_BUFFER);
 }
 
 Framebuffer::~Framebuffer()
@@ -685,6 +714,11 @@ Framebuffer::~Framebuffer()
 
 void Framebuffer::onDestroy(const Context *context)
 {
+    if (isDefault())
+    {
+        mState.mDefaultFramebufferReadAttachment.detach(context);
+    }
+
     for (auto &attachment : mState.mColorAttachments)
     {
         attachment.detach(context);
@@ -964,7 +998,7 @@ bool Framebuffer::usingExtendedDrawBuffers() const
 
 void Framebuffer::invalidateCompletenessCache()
 {
-    if (mState.mId != 0)
+    if (!isDefault())
     {
         mCachedStatus.reset();
     }
@@ -1003,7 +1037,7 @@ GLenum Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
 {
     const State &state = context->getState();
 
-    ASSERT(mState.mId != 0);
+    ASSERT(!isDefault());
 
     bool hasAttachments = false;
     Optional<unsigned int> colorbufferSize;
@@ -1555,9 +1589,10 @@ angle::Result Framebuffer::blit(const Context *context,
     return mImpl->blit(context, sourceArea, destArea, blitMask, filter);
 }
 
-bool Framebuffer::isDefault() const
+void Framebuffer::setIsDefault(bool isDefaultFramebuffer)
 {
-    return id() == 0;
+    mIsDefaultFramebuffer = isDefaultFramebuffer;
+    mState.setIsDefault(isDefaultFramebuffer);
 }
 
 int Framebuffer::getSamples(const Context *context)
@@ -1787,6 +1822,7 @@ void Framebuffer::setAttachmentImpl(const Context *context,
             updateAttachment(context, &mState.mColorAttachments[0], DIRTY_BIT_COLOR_ATTACHMENT_0,
                              &mDirtyColorAttachmentBindings[0], type, binding, textureIndex,
                              resource, numViews, baseViewIndex, isMultiview);
+
             break;
 
         default:
@@ -2179,11 +2215,18 @@ angle::Result Framebuffer::ensureReadAttachmentsInitialized(const Context *conte
 
     if (mState.mReadBufferState != GL_NONE)
     {
-        size_t readIndex = mState.getReadIndex();
-        if (mState.mResourceNeedsInit[readIndex])
+        if (isDefault())
         {
-            ANGLE_TRY(InitAttachment(context, &mState.mColorAttachments[readIndex]));
-            mState.mResourceNeedsInit.reset(readIndex);
+            ANGLE_TRY(InitAttachment(context, &mState.mDefaultFramebufferReadAttachment));
+        }
+        else
+        {
+            size_t readIndex = mState.getReadIndex();
+            if (mState.mResourceNeedsInit[readIndex])
+            {
+                ANGLE_TRY(InitAttachment(context, &mState.mColorAttachments[readIndex]));
+                mState.mResourceNeedsInit.reset(readIndex);
+            }
         }
     }
 

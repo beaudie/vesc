@@ -20,7 +20,7 @@ namespace rx
 class MockFramebufferImpl : public rx::FramebufferImpl
 {
   public:
-    MockFramebufferImpl() : rx::FramebufferImpl(gl::FramebufferState()) {}
+    MockFramebufferImpl() : rx::FramebufferImpl(gl::FramebufferState(false)) {}
     virtual ~MockFramebufferImpl() { destructor(); }
 
     MOCK_METHOD3(discard, angle::Result(const gl::Context *, size_t, const GLenum *));
