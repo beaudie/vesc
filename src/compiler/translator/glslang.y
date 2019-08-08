@@ -29,6 +29,7 @@ WHICH GENERATES THE GLSL ES PARSER (glslang_tab.cpp AND glslang_tab.h).
 #pragma GCC diagnostic ignored "-Wunused-function"
 #pragma GCC diagnostic ignored "-Wunused-variable"
 #pragma GCC diagnostic ignored "-Wswitch-enum"
+#pragma GCC diagnostic ignored "-Wunreachable-code"
 #elif defined(_MSC_VER)
 #pragma warning(disable: 4065)
 #pragma warning(disable: 4189)
