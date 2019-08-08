@@ -34,6 +34,24 @@
       "revId": "c319b56c37a2ef44f88609a1cd97e4da9b4d0965",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3f3f37a6_8f0ac3a2",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6410,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-08-08T19:26:20Z",
+      "side": 1,
+      "message": "Okay, I added the extension check.",
+      "parentUuid": "045b86a4_e48e2c40",
+      "revId": "c319b56c37a2ef44f88609a1cd97e4da9b4d0965",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
