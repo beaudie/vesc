@@ -16,6 +16,24 @@
       "revId": "6ba349abbc4d1a90a6a4a012cee8b4c56019a360",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4195c1db_5d8b2632",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2482,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-08T13:19:24Z",
+      "side": 1,
+      "message": "The texture and sampler cannot possibly have the same serial, right? In that case, this sounds correct.\n\nAlternatively, you can use 0 for the sampler serial, indicating \"no sampler\". That requires serials to start from 1.\n\nJamie should be able to tell if either of these approaches is wrong.",
+      "parentUuid": "26f57db3_61638199",
+      "revId": "6ba349abbc4d1a90a6a4a012cee8b4c56019a360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
