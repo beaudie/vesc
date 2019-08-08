@@ -149,6 +149,24 @@
     },
     {
       "key": {
+        "uuid": "1bc88781_dad8e183",
+        "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-08T17:48:12Z",
+      "side": 1,
+      "message": "Ack. Yes they became ugly when I had to adjust their offset with a uniform.",
+      "parentUuid": "eb734c57_658e89df",
+      "revId": "7ce5cb61ad216584fd8639612a2a4057b372a1fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "12f41ffd_64e637e8",
         "filename": "src/tests/gl_tests/AtomicCounterBufferTest.cpp",
         "patchSetId": 4
