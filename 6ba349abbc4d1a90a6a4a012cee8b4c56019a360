@@ -34,6 +34,24 @@
       "revId": "6ba349abbc4d1a90a6a4a012cee8b4c56019a360",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06621326_0978d1b0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 2482,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-08T13:49:45Z",
+      "side": 1,
+      "message": "They can\u0027t have the same serial. As they share the same serial generator. But I think you should still use an empty serial for no sampler here to be clear to the reader.",
+      "parentUuid": "4195c1db_5d8b2632",
+      "revId": "6ba349abbc4d1a90a6a4a012cee8b4c56019a360",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
