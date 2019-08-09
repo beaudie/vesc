@@ -34,6 +34,41 @@ struct ParamCapture : angle::NonCopyable
     ParamCapture(ParamCapture &&other);
     ParamCapture &operator=(ParamCapture &&other);
 
+    template <typename T>
+    T getReadBufferPointer(std::vector<uint8_t> *readBuffer)
+    {
+        ASSERT(readBufferSizeBytes > 0);
+        ASSERT(readBuffer->size() >= readBufferSizeBytes);
+        return reinterpret_cast<T>(const_cast<uint8_t *>(readBuffer->data()));
+    }
+    template <typename T>
+    T getAsConstPointer()
+    {
+        if (!data.empty())
+        {
+            ASSERT(data.size() == 1);
+            return reinterpret_cast<T>(data[0].data());
+        }
+
+        return nullptr;
+    }
+
+    template <typename T>
+    T getAsPointerConstPointer(std::vector<const uint8_t *> *pointersBufferOut) const
+    {
+        static_assert(sizeof(typename std::remove_pointer<T>::type) == sizeof(uint8_t *),
+                      "pointer size not match!");
+
+        ASSERT(!data.empty());
+        pointersBufferOut->clear();
+        pointersBufferOut->reserve(data.size());
+        for (const auto &data : data)
+        {
+            pointersBufferOut->emplace_back(data.data());
+        }
+        return reinterpret_cast<T>(pointersBufferOut->data());
+    }
+
     std::string name;
     ParamType type;
     ParamValue value;
@@ -93,6 +128,59 @@ struct CallCapture
     ParamBuffer params;
 };
 
+struct FrameCaptureReplayContext
+{
+    FrameCaptureReplayContext();
+    ~FrameCaptureReplayContext();
+
+    void initialize(size_t readBufferSizeByte)
+    {
+        for (auto &attribValid : vertexAttribs_valid)
+        {
+            attribValid = false;
+        }
+        readBuffer.resize(readBufferSizeByte);
+    }
+
+    void Update_vertexAttribPointer(GLuint index,
+                                    GLint size,
+                                    gl::VertexAttribType typePacked,
+                                    GLboolean normalized,
+                                    GLsizei stride,
+                                    const void *pointer)
+    {
+        ASSERT(index < gl::MAX_VERTEX_ATTRIBS);
+        vertexAttribs_size[index]       = size;
+        vertexAttribs_type[index]       = typePacked;
+        vertexAttribs_normalized[index] = normalized;
+        vertexAttribs_stride[index]     = stride;
+        vertexAttribs_valid[index]      = true;
+    }
+
+    void Update_vertexAttribIPointer(GLuint index,
+                                     GLint size,
+                                     gl::VertexAttribType typePacked,
+                                     GLsizei stride,
+                                     const void *pointer)
+    {
+        ASSERT(index < gl::MAX_VERTEX_ATTRIBS);
+        vertexAttribs_size[index]       = size;
+        vertexAttribs_type[index]       = typePacked;
+        vertexAttribs_normalized[index] = false;
+        vertexAttribs_stride[index]     = stride;
+        vertexAttribs_valid[index]      = true;
+    }
+
+    std::vector<uint8_t> readBuffer;
+    std::vector<const uint8_t *> pointersBuffer;
+
+    GLint vertexAttribs_size[gl::MAX_VERTEX_ATTRIBS];
+    gl::VertexAttribType vertexAttribs_type[gl::MAX_VERTEX_ATTRIBS];
+    GLboolean vertexAttribs_normalized[gl::MAX_VERTEX_ATTRIBS];
+    GLsizei vertexAttribs_stride[gl::MAX_VERTEX_ATTRIBS];
+    bool vertexAttribs_valid[gl::MAX_VERTEX_ATTRIBS];
+};
+
 class FrameCapture final : angle::NonCopyable
 {
   public:
@@ -102,6 +190,7 @@ class FrameCapture final : angle::NonCopyable
     void captureCall(const gl::Context *context, CallCapture &&call);
     void onEndFrame();
     bool enabled() const;
+    void replay(gl::Context *context);
 
   private:
     // <CallName, ParamName>
@@ -126,6 +215,10 @@ class FrameCapture final : angle::NonCopyable
     gl::AttribArray<size_t> mClientArraySizes;
     std::map<Counter, int> mDataCounters;
     size_t mReadBufferSize;
+
+    static void replayCall(gl::Context *context,
+                           FrameCaptureReplayContext *paramBuffer,
+                           CallCapture *call);
 };
 
 template <typename CaptureFuncT, typename... ArgsT>

@@ -25,6 +25,7 @@ ParamCapture::~ParamCapture() {}
 FrameCapture::FrameCapture() {}
 FrameCapture::~FrameCapture() {}
 void FrameCapture::onEndFrame() {}
+void FrameCapture::replay(gl::Context *context) {}
 #else
 namespace
 {
@@ -169,6 +170,9 @@ const char *CallCapture::name() const
     return gl::GetEntryPointName(entryPoint);
 }
 
+FrameCaptureReplayContext::FrameCaptureReplayContext() {}
+FrameCaptureReplayContext::~FrameCaptureReplayContext() {}
+
 FrameCapture::FrameCapture() : mFrameIndex(0), mReadBufferSize(0)
 {
     reset();
@@ -231,7 +235,7 @@ void FrameCapture::captureCall(const gl::Context *context, CallCapture &&call)
                 indexRange = gl::ComputeIndexRange(drawElementsType, indices, count, restart);
             }
 
-            captureClientArraySnapshot(context, indexRange.end, 1);
+            captureClientArraySnapshot(context, indexRange.vertexCount(), 1);
         }
     }
 
@@ -548,7 +552,18 @@ void FrameCapture::writeCallReplay(const CallCapture &call,
 
 bool FrameCapture::enabled() const
 {
-    return mFrameIndex < 100;
+    return mFrameIndex < 99;
+}
+
+void FrameCapture::replay(gl::Context *context)
+{
+    FrameCaptureReplayContext replayContext;
+    replayContext.initialize(mReadBufferSize);
+    for (CallCapture &call : mCalls)
+    {
+        INFO() << "frame count: " << mFrameIndex << " " << call.name();
+        replayCall(context, &replayContext, &call);
+    }
 }
 
 void FrameCapture::reset()
@@ -575,7 +590,8 @@ void CaptureMemory(const void *source, size_t size, ParamCapture *paramCapture)
 
 void CaptureString(const GLchar *str, ParamCapture *paramCapture)
 {
-    CaptureMemory(str, strlen(str), paramCapture);
+    // include the '\0' suffix
+    CaptureMemory(str, strlen(str) + 1, paramCapture);
 }
 
 template <>
