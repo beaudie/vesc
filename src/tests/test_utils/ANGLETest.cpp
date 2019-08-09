@@ -173,7 +173,7 @@ bool ShouldAlwaysForceNewDisplay()
     // many displays causes crashes. However this exposes other driver bugs on many other platforms.
     // Conservatively enable the feature only on Windows Intel and NVIDIA for now.
     SystemInfo *systemInfo = GetTestSystemInfo();
-    return (!systemInfo || !IsWindows() || systemInfo->hasAMDGPU());
+    return (!systemInfo || !IsWindows() || IsVulkan());  // || systemInfo->hasAMDGPU());
 }
 }  // anonymous namespace
 

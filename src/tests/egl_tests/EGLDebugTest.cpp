@@ -181,7 +181,7 @@ ANGLE_INSTANTIATE_TEST(EGLDebugTest,
                        ES2_D3D11(),
                        ES3_D3D11(),
                        ES2_OPENGL(),
-                       ES3_OPENGL(),
-                       ES2_VULKAN());
+                       ES3_OPENGL());
+// http://anglebug.com/4092 Not instantiating on other backends currently
 
 }  // namespace angle
