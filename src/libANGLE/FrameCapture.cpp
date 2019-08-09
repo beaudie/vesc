@@ -13,7 +13,10 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/VertexArray.h"
-#include "libANGLE/gl_enum_utils_autogen.h"
+
+#if ANGLE_CAPTURE_ENABLED
+#    include "libANGLE/gl_enum_utils_autogen.h"
+#endif
 
 namespace angle
 {
