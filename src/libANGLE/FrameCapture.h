@@ -95,6 +95,56 @@ struct CallCapture
     ParamBuffer params;
 };
 
+struct ReplayContext
+{
+    ReplayContext(size_t readBufferSizebytes, const gl::AttribArray<size_t> &clientArraysSizebytes);
+    ~ReplayContext();
+
+    template <typename T>
+    T getReadBufferPointer(const ParamCapture &param)
+    {
+        ASSERT(param.readBufferSizeBytes > 0);
+        ASSERT(readBuffer.size() >= param.readBufferSizeBytes);
+        return reinterpret_cast<T>(const_cast<uint8_t *>(readBuffer.data()));
+    }
+    template <typename T>
+    T getAsConstPointer(const ParamCapture &param)
+    {
+        if (param.arrayClientPointerIndex != -1)
+        {
+            return reinterpret_cast<T>(clientArraysBuffer[param.arrayClientPointerIndex].data());
+        }
+
+        if (!param.data.empty())
+        {
+            ASSERT(param.data.size() == 1);
+            return reinterpret_cast<T>(param.data[0].data());
+        }
+
+        return nullptr;
+    }
+
+    template <typename T>
+    T getAsPointerConstPointer(const ParamCapture &param)
+    {
+        static_assert(sizeof(typename std::remove_pointer<T>::type) == sizeof(uint8_t *),
+                      "pointer size not match!");
+
+        ASSERT(!param.data.empty());
+        pointersBuffer.clear();
+        pointersBuffer.reserve(param.data.size());
+        for (const std::vector<uint8_t> &data : param.data)
+        {
+            pointersBuffer.emplace_back(data.data());
+        }
+        return reinterpret_cast<T>(pointersBuffer.data());
+    }
+
+    std::vector<uint8_t> readBuffer;
+    std::vector<const uint8_t *> pointersBuffer;
+    gl::AttribArray<std::vector<uint8_t>> clientArraysBuffer;
+};
+
 class FrameCapture final : angle::NonCopyable
 {
   public:
@@ -104,6 +154,7 @@ class FrameCapture final : angle::NonCopyable
     void captureCall(const gl::Context *context, CallCapture &&call);
     void onEndFrame();
     bool enabled() const;
+    void replay(gl::Context *context);
 
   private:
     // <CallName, ParamName>
@@ -143,6 +194,10 @@ class FrameCapture final : angle::NonCopyable
     gl::AttribArray<size_t> mClientArraySizes;
     std::map<Counter, int> mDataCounters;
     size_t mReadBufferSize;
+
+    static void ReplayCall(gl::Context *context,
+                           ReplayContext *replayContext,
+                           const CallCapture &call);
 };
 
 template <typename CaptureFuncT, typename... ArgsT>
