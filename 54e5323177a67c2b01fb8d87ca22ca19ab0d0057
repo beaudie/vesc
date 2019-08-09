@@ -16,6 +16,24 @@
       "revId": "54e5323177a67c2b01fb8d87ca22ca19ab0d0057",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22e6bee7_cbb95cae",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-09T16:37:17Z",
+      "side": 1,
+      "message": "Unfortunately not. Defining your functions here would be overly broad and catches other \"FromGL\" invocations for other non-ID types.",
+      "parentUuid": "5ed0f17e_b799c581",
+      "revId": "54e5323177a67c2b01fb8d87ca22ca19ab0d0057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
