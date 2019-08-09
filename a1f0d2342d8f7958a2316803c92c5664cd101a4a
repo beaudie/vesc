@@ -52,6 +52,24 @@
       "revId": "a1f0d2342d8f7958a2316803c92c5664cd101a4a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27140e31_39cad153",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-09T17:46:53Z",
+      "side": 0,
+      "message": "I think I thought about remove it when I was working in this area but left it as a \"who cares, let\u0027s keep it to be safe\".\n\nThe reason this is not needed is that `stageSubresourceUpdateFromFramebuffer` is doing a finish call, so there are no real nodes at this point, and there\u0027s no point in setting a read dependency (would not have been true for write dependency).",
+      "parentUuid": "586fba8e_5eaa5184",
+      "revId": "a1f0d2342d8f7958a2316803c92c5664cd101a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
