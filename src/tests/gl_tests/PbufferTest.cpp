@@ -301,4 +301,5 @@ TEST_P(PbufferTest, BindTexImageAndRedefineTexture)
     glDeleteTextures(1, &texture);
 }
 
-ANGLE_INSTANTIATE_TEST_ES2(PbufferTest);
+ANGLE_INSTANTIATE_TEST(PbufferTest, ES2_D3D9(), ES2_D3D11(), ES2_OPENGL(), ES2_OPENGLES());
+// http://anglebug.com/4092 Not instantiating on other backends currently

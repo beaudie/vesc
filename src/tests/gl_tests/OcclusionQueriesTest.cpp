@@ -89,6 +89,8 @@ TEST_P(OcclusionQueriesTest, IsNotOccluded)
     // TODO(syoussefi): Using render pass ops to clear the framebuffer attachment results in
     // AMD/Windows misbehaving in this test.  http://anglebug.com/3286
     ANGLE_SKIP_TEST_IF(IsWindows() && IsAMD() && IsVulkan());
+    // http://anglebug.com/4092
+    ANGLE_SKIP_TEST_IF(IsVulkan());
 
     glDepthMask(GL_TRUE);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);

@@ -899,9 +899,7 @@ ANGLE_INSTANTIATE_TEST(EGLSurfaceTest,
                        WithNoFixture(ES2_OPENGLES()),
                        WithNoFixture(ES3_OPENGLES()),
                        WithNoFixture(ES2_VULKAN()),
-                       WithNoFixture(ES3_VULKAN()),
-                       WithNoFixture(ES2_VULKAN_SWIFTSHADER()),
-                       WithNoFixture(ES3_VULKAN_SWIFTSHADER()));
+                       WithNoFixture(ES3_VULKAN()));
 ANGLE_INSTANTIATE_TEST(EGLSurfaceTest3, WithNoFixture(ES3_VULKAN()));
 
 #if defined(ANGLE_ENABLE_D3D11)
