@@ -13,4 +13,3 @@ Description:
 The Vulkan Loader Components are used to build the open-source desktop Vulkan loader. The loader
 is a library that loads the Vulkan entry points and hooks them into the correct layers and the
 client driver (ICD). This is required for using Vulkan layers and applications.
-

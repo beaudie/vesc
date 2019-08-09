@@ -686,6 +686,7 @@ angle_source_set("libANGLE_base") {
       sources += libangle_vulkan_android_sources
       libs += [ "vulkan" ]
     }
+    include_dirs += [ "${angle_root}/src/third_party/volk" ]
     deps += [
       ":angle_vulkan",
       "${angle_glslang_dir}:glslang_default_resource_limits_sources",
