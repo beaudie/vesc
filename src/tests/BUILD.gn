@@ -158,7 +158,10 @@ if (is_win || is_linux || is_mac || is_android || is_fuchsia) {
     ]
 
     if (angle_enable_vulkan) {
-      deps += [ "${angle_root}/src/libANGLE/renderer/vulkan:angle_vulkan" ]
+      deps += [
+        "${angle_root}/src/libANGLE/renderer/vulkan:angle_vulkan",
+        "${angle_root}/src/third_party/volk:volk",
+      ]
     }
   }
 }
@@ -173,10 +176,6 @@ if (is_win || is_linux || is_mac || is_android) {
 
     if (is_win) {
       sources += angle_white_box_tests_win_sources
-    }
-
-    if (angle_enable_vulkan) {
-      sources += angle_white_box_tests_vulkan_sources
     }
 
     if (is_mac) {
@@ -196,6 +195,11 @@ if (is_win || is_linux || is_mac || is_android) {
       "${angle_root}:preprocessor",
       "${angle_root}:translator",
     ]
+
+    if (angle_enable_vulkan) {
+      sources += angle_white_box_tests_vulkan_sources
+      deps += [ "${angle_root}/src/third_party/volk:volk" ]
+    }
   }
 }
 
@@ -222,7 +226,10 @@ if (is_win || is_linux || is_android || is_mac) {
 
     if (angle_enable_vulkan) {
       sources += angle_white_box_perf_tests_vulkan_sources
-      deps += [ "${angle_glslang_dir}:glslang_sources" ]
+      deps += [
+        "${angle_glslang_dir}:glslang_sources",
+        "${angle_root}/src/third_party/volk:volk",
+      ]
     }
 
     configs += [
