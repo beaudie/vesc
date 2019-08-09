@@ -80,7 +80,13 @@ EGLBoolean EGLAPIENTRY EGL_Initialize(EGLDisplay dpy, EGLint *major, EGLint *min
                (uintptr_t)dpy, (uintptr_t)major, (uintptr_t)minor);
     Thread *thread = egl::GetCurrentThread();
 
-    egl::Display *display = static_cast<egl::Display *>(dpy);
+    egl::Display *display                    = static_cast<egl::Display *>(dpy);
+    const egl::AttributeMap &eglAttributeMap = display->getAttributeMap();
+    if (eglAttributeMap.contains(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE))
+    {
+        thread->setDevice(
+            static_cast<GLint>(eglAttributeMap.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE)));
+    }
     ANGLE_EGL_TRY_RETURN(thread, ValidateInitialize(display), "eglInitialize",
                          GetDisplayIfValid(display), EGL_FALSE);
 
@@ -430,10 +436,16 @@ EGLBoolean EGLAPIENTRY EGL_MakeCurrent(EGLDisplay dpy,
                (uintptr_t)dpy, (uintptr_t)draw, (uintptr_t)read, CID(dpy, ctx));
     Thread *thread = egl::GetCurrentThread();
 
-    egl::Display *display = static_cast<egl::Display *>(dpy);
-    Surface *drawSurface  = static_cast<Surface *>(draw);
-    Surface *readSurface  = static_cast<Surface *>(read);
-    gl::Context *context  = static_cast<gl::Context *>(ctx);
+    egl::Display *display                    = static_cast<egl::Display *>(dpy);
+    Surface *drawSurface                     = static_cast<Surface *>(draw);
+    Surface *readSurface                     = static_cast<Surface *>(read);
+    gl::Context *context                     = static_cast<gl::Context *>(ctx);
+    GLint device                             = 0;
+    const egl::AttributeMap &eglAttributeMap = display->getAttributeMap();
+    if (eglAttributeMap.contains(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE))
+    {
+        device = static_cast<GLint>(eglAttributeMap.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE));
+    }
 
     ANGLE_EGL_TRY_RETURN(thread, ValidateMakeCurrent(display, drawSurface, readSurface, context),
                          "eglMakeCurrent", GetContextIfValid(display, context), EGL_FALSE);
@@ -441,9 +453,11 @@ EGLBoolean EGLAPIENTRY EGL_MakeCurrent(EGLDisplay dpy,
     Surface *previousDraw        = thread->getCurrentDrawSurface();
     Surface *previousRead        = thread->getCurrentReadSurface();
     gl::Context *previousContext = thread->getContext();
+    GLint previousDevice         = thread->getDevice();
 
     // Only call makeCurrent if the context or surfaces have changed.
-    if (previousDraw != drawSurface || previousRead != readSurface || previousContext != context)
+    if (previousDraw != drawSurface || previousRead != readSurface || previousContext != context ||
+        previousDevice != device)
     {
         ANGLE_EGL_TRY_RETURN(thread,
                              display->makeCurrent(thread, drawSurface, readSurface, context),
