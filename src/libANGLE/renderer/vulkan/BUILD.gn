@@ -204,6 +204,7 @@ if (angle_swiftshader) {
 # Use this target to include everything ANGLE needs for Vulkan.
 group("angle_vulkan") {
   public_deps = [
+    "$angle_root/src/third_party/volk:volk",
     "$angle_root/third_party/vulkan-headers/src:vulkan_headers",
   ]
   public_configs = [ ":vulkan_config" ]
