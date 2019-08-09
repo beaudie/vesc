@@ -21,12 +21,14 @@ class BindGeneratesResourceTest : public ANGLETest
 // available so the GL extension should always be present
 TEST_P(BindGeneratesResourceTest, ExtensionStringExposed)
 {
+    ANGLE_SKIP_TEST_IF(IsVulkan() && (IsIntel() || IsNVIDIA()));
     EXPECT_TRUE(IsGLExtensionEnabled("GL_CHROMIUM_bind_generates_resource"));
 }
 
 // Verify that GL_BIND_GENERATES_RESOURCE_CHROMIUM can be queried but not changed
 TEST_P(BindGeneratesResourceTest, QueryValidation)
 {
+    ANGLE_SKIP_TEST_IF(IsVulkan() && (IsIntel() || IsNVIDIA()));
     GLint intValue = 2;
     glGetIntegerv(GL_BIND_GENERATES_RESOURCE_CHROMIUM, &intValue);
     EXPECT_GL_NO_ERROR();
@@ -56,6 +58,7 @@ TEST_P(BindGeneratesResourceTest, QueryValidation)
 // Test that buffers cannot be generated on bind
 TEST_P(BindGeneratesResourceTest, Buffers)
 {
+    ANGLE_SKIP_TEST_IF(IsVulkan() && (IsIntel() || IsNVIDIA()));
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 2);
     EXPECT_GL_ERROR(GL_INVALID_OPERATION);
 
