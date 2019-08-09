@@ -8533,6 +8533,11 @@ void Context::onPostSwap() const
     mFrameCapture->onEndFrame();
 }
 
+void Context::replayFrameCapture()
+{
+    mFrameCapture->replay(this);
+}
+
 // ErrorSet implementation.
 ErrorSet::ErrorSet(Context *context) : mContext(context) {}
 

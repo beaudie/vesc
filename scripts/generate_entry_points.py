@@ -483,6 +483,27 @@ union ParamValue
 }};
 
 template <ParamType PType, typename T>
+void GetParamVal(const ParamValue &value, void *valueOut);
+
+{get_param_val_specializations}
+
+
+template <ParamType PType, typename T>
+void GetParamVal(const ParamValue &value, void *valueOut)
+{{
+    UNREACHABLE();
+}}
+
+template <typename T>
+void AccessParamValue(ParamType paramType, const ParamValue &value, void *valueOut)
+{{
+    switch (paramType)
+    {{
+{access_param_value_cases}
+    }}
+}}
+
+template <ParamType PType, typename T>
 void SetParamVal(T valueIn, ParamValue *valueOut);
 
 {set_param_val_specializations}
@@ -548,6 +569,15 @@ const char *ParamTypeToString(ParamType paramType)
 }}
 }}  // namespace angle
 """
+
+template_get_param_val_specialization = """template <>
+inline void GetParamVal<ParamType::T{enum}, {type}>(const ParamValue &value, void *valueOut)
+{{
+    *reinterpret_cast<{type}*>(valueOut) = value.{union_name};
+}}"""
+
+template_access_param_value_case = """        case ParamType::T{enum}:
+    GetParamVal<ParamType::T{enum}, {type}>(value, valueOut);break;"""
 
 template_set_param_val_specialization = """template <>
 inline void SetParamVal<ParamType::T{enum}>({type} valueIn, ParamValue *valueOut)
@@ -1189,6 +1219,18 @@ def format_param_type_union_type(param_type):
     return "%s %s;" % (get_param_type_type(param_type), get_param_type_union_name(param_type))
 
 
+def format_get_param_val_sepcialization(param_type):
+    return template_get_param_val_specialization.format(
+        enum=param_type,
+        type=get_param_type_type(param_type),
+        union_name=get_param_type_union_name(param_type))
+
+
+def format_access_param_value_case(param_type):
+    return template_access_param_value_case.format(
+        enum=param_type, type=get_param_type_type(param_type))
+
+
 def format_set_param_val_specialization(param_type):
     return template_set_param_val_specialization.format(
         enum=param_type,
@@ -1209,6 +1251,10 @@ def write_capture_helper_header(all_param_types):
 
     param_types = "\n    ".join(["T%s," % t for t in all_param_types])
     param_union_values = "\n    ".join([format_param_type_union_type(t) for t in all_param_types])
+    get_param_val_specializations = "\n\n".join(
+        [format_get_param_val_sepcialization(t) for t in all_param_types])
+    access_param_value_cases = "\n".join(
+        [format_access_param_value_case(t) for t in all_param_types])
     set_param_val_specializations = "\n\n".join(
         [format_set_param_val_specialization(t) for t in all_param_types])
     init_param_value_cases = "\n".join([format_init_param_value_case(t) for t in all_param_types])
@@ -1219,6 +1265,8 @@ def write_capture_helper_header(all_param_types):
         year=date.today().year,
         param_types=param_types,
         param_union_values=param_union_values,
+        get_param_val_specializations=get_param_val_specializations,
+        access_param_value_cases=access_param_value_cases,
         set_param_val_specializations=set_param_val_specializations,
         init_param_value_cases=init_param_value_cases)
 
