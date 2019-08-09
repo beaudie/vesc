@@ -734,6 +734,11 @@ angle_source_set("libANGLE") {
   sources = [
     "src/libANGLE/FrameCapture.cpp",
   ]
+
+  # gl_enum_utils defaults included in with_capture_build
+  if (angle_enable_trace) {
+    sources += [ "src/libANGLE/gl_enum_utils_autogen.cpp" ]
+  }
 }
 
 angle_source_set("libANGLE_with_capture") {
