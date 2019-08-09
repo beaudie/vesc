@@ -72,7 +72,6 @@ const char *GLenumToString(GLenumGroup enumGroup, unsigned int value) {{
     switch (enumGroup) {{
         {gl_enums_value_to_string_table}
         default:
-            UNREACHABLE();
             return "EnumUnknown";
     }}
 }}
@@ -113,7 +112,7 @@ template_enum_group_case = """case GLenumGroup::{group_name}: {{
 
 template_enum_value_to_string_case = """case {value}: return {name};"""
 
-export_apis = ['gles2']
+export_apis = ['gles2', 'gl']
 export_extensions = registry_xml.supported_extensions
 
 trivial_gl_enums = {'GL_FALSE', 'GL_TRUE', 'GL_NO_ERROR', 'GL_TIMEOUT_IGNORED', 'GL_INVALID_INDEX'}
