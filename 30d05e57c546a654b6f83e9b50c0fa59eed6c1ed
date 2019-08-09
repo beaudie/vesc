@@ -52,6 +52,24 @@
       "revId": "30d05e57c546a654b6f83e9b50c0fa59eed6c1ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "295400e7_d9bbf0a5",
+        "filename": "src/common/third_party/volk/volk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-09T20:48:34Z",
+      "side": 1,
+      "message": "Cool. And do you mean to bake into \"angle/third_party\" (or \"angle/src/third_party\") instead of \"src/common/third_party\"? I don\u0027t see any other files baked into \"angle/third_party\" so want to make sure I understand you correctly.\nIs \"angle/src/third_party\" for baked-in third party files and \"angle/third_party\" for deps that are pulled from mirrors?",
+      "parentUuid": "3c4a30d3_37006ce1",
+      "revId": "30d05e57c546a654b6f83e9b50c0fa59eed6c1ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
