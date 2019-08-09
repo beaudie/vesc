@@ -89,6 +89,8 @@ generators = {
         'scripts/generate_entry_points.py',
     'GLenum value to string map':
         'scripts/gen_gl_enum_utils.py',
+    'Frame capture replay':
+        'scripts/gen_frame_capture_replay.py',
     'GL format map':
         'src/libANGLE/gen_format_map.py',
     'uniform type':

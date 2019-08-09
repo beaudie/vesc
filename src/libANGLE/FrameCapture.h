@@ -98,6 +98,7 @@ class FrameCapture final : angle::NonCopyable
     void captureCall(const gl::Context *context, CallCapture &&call);
     void onEndFrame();
     bool enabled() const;
+    void replay(const gl::Context *context) const;
 
   private:
     // <CallName, ParamName>

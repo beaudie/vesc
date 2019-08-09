@@ -560,6 +560,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     const angle::FrontendFeatures &getFrontendFeatures() const;
 
     angle::FrameCapture *getFrameCapture() { return mFrameCapture.get(); }
+    void replayFrameCapture() { mFrameCapture->replay(this); }
 
     void onPostSwap() const;
 
