@@ -11,7 +11,10 @@
 #ifndef LIBANGLE_GL_ENUM_UTILS_AUTOGEN_H_
 #define LIBANGLE_GL_ENUM_UTILS_AUTOGEN_H_
 
+#include <sstream>
 #include <string>
+
+#include "common/PackedGLEnums_autogen.h"
 
 namespace gl
 {
