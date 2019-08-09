@@ -809,6 +809,11 @@ angle_libGLESv2("libGLESv2") {
     ":libANGLE",
   ]
 
+  # trace sources are default included in with_capture build
+  if (angle_enable_trace) {
+    sources += libangle_trace_sources
+  }
+
   if (angle_with_capture_by_default) {
     output_name = "libGLESv2_no_capture"
   }
@@ -863,6 +868,10 @@ angle_static_library("libGLESv2_static") {
   public_deps = [
     ":libANGLE",
   ]
+
+  if (angle_enable_trace) {
+    sources += libangle_trace_sources
+  }
 }
 
 angle_shared_library("libGLESv1_CM") {

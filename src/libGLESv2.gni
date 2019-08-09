@@ -123,6 +123,11 @@ libangle_gpu_info_util_x11_sources = [ "src/gpu_info_util/SystemInfo_x11.cpp" ]
 
 libangle_gpu_info_util_mac_sources = [ "src/gpu_info_util/SystemInfo_mac.mm" ]
 
+libangle_trace_sources = [
+  "src/libANGLE/gl_enum_utils_autogen.cpp",
+  "src/libANGLE/gl_enum_utils_autogen.h",
+]
+
 libangle_includes = [
   "include/angle_gl.h",
   "include/export.h",
@@ -923,7 +928,6 @@ libangle_sources += [
   "src/libANGLE/capture_gles_3_1_autogen.h",
   "src/libANGLE/capture_gles_ext_autogen.h",
   "src/libANGLE/frame_capture_utils_autogen.h",
-  "src/libANGLE/gl_enum_utils_autogen.h",
 ]
 
 libangle_capture_sources = [
@@ -938,8 +942,9 @@ libangle_capture_sources = [
   "src/libANGLE/capture_gles_3_1_params.cpp",
   "src/libANGLE/capture_gles_ext_autogen.cpp",
   "src/libANGLE/capture_gles_ext_params.cpp",
-  "src/libANGLE/gl_enum_utils_autogen.cpp",
   "src/libANGLE/frame_capture_utils_autogen.cpp",
+  "src/libANGLE/gl_enum_utils_autogen.cpp",
+  "src/libANGLE/gl_enum_utils_autogen.h",
 ]
 
 libangle_vulkan_android_sources = [
