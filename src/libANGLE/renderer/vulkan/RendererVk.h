@@ -10,10 +10,10 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_RENDERERVK_H_
 #define LIBANGLE_RENDERER_VULKAN_RENDERERVK_H_
 
-#include <vulkan/vulkan.h>
 #include <memory>
 #include <mutex>
 #include "vk_ext_provoking_vertex.h"
+#include "volk.h"
 
 #include "common/PoolAlloc.h"
 #include "common/angleutils.h"
@@ -208,6 +208,8 @@ class RendererVk : angle::NonCopyable
     {
         return (mSharedGarbage.size() > mGarbageCollectionFlushThreshold);
     }
+
+    void validateVolk() const;
 
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
