@@ -671,7 +671,7 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
 
         case CommandGraphNodeFunction::InsertDebugMarker:
             ASSERT(!mOutsideRenderPassCommands.valid() && !mInsideRenderPassCommands.valid());
-
+#if !defined(ANGLE_PLATFORM_ANDROID)
             if (vkCmdInsertDebugUtilsLabelEXT)
             {
                 VkDebugUtilsLabelEXT label;
@@ -679,11 +679,12 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
 
                 vkCmdInsertDebugUtilsLabelEXT(primaryCommandBuffer->getHandle(), &label);
             }
+#endif
             break;
 
         case CommandGraphNodeFunction::PushDebugMarker:
             ASSERT(!mOutsideRenderPassCommands.valid() && !mInsideRenderPassCommands.valid());
-
+#if !defined(ANGLE_PLATFORM_ANDROID)
             if (vkCmdBeginDebugUtilsLabelEXT)
             {
                 VkDebugUtilsLabelEXT label;
@@ -691,15 +692,17 @@ angle::Result CommandGraphNode::visitAndExecute(vk::Context *context,
 
                 vkCmdBeginDebugUtilsLabelEXT(primaryCommandBuffer->getHandle(), &label);
             }
+#endif
             break;
 
         case CommandGraphNodeFunction::PopDebugMarker:
             ASSERT(!mOutsideRenderPassCommands.valid() && !mInsideRenderPassCommands.valid());
-
+#if !defined(ANGLE_PLATFORM_ANDROID)
             if (vkCmdEndDebugUtilsLabelEXT)
             {
                 vkCmdEndDebugUtilsLabelEXT(primaryCommandBuffer->getHandle());
             }
+#endif
             break;
 
         case CommandGraphNodeFunction::HostAvailabilityOperation:
