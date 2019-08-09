@@ -34,13 +34,67 @@ struct ParamCapture : angle::NonCopyable
     ParamCapture(ParamCapture &&other);
     ParamCapture &operator=(ParamCapture &&other);
 
+    template <typename T>
+    T getAs() const
+    {
+        return angle::AccessParamValue<T>(type, value);
+    }
+    template <typename T>
+    T getAsPointer()
+    {
+        ASSERT(!(!data.empty() && readBufferSizeBytes > 0));
+        if (!data.empty())
+        {
+            ASSERT(data.size() == 1);
+            return reinterpret_cast<T>(const_cast<uint8_t *>(data[0].data()));
+        }
+
+        if (readBufferSizeBytes > 0)
+        {
+            replayReadBuffer.resize(readBufferSizeBytes);
+            return reinterpret_cast<T>(const_cast<uint8_t *>(replayReadBuffer.data()));
+        }
+
+        return getAs<T>();
+    }
+    template <typename T>
+    T getAsPointerPointer(std::vector<const uint8_t *> *pointersBufferOut) const
+    {
+        static_assert(sizeof(typename std::remove_pointer<T>::type) == sizeof(uint8_t *),
+                      "pointer size not match!");
+
+        if (!data.empty())
+        {
+            pointersBufferOut->clear();
+            pointersBufferOut->reserve(data.size());
+            for (const auto &data : data)
+            {
+                pointersBufferOut->emplace_back(data.data());
+            }
+            return reinterpret_cast<T>(const_cast<uint8_t **>(pointersBufferOut->data()));
+        }
+
+        return getAs<T>();
+    }
+
+    template <typename T>
+    const T *getReadBufferValuePointer() const
+    {
+        // XXX: better to have some static assert that (T* == ParamType)
+        ASSERT(readBufferSizeBytes == replayReadBuffer.size());
+        ASSERT(readBufferSizeBytes > 0);
+
+        return reinterpret_cast<const T *>(replayReadBuffer.data());
+    }
+
     std::string name;
     ParamType type;
     ParamValue value;
     gl::GLenumGroup enumGroup;  // only used for param type GLenum, GLboolean and GLbitfield
     std::vector<std::vector<uint8_t>> data;
     int arrayClientPointerIndex = -1;
-    size_t readBufferSizeBytes  = 0;
+    std::vector<uint8_t> replayReadBuffer;
+    size_t readBufferSizeBytes = 0;
 };
 
 class ParamBuffer final : angle::NonCopyable
@@ -102,6 +156,7 @@ class FrameCapture final : angle::NonCopyable
     void captureCall(const gl::Context *context, CallCapture &&call);
     void onEndFrame();
     bool enabled() const;
+    void replay(gl::Context *context);
 
   private:
     // <CallName, ParamName>
@@ -126,6 +181,18 @@ class FrameCapture final : angle::NonCopyable
     gl::AttribArray<size_t> mClientArraySizes;
     std::map<Counter, int> mDataCounters;
     size_t mReadBufferSize;
+
+    struct ReplayParamBuffer
+    {
+        ReplayParamBuffer();
+        ~ReplayParamBuffer();
+
+        std::vector<const uint8_t *> pointersBuffer;
+    } mReplayParamBuffer;
+
+    static void ReplayCallCapture(gl::Context *context,
+                                  FrameCapture::ReplayParamBuffer *paramBuffer,
+                                  CallCapture *call);
 };
 
 template <typename CaptureFuncT, typename... ArgsT>
