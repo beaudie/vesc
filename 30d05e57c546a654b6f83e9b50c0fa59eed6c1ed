@@ -70,6 +70,24 @@
       "revId": "30d05e57c546a654b6f83e9b50c0fa59eed6c1ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "899aef0f_b8b34778",
+        "filename": "src/common/third_party/volk/volk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-09T20:50:53Z",
+      "side": 1,
+      "message": "No, common/third_party is just for deps of common/. If you want you can bake it into src/third_party where there is already some baked stuff.",
+      "parentUuid": "295400e7_d9bbf0a5",
+      "revId": "30d05e57c546a654b6f83e9b50c0fa59eed6c1ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
