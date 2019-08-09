@@ -58,7 +58,9 @@ class DisplayImpl : public EGLImplFactory
     ~DisplayImpl() override;
 
     virtual egl::Error initialize(egl::Display *display) = 0;
-    virtual void terminate()                             = 0;
+    // SoftInitialize currently used w/ VK backend to reset vk* function ptrs
+    virtual egl::Error softInitialize(egl::Display *display);
+    virtual void terminate() = 0;
 
     virtual egl::Error makeCurrent(egl::Surface *drawSurface,
                                    egl::Surface *readSurface,

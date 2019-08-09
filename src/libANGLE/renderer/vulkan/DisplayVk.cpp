@@ -39,6 +39,15 @@ egl::Error DisplayVk::initialize(egl::Display *display)
     return egl::NoError();
 }
 
+egl::Error DisplayVk::softInitialize(egl::Display *display)
+{
+    ASSERT(mRenderer != nullptr && display != nullptr);
+    printf("In DisplayVk::sofInitialize(), mRenderer 0x%p\n", mRenderer);
+    angle::Result result = mRenderer->softInitialize(this);
+    ANGLE_TRY(angle::ToEGL(result, this, EGL_NOT_INITIALIZED));
+    return egl::NoError();
+}
+
 void DisplayVk::terminate()
 {
     ASSERT(mRenderer);

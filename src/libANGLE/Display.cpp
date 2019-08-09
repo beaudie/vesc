@@ -672,7 +672,6 @@ Error Display::terminate(const Thread *thread)
     {
         return NoError();
     }
-
     mMemoryProgramCache.clear();
     mBlobCache.setBlobCacheFuncs(nullptr, nullptr);
 
@@ -680,7 +679,6 @@ Error Display::terminate(const Thread *thread)
     {
         ANGLE_TRY(destroyContext(thread, *mContextSet.begin()));
     }
-
     ANGLE_TRY(makeCurrent(thread, nullptr, nullptr, nullptr));
 
     // The global texture manager should be deleted with the last context that uses it.
@@ -705,7 +703,6 @@ Error Display::terminate(const Thread *thread)
     {
         ANGLE_TRY(destroySurface(*mState.surfaceSet.begin()));
     }
-
     mConfigSet.clear();
 
     if (mDevice != nullptr && mDevice->getOwningDisplay() != nullptr)
@@ -714,13 +711,11 @@ Error Display::terminate(const Thread *thread)
         // We also shouldn't set it to null in case eglInitialize() is called again later
         SafeDelete(mDevice);
     }
-
     mImplementation->terminate();
 
     mDeviceLost = false;
 
     mInitialized = false;
-
     gl::UninitializeDebugAnnotations();
 
     // TODO(jmadill): Store Platform in Display and deinit here.
@@ -1027,6 +1022,12 @@ Error Display::makeCurrent(const Thread *thread,
     }
 
     ANGLE_TRY(mImplementation->makeCurrent(drawSurface, readSurface, context));
+    if (thread->getDevice() !=
+        static_cast<GLint>(mAttributeMap.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE)))
+    {
+        // If the device has changed we need to re-init to make sure vk* func ptrs are correct
+        ANGLE_TRY(mImplementation->softInitialize(this));
+    }
 
     if (context != nullptr)
     {

@@ -3196,7 +3196,6 @@ angle::Result ContextVk::ensureSubmitFenceInitialized()
     {
         return angle::Result::Continue;
     }
-
     return mRenderer->newSharedFence(this, &mSubmitFence);
 }
 

@@ -63,4 +63,9 @@ const egl::Caps &DisplayImpl::getCaps() const
     return mCaps;
 }
 
+egl::Error DisplayImpl::softInitialize(egl::Display *display)
+{
+    return egl::NoError();
+}
+
 }  // namespace rx

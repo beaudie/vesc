@@ -20,7 +20,8 @@ Thread::Thread()
     : mLabel(nullptr),
       mError(EGL_SUCCESS),
       mAPI(EGL_OPENGL_ES_API),
-      mContext(static_cast<gl::Context *>(EGL_NO_CONTEXT))
+      mContext(static_cast<gl::Context *>(EGL_NO_CONTEXT)),
+      mDevice(0)
 {}
 
 void Thread::setLabel(EGLLabelKHR label)
@@ -115,6 +116,16 @@ Display *Thread::getDisplay() const
         return mContext->getDisplay();
     }
     return nullptr;
+}
+
+void Thread::setDevice(GLint device)
+{
+    mDevice = device;
+}
+
+GLint Thread::getDevice() const
+{
+    return mDevice;
 }
 
 }  // namespace egl

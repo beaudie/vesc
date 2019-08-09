@@ -25,6 +25,7 @@ class DisplayVk : public DisplayImpl, public vk::Context
     ~DisplayVk() override;
 
     egl::Error initialize(egl::Display *display) override;
+    egl::Error softInitialize(egl::Display *display) override;
     void terminate() override;
 
     egl::Error makeCurrent(egl::Surface *drawSurface,
