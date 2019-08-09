@@ -13,6 +13,7 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/VertexArray.h"
+#include "libANGLE/frame_capture_replay_autogen.h"
 #include "libANGLE/gl_enum_utils_autogen.h"
 
 namespace angle
@@ -25,6 +26,10 @@ ParamCapture::~ParamCapture() {}
 FrameCapture::FrameCapture() {}
 FrameCapture::~FrameCapture() {}
 void FrameCapture::onEndFrame() {}
+void FrameCapture::replay(gl::Context *context)
+{
+    ANGLE_UNUSED_VARIABLE(context);
+}
 #else
 namespace
 {
@@ -299,7 +304,8 @@ void FrameCapture::onEndFrame()
 {
     if (!mCalls.empty())
     {
-        saveCapturedFrameAsCpp();
+        // FIXME: revert back
+        // saveCapturedFrameAsCpp();
     }
 
     reset();
@@ -537,6 +543,15 @@ void FrameCapture::writeCallReplay(const CallCapture &call,
 bool FrameCapture::enabled() const
 {
     return mFrameIndex < 100;
+}
+
+void FrameCapture::replay(gl::Context *context)
+{
+    for (const CallCapture &call : mCalls)
+    {
+        // TODO: spefical handling of some call
+        CallCaptureReplay(context, call);
+    }
 }
 
 void FrameCapture::reset()
