@@ -34,6 +34,24 @@
       "revId": "30d05e57c546a654b6f83e9b50c0fa59eed6c1ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3c4a30d3_37006ce1",
+        "filename": "src/common/third_party/volk/volk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-09T20:37:41Z",
+      "side": 1,
+      "message": "No, you can bake the files. But you still need the above changes.",
+      "parentUuid": "68d62954_98bb1507",
+      "revId": "30d05e57c546a654b6f83e9b50c0fa59eed6c1ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
