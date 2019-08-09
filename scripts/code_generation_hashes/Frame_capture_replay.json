@@ -1,0 +1,12 @@
+{
+  "scripts/gen_frame_capture_replay.py":
+    "0b994df08e84f7ddff5c7410df8961ee",
+  "scripts/gl.xml":
+    "b470cb06b06cbbe7adb2c8129ec85708",
+  "scripts/gl_angle_ext.xml":
+    "bed6b56a38621721e689ebc19601a556",
+  "src/libANGLE/frame_capture_replay_autogen.cpp":
+    "ecd0f0bd2fbb4c9315b55b2baf775132",
+  "src/libANGLE/frame_capture_replay_autogen.h":
+    "b57b46ebb499d83eef0e94d36e7ba8cd"
+}
