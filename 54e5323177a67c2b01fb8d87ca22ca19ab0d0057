@@ -70,6 +70,24 @@
       "revId": "54e5323177a67c2b01fb8d87ca22ca19ab0d0057",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "098fae9c_6b931c98",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-09T20:28:35Z",
+      "side": 1,
+      "message": "I\u0027m not sure PackedGLEnums_autogen.cpp addresses my question.   Those are different functions than the catch-all FromGL() that\u0027s defined here and is used by this macro:\n\n// Pass-through for resource types that aren\u0027t yet represented by IDs.\n// TODO(jmadill): Remove when all resource types use IDs. http://anglebug.com/3611\ntemplate \u003c\u003e\nANGLE_INLINE GLuint FromGL(GLuint id)\n{\n    return id;\n}\n\nBased on the grep results, it seems we will eventually see:\nANGLE_INSTANTIATE_RESOURCE_ID_FUNCS(MaterialParameter)\nANGLE_INSTANTIATE_RESOURCE_ID_FUNCS(MatrixType)\nANGLE_INSTANTIATE_RESOURCE_ID_FUNCS(ShadingModel)\nANGLE_INSTANTIATE_RESOURCE_ID_FUNCS(TextureEnvTarget)\netc.\n\nThis means that each new struct needs to be defined and have a line added here, and then when everything is converted all of this needs to be removed and converted to just the functions (outside of the macro).   Instead, I think we can do something like this:\n\n    #include \u003ciostream\u003e\n    #include \u003cstring\u003e\n\n    enum class GLenumGroup\n    {\n        AccumOp,\n        AlphaFunction\n    };\n\n    class ResourceIDType\n    {\n    public:\n        ResourceIDType(int value) : mValue(value) {}\n        virtual ~ResourceIDType() {};\n        int getIDValue() { return mValue; }\n\n    private:\n        int mValue;\n    };\n\n    template \u003ctypename ResourceIDType\u003e\n    inline int GetIDValue(ResourceIDType id)\n    {\n        return id.getIDValue();\n    }\n\n    template \u003ctypename T\u003e\n    T FromGL(int handle)\n    {\n        if (std::is_enum\u003cT\u003e::value)\n        {\n            // Not a child of ResourceIDType yet\n            return static_cast\u003cT\u003e(handle);\n        }\n        else\n        {\n            return T(handle);\n        }\n    }\n\n    template \u003ctypename T\u003e\n    T FromGL(int *handle)\n    {\n        return reinterpret_cast\u003cT\u003e(handle);\n    }\n\n    class BufferID : public ResourceIDType\n    {\n    public:\n        BufferID(int value) : ResourceIDType(value) {}\n        virtual ~BufferID() {};\n    };\n\n    class RenderbufferID : public ResourceIDType\n    {\n    public:\n        RenderbufferID(int value) : ResourceIDType(value) {}\n        virtual ~RenderbufferID() {};\n    };\n\n    int main()\n    {\n      std::cout \u003c\u003c \"What is your name? \";\n      BufferID b \u003d FromGL\u003cBufferID\u003e(10);\n      std::cout \u003c\u003c \"b \u003d \" \u003c\u003c GetIDValue(b) \u003c\u003c std::endl;\n      GLenumGroup i \u003d FromGL\u003cGLenumGroup\u003e(11);\n      std::cout \u003c\u003c \"i \u003d \" \u003c\u003c static_cast\u003cint\u003e(i) \u003c\u003c std::endl;\n      int temp \u003d 12;\n      BufferID *c \u003d FromGL\u003cBufferID*\u003e(\u0026temp);\n    }\n\n\nThis only requires two FromGL() functions, with just one needing special treatment for the old enum values still out there.   Adding new types just requires declaring the new class that inherits from ResourceIDType and the only cleanup should be removing the is_enum block.\n\nThat little test main() obviously doesn\u0027t cover all of the cases where this is used in ANGLE, but hopefully it\u0027s mostly there.   Thoughts?",
+      "parentUuid": "e25f04c4_6992e0c2",
+      "revId": "54e5323177a67c2b01fb8d87ca22ca19ab0d0057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
