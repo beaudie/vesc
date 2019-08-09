@@ -540,7 +540,8 @@ void ANGLETestBase::ANGLETestSetUp()
     }
     else
     {
-        if (mForceNewDisplay || !mFixture->eglWindow->isDisplayInitialized())
+        if (mForceNewDisplay || !mFixture->eglWindow->isDisplayInitialized() ||
+            mLastDeviceType != mCurrentParams->getDeviceType())
         {
             mFixture->eglWindow->destroyGL();
             if (!mFixture->eglWindow->initializeDisplay(mFixture->osWindow,
@@ -549,6 +550,7 @@ void ANGLETestBase::ANGLETestSetUp()
             {
                 FAIL() << "EGL Display init failed.";
             }
+            mLastDeviceType = mCurrentParams->getDeviceType();
         }
         else if (mCurrentParams->eglParameters != mFixture->eglWindow->getPlatform())
         {
@@ -1342,6 +1344,7 @@ ANGLETestBase::ScopedIgnorePlatformMessages::~ScopedIgnorePlatformMessages()
 
 OSWindow *ANGLETestBase::mOSWindowSingleton = nullptr;
 std::map<angle::PlatformParameters, ANGLETestBase::TestFixture> ANGLETestBase::gFixtures;
+GLint ANGLETestBase::mLastDeviceType = 0;
 Optional<EGLint> ANGLETestBase::mLastRendererType;
 
 std::unique_ptr<Library> ANGLETestEnvironment::gEGLLibrary;

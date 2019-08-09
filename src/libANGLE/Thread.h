@@ -49,12 +49,15 @@ class Thread : public LabeledObject
     gl::Context *getContext() const;
     gl::Context *getValidContext() const;
     Display *getDisplay() const;
+    void setDevice(GLint device);
+    GLint getDevice() const;
 
   private:
     EGLLabelKHR mLabel;
     EGLint mError;
     EGLenum mAPI;
     gl::Context *mContext;
+    GLint mDevice;
 };
 
 }  // namespace egl
