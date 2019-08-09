@@ -22,6 +22,30 @@
       "revId": "3038876f3203642dba1a334f5c89b7494ba00218",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e3f894f4_fdd06366",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 652,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-09T17:16:17Z",
+      "side": 1,
+      "message": "Done.\n\nTalked with Jamie on chat, the confusion is resolved.",
+      "parentUuid": "0cb1bd2e_a5f737f9",
+      "range": {
+        "startLine": 649,
+        "startChar": 8,
+        "endLine": 652,
+        "endChar": 13
+      },
+      "revId": "3038876f3203642dba1a334f5c89b7494ba00218",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
