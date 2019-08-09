@@ -170,4 +170,6 @@ angle_end2end_tests_vulkan_sources = [
   "gl_tests/VulkanExternalImageTest.cpp",
   "test_utils/VulkanExternalHelper.cpp",
   "test_utils/VulkanExternalHelper.h",
+  "../third_party/volk/volk.c",
+  "../third_party/volk/volk.h",
 ]
