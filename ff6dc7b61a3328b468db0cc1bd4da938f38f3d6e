@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7fb098b3_fdd78973",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-09T18:03:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f221f4aa_1db4f436",
+      "range": {
+        "startLine": 641,
+        "startChar": 0,
+        "endLine": 642,
+        "endChar": 72
+      },
+      "revId": "ff6dc7b61a3328b468db0cc1bd4da938f38f3d6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e8771ce0_b30b0fe6",
         "filename": "src/libANGLE/gl_enum_utils_autogen.cpp",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "ff6dc7b61a3328b468db0cc1bd4da938f38f3d6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adc9bbfb_c65ed317",
+        "filename": "src/libANGLE/gl_enum_utils_autogen.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-09T18:03:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8771ce0_b30b0fe6",
+      "range": {
+        "startLine": 875,
+        "startChar": 28,
+        "endLine": 875,
+        "endChar": 48
+      },
+      "revId": "ff6dc7b61a3328b468db0cc1bd4da938f38f3d6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
