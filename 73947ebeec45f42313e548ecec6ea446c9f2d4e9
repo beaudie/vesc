@@ -16,6 +16,29 @@
       "revId": "73947ebeec45f42313e548ecec6ea446c9f2d4e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3be105d0_c2cf5b27",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-09T14:00:08Z",
+      "side": 1,
+      "message": "GetRenderTargetLayerCount() should return `kCubeFaceCount` for cube maps, right? You can assert it and then have `initRenderTargets` infer the number of layers.",
+      "range": {
+        "startLine": 1133,
+        "startChar": 78,
+        "endLine": 1133,
+        "endChar": 92
+      },
+      "revId": "73947ebeec45f42313e548ecec6ea446c9f2d4e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
