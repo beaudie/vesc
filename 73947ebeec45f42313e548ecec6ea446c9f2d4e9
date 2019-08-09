@@ -63,6 +63,30 @@
       "revId": "73947ebeec45f42313e548ecec6ea446c9f2d4e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e4f8874_17eead0e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-08-09T15:58:45Z",
+      "side": 1,
+      "message": "Took another pass that makes the code tighter, removes the extra vector, hopefully understandable.",
+      "parentUuid": "293d4e40_82a14c11",
+      "range": {
+        "startLine": 1133,
+        "startChar": 78,
+        "endLine": 1133,
+        "endChar": 92
+      },
+      "revId": "73947ebeec45f42313e548ecec6ea446c9f2d4e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
