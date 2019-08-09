@@ -1989,6 +1989,21 @@ TEST_P(CHROMIUMPathRenderingWithTexturingTest, UnusedFragmentInputUpdate)
 
 }  // namespace
 
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(CHROMIUMPathRenderingTest);
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(CHROMIUMPathRenderingDrawTest);
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(CHROMIUMPathRenderingWithTexturingTest);
+// http://anglebug.com/4092 Not instantiating on VK backends currently
+ANGLE_INSTANTIATE_TEST(CHROMIUMPathRenderingTest,
+                       ES2_OPENGL(),
+                       ES2_OPENGLES(),
+                       ES3_OPENGL(),
+                       ES3_OPENGLES());
+
+ANGLE_INSTANTIATE_TEST(CHROMIUMPathRenderingDrawTest,
+                       ES2_OPENGL(),
+                       ES2_OPENGLES(),
+                       ES3_OPENGL(),
+                       ES3_OPENGLES());
+
+ANGLE_INSTANTIATE_TEST(CHROMIUMPathRenderingWithTexturingTest,
+                       ES2_OPENGL(),
+                       ES2_OPENGLES(),
+                       ES3_OPENGL(),
+                       ES3_OPENGLES());
