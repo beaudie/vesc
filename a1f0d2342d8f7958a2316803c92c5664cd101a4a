@@ -16,6 +16,24 @@
       "revId": "a1f0d2342d8f7958a2316803c92c5664cd101a4a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "586fba8e_5eaa5184",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-09T17:37:53Z",
+      "side": 0,
+      "message": "Intuitively and from spec language copyTexImage is reading from a Framebuffer. The CL also doesn\u0027t seem to enable any new tests.",
+      "parentUuid": "e583f71c_97dcecaa",
+      "revId": "a1f0d2342d8f7958a2316803c92c5664cd101a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
