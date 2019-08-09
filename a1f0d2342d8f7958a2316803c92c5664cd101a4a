@@ -70,6 +70,24 @@
       "revId": "a1f0d2342d8f7958a2316803c92c5664cd101a4a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8c3e6ad_b26c6014",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-09T17:57:13Z",
+      "side": 0,
+      "message": "The CL does reference the bug, with all of the details.  If desired, I can add a comment that explicitly says the details are in the bug (I wrote the bug and immediately the CL).  I\u0027ll probably wait till the bots are finished, to not give them more to do.",
+      "parentUuid": "27140e31_39cad153",
+      "revId": "a1f0d2342d8f7958a2316803c92c5664cd101a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
