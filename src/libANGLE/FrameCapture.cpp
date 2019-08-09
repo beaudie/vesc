@@ -299,7 +299,8 @@ void FrameCapture::onEndFrame()
 {
     if (!mCalls.empty())
     {
-        saveCapturedFrameAsCpp();
+        // FIXME: revert back
+        // saveCapturedFrameAsCpp();
     }
 
     reset();
