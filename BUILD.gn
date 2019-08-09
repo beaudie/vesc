@@ -734,6 +734,10 @@ config("angle_frame_capture_enabled") {
   defines = [ "ANGLE_CAPTURE_ENABLED=1" ]
 }
 
+config("angle_frame_capture_replay_enabled") {
+  defines = [ "ANGLE_CAPTURE_REPLAY_ENABLED=1" ]
+}
+
 angle_source_set("libANGLE") {
   public_deps = [
     ":libANGLE_base",

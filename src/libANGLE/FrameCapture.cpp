@@ -25,6 +25,7 @@ ParamCapture::~ParamCapture() {}
 FrameCapture::FrameCapture() {}
 FrameCapture::~FrameCapture() {}
 void FrameCapture::onEndFrame() {}
+void FrameCapture::replay(gl::Context *context) {}
 #else
 namespace
 {
@@ -183,6 +184,9 @@ const char *CallCapture::name() const
     return gl::GetEntryPointName(entryPoint);
 }
 
+FrameCaptureReplayContext::FrameCaptureReplayContext() {}
+FrameCaptureReplayContext::~FrameCaptureReplayContext() {}
+
 FrameCapture::FrameCapture() : mFrameIndex(0), mReadBufferSize(0)
 {
     reset();
@@ -254,7 +258,8 @@ void FrameCapture::maybeCaptureClientData(const gl::Context *context, const Call
                     indexRange = gl::ComputeIndexRange(drawElementsType, indices, count, restart);
                 }
 
-                captureClientArraySnapshot(context, indexRange.end, 1);
+                // index starts from 0
+                captureClientArraySnapshot(context, indexRange.end + 1, 1);
             }
             break;
         }
@@ -682,7 +687,48 @@ void FrameCapture::writeCallReplay(const CallCapture &call,
 
 bool FrameCapture::enabled() const
 {
-    return mFrameIndex < 100;
+    return mFrameIndex < 99;
+}
+
+void FrameCapture::replay(gl::Context *context)
+{
+    FrameCaptureReplayContext replayContext;
+    replayContext.initialize(mReadBufferSize, mClientArraySizes);
+    for (CallCapture &call : mCalls)
+    {
+        INFO() << "frame count: " << mFrameIndex << " " << call.name();
+
+        if (call.entryPoint == gl::EntryPoint::Invalid)
+        {
+            if (call.customFunctionName == "UpdateClientArrayPointer")
+            {
+                GLint arrayIndex =
+                    call.params.getParam("arrayIndex", ParamType::TGLint, 0).value.GLintVal;
+                ASSERT(arrayIndex < gl::MAX_VERTEX_ATTRIBS);
+
+                const void *pointer =
+                    call.params.getParam("pointer", ParamType::TvoidConstPointer, 1)
+                        .value.voidConstPointerVal;
+                GLuint64 size =
+                    call.params.getParam("size", ParamType::TGLuint64, 2).value.GLuint64Val;
+
+                ASSERT(replayContext.clientArraysBuffer[arrayIndex].size() >= size);
+
+                memcpy(const_cast<uint8_t *>(replayContext.clientArraysBuffer[arrayIndex].data()),
+                       pointer, size);
+            }
+            continue;
+        }
+
+        if (call.params.hasClientArrayData())
+        {
+            GLuint arrayIndex =
+                call.params.getParam("index", ParamType::TGLuint, 0).value.GLuintVal;
+            call.params.getClientArrayPointerParameter().value.voidConstPointerVal =
+                replayContext.clientArraysBuffer[arrayIndex].data();
+        }
+        replayCall(context, &replayContext, call);
+    }
 }
 
 void FrameCapture::reset()
@@ -709,7 +755,8 @@ void CaptureMemory(const void *source, size_t size, ParamCapture *paramCapture)
 
 void CaptureString(const GLchar *str, ParamCapture *paramCapture)
 {
-    CaptureMemory(str, strlen(str), paramCapture);
+    // include the '\0' suffix
+    CaptureMemory(str, strlen(str) + 1, paramCapture);
 }
 
 template <>
