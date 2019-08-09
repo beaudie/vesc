@@ -34,6 +34,45 @@ struct ParamCapture : angle::NonCopyable
     ParamCapture(ParamCapture &&other);
     ParamCapture &operator=(ParamCapture &&other);
 
+    template <typename T>
+    T getAs() const
+    {
+        T paramOut;
+        angle::AccessParamValue(type, value, &paramOut);
+        return paramOut;
+    }
+    template <typename T>
+    T getAsPointer() const
+    {
+        if (!data.empty())
+        {
+            ASSERT(data.size() == 1);
+            return reinterpret_cast<T>(const_cast<uint8_t *>(data[0].data()));
+        }
+        else
+        {
+            return getAs<T>();
+        }
+    }
+    template <typename T>
+    T getAsPointerPointer(std::vector<const uint8_t *> *pointersBufferOut) const
+    {
+        if (!data.empty())
+        {
+            pointersBufferOut->clear();
+            pointersBufferOut->reserve(data.size());
+            for (const auto &data : data)
+            {
+                pointersBufferOut->emplace_back(data.data());
+            }
+            return reinterpret_cast<T>(const_cast<uint8_t **>(pointersBufferOut->data()));
+        }
+        else
+        {
+            return getAs<T>();
+        }
+    }
+
     std::string name;
     ParamType type;
     ParamValue value;
@@ -102,6 +141,7 @@ class FrameCapture final : angle::NonCopyable
     void captureCall(const gl::Context *context, CallCapture &&call);
     void onEndFrame();
     bool enabled() const;
+    void replay(gl::Context *context);
 
   private:
     // <CallName, ParamName>
@@ -126,6 +166,17 @@ class FrameCapture final : angle::NonCopyable
     gl::AttribArray<size_t> mClientArraySizes;
     std::map<Counter, int> mDataCounters;
     size_t mReadBufferSize;
+
+    struct ReplayParamBuffer
+    {
+        ReplayParamBuffer();
+        ~ReplayParamBuffer();
+        std::vector<const uint8_t *> pointersBuffer;
+    } mReplayParamBuffer;
+
+    static void CallCaptureReplay(gl::Context *context,
+                                  FrameCapture::ReplayParamBuffer *paramBuffer,
+                                  const CallCapture &call);
 };
 
 template <typename CaptureFuncT, typename... ArgsT>
