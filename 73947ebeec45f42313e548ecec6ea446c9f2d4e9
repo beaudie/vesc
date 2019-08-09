@@ -39,6 +39,30 @@
       "revId": "73947ebeec45f42313e548ecec6ea446c9f2d4e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "293d4e40_82a14c11",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-08-09T14:20:46Z",
+      "side": 1,
+      "message": "GetRenderTargetLayerCount() doesn\u0027t have access to the TextureType so it can\u0027t infer without passing the imageIndex around.  I can refactor this further to have CubeMap treated the same, but since we just switched on the value, it seemed more straightforward to dictate the number of layers here.  I\u0027ll add CubeMap to GetRenderTargetLayerCount, should clean up the helper actually.",
+      "parentUuid": "3be105d0_c2cf5b27",
+      "range": {
+        "startLine": 1133,
+        "startChar": 78,
+        "endLine": 1133,
+        "endChar": 92
+      },
+      "revId": "73947ebeec45f42313e548ecec6ea446c9f2d4e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
