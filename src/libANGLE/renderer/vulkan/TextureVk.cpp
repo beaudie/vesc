@@ -428,7 +428,6 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
         framebufferVk));
     onStagingBufferChange();
 
-    framebufferVk->getFramebuffer()->addReadDependency(mImage);
     return angle::Result::Continue;
 }
 
