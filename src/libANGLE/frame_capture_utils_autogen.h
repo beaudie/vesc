@@ -202,6 +202,883 @@ union ParamValue
 };
 
 template <ParamType PType, typename T>
+T GetParamVal(const ParamValue &value);
+
+template <>
+inline gl::AlphaTestFunc GetParamVal<ParamType::TAlphaTestFunc, gl::AlphaTestFunc>(
+    const ParamValue &value)
+{
+    return value.AlphaTestFuncVal;
+}
+
+template <>
+inline gl::BufferBinding GetParamVal<ParamType::TBufferBinding, gl::BufferBinding>(
+    const ParamValue &value)
+{
+    return value.BufferBindingVal;
+}
+
+template <>
+inline gl::BufferID GetParamVal<ParamType::TBufferID, gl::BufferID>(const ParamValue &value)
+{
+    return value.BufferIDVal;
+}
+
+template <>
+inline const gl::BufferID *GetParamVal<ParamType::TBufferIDConstPointer, const gl::BufferID *>(
+    const ParamValue &value)
+{
+    return value.BufferIDConstPointerVal;
+}
+
+template <>
+inline gl::BufferID *GetParamVal<ParamType::TBufferIDPointer, gl::BufferID *>(
+    const ParamValue &value)
+{
+    return value.BufferIDPointerVal;
+}
+
+template <>
+inline gl::BufferUsage GetParamVal<ParamType::TBufferUsage, gl::BufferUsage>(
+    const ParamValue &value)
+{
+    return value.BufferUsageVal;
+}
+
+template <>
+inline gl::ClientVertexArrayType
+GetParamVal<ParamType::TClientVertexArrayType, gl::ClientVertexArrayType>(const ParamValue &value)
+{
+    return value.ClientVertexArrayTypeVal;
+}
+
+template <>
+inline gl::CullFaceMode GetParamVal<ParamType::TCullFaceMode, gl::CullFaceMode>(
+    const ParamValue &value)
+{
+    return value.CullFaceModeVal;
+}
+
+template <>
+inline gl::DrawElementsType GetParamVal<ParamType::TDrawElementsType, gl::DrawElementsType>(
+    const ParamValue &value)
+{
+    return value.DrawElementsTypeVal;
+}
+
+template <>
+inline GLDEBUGPROC GetParamVal<ParamType::TGLDEBUGPROC, GLDEBUGPROC>(const ParamValue &value)
+{
+    return value.GLDEBUGPROCVal;
+}
+
+template <>
+inline GLDEBUGPROCKHR GetParamVal<ParamType::TGLDEBUGPROCKHR, GLDEBUGPROCKHR>(
+    const ParamValue &value)
+{
+    return value.GLDEBUGPROCKHRVal;
+}
+
+template <>
+inline GLbitfield GetParamVal<ParamType::TGLbitfield, GLbitfield>(const ParamValue &value)
+{
+    return value.GLbitfieldVal;
+}
+
+template <>
+inline GLboolean GetParamVal<ParamType::TGLboolean, GLboolean>(const ParamValue &value)
+{
+    return value.GLbooleanVal;
+}
+
+template <>
+inline const GLboolean *GetParamVal<ParamType::TGLbooleanConstPointer, const GLboolean *>(
+    const ParamValue &value)
+{
+    return value.GLbooleanConstPointerVal;
+}
+
+template <>
+inline GLboolean *GetParamVal<ParamType::TGLbooleanPointer, GLboolean *>(const ParamValue &value)
+{
+    return value.GLbooleanPointerVal;
+}
+
+template <>
+inline GLbyte GetParamVal<ParamType::TGLbyte, GLbyte>(const ParamValue &value)
+{
+    return value.GLbyteVal;
+}
+
+template <>
+inline const GLbyte *GetParamVal<ParamType::TGLbyteConstPointer, const GLbyte *>(
+    const ParamValue &value)
+{
+    return value.GLbyteConstPointerVal;
+}
+
+template <>
+inline const GLchar *GetParamVal<ParamType::TGLcharConstPointer, const GLchar *>(
+    const ParamValue &value)
+{
+    return value.GLcharConstPointerVal;
+}
+
+template <>
+inline const GLchar *const *
+GetParamVal<ParamType::TGLcharConstPointerPointer, const GLchar *const *>(const ParamValue &value)
+{
+    return value.GLcharConstPointerPointerVal;
+}
+
+template <>
+inline GLchar *GetParamVal<ParamType::TGLcharPointer, GLchar *>(const ParamValue &value)
+{
+    return value.GLcharPointerVal;
+}
+
+template <>
+inline GLclampx GetParamVal<ParamType::TGLclampx, GLclampx>(const ParamValue &value)
+{
+    return value.GLclampxVal;
+}
+
+template <>
+inline GLdouble GetParamVal<ParamType::TGLdouble, GLdouble>(const ParamValue &value)
+{
+    return value.GLdoubleVal;
+}
+
+template <>
+inline const GLdouble *GetParamVal<ParamType::TGLdoubleConstPointer, const GLdouble *>(
+    const ParamValue &value)
+{
+    return value.GLdoubleConstPointerVal;
+}
+
+template <>
+inline GLdouble *GetParamVal<ParamType::TGLdoublePointer, GLdouble *>(const ParamValue &value)
+{
+    return value.GLdoublePointerVal;
+}
+
+template <>
+inline GLeglImageOES GetParamVal<ParamType::TGLeglImageOES, GLeglImageOES>(const ParamValue &value)
+{
+    return value.GLeglImageOESVal;
+}
+
+template <>
+inline GLenum GetParamVal<ParamType::TGLenum, GLenum>(const ParamValue &value)
+{
+    return value.GLenumVal;
+}
+
+template <>
+inline const GLenum *GetParamVal<ParamType::TGLenumConstPointer, const GLenum *>(
+    const ParamValue &value)
+{
+    return value.GLenumConstPointerVal;
+}
+
+template <>
+inline GLenum *GetParamVal<ParamType::TGLenumPointer, GLenum *>(const ParamValue &value)
+{
+    return value.GLenumPointerVal;
+}
+
+template <>
+inline GLfixed GetParamVal<ParamType::TGLfixed, GLfixed>(const ParamValue &value)
+{
+    return value.GLfixedVal;
+}
+
+template <>
+inline const GLfixed *GetParamVal<ParamType::TGLfixedConstPointer, const GLfixed *>(
+    const ParamValue &value)
+{
+    return value.GLfixedConstPointerVal;
+}
+
+template <>
+inline GLfixed *GetParamVal<ParamType::TGLfixedPointer, GLfixed *>(const ParamValue &value)
+{
+    return value.GLfixedPointerVal;
+}
+
+template <>
+inline GLfloat GetParamVal<ParamType::TGLfloat, GLfloat>(const ParamValue &value)
+{
+    return value.GLfloatVal;
+}
+
+template <>
+inline const GLfloat *GetParamVal<ParamType::TGLfloatConstPointer, const GLfloat *>(
+    const ParamValue &value)
+{
+    return value.GLfloatConstPointerVal;
+}
+
+template <>
+inline GLfloat *GetParamVal<ParamType::TGLfloatPointer, GLfloat *>(const ParamValue &value)
+{
+    return value.GLfloatPointerVal;
+}
+
+template <>
+inline GLint GetParamVal<ParamType::TGLint, GLint>(const ParamValue &value)
+{
+    return value.GLintVal;
+}
+
+template <>
+inline GLint64 *GetParamVal<ParamType::TGLint64Pointer, GLint64 *>(const ParamValue &value)
+{
+    return value.GLint64PointerVal;
+}
+
+template <>
+inline const GLint *GetParamVal<ParamType::TGLintConstPointer, const GLint *>(
+    const ParamValue &value)
+{
+    return value.GLintConstPointerVal;
+}
+
+template <>
+inline GLint *GetParamVal<ParamType::TGLintPointer, GLint *>(const ParamValue &value)
+{
+    return value.GLintPointerVal;
+}
+
+template <>
+inline GLintptr GetParamVal<ParamType::TGLintptr, GLintptr>(const ParamValue &value)
+{
+    return value.GLintptrVal;
+}
+
+template <>
+inline const GLintptr *GetParamVal<ParamType::TGLintptrConstPointer, const GLintptr *>(
+    const ParamValue &value)
+{
+    return value.GLintptrConstPointerVal;
+}
+
+template <>
+inline GLshort GetParamVal<ParamType::TGLshort, GLshort>(const ParamValue &value)
+{
+    return value.GLshortVal;
+}
+
+template <>
+inline const GLshort *GetParamVal<ParamType::TGLshortConstPointer, const GLshort *>(
+    const ParamValue &value)
+{
+    return value.GLshortConstPointerVal;
+}
+
+template <>
+inline GLsizei GetParamVal<ParamType::TGLsizei, GLsizei>(const ParamValue &value)
+{
+    return value.GLsizeiVal;
+}
+
+template <>
+inline const GLsizei *GetParamVal<ParamType::TGLsizeiConstPointer, const GLsizei *>(
+    const ParamValue &value)
+{
+    return value.GLsizeiConstPointerVal;
+}
+
+template <>
+inline GLsizei *GetParamVal<ParamType::TGLsizeiPointer, GLsizei *>(const ParamValue &value)
+{
+    return value.GLsizeiPointerVal;
+}
+
+template <>
+inline GLsizeiptr GetParamVal<ParamType::TGLsizeiptr, GLsizeiptr>(const ParamValue &value)
+{
+    return value.GLsizeiptrVal;
+}
+
+template <>
+inline const GLsizeiptr *GetParamVal<ParamType::TGLsizeiptrConstPointer, const GLsizeiptr *>(
+    const ParamValue &value)
+{
+    return value.GLsizeiptrConstPointerVal;
+}
+
+template <>
+inline GLsync GetParamVal<ParamType::TGLsync, GLsync>(const ParamValue &value)
+{
+    return value.GLsyncVal;
+}
+
+template <>
+inline GLubyte GetParamVal<ParamType::TGLubyte, GLubyte>(const ParamValue &value)
+{
+    return value.GLubyteVal;
+}
+
+template <>
+inline const GLubyte *GetParamVal<ParamType::TGLubyteConstPointer, const GLubyte *>(
+    const ParamValue &value)
+{
+    return value.GLubyteConstPointerVal;
+}
+
+template <>
+inline GLubyte *GetParamVal<ParamType::TGLubytePointer, GLubyte *>(const ParamValue &value)
+{
+    return value.GLubytePointerVal;
+}
+
+template <>
+inline GLuint GetParamVal<ParamType::TGLuint, GLuint>(const ParamValue &value)
+{
+    return value.GLuintVal;
+}
+
+template <>
+inline GLuint64 GetParamVal<ParamType::TGLuint64, GLuint64>(const ParamValue &value)
+{
+    return value.GLuint64Val;
+}
+
+template <>
+inline const GLuint64 *GetParamVal<ParamType::TGLuint64ConstPointer, const GLuint64 *>(
+    const ParamValue &value)
+{
+    return value.GLuint64ConstPointerVal;
+}
+
+template <>
+inline GLuint64 *GetParamVal<ParamType::TGLuint64Pointer, GLuint64 *>(const ParamValue &value)
+{
+    return value.GLuint64PointerVal;
+}
+
+template <>
+inline const GLuint *GetParamVal<ParamType::TGLuintConstPointer, const GLuint *>(
+    const ParamValue &value)
+{
+    return value.GLuintConstPointerVal;
+}
+
+template <>
+inline GLuint *GetParamVal<ParamType::TGLuintPointer, GLuint *>(const ParamValue &value)
+{
+    return value.GLuintPointerVal;
+}
+
+template <>
+inline GLushort GetParamVal<ParamType::TGLushort, GLushort>(const ParamValue &value)
+{
+    return value.GLushortVal;
+}
+
+template <>
+inline const GLushort *GetParamVal<ParamType::TGLushortConstPointer, const GLushort *>(
+    const ParamValue &value)
+{
+    return value.GLushortConstPointerVal;
+}
+
+template <>
+inline GLushort *GetParamVal<ParamType::TGLushortPointer, GLushort *>(const ParamValue &value)
+{
+    return value.GLushortPointerVal;
+}
+
+template <>
+inline const GLvoid *GetParamVal<ParamType::TGLvoidConstPointer, const GLvoid *>(
+    const ParamValue &value)
+{
+    return value.GLvoidConstPointerVal;
+}
+
+template <>
+inline const GLvoid *const *
+GetParamVal<ParamType::TGLvoidConstPointerPointer, const GLvoid *const *>(const ParamValue &value)
+{
+    return value.GLvoidConstPointerPointerVal;
+}
+
+template <>
+inline gl::GraphicsResetStatus
+GetParamVal<ParamType::TGraphicsResetStatus, gl::GraphicsResetStatus>(const ParamValue &value)
+{
+    return value.GraphicsResetStatusVal;
+}
+
+template <>
+inline gl::HandleType GetParamVal<ParamType::THandleType, gl::HandleType>(const ParamValue &value)
+{
+    return value.HandleTypeVal;
+}
+
+template <>
+inline gl::LightParameter GetParamVal<ParamType::TLightParameter, gl::LightParameter>(
+    const ParamValue &value)
+{
+    return value.LightParameterVal;
+}
+
+template <>
+inline gl::LogicalOperation GetParamVal<ParamType::TLogicalOperation, gl::LogicalOperation>(
+    const ParamValue &value)
+{
+    return value.LogicalOperationVal;
+}
+
+template <>
+inline gl::MaterialParameter GetParamVal<ParamType::TMaterialParameter, gl::MaterialParameter>(
+    const ParamValue &value)
+{
+    return value.MaterialParameterVal;
+}
+
+template <>
+inline gl::MatrixType GetParamVal<ParamType::TMatrixType, gl::MatrixType>(const ParamValue &value)
+{
+    return value.MatrixTypeVal;
+}
+
+template <>
+inline gl::PointParameter GetParamVal<ParamType::TPointParameter, gl::PointParameter>(
+    const ParamValue &value)
+{
+    return value.PointParameterVal;
+}
+
+template <>
+inline gl::PrimitiveMode GetParamVal<ParamType::TPrimitiveMode, gl::PrimitiveMode>(
+    const ParamValue &value)
+{
+    return value.PrimitiveModeVal;
+}
+
+template <>
+inline gl::ProvokingVertexConvention
+GetParamVal<ParamType::TProvokingVertexConvention, gl::ProvokingVertexConvention>(
+    const ParamValue &value)
+{
+    return value.ProvokingVertexConventionVal;
+}
+
+template <>
+inline gl::QueryType GetParamVal<ParamType::TQueryType, gl::QueryType>(const ParamValue &value)
+{
+    return value.QueryTypeVal;
+}
+
+template <>
+inline gl::RenderbufferID GetParamVal<ParamType::TRenderbufferID, gl::RenderbufferID>(
+    const ParamValue &value)
+{
+    return value.RenderbufferIDVal;
+}
+
+template <>
+inline const gl::RenderbufferID *GetParamVal<ParamType::TRenderbufferIDConstPointer,
+                                             const gl::RenderbufferID *>(const ParamValue &value)
+{
+    return value.RenderbufferIDConstPointerVal;
+}
+
+template <>
+inline gl::RenderbufferID *GetParamVal<ParamType::TRenderbufferIDPointer, gl::RenderbufferID *>(
+    const ParamValue &value)
+{
+    return value.RenderbufferIDPointerVal;
+}
+
+template <>
+inline gl::ShaderType GetParamVal<ParamType::TShaderType, gl::ShaderType>(const ParamValue &value)
+{
+    return value.ShaderTypeVal;
+}
+
+template <>
+inline gl::ShadingModel GetParamVal<ParamType::TShadingModel, gl::ShadingModel>(
+    const ParamValue &value)
+{
+    return value.ShadingModelVal;
+}
+
+template <>
+inline gl::TextureEnvParameter
+GetParamVal<ParamType::TTextureEnvParameter, gl::TextureEnvParameter>(const ParamValue &value)
+{
+    return value.TextureEnvParameterVal;
+}
+
+template <>
+inline gl::TextureEnvTarget GetParamVal<ParamType::TTextureEnvTarget, gl::TextureEnvTarget>(
+    const ParamValue &value)
+{
+    return value.TextureEnvTargetVal;
+}
+
+template <>
+inline gl::TextureID GetParamVal<ParamType::TTextureID, gl::TextureID>(const ParamValue &value)
+{
+    return value.TextureIDVal;
+}
+
+template <>
+inline const gl::TextureID *GetParamVal<ParamType::TTextureIDConstPointer, const gl::TextureID *>(
+    const ParamValue &value)
+{
+    return value.TextureIDConstPointerVal;
+}
+
+template <>
+inline gl::TextureID *GetParamVal<ParamType::TTextureIDPointer, gl::TextureID *>(
+    const ParamValue &value)
+{
+    return value.TextureIDPointerVal;
+}
+
+template <>
+inline gl::TextureTarget GetParamVal<ParamType::TTextureTarget, gl::TextureTarget>(
+    const ParamValue &value)
+{
+    return value.TextureTargetVal;
+}
+
+template <>
+inline gl::TextureType GetParamVal<ParamType::TTextureType, gl::TextureType>(
+    const ParamValue &value)
+{
+    return value.TextureTypeVal;
+}
+
+template <>
+inline gl::VertexAttribType GetParamVal<ParamType::TVertexAttribType, gl::VertexAttribType>(
+    const ParamValue &value)
+{
+    return value.VertexAttribTypeVal;
+}
+
+template <>
+inline const void *GetParamVal<ParamType::TvoidConstPointer, const void *>(const ParamValue &value)
+{
+    return value.voidConstPointerVal;
+}
+
+template <>
+inline const void *const *GetParamVal<ParamType::TvoidConstPointerPointer, const void *const *>(
+    const ParamValue &value)
+{
+    return value.voidConstPointerPointerVal;
+}
+
+template <>
+inline void *GetParamVal<ParamType::TvoidPointer, void *>(const ParamValue &value)
+{
+    return value.voidPointerVal;
+}
+
+template <>
+inline void **GetParamVal<ParamType::TvoidPointerPointer, void **>(const ParamValue &value)
+{
+    return value.voidPointerPointerVal;
+}
+
+template <ParamType PType, typename T>
+T GetParamVal(const ParamValue &value)
+{
+    UNREACHABLE();
+}
+
+template <typename T>
+void AccessParamValue(ParamType paramType, const ParamValue &value, T *valueOut)
+{
+    switch (paramType)
+    {
+        case ParamType::TAlphaTestFunc:
+            *valueOut = GetParamVal<ParamType::TAlphaTestFunc, gl::AlphaTestFunc>(value);
+            break;
+        case ParamType::TBufferBinding:
+            *valueOut = GetParamVal<ParamType::TBufferBinding, gl::BufferBinding>(value);
+            break;
+        case ParamType::TBufferID:
+            *valueOut = GetParamVal<ParamType::TBufferID, gl::BufferID>(value);
+            break;
+        case ParamType::TBufferIDConstPointer:
+            *valueOut = GetParamVal<ParamType::TBufferIDConstPointer, const gl::BufferID *>(value);
+            break;
+        case ParamType::TBufferIDPointer:
+            *valueOut = GetParamVal<ParamType::TBufferIDPointer, gl::BufferID *>(value);
+            break;
+        case ParamType::TBufferUsage:
+            *valueOut = GetParamVal<ParamType::TBufferUsage, gl::BufferUsage>(value);
+            break;
+        case ParamType::TClientVertexArrayType:
+            *valueOut =
+                GetParamVal<ParamType::TClientVertexArrayType, gl::ClientVertexArrayType>(value);
+            break;
+        case ParamType::TCullFaceMode:
+            *valueOut = GetParamVal<ParamType::TCullFaceMode, gl::CullFaceMode>(value);
+            break;
+        case ParamType::TDrawElementsType:
+            *valueOut = GetParamVal<ParamType::TDrawElementsType, gl::DrawElementsType>(value);
+            break;
+        case ParamType::TGLDEBUGPROC:
+            *valueOut = GetParamVal<ParamType::TGLDEBUGPROC, GLDEBUGPROC>(value);
+            break;
+        case ParamType::TGLDEBUGPROCKHR:
+            *valueOut = GetParamVal<ParamType::TGLDEBUGPROCKHR, GLDEBUGPROCKHR>(value);
+            break;
+        case ParamType::TGLbitfield:
+            *valueOut = GetParamVal<ParamType::TGLbitfield, GLbitfield>(value);
+            break;
+        case ParamType::TGLboolean:
+            *valueOut = GetParamVal<ParamType::TGLboolean, GLboolean>(value);
+            break;
+        case ParamType::TGLbooleanConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLbooleanConstPointer, const GLboolean *>(value);
+            break;
+        case ParamType::TGLbooleanPointer:
+            *valueOut = GetParamVal<ParamType::TGLbooleanPointer, GLboolean *>(value);
+            break;
+        case ParamType::TGLbyte:
+            *valueOut = GetParamVal<ParamType::TGLbyte, GLbyte>(value);
+            break;
+        case ParamType::TGLbyteConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLbyteConstPointer, const GLbyte *>(value);
+            break;
+        case ParamType::TGLcharConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLcharConstPointer, const GLchar *>(value);
+            break;
+        case ParamType::TGLcharConstPointerPointer:
+            *valueOut =
+                GetParamVal<ParamType::TGLcharConstPointerPointer, const GLchar *const *>(value);
+            break;
+        case ParamType::TGLcharPointer:
+            *valueOut = GetParamVal<ParamType::TGLcharPointer, GLchar *>(value);
+            break;
+        case ParamType::TGLclampx:
+            *valueOut = GetParamVal<ParamType::TGLclampx, GLclampx>(value);
+            break;
+        case ParamType::TGLdouble:
+            *valueOut = GetParamVal<ParamType::TGLdouble, GLdouble>(value);
+            break;
+        case ParamType::TGLdoubleConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLdoubleConstPointer, const GLdouble *>(value);
+            break;
+        case ParamType::TGLdoublePointer:
+            *valueOut = GetParamVal<ParamType::TGLdoublePointer, GLdouble *>(value);
+            break;
+        case ParamType::TGLeglImageOES:
+            *valueOut = GetParamVal<ParamType::TGLeglImageOES, GLeglImageOES>(value);
+            break;
+        case ParamType::TGLenum:
+            *valueOut = GetParamVal<ParamType::TGLenum, GLenum>(value);
+            break;
+        case ParamType::TGLenumConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLenumConstPointer, const GLenum *>(value);
+            break;
+        case ParamType::TGLenumPointer:
+            *valueOut = GetParamVal<ParamType::TGLenumPointer, GLenum *>(value);
+            break;
+        case ParamType::TGLfixed:
+            *valueOut = GetParamVal<ParamType::TGLfixed, GLfixed>(value);
+            break;
+        case ParamType::TGLfixedConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLfixedConstPointer, const GLfixed *>(value);
+            break;
+        case ParamType::TGLfixedPointer:
+            *valueOut = GetParamVal<ParamType::TGLfixedPointer, GLfixed *>(value);
+            break;
+        case ParamType::TGLfloat:
+            *valueOut = GetParamVal<ParamType::TGLfloat, GLfloat>(value);
+            break;
+        case ParamType::TGLfloatConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLfloatConstPointer, const GLfloat *>(value);
+            break;
+        case ParamType::TGLfloatPointer:
+            *valueOut = GetParamVal<ParamType::TGLfloatPointer, GLfloat *>(value);
+            break;
+        case ParamType::TGLint:
+            *valueOut = GetParamVal<ParamType::TGLint, GLint>(value);
+            break;
+        case ParamType::TGLint64Pointer:
+            *valueOut = GetParamVal<ParamType::TGLint64Pointer, GLint64 *>(value);
+            break;
+        case ParamType::TGLintConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLintConstPointer, const GLint *>(value);
+            break;
+        case ParamType::TGLintPointer:
+            *valueOut = GetParamVal<ParamType::TGLintPointer, GLint *>(value);
+            break;
+        case ParamType::TGLintptr:
+            *valueOut = GetParamVal<ParamType::TGLintptr, GLintptr>(value);
+            break;
+        case ParamType::TGLintptrConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLintptrConstPointer, const GLintptr *>(value);
+            break;
+        case ParamType::TGLshort:
+            *valueOut = GetParamVal<ParamType::TGLshort, GLshort>(value);
+            break;
+        case ParamType::TGLshortConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLshortConstPointer, const GLshort *>(value);
+            break;
+        case ParamType::TGLsizei:
+            *valueOut = GetParamVal<ParamType::TGLsizei, GLsizei>(value);
+            break;
+        case ParamType::TGLsizeiConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLsizeiConstPointer, const GLsizei *>(value);
+            break;
+        case ParamType::TGLsizeiPointer:
+            *valueOut = GetParamVal<ParamType::TGLsizeiPointer, GLsizei *>(value);
+            break;
+        case ParamType::TGLsizeiptr:
+            *valueOut = GetParamVal<ParamType::TGLsizeiptr, GLsizeiptr>(value);
+            break;
+        case ParamType::TGLsizeiptrConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLsizeiptrConstPointer, const GLsizeiptr *>(value);
+            break;
+        case ParamType::TGLsync:
+            *valueOut = GetParamVal<ParamType::TGLsync, GLsync>(value);
+            break;
+        case ParamType::TGLubyte:
+            *valueOut = GetParamVal<ParamType::TGLubyte, GLubyte>(value);
+            break;
+        case ParamType::TGLubyteConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLubyteConstPointer, const GLubyte *>(value);
+            break;
+        case ParamType::TGLubytePointer:
+            *valueOut = GetParamVal<ParamType::TGLubytePointer, GLubyte *>(value);
+            break;
+        case ParamType::TGLuint:
+            *valueOut = GetParamVal<ParamType::TGLuint, GLuint>(value);
+            break;
+        case ParamType::TGLuint64:
+            *valueOut = GetParamVal<ParamType::TGLuint64, GLuint64>(value);
+            break;
+        case ParamType::TGLuint64ConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLuint64ConstPointer, const GLuint64 *>(value);
+            break;
+        case ParamType::TGLuint64Pointer:
+            *valueOut = GetParamVal<ParamType::TGLuint64Pointer, GLuint64 *>(value);
+            break;
+        case ParamType::TGLuintConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLuintConstPointer, const GLuint *>(value);
+            break;
+        case ParamType::TGLuintPointer:
+            *valueOut = GetParamVal<ParamType::TGLuintPointer, GLuint *>(value);
+            break;
+        case ParamType::TGLushort:
+            *valueOut = GetParamVal<ParamType::TGLushort, GLushort>(value);
+            break;
+        case ParamType::TGLushortConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLushortConstPointer, const GLushort *>(value);
+            break;
+        case ParamType::TGLushortPointer:
+            *valueOut = GetParamVal<ParamType::TGLushortPointer, GLushort *>(value);
+            break;
+        case ParamType::TGLvoidConstPointer:
+            *valueOut = GetParamVal<ParamType::TGLvoidConstPointer, const GLvoid *>(value);
+            break;
+        case ParamType::TGLvoidConstPointerPointer:
+            *valueOut =
+                GetParamVal<ParamType::TGLvoidConstPointerPointer, const GLvoid *const *>(value);
+            break;
+        case ParamType::TGraphicsResetStatus:
+            *valueOut =
+                GetParamVal<ParamType::TGraphicsResetStatus, gl::GraphicsResetStatus>(value);
+            break;
+        case ParamType::THandleType:
+            *valueOut = GetParamVal<ParamType::THandleType, gl::HandleType>(value);
+            break;
+        case ParamType::TLightParameter:
+            *valueOut = GetParamVal<ParamType::TLightParameter, gl::LightParameter>(value);
+            break;
+        case ParamType::TLogicalOperation:
+            *valueOut = GetParamVal<ParamType::TLogicalOperation, gl::LogicalOperation>(value);
+            break;
+        case ParamType::TMaterialParameter:
+            *valueOut = GetParamVal<ParamType::TMaterialParameter, gl::MaterialParameter>(value);
+            break;
+        case ParamType::TMatrixType:
+            *valueOut = GetParamVal<ParamType::TMatrixType, gl::MatrixType>(value);
+            break;
+        case ParamType::TPointParameter:
+            *valueOut = GetParamVal<ParamType::TPointParameter, gl::PointParameter>(value);
+            break;
+        case ParamType::TPrimitiveMode:
+            *valueOut = GetParamVal<ParamType::TPrimitiveMode, gl::PrimitiveMode>(value);
+            break;
+        case ParamType::TProvokingVertexConvention:
+            *valueOut =
+                GetParamVal<ParamType::TProvokingVertexConvention, gl::ProvokingVertexConvention>(
+                    value);
+            break;
+        case ParamType::TQueryType:
+            *valueOut = GetParamVal<ParamType::TQueryType, gl::QueryType>(value);
+            break;
+        case ParamType::TRenderbufferID:
+            *valueOut = GetParamVal<ParamType::TRenderbufferID, gl::RenderbufferID>(value);
+            break;
+        case ParamType::TRenderbufferIDConstPointer:
+            *valueOut =
+                GetParamVal<ParamType::TRenderbufferIDConstPointer, const gl::RenderbufferID *>(
+                    value);
+            break;
+        case ParamType::TRenderbufferIDPointer:
+            *valueOut = GetParamVal<ParamType::TRenderbufferIDPointer, gl::RenderbufferID *>(value);
+            break;
+        case ParamType::TShaderType:
+            *valueOut = GetParamVal<ParamType::TShaderType, gl::ShaderType>(value);
+            break;
+        case ParamType::TShadingModel:
+            *valueOut = GetParamVal<ParamType::TShadingModel, gl::ShadingModel>(value);
+            break;
+        case ParamType::TTextureEnvParameter:
+            *valueOut =
+                GetParamVal<ParamType::TTextureEnvParameter, gl::TextureEnvParameter>(value);
+            break;
+        case ParamType::TTextureEnvTarget:
+            *valueOut = GetParamVal<ParamType::TTextureEnvTarget, gl::TextureEnvTarget>(value);
+            break;
+        case ParamType::TTextureID:
+            *valueOut = GetParamVal<ParamType::TTextureID, gl::TextureID>(value);
+            break;
+        case ParamType::TTextureIDConstPointer:
+            *valueOut =
+                GetParamVal<ParamType::TTextureIDConstPointer, const gl::TextureID *>(value);
+            break;
+        case ParamType::TTextureIDPointer:
+            *valueOut = GetParamVal<ParamType::TTextureIDPointer, gl::TextureID *>(value);
+            break;
+        case ParamType::TTextureTarget:
+            *valueOut = GetParamVal<ParamType::TTextureTarget, gl::TextureTarget>(value);
+            break;
+        case ParamType::TTextureType:
+            *valueOut = GetParamVal<ParamType::TTextureType, gl::TextureType>(value);
+            break;
+        case ParamType::TVertexAttribType:
+            *valueOut = GetParamVal<ParamType::TVertexAttribType, gl::VertexAttribType>(value);
+            break;
+        case ParamType::TvoidConstPointer:
+            *valueOut = GetParamVal<ParamType::TvoidConstPointer, const void *>(value);
+            break;
+        case ParamType::TvoidConstPointerPointer:
+            *valueOut =
+                GetParamVal<ParamType::TvoidConstPointerPointer, const void *const *>(value);
+            break;
+        case ParamType::TvoidPointer:
+            *valueOut = GetParamVal<ParamType::TvoidPointer, void *>(value);
+            break;
+        case ParamType::TvoidPointerPointer:
+            *valueOut = GetParamVal<ParamType::TvoidPointerPointer, void **>(value);
+            break;
+    }
+}
+
+template <ParamType PType, typename T>
 void SetParamVal(T valueIn, ParamValue *valueOut);
 
 template <>

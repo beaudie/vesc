@@ -8551,6 +8551,7 @@ egl::Error Context::unsetDefaultFramebuffer()
 
 void Context::onPostSwap() const
 {
+    mFrameCapture->replay(const_cast<gl::Context *>(this));
     // Dump frame capture if enabled.
     mFrameCapture->onEndFrame();
 }
