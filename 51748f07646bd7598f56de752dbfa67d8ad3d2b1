@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "214f85a6_f24daa39",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-09T16:17:41Z",
+      "side": 1,
+      "message": "These should actually be pointers, since they are output parameters:\nhttp://go/cstyle#Output_Parameters\n\u003e output and input/output parameters will be pointers to non-const.",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 60
+      },
+      "revId": "51748f07646bd7598f56de752dbfa67d8ad3d2b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
