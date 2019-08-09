@@ -1125,11 +1125,12 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
             break;
         case gl::TextureType::_2DArray:
         case gl::TextureType::_3D:
-            ANGLE_TRY(init3DRenderTargets(contextVk));
+            ANGLE_TRY(
+                initRenderTargets(contextVk, m3DRenderTargets, GetRenderTargetLayerCount(mImage)));
             *rtOut = &m3DRenderTargets[imageIndex.getLayerIndex()];
             break;
         case gl::TextureType::CubeMap:
-            ANGLE_TRY(initCubeMapRenderTargets(contextVk));
+            ANGLE_TRY(initRenderTargets(contextVk, mCubeMapRenderTargets, gl::kCubeFaceCount));
             *rtOut = &mCubeMapRenderTargets[imageIndex.cubeMapFaceIndex()];
             break;
         default:
@@ -1174,16 +1175,16 @@ angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
                                       commandBuffer);
 }
 
-angle::Result TextureVk::init3DRenderTargets(ContextVk *contextVk)
+angle::Result TextureVk::initRenderTargets(ContextVk *contextVk,
+                                           std::vector<RenderTargetVk> &renderTargets,
+                                           uint32_t layerCount)
 {
     // Lazy init. Check if already initialized.
-    if (!m3DRenderTargets.empty())
+    if (!renderTargets.empty())
         return angle::Result::Continue;
 
-    uint32_t layerCount = GetRenderTargetLayerCount(mImage);
-
     mLayerFetchImageView.resize(layerCount);
-    m3DRenderTargets.resize(layerCount);
+    renderTargets.resize(layerCount);
 
     for (size_t layerIndex = 0; layerIndex < layerCount; ++layerIndex)
     {
@@ -1200,38 +1201,8 @@ angle::Result TextureVk::init3DRenderTargets(ContextVk *contextVk)
                                              getNativeImageLevel(0), 1,
                                              getNativeImageLayer(layerIndex), 1));
 
-        m3DRenderTargets[layerIndex].init(mImage, drawView, &mLayerFetchImageView[layerIndex],
-                                          getNativeImageLevel(0), getNativeImageLayer(layerIndex));
-    }
-    return angle::Result::Continue;
-}
-
-angle::Result TextureVk::initCubeMapRenderTargets(ContextVk *contextVk)
-{
-    // Lazy init. Check if already initialized.
-    if (!mCubeMapRenderTargets.empty())
-        return angle::Result::Continue;
-
-    mLayerFetchImageView.resize(gl::kCubeFaceCount);
-    mCubeMapRenderTargets.resize(gl::kCubeFaceCount);
-    for (size_t cubeMapFaceIndex = 0; cubeMapFaceIndex < gl::kCubeFaceCount; ++cubeMapFaceIndex)
-    {
-        vk::ImageView *drawView;
-        ANGLE_TRY(getLayerLevelDrawImageView(contextVk, cubeMapFaceIndex, 0, &drawView));
-
-        // Users of the render target expect the views to directly view the desired layer, so we
-        // need create a fetch view for each layer as well.
-        gl::SwizzleState mappedSwizzle;
-        MapSwizzleState(contextVk, mImage->getFormat(), mState.getSwizzleState(), &mappedSwizzle);
-        gl::TextureType arrayType = vk::Get2DTextureType(gl::kCubeFaceCount, mImage->getSamples());
-        ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, mImage->getAspectFlags(),
-                                             mappedSwizzle, &mLayerFetchImageView[cubeMapFaceIndex],
-                                             getNativeImageLevel(0), 1,
-                                             getNativeImageLayer(cubeMapFaceIndex), 1));
-
-        mCubeMapRenderTargets[cubeMapFaceIndex].init(
-            mImage, drawView, &mLayerFetchImageView[cubeMapFaceIndex], getNativeImageLevel(0),
-            getNativeImageLayer(cubeMapFaceIndex));
+        renderTargets[layerIndex].init(mImage, drawView, &mLayerFetchImageView[layerIndex],
+                                       getNativeImageLevel(0), getNativeImageLayer(layerIndex));
     }
     return angle::Result::Continue;
 }

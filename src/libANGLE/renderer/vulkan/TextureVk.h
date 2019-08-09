@@ -282,8 +282,9 @@ class TextureVk : public TextureImpl
                                  const vk::Format &format,
                                  uint32_t levelCount,
                                  uint32_t layerCount);
-    angle::Result init3DRenderTargets(ContextVk *contextVk);
-    angle::Result initCubeMapRenderTargets(ContextVk *contextVk);
+    angle::Result initRenderTargets(ContextVk *contextVk,
+                                    std::vector<RenderTargetVk> &renderTargets,
+                                    uint32_t layerCount);
 
     angle::Result ensureImageInitializedImpl(ContextVk *contextVk,
                                              const gl::Extents &baseLevelExtents,
