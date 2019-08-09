@@ -22,9 +22,13 @@ CallCapture::~CallCapture() {}
 ParamBuffer::~ParamBuffer() {}
 ParamCapture::~ParamCapture() {}
 
+FrameCapture::ReplayParamBuffer::ReplayParamBuffer() {}
+FrameCapture::ReplayParamBuffer::~ReplayParamBuffer() {}
+
 FrameCapture::FrameCapture() {}
 FrameCapture::~FrameCapture() {}
 void FrameCapture::onEndFrame() {}
+void FrameCapture::replay(gl::Context *context) {}
 #else
 namespace
 {
@@ -169,6 +173,9 @@ const char *CallCapture::name() const
     return gl::GetEntryPointName(entryPoint);
 }
 
+FrameCapture::ReplayParamBuffer::ReplayParamBuffer()  = default;
+FrameCapture::ReplayParamBuffer::~ReplayParamBuffer() = default;
+
 FrameCapture::FrameCapture() : mFrameIndex(0), mReadBufferSize(0)
 {
     reset();
@@ -231,7 +238,9 @@ void FrameCapture::captureCall(const gl::Context *context, CallCapture &&call)
                 indexRange = gl::ComputeIndexRange(drawElementsType, indices, count, restart);
             }
 
-            captureClientArraySnapshot(context, indexRange.end, 1);
+            // index starts from 0
+            size_t vertexCount = indexRange.end + 1;
+            captureClientArraySnapshot(context, vertexCount, 1);
         }
     }
 
@@ -303,7 +312,9 @@ void FrameCapture::onEndFrame()
 {
     if (!mCalls.empty())
     {
+#    if !ANGLE_CAPTURE_REPLAY_ENABLED
         saveCapturedFrameAsCpp();
+#    endif
         reset();
         mFrameIndex++;
     }
@@ -548,7 +559,17 @@ void FrameCapture::writeCallReplay(const CallCapture &call,
 
 bool FrameCapture::enabled() const
 {
-    return mFrameIndex < 100;
+    return mFrameIndex < INFINITY;
+}
+
+void FrameCapture::replay(gl::Context *context)
+{
+    mReplayParamBuffer.reset();
+    for (CallCapture &call : mCalls)
+    {
+        INFO() << "frame count: " << mFrameIndex << " " << call.name();
+        ReplayCallCapture(context, &mReplayParamBuffer, &call);
+    }
 }
 
 void FrameCapture::reset()
@@ -575,7 +596,8 @@ void CaptureMemory(const void *source, size_t size, ParamCapture *paramCapture)
 
 void CaptureString(const GLchar *str, ParamCapture *paramCapture)
 {
-    CaptureMemory(str, strlen(str), paramCapture);
+    // include the '\0' suffix
+    CaptureMemory(str, strlen(str) + 1, paramCapture);
 }
 
 template <>
