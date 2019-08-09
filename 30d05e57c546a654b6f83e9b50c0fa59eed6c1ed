@@ -16,6 +16,24 @@
       "revId": "30d05e57c546a654b6f83e9b50c0fa59eed6c1ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68d62954_98bb1507",
+        "filename": "src/common/third_party/volk/volk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-09T20:33:09Z",
+      "side": 1,
+      "message": "To clarify, do you want me to set up a mirror and pull in volk repo as a DEP in \"angle/src/third_party\" instead of baking the files?",
+      "parentUuid": "8ee44bad_fc2df758",
+      "revId": "30d05e57c546a654b6f83e9b50c0fa59eed6c1ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
