@@ -581,10 +581,17 @@ class Recycler final : angle::NonCopyable
   public:
     Recycler() = default;
 
-    void recycle(T &&garbageObject) { mObjectFreeList.emplace_back(std::move(garbageObject)); }
+    void recycle(T &&garbageObject)
+    {
+        printf("In Recycler::recycle()\n");
+        mObjectFreeList.emplace_back(std::move(garbageObject));
+        printf("Finishing Recycler::recycle() w/ mObjectFreeList size: %llu\n",
+               mObjectFreeList.size());
+    }
 
     void fetch(T *outObject)
     {
+        printf("In Recycler::fetch()\n");
         ASSERT(!empty());
         *outObject = std::move(mObjectFreeList.back());
         mObjectFreeList.pop_back();
@@ -592,10 +599,16 @@ class Recycler final : angle::NonCopyable
 
     void destroy(VkDevice device)
     {
+        printf("In Recycler::destroy(), calling object.destroy() on %llu objects\n",
+               mObjectFreeList.size());
         for (T &object : mObjectFreeList)
         {
+            printf("object\n");
             object.destroy(device);
+            printf("done\n");
         }
+        mObjectFreeList.clear();
+        printf("Leaving Recycler::destroy(), free list size %llu\n", mObjectFreeList.size());
     }
 
     bool empty() const { return mObjectFreeList.empty(); }
@@ -605,51 +618,6 @@ class Recycler final : angle::NonCopyable
 };
 
 }  // namespace vk
-
-// List of function pointers for used extensions.
-// VK_EXT_debug_utils
-extern PFN_vkCreateDebugUtilsMessengerEXT vkCreateDebugUtilsMessengerEXT;
-extern PFN_vkDestroyDebugUtilsMessengerEXT vkDestroyDebugUtilsMessengerEXT;
-extern PFN_vkCmdBeginDebugUtilsLabelEXT vkCmdBeginDebugUtilsLabelEXT;
-extern PFN_vkCmdEndDebugUtilsLabelEXT vkCmdEndDebugUtilsLabelEXT;
-extern PFN_vkCmdInsertDebugUtilsLabelEXT vkCmdInsertDebugUtilsLabelEXT;
-
-// VK_EXT_debug_report
-extern PFN_vkCreateDebugReportCallbackEXT vkCreateDebugReportCallbackEXT;
-extern PFN_vkDestroyDebugReportCallbackEXT vkDestroyDebugReportCallbackEXT;
-
-// VK_KHR_get_physical_device_properties2
-extern PFN_vkGetPhysicalDeviceProperties2KHR vkGetPhysicalDeviceProperties2KHR;
-extern PFN_vkGetPhysicalDeviceFeatures2KHR vkGetPhysicalDeviceFeatures2KHR;
-
-// VK_KHR_external_semaphore_fd
-extern PFN_vkImportSemaphoreFdKHR vkImportSemaphoreFdKHR;
-
-// Lazily load entry points for each extension as necessary.
-void InitDebugUtilsEXTFunctions(VkInstance instance);
-void InitDebugReportEXTFunctions(VkInstance instance);
-void InitGetPhysicalDeviceProperties2KHRFunctions(VkInstance instance);
-
-#if defined(ANGLE_PLATFORM_FUCHSIA)
-// VK_FUCHSIA_imagepipe_surface
-extern PFN_vkCreateImagePipeSurfaceFUCHSIA vkCreateImagePipeSurfaceFUCHSIA;
-void InitImagePipeSurfaceFUCHSIAFunctions(VkInstance instance);
-#endif
-
-#if defined(ANGLE_PLATFORM_ANDROID)
-// VK_ANDROID_external_memory_android_hardware_buffer
-extern PFN_vkGetAndroidHardwareBufferPropertiesANDROID vkGetAndroidHardwareBufferPropertiesANDROID;
-extern PFN_vkGetMemoryAndroidHardwareBufferANDROID vkGetMemoryAndroidHardwareBufferANDROID;
-void InitExternalMemoryHardwareBufferANDROIDFunctions(VkInstance instance);
-#endif
-
-#if defined(ANGLE_PLATFORM_GGP)
-// VK_GGP_stream_descriptor_surface
-extern PFN_vkCreateStreamDescriptorSurfaceGGP vkCreateStreamDescriptorSurfaceGGP;
-void InitGGPStreamDescriptorSurfaceFunctions(VkInstance instance);
-#endif  // defined(ANGLE_PLATFORM_GGP)
-
-void InitExternalSemaphoreFdFunctions(VkInstance instance);
 
 namespace gl_vk
 {

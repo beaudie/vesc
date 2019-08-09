@@ -611,6 +611,11 @@ void ContextVk::onDestroy(const gl::Context *context)
     mUtils.destroy(device);
 
     mRenderPassCache.destroy(device);
+    // if (mSubmitFence)
+    //    printf("In ContextVk::onDestroy() calling mSubmitFence.reset() for fence handle 0x%p.\n",
+    //    mSubmitFence.get().getHandle());
+    // else
+    printf("In ContextVk::onDestroy() calling mSubmitFence.reset().\n");
     mSubmitFence.reset(device);
     mShaderLibrary.destroy(device);
     mGpuEventQueryPool.destroy(device);
@@ -1215,6 +1220,8 @@ angle::Result ContextVk::submitFrame(const VkSubmitInfo &submitInfo,
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
 
     // Make sure a new fence is created for the next submission.
+    printf("ContextVk::submitFrame() resetSharedFence() handle 0x%p\n",
+           mSubmitFence.get().getHandle());
     mRenderer->resetSharedFence(&mSubmitFence);
 
     if (mGpuEventsEnabled)
@@ -3196,7 +3203,9 @@ angle::Result ContextVk::ensureSubmitFenceInitialized()
     {
         return angle::Result::Continue;
     }
-
+    if (mSubmitFence.isReferenced())
+        printf("ContextVk::ensureSubmitFenceInitialized() mSubmitFence handle 0x%p\n",
+               mSubmitFence.get().getHandle());
     return mRenderer->newSharedFence(this, &mSubmitFence);
 }
 
@@ -3205,6 +3214,10 @@ angle::Result ContextVk::getNextSubmitFence(vk::Shared<vk::Fence> *sharedFenceOu
     ANGLE_TRY(ensureSubmitFenceInitialized());
 
     ASSERT(!sharedFenceOut->isReferenced());
+    if (mSubmitFence.isReferenced())
+        printf("ContextVk::getNextSubmitFence() copying fence handle 0x%p\n",
+               mSubmitFence.get().getHandle());
+
     sharedFenceOut->copy(getDevice(), mSubmitFence);
     return angle::Result::Continue;
 }

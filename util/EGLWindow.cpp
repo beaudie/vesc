@@ -469,15 +469,22 @@ bool EGLWindow::initializeContext()
 
 void EGLWindow::destroyGL()
 {
+    printf("In destroyGL(), calling destroyContext()\n");
     destroyContext();
+    printf("In destroyGL(), called destroyContext()\n");
+    printf("In destroyGL(), calling destroySurface()\n");
     destroySurface();
+    printf("In destroyGL(), called destroySurface()\n");
 
     if (mDisplay != EGL_NO_DISPLAY)
     {
+        printf("In destroyGL(), calling eglMakeCurrent()\n");
         eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+        printf("In destroyGL(), calling eglTerminate()\n");
         eglTerminate(mDisplay);
         mDisplay = EGL_NO_DISPLAY;
     }
+    printf("Finished destroyGL()\n");
 }
 
 void EGLWindow::destroySurface()

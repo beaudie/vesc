@@ -357,6 +357,7 @@ TEST_P(D3DTextureTest, TestD3D11SupportedFormatsTexture)
 {
     bool srgb8alpha8TextureAttachmentSupported = getClientMajorVersion() >= 3;
     ANGLE_SKIP_TEST_IF(!valid() || !mD3D11Device || !srgb8alpha8TextureAttachmentSupported);
+    ANGLE_SKIP_TEST_IF(IsVulkan() && (IsIntel() || IsNVIDIA()));
 
     bool srgbWriteControlSupported =
         IsGLExtensionEnabled("GL_EXT_sRGB_write_control") && !IsOpenGL();

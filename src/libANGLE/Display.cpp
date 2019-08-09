@@ -672,15 +672,17 @@ Error Display::terminate(const Thread *thread)
     {
         return NoError();
     }
-
+    printf("In Display::terminate(), calling mMemoryProgramCache.clear()\n");
     mMemoryProgramCache.clear();
+    printf("In Display::terminate(), calling mBlobCache.setBlobCacheFuncs()\n");
     mBlobCache.setBlobCacheFuncs(nullptr, nullptr);
 
     while (!mContextSet.empty())
     {
+        printf("In Display::terminate(), calling destroyContext()\n");
         ANGLE_TRY(destroyContext(thread, *mContextSet.begin()));
     }
-
+    printf("In Display::terminate(), calling makeCurrent()\n");
     ANGLE_TRY(makeCurrent(thread, nullptr, nullptr, nullptr));
 
     // The global texture manager should be deleted with the last context that uses it.
@@ -688,42 +690,48 @@ Error Display::terminate(const Thread *thread)
 
     while (!mImageSet.empty())
     {
+        printf("In Display::terminate(), calling destroyImage()\n");
         destroyImage(*mImageSet.begin());
     }
 
     while (!mStreamSet.empty())
     {
+        printf("In Display::terminate(), calling destroyStream()\n");
         destroyStream(*mStreamSet.begin());
     }
 
     while (!mSyncSet.empty())
     {
+        printf("In Display::terminate(), calling destroySync()\n");
         destroySync(*mSyncSet.begin());
     }
 
     while (!mState.surfaceSet.empty())
     {
+        printf("In Display::terminate(), calling destroySurface()\n");
         ANGLE_TRY(destroySurface(*mState.surfaceSet.begin()));
     }
-
+    printf("In Display::terminate(), calling mConfigSet.clear()\n");
     mConfigSet.clear();
 
     if (mDevice != nullptr && mDevice->getOwningDisplay() != nullptr)
     {
         // Don't delete the device if it was created externally using eglCreateDeviceANGLE
         // We also shouldn't set it to null in case eglInitialize() is called again later
+        printf("In Display::terminate(), calling SafeDelete()\n");
         SafeDelete(mDevice);
     }
-
+    printf("In Display::terminate(), calling mImplementation->terminate()\n");
     mImplementation->terminate();
 
     mDeviceLost = false;
 
     mInitialized = false;
-
+    printf("In Display::terminate(), calling gl::UninitializeDebugAnnotations()\n");
     gl::UninitializeDebugAnnotations();
 
     // TODO(jmadill): Store Platform in Display and deinit here.
+    printf("In Display::terminate(), calling ANGLEResetDisplayPlatform()\n");
     ANGLEResetDisplayPlatform(this);
 
     return NoError();

@@ -98,27 +98,34 @@ EGLBoolean EGLAPIENTRY EGL_Initialize(EGLDisplay dpy, EGLint *major, EGLint *min
 
 EGLBoolean EGLAPIENTRY EGL_Terminate(EGLDisplay dpy)
 {
+    printf("In EGL_Terminate(), getting scoped lock\n");
     ANGLE_SCOPED_GLOBAL_LOCK();
+    printf("In EGL_Terminate(), have scoped lock\n");
     FUNC_EVENT("EGLDisplay dpy = 0x%016" PRIxPTR, (uintptr_t)dpy);
     Thread *thread = egl::GetCurrentThread();
-
+    printf("In EGL_Terminate(), calling ValidateTerminate(display)\n");
     egl::Display *display = static_cast<egl::Display *>(dpy);
     ANGLE_EGL_TRY_RETURN(thread, ValidateTerminate(display), "eglTerminate",
                          GetDisplayIfValid(display), EGL_FALSE);
-
+    printf("In EGL_Terminate(), calling display->makeCurrent()\n");
     ANGLE_EGL_TRY_RETURN(thread, display->makeCurrent(thread, nullptr, nullptr, nullptr),
                          "eglTerminate", GetDisplayIfValid(display), EGL_FALSE);
     SetContextCurrent(thread, nullptr);
+    printf("In EGL_Terminate(), calling display->terminate()\n");
     ANGLE_EGL_TRY_RETURN(thread, display->terminate(thread), "eglTerminate",
                          GetDisplayIfValid(display), EGL_FALSE);
-
+    printf("In EGL_Terminate(), calling thread->setSuccess()\n");
     thread->setSuccess();
     return EGL_TRUE;
 }
 
 const char *EGLAPIENTRY EGL_QueryString(EGLDisplay dpy, EGLint name)
 {
+    printf("TID(0x%lX): Inside EGL_QueryString() and attempting to acquire global lock.\n",
+           GetCurrentThreadId());
     ANGLE_SCOPED_GLOBAL_LOCK();
+    printf("TID(0x%lX): Inside EGL_QueryString() and acquired global lock.\n",
+           GetCurrentThreadId());
     FUNC_EVENT("EGLDisplay dpy = 0x%016" PRIxPTR ", EGLint name = %d", (uintptr_t)dpy, name);
     Thread *thread = egl::GetCurrentThread();
 

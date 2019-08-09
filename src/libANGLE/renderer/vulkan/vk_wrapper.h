@@ -11,7 +11,7 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_VK_WRAPPER_H_
 #define LIBANGLE_RENDERER_VULKAN_VK_WRAPPER_H_
 
-#include <vulkan/vulkan.h>
+#include "volk.h"
 
 #include "libANGLE/renderer/renderer_utils.h"
 
@@ -1467,34 +1467,45 @@ ANGLE_INLINE VkResult Event::reset(VkDevice device) const
 // Fence implementation.
 ANGLE_INLINE void Fence::destroy(VkDevice device)
 {
+    printf("In Fence::destroy()\n");
     if (valid())
     {
+        printf(
+            "In Fence::destroy(), valid(), calling vkDestroyFence() w/ handle 0x%p, vkDestroyFence "
+            "func 0x%p\n",
+            mHandle, vkDestroyFence);
         vkDestroyFence(device, mHandle, nullptr);
+        printf("In Fence::destroy(), valid(), called vkDestroyFence()\n");
         mHandle = VK_NULL_HANDLE;
     }
+    printf("Finished Fence::destroy()\n");
 }
 
 ANGLE_INLINE VkResult Fence::init(VkDevice device, const VkFenceCreateInfo &createInfo)
 {
     ASSERT(!valid());
+    printf("In Fence::init()\n");
     return vkCreateFence(device, &createInfo, nullptr, &mHandle);
 }
 
 ANGLE_INLINE VkResult Fence::reset(VkDevice device)
 {
     ASSERT(valid());
+    printf("In Fence::reset()\n");
     return vkResetFences(device, 1, &mHandle);
 }
 
 ANGLE_INLINE VkResult Fence::getStatus(VkDevice device) const
 {
     ASSERT(valid());
+    printf("In Fence::getStatus()\n");
     return vkGetFenceStatus(device, mHandle);
 }
 
 ANGLE_INLINE VkResult Fence::wait(VkDevice device, uint64_t timeout) const
 {
     ASSERT(valid());
+    printf("In Fence::wait()\n");
     return vkWaitForFences(device, 1, &mHandle, true, timeout);
 }
 

@@ -173,7 +173,8 @@ bool ShouldAlwaysForceNewDisplay()
     // many displays causes crashes. However this exposes other driver bugs on many other platforms.
     // Conservatively enable the feature only on Windows Intel and NVIDIA for now.
     SystemInfo *systemInfo = GetTestSystemInfo();
-    return (!systemInfo || !IsWindows() || systemInfo->hasAMDGPU());
+    return (!systemInfo || !IsWindows());  // || systemInfo->hasAMDGPU());
+    // return (!systemInfo || !IsWindows() || systemInfo->hasAMDGPU());
 }
 }  // anonymous namespace
 
@@ -540,15 +541,25 @@ void ANGLETestBase::ANGLETestSetUp()
     }
     else
     {
-        if (mForceNewDisplay || !mFixture->eglWindow->isDisplayInitialized())
+        printf("In ANGLETestSetUp(), last device is 0x%X & current device is 0x%X\n",
+               mLastDeviceType, mCurrentParams->getDeviceType());
+        if (mForceNewDisplay || !mFixture->eglWindow->isDisplayInitialized() ||
+            mLastDeviceType != mCurrentParams->getDeviceType())
         {
+            printf(
+                "In ANGLETestSetUp(), destroying GL, mFixture,eglWindow,mDisplay: 0x%p,0x%p,0x%p\n",
+                mFixture, mFixture->eglWindow, mFixture->eglWindow->getDisplay());
             mFixture->eglWindow->destroyGL();
+            printf("In ANGLETestSetUp(), initializing display\n");
             if (!mFixture->eglWindow->initializeDisplay(mFixture->osWindow,
                                                         ANGLETestEnvironment::GetEGLLibrary(),
                                                         mCurrentParams->eglParameters))
             {
                 FAIL() << "EGL Display init failed.";
             }
+            printf("In ANGLETestSetUp(), initialized display mDisplay handle 0x%p\n",
+                   mFixture->eglWindow->getDisplay());
+            mLastDeviceType = mCurrentParams->getDeviceType();
         }
         else if (mCurrentParams->eglParameters != mFixture->eglWindow->getPlatform())
         {
@@ -1337,6 +1348,7 @@ ANGLETestBase::ScopedIgnorePlatformMessages::~ScopedIgnorePlatformMessages()
 
 OSWindow *ANGLETestBase::mOSWindowSingleton = nullptr;
 std::map<angle::PlatformParameters, ANGLETestBase::TestFixture> ANGLETestBase::gFixtures;
+GLint ANGLETestBase::mLastDeviceType = 0;
 Optional<EGLint> ANGLETestBase::mLastRendererType;
 
 std::unique_ptr<Library> ANGLETestEnvironment::gEGLLibrary;

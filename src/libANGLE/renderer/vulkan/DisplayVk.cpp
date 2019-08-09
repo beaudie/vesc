@@ -34,6 +34,7 @@ DisplayVk::~DisplayVk()
 egl::Error DisplayVk::initialize(egl::Display *display)
 {
     ASSERT(mRenderer != nullptr && display != nullptr);
+    printf("In DisplayVk::initialize(), mRenderer 0x%p\n", mRenderer);
     angle::Result result = mRenderer->initialize(this, display, getWSIExtension(), getWSILayer());
     ANGLE_TRY(angle::ToEGL(result, this, EGL_NOT_INITIALIZED));
     return egl::NoError();
@@ -41,8 +42,11 @@ egl::Error DisplayVk::initialize(egl::Display *display)
 
 void DisplayVk::terminate()
 {
+    printf("In DisplayVk::terminate(), mRenderer 0x%p\n", mRenderer);
     ASSERT(mRenderer);
+    printf("In DisplayVk::terminate(), calling mRenderer->onDestroy\n");
     mRenderer->onDestroy(this);
+    printf("Leaving DisplayVk::terminate()\n");
 }
 
 egl::Error DisplayVk::makeCurrent(egl::Surface * /*drawSurface*/,
