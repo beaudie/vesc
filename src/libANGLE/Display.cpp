@@ -1027,6 +1027,12 @@ Error Display::makeCurrent(const Thread *thread,
     }
 
     ANGLE_TRY(mImplementation->makeCurrent(drawSurface, readSurface, context));
+    if (thread->getDevice() !=
+        static_cast<GLint>(mAttributeMap.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE)))
+    {
+        // If the device has changed we need to re-init to make sure vk* func ptrs are correct
+        ANGLE_TRY(mImplementation->softInitialize(this));
+    }
 
     if (context != nullptr)
     {

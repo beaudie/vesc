@@ -528,6 +528,7 @@ class ANGLETestBase
 
     static std::map<angle::PlatformParameters, TestFixture> gFixtures;
     const angle::PlatformParameters *mCurrentParams;
+    static EGLint mLastDeviceType;  // Make sure to load new ICD when switching between SwS & HW
     TestFixture *mFixture;
 
     // Workaround for NVIDIA not being able to share a window with OpenGL and Vulkan.
