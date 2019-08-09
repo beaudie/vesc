@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e583f71c_97dcecaa",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-09T17:12:50Z",
+      "side": 0,
+      "message": "Could you provide some commentary in the CL comment on why this isn\u0027t necessary?\nMaybe that would be better for an offline discussion.\nDoes a CPU read not need a read dependency?",
+      "revId": "a1f0d2342d8f7958a2316803c92c5664cd101a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
