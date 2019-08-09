@@ -131,6 +131,28 @@ Error Surface::destroyImpl(const Display *display)
     return NoError();
 }
 
+// FIXME: revert this change
+static void Sleep(unsigned int milliseconds)
+{
+#ifdef __unix__
+    // On Windows Sleep(0) yields while it isn't guaranteed by Posix's sleep
+    // so we replicate Windows' behavior with an explicit yield.
+    if (milliseconds == 0)
+    {
+        sched_yield();
+    }
+    else
+    {
+        timespec sleepTime = {
+            .tv_sec  = milliseconds / 1000,
+            .tv_nsec = (milliseconds % 1000) * 1000000,
+        };
+
+        nanosleep(&sleepTime, nullptr);
+    }
+#endif
+}
+
 void Surface::postSwap(const gl::Context *context)
 {
     if (mRobustResourceInitialization && mSwapBehavior != EGL_BUFFER_PRESERVED)
@@ -139,7 +161,36 @@ void Surface::postSwap(const gl::Context *context)
         onStateChange(angle::SubjectMessage::SubjectChanged);
     }
 
-    context->onPostSwap();
+    // FIXME: revert this change
+    // hack to preview the frame capture
+    Sleep(1000);
+    gl::Context *renderableContext = const_cast<gl::Context *>(context);
+    {
+        {
+            renderableContext->clearColor(0.0f, 1.0f, 0.0f, 0.0f);
+            renderableContext->clear(GL_COLOR_BUFFER_BIT);
+            egl::Error err = mImplementation->swap(context);
+            ASSERT(err.getCode() == EGL_SUCCESS);
+            Sleep(100);
+        }
+
+        {
+            renderableContext->replayFrameCapture();
+            egl::Error err = mImplementation->swap(context);
+            ASSERT(err.getCode() == EGL_SUCCESS);
+            context->onPostSwap();
+            Sleep(800);
+        }
+
+        {
+
+            renderableContext->clearColor(0.0f, 1.0f, 0.0f, 0.0f);
+            renderableContext->clear(GL_COLOR_BUFFER_BIT);
+            egl::Error err = mImplementation->swap(context);
+            ASSERT(err.getCode() == EGL_SUCCESS);
+            Sleep(100);
+        }
+    }
 }
 
 Error Surface::initialize(const Display *display)
