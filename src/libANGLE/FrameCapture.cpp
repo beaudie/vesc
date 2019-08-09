@@ -13,6 +13,7 @@
 
 #include "libANGLE/Context.h"
 #include "libANGLE/VertexArray.h"
+#include "libANGLE/frame_capture_replay_autogen.h"
 #include "libANGLE/gl_enum_utils_autogen.h"
 
 namespace angle
@@ -25,6 +26,10 @@ ParamCapture::~ParamCapture() {}
 FrameCapture::FrameCapture() {}
 FrameCapture::~FrameCapture() {}
 void FrameCapture::onEndFrame() {}
+void FrameCapture::replay(gl::Context *context)
+{
+    ANGLE_UNUSED_VARIABLE(context);
+}
 #else
 namespace
 {
@@ -299,7 +304,8 @@ void FrameCapture::onEndFrame()
 {
     if (!mCalls.empty())
     {
-        saveCapturedFrameAsCpp();
+        // FIXME: revert back
+        // saveCapturedFrameAsCpp();
     }
 
     reset();
@@ -539,6 +545,42 @@ bool FrameCapture::enabled() const
     return mFrameIndex < 100;
 }
 
+void FrameCapture::replay(gl::Context *context)
+{
+    // handle client array update
+    const void *vertexArrayPointers[gl::MAX_VERTEX_ATTRIBS] = {nullptr};
+    for (auto revIter = mCalls.rbegin(); revIter != mCalls.rend(); revIter++)
+    {
+        CallCapture &call                                     = *revIter;
+        const std::vector<angle::ParamCapture> &paramCaptures = call.params.getParamCaptures();
+        if (call.entryPoint == gl::EntryPoint::Invalid &&
+            call.customFunctionName == "UpdateClientArrayPointer")
+        {
+            GLint arrayIndex = paramCaptures[0].value.GLintVal;
+            ASSERT(arrayIndex < gl::MAX_VERTEX_ATTRIBS);
+            ASSERT(!paramCaptures[1].data.empty());
+            vertexArrayPointers[arrayIndex] = paramCaptures[1].data[0].data();
+        }
+        else if (call.entryPoint == gl::EntryPoint::VertexAttribPointer ||
+                 call.entryPoint == gl::EntryPoint::VertexAttribIPointer)
+        {
+            if (call.params.hasClientArrayData())
+            {
+                GLint arrayIndex = paramCaptures[0].value.GLintVal;
+                ASSERT(arrayIndex < gl::MAX_VERTEX_ATTRIBS);
+                ASSERT(vertexArrayPointers[arrayIndex]);
+                call.params.getClientArrayPointerParameter().value.voidConstPointerVal =
+                    vertexArrayPointers[arrayIndex];
+            }
+        }
+    }
+
+    for (const CallCapture &call : mCalls)
+    {
+        CallCaptureReplay(context, call);
+    }
+}
+
 void FrameCapture::reset()
 {
     mCalls.clear();
@@ -563,7 +605,8 @@ void CaptureMemory(const void *source, size_t size, ParamCapture *paramCapture)
 
 void CaptureString(const GLchar *str, ParamCapture *paramCapture)
 {
-    CaptureMemory(str, strlen(str), paramCapture);
+    // include the '\0' suffix
+    CaptureMemory(str, strlen(str) + 1, paramCapture);
 }
 
 template <>
