@@ -170,9 +170,9 @@ bool ShouldAlwaysForceNewDisplay()
 {
     // We prefer to reuse config displays. This is faster and solves a driver issue where creating
     // many displays causes crashes. However this exposes other driver bugs on many other platforms.
-    // Conservatively enable the feature only on Windows Intel and NVIDIA for now.
+    // Conservatively enable the feature only on Windows for now.
     SystemInfo *systemInfo = GetTestSystemInfo();
-    return (!systemInfo || !IsWindows() || systemInfo->hasAMDGPU());
+    return !systemInfo || !IsWindows();
 }
 }  // anonymous namespace
 
