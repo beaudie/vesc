@@ -171,9 +171,9 @@ bool ShouldAlwaysForceNewDisplay()
 {
     // We prefer to reuse config displays. This is faster and solves a driver issue where creating
     // many displays causes crashes. However this exposes other driver bugs on many other platforms.
-    // Conservatively enable the feature only on Windows Intel and NVIDIA for now.
-    SystemInfo *systemInfo = GetTestSystemInfo();
-    return (!systemInfo || !IsWindows() || systemInfo->hasAMDGPU());
+    // Initially were using this on Windows non-AMD devices, but disabling for now to enable the
+    // transition to volk dynamic vk* entrypoint loading.
+    return true;
 }
 }  // anonymous namespace
 
