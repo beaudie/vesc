@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "9a2f8966_0d702f5d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-09T15:35:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "66fad7d8_7522e1f1",
+      "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c2221ae_170a1b4d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 1
@@ -140,6 +158,24 @@
       "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0198ae2b_0c957835",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-09T15:35:02Z",
+      "side": 1,
+      "message": "This appears to have been fixed with Cody\u0027s changes in:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1738436",
+      "parentUuid": "be4be385_2d25f58a",
+      "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -259,6 +295,30 @@
       "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5310feb0_5b1bb0d8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2398,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-09T15:35:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8a9e22b_086f4fbe",
+      "range": {
+        "startLine": 2397,
+        "startChar": 0,
+        "endLine": 2398,
+        "endChar": 54
+      },
+      "revId": "9aaf2dd733b2343dd4be31b767401ddac3644295",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
