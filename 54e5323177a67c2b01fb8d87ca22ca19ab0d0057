@@ -52,6 +52,24 @@
       "revId": "54e5323177a67c2b01fb8d87ca22ca19ab0d0057",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e25f04c4_6992e0c2",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-09T17:34:10Z",
+      "side": 1,
+      "message": "These macro inserts explicit template instantiations. They\u0027re specifically for resource ID types. We have FromGL instantiations for each and every packed enum type but those are defined in PackedGLEnums_autogen.cpp. Please see that file for more detail.\n\nIs this okay to proceed with? I\u0027d be happy to explain more about template instantiation offline.",
+      "parentUuid": "3ee6d898_30bc397e",
+      "revId": "54e5323177a67c2b01fb8d87ca22ca19ab0d0057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
