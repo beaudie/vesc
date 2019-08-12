@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab8ad5f5_db3914b0",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1915,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-12T21:43:42Z",
+      "side": 1,
+      "message": "Why don\u0027t these types of calls use FromGL() rather than declaring the struct directly?",
+      "revId": "0b7d491352c99eccb8495bcce877df72d8e9172f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
