@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "c6e91b62_e7fb40e9",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-12T17:34:29Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "2fad84d8_2a94a071",
+      "range": {
+        "startLine": 581,
+        "startChar": 81,
+        "endLine": 581,
+        "endChar": 94
+      },
+      "revId": "edc84abd9b13dccb595e3486b95dcb15d2e1943d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3fc8702b_f5500b97",
         "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
         "patchSetId": 7
@@ -82,6 +106,24 @@
       "writtenOn": "2019-08-12T17:32:28Z",
       "side": 1,
       "message": "Should any of these have been using SafeMath in case the application set the base levels close to the wraparound point? (Not sure whether base levels factor in to these indices)",
+      "revId": "edc84abd9b13dccb595e3486b95dcb15d2e1943d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca4a4c94_a2069af7",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-12T17:34:29Z",
+      "side": 1,
+      "message": "We don\u0027t have the base level implementation yet. But pretty sure base level is hard limited in the spec to 1000:\n\nan implementation may allow a texture image\narray of level 1 or greater to be created only if a mipmap complete set of image\narrays consistent with the requested array can be supported where the values of\nTEXTURE_BASE_LEVEL and TEXTURE_MAX_LEVEL are 0 and 1000 respectively",
+      "parentUuid": "3fc8702b_f5500b97",
       "revId": "edc84abd9b13dccb595e3486b95dcb15d2e1943d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
