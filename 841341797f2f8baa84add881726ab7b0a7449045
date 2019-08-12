@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "297b6817_4b49d0a4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1321,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-12T14:12:51Z",
+      "side": 1,
+      "message": "Incomplete allows the caller to skip `vk::PipelineCache::merge()` with an empty cache. Probably not that big a deal though.",
+      "parentUuid": "2a1168c4_fe02bc51",
+      "range": {
+        "startLine": 1312,
+        "startChar": 0,
+        "endLine": 1321,
+        "endChar": 5
+      },
+      "revId": "841341797f2f8baa84add881726ab7b0a7449045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b82b2e57_28d80bdb",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
