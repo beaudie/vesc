@@ -129,10 +129,13 @@ class TIntermTraverser : angle::NonCopyable
     friend void TIntermConstantUnion::traverse(TIntermTraverser *);
     friend void TIntermFunctionPrototype::traverse(TIntermTraverser *);
 
-    TIntermNode *getParentNode() { return mPath.size() <= 1 ? nullptr : mPath[mPath.size() - 2u]; }
+    TIntermNode *getParentNode() const
+    {
+        return mPath.size() <= 1 ? nullptr : mPath[mPath.size() - 2u];
+    }
 
     // Return the nth ancestor of the node being traversed. getAncestorNode(0) == getParentNode()
-    TIntermNode *getAncestorNode(unsigned int n)
+    TIntermNode *getAncestorNode(unsigned int n) const
     {
         if (mPath.size() > n + 1u)
         {
@@ -142,6 +145,12 @@ class TIntermTraverser : angle::NonCopyable
     }
 
     const TIntermBlock *getParentBlock() const;
+
+    TIntermNode *getRootNode() const
+    {
+        ASSERT(!mPath.empty());
+        return mPath.front();
+    }
 
     void pushParentBlock(TIntermBlock *node);
     void incrementParentBlockPos();
