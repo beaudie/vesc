@@ -5730,6 +5730,315 @@ TEST_P(GLSLTest_ES3, InitSameNameArray)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Test reading from UBOs and SSBOs and writing to SSBOs with mixed row- and colum-major layouts in
+// both std140 and std430 layouts.
+TEST_P(GLSLTest_ES31, MixedRowAndColumnMajorMatrices)
+{
+    constexpr char kFS[] = R"(#version 310 es
+precision highp float;
+out vec4 outColor;
+
+struct Inner
+{
+    mat3x4 m3c4r;
+    mat4x3 m4c3r;
+};
+
+struct Matrices
+{
+    mat2 m2c2r;
+    mat2x3 m2c3r;
+    mat3x2 m3c2r;
+    Inner inner;
+};
+
+// For simplicity, the layouts are either of:
+// - col-major mat4, row-major rest
+// - row-major mat4, col-major rest
+//
+// The format is tagged with c, the latter with r.
+layout(std140, column_major) uniform Ubo140c
+{
+    mat4 m4c4r;
+    layout(row_major) Matrices m;
+} ubo140cIn;
+
+layout(std140, row_major) uniform Ubo140r
+{
+    mat4 m4c4r;
+    layout(column_major) Matrices m;
+} ubo140rIn;
+
+layout(std140, row_major, binding = 0) buffer Ssbo140c
+{
+    layout(column_major) mat4 m4c4r;
+    Matrices m;
+} ssbo140cIn;
+
+layout(std140, column_major, binding = 1) buffer Ssbo140r
+{
+    layout(row_major) mat4 m4c4r;
+    Matrices m;
+} ssbo140rIn;
+
+layout(std430, column_major, binding = 2) buffer Ssbo430c
+{
+    mat4 m4c4r;
+    layout(row_major) Matrices m;
+} ssbo430cIn;
+
+layout(std430, row_major, binding = 3) buffer Ssbo430r
+{
+    mat4 m4c4r;
+    layout(column_major) Matrices m;
+} ssbo430rIn;
+
+layout(std140, row_major, binding = 4) buffer Ssbo140cOut
+{
+    layout(column_major) mat4 m4c4r;
+    Matrices m;
+} ssbo140cOut;
+
+layout(std140, column_major, binding = 5) buffer Ssbo140rOut
+{
+    layout(row_major) mat4 m4c4r;
+    Matrices m;
+} ssbo140rOut;
+
+layout(std430, column_major, binding = 6) buffer Ssbo430cOut
+{
+    mat4 m4c4r;
+    layout(row_major) Matrices m;
+} ssbo430cOut;
+
+layout(std430, row_major, binding = 7) buffer Ssbo430rOut
+{
+    mat4 m4c4r;
+    layout(column_major) Matrices m;
+} ssbo430rOut;
+
+#define EXPECT(result, expression, value) if ((expression) != value) { result = false; }
+#define EXPECTV(result, expression, value) if (any(notEqual(expression, value))) { result = false; }
+
+#define VERIFY_IN(result, mat, cols, rows)                  \
+    EXPECT(result, mat[0].x, 0.0);                          \
+    EXPECT(result, mat[0][1], 4.0);                         \
+    EXPECTV(result, mat[0].xy, vec2(0, 4));                 \
+    EXPECTV(result, mat[1].xy, vec2(1, 5));                 \
+    for (int c = 0; c < cols; ++c)                          \
+    {                                                       \
+        for (int r = 0; r < rows; ++r)                      \
+        {                                                   \
+            EXPECT(result, mat[c][r], float(r * 4 + c));    \
+        }                                                   \
+    }
+
+#define COPY(matIn, matOut, cols, rows) \
+    matOut = matIn;                     \
+    matOut[0].x = matIn[0].x;           \
+    matOut[0][1] = matIn[0][1];         \
+    matOut[1] = matIn[1];               \
+    matOut[1].xy = matIn[1].xy;
+
+bool verifyMatrices(in Matrices m)
+{
+    bool result = true;
+    VERIFY_IN(result, m.m2c2r, 2, 2);
+    VERIFY_IN(result, m.m2c3r, 2, 3);
+    VERIFY_IN(result, m.m3c2r, 3, 2);
+    VERIFY_IN(result, m.inner.m3c4r, 3, 4);
+    VERIFY_IN(result, m.inner.m4c3r, 4, 3);
+    return result;
+}
+
+mat4 copyMat4(in mat4 m)
+{
+    return m;
+}
+
+void copyMatrices(in Matrices mIn, out Matrices mOut)
+{
+    COPY(mIn.m2c2r, mOut.m2c2r, 2, 2);
+    COPY(mIn.m2c3r, mOut.m2c3r, 2, 3);
+    COPY(mIn.m3c2r, mOut.m3c2r, 3, 2);
+    COPY(mIn.inner.m3c4r, mOut.inner.m3c4r, 3, 4);
+    COPY(mIn.inner.m4c3r, mOut.inner.m4c3r, 4, 3);
+}
+
+void main()
+{
+    bool result = true;
+
+#if 0
+    VERIFY_IN(result, ubo140cIn.m4c4r, 4, 4);
+    VERIFY_IN(result, ubo140cIn.m.m2c3r, 2, 3);
+    EXPECT(result, verifyMatrices(ubo140cIn.m), true);
+
+    VERIFY_IN(result, ubo140rIn.m4c4r, 4, 4);
+#endif
+    // TODO: nvidia driver bug: if I comment out layout in ubo140cIn, this passes.  nvidia's bug is
+    // attributing the layout to the struct type instead of the variable.
+    VERIFY_IN(result, ubo140rIn.m.m2c2r, 2, 2);
+#if 0
+    VERIFY_IN(result, ubo140rIn.m.inner.m3c4r, 3, 4);
+    EXPECT(result, verifyMatrices(ubo140rIn.m), true);
+
+    VERIFY_IN(result, ssbo140cIn.m4c4r, 4, 4);
+    VERIFY_IN(result, ssbo140cIn.m.m3c2r, 3, 2);
+    EXPECT(result, verifyMatrices(ssbo140cIn.m), true);
+
+    VERIFY_IN(result, ssbo140rIn.m4c4r, 4, 4);
+    VERIFY_IN(result, ssbo140rIn.m.inner.m4c3r, 4, 3);
+    EXPECT(result, verifyMatrices(ssbo140rIn.m), true);
+
+    VERIFY_IN(result, ssbo430cIn.m4c4r, 4, 4);
+    VERIFY_IN(result, ssbo430cIn.m.m2c3r, 2, 3);
+    EXPECT(result, verifyMatrices(ssbo430cIn.m), true);
+
+    VERIFY_IN(result, ssbo430rIn.m4c4r, 4, 4);
+    VERIFY_IN(result, ssbo430rIn.m.inner.m3c4r, 3, 4);
+    EXPECT(result, verifyMatrices(ssbo430rIn.m), true);
+
+    ssbo140cOut.m4c4r = copyMat4(ssbo140cIn.m4c4r);
+    copyMatrices(ssbo140cOut.m, ssbo430cIn.m);
+    COPY(ssbo140cOut.m.m2c3r, ssbo430cIn.m.m2c3r, 2, 3);
+
+    ssbo140rOut.m4c4r = copyMat4(ssbo140rIn.m4c4r);
+    copyMatrices(ssbo140rOut.m, ssbo430rIn.m);
+    COPY(ssbo140rOut.m.inner.m3c4r, ssbo430rIn.m.inner.m3c4r, 3, 4);
+
+    ssbo430cOut.m4c4r = copyMat4(ssbo430cIn.m4c4r);
+    copyMatrices(ssbo430cOut.m, ssbo140cIn.m);
+    COPY(ssbo430cOut.m.m3c2r, ssbo430cIn.m.m3c2r, 3, 2);
+
+    ssbo430rOut.m4c4r = copyMat4(ssbo430rIn.m4c4r);
+    copyMatrices(ssbo430rOut.m, ssbo140rIn.m);
+    COPY(ssbo430rOut.m.inner.m4c3r, ssbo430rIn.m.inner.m4c3r, 4, 3);
+
+#endif
+    outColor = result ? vec4(0, 1, 0, 1) : vec4(1, 0, 0, 1);
+})";
+
+    ANGLE_GL_PROGRAM(program, essl31_shaders::vs::Simple(), kFS);
+    EXPECT_GL_NO_ERROR();
+
+    constexpr size_t kMatrixCount                                     = 6;
+    constexpr std::pair<uint32_t, uint32_t> kMatrixDims[kMatrixCount] = {
+        {4, 4}, {2, 2}, {2, 3}, {3, 2}, {3, 4}, {4, 3},
+    };
+    constexpr bool kMatrixIsColMajor[kMatrixCount] = {
+        true, false, false, false, false, false,
+    };
+
+    auto roundUp2 = [](uint32_t dim) { return dim == 3 ? 4 : dim; };
+    auto initData = [&](float data[], bool isStd430, bool isTransposed) {
+        size_t offset = 0;
+        for (size_t m = 0; m < kMatrixCount; ++m)
+        {
+            uint32_t rows   = kMatrixDims[m].first;
+            uint32_t cols   = kMatrixDims[m].second;
+            bool isColMajor = kMatrixIsColMajor[m] != isTransposed;
+            fprintf(stderr, "Matrix %zu (offset: %zu, col major? %d)\n", m, offset, isColMajor);
+
+            uint32_t arraySize              = isColMajor ? cols : rows;
+            uint32_t arrayElementComponents = isColMajor ? rows : cols;
+            uint32_t stride                 = isStd430 ? roundUp2(arrayElementComponents) : 4;
+
+            for (uint32_t i = 0; i < arraySize; ++i)
+            {
+                for (uint32_t c = 0; c < arrayElementComponents; ++c)
+                {
+                    uint32_t row = isColMajor ? c : i;
+                    uint32_t col = isColMajor ? i : c;
+
+                    data[offset + i * stride + c] = col * 4 + row;
+                }
+            }
+
+            offset += arraySize * stride;
+        }
+        return offset;
+    };
+
+    float dataStd140ColMajor[kMatrixCount * 4 * 4] = {};
+    float dataStd140RowMajor[kMatrixCount * 4 * 4] = {};
+    float dataStd430ColMajor[kMatrixCount * 4 * 4] = {};
+    float dataStd430RowMajor[kMatrixCount * 4 * 4] = {};
+    float dataZeros[kMatrixCount * 4 * 4]          = {};
+
+    const uint32_t sizeStd140ColMajor = initData(dataStd140ColMajor, false, true);
+    const uint32_t sizeStd140RowMajor = initData(dataStd140RowMajor, false, false);
+    const uint32_t sizeStd430ColMajor = initData(dataStd430ColMajor, true, true);
+    const uint32_t sizeStd430RowMajor = initData(dataStd430RowMajor, true, false);
+#if 1
+    fprintf(stderr, "std140 col major data (%u):\n", sizeStd140ColMajor);
+    for (size_t i = 0; i < sizeStd140ColMajor; ++i)
+    {
+        fprintf(stderr, "%c%4.1f", i % 4 == 0 ? '\n' : ' ', dataStd140ColMajor[i]);
+    }
+    fprintf(stderr, "\n");
+    fprintf(stderr, "std140 row major data (%u):\n", sizeStd140RowMajor);
+    for (size_t i = 0; i < sizeStd140RowMajor; ++i)
+    {
+        fprintf(stderr, "%c%4.1f", i % 4 == 0 ? '\n' : ' ', dataStd140RowMajor[i]);
+    }
+    fprintf(stderr, "\n");
+#endif
+
+    GLBuffer uboStd140ColMajor, uboStd140RowMajor;
+    GLBuffer ssboStd140ColMajor, ssboStd140RowMajor;
+    GLBuffer ssboStd430ColMajor, ssboStd430RowMajor;
+    GLBuffer ssboStd140ColMajorOut, ssboStd140RowMajorOut;
+    GLBuffer ssboStd430ColMajorOut, ssboStd430RowMajorOut;
+
+    GLuint programObj = program.get();
+    auto initBuffer   = [programObj](const char *name, GLuint buffer, uint32_t bindingIndex,
+                                   float data[], uint32_t dataSize, bool isUniform) {
+        GLenum bindPoint = isUniform ? GL_UNIFORM_BUFFER : GL_SHADER_STORAGE_BUFFER;
+
+        glBindBufferBase(bindPoint, bindingIndex, buffer);
+        glBufferData(bindPoint, dataSize * sizeof(*data), data, GL_STATIC_DRAW);
+
+        if (isUniform)
+        {
+            GLint blockIndex = glGetUniformBlockIndex(programObj, name);
+            glUniformBlockBinding(programObj, blockIndex, bindingIndex);
+        }
+    };
+
+    initBuffer("Ubo140c", uboStd140ColMajor, 0, dataStd140ColMajor, sizeStd140ColMajor, true);
+    initBuffer("Ubo140r", uboStd140RowMajor, 1, dataStd140RowMajor, sizeStd140RowMajor, true);
+    initBuffer("Ssbo140c", ssboStd140ColMajor, 0, dataStd140ColMajor, sizeStd140ColMajor, false);
+    initBuffer("Ssbo140r", ssboStd140RowMajor, 1, dataStd140RowMajor, sizeStd140RowMajor, false);
+    initBuffer("Ssbo430c", ssboStd430ColMajor, 2, dataStd430ColMajor, sizeStd430ColMajor, false);
+    initBuffer("Ssbo430r", ssboStd430RowMajor, 3, dataStd430RowMajor, sizeStd430RowMajor, false);
+    initBuffer("Ssbo140cOut", ssboStd140ColMajorOut, 4, dataZeros, sizeStd140ColMajor, false);
+    initBuffer("Ssbo140rOut", ssboStd140RowMajorOut, 5, dataZeros, sizeStd140RowMajor, false);
+    initBuffer("Ssbo430cOut", ssboStd430ColMajorOut, 6, dataZeros, sizeStd430ColMajor, false);
+    initBuffer("Ssbo430rOut", ssboStd430RowMajorOut, 7, dataZeros, sizeStd430RowMajor, false);
+    EXPECT_GL_NO_ERROR();
+
+    drawQuad(program, essl31_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    auto verifyBuffer = [](GLuint buffer, float data[], uint32_t dataSize) {
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, buffer);
+
+        const GLuint *ptr = reinterpret_cast<const GLuint *>(
+            glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, dataSize, GL_MAP_READ_BIT));
+
+        bool isCorrect = memcmp(ptr, data, dataSize * sizeof(*data));
+        glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
+        return isCorrect;
+    };
+
+    EXPECT_TRUE(verifyBuffer(ssboStd140ColMajorOut, dataStd140ColMajor, sizeStd140ColMajor));
+    EXPECT_TRUE(verifyBuffer(ssboStd140RowMajorOut, dataStd140RowMajor, sizeStd140RowMajor));
+    EXPECT_TRUE(verifyBuffer(ssboStd430ColMajorOut, dataStd430ColMajor, sizeStd430ColMajor));
+    EXPECT_TRUE(verifyBuffer(ssboStd430RowMajorOut, dataStd430RowMajor, sizeStd430RowMajor));
+}
+
 // Tests using gl_FragData[0] instead of gl_FragColor.
 TEST_P(GLSLTest, FragData)
 {
