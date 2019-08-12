@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "feac363c_9c47c8ef",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1321,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-12T14:22:37Z",
+      "side": 1,
+      "message": "I meant add a \"bool\" out return variable. (Parameter)",
+      "parentUuid": "297b6817_4b49d0a4",
+      "range": {
+        "startLine": 1312,
+        "startChar": 0,
+        "endLine": 1321,
+        "endChar": 5
+      },
+      "revId": "841341797f2f8baa84add881726ab7b0a7449045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b82b2e57_28d80bdb",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
