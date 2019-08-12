@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36c95dfe_c03c8888",
+        "filename": "src/compiler/translator/tree_ops/RewriteAtomicCounters.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-12T13:01:21Z",
+      "side": 1,
+      "message": "nit: unsigned int or uint32_t",
+      "range": {
+        "startLine": 332,
+        "startChar": 17,
+        "endLine": 332,
+        "endChar": 25
+      },
+      "revId": "edc84abd9b13dccb595e3486b95dcb15d2e1943d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb7873b1_dc48b6b8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1365,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-12T13:01:21Z",
+      "side": 1,
+      "message": "maybe setup should return uint32_t?",
+      "range": {
+        "startLine": 1365,
+        "startChar": 12,
+        "endLine": 1365,
+        "endChar": 29
+      },
+      "revId": "edc84abd9b13dccb595e3486b95dcb15d2e1943d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
