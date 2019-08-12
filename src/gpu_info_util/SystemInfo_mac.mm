@@ -17,6 +17,51 @@ namespace angle
 namespace
 {
 
+using PlatformDisplayID = uint32_t;
+
+// Code from WebKit to get the active GPU's ID given a display ID.
+int64_t GetGpuIDFromDisplayID(PlatformDisplayID displayID)
+{
+    GLuint displayMask              = CGDisplayIDToOpenGLDisplayMask(displayID);
+    GLint numRenderers              = 0;
+    CGLRendererInfoObj rendererInfo = nullptr;
+    CGLError error = CGLQueryRendererInfo(displayMask, &rendererInfo, &numRenderers);
+    if (!numRenderers || !rendererInfo || error != kCGLNoError)
+        return 0;
+
+    // The 0th renderer should not be the software renderer.
+    GLint isAccelerated;
+    error = CGLDescribeRenderer(rendererInfo, 0, kCGLRPAccelerated, &isAccelerated);
+    if (!isAccelerated || error != kCGLNoError)
+    {
+        CGLDestroyRendererInfo(rendererInfo);
+        return 0;
+    }
+
+    GLint gpuIDLow  = 0;
+    GLint gpuIDHigh = 0;
+
+    // kCGLRPRegistryIDLow is 140
+    error = CGLDescribeRenderer(rendererInfo, 0, static_cast<CGLRendererProperty>(140), &gpuIDLow);
+
+    if (error != kCGLNoError)
+    {
+        CGLDestroyRendererInfo(rendererInfo);
+        return 0;
+    }
+
+    // kCGLRPRegistryIDHigh is 141
+    error = CGLDescribeRenderer(rendererInfo, 0, static_cast<CGLRendererProperty>(141), &gpuIDHigh);
+    if (error != kCGLNoError)
+    {
+        CGLDestroyRendererInfo(rendererInfo);
+        return 0;
+    }
+
+    CGLDestroyRendererInfo(rendererInfo);
+    return static_cast<int64_t>(gpuIDHigh) << 32 | gpuIDLow;
+}
+
 std::string GetMachineModel()
 {
     io_service_t platformExpert = IOServiceGetMatchingService(
@@ -106,6 +151,44 @@ bool GetPCIDevices(std::vector<GPUDeviceInfo> *devices)
     return true;
 }
 
+void SetActiveGPUIndex(SystemInfo *info)
+{
+    VendorID activeVendor;
+    DeviceID activeDevice;
+
+    int64_t gpuID = GetGpuIDFromDisplayID(kCGDirectMainDisplay);
+
+    if (gpuID == 0)
+        return;
+
+    CFMutableDictionaryRef matchDictionary = IORegistryEntryIDMatching(gpuID);
+    io_service_t gpuEntry = IOServiceGetMatchingService(kIOMasterPortDefault, matchDictionary);
+
+    if (gpuEntry == IO_OBJECT_NULL)
+    {
+        IOObjectRelease(gpuEntry);
+        return;
+    }
+
+    if (!(GetEntryProperty(gpuEntry, CFSTR("vendor-id"), &activeVendor) &&
+          GetEntryProperty(gpuEntry, CFSTR("device-id"), &activeDevice)))
+    {
+        IOObjectRelease(gpuEntry);
+        return;
+    }
+
+    IOObjectRelease(gpuEntry);
+
+    for (size_t i = 0; i < info->gpus.size(); ++i)
+    {
+        if (info->gpus[i].vendorId == activeVendor && info->gpus[i].deviceId == activeDevice)
+        {
+            info->activeGPUIndex = i;
+            break;
+        }
+    }
+}
+
 }  // anonymous namespace
 
 bool GetSystemInfo(SystemInfo *info)
@@ -127,7 +210,16 @@ bool GetSystemInfo(SystemInfo *info)
         return false;
     }
 
+    // Call the generic FindActiveGpu function to initialize info fields
+    // such as isOptimus, isAMDSwitchable, and the activeGPUIndex
     FindActiveGPU(info);
+
+    // Then override the activeGPUIndex field of info to reflect the current
+    // GPU instead of the non-intel GPU
+    if (@available(macOS 10.13, *))
+    {
+        SetActiveGPUIndex(info);
+    }
 
     // Figure out whether this is a dual-GPU system.
     //
