@@ -90,11 +90,9 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermTyped *variable)
         }
     }
 
-    // Specify matrix packing if necessary.
-    if (layoutQualifier.matrixPacking != EmpUnspecified)
-    {
-        matrixPacking = getMatrixPackingString(layoutQualifier.matrixPacking);
-    }
+    // We expect all interface blocks to have been transformed to column major, so we don't specify
+    // the packing.
+    ASSERT(layoutQualifier.matrixPacking != EmpRowMajor);
 
     if (needsCustomLayout)
     {
@@ -130,6 +128,13 @@ void TOutputVulkanGLSL::writeLayoutQualifier(TIntermTyped *variable)
     {
         out << "@@";
     }
+}
+
+void TOutputVulkanGLSL::writeFieldLayoutQualifier(const TField *field)
+{
+    // We expect all interface blocks to have been transformed to column major, as Vulkan GLSL
+    // doesn't allow layout qualifiers on interface block fields.
+    ASSERT(field->type()->getLayoutQualifier().matrixPacking != EmpRowMajor);
 }
 
 void TOutputVulkanGLSL::writeQualifier(TQualifier qualifier,

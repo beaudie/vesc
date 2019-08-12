@@ -20,6 +20,7 @@
 #include "compiler/translator/tree_ops/RewriteAtomicCounters.h"
 #include "compiler/translator/tree_ops/RewriteCubeMapSamplersAs2DArray.h"
 #include "compiler/translator/tree_ops/RewriteDfdy.h"
+#include "compiler/translator/tree_ops/RewriteRowMajorMatrices.h"
 #include "compiler/translator/tree_ops/RewriteStructSamplers.h"
 #include "compiler/translator/tree_util/BuiltIn_autogen.h"
 #include "compiler/translator/tree_util/FindFunction.h"
@@ -694,6 +695,16 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         RewriteCubeMapSamplersAs2DArray(
             root, &getSymbolTable(), getShaderType() == GL_FRAGMENT_SHADER,
             compileOptions & SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING_WITH_SUBGROUP_OP);
+    }
+
+    if (getShaderVersion() >= 300)
+    {
+        // In GLES3+, matrices can be declared row- or column-major.  Transform all to column-major
+        // as interface block field layout qualifiers are not allowed.  This should be done after
+        // samplers are taken out of structs (as structs could be rewritten), but before uniforms
+        // are collected in a uniform buffer as they are handled especially.
+        RewriteRowMajorMatrices(root, &getSymbolTable());
+        ASSERT(validateAST(root));
     }
 
     if (defaultUniformCount > 0)
