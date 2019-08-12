@@ -400,6 +400,7 @@ const std::string &GetObjectCode(const ShHandle handle)
     ASSERT(compiler);
 
     TInfoSink &infoSink = compiler->getInfoSink();
+    // fprintf(stderr, "%s\n", infoSink.obj.str().c_str());
     return infoSink.obj.str();
 }
 
