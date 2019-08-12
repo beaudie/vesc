@@ -372,7 +372,8 @@ TEST_P(ClearTest, ChangeFramebufferAttachmentFromRGBAtoRGB)
 {
     // http://anglebug.com/2689
     ANGLE_SKIP_TEST_IF(IsD3D9() || IsD3D11() || (IsOzone() && IsOpenGLES()));
-    ANGLE_SKIP_TEST_IF(IsOSX() && (IsNVIDIA() || IsIntel()) && IsDesktopOpenGL());
+    // Fails on Intel and NVIDIA GPUs on Mac
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsDesktopOpenGL());
     ANGLE_SKIP_TEST_IF(IsAndroid() && IsAdreno() && IsOpenGLES());
 
     ANGLE_GL_PROGRAM(program, angle::essl1_shaders::vs::Simple(),

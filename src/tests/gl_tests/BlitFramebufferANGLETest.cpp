@@ -1149,6 +1149,7 @@ class BlitFramebufferTest : public ANGLETest
 TEST_P(BlitFramebufferTest, MultisampleDepth)
 {
     // TODO(oetuaho@nvidia.com): http://crbug.com/837717
+    // Fails on Intel and AMD GPUs on Mac
     ANGLE_SKIP_TEST_IF(IsOpenGL() && IsOSX());
 
     GLRenderbuffer renderbuf;
@@ -1342,7 +1343,7 @@ TEST_P(BlitFramebufferTest, ScissoredMultisampleStencil)
     ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL() && IsWindows());
 
     // Fails verifying that the middle pixel is red. http://anglebug.com/3496
-    ANGLE_SKIP_TEST_IF((IsIntel() || IsAMD()) && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsOSX());
 
     constexpr GLuint kSize = 256;
 

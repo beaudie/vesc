@@ -136,7 +136,7 @@ TEST_P(ProvokingVertexTest, FlatTriangle)
 TEST_P(ProvokingVertexTest, FlatTriWithTransformFeedback)
 {
     // TODO(cwallez) figure out why it is broken on AMD on Mac
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsAMD());
+    ANGLE_SKIP_TEST_IF(IsOSX());
 
     glGenTransformFeedbacks(1, &mTransformFeedback);
     glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, mTransformFeedback);

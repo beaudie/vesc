@@ -104,6 +104,13 @@ bool gSeparateProcessPerConfig = false;
 SystemInfo *GetTestSystemInfo()
 {
     static SystemInfo *sSystemInfo = nullptr;
+    // On dual-GPU Macs we always want to get the currently active GPU
+    if (IsOSX() && sSystemInfo != nullptr && sSystemInfo->gpus.size() > 1)
+    {
+        // Reset the static system info pointer
+        delete sSystemInfo;
+        sSystemInfo = nullptr;
+    }
     if (sSystemInfo == nullptr)
     {
         sSystemInfo = new SystemInfo;

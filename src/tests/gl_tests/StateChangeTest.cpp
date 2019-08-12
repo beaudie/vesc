@@ -3737,7 +3737,8 @@ void main()
 // Tests negative API state change cases with Transform Feedback bindings.
 TEST_P(WebGL2ValidationStateChangeTest, TransformFeedbackNegativeAPI)
 {
-    ANGLE_SKIP_TEST_IF(IsAMD() && IsOSX());
+    // Fails on AMD GPUs on Mac
+    ANGLE_SKIP_TEST_IF(IsOSX());
 
     constexpr char kFS[] = R"(#version 300 es
 precision mediump float;
@@ -3901,7 +3902,8 @@ void main()
 // Tests that we retain the correct draw mode settings with transform feedback changes.
 TEST_P(ValidationStateChangeTest, TransformFeedbackDrawModes)
 {
-    ANGLE_SKIP_TEST_IF(IsAMD() && IsOSX());
+    // Fails on AMD GPUs on Mac
+    ANGLE_SKIP_TEST_IF(IsOSX());
 
     std::vector<std::string> tfVaryings = {"gl_Position"};
     ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(program, essl3_shaders::vs::Simple(),

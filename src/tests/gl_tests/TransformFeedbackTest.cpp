@@ -909,7 +909,8 @@ TEST_P(TransformFeedbackTest, TwoUnreferencedInFragShader)
 // glBeginTransformFeedback is called
 TEST_P(TransformFeedbackTest, OffsetResetOnBeginTransformFeedback)
 {
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsAMD());
+    // Fails on AMD GPUs on Mac
+    ANGLE_SKIP_TEST_IF(IsOSX());
 
     ANGLE_SKIP_TEST_IF((IsNexus5X() || IsNexus6P()) && IsOpenGLES());
 
