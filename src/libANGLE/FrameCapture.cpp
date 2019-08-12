@@ -9,11 +9,39 @@
 
 #include "libANGLE/FrameCapture.h"
 
+#include <cerrno>
+#include <cstring>
 #include <string>
 
 #include "libANGLE/Context.h"
 #include "libANGLE/VertexArray.h"
 #include "libANGLE/gl_enum_utils_autogen.h"
+
+#ifdef __ANDROID__
+#    define CAPTURE_FILE_FOLDER ("/sdcard/Android/data/" + current_apk_name() + "/")
+
+#    include <sys/system_properties.h>
+
+inline std::string current_apk_name()
+{
+    constexpr uint32_t application_id_size          = 64;
+    static char application_id[application_id_size] = {0};
+    if (!application_id[0])
+    {
+        FILE *cmdline = fopen("/proc/self/cmdline", "r");
+        if (cmdline)
+        {
+            fread(application_id, application_id_size, 1, cmdline);
+            fclose(cmdline);
+        }
+        WARN() << "not able to lookup application id";
+    }
+    return std::string(application_id);
+}
+
+#else
+#    define CAPTURE_FILE_FOLDER "./"
+#endif
 
 namespace angle
 {
@@ -33,7 +61,7 @@ std::string GetCaptureFileName(size_t frameIndex, const char *suffix)
     std::stringstream fnameStream;
     fnameStream << "angle_capture_frame" << std::setfill('0') << std::setw(3) << frameIndex
                 << suffix;
-    return fnameStream.str();
+    return CAPTURE_FILE_FOLDER + fnameStream.str();
 }
 
 void WriteParamStaticVarName(const CallCapture &call,
@@ -369,6 +397,10 @@ void FrameCapture::saveCapturedFrameAsCpp()
         std::string fname = GetCaptureFileName(mFrameIndex, ".angledata");
 
         FILE *fp = fopen(fname.c_str(), "wb");
+        if (!fp)
+        {
+            FATAL() << "data file can not created!!: " << strerror(errno);
+        }
         fwrite(binaryData.data(), 1, binaryData.size(), fp);
         fclose(fp);
 
@@ -397,6 +429,10 @@ void FrameCapture::saveCapturedFrameAsCpp()
 
     std::string fname = GetCaptureFileName(mFrameIndex, ".cpp");
     FILE *fp          = fopen(fname.c_str(), "w");
+    if (!fp)
+    {
+        FATAL() << "cpp file can not created!!: " << strerror(errno);
+    }
     fprintf(fp, "%s\n\n%s", headerString.c_str(), outString.c_str());
     fclose(fp);
 
