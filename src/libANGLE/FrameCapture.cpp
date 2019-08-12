@@ -9,6 +9,8 @@
 
 #include "libANGLE/FrameCapture.h"
 
+#include <cerrno>
+#include <cstring>
 #include <string>
 
 #include "libANGLE/Context.h"
@@ -33,7 +35,11 @@ std::string GetCaptureFileName(size_t frameIndex, const char *suffix)
     std::stringstream fnameStream;
     fnameStream << "angle_capture_frame" << std::setfill('0') << std::setw(3) << frameIndex
                 << suffix;
+#    ifdef __ANDROID__
+    return "/sdcard/Android/data/org.chromium.native_test/" + fnameStream.str();
+#    else
     return fnameStream.str();
+#    endif
 }
 
 void WriteParamStaticVarName(const CallCapture &call,
@@ -365,6 +371,10 @@ void FrameCapture::saveCapturedFrameAsCpp()
         std::string fname = GetCaptureFileName(mFrameIndex, ".angledata");
 
         FILE *fp = fopen(fname.c_str(), "wb");
+        if (!fp)
+        {
+            FATAL() << "File can not created!!: " << strerror(errno);
+        }
         fwrite(binaryData.data(), 1, binaryData.size(), fp);
         fclose(fp);
 
@@ -393,6 +403,10 @@ void FrameCapture::saveCapturedFrameAsCpp()
 
     std::string fname = GetCaptureFileName(mFrameIndex, ".cpp");
     FILE *fp          = fopen(fname.c_str(), "w");
+    if (!fp)
+    {
+        FATAL() << "File can not created!!: " << strerror(errno);
+    }
     fprintf(fp, "%s\n\n%s", headerString.c_str(), outString.c_str());
     fclose(fp);
 
