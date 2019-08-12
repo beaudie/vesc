@@ -108,6 +108,10 @@ bool IsVeriSilicon(VendorID vendorId);
 bool IsVMWare(VendorID vendorId);
 bool IsVivante(VendorID vendorId);
 
+// Returns information about the active GPU and returns it through `info`.
+// Always assumes the non-Intel GPU is active on dual-GPU machines.
+void FindActiveGPU(SystemInfo *info);
+
 // Dumps the system info to stdout.
 void PrintSystemInfo(const SystemInfo &info);
 }  // namespace angle
