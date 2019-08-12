@@ -16,6 +16,190 @@
       "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c69a5206_a11985fc",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-12T23:38:28Z",
+      "side": 1,
+      "message": "Perhaps:\n\"in EXT_multi_draw_arrays functionality\" -\u003e \"from the EXT_multi_draw_arrays extension\"\n\"builtin\" -\u003e \"builtins\"",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 12
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f9cb9d0_66aca90d",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-12T23:38:28Z",
+      "side": 1,
+      "message": "Please reflow all paragraphs to 80 columns.",
+      "range": {
+        "startLine": 49,
+        "startChar": 5,
+        "endLine": 49,
+        "endChar": 17
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b87360d9_b7db39f6",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-12T23:38:28Z",
+      "side": 1,
+      "message": "typo: instanceCount",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 17
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fe22411_39c8df89",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-12T23:38:28Z",
+      "side": 1,
+      "message": "It would be nice to delineate variables somehow, like |instance|, |instanceCount|, and |divisor| below.",
+      "range": {
+        "startLine": 51,
+        "startChar": 21,
+        "endLine": 51,
+        "endChar": 29
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37a5cb82_f83fbd66",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-12T23:38:28Z",
+      "side": 1,
+      "message": "base vertex passed into driver -\u003e the base vertex passed into the driver\n\nWould be good to delineate variable names like |baseVertex|.",
+      "range": {
+        "startLine": 58,
+        "startChar": 36,
+        "endLine": 58,
+        "endChar": 40
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d926928_8605052e",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-12T23:38:28Z",
+      "side": 1,
+      "message": "plus that -\u003e and\ninstances -\u003e |instances|\ninstance -\u003e |instance|",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 8
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8256aba_16525dcc",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-12T23:38:28Z",
+      "side": 1,
+      "message": "Please wrap the code to 80 columns to match the OpenGL extension spec format.",
+      "range": {
+        "startLine": 144,
+        "startChar": 14,
+        "endLine": 144,
+        "endChar": 20
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bb612bd_1bef9857",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-12T23:38:28Z",
+      "side": 1,
+      "message": "End sentence with \u0027.\u0027.",
+      "range": {
+        "startLine": 197,
+        "startChar": 32,
+        "endLine": 197,
+        "endChar": 51
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
