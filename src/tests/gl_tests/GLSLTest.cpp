@@ -1407,7 +1407,7 @@ TEST_P(GLSLTest, MaxVaryingVec4)
 {
     // TODO(geofflang): Find out why this doesn't compile on Apple AMD OpenGL drivers
     // (http://anglebug.com/1291)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsAMD() && IsOpenGL());
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
 
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
@@ -1515,7 +1515,7 @@ TEST_P(GLSLTest, TwiceMaxVaryingVec2)
 
     // TODO(geofflang): Find out why this doesn't compile on Apple AMD OpenGL drivers
     // (http://anglebug.com/1291)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsAMD() && IsOpenGL());
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
 
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
@@ -1533,7 +1533,7 @@ TEST_P(GLSLTest, MaxVaryingVec2Arrays)
 
     // TODO(geofflang): Find out why this doesn't compile on Apple AMD OpenGL drivers
     // (http://anglebug.com/1291)
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsAMD() && IsOpenGL());
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
 
     GLint maxVaryings = 0;
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &maxVaryings);
