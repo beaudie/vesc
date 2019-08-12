@@ -307,7 +307,7 @@ TEST_P(SRGBTextureTest, GenerateMipmaps)
 {
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
 
-    ANGLE_SKIP_TEST_IF(IsOpenGL() && ((IsIntel() && IsOSX()) || IsAMD()));
+    ANGLE_SKIP_TEST_IF(IsOpenGL() && (IsOSX()) || IsAMD());
 
     auto createAndReadBackTexture = [this](GLenum internalFormat, const GLColor &color) {
         constexpr GLsizei width  = 128;

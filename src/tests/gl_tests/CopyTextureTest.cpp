@@ -905,7 +905,7 @@ TEST_P(CopyTextureTest, CubeMapTarget)
     }
 
     // http://anglebug.com/1932
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsIntel() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsDesktopOpenGL());
 
     // http://anglebug.com/3145
     ANGLE_SKIP_TEST_IF(IsFuchsia() && IsIntel() && IsVulkan());
@@ -1065,7 +1065,7 @@ TEST_P(CopyTextureTest, CubeMapTargetRGB)
     }
 
     // http://anglebug.com/1932
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsIntel() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsDesktopOpenGL());
 
     // http://anglebug.com/3145
     ANGLE_SKIP_TEST_IF(IsFuchsia() && IsIntel() && IsVulkan());
@@ -1137,7 +1137,7 @@ TEST_P(CopyTextureTest, CopyToMipmap)
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 &&
                        !IsGLExtensionEnabled("GL_OES_fbo_render_mipmap"));
 
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsIntel());
+    ANGLE_SKIP_TEST_IF(IsOSX());
 
     GLColor pixels[] = {GLColor::red, GLColor::red, GLColor::red, GLColor::red};
 

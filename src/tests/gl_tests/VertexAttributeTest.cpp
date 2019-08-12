@@ -956,7 +956,7 @@ TEST_P(VertexAttributeTest, DrawArraysWithDisabledAttribute)
 TEST_P(VertexAttributeTest, DisabledAttribArrays)
 {
     // Known failure on Retina MBP: http://crbug.com/635081
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsNVIDIA());
+    ANGLE_SKIP_TEST_IF(IsOSX());
 
     // TODO: Support this test on Vulkan.  http://anglebug.com/2797
     ANGLE_SKIP_TEST_IF(IsLinux() && IsVulkan() && IsIntel());

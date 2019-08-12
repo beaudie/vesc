@@ -208,7 +208,7 @@ TEST_P(UniformBufferTest, ANGLEUnboundUniformBuffer)
 TEST_P(UniformBufferTest, UniformBufferManyUpdates)
 {
     // TODO(jmadill): Figure out why this fails on OSX Intel OpenGL.
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsOSX() && IsOpenGL());
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
 
     int px = getWindowWidth() / 2;
     int py = getWindowHeight() / 2;
@@ -1382,7 +1382,7 @@ void main()
 TEST_P(UniformBufferTest, SimpleBindingChange)
 {
     // http://anglebug.com/2287
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsNVIDIA() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsOSX() && IsDesktopOpenGL());
 
     ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFragmentShader);
 
