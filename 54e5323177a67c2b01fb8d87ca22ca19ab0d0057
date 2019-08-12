@@ -106,6 +106,24 @@
       "revId": "54e5323177a67c2b01fb8d87ca22ca19ab0d0057",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26917548_ba9c52c6",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-12T14:24:21Z",
+      "side": 1,
+      "message": "I was able to figure out how to use std::enable_if to avoid both inheritance and macros.\n\nhttps://en.cppreference.com/w/cpp/types/enable_if\nhttps://stackoverflow.com/questions/6972368/stdenable-if-to-conditionally-compile-a-member-function",
+      "parentUuid": "abef6aff_7d90b667",
+      "revId": "54e5323177a67c2b01fb8d87ca22ca19ab0d0057",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
