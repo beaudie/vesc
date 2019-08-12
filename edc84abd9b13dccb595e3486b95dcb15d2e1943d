@@ -45,6 +45,46 @@
       "revId": "edc84abd9b13dccb595e3486b95dcb15d2e1943d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fad84d8_2a94a071",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-12T17:32:28Z",
+      "side": 1,
+      "message": "Should RenderTargetVk.h store these as uint32_t? size_t seems like overkill. This would remove a lot of the static_casts in the Vulkan backend.",
+      "range": {
+        "startLine": 581,
+        "startChar": 81,
+        "endLine": 581,
+        "endChar": 94
+      },
+      "revId": "edc84abd9b13dccb595e3486b95dcb15d2e1943d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fc8702b_f5500b97",
+        "filename": "src/libANGLE/renderer/vulkan/RenderTargetVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-12T17:32:28Z",
+      "side": 1,
+      "message": "Should any of these have been using SafeMath in case the application set the base levels close to the wraparound point? (Not sure whether base levels factor in to these indices)",
+      "revId": "edc84abd9b13dccb595e3486b95dcb15d2e1943d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
