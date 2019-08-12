@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b65c6ae6_a7eda30a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-12T01:44:10Z",
+      "side": 1,
+      "message": "You can just ANGLE_TRY(onGetPipelineCache(...)) here. The result is not used otherwise.",
+      "range": {
+        "startLine": 1344,
+        "startChar": 8,
+        "endLine": 1344,
+        "endChar": 31
+      },
+      "revId": "d04a65c6b85a52a9e53a4dbbb12d213b5c568d2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
