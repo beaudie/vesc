@@ -56,6 +56,18 @@ ANGLE_INLINE Context *GetValidGlobalContext()
     return thread->getValidContext();
 }
 
+// MSVC complains that returning rvalue is returning local var so disabling that warning
+#if defined(ANGLE_PLATFORM_WINDOWS)
+#    pragma warning(disable : 4172)
+#endif
+ANGLE_INLINE std::unique_lock<std::mutex> &&GetShareGroupLock(const Context *context)
+{
+    return context->isShared() ? std::move(std::unique_lock<std::mutex>(egl::GetGlobalMutex()))
+                               : std::move(std::unique_lock<std::mutex>());
+}
+#if defined(ANGLE_PLATFORM_WINDOWS)
+#    pragma warning(default : 4172)
+#endif
 }  // namespace gl
 
 #endif  // LIBGLESV2_GLOBALSTATE_H_
