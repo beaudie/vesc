@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffe39c2b_2ad3405f",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-13T13:14:36Z",
+      "side": 1,
+      "message": "make this std::min(getMipmapMaxLevel(), mImageDescs.size())",
+      "range": {
+        "startLine": 502,
+        "startChar": 29,
+        "endLine": 502,
+        "endChar": 48
+      },
+      "revId": "96594d34da6b02e0cb86604d8bf644dedcf608dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
