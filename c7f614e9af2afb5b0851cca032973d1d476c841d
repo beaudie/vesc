@@ -93,6 +93,30 @@
       "revId": "c7f614e9af2afb5b0851cca032973d1d476c841d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d90daafa_518e6726",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-13T20:20:08Z",
+      "side": 1,
+      "message": "Maybe in this case it was fine. For more than one case, it is hard to read.",
+      "parentUuid": "285313ac_f34f71d5",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 80
+      },
+      "revId": "c7f614e9af2afb5b0851cca032973d1d476c841d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
