@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a6f99137_67ad5430",
+        "filename": "extensions/EGL_ANGLE_iosurface_client_buffer.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-13T17:42:03Z",
+      "side": 1,
+      "message": "Done, mentioned that the alpha channel will be cleared to 1.0 when using RGB formats.",
+      "parentUuid": "afd8effb_b14d3b25",
+      "range": {
+        "startLine": 100,
+        "startChar": 4,
+        "endLine": 100,
+        "endChar": 20
+      },
+      "revId": "c05d41250954513da3040daec61509a19439db51",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e32252ee_a8ef2442",
         "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
         "patchSetId": 6
