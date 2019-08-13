@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe089a85_f2d0238b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-08-13T15:51:27Z",
+      "side": 1,
+      "message": "We\u0027ve tried to add helpers to do specialized handling like this, but it isn\u0027t clear to me that it is worth the effort (not yet anyway).  There\u0027s always a corner case or two that don\u0027t align to the helper\u0027s design.  I\u0027m okay with a one off here, and maybe an abstraction will present itself at some point.",
+      "range": {
+        "startLine": 399,
+        "startChar": 28,
+        "endLine": 399,
+        "endChar": 79
+      },
+      "revId": "8b512ccd488b7b6633e5f393171d7e702ea160cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e1b16e53_295ae7fd",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-08-13T15:51:27Z",
+      "side": 1,
+      "message": "Can you switch this to the tracking bug (or new bug) about test assumptions about sized internal formats?  Possibly including the patch that works around it too (even if not production).",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 4
+      },
+      "revId": "8b512ccd488b7b6633e5f393171d7e702ea160cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
