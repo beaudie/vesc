@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6adeeabe_e3e57f88",
+        "filename": "src/libANGLE/es3_format_type_combinations.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1361695
+      },
+      "writtenOn": "2019-08-13T12:08:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45dedba6_b3f49cfb",
+      "range": {
+        "startLine": 78,
+        "startChar": 8,
+        "endLine": 78,
+        "endChar": 92
+      },
+      "revId": "7ce4d7196467b6fa3e878d2a682f1a49f2ff2f6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2fc9a32e_2168f3a1",
         "filename": "src/libANGLE/format_map_data.json",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2019-08-05T12:55:27Z",
       "side": 1,
       "message": "This format is a bit tricky. The extension spec says:\n\n\"When used with RGB format, the alpha channel assumes the value 1.0 when expanded, so the 2-bit component in the 2.10.10.10 texture data is ignored in this case\"\n\nCan you add test that verify when we upload alpha texture data that is not 1.0, that we correctly use 1.0 as the alpha channel? CopyTexImage can also change the alpha channel.\n\nAlso if this format is renderable than various Framebuffer operations like Clear, Draw and Blit could change the alpha color.",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 31,
+        "endChar": 56
+      },
+      "revId": "7ce4d7196467b6fa3e878d2a682f1a49f2ff2f6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "814865c1_696b108d",
+        "filename": "src/libANGLE/format_map_data.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1361695
+      },
+      "writtenOn": "2019-08-13T12:08:46Z",
+      "side": 1,
+      "message": "Because texture base internal format is RGB, texture source alpha value is not used when texture lookup is performed in a fragment shader. ( according to 3.8.2 in GLES 2.0 spec). So I think it is OK even if alpha value is not 1.0 in texture data.\n\nAnd, this format is not renderable.",
+      "parentUuid": "2fc9a32e_2168f3a1",
       "range": {
         "startLine": 31,
         "startChar": 8,
