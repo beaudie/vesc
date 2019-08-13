@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6efadeda_847a0f90",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-13T20:16:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0920f2cd_2b75bf21",
+      "range": {
+        "startLine": 314,
+        "startChar": 8,
+        "endLine": 314,
+        "endChar": 82
+      },
+      "revId": "c7f614e9af2afb5b0851cca032973d1d476c841d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "558b4fd9_e3a38bef",
         "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "c7f614e9af2afb5b0851cca032973d1d476c841d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "285313ac_f34f71d5",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-13T20:16:16Z",
+      "side": 1,
+      "message": "Done\n\nDon\u0027t know what you have against ?: :D, it\u0027s like a succinct switch-case (or the way you would write this in math):\n\n   x \u003d cond1 ? value1 :\n       cond2 ? value2 :\n       cond3 ? value3 :\n               value4;\n\nCan\u0027t get any more readable (though `git cl format` butchers the above formatting)",
+      "parentUuid": "558b4fd9_e3a38bef",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 80
+      },
+      "revId": "c7f614e9af2afb5b0851cca032973d1d476c841d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
