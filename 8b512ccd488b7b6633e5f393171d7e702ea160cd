@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3028f23d_70872762",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-13T17:51:36Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fe089a85_f2d0238b",
+      "range": {
+        "startLine": 399,
+        "startChar": 28,
+        "endLine": 399,
+        "endChar": 79
+      },
+      "revId": "8b512ccd488b7b6633e5f393171d7e702ea160cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e1b16e53_295ae7fd",
         "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "8b512ccd488b7b6633e5f393171d7e702ea160cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0717f47_4aa495d3",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-13T17:51:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1b16e53_295ae7fd",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 4
+      },
+      "revId": "8b512ccd488b7b6633e5f393171d7e702ea160cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
