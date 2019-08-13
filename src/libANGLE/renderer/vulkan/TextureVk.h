@@ -19,6 +19,14 @@
 namespace rx
 {
 
+enum class ImageMipLevels
+{
+    EnabledLevels = 0,
+    FullMipChain  = 1,
+
+    InvalidEnum = 2,
+};
+
 class TextureVk : public TextureImpl
 {
   public:
@@ -165,7 +173,8 @@ class TextureVk : public TextureImpl
                                       const vk::ImageView **imageViewOut);
     const vk::Sampler &getSampler() const;
 
-    angle::Result ensureImageInitialized(ContextVk *contextVk);
+    // Normally, initialize the image with enabled mipmap level counts.
+    angle::Result ensureImageInitialized(ContextVk *contextVk, ImageMipLevels mipLevels);
 
     Serial getSerial() const { return mSerial; }
 
@@ -288,7 +297,14 @@ class TextureVk : public TextureImpl
                             const uint32_t levelCount);
     void releaseImage(ContextVk *contextVk);
     void releaseStagingBuffer(ContextVk *contextVk);
-    uint32_t getLevelCount() const;
+    uint32_t getMipLevelCount(ImageMipLevels mipLevels) const;
+    uint32_t getMaxLevelCount() const;
+    angle::Result copyImageDataToStagingBuffer(ContextVk *contextVk,
+                                               const gl::ImageDesc &desc,
+                                               bool ignoreLayerCount,
+                                               uint32_t currentLayer,
+                                               uint32_t sourceLevel,
+                                               uint32_t stagingDstMipLevel);
     angle::Result initImageViews(ContextVk *contextVk,
                                  const vk::Format &format,
                                  const bool sized,
