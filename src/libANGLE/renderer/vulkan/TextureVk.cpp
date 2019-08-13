@@ -1577,7 +1577,6 @@ uint32_t TextureVk::getLevelCount() const
 {
     ASSERT(mState.getEffectiveBaseLevel() == 0);
 
-    // getMipmapMaxLevel will be 0 here if mipmaps are not used, so the levelCount is always +1.
-    return mState.getMipmapMaxLevel() + 1;
+    return mState.getLevelCount();
 }
 }  // namespace rx
