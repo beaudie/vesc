@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "12b1bca9_34bebd28",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Thanks for the review.",
+      "parentUuid": "b79e27c0_5bb2c832",
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c69a5206_a11985fc",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 2
@@ -65,6 +83,54 @@
     },
     {
       "key": {
+        "uuid": "0daeee18_e1aa5847",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "c69a5206_a11985fc",
+      "range": {
+        "startLine": 46,
+        "startChar": 4,
+        "endLine": 46,
+        "endChar": 12
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61febea2_e517ac73",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "f0fa5c3f_6b84deb0",
+      "range": {
+        "startLine": 46,
+        "startChar": 85,
+        "endLine": 46,
+        "endChar": 92
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9f73598_624c6d07",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 2
@@ -79,6 +145,24 @@
       "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a21c2079_7eb75787",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Solved see later comments.",
+      "parentUuid": "b9f73598_624c6d07",
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -105,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "f2bb4615_8c074963",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f9cb9d0_66aca90d",
+      "range": {
+        "startLine": 49,
+        "startChar": 5,
+        "endLine": 49,
+        "endChar": 17
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b87360d9_b7db39f6",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 2
@@ -125,6 +233,30 @@
       "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47a7c5cd_47ce235e",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b87360d9_b7db39f6",
+      "range": {
+        "startLine": 50,
+        "startChar": 4,
+        "endLine": 50,
+        "endChar": 17
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -175,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "2a20fb8a_19bbea08",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bcbfa34_f663f48f",
+      "range": {
+        "startLine": 51,
+        "startChar": 21,
+        "endLine": 51,
+        "endChar": 29
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0c5ee4e_06c5bdf9",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 2
@@ -195,6 +351,30 @@
       "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95191c9a_3a03e9b6",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0c5ee4e_06c5bdf9",
+      "range": {
+        "startLine": 53,
+        "startChar": 49,
+        "endLine": 53,
+        "endChar": 77
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -221,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "189a5fe1_20dfd9f8",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff54cf64_dd6cd1ae",
+      "range": {
+        "startLine": 54,
+        "startChar": 18,
+        "endLine": 55,
+        "endChar": 32
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "37a5cb82_f83fbd66",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 2
@@ -241,6 +445,30 @@
       "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c81e846_4969a20c",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37a5cb82_f83fbd66",
+      "range": {
+        "startLine": 58,
+        "startChar": 36,
+        "endLine": 58,
+        "endChar": 40
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -267,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "6903c187_222d49f5",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d926928_8605052e",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 8
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5b5b328_ab498145",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 2
@@ -281,6 +533,24 @@
       "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4812fcd_774febbb",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5b5b328_ab498145",
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -307,6 +577,30 @@
     },
     {
       "key": {
+        "uuid": "d2cbdcd9_dbd6d96e",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76da5e2a_9689ed7b",
+      "range": {
+        "startLine": 89,
+        "startChar": 65,
+        "endLine": 89,
+        "endChar": 77
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d5245493_34beefea",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 2
@@ -327,6 +621,30 @@
       "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70dc0b0b_f0ac1336",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5245493_34beefea",
+      "range": {
+        "startLine": 132,
+        "startChar": 16,
+        "endLine": 132,
+        "endChar": 25
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -353,6 +671,30 @@
     },
     {
       "key": {
+        "uuid": "1afcde3c_0d209b06",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8256aba_16525dcc",
+      "range": {
+        "startLine": 144,
+        "startChar": 14,
+        "endLine": 144,
+        "endChar": 20
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a5541f1_e9cb023b",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 2
@@ -373,6 +715,30 @@
       "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69d74b48_618d4f0e",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Add GL_ANGLE_multi_draw as a required dependency so that gl_DrawID should always be available in the context of this extension.",
+      "parentUuid": "7a5541f1_e9cb023b",
+      "range": {
+        "startLine": 148,
+        "startChar": 24,
+        "endLine": 148,
+        "endChar": 33
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -399,6 +765,30 @@
     },
     {
       "key": {
+        "uuid": "e5e7ab01_c544efee",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3c7d61a_311ed86a",
+      "range": {
+        "startLine": 175,
+        "startChar": 16,
+        "endLine": 175,
+        "endChar": 25
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25b6edb5_4a61f1bd",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 2
@@ -422,6 +812,30 @@
     },
     {
       "key": {
+        "uuid": "c72a6fc9_47eddfe8",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25b6edb5_4a61f1bd",
+      "range": {
+        "startLine": 188,
+        "startChar": 138,
+        "endLine": 188,
+        "endChar": 151
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5bb612bd_1bef9857",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 2
@@ -442,6 +856,30 @@
       "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69bbc150_bba6a4a7",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:31:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bb612bd_1bef9857",
+      "range": {
+        "startLine": 197,
+        "startChar": 32,
+        "endLine": 197,
+        "endChar": 51
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
