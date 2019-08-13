@@ -16,6 +16,24 @@
       "revId": "0b7d491352c99eccb8495bcce877df72d8e9172f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ad5cf43_dd01e877",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1915,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-13T12:48:36Z",
+      "side": 1,
+      "message": "I found it was less verbose with this syntax. But they are functionally equivalent.",
+      "parentUuid": "ab8ad5f5_db3914b0",
+      "revId": "0b7d491352c99eccb8495bcce877df72d8e9172f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
