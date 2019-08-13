@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a1c2aef_fd99354f",
+        "filename": "src/gpu_info_util/SystemInfo_mac.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-13T23:57:08Z",
+      "side": 1,
+      "message": "static_cast\u003cint64_t\u003e(gpuIDHigh)",
+      "range": {
+        "startLine": 62,
+        "startChar": 12,
+        "endLine": 62,
+        "endChar": 19
+      },
+      "revId": "b8c46f281be27c5b67b4dd3ce1b6293d0a484a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93f9532b_0a8ad9a1",
+        "filename": "src/gpu_info_util/SystemInfo_mac.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-13T23:57:08Z",
+      "side": 1,
+      "message": "Need to call IOObjectRelease(gpu_entry) along all early-return code paths. Should null-check the result. See GetMachineModel above as an example.",
+      "range": {
+        "startLine": 165,
+        "startChar": 17,
+        "endLine": 165,
+        "endChar": 26
+      },
+      "revId": "b8c46f281be27c5b67b4dd3ce1b6293d0a484a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5db848a_db2604a2",
+        "filename": "src/gpu_info_util/SystemInfo_mac.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-13T23:57:08Z",
+      "side": 1,
+      "message": "Nice, very clever.",
+      "range": {
+        "startLine": 210,
+        "startChar": 25,
+        "endLine": 210,
+        "endChar": 30
+      },
+      "revId": "b8c46f281be27c5b67b4dd3ce1b6293d0a484a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25ee6b0b_c8615afe",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-13T23:57:08Z",
+      "side": 1,
+      "message": "Does this slow down ANGLE\u0027s end-to-end tests significantly?\n\nIf it does, then can we please look into an alternate solution where we add a little Mac-specific call like \"FixupTestSystemInfo()\" which sets the system info\u0027s active GPU to the non-Intel GPU? That\u0027s what the tests expect. Honestly I would prefer that solution regardless of the perf impact of removing this cache. The tests don\u0027t expect the GPU to jump from one to the other during runtime.",
+      "range": {
+        "startLine": 107,
+        "startChar": 50,
+        "endLine": 107,
+        "endChar": 59
+      },
+      "revId": "b8c46f281be27c5b67b4dd3ce1b6293d0a484a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
