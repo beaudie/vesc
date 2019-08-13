@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b60ac9ad_1190c94d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2133,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-13T17:25:41Z",
+      "side": 1,
+      "message": "This checks \"storageFormat.stencilBits \u003e 0\" and below is \"storageFormat.stencilBits \u003d\u003d 8\".  Are they meant to check the same thing?",
+      "range": {
+        "startLine": 2133,
+        "startChar": 71,
+        "endLine": 2133,
+        "endChar": 72
+      },
+      "revId": "a9abee3c120820186ddda3db81ec05ef2ea70771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efd66b02_65cc978e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2133,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-13T17:25:41Z",
+      "side": 1,
+      "message": "Could this be a more specific check? What about\n\n   storageFormat.id \u003d\u003d angle::FormatID::D32_FLOAT_S8X24_UINT",
+      "range": {
+        "startLine": 2133,
+        "startChar": 0,
+        "endLine": 2133,
+        "endChar": 74
+      },
+      "revId": "a9abee3c120820186ddda3db81ec05ef2ea70771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a75b03e4_b735447b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2171,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-13T17:25:41Z",
+      "side": 1,
+      "message": "How about adding a\n\n   LoadImageFunctionInfo stencilLoadFunction \u003d nullptr;\n\nhere and then assigning it for the D32_FLOAT_S8X24_UINT and D24_UNORM_S8_UINT when we compute the stencil allocation size.  Then we can load the stencil buffer in a more generic way below.",
+      "revId": "a9abee3c120820186ddda3db81ec05ef2ea70771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91d0825f_a98f8c39",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2172,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-13T17:25:41Z",
+      "side": 1,
+      "message": "Instead of calling the function directly, I would re-assign the loadFunction to angle::LoadD32FS8X24ToD32F.",
+      "range": {
+        "startLine": 2172,
+        "startChar": 8,
+        "endLine": 2172,
+        "endChar": 71
+      },
+      "revId": "a9abee3c120820186ddda3db81ec05ef2ea70771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
