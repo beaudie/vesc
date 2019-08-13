@@ -742,8 +742,6 @@ void ANGLETestBase::drawQuad(GLuint program,
 
     GLint positionLocation = glGetAttribLocation(program, positionAttribName.c_str());
 
-    std::array<Vector3, 6> quadVertices;
-
     if (useVertexBuffer)
     {
         setupQuadVertexBuffer(positionAttribZ, positionAttribXYScale);
@@ -752,7 +750,7 @@ void ANGLETestBase::drawQuad(GLuint program,
     }
     else
     {
-        quadVertices = GetQuadVertices();
+        std::array<Vector3, 6> quadVertices = GetQuadVertices();
         for (Vector3 &vertex : quadVertices)
         {
             vertex.x() *= positionAttribXYScale;
