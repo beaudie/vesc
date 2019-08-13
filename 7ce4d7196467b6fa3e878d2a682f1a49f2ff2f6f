@@ -93,6 +93,30 @@
       "revId": "7ce4d7196467b6fa3e878d2a682f1a49f2ff2f6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52b4d08b_9e8d413c",
+        "filename": "src/libANGLE/format_map_data.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-13T13:11:14Z",
+      "side": 1,
+      "message": "Going to have to push back on this one. There\u0027s probably ways we can get to the alpha channel.",
+      "parentUuid": "814865c1_696b108d",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 31,
+        "endChar": 56
+      },
+      "revId": "7ce4d7196467b6fa3e878d2a682f1a49f2ff2f6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
