@@ -2,26 +2,9 @@
   "comments": [
     {
       "key": {
-        "uuid": "4dd3ea51_1499c13e",
+        "uuid": "2d62b93c_ccac622c",
         "filename": "src/compiler/translator/tree_ops/EmulateMultiDrawShaderBuiltins.cpp",
-        "patchSetId": 3
-      },
-      "lineNbr": 139,
-      "author": {
-        "id": 1328182
-      },
-      "writtenOn": "2019-08-12T22:51:51Z",
-      "side": 1,
-      "message": "I merge the two emulation functions into one as there was a issue where order of emulated angle_BaseVertex and angle_BaseInstance in the uniform block of Vulkan GLSL is different from that in the uniforms vector, if two separate functions EmulateGLBaseVertex and EmulateGLBaseInstance are called separately.\nBy merging them into one function I deliberately call ReplaceVariable and uniforms-\u003epush_back in different order to make sure the uniform location matches their appearance in the Vulkan GLSL. Ken mentions this may be unstable. So I highlight this part for your opinions",
-      "revId": "641fbdb07784852b33f591cfa219b8ced009bb2b",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
-    },
-    {
-      "key": {
-        "uuid": "f9acb1eb_af73832b",
-        "filename": "src/compiler/translator/tree_ops/EmulateMultiDrawShaderBuiltins.cpp",
-        "patchSetId": 3
+        "patchSetId": 5
       },
       "lineNbr": 139,
       "author": {
@@ -29,11 +12,27 @@
       },
       "writtenOn": "2019-08-13T23:58:17Z",
       "side": 1,
-      "message": "Done",
-      "parentUuid": "4dd3ea51_1499c13e",
-      "revId": "641fbdb07784852b33f591cfa219b8ced009bb2b",
+      "message": "I merge the two emulation functions into one as there was a issue where order of emulated angle_BaseVertex and angle_BaseInstance in the uniform block of Vulkan GLSL is different from that in the uniforms vector, if two separate functions EmulateGLBaseVertex and EmulateGLBaseInstance are called separately.\nBy merging them into one function I deliberately call ReplaceVariable and uniforms-\u003epush_back in different order to make sure the uniform location matches their appearance in the Vulkan GLSL. Ken mentions this may be unstable. So I highlight this part for your opinions",
+      "revId": "b00cc153bd8540124e20b7ee6c9871aaf4b3bd34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": false
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85a77e39_00796608",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1409,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-13T23:58:17Z",
+      "side": 1,
+      "message": "I didn\u0027t find a handy device with GL_OES/EXT_draw_elements_base_vertex support and \u003c3.2 GLES context at the same (base vertex functions are core of 3.2). So GLES 3.1 and 3.0 with base vertex capability is not tested. (\u003c3.2 GLES unsupported is tested though).",
+      "revId": "b00cc153bd8540124e20b7ee6c9871aaf4b3bd34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
