@@ -42,6 +42,46 @@
     },
     {
       "key": {
+        "uuid": "f0fa5c3f_6b84deb0",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2019-08-13T17:23:30Z",
+      "side": 1,
+      "message": "nit: builtins",
+      "range": {
+        "startLine": 46,
+        "startChar": 85,
+        "endLine": 46,
+        "endChar": 92
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9f73598_624c6d07",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2019-08-13T17:23:30Z",
+      "side": 1,
+      "message": "[1]",
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0f9cb9d0_66aca90d",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 2
@@ -111,6 +151,76 @@
     },
     {
       "key": {
+        "uuid": "2bcbfa34_f663f48f",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2019-08-13T17:23:30Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "5fe22411_39c8df89",
+      "range": {
+        "startLine": 51,
+        "startChar": 21,
+        "endLine": 51,
+        "endChar": 29
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0c5ee4e_06c5bdf9",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2019-08-13T17:23:30Z",
+      "side": 1,
+      "message": "once every divisor instances... of what? Maybe borrow similar language from glVertexAttribDivisor:\n\nhttps://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glVertexAttribDivisor.xhtml\n\"once per divisor instances of the set(s) of vertices being rendered\"",
+      "range": {
+        "startLine": 53,
+        "startChar": 49,
+        "endLine": 53,
+        "endChar": 77
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff54cf64_dd6cd1ae",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2019-08-13T17:23:30Z",
+      "side": 1,
+      "message": "nit: rephrase from passive to active voice.\nbaseInstance specifies the first element within the instanced vertex attributes.",
+      "range": {
+        "startLine": 54,
+        "startChar": 18,
+        "endLine": 55,
+        "endChar": 32
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "37a5cb82_f83fbd66",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 2
@@ -157,6 +267,69 @@
     },
     {
       "key": {
+        "uuid": "f5b5b328_ab498145",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2019-08-13T17:23:30Z",
+      "side": 1,
+      "message": "[2]",
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76da5e2a_9689ed7b",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2019-08-13T17:23:30Z",
+      "side": 1,
+      "message": "inconsistent casing: baseInstance",
+      "range": {
+        "startLine": 89,
+        "startChar": 65,
+        "endLine": 89,
+        "endChar": 77
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5245493_34beefea",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2019-08-13T17:23:30Z",
+      "side": 1,
+      "message": "inconsistent casing: this is \"drawcount\" in other parts of the text.",
+      "range": {
+        "startLine": 132,
+        "startChar": 16,
+        "endLine": 132,
+        "endChar": 25
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c8256aba_16525dcc",
         "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
         "patchSetId": 2
@@ -173,6 +346,75 @@
         "startChar": 14,
         "endLine": 144,
         "endChar": 20
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a5541f1_e9cb023b",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2019-08-13T17:23:30Z",
+      "side": 1,
+      "message": "This spec text does not say it adds this parameter. Should this be conditional on enabling ANGLE_multi_draw? or should we add at [1] and [2] that this variable is also added to the shader?",
+      "range": {
+        "startLine": 148,
+        "startChar": 24,
+        "endLine": 148,
+        "endChar": 33
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3c7d61a_311ed86a",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2019-08-13T17:23:30Z",
+      "side": 1,
+      "message": "nit: casing",
+      "range": {
+        "startLine": 175,
+        "startChar": 16,
+        "endLine": 175,
+        "endChar": 25
+      },
+      "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25b6edb5_4a61f1bd",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2019-08-13T17:23:30Z",
+      "side": 1,
+      "message": "typo: baseVertices",
+      "range": {
+        "startLine": 188,
+        "startChar": 138,
+        "endLine": 188,
+        "endChar": 151
       },
       "revId": "16e97e3a4323fcd351faa129f6fb271ae829a0f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
