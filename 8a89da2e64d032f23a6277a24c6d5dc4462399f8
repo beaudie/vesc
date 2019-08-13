@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9893632_bba4632a",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-13T19:08:41Z",
+      "side": 1,
+      "message": "GL_RGBA8 is exposed on GLES 2.0 via EXT_texture_storage\n\nhttps://www.khronos.org/registry/OpenGL/extensions/EXT/EXT_texture_storage.txt",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 38,
+        "endChar": 37
+      },
+      "revId": "8a89da2e64d032f23a6277a24c6d5dc4462399f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
