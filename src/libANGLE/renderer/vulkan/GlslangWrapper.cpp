@@ -519,7 +519,10 @@ std::string RemoveArrayZeroSubscript(const std::string &expression)
 void AssignOutputLocations(const gl::ProgramState &programState,
                            IntermediateShaderSource *fragmentSource)
 {
-    ASSERT(!fragmentSource->empty());
+    if (fragmentSource->empty())
+    {
+        return;
+    }
 
     // Parse output locations and replace them in the fragment shader.
     // See corresponding code in OutputVulkanGLSL.cpp.
@@ -573,9 +576,6 @@ void AssignVaryingLocations(const gl::ProgramLinkedResources &resources,
                             IntermediateShaderSource *outStageSource,
                             IntermediateShaderSource *inStageSource)
 {
-    ASSERT(!outStageSource->empty());
-    ASSERT(!inStageSource->empty());
-
     // Assign varying locations.
     for (const gl::PackedVaryingRegister &varyingReg : resources.varyingPacking.getRegisterList())
     {
@@ -612,8 +612,14 @@ void AssignVaryingLocations(const gl::ProgramLinkedResources &resources,
         const std::string &name =
             varying.isStructField() ? varying.parentStructName : varying.varying->name;
 
-        outStageSource->insertLayoutSpecifier(name, locationString);
-        inStageSource->insertLayoutSpecifier(name, locationString);
+        if (!outStageSource->empty())
+        {
+            outStageSource->insertLayoutSpecifier(name, locationString);
+        }
+        if (!inStageSource->empty())
+        {
+            inStageSource->insertLayoutSpecifier(name, locationString);
+        }
 
         const char *outQualifier = "out";
         const char *inQualifier  = "in";
@@ -632,8 +638,14 @@ void AssignVaryingLocations(const gl::ProgramLinkedResources &resources,
             default:
                 UNREACHABLE();
         }
-        outStageSource->insertQualifierSpecifier(name, outQualifier);
-        inStageSource->insertQualifierSpecifier(name, inQualifier);
+        if (!outStageSource->empty())
+        {
+            outStageSource->insertQualifierSpecifier(name, outQualifier);
+        }
+        if (!inStageSource->empty())
+        {
+            inStageSource->insertQualifierSpecifier(name, inQualifier);
+        }
     }
 
     // Substitute layout and qualifier strings for the position varying. Use the first free
@@ -643,11 +655,16 @@ void AssignVaryingLocations(const gl::ProgramLinkedResources &resources,
     layoutStream << "location = " << (resources.varyingPacking.getMaxSemanticIndex() + 1);
     const std::string layout = layoutStream.str();
 
-    outStageSource->insertLayoutSpecifier(kVaryingName, layout);
-    inStageSource->insertLayoutSpecifier(kVaryingName, layout);
-
-    outStageSource->insertQualifierSpecifier(kVaryingName, "out");
-    inStageSource->insertQualifierSpecifier(kVaryingName, "in");
+    if (!outStageSource->empty())
+    {
+        outStageSource->insertLayoutSpecifier(kVaryingName, layout);
+        outStageSource->insertQualifierSpecifier(kVaryingName, "out");
+    }
+    if (!inStageSource->empty())
+    {
+        inStageSource->insertLayoutSpecifier(kVaryingName, layout);
+        inStageSource->insertQualifierSpecifier(kVaryingName, "in");
+    }
 }
 
 void AssignUniformBindings(gl::ShaderMap<IntermediateShaderSource> *shaderSources)

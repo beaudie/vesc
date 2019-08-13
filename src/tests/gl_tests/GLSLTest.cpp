@@ -4795,25 +4795,13 @@ void main()
 
     GLuint program = glCreateProgram();
 
-    // The first time the program link fails because of lack of fragment shader.
+    // The program link fails because of the mismatch of the varying types.
     glAttachShader(program, vs);
+    glAttachShader(program, fs);
     glLinkProgram(program);
     GLint linkStatus = GL_TRUE;
     glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
     ASSERT_FALSE(linkStatus);
-
-    const std::string &lackOfFragmentShader = QueryErrorMessage(program);
-
-    // The second time the program link fails because of the mismatch of the varying types.
-    glAttachShader(program, fs);
-    glLinkProgram(program);
-    linkStatus = GL_TRUE;
-    glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
-    ASSERT_FALSE(linkStatus);
-
-    const std::string &varyingTypeMismatch = QueryErrorMessage(program);
-
-    EXPECT_EQ(std::string::npos, varyingTypeMismatch.find(lackOfFragmentShader));
 
     glDetachShader(program, vs);
     glDetachShader(program, fs);

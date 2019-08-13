@@ -256,16 +256,22 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
                 &transformFeedbackVaryings[0], mState.getTransformFeedbackBufferMode());
         }
 
-        const ShaderGL *vertexShaderGL =
-            GetImplAs<ShaderGL>(mState.getAttachedShader(gl::ShaderType::Vertex));
-        const ShaderGL *fragmentShaderGL =
-            GetImplAs<ShaderGL>(mState.getAttachedShader(gl::ShaderType::Fragment));
+        const ShaderGL *vertexShaderGL = rx::SafeGetImplAs<ShaderGL, gl::Shader>(
+            mState.getAttachedShader(gl::ShaderType::Vertex));
+        const ShaderGL *fragmentShaderGL = rx::SafeGetImplAs<ShaderGL, gl::Shader>(
+            mState.getAttachedShader(gl::ShaderType::Fragment));
         const ShaderGL *geometryShaderGL = rx::SafeGetImplAs<ShaderGL, gl::Shader>(
             mState.getAttachedShader(gl::ShaderType::Geometry));
 
         // Attach the shaders
-        mFunctions->attachShader(mProgramID, vertexShaderGL->getShaderID());
-        mFunctions->attachShader(mProgramID, fragmentShaderGL->getShaderID());
+        if (vertexShaderGL)
+        {
+            mFunctions->attachShader(mProgramID, vertexShaderGL->getShaderID());
+        }
+        if (fragmentShaderGL)
+        {
+            mFunctions->attachShader(mProgramID, fragmentShaderGL->getShaderID());
+        }
         if (geometryShaderGL)
         {
             mFunctions->attachShader(mProgramID, geometryShaderGL->getShaderID());
@@ -288,7 +294,8 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
         // Otherwise shader-assigned locations will work.
         if (context->getExtensions().blendFuncExtended)
         {
-            if (mState.getAttachedShader(gl::ShaderType::Fragment)->getShaderVersion() == 100)
+            gl::Shader *fragmentShader = mState.getAttachedShader(gl::ShaderType::Fragment);
+            if (fragmentShader && fragmentShader->getShaderVersion() == 100)
             {
                 // TODO(http://anglebug.com/2833): The bind done below is only valid in case the
                 // compiler transforms the shader outputs to the angle/webgl prefixed ones. If we
@@ -432,16 +439,22 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
         }
         else
         {
-            const ShaderGL *vertexShaderGL =
-                GetImplAs<ShaderGL>(mState.getAttachedShader(gl::ShaderType::Vertex));
-            const ShaderGL *fragmentShaderGL =
-                GetImplAs<ShaderGL>(mState.getAttachedShader(gl::ShaderType::Fragment));
+            const ShaderGL *vertexShaderGL = rx::SafeGetImplAs<ShaderGL, gl::Shader>(
+                mState.getAttachedShader(gl::ShaderType::Vertex));
+            const ShaderGL *fragmentShaderGL = rx::SafeGetImplAs<ShaderGL, gl::Shader>(
+                mState.getAttachedShader(gl::ShaderType::Fragment));
             const ShaderGL *geometryShaderGL = rx::SafeGetImplAs<ShaderGL, gl::Shader>(
                 mState.getAttachedShader(gl::ShaderType::Geometry));
 
             // Detach the shaders
-            mFunctions->detachShader(mProgramID, vertexShaderGL->getShaderID());
-            mFunctions->detachShader(mProgramID, fragmentShaderGL->getShaderID());
+            if (vertexShaderGL)
+            {
+                mFunctions->detachShader(mProgramID, vertexShaderGL->getShaderID());
+            }
+            if (fragmentShaderGL)
+            {
+                mFunctions->detachShader(mProgramID, fragmentShaderGL->getShaderID());
+            }
             if (geometryShaderGL)
             {
                 mFunctions->detachShader(mProgramID, geometryShaderGL->getShaderID());
