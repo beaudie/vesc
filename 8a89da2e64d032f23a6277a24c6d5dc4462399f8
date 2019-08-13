@@ -22,6 +22,30 @@
       "revId": "8a89da2e64d032f23a6277a24c6d5dc4462399f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ef6f3c4_ccc350d9",
+        "filename": "src/tests/deqp_support/deqp_khr_gles2_test_expectations.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-13T19:57:30Z",
+      "side": 1,
+      "message": "That\u0027s for TexStorage*DEXT and TextureStorage*DEXT, not TexImage*D.\n\nFrom the extension:\nOpenGL ES does not accept sized internal formats (e.g., RGBA8) and\n    instead derives an internal format from the \u003cformat\u003e and \u003ctype\u003e\n    parameters of TexImage2D. Since TexStorage* does not specify texel\n    data, the API doesn\u0027t include \u003cformat\u003e and \u003ctype\u003e parameters.\n    On an OpenGL ES implementation, the values in the \u003cinternalformat\u003e\n    column in the tables below are accepted as \u003cinternalformat\u003e\n    parameters, and base internal formats are not accepted. The\n    TexImage* calls in the TexStorage* pseudocode are modified so that\n    the \u003cinternalformat\u003e, \u003cformat\u003e and \u003ctype\u003e parameters are\n    taken from the \u003cformat\u003e, \u003cformat\u003e and \u003ctype\u003e columns (respectively)\n    in the tables below, according to the \u003cinternalformat\u003e\n    specified in the TexStorage* command.",
+      "parentUuid": "a9893632_bba4632a",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 38,
+        "endChar": 37
+      },
+      "revId": "8a89da2e64d032f23a6277a24c6d5dc4462399f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
