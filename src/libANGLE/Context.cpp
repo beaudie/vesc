@@ -3150,6 +3150,10 @@ bool Context::isExtensionRequestable(const char *name)
 
 void Context::requestExtension(const char *name)
 {
+    if (strcmp(name, "GL_OVR_multiview2") == 0)
+    {
+        requestExtension("GL_OVR_multiview");
+    }
     const ExtensionInfoMap &extensionInfos = GetExtensionInfoMap();
     ASSERT(extensionInfos.find(name) != extensionInfos.end());
     const auto &extension = extensionInfos.at(name);

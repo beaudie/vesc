@@ -164,6 +164,16 @@ void TDirectiveHandler::handleExtension(const angle::pp::SourceLocation &loc,
     if (iter != mExtensionBehavior.end())
     {
         iter->second = behaviorVal;
+        if (name == "GL_OVR_multiview2")
+        {
+            const std::string multiview = "GL_OVR_multiview";
+            TExtensionBehavior::iterator iterMultiview =
+                mExtensionBehavior.find(GetExtensionByName(multiview.c_str()));
+            if (iterMultiview != mExtensionBehavior.end())
+            {
+                iterMultiview->second = behaviorVal;
+            }
+        }
         return;
     }
 
