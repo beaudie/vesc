@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd993538_8717546b",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1714,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-13T17:38:36Z",
+      "side": 1,
+      "message": "Should this do the same validation as GL_RGB10_A2_EXT?\n\n                    if (!context-\u003egetExtensions().textureFormat2101010REV)\n                    {\n                        context-\u003evalidationError(GL_INVALID_ENUM, kEnumNotSupported);\n                        return false;\n                    }\n\n                    if (type !\u003d GL_UNSIGNED_INT_2_10_10_10_REV_EXT || format !\u003d GL_RGBA)\n                    {\n                        context-\u003evalidationError(GL_INVALID_OPERATION, kMismatchedTypeAndFormat);\n                        return false;\n                    }",
+      "revId": "fbdfa4a8c27abc0e802f75be633099af01cb6f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
