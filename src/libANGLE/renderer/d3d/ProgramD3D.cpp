@@ -403,34 +403,39 @@ int ProgramD3DMetadata::getRendererMajorShaderModel() const
 
 bool ProgramD3DMetadata::usesBroadcast(const gl::State &data) const
 {
-    return (mAttachedShaders[gl::ShaderType::Fragment]->usesFragColor() &&
-            mAttachedShaders[gl::ShaderType::Fragment]->usesMultipleRenderTargets() &&
+    const rx::ShaderD3D *shader = mAttachedShaders[gl::ShaderType::Fragment];
+    return (shader && shader->usesFragColor() && shader->usesMultipleRenderTargets() &&
             data.getClientMajorVersion() < 3);
 }
 
 bool ProgramD3DMetadata::usesSecondaryColor() const
 {
-    return mAttachedShaders[gl::ShaderType::Fragment]->usesSecondaryColor();
+    const rx::ShaderD3D *shader = mAttachedShaders[gl::ShaderType::Fragment];
+    return (shader && shader->usesSecondaryColor());
 }
 
 bool ProgramD3DMetadata::usesFragDepth() const
 {
-    return mAttachedShaders[gl::ShaderType::Fragment]->usesFragDepth();
+    const rx::ShaderD3D *shader = mAttachedShaders[gl::ShaderType::Fragment];
+    return (shader && shader->usesFragDepth());
 }
 
 bool ProgramD3DMetadata::usesPointCoord() const
 {
-    return mAttachedShaders[gl::ShaderType::Fragment]->usesPointCoord();
+    const rx::ShaderD3D *shader = mAttachedShaders[gl::ShaderType::Fragment];
+    return (shader && shader->usesPointCoord());
 }
 
 bool ProgramD3DMetadata::usesFragCoord() const
 {
-    return mAttachedShaders[gl::ShaderType::Fragment]->usesFragCoord();
+    const rx::ShaderD3D *shader = mAttachedShaders[gl::ShaderType::Fragment];
+    return (shader && shader->usesFragCoord());
 }
 
 bool ProgramD3DMetadata::usesPointSize() const
 {
-    return mAttachedShaders[gl::ShaderType::Vertex]->usesPointSize();
+    const rx::ShaderD3D *shader = mAttachedShaders[gl::ShaderType::Vertex];
+    return (shader && mAttachedShaders[gl::ShaderType::Vertex]->usesPointSize());
 }
 
 bool ProgramD3DMetadata::usesInsertedPointCoordValue() const
@@ -446,17 +451,20 @@ bool ProgramD3DMetadata::usesViewScale() const
 
 bool ProgramD3DMetadata::hasANGLEMultiviewEnabled() const
 {
-    return mAttachedShaders[gl::ShaderType::Vertex]->hasANGLEMultiviewEnabled();
+    const rx::ShaderD3D *shader = mAttachedShaders[gl::ShaderType::Vertex];
+    return (shader && shader->hasANGLEMultiviewEnabled());
 }
 
 bool ProgramD3DMetadata::usesVertexID() const
 {
-    return mAttachedShaders[gl::ShaderType::Vertex]->usesVertexID();
+    const rx::ShaderD3D *shader = mAttachedShaders[gl::ShaderType::Vertex];
+    return (shader && shader->usesVertexID());
 }
 
 bool ProgramD3DMetadata::usesViewID() const
 {
-    return mAttachedShaders[gl::ShaderType::Fragment]->usesViewID();
+    const rx::ShaderD3D *shader = mAttachedShaders[gl::ShaderType::Fragment];
+    return (shader && shader->usesViewID());
 }
 
 bool ProgramD3DMetadata::canSelectViewInVertexShader() const
@@ -491,12 +499,15 @@ bool ProgramD3DMetadata::usesSystemValuePointSize() const
 
 bool ProgramD3DMetadata::usesMultipleFragmentOuts() const
 {
-    return mAttachedShaders[gl::ShaderType::Fragment]->usesMultipleRenderTargets();
+    const rx::ShaderD3D *shader = mAttachedShaders[gl::ShaderType::Fragment];
+    return (shader && shader->usesMultipleRenderTargets());
 }
 
 bool ProgramD3DMetadata::usesCustomOutVars() const
 {
-    int version = mAttachedShaders[gl::ShaderType::Vertex]->getData().getShaderVersion();
+
+    const rx::ShaderD3D *shader = mAttachedShaders[gl::ShaderType::Vertex];
+    int version                 = shader ? shader->getData().getShaderVersion() : -1;
 
     switch (mClientType)
     {
@@ -1488,6 +1499,13 @@ angle::Result ProgramD3D::getPixelExecutableForCachedOutputLayout(
     ShaderExecutableD3D **outExecutable,
     gl::InfoLog *infoLog)
 {
+    gl::Shader *fragmentShader = mState.getAttachedShader(gl::ShaderType::Fragment);
+    if (!fragmentShader)
+    {
+        // No fragment shader, so nothing to create an executable for.
+        return angle::Result::Continue;
+    }
+
     if (mCachedPixelExecutableIndex.valid())
     {
         *outExecutable = mPixelExecutables[mCachedPixelExecutableIndex.value()]->shaderExecutable();
@@ -1875,10 +1893,11 @@ std::unique_ptr<LinkEvent> ProgramD3D::compileProgramExecutables(const gl::Conte
     auto pixelTask    = std::make_shared<GetPixelExecutableTask>(this);
     auto geometryTask = std::make_shared<GetGeometryExecutableTask>(this, context->getState());
     bool useGS        = usesGeometryShader(context->getState(), gl::PrimitiveMode::Points);
-    const ShaderD3D *vertexShaderD3D =
-        GetImplAs<ShaderD3D>(mState.getAttachedShader(gl::ShaderType::Vertex));
+    gl::Shader *vertexShader = mState.getAttachedShader(gl::ShaderType::Vertex);
+    gl::Shader *fragmentShader       = mState.getAttachedShader(gl::ShaderType::Fragment);
+    const ShaderD3D *vertexShaderD3D = vertexShader ? GetImplAs<ShaderD3D>(vertexShader) : nullptr;
     const ShaderD3D *fragmentShaderD3D =
-        GetImplAs<ShaderD3D>(mState.getAttachedShader(gl::ShaderType::Fragment));
+        fragmentShader ? GetImplAs<ShaderD3D>(fragmentShader) : nullptr;
 
     return std::make_unique<GraphicsProgramLinkEvent>(infoLog, context->getWorkerThreadPool(),
                                                       vertexTask, pixelTask, geometryTask, useGS,
