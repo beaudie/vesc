@@ -300,10 +300,9 @@ void FrameCapture::onEndFrame()
     if (!mCalls.empty())
     {
         saveCapturedFrameAsCpp();
+        reset();
+        mFrameIndex++;
     }
-
-    reset();
-    mFrameIndex++;
 }
 
 void FrameCapture::saveCapturedFrameAsCpp()
