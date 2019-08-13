@@ -266,8 +266,8 @@ VkImageAspectFlags GetFormatAspectFlags(const angle::Format &format)
 
 VkImageAspectFlags GetDepthStencilAspectFlagsForCopy(bool copyDepth, bool copyStencil)
 {
-    return copyDepth ? VK_IMAGE_ASPECT_DEPTH_BIT
-                     : 0 | copyStencil ? VK_IMAGE_ASPECT_STENCIL_BIT : 0;
+    return (copyDepth ? VK_IMAGE_ASPECT_DEPTH_BIT : 0) |
+           (copyStencil ? VK_IMAGE_ASPECT_STENCIL_BIT : 0);
 }
 
 // Context implementation.
