@@ -124,6 +124,14 @@ angle::Result InputLayoutCache::getInputLayout(
     PackedAttributeLayout layout;
 
     ProgramD3D *programD3D = GetImplAs<ProgramD3D>(program);
+
+    gl::Shader *vertexShader = programD3D->getState().getAttachedShader(gl::ShaderType::Vertex);
+    if (!vertexShader)
+    {
+        // No vertex shader, so nothing to lay out
+        return angle::Result::Continue;
+    }
+
     bool programUsesInstancedPointSprites =
         programD3D->usesPointSize() && programD3D->usesInstancedPointSpriteEmulation();
     bool instancedPointSpritesActive =
