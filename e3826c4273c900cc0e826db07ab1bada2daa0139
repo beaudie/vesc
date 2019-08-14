@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b2dccf2_2b037f8c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-14T23:01:41Z",
+      "side": 1,
+      "message": "Do we need to validate that shareContext is a valid context?",
+      "revId": "e3826c4273c900cc0e826db07ab1bada2daa0139",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
