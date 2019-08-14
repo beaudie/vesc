@@ -304,16 +304,9 @@ angle::Result ProgramVk::ShaderInfo::initShaders(ContextVk *contextVk,
 {
     ASSERT(!valid());
 
-    bool useSubgroupOpsWithSeamfulCubeMapEmulation = false;
-    bool emulateSeamfulCubeMapSampling =
-        contextVk->emulateSeamfulCubeMapSampling(&useSubgroupOpsWithSeamfulCubeMapEmulation);
-    bool useSubgroupOps =
-        emulateSeamfulCubeMapSampling && useSubgroupOpsWithSeamfulCubeMapEmulation;
-
     gl::ShaderMap<std::vector<uint32_t>> shaderCodes;
-    ANGLE_TRY(GlslangWrapper::GetShaderCode(contextVk, contextVk->getCaps(),
-                                            enableLineRasterEmulation, useSubgroupOps,
-                                            shaderSources, &shaderCodes));
+    ANGLE_TRY(GlslangWrapper::GetShaderCode(
+        contextVk, contextVk->getCaps(), enableLineRasterEmulation, shaderSources, &shaderCodes));
 
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
@@ -1457,8 +1450,7 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk)
 
     const gl::ActiveTextureArray<vk::TextureUnit> &activeTextures = contextVk->getActiveTextures();
 
-    bool useSubgroupOps                = false;
-    bool emulateSeamfulCubeMapSampling = contextVk->emulateSeamfulCubeMapSampling(&useSubgroupOps);
+    bool emulateSeamfulCubeMapSampling = contextVk->emulateSeamfulCubeMapSampling();
 
     for (uint32_t textureIndex = 0; textureIndex < mState.getSamplerBindings().size();
          ++textureIndex)
