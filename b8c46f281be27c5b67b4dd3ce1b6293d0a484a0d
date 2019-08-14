@@ -115,6 +115,30 @@
       "revId": "b8c46f281be27c5b67b4dd3ce1b6293d0a484a0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc736c60_4800ce8a",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-14T16:38:25Z",
+      "side": 1,
+      "message": "Agreed that we should just update the expectations by using IsOSX or adding a IsIntelOrNVIDIA/IsIntelOrAMD along with our IsOSX checks.",
+      "parentUuid": "0d41cb40_d8470d11",
+      "range": {
+        "startLine": 107,
+        "startChar": 50,
+        "endLine": 107,
+        "endChar": 59
+      },
+      "revId": "b8c46f281be27c5b67b4dd3ce1b6293d0a484a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
