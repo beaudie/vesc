@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "97a28829_23d58274",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-14T20:06:57Z",
+      "side": 1,
+      "message": "Compiler throws error when use GLsizei, because casting size_t(unsigned long) to GLsizei (int), I switch to use GLuint64 here, which should be the safest one.",
+      "parentUuid": "ad7ce4c9_94df163d",
+      "range": {
+        "startLine": 244,
+        "startChar": 44,
+        "endLine": 244,
+        "endChar": 50
+      },
+      "revId": "4cbf104a012bed89555ed89cabbeb9692e778ab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "67a5ebe3_a6897dec",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "51a10835_2659695f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-14T20:06:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67a5ebe3_a6897dec",
+      "range": {
+        "startLine": 299,
+        "startChar": 71,
+        "endLine": 299,
+        "endChar": 77
+      },
+      "revId": "4cbf104a012bed89555ed89cabbeb9692e778ab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d463cd9_d8f7a2c6",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 1
@@ -68,6 +116,30 @@
       "revId": "4cbf104a012bed89555ed89cabbeb9692e778ab2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5842d6f4_531b815f",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-14T20:06:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d463cd9_d8f7a2c6",
+      "range": {
+        "startLine": 439,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 42
+      },
+      "revId": "4cbf104a012bed89555ed89cabbeb9692e778ab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
