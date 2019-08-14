@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d056d928_228fec69",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-14T19:36:48Z",
+      "side": 1,
+      "message": "nit: increment version.\n\n(aside) Wonder how hard it would be to make a presubmit for this..",
+      "range": {
+        "startLine": 29,
+        "startChar": 25,
+        "endLine": 29,
+        "endChar": 28
+      },
+      "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5ccc9ec_6250ab7d",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-14T19:36:48Z",
+      "side": 1,
+      "message": "could you call this something like \"ADD_BASE_VERTEX_TO_VERTEX_ID\" ?",
+      "range": {
+        "startLine": 298,
+        "startChar": 23,
+        "endLine": 298,
+        "endChar": 52
+      },
+      "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e95bc05_1baf0538",
+        "filename": "include/platform/FeaturesGL.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-14T19:36:48Z",
+      "side": 1,
+      "message": "naming nit:\n\nthe \"Bug\" is the above..\n\nthe \"Feature\" would be \"addBaseVertexToVertexID\"",
+      "range": {
+        "startLine": 64,
+        "startChar": 12,
+        "endLine": 64,
+        "endChar": 45
+      },
+      "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d466c8ac_05523da2",
+        "filename": "src/compiler/translator/OutputGLSL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-14T19:36:48Z",
+      "side": 1,
+      "message": "could you redesign this emulation and the Vulkan emulation as tree transformations? See\n\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/master/doc/WritingShaderASTTransformations.md\n\nYou never know what weird situations we might need this on other back-ends. Or to perform recursive transformations. It\u0027s a bit more verbose but it\u0027s a more flexible design long-term. You also wouldn\u0027t need to track the state in the Compiler. Only in the traverser.\n\nBTW I think you can refer to builtin symbols globally as gl_VertexID(), etc.",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 21
+      },
+      "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1bcc581e_ec75d43c",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1542,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-14T19:36:48Z",
+      "side": 1,
+      "message": "can you redesign this to not modify the function parameter variable?",
+      "range": {
+        "startLine": 1542,
+        "startChar": 4,
+        "endLine": 1542,
+        "endChar": 29
+      },
+      "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "76a1ec4b_6582ba3d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-14T19:36:48Z",
+      "side": 1,
+      "message": "you can probably add a new command for these. it saves some memory bandwidth for handling non-base instanced draws.",
+      "range": {
+        "startLine": 1371,
+        "startChar": 19,
+        "endLine": 1371,
+        "endChar": 32
+      },
+      "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9e9f2dd_bc4584a7",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-14T19:36:48Z",
+      "side": 1,
+      "message": "can you work on these tests? we have a policy not to add open-ended TODOs that linger in the code base. if you tag your ldap and a http://anglebug.com/#### we can ensure we don\u0027t lose track of the TODO.\n\nalternately you can just remove the TODO :)",
+      "range": {
+        "startLine": 54,
+        "startChar": 3,
+        "endLine": 54,
+        "endChar": 7
+      },
+      "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2094893_19855c92",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-14T19:36:48Z",
+      "side": 1,
+      "message": "for ANGLE style, non-static members should not be caps.",
+      "range": {
+        "startLine": 313,
+        "startChar": 9,
+        "endLine": 313,
+        "endChar": 24
+      },
+      "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e2f9ae7_901cb7d1",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-14T19:36:48Z",
+      "side": 1,
+      "message": "it\u0027s nice to use RAII for resources if you feel like redesigning your helper functions. You can\u0027t use RAII as class members because of destruction order unfortunately.",
+      "range": {
+        "startLine": 333,
+        "startChar": 12,
+        "endLine": 333,
+        "endChar": 36
+      },
+      "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
