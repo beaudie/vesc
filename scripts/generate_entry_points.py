@@ -1161,9 +1161,18 @@ def write_capture_source(annotation_with_dash, annotation_no_dash, comment, capt
         out.close()
 
 
+def is_packed_enum_param_type(param_type):
+    return param_type[0:2] != "GL" and "void" not in param_type
+
+
+def is_resource_id_type(param_type):
+    return is_packed_enum_param_type(param_type) and (param_type[-2:] == "ID" or
+                                                      "IDPointer" in param_type)
+
+
 def get_param_type_type(param_type):
 
-    if param_type[0:2] != "GL" and "void" not in param_type:
+    if is_packed_enum_param_type(param_type):
         param_type = "gl::" + param_type
 
     if "ConstPointerPointer" in param_type:
@@ -1230,8 +1239,14 @@ def write_capture_helper_header(all_param_types):
 
 
 def format_param_type_to_string_case(param_type):
-    return template_param_type_to_string_case.format(
-        enum=param_type, type=get_param_type_type(param_type))
+    # Special cases for packed enum values.
+    if is_resource_id_type(param_type):
+        type = "GLuint"
+    elif is_packed_enum_param_type(param_type):
+        type = "GLenum"
+    else:
+        type = get_param_type_type(param_type)
+    return template_param_type_to_string_case.format(enum=param_type, type=type)
 
 
 def write_capture_helper_source(all_param_types):
