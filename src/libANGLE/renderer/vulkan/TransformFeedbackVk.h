@@ -45,6 +45,10 @@ class TransformFeedbackVk : public TransformFeedbackImpl
     void addFramebufferDependency(ContextVk *contextVk,
                                   const gl::ProgramState &programState,
                                   vk::FramebufferHelper *framebuffer) const;
+    void initDescriptorSet(ContextVk *contextVk,
+                           const gl::ProgramState &programState,
+                           vk::BufferHelper *emptyBuffer,
+                           VkDescriptorSet descSet) const;
     void updateDescriptorSet(ContextVk *contextVk,
                              const gl::ProgramState &programState,
                              VkDescriptorSet descSet) const;

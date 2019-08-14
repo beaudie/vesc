@@ -1085,6 +1085,17 @@ angle::Result ProgramVk::allocateDescriptorSetAndGetInfo(ContextVk *contextVk,
         &mDescriptorSets[descriptorSetIndex], newPoolAllocatedOut));
     mEmptyDescriptorSets[descriptorSetIndex] = VK_NULL_HANDLE;
 
+    if (descriptorSetIndex == kUniformsAndXfbDescriptorSetIndex)
+    {
+        // We set empty Buffer to xfb descriptor set right after creation because xfb
+        // descriptor set requires valid buffer bindings, even if they are empty buffer,
+        // otherwise Vulkan validation layer generates errors.
+        const gl::State &glState = contextVk->getState();
+        TransformFeedbackVk *transformFeedbackVk =
+            vk::GetImpl(glState.getCurrentTransformFeedback());
+        transformFeedbackVk->initDescriptorSet(contextVk, mState, &mEmptyBuffer,
+                                               mDescriptorSets[kUniformsAndXfbDescriptorSetIndex]);
+    }
     return angle::Result::Continue;
 }
 
@@ -1394,11 +1405,11 @@ angle::Result ProgramVk::updateTransformFeedbackDescriptorSet(ContextVk *context
 void ProgramVk::updateTransformFeedbackDescriptorSetImpl(ContextVk *contextVk)
 {
     const gl::State &glState = contextVk->getState();
-    if (!hasTransformFeedbackOutput())
+    if (!(hasTransformFeedbackOutput() && glState.isTransformFeedbackActive()))
     {
-        // NOTE(syoussefi): a possible optimization is to skip this if transform feedback is
-        // paused.  However, even if paused, |updateDescriptorSet| must be called at least once for
-        // the sake of validation.
+        // If xfb has no output or if xfb is not active there is no need to update descriptor
+        // set.If xfb is active it is gauranteed that valid buffers are bound to xfb objects.
+        // We update descriptor sets only when there are valid buffer bidings for xfb.
         return;
     }
 
