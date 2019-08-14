@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e9076de_e3f897da",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-14T18:09:11Z",
+      "side": 1,
+      "message": "sorry, this should return by value and not use std::move. There\u0027s guaranteed copy elision in C++14 or 17 or one of those versions. Basically it should not do a copy.",
+      "range": {
+        "startLine": 58,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 0
+      },
+      "revId": "90f3afe6f7a73ad92dbd0ae28dc6c2d10b844990",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
