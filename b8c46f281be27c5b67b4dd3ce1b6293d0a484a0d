@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "dac8c170_aa47843d",
+        "filename": "src/gpu_info_util/SystemInfo_mac.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1356146
+      },
+      "writtenOn": "2019-08-14T23:51:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a1c2aef_fd99354f",
+      "range": {
+        "startLine": 62,
+        "startChar": 12,
+        "endLine": 62,
+        "endChar": 19
+      },
+      "revId": "b8c46f281be27c5b67b4dd3ce1b6293d0a484a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "93f9532b_0a8ad9a1",
         "filename": "src/gpu_info_util/SystemInfo_mac.mm",
         "patchSetId": 3
@@ -45,6 +69,30 @@
       "revId": "b8c46f281be27c5b67b4dd3ce1b6293d0a484a0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0d5a0285_5aeb7dd7",
+        "filename": "src/gpu_info_util/SystemInfo_mac.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1356146
+      },
+      "writtenOn": "2019-08-14T23:51:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93f9532b_0a8ad9a1",
+      "range": {
+        "startLine": 165,
+        "startChar": 17,
+        "endLine": 165,
+        "endChar": 26
+      },
+      "revId": "b8c46f281be27c5b67b4dd3ce1b6293d0a484a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -130,6 +178,30 @@
       "side": 1,
       "message": "Agreed that we should just update the expectations by using IsOSX or adding a IsIntelOrNVIDIA/IsIntelOrAMD along with our IsOSX checks.",
       "parentUuid": "0d41cb40_d8470d11",
+      "range": {
+        "startLine": 107,
+        "startChar": 50,
+        "endLine": 107,
+        "endChar": 59
+      },
+      "revId": "b8c46f281be27c5b67b4dd3ce1b6293d0a484a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45142dbb_ae08eaf5",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1356146
+      },
+      "writtenOn": "2019-08-14T23:51:20Z",
+      "side": 1,
+      "message": "Re: performance impact, eliminating this cache does consistently cause a slowdown in end-to-end tests: ~2 seconds on the dual-GPU laptop I tested on. Let me know if this is significant enough to use a Mac-specific call instead of updating test expectations.\n\nRe: updating test expectations, I updated the test expectations to remove GPU-specific checks on IsOSX. I opted not to add IsIntelOrNVIDIA/IsIntelOrAMD like calls because that would imply that the AMD/NVIDIA GPU respectively would be allowed and this isn\u0027t desired behaviour, assuming we can\u0027t be sure of a particular GPU.  \n\nIt might also be worthwhile to note that the tests are actually currently robust to runtime changes in GPU -- this is because the IsAMD/IsIntel-type functions would all call GetTestSystemInfo and fetch the current GPU, and none of the tests seemed to cause a GPU switch after the GetTestSystemInfo call. So we could probably assume a particular GPU at the beginning of a test, but I think we should not rely on this due to risks of flakiness in the future. Please let me know if I missed something!",
+      "parentUuid": "cc736c60_4800ce8a",
       "range": {
         "startLine": 107,
         "startChar": 50,
