@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f06f74c8_92868f70",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2099,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-14T16:26:49Z",
+      "side": 1,
+      "message": "nit: assign this to nullptr and check for the D24S8 format to assign it below then assert that stencilLoadFunction is not null before calling it.  This protects us from adding new formats that need a stencil load function but not assigning it.",
+      "range": {
+        "startLine": 2099,
+        "startChar": 45,
+        "endLine": 2099,
+        "endChar": 65
+      },
+      "revId": "aed7a9655c0c6f47fd45821168808dc67117f9a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
