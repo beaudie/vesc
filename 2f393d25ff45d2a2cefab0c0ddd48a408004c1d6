@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "59addda7_bf0f682d",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-14T00:23:44Z",
+      "side": 1,
+      "message": "typo: DrawArraysOneInstance",
+      "range": {
+        "startLine": 127,
+        "startChar": 19,
+        "endLine": 127,
+        "endChar": 41
+      },
+      "revId": "2f393d25ff45d2a2cefab0c0ddd48a408004c1d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4ad3b5c_2b9aa087",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-14T00:23:44Z",
+      "side": 1,
+      "message": "\u003cdrawcount\u003e?",
+      "range": {
+        "startLine": 143,
+        "startChar": 8,
+        "endLine": 143,
+        "endChar": 17
+      },
+      "revId": "2f393d25ff45d2a2cefab0c0ddd48a408004c1d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6e6d218_430dbc34",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-14T00:23:44Z",
+      "side": 1,
+      "message": "typo: DrawElementsOneInstance",
+      "range": {
+        "startLine": 169,
+        "startChar": 38,
+        "endLine": 169,
+        "endChar": 62
+      },
+      "revId": "2f393d25ff45d2a2cefab0c0ddd48a408004c1d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9dd9cac1_2a23e2a8",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-14T00:23:44Z",
+      "side": 1,
+      "message": "\u003cdrawcount\u003e?",
+      "range": {
+        "startLine": 191,
+        "startChar": 21,
+        "endLine": 191,
+        "endChar": 30
+      },
+      "revId": "2f393d25ff45d2a2cefab0c0ddd48a408004c1d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e420ba4c_f12402d0",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-14T00:23:44Z",
+      "side": 1,
+      "message": "extensions -\u003e extension",
+      "range": {
+        "startLine": 238,
+        "startChar": 60,
+        "endLine": 238,
+        "endChar": 70
+      },
+      "revId": "2f393d25ff45d2a2cefab0c0ddd48a408004c1d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce05b605_5ad76dca",
+        "filename": "extensions/ANGLE_base_vertex_base_instance.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-14T00:23:44Z",
+      "side": 1,
+      "message": "Since there\u0027s no notion of \"enabling\" extensions in OpenGL ES, I suggest writing \"are available\" rather than \"is enabled\".",
+      "range": {
+        "startLine": 240,
+        "startChar": 40,
+        "endLine": 240,
+        "endChar": 47
+      },
+      "revId": "2f393d25ff45d2a2cefab0c0ddd48a408004c1d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
