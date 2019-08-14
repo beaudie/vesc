@@ -645,11 +645,6 @@ void TranslatorVulkan::translate(TIntermBlock *root,
 
     sink << "#version 450 core\n";
 
-    if (compileOptions & SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING_WITH_SUBGROUP_OP)
-    {
-        sink << "#extension GL_KHR_shader_subgroup_quad : require\n";
-    }
-
     // Write out default uniforms into a uniform block assigned to a specific set/binding.
     int defaultUniformCount        = 0;
     int structTypesUsedForUniforms = 0;
@@ -688,12 +683,10 @@ void TranslatorVulkan::translate(TIntermBlock *root,
 
     // Rewrite samplerCubes as sampler2DArrays.  This must be done after rewriting struct samplers
     // as it doesn't expect that.
-    if (compileOptions & (SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING |
-                          SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING_WITH_SUBGROUP_OP))
+    if (compileOptions & SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING)
     {
-        RewriteCubeMapSamplersAs2DArray(
-            root, &getSymbolTable(), getShaderType() == GL_FRAGMENT_SHADER,
-            compileOptions & SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING_WITH_SUBGROUP_OP);
+        RewriteCubeMapSamplersAs2DArray(root, &getSymbolTable(),
+                                        getShaderType() == GL_FRAGMENT_SHADER);
     }
 
     if (defaultUniformCount > 0)
