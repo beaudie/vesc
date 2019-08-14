@@ -239,7 +239,6 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mFlipYForCurrentSurface(false),
       mIsAnyHostVisibleBufferWritten(false),
       mEmulateSeamfulCubeMapSampling(false),
-      mEmulateSeamfulCubeMapSamplingWithSubgroupOps(false),
       mLastCompletedQueueSerial(renderer->nextSerial()),
       mCurrentQueueSerial(renderer->nextSerial()),
       mPoolAllocator(kDefaultPoolAllocatorPageSize, 1),
@@ -443,8 +442,7 @@ angle::Result ContextVk::initialize()
         ANGLE_TRY(synchronizeCpuGpuTime());
     }
 
-    mEmulateSeamfulCubeMapSampling =
-        shouldEmulateSeamfulCubeMapSampling(&mEmulateSeamfulCubeMapSamplingWithSubgroupOps);
+    mEmulateSeamfulCubeMapSampling = shouldEmulateSeamfulCubeMapSampling();
 
     return angle::Result::Continue;
 }
@@ -2923,7 +2921,7 @@ vk::DescriptorSetLayoutDesc ContextVk::getDriverUniformsDescriptorSetDesc(
     return desc;
 }
 
-bool ContextVk::shouldEmulateSeamfulCubeMapSampling(bool *useSubgroupOpsOut) const
+bool ContextVk::shouldEmulateSeamfulCubeMapSampling() const
 {
     // Only allow seamful cube map sampling in non-webgl ES2.
     if (mState.getClientMajorVersion() != 2 || mState.isWebGL())
@@ -2935,15 +2933,6 @@ bool ContextVk::shouldEmulateSeamfulCubeMapSampling(bool *useSubgroupOpsOut) con
     {
         return false;
     }
-
-    // Use subgroup ops where available.
-    constexpr VkSubgroupFeatureFlags kSeamfulCubeMapSubgroupOperations =
-        VK_SUBGROUP_FEATURE_BASIC_BIT | VK_SUBGROUP_FEATURE_BALLOT_BIT |
-        VK_SUBGROUP_FEATURE_QUAD_BIT;
-    const VkSubgroupFeatureFlags deviceSupportedOperations =
-        mRenderer->getPhysicalDeviceSubgroupProperties().supportedOperations;
-    *useSubgroupOpsOut = (deviceSupportedOperations & kSeamfulCubeMapSubgroupOperations) ==
-                         kSeamfulCubeMapSubgroupOperations;
 
     return true;
 }
