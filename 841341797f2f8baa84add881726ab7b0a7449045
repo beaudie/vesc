@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "e51b89f8_61679068",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1321,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-08-14T03:16:04Z",
+      "side": 1,
+      "message": "Is the change in my latest patch set what you want?",
+      "parentUuid": "feac363c_9c47c8ef",
+      "range": {
+        "startLine": 1312,
+        "startChar": 0,
+        "endLine": 1321,
+        "endChar": 5
+      },
+      "revId": "841341797f2f8baa84add881726ab7b0a7449045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b82b2e57_28d80bdb",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 4
@@ -84,6 +108,30 @@
       "writtenOn": "2019-08-12T13:08:46Z",
       "side": 1,
       "message": "I\u0027m not sure this new function is necessary. Couldn\u0027t you just inline it into getPipelineCache?",
+      "range": {
+        "startLine": 1324,
+        "startChar": 0,
+        "endLine": 1338,
+        "endChar": 1
+      },
+      "revId": "841341797f2f8baa84add881726ab7b0a7449045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1eff108e_181384aa",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1338,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-08-14T03:16:04Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "b82b2e57_28d80bdb",
       "range": {
         "startLine": 1324,
         "startChar": 0,
@@ -119,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "e7561330_6363fe7b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1347,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-08-14T03:16:04Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "ea7ed641_35bf6132",
+      "range": {
+        "startLine": 1342,
+        "startChar": 0,
+        "endLine": 1347,
+        "endChar": 37
+      },
+      "revId": "841341797f2f8baa84add881726ab7b0a7449045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7739d6c9_274238c6",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 4
@@ -130,6 +202,30 @@
       "writtenOn": "2019-08-12T13:08:46Z",
       "side": 1,
       "message": "I don\u0027t think these new includes are necessary here.",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 47
+      },
+      "revId": "841341797f2f8baa84add881726ab7b0a7449045",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f91c98d_056f2485",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1333595
+      },
+      "writtenOn": "2019-08-14T03:16:04Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "7739d6c9_274238c6",
       "range": {
         "startLine": 21,
         "startChar": 0,
