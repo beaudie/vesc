@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "915d8f16_849efa4f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-14T18:14:36Z",
+      "side": 1,
+      "message": "also this bug ID doesn\u0027t look correct. Maybe 2464?",
+      "range": {
+        "startLine": 12,
+        "startChar": 18,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "90f3afe6f7a73ad92dbd0ae28dc6c2d10b844990",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e9076de_e3f897da",
         "filename": "src/libGLESv2/global_state.h",
         "patchSetId": 8
