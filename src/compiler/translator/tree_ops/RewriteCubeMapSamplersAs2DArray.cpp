@@ -21,182 +21,24 @@ namespace sh
 namespace
 {
 constexpr ImmutableString kCoordTransformFuncName("ANGLECubeMapCoordTransform");
+constexpr ImmutableString kCoordTransformFuncNameImplicit("ANGLECubeMapCoordTransformImplicit");
 
-// Retrieve a value from another invocation in the quad.  See comment in
-// declareCoordTranslationFunction.
-TIntermSymbol *GetValueFromNeighbor(TSymbolTable *symbolTable,
-                                    TIntermBlock *body,
-                                    TFunction *quadSwap,
-                                    TIntermTyped *variable,
-                                    const TType *variableType)
+TIntermTyped *DerivativeQuotient(TIntermTyped *u,
+                                 TIntermTyped *du,
+                                 TIntermTyped *v,
+                                 TIntermTyped *dv,
+                                 TIntermTyped *vRecip)
 {
-    TIntermTyped *neighborValue =
-        TIntermAggregate::CreateRawFunctionCall(*quadSwap, new TIntermSequence({variable}));
-
-    TIntermSymbol *neighbor = new TIntermSymbol(CreateTempVariable(symbolTable, variableType));
-    body->appendStatement(CreateTempInitDeclarationNode(&neighbor->variable(), neighborValue));
-
-    return neighbor;
+    // (du v - dv u) / v^2
+    return new TIntermBinary(EOpMul,
+                             new TIntermBinary(EOpSub, new TIntermBinary(EOpMul, du, v),
+                                               new TIntermBinary(EOpMul, dv, u)),
+                             new TIntermBinary(EOpMul, vRecip, vRecip));
 }
 
-// Calculate the difference of a value with another invocation in the quad.  Used to emulate
-// GetValueFromNeighbor where subgroup operations are not present.
-//
-// See comment in declareCoordTranslationFunction.
-TIntermSymbol *GetDiffWithNeighbor(TSymbolTable *symbolTable,
-                                   TIntermBlock *body,
-                                   TFunction *dFdxyFine,
-                                   TIntermTyped *variable,
-                                   const TType *variableType)
+TIntermTyped *IndexDirect(TIntermTyped *array, int i)
 {
-    TIntermTyped *neighborValue =
-        TIntermAggregate::CreateRawFunctionCall(*dFdxyFine, new TIntermSequence({variable}));
-    TIntermTyped *absNeighborValue = new TIntermUnary(EOpAbs, neighborValue, nullptr);
-
-    TIntermSymbol *neighbor = new TIntermSymbol(CreateTempVariable(symbolTable, variableType));
-    body->appendStatement(CreateTempInitDeclarationNode(&neighbor->variable(), absNeighborValue));
-
-    return neighbor;
-}
-
-// Used to emulate GetValueFromNeighbor with bool values.
-TIntermSymbol *IsNeighborNonHelper(TSymbolTable *symbolTable,
-                                   TIntermBlock *body,
-                                   TFunction *dFdxyFine,
-                                   TIntermTyped *gl_HelperInvocation)
-{
-    const TType *boolType  = StaticType::GetBasic<EbtBool>();
-    const TType *floatType = StaticType::GetBasic<EbtFloat>();
-
-    TIntermTyped *gl_HelperInvocationAsFloat =
-        TIntermAggregate::CreateConstructor(*floatType, new TIntermSequence({gl_HelperInvocation}));
-    TIntermSymbol *diffWithNeighbor =
-        GetDiffWithNeighbor(symbolTable, body, dFdxyFine, gl_HelperInvocationAsFloat, floatType);
-
-    TIntermTyped *isNeighborNonHelperValue =
-        new TIntermBinary(EOpGreaterThan, diffWithNeighbor, CreateFloatNode(0.5f));
-    TIntermSymbol *isNeighborNonHelper =
-        new TIntermSymbol(CreateTempVariable(symbolTable, boolType));
-    body->appendStatement(
-        CreateTempInitDeclarationNode(&isNeighborNonHelper->variable(), isNeighborNonHelperValue));
-
-    return isNeighborNonHelper;
-}
-
-// If this is a helper invocation, retrieve the layer index (cube map face) from another invocation
-// in the quad that is not a helper.  See comment in declareCoordTranslationFunction.
-void GetLayerFromNonHelperInvocation(TSymbolTable *symbolTable,
-                                     TIntermBlock *body,
-                                     TIntermTyped *l,
-                                     bool useSubgroupOps)
-{
-    TVariable *gl_HelperInvocationVar =
-        new TVariable(symbolTable, ImmutableString("gl_HelperInvocation"),
-                      StaticType::GetBasic<EbtBool>(), SymbolType::AngleInternal);
-    TIntermSymbol *gl_HelperInvocation = new TIntermSymbol(gl_HelperInvocationVar);
-
-    const TType *boolType  = StaticType::GetBasic<EbtBool>();
-    const TType *floatType = StaticType::GetBasic<EbtFloat>();
-
-    TIntermSymbol *lH;
-    TIntermSymbol *lV;
-    TIntermSymbol *lD;
-
-    TIntermTyped *horizontalIsNonHelper;
-    TIntermTyped *verticalIsNonHelper;
-
-    if (useSubgroupOps)
-    {
-        TFunction *quadSwapHorizontalBool =
-            new TFunction(symbolTable, ImmutableString("subgroupQuadSwapHorizontal"),
-                          SymbolType::AngleInternal, boolType, true);
-        TFunction *quadSwapHorizontalFloat =
-            new TFunction(symbolTable, ImmutableString("subgroupQuadSwapHorizontal"),
-                          SymbolType::AngleInternal, floatType, true);
-        TFunction *quadSwapVerticalBool =
-            new TFunction(symbolTable, ImmutableString("subgroupQuadSwapVertical"),
-                          SymbolType::AngleInternal, boolType, true);
-        TFunction *quadSwapVerticalFloat =
-            new TFunction(symbolTable, ImmutableString("subgroupQuadSwapVertical"),
-                          SymbolType::AngleInternal, floatType, true);
-        TFunction *quadSwapDiagonalFloat =
-            new TFunction(symbolTable, ImmutableString("subgroupQuadSwapDiagonal"),
-                          SymbolType::AngleInternal, floatType, true);
-
-        quadSwapHorizontalBool->addParameter(CreateTempVariable(symbolTable, boolType));
-        quadSwapVerticalBool->addParameter(CreateTempVariable(symbolTable, boolType));
-        quadSwapHorizontalFloat->addParameter(CreateTempVariable(symbolTable, floatType));
-        quadSwapVerticalFloat->addParameter(CreateTempVariable(symbolTable, floatType));
-        quadSwapDiagonalFloat->addParameter(CreateTempVariable(symbolTable, floatType));
-
-        // Get the layer from the horizontal, vertical and diagonal neighbor.  These should be done
-        // outside `if`s so the non-helper thread is not turned inactive.
-        lH = GetValueFromNeighbor(symbolTable, body, quadSwapHorizontalFloat, l, floatType);
-        lV = GetValueFromNeighbor(symbolTable, body, quadSwapVerticalFloat, l->deepCopy(),
-                                  floatType);
-        lD = GetValueFromNeighbor(symbolTable, body, quadSwapDiagonalFloat, l->deepCopy(),
-                                  floatType);
-
-        // Get the value of gl_HelperInvocation from the neighbors too.
-        TIntermSymbol *horizontalIsHelper = GetValueFromNeighbor(
-            symbolTable, body, quadSwapHorizontalBool, gl_HelperInvocation->deepCopy(), boolType);
-        TIntermSymbol *verticalIsHelper = GetValueFromNeighbor(
-            symbolTable, body, quadSwapVerticalBool, gl_HelperInvocation->deepCopy(), boolType);
-
-        // Note(syoussefi): if the sampling is done inside an if with a non-uniform condition, it's
-        // not enough to test if the neighbor is not a helper, we should also check if it's active.
-        horizontalIsNonHelper = new TIntermUnary(EOpLogicalNot, horizontalIsHelper, nullptr);
-        verticalIsNonHelper   = new TIntermUnary(EOpLogicalNot, verticalIsHelper, nullptr);
-    }
-    else
-    {
-        TFunction *dFdxFineBool  = new TFunction(symbolTable, ImmutableString("dFdxFine"),
-                                                SymbolType::AngleInternal, boolType, true);
-        TFunction *dFdxFineFloat = new TFunction(symbolTable, ImmutableString("dFdxFine"),
-                                                 SymbolType::AngleInternal, floatType, true);
-        TFunction *dFdyFineBool  = new TFunction(symbolTable, ImmutableString("dFdyFine"),
-                                                SymbolType::AngleInternal, boolType, true);
-        TFunction *dFdyFineFloat = new TFunction(symbolTable, ImmutableString("dFdyFine"),
-                                                 SymbolType::AngleInternal, floatType, true);
-
-        dFdxFineBool->addParameter(CreateTempVariable(symbolTable, boolType));
-        dFdyFineBool->addParameter(CreateTempVariable(symbolTable, boolType));
-        dFdxFineFloat->addParameter(CreateTempVariable(symbolTable, floatType));
-        dFdyFineFloat->addParameter(CreateTempVariable(symbolTable, floatType));
-
-        // layerQuadSwapHelper = gl_HelperInvocation ? 0.0 : layer;
-        TIntermTyped *layerQuadSwapHelperValue =
-            new TIntermTernary(gl_HelperInvocation->deepCopy(), CreateZeroNode(*floatType), l);
-        TIntermSymbol *layerQuadSwapHelper =
-            new TIntermSymbol(CreateTempVariable(symbolTable, floatType));
-        body->appendStatement(CreateTempInitDeclarationNode(&layerQuadSwapHelper->variable(),
-                                                            layerQuadSwapHelperValue));
-
-        // Get the layer from the horizontal, vertical and diagonal neighbor.  These should be done
-        // outside `if`s so the non-helper thread is not turned inactive.
-        lH = GetDiffWithNeighbor(symbolTable, body, dFdxFineFloat, layerQuadSwapHelper, floatType);
-        lV = GetDiffWithNeighbor(symbolTable, body, dFdyFineFloat, layerQuadSwapHelper->deepCopy(),
-                                 floatType);
-        lD = GetDiffWithNeighbor(symbolTable, body, dFdxFineFloat, lV->deepCopy(), floatType);
-
-        // Get the value of gl_HelperInvocation from the neighbors too.
-        //
-        // Note(syoussefi): if the sampling is done inside an if with a non-uniform condition, it's
-        // not enough to test if the neighbor is not a helper, we should also check if it's active.
-        horizontalIsNonHelper =
-            IsNeighborNonHelper(symbolTable, body, dFdxFineBool, gl_HelperInvocation->deepCopy());
-        verticalIsNonHelper =
-            IsNeighborNonHelper(symbolTable, body, dFdyFineBool, gl_HelperInvocation->deepCopy());
-    }
-
-    TIntermTyped *lVD  = new TIntermTernary(verticalIsNonHelper, lV, lD);
-    TIntermTyped *lHVD = new TIntermTernary(horizontalIsNonHelper, lH, lVD);
-
-    TIntermBlock *helperBody = new TIntermBlock;
-    helperBody->appendStatement(new TIntermBinary(EOpAssign, l->deepCopy(), lHVD));
-
-    TIntermIfElse *ifHelper = new TIntermIfElse(gl_HelperInvocation, helperBody, nullptr);
-    body->appendStatement(ifHelper);
+    return new TIntermBinary(EOpIndexDirect, array, CreateIndexNode(i));
 }
 
 // Generated the common transformation in each coord transformation case.  See comment in
@@ -220,6 +62,40 @@ void TransformXMajor(TIntermBlock *block,
     block->appendStatement(new TIntermBinary(EOpAssign, vc->deepCopy(), vcValue));
 }
 
+void TransformDerivativeXMajor(TIntermBlock *block,
+                               TSymbolTable *symbolTable,
+                               TIntermTyped *x,
+                               TIntermTyped *y,
+                               TIntermTyped *z,
+                               TIntermTyped *dx,
+                               TIntermTyped *dy,
+                               TIntermTyped *dz,
+                               TIntermTyped *du,
+                               TIntermTyped *dv)
+{
+    // Only the magnitude of the derivative matters, so we ignore the sign(x)
+    // and the negations.
+    const TType *floatType    = StaticType::GetBasic<EbtFloat>();
+    TIntermSymbol *xRecip     = new TIntermSymbol(CreateTempVariable(symbolTable, floatType));
+    TIntermTyped *xRecipValue = new TIntermBinary(EOpDiv, CreateFloatNode(1.0f), x);
+    block->appendStatement(CreateTempInitDeclarationNode(&xRecip->variable(), xRecipValue));
+    TIntermTyped *duValue = DerivativeQuotient(z, dz, x, dx, xRecip);
+    TIntermTyped *dvValue = DerivativeQuotient(y, dy, x, dx, xRecip);
+    duValue               = new TIntermBinary(EOpMul, duValue, CreateFloatNode(0.5f));
+    dvValue               = new TIntermBinary(EOpMul, dvValue, CreateFloatNode(0.5f));
+    block->appendStatement(new TIntermBinary(EOpAssign, du, duValue));
+    block->appendStatement(new TIntermBinary(EOpAssign, dv, dvValue));
+}
+
+void TransformImplicitDerivativeXMajor(TIntermBlock *block,
+                                       TIntermTyped *dOuter,
+                                       TIntermTyped *du,
+                                       TIntermTyped *dv)
+{
+    block->appendStatement(new TIntermBinary(EOpAssign, du->deepCopy(), IndexDirect(dOuter, 2)));
+    block->appendStatement(new TIntermBinary(EOpAssign, dv->deepCopy(), IndexDirect(dOuter, 1)));
+}
+
 void TransformYMajor(TIntermBlock *block,
                      TIntermTyped *x,
                      TIntermTyped *y,
@@ -236,6 +112,40 @@ void TransformYMajor(TIntermBlock *block,
 
     block->appendStatement(new TIntermBinary(EOpAssign, uc->deepCopy(), ucValue));
     block->appendStatement(new TIntermBinary(EOpAssign, vc->deepCopy(), vcValue));
+}
+
+void TransformDerivativeYMajor(TIntermBlock *block,
+                               TSymbolTable *symbolTable,
+                               TIntermTyped *x,
+                               TIntermTyped *y,
+                               TIntermTyped *z,
+                               TIntermTyped *dx,
+                               TIntermTyped *dy,
+                               TIntermTyped *dz,
+                               TIntermTyped *du,
+                               TIntermTyped *dv)
+{
+    // Only the magnitude of the derivative matters, so we ignore the sign(x)
+    // and the negations.
+    const TType *floatType    = StaticType::GetBasic<EbtFloat>();
+    TIntermSymbol *yRecip     = new TIntermSymbol(CreateTempVariable(symbolTable, floatType));
+    TIntermTyped *yRecipValue = new TIntermBinary(EOpDiv, CreateFloatNode(1.0f), y);
+    block->appendStatement(CreateTempInitDeclarationNode(&yRecip->variable(), yRecipValue));
+    TIntermTyped *duValue = DerivativeQuotient(x, dx, y, dy, yRecip);
+    TIntermTyped *dvValue = DerivativeQuotient(z, dz, y, dy, yRecip);
+    duValue               = new TIntermBinary(EOpMul, duValue, CreateFloatNode(0.5f));
+    dvValue               = new TIntermBinary(EOpMul, dvValue, CreateFloatNode(0.5f));
+    block->appendStatement(new TIntermBinary(EOpAssign, du, duValue));
+    block->appendStatement(new TIntermBinary(EOpAssign, dv, dvValue));
+}
+
+void TransformImplicitDerivativeYMajor(TIntermBlock *block,
+                                       TIntermTyped *dOuter,
+                                       TIntermTyped *du,
+                                       TIntermTyped *dv)
+{
+    block->appendStatement(new TIntermBinary(EOpAssign, du->deepCopy(), IndexDirect(dOuter, 0)));
+    block->appendStatement(new TIntermBinary(EOpAssign, dv->deepCopy(), IndexDirect(dOuter, 2)));
 }
 
 void TransformZMajor(TIntermBlock *block,
@@ -256,17 +166,50 @@ void TransformZMajor(TIntermBlock *block,
     block->appendStatement(new TIntermBinary(EOpAssign, vc->deepCopy(), vcValue));
 }
 
+void TransformDerivativeZMajor(TIntermBlock *block,
+                               TSymbolTable *symbolTable,
+                               TIntermTyped *x,
+                               TIntermTyped *y,
+                               TIntermTyped *z,
+                               TIntermTyped *dx,
+                               TIntermTyped *dy,
+                               TIntermTyped *dz,
+                               TIntermTyped *du,
+                               TIntermTyped *dv)
+{
+    // Only the magnitude of the derivative matters, so we ignore the sign(x)
+    // and the negations.
+    const TType *floatType    = StaticType::GetBasic<EbtFloat>();
+    TIntermSymbol *zRecip     = new TIntermSymbol(CreateTempVariable(symbolTable, floatType));
+    TIntermTyped *zRecipValue = new TIntermBinary(EOpDiv, CreateFloatNode(1.0f), z);
+    block->appendStatement(CreateTempInitDeclarationNode(&zRecip->variable(), zRecipValue));
+    TIntermTyped *duValue = DerivativeQuotient(x, dx, z, dz, zRecip);
+    TIntermTyped *dvValue = DerivativeQuotient(y, dy, z, dz, zRecip);
+    duValue               = new TIntermBinary(EOpMul, duValue, CreateFloatNode(0.5f));
+    dvValue               = new TIntermBinary(EOpMul, dvValue, CreateFloatNode(0.5f));
+    block->appendStatement(new TIntermBinary(EOpAssign, du, duValue));
+    block->appendStatement(new TIntermBinary(EOpAssign, dv, dvValue));
+}
+
+void TransformImplicitDerivativeZMajor(TIntermBlock *block,
+                                       TIntermTyped *dOuter,
+                                       TIntermTyped *du,
+                                       TIntermTyped *dv)
+{
+    block->appendStatement(new TIntermBinary(EOpAssign, du->deepCopy(), IndexDirect(dOuter, 0)));
+    block->appendStatement(new TIntermBinary(EOpAssign, dv->deepCopy(), IndexDirect(dOuter, 1)));
+}
+
 class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
 {
   public:
-    RewriteCubeMapSamplersAs2DArrayTraverser(TSymbolTable *symbolTable,
-                                             bool isFragmentShader,
-                                             bool useSubgroupOps)
+    RewriteCubeMapSamplersAs2DArrayTraverser(TSymbolTable *symbolTable, bool isFragmentShader)
         : TIntermTraverser(true, true, true, symbolTable),
           mCubeXYZToArrayUVL(nullptr),
+          mCubeXYZToArrayUVLImplicit(nullptr),
           mIsFragmentShader(isFragmentShader),
-          mUseSubgroupOps(useSubgroupOps),
-          mCoordTranslationFunctionDecl(nullptr)
+          mCoordTranslationFunctionDecl(nullptr),
+          mCoordTranslationFunctionImplicitDecl(nullptr)
     {}
 
     bool visitDeclaration(Visit visit, TIntermDeclaration *node) override
@@ -384,6 +327,11 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         return mCoordTranslationFunctionDecl;
     }
 
+    TIntermFunctionDefinition *getCoordTranslationFunctionDeclImplicit()
+    {
+        return mCoordTranslationFunctionImplicitDecl;
+    }
+
   private:
     void declareSampler2DArray(const TVariable *samplerCubeVar, TIntermDeclaration *node)
     {
@@ -391,7 +339,14 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         {
             // If not done yet, declare the function that transforms cube map texture sampling
             // coordinates to face index and uv coordinates.
-            declareCoordTranslationFunction();
+            declareCoordTranslationFunction(false, kCoordTransformFuncName, &mCubeXYZToArrayUVL,
+                                            &mCoordTranslationFunctionDecl);
+        }
+        if (mCubeXYZToArrayUVLImplicit == nullptr)
+        {
+            declareCoordTranslationFunction(true, kCoordTransformFuncNameImplicit,
+                                            &mCubeXYZToArrayUVLImplicit,
+                                            &mCoordTranslationFunctionImplicitDecl);
         }
 
         TType *newType = new TType(samplerCubeVar->getType());
@@ -411,7 +366,10 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         mRetyper.replaceGlobalVariable(samplerCubeVar, sampler2DArrayVar);
     }
 
-    void declareCoordTranslationFunction()
+    void declareCoordTranslationFunction(bool implicit,
+                                         const ImmutableString &name,
+                                         TFunction **functionOut,
+                                         TIntermFunctionDefinition **declOut)
     {
         // GLES2.0 (as well as desktop OpenGL 2.0) define the coordination transformation as
         // follows.  Given xyz cube coordinates, where each channel is in [-1, 1], the following
@@ -554,6 +512,58 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         body->appendStatement(absYDecl);
         body->appendStatement(absZDecl);
 
+        // Create temporary variable for division outer product matrix and its
+        // derivatives.
+        // recipOuter[i][j] = 0.5 * P[j] / P[i]
+        const TType *mat3Type     = StaticType::GetBasic<EbtFloat, 3, 3>();
+        TIntermSymbol *recipOuter = new TIntermSymbol(CreateTempVariable(mSymbolTable, mat3Type));
+
+        TIntermTyped *pRecip               = new TIntermBinary(EOpDiv, CreateFloatNode(0.5), p);
+        TIntermDeclaration *recipOuterDecl = CreateTempInitDeclarationNode(
+            &recipOuter->variable(),
+            CreateBuiltInFunctionCallNode("outerProduct", new TIntermSequence({p, pRecip}),
+                                          *mSymbolTable, 300));
+        body->appendStatement(recipOuterDecl);
+
+        TIntermSymbol *dPDXdx = new TIntermSymbol(CreateTempVariable(mSymbolTable, vec3Type));
+        TIntermSymbol *dPDYdx = new TIntermSymbol(CreateTempVariable(mSymbolTable, vec3Type));
+        TIntermSymbol *dPDZdx = new TIntermSymbol(CreateTempVariable(mSymbolTable, vec3Type));
+        TIntermSymbol *dPDXdy = new TIntermSymbol(CreateTempVariable(mSymbolTable, vec3Type));
+        TIntermSymbol *dPDYdy = new TIntermSymbol(CreateTempVariable(mSymbolTable, vec3Type));
+        TIntermSymbol *dPDZdy = new TIntermSymbol(CreateTempVariable(mSymbolTable, vec3Type));
+
+        TIntermDeclaration *dPDXdxDecl = CreateTempInitDeclarationNode(
+            &dPDXdx->variable(),
+            CreateBuiltInFunctionCallNode("dFdx", new TIntermSequence({IndexDirect(recipOuter, 0)}),
+                                          *mSymbolTable, 100));
+        TIntermDeclaration *dPDYdxDecl = CreateTempInitDeclarationNode(
+            &dPDYdx->variable(),
+            CreateBuiltInFunctionCallNode("dFdx", new TIntermSequence({IndexDirect(recipOuter, 1)}),
+                                          *mSymbolTable, 100));
+        TIntermDeclaration *dPDZdxDecl = CreateTempInitDeclarationNode(
+            &dPDZdx->variable(),
+            CreateBuiltInFunctionCallNode("dFdx", new TIntermSequence({IndexDirect(recipOuter, 2)}),
+                                          *mSymbolTable, 100));
+        TIntermDeclaration *dPDXdyDecl = CreateTempInitDeclarationNode(
+            &dPDXdy->variable(),
+            CreateBuiltInFunctionCallNode("dFdy", new TIntermSequence({IndexDirect(recipOuter, 0)}),
+                                          *mSymbolTable, 100));
+        TIntermDeclaration *dPDYdyDecl = CreateTempInitDeclarationNode(
+            &dPDYdy->variable(),
+            CreateBuiltInFunctionCallNode("dFdy", new TIntermSequence({IndexDirect(recipOuter, 1)}),
+                                          *mSymbolTable, 100));
+        TIntermDeclaration *dPDZdyDecl = CreateTempInitDeclarationNode(
+            &dPDZdy->variable(),
+            CreateBuiltInFunctionCallNode("dFdy", new TIntermSequence({IndexDirect(recipOuter, 2)}),
+                                          *mSymbolTable, 100));
+
+        body->appendStatement(dPDXdxDecl);
+        body->appendStatement(dPDYdxDecl);
+        body->appendStatement(dPDZdxDecl);
+        body->appendStatement(dPDXdyDecl);
+        body->appendStatement(dPDYdyDecl);
+        body->appendStatement(dPDZdyDecl);
+
         // Create temporary variables for ma, uc, vc, and l (layer), as well as dUdx, dVdx, dUdy
         // and dVdy.
         TIntermSymbol *ma   = new TIntermSymbol(CreateTempVariable(mSymbolTable, floatType));
@@ -620,39 +630,6 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         TIntermIfElse *calculateXYZL = new TIntermIfElse(isXMajor, calculateXL, calculateYZLBlock);
         body->appendStatement(calculateXYZL);
 
-        // If the input coordinates come from a varying, they are interpolated between values
-        // provided by the vertex shader.  Say the vertex shader provides the coordinates
-        // corresponding to corners of a face.  For the sake of the argument, say this is the
-        // positive X face.  The coordinates would thus look as follows:
-        //
-        //  - (A, A, A)
-        //  - (B, B, -B)
-        //  - (C, -C, C)
-        //  - (D, -D, -D)
-        //
-        // The values A, B, C and D could be equal, but not necessarily.  All fragments inside this
-        // quad will have X as the major axis.  The transformation described the spec works for
-        // these samples.
-        //
-        // However, WQM (Whole Quad Mode) can enable a few invocations outside the borders of the
-        // quad for the sole purpose of calculating derivatives.  These invocations will extrapolate
-        // the coordinates that are input from varyings and end up with a different major axis.  In
-        // turn, their transformed UV would correspond to a different face and while the sampling
-        // is done on the correct face (by fragments inside the quad), the derivatives would be
-        // incorrect and the wrong mip would be selected.
-        //
-        // We therefore use gl_HelperInvocation to identify these invocations and subgroupQuadSwap*
-        // (where available) or dFdx/dFdy (emulating subgroupQuadSwap*) to retrieve the layer from a
-        // non-helper invocation.  As a result, the UVs calculated for the helper invocations
-        // correspond to the same face and end up outside the [0, 1] range, but result in correct
-        // derivatives.  Indeed, sampling from any other kind of texture using varyings that range
-        // from [0, 1] would follow the same behavior (where helper invocations generate UVs out of
-        // range).
-        if (mIsFragmentShader)
-        {
-            GetLayerFromNonHelperInvocation(mSymbolTable, body, l->deepCopy(), mUseSubgroupOps);
-        }
-
         // layer < 1.5 (covering faces 0 and 1, corresponding to major axis being X) and layer < 3.5
         // (covering faces 2 and 3, corresponding to major axis being Y).  Used to determine which
         // of the three transformations to apply.  Previously, ma == |X| and ma == |Y| was used,
@@ -673,22 +650,42 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         calculateXUcVc->appendStatement(
             new TIntermBinary(EOpAssign, ma->deepCopy(), absX->deepCopy()));
         TransformXMajor(calculateXUcVc, x, y, z, uc, vc);
-        TransformXMajor(calculateXUcVc, dPdxX, dPdxY, dPdxZ, dUdx, dVdx);
-        TransformXMajor(calculateXUcVc, dPdyX, dPdyY, dPdyZ, dUdy, dVdy);
 
         TIntermBlock *calculateYUcVc = new TIntermBlock;
         calculateYUcVc->appendStatement(
             new TIntermBinary(EOpAssign, ma->deepCopy(), absY->deepCopy()));
         TransformYMajor(calculateYUcVc, x, y, z, uc, vc);
-        TransformYMajor(calculateYUcVc, dPdxX, dPdxY, dPdxZ, dUdx, dVdx);
-        TransformYMajor(calculateYUcVc, dPdyX, dPdyY, dPdyZ, dUdy, dVdy);
 
         TIntermBlock *calculateZUcVc = new TIntermBlock;
         calculateZUcVc->appendStatement(
             new TIntermBinary(EOpAssign, ma->deepCopy(), absZ->deepCopy()));
         TransformZMajor(calculateZUcVc, x, y, z, uc, vc);
-        TransformZMajor(calculateZUcVc, dPdxX, dPdxY, dPdxZ, dUdx, dVdx);
-        TransformZMajor(calculateZUcVc, dPdyX, dPdyY, dPdyZ, dUdy, dVdy);
+
+        // Compute derivatives.
+        if (implicit)
+        {
+            TransformImplicitDerivativeXMajor(calculateXUcVc, dPDXdx, dUdx, dVdx);
+            TransformImplicitDerivativeXMajor(calculateXUcVc, dPDXdy, dUdy, dVdy);
+            TransformImplicitDerivativeYMajor(calculateYUcVc, dPDYdx, dUdx, dVdx);
+            TransformImplicitDerivativeYMajor(calculateYUcVc, dPDYdy, dUdy, dVdy);
+            TransformImplicitDerivativeZMajor(calculateZUcVc, dPDZdx, dUdx, dVdx);
+            TransformImplicitDerivativeZMajor(calculateZUcVc, dPDZdy, dUdy, dVdy);
+        }
+        else
+        {
+            TransformDerivativeXMajor(calculateXUcVc, mSymbolTable, x, y, z, dPdxX, dPdxY, dPdxZ,
+                                      dUdx, dVdx);
+            TransformDerivativeXMajor(calculateXUcVc, mSymbolTable, x, y, z, dPdyX, dPdyY, dPdyZ,
+                                      dUdy, dVdy);
+            TransformDerivativeYMajor(calculateYUcVc, mSymbolTable, x, y, z, dPdxX, dPdxY, dPdxZ,
+                                      dUdx, dVdx);
+            TransformDerivativeYMajor(calculateYUcVc, mSymbolTable, x, y, z, dPdyX, dPdyY, dPdyZ,
+                                      dUdy, dVdy);
+            TransformDerivativeZMajor(calculateZUcVc, mSymbolTable, x, y, z, dPdxX, dPdxY, dPdxZ,
+                                      dUdx, dVdx);
+            TransformDerivativeZMajor(calculateZUcVc, mSymbolTable, x, y, z, dPdyX, dPdyY, dPdyZ,
+                                      dUdy, dVdy);
+        }
 
         // Create the if-else paths:
         TIntermIfElse *calculateYZUcVc =
@@ -701,30 +698,23 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
 
         // u = (1 + uc/|ma|) / 2
         // v = (1 + vc/|ma|) / 2
-        TIntermTyped *maTimesTwo =
-            new TIntermBinary(EOpMulAssign, ma->deepCopy(), CreateFloatNode(2.0));
-        body->appendStatement(maTimesTwo);
+        TIntermTyped *maTimesTwoRecip =
+            new TIntermBinary(EOpAssign, ma->deepCopy(),
+                              new TIntermBinary(EOpDiv, CreateFloatNode(0.5f), ma->deepCopy()));
+        body->appendStatement(maTimesTwoRecip);
 
-        TIntermTyped *ucDivMa     = new TIntermBinary(EOpDiv, uc, ma->deepCopy());
-        TIntermTyped *vcDivMa     = new TIntermBinary(EOpDiv, vc, ma->deepCopy());
+        TIntermTyped *ucDivMa     = new TIntermBinary(EOpMul, uc, ma->deepCopy());
+        TIntermTyped *vcDivMa     = new TIntermBinary(EOpMul, vc, ma->deepCopy());
         TIntermTyped *uNormalized = new TIntermBinary(EOpAdd, CreateFloatNode(0.5f), ucDivMa);
         TIntermTyped *vNormalized = new TIntermBinary(EOpAdd, CreateFloatNode(0.5f), vcDivMa);
 
         body->appendStatement(new TIntermBinary(EOpAssign, uc->deepCopy(), uNormalized));
         body->appendStatement(new TIntermBinary(EOpAssign, vc->deepCopy(), vNormalized));
 
-        // dUdx / (ma*2).  Similarly for dVdx, dUdy and dVdy
-        TIntermTyped *dUdxNormalized = new TIntermBinary(EOpDiv, dUdx, ma->deepCopy());
-        TIntermTyped *dVdxNormalized = new TIntermBinary(EOpDiv, dVdx, ma->deepCopy());
-        TIntermTyped *dUdyNormalized = new TIntermBinary(EOpDiv, dUdy, ma->deepCopy());
-        TIntermTyped *dVdyNormalized = new TIntermBinary(EOpDiv, dVdy, ma->deepCopy());
-
-        // dUVdx = vec2(dUdx/2ma, dVdx/2ma)
-        // dUVdy = vec2(dUdy/2ma, dVdy/2ma)
-        TIntermTyped *dUVdxValue = TIntermAggregate::CreateConstructor(
-            *vec2Type, new TIntermSequence({dUdxNormalized, dVdxNormalized}));
-        TIntermTyped *dUVdyValue = TIntermAggregate::CreateConstructor(
-            *vec2Type, new TIntermSequence({dUdyNormalized, dVdyNormalized}));
+        TIntermTyped *dUVdxValue =
+            TIntermAggregate::CreateConstructor(*vec2Type, new TIntermSequence({dUdx, dVdx}));
+        TIntermTyped *dUVdyValue =
+            TIntermAggregate::CreateConstructor(*vec2Type, new TIntermSequence({dUdy, dVdy}));
 
         body->appendStatement(new TIntermBinary(EOpAssign, dUVdx, dUVdxValue));
         body->appendStatement(new TIntermBinary(EOpAssign, dUVdy, dUVdyValue));
@@ -735,16 +725,17 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
                            *vec3Type, new TIntermSequence({uc->deepCopy(), vc->deepCopy(), l})));
         body->appendStatement(returnStatement);
 
-        mCubeXYZToArrayUVL = new TFunction(mSymbolTable, kCoordTransformFuncName,
-                                           SymbolType::AngleInternal, vec3Type, true);
-        mCubeXYZToArrayUVL->addParameter(pVar);
-        mCubeXYZToArrayUVL->addParameter(dPdxVar);
-        mCubeXYZToArrayUVL->addParameter(dPdyVar);
-        mCubeXYZToArrayUVL->addParameter(dUVdxVar);
-        mCubeXYZToArrayUVL->addParameter(dUVdyVar);
+        TFunction *function;
+        function = new TFunction(mSymbolTable, name, SymbolType::AngleInternal, vec3Type, true);
+        function->addParameter(pVar);
+        function->addParameter(dPdxVar);
+        function->addParameter(dPdyVar);
+        function->addParameter(dUVdxVar);
+        function->addParameter(dUVdyVar);
 
-        mCoordTranslationFunctionDecl =
-            CreateInternalFunctionDefinitionNode(*mCubeXYZToArrayUVL, body);
+        *functionOut = function;
+
+        *declOut = CreateInternalFunctionDefinitionNode(*function, body);
     }
 
     TIntermTyped *createCoordTransformationCall(TIntermTyped *P,
@@ -755,6 +746,17 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
     {
         TIntermSequence *args = new TIntermSequence({P, dPdx, dPdy, dUVdx, dUVdy});
         return TIntermAggregate::CreateFunctionCall(*mCubeXYZToArrayUVL, args);
+    }
+
+    TIntermTyped *createImplicitCoordTransformationCall(TIntermTyped *P,
+                                                        TIntermTyped *dUVdx,
+                                                        TIntermTyped *dUVdy)
+    {
+        const TType *vec3Type = StaticType::GetBasic<EbtFloat, 3>();
+        TIntermTyped *dPdx    = CreateZeroNode(*vec3Type);
+        TIntermTyped *dPdy    = CreateZeroNode(*vec3Type);
+        TIntermSequence *args = new TIntermSequence({P, dPdx, dPdy, dUVdx, dUVdy});
+        return TIntermAggregate::CreateFunctionCall(*mCubeXYZToArrayUVLImplicit, args);
     }
 
     TVariable *convertFunctionParameter(TIntermNode *parent, const TVariable *param)
@@ -794,7 +796,7 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         //
         // The intrinsics map as follows:
         //
-        //     textureCube -> texture
+        //     textureCube -> textureGrad
         //     textureCubeLod -> textureLod
         //     textureCubeLodEXT -> textureLod
         //     textureCubeGrad -> textureGrad
@@ -841,15 +843,17 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         // The calculation of dPdx and dPdy is declared as implementation-dependent, so we have
         // freedom to calculate it as fit, even if not precisely the same as hardware might.
 
-        const char *substituteFunctionName = "texture";
+        const char *substituteFunctionName = "textureGrad";
         bool isGrad                        = false;
+        bool isTranslatedGrad              = true;
+        bool hasBias                       = false;
         if (function->name().beginsWith("textureCubeLod"))
         {
             substituteFunctionName = "textureLod";
+            isTranslatedGrad       = false;
         }
         else if (function->name().beginsWith("textureCubeGrad"))
         {
-            substituteFunctionName = "textureGrad";
             isGrad                 = true;
         }
 
@@ -870,10 +874,20 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
             dPdx = (*arguments)[2]->getAsTyped()->deepCopy();
             dPdy = (*arguments)[3]->getAsTyped()->deepCopy();
         }
+        else if (isTranslatedGrad && mIsFragmentShader && arguments->size() == 3)
+        {
+            hasBias = true;
+        }
         else
         {
             dPdx = CreateZeroNode(*vec3Type);
             dPdy = CreateZeroNode(*vec3Type);
+        }
+
+        if (isTranslatedGrad && !mIsFragmentShader)
+        {
+            substituteFunctionName = "texture";
+            isTranslatedGrad       = false;
         }
 
         // The function call to transform the coordinates, dPdx and dPdy.  If not textureCubeGrad,
@@ -881,10 +895,35 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         TIntermSequence *coordTransform = new TIntermSequence;
         coordTransform->push_back(CreateTempDeclarationNode(&dUVdx->variable()));
         coordTransform->push_back(CreateTempDeclarationNode(&dUVdy->variable()));
-        TIntermTyped *coordTransformCall = createCoordTransformationCall(
-            (*arguments)[1]->getAsTyped()->deepCopy(), dPdx, dPdy, dUVdx, dUVdy);
+        TIntermTyped *coordTransformCall;
+        if (isGrad || !isTranslatedGrad)
+        {
+            coordTransformCall = createCoordTransformationCall(
+                (*arguments)[1]->getAsTyped()->deepCopy(), dPdx, dPdy, dUVdx, dUVdy);
+        }
+        else
+        {
+            coordTransformCall = createImplicitCoordTransformationCall(
+                (*arguments)[1]->getAsTyped()->deepCopy(), dUVdx, dUVdy);
+        }
         coordTransform->push_back(
             CreateTempInitDeclarationNode(&uvl->variable(), coordTransformCall));
+
+        TIntermTyped *dUVdxArg = dUVdx;
+        TIntermTyped *dUVdyArg = dUVdy;
+        if (hasBias)
+        {
+            const TType *floatType = StaticType::GetBasic<EbtFloat>();
+            TIntermNode *bias      = (*arguments)[2];
+            TIntermTyped *exp2Call = CreateBuiltInFunctionCallNode(
+                "exp2", new TIntermSequence({bias}), *mSymbolTable, 100);
+            TIntermSymbol *biasFac = new TIntermSymbol(CreateTempVariable(mSymbolTable, floatType));
+            coordTransform->push_back(CreateTempDeclarationNode(&biasFac->variable()));
+            coordTransform->push_back(new TIntermBinary(EOpAssign, biasFac, exp2Call));
+            dUVdxArg = new TIntermBinary(EOpVectorTimesScalar, biasFac, dUVdx);
+            dUVdyArg = new TIntermBinary(EOpVectorTimesScalar, biasFac, dUVdy);
+        }
+
         insertStatementsInParentBlock(*coordTransform);
 
         TIntermSequence *substituteArguments = new TIntermSequence;
@@ -892,10 +931,10 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         substituteArguments->push_back(mRetyper.getFunctionCallArgReplacement((*arguments)[0]));
         // Replace the second argument with the coordination transformation.
         substituteArguments->push_back(uvl->deepCopy());
-        if (isGrad)
+        if (isTranslatedGrad)
         {
-            substituteArguments->push_back(dUVdx->deepCopy());
-            substituteArguments->push_back(dUVdy->deepCopy());
+            substituteArguments->push_back(dUVdxArg->deepCopy());
+            substituteArguments->push_back(dUVdyArg->deepCopy());
         }
         else
         {
@@ -917,32 +956,39 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
     // A helper function to convert xyz coordinates passed to a cube map sampling function into the
     // array layer (cube map face) and uv coordinates.
     TFunction *mCubeXYZToArrayUVL;
+    // A specializer version of the same function which uses implicit derivatives.
+    TFunction *mCubeXYZToArrayUVLImplicit;
 
     bool mIsFragmentShader;
-    bool mUseSubgroupOps;
 
     // Stored to be put before the first function after the pass.
     TIntermFunctionDefinition *mCoordTranslationFunctionDecl;
+    TIntermFunctionDefinition *mCoordTranslationFunctionImplicitDecl;
 };
 
 }  // anonymous namespace
 
 void RewriteCubeMapSamplersAs2DArray(TIntermBlock *root,
                                      TSymbolTable *symbolTable,
-                                     bool isFragmentShader,
-                                     bool useSubgroupOps)
+                                     bool isFragmentShader)
 {
-    RewriteCubeMapSamplersAs2DArrayTraverser traverser(symbolTable, isFragmentShader,
-                                                       useSubgroupOps);
+    RewriteCubeMapSamplersAs2DArrayTraverser traverser(symbolTable, isFragmentShader);
     root->traverse(&traverser);
     traverser.updateTree();
 
     TIntermFunctionDefinition *coordTranslationFunctionDecl =
         traverser.getCoordTranslationFunctionDecl();
+    TIntermFunctionDefinition *coordTranslationFunctionDeclImplicit =
+        traverser.getCoordTranslationFunctionDeclImplicit();
+    size_t firstFunctionIndex = FindFirstFunctionDefinitionIndex(root);
     if (coordTranslationFunctionDecl)
     {
-        size_t firstFunctionIndex = FindFirstFunctionDefinitionIndex(root);
         root->insertChildNodes(firstFunctionIndex, TIntermSequence({coordTranslationFunctionDecl}));
+    }
+    if (coordTranslationFunctionDeclImplicit)
+    {
+        root->insertChildNodes(firstFunctionIndex,
+                               TIntermSequence({coordTranslationFunctionDeclImplicit}));
     }
 }
 
