@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad7ce4c9_94df163d",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-14T19:23:14Z",
+      "side": 1,
+      "message": "nit: might want to make this GLsizei to be safe.",
+      "range": {
+        "startLine": 244,
+        "startChar": 44,
+        "endLine": 244,
+        "endChar": 50
+      },
+      "revId": "4cbf104a012bed89555ed89cabbeb9692e778ab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67a5ebe3_a6897dec",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-14T19:23:14Z",
+      "side": 1,
+      "message": "nit: \"void *data\"",
+      "range": {
+        "startLine": 299,
+        "startChar": 71,
+        "endLine": 299,
+        "endChar": 77
+      },
+      "revId": "4cbf104a012bed89555ed89cabbeb9692e778ab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d463cd9_d8f7a2c6",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-14T19:23:14Z",
+      "side": 1,
+      "message": "if param.type is void pointer or const void pointer you can omit the reinterpret_cast.",
+      "range": {
+        "startLine": 439,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 42
+      },
+      "revId": "4cbf104a012bed89555ed89cabbeb9692e778ab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
