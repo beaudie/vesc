@@ -254,6 +254,30 @@
       "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cad1c526_ada3b702",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-15T12:23:28Z",
+      "side": 1,
+      "message": "Oh, and the RAII types don\u0027t need explicit gen calls. Look at gl_raii.h.",
+      "parentUuid": "eff69086_b415d4b9",
+      "range": {
+        "startLine": 333,
+        "startChar": 12,
+        "endLine": 333,
+        "endChar": 36
+      },
+      "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
