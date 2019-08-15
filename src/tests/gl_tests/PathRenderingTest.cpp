@@ -1064,12 +1064,6 @@ class CHROMIUMPathRenderingWithTexturingTest : public ANGLETest
         }
     }
 
-    void testSetUp() override
-    {
-        mBindUniformLocation = reinterpret_cast<PFNGLBINDUNIFORMLOCATIONCHROMIUMPROC>(
-            eglGetProcAddress("glBindUniformLocationCHROMIUM"));
-    }
-
     // Sets up the GL program state for the test.
     // Vertex shader needs at least following variables:
     //  uniform mat4 view_matrix;
@@ -1212,11 +1206,6 @@ class CHROMIUMPathRenderingWithTexturingTest : public ANGLETest
         kTestRows    = kResolution / kShapeHeight,
         kTestColumns = kResolution / kShapeWidth,
     };
-
-    typedef void(GL_APIENTRYP PFNGLBINDUNIFORMLOCATIONCHROMIUMPROC)(GLuint mProgram,
-                                                                    GLint location,
-                                                                    const GLchar *name);
-    PFNGLBINDUNIFORMLOCATIONCHROMIUMPROC mBindUniformLocation = nullptr;
 
     GLuint mProgram;
 

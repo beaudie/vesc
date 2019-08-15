@@ -40,14 +40,6 @@ class CopyTextureTest : public ANGLETest
         glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextures[1],
                                0);
-
-        if (IsGLExtensionEnabled("GL_CHROMIUM_copy_texture"))
-        {
-            glCopyTextureCHROMIUM = reinterpret_cast<PFNGLCOPYTEXTURECHROMIUMPROC>(
-                eglGetProcAddress("glCopyTextureCHROMIUM"));
-            glCopySubTextureCHROMIUM = reinterpret_cast<PFNGLCOPYSUBTEXTURECHROMIUMPROC>(
-                eglGetProcAddress("glCopySubTextureCHROMIUM"));
-        }
     }
 
     void testTearDown() override
@@ -120,9 +112,6 @@ class CopyTextureTest : public ANGLETest
         0,
     };
     GLuint mFramebuffer = 0;
-
-    PFNGLCOPYTEXTURECHROMIUMPROC glCopyTextureCHROMIUM       = nullptr;
-    PFNGLCOPYSUBTEXTURECHROMIUMPROC glCopySubTextureCHROMIUM = nullptr;
 };
 
 using CopyTextureVariationsTestParams =
@@ -220,14 +209,6 @@ class CopyTextureVariationsTest : public ANGLETestWithParam<CopyTextureVariation
         glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mTextures[1],
                                0);
-
-        if (IsGLExtensionEnabled("GL_CHROMIUM_copy_texture"))
-        {
-            glCopyTextureCHROMIUM = reinterpret_cast<PFNGLCOPYTEXTURECHROMIUMPROC>(
-                eglGetProcAddress("glCopyTextureCHROMIUM"));
-            glCopySubTextureCHROMIUM = reinterpret_cast<PFNGLCOPYSUBTEXTURECHROMIUMPROC>(
-                eglGetProcAddress("glCopySubTextureCHROMIUM"));
-        }
     }
 
     void testTearDown() override
@@ -251,8 +232,6 @@ class CopyTextureVariationsTest : public ANGLETestWithParam<CopyTextureVariation
             return false;
         }
 
-        EXPECT_NE(nullptr, glCopyTextureCHROMIUM);
-        EXPECT_NE(nullptr, glCopySubTextureCHROMIUM);
         return true;
     }
 
@@ -543,9 +522,6 @@ class CopyTextureVariationsTest : public ANGLETestWithParam<CopyTextureVariation
         0,
     };
     GLuint mFramebuffer = 0;
-
-    PFNGLCOPYTEXTURECHROMIUMPROC glCopyTextureCHROMIUM       = nullptr;
-    PFNGLCOPYSUBTEXTURECHROMIUMPROC glCopySubTextureCHROMIUM = nullptr;
 };
 
 class CopyTextureTestDest : public CopyTextureTest
