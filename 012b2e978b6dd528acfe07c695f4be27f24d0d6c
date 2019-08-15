@@ -278,6 +278,30 @@
       "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af26c79b_fa55f7db",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-15T15:46:55Z",
+      "side": 1,
+      "message": "RE custom test parameter: I\u0027ve added test cases for that TODO (missed). So it will use parameter now. I think I will keep this part unchanged.\nThanks for the answer.",
+      "parentUuid": "cad1c526_ada3b702",
+      "range": {
+        "startLine": 333,
+        "startChar": 12,
+        "endLine": 333,
+        "endChar": 36
+      },
+      "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
