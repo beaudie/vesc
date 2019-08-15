@@ -206,6 +206,30 @@
       "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5c0cb58f_223336be",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-15T01:05:44Z",
+      "side": 1,
+      "message": "Sorry. Didn\u0027t fully get this one. Did you mean declare new buffer variable and glGen* new buffers at the start of each test?\n\nAlso notice https://chromium-review.googlesource.com/c/angle/angle/+/1593960. Would a simple replacement of SetUp with testSetup just work? (current base classes are ANGLETestBase and ::testing::TestWithParam\u003cDrawBaseVertexBaseInstanceTestParams\u003e)",
+      "parentUuid": "8e2f9ae7_901cb7d1",
+      "range": {
+        "startLine": 333,
+        "startChar": 12,
+        "endLine": 333,
+        "endChar": 36
+      },
+      "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
