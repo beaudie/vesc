@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7a27ef4a_7572eabf",
+        "filename": "src/gpu_info_util/SystemInfo_mac.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1356146
+      },
+      "writtenOn": "2019-08-15T17:48:32Z",
+      "side": 1,
+      "message": "CGLDescribeRenderer expects these to be of type GLint",
+      "parentUuid": "61fa8fc5_15432d19",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 24
+      },
+      "revId": "6bc40fba762c6112fdb9b64955a9bd1b196f2a3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fcb93776_b4488fb4",
         "filename": "src/gpu_info_util/SystemInfo_mac.mm",
         "patchSetId": 5
@@ -45,6 +69,30 @@
       "revId": "6bc40fba762c6112fdb9b64955a9bd1b196f2a3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "615d2549_6cf80cd2",
+        "filename": "src/gpu_info_util/SystemInfo_mac.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1356146
+      },
+      "writtenOn": "2019-08-15T17:48:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcb93776_b4488fb4",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 33
+      },
+      "revId": "6bc40fba762c6112fdb9b64955a9bd1b196f2a3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a66b4bb2_d5030717",
+        "filename": "src/gpu_info_util/SystemInfo_mac.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1356146
+      },
+      "writtenOn": "2019-08-15T17:48:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e9dc157_57298ec0",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 34
+      },
+      "revId": "6bc40fba762c6112fdb9b64955a9bd1b196f2a3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1686cfa_018fb373",
         "filename": "src/gpu_info_util/SystemInfo_mac.mm",
         "patchSetId": 5
@@ -91,6 +163,30 @@
       "revId": "6bc40fba762c6112fdb9b64955a9bd1b196f2a3f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6494017d_fba0ec64",
+        "filename": "src/gpu_info_util/SystemInfo_mac.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1356146
+      },
+      "writtenOn": "2019-08-15T17:48:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1686cfa_018fb373",
+      "range": {
+        "startLine": 62,
+        "startChar": 11,
+        "endLine": 62,
+        "endChar": 59
+      },
+      "revId": "6bc40fba762c6112fdb9b64955a9bd1b196f2a3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
