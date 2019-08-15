@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "92be7e10_d6f02190",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-15T13:57:52Z",
+      "side": 1,
+      "message": "sourece-\u003esource",
+      "revId": "9c32d3f01f1cb722fda62bef4d4169a3e690aa4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
