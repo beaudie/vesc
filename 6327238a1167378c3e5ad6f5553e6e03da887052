@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "12c11493_c9414b8a",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-15T23:04:06Z",
+      "side": 1,
+      "message": "Any chance we could keep a comment like \"Fails on Intel and AMD\" just above the IsOSX(), for this and all the other suppressions?",
+      "range": {
+        "startLine": 1345,
+        "startChar": 4,
+        "endLine": 1345,
+        "endChar": 22
+      },
+      "revId": "6327238a1167378c3e5ad6f5553e6e03da887052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
