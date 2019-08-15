@@ -155,6 +155,30 @@
     },
     {
       "key": {
+        "uuid": "983dae31_d616b3d0",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-15T17:38:04Z",
+      "side": 1,
+      "message": "Here needs to use reverse because all our client array capture are inserted right before the draw calls, and they are all after the all the `vertexAttribPointer` calls. So with reverse iterating, it gets the client array pointer in the `UpdateClientArrayPointer` (which is a capture memory) and assign to the `pointer` of `vertexAttribPointer`.  Then when replays `vertexAttribPointer`, it points to our captured memory and we can simply skip all the `UpdateClientArrayPointer` calls",
+      "parentUuid": "c5fff09a_814992ff",
+      "range": {
+        "startLine": 552,
+        "startChar": 0,
+        "endLine": 576,
+        "endChar": 5
+      },
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "45d96803_d08f9205",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 10
@@ -175,6 +199,30 @@
       "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "565cbf11_12a2e0c1",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-15T17:38:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45d96803_d08f9205",
+      "range": {
+        "startLine": 580,
+        "startChar": 8,
+        "endLine": 580,
+        "endChar": 25
+      },
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
