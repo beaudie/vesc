@@ -131,6 +131,53 @@
     },
     {
       "key": {
+        "uuid": "c5fff09a_814992ff",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-15T17:00:31Z",
+      "side": 1,
+      "message": "Sorry. I just don\u0027t understand how this gets the correct client array data. You\u0027re using a reverse iterator. It seems like you\u0027ll update the data incorrectly. And if you\u0027re using a forward iterator (which I think you should) then you might as well merge this for loop with the one below where you call \"CallCaptureReplay\".",
+      "parentUuid": "64a9fb85_5a8828ad",
+      "range": {
+        "startLine": 552,
+        "startChar": 0,
+        "endLine": 576,
+        "endChar": 5
+      },
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45d96803_d08f9205",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-15T17:00:31Z",
+      "side": 1,
+      "message": "can you call this ReplayCallCapture?",
+      "range": {
+        "startLine": 580,
+        "startChar": 8,
+        "endLine": 580,
+        "endChar": 25
+      },
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "27b51811_9cc1700c",
         "filename": "src/libANGLE/Surface.cpp",
         "patchSetId": 10
@@ -424,6 +471,30 @@
     },
     {
       "key": {
+        "uuid": "f80a921b_d3b73863",
+        "filename": "src/libANGLE/frame_capture_utils_autogen.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-15T17:00:31Z",
+      "side": 1,
+      "message": "That\u0027s fine. Just explicitly use the template type.\n\nreturn GetParamVal\u003cWhatever::Type\u003e(value);",
+      "parentUuid": "9e5d8bd8_46eb8629",
+      "range": {
+        "startLine": 205,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 5
+      },
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91381a27_6af38fb9",
         "filename": "src/libANGLE/frame_capture_utils_autogen.h",
         "patchSetId": 10
@@ -459,6 +530,30 @@
       "side": 1,
       "message": "It would be very hard to handle the default case if it is a non-void function, I\u0027d rather use the pointerOut if there is no performance issue.",
       "parentUuid": "91381a27_6af38fb9",
+      "range": {
+        "startLine": 846,
+        "startChar": 0,
+        "endLine": 846,
+        "endChar": 5
+      },
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cdb7b3d7_80d75de6",
+        "filename": "src/libANGLE/frame_capture_utils_autogen.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-15T17:00:31Z",
+      "side": 1,
+      "message": "Same comment. It\u0027s nicer and more consistent to explicitly specify the parameter. I\u0027d suggest we go with that design.",
+      "parentUuid": "24084c4a_7d7d989a",
       "range": {
         "startLine": 846,
         "startChar": 0,
