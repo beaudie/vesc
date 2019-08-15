@@ -606,11 +606,6 @@
 3430 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.struct.u* = FAIL
 3430 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.struct.float_uvec2_vec3 = FAIL
 
-// Instanced rendering:
-2672 VULKAN : dEQP-GLES3.functional.draw.draw_arrays_instanced.line_loop.* = SKIP
-2672 VULKAN : dEQP-GLES3.functional.draw.draw_elements_instanced.line_loop.* = SKIP
-2672 VULKAN : dEQP-GLES3.functional.draw.random.* = SKIP
-
 // Fails after OpenGL line rasterization rules implementation. Possibly a bug in FragCoord.
 2830 VULKAN ANDROID : dEQP-GLES3.functional.clipping.line.long_line_clip = FAIL
 
@@ -624,9 +619,6 @@
 3148 VULKAN : dEQP-GLES3.functional.shaders.texture_functions.texturesize.* = SKIP
 
 // Misc unimplemented:
-
-// - Primitive restart with line loops:
-2672 VULKAN : dEQP-GLES3.functional.primitive_restart.*.line_loop.*instanced = SKIP
 
 // Misc failures:
 3681 VULKAN : dEQP-GLES3.functional.lifetime.attach.deleted_input.buffer_vertex_array = SKIP
