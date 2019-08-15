@@ -22,6 +22,30 @@
       "revId": "611663f4f61c7a98fcd64208c15d99be2da8740f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cf7edd2_b94450aa",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-15T18:53:44Z",
+      "side": 0,
+      "message": "Sorry, just on Pixel2.  I was being too quick and only tested on Windows before PatchSet 1.",
+      "parentUuid": "1aea6515_6921b23d",
+      "range": {
+        "startLine": 541,
+        "startChar": 0,
+        "endLine": 543,
+        "endChar": 97
+      },
+      "revId": "611663f4f61c7a98fcd64208c15d99be2da8740f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
