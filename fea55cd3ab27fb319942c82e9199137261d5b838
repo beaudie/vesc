@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "adb6c917_c1cdca59",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-15T16:48:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "314b24e5_1d8168fd",
+      "range": {
+        "startLine": 7,
+        "startChar": 16,
+        "endLine": 7,
+        "endChar": 24
+      },
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "be4dc3f4_e2605f14",
         "filename": "scripts/gen_frame_capture_replay.py",
         "patchSetId": 10
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "dd21b908_5dab754e",
+        "filename": "scripts/gen_frame_capture_replay.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-15T16:48:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be4dc3f4_e2605f14",
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24d754fe_9b4dbf3c",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 10
@@ -53,6 +95,30 @@
       "writtenOn": "2019-08-14T14:35:35Z",
       "side": 1,
       "message": "this should be merged with the other call capture. you\u0027ll need to do some special actions here instead of calling CallCaptureReplay for these non-standard calls.",
+      "range": {
+        "startLine": 552,
+        "startChar": 0,
+        "endLine": 576,
+        "endChar": 5
+      },
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64a9fb85_5a8828ad",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-15T16:48:42Z",
+      "side": 1,
+      "message": "Not quite following you.  I put all the special handling here and all the custom function (which with EntryPoint::Invalid) would be none op in CallCaptureReplay",
+      "parentUuid": "24d754fe_9b4dbf3c",
       "range": {
         "startLine": 552,
         "startChar": 0,
@@ -111,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "710a5b5f_f139e49c",
+        "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-15T16:48:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d59b33f_7f256ebf",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 19
+      },
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "90ece09d_cd2e5762",
         "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
         "patchSetId": 10
@@ -131,6 +221,30 @@
       "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8421f7a0_b9304c64",
+        "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-15T16:48:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90ece09d_cd2e5762",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 0
+      },
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -157,6 +271,30 @@
     },
     {
       "key": {
+        "uuid": "21d99e67_5a20b660",
+        "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-15T16:48:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7a54ec3_d5ed91bf",
+      "range": {
+        "startLine": 34,
+        "startChar": 9,
+        "endLine": 34,
+        "endChar": 32
+      },
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "508c7876_d535407c",
         "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
         "patchSetId": 10
@@ -180,6 +318,30 @@
     },
     {
       "key": {
+        "uuid": "c30dc687_6b5f8e19",
+        "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-15T16:48:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "508c7876_d535407c",
+      "range": {
+        "startLine": 48,
+        "startChar": 9,
+        "endLine": 48,
+        "endChar": 39
+      },
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1909572d_61636dc3",
         "filename": "src/libANGLE/frame_capture_replay_autogen.h",
         "patchSetId": 10
@@ -194,6 +356,24 @@
       "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d43aa9ea_40b8f301",
+        "filename": "src/libANGLE/frame_capture_replay_autogen.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-15T16:48:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1909572d_61636dc3",
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -220,6 +400,30 @@
     },
     {
       "key": {
+        "uuid": "9e5d8bd8_46eb8629",
+        "filename": "src/libANGLE/frame_capture_utils_autogen.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-15T16:48:42Z",
+      "side": 1,
+      "message": "tried, and find that compiler can not do type inference if T is the return value",
+      "parentUuid": "424c66e6_9cf8fc08",
+      "range": {
+        "startLine": 205,
+        "startChar": 0,
+        "endLine": 205,
+        "endChar": 5
+      },
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91381a27_6af38fb9",
         "filename": "src/libANGLE/frame_capture_utils_autogen.h",
         "patchSetId": 10
@@ -231,6 +435,30 @@
       "writtenOn": "2019-08-14T14:35:35Z",
       "side": 1,
       "message": "same here. Can\u0027t we just return T?",
+      "range": {
+        "startLine": 846,
+        "startChar": 0,
+        "endLine": 846,
+        "endChar": 5
+      },
+      "revId": "fea55cd3ab27fb319942c82e9199137261d5b838",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24084c4a_7d7d989a",
+        "filename": "src/libANGLE/frame_capture_utils_autogen.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-15T16:48:42Z",
+      "side": 1,
+      "message": "It would be very hard to handle the default case if it is a non-void function, I\u0027d rather use the pointerOut if there is no performance issue.",
+      "parentUuid": "91381a27_6af38fb9",
       "range": {
         "startLine": 846,
         "startChar": 0,
