@@ -1502,6 +1502,12 @@ angle::Result Framebuffer::getImplementationColorReadType(const Context *context
 {
     ANGLE_TRY(syncState(context));
     *typeOut = mImpl->getImplementationColorReadType(context);
+    if (context->getClientMajorVersion() < 3 && *typeOut == GL_HALF_FLOAT)
+    {
+        // GL_HALF_FLOAT was not introduced until GLES 3.0, and has a different value from
+        // GL_HALF_FLOAT_OES
+        *typeOut = GL_HALF_FLOAT_OES;
+    }
     return angle::Result::Continue;
 }
 

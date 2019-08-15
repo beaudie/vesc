@@ -3254,6 +3254,15 @@ Extensions Context::generateSupportedExtensions() const
         {
             supportedExtensions.textureSRGBDecode = false;
         }
+
+        // Don't expose GL_OES_texture_float_linear without full legacy float texture support
+        // The renderer may report OES_texture_float_linear without OES_texture_float
+        // This is valid in a GLES 3.0 context, but not in a GLES 2.0 context
+        if (!(supportedExtensions.textureFloat && supportedExtensions.textureHalfFloat))
+        {
+            supportedExtensions.textureFloatLinear     = false;
+            supportedExtensions.textureHalfFloatLinear = false;
+        }
     }
 
     if (getClientVersion() < ES_3_1)
@@ -3342,6 +3351,17 @@ Extensions Context::generateSupportedExtensions() const
         // GL_KHR_texture_compression_astc_ldr and GL_KHR_texture_compression_astc_hdr
         ASSERT(supportedExtensions.textureCompressionASTCLDRKHR);
         ASSERT(supportedExtensions.textureCompressionASTCHDRKHR);
+    }
+
+    // If the context is not a WebGL context, and GL_EXT_texture_rg is exposed,
+    // GL_EXT_color_buffer_half_float additionally requires color buffer support for R16F and RG16F
+    // textures
+    if (!supportedExtensions.webglCompatibility)
+    {
+        if (supportedExtensions.textureRG)
+        {
+            supportedExtensions.colorBufferHalfFloat &= supportedExtensions.colorBufferHalfFloatRG;
+        }
     }
 
     return supportedExtensions;
