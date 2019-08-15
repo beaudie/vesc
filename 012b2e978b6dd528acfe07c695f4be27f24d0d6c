@@ -230,6 +230,30 @@
       "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eff69086_b415d4b9",
+        "filename": "src/tests/gl_tests/DrawBaseVertexBaseInstanceTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-15T12:22:53Z",
+      "side": 1,
+      "message": "If you\u0027re using a custom test parameter like this builtin thing then you do need to use ANGLETestBase and explicitly call the setup/teardown.\n\nI don\u0027t see you using the test parameter in your test right now. Are you planning to use it in the future?\n\nRE RAII classes: sorta yeah. you could declare them in shared test functions if that makes sense. anyway not a big deal.",
+      "parentUuid": "5c0cb58f_223336be",
+      "range": {
+        "startLine": 333,
+        "startChar": 12,
+        "endLine": 333,
+        "endChar": 36
+      },
+      "revId": "012b2e978b6dd528acfe07c695f4be27f24d0d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
