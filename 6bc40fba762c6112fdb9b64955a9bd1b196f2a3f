@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61fa8fc5_15432d19",
+        "filename": "src/gpu_info_util/SystemInfo_mac.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-15T14:01:43Z",
+      "side": 1,
+      "message": "These should be of type \u0027long\u0027",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 24
+      },
+      "revId": "6bc40fba762c6112fdb9b64955a9bd1b196f2a3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcb93776_b4488fb4",
+        "filename": "src/gpu_info_util/SystemInfo_mac.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-15T14:01:43Z",
+      "side": 1,
+      "message": "nit:\n\n  contexpr CGLRendererProperty kCGLRPRegistryIDLow \u003d static_cast\u003cCGLRendererProperty\u003e(140);",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 33
+      },
+      "revId": "6bc40fba762c6112fdb9b64955a9bd1b196f2a3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e9dc157_57298ec0",
+        "filename": "src/gpu_info_util/SystemInfo_mac.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-15T14:01:43Z",
+      "side": 1,
+      "message": "Same as above.",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 34
+      },
+      "revId": "6bc40fba762c6112fdb9b64955a9bd1b196f2a3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1686cfa_018fb373",
+        "filename": "src/gpu_info_util/SystemInfo_mac.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-15T14:01:43Z",
+      "side": 1,
+      "message": "The return value should be a uint64_t, there may be some edge cases with shifting two signed integers into another signed int.  Maybe assert that both are positive?\n\nAlso the return value is used in IORegistryEntryIDMatching which takes a uint64_t.",
+      "range": {
+        "startLine": 62,
+        "startChar": 11,
+        "endLine": 62,
+        "endChar": 59
+      },
+      "revId": "6bc40fba762c6112fdb9b64955a9bd1b196f2a3f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
