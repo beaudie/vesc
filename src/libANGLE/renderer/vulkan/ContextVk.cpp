@@ -478,8 +478,13 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     }
 
     // Must be called before the command buffer is started. Can call finish.
-    if (context->getStateCache().hasAnyActiveClientAttrib())
+    if (context->getStateCache().hasAnyActiveClientAttrib() ||
+        mVertexArray->getEmulateAttribDivisorMask().any())
     {
+        // TODO: Emulation of buffered vtx attribs not yet handled, assert if we hit this case
+        ASSERT((mVertexArray->getEmulateAttribDivisorMask() &
+                context->getStateCache().getActiveBufferedAttribsMask())
+                   .none());
         ANGLE_TRY(mVertexArray->updateClientAttribs(context, firstVertex, vertexOrIndexCount,
                                                     instanceCount, indexTypeOrNone, indices));
         mGraphicsDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
@@ -2593,6 +2598,12 @@ angle::Result ContextVk::updateActiveImages(const gl::Context *context,
     }
 
     return angle::Result::Continue;
+}
+
+const gl::AttributesMask ContextVk::getEmulatedVertexAttribMask() const
+{
+    return (mVertexArray != nullptr) ? mVertexArray->getEmulateAttribDivisorMask()
+                                     : angle::BitSet<gl::MAX_VERTEX_ATTRIBS>(0);
 }
 
 void ContextVk::insertWaitSemaphore(const vk::Semaphore *waitSemaphore)

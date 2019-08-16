@@ -87,6 +87,11 @@ class VertexArrayVk : public VertexArrayImpl
                                         size_t indexCount,
                                         const void *sourcePointer);
 
+    const gl::AttributesMask &getEmulateAttribDivisorMask() const
+    {
+        return mEmulateAttribDivisorMask;
+    }
+
   private:
     void setDefaultPackedInput(ContextVk *contextVk, size_t attribIndex);
 
@@ -128,6 +133,9 @@ class VertexArrayVk : public VertexArrayImpl
 
     // Vulkan does not allow binding a null vertex buffer. We use a dummy as a placeholder.
     vk::BufferHelper mTheNullBuffer;
+
+    // Track which attribs (if any) we have to emulate due to unsupported divisor value.
+    gl::AttributesMask mEmulateAttribDivisorMask;
 };
 }  // namespace rx
 
