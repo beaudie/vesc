@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "e49b9718_68c88ed0",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-16T21:20:23Z",
+      "side": 1,
+      "message": "Ah looks like I can not.  VertexCount() is `(end - begin + 1)`, here I do need `end + 1`",
+      "parentUuid": "163a72d5_53fed8e0",
+      "range": {
+        "startLine": 243,
+        "startChar": 48,
+        "endLine": 243,
+        "endChar": 59
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "57d344a5_613b9078",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 18
@@ -542,6 +566,30 @@
     },
     {
       "key": {
+        "uuid": "4e4be4c0_082de8f1",
+        "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-16T21:20:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f6ac8d6_66b76286",
+      "range": {
+        "startLine": 42,
+        "startChar": 25,
+        "endLine": 42,
+        "endChar": 44
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e7dd211b_853c9c11",
         "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
         "patchSetId": 18
@@ -562,6 +610,30 @@
       "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04dee7d6_3a292362",
+        "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-16T21:20:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7dd211b_853c9c11",
+      "range": {
+        "startLine": 30,
+        "startChar": 1,
+        "endLine": 51,
+        "endChar": 18
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -588,6 +660,30 @@
     },
     {
       "key": {
+        "uuid": "c1564a42_ab92d58b",
+        "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-16T21:20:23Z",
+      "side": 1,
+      "message": "Yeah, I can simple use .value.\u003cenum_type\u003eVal",
+      "parentUuid": "3ac74f5d_8d1bcfd8",
+      "range": {
+        "startLine": 318,
+        "startChar": 77,
+        "endLine": 318,
+        "endChar": 94
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "335c29c9_3e08c9d2",
         "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
         "patchSetId": 18
@@ -611,6 +707,30 @@
     },
     {
       "key": {
+        "uuid": "b44dd9d5_453753c9",
+        "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2916,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-16T21:20:23Z",
+      "side": 1,
+      "message": "are you referring to `vertexAttribPointer`? if so, I think it is resolved",
+      "parentUuid": "335c29c9_3e08c9d2",
+      "range": {
+        "startLine": 2916,
+        "startChar": 12,
+        "endLine": 2916,
+        "endChar": 19
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef8d1636_d1cbe9a4",
         "filename": "src/libANGLE/frame_capture_utils_autogen.h",
         "patchSetId": 18
@@ -625,6 +745,24 @@
       "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3409db6_a4d60eb5",
+        "filename": "src/libANGLE/frame_capture_utils_autogen.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-16T21:20:23Z",
+      "side": 1,
+      "message": "Ok, looks like it is useful for gl calls use pointer as an offset",
+      "parentUuid": "ef8d1636_d1cbe9a4",
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
