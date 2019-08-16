@@ -98,6 +98,10 @@ class RendererVk : angle::NonCopyable
     {
         return mPhysicalDeviceFeatures;
     }
+    const VkExternalFenceProperties &getExternalFenceProperties() const
+    {
+        return mExternalFenceProperties;
+    }
     VkDevice getDevice() const { return mDevice; }
 
     angle::Result selectPresentQueueForSurface(DisplayVk *displayVk,
@@ -282,6 +286,7 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDevice mPhysicalDevice;
     VkPhysicalDeviceProperties mPhysicalDeviceProperties;
     VkPhysicalDeviceFeatures mPhysicalDeviceFeatures;
+    VkExternalFenceProperties mExternalFenceProperties;
     VkPhysicalDeviceLineRasterizationFeaturesEXT mLineRasterizationFeatures;
     VkPhysicalDeviceProvokingVertexFeaturesEXT mProvokingVertexFeatures;
     VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT mVertexAttributeDivisorFeatures;

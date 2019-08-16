@@ -565,6 +565,7 @@ RendererVk::RendererVk()
       mDebugUtilsMessenger(VK_NULL_HANDLE),
       mDebugReportCallback(VK_NULL_HANDLE),
       mPhysicalDevice(VK_NULL_HANDLE),
+      mExternalFenceProperties{},
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mMaxVertexAttribDivisor(1),
       mMaxVertexAttribStride(0),
@@ -1309,6 +1310,21 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         mPriorities[egl::ContextPriority::Low] = egl::ContextPriority::Low;
     }
 
+    // Fence properties
+    mExternalFenceProperties.sType = VK_STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES;
+    mExternalFenceProperties.pNext = nullptr;
+    mExternalFenceProperties.exportFromImportedHandleTypes = 0;
+    mExternalFenceProperties.compatibleHandleTypes         = 0;
+    mExternalFenceProperties.externalFenceFeatures         = 0;
+
+    VkPhysicalDeviceExternalFenceInfo externalFenceInfo = {};
+    externalFenceInfo.sType      = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FENCE_INFO;
+    externalFenceInfo.pNext      = nullptr;
+    externalFenceInfo.handleType = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+
+    vkGetPhysicalDeviceExternalFencePropertiesKHR(mPhysicalDevice, &externalFenceInfo,
+                                                  &mExternalFenceProperties);
+
     // Initialize the vulkan pipeline cache.
     bool success = false;
     ANGLE_TRY(initPipelineCache(displayVk, &mPipelineCache, &success));
@@ -1604,6 +1620,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
     ANGLE_FEATURE_CONDITION(
         (&mFeatures), supportsExternalSemaphoreFuchsia,
         ExtensionFound(VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME, deviceExtensionNames));
+
+    ANGLE_FEATURE_CONDITION(
+        (&mFeatures), supportsExternalFenceFd,
+        ExtensionFound(VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME, deviceExtensionNames));
 
     ANGLE_FEATURE_CONDITION(
         (&mFeatures), supportsShaderStencilExport,
