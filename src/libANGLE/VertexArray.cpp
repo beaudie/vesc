@@ -148,7 +148,7 @@ bool VertexArray::detachBuffer(const Context *context, GLuint bufferName)
 {
     bool isBound           = context->isCurrentVertexArray(this);
     bool anyBufferDetached = false;
-    for (size_t bindingIndex = 0; bindingIndex < gl::MAX_VERTEX_ATTRIB_BINDINGS; ++bindingIndex)
+    for (uint32_t bindingIndex = 0; bindingIndex < gl::MAX_VERTEX_ATTRIB_BINDINGS; ++bindingIndex)
     {
         VertexBinding &binding = mState.mVertexBindings[bindingIndex];
         if (binding.getBuffer().id() == bufferName)
@@ -167,8 +167,7 @@ bool VertexArray::detachBuffer(const Context *context, GLuint bufferName)
             }
             else
             {
-                ASSERT(binding.getBoundAttributesMask() ==
-                       AttributesMask(static_cast<size_t>(1) << bindingIndex));
+                ASSERT(binding.getBoundAttributesMask() == AttributesMask(1 << bindingIndex));
                 setDirtyAttribBit(bindingIndex, DIRTY_ATTRIB_POINTER);
             }
 
