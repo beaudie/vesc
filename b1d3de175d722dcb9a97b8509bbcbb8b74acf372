@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "5654b95b_381cccad",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T19:44:47Z",
+      "side": 1,
+      "message": "Cody can you follow up internally to see if there\u0027s any different process for platform developers vs application developers? ANGLE seems to be more part of the platform than part of the application. But we can do like this to get the ball rolling.",
+      "parentUuid": "dbb36feb_7424efe9",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 5
+      },
+      "revId": "b1d3de175d722dcb9a97b8509bbcbb8b74acf372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bc58206e_5945beb4",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 3
