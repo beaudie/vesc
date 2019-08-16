@@ -38,10 +38,10 @@ using RefCountedPipelineLayout      = RefCounted<PipelineLayout>;
 // fewer bits. For example, boolean values could be represented by a single bit instead
 // of a uint8_t. However at the current time there are concerns about the portability
 // of bitfield operators, and complexity issues with using bit mask operations. This is
-// something likely we will want to investigate as the Vulkan implementation progresses.
+// something we will likely want to investigate as the Vulkan implementation progresses.
 //
 // Second implementation note: the struct packing is also a bit fragile, and some of the
-// packing requirements depend on using alignas and field ordering to get the result of
+// packing requirements depend on using aligns and field ordering to get the result of
 // packing nicely into the desired space. This is something we could also potentially fix
 // with a redesign to use bitfields or bit mask operations.
 
@@ -315,9 +315,9 @@ constexpr size_t kPackedInputAssemblyAndColorBlendStateSize =
 static_assert(kPackedInputAssemblyAndColorBlendStateSize == 56, "Size check failed");
 
 constexpr size_t kGraphicsPipelineDescSumOfSizes =
-    kVertexInputAttributesSize + kPackedInputAssemblyAndColorBlendStateSize +
-    kPackedRasterizationAndMultisampleStateSize + kPackedDepthStencilStateSize +
-    kRenderPassDescSize + sizeof(VkViewport) + sizeof(VkRect2D);
+    kVertexInputAttributesSize + kRenderPassDescSize + kPackedRasterizationAndMultisampleStateSize +
+    kPackedDepthStencilStateSize + kPackedInputAssemblyAndColorBlendStateSize + sizeof(VkViewport) +
+    sizeof(VkRect2D);
 
 // Number of dirty bits in the dirty bit set.
 constexpr size_t kGraphicsPipelineDirtyBitBytes = 4;
