@@ -555,6 +555,8 @@ class Fence final : public WrappedObject<Fence, VkFence>
     VkResult reset(VkDevice device);
     VkResult getStatus(VkDevice device) const;
     VkResult wait(VkDevice device, uint64_t timeout) const;
+    VkResult importFd(VkDevice device, const VkImportFenceFdInfoKHR &importFdInfo);
+    VkResult getFd(VkDevice device, const VkFenceGetFdInfoKHR &getFdInfo, int *pFd) const;
 };
 
 class QueryPool final : public WrappedObject<QueryPool, VkQueryPool>
@@ -1509,6 +1511,20 @@ ANGLE_INLINE VkResult Fence::wait(VkDevice device, uint64_t timeout) const
 {
     ASSERT(valid());
     return vkWaitForFences(device, 1, &mHandle, true, timeout);
+}
+
+ANGLE_INLINE VkResult Fence::importFd(VkDevice device, const VkImportFenceFdInfoKHR &importFdInfo)
+{
+    ASSERT(!valid());
+    return vkImportFenceFdKHR(device, &importFdInfo);
+}
+
+ANGLE_INLINE VkResult Fence::getFd(VkDevice device,
+                                   const VkFenceGetFdInfoKHR &getFdInfo,
+                                   int *pFd) const
+{
+    ASSERT(!valid());
+    return vkGetFenceFdKHR(device, &getFdInfo, pFd);
 }
 
 // QueryPool implementation.

@@ -35,7 +35,7 @@ void SyncHelper::releaseToRenderer(RendererVk *renderer)
     mFence.reset(renderer->getDevice());
 }
 
-angle::Result SyncHelper::initialize(ContextVk *contextVk)
+angle::Result SyncHelper::initialize(ContextVk *contextVk, int fd)
 {
     ASSERT(!mEvent.valid());
 
@@ -49,6 +49,24 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk)
     DeviceScoped<Event> event(device);
     ANGLE_VK_TRY(contextVk, event.get().init(device, eventCreateInfo));
     ANGLE_TRY(contextVk->getNextSubmitFence(&mFence));
+
+    // Import FD to next submit Fence to enable clientWait() with nativeFence
+    if (fd != kInvalidFenceFd)
+    {
+        VkImportFenceFdInfoKHR fenceImportInfo{};
+        fenceImportInfo.sType      = VK_STRUCTURE_TYPE_IMPORT_FENCE_FD_INFO_KHR;
+        fenceImportInfo.pNext      = nullptr;
+        fenceImportInfo.fence      = mFence.get().getHandle();
+        fenceImportInfo.flags      = VK_FENCE_IMPORT_TEMPORARY_BIT_KHR;
+        fenceImportInfo.handleType = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT;
+        fenceImportInfo.fd         = fd;
+        VkResult importResult      = mFence.get().importFd(device, fenceImportInfo);
+
+        if (importResult != VK_SUCCESS)
+        {
+            return angle::Result::Stop;
+        }
+    }
 
     mEvent = event.release();
 
@@ -120,6 +138,23 @@ angle::Result SyncHelper::getStatus(Context *context, bool *signaled)
     *signaled = result == VK_EVENT_SET;
     return angle::Result::Continue;
 }
+
+angle::Result SyncHelper::dupNativeFenceFD(Context *context, int *pFd) const
+{
+    VkFenceGetFdInfoKHR getFdInfo{};
+    getFdInfo.sType      = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
+    getFdInfo.pNext      = nullptr;
+    getFdInfo.fence      = mFence.get().getHandle();
+    getFdInfo.handleType = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+
+    VkResult result = mFence.get().getFd(context->getDevice(), getFdInfo, pFd);
+    if (result != VK_SUCCESS)
+    {
+        return angle::Result::Stop;
+    }
+    return angle::Result::Continue;
+}
+
 }  // namespace vk
 
 SyncVk::SyncVk() : SyncImpl() {}
@@ -136,7 +171,7 @@ angle::Result SyncVk::set(const gl::Context *context, GLenum condition, GLbitfie
     ASSERT(condition == GL_SYNC_GPU_COMMANDS_COMPLETE);
     ASSERT(flags == 0);
 
-    return mFenceSync.initialize(vk::GetImpl(context));
+    return mFenceSync.initialize(vk::GetImpl(context), kInvalidFenceFd);
 }
 
 angle::Result SyncVk::clientWait(const gl::Context *context,
@@ -194,9 +229,12 @@ angle::Result SyncVk::getStatus(const gl::Context *context, GLint *outResult)
     return angle::Result::Continue;
 }
 
-EGLSyncVk::EGLSyncVk(const egl::AttributeMap &attribs) : EGLSyncImpl()
+EGLSyncVk::EGLSyncVk(const egl::AttributeMap &attribs)
+    : EGLSyncImpl(), mNativeFenceFD(kInvalidFenceFd)
 {
     ASSERT(attribs.isEmpty());
+    mNativeFenceFD = static_cast<int>(
+        attribs.getAsInt(EGL_SYNC_NATIVE_FENCE_FD_ANDROID, EGL_NO_NATIVE_FENCE_FD_ANDROID));
 }
 
 EGLSyncVk::~EGLSyncVk() {}
@@ -213,7 +251,7 @@ egl::Error EGLSyncVk::initialize(const egl::Display *display,
     ASSERT(type == EGL_SYNC_FENCE_KHR);
     ASSERT(context != nullptr);
 
-    if (mFenceSync.initialize(vk::GetImpl(context)) == angle::Result::Stop)
+    if (mFenceSync.initialize(vk::GetImpl(context), mNativeFenceFD) == angle::Result::Stop)
     {
         return egl::Error(EGL_BAD_ALLOC, "eglCreateSyncKHR failed to create sync object");
     }
@@ -286,10 +324,15 @@ egl::Error EGLSyncVk::getStatus(const egl::Display *display, EGLint *outStatus)
     return egl::NoError();
 }
 
-egl::Error EGLSyncVk::dupNativeFenceFD(const egl::Display *display, EGLint *result) const
+egl::Error EGLSyncVk::dupNativeFenceFD(const egl::Display *display, EGLint *pFd) const
 {
-    UNREACHABLE();
-    return egl::EglBadDisplay();
+    int fd = kInvalidFenceFd;
+    if (mFenceSync.dupNativeFenceFD(vk::GetImpl(display), &fd) == angle::Result::Stop)
+    {
+        return egl::Error(EGL_BAD_PARAMETER, "eglDupNativeFenceFDANDROID failed to dup native FD");
+    }
+    *pFd = static_cast<EGLint>(fd);
+    return egl::NoError();
 }
 
 }  // namespace rx

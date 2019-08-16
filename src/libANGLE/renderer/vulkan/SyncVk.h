@@ -14,6 +14,8 @@
 #include "libANGLE/renderer/SyncImpl.h"
 #include "libANGLE/renderer/vulkan/CommandGraph.h"
 
+constexpr int kInvalidFenceFd = -1;
+
 namespace egl
 {
 class AttributeMap;
@@ -33,7 +35,7 @@ class SyncHelper
 
     void releaseToRenderer(RendererVk *renderer);
 
-    angle::Result initialize(ContextVk *contextVk);
+    angle::Result initialize(ContextVk *contextVk, int fd);
     angle::Result clientWait(Context *context,
                              ContextVk *contextVk,
                              bool flushCommands,
@@ -41,6 +43,7 @@ class SyncHelper
                              VkResult *outResult);
     void serverWait(ContextVk *contextVk);
     angle::Result getStatus(Context *context, bool *signaled);
+    angle::Result dupNativeFenceFD(Context *context, int *pFd) const;
 
   private:
     // The vkEvent that's signaled on `init` and can be waited on in `serverWait`, or queried with
@@ -96,11 +99,11 @@ class EGLSyncVk final : public EGLSyncImpl
                           const gl::Context *context,
                           EGLint flags) override;
     egl::Error getStatus(const egl::Display *display, EGLint *outStatus) override;
-
-    egl::Error dupNativeFenceFD(const egl::Display *display, EGLint *result) const override;
+    egl::Error dupNativeFenceFD(const egl::Display *display, EGLint *pFd) const override;
 
   private:
     vk::SyncHelper mFenceSync;
+    int mNativeFenceFD;
 };
 }  // namespace rx
 
