@@ -22,6 +22,75 @@
       "revId": "6bc5e60b6e9c56047af62e90a289a409755ebc85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41df3a47_9dc1297e",
+        "filename": "src/libANGLE/Caps.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-16T14:21:47Z",
+      "side": 1,
+      "message": "EXT_color_buffer_half_float + EXT_color_buffer_half_float does not require that these formats are renderable, it only allows them to be.  Issue 2 from the EXT_color_buffer_half_float:\n\n    2. Should this extension require specific floating-point formats?\n\n       RESOLVED:  No. Although it is expected that all implementations\n       supporting this extension support rendering to at least one\n       HALF_FLOAT_OES format, applications must check framebuffer completeness\n       to determine which formats are supported.\n\nWebGL took the approach that it would only expose EXT_color_buffer_half_float if at least one of RGB16F and RGBA16F is renderable because otherwise the extension is not very useful.\n\nI think if we should continue to expose the extension as we used to and mark these formats are renderable with the TextureCaps that are set in FillTextureFormatCaps (https://cs.chromium.org/chromium/src/third_party/angle/src/libANGLE/renderer/vulkan/vk_format_utils.cpp?g\u003d0\u0026l\u003d22) which this patch should do.",
+      "range": {
+        "startLine": 156,
+        "startChar": 0,
+        "endLine": 160,
+        "endChar": 94
+      },
+      "revId": "6bc5e60b6e9c56047af62e90a289a409755ebc85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf8cfe78_450ae544",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1510,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-16T14:21:47Z",
+      "side": 1,
+      "message": "This should be done in FramebufferVk, I believe other backends do the same.",
+      "range": {
+        "startLine": 1505,
+        "startChar": 0,
+        "endLine": 1510,
+        "endChar": 5
+      },
+      "revId": "6bc5e60b6e9c56047af62e90a289a409755ebc85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b9109a5_e5fe215b",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4199,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-16T14:21:47Z",
+      "side": 1,
+      "message": "FYI that we also have a bunch of floating point texture tests that permute the extensions and formats in WebGLCompatabilityTest: https://cs.chromium.org/chromium/src/third_party/angle/src/tests/gl_tests/WebGLCompatibilityTest.cpp?l\u003d71\u0026rcl\u003d791e19e774ce7e50aa12ff43e3e7a8105b49279c",
+      "range": {
+        "startLine": 4199,
+        "startChar": 6,
+        "endLine": 4199,
+        "endChar": 25
+      },
+      "revId": "6bc5e60b6e9c56047af62e90a289a409755ebc85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
