@@ -179,6 +179,12 @@ angle_sample("window_test") {
   ]
 }
 
+angle_sample("capture_replay") {
+  sources = [
+    "capture_replay/CaptureReplayAutoGen.cpp",
+  ]
+}
+
 angle_sample("gles1_hello_triangle") {
   sources = [
     "gles1/HelloTriangle.cpp",
@@ -212,6 +218,7 @@ angle_sample("gles1_draw_texture") {
 group("all") {
   testonly = true
   deps = [
+    ":capture_replay",
     ":gles1_draw_texture",
     ":gles1_flat_shading",
     ":gles1_hello_triangle",

@@ -31,9 +31,16 @@ namespace
 std::string GetCaptureFileName(size_t frameIndex, const char *suffix)
 {
     std::stringstream fnameStream;
-    fnameStream << "angle_capture_frame" << std::setfill('0') << std::setw(3) << frameIndex
-                << suffix;
+    fnameStream << "../../samples/capture_replay/angle_capture_frame" << std::setfill('0')
+                << std::setw(3) << frameIndex << suffix;
     return fnameStream.str();
+}
+
+std::string GetBinaryDataSizeVarName(size_t frameIndex)
+{
+    std::stringstream varNameStream;
+    varNameStream << "binaryDataSize" << frameIndex;
+    return varNameStream.str();
 }
 
 void WriteParamStaticVarName(const CallCapture &call,
@@ -379,105 +386,108 @@ void FrameCapture::onEndFrame()
 
 void FrameCapture::saveCapturedFrameAsCpp()
 {
-    bool useClientArrays = anyClientArray();
-
     std::stringstream out;
     std::stringstream header;
     std::vector<uint8_t> binaryData;
 
-    header << "#include \"util/gles_loader_autogen.h\"\n";
+    // header << "#include \"util/gles_loader_autogen.h\"\n";
     header << "\n";
-    header << "#include <cstdio>\n";
-    header << "#include <cstring>\n";
-    header << "#include <vector>\n";
-    header << "#include <unordered_map>\n";
+    // header << "#include <cstdio>\n";
+    // header << "#include <cstring>\n";
+    // header << "#include <vector>\n";
+    // header << "#include <unordered_map>\n";
     header << "\n";
-    header << "namespace\n";
-    header << "{\n";
-    if (mReadBufferSize > 0)
-    {
-        header << "std::vector<uint8_t> gReadBuffer;\n";
-    }
-    if (useClientArrays)
-    {
-        header << "std::vector<uint8_t> gClientArrays[" << gl::MAX_VERTEX_ATTRIBS << "];\n";
-        header << "void UpdateClientArrayPointer(int arrayIndex, const void *data, GLuint64 size)"
-               << "\n";
-        header << "{\n";
-        header << "    memcpy(gClientArrays[arrayIndex].data(), data, size);\n";
-        header << "}\n";
-    }
+    // header << "namespace\n";
+    // header << "{\n";
+    // if (mReadBufferSize > 0)
+    // {
+    //     header << "std::vector<uint8_t> gReadBuffer;\n";
+    // }
+    // bool useClientArrays = anyClientArray();
+    // if (useClientArrays)
+    // {
+    //     header << "std::vector<uint8_t> gClientArrays[" << gl::MAX_VERTEX_ATTRIBS << "];\n";
+    //     header << "void UpdateClientArrayPointer(int arrayIndex, const void *data, GLuint64
+    //     size)"
+    //            << "\n";
+    //     header << "{\n";
+    //     header << "    memcpy(gClientArrays[arrayIndex].data(), data, size);\n";
+    //     header << "}\n";
+    // }
 
-    header << "std::unordered_map<GLuint, GLuint> gRenderbufferMap;\n";
-    header << "void UpdateRenderbufferID(GLuint id, GLsizei readBufferOffset)\n";
-    header << "{\n";
-    header << "    GLuint returnedID;\n";
-    header << "    memcpy(&returnedID, &gReadBuffer[readBufferOffset], sizeof(GLuint));\n";
-    header << "    gRenderbufferMap[id] = returnedID;\n";
-    header << "}\n";
+    // header << "std::unordered_map<GLuint, GLuint> gRenderbufferMap;\n";
+    // header << "void UpdateRenderbufferID(GLuint id, GLsizei readBufferOffset)\n";
+    // header << "{\n";
+    // header << "    GLuint returnedID;\n";
+    // header << "    memcpy(&returnedID, &gReadBuffer[readBufferOffset], sizeof(GLuint));\n";
+    // header << "    gRenderbufferMap[id] = returnedID;\n";
+    // header << "}\n";
 
-    out << "void ReplayFrame" << mFrameIndex << "()\n";
-    out << "{\n";
-    out << "    LoadBinaryData();\n";
+    std::string binaryDataFilename    = GetCaptureFileName(mFrameIndex, ".angledata");
+    std::string binaryDataSizeVarname = GetBinaryDataSizeVarName(mFrameIndex);
+
+    out << "#define ReplayFrame" << mFrameIndex << " ";
+    out << "{\\\n";
+    out << "    LoadBinaryData(" << binaryDataFilename << ", " << binaryDataSizeVarname << ");\\\n";
 
     for (size_t arrayIndex = 0; arrayIndex < mClientArraySizes.size(); ++arrayIndex)
     {
         if (mClientArraySizes[arrayIndex] > 0)
         {
             out << "    gClientArrays[" << arrayIndex << "].resize("
-                << mClientArraySizes[arrayIndex] << ");\n";
+                << mClientArraySizes[arrayIndex] << ");\\\n";
         }
     }
 
     if (mReadBufferSize > 0)
     {
-        out << "    gReadBuffer.resize(" << mReadBufferSize << ");\n";
+        out << "    gReadBuffer.resize(" << mReadBufferSize << ");\\\n";
     }
 
     for (const CallCapture &call : mCalls)
     {
         out << "    ";
         writeCallReplay(call, out, header, &binaryData);
-        out << ";\n";
+        out << ";\\\n";
     }
 
     if (!binaryData.empty())
     {
-        std::string fname = GetCaptureFileName(mFrameIndex, ".angledata");
-
-        FILE *fp = fopen(fname.c_str(), "wb");
+        FILE *fp = fopen(binaryDataFilename.c_str(), "wb");
         fwrite(binaryData.data(), 1, binaryData.size(), fp);
         fclose(fp);
 
-        header << "std::vector<uint8_t> gBinaryData;\n";
-        header << "void LoadBinaryData()\n";
-        header << "{\n";
-        header << "    gBinaryData.resize(" << static_cast<int>(binaryData.size()) << ");\n";
-        header << "    FILE *fp = fopen(\"" << fname << "\", \"rb\");\n";
-        header << "    fread(gBinaryData.data(), 1, " << static_cast<int>(binaryData.size())
-               << ", fp);\n";
-        header << "    fclose(fp);\n";
-        header << "}\n";
+        header << "size_t " << binaryDataSizeVarname << " = " << binaryData.size() << ";\n";
+
+        // header << "std::vector<uint8_t> gBinaryData;\n";
+        // header << "void LoadBinaryData()\n";
+        // header << "{\n";
+        // header << "    gBinaryData.resize(" << static_cast<int>(binaryData.size()) << ");\n";
+        // header << "    FILE *fp = fopen(\"" << fname << "\", \"rb\");\n";
+        // header << "    fread(gBinaryData.data(), 1, " << static_cast<int>(binaryData.size())
+        //        << ", fp);\n";
+        // header << "    fclose(fp);\n";
+        // header << "}\n";
     }
     else
     {
-        header << "// No binary data.\n";
-        header << "void LoadBinaryData() {}\n";
+        // header << "// No binary data.\n";
+        // header << "void LoadBinaryData() {}\n";
     }
 
-    out << "}\n";
+    out << "}\\\n";
 
-    header << "}  // anonymous namespace\n";
+    // header << "}  // anonymous namespace\n";
 
     std::string outString    = out.str();
     std::string headerString = header.str();
 
-    std::string fname = GetCaptureFileName(mFrameIndex, ".cpp");
-    FILE *fp          = fopen(fname.c_str(), "w");
+    std::string cppFileName = GetCaptureFileName(mFrameIndex, ".cpp");
+    FILE *fp                = fopen(cppFileName.c_str(), "w");
     fprintf(fp, "%s\n\n%s", headerString.c_str(), outString.c_str());
     fclose(fp);
 
-    printf("Saved '%s'.\n", fname.c_str());
+    printf("Saved '%s'.\n", cppFileName.c_str());
 }
 
 int FrameCapture::getAndIncrementCounter(gl::EntryPoint entryPoint, const std::string &paramName)
