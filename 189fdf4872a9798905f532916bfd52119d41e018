@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36ddefea_f5ad8bde",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-16T18:39:13Z",
+      "side": 1,
+      "message": "Whoops, forgot to remove this. Will do so in next version.",
+      "range": {
+        "startLine": 710,
+        "startChar": 0,
+        "endLine": 721,
+        "endChar": 9
+      },
+      "revId": "189fdf4872a9798905f532916bfd52119d41e018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
