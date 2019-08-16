@@ -27,7 +27,7 @@ class FenceNVVk : public FenceNVImpl
     angle::Result finish(const gl::Context *context) override;
 
   private:
-    vk::SyncHelper mFenceSync;
+    vk::SyncHelperFence mFenceSync;
 };
 }  // namespace rx
 

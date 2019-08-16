@@ -27,6 +27,12 @@ class EGLSyncTest : public ANGLETest
                IsEGLDisplayExtensionEnabled(getEGLWindow()->getDisplay(), "EGL_KHR_wait_sync");
     }
     bool hasGLSyncExtension() const { return IsGLExtensionEnabled("GL_OES_EGL_sync"); }
+
+    bool hasAndroidNativeFenceSyncExtension() const
+    {
+        return IsEGLDisplayExtensionEnabled(getEGLWindow()->getDisplay(),
+                                            "EGL_ANDROID_native_fence_sync");
+    }
 };
 
 // Test error cases for all EGL_KHR_fence_sync functions
@@ -242,6 +248,88 @@ TEST_P(EGLSyncTest, WaitNative)
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_EGL_TRUE(eglWaitNative(EGL_CORE_NATIVE_ENGINE));
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, GLColor::red);
+}
+
+// Verify EGL_ANDROID_native_fence_sync
+TEST_P(EGLSyncTest, AndroidNativeFence)
+{
+    ANGLE_SKIP_TEST_IF(!hasFenceSyncExtension());
+    ANGLE_SKIP_TEST_IF(!hasFenceSyncExtension() || !hasGLSyncExtension());
+    ANGLE_SKIP_TEST_IF(!hasAndroidNativeFenceSyncExtension());
+
+    EGLint value       = 0;
+    EGLDisplay display = getEGLWindow()->getDisplay();
+
+    /*- First Context ------------------------*/
+
+    // Extra fences to ensure that Fence and Android fences work together
+    EGLSyncKHR syncFence1 = eglCreateSyncKHR(display, EGL_SYNC_FENCE_KHR, nullptr);
+    EXPECT_NE(syncFence1, EGL_NO_SYNC_KHR);
+
+    // We can ClientWait on this
+    EGLSyncKHR syncWithGeneratedFD =
+        eglCreateSyncKHR(display, EGL_SYNC_NATIVE_FENCE_ANDROID, nullptr);
+    EXPECT_NE(syncWithGeneratedFD, EGL_NO_SYNC_KHR);
+
+    int fd = eglDupNativeFenceFDANDROID(display, syncWithGeneratedFD);
+    EXPECT_NE(fd, EGL_NO_NATIVE_FENCE_FD_ANDROID);
+
+    EGLSyncKHR syncFence2 = eglCreateSyncKHR(display, EGL_SYNC_FENCE_KHR, nullptr);
+    EXPECT_NE(syncFence2, EGL_NO_SYNC_KHR);
+
+    // Create work to do
+    glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glFlush();
+
+    EXPECT_EGL_TRUE(eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+
+    /*- Second Context ------------------------*/
+
+    EGLContext context2 = getEGLWindow()->createContext(EGL_NO_CONTEXT);
+    EGLSurface surface  = getEGLWindow()->getSurface();
+    EXPECT_EGL_TRUE(eglMakeCurrent(display, surface, surface, context2));
+
+    // check that Fence and Android fences work together
+    EGLSyncKHR syncFence3 = eglCreateSyncKHR(display, EGL_SYNC_FENCE_KHR, nullptr);
+    EXPECT_NE(syncFence3, EGL_NO_SYNC_KHR);
+
+    // We can eglWaitSync on this
+    EGLint syncAttribs[] = {EGL_SYNC_NATIVE_FENCE_FD_ANDROID, (EGLint)fd, EGL_NONE};
+    EGLSyncKHR syncWithDupFD =
+        eglCreateSyncKHR(display, EGL_SYNC_NATIVE_FENCE_ANDROID, syncAttribs);
+    EXPECT_NE(syncWithDupFD, EGL_NO_SYNC_KHR);
+
+    EGLSyncKHR syncFence4 = eglCreateSyncKHR(display, EGL_SYNC_FENCE_KHR, nullptr);
+    EXPECT_NE(syncFence4, EGL_NO_SYNC_KHR);
+
+    // Second draw waits for first to complete
+    EXPECT_EGL_TRUE(eglWaitSyncKHR(display, syncWithDupFD, 0));
+
+    // Create work to do
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glFlush();
+
+    // Wait for first draw to complete
+    EXPECT_EGL_TRUE(eglClientWaitSyncKHR(display, syncWithGeneratedFD,
+                                         EGL_SYNC_FLUSH_COMMANDS_BIT_KHR, 1000000));
+    EXPECT_EGL_TRUE(eglGetSyncAttribKHR(display, syncWithGeneratedFD, EGL_SYNC_STATUS_KHR, &value));
+    EXPECT_EQ(value, EGL_SIGNALED_KHR);
+
+    // Wait for second draw to complete
+    EXPECT_EGL_TRUE(
+        eglClientWaitSyncKHR(display, syncFence4, EGL_SYNC_FLUSH_COMMANDS_BIT_KHR, 1000000));
+    EXPECT_EGL_TRUE(eglGetSyncAttribKHR(display, syncFence4, EGL_SYNC_STATUS_KHR, &value));
+    EXPECT_EQ(value, EGL_SIGNALED_KHR);
+
+    EXPECT_EGL_TRUE(eglDestroySyncKHR(display, syncFence1));
+    EXPECT_EGL_TRUE(eglDestroySyncKHR(display, syncFence2));
+    EXPECT_EGL_TRUE(eglDestroySyncKHR(display, syncFence3));
+    EXPECT_EGL_TRUE(eglDestroySyncKHR(display, syncFence4));
+    EXPECT_EGL_TRUE(eglDestroySyncKHR(display, syncWithGeneratedFD));
+    EXPECT_EGL_TRUE(eglDestroySyncKHR(display, syncWithDupFD));
+    EXPECT_EGL_TRUE(eglDestroyContext(display, context2));
 }
 
 ANGLE_INSTANTIATE_TEST(EGLSyncTest,

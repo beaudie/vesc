@@ -98,6 +98,14 @@ class RendererVk : angle::NonCopyable
     {
         return mPhysicalDeviceFeatures;
     }
+    const VkExternalFenceProperties &getExternalFenceProperties() const
+    {
+        return mExternalFenceProperties;
+    }
+    const VkExternalSemaphoreProperties &getExternalSemaphoreProperties() const
+    {
+        return mExternalSemaphoreProperties;
+    }
     VkDevice getDevice() const { return mDevice; }
 
     angle::Result selectPresentQueueForSurface(DisplayVk *displayVk,
@@ -167,6 +175,7 @@ class RendererVk : angle::NonCopyable
     {
         return mPriorities[priority];
     }
+    ANGLE_MAYBE_UNUSED bool supportsAndroidNativeFences() { return mSupportsAndroidNativeFences; }
 
     angle::Result queueSubmit(vk::Context *context,
                               egl::ContextPriority priority,
@@ -189,10 +198,7 @@ class RendererVk : angle::NonCopyable
                                     Serial *serialOut);
 
     angle::Result newSharedFence(vk::Context *context, vk::Shared<vk::Fence> *sharedFenceOut);
-    inline void resetSharedFence(vk::Shared<vk::Fence> *sharedFenceIn)
-    {
-        sharedFenceIn->resetAndRecycle(&mFenceRecycler);
-    }
+    void resetSharedFence(vk::Shared<vk::Fence> *sharedFenceIn);
 
     template <typename... ArgsT>
     void collectGarbageAndReinit(vk::SharedResourceUse *use, ArgsT... garbageIn)
@@ -282,6 +288,8 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDevice mPhysicalDevice;
     VkPhysicalDeviceProperties mPhysicalDeviceProperties;
     VkPhysicalDeviceFeatures mPhysicalDeviceFeatures;
+    VkExternalFenceProperties mExternalFenceProperties;
+    VkExternalSemaphoreProperties mExternalSemaphoreProperties;
     VkPhysicalDeviceLineRasterizationFeaturesEXT mLineRasterizationFeatures;
     VkPhysicalDeviceProvokingVertexFeaturesEXT mProvokingVertexFeatures;
     VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT mVertexAttributeDivisorFeatures;
@@ -356,6 +364,8 @@ class RendererVk : angle::NonCopyable
 
     // track whether we initialized (or released) glslang
     bool mGlslangInitialized;
+
+    bool mSupportsAndroidNativeFences;
 };
 
 }  // namespace rx

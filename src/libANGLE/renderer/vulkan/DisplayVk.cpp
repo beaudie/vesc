@@ -207,6 +207,10 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->contextPriority = !getRenderer()->getFeatures().allocateNonZeroMemory.enabled;
     outExtensions->noConfigContext = true;
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+    outExtensions->nativeFenceSyncANDROID = getRenderer()->supportsAndroidNativeFences();
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
+
 #if defined(ANGLE_PLATFORM_GGP)
     outExtensions->ggpStreamDescriptor = true;
     outExtensions->swapWithFrameToken  = true;

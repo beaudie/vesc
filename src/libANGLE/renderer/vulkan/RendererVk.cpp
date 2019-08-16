@@ -552,6 +552,53 @@ gl::Version LimitVersionTo(const gl::Version &current, const gl::Version &lower)
 {
     return std::min(current, lower);
 }
+
+ANGLE_MAYBE_UNUSED bool FencePropertiesCompatibleWithAndroid(
+    const VkExternalFenceProperties &externalFenceProperties)
+{
+    // handleType here is the external fence type -
+    // we want type compatible with creating and export/dup() Android FD
+
+    // HandleTypes which can be specified at creating a fence
+    if ((externalFenceProperties.compatibleHandleTypes &
+         VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR) == 0)
+    {
+        return false;
+    }
+
+    constexpr VkExternalFenceFeatureFlags kFeatureFlags =
+        (VK_EXTERNAL_FENCE_FEATURE_EXPORTABLE_BIT_KHR);
+    if ((externalFenceProperties.externalFenceFeatures & kFeatureFlags) != kFeatureFlags)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+ANGLE_MAYBE_UNUSED bool SemaphorePropertiesCompatibleWithAndroid(
+    const VkExternalSemaphoreProperties &externalSemaphoreProperties)
+{
+    // handleType here is the external semaphore type -
+    // we want type compatible with importing an Android FD
+
+    // Imported handleType that can be exported - need for vkGetSemaphoreFdKHR()
+    if ((externalSemaphoreProperties.exportFromImportedHandleTypes &
+         VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT_KHR) == 0)
+    {
+        return false;
+    }
+
+    constexpr VkExternalSemaphoreFeatureFlags kFeatureFlags =
+        (VK_EXTERNAL_SEMAPHORE_FEATURE_IMPORTABLE_BIT_KHR);
+    if ((externalSemaphoreProperties.externalSemaphoreFeatures & kFeatureFlags) != kFeatureFlags)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 }  // namespace
 
 // RendererVk implementation.
@@ -565,6 +612,8 @@ RendererVk::RendererVk()
       mDebugUtilsMessenger(VK_NULL_HANDLE),
       mDebugReportCallback(VK_NULL_HANDLE),
       mPhysicalDevice(VK_NULL_HANDLE),
+      mExternalFenceProperties{},
+      mExternalSemaphoreProperties{},
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mMaxVertexAttribDivisor(1),
       mMaxVertexAttribStride(0),
@@ -576,7 +625,8 @@ RendererVk::RendererVk()
       mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
       mPipelineCacheDirty(false),
       mPipelineCacheInitialized(false),
-      mGlslangInitialized(false)
+      mGlslangInitialized(false),
+      mSupportsAndroidNativeFences(false)
 {
     VkFormatProperties invalid = {0, 0, kInvalidFormatFeatureFlags};
     mFormatProperties.fill(invalid);
@@ -1325,6 +1375,43 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         mPriorities[egl::ContextPriority::Low] = egl::ContextPriority::Low;
     }
 
+    // Fence properties
+    if (mFeatures.supportsExternalFenceFd.enabled)
+    {
+        mExternalFenceProperties.sType = VK_STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES;
+        mExternalFenceProperties.pNext = nullptr;
+
+        VkPhysicalDeviceExternalFenceInfo externalFenceInfo = {};
+        externalFenceInfo.sType      = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FENCE_INFO;
+        externalFenceInfo.pNext      = nullptr;
+        externalFenceInfo.handleType = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+
+        vkGetPhysicalDeviceExternalFencePropertiesKHR(mPhysicalDevice, &externalFenceInfo,
+                                                      &mExternalFenceProperties);
+    }
+
+    // Semaphore properties
+    if (mFeatures.supportsExternalSemaphoreFd.enabled)
+    {
+        mExternalSemaphoreProperties.sType = VK_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES;
+        mExternalSemaphoreProperties.pNext = nullptr;
+
+        VkPhysicalDeviceExternalSemaphoreInfo externalSemaphoreInfo = {};
+        externalSemaphoreInfo.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO;
+        externalSemaphoreInfo.pNext = nullptr;
+        externalSemaphoreInfo.handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+
+        vkGetPhysicalDeviceExternalSemaphorePropertiesKHR(mPhysicalDevice, &externalSemaphoreInfo,
+                                                          &mExternalSemaphoreProperties);
+    }
+#if defined(ANGLE_PLATFORM_ANDROID)
+    mSupportsAndroidNativeFences =
+        (mFeatures.supportsExternalFenceFd.enabled &&
+         FencePropertiesCompatibleWithAndroid(mExternalFenceProperties) &&
+         (mFeatures.supportsExternalSemaphoreFd.enabled &&
+          SemaphorePropertiesCompatibleWithAndroid(mExternalSemaphoreProperties)));
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
+
     // Initialize the vulkan pipeline cache.
     bool success = false;
     ANGLE_TRY(initPipelineCache(displayVk, &mPipelineCache, &success));
@@ -1624,7 +1711,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk, const ExtensionNameList &dev
         ExtensionFound(VK_FUCHSIA_EXTERNAL_SEMAPHORE_EXTENSION_NAME, deviceExtensionNames));
 
     ANGLE_FEATURE_CONDITION(
-        &mFeatures, supportsShaderStencilExport,
+        (&mFeatures), supportsExternalFenceFd,
+        ExtensionFound(VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME, deviceExtensionNames));
+
+    ANGLE_FEATURE_CONDITION(
+        (&mFeatures), supportsShaderStencilExport,
         ExtensionFound(VK_EXT_SHADER_STENCIL_EXPORT_EXTENSION_NAME, deviceExtensionNames));
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsTransformFeedbackExtension,
@@ -1980,20 +2071,51 @@ angle::Result RendererVk::newSharedFence(vk::Context *context,
                                          vk::Shared<vk::Fence> *sharedFenceOut)
 {
     vk::Fence fence;
-    if (mFenceRecycler.empty())
+    // When used Android Native Fences - need to have VkFence generate a FD to dup()/export
+    if (mSupportsAndroidNativeFences)
     {
+        VkExportFenceCreateInfo fenceExportInfo = {};
+        fenceExportInfo.sType                   = VK_STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO;
+        fenceExportInfo.pNext                   = nullptr;
+        fenceExportInfo.handleTypes             = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT;
+
         VkFenceCreateInfo fenceCreateInfo = {};
         fenceCreateInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         fenceCreateInfo.flags             = 0;
+        fenceCreateInfo.pNext             = &fenceExportInfo;
+
         ANGLE_VK_TRY(context, fence.init(mDevice, fenceCreateInfo));
     }
     else
     {
-        mFenceRecycler.fetch(&fence);
-        ANGLE_VK_TRY(context, fence.reset(mDevice));
+        if (mFenceRecycler.empty())
+        {
+            VkFenceCreateInfo fenceCreateInfo = {};
+            fenceCreateInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+            fenceCreateInfo.flags             = 0;
+            ANGLE_VK_TRY(context, fence.init(mDevice, fenceCreateInfo));
+        }
+        else
+        {
+            mFenceRecycler.fetch(&fence);
+            ANGLE_VK_TRY(context, fence.reset(mDevice));
+        }
     }
     sharedFenceOut->assign(mDevice, std::move(fence));
     return angle::Result::Continue;
+}
+
+void RendererVk::resetSharedFence(vk::Shared<vk::Fence> *sharedFenceIn)
+{
+    // Can't use recycle with FD payloads
+    if (mSupportsAndroidNativeFences)
+    {
+        sharedFenceIn->reset(mDevice);
+    }
+    else
+    {
+        sharedFenceIn->resetAndRecycle(&mFenceRecycler);
+    }
 }
 
 template <VkFormatFeatureFlags VkFormatProperties::*features>

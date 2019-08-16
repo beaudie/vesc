@@ -424,6 +424,9 @@ class Semaphore final : public WrappedObject<Semaphore, VkSemaphore>
     void destroy(VkDevice device);
 
     VkResult init(VkDevice device);
+    VkResult init(VkDevice device, const VkSemaphoreCreateInfo &createInfo);
+    VkResult getFd(VkDevice device, const VkSemaphoreGetFdInfoKHR &getFdInfo, int *fdOut) const;
+    VkResult importFd(VkDevice device, const VkImportSemaphoreFdInfoKHR &importFdInfo) const;
 };
 
 class Framebuffer final : public WrappedObject<Framebuffer, VkFramebuffer>
@@ -578,6 +581,8 @@ class Fence final : public WrappedObject<Fence, VkFence>
     VkResult reset(VkDevice device);
     VkResult getStatus(VkDevice device) const;
     VkResult wait(VkDevice device, uint64_t timeout) const;
+    VkResult importFd(VkDevice device, const VkImportFenceFdInfoKHR &importFenceFdInfo) const;
+    VkResult getFd(VkDevice device, const VkFenceGetFdInfoKHR &fenceGetFdInfo, int *outFd) const;
 };
 
 class QueryPool final : public WrappedObject<QueryPool, VkQueryPool>
@@ -1241,6 +1246,30 @@ ANGLE_INLINE VkResult Semaphore::init(VkDevice device)
     return vkCreateSemaphore(device, &semaphoreInfo, nullptr, &mHandle);
 }
 
+ANGLE_INLINE VkResult Semaphore::init(VkDevice device, const VkSemaphoreCreateInfo &createInfo)
+{
+    ASSERT(!valid());
+
+    return vkCreateSemaphore(device, &createInfo, nullptr, &mHandle);
+}
+
+ANGLE_INLINE VkResult Semaphore::getFd(VkDevice device,
+                                       const VkSemaphoreGetFdInfoKHR &getFdInfo,
+                                       int *fdOut) const
+{
+    ASSERT(!valid());
+
+    return vkGetSemaphoreFdKHR(device, &getFdInfo, fdOut);
+}
+
+ANGLE_INLINE VkResult Semaphore::importFd(VkDevice device,
+                                          const VkImportSemaphoreFdInfoKHR &importFdInfo) const
+{
+    ASSERT(!valid());
+
+    return vkImportSemaphoreFdKHR(device, &importFdInfo);
+}
+
 // Framebuffer implementation.
 ANGLE_INLINE void Framebuffer::destroy(VkDevice device)
 {
@@ -1594,6 +1623,21 @@ ANGLE_INLINE VkResult Fence::wait(VkDevice device, uint64_t timeout) const
 {
     ASSERT(valid());
     return vkWaitForFences(device, 1, &mHandle, true, timeout);
+}
+
+ANGLE_INLINE VkResult Fence::importFd(VkDevice device,
+                                      const VkImportFenceFdInfoKHR &importFenceFdInfo) const
+{
+    ASSERT(!valid());
+    return vkImportFenceFdKHR(device, &importFenceFdInfo);
+}
+
+ANGLE_INLINE VkResult Fence::getFd(VkDevice device,
+                                   const VkFenceGetFdInfoKHR &fenceGetFdInfo,
+                                   int *fdOut) const
+{
+    ASSERT(!valid());
+    return vkGetFenceFdKHR(device, &fenceGetFdInfo, fdOut);
 }
 
 // QueryPool implementation.
