@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "b83f5ca9_94443151",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-16T19:46:34Z",
+      "side": 1,
+      "message": "Good point, I am going to add a warning for this case.  So is any specific format I should use in order to be easily filtered by Android logcat?",
+      "parentUuid": "74a0b75a_e49c607d",
+      "range": {
+        "startLine": 22,
+        "startChar": 35,
+        "endLine": 22,
+        "endChar": 84
+      },
+      "revId": "b1d3de175d722dcb9a97b8509bbcbb8b74acf372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f969bf43_738f2857",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 3
@@ -188,6 +212,30 @@
       "revId": "b1d3de175d722dcb9a97b8509bbcbb8b74acf372",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5d914fa_38feb7c9",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-16T19:46:34Z",
+      "side": 1,
+      "message": "\u003e Are you able to create things under the running application\u0027s data directory?\n\nYeah, it is good.   \n\n\u003e \"/sdcard/Android/data/\u003csome-dir\u003e\"\n\nHere I am referring to create some directory like \u0027angle-frame-captures\u0027 or something\n\n\nThanks for the explanation, then I think we are still going to use the property approach.",
+      "parentUuid": "dbb36feb_7424efe9",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 5
+      },
+      "revId": "b1d3de175d722dcb9a97b8509bbcbb8b74acf372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
