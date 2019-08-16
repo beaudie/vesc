@@ -40,7 +40,10 @@ IF YOU MODIFY THIS FILE YOU ALSO NEED TO RUN generate_parser.sh.
 #endif
 #if defined(__clang__)
 // Flex uses `/*FALLTHROUGH*/` instead of dedicated statements.
-#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#pragma clang diagnostic ignored "-Wimplicit-fallthrough"
+// Older clang versions don't have -Wextra-semi-stmt, and detecting clang versions is difficult
+// because Apple clang version numbers are different than everyone else's.
+#pragma clang diagnostic ignored "-Wunknown-warning-option"
 // Flex isn't semi-colon clean.
 #pragma clang diagnostic ignored "-Wextra-semi-stmt"
 #pragma clang diagnostic ignored "-Wunreachable-code"

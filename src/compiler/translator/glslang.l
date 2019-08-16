@@ -39,7 +39,10 @@ WHICH GENERATES THE GLSL ES LEXER (glslang_lex.cpp).
 #pragma warning(disable: 4702)
 #endif
 #if defined(__clang__)
-#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#pragma clang diagnostic ignored "-Wimplicit-fallthrough"
+// Older clang versions don't have -Wextra-semi-stmt, and detecting clang versions is difficult
+// because Apple clang version numbers are different than everyone else's.
+#pragma clang diagnostic ignored "-Wunknown-warning-option"
 // Flex isn't semi-colon clean.
 #pragma clang diagnostic ignored "-Wextra-semi-stmt"
 #pragma clang diagnostic ignored "-Wunreachable-code"
