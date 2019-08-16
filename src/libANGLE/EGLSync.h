@@ -52,7 +52,7 @@ class Sync final : public angle::RefCountObject<Display, angle::Result>, public 
     Error dupNativeFenceFD(const Display *display, EGLint *result) const;
 
     EGLenum getType() const { return mType; }
-    EGLint getCondition() const { return mCondition; }
+    EGLint getCondition(const Display *display);
     EGLint getNativeFenceFD() const { return mNativeFenceFD; }
 
   private:
@@ -61,7 +61,7 @@ class Sync final : public angle::RefCountObject<Display, angle::Result>, public 
     EGLLabelKHR mLabel;
 
     EGLenum mType;
-    static constexpr EGLint mCondition = EGL_SYNC_PRIOR_COMMANDS_COMPLETE_KHR;
+    EGLint mCondition;
     EGLint mNativeFenceFD;
 };
 

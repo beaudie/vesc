@@ -21,9 +21,16 @@ Sync::Sync(rx::EGLImplFactory *factory, EGLenum type, const AttributeMap &attrib
     : mFence(factory->createSync(attribs)),
       mLabel(nullptr),
       mType(type),
+      mCondition(EGL_SYNC_PRIOR_COMMANDS_COMPLETE_KHR),
       mNativeFenceFD(
           attribs.getAsInt(EGL_SYNC_NATIVE_FENCE_FD_ANDROID, EGL_NO_NATIVE_FENCE_FD_ANDROID))
-{}
+{
+    if ((mType == EGL_SYNC_NATIVE_FENCE_ANDROID) &&
+        (mNativeFenceFD != EGL_NO_NATIVE_FENCE_FD_ANDROID))
+    {
+        mCondition = EGL_SYNC_NATIVE_FENCE_SIGNALED_ANDROID;
+    }
+}
 
 void Sync::onDestroy(const Display *display)
 {
@@ -71,6 +78,19 @@ Error Sync::getStatus(const Display *display, EGLint *outStatus) const
 Error Sync::dupNativeFenceFD(const Display *display, EGLint *result) const
 {
     return mFence->dupNativeFenceFD(display, result);
+}
+
+EGLint Sync::getCondition(const Display *display)
+{
+    if (mType == EGL_SYNC_NATIVE_FENCE_ANDROID)
+    {
+        EGLint outStatus = EGL_UNSIGNALED_KHR;
+        if ((!getStatus(display, &outStatus).isError()) && (outStatus == EGL_SIGNALED_KHR))
+        {
+            mCondition = EGL_SYNC_PRIOR_COMMANDS_COMPLETE_KHR;
+        }
+    }
+    return mCondition;
 }
 
 }  // namespace egl
