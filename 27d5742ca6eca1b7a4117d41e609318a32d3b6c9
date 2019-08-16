@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2faeb2eb_737a4dd5",
+        "filename": "include/EGL/eglplatform.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T22:46:48Z",
+      "side": 1,
+      "message": "mind trying to upstream this by submitting a PR against https://github.com/KhronosGroup/EGL-Registry ? Doesn\u0027t hurt to ask.",
+      "range": {
+        "startLine": 113,
+        "startChar": 36,
+        "endLine": 113,
+        "endChar": 50
+      },
+      "revId": "27d5742ca6eca1b7a4117d41e609318a32d3b6c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
