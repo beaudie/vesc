@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "e586e88c_5e58f544",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-16T19:14:28Z",
+      "side": 1,
+      "message": "Thanks for the information",
+      "parentUuid": "f969bf43_738f2857",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 25
+      },
+      "revId": "b1d3de175d722dcb9a97b8509bbcbb8b74acf372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "38723bf1_3919b004",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 3
@@ -83,6 +107,30 @@
       "side": 1,
       "message": "Applications can\u0027t write anywhere outside of their designated areas, there isn\u0027t a common writable temp location.  The ANGLE libraries are limited to what the application can do.  You would have to change the application\u0027s manifest to influence behavior.",
       "parentUuid": "38723bf1_3919b004",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 5
+      },
+      "revId": "b1d3de175d722dcb9a97b8509bbcbb8b74acf372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3e3d34d_a0f0e2b5",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-16T19:14:28Z",
+      "side": 1,
+      "message": "I did a try after Jamie\u0027s comment. \"/sdcard/Android/data/\" surprising works on my Pixel3XL, @Cody Could you verify it on your device, you can use the latest patch? \n\nAlso, looks like there is still no permission to create an arbitrary directory on sd card, if I use \"/sdcard/Android/data/\u003csome-dir\u003e\" if this \u003csome-dir\u003e is not present, it will fail",
+      "parentUuid": "e08a8da9_98533dd4",
       "range": {
         "startLine": 20,
         "startChar": 0,
