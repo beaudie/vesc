@@ -1,0 +1,372 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a12e769_8b0fbd7d",
+        "filename": "gni/angle.gni",
+        "patchSetId": 18
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "I don\u0027t understand why you modified the GN files. Can you revert these changes? I don\u0027t want to make building capture/replay optional.",
+      "range": {
+        "startLine": 78,
+        "startChar": 2,
+        "endLine": 78,
+        "endChar": 29
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c7816cb_7333ccf7",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 8554,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "can you remove this? I\u0027m not sure why it is included here.",
+      "range": {
+        "startLine": 8554,
+        "startChar": 4,
+        "endLine": 8554,
+        "endChar": 59
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d613a4a1_197a4d31",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "use indexRange.vertexCount() instead.",
+      "range": {
+        "startLine": 243,
+        "startChar": 48,
+        "endLine": 243,
+        "endChar": 59
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57d344a5_613b9078",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "can we remove this for now?",
+      "range": {
+        "startLine": 315,
+        "startChar": 9,
+        "endLine": 315,
+        "endChar": 37
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0cee0cf_480a1691",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "I think in this case you want to store the read buffer in the replay context and not the parameter capture.",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 9
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a90cb8b_3c550f66",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "can we somehow get rid of this const_cast?",
+      "range": {
+        "startLine": 74,
+        "startChar": 39,
+        "endLine": 74,
+        "endChar": 49
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc0e824e_beb9c5af",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "I think behaviour here will differ for const pointer pointers (like you have here) and mutable pointer pointers (which are read back buffers, more similar to the read buffer above)\n\nI\u0027d recommend making the helpers in the replay context.",
+      "range": {
+        "startLine": 60,
+        "startChar": 2,
+        "endLine": 77,
+        "endChar": 26
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5030f1dc_9c8c3df1",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "can you remove this or move it elsewhere?",
+      "range": {
+        "startLine": 95,
+        "startChar": 4,
+        "endLine": 95,
+        "endChar": 42
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3562bffc_353b8fbb",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "This could be improved quite a bit. First, don\u0027t use in-class structs. Second, make this a ReplayContext. Then rename the methods to handle client array data explicitly instead of mirroring API calls.",
+      "range": {
+        "startLine": 184,
+        "startChar": 11,
+        "endLine": 184,
+        "endChar": 28
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85ed23d3_a14c0289",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "reminder: revert",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 28
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91e1904b_5a2d1f75",
+        "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "nit: if this is a member of FrameCapture it should not be capitalized. also you should call it \"replayCall\" to mirror \"captureCall\".",
+      "range": {
+        "startLine": 23,
+        "startChar": 19,
+        "endLine": 23,
+        "endChar": 36
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f6ac8d6_66b76286",
+        "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "This is going to change the behaviour of the replay because it injects an additional GL call. Instead I was imagining that you mirror \"gClientArrays\" in your replay state. Make an array and in this code update the memory client array pointer with the data in \"pointer\".\n\nThen in the replay when you run into a param with param.arrayClientPointerIndex !\u003d -1, instead of returning the ParamValue value for the void * value, get the pointer to your memory array.",
+      "range": {
+        "startLine": 42,
+        "startChar": 25,
+        "endLine": 42,
+        "endChar": 44
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7dd211b_853c9c11",
+        "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "Could we move this out of autogeneration like you had it before?",
+      "range": {
+        "startLine": 30,
+        "startChar": 1,
+        "endLine": 51,
+        "endChar": 18
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ac74f5d_8d1bcfd8",
+        "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "can you instead autogenerate these as .value.GLubyteVal, etc. If there even a need for the getAs function?",
+      "range": {
+        "startLine": 318,
+        "startChar": 77,
+        "endLine": 318,
+        "endChar": 94
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "335c29c9_3e08c9d2",
+        "filename": "src/libANGLE/frame_capture_replay_autogen.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2916,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "for all these calls, if the call is not valid, you should skip calling the context. That can probably be done outside the auto-generation.",
+      "range": {
+        "startLine": 2916,
+        "startChar": 12,
+        "endLine": 2916,
+        "endChar": 19
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77c0111c_3ebd9d4d",
+        "filename": "src/libANGLE/frame_capture_utils_autogen.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 981,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T14:26:11Z",
+      "side": 1,
+      "message": "you can omit this I believe. we handle every case. if it fails in MSVC then you can keep it.",
+      "range": {
+        "startLine": 980,
+        "startChar": 0,
+        "endLine": 981,
+        "endChar": 15
+      },
+      "revId": "47a2e42cdb550ffb66aee0ac1efab4a951aabc44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
