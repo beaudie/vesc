@@ -4092,7 +4092,7 @@ Error GetSyncAttrib(Display *display, Sync *sync, EGLint attribute, EGLint *valu
             return sync->getStatus(display, value);
 
         case EGL_SYNC_CONDITION_KHR:
-            *value = sync->getCondition();
+            *value = sync->getCondition(display);
             return NoError();
 
         default:

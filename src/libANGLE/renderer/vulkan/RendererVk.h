@@ -281,6 +281,8 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDevice mPhysicalDevice;
     VkPhysicalDeviceProperties mPhysicalDeviceProperties;
     VkPhysicalDeviceFeatures mPhysicalDeviceFeatures;
+    VkExternalFenceProperties mExternalFenceProperties;
+    VkExternalSemaphoreProperties mExternalSemaphoreProperties;
     VkPhysicalDeviceLineRasterizationFeaturesEXT mLineRasterizationFeatures;
     VkPhysicalDeviceProvokingVertexFeaturesEXT mProvokingVertexFeatures;
     VkPhysicalDeviceVertexAttributeDivisorFeaturesEXT mVertexAttributeDivisorFeatures;
