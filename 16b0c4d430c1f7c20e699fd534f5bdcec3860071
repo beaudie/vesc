@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1972b95_7552062d",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3590,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T18:48:14Z",
+      "side": 1,
+      "message": "we can\u0027t really validate an interface if there\u0027s no producer / consumer relationship. You can skip the checks that don\u0027t apply.",
+      "range": {
+        "startLine": 3586,
+        "startChar": 0,
+        "endLine": 3590,
+        "endChar": 77
+      },
+      "revId": "16b0c4d430c1f7c20e699fd534f5bdcec3860071",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dff26d5d_2a589c02",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3865,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T18:48:14Z",
+      "side": 1,
+      "message": "I would put your check in here instead of defining a dummy empty array of attributes.",
+      "range": {
+        "startLine": 3857,
+        "startChar": 0,
+        "endLine": 3865,
+        "endChar": 0
+      },
+      "revId": "16b0c4d430c1f7c20e699fd534f5bdcec3860071",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d4eb48e_86fb2dd2",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4047,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T18:48:14Z",
+      "side": 1,
+      "message": "probably can short circuit this if there\u0027s no fragment shader. seems a lot cleaner than defining a dummy empty output set.",
+      "range": {
+        "startLine": 4046,
+        "startChar": 4,
+        "endLine": 4047,
+        "endChar": 85
+      },
+      "revId": "16b0c4d430c1f7c20e699fd534f5bdcec3860071",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed3a6023_fd53bc70",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T18:48:14Z",
+      "side": 1,
+      "message": "we have gl::kAllGraphicsShaderTypes for these",
+      "range": {
+        "startLine": 260,
+        "startChar": 12,
+        "endLine": 260,
+        "endChar": 89
+      },
+      "revId": "16b0c4d430c1f7c20e699fd534f5bdcec3860071",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c182de20_3b66ec24",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-16T18:48:14Z",
+      "side": 1,
+      "message": "this is redundant, you can omit it",
+      "range": {
+        "startLine": 438,
+        "startChar": 46,
+        "endLine": 438,
+        "endChar": 58
+      },
+      "revId": "16b0c4d430c1f7c20e699fd534f5bdcec3860071",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
