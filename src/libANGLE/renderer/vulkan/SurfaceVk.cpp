@@ -944,13 +944,14 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         presentInfo.pNext = &presentRegions;
     }
 
-    // Update the swap history for this presentation
-    swap.sharedFence = contextVk->getLastSubmittedFence();
-    ASSERT(!mAcquireImageSemaphore.valid());
-
     ++mCurrentSwapHistoryIndex;
     mCurrentSwapHistoryIndex =
         mCurrentSwapHistoryIndex == mSwapHistory.size() ? 0 : mCurrentSwapHistoryIndex;
+
+    // Update the swap history for this presentation
+    SwapHistory &nextSwap = mSwapHistory[mCurrentSwapHistoryIndex];
+    nextSwap.sharedFence  = contextVk->getLastSubmittedFence();
+    ASSERT(!mAcquireImageSemaphore.valid());
 
     VkResult result = contextVk->getRenderer()->queuePresent(presentInfo);
 
