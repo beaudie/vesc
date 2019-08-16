@@ -246,6 +246,7 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
         return mActiveTextures;
     }
     const gl::ActiveTextureArray<TextureVk *> &getActiveImages() const { return mActiveImages; }
+    const VertexArrayVk *getVertexArray() const { return mVertexArray; }
 
     void setIndexBufferDirty()
     {
