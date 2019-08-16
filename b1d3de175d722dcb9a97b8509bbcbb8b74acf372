@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "dbb36feb_7424efe9",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-08-16T19:36:50Z",
+      "side": 1,
+      "message": "That\u0027s actually going to vary based on the API target of the application.  Apps that target newer versions (Q and later) will be more limited.  The guidance we\u0027re giving to Android developers is to include the app name in the path when accessing from native code:\n\n    /sdcard/Android/data/com.example/foo.jpg\n\nSo it might work now for most apps, but it won\u0027t work for all of them, all the time.\n\nAre you able to create things under the running application\u0027s data directory?",
+      "parentUuid": "a3e3d34d_a0f0e2b5",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 5
+      },
+      "revId": "b1d3de175d722dcb9a97b8509bbcbb8b74acf372",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bc58206e_5945beb4",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 3
