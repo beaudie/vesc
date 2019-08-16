@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "677bf4b6_d23c2e64",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-16T01:00:53Z",
+      "side": 1,
+      "message": "Is this comment accurate? Seems it was meant to go with the next suppression in the diff.",
+      "range": {
+        "startLine": 1152,
+        "startChar": 26,
+        "endLine": 1152,
+        "endChar": 29
+      },
+      "revId": "6f22d04297d6d9f6938459a1fb420400c307db35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "293e58e4_a59e7c45",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-16T01:00:53Z",
+      "side": 1,
+      "message": "The comment about which GPUs the test fails on was missed here.",
+      "range": {
+        "startLine": 1346,
+        "startChar": 4,
+        "endLine": 1346,
+        "endChar": 22
+      },
+      "revId": "6f22d04297d6d9f6938459a1fb420400c307db35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

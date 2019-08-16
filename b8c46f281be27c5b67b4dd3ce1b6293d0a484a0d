@@ -211,6 +211,30 @@
       "revId": "b8c46f281be27c5b67b4dd3ce1b6293d0a484a0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "732ea670_fe4940d3",
+        "filename": "src/tests/test_utils/angle_test_instantiate.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-16T01:00:53Z",
+      "side": 1,
+      "message": "Given that the expectations for all of the tests have been updated, would you please delete this block of new code and just add a comment about the fact that on dual-GPU Macs, this code isn\u0027t guaranteed to return one GPU or the other, so any test suppressions for macOS should be done for all GPU types with a comment about which GPU the test actually fails on?\n\nThanks.",
+      "parentUuid": "45142dbb_ae08eaf5",
+      "range": {
+        "startLine": 107,
+        "startChar": 50,
+        "endLine": 107,
+        "endChar": 59
+      },
+      "revId": "b8c46f281be27c5b67b4dd3ce1b6293d0a484a0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
