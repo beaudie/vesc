@@ -657,7 +657,9 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     VkPipelineVertexInputDivisorStateCreateInfoEXT divisorState = {};
     divisorState.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
     divisorState.pVertexBindingDivisors = divisorDesc.data();
-
+    // TODO: Pull emulatedMask and use it below
+    // const gl::AttributesMask emulateAttribMask =
+    // contextVk->getVertexArray()->getEmulateAttribDivisorMask();
     for (size_t attribIndexSizeT : activeAttribLocationsMask)
     {
         const uint32_t attribIndex = static_cast<uint32_t>(attribIndexSizeT);
@@ -672,7 +674,10 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         {
             bindingDesc.inputRate = static_cast<VkVertexInputRate>(VK_VERTEX_INPUT_RATE_INSTANCE);
             divisorDesc[divisorState.vertexBindingDivisorCount].binding = bindingDesc.binding;
-            divisorDesc[divisorState.vertexBindingDivisorCount].divisor = packedAttrib.divisor;
+            // Force divisor to 1 for emulation case.
+            // TODO: Need to pull emulated mask
+            divisorDesc[divisorState.vertexBindingDivisorCount].divisor =
+                (activeAttribLocationsMask[attribIndex]) ? 1 : packedAttrib.divisor;
             ++divisorState.vertexBindingDivisorCount;
         }
         else
@@ -868,10 +873,6 @@ void GraphicsPipelineDesc::updateVertexInput(GraphicsPipelineTransitionBits *tra
                                              GLuint relativeOffset)
 {
     vk::PackedAttribDesc &packedAttrib = mVertexInputAttribs.attribs[attribIndex];
-
-    // TODO: Handle the case where the divisor overflows the field that holds it.
-    // http://anglebug.com/2672
-    ASSERT(divisor <= std::numeric_limits<decltype(packedAttrib.divisor)>::max());
 
     SetBitField(packedAttrib.stride, stride);
     SetBitField(packedAttrib.divisor, divisor);
