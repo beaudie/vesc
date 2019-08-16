@@ -172,6 +172,26 @@ gl::Version DisplayVk::getMaxConformantESVersion() const
     return mRenderer->getMaxConformantESVersion();
 }
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+static bool FencePropertiesCompatibleWithAndroid(
+    const VkExternalFenceProperties &externalFenceProperties)
+{
+    // handleType here is the external fence type - we want type compatible with Android FD
+    return (
+        // Types of imported handle handleType that can be exported from - dup function
+        (externalFenceProperties.exportFromImportedHandleTypes &
+         VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR) &&
+        // Types which can be specified at the same time as handleType when creating a fence -
+        // create with import FD
+        (externalFenceProperties.compatibleHandleTypes &
+         VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR) &&
+        // Indicates the features of handleType - import and export
+        (externalFenceProperties.externalFenceFeatures &
+         (VK_EXTERNAL_FENCE_FEATURE_EXPORTABLE_BIT_KHR |
+          VK_EXTERNAL_FENCE_FEATURE_IMPORTABLE_BIT_KHR)));
+}
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
+
 void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     outExtensions->createContextRobustness      = true;
@@ -206,6 +226,12 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
     // Disable context priority when non-zero memory init is enabled. This enforces a queue order.
     outExtensions->contextPriority = !getRenderer()->getFeatures().allocateNonZeroMemory.enabled;
     outExtensions->noConfigContext = true;
+
+#if defined(ANGLE_PLATFORM_ANDROID)
+    outExtensions->nativeFenceSyncANDROID =
+        getRenderer()->getFeatures().supportsExternalFenceFd.enabled &&
+        FencePropertiesCompatibleWithAndroid(getRenderer()->getExternalFenceProperties());
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
 
 #if defined(ANGLE_PLATFORM_GGP)
     outExtensions->ggpStreamDescriptor = true;
