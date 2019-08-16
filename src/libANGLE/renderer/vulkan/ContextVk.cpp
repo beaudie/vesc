@@ -480,10 +480,11 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     }
 
     // Must be called before the command buffer is started. Can call finish.
-    if (context->getStateCache().hasAnyActiveClientAttrib())
+    if (mVertexArray->getStreamingVertexAttribsMask().any())
     {
-        ANGLE_TRY(mVertexArray->updateClientAttribs(context, firstVertex, vertexOrIndexCount,
-                                                    instanceCount, indexTypeOrNone, indices));
+        // All client attribs & any emulated buffered attribs will be updated
+        ANGLE_TRY(mVertexArray->updateStreamedAttribs(context, firstVertex, vertexOrIndexCount,
+                                                      instanceCount, indexTypeOrNone, indices));
         mGraphicsDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
     }
 
