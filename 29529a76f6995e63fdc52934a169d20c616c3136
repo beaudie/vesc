@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "83c66878_ea53a384",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3234,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-16T17:37:10Z",
+      "side": 1,
+      "message": "Something I just noticed, can you change this to `sampler2D` (so, float type) just so we have coverage for the case where all the samplers are not of the same type? Varying the dimensions (for example 2x3 instead of 2x2) could also help catch future issues if the row and column indices are mistaken.",
+      "range": {
+        "startLine": 3234,
+        "startChar": 63,
+        "endLine": 3234,
+        "endChar": 73
+      },
+      "revId": "29529a76f6995e63fdc52934a169d20c616c3136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
