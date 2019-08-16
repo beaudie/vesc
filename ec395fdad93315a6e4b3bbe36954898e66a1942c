@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49e7862b_b0b890f2",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-16T16:40:48Z",
+      "side": 1,
+      "message": "For these getParam() calls (here and \"n\" above), how do you know what these index values are supposed to be?   In this context they look like magic numbers.",
+      "range": {
+        "startLine": 288,
+        "startChar": 95,
+        "endLine": 288,
+        "endChar": 96
+      },
+      "revId": "ec395fdad93315a6e4b3bbe36954898e66a1942c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a36e4e7_7d07c3ac",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-16T16:40:48Z",
+      "side": 1,
+      "message": "sizeof(RenderbufferID().value) ?",
+      "range": {
+        "startLine": 415,
+        "startChar": 71,
+        "endLine": 415,
+        "endChar": 85
+      },
+      "revId": "ec395fdad93315a6e4b3bbe36954898e66a1942c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bcf9cef_119090d1",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-16T16:40:48Z",
+      "side": 1,
+      "message": "Will the compiler care later that the final value has a trailing \",\"?   I think you\u0027ll want this:\n\nif ((resIndex \u003e 0) \u0026\u0026 (resIndex !\u003d (n - 1)))",
+      "revId": "ec395fdad93315a6e4b3bbe36954898e66a1942c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a68c13f_38317dfb",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-16T16:40:48Z",
+      "side": 1,
+      "message": "The \"maybe\"s here can be removed from these 2 functions, since they will always do as much work as we\u0027d like them to.",
+      "range": {
+        "startLine": 138,
+        "startChar": 9,
+        "endLine": 138,
+        "endChar": 14
+      },
+      "revId": "ec395fdad93315a6e4b3bbe36954898e66a1942c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
