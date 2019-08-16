@@ -481,7 +481,15 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
     }
 
     // Must be called before the command buffer is started. Can call finish.
-    if (context->getStateCache().hasAnyActiveClientAttrib())
+    // TDEWIP: Need to update attribs here if we're emulating divisor as well
+    if (mVertexArray->anyEmulateDivisor())
+    {
+        // TDEWIP: emuate divisor means we need to copy attribs to new buffer
+        //  as if the divisor is 1
+        ANGLE_TRY(mVertexArray->updateAttribsEmulateDivisor(
+            context, firstVertex, vertexOrIndexCount, instanceCount, indexTypeOrNone, indices));
+    }
+    else if (context->getStateCache().hasAnyActiveClientAttrib())
     {
         ANGLE_TRY(mVertexArray->updateClientAttribs(context, firstVertex, vertexOrIndexCount,
                                                     instanceCount, indexTypeOrNone, indices));

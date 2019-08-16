@@ -97,7 +97,8 @@ VertexArrayVk::VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &s
       mCurrentElementArrayBufferOffset(0),
       mCurrentElementArrayBuffer(nullptr),
       mLineLoopHelper(contextVk->getRenderer()),
-      mDirtyLineLoopTranslation(true)
+      mDirtyLineLoopTranslation(true),
+      mEmulateAttribDivisorMask(0)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -427,6 +428,15 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
     {
         RendererVk *renderer           = contextVk->getRenderer();
         const vk::Format &vertexFormat = renderer->getFormat(attrib.format->id);
+        // TDEWIP: This seems like a good place to track this
+        if (binding.getDivisor() > renderer->getMaxVertexAttribDivisor())
+        {
+            mEmulateAttribDivisorMask |= (1 << attribIndex);
+        }
+        else
+        {
+            mEmulateAttribDivisorMask &= ~(1 << attribIndex);
+        }
 
         GLuint stride;
         bool anyVertexBufferConvertedOnGpu = false;
@@ -581,6 +591,108 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
                                        count, binding.getStride(), vertexFormat.vertexLoadFunction,
                                        &mCurrentArrayBuffers[attribIndex],
                                        &mCurrentArrayBufferOffsets[attribIndex]));
+        }
+        else
+        {
+            // Allocate space for startVertex + vertexCount so indexing will work.  If we don't
+            // start at zero all the indices will be off.
+            // Only vertexCount vertices will be used by the upcoming draw so that is all we copy.
+            size_t bytesToAllocate = (startVertex + vertexCount) * stride;
+            src += startVertex * binding.getStride();
+            size_t destOffset = startVertex * stride;
+
+            ANGLE_TRY(StreamVertexData(
+                contextVk, &mDynamicVertexData, src, bytesToAllocate, destOffset, vertexCount,
+                binding.getStride(), vertexFormat.vertexLoadFunction,
+                &mCurrentArrayBuffers[attribIndex], &mCurrentArrayBufferOffsets[attribIndex]));
+        }
+
+        mCurrentArrayBufferHandles[attribIndex] =
+            mCurrentArrayBuffers[attribIndex]->getBuffer().getHandle();
+    }
+
+    return angle::Result::Continue;
+}
+
+// TDEWIP : Just copying updateClientAttribs with a few tweaks initially
+angle::Result VertexArrayVk::updateAttribsEmulateDivisor(const gl::Context *context,
+                                                         GLint firstVertex,
+                                                         GLsizei vertexOrIndexCount,
+                                                         GLsizei instanceCount,
+                                                         gl::DrawElementsType indexTypeOrInvalid,
+                                                         const void *indices)
+{
+    ContextVk *contextVk = vk::GetImpl(context);
+    // TDEWIP: Need to get all active attribs (not just client attribs)
+    const gl::AttributesMask &clientAttribs = context->getStateCache().getActiveClientAttribsMask();
+    const gl::AttributesMask activeAttribs =
+        clientAttribs | context->getStateCache().getActiveBufferedAttribsMask();
+    // TODO: Do I need default attribs as well? I'm thinking they can't be instanced so won't have
+    // to emulate, right?
+
+    ASSERT(activeAttribs.any());
+
+    GLint startVertex;
+    size_t vertexCount;
+    ANGLE_TRY(GetVertexRangeInfo(context, firstVertex, vertexOrIndexCount, indexTypeOrInvalid,
+                                 indices, 0, &startVertex, &vertexCount));
+
+    RendererVk *renderer = contextVk->getRenderer();
+    mDynamicVertexData.releaseInFlightBuffers(contextVk);
+
+    const auto &attribs  = mState.getVertexAttributes();
+    const auto &bindings = mState.getVertexBindings();
+
+    // Copied TODO(fjhenigman): When we have a bunch of interleaved attributes, they end up
+    // un-interleaved, wasting space and copying time.  Consider improving on that.
+    for (size_t attribIndex : activeAttribs)
+    {
+        const gl::VertexAttribute &attrib = attribs[attribIndex];
+        const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];
+        ASSERT(attrib.enabled && binding.getBuffer().get() == nullptr);
+
+        const vk::Format &vertexFormat = renderer->getFormat(attrib.format->id);
+        GLuint stride                  = vertexFormat.bufferFormat().pixelBytes;
+
+        ASSERT(GetVertexInputAlignment(vertexFormat) <= vk::kVertexBufferAlignment);
+
+        const uint8_t *src = static_cast<const uint8_t *>(attrib.pointer);
+        if (binding.getDivisor() > 0)
+        {
+            // instanced attrib
+            if ((mEmulateAttribDivisorMask & (1 << attribIndex)) != 0)
+            {
+                // Emulate divisor case
+                // TDEWIP : Need to treat buffered vs client attribs differently
+                //  TODO: Copy attribs to new buffer, 1 per instance, & set divisor to 1
+                // Client case
+                if ((clientAttribs.bits() & (1 << attribIndex)) != 0)
+                {
+                    // TODO : Verify that this copies data correctly
+                    //  Need one attrib per instance
+                    size_t bytesToAllocate = instanceCount * stride;
+
+                    ANGLE_TRY(StreamVertexData(contextVk, &mDynamicVertexData, src, bytesToAllocate,
+                                               0, instanceCount, binding.getStride(),
+                                               vertexFormat.vertexLoadFunction,
+                                               &mCurrentArrayBuffers[attribIndex],
+                                               &mCurrentArrayBufferOffsets[attribIndex]));
+                }
+                else
+                {
+                    // TDEWIP : Buffered case, how to handle?
+                }
+            }
+            else
+            {
+                size_t count           = UnsignedCeilDivide(instanceCount, binding.getDivisor());
+                size_t bytesToAllocate = count * stride;
+
+                ANGLE_TRY(StreamVertexData(
+                    contextVk, &mDynamicVertexData, src, bytesToAllocate, 0, count,
+                    binding.getStride(), vertexFormat.vertexLoadFunction,
+                    &mCurrentArrayBuffers[attribIndex], &mCurrentArrayBufferOffsets[attribIndex]));
+            }
         }
         else
         {

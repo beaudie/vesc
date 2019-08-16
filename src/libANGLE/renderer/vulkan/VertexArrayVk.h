@@ -37,6 +37,13 @@ class VertexArrayVk : public VertexArrayImpl
                              VkBuffer bufferHandle,
                              uint32_t offset);
 
+    angle::Result updateAttribsEmulateDivisor(const gl::Context *context,
+                                              GLint firstVertex,
+                                              GLsizei vertexOrIndexCount,
+                                              GLsizei instanceCount,
+                                              gl::DrawElementsType indexTypeOrInvalid,
+                                              const void *indices);
+
     angle::Result updateClientAttribs(const gl::Context *context,
                                       GLint firstVertex,
                                       GLsizei vertexOrIndexCount,
@@ -87,6 +94,8 @@ class VertexArrayVk : public VertexArrayImpl
                                         size_t indexCount,
                                         const void *sourcePointer);
 
+    bool anyEmulateDivisor() const { return mEmulateAttribDivisorMask != 0; }
+
   private:
     void setDefaultPackedInput(ContextVk *contextVk, size_t attribIndex);
 
@@ -128,6 +137,10 @@ class VertexArrayVk : public VertexArrayImpl
 
     // Vulkan does not allow binding a null vertex buffer. We use a dummy as a placeholder.
     vk::BufferHelper mTheNullBuffer;
+
+    // TDEWIP: Track this to know which attribs (if any) we have to emulate
+    // TODO : Verify that max attribs is <= 16
+    uint16_t mEmulateAttribDivisorMask;
 };
 }  // namespace rx
 

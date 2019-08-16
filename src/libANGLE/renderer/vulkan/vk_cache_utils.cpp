@@ -493,6 +493,7 @@ void GraphicsPipelineDesc::initDefaults()
 {
     // Set all vertex input attributes to default, the default format is Float
     angle::FormatID defaultFormat = GetCurrentValueFormatID(gl::VertexAttribType::Float);
+    // mVertexInputAttribs.emulate   = 0;
     for (PackedAttribDesc &packedAttrib : mVertexInputAttribs.attribs)
     {
         SetBitField(packedAttrib.stride, 0);
@@ -653,11 +654,11 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
                           sizeof(attributeDescs);
     ANGLE_UNUSED_VARIABLE(unpackedSize);
 
+    // mMaxVertexAttribDivisor = context->getRenderer()->getMaxVertexAttribDivisor()
     gl::AttribArray<VkVertexInputBindingDivisorDescriptionEXT> divisorDesc;
     VkPipelineVertexInputDivisorStateCreateInfoEXT divisorState = {};
     divisorState.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT;
     divisorState.pVertexBindingDivisors = divisorDesc.data();
-
     for (size_t attribIndexSizeT : activeAttribLocationsMask)
     {
         const uint32_t attribIndex = static_cast<uint32_t>(attribIndexSizeT);
@@ -673,6 +674,9 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
             bindingDesc.inputRate = static_cast<VkVertexInputRate>(VK_VERTEX_INPUT_RATE_INSTANCE);
             divisorDesc[divisorState.vertexBindingDivisorCount].binding = bindingDesc.binding;
             divisorDesc[divisorState.vertexBindingDivisorCount].divisor = packedAttrib.divisor;
+            // TDEWIP: Forcing divisor to 1 for emulation. If divisor > 255, need to emulate
+            // divisorDesc[divisorState.vertexBindingDivisorCount].divisor =
+            //    (mVertexInputAttribs.emulate & (1 << attribIndex)) ? 1 : packedAttrib.divisor;
             ++divisorState.vertexBindingDivisorCount;
         }
         else
@@ -871,7 +875,13 @@ void GraphicsPipelineDesc::updateVertexInput(GraphicsPipelineTransitionBits *tra
 
     // TODO: Handle the case where the divisor overflows the field that holds it.
     // http://anglebug.com/2672
+    // This will explode, handle it
     ASSERT(divisor <= std::numeric_limits<decltype(packedAttrib.divisor)>::max());
+    if (divisor > std::numeric_limits<decltype(packedAttrib.divisor)>::max())
+    {
+        // TDEWIP : This handles catching emulation case for > 255, but need to store actual divisor
+        // mVertexInputAttribs.emulate |= (1 < attribIndex);
+    }
 
     SetBitField(packedAttrib.stride, stride);
     SetBitField(packedAttrib.divisor, divisor);
