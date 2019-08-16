@@ -201,6 +201,11 @@ void DisplayVk::generateExtensions(egl::DisplayExtensions *outExtensions) const
     outExtensions->contextPriority = true;
     outExtensions->noConfigContext = true;
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+    outExtensions->nativeFenceSyncANDROID =
+        getRenderer()->getFeatures().supportsExternalFenceFd.enabled;
+#endif  // defined(ANGLE_PLATFORM_ANDROID)
+
 #if defined(ANGLE_PLATFORM_GGP)
     outExtensions->ggpStreamDescriptor = true;
     outExtensions->swapWithFrameToken  = true;

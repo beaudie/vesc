@@ -1509,6 +1509,10 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
         ExtensionFound(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME, deviceExtensionNames));
 
     ANGLE_FEATURE_CONDITION(
+        (&mFeatures), supportsExternalFenceFd,
+        ExtensionFound(VK_KHR_EXTERNAL_FENCE_FD_EXTENSION_NAME, deviceExtensionNames));
+
+    ANGLE_FEATURE_CONDITION(
         (&mFeatures), supportsShaderStencilExport,
         ExtensionFound(VK_EXT_SHADER_STENCIL_EXPORT_EXTENSION_NAME, deviceExtensionNames));
 

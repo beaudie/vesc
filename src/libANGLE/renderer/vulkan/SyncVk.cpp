@@ -19,6 +19,8 @@ namespace rx
 {
 namespace vk
 {
+constexpr int kInvalidFenceFd = -1;
+
 SyncHelper::SyncHelper()
 {
     mUse.init();
@@ -37,6 +39,11 @@ void SyncHelper::releaseToRenderer(RendererVk *renderer)
 
 angle::Result SyncHelper::initialize(ContextVk *contextVk)
 {
+    return initializeWithExternalFd(contextVk, kInvalidFenceFd);
+}
+
+angle::Result SyncHelper::initializeWithExternalFd(ContextVk *contextVk, int externalFd)
+{
     ASSERT(!mEvent.valid());
 
     RendererVk *renderer = contextVk->getRenderer();
@@ -49,6 +56,19 @@ angle::Result SyncHelper::initialize(ContextVk *contextVk)
     DeviceScoped<Event> event(device);
     ANGLE_VK_TRY(contextVk, event.get().init(device, eventCreateInfo));
     ANGLE_TRY(contextVk->getNextSubmitFence(&mFence));
+
+    // Import FD to next submit Fence to enable clientWait() with nativeFence
+    if (externalFd != kInvalidFenceFd)
+    {
+        VkImportFenceFdInfoKHR importFenceFdInfo = {};
+        importFenceFdInfo.sType                  = VK_STRUCTURE_TYPE_IMPORT_FENCE_FD_INFO_KHR;
+        importFenceFdInfo.pNext                  = nullptr;
+        importFenceFdInfo.fence                  = mFence.get().getHandle();
+        importFenceFdInfo.flags                  = VK_FENCE_IMPORT_TEMPORARY_BIT_KHR;
+        importFenceFdInfo.handleType             = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT;
+        importFenceFdInfo.fd                     = externalFd;
+        ANGLE_VK_TRY(contextVk, mFence.get().importFd(device, importFenceFdInfo));
+    }
 
     mEvent = event.release();
 
@@ -120,6 +140,18 @@ angle::Result SyncHelper::getStatus(Context *context, bool *signaled)
     *signaled = result == VK_EVENT_SET;
     return angle::Result::Continue;
 }
+
+angle::Result SyncHelper::dupNativeFenceFD(Context *context, int *fdOut) const
+{
+    VkFenceGetFdInfoKHR fenceGetFdInfo = {};
+    fenceGetFdInfo.sType               = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
+    fenceGetFdInfo.pNext               = nullptr;
+    fenceGetFdInfo.fence               = mFence.get().getHandle();
+    fenceGetFdInfo.handleType          = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+    ANGLE_VK_TRY(context, mFence.get().getFd(context->getDevice(), fenceGetFdInfo, fdOut));
+    return angle::Result::Continue;
+}
+
 }  // namespace vk
 
 SyncVk::SyncVk() : SyncImpl() {}
@@ -194,10 +226,11 @@ angle::Result SyncVk::getStatus(const gl::Context *context, GLint *outResult)
     return angle::Result::Continue;
 }
 
-EGLSyncVk::EGLSyncVk(const egl::AttributeMap &attribs) : EGLSyncImpl()
-{
-    ASSERT(attribs.isEmpty());
-}
+EGLSyncVk::EGLSyncVk(const egl::AttributeMap &attribs)
+    : EGLSyncImpl(),
+      mExternalFd(static_cast<int>(
+          attribs.getAsInt(EGL_SYNC_NATIVE_FENCE_FD_ANDROID, EGL_NO_NATIVE_FENCE_FD_ANDROID)))
+{}
 
 EGLSyncVk::~EGLSyncVk() {}
 
@@ -213,7 +246,8 @@ egl::Error EGLSyncVk::initialize(const egl::Display *display,
     ASSERT(type == EGL_SYNC_FENCE_KHR);
     ASSERT(context != nullptr);
 
-    if (mFenceSync.initialize(vk::GetImpl(context)) == angle::Result::Stop)
+    if (mFenceSync.initializeWithExternalFd(vk::GetImpl(context), mExternalFd) ==
+        angle::Result::Stop)
     {
         return egl::Error(EGL_BAD_ALLOC, "eglCreateSyncKHR failed to create sync object");
     }
@@ -286,10 +320,13 @@ egl::Error EGLSyncVk::getStatus(const egl::Display *display, EGLint *outStatus)
     return egl::NoError();
 }
 
-egl::Error EGLSyncVk::dupNativeFenceFD(const egl::Display *display, EGLint *result) const
+egl::Error EGLSyncVk::dupNativeFenceFD(const egl::Display *display, EGLint *fdOut) const
 {
-    UNREACHABLE();
-    return egl::EglBadDisplay();
+    if (mFenceSync.dupNativeFenceFD(vk::GetImpl(display), fdOut) == angle::Result::Stop)
+    {
+        return egl::Error(EGL_BAD_PARAMETER, "eglDupNativeFenceFDANDROID failed to dup native FD");
+    }
+    return egl::NoError();
 }
 
 }  // namespace rx

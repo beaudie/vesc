@@ -120,6 +120,13 @@ struct FeaturesVk : FeatureSetBase
         "supports_external_semaphore_fd", FeatureCategory::VulkanFeatures,
         "VkDevice supports the VK_KHR_external_semaphore_fd extension", &members};
 
+    // Whether the VkDevice supports the VK_KHR_external_fence_fd extension, on which the
+    // EGL_ANDROID_native_fence extension can be layered.
+    Feature supportsExternalFenceFd = {"supports_external_fence_fd",
+                                       FeatureCategory::VulkanFeatures,
+                                       "VkDevice supports the VK_KHR_external_fence_fd extension",
+                                       &members, "http://anglebug.com/2517"};
+
     // Whether the VkDevice supports the VK_EXT_shader_stencil_export extension, which is used to
     // perform multisampled resolve of stencil buffer.  A multi-step workaround is used instead if
     // this extension is not available.

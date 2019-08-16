@@ -34,6 +34,7 @@ class SyncHelper
     void releaseToRenderer(RendererVk *renderer);
 
     angle::Result initialize(ContextVk *contextVk);
+    angle::Result initializeWithExternalFd(ContextVk *contextVk, int externalFd);
     angle::Result clientWait(Context *context,
                              ContextVk *contextVk,
                              bool flushCommands,
@@ -41,6 +42,7 @@ class SyncHelper
                              VkResult *outResult);
     void serverWait(ContextVk *contextVk);
     angle::Result getStatus(Context *context, bool *signaled);
+    angle::Result dupNativeFenceFD(Context *context, int *fdOut) const;
 
   private:
     // The vkEvent that's signaled on `init` and can be waited on in `serverWait`, or queried with
@@ -96,11 +98,11 @@ class EGLSyncVk final : public EGLSyncImpl
                           const gl::Context *context,
                           EGLint flags) override;
     egl::Error getStatus(const egl::Display *display, EGLint *outStatus) override;
-
-    egl::Error dupNativeFenceFD(const egl::Display *display, EGLint *result) const override;
+    egl::Error dupNativeFenceFD(const egl::Display *display, EGLint *fdOut) const override;
 
   private:
     vk::SyncHelper mFenceSync;
+    int mExternalFd;
 };
 }  // namespace rx
 
