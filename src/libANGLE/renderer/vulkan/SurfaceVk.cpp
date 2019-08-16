@@ -944,8 +944,18 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         presentInfo.pNext = &presentRegions;
     }
 
-    // Update the swap history for this presentation
-    swap.sharedFence = contextVk->getLastSubmittedFence();
+    {
+        SwapHistory &previousSwap =
+            mSwapHistory[(mCurrentSwapHistoryIndex + kSwapHistorySize - 1) % kSwapHistorySize];
+        // The most recently submitted present contains a reference to the presentImageSemaphore of
+        // the previous swap. Therefore the fence of the queue submission of the most recently
+        // submitted present must be waited on before destroying the presentImageSemaphore of the
+        // previous swap. The last submitted fence either is this exact fence or at least follows
+        // it, so it is safe to select this fence as the fence to wait on before destroying the
+        // semaphore.
+        previousSwap.sharedFence = contextVk->getLastSubmittedFence();
+    }
+
     ASSERT(!mAcquireImageSemaphore.valid());
 
     ++mCurrentSwapHistoryIndex;
