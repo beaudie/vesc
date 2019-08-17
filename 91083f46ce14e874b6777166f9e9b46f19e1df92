@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "27268a3e_fb48d605",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-08-17T06:16:23Z",
+      "side": 1,
+      "message": "Yeah sorry about the commit message. It made little sense as written. I rewrote the commit message so please see if that makes more sense.",
+      "parentUuid": "657c7ce5_37533628",
+      "range": {
+        "startLine": 10,
+        "startChar": 16,
+        "endLine": 12,
+        "endChar": 46
+      },
+      "revId": "91083f46ce14e874b6777166f9e9b46f19e1df92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f8028d1d_f8e7c162",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
