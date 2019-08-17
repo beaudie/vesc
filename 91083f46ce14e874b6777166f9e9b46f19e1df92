@@ -22,6 +22,63 @@
       "revId": "91083f46ce14e874b6777166f9e9b46f19e1df92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "657c7ce5_37533628",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T02:07:59Z",
+      "side": 1,
+      "message": "I don\u0027t get what you are trying to say here:\n\n\"The semaphore ... was waiting on the .. fence\"?!\n\"while the wait was scheduled on the next submit\"?!",
+      "range": {
+        "startLine": 10,
+        "startChar": 16,
+        "endLine": 12,
+        "endChar": 46
+      },
+      "revId": "91083f46ce14e874b6777166f9e9b46f19e1df92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8028d1d_f8e7c162",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 865,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T02:07:59Z",
+      "side": 1,
+      "message": "You say the present semaphore, is that swap.presentImageSemaphore? Can you explain exactly how that\u0027s being deleted while in use by the GPU? The waitFence here ensures the fence corresponding to that frame\u0027s vkQueueSubmit is signaled. Is the issue that the presentation engine may still not have processed the corresponding semaphore?\n\nIf so, we may have to think about where and when to clean up presentImageSemaphore, but the change in this CL is not the answer.",
+      "revId": "91083f46ce14e874b6777166f9e9b46f19e1df92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4b09ee97_c27c6321",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T02:07:59Z",
+      "side": 1,
+      "message": "You are effectively reducing the swap history size to 1. Look at what happens here:\n\n- Frame N, ++H, nextSwap \u003d mSwapHistory[H], set sharedFence\n- Frame N+1, swap \u003d mSwapHistory[H], wait on sharedFence\n\nEffectively you are making every frame finish before submitting the next one.",
+      "revId": "91083f46ce14e874b6777166f9e9b46f19e1df92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
