@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c94a66bf_42ead2e5",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-17T19:28:01Z",
+      "side": 1,
+      "message": "this comment needs polish. How about\n\n\"If we switch from an array buffer to a client pointer (or vice-versa) we set the whole attribute dirty. This notifies the Vulkan back-end to update all its caches.\"",
+      "range": {
+        "startLine": 476,
+        "startChar": 5,
+        "endLine": 479,
+        "endChar": 56
+      },
+      "revId": "db1b09e1af5dc89010dd1b2c7f8ff29221746543",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34ce4b08_095bcba3",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-17T19:28:01Z",
+      "side": 1,
+      "message": "if ((boundBuffer \u003d\u003d nullptr) !\u003d (binding.getBuffer().get() \u003d\u003d nullptr))\n{\n    attribDirty \u003d true;\n}",
+      "range": {
+        "startLine": 481,
+        "startChar": 4,
+        "endLine": 481,
+        "endChar": 90
+      },
+      "revId": "db1b09e1af5dc89010dd1b2c7f8ff29221746543",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c98fe3f_db6ad18c",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-17T19:28:01Z",
+      "side": 1,
+      "message": "Could you rename this to stride? Remove the default init - it will only add additional instructions.",
+      "range": {
+        "startLine": 429,
+        "startChar": 15,
+        "endLine": 429,
+        "endChar": 28
+      },
+      "revId": "db1b09e1af5dc89010dd1b2c7f8ff29221746543",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e06b6e46_777dc4f7",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-17T19:28:01Z",
+      "side": 1,
+      "message": "can you restore this to the prior code?",
+      "range": {
+        "startLine": 492,
+        "startChar": 16,
+        "endLine": 492,
+        "endChar": 52
+      },
+      "revId": "db1b09e1af5dc89010dd1b2c7f8ff29221746543",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
