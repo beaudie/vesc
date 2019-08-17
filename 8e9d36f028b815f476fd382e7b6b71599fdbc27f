@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c2e8b02_2f0f2551",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T19:02:24Z",
+      "side": 1,
+      "message": "Add a `Bug:` tag above Change-Id. `git cl upload` should have warned you about this, did you bypass its validation?\n\nIf there are no bugs created for this, you can create one at anglebug.com/new\n\nThe Bug line should look like:\n\nBug: angleproject:NNNN",
+      "revId": "8e9d36f028b815f476fd382e7b6b71599fdbc27f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bfcd46cb_9647c080",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T19:02:24Z",
+      "side": 1,
+      "message": "It\u0027s a bit alarming that libANGLE/Constants.h defines some limits for uniform buffers, but they are not consistently applied as hard limits in libANGLE/Context.cpp (Context::initCaps()), yet every here and there those limits are assumed.\n\nInstead of this change, can you please modify Context::initCaps() to apply these limits in the frontend itself? There\u0027s a line that says:\n\n    LimitCap(\u0026mState.mCaps.maxShaderUniformBlocks[ShaderType::Vertex],\n             IMPLEMENTATION_MAX_VERTEX_SHADER_UNIFORM_BUFFERS);\n\nBasically that line needs to be duplicated to set the limits of Fragment and Compute, and another line added that sets the limit of maxCombinedUniformBlocks. Note that maxUniformBufferBindings is capped right after.",
+      "revId": "8e9d36f028b815f476fd382e7b6b71599fdbc27f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
