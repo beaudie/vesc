@@ -1,0 +1,818 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3d00502e_bdc0b75b",
+        "filename": "src/compiler/translator/IntermNode.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1344,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Fix the return value of TIntermSymbol::deepCopy() instead.",
+      "range": {
+        "startLine": 1344,
+        "startChar": 34,
+        "endLine": 1344,
+        "endChar": 62
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e93392b6_73309dec",
+        "filename": "src/compiler/translator/IntermNode.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Since all the other deep copies are not copying line, I suggest passing in 0 here. At least if there are errors or warnings, duplicate code will consistently report line 0. The line copied here will most likely be wrong anyway.",
+      "range": {
+        "startLine": 1345,
+        "startChar": 34,
+        "endLine": 1345,
+        "endChar": 44
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84d9833d_5e156793",
+        "filename": "src/compiler/translator/IntermNode.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Nice! You can split this change into its own CL if you feel like it.",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e1e6a40_6f5ccd9a",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "deepCopy()",
+      "range": {
+        "startLine": 152,
+        "startChar": 70,
+        "endLine": 152,
+        "endChar": 90
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0b80e80_ee50395f",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "This is a list of flattened array sizes corresponding to sampler array arguments, right? A comment could be useful.",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68ba22e7_767b05af",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Is `std::unordered_map` not able to hash `std::vector\u003csize_t\u003e` by itself?\n\nAlso, please add a comment saying what the key and data values in this map mean.",
+      "range": {
+        "startLine": 186,
+        "startChar": 81,
+        "endLine": 186,
+        "endChar": 98
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97cd6791_7b85bf77",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be isArray \u0026\u0026 isSampler?\n\nYou can add a test for this by having a function that takes an array of struct to also get an array of `uint`s to make sure that latter array is not modified.",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d13d5ad8_e59e55b8",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "You could have the map keyed by `TFunction *` instead of the name",
+      "range": {
+        "startLine": 215,
+        "startChar": 49,
+        "endLine": 215,
+        "endChar": 65
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a081e0cf_88da81a8",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Use ** instead. Chromium style disallows non-const references (i.e. if you want to write to it, make it a pointer).",
+      "range": {
+        "startLine": 227,
+        "startChar": 14,
+        "endLine": 227,
+        "endChar": 16
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7aadafe9_82a2e084",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "If you key the map with TFunction * instead of the name, then you can just give kEmptyImmutableString to the function constructor (with SymbolType::Empty) and have it generate a temp name automatically. This avoids name collisions with other user defined functions.",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 9
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d596e496_44206b9c",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "What does this do? You give the name of the function to the symbol table to get another function? Shouldn\u0027t it give back the same function? Why couldn\u0027t you use `function` directly?",
+      "range": {
+        "startLine": 244,
+        "startChar": 8,
+        "endLine": 244,
+        "endChar": 92
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58244b2a_3a89954e",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Again, should this only be applied to sampler arrays?",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c23b4b56_fa0b1324",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "I think `TVariable` here is just using symbolTable to generate temp names, if any, or something mundane like that. I\u0027ve always seen the symbol table to be empty (?!) and I have a feeling you have to do actively do something in your traversal for it to contain anything. I could be wrong, but you can safely remove this comment.",
+      "range": {
+        "startLine": 256,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 24
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33d727e2_c089b677",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Or just:\n\n        param \u003d new TVariable(...)\n    }\n    newFunction-\u003eaddParameter(param);",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 13
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1082ecc5_8e45edf7",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "6?\n\nActually it likes only back() is ever used. If that\u0027s true, you can then just store {1, 18}, pushing a single value on entryArray and popping a single value on exitArray.",
+      "range": {
+        "startLine": 304,
+        "startChar": 64,
+        "endLine": 304,
+        "endChar": 65
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "464ff99c_d77d8f62",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Use composition (instead of inheritance) for this at least. Then you don\u0027t have to `static_cast\u003cVariableExtraData *\u003e(this)`, you can just pass the member (\u0026mVariableExtraData).",
+      "range": {
+        "startLine": 317,
+        "startChar": 79,
+        "endLine": 317,
+        "endChar": 96
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "64870fb7_c091e929",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Update the comment. This is handling sampler array default uniforms too, IIUC",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d28e2e71_064ad638",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Should the ! apply to the whole thing?",
+      "range": {
+        "startLine": 385,
+        "startChar": 13,
+        "endLine": 385,
+        "endChar": 69
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56806ad8_42053267",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "{ } for style.",
+      "range": {
+        "startLine": 386,
+        "startChar": 12,
+        "endLine": 386,
+        "endChar": 24
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcee93f2_18d1e7b5",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Move inside the if below",
+      "range": {
+        "startLine": 400,
+        "startChar": 0,
+        "endLine": 403,
+        "endChar": 0
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3364de37_ac977cc3",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "deepCopy()",
+      "range": {
+        "startLine": 409,
+        "startChar": 70,
+        "endLine": 409,
+        "endChar": 74
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fe84c50_650da1bd",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Please add a new function to TType, like toArrayBaseType(), that just clears mArraySizes in one go.",
+      "range": {
+        "startLine": 859,
+        "startChar": 0,
+        "endLine": 860,
+        "endChar": 50
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4ba7e582_550de65a",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Remember to remove",
+      "range": {
+        "startLine": 866,
+        "startChar": 12,
+        "endLine": 866,
+        "endChar": 69
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab208e12_14656418",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Again, I recommend just giving the variable kEmptyImmutableString and SymbolType::Empty and let it generate temp names. It may be harder to read the generated code, but you are safe from name collisions.\n\nIn this case, since you are using SymbolTable::AngleInternal, you are safe from collision with user names, but could cause trouble if another pass declares something_offset as well.\n\n---\n\nOn the same note, I\u0027ve been thinking of augmenting the temp name generator to generate names like \"s419_given_string\", so we have both the safety of collision-free generated names as well as readability of giving actual names to variables. It should be doable by appending the name passed to the variable (instead of expecting kEmptyImmutableString) when SymbolType::Empty.",
+      "range": {
+        "startLine": 872,
+        "startChar": 0,
+        "endLine": 874,
+        "endChar": 55
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3cb837b5_4090f4cc",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "const TType *intType \u003d StaticType::GetBasic\u003cEbtInt\u003e();",
+      "range": {
+        "startLine": 876,
+        "startChar": 16,
+        "endLine": 876,
+        "endChar": 82
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd5ce176_21f731e0",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "I don\u0027t know what this does. In CreateStructSamplerFunctionVisitor::visitSamplerInStructParam, you use `new TVariable(...)` as the code here previously did. Why does that work there and not here and what does this function do for you?",
+      "range": {
+        "startLine": 940,
+        "startChar": 61,
+        "endLine": 940,
+        "endChar": 76
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2c7d98c_a12ff04e",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "deepCopy()",
+      "range": {
+        "startLine": 955,
+        "startChar": 16,
+        "endLine": 955,
+        "endChar": 24
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36716a9a_19a129f2",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "deepCopy()",
+      "range": {
+        "startLine": 955,
+        "startChar": 67,
+        "endLine": 955,
+        "endChar": 76
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ce9732c_8ced38de",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Is the original prototype ever removed from the tree? Same question with the original function definition.",
+      "range": {
+        "startLine": 1053,
+        "startChar": 12,
+        "endLine": 1053,
+        "endChar": 66
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e276001_16734262",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "You can create a typedef for this, it\u0027s used in a couple places.",
+      "range": {
+        "startLine": 1106,
+        "startChar": 4,
+        "endLine": 1106,
+        "endChar": 60
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcca6683_631ba411",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Can you stick a\n\n    if (!ValidateAST(root, \u0026mDiagnostics, mValidateASTOptions))\n    {\n        return false;\n    }\n\nlike Compiler.cpp does, after the call to this function? That should catch the missing deepCopy()s.",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7769b0dc_ceb1488f",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1191,
+        "startChar": 16,
+        "endLine": 1191,
+        "endChar": 29
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8433f0bc_b40c6669",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Remember to remove after debugging.",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4024fbd_33a48315",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "I just hit this today! Yeay for fix",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f2fa5ff7_808864ec",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "I\u0027d suggest outputting \"\\\\\". Not sure how glslang interprets it, but this should escape the original backslash and make it no longer be a line-continuation. With \"\\\\\u003cNL\u003e\", you have \u003c escaped with backslash, which is kinda weird.",
+      "range": {
+        "startLine": 414,
+        "startChar": 29,
+        "endLine": 414,
+        "endChar": 33
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2767c713_3c832446",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Can you add a comment here describing what\u0027s the possible forms `samplerUniform.name` can take and what is expected to be done in each case?",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "263ebcb4_0c77e38c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Can you do without these? In ProgramVk::linkImpl, mState.getSamplerBindings() is traversed similarly and bindingIndex is trivially calculated, so probably the same can be done here?\n\nRegarding offsets, if nested arrays of the same sampler are sequentially placed by the front-end, then you can always have a single variable tracking the current offset of the current sampler.\n\nThis way you avoid many string and map operations.",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77ecb158_979b05a9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T04:49:39Z",
+      "side": 1,
+      "message": "Can\u0027t you just find the first \u0027[\u0027 and erase everything from there to the end?",
+      "range": {
+        "startLine": 558,
+        "startChar": 0,
+        "endLine": 575,
+        "endChar": 46
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
