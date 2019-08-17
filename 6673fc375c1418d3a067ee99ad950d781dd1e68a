@@ -65,6 +65,47 @@
     },
     {
       "key": {
+        "uuid": "b5100b48_272fe066",
+        "filename": "src/compiler/translator/IntermNode.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-17T19:03:23Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "84d9833d_5e156793",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce6d82cb_84d3c0e7",
+        "filename": "src/compiler/translator/blocklayout.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-17T19:03:23Z",
+      "side": 1,
+      "message": "how does arraySizes differ from sampler.arraySizes? Seems like it wouldn\u0027t be necessary.",
+      "range": {
+        "startLine": 231,
+        "startChar": 45,
+        "endLine": 231,
+        "endChar": 59
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7e1e6a40_6f5ccd9a",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -759,6 +800,53 @@
     },
     {
       "key": {
+        "uuid": "1714a96f_513db0f7",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-17T19:03:23Z",
+      "side": 1,
+      "message": "Also, split change would be recommended.",
+      "parentUuid": "f2fa5ff7_808864ec",
+      "range": {
+        "startLine": 414,
+        "startChar": 29,
+        "endLine": 414,
+        "endChar": 33
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0ae0e7c_f61ba650",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-17T19:03:23Z",
+      "side": 1,
+      "message": "similar to how the translator can modify the names of variables (see ShaderVariable::name vs mappedName) I wonder if it would be sane to update ShaderVariable to have arraySizes and translatedArraySize. Something like that.",
+      "range": {
+        "startLine": 78,
+        "startChar": 30,
+        "endLine": 78,
+        "endChar": 45
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2767c713_3c832446",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 9
@@ -770,6 +858,29 @@
       "writtenOn": "2019-08-17T04:49:39Z",
       "side": 1,
       "message": "Can you add a comment here describing what\u0027s the possible forms `samplerUniform.name` can take and what is expected to be done in each case?",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "784c3590_8bb30311",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-17T19:03:23Z",
+      "side": 1,
+      "message": "nit: don\u0027t need auto here",
+      "range": {
+        "startLine": 588,
+        "startChar": 13,
+        "endLine": 588,
+        "endChar": 17
+      },
       "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
