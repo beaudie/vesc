@@ -48,7 +48,7 @@ class FenceSyncVk
     vk::Event mEvent;
     // The vkFence that's signaled once the command buffer including the `init` signal is executed.
     // `clientWait` waits on this fence.
-    vk::Shared<vk::Fence> mFence;
+    std::vector<vk::Shared<vk::Fence>> mFences;
 };
 
 class SyncVk final : public SyncImpl
