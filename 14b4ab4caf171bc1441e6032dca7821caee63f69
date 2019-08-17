@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5defd674_4273a977",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-17T18:41:19Z",
+      "side": 1,
+      "message": "Wait, really? The code here has changed so much I don\u0027t have a mental model of it anymore, but let me try to see if I understand what\u0027s happening:\n\n1. Say history has size N and we are at index 1 (which means [1] is the oldest swap that happened)\n2. We wait on fence[0], then delete fence[1] and presentSemaphore[1]\n3. We create a new semaphore over presentSemaphore[1]\n4. We make a submission that signals presentSemaphore[1]\n5. We take the fence corresponding to that submission and place it in fence[1]\n6. [1] is now the newest swap and the history index is changed to 2\n\nYou are changing step 5 to store the fence in fence[0].\n\n---\n\nI\u0027m not sure I follow your analysis. A new presentImageSemaphore has just been created for this present operation, so how can it refer to the previous swap? It\u0027s deletion is fenced to the same submission that signals the semaphore. We have:\n\nCPU: Wait Fence 10, delete Semaphore 10, Submit 10+N-1, Wait Fence 11, delete Semaphore 11, Submit 11+N-1, ...\nGraphics Queue: Execute 10, Signal Semaphore 10 \u0026 Fence 10, Execute 11, Signal Semaphore 11 \u0026 Fence 11, ...\nPresent Queue: Wait Semaphore 10, Present 10, Wait semaphore 11, Present 11\n\nAt the moment the Graphics Queue does \"Signal Semaphore 10 \u0026 Fence 10\", the CPU goes ahead and deletes Semaphore 10. If the Present Queue has not yet woken up to respond to Semaphore 10\u0027s signal, I can see a problem as the semaphore is deleted while it\u0027s waiting on it.\n\nHowever, I can\u0027t really see how you can know when the present queue has stopped waiting on the semaphore just by looking at the fences that the graphics queue is signalling. For example, what if the present queue is super slow (relatively) and the GPU manages to get a few submissions executed? Then the present queue could be behind the GPU queue by a few frames (so just using the previous swap history may not be enough).\n\n---\n\nShould we instead have a separate history that has the same size as the swapchain, and delete the semaphores based on that? My reasoning is that if you have S swapchain images, after S successful acquires, the presentation engine must definitely be done with the semaphore corresponding to S frames ago, so you can delete that.",
+      "range": {
+        "startLine": 950,
+        "startChar": 11,
+        "endLine": 951,
+        "endChar": 29
+      },
+      "revId": "14b4ab4caf171bc1441e6032dca7821caee63f69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
