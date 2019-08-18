@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "4405d977_a80dffa7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1361975
+      },
+      "writtenOn": "2019-08-18T09:56:35Z",
+      "side": 1,
+      "message": "I\u0027ve created a bug and added it to the commit message now. I hadn\u0027t heard of git cl upload before you mentioned it I\u0027m afraid, so I just followed the instructions on Gerrit about how to put the commit up for review which was done directly with git push.",
+      "parentUuid": "4c2e8b02_2f0f2551",
+      "revId": "8e9d36f028b815f476fd382e7b6b71599fdbc27f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bfcd46cb_9647c080",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "8e9d36f028b815f476fd382e7b6b71599fdbc27f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1441879_ed220e62",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1361975
+      },
+      "writtenOn": "2019-08-18T09:56:35Z",
+      "side": 1,
+      "message": "Makes sense, I\u0027ve removed all changes to this file in the latest version and have applied the limits in initCaps instead as you suggested.",
+      "parentUuid": "bfcd46cb_9647c080",
+      "revId": "8e9d36f028b815f476fd382e7b6b71599fdbc27f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
