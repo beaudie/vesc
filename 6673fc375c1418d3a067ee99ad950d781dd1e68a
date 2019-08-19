@@ -201,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "dfe0dc4a_8a67c33e",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T19:41:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43ab36f9_e7bdd376",
+      "range": {
+        "startLine": 152,
+        "startChar": 70,
+        "endLine": 152,
+        "endChar": 90
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b0b80e80_ee50395f",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -483,6 +507,30 @@
     },
     {
       "key": {
+        "uuid": "10de8087_cd5017e4",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T19:41:06Z",
+      "side": 1,
+      "message": "Symbol.cpp:175 in TFunction::TFunction(...) - ASSERT(symbolType !\u003d SymbolType::EMPTY)",
+      "parentUuid": "6ca097c8_e83eafea",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 9
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d596e496_44206b9c",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -542,6 +590,30 @@
       "side": 1,
       "message": "Can you just use `function` directly?",
       "parentUuid": "2a981b48_79d23f5e",
+      "range": {
+        "startLine": 244,
+        "startChar": 8,
+        "endLine": 244,
+        "endChar": 92
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7df9fbb4_37afd415",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T19:41:06Z",
+      "side": 1,
+      "message": "This should be the unreplaced function that was originally in the AST; the first step replaces those prototypes with a function with the same name (updatedFunction), after which we instantiate as necessary.",
+      "parentUuid": "bd64b3f6_c92df6c8",
       "range": {
         "startLine": 244,
         "startChar": 8,
@@ -718,6 +790,30 @@
       "side": 1,
       "message": "We need all the values for calculating the strides.",
       "parentUuid": "1082ecc5_8e45edf7",
+      "range": {
+        "startLine": 304,
+        "startChar": 64,
+        "endLine": 304,
+        "endChar": 65
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "023f9125_0054c1ef",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T19:41:06Z",
+      "side": 1,
+      "message": "Also, the example is correct: the array sizes are reversed from how they are in TType. This makes the order match up when nesting through arrays and structs.",
+      "parentUuid": "75089ecc_339685e7",
       "range": {
         "startLine": 304,
         "startChar": 64,
@@ -1472,6 +1568,30 @@
     },
     {
       "key": {
+        "uuid": "8d184e33_168a5990",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T19:41:06Z",
+      "side": 1,
+      "message": "This is done after a first pass which flattens all the arrays, so that isn\u0027t an issue.\nWe need to preserve the original function so that we can use it in subsequent passes as well.",
+      "parentUuid": "52ec6f1a_1ebeb8df",
+      "range": {
+        "startLine": 1053,
+        "startChar": 12,
+        "endLine": 1053,
+        "endChar": 66
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1e276001_16734262",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -1569,6 +1689,24 @@
       "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7abec52c_d0832103",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T19:41:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb725109_e32d16ca",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -1803,6 +1941,24 @@
       "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2a6a2030_98f70161",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T19:41:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2767c713_3c832446",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
