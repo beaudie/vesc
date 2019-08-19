@@ -143,6 +143,8 @@ class TCompiler : public TShHandleBase
 
     sh::GLenum getShaderType() const { return mShaderType; }
 
+    bool validateAST(TIntermBlock *root);
+
   protected:
     // Add emulated functions to the built-in function emulator.
     virtual void initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu,
