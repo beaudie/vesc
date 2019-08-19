@@ -722,6 +722,30 @@
     },
     {
       "key": {
+        "uuid": "e13b6f82_717fb1de",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T21:12:11Z",
+      "side": 1,
+      "message": "Understood",
+      "parentUuid": "ac00a242_4fa29a01",
+      "range": {
+        "startLine": 244,
+        "startChar": 8,
+        "endLine": 244,
+        "endChar": 92
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "58244b2a_3a89954e",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
