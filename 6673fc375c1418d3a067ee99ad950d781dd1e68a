@@ -106,6 +106,30 @@
     },
     {
       "key": {
+        "uuid": "9d8d8fda_f9114df9",
+        "filename": "src/compiler/translator/blocklayout.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "From what I\u0027ve seen, we generate a bunch of LinkedUniforms with only the outermost (innermost?) array size visible. (e.g. sampler2D foo[3][5] -\u003e foo[0], foo[1], foo[2], each having type sampler2D[5])",
+      "parentUuid": "ce6d82cb_84d3c0e7",
+      "range": {
+        "startLine": 231,
+        "startChar": 45,
+        "endLine": 231,
+        "endChar": 59
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7e1e6a40_6f5ccd9a",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -117,6 +141,30 @@
       "writtenOn": "2019-08-17T04:49:39Z",
       "side": 1,
       "message": "deepCopy()",
+      "range": {
+        "startLine": 152,
+        "startChar": 70,
+        "endLine": 152,
+        "endChar": 90
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84028657_d2409acb",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Does this need to be copied? We only use each node once.",
+      "parentUuid": "7e1e6a40_6f5ccd9a",
       "range": {
         "startLine": 152,
         "startChar": 70,
@@ -146,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "f3457000_b4b95f1f",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0b80e80_ee50395f",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68ba22e7_767b05af",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -157,6 +223,30 @@
       "writtenOn": "2019-08-17T04:49:39Z",
       "side": 1,
       "message": "Is `std::unordered_map` not able to hash `std::vector\u003csize_t\u003e` by itself?\n\nAlso, please add a comment saying what the key and data values in this map mean.",
+      "range": {
+        "startLine": 186,
+        "startChar": 81,
+        "endLine": 186,
+        "endChar": 98
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2b6ae8c4_452fdd42",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "No built-in specialization for vector. Wasn\u0027t sure if there was a better hash somewhere, so I just copied one from StackOverflow. Added a comment.",
+      "parentUuid": "68ba22e7_767b05af",
       "range": {
         "startLine": 186,
         "startChar": 81,
@@ -186,6 +276,24 @@
     },
     {
       "key": {
+        "uuid": "8c356dc7_88a93e11",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done. Added a basic test.",
+      "parentUuid": "97cd6791_7b85bf77",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d13d5ad8_e59e55b8",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -206,6 +314,30 @@
       "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa9b2369_f56b74f1",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d13d5ad8_e59e55b8",
+      "range": {
+        "startLine": 215,
+        "startChar": 49,
+        "endLine": 215,
+        "endChar": 65
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -232,6 +364,30 @@
     },
     {
       "key": {
+        "uuid": "7f3fa807_45af3dd7",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a081e0cf_88da81a8",
+      "range": {
+        "startLine": 227,
+        "startChar": 14,
+        "endLine": 227,
+        "endChar": 16
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7aadafe9_82a2e084",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -243,6 +399,30 @@
       "writtenOn": "2019-08-17T04:49:39Z",
       "side": 1,
       "message": "If you key the map with TFunction * instead of the name, then you can just give kEmptyImmutableString to the function constructor (with SymbolType::Empty) and have it generate a temp name automatically. This avoids name collisions with other user defined functions.",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 9
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2606ce62_aa5f8a73",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "TFunction constructor ASSERT()s that the type isn\u0027t Empty.",
+      "parentUuid": "7aadafe9_82a2e084",
       "range": {
         "startLine": 231,
         "startChar": 0,
@@ -278,6 +458,30 @@
     },
     {
       "key": {
+        "uuid": "2a981b48_79d23f5e",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "When we process function prototypes, we construct a new function with the same name. Not sure how it winds its way into the symbol table, but it seems to work.",
+      "parentUuid": "d596e496_44206b9c",
+      "range": {
+        "startLine": 244,
+        "startChar": 8,
+        "endLine": 244,
+        "endChar": 92
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "58244b2a_3a89954e",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -292,6 +496,24 @@
       "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b3e1fcb_7e1c95be",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58244b2a_3a89954e",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -318,6 +540,30 @@
     },
     {
       "key": {
+        "uuid": "ab7f43e8_2650c844",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c23b4b56_fa0b1324",
+      "range": {
+        "startLine": 256,
+        "startChar": 0,
+        "endLine": 257,
+        "endChar": 24
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "33d727e2_c089b677",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -341,6 +587,30 @@
     },
     {
       "key": {
+        "uuid": "09b8d35d_7bb6e59a",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33d727e2_c089b677",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 265,
+        "endChar": 13
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1082ecc5_8e45edf7",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -352,6 +622,30 @@
       "writtenOn": "2019-08-17T04:49:39Z",
       "side": 1,
       "message": "6?\n\nActually it likes only back() is ever used. If that\u0027s true, you can then just store {1, 18}, pushing a single value on entryArray and popping a single value on exitArray.",
+      "range": {
+        "startLine": 304,
+        "startChar": 64,
+        "endLine": 304,
+        "endChar": 65
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75089ecc_339685e7",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "We need all the values for calculating the strides.",
+      "parentUuid": "1082ecc5_8e45edf7",
       "range": {
         "startLine": 304,
         "startChar": 64,
@@ -387,6 +681,30 @@
     },
     {
       "key": {
+        "uuid": "e0f52d11_1bb9ae8d",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "464ff99c_d77d8f62",
+      "range": {
+        "startLine": 317,
+        "startChar": 79,
+        "endLine": 317,
+        "endChar": 96
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64870fb7_c091e929",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -404,6 +722,24 @@
     },
     {
       "key": {
+        "uuid": "cdf0833e_5c6c6b54",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64870fb7_c091e929",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d28e2e71_064ad638",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -415,6 +751,30 @@
       "writtenOn": "2019-08-17T04:49:39Z",
       "side": 1,
       "message": "Should the ! apply to the whole thing?",
+      "range": {
+        "startLine": 385,
+        "startChar": 13,
+        "endLine": 385,
+        "endChar": 69
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5988a82b_825bc961",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "No, if the return type of the node is an array then the access is not complete, and we only want to rewrite complete accesses. (For example, foo[3][5] would have foo[3] returning an array, so it\u0027s not a complete access; we want to look at the whole thing.)\nAdded a comment.",
+      "parentUuid": "d28e2e71_064ad638",
       "range": {
         "startLine": 385,
         "startChar": 13,
@@ -450,6 +810,30 @@
     },
     {
       "key": {
+        "uuid": "94dca085_4a01861b",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56806ad8_42053267",
+      "range": {
+        "startLine": 386,
+        "startChar": 12,
+        "endLine": 386,
+        "endChar": 24
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fcee93f2_18d1e7b5",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -473,6 +857,30 @@
     },
     {
       "key": {
+        "uuid": "cfe4ece3_f4a50630",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcee93f2_18d1e7b5",
+      "range": {
+        "startLine": 400,
+        "startChar": 0,
+        "endLine": 403,
+        "endChar": 0
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3364de37_ac977cc3",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -484,6 +892,30 @@
       "writtenOn": "2019-08-17T04:49:39Z",
       "side": 1,
       "message": "deepCopy()",
+      "range": {
+        "startLine": 409,
+        "startChar": 70,
+        "endLine": 409,
+        "endChar": 74
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "02fbc8fe_9d8c68b4",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "I don\u0027t think this needs to be copied as we\u0027re just generating the index. See response to the deepCopy() in the function above.",
+      "parentUuid": "3364de37_ac977cc3",
       "range": {
         "startLine": 409,
         "startChar": 70,
@@ -519,6 +951,30 @@
     },
     {
       "key": {
+        "uuid": "39323b6d_754b601f",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 860,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fe84c50_650da1bd",
+      "range": {
+        "startLine": 859,
+        "startChar": 0,
+        "endLine": 860,
+        "endChar": 50
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4ba7e582_550de65a",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -542,6 +998,30 @@
     },
     {
       "key": {
+        "uuid": "bc09842d_3b272db2",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ba7e582_550de65a",
+      "range": {
+        "startLine": 866,
+        "startChar": 12,
+        "endLine": 866,
+        "endChar": 69
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ab208e12_14656418",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -553,6 +1033,30 @@
       "writtenOn": "2019-08-17T04:49:39Z",
       "side": 1,
       "message": "Again, I recommend just giving the variable kEmptyImmutableString and SymbolType::Empty and let it generate temp names. It may be harder to read the generated code, but you are safe from name collisions.\n\nIn this case, since you are using SymbolTable::AngleInternal, you are safe from collision with user names, but could cause trouble if another pass declares something_offset as well.\n\n---\n\nOn the same note, I\u0027ve been thinking of augmenting the temp name generator to generate names like \"s419_given_string\", so we have both the safety of collision-free generated names as well as readability of giving actual names to variables. It should be doable by appending the name passed to the variable (instead of expecting kEmptyImmutableString) when SymbolType::Empty.",
+      "range": {
+        "startLine": 872,
+        "startChar": 0,
+        "endLine": 874,
+        "endChar": 55
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce76e8af_3bdc0f62",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done. For some reason using SymbolType::Empty actually results in an empty string being output, so I used AngleInternal.",
+      "parentUuid": "ab208e12_14656418",
       "range": {
         "startLine": 872,
         "startChar": 0,
@@ -588,6 +1092,30 @@
     },
     {
       "key": {
+        "uuid": "9eef9a9a_1e0c7206",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cb837b5_4090f4cc",
+      "range": {
+        "startLine": 876,
+        "startChar": 16,
+        "endLine": 876,
+        "endChar": 82
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd5ce176_21f731e0",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -599,6 +1127,30 @@
       "writtenOn": "2019-08-17T04:49:39Z",
       "side": 1,
       "message": "I don\u0027t know what this does. In CreateStructSamplerFunctionVisitor::visitSamplerInStructParam, you use `new TVariable(...)` as the code here previously did. Why does that work there and not here and what does this function do for you?",
+      "range": {
+        "startLine": 940,
+        "startChar": 61,
+        "endLine": 940,
+        "endChar": 76
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f66cf49_e6f55b5a",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 940,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "The variable should already exist. We need to ensure that the `TVariable *` is the same as when we generated the variable (either a default uniform or a parameter) so we can use it for map lookups.",
+      "parentUuid": "dd5ce176_21f731e0",
       "range": {
         "startLine": 940,
         "startChar": 61,
@@ -657,6 +1209,54 @@
     },
     {
       "key": {
+        "uuid": "3408d404_91cb1820",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Same as above.",
+      "parentUuid": "36716a9a_19a129f2",
+      "range": {
+        "startLine": 955,
+        "startChar": 67,
+        "endLine": 955,
+        "endChar": 76
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bc63be05_be7a7cad",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Same as above.",
+      "parentUuid": "e2c7d98c_a12ff04e",
+      "range": {
+        "startLine": 955,
+        "startChar": 16,
+        "endLine": 955,
+        "endChar": 24
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1ce9732c_8ced38de",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -668,6 +1268,30 @@
       "writtenOn": "2019-08-17T04:49:39Z",
       "side": 1,
       "message": "Is the original prototype ever removed from the tree? Same question with the original function definition.",
+      "range": {
+        "startLine": 1053,
+        "startChar": 12,
+        "endLine": 1053,
+        "endChar": 66
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "60666b01_eb2533b0",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "No, I couldn\u0027t find a method to do that :P",
+      "parentUuid": "1ce9732c_8ced38de",
       "range": {
         "startLine": 1053,
         "startChar": 12,
@@ -703,6 +1327,30 @@
     },
     {
       "key": {
+        "uuid": "5eeaeb44_edbfd09d",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1106,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e276001_16734262",
+      "range": {
+        "startLine": 1106,
+        "startChar": 4,
+        "endLine": 1106,
+        "endChar": 60
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dcca6683_631ba411",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -714,6 +1362,24 @@
       "writtenOn": "2019-08-17T04:49:39Z",
       "side": 1,
       "message": "Can you stick a\n\n    if (!ValidateAST(root, \u0026mDiagnostics, mValidateASTOptions))\n    {\n        return false;\n    }\n\nlike Compiler.cpp does, after the call to this function? That should catch the missing deepCopy()s.",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ab8657e_f2b2ba16",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Those members are private, and translate() doesn\u0027t return a value. Calling it manually in GDB after a few tests returns true.",
+      "parentUuid": "dcca6683_631ba411",
       "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -743,6 +1409,30 @@
     },
     {
       "key": {
+        "uuid": "26b546e5_eb0f127f",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1191,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7769b0dc_ceb1488f",
+      "range": {
+        "startLine": 1191,
+        "startChar": 16,
+        "endLine": 1191,
+        "endChar": 29
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8433f0bc_b40c6669",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -757,6 +1447,24 @@
       "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd75e676_d2fdf5b8",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8433f0bc_b40c6669",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -824,6 +1532,30 @@
     },
     {
       "key": {
+        "uuid": "d055285a_4d3d4332",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Changed to \"\\\\\".",
+      "parentUuid": "1714a96f_513db0f7",
+      "range": {
+        "startLine": 414,
+        "startChar": 29,
+        "endLine": 414,
+        "endChar": 33
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e0ae0e7c_f61ba650",
         "filename": "src/libANGLE/Uniform.h",
         "patchSetId": 9
@@ -835,6 +1567,30 @@
       "writtenOn": "2019-08-17T19:03:23Z",
       "side": 1,
       "message": "similar to how the translator can modify the names of variables (see ShaderVariable::name vs mappedName) I wonder if it would be sane to update ShaderVariable to have arraySizes and translatedArraySize. Something like that.",
+      "range": {
+        "startLine": 78,
+        "startChar": 30,
+        "endLine": 78,
+        "endChar": 45
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6877e4e0_e48dfd62",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Not too sure how this stuff works, but isn\u0027t the program interface generated before translation? Not sure how that would work.",
+      "parentUuid": "e0ae0e7c_f61ba650",
       "range": {
         "startLine": 78,
         "startChar": 30,
@@ -887,6 +1643,30 @@
     },
     {
       "key": {
+        "uuid": "e580bb5e_f88fb212",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "784c3590_8bb30311",
+      "range": {
+        "startLine": 588,
+        "startChar": 13,
+        "endLine": 588,
+        "endChar": 17
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "263ebcb4_0c77e38c",
         "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
         "patchSetId": 9
@@ -898,6 +1678,24 @@
       "writtenOn": "2019-08-17T04:49:39Z",
       "side": 1,
       "message": "Can you do without these? In ProgramVk::linkImpl, mState.getSamplerBindings() is traversed similarly and bindingIndex is trivially calculated, so probably the same can be done here?\n\nRegarding offsets, if nested arrays of the same sampler are sequentially placed by the front-end, then you can always have a single variable tracking the current offset of the current sampler.\n\nThis way you avoid many string and map operations.",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f3c643a_6bdcb71c",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T17:36:28Z",
+      "side": 1,
+      "message": "Not sure: I was worried about structs containing multiple arrays, so they might be traversed out-of-order (e.g. struct S { sampler2D foo[3], bar[3] }; uniform S baz[3]; could become baz[0].foo -\u003e baz[0].bar -\u003e baz[1].foo -\u003e baz[1].bar ...) I have confirmed that this does happen.",
+      "parentUuid": "263ebcb4_0c77e38c",
       "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
