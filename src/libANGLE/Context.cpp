@@ -8685,7 +8685,11 @@ angle::Result Context::onProgramLink(Program *programObject)
 
 egl::Error Context::setDefaultFramebuffer(egl::Surface *surface)
 {
-    ASSERT(mCurrentSurface == nullptr);
+    // This can happen during Context destruction.
+    if (mCurrentSurface)
+    {
+        ANGLE_TRY(unsetDefaultFramebuffer());
+    }
 
     Framebuffer *newDefault = nullptr;
     if (surface != nullptr)
