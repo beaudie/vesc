@@ -46,6 +46,30 @@
       "revId": "14b4ab4caf171bc1441e6032dca7821caee63f69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9e2b71f6_73a8f564",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T15:06:44Z",
+      "side": 1,
+      "message": "I see your additional notes, but I can\u0027t say I agree with them. vkQueuePresentKHR is not \"recorded\" to be submitted, it\u0027s a direct command for the present engine and has nothing to do with vkQueueSubmit. Let\u0027s focus on this little bit then, since we agree on the rest. What this function does is:\n\n- vkQueueSubmit(signal: presentImageSemaphore[1], signal: fence[1])\n- vkQueuePresentKHR(wait: presentImageSemaphore[1])\n\nAgreed? Your comment that says \"Note that this will submit the present command that waits on presentSemaphore[0]\" makes me think you believe the `vkQueuePresentKHR` call is recorded into a command buffer and submitted with the next `vkQueueSubmit`. Is that what you mean? That can\u0027t be right.",
+      "parentUuid": "a943147b_eabe91ee",
+      "range": {
+        "startLine": 950,
+        "startChar": 11,
+        "endLine": 951,
+        "endChar": 29
+      },
+      "revId": "14b4ab4caf171bc1441e6032dca7821caee63f69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
