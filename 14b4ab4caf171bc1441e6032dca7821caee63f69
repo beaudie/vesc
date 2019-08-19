@@ -94,6 +94,30 @@
       "revId": "14b4ab4caf171bc1441e6032dca7821caee63f69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90710786_faec09e5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T18:53:56Z",
+      "side": 1,
+      "message": "Ok so, first do we agree that that\u0027s not how vkQueuePresentKHR works? For example, I could do this:\n\n    while (true) { usleep(1000*1000); vkAcquireNextImageKHR(); vkQueuePresent(); }\n\nand cycle through swapchain images every second without a vkQueueSubmit involved.\n\n---\n\nEstablishing that the presentation engine is a separate entity, I can refute your claim:\n\n\u003e In contrast: will the fence from the queue submit following the present be reached after the wait on the present semaphore? Of course!\n\nLet\u0027s say you are V-Sync bound (FIFO mode). At V-Sync, say Image X from the swapchain is placed for presentation. Assume V-Sync is so long, that all the below happen in the meantime:\n\n1. V-Sync: present image X\n\n2. vkAcquireNextImageKHR() -\u003e image Y\n3. vkQueueSubmit(signal Fence 1, signal Semaphore 1)\n4. vkQueuePresentKhr(image Y, wait Semaphore 1)\n\n5. vkAcquireNextImageKHR() -\u003e image Z\n6. vkQueueSubmit(signal Fence 2, signal Semaphore 2)\n7. vkQueuePresentKhr(image Z, wait Semaphore 2)\n\n8. vkAcquireNextImageKHR() -\u003e image W\n9. vkQueueSubmit(signal Fence 3, signal Semaphore 3)\n10. vkQueuePresentKhr(image W, wait Semaphore 3)\n\nNow the present engine is still waiting on Semaphore 1, because it needs to present image Y. Say by step 9, submissions in 3 and 6 actually finish while still waiting for V-Sync. At step 9 then we wait on Fence 1, see its signaled and delete semaphore 1. And now you have deleted the semaphore the present engine was waiting on.\n\nThe issue is that you cannot now when the present engine is done waiting on the semaphore just by looking at the fences signaled by submission finishes. Let me reiterate my suggestion then:\n\n\u003e Should we instead have a separate history that has the same size as the swapchain, and delete the semaphores based on that? My reasoning is that if you have S swapchain images, after S successful acquires, the presentation engine must definitely be done with the semaphore corresponding to S frames ago, so you can delete that.",
+      "parentUuid": "ef731baf_c66a1841",
+      "range": {
+        "startLine": 950,
+        "startChar": 11,
+        "endLine": 951,
+        "endChar": 29
+      },
+      "revId": "14b4ab4caf171bc1441e6032dca7821caee63f69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
