@@ -22,6 +22,30 @@
       "revId": "14b4ab4caf171bc1441e6032dca7821caee63f69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a943147b_eabe91ee",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-08-19T05:18:17Z",
+      "side": 1,
+      "message": "The numerical indices makes things a bit ambiguous.\nLet\u0027s use them to refer to entries in mSwapHistory always.\n\nThen in similar terminology, the original code does this:\n1. Say history has size N and we are at index 1 (which means [1] is the oldest swap)\n2. We wait on fence[1], then reset fence[1] and destroy presentSemaphore[1] (see SwapHistory::destroy)\n3. We create a new semaphore over presentSemaphore[1]\n4. We submit the queue by calling contextVk-\u003eflushImpl. This schedules a signalling of presentSemaphroe[1].\n   Note that this will submit the present command that waits on presentSemaphore[0].\n5. We queue a present command that will wait on presentSemaphore[1].\n   Note that this present command, and the scheduled wait on presentSemaphore[1] will not belong to the submission we just made, but instead to the next one.\n6. We take the fence corresponding to that submission (from step 4) and place it in fence[1]\n7. [1] is now the newest swap and the history index is changed to 2\n\n\n\nThe issue: the wrong fence is selected in step 6. Why is it wrong? See the note for step 5 -- the wait on presentSemaphore[1] cannot be known to have run when you wait on this fence, because it has only been queued but not yet submitted. \nThis is not the fence that we should wait on if we want to make sure that the scheduled wait on presentSemaphore[1] has finished.",
+      "parentUuid": "5defd674_4273a977",
+      "range": {
+        "startLine": 950,
+        "startChar": 11,
+        "endLine": 951,
+        "endChar": 29
+      },
+      "revId": "14b4ab4caf171bc1441e6032dca7821caee63f69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
