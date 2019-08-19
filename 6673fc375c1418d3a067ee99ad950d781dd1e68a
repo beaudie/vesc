@@ -531,6 +531,30 @@
     },
     {
       "key": {
+        "uuid": "698a9b95_bcac519e",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T20:50:47Z",
+      "side": 1,
+      "message": "Ok I checked with some code I have in progress that gives temp names to functions, and I\u0027ve used this:\n\n    TFunction *copyFunction \u003d new TFunction(mSymbolTable, kEmptyImmutableString,\n                                            SymbolType::AngleInternal, toType, true);\n\nI think at the moment I made a mistake of using AngleInternal (as Empty makes more sense), but it\u0027s accidentally working. I don\u0027t know why that assert is there, but I think the code is perfectly capable of generating temp names for functions, so I think you can just change that ASSERT to something like (type !\u003d Empty or name.empty()).",
+      "parentUuid": "10de8087_cd5017e4",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 9
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d596e496_44206b9c",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -614,6 +638,30 @@
       "side": 1,
       "message": "This should be the unreplaced function that was originally in the AST; the first step replaces those prototypes with a function with the same name (updatedFunction), after which we instantiate as necessary.",
       "parentUuid": "bd64b3f6_c92df6c8",
+      "range": {
+        "startLine": 244,
+        "startChar": 8,
+        "endLine": 244,
+        "endChar": 92
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b1b1a7ff_9330c6f1",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T20:50:47Z",
+      "side": 1,
+      "message": "Oh ok, sorry. I don\u0027t know the inner workings of the symbol table, so it\u0027s probably just me being wary, but I would have had this class maintain its own function-\u003eupdatedFunction map, but if this works, that\u0027s fine!",
+      "parentUuid": "7df9fbb4_37afd415",
       "range": {
         "startLine": 244,
         "startChar": 8,
