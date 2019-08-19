@@ -83,12 +83,14 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
         // Note that LUMA textures are not color-renderable, so a read-view with swizzle is not
         // needed.
         ANGLE_TRY(mImage->initImageView(contextVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
-                                        &mImageView, 0, 1));
+                                        &mDrawImageView, 0, 1));
+        ANGLE_TRY(mImage->initImageView(contextVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
+                                        &mReadImageView, 0, 1));
 
         // Clear the renderbuffer if it has emulated channels.
         mImage->stageClearIfEmulatedFormat(gl::ImageIndex::Make2D(0), vkFormat);
 
-        mRenderTarget.init(mImage, &mImageView, nullptr, 0, 0);
+        mRenderTarget.init(mImage, &mDrawImageView, &mReadImageView, nullptr, 0, 0);
     }
 
     return angle::Result::Continue;
@@ -169,8 +171,11 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
     }
 
     ANGLE_TRY(mImage->initLayerImageView(contextVk, imageVk->getImageTextureType(), aspect,
-                                         gl::SwizzleState(), &mImageView, imageVk->getImageLevel(),
-                                         1, imageVk->getImageLayer(), 1));
+                                         gl::SwizzleState(), &mDrawImageView,
+                                         imageVk->getImageLevel(), 1, imageVk->getImageLayer(), 1));
+    ANGLE_TRY(mImage->initLayerImageView(contextVk, imageVk->getImageTextureType(), aspect,
+                                         gl::SwizzleState(), &mReadImageView,
+                                         imageVk->getImageLevel(), 1, imageVk->getImageLayer(), 1));
 
     if (imageVk->getImageTextureType() == gl::TextureType::CubeMap)
     {
@@ -181,7 +186,7 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
                                              imageVk->getImageLayer(), 1));
     }
 
-    mRenderTarget.init(mImage, &mImageView,
+    mRenderTarget.init(mImage, &mDrawImageView, &mReadImageView,
                        mCubeImageFetchView.valid() ? &mCubeImageFetchView : nullptr,
                        imageVk->getImageLevel(), imageVk->getImageLayer());
 
@@ -232,7 +237,8 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
         mImage = nullptr;
     }
 
-    contextVk->releaseObject(contextVk->getCurrentQueueSerial(), &mImageView);
+    contextVk->releaseObject(contextVk->getCurrentQueueSerial(), &mDrawImageView);
+    contextVk->releaseObject(contextVk->getCurrentQueueSerial(), &mReadImageView);
     contextVk->releaseObject(contextVk->getCurrentQueueSerial(), &mCubeImageFetchView);
 }
 

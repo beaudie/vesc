@@ -181,8 +181,10 @@ OffscreenSurfaceVk::OffscreenSurfaceVk(const egl::SurfaceState &surfaceState,
                                        EGLint height)
     : SurfaceVk(surfaceState), mWidth(width), mHeight(height)
 {
-    mColorRenderTarget.init(&mColorAttachment.image, &mColorAttachment.imageView, nullptr, 0, 0);
+    mColorRenderTarget.init(&mColorAttachment.image, &mColorAttachment.imageView,
+                            &mColorAttachment.imageView, nullptr, 0, 0);
     mDepthStencilRenderTarget.init(&mDepthStencilAttachment.image,
+                                   &mDepthStencilAttachment.imageView,
                                    &mDepthStencilAttachment.imageView, nullptr, 0, 0);
 }
 
@@ -375,8 +377,9 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState,
 {
     // Initialize the color render target with the multisampled targets.  If not multisampled, the
     // render target will be updated to refer to a swapchain image on every acquire.
-    mColorRenderTarget.init(&mColorImageMS, &mColorImageViewMS, nullptr, 0, 0);
-    mDepthStencilRenderTarget.init(&mDepthStencilImage, &mDepthStencilImageView, nullptr, 0, 0);
+    mColorRenderTarget.init(&mColorImageMS, &mColorImageViewMS, &mColorImageViewMS, nullptr, 0, 0);
+    mDepthStencilRenderTarget.init(&mDepthStencilImage, &mDepthStencilImageView,
+                                   &mDepthStencilImageView, nullptr, 0, 0);
 }
 
 WindowSurfaceVk::~WindowSurfaceVk()

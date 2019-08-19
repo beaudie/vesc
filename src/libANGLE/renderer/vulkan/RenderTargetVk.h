@@ -44,7 +44,8 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     RenderTargetVk(RenderTargetVk &&other);
 
     void init(vk::ImageHelper *image,
-              vk::ImageView *imageView,
+              vk::ImageView *drawImageView,
+              vk::ImageView *readImageView,
               vk::ImageView *cubeImageFetchView,
               uint32_t levelIndex,
               uint32_t layerIndex);
@@ -87,9 +88,8 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
   private:
     vk::ImageHelper *mImage;
-    // Note that the draw and read image views are the same, given the requirements of a render
-    // target.
-    vk::ImageView *mImageView;
+    vk::ImageView *mDrawImageView;
+    vk::ImageView *mReadImageView;
     // For cubemaps, a 2D-array view is also created to be used with shaders that use texelFetch().
     vk::ImageView *mCubeImageFetchView;
     uint32_t mLevelIndex;
