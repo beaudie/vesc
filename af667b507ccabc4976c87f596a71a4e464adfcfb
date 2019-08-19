@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10158b9d_1f9f08c6",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-19T17:45:54Z",
+      "side": 1,
+      "message": "Not able to find any information about maximal length of application. So use a magic number 512, it should be sufficient.",
+      "revId": "af667b507ccabc4976c87f596a71a4e464adfcfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2acea57_2bc7446a",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-19T17:45:54Z",
+      "side": 1,
+      "message": "It is a Linux file interface to get the running process name (which happens to be application id on Android) \n\nsee https://unix.stackexchange.com/questions/333225/which-process-is-proc-self-for",
+      "revId": "af667b507ccabc4976c87f596a71a4e464adfcfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6aeb5354_fe233efd",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-19T17:45:54Z",
+      "side": 1,
+      "message": "Find that for deqp tests, it has application id `org.chromium.native_tests:test_process`",
+      "revId": "af667b507ccabc4976c87f596a71a4e464adfcfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
