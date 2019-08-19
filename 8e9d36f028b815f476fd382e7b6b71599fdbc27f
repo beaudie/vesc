@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "b849e523_dfcd07fa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T14:58:59Z",
+      "side": 1,
+      "message": "Thanks. You do use depot_tools, right? See here for an example of how we upload to gerrit:\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/ContributingCode.md#making-changes\n\nIn short, we use `git cl upload` which runs a hook to make sure some basic issues are fixed, such as missing the Bug: tag, bad formatting etc. Indeed, this change needs a `git cl format` to pass the \"presubmit bot\".\n\nOther useful reading material:\n\nhttps://chromium.googlesource.com/angle/angle/+/master/README.md#contributing",
+      "parentUuid": "4405d977_a80dffa7",
+      "revId": "8e9d36f028b815f476fd382e7b6b71599fdbc27f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bfcd46cb_9647c080",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 1
