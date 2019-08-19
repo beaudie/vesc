@@ -70,6 +70,30 @@
       "revId": "14b4ab4caf171bc1441e6032dca7821caee63f69",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef731baf_c66a1841",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1298773
+      },
+      "writtenOn": "2019-08-19T17:36:46Z",
+      "side": 1,
+      "message": "Yes I was indeed assuming that the present call simply added a command (preceded by the semaphore wait) to the queue.\nOr, if not assuming it, then at least thinking in equivalent terms.\n\nBut to my mind, the important issue here is: will the fence from the preceding submit be reached after the wait on the present semaphore from the present that follows it. No way!\n\nIn contrast: will the fence from the queue submit following the present be reached after the wait on the present semaphore? Of course!",
+      "parentUuid": "9e2b71f6_73a8f564",
+      "range": {
+        "startLine": 950,
+        "startChar": 11,
+        "endLine": 951,
+        "endChar": 29
+      },
+      "revId": "14b4ab4caf171bc1441e6032dca7821caee63f69",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
