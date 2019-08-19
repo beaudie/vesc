@@ -555,6 +555,30 @@
     },
     {
       "key": {
+        "uuid": "d4e70b62_48da7b4e",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T20:59:14Z",
+      "side": 1,
+      "message": "Done. I think the Vulkan translator does strange things with Empty so I\u0027ll leave it with AngleInternal.",
+      "parentUuid": "698a9b95_bcac519e",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 9
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d596e496_44206b9c",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -662,6 +686,30 @@
       "side": 1,
       "message": "Oh ok, sorry. I don\u0027t know the inner workings of the symbol table, so it\u0027s probably just me being wary, but I would have had this class maintain its own function-\u003eupdatedFunction map, but if this works, that\u0027s fine!",
       "parentUuid": "7df9fbb4_37afd415",
+      "range": {
+        "startLine": 244,
+        "startChar": 8,
+        "endLine": 244,
+        "endChar": 92
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac00a242_4fa29a01",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-19T20:59:14Z",
+      "side": 1,
+      "message": "I think the reason I did this is that the `TFunction *` pointers aren\u0027t necessarily identical.",
+      "parentUuid": "b1b1a7ff_9330c6f1",
       "range": {
         "startLine": 244,
         "startChar": 8,
