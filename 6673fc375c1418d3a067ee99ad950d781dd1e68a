@@ -177,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "43ab36f9_e7bdd376",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T18:37:30Z",
+      "side": 1,
+      "message": "This is a pre-existing node, isn\u0027t it? In that case, the tree already has links to it, so you need to deepCopy() it. Basically any node you are directly using from the tree should be deepCopy\u0027ed",
+      "parentUuid": "84028657_d2409acb",
+      "range": {
+        "startLine": 152,
+        "startChar": 70,
+        "endLine": 152,
+        "endChar": 90
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b0b80e80_ee50395f",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -435,6 +459,30 @@
     },
     {
       "key": {
+        "uuid": "6ca097c8_e83eafea",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T18:37:30Z",
+      "side": 1,
+      "message": "Yeap, give SymbolType::Empty as the third parameter too.",
+      "parentUuid": "2606ce62_aa5f8a73",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 9
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d596e496_44206b9c",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -470,6 +518,30 @@
       "side": 1,
       "message": "When we process function prototypes, we construct a new function with the same name. Not sure how it winds its way into the symbol table, but it seems to work.",
       "parentUuid": "d596e496_44206b9c",
+      "range": {
+        "startLine": 244,
+        "startChar": 8,
+        "endLine": 244,
+        "endChar": 92
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd64b3f6_c92df6c8",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T18:37:30Z",
+      "side": 1,
+      "message": "Can you just use `function` directly?",
+      "parentUuid": "2a981b48_79d23f5e",
       "range": {
         "startLine": 244,
         "startChar": 8,
@@ -928,6 +1000,30 @@
     },
     {
       "key": {
+        "uuid": "21312f54_ebdd0d52",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T18:37:30Z",
+      "side": 1,
+      "message": "True about node, I missed that it\u0027s only being used to traverse.",
+      "parentUuid": "02fbc8fe_9d8c68b4",
+      "range": {
+        "startLine": 409,
+        "startChar": 70,
+        "endLine": 409,
+        "endChar": 74
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2fe84c50_650da1bd",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -1257,6 +1353,54 @@
     },
     {
       "key": {
+        "uuid": "ea7a219a_d1a5cfb1",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T18:37:30Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "bc63be05_be7a7cad",
+      "range": {
+        "startLine": 955,
+        "startChar": 16,
+        "endLine": 955,
+        "endChar": 24
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "395aa8cf_4f98c802",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T18:37:30Z",
+      "side": 1,
+      "message": "Ack, missed that you just created it",
+      "parentUuid": "3408d404_91cb1820",
+      "range": {
+        "startLine": 955,
+        "startChar": 67,
+        "endLine": 955,
+        "endChar": 76
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1ce9732c_8ced38de",
         "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
         "patchSetId": 9
@@ -1292,6 +1436,30 @@
       "side": 1,
       "message": "No, I couldn\u0027t find a method to do that :P",
       "parentUuid": "1ce9732c_8ced38de",
+      "range": {
+        "startLine": 1053,
+        "startChar": 12,
+        "endLine": 1053,
+        "endChar": 66
+      },
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52ec6f1a_1ebeb8df",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T18:37:30Z",
+      "side": 1,
+      "message": "Search for queueReplacement and mMultiReplacements. What you probably want here is mMultiReplacements to replace the original function with the new ones, instead of just prepending them.\n\nIn particular, the original function could have array of array parameters, so if you leave it, it would generate a compile error.",
+      "parentUuid": "60666b01_eb2533b0",
       "range": {
         "startLine": 1053,
         "startChar": 12,
@@ -1380,6 +1548,24 @@
       "side": 1,
       "message": "Those members are private, and translate() doesn\u0027t return a value. Calling it manually in GDB after a few tests returns true.",
       "parentUuid": "dcca6683_631ba411",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb725109_e32d16ca",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1176,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T18:37:30Z",
+      "side": 1,
+      "message": "You can write a helper in the base class that calls this function, then ASSERT on it.",
+      "parentUuid": "0ab8657e_f2b2ba16",
       "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -1696,6 +1882,24 @@
       "side": 1,
       "message": "Not sure: I was worried about structs containing multiple arrays, so they might be traversed out-of-order (e.g. struct S { sampler2D foo[3], bar[3] }; uniform S baz[3]; could become baz[0].foo -\u003e baz[0].bar -\u003e baz[1].foo -\u003e baz[1].bar ...) I have confirmed that this does happen.",
       "parentUuid": "263ebcb4_0c77e38c",
+      "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20c8addf_611d536f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1461,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-19T18:37:30Z",
+      "side": 1,
+      "message": "Sadness...",
+      "parentUuid": "2f3c643a_6bdcb71c",
       "revId": "6673fc375c1418d3a067ee99ad950d781dd1e68a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
