@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e8cc8910_7f4da43a",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-19T17:49:09Z",
+      "side": 1,
+      "message": "sp: specialization",
+      "revId": "fd2a0a6c504e6f4c106665e04a772e8c5b9c8094",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5863eb09_b9d53079",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-19T17:49:09Z",
+      "side": 1,
+      "message": "fix here too",
+      "revId": "fd2a0a6c504e6f4c106665e04a772e8c5b9c8094",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
