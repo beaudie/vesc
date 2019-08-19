@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "8ccf0e74_afef5fda",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1361975
+      },
+      "writtenOn": "2019-08-19T21:27:47Z",
+      "side": 1,
+      "message": "Thanks for the links Shahbaz. Yes I already have depot_tools so it\u0027s no problem to run those scripts.",
+      "parentUuid": "b849e523_dfcd07fa",
+      "revId": "8e9d36f028b815f476fd382e7b6b71599fdbc27f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bfcd46cb_9647c080",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 1
