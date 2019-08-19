@@ -301,6 +301,8 @@ enum SubjectIndexes : angle::SubjectIndex
     kReadFramebufferSubjectIndex,
     kDrawFramebufferSubjectIndex
 };
+
+int gIDCounter = 1;
 }  // anonymous namespace
 
 Context::Context(egl::Display *display,
@@ -325,6 +327,7 @@ Context::Context(egl::Display *display,
       mShared(shareContext != nullptr),
       mSkipValidation(GetNoError(attribs)),
       mDisplayTextureShareGroup(shareTextures != nullptr),
+      mID(gIDCounter++),
       mErrors(this),
       mImplementation(display->getImplementation()
                           ->createContext(mState, &mErrors, config, shareContext, attribs)),
