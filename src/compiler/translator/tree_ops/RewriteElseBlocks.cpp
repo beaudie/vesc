@@ -111,10 +111,12 @@ TIntermNode *ElseBlockRewriter::rewriteIfElse(TIntermIfElse *ifElse)
 
 }  // anonymous namespace
 
-void RewriteElseBlocks(TIntermNode *node, TSymbolTable *symbolTable)
+bool RewriteElseBlocks(TCompiler *compiler, TIntermNode *node, TSymbolTable *symbolTable)
 {
     ElseBlockRewriter rewriter(symbolTable);
     node->traverse(&rewriter);
+
+    return compiler->validateAST(root);
 }
 
 }  // namespace sh

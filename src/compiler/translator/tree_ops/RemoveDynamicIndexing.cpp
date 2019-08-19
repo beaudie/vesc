@@ -521,7 +521,8 @@ void RemoveDynamicIndexingTraverser::nextIteration()
 
 }  // namespace
 
-void RemoveDynamicIndexing(TIntermNode *root,
+bool RemoveDynamicIndexing(TCompiler *compiler,
+                           TIntermNode *root,
                            TSymbolTable *symbolTable,
                            PerformanceDiagnostics *perfDiagnostics)
 {
@@ -530,7 +531,10 @@ void RemoveDynamicIndexing(TIntermNode *root,
     {
         traverser.nextIteration();
         root->traverse(&traverser);
-        traverser.updateTree();
+        if (!traverser.updateTree(compiler, root))
+        {
+            return false;
+        }
     } while (traverser.usedTreeInsertion());
     // TODO(oetuaho@nvidia.com): It might be nicer to add the helper definitions also in the middle
     // of traversal. Now the tree ends up in an inconsistent state in the middle, since there are
@@ -538,6 +542,7 @@ void RemoveDynamicIndexing(TIntermNode *root,
     // TIntermLValueTrackingTraverser, and creates intricacies that are not easily apparent from a
     // superficial reading of the code.
     traverser.insertHelperDefinitions(root);
+    return compiler->validateAST(root);
 }
 
 }  // namespace sh

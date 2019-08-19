@@ -36,7 +36,7 @@ TranslatorHLSL::TranslatorHLSL(sh::GLenum type, ShShaderSpec spec, ShShaderOutpu
     : TCompiler(type, spec, output)
 {}
 
-void TranslatorHLSL::translate(TIntermBlock *root,
+bool TranslatorHLSL::translate(TIntermBlock *root,
                                ShCompileOptions compileOptions,
                                PerformanceDiagnostics *perfDiagnostics)
 {
@@ -108,7 +108,10 @@ void TranslatorHLSL::translate(TIntermBlock *root,
     {
         EmulatePrecision emulatePrecision(&getSymbolTable());
         root->traverse(&emulatePrecision);
-        emulatePrecision.updateTree();
+        if (!emulatePrecision.updateTree(this, root))
+        {
+            return false;
+        }
         emulatePrecision.writeEmulationHelpers(getInfoSink().obj, getShaderVersion(),
                                                getOutputType());
     }
@@ -151,6 +154,8 @@ void TranslatorHLSL::translate(TIntermBlock *root,
     mReadonlyImage2DRegisterIndex  = outputHLSL.getReadonlyImage2DRegisterIndex();
     mImage2DRegisterIndex          = outputHLSL.getImage2DRegisterIndex();
     mUsedImage2DFunctionNames      = outputHLSL.getUsedImage2DFunctionNames();
+
+    return true;
 }
 
 bool TranslatorHLSL::shouldFlattenPragmaStdglInvariantAll()

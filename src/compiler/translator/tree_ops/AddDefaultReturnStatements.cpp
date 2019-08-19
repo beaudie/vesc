@@ -39,7 +39,7 @@ bool NeedsReturnStatement(TIntermFunctionDefinition *node, TType *returnType)
 
 }  // anonymous namespace
 
-void AddDefaultReturnStatements(TIntermBlock *root)
+bool AddDefaultReturnStatements(TCompiler *compiler, TIntermBlock *root)
 {
     TType returnType;
     for (TIntermNode *node : *root->getSequence())
@@ -53,6 +53,8 @@ void AddDefaultReturnStatements(TIntermBlock *root)
             bodyNode->getSequence()->push_back(branch);
         }
     }
+
+    return compiler->validateAST(root);
 }
 
 }  // namespace sh
