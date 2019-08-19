@@ -202,12 +202,6 @@ SrcType loadSourceComponent(uint cd)
     uint vertex = cd / Nd;
     uint component = cd % Nd;
 
-    // If no such component, return 0
-    if (component >= Ns)
-    {
-        return 0;
-    }
-
     // Load the source component
     uint offset = getSourceComponentOffset(vertex, component);
     uint block = srcData[offset / 4];
@@ -222,7 +216,13 @@ SrcType loadSourceComponent(uint cd)
     uint valueBits = Bs * 8;
     uint valueMask = valueBits == 32 ? -1 : (1 << valueBits) - 1;
 #endif
-    uint valueAsUint = (block >> shiftBits) & valueMask;
+    // If no source component, fill zero in the destination component
+    // Else, source data is filled into that of the destination
+    uint valueAsUint = 0;
+    if (component < Ns)
+    {
+        uint valueAsUint = (block >> shiftBits) & valueMask;
+    }
 
     // Convert to SrcType
 #if SintToSint || SintToFloat || A2BGR10SintToSint || A2BGR10SintToFloat
