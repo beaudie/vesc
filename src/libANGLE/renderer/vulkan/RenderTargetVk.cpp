@@ -19,7 +19,9 @@ namespace rx
 {
 RenderTargetVk::RenderTargetVk()
     : mImage(nullptr),
-      mImageView(nullptr),
+      mDrawImageView(nullptr),
+      mReadImageView(nullptr),
+      mReadImageViewType(gl::TextureType::InvalidEnum),
       mCubeImageFetchView(nullptr),
       mLevelIndex(0),
       mLayerIndex(0)
@@ -29,20 +31,26 @@ RenderTargetVk::~RenderTargetVk() {}
 
 RenderTargetVk::RenderTargetVk(RenderTargetVk &&other)
     : mImage(other.mImage),
-      mImageView(other.mImageView),
+      mDrawImageView(other.mDrawImageView),
+      mReadImageView(other.mReadImageView),
+      mReadImageViewType(other.mReadImageViewType),
       mCubeImageFetchView(other.mCubeImageFetchView),
       mLevelIndex(other.mLevelIndex),
       mLayerIndex(other.mLayerIndex)
 {}
 
 void RenderTargetVk::init(vk::ImageHelper *image,
-                          vk::ImageView *imageView,
+                          vk::ImageView *drawImageView,
+                          vk::ImageView *readImageView,
+                          gl::TextureType readImageViewType,
                           vk::ImageView *cubeImageFetchView,
                           uint32_t levelIndex,
                           uint32_t layerIndex)
 {
     mImage              = image;
-    mImageView          = imageView;
+    mDrawImageView      = drawImageView;
+    mReadImageView      = readImageView;
+    mReadImageViewType  = readImageViewType;
     mCubeImageFetchView = cubeImageFetchView;
     mLevelIndex         = levelIndex;
     mLayerIndex         = layerIndex;
@@ -51,7 +59,9 @@ void RenderTargetVk::init(vk::ImageHelper *image,
 void RenderTargetVk::reset()
 {
     mImage              = nullptr;
-    mImageView          = nullptr;
+    mDrawImageView      = nullptr;
+    mReadImageView      = nullptr;
+    mReadImageViewType  = gl::TextureType::InvalidEnum;
     mCubeImageFetchView = nullptr;
     mLevelIndex         = 0;
     mLayerIndex         = 0;
@@ -107,13 +117,20 @@ const vk::ImageHelper &RenderTargetVk::getImage() const
 
 vk::ImageView *RenderTargetVk::getDrawImageView() const
 {
-    ASSERT(mImageView && mImageView->valid());
-    return mImageView;
+    ASSERT(mDrawImageView && mDrawImageView->valid());
+    return mDrawImageView;
 }
 
 vk::ImageView *RenderTargetVk::getReadImageView() const
 {
-    return getDrawImageView();
+    ASSERT(mReadImageView && mReadImageView->valid());
+    return mReadImageView;
+}
+
+gl::TextureType RenderTargetVk::getReadImageViewType() const
+{
+    ASSERT(mReadImageView && mReadImageView->valid());
+    return mReadImageViewType;
 }
 
 vk::ImageView *RenderTargetVk::getFetchImageView() const
@@ -138,7 +155,8 @@ void RenderTargetVk::updateSwapchainImage(vk::ImageHelper *image, vk::ImageView 
 {
     ASSERT(image && image->valid() && imageView && imageView->valid());
     mImage              = image;
-    mImageView          = imageView;
+    mDrawImageView      = imageView;
+    mReadImageView      = imageView;
     mCubeImageFetchView = nullptr;
 }
 

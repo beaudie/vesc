@@ -161,6 +161,11 @@ class TextureVk : public TextureImpl
                                              size_t layer,
                                              size_t level,
                                              vk::ImageView **imageViewOut);
+    angle::Result getLayerLevelReadImageView(vk::Context *context,
+                                             size_t layer,
+                                             size_t level,
+                                             gl::TextureType viewType,
+                                             vk::ImageView **imageViewOut);
     const vk::Sampler &getSampler() const;
 
     angle::Result ensureImageInitialized(ContextVk *contextVk);
@@ -279,6 +284,7 @@ class TextureVk : public TextureImpl
                                            bool unpackFlipY,
                                            bool unpackPremultiplyAlpha,
                                            bool unpackUnmultiplyAlpha,
+                                           bool isSrc3D,
                                            vk::ImageHelper *srcImage,
                                            const vk::ImageView *srcView);
 
@@ -331,6 +337,7 @@ class TextureVk : public TextureImpl
     TextureVkViews mDefaultViews;
     TextureVkViews mStencilViews;
     std::vector<std::vector<vk::ImageView>> mLayerLevelDrawImageViews;
+    std::vector<std::vector<vk::ImageView>> mLayerLevelReadImageViews;
     vk::Sampler mSampler;
 
     RenderTargetVk mRenderTarget;

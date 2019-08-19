@@ -127,5 +127,6 @@
 3443 VULKAN : KHR-GLES3.shaders.uniform_block.random.nested_structs_arrays.7 = FAIL
 3443 VULKAN : KHR-GLES3.shaders.uniform_block.random.nested_structs_arrays_instance_arrays.3 = FAIL
 
-// Require 3D textures.
-3188 VULKAN : KHR-GLES3.packed_pixels.varied_rectangle.* = SKIP
+// ?? No idea what's causing these particular formats to fail
+3188 VULKAN : KHR-GLES3.packed_pixels.varied_rectangle.rgb32f = FAIL
+3188 VULKAN : KHR-GLES3.packed_pixels.varied_rectangle.rgba32f = FAIL

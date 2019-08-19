@@ -114,6 +114,7 @@ class UtilsVk : angle::NonCopyable
         bool srcPremultiplyAlpha;
         bool srcUnmultiplyAlpha;
         bool srcFlipY;
+        bool srcIs3D;
         bool destFlipY;
     };
 

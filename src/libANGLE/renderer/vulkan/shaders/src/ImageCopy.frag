@@ -24,10 +24,14 @@
 #error "Not all source formats are accounted for"
 #endif
 
-#if SrcIsArray
-#define SRC_RESOURCE_NAME texture2DArray
-#else
+#if SrcIs2D
 #define SRC_RESOURCE_NAME texture2D
+#elif SrcIs2DArray
+#define SRC_RESOURCE_NAME texture2DArray
+#elif SrcIs3D
+#define SRC_RESOURCE_NAME texture3D
+#else
+#error "Not all source resource types are accounted for"
 #endif
 
 #if DestIsFloat
@@ -74,10 +78,13 @@ void main()
     if (params.flipY)
         srcSubImageCoords.y = -srcSubImageCoords.y;
 
-#if SrcIsArray
-    SrcType srcValue = texelFetch(src, ivec3(params.srcOffset + srcSubImageCoords, params.srcLayer), params.srcMip);
-#else
+#if SrcIs2D
     SrcType srcValue = texelFetch(src, params.srcOffset + srcSubImageCoords, params.srcMip);
+#elif SrcIs2DArray
+    SrcType srcValue = texelFetch(src, ivec3(params.srcOffset + srcSubImageCoords, params.srcLayer), params.srcMip);
+#elif SrcIs3D
+	// TODO (cnorthrop): This is identical to SrcIs2DArray, try using compound condition
+    SrcType srcValue = texelFetch(src, ivec3(params.srcOffset + srcSubImageCoords, params.srcLayer), params.srcMip);
 #endif
 
     if (params.premultiplyAlpha)

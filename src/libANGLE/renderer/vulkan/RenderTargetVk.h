@@ -44,7 +44,9 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
     RenderTargetVk(RenderTargetVk &&other);
 
     void init(vk::ImageHelper *image,
-              vk::ImageView *imageView,
+              vk::ImageView *drawImageView,
+              vk::ImageView *readImageView,
+              gl::TextureType readImageViewTextureType,
               vk::ImageView *cubeImageFetchView,
               uint32_t levelIndex,
               uint32_t layerIndex);
@@ -69,6 +71,7 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
     vk::ImageView *getDrawImageView() const;
     vk::ImageView *getReadImageView() const;
+    gl::TextureType getReadImageViewType() const;
     // GLSL's texelFetch() needs a 2D array view to read from cube maps.  This function returns the
     // same view as `getReadImageView()`, except for cubemaps, in which case it returns a 2D array
     // view of it.
@@ -87,9 +90,9 @@ class RenderTargetVk final : public FramebufferAttachmentRenderTarget
 
   private:
     vk::ImageHelper *mImage;
-    // Note that the draw and read image views are the same, given the requirements of a render
-    // target.
-    vk::ImageView *mImageView;
+    vk::ImageView *mDrawImageView;
+    vk::ImageView *mReadImageView;
+    gl::TextureType mReadImageViewType;
     // For cubemaps, a 2D-array view is also created to be used with shaders that use texelFetch().
     vk::ImageView *mCubeImageFetchView;
     uint32_t mLevelIndex;
