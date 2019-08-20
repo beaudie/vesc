@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "b48e478a_225bd1a4",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-20T18:11:19Z",
+      "side": 1,
+      "message": "Didn\u0027t see this comment addressed.",
+      "parentUuid": "ca064a56_e15226e5",
+      "range": {
+        "startLine": 319,
+        "startChar": 5,
+        "endLine": 319,
+        "endChar": 38
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a155ced6_de98d9c3",
         "filename": "src/libANGLE/Sampler.cpp",
         "patchSetId": 3
