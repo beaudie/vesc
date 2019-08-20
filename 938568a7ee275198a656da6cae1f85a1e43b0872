@@ -144,6 +144,30 @@
     },
     {
       "key": {
+        "uuid": "7dcfff8a_f70c31f3",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-20T18:25:48Z",
+      "side": 1,
+      "message": "Ah sorry, looks like `GLenum target`makes more sense",
+      "parentUuid": "6b2244bc_b6c2359c",
+      "range": {
+        "startLine": 319,
+        "startChar": 5,
+        "endLine": 319,
+        "endChar": 38
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a155ced6_de98d9c3",
         "filename": "src/libANGLE/Sampler.cpp",
         "patchSetId": 3
