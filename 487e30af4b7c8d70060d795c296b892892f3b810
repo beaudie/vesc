@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5b569b2_e1a1d782",
+        "filename": "src/libANGLE/Config.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2019-08-20T21:52:57Z",
+      "side": 1,
+      "message": "clang doesn\u0027t like this lack of static destructor. Re working to use pattern base::NoDestructor wrapped in a getInstance() static function.",
+      "revId": "487e30af4b7c8d70060d795c296b892892f3b810",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
