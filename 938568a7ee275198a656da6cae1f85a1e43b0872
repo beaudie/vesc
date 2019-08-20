@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b1baf611_27983f33",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-20T17:55:01Z",
+      "side": 1,
+      "message": "It makes it a bit harder to review if you shuffle the existing code around. In the future just be aware of this and prefer to keep old code or to split out the functional change from the refactor.",
+      "range": {
+        "startLine": 119,
+        "startChar": 9,
+        "endLine": 119,
+        "endChar": 16
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca064a56_e15226e5",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-20T17:55:01Z",
+      "side": 1,
+      "message": "Looks like this is an error in gl_angle_ext.xml. It should be GLuint framebuffer. Can you fix that in a split patch? It\u0027s a Framebuffer command not Sampler.",
+      "range": {
+        "startLine": 319,
+        "startChar": 5,
+        "endLine": 319,
+        "endChar": 38
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a155ced6_de98d9c3",
+        "filename": "src/libANGLE/Sampler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-20T17:55:01Z",
+      "side": 1,
+      "message": "nit: id.value",
+      "range": {
+        "startLine": 19,
+        "startChar": 21,
+        "endLine": 19,
+        "endChar": 35
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9827e6a6_958308e2",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1260,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-20T17:55:01Z",
+      "side": 1,
+      "message": "for *.* prefer sampler.value instead of GetIDValue",
+      "range": {
+        "startLine": 1260,
+        "startChar": 33,
+        "endLine": 1260,
+        "endChar": 52
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe1976db_5830f04d",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-20T17:55:01Z",
+      "side": 1,
+      "message": "can you add the explicit argument name here? Mirror the prototype.",
+      "range": {
+        "startLine": 2416,
+        "startChar": 56,
+        "endLine": 2416,
+        "endChar": 66
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40a95d4e_de719f0d",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2421,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-20T17:55:01Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 2421,
+        "startChar": 65,
+        "endLine": 2421,
+        "endChar": 75
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
