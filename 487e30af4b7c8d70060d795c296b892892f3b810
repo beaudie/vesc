@@ -88,6 +88,24 @@
       "revId": "487e30af4b7c8d70060d795c296b892892f3b810",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f42804f_b982cc90",
+        "filename": "src/libANGLE/Config.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2019-08-20T23:27:04Z",
+      "side": 1,
+      "message": "Yeah, I was curious how this templated class evades the static destructor warning.\n\nI\u0027d like to see an example \"... Ideally most of these objects could be made into statically allocated tables that don\u0027t require runtime construction or heap allocation at all, to optimize startup time.\"\n\nOtherwise, I\u0027ll revert to using \"EGL_NO_CONFIG\" as a nullptr. It reads real simple that way.",
+      "parentUuid": "5e2b3a90_594aa9d8",
+      "revId": "487e30af4b7c8d70060d795c296b892892f3b810",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
