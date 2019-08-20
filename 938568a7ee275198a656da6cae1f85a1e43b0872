@@ -168,6 +168,30 @@
     },
     {
       "key": {
+        "uuid": "642305fa_4c737d34",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-20T18:27:30Z",
+      "side": 1,
+      "message": "GLenum target is correct, thanks for checking:\n\nhttps://cs.chromium.org/chromium/src/ui/gl/gl_stub_autogen_gl.h?type\u003dcs\u0026q\u003dgetframebufferparameterivrobustangle\u0026sq\u003dpackage:chromium\u0026g\u003d0\u0026l\u003d529",
+      "parentUuid": "7dcfff8a_f70c31f3",
+      "range": {
+        "startLine": 319,
+        "startChar": 5,
+        "endLine": 319,
+        "endChar": 38
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a155ced6_de98d9c3",
         "filename": "src/libANGLE/Sampler.cpp",
         "patchSetId": 3
