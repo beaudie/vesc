@@ -1179,7 +1179,7 @@ def process_single_function_group(
 
             template_mangled_if = """if (name == BuiltInName::{unique_name}{extension_condition})
 {{
-    return &BuiltInFunction::kFunction_{unique_name};
+    return &BuiltInFunction::function_{unique_name};
 }}"""
             mangled_if = template_mangled_if.format(**template_args)
             get_builtin_if_statements.add_obj(essl_level, glsl_level, condition,
@@ -1229,7 +1229,7 @@ def process_single_function_group(
                     'parameters_var_name']] = template_parameter_list_declaration.format(
                         **template_args)
 
-            template_function_declaration = 'constexpr const TFunction kFunction_{unique_name}(BuiltInId::{human_readable_name}, BuiltInName::{name_with_suffix}, TExtension::{extension}, BuiltInParameters::{parameters_var_name}, {param_count}, {return_type}, EOp{op}, {known_to_not_have_side_effects});'
+            template_function_declaration = 'constexpr const TFunction function_{unique_name}(BuiltInId::{human_readable_name}, BuiltInName::{name_with_suffix}, TExtension::{extension}, BuiltInParameters::{parameters_var_name}, {param_count}, {return_type}, EOp{op}, {known_to_not_have_side_effects});'
             function_declarations.append(template_function_declaration.format(**template_args))
 
             template_mangled_name_declaration = 'constexpr const ImmutableString {unique_name}("{mangled_name}");'
