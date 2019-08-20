@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b63539e_d8b30ba8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3394,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-20T01:07:33Z",
+      "side": 1,
+      "message": "Indeed, as I suspected there are some failures. Luckily they should be easy to fix.\n\nFirst, look at Constants.h, see where `IMPLEMENTATION_MAX_UNIFORM_BUFFER_BINDINGS` is defined. You can add a similar comment to that for `IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS` and change the value to 36 (EXT_geometry_shader requires 36 as the minimum value).\n\nSecond, make sure to add a `IMPLEMENTATION_MAX_GEOMETRY_SHADER_UNIFORM_BUFFERS` (16 should be fine?) and limit `mState.mCaps.maxShaderUniformBlocks[ShaderType::Geometry]` here too.\n\nYou can try to run the tests locally to verify that these fix the failures. Let me know if you need help running tests.",
+      "revId": "31480b69f4da1afff13c3c4e577e5ce5ad6d5822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
