@@ -34,6 +34,24 @@
       "revId": "487e30af4b7c8d70060d795c296b892892f3b810",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9765b60c_d2e216c9",
+        "filename": "src/libANGLE/Config.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2019-08-20T22:56:38Z",
+      "side": 1,
+      "message": "Another common pattern is:\n\nConfig *Config::noConfig()\n{\n    if (!noConfigInstance)\n    {\n         noConfigInstance \u003d new NoConfig();\n    }\n    return noConfigInstance;\n}\n\nI don\u0027t like this pattern because it always checks for null. And there is no workable destructor for this. Would have to be in cleanup code.\n\nHow about: using pattern I have found in several other libANGLE files:\n\nConfig *Config::noConfig()\n{\n    // NoConfig (singleton) to represent EGL_NO_CONFIG,\n    struct NoConfig final : Config\n    {\n        NoConfig() { renderableType \u003d EGL_OPENGL_ES3_BIT | EGL_OPENGL_ES2_BIT; }\n    };\n    static angle::base::NoDestructor\u003cNoConfig\u003e g_NoConfigInstance;\n    return static_cast\u003cConfig *\u003e(g_NoConfigInstance.get());\n}",
+      "parentUuid": "37ea8c0e_c995138d",
+      "revId": "487e30af4b7c8d70060d795c296b892892f3b810",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
