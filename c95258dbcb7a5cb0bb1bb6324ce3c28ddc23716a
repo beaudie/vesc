@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "4e3736e6_3ad3db49",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-20T22:40:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8763a20_cd8d68a6",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 18
+      },
+      "revId": "c95258dbcb7a5cb0bb1bb6324ce3c28ddc23716a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b916f625_7a6fe02c",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 8
@@ -45,6 +69,30 @@
       "revId": "c95258dbcb7a5cb0bb1bb6324ce3c28ddc23716a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5fdf2fde_a06ad492",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-20T22:40:59Z",
+      "side": 1,
+      "message": "Both Android and other platform will use the macro, so I am going to change this to CAPTURE_PATH",
+      "parentUuid": "b916f625_7a6fe02c",
+      "range": {
+        "startLine": 21,
+        "startChar": 12,
+        "endLine": 21,
+        "endChar": 32
+      },
+      "revId": "c95258dbcb7a5cb0bb1bb6324ce3c28ddc23716a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -94,6 +142,54 @@
     },
     {
       "key": {
+        "uuid": "75d547ed_ceeac405",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-20T22:40:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3552ab8_c0a4a5ae",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 7
+      },
+      "revId": "c95258dbcb7a5cb0bb1bb6324ce3c28ddc23716a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc9d238f_56f6d17c",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-20T22:40:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a0bb71f_cc3825c0",
+      "range": {
+        "startLine": 23,
+        "startChar": 19,
+        "endLine": 23,
+        "endChar": 35
+      },
+      "revId": "c95258dbcb7a5cb0bb1bb6324ce3c28ddc23716a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c86ccb5f_beb95d3c",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 8
@@ -114,6 +210,30 @@
       "revId": "c95258dbcb7a5cb0bb1bb6324ce3c28ddc23716a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8fbf7ff_e388c58c",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-20T22:40:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c86ccb5f_beb95d3c",
+      "range": {
+        "startLine": 25,
+        "startChar": 16,
+        "endLine": 25,
+        "endChar": 30
+      },
+      "revId": "c95258dbcb7a5cb0bb1bb6324ce3c28ddc23716a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
