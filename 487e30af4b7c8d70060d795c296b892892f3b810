@@ -70,6 +70,24 @@
       "revId": "487e30af4b7c8d70060d795c296b892892f3b810",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e2b3a90_594aa9d8",
+        "filename": "src/libANGLE/Config.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-20T23:21:20Z",
+      "side": 1,
+      "message": "If you want a static object can you give it an owner? See http://anglebug.com/3787 . NoDestructor is a kludge and I would like to get rid of it.\n\nAlternately you can just construct an empty object on the stack each time. These configs should be rarely used in any hot path.",
+      "parentUuid": "42bca7f8_44cd8160",
+      "revId": "487e30af4b7c8d70060d795c296b892892f3b810",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
