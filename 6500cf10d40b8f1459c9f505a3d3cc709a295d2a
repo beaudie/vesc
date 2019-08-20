@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36ac42de_b821604c",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-20T22:48:08Z",
+      "side": 1,
+      "message": "re-nit: ANGLE_CAPTURE_PATH",
+      "range": {
+        "startLine": 21,
+        "startChar": 12,
+        "endLine": 21,
+        "endChar": 25
+      },
+      "revId": "6500cf10d40b8f1459c9f505a3d3cc709a295d2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
