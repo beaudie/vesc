@@ -52,6 +52,24 @@
       "revId": "487e30af4b7c8d70060d795c296b892892f3b810",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42bca7f8_44cd8160",
+        "filename": "src/libANGLE/Config.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2019-08-20T23:01:40Z",
+      "side": 1,
+      "message": "We didn\u0027t like using nullptr for EGL_NO_CONFIG. So alternative was to use an instance of Config that would mark/act as EGL_NO_CONFIG. This object should be static for the life of the use of EGL/ life of process. So a static object would be ideal. Just need a pattern that a destructor is either not needed or automatic.",
+      "parentUuid": "9765b60c_d2e216c9",
+      "revId": "487e30af4b7c8d70060d795c296b892892f3b810",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
