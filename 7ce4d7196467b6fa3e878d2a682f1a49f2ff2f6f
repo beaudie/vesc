@@ -117,6 +117,30 @@
       "revId": "7ce4d7196467b6fa3e878d2a682f1a49f2ff2f6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f9d54d5_db22a15d",
+        "filename": "src/libANGLE/format_map_data.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1361695
+      },
+      "writtenOn": "2019-08-20T05:33:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "814865c1_696b108d",
+      "range": {
+        "startLine": 31,
+        "startChar": 8,
+        "endLine": 31,
+        "endChar": 56
+      },
+      "revId": "7ce4d7196467b6fa3e878d2a682f1a49f2ff2f6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

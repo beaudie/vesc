@@ -16,6 +16,24 @@
       "revId": "fbdfa4a8c27abc0e802f75be633099af01cb6f33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89ad4bc1_a0af7a9f",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1714,
+      "author": {
+        "id": 1361695
+      },
+      "writtenOn": "2019-08-20T05:33:33Z",
+      "side": 1,
+      "message": "The format \"RGB5_A1\" can be used without this extension. So we don\u0027t need this validation.",
+      "parentUuid": "cd993538_8717546b",
+      "revId": "fbdfa4a8c27abc0e802f75be633099af01cb6f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
