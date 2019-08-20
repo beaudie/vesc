@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e0a36b16_26d501b7",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-20T18:08:52Z",
+      "side": 1,
+      "message": "Yeah, I realized this problem and I keep the reordering only in patch 2 and 3 and made a small comment there(maybe it\u0027s not very visible). \n\nYou can review the Patch 1, which is all the changes.   And you are right, probably have a separate CL for refactoring is much better.",
+      "parentUuid": "b1baf611_27983f33",
+      "range": {
+        "startLine": 119,
+        "startChar": 9,
+        "endLine": 119,
+        "endChar": 16
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ca064a56_e15226e5",
         "filename": "scripts/entry_point_packed_gl_enums.json",
         "patchSetId": 3
@@ -71,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "4f651ca4_b0cdf6ce",
+        "filename": "src/libANGLE/Sampler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-20T18:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a155ced6_de98d9c3",
+      "range": {
+        "startLine": 19,
+        "startChar": 21,
+        "endLine": 19,
+        "endChar": 35
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9827e6a6_958308e2",
         "filename": "src/libANGLE/State.cpp",
         "patchSetId": 3
@@ -91,6 +139,30 @@
       "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7899dc43_e261015e",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1260,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-20T18:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9827e6a6_958308e2",
+      "range": {
+        "startLine": 1260,
+        "startChar": 33,
+        "endLine": 1260,
+        "endChar": 52
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "5d3c48cf_c8e1981f",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2416,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-20T18:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe1976db_5830f04d",
+      "range": {
+        "startLine": 2416,
+        "startChar": 56,
+        "endLine": 2416,
+        "endChar": 66
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "40a95d4e_de719f0d",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 3
@@ -137,6 +233,30 @@
       "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "32d51623_b62e2d80",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2421,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-20T18:08:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40a95d4e_de719f0d",
+      "range": {
+        "startLine": 2421,
+        "startChar": 65,
+        "endLine": 2421,
+        "endChar": 75
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
