@@ -1,6 +1,6 @@
 {
     "description": [
-        "Copyright 2019 The ANGLE Project Authors. All rights reserved.",
+        "Copyright 2019 The  Project Authors. All rights reserved.",
         "Use of this source code is governed by a BSD-style license that can be",
         "found in the LICENSE file.",
         "",
@@ -791,5 +791,74 @@
     "glWaitSemaphore": {
         "buffers": "const BufferID *",
         "textures": "const TextureID *"
+    },
+    "glGenSamplers": {
+        "samplers": "SamplerID *"
+    },
+    "glDeleteSamplers": {
+        "samplers": "const SamplerID *"
+    },
+    "glIsSampler": {
+        "sampler": "SamplerID"
+    },
+    "glSamplerParameterf": {
+        "sampler": "SamplerID"
+    },
+    "glSamplerParameterfv": {
+        "sampler": "SamplerID"
+    },
+    "glSamplerParameteri": {
+        "sampler": "SamplerID"
+    },
+    "glSamplerParameteriv": {
+        "sampler": "SamplerID"
+    },
+    "glSamplerParameterIiv": {
+        "sampler": "SamplerID"
+    },
+    "glSamplerParameterIuiv": {
+        "sampler": "SamplerID"
+    },
+    "glBindSampler": {
+        "sampler": "SamplerID"
+    },
+    "glGetSamplerParameterfv": {
+        "sampler": "SamplerID"
+    },
+    "glGetSamplerParameterIiv": {
+        "sampler": "SamplerID"
+    },
+    "glGetSamplerParameterIuiv": {
+        "sampler": "SamplerID"
+    },
+    "glSamplerParameterivRobust": {
+        "sampler": "SamplerID"
+    },
+    "glSamplerParameterfvRobust": {
+        "sampler": "SamplerID"
+    },
+    "glGetSamplerParameterivRobust": {
+        "sampler": "SamplerID"
+    },
+    "glGetSamplerParameterfvRobust": {
+        "sampler": "SamplerID"
+    },
+    "glGetFramebufferParameterivRobust": {
+        "sampler": "SamplerID"
+    },
+    "glSamplerParameterIivRobust": {
+        "sampler": "SamplerID"
+    },
+    "glSamplerParameterIuivRobust": {
+        "sampler": "SamplerID"
+    },
+    "glGetSamplerParameterIivRobust": {
+        "sampler": "SamplerID"
+    },
+    "glGetSamplerParameterIuivRobust": {
+        "sampler": "SamplerID"
+    },
+    "glGetSamplerParameteriv": {
+        "sampler": "SamplerID"
     }
 }
