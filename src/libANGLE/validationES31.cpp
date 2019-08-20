@@ -1107,7 +1107,7 @@ bool ValidateGetFramebufferParameteriv(Context *context, GLenum target, GLenum p
 }
 
 bool ValidateGetFramebufferParameterivRobustANGLE(Context *context,
-                                                  GLenum target,
+                                                  SamplerID samplerPacked,
                                                   GLenum pname,
                                                   GLsizei bufSize,
                                                   GLsizei *length,
