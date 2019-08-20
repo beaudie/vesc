@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54d50027_cdd5d55a",
+        "filename": "src/gpu_info_util/SystemInfo_mac.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1003154
+      },
+      "writtenOn": "2019-08-20T02:42:00Z",
+      "side": 1,
+      "message": "Drive-by: can we change this to GetDualGPUInfo or something reflective? FindActiveGPU() is misleading now.",
+      "range": {
+        "startLine": 216,
+        "startChar": 4,
+        "endLine": 216,
+        "endChar": 17
+      },
+      "revId": "81b1de40eb11c24cf7dd9078e529044f978e54ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
