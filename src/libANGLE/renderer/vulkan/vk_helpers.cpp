@@ -252,7 +252,8 @@ DynamicBuffer::DynamicBuffer()
       mNextAllocationOffset(0),
       mLastFlushOrInvalidateOffset(0),
       mSize(0),
-      mAlignment(0)
+      mAlignment(0),
+      mAlignmentIsPow2(false)
 {}
 
 DynamicBuffer::DynamicBuffer(DynamicBuffer &&other)
@@ -264,6 +265,7 @@ DynamicBuffer::DynamicBuffer(DynamicBuffer &&other)
       mLastFlushOrInvalidateOffset(other.mLastFlushOrInvalidateOffset),
       mSize(other.mSize),
       mAlignment(other.mAlignment),
+      mAlignmentIsPow2(other.mAlignmentIsPow2),
       mInFlightBuffers(std::move(other.mInFlightBuffers))
 {
     other.mBuffer = nullptr;
@@ -330,7 +332,15 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
                                       VkDeviceSize *offsetOut,
                                       bool *newBufferAllocatedOut)
 {
-    size_t sizeToAllocate = roundUpPow2(sizeInBytes, mAlignment);
+    size_t sizeToAllocate;
+    if (mAlignmentIsPow2)
+    {
+        sizeToAllocate = roundUpPow2(sizeInBytes, mAlignment);
+    }
+    else
+    {
+        sizeToAllocate = roundUp(sizeInBytes, mAlignment);
+    }
 
     angle::base::CheckedNumeric<size_t> checkedNextWriteOffset = mNextAllocationOffset;
     checkedNextWriteOffset += sizeToAllocate;
@@ -546,17 +556,38 @@ void DynamicBuffer::updateAlignment(RendererVk *renderer, size_t alignment)
     size_t atomSize =
         static_cast<size_t>(renderer->getPhysicalDeviceProperties().limits.nonCoherentAtomSize);
 
-    // We need lcm(alignment, atomSize), we are assuming one divides the other so std::max() could
-    // be used instead.
-    ASSERT(alignment % atomSize == 0 || atomSize % alignment == 0);
-    alignment = std::max(alignment, atomSize);
-    ASSERT(gl::isPow2(alignment));
+    // We need lcm(alignment, atomSize).  Usually, one divides the other so std::max() could be used
+    // instead.  Only known case where this assumption breaks is for 3-component types with 16- or
+    // 32-bit channels, so that's special cased to keep the performance of the usual case (i.e. use
+    // roundUpPow2).
 
-    // If alignment has changed, make sure the next allocation is done at an aligned offset.
-    if (alignment != mAlignment)
+    mAlignmentIsPow2 = gl::isPow2(alignment);
+    if (mAlignmentIsPow2)
     {
-        mNextAllocationOffset =
-            roundUpPow2(mNextAllocationOffset, static_cast<uint32_t>(alignment));
+        ASSERT(alignment % atomSize == 0 || atomSize % alignment == 0);
+        alignment = std::max(alignment, atomSize);
+        ASSERT(gl::isPow2(alignment));
+
+        // If alignment has changed, make sure the next allocation is done at an aligned offset.
+        if (alignment != mAlignment)
+        {
+            mNextAllocationOffset =
+                roundUpPow2(mNextAllocationOffset, static_cast<uint32_t>(alignment));
+        }
+    }
+    else
+    {
+        ASSERT(gl::isPow2(atomSize));
+        ASSERT(alignment % 3 == 0);
+        ASSERT(gl::isPow2(alignment / 3));
+
+        alignment = std::max(alignment / 3, atomSize) * 3;
+
+        if (alignment != mAlignment)
+        {
+            mNextAllocationOffset =
+                roundUp(mNextAllocationOffset, static_cast<uint32_t>(alignment));
+        }
     }
 
     mAlignment = alignment;

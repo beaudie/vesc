@@ -93,7 +93,6 @@ class DynamicBuffer : angle::NonCopyable
 
     BufferHelper *getCurrentBuffer() { return mBuffer; }
 
-    size_t getAlignment() { return mAlignment; }
     void updateAlignment(RendererVk *renderer, size_t alignment);
 
     // For testing only!
@@ -116,6 +115,7 @@ class DynamicBuffer : angle::NonCopyable
     uint32_t mLastFlushOrInvalidateOffset;
     size_t mSize;
     size_t mAlignment;
+    bool mAlignmentIsPow2;
 
     std::vector<BufferHelper *> mInFlightBuffers;
     std::vector<BufferHelper *> mBufferFreeList;
