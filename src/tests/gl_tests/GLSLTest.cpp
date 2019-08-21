@@ -6390,6 +6390,29 @@ TEST_P(GLSLTest, MemoryExhaustedTest)
     EXPECT_NE(0u, program);
 }
 
+// Test uniform precision mismatch, if the it isn't active, then the link should be successful
+TEST_P(GLSLTest, InactiveUniformPrecisionMismatchTest)
+{
+    constexpr char kVS_inactive[] = R"(
+      attribute highp vec4 position;
+      uniform mediump vec3 out_color;
+      void main(void)
+      {
+          gl_Position = position;
+      })";
+
+    constexpr char kFS[] = R"(
+      uniform highp vec3 out_color;
+      void main(void)
+      {
+          gl_FragColor = vec4(out_color, 1);
+      })";
+
+    GLuint program = CompileProgram(kVS_inactive, kFS);
+    EXPECT_NE(0u, program);
+    glDeleteProgram(program);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest,
