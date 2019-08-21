@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "202bb499_376e5347",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-21T18:36:03Z",
+      "side": 1,
+      "message": "I would call this `TransposeMatrixType` for clarity, especially since you also have CreateTransposeCall().",
+      "range": {
+        "startLine": 64,
+        "startChar": 7,
+        "endLine": 64,
+        "endChar": 22
+      },
+      "revId": "b8b002eb31aa0e8b5ff9cc2ad5066454850c7999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "992bd97d_be51f6bb",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-21T18:36:03Z",
+      "side": 1,
+      "message": "We need to reset the index to 0 in the else, right? Do we have a test for 2D arrays?",
+      "range": {
+        "startLine": 286,
+        "startChar": 0,
+        "endLine": 289,
+        "endChar": 13
+      },
+      "revId": "b8b002eb31aa0e8b5ff9cc2ad5066454850c7999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fc6dd0e9_f02777b4",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 6614,
+      "author": {
+        "id": 1350412
+      },
+      "writtenOn": "2019-08-21T18:36:03Z",
+      "side": 1,
+      "message": "What is this doing? Could use a comment.",
+      "range": {
+        "startLine": 6603,
+        "startChar": 0,
+        "endLine": 6614,
+        "endChar": 32
+      },
+      "revId": "b8b002eb31aa0e8b5ff9cc2ad5066454850c7999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
