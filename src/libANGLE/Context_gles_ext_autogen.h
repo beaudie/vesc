@@ -71,7 +71,7 @@
                             GLint *params);                                                        \
     void getRenderbufferParameterivRobust(GLenum target, GLenum pname, GLsizei bufSize,            \
                                           GLsizei *length, GLint *params);                         \
-    void getShaderivRobust(GLuint shader, GLenum pname, GLsizei bufSize, GLsizei *length,          \
+    void getShaderivRobust(ShaderID shaderPacked, GLenum pname, GLsizei bufSize, GLsizei *length,  \
                            GLint *params);                                                         \
     void getTexParameterfvRobust(TextureType targetPacked, GLenum pname, GLsizei bufSize,          \
                                  GLsizei *length, GLfloat *params);                                \
@@ -297,7 +297,7 @@
     void provokingVertex(ProvokingVertexConvention modePacked);                                    \
     /* GL_ANGLE_texture_multisample */                                                             \
     /* GL_ANGLE_translated_shader_source */                                                        \
-    void getTranslatedShaderSource(GLuint shader, GLsizei bufsize, GLsizei *length,                \
+    void getTranslatedShaderSource(ShaderID shaderPacked, GLsizei bufsize, GLsizei *length,        \
                                    GLchar *source);                                                \
     /* GL_EXT_blend_func_extended */                                                               \
     void bindFragDataLocation(GLuint program, GLuint color, const GLchar *name);                   \

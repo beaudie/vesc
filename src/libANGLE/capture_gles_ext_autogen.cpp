@@ -720,7 +720,7 @@ CallCapture CaptureGetRenderbufferParameterivRobustANGLE(const Context *context,
 
 CallCapture CaptureGetShaderivRobustANGLE(const Context *context,
                                           bool isCallValid,
-                                          GLuint shader,
+                                          ShaderID shaderPacked,
                                           GLenum pname,
                                           GLsizei bufSize,
                                           GLsizei *length,
@@ -728,19 +728,19 @@ CallCapture CaptureGetShaderivRobustANGLE(const Context *context,
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addValueParam("shader", ParamType::TGLuint, shader);
+    paramBuffer.addValueParam("shaderPacked", ParamType::TShaderID, shaderPacked);
     paramBuffer.addEnumParam("pname", GLenumGroup::DefaultGroup, ParamType::TGLenum, pname);
     paramBuffer.addValueParam("bufSize", ParamType::TGLsizei, bufSize);
 
     ParamCapture lengthParam("length", ParamType::TGLsizeiPointer);
     InitParamValue(ParamType::TGLsizeiPointer, length, &lengthParam.value);
-    CaptureGetShaderivRobustANGLE_length(context, isCallValid, shader, pname, bufSize, length,
+    CaptureGetShaderivRobustANGLE_length(context, isCallValid, shaderPacked, pname, bufSize, length,
                                          params, &lengthParam);
     paramBuffer.addParam(std::move(lengthParam));
 
     ParamCapture paramsParam("params", ParamType::TGLintPointer);
     InitParamValue(ParamType::TGLintPointer, params, &paramsParam.value);
-    CaptureGetShaderivRobustANGLE_params(context, isCallValid, shader, pname, bufSize, length,
+    CaptureGetShaderivRobustANGLE_params(context, isCallValid, shaderPacked, pname, bufSize, length,
                                          params, &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
@@ -2564,26 +2564,26 @@ CallCapture CaptureSampleMaskiANGLE(const Context *context,
 
 CallCapture CaptureGetTranslatedShaderSourceANGLE(const Context *context,
                                                   bool isCallValid,
-                                                  GLuint shader,
+                                                  ShaderID shaderPacked,
                                                   GLsizei bufsize,
                                                   GLsizei *length,
                                                   GLchar *source)
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addValueParam("shader", ParamType::TGLuint, shader);
+    paramBuffer.addValueParam("shaderPacked", ParamType::TShaderID, shaderPacked);
     paramBuffer.addValueParam("bufsize", ParamType::TGLsizei, bufsize);
 
     ParamCapture lengthParam("length", ParamType::TGLsizeiPointer);
     InitParamValue(ParamType::TGLsizeiPointer, length, &lengthParam.value);
-    CaptureGetTranslatedShaderSourceANGLE_length(context, isCallValid, shader, bufsize, length,
-                                                 source, &lengthParam);
+    CaptureGetTranslatedShaderSourceANGLE_length(context, isCallValid, shaderPacked, bufsize,
+                                                 length, source, &lengthParam);
     paramBuffer.addParam(std::move(lengthParam));
 
     ParamCapture sourceParam("source", ParamType::TGLcharPointer);
     InitParamValue(ParamType::TGLcharPointer, source, &sourceParam.value);
-    CaptureGetTranslatedShaderSourceANGLE_source(context, isCallValid, shader, bufsize, length,
-                                                 source, &sourceParam);
+    CaptureGetTranslatedShaderSourceANGLE_source(context, isCallValid, shaderPacked, bufsize,
+                                                 length, source, &sourceParam);
     paramBuffer.addParam(std::move(sourceParam));
 
     return CallCapture(gl::EntryPoint::GetTranslatedShaderSourceANGLE, std::move(paramBuffer));

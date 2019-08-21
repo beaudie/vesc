@@ -92,6 +92,9 @@ enum class ParamType
     TRenderbufferID,
     TRenderbufferIDConstPointer,
     TRenderbufferIDPointer,
+    TShaderID,
+    TShaderIDConstPointer,
+    TShaderIDPointer,
     TShaderType,
     TShadingModel,
     TTextureEnvParameter,
@@ -185,6 +188,9 @@ union ParamValue
     gl::RenderbufferID RenderbufferIDVal;
     const gl::RenderbufferID *RenderbufferIDConstPointerVal;
     gl::RenderbufferID *RenderbufferIDPointerVal;
+    gl::ShaderID ShaderIDVal;
+    const gl::ShaderID *ShaderIDConstPointerVal;
+    gl::ShaderID *ShaderIDPointerVal;
     gl::ShaderType ShaderTypeVal;
     gl::ShadingModel ShadingModelVal;
     gl::TextureEnvParameter TextureEnvParameterVal;
@@ -681,6 +687,25 @@ inline void SetParamVal<ParamType::TRenderbufferIDPointer>(gl::RenderbufferID *v
 }
 
 template <>
+inline void SetParamVal<ParamType::TShaderID>(gl::ShaderID valueIn, ParamValue *valueOut)
+{
+    valueOut->ShaderIDVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TShaderIDConstPointer>(const gl::ShaderID *valueIn,
+                                                          ParamValue *valueOut)
+{
+    valueOut->ShaderIDConstPointerVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TShaderIDPointer>(gl::ShaderID *valueIn, ParamValue *valueOut)
+{
+    valueOut->ShaderIDPointerVal = valueIn;
+}
+
+template <>
 inline void SetParamVal<ParamType::TShaderType>(gl::ShaderType valueIn, ParamValue *valueOut)
 {
     valueOut->ShaderTypeVal = valueIn;
@@ -1004,6 +1029,15 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
             break;
         case ParamType::TRenderbufferIDPointer:
             SetParamVal<ParamType::TRenderbufferIDPointer>(valueIn, valueOut);
+            break;
+        case ParamType::TShaderID:
+            SetParamVal<ParamType::TShaderID>(valueIn, valueOut);
+            break;
+        case ParamType::TShaderIDConstPointer:
+            SetParamVal<ParamType::TShaderIDConstPointer>(valueIn, valueOut);
+            break;
+        case ParamType::TShaderIDPointer:
+            SetParamVal<ParamType::TShaderIDPointer>(valueIn, valueOut);
             break;
         case ParamType::TShaderType:
             SetParamVal<ParamType::TShaderType>(valueIn, valueOut);

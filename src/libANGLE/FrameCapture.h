@@ -204,6 +204,9 @@ template <>
 void WriteParamValueToStream<ParamType::TBufferID>(std::ostream &os, gl::BufferID value);
 
 template <>
+void WriteParamValueToStream<ParamType::TShaderID>(std::ostream &os, gl::ShaderID value);
+
+template <>
 void WriteParamValueToStream<ParamType::TRenderbufferID>(std::ostream &os,
                                                          gl::RenderbufferID value);
 

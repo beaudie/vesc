@@ -9,7 +9,6 @@
         "Note that all entry points have their suffixes stripped in this file.",
         "See gen_packed_gl_enums.py for the generator that uses this data."
     ],
-
     "glAlphaFunc": {
         "func": "AlphaTestFunc"
     },
@@ -305,16 +304,16 @@
         "texture": "TextureID"
     },
     "glGetLightfv": {
-        "pname" : "LightParameter"
+        "pname": "LightParameter"
     },
     "glGetLightxv": {
-        "pname" : "LightParameter"
+        "pname": "LightParameter"
     },
     "glGetMaterialfv": {
-        "pname" : "MaterialParameter"
+        "pname": "MaterialParameter"
     },
     "glGetMaterialxv": {
-        "pname" : "MaterialParameter"
+        "pname": "MaterialParameter"
     },
     "glGetNamedBufferParameteri64v": {
         "buffer": "BufferID"
@@ -454,24 +453,24 @@
     "glIsTexture": {
         "texture": "TextureID"
     },
-    "glLightf" : {
-        "pname" : "LightParameter"
+    "glLightf": {
+        "pname": "LightParameter"
     },
-    "glLightfv" : {
-        "pname" : "LightParameter"
+    "glLightfv": {
+        "pname": "LightParameter"
     },
-    "glLightx" : {
-        "pname" : "LightParameter"
+    "glLightx": {
+        "pname": "LightParameter"
     },
-    "glLightxv" : {
-        "pname" : "LightParameter"
+    "glLightxv": {
+        "pname": "LightParameter"
     },
-    "glLogicOp" : {
-        "opcode" : "LogicalOperation"
+    "glLogicOp": {
+        "opcode": "LogicalOperation"
     },
-    "glLoseContext" : {
-        "current" : "GraphicsResetStatus",
-        "other" : "GraphicsResetStatus"
+    "glLoseContext": {
+        "current": "GraphicsResetStatus",
+        "other": "GraphicsResetStatus"
     },
     "glMapBuffer": {
         "target": "BufferBinding"
@@ -549,19 +548,19 @@
         "type": "VertexAttribType"
     },
     "glPointParameterf": {
-        "pname" : "PointParameter"
+        "pname": "PointParameter"
     },
     "glPointParameterfv": {
-        "pname" : "PointParameter"
+        "pname": "PointParameter"
     },
     "glPointParameterx": {
-        "pname" : "PointParameter"
+        "pname": "PointParameter"
     },
     "glPointParameterxv": {
-        "pname" : "PointParameter"
+        "pname": "PointParameter"
     },
     "glPointSizePointer": {
-        "type" : "VertexAttribType"
+        "type": "VertexAttribType"
     },
     "glProvokingVertex": {
         "mode": "ProvokingVertexConvention"
@@ -791,5 +790,48 @@
     "glWaitSemaphore": {
         "buffers": "const BufferID *",
         "textures": "const TextureID *"
+    },
+    "glAttachShader": {
+        "shader": "ShaderID"
+    },
+    "glCompileShader": {
+        "shader": "ShaderID"
+    },
+    "glDeleteShader": {
+        "shader": "ShaderID"
+    },
+    "glGetAttachedShaders": {
+        "shaders": "ShaderID *"
+    },
+    "glDetachShader": {
+        "shader": "ShaderID"
+    },
+    "glGetShaderiv": {
+        "shader": "ShaderID"
+    },
+    "glGetShaderInfoLog": {
+        "shader": "ShaderID"
+    },
+    "glGetShaderPrecisionFormat": {
+        "shader": "ShaderID"
+    },
+    "glGetShaderSource": {
+        "shader": "ShaderID"
+    },
+    "glIsShader": {
+        "shader": "ShaderID"
+    },
+    "glShaderSource": {
+        "shader": "ShaderID"
+    },
+    "glShaderBinary": {
+        "shaders": "const ShaderID *"
+    },
+    "glGetShaderivRobust" : {
+        "shader": "ShaderID"
+    },
+    "glGetTranslatedShaderSource": {
+        "shader": "ShaderID"
     }
+
 }

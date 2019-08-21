@@ -2380,7 +2380,7 @@ static bool ValidateObjectIdentifierAndName(Context *context, GLenum identifier,
             return true;
 
         case GL_SHADER:
-            if (context->getShader(name) == nullptr)
+            if (context->getShader({name}) == nullptr)
             {
                 context->validationError(GL_INVALID_VALUE, kInvalidShaderName);
                 return false;
@@ -4876,7 +4876,7 @@ bool ValidateActiveTexture(Context *context, GLenum texture)
     return true;
 }
 
-bool ValidateAttachShader(Context *context, GLuint program, GLuint shader)
+bool ValidateAttachShader(Context *context, GLuint program, ShaderID shader)
 {
     Program *programObject = GetValidProgram(context, program);
     if (!programObject)
@@ -5218,7 +5218,7 @@ bool ValidateColorMask(Context *context,
     return true;
 }
 
-bool ValidateCompileShader(Context *context, GLuint shader)
+bool ValidateCompileShader(Context *context, ShaderID shader)
 {
     return true;
 }
@@ -5254,7 +5254,7 @@ bool ValidateDeleteProgram(Context *context, GLuint program)
 
     if (!context->getProgramResolveLink(program))
     {
-        if (context->getShader(program))
+        if (context->getShader({program}))
         {
             context->validationError(GL_INVALID_OPERATION, kExpectedProgramName);
             return false;
@@ -5269,16 +5269,16 @@ bool ValidateDeleteProgram(Context *context, GLuint program)
     return true;
 }
 
-bool ValidateDeleteShader(Context *context, GLuint shader)
+bool ValidateDeleteShader(Context *context, ShaderID shader)
 {
-    if (shader == 0)
+    if (shader.value == 0)
     {
         return false;
     }
 
     if (!context->getShader(shader))
     {
-        if (context->getProgramResolveLink(shader))
+        if (context->getProgramResolveLink(shader.value))
         {
             context->validationError(GL_INVALID_OPERATION, kInvalidShaderName);
             return false;
@@ -5320,7 +5320,7 @@ bool ValidateDepthMask(Context *context, GLboolean flag)
     return true;
 }
 
-bool ValidateDetachShader(Context *context, GLuint program, GLuint shader)
+bool ValidateDetachShader(Context *context, GLuint program, ShaderID shader)
 {
     Program *programObject = GetValidProgram(context, program);
     if (!programObject)
@@ -5457,7 +5457,7 @@ bool ValidateGetAttachedShaders(Context *context,
                                 GLuint program,
                                 GLsizei maxcount,
                                 GLsizei *count,
-                                GLuint *shaders)
+                                ShaderID *shaders)
 {
     if (maxcount < 0)
     {
@@ -5550,7 +5550,7 @@ bool ValidateGetProgramInfoLog(Context *context,
 }
 
 bool ValidateGetShaderInfoLog(Context *context,
-                              GLuint shader,
+                              ShaderID shader,
                               GLsizei bufsize,
                               GLsizei *length,
                               GLchar *infolog)
@@ -5608,7 +5608,7 @@ bool ValidateGetShaderPrecisionFormat(Context *context,
 }
 
 bool ValidateGetShaderSource(Context *context,
-                             GLuint shader,
+                             ShaderID shader,
                              GLsizei bufsize,
                              GLsizei *length,
                              GLchar *source)
@@ -5726,7 +5726,7 @@ bool ValidateIsRenderbuffer(Context *context, RenderbufferID renderbuffer)
     return true;
 }
 
-bool ValidateIsShader(Context *context, GLuint shader)
+bool ValidateIsShader(Context *context, ShaderID shader)
 {
     return true;
 }
@@ -5846,7 +5846,7 @@ bool ValidateScissor(Context *context, GLint x, GLint y, GLsizei width, GLsizei 
 
 bool ValidateShaderBinary(Context *context,
                           GLsizei n,
-                          const GLuint *shaders,
+                          const ShaderID *shaders,
                           GLenum binaryformat,
                           const void *binary,
                           GLsizei length)
@@ -5863,7 +5863,7 @@ bool ValidateShaderBinary(Context *context,
 }
 
 bool ValidateShaderSource(Context *context,
-                          GLuint shader,
+                          ShaderID shader,
                           GLsizei count,
                           const GLchar *const *string,
                           const GLint *length)
@@ -6605,7 +6605,7 @@ bool ValidateGetRenderbufferParameteriv(Context *context,
     return ValidateGetRenderbufferParameterivBase(context, target, pname, nullptr);
 }
 
-bool ValidateGetShaderiv(Context *context, GLuint shader, GLenum pname, GLint *params)
+bool ValidateGetShaderiv(Context *context, ShaderID shader, GLenum pname, GLint *params)
 {
     return ValidateGetShaderivBase(context, shader, pname, nullptr);
 }
@@ -6770,7 +6770,7 @@ bool ValidateUseProgram(Context *context, GLuint program)
         if (!programObject)
         {
             // ES 3.1.0 section 7.3 page 72
-            if (context->getShader(program))
+            if (context->getShader({program}))
             {
                 context->validationError(GL_INVALID_OPERATION, kExpectedProgramName);
                 return false;
@@ -6904,7 +6904,7 @@ bool ValidateGetGraphicsResetStatusEXT(Context *context)
 }
 
 bool ValidateGetTranslatedShaderSourceANGLE(Context *context,
-                                            GLuint shader,
+                                            ShaderID shader,
                                             GLsizei bufsize,
                                             GLsizei *length,
                                             GLchar *source)
