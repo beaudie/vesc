@@ -1200,6 +1200,7 @@ angle::Result TextureVk::init3DRenderTargets(ContextVk *contextVk)
         return angle::Result::Continue;
 
     uint32_t layerCount = GetRenderTargetLayerCount(mImage);
+    const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
 
     mLayerFetchImageView.resize(layerCount);
     m3DRenderTargets.resize(layerCount);
@@ -1212,7 +1213,8 @@ angle::Result TextureVk::init3DRenderTargets(ContextVk *contextVk)
         // Users of the render target expect the views to directly view the desired layer, so we
         // need create a fetch view for each layer as well.
         gl::SwizzleState mappedSwizzle;
-        MapSwizzleState(contextVk, mImage->getFormat(), mState.getSwizzleState(), &mappedSwizzle);
+        MapSwizzleState(contextVk, mImage->getFormat(), baseLevelDesc.format.info->sized,
+                        mState.getSwizzleState(), &mappedSwizzle);
         gl::TextureType arrayType = vk::Get2DTextureType(layerCount, mImage->getSamples());
         ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, mImage->getAspectFlags(),
                                              mappedSwizzle, &mLayerFetchImageView[layerIndex],
@@ -1231,6 +1233,8 @@ angle::Result TextureVk::initCubeMapRenderTargets(ContextVk *contextVk)
     if (!mCubeMapRenderTargets.empty())
         return angle::Result::Continue;
 
+    const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
+
     mLayerFetchImageView.resize(gl::kCubeFaceCount);
     mCubeMapRenderTargets.resize(gl::kCubeFaceCount);
     for (size_t cubeMapFaceIndex = 0; cubeMapFaceIndex < gl::kCubeFaceCount; ++cubeMapFaceIndex)
@@ -1241,7 +1245,8 @@ angle::Result TextureVk::initCubeMapRenderTargets(ContextVk *contextVk)
         // Users of the render target expect the views to directly view the desired layer, so we
         // need create a fetch view for each layer as well.
         gl::SwizzleState mappedSwizzle;
-        MapSwizzleState(contextVk, mImage->getFormat(), mState.getSwizzleState(), &mappedSwizzle);
+        MapSwizzleState(contextVk, mImage->getFormat(), baseLevelDesc.format.info->sized,
+                        mState.getSwizzleState(), &mappedSwizzle);
         gl::TextureType arrayType = vk::Get2DTextureType(gl::kCubeFaceCount, mImage->getSamples());
         ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, mImage->getAspectFlags(),
                                              mappedSwizzle, &mLayerFetchImageView[cubeMapFaceIndex],
@@ -1559,8 +1564,11 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
 {
     ASSERT(mImage != nullptr);
 
+    const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
+
     gl::SwizzleState mappedSwizzle;
-    MapSwizzleState(contextVk, format, mState.getSwizzleState(), &mappedSwizzle);
+    MapSwizzleState(contextVk, format, baseLevelDesc.format.info->sized, mState.getSwizzleState(),
+                    &mappedSwizzle);
 
     VkImageAspectFlags aspectFlags = vk::GetFormatAspectFlags(format.angleFormat());
     if (HasBothDepthAndStencilAspects(aspectFlags))
