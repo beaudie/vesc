@@ -10,7 +10,6 @@
 #include "ANGLEPerfTest.h"
 
 #include "ANGLEPerfTestArgs.h"
-#include "anglebase/logging.h"
 #include "common/platform.h"
 #include "third_party/perf/perf_test.h"
 #include "third_party/trace_event/trace_event.h"
