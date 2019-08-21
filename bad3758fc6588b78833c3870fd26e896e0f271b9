@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1734f244_f0798634",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-21T16:56:25Z",
+      "side": 1,
+      "message": "Is there maybe a mutex missing instead? You say it\u0027s racy that mCurrentSurface is nullptr or not, is it racy in a valid way (contexts could be doing things in different orders, but otherwise thread-safe) or it\u0027s a threading bug? If the latter, this change doesn\u0027t seem right.",
+      "revId": "bad3758fc6588b78833c3870fd26e896e0f271b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
