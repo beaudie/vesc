@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9c0a6702_8095f1a0",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-21T15:11:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b2740e78_c7cb9fcd",
+      "revId": "fdbc72d6e36e95cb3c43d268795729b6ef63179f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e80ad83_ed50cab4",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 20
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "Interesting. Can you make this a split change? There are a bunch of tests for primitive restart that use GL_POINTS, GL_LINES, etc. I wonder if the driver was accepting this and working correctly and the LVL is just blocking us.\n\nAlso minor cleanup suggestion for the split patch: Make this a helper function \"vk::PrimitiveTopologySupportsRestart\" and use a switch.",
       "parentUuid": "7e80ad83_ed50cab4",
+      "revId": "fdbc72d6e36e95cb3c43d268795729b6ef63179f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "672eb697_ae5cfff8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-21T15:11:29Z",
+      "side": 1,
+      "message": "We fail a bunch of tests with this fix so keeping code like it is and skipping VUID for now. Filed a bug to track fix.",
+      "parentUuid": "aa6f84d2_78c5eccd",
       "revId": "fdbc72d6e36e95cb3c43d268795729b6ef63179f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
