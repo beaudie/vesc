@@ -504,25 +504,31 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         const TType *vec3Type = StaticType::GetBasic<EbtFloat, 3>();
         TVariable *pVar =
             new TVariable(mSymbolTable, ImmutableString("P"), vec3Type, SymbolType::AngleInternal);
+#if 0
         TVariable *dPdxVar = new TVariable(mSymbolTable, ImmutableString("dPdx"), vec3Type,
                                            SymbolType::AngleInternal);
         TVariable *dPdyVar = new TVariable(mSymbolTable, ImmutableString("dPdy"), vec3Type,
                                            SymbolType::AngleInternal);
+#endif
 
         const TType *vec2Type = StaticType::GetBasic<EbtFloat, 2>();
         TType *outVec2Type    = new TType(*vec2Type);
         outVec2Type->setQualifier(EvqOut);
 
+#if 0
         TVariable *dUVdxVar = new TVariable(mSymbolTable, ImmutableString("dUVdx"), outVec2Type,
                                             SymbolType::AngleInternal);
         TVariable *dUVdyVar = new TVariable(mSymbolTable, ImmutableString("dUVdy"), outVec2Type,
                                             SymbolType::AngleInternal);
+#endif
 
         TIntermSymbol *p     = new TIntermSymbol(pVar);
+#if 0
         TIntermSymbol *dPdx  = new TIntermSymbol(dPdxVar);
         TIntermSymbol *dPdy  = new TIntermSymbol(dPdyVar);
         TIntermSymbol *dUVdx = new TIntermSymbol(dUVdxVar);
         TIntermSymbol *dUVdy = new TIntermSymbol(dUVdyVar);
+#endif
 
         // Create the function body as statements are generated.
         TIntermBlock *body = new TIntermBlock;
@@ -560,19 +566,23 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         TIntermSymbol *l    = new TIntermSymbol(CreateTempVariable(mSymbolTable, floatType));
         TIntermSymbol *uc   = new TIntermSymbol(CreateTempVariable(mSymbolTable, floatType));
         TIntermSymbol *vc   = new TIntermSymbol(CreateTempVariable(mSymbolTable, floatType));
+#if 0
         TIntermSymbol *dUdx = new TIntermSymbol(CreateTempVariable(mSymbolTable, floatType));
         TIntermSymbol *dVdx = new TIntermSymbol(CreateTempVariable(mSymbolTable, floatType));
         TIntermSymbol *dUdy = new TIntermSymbol(CreateTempVariable(mSymbolTable, floatType));
         TIntermSymbol *dVdy = new TIntermSymbol(CreateTempVariable(mSymbolTable, floatType));
+#endif
 
         body->appendStatement(CreateTempDeclarationNode(&ma->variable()));
         body->appendStatement(CreateTempDeclarationNode(&l->variable()));
         body->appendStatement(CreateTempDeclarationNode(&uc->variable()));
         body->appendStatement(CreateTempDeclarationNode(&vc->variable()));
+#if 0
         body->appendStatement(CreateTempDeclarationNode(&dUdx->variable()));
         body->appendStatement(CreateTempDeclarationNode(&dVdx->variable()));
         body->appendStatement(CreateTempDeclarationNode(&dUdy->variable()));
         body->appendStatement(CreateTempDeclarationNode(&dVdy->variable()));
+#endif
 
         // ma = max(|x|, max(|y|, |z|))
         TIntermTyped *maxYZ = CreateBuiltInFunctionCallNode(
@@ -661,6 +671,7 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         isXMajor = new TIntermBinary(EOpLessThan, l->deepCopy(), CreateFloatNode(1.5f));
         isYMajor = new TIntermBinary(EOpLessThan, l->deepCopy(), CreateFloatNode(3.5f));
 
+#if 0
         TIntermSwizzle *dPdxX = new TIntermSwizzle(dPdx->deepCopy(), {0});
         TIntermSwizzle *dPdxY = new TIntermSwizzle(dPdx->deepCopy(), {1});
         TIntermSwizzle *dPdxZ = new TIntermSwizzle(dPdx->deepCopy(), {2});
@@ -668,27 +679,34 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         TIntermSwizzle *dPdyX = new TIntermSwizzle(dPdy->deepCopy(), {0});
         TIntermSwizzle *dPdyY = new TIntermSwizzle(dPdy->deepCopy(), {1});
         TIntermSwizzle *dPdyZ = new TIntermSwizzle(dPdy->deepCopy(), {2});
+#endif
 
         TIntermBlock *calculateXUcVc = new TIntermBlock;
         calculateXUcVc->appendStatement(
             new TIntermBinary(EOpAssign, ma->deepCopy(), absX->deepCopy()));
         TransformXMajor(calculateXUcVc, x, y, z, uc, vc);
+#if 0
         TransformXMajor(calculateXUcVc, dPdxX, dPdxY, dPdxZ, dUdx, dVdx);
         TransformXMajor(calculateXUcVc, dPdyX, dPdyY, dPdyZ, dUdy, dVdy);
+#endif
 
         TIntermBlock *calculateYUcVc = new TIntermBlock;
         calculateYUcVc->appendStatement(
             new TIntermBinary(EOpAssign, ma->deepCopy(), absY->deepCopy()));
         TransformYMajor(calculateYUcVc, x, y, z, uc, vc);
+#if 0
         TransformYMajor(calculateYUcVc, dPdxX, dPdxY, dPdxZ, dUdx, dVdx);
         TransformYMajor(calculateYUcVc, dPdyX, dPdyY, dPdyZ, dUdy, dVdy);
+#endif
 
         TIntermBlock *calculateZUcVc = new TIntermBlock;
         calculateZUcVc->appendStatement(
             new TIntermBinary(EOpAssign, ma->deepCopy(), absZ->deepCopy()));
         TransformZMajor(calculateZUcVc, x, y, z, uc, vc);
+#if 0
         TransformZMajor(calculateZUcVc, dPdxX, dPdxY, dPdxZ, dUdx, dVdx);
         TransformZMajor(calculateZUcVc, dPdyX, dPdyY, dPdyZ, dUdy, dVdy);
+#endif
 
         // Create the if-else paths:
         TIntermIfElse *calculateYZUcVc =
@@ -713,6 +731,7 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         body->appendStatement(new TIntermBinary(EOpAssign, uc->deepCopy(), uNormalized));
         body->appendStatement(new TIntermBinary(EOpAssign, vc->deepCopy(), vNormalized));
 
+#if 0
         // dUdx / (ma*2).  Similarly for dVdx, dUdy and dVdy
         TIntermTyped *dUdxNormalized = new TIntermBinary(EOpDiv, dUdx, ma->deepCopy());
         TIntermTyped *dVdxNormalized = new TIntermBinary(EOpDiv, dVdx, ma->deepCopy());
@@ -728,6 +747,7 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
 
         body->appendStatement(new TIntermBinary(EOpAssign, dUVdx, dUVdxValue));
         body->appendStatement(new TIntermBinary(EOpAssign, dUVdy, dUVdyValue));
+#endif
 
         // return vec3(u, v, l)
         TIntermBranch *returnStatement = new TIntermBranch(
@@ -738,10 +758,12 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         mCubeXYZToArrayUVL = new TFunction(mSymbolTable, kCoordTransformFuncName,
                                            SymbolType::AngleInternal, vec3Type, true);
         mCubeXYZToArrayUVL->addParameter(pVar);
+#if 0
         mCubeXYZToArrayUVL->addParameter(dPdxVar);
         mCubeXYZToArrayUVL->addParameter(dPdyVar);
         mCubeXYZToArrayUVL->addParameter(dUVdxVar);
         mCubeXYZToArrayUVL->addParameter(dUVdyVar);
+#endif
 
         mCoordTranslationFunctionDecl =
             CreateInternalFunctionDefinitionNode(*mCubeXYZToArrayUVL, body);
@@ -753,7 +775,7 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
                                                 TIntermTyped *dUVdx,
                                                 TIntermTyped *dUVdy)
     {
-        TIntermSequence *args = new TIntermSequence({P, dPdx, dPdy, dUVdx, dUVdy});
+        TIntermSequence *args = new TIntermSequence({P /*, dPdx, dPdy, dUVdx, dUVdy*/});
         return TIntermAggregate::CreateFunctionCall(*mCubeXYZToArrayUVL, args);
     }
 
@@ -866,6 +888,7 @@ class RewriteCubeMapSamplersAs2DArrayTraverser : public TIntermTraverser
         TIntermTyped *dPdy = nullptr;
         if (isGrad)
         {
+            __builtin_trap();
             ASSERT(arguments->size() == 4);
             dPdx = (*arguments)[2]->getAsTyped()->deepCopy();
             dPdy = (*arguments)[3]->getAsTyped()->deepCopy();
