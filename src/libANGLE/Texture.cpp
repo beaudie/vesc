@@ -217,7 +217,7 @@ bool TextureState::isCubeComplete() const
 
 const ImageDesc &TextureState::getBaseLevelDesc() const
 {
-    ASSERT(mType != TextureType::CubeMap || isCubeComplete());
+    //    ASSERT(mType != TextureType::CubeMap || isCubeComplete());
     return getImageDesc(getBaseImageTarget(), getEffectiveBaseLevel());
 }
 
@@ -1023,11 +1023,11 @@ angle::Result Texture::setImage(Context *context,
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, size.depth);
 
-    ANGLE_TRY(mTexture->setImage(context, index, internalFormat, size, format, type, unpackState,
-                                 pixels));
-
     InitState initState = DetermineInitState(context, pixels);
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, type), initState));
+
+    ANGLE_TRY(mTexture->setImage(context, index, internalFormat, size, format, type, unpackState,
+                                 pixels));
 
     ANGLE_TRY(handleMipmapGenerationHint(context, level));
 
@@ -1079,11 +1079,12 @@ angle::Result Texture::setCompressedImage(Context *context,
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, size.depth);
 
+    InitState initState = DetermineInitState(context, pixels);
+    mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat), initState));
+
     ANGLE_TRY(mTexture->setCompressedImage(context, index, internalFormat, size, unpackState,
                                            imageSize, pixels));
 
-    InitState initState = DetermineInitState(context, pixels);
-    mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat), initState));
     signalDirtyStorage(initState);
 
     return angle::Result::Continue;
@@ -1131,14 +1132,14 @@ angle::Result Texture::copyImage(Context *context,
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, 1);
 
-    ANGLE_TRY(mTexture->copyImage(context, index, sourceArea, internalFormat, source));
-
     const InternalFormat &internalFormatInfo =
         GetInternalFormatInfo(internalFormat, GL_UNSIGNED_BYTE);
 
     mState.setImageDesc(target, level,
                         ImageDesc(Extents(sourceArea.width, sourceArea.height, 1),
                                   Format(internalFormatInfo), InitState::Initialized));
+
+    ANGLE_TRY(mTexture->copyImage(context, index, sourceArea, internalFormat, source));
 
     ANGLE_TRY(handleMipmapGenerationHint(context, level));
 
@@ -1192,15 +1193,15 @@ angle::Result Texture::copyTexture(Context *context,
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, ImageIndex::kEntireLevel);
 
-    ANGLE_TRY(mTexture->copyTexture(context, index, internalFormat, type, sourceLevel, unpackFlipY,
-                                    unpackPremultiplyAlpha, unpackUnmultiplyAlpha, source));
-
     const auto &sourceDesc =
         source->mState.getImageDesc(NonCubeTextureTypeToTarget(source->getType()), 0);
     const InternalFormat &internalFormatInfo = GetInternalFormatInfo(internalFormat, type);
     mState.setImageDesc(
         target, level,
         ImageDesc(sourceDesc.size, Format(internalFormatInfo), InitState::Initialized));
+
+    ANGLE_TRY(mTexture->copyTexture(context, index, internalFormat, type, sourceLevel, unpackFlipY,
+                                    unpackPremultiplyAlpha, unpackUnmultiplyAlpha, source));
 
     signalDirtyStorage(InitState::Initialized);
 
@@ -1266,13 +1267,13 @@ angle::Result Texture::setStorage(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
     ANGLE_TRY(orphanImages(context));
 
-    ANGLE_TRY(mTexture->setStorage(context, type, levels, internalFormat, size));
-
     mState.mImmutableFormat = true;
     mState.mImmutableLevels = static_cast<GLuint>(levels);
     mState.clearImageDescs();
     mState.setImageDescChain(0, static_cast<GLuint>(levels - 1), size, Format(internalFormat),
                              InitState::MayNeedInit);
+
+    ANGLE_TRY(mTexture->setStorage(context, type, levels, internalFormat, size));
 
     // Changing the texture to immutable can trigger a change in the base and max levels:
     // GLES 3.0.4 section 3.8.10 pg 158:
@@ -1302,10 +1303,10 @@ angle::Result Texture::setImageExternal(Context *context,
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, size.depth);
 
-    ANGLE_TRY(mTexture->setImageExternal(context, index, internalFormat, size, format, type));
-
     InitState initState = InitState::Initialized;
     mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, type), initState));
+
+    ANGLE_TRY(mTexture->setImageExternal(context, index, internalFormat, size, format, type));
 
     ANGLE_TRY(handleMipmapGenerationHint(context, level));
 
@@ -1327,14 +1328,14 @@ angle::Result Texture::setStorageMultisample(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
     ANGLE_TRY(orphanImages(context));
 
-    ANGLE_TRY(mTexture->setStorageMultisample(context, type, samples, internalFormat, size,
-                                              fixedSampleLocations));
-
     mState.mImmutableFormat = true;
     mState.mImmutableLevels = static_cast<GLuint>(1);
     mState.clearImageDescs();
     mState.setImageDescChainMultisample(size, Format(internalFormat), samples, fixedSampleLocations,
                                         InitState::MayNeedInit);
+
+    ANGLE_TRY(mTexture->setStorageMultisample(context, type, samples, internalFormat, size,
+                                              fixedSampleLocations));
 
     signalDirtyStorage(InitState::MayNeedInit);
 
@@ -1355,14 +1356,14 @@ angle::Result Texture::setStorageExternalMemory(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
     ANGLE_TRY(orphanImages(context));
 
-    ANGLE_TRY(mTexture->setStorageExternalMemory(context, type, levels, internalFormat, size,
-                                                 memoryObject, offset));
-
     mState.mImmutableFormat = true;
     mState.mImmutableLevels = static_cast<GLuint>(levels);
     mState.clearImageDescs();
     mState.setImageDescChain(0, static_cast<GLuint>(levels - 1), size, Format(internalFormat),
                              InitState::MayNeedInit);
+
+    ANGLE_TRY(mTexture->setStorageExternalMemory(context, type, levels, internalFormat, size,
+                                                 memoryObject, offset));
 
     // Changing the texture to immutable can trigger a change in the base and max levels:
     // GLES 3.0.4 section 3.8.10 pg 158:
@@ -1488,11 +1489,13 @@ angle::Result Texture::acquireImageFromStream(const Context *context,
                                               const egl::Stream::GLTextureDescription &desc)
 {
     ASSERT(mBoundStream != nullptr);
-    ANGLE_TRY(mTexture->setImageExternal(context, mState.mType, mBoundStream, desc));
 
     Extents size(desc.width, desc.height, 1);
     mState.setImageDesc(NonCubeTextureTypeToTarget(mState.mType), 0,
                         ImageDesc(size, Format(desc.internalFormat), InitState::Initialized));
+
+    ANGLE_TRY(mTexture->setImageExternal(context, mState.mType, mBoundStream, desc));
+
     signalDirtyStorage(InitState::Initialized);
     return angle::Result::Continue;
 }
