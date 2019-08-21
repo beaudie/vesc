@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a949f6f9_242989a3",
+        "filename": "src/image_util/imageformats.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-21T13:32:09Z",
+      "side": 1,
+      "message": "I would recommend calling this R10G10B10X2, where X is unused bits.",
+      "range": {
+        "startLine": 688,
+        "startChar": 7,
+        "endLine": 688,
+        "endChar": 18
+      },
+      "revId": "e0aa6c6b7c0ca2f0c1a10c1dafc74358709fee0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6472e18c_03e176e8",
+        "filename": "src/libANGLE/renderer/Format_table_autogen.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-21T13:32:09Z",
+      "side": 1,
+      "message": "this value should end up as 4. the \"X\" naming should do that.",
+      "range": {
+        "startLine": 124,
+        "startChar": 239,
+        "endLine": 124,
+        "endChar": 240
+      },
+      "revId": "e0aa6c6b7c0ca2f0c1a10c1dafc74358709fee0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2dc99f61_d10f7b8f",
+        "filename": "src/libANGLE/renderer/angle_format_map.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-21T13:32:09Z",
+      "side": 1,
+      "message": "here also, X2",
+      "range": {
+        "startLine": 201,
+        "startChar": 30,
+        "endLine": 201,
+        "endChar": 47
+      },
+      "revId": "e0aa6c6b7c0ca2f0c1a10c1dafc74358709fee0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c94d2c5_c0591139",
+        "filename": "src/libANGLE/renderer/load_functions_data.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-21T13:32:09Z",
+      "side": 1,
+      "message": "X naming here too.",
+      "range": {
+        "startLine": 214,
+        "startChar": 41,
+        "endLine": 214,
+        "endChar": 61
+      },
+      "revId": "e0aa6c6b7c0ca2f0c1a10c1dafc74358709fee0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
