@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac6f5573_2c98a32d",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-21T19:09:59Z",
+      "side": 1,
+      "message": "ANGLE not Android.",
+      "range": {
+        "startLine": 21,
+        "startChar": 12,
+        "endLine": 21,
+        "endChar": 33
+      },
+      "revId": "c1676397aedbcf1be4ca805359eed70d16008473",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
