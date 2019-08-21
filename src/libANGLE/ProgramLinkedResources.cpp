@@ -50,14 +50,8 @@ LinkMismatchError LinkValidateUniforms(const sh::Uniform &uniform1,
                                        const sh::Uniform &uniform2,
                                        std::string *mismatchedStructFieldName)
 {
-#if ANGLE_PROGRAM_LINK_VALIDATE_UNIFORM_PRECISION == ANGLE_ENABLED
-    const bool validatePrecision = true;
-#else
-    const bool validatePrecision = false;
-#endif
-
     LinkMismatchError linkError = Program::LinkValidateVariablesBase(
-        uniform1, uniform2, validatePrecision, true, mismatchedStructFieldName);
+        uniform1, uniform2, false, true, mismatchedStructFieldName);
     if (linkError != LinkMismatchError::NO_MISMATCH)
     {
         return linkError;

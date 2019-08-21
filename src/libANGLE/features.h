@@ -43,15 +43,6 @@
 #    endif  // !defined(NDEBUG)
 #endif      // !defined(ANGLE_APPEND_ASSEMBLY_TO_SHADER_DEBUG_INFO)
 
-// Program link validation of precisions for uniforms. This feature was
-// requested by developers to allow non-conformant shaders to be used which
-// contain mismatched precisions.
-// ENABLED validate that precision for uniforms match between vertex and fragment shaders
-// DISABLED allow precision for uniforms to differ between vertex and fragment shaders
-#if !defined(ANGLE_PROGRAM_LINK_VALIDATE_UNIFORM_PRECISION)
-#    define ANGLE_PROGRAM_LINK_VALIDATE_UNIFORM_PRECISION ANGLE_ENABLED
-#endif
-
 // Controls if our threading code uses std::async or falls back to single-threaded operations.
 #if !defined(ANGLE_STD_ASYNC_WORKERS)
 #    define ANGLE_STD_ASYNC_WORKERS ANGLE_ENABLED

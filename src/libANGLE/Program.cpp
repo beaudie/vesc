@@ -3499,6 +3499,17 @@ LinkMismatchError Program::LinkValidateVariablesBase(const sh::ShaderVariable &v
     {
         return LinkMismatchError::FIELD_NUMBER_MISMATCH;
     }
+    // GLSL ES Spec 3.20.6, section 9.1: The precision of a vertex output does not need to match the
+    // precision of the corresponding fragment input.
+    // However, some CTS are still not updated, like:
+    // dEQP-GLES2.functional.shaders.linkage.uniform_struct_precision_conflict_*
+    // dEQP-GLES3.functional.shaders.linkage.uniform.struct.precision_conflict_*
+    // So we still return mismatch for uniform struct here to make these tests pass.
+    if (!variable1.structName.empty())
+    {
+        validatePrecision = true;
+    }
+
     const unsigned int numMembers = static_cast<unsigned int>(variable1.fields.size());
     for (unsigned int memberIndex = 0; memberIndex < numMembers; memberIndex++)
     {
