@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "547f5e80_c4a1155c",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-21T16:54:00Z",
+      "side": 1,
+      "message": "Do we need to capture the treadId as well? Or maybe we can infer that if we know what thread a context is current on.",
+      "revId": "a2875453646c3528a5d79893b243310ebd55ead4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
