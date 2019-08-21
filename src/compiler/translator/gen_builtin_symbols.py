@@ -33,7 +33,7 @@ template_immutablestring_cpp = """// GENERATED FILE - DO NOT EDIT.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// ImmutableString_autogen.cpp: Wrapper for static or pool allocated char arrays, that are guaranteed to be
+// ImmutableString_{source_label}autogen.cpp: Wrapper for static or pool allocated char arrays, that are guaranteed to be
 // valid and unchanged for the duration of the compilation.
 // Implements mangledNameHash using perfect hash function from gen_builtin_symbols.py
 
@@ -139,7 +139,7 @@ template_immutablestringtest_cpp = """// GENERATED FILE - DO NOT EDIT.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// ImmutableString_test_autogen.cpp:
+// ImmutableString_test_{source_label}autogen.cpp:
 //   Tests for matching script-generated hashes with runtime computed hashes.
 
 #include "compiler/translator/ImmutableString.h"
@@ -167,7 +167,7 @@ template_builtin_header = """// GENERATED FILE - DO NOT EDIT.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// BuiltIn_autogen.h:
+// BuiltIn_{header_label}autogen.h:
 //   Compile-time initialized built-ins.
 
 #ifndef COMPILER_TRANSLATOR_TREEUTIL_BUILTIN_AUTOGEN_H_
@@ -238,13 +238,13 @@ template_symboltable_cpp = """// GENERATED FILE - DO NOT EDIT.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// SymbolTable_autogen.cpp:
+// SymbolTable_{source_label}autogen.cpp:
 //   Compile-time initialized built-ins.
 
 #include "compiler/translator/SymbolTable.h"
 
 #include "angle_gl.h"
-#include "compiler/translator/tree_util/BuiltIn_autogen.h"
+#include "compiler/translator/tree_util/BuiltIn.h"
 #include "compiler/translator/ImmutableString.h"
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/Symbol.h"
@@ -463,7 +463,7 @@ template_parsecontext_header = """// GENERATED FILE - DO NOT EDIT.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// ParseContext_autogen.h:
+// ParseContext_{header_label}autogen.h:
 //   Helpers for built-in related checks.
 
 #ifndef COMPILER_TRANSLATOR_PARSECONTEXT_AUTOGEN_H_
@@ -1102,7 +1102,7 @@ class HashFunction:
         return (self.G[self.f1(key)] + self.G[self.f2(key)]) % len(self.G)
 
 
-def get_parsed_functions(functions_txt_filename):
+def get_parsed_functions(functions_txt_filename, essl_only):
 
     def parse_function_parameters(parameters):
         if parameters == '':
@@ -1163,7 +1163,12 @@ def get_parsed_functions(functions_txt_filename):
                 'parameters': parse_function_parameters(parameters)
             }
             function_props.update(default_metadata)
-            group_stack[-1]['functions'].append(function_props)
+            if essl_only:
+                # Skip GLSL-only functions
+                if 'essl_level' in function_props:
+                    group_stack[-1]['functions'].append(function_props)
+            else:
+                group_stack[-1]['functions'].append(function_props)
         else:
             raise Exception('Unexpected function input line: ' + line)
 
@@ -1716,7 +1721,7 @@ def process_single_variable_group(shader_type, group_name, group, builtin_id_dec
 
             if essl_level != 'GLSL_BUILTINS':
                 obj = '&BuiltInVariable::kVar_{name_with_suffix}'.format(**template_args)
-                # TODO(clemendeng@google.com): Add GLSL level once GLSL built-in vars are added
+                # TODO(http://anglebug.com/3835): Add GLSL level once GLSL built-in vars are added
                 get_builtin_if_statements.add_obj(
                     essl_level, 'COMMON_BUILTINS', shader_type, template_args['name'], obj,
                     template_args['essl_extension'], template_args['glsl_extension'],
@@ -1731,7 +1736,7 @@ def process_single_variable_group(shader_type, group_name, group, builtin_id_dec
 
             obj = 'mVar_{name_with_suffix}'.format(**template_args)
 
-            # TODO(clemendeng@google.com): Add GLSL level once GLSL built-in vars are added
+            # TODO(http://anglebug.com/3835): Add GLSL level once GLSL built-in vars are added
             get_builtin_if_statements.add_obj(
                 essl_level, 'COMMON_BUILTINS', shader_type, template_args['name'], obj,
                 template_args['essl_extension'], template_args['glsl_extension'],
@@ -1778,6 +1783,7 @@ def main():
     args = parser.parse_args()
 
     test_filename = '../../tests/compiler_tests/ImmutableString_test_autogen.cpp'
+    essl_test_filename = '../../tests/compiler_tests/ImmutableString_test_ESSL_autogen.cpp'
     variables_json_filename = 'builtin_variables.json'
     functions_txt_filename = 'builtin_function_declarations.txt'
 
@@ -1789,11 +1795,16 @@ def main():
         ]
         outputs = [
             'ImmutableString_autogen.cpp',
-            'ParseContext_autogen.h',
+            'ParseContext_complete_autogen.h',
             'SymbolTable_autogen.cpp',
             'SymbolTable_autogen.h',
-            'tree_util/BuiltIn_autogen.h',
+            'tree_util/BuiltIn_complete_autogen.h',
             test_filename,
+            'ImmutableString_ESSL_autogen.cpp',
+            'ParseContext_ESSL_autogen.h',
+            'SymbolTable_ESSL_autogen.cpp',
+            'tree_util/BuiltIn_ESSL_autogen.h',
+            essl_test_filename,
         ]
 
         if args.auto_script_command == 'inputs':
@@ -1804,6 +1815,8 @@ def main():
             print('Invalid script parameters')
             return 1
         return 0
+
+    # For complete symbol table (ESSL + GLSL)
 
     # Declarations of symbol unique ids
     builtin_id_declarations = []
@@ -1845,7 +1858,7 @@ def main():
     defined_function_variants = set()
     defined_parameter_names = set()
 
-    parsed_functions = get_parsed_functions(functions_txt_filename)
+    parsed_functions = get_parsed_functions(functions_txt_filename, False)
 
     if args.dump_intermediate_json:
         with open('builtin_functions.json', 'w') as outfile:
@@ -1983,7 +1996,11 @@ def main():
         'unmangled_NG':
             len(unmangled_G),
         'unmangled_NS':
-            len(unmangled_S1)
+            len(unmangled_S1),
+        'header_label':
+            'complete_',
+        'source_label':
+            ''
     }
 
     with open('ImmutableString_autogen.cpp', 'wt') as outfile_cpp:
@@ -1994,7 +2011,7 @@ def main():
         output_cpp = template_immutablestringtest_cpp.format(**output_strings)
         outfile_cpp.write(output_cpp)
 
-    with open('tree_util/BuiltIn_autogen.h', 'wt') as outfile_header:
+    with open('tree_util/BuiltIn_complete_autogen.h', 'wt') as outfile_header:
         output_header = template_builtin_header.format(**output_strings)
         outfile_header.write(output_header)
 
@@ -2002,13 +2019,222 @@ def main():
         output_cpp = template_symboltable_cpp.format(**output_strings)
         outfile_cpp.write(output_cpp)
 
-    with open('ParseContext_autogen.h', 'wt') as outfile_header:
+    with open('ParseContext_complete_autogen.h', 'wt') as outfile_header:
         output_header = template_parsecontext_header.format(**output_strings)
         outfile_header.write(output_header)
 
     with open('SymbolTable_autogen.h', 'wt') as outfile_h:
         output_h = template_symboltable_h.format(**output_strings)
         outfile_h.write(output_h)
+
+    # ESSL-only symbol table for Android
+
+    # Declarations of symbol unique ids
+    builtin_id_declarations = []
+
+    # Definitions of symbol unique ids needed for those ids used outside of constexpr expressions.
+    builtin_id_definitions = []
+
+    # Declarations of name string variables
+    name_declarations = set()
+
+    # Declarations of builtin TVariables
+    variable_declarations = []
+
+    # Declarations of builtin TFunctions
+    function_declarations = []
+
+    # Functions for querying the pointer to a specific TVariable.
+    get_variable_declarations = []
+    get_variable_definitions = []
+
+    # Code for defining TVariables stored as members of TSymbolTable.
+    declare_member_variables = []
+    init_member_variables = []
+
+    # Declarations of UnmangledBuiltIn objects
+    unmangled_builtin_declarations = set()
+
+    # Code for testing that script-generated hashes match with runtime computed hashes.
+    script_generated_hash_tests = OrderedDict()
+    unmangled_script_generated_hash_tests = OrderedDict()
+
+    # Functions for testing whether a builtin belongs in group.
+    is_in_group_definitions = []
+
+    # Declarations of parameter arrays for builtin TFunctions. Map from C++ variable name to the full
+    # declaration.
+    parameter_declarations = {}
+
+    defined_function_variants = set()
+    defined_parameter_names = set()
+
+    # Skips GLSL-only functions
+    parsed_functions = get_parsed_functions(functions_txt_filename, True)
+
+    if args.dump_intermediate_json:
+        with open('builtin_functions_ESSL.json', 'w') as outfile:
+
+            def serialize_obj(obj):
+                if isinstance(obj, TType):
+                    return obj.data
+                else:
+                    raise "Cannot serialize to JSON: " + str(obj)
+
+            json.dump(
+                parsed_functions, outfile, indent=4, separators=(',', ': '), default=serialize_obj)
+
+    parsed_variables = None
+    with open(variables_json_filename) as f:
+        # TODO(http://anglebug.com/3835): skip loading GLSL-only vars when they are added
+        parsed_variables = json.load(f, object_pairs_hook=OrderedDict)
+
+    # This script uses a perfect hash function to avoid dealing with collisions
+    mangled_names = []
+    unmangled_names = []
+    for group_name, group in parsed_functions.iteritems():
+        get_function_names(group, mangled_names, unmangled_names)
+    for group_name, group in parsed_variables.iteritems():
+        get_variable_names(group, mangled_names)
+
+    # Hashing mangled names
+    mangled_names = list(dict.fromkeys(mangled_names))
+    num_mangled_names = len(mangled_names)
+    mangled_names_dict = dict(zip(mangled_names, range(0, len(mangled_names))))
+    # Generate the perfect hash function
+    f1, f2, mangled_G = generate_hash(mangled_names_dict, Hash2)
+    mangled_hashfn = HashFunction(f1, f2, mangled_G)
+    mangled_S1 = f1.salt
+    mangled_S2 = f2.salt
+    # Array for querying mangled builtins
+    get_builtin_if_statements = GroupedList(mangled_hashfn, num_mangled_names)
+
+    # Hashing unmangled names
+    unmangled_names = list(dict.fromkeys(unmangled_names))
+    num_unmangled_names = len(unmangled_names)
+    unmangled_names_dict = dict(zip(unmangled_names, range(0, len(unmangled_names))))
+    # Generate the perfect hash function
+    f1, f2, unmangled_G = generate_hash(unmangled_names_dict, Hash2)
+    unmangled_hashfn = HashFunction(f1, f2, unmangled_G)
+    unmangled_S1 = f1.salt
+    unmangled_S2 = f2.salt
+    # Array for querying unmangled builtins
+    unmangled_function_if_statements = UnmangledGroupedList(unmangled_hashfn, num_unmangled_names)
+
+    for group_name, group in parsed_functions.iteritems():
+        process_function_group(group_name, group, parameter_declarations, name_declarations,
+                               unmangled_function_if_statements, unmangled_builtin_declarations,
+                               defined_function_variants, builtin_id_declarations,
+                               builtin_id_definitions, defined_parameter_names,
+                               variable_declarations, function_declarations,
+                               script_generated_hash_tests, unmangled_script_generated_hash_tests,
+                               get_builtin_if_statements, is_in_group_definitions)
+
+    parameter_declarations = prune_parameters_arrays(parameter_declarations, function_declarations)
+
+    for group_name, group in parsed_variables.iteritems():
+        process_variable_group('NONE', group_name, group, builtin_id_declarations,
+                               builtin_id_definitions, name_declarations, init_member_variables,
+                               get_variable_declarations, get_builtin_if_statements,
+                               declare_member_variables, variable_declarations,
+                               get_variable_definitions, script_generated_hash_tests)
+
+    output_strings = {
+        'script_name':
+            os.path.basename(__file__),
+        'copyright_year':
+            date.today().year,
+        'builtin_id_declarations':
+            '\n'.join(builtin_id_declarations),
+        'builtin_id_definitions':
+            '\n'.join(builtin_id_definitions),
+        'last_builtin_id':
+            id_counter - 1,
+        'name_declarations':
+            '\n'.join(sorted(list(name_declarations))),
+        'function_data_source_name':
+            functions_txt_filename,
+        'function_declarations':
+            '\n'.join(function_declarations),
+        'parameter_declarations':
+            '\n'.join(sorted(parameter_declarations)),
+        'is_in_group_definitions':
+            '\n'.join(is_in_group_definitions),
+        'variable_data_source_name':
+            variables_json_filename,
+        'variable_declarations':
+            '\n'.join(sorted(variable_declarations)),
+        'get_variable_declarations':
+            '\n'.join(sorted(get_variable_declarations)),
+        'get_variable_definitions':
+            '\n'.join(sorted(get_variable_definitions)),
+        'declare_member_variables':
+            '\n'.join(declare_member_variables),
+        'init_member_variables':
+            '\n'.join(init_member_variables),
+        'mangled_array':
+            get_builtin_if_statements.get_array(),
+        'unmangled_array':
+            unmangled_function_if_statements.get_array(unmangled_builtin_declarations),
+        'max_unmangled_name_length':
+            unmangled_function_if_statements.get_max_name_length(),
+        'max_mangled_name_length':
+            get_builtin_if_statements.get_max_name_length(),
+        'num_unmangled_names':
+            num_unmangled_names,
+        'num_mangled_names':
+            num_mangled_names,
+        'unmangled_builtin_declarations':
+            '\n'.join(sorted(unmangled_builtin_declarations)),
+        'script_generated_hash_tests':
+            '\n'.join(script_generated_hash_tests.iterkeys()),
+        'unmangled_script_generated_hash_tests':
+            '\n'.join(unmangled_script_generated_hash_tests.iterkeys()),
+        'mangled_S1':
+            str(mangled_S1).replace('[', ' ').replace(']', ' '),
+        'mangled_S2':
+            str(mangled_S2).replace('[', ' ').replace(']', ' '),
+        'mangled_G':
+            str(mangled_G).replace('[', ' ').replace(']', ' '),
+        'mangled_NG':
+            len(mangled_G),
+        'mangled_NS':
+            len(mangled_S1),
+        'unmangled_S1':
+            str(unmangled_S1).replace('[', ' ').replace(']', ' '),
+        'unmangled_S2':
+            str(unmangled_S2).replace('[', ' ').replace(']', ' '),
+        'unmangled_G':
+            str(unmangled_G).replace('[', ' ').replace(']', ' '),
+        'unmangled_NG':
+            len(unmangled_G),
+        'unmangled_NS':
+            len(unmangled_S1),
+        'header_label':
+            'ESSL_',
+        'source_label':
+            'ESSL_'
+    }
+
+    with open('ImmutableString_ESSL_autogen.cpp', 'wt') as outfile_cpp:
+        output_cpp = template_immutablestring_cpp.format(**output_strings)
+        outfile_cpp.write(output_cpp)
+
+    with open(essl_test_filename, 'wt') as outfile_cpp:
+        output_cpp = template_immutablestringtest_cpp.format(**output_strings)
+        outfile_cpp.write(output_cpp)
+
+    with open('tree_util/BuiltIn_ESSL_autogen.h', 'wt') as outfile_header:
+        output_header = template_builtin_header.format(**output_strings)
+        outfile_header.write(output_header)
+
+    with open('SymbolTable_ESSL_autogen.cpp', 'wt') as outfile_cpp:
+        output_cpp = template_symboltable_cpp.format(**output_strings)
+        outfile_cpp.write(output_cpp)
+
+    with open('ParseContext_ESSL_autogen.h', 'wt') as outfile_header:
+        output_header = template_parsecontext_header.format(**output_strings)
+        outfile_header.write(output_header)
 
     return 0
 

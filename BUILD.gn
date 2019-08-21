@@ -1090,11 +1090,18 @@ foreach(is_shared_library,
     if (is_android) {
       # To prevent linux sources filtering on android
       set_sources_assignment_filter([])
+
       sources += util_android_sources
+
+      # Use ESSL only builtin symbol table
+      sources += angle_translator_android_sources
+
       libs += [
         "android",
         "log",
       ]
+    } else {
+      sources += angle_translator_not_android_sources
     }
 
     configs += [ ":debug_annotations_config" ]
