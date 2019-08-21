@@ -123,7 +123,7 @@ bool ValidateGetObjectPtrLabel(Context *context,
 }
 
 bool ValidateGetProgramResourceLocationIndex(Context *context,
-                                             GLuint program,
+                                             ShaderProgramID program,
                                              GLenum programInterface,
                                              const GLchar *name)
 {
