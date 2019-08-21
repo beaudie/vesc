@@ -33,14 +33,15 @@ void GL_APIENTRY AttachShader(GLuint program, GLuint shader)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ShaderID shaderPacked                         = FromGL<ShaderID>(shader);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateAttachShader(context, program, shader));
+            (context->skipValidation() || ValidateAttachShader(context, program, shaderPacked));
         if (isCallValid)
         {
-            context->attachShader(program, shader);
+            context->attachShader(program, shaderPacked);
         }
-        ANGLE_CAPTURE(AttachShader, isCallValid, context, program, shader);
+        ANGLE_CAPTURE(AttachShader, isCallValid, context, program, shaderPacked);
     }
 }
 
@@ -90,13 +91,15 @@ void GL_APIENTRY CompileShader(GLuint shader)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ShaderID shaderPacked                         = FromGL<ShaderID>(shader);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateCompileShader(context, shader));
+        bool isCallValid =
+            (context->skipValidation() || ValidateCompileShader(context, shaderPacked));
         if (isCallValid)
         {
-            context->compileShader(shader);
+            context->compileShader(shaderPacked);
         }
-        ANGLE_CAPTURE(CompileShader, isCallValid, context, shader);
+        ANGLE_CAPTURE(CompileShader, isCallValid, context, shaderPacked);
     }
 }
 
@@ -132,7 +135,7 @@ GLuint GL_APIENTRY CreateShader(GLenum type)
     EVENT("(GLenum type = %s)", GLenumToString(GLenumGroup::ShaderType, type));
 
     Context *context = GetValidGlobalContext();
-    GLuint returnValue;
+    ShaderID returnValue;
     if (context)
     {
         ShaderType typePacked                         = FromGL<ShaderType>(type);
@@ -144,15 +147,15 @@ GLuint GL_APIENTRY CreateShader(GLenum type)
         }
         else
         {
-            returnValue = GetDefaultReturnValue<EntryPoint::CreateShader, GLuint>();
+            returnValue = GetDefaultReturnValue<EntryPoint::CreateShader, ShaderID>();
         }
         ANGLE_CAPTURE(CreateShader, isCallValid, context, typePacked, returnValue);
     }
     else
     {
-        returnValue = GetDefaultReturnValue<EntryPoint::CreateShader, GLuint>();
+        returnValue = GetDefaultReturnValue<EntryPoint::CreateShader, ShaderID>();
     }
-    return returnValue;
+    return GetIDValue(returnValue);
 }
 
 void GL_APIENTRY DeleteProgram(GLuint program)
@@ -179,13 +182,15 @@ void GL_APIENTRY DeleteShader(GLuint shader)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ShaderID shaderPacked                         = FromGL<ShaderID>(shader);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateDeleteShader(context, shader));
+        bool isCallValid =
+            (context->skipValidation() || ValidateDeleteShader(context, shaderPacked));
         if (isCallValid)
         {
-            context->deleteShader(shader);
+            context->deleteShader(shaderPacked);
         }
-        ANGLE_CAPTURE(DeleteShader, isCallValid, context, shader);
+        ANGLE_CAPTURE(DeleteShader, isCallValid, context, shaderPacked);
     }
 }
 
@@ -196,14 +201,15 @@ void GL_APIENTRY DetachShader(GLuint program, GLuint shader)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ShaderID shaderPacked                         = FromGL<ShaderID>(shader);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateDetachShader(context, program, shader));
+            (context->skipValidation() || ValidateDetachShader(context, program, shaderPacked));
         if (isCallValid)
         {
-            context->detachShader(program, shader);
+            context->detachShader(program, shaderPacked);
         }
-        ANGLE_CAPTURE(DetachShader, isCallValid, context, program, shader);
+        ANGLE_CAPTURE(DetachShader, isCallValid, context, program, shaderPacked);
     }
 }
 
@@ -334,14 +340,17 @@ void GL_APIENTRY GetAttachedShaders(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ShaderID *shadersPacked                       = FromGL<ShaderID *>(shaders);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetAttachedShaders(context, program, maxCount, count, shaders));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateGetAttachedShaders(context, program, maxCount, count, shadersPacked));
         if (isCallValid)
         {
-            context->getAttachedShaders(program, maxCount, count, shaders);
+            context->getAttachedShaders(program, maxCount, count, shadersPacked);
         }
-        ANGLE_CAPTURE(GetAttachedShaders, isCallValid, context, program, maxCount, count, shaders);
+        ANGLE_CAPTURE(GetAttachedShaders, isCallValid, context, program, maxCount, count,
+                      shadersPacked);
     }
 }
 
@@ -425,14 +434,17 @@ void GL_APIENTRY GetShaderInfoLog(GLuint shader, GLsizei bufSize, GLsizei *lengt
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ShaderID shaderPacked                         = FromGL<ShaderID>(shader);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetShaderInfoLog(context, shader, bufSize, length, infoLog));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateGetShaderInfoLog(context, shaderPacked, bufSize, length, infoLog));
         if (isCallValid)
         {
-            context->getShaderInfoLog(shader, bufSize, length, infoLog);
+            context->getShaderInfoLog(shaderPacked, bufSize, length, infoLog);
         }
-        ANGLE_CAPTURE(GetShaderInfoLog, isCallValid, context, shader, bufSize, length, infoLog);
+        ANGLE_CAPTURE(GetShaderInfoLog, isCallValid, context, shaderPacked, bufSize, length,
+                      infoLog);
     }
 }
 
@@ -445,14 +457,16 @@ void GL_APIENTRY GetShaderSource(GLuint shader, GLsizei bufSize, GLsizei *length
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ShaderID shaderPacked                         = FromGL<ShaderID>(shader);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetShaderSource(context, shader, bufSize, length, source));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateGetShaderSource(context, shaderPacked, bufSize, length, source));
         if (isCallValid)
         {
-            context->getShaderSource(shader, bufSize, length, source);
+            context->getShaderSource(shaderPacked, bufSize, length, source);
         }
-        ANGLE_CAPTURE(GetShaderSource, isCallValid, context, shader, bufSize, length, source);
+        ANGLE_CAPTURE(GetShaderSource, isCallValid, context, shaderPacked, bufSize, length, source);
     }
 }
 
@@ -464,14 +478,15 @@ void GL_APIENTRY GetShaderiv(GLuint shader, GLenum pname, GLint *params)
     Context *context = GetGlobalContext();
     if (context)
     {
+        ShaderID shaderPacked                         = FromGL<ShaderID>(shader);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateGetShaderiv(context, shader, pname, params));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateGetShaderiv(context, shaderPacked, pname, params));
         if (isCallValid)
         {
-            context->getShaderiv(shader, pname, params);
+            context->getShaderiv(shaderPacked, pname, params);
         }
-        ANGLE_CAPTURE(GetShaderiv, isCallValid, context, shader, pname, params);
+        ANGLE_CAPTURE(GetShaderiv, isCallValid, context, shaderPacked, pname, params);
     }
 }
 
@@ -653,17 +668,18 @@ GLboolean GL_APIENTRY IsShader(GLuint shader)
     GLboolean returnValue;
     if (context)
     {
+        ShaderID shaderPacked                         = FromGL<ShaderID>(shader);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateIsShader(context, shader));
+        bool isCallValid = (context->skipValidation() || ValidateIsShader(context, shaderPacked));
         if (isCallValid)
         {
-            returnValue = context->isShader(shader);
+            returnValue = context->isShader(shaderPacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsShader, GLboolean>();
         }
-        ANGLE_CAPTURE(IsShader, isCallValid, context, shader, returnValue);
+        ANGLE_CAPTURE(IsShader, isCallValid, context, shaderPacked, returnValue);
     }
     else
     {
@@ -701,14 +717,15 @@ void GL_APIENTRY ShaderSource(GLuint shader,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ShaderID shaderPacked                         = FromGL<ShaderID>(shader);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateShaderSource(context, shader, count, string, length));
+                            ValidateShaderSource(context, shaderPacked, count, string, length));
         if (isCallValid)
         {
-            context->shaderSource(shader, count, string, length);
+            context->shaderSource(shaderPacked, count, string, length);
         }
-        ANGLE_CAPTURE(ShaderSource, isCallValid, context, shader, count, string, length);
+        ANGLE_CAPTURE(ShaderSource, isCallValid, context, shaderPacked, count, string, length);
     }
 }
 

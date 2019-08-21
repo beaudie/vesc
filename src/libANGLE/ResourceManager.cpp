@@ -162,27 +162,28 @@ void ShaderProgramManager::reset(const Context *context)
     mPrograms.clear();
     while (!mShaders.empty())
     {
-        deleteShader(context, mShaders.begin()->first);
+        // FIXME
+        deleteShader(context, {mShaders.begin()->first});
     }
     mShaders.clear();
 }
 
-GLuint ShaderProgramManager::createShader(rx::GLImplFactory *factory,
-                                          const gl::Limitations &rendererLimitations,
-                                          ShaderType type)
+ShaderID ShaderProgramManager::createShader(rx::GLImplFactory *factory,
+                                            const gl::Limitations &rendererLimitations,
+                                            ShaderType type)
 {
     ASSERT(type != ShaderType::InvalidEnum);
-    GLuint handle = mHandleAllocator.allocate();
+    ShaderID handle = ShaderID{mHandleAllocator.allocate()};
     mShaders.assign(handle, new Shader(this, factory, rendererLimitations, type, handle));
     return handle;
 }
 
-void ShaderProgramManager::deleteShader(const Context *context, GLuint shader)
+void ShaderProgramManager::deleteShader(const Context *context, ShaderID shader)
 {
     deleteObject(context, &mShaders, shader);
 }
 
-Shader *ShaderProgramManager::getShader(GLuint handle) const
+Shader *ShaderProgramManager::getShader(ShaderID handle) const
 {
     return mShaders.query(handle);
 }
@@ -199,6 +200,7 @@ void ShaderProgramManager::deleteProgram(const gl::Context *context, GLuint prog
     deleteObject(context, &mPrograms, program);
 }
 
+// FIXME(lujc) remove after program handle converted
 template <typename ObjectType>
 void ShaderProgramManager::deleteObject(const Context *context,
                                         ResourceMap<ObjectType> *objectMap,
@@ -213,6 +215,29 @@ void ShaderProgramManager::deleteObject(const Context *context,
     if (object->getRefCount() == 0)
     {
         mHandleAllocator.release(id);
+        object->onDestroy(context);
+        objectMap->erase(id, &object);
+    }
+    else
+    {
+        object->flagForDeletion();
+    }
+}
+
+template <typename ObjectType, typename IDType>
+void ShaderProgramManager::deleteObject(const Context *context,
+                                        ResourceMap<ObjectType, IDType> *objectMap,
+                                        IDType id)
+{
+    ObjectType *object = objectMap->query(id);
+    if (!object)
+    {
+        return;
+    }
+
+    if (object->getRefCount() == 0)
+    {
+        mHandleAllocator.release(id.value);
         object->onDestroy(context);
         objectMap->erase(id, &object);
     }

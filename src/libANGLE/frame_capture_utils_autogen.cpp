@@ -272,6 +272,16 @@ void WriteParamTypeToStream(std::ostream &os, ParamType paramType, const ParamVa
             WriteParamValueToStream<ParamType::TRenderbufferIDPointer>(
                 os, paramValue.RenderbufferIDPointerVal);
             break;
+        case ParamType::TShaderID:
+            WriteParamValueToStream<ParamType::TShaderID>(os, paramValue.ShaderIDVal);
+            break;
+        case ParamType::TShaderIDConstPointer:
+            WriteParamValueToStream<ParamType::TShaderIDConstPointer>(
+                os, paramValue.ShaderIDConstPointerVal);
+            break;
+        case ParamType::TShaderIDPointer:
+            WriteParamValueToStream<ParamType::TShaderIDPointer>(os, paramValue.ShaderIDPointerVal);
+            break;
         case ParamType::TShaderType:
             WriteParamValueToStream<ParamType::TShaderType>(os, paramValue.ShaderTypeVal);
             break;
@@ -481,6 +491,12 @@ const char *ParamTypeToString(ParamType paramType)
         case ParamType::TRenderbufferIDConstPointer:
             return "const GLuint *";
         case ParamType::TRenderbufferIDPointer:
+            return "GLuint *";
+        case ParamType::TShaderID:
+            return "GLuint";
+        case ParamType::TShaderIDConstPointer:
+            return "const GLuint *";
+        case ParamType::TShaderIDPointer:
             return "GLuint *";
         case ParamType::TShaderType:
             return "GLenum";

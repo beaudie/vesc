@@ -55,17 +55,17 @@ class GLES1Renderer final : angle::NonCopyable
     using Vec4Uniform = float[4];
     using Vec3Uniform = float[3];
 
-    Shader *getShader(GLuint handle) const;
+    Shader *getShader(ShaderID handle) const;
     Program *getProgram(GLuint handle) const;
 
     angle::Result compileShader(Context *context,
                                 ShaderType shaderType,
                                 const char *src,
-                                GLuint *shaderOut);
+                                ShaderID *shaderOut);
     angle::Result linkProgram(Context *context,
                               State *glState,
-                              GLuint vshader,
-                              GLuint fshader,
+                              ShaderID vshader,
+                              ShaderID fshader,
                               const std::unordered_map<GLint, std::string> &attribLocs,
                               GLuint *programOut);
     angle::Result initializeRendererProgram(Context *context, State *glState);

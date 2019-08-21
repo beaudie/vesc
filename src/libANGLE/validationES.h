@@ -99,7 +99,7 @@ Program *GetValidProgram(Context *context, GLuint id);
 // Returns valid shader if id is a valid shader name
 // Errors INVALID_OPERATION if valid program is given and returns NULL
 // Errors INVALID_VALUE otherwise and returns NULL
-Shader *GetValidShader(Context *context, GLuint id);
+Shader *GetValidShader(Context *context, ShaderID id);
 
 bool ValidateAttachmentTarget(Context *context, GLenum attachment);
 bool ValidateRenderbufferStorageParametersBase(Context *context,
@@ -484,7 +484,7 @@ bool ValidateGetRenderbufferParameterivBase(Context *context,
                                             GLenum pname,
                                             GLsizei *length);
 
-bool ValidateGetShaderivBase(Context *context, GLuint shader, GLenum pname, GLsizei *length);
+bool ValidateGetShaderivBase(Context *context, ShaderID shader, GLenum pname, GLsizei *length);
 
 bool ValidateGetTexParameterBase(Context *context,
                                  TextureType target,

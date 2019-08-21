@@ -686,7 +686,7 @@ GLuint Context::createProgram()
     return mState.mShaderProgramManager->createProgram(mImplementation.get());
 }
 
-GLuint Context::createShader(ShaderType type)
+ShaderID Context::createShader(ShaderType type)
 {
     return mState.mShaderProgramManager->createShader(mImplementation.get(), mState.mLimitations,
                                                       type);
@@ -762,7 +762,7 @@ void Context::deleteBuffer(BufferID bufferName)
     mState.mBufferManager->deleteObject(this, bufferName);
 }
 
-void Context::deleteShader(GLuint shader)
+void Context::deleteShader(ShaderID shader)
 {
     mState.mShaderProgramManager->deleteShader(this, shader);
 }
@@ -1000,7 +1000,7 @@ gl::LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) con
         case GL_BUFFER:
             return getBuffer({name});
         case GL_SHADER:
-            return getShader(name);
+            return getShader({name});
         case GL_PROGRAM:
             return getProgramNoResolveLink(name);
         case GL_VERTEX_ARRAY:
@@ -5192,7 +5192,7 @@ void Context::bufferSubData(BufferBinding target,
     ANGLE_CONTEXT_TRY(buffer->bufferSubData(this, target, data, size, offset));
 }
 
-void Context::attachShader(GLuint program, GLuint shader)
+void Context::attachShader(GLuint program, ShaderID shader)
 {
     Program *programObject = mState.mShaderProgramManager->getProgram(program);
     Shader *shaderObject   = mState.mShaderProgramManager->getShader(shader);
@@ -5841,7 +5841,7 @@ GLenum Context::checkFramebufferStatus(GLenum target)
     return framebuffer->checkStatus(this);
 }
 
-void Context::compileShader(GLuint shader)
+void Context::compileShader(ShaderID shader)
 {
     Shader *shaderObject = GetValidShader(this, shader);
     if (!shaderObject)
@@ -5889,7 +5889,7 @@ void Context::deleteTextures(GLsizei n, const TextureID *textures)
     }
 }
 
-void Context::detachShader(GLuint program, GLuint shader)
+void Context::detachShader(GLuint program, ShaderID shader)
 {
     Program *programObject = getProgramNoResolveLink(program);
     ASSERT(programObject);
@@ -5958,7 +5958,10 @@ void Context::getActiveUniform(GLuint program,
     programObject->getActiveUniform(index, bufsize, length, size, type, name);
 }
 
-void Context::getAttachedShaders(GLuint program, GLsizei maxcount, GLsizei *count, GLuint *shaders)
+void Context::getAttachedShaders(GLuint program,
+                                 GLsizei maxcount,
+                                 GLsizei *count,
+                                 ShaderID *shaders)
 {
     Program *programObject = getProgramNoResolveLink(program);
     ASSERT(programObject);
@@ -6087,7 +6090,7 @@ void Context::getProgramPipelineInfoLog(GLuint pipeline,
     UNIMPLEMENTED();
 }
 
-void Context::getShaderiv(GLuint shader, GLenum pname, GLint *params)
+void Context::getShaderiv(ShaderID shader, GLenum pname, GLint *params)
 {
     Shader *shaderObject = nullptr;
     if (!mContextLost)
@@ -6098,7 +6101,7 @@ void Context::getShaderiv(GLuint shader, GLenum pname, GLint *params)
     QueryShaderiv(this, shaderObject, pname, params);
 }
 
-void Context::getShaderivRobust(GLuint shader,
+void Context::getShaderivRobust(ShaderID shader,
                                 GLenum pname,
                                 GLsizei bufSize,
                                 GLsizei *length,
@@ -6107,7 +6110,7 @@ void Context::getShaderivRobust(GLuint shader,
     getShaderiv(shader, pname, params);
 }
 
-void Context::getShaderInfoLog(GLuint shader, GLsizei bufsize, GLsizei *length, GLchar *infolog)
+void Context::getShaderInfoLog(ShaderID shader, GLsizei bufsize, GLsizei *length, GLchar *infolog)
 {
     Shader *shaderObject = getShader(shader);
     ASSERT(shaderObject);
@@ -6187,7 +6190,7 @@ void Context::getShaderPrecisionFormat(GLenum shadertype,
     }
 }
 
-void Context::getShaderSource(GLuint shader, GLsizei bufsize, GLsizei *length, GLchar *source)
+void Context::getShaderSource(ShaderID shader, GLsizei bufsize, GLsizei *length, GLchar *source)
 {
     Shader *shaderObject = getShader(shader);
     ASSERT(shaderObject);
@@ -6278,9 +6281,9 @@ GLboolean Context::isRenderbuffer(RenderbufferID renderbuffer)
     return ConvertToGLBoolean(getRenderbuffer(renderbuffer));
 }
 
-GLboolean Context::isShader(GLuint shader)
+GLboolean Context::isShader(ShaderID shader)
 {
-    if (shader == 0)
+    if (shader.value == 0)
     {
         return GL_FALSE;
     }
@@ -6312,7 +6315,7 @@ void Context::releaseShaderCompiler()
 }
 
 void Context::shaderBinary(GLsizei n,
-                           const GLuint *shaders,
+                           const ShaderID *shaders,
                            GLenum binaryformat,
                            const void *binary,
                            GLsizei length)
@@ -6351,7 +6354,7 @@ int Context::getProgramResourceLocationIndex(GLuint program,
     return programObject->getFragDataIndex(name);
 }
 
-void Context::shaderSource(GLuint shader,
+void Context::shaderSource(ShaderID shader,
                            GLsizei count,
                            const GLchar *const *string,
                            const GLint *length)
@@ -7386,7 +7389,7 @@ void Context::getFenceivNV(GLuint fence, GLenum pname, GLint *params)
     }
 }
 
-void Context::getTranslatedShaderSource(GLuint shader,
+void Context::getTranslatedShaderSource(ShaderID shader,
                                         GLsizei bufsize,
                                         GLsizei *length,
                                         GLchar *source)
@@ -8543,7 +8546,7 @@ Program *Context::getProgramNoResolveLink(GLuint handle) const
     return mState.mShaderProgramManager->getProgram(handle);
 }
 
-Shader *Context::getShader(GLuint handle) const
+Shader *Context::getShader(ShaderID handle) const
 {
     return mState.mShaderProgramManager->getShader(handle);
 }

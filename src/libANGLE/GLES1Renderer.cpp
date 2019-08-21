@@ -503,7 +503,7 @@ void GLES1Renderer::drawTexture(Context *context,
     mDrawTextureEnabled = false;
 }
 
-Shader *GLES1Renderer::getShader(GLuint handle) const
+Shader *GLES1Renderer::getShader(ShaderID handle) const
 {
     return mShaderPrograms->getShader(handle);
 }
@@ -516,12 +516,12 @@ Program *GLES1Renderer::getProgram(GLuint handle) const
 angle::Result GLES1Renderer::compileShader(Context *context,
                                            ShaderType shaderType,
                                            const char *src,
-                                           GLuint *shaderOut)
+                                           ShaderID *shaderOut)
 {
     rx::ContextImpl *implementation = context->getImplementation();
     const Limitations &limitations  = implementation->getNativeLimitations();
 
-    GLuint shader = mShaderPrograms->createShader(implementation, limitations, shaderType);
+    ShaderID shader = mShaderPrograms->createShader(implementation, limitations, shaderType);
 
     Shader *shaderObject = getShader(shader);
     ANGLE_CHECK(context, shaderObject, "Missing shader object", GL_INVALID_OPERATION);
@@ -547,8 +547,8 @@ angle::Result GLES1Renderer::compileShader(Context *context,
 
 angle::Result GLES1Renderer::linkProgram(Context *context,
                                          State *glState,
-                                         GLuint vertexShader,
-                                         GLuint fragmentShader,
+                                         ShaderID vertexShader,
+                                         ShaderID fragmentShader,
                                          const std::unordered_map<GLint, std::string> &attribLocs,
                                          GLuint *programOut)
 {
@@ -600,8 +600,8 @@ angle::Result GLES1Renderer::initializeRendererProgram(Context *context, State *
 
     mShaderPrograms = new ShaderProgramManager();
 
-    GLuint vertexShader;
-    GLuint fragmentShader;
+    ShaderID vertexShader;
+    ShaderID fragmentShader;
 
     ANGLE_TRY(compileShader(context, ShaderType::Vertex, kGLES1DrawVShader, &vertexShader));
 

@@ -171,7 +171,7 @@ template_entry_point_with_return = """{return_type}GL_APIENTRY {name}{explicit_c
     {event_comment}EVENT("({format_params})"{comma_if_needed}{pass_params});
 
     Context *context = {context_getter};
-    {return_type} returnValue;
+    {context_return_type} returnValue;
     if (context)
     {{{assert_explicit_context}{packed_gl_enum_conversions}
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
@@ -182,15 +182,15 @@ template_entry_point_with_return = """{return_type}GL_APIENTRY {name}{explicit_c
         }}
         else
         {{
-            returnValue = GetDefaultReturnValue<EntryPoint::{name}, {return_type}>();
+            returnValue = GetDefaultReturnValue<EntryPoint::{name}, {context_return_type}>();
         }}
         ANGLE_CAPTURE({name}, isCallValid, {validate_params}, returnValue);
     }}
     else
     {{
-        returnValue = GetDefaultReturnValue<EntryPoint::{name}, {return_type}>();
+        returnValue = GetDefaultReturnValue<EntryPoint::{name}, {context_return_type}>();
     }}
-    return returnValue;
+    {return_statement}
 }}
 """
 
@@ -708,6 +708,12 @@ def get_packed_enums(cmd_packed_gl_enums, cmd_name):
     return cmd_packed_gl_enums.get(strip_suffix(cmd_name), {})
 
 
+def get_return_type(return_type, packed_gl_enums):
+    if "returnValue" not in packed_gl_enums:
+        return return_type
+    return packed_gl_enums["returnValue"]
+
+
 def format_entry_point_def(command_node, cmd_name, proto, params, is_explicit_context,
                            cmd_packed_gl_enums):
     packed_gl_enums = get_packed_enums(cmd_packed_gl_enums, cmd_name)
@@ -768,6 +774,12 @@ def format_entry_point_def(command_node, cmd_name, proto, params, is_explicit_co
     if return_type.strip() == "void":
         return template_entry_point_no_return.format(**format_params)
     else:
+        context_return_type = get_return_type(return_type, packed_gl_enums)
+        format_params["context_return_type"] = context_return_type
+        if context_return_type != return_type:
+            format_params["return_statement"] = "return GetIDValue(returnValue);"
+        else:
+            format_params["return_statement"] = "return returnValue;"
         return template_entry_point_with_return.format(**format_params)
 
 
@@ -835,7 +847,7 @@ def format_capture_method(command, cmd_name, proto, params, all_param_types, cap
         "params_with_type": params_with_type,
         "params_just_name": params_just_name,
         "parameter_captures": "\n    ".join(parameter_captures),
-        "return_value_type_original": return_type,
+        "return_value_type_original": get_return_type(return_type, packed_gl_enums),
         "return_value_type_custom": get_capture_param_type_name(return_type)
     }
 
@@ -857,7 +869,8 @@ def get_internal_params(cmd_name, params, cmd_packed_gl_enums):
 def format_context_decl(cmd_name, proto, params, template, cmd_packed_gl_enums):
     internal_params = get_internal_params(cmd_name, params, cmd_packed_gl_enums)
 
-    return_type = proto[:-len(cmd_name)]
+    return_type = get_return_type(proto[:-len(cmd_name)],
+                                  get_packed_enums(cmd_packed_gl_enums, cmd_name))
     name_lower_no_suffix = cmd_name[2:3].lower() + cmd_name[3:]
     name_lower_no_suffix = strip_suffix(name_lower_no_suffix)
 
@@ -893,7 +906,8 @@ def format_capture_proto(cmd_name, proto, params, cmd_packed_gl_enums):
         cmd_name, ["const Context *context", "bool isCallValid"] + params, cmd_packed_gl_enums)
     return_type = proto[:-len(cmd_name)].strip()
     if return_type != "void":
-        internal_params += ", %s returnValue" % return_type
+        internal_params += ", %s returnValue" % get_return_type(
+            return_type, get_packed_enums(cmd_packed_gl_enums, cmd_name))
     return template_capture_proto % (cmd_name[2:], internal_params)
 
 

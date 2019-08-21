@@ -189,7 +189,7 @@ bool ValidateGetRenderbufferParameterivRobustANGLE(Context *context,
                                                    GLsizei *length,
                                                    GLint *params);
 bool ValidateGetShaderivRobustANGLE(Context *context,
-                                    GLuint shader,
+                                    ShaderID shaderPacked,
                                     GLenum pname,
                                     GLsizei bufSize,
                                     GLsizei *length,
@@ -617,7 +617,7 @@ bool ValidateSampleMaskiANGLE(Context *context, GLuint maskNumber, GLbitfield ma
 
 // GL_ANGLE_translated_shader_source
 bool ValidateGetTranslatedShaderSourceANGLE(Context *context,
-                                            GLuint shader,
+                                            ShaderID shaderPacked,
                                             GLsizei bufsize,
                                             GLsizei *length,
                                             GLchar *source);

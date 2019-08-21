@@ -304,19 +304,19 @@ void CaptureGetAttachedShaders_count(const Context *context,
                                      GLuint program,
                                      GLsizei maxCount,
                                      GLsizei *count,
-                                     GLuint *shaders,
+                                     ShaderID *shaders,
                                      ParamCapture *paramCapture)
 {
     UNIMPLEMENTED();
 }
 
-void CaptureGetAttachedShaders_shaders(const Context *context,
-                                       bool isCallValid,
-                                       GLuint program,
-                                       GLsizei maxCount,
-                                       GLsizei *count,
-                                       GLuint *shaders,
-                                       ParamCapture *paramCapture)
+void CaptureGetAttachedShaders_shadersPacked(const Context *context,
+                                             bool isCallValid,
+                                             GLuint program,
+                                             GLsizei maxCount,
+                                             GLsizei *count,
+                                             ShaderID *shaders,
+                                             ParamCapture *paramCapture)
 {
     UNIMPLEMENTED();
 }
@@ -433,7 +433,7 @@ void CaptureGetRenderbufferParameteriv_params(const Context *context,
 
 void CaptureGetShaderInfoLog_length(const Context *context,
                                     bool isCallValid,
-                                    GLuint shader,
+                                    ShaderID shader,
                                     GLsizei bufSize,
                                     GLsizei *length,
                                     GLchar *infoLog,
@@ -444,7 +444,7 @@ void CaptureGetShaderInfoLog_length(const Context *context,
 
 void CaptureGetShaderInfoLog_infoLog(const Context *context,
                                      bool isCallValid,
-                                     GLuint shader,
+                                     ShaderID shader,
                                      GLsizei bufSize,
                                      GLsizei *length,
                                      GLchar *infoLog,
@@ -479,7 +479,7 @@ void CaptureGetShaderPrecisionFormat_precision(const Context *context,
 
 void CaptureGetShaderSource_length(const Context *context,
                                    bool isCallValid,
-                                   GLuint shader,
+                                   ShaderID shader,
                                    GLsizei bufSize,
                                    GLsizei *length,
                                    GLchar *source,
@@ -490,7 +490,7 @@ void CaptureGetShaderSource_length(const Context *context,
 
 void CaptureGetShaderSource_source(const Context *context,
                                    bool isCallValid,
-                                   GLuint shader,
+                                   ShaderID shader,
                                    GLsizei bufSize,
                                    GLsizei *length,
                                    GLchar *source,
@@ -501,7 +501,7 @@ void CaptureGetShaderSource_source(const Context *context,
 
 void CaptureGetShaderiv_params(const Context *context,
                                bool isCallValid,
-                               GLuint shader,
+                               ShaderID shader,
                                GLenum pname,
                                GLint *params,
                                ParamCapture *paramCapture)
@@ -609,14 +609,14 @@ void CaptureReadPixels_pixels(const Context *context,
     paramCapture->readBufferSizeBytes      = kMaxPixelSize * width * height;
 }
 
-void CaptureShaderBinary_shaders(const Context *context,
-                                 bool isCallValid,
-                                 GLsizei count,
-                                 const GLuint *shaders,
-                                 GLenum binaryformat,
-                                 const void *binary,
-                                 GLsizei length,
-                                 ParamCapture *paramCapture)
+void CaptureShaderBinary_shadersPacked(const Context *context,
+                                       bool isCallValid,
+                                       GLsizei count,
+                                       const ShaderID *shaders,
+                                       GLenum binaryformat,
+                                       const void *binary,
+                                       GLsizei length,
+                                       ParamCapture *paramCapture)
 {
     UNIMPLEMENTED();
 }
@@ -624,7 +624,7 @@ void CaptureShaderBinary_shaders(const Context *context,
 void CaptureShaderBinary_binary(const Context *context,
                                 bool isCallValid,
                                 GLsizei count,
-                                const GLuint *shaders,
+                                const ShaderID *shaders,
                                 GLenum binaryformat,
                                 const void *binary,
                                 GLsizei length,
@@ -635,7 +635,7 @@ void CaptureShaderBinary_binary(const Context *context,
 
 void CaptureShaderSource_string(const Context *context,
                                 bool isCallValid,
-                                GLuint shader,
+                                ShaderID shader,
                                 GLsizei count,
                                 const GLchar *const *string,
                                 const GLint *length,
@@ -650,7 +650,7 @@ void CaptureShaderSource_string(const Context *context,
 
 void CaptureShaderSource_length(const Context *context,
                                 bool isCallValid,
-                                GLuint shader,
+                                ShaderID shader,
                                 GLsizei count,
                                 const GLchar *const *string,
                                 const GLint *length,

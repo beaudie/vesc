@@ -1068,7 +1068,7 @@ Program *GetValidProgramNoResolve(Context *context, GLuint id)
 
     if (!validProgram)
     {
-        if (context->getShader(id))
+        if (context->getShader({id}))
         {
             context->validationError(GL_INVALID_OPERATION, kExpectedProgramName);
         }
@@ -1091,7 +1091,7 @@ Program *GetValidProgram(Context *context, GLuint id)
     return program;
 }
 
-Shader *GetValidShader(Context *context, GLuint id)
+Shader *GetValidShader(Context *context, ShaderID id)
 {
     // See ValidProgram for spec details.
 
@@ -1099,7 +1099,7 @@ Shader *GetValidShader(Context *context, GLuint id)
 
     if (!validShader)
     {
-        if (context->getProgramNoResolveLink(id))
+        if (context->getProgramNoResolveLink(GetIDValue(id)))
         {
             context->validationError(GL_INVALID_OPERATION, kExpectedShaderName);
         }
@@ -4403,7 +4403,7 @@ bool ValidateGetRenderbufferParameterivRobustANGLE(Context *context,
 }
 
 bool ValidateGetShaderivRobustANGLE(Context *context,
-                                    GLuint shader,
+                                    ShaderID shader,
                                     GLenum pname,
                                     GLsizei bufSize,
                                     GLsizei *length,
@@ -5087,7 +5087,7 @@ bool ValidateGetRenderbufferParameterivBase(Context *context,
     return true;
 }
 
-bool ValidateGetShaderivBase(Context *context, GLuint shader, GLenum pname, GLsizei *length)
+bool ValidateGetShaderivBase(Context *context, ShaderID shader, GLenum pname, GLsizei *length)
 {
     if (length)
     {
