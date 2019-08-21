@@ -16,6 +16,24 @@
       "revId": "bad3758fc6588b78833c3870fd26e896e0f271b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06f72901_b69430ff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-21T19:09:03Z",
+      "side": 1,
+      "message": "I\u0027m not sure. This fixes the bug. Would you like to take ownership? I won\u0027t be able to investigate this any time soon. But I do need this to land. And it seems safe to me.\n\nAnyway please let me know what you\u0027d like to do.",
+      "parentUuid": "1734f244_f0798634",
+      "revId": "bad3758fc6588b78833c3870fd26e896e0f271b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
