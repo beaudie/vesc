@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7af8b44_0ffe1f38",
+        "filename": "scripts/perf_test_runner.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2019-08-21T20:59:13Z",
+      "side": 1,
+      "message": "This was changed because re.findall returns an empty list if it doesn\u0027t find anything, not None.",
+      "range": {
+        "startLine": 124,
+        "startChar": 4,
+        "endLine": 124,
+        "endChar": 12
+      },
+      "revId": "e5577bb973e5fed4032733b31f3cd07ddf5d7585",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
