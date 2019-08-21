@@ -769,5 +769,13 @@ void WriteParamValueToStream<ParamType::TTextureID>(std::ostream &os, gl::Textur
 {
     os << value.value;
 }
+
+// TODO(jmadill): Use FenceNV ID map. http://anglebug.com/3611
+template <>
+void WriteParamValueToStream<ParamType::TFenceNvID>(std::ostream &os, gl::FenceNvID value)
+{
+    os << value.value;
+}
+
 #endif  // ANGLE_CAPTURE_ENABLED
 }  // namespace angle

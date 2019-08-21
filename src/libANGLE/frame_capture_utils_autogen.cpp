@@ -48,6 +48,17 @@ void WriteParamTypeToStream(std::ostream &os, ParamType paramType, const ParamVa
             WriteParamValueToStream<ParamType::TDrawElementsType>(os,
                                                                   paramValue.DrawElementsTypeVal);
             break;
+        case ParamType::TFenceNvID:
+            WriteParamValueToStream<ParamType::TFenceNvID>(os, paramValue.FenceNvIDVal);
+            break;
+        case ParamType::TFenceNvIDConstPointer:
+            WriteParamValueToStream<ParamType::TFenceNvIDConstPointer>(
+                os, paramValue.FenceNvIDConstPointerVal);
+            break;
+        case ParamType::TFenceNvIDPointer:
+            WriteParamValueToStream<ParamType::TFenceNvIDPointer>(os,
+                                                                  paramValue.FenceNvIDPointerVal);
+            break;
         case ParamType::TGLDEBUGPROC:
             WriteParamValueToStream<ParamType::TGLDEBUGPROC>(os, paramValue.GLDEBUGPROCVal);
             break;
@@ -350,6 +361,12 @@ const char *ParamTypeToString(ParamType paramType)
             return "GLenum";
         case ParamType::TDrawElementsType:
             return "GLenum";
+        case ParamType::TFenceNvID:
+            return "GLuint";
+        case ParamType::TFenceNvIDConstPointer:
+            return "const GLuint *";
+        case ParamType::TFenceNvIDPointer:
+            return "GLuint *";
         case ParamType::TGLDEBUGPROC:
             return "GLDEBUGPROC";
         case ParamType::TGLDEBUGPROCKHR:

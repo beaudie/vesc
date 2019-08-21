@@ -5110,14 +5110,15 @@ void GL_APIENTRY DeleteFencesNV(GLsizei n, const GLuint *fences)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        const FenceNvID *fencesPacked                 = FromGL<const FenceNvID *>(fences);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateDeleteFencesNV(context, n, fences));
+            (context->skipValidation() || ValidateDeleteFencesNV(context, n, fencesPacked));
         if (isCallValid)
         {
-            context->deleteFencesNV(n, fences);
+            context->deleteFencesNV(n, fencesPacked);
         }
-        ANGLE_CAPTURE(DeleteFencesNV, isCallValid, context, n, fences);
+        ANGLE_CAPTURE(DeleteFencesNV, isCallValid, context, n, fencesPacked);
     }
 }
 
@@ -5128,13 +5129,15 @@ void GL_APIENTRY FinishFenceNV(GLuint fence)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        FenceNvID fencePacked                         = FromGL<FenceNvID>(fence);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateFinishFenceNV(context, fence));
+        bool isCallValid =
+            (context->skipValidation() || ValidateFinishFenceNV(context, fencePacked));
         if (isCallValid)
         {
-            context->finishFenceNV(fence);
+            context->finishFenceNV(fencePacked);
         }
-        ANGLE_CAPTURE(FinishFenceNV, isCallValid, context, fence);
+        ANGLE_CAPTURE(FinishFenceNV, isCallValid, context, fencePacked);
     }
 }
 
@@ -5145,13 +5148,15 @@ void GL_APIENTRY GenFencesNV(GLsizei n, GLuint *fences)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        FenceNvID *fencesPacked                       = FromGL<FenceNvID *>(fences);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateGenFencesNV(context, n, fences));
+        bool isCallValid =
+            (context->skipValidation() || ValidateGenFencesNV(context, n, fencesPacked));
         if (isCallValid)
         {
-            context->genFencesNV(n, fences);
+            context->genFencesNV(n, fencesPacked);
         }
-        ANGLE_CAPTURE(GenFencesNV, isCallValid, context, n, fences);
+        ANGLE_CAPTURE(GenFencesNV, isCallValid, context, n, fencesPacked);
     }
 }
 
@@ -5163,14 +5168,15 @@ void GL_APIENTRY GetFenceivNV(GLuint fence, GLenum pname, GLint *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        FenceNvID fencePacked                         = FromGL<FenceNvID>(fence);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateGetFenceivNV(context, fence, pname, params));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateGetFenceivNV(context, fencePacked, pname, params));
         if (isCallValid)
         {
-            context->getFenceivNV(fence, pname, params);
+            context->getFenceivNV(fencePacked, pname, params);
         }
-        ANGLE_CAPTURE(GetFenceivNV, isCallValid, context, fence, pname, params);
+        ANGLE_CAPTURE(GetFenceivNV, isCallValid, context, fencePacked, pname, params);
     }
 }
 
@@ -5182,17 +5188,18 @@ GLboolean GL_APIENTRY IsFenceNV(GLuint fence)
     GLboolean returnValue;
     if (context)
     {
+        FenceNvID fencePacked                         = FromGL<FenceNvID>(fence);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateIsFenceNV(context, fence));
+        bool isCallValid = (context->skipValidation() || ValidateIsFenceNV(context, fencePacked));
         if (isCallValid)
         {
-            returnValue = context->isFenceNV(fence);
+            returnValue = context->isFenceNV(fencePacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsFenceNV, GLboolean>();
         }
-        ANGLE_CAPTURE(IsFenceNV, isCallValid, context, fence, returnValue);
+        ANGLE_CAPTURE(IsFenceNV, isCallValid, context, fencePacked, returnValue);
     }
     else
     {
@@ -5209,14 +5216,15 @@ void GL_APIENTRY SetFenceNV(GLuint fence, GLenum condition)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        FenceNvID fencePacked                         = FromGL<FenceNvID>(fence);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateSetFenceNV(context, fence, condition));
+            (context->skipValidation() || ValidateSetFenceNV(context, fencePacked, condition));
         if (isCallValid)
         {
-            context->setFenceNV(fence, condition);
+            context->setFenceNV(fencePacked, condition);
         }
-        ANGLE_CAPTURE(SetFenceNV, isCallValid, context, fence, condition);
+        ANGLE_CAPTURE(SetFenceNV, isCallValid, context, fencePacked, condition);
     }
 }
 
@@ -5228,17 +5236,18 @@ GLboolean GL_APIENTRY TestFenceNV(GLuint fence)
     GLboolean returnValue;
     if (context)
     {
+        FenceNvID fencePacked                         = FromGL<FenceNvID>(fence);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateTestFenceNV(context, fence));
+        bool isCallValid = (context->skipValidation() || ValidateTestFenceNV(context, fencePacked));
         if (isCallValid)
         {
-            returnValue = context->testFenceNV(fence);
+            returnValue = context->testFenceNV(fencePacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::TestFenceNV, GLboolean>();
         }
-        ANGLE_CAPTURE(TestFenceNV, isCallValid, context, fence, returnValue);
+        ANGLE_CAPTURE(TestFenceNV, isCallValid, context, fencePacked, returnValue);
     }
     else
     {
@@ -8802,14 +8811,15 @@ void GL_APIENTRY DeleteFencesNVContextANGLE(GLeglContext ctx, GLsizei n, const G
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        const FenceNvID *fencesPacked                 = FromGL<const FenceNvID *>(fences);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateDeleteFencesNV(context, n, fences));
+            (context->skipValidation() || ValidateDeleteFencesNV(context, n, fencesPacked));
         if (isCallValid)
         {
-            context->deleteFencesNV(n, fences);
+            context->deleteFencesNV(n, fencesPacked);
         }
-        ANGLE_CAPTURE(DeleteFencesNV, isCallValid, context, n, fences);
+        ANGLE_CAPTURE(DeleteFencesNV, isCallValid, context, n, fencesPacked);
     }
 }
 
@@ -10110,13 +10120,15 @@ void GL_APIENTRY FinishFenceNVContextANGLE(GLeglContext ctx, GLuint fence)
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        FenceNvID fencePacked                         = FromGL<FenceNvID>(fence);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateFinishFenceNV(context, fence));
+        bool isCallValid =
+            (context->skipValidation() || ValidateFinishFenceNV(context, fencePacked));
         if (isCallValid)
         {
-            context->finishFenceNV(fence);
+            context->finishFenceNV(fencePacked);
         }
-        ANGLE_CAPTURE(FinishFenceNV, isCallValid, context, fence);
+        ANGLE_CAPTURE(FinishFenceNV, isCallValid, context, fencePacked);
     }
 }
 
@@ -10656,13 +10668,15 @@ void GL_APIENTRY GenFencesNVContextANGLE(GLeglContext ctx, GLsizei n, GLuint *fe
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        FenceNvID *fencesPacked                       = FromGL<FenceNvID *>(fences);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateGenFencesNV(context, n, fences));
+        bool isCallValid =
+            (context->skipValidation() || ValidateGenFencesNV(context, n, fencesPacked));
         if (isCallValid)
         {
-            context->genFencesNV(n, fences);
+            context->genFencesNV(n, fencesPacked);
         }
-        ANGLE_CAPTURE(GenFencesNV, isCallValid, context, n, fences);
+        ANGLE_CAPTURE(GenFencesNV, isCallValid, context, n, fencesPacked);
     }
 }
 
@@ -11435,14 +11449,15 @@ void GL_APIENTRY GetFenceivNVContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        FenceNvID fencePacked                         = FromGL<FenceNvID>(fence);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateGetFenceivNV(context, fence, pname, params));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateGetFenceivNV(context, fencePacked, pname, params));
         if (isCallValid)
         {
-            context->getFenceivNV(fence, pname, params);
+            context->getFenceivNV(fencePacked, pname, params);
         }
-        ANGLE_CAPTURE(GetFenceivNV, isCallValid, context, fence, pname, params);
+        ANGLE_CAPTURE(GetFenceivNV, isCallValid, context, fencePacked, pname, params);
     }
 }
 
@@ -13889,17 +13904,18 @@ GLboolean GL_APIENTRY IsFenceNVContextANGLE(GLeglContext ctx, GLuint fence)
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        FenceNvID fencePacked                         = FromGL<FenceNvID>(fence);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateIsFenceNV(context, fence));
+        bool isCallValid = (context->skipValidation() || ValidateIsFenceNV(context, fencePacked));
         if (isCallValid)
         {
-            returnValue = context->isFenceNV(fence);
+            returnValue = context->isFenceNV(fencePacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsFenceNV, GLboolean>();
         }
-        ANGLE_CAPTURE(IsFenceNV, isCallValid, context, fence, returnValue);
+        ANGLE_CAPTURE(IsFenceNV, isCallValid, context, fencePacked, returnValue);
     }
     else
     {
@@ -17203,14 +17219,15 @@ void GL_APIENTRY SetFenceNVContextANGLE(GLeglContext ctx, GLuint fence, GLenum c
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        FenceNvID fencePacked                         = FromGL<FenceNvID>(fence);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateSetFenceNV(context, fence, condition));
+            (context->skipValidation() || ValidateSetFenceNV(context, fencePacked, condition));
         if (isCallValid)
         {
-            context->setFenceNV(fence, condition);
+            context->setFenceNV(fencePacked, condition);
         }
-        ANGLE_CAPTURE(SetFenceNV, isCallValid, context, fence, condition);
+        ANGLE_CAPTURE(SetFenceNV, isCallValid, context, fencePacked, condition);
     }
 }
 
@@ -17462,17 +17479,18 @@ GLboolean GL_APIENTRY TestFenceNVContextANGLE(GLeglContext ctx, GLuint fence)
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        FenceNvID fencePacked                         = FromGL<FenceNvID>(fence);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateTestFenceNV(context, fence));
+        bool isCallValid = (context->skipValidation() || ValidateTestFenceNV(context, fencePacked));
         if (isCallValid)
         {
-            returnValue = context->testFenceNV(fence);
+            returnValue = context->testFenceNV(fencePacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::TestFenceNV, GLboolean>();
         }
-        ANGLE_CAPTURE(TestFenceNV, isCallValid, context, fence, returnValue);
+        ANGLE_CAPTURE(TestFenceNV, isCallValid, context, fencePacked, returnValue);
     }
     else
     {

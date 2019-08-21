@@ -389,13 +389,13 @@
     /* GL_KHR_parallel_shader_compile */                                                           \
     void maxShaderCompilerThreads(GLuint count);                                                   \
     /* GL_NV_fence */                                                                              \
-    void deleteFencesNV(GLsizei n, const GLuint *fences);                                          \
-    void finishFenceNV(GLuint fence);                                                              \
-    void genFencesNV(GLsizei n, GLuint *fences);                                                   \
-    void getFenceivNV(GLuint fence, GLenum pname, GLint *params);                                  \
-    GLboolean isFenceNV(GLuint fence);                                                             \
-    void setFenceNV(GLuint fence, GLenum condition);                                               \
-    GLboolean testFenceNV(GLuint fence);                                                           \
+    void deleteFencesNV(GLsizei n, const FenceNvID *fencesPacked);                                 \
+    void finishFenceNV(FenceNvID fencePacked);                                                     \
+    void genFencesNV(GLsizei n, FenceNvID *fencesPacked);                                          \
+    void getFenceivNV(FenceNvID fencePacked, GLenum pname, GLint *params);                         \
+    GLboolean isFenceNV(FenceNvID fencePacked);                                                    \
+    void setFenceNV(FenceNvID fencePacked, GLenum condition);                                      \
+    GLboolean testFenceNV(FenceNvID fencePacked);                                                  \
     /* GL_OES_EGL_image */                                                                         \
     void eGLImageTargetRenderbufferStorage(GLenum target, GLeglImageOES image);                    \
     void eGLImageTargetTexture2D(TextureType targetPacked, GLeglImageOES image);                   \
