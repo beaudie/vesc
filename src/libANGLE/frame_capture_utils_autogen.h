@@ -26,6 +26,9 @@ enum class ParamType
     TClientVertexArrayType,
     TCullFaceMode,
     TDrawElementsType,
+    TFenceNvID,
+    TFenceNvIDConstPointer,
+    TFenceNvIDPointer,
     TGLDEBUGPROC,
     TGLDEBUGPROCKHR,
     TGLbitfield,
@@ -119,6 +122,9 @@ union ParamValue
     gl::ClientVertexArrayType ClientVertexArrayTypeVal;
     gl::CullFaceMode CullFaceModeVal;
     gl::DrawElementsType DrawElementsTypeVal;
+    gl::FenceNvID FenceNvIDVal;
+    const gl::FenceNvID *FenceNvIDConstPointerVal;
+    gl::FenceNvID *FenceNvIDPointerVal;
     GLDEBUGPROC GLDEBUGPROCVal;
     GLDEBUGPROCKHR GLDEBUGPROCKHRVal;
     GLbitfield GLbitfieldVal;
@@ -259,6 +265,25 @@ inline void SetParamVal<ParamType::TDrawElementsType>(gl::DrawElementsType value
                                                       ParamValue *valueOut)
 {
     valueOut->DrawElementsTypeVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TFenceNvID>(gl::FenceNvID valueIn, ParamValue *valueOut)
+{
+    valueOut->FenceNvIDVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TFenceNvIDConstPointer>(const gl::FenceNvID *valueIn,
+                                                           ParamValue *valueOut)
+{
+    valueOut->FenceNvIDConstPointerVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TFenceNvIDPointer>(gl::FenceNvID *valueIn, ParamValue *valueOut)
+{
+    valueOut->FenceNvIDPointerVal = valueIn;
 }
 
 template <>
@@ -806,6 +831,15 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
             break;
         case ParamType::TDrawElementsType:
             SetParamVal<ParamType::TDrawElementsType>(valueIn, valueOut);
+            break;
+        case ParamType::TFenceNvID:
+            SetParamVal<ParamType::TFenceNvID>(valueIn, valueOut);
+            break;
+        case ParamType::TFenceNvIDConstPointer:
+            SetParamVal<ParamType::TFenceNvIDConstPointer>(valueIn, valueOut);
+            break;
+        case ParamType::TFenceNvIDPointer:
+            SetParamVal<ParamType::TFenceNvIDPointer>(valueIn, valueOut);
             break;
         case ParamType::TGLDEBUGPROC:
             SetParamVal<ParamType::TGLDEBUGPROC>(valueIn, valueOut);

@@ -367,7 +367,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void bindDrawFramebuffer(GLuint framebufferHandle);
 
     Buffer *getBuffer(BufferID handle) const;
-    FenceNV *getFenceNV(GLuint handle);
+    FenceNV *getFenceNV(FenceNvID handle);
     Sync *getSync(GLsync handle) const;
     ANGLE_INLINE Texture *getTexture(TextureID handle) const
     {
@@ -644,7 +644,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     TextureMap mZeroTextures;
 
-    ResourceMap<FenceNV> mFenceNVMap;
+    ResourceMap<FenceNV, FenceNvID> mFenceNVMap;
     HandleAllocator mFenceNVHandleAllocator;
 
     ResourceMap<Query> mQueryMap;
