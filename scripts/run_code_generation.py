@@ -107,8 +107,10 @@ generators = {
         'src/libANGLE/renderer/vulkan/gen_vk_internal_shaders.py',
     'Emulated HLSL functions':
         'src/compiler/translator/gen_emulated_builtin_function_tables.py',
-    'ESSL static builtins':
+    'Static builtins':
         'src/compiler/translator/gen_builtin_symbols.py',
+    'ESSL static builtins':
+        'src/compiler/translator/gen_builtin_symbols_essl_only.py',
 }
 
 

@@ -1080,9 +1080,20 @@ foreach(is_shared_library,
     }
 
     if (is_android) {
-      # To prevent linux sources filtering on android
-      set_sources_assignment_filter([])
-      sources += util_android_sources
+      # ESSL+GLSL builtin symbol table too large to include in android
+      set_sources_assignment_filter([
+                                      "*ImmutableString_autogen.cpp",
+                                      "*SymbolTable_autogen.cpp",
+                                      "*ImmutableString_test_autogen.cpp",
+                                    ])
+
+      # Use ESSL only builtin symbol table
+      sources +=
+          util_android_sources + [
+            "src/compiler/translator/ImmutableString_ESSL_autogen.cpp",
+            "src/compiler/translator/SymbolTable_ESSL_autogen.cpp",
+            "src/compiler/translator/ImmutableString_test_ESSL_autogen.cpp",
+          ]
       libs += [
         "android",
         "log",

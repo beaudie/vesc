@@ -5,7 +5,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// ImmutableString_test_autogen.cpp:
+// ImmutableString_test_ESSL_autogen.cpp:
 //   Tests for matching script-generated hashes with runtime computed hashes.
 
 #include "compiler/translator/ImmutableString.h"
