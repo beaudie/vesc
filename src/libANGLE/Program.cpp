@@ -3486,7 +3486,8 @@ LinkMismatchError Program::LinkValidateVariablesBase(const sh::ShaderVariable &v
     {
         return LinkMismatchError::ARRAY_SIZE_MISMATCH;
     }
-    if (validatePrecision && variable1.precision != variable2.precision)
+    if (validatePrecision && variable1.active && variable2.active &&
+        variable1.precision != variable2.precision)
     {
         return LinkMismatchError::PRECISION_MISMATCH;
     }
