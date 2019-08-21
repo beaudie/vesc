@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffcf7f1f_e23562dc",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-21T21:11:57Z",
+      "side": 1,
+      "message": "nit: I would merge these two functions, if the environment variable doesn\u0027t exist or is invalid, fall back to the if-def tree.",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 174,
+        "endChar": 1
+      },
+      "revId": "f0daad26ad483141ac0a76e55349e8e3648b56ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8db22a3_d1bc895e",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-21T21:11:57Z",
+      "side": 1,
+      "message": "nit: I would nest this to be like:\n\n  if ANGLE_ENABLE_OPENGL:\n     if ANGLE_PLATFORM_ANDROID || ANGLE_PLATFORM_ANDROID:\n         return GLES\n     else:\n         return GL",
+      "range": {
+        "startLine": 180,
+        "startChar": 0,
+        "endLine": 183,
+        "endChar": 50
+      },
+      "revId": "f0daad26ad483141ac0a76e55349e8e3648b56ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
