@@ -46,7 +46,7 @@ class ResourceMap final : angle::NonCopyable
     // Clears the map.
     void clear();
 
-    using IndexAndResource = std::pair<GLuint, ResourceType *>;
+    using IndexAndResource = std::pair<IDType, ResourceType *>;
     using HashMap          = std::unordered_map<GLuint, ResourceType *>;
 
     class Iterator final
@@ -310,12 +310,12 @@ void ResourceMap<ResourceType, IDType>::Iterator::updateValue()
 {
     if (mFlatIndex < static_cast<GLuint>(mOrigin.mFlatResourcesSize))
     {
-        mValue.first  = mFlatIndex;
+        mValue.first  = IDType{mFlatIndex};
         mValue.second = mOrigin.mFlatResources[mFlatIndex];
     }
     else if (mHashIndex != mOrigin.mHashedResources.end())
     {
-        mValue.first  = mHashIndex->first;
+        mValue.first  = IDType{mHashIndex->first};
         mValue.second = mHashIndex->second;
     }
 }
