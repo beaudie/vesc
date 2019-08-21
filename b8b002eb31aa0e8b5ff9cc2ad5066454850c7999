@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "c7a4e7a1_bb0558f0",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-21T20:30:20Z",
+      "side": 1,
+      "message": "nit: stray semicolon",
+      "range": {
+        "startLine": 250,
+        "startChar": 8,
+        "endLine": 250,
+        "endChar": 9
+      },
+      "revId": "b8b002eb31aa0e8b5ff9cc2ad5066454850c7999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "992bd97d_be51f6bb",
         "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
         "patchSetId": 13
