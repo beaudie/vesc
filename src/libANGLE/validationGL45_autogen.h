@@ -341,12 +341,12 @@ bool ValidateGetnUniformdv(Context *context,
                            GLsizei bufSize,
                            GLdouble *params);
 bool ValidateGetnUniformfv(Context *context,
-                           GLuint program,
+                           ShaderProgramID programPacked,
                            GLint location,
                            GLsizei bufSize,
                            GLfloat *params);
 bool ValidateGetnUniformiv(Context *context,
-                           GLuint program,
+                           ShaderProgramID programPacked,
                            GLint location,
                            GLsizei bufSize,
                            GLint *params);

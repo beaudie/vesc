@@ -878,5 +878,311 @@
     },
     "glGenFencesNV": {
         "fences": "FenceNVID *"
+    },
+    "glAttachShader": {
+        "program": "ShaderProgramID",
+        "shader": "ShaderProgramID"
+    },
+    "glCompileShader": {
+        "shader": "ShaderProgramID"
+    },
+    "glDeleteShader": {
+        "shader": "ShaderProgramID"
+    },
+    "glGetAttachedShaders": {
+        "program": "ShaderProgramID",
+        "shaders": "ShaderProgramID *"
+    },
+    "glDetachShader": {
+        "program": "ShaderProgramID",
+        "shader": "ShaderProgramID"
+    },
+    "glGetShaderiv": {
+        "shader": "ShaderProgramID"
+    },
+    "glGetShaderInfoLog": {
+        "shader": "ShaderProgramID"
+    },
+    "glGetShaderPrecisionFormat": {
+        "shader": "ShaderProgramID"
+    },
+    "glGetShaderSource": {
+        "shader": "ShaderProgramID"
+    },
+    "glIsShader": {
+        "shader": "ShaderProgramID"
+    },
+    "glShaderSource": {
+        "shader": "ShaderProgramID"
+    },
+    "glShaderBinary": {
+        "shaders": "const ShaderProgramID *"
+    },
+    "glGetShaderivRobust" : {
+        "shader": "ShaderProgramID"
+    },
+    "glGetTranslatedShaderSource": {
+        "shader": "ShaderProgramID"
+    },
+    "glGetnUniformfv": {
+        "program": "ShaderProgramID"
+    },
+    "glGetnUniformiv": {
+        "program": "ShaderProgramID"
+    },
+    "glExtIsProgramBinary": {
+        "program": "ShaderProgramID"
+    },
+    "glExtGetProgramBinarySource": {
+        "program": "ShaderProgramID"
+    },
+    "glBindAttribLocation": {
+        "program": "ShaderProgramID"
+    },
+    "glDeleteProgram": {
+        "program": "ShaderProgramID"
+    },
+    "glGetActiveAttrib": {
+        "program": "ShaderProgramID"
+    },
+    "glGetActiveUniform": {
+        "program": "ShaderProgramID"
+    },
+    "glGetAttribLocation": {
+        "program": "ShaderProgramID"
+    },
+    "glGetProgramiv": {
+        "program": "ShaderProgramID"
+    },
+    "glGetProgramInfoLog": {
+        "program": "ShaderProgramID"
+    },
+    "glGetUniformfv": {
+        "program": "ShaderProgramID"
+    },
+    "glGetUniformiv": {
+        "program": "ShaderProgramID"
+    },
+    "glGetUniformLocation": {
+        "program": "ShaderProgramID"
+    },
+    "glIsProgram": {
+        "program": "ShaderProgramID"
+    },
+    "glLinkProgram": {
+        "program": "ShaderProgramID"
+    },
+    "glUseProgram": {
+        "program": "ShaderProgramID"
+    },
+    "glValidateProgram": {
+        "program": "ShaderProgramID"
+    },
+    "glGetProgramivRobust": {
+        "program": "ShaderProgramID"
+    },
+    "glGetUniformfvRobust": {
+        "program": "ShaderProgramID"
+    },
+    "glGetUniformivRobust": {
+        "program": "ShaderProgramID"
+    },
+    "glGetUniformuivRobust": {
+        "program": "ShaderProgramID"
+    },
+    "glGetActiveUniformBlockivRobust": {
+        "program": "ShaderProgramID"
+    },
+    "glGetProgramInterfaceivRobust": {
+        "program": "ShaderProgramID"
+    },
+    "glGetnUniformfvRobust": {
+        "program": "ShaderProgramID"
+    },
+    "glGetnUniformivRobust": {
+        "program": "ShaderProgramID"
+    },
+    "glGetnUniformuivRobust": {
+        "program": "ShaderProgramID"
+    },
+    "glGetProgramBinary": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramBinary": {
+        "program": "ShaderProgramID"
+    },
+    "glBindFragDataLocationIndexed": {
+        "program": "ShaderProgramID"
+    },
+    "glBindFragDataLocation": {
+        "program": "ShaderProgramID"
+    },
+    "glGetProgramResourceLocationIndex": {
+        "program": "ShaderProgramID"
+    },
+    "glGetFragDataIndex": {
+        "program": "ShaderProgramID"
+    },
+    "glActiveShaderProgram": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramParameteri": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform1f": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform1fv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform1i": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform1iv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform2f": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform2fv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform2i": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform2iv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform3f": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform3fv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform3i": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform3iv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform4f": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform4fv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform4i": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform4iv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniformMatrix2fv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniformMatrix3fv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniformMatrix4fv": {
+        "program": "ShaderProgramID"
+    },
+    "glUseProgramStages": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform1ui": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform2ui": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform3ui": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform4ui": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform1uiv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform2uiv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform3uiv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniform4uiv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniformMatrix2x3fv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniformMatrix3x2fv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniformMatrix2x4fv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniformMatrix4x2fv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniformMatrix3x4fv": {
+        "program": "ShaderProgramID"
+    },
+    "glProgramUniformMatrix4x3fv": {
+        "program": "ShaderProgramID"
+    },
+    "glBindUniformLocation": {
+        "program": "ShaderProgramID"
+    },
+    "glBindFragmentInputLocation": {
+        "programs": "ShaderProgramID"
+    },
+    "glProgramPathFragmentInputGen": {
+        "program": "ShaderProgramID"
+    },
+    "glGetProgramInterfaceiv": {
+        "program": "ShaderProgramID"
+    },
+    "glGetProgramResourceName": {
+        "program": "ShaderProgramID"
+    },
+    "glGetProgramResourceiv": {
+        "program": "ShaderProgramID"
+    },
+    "glGetProgramResourceLocation": {
+        "program": "ShaderProgramID"
+    },
+    "glGetProgramResourceIndex": {
+        "program": "ShaderProgramID"
+    },
+    "glGetUniformuiv": {
+        "program": "ShaderProgramID"
+    },
+    "glGetFragDataLocation": {
+        "program": "ShaderProgramID"
+    },
+    "glGetUniformIndices": {
+        "program": "ShaderProgramID"
+    },
+    "glGetActiveUniformsiv": {
+        "program": "ShaderProgramID"
+    },
+    "glGetUniformBlockIndex": {
+        "program": "ShaderProgramID"
+    },
+    "glGetActiveUniformBlockiv": {
+        "program": "ShaderProgramID"
+    },
+    "glGetActiveUniformBlockName": {
+        "program": "ShaderProgramID"
+    },
+    "glUniformBlockBinding": {
+        "program": "ShaderProgramID"
+    },
+    "glTransformFeedbackVaryings": {
+        "program": "ShaderProgramID"
+    },
+    "glGetTransformFeedbackVarying": {
+        "program": "ShaderProgramID"
     }
 }

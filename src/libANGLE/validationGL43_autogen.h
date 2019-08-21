@@ -89,7 +89,7 @@ bool ValidateGetObjectPtrLabel(Context *context,
                                GLsizei *length,
                                GLchar *label);
 bool ValidateGetProgramResourceLocationIndex(Context *context,
-                                             GLuint program,
+                                             ShaderProgramID programPacked,
                                              GLenum programInterface,
                                              const GLchar *name);
 bool ValidateInvalidateBufferData(Context *context, BufferID bufferPacked);

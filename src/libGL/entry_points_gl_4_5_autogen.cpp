@@ -1879,14 +1879,17 @@ void GL_APIENTRY GetnUniformfv(GLuint program, GLint location, GLsizei bufSize, 
 
     if (context)
     {
+        ShaderProgramID programPacked                 = FromGL<ShaderProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetnUniformfv(context, program, location, bufSize, params));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateGetnUniformfv(context, programPacked, location, bufSize, params));
         if (isCallValid)
         {
-            context->getnUniformfv(program, location, bufSize, params);
+            context->getnUniformfv(programPacked, location, bufSize, params);
         }
-        ANGLE_CAPTURE(GetnUniformfv, isCallValid, context, program, location, bufSize, params);
+        ANGLE_CAPTURE(GetnUniformfv, isCallValid, context, programPacked, location, bufSize,
+                      params);
     }
 }
 
@@ -1900,14 +1903,17 @@ void GL_APIENTRY GetnUniformiv(GLuint program, GLint location, GLsizei bufSize, 
 
     if (context)
     {
+        ShaderProgramID programPacked                 = FromGL<ShaderProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetnUniformiv(context, program, location, bufSize, params));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateGetnUniformiv(context, programPacked, location, bufSize, params));
         if (isCallValid)
         {
-            context->getnUniformiv(program, location, bufSize, params);
+            context->getnUniformiv(programPacked, location, bufSize, params);
         }
-        ANGLE_CAPTURE(GetnUniformiv, isCallValid, context, program, location, bufSize, params);
+        ANGLE_CAPTURE(GetnUniformiv, isCallValid, context, programPacked, location, bufSize,
+                      params);
     }
 }
 
