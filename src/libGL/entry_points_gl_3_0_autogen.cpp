@@ -119,14 +119,15 @@ void GL_APIENTRY BindFragDataLocation(GLuint program, GLuint color, const GLchar
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateBindFragDataLocation(context, program, color, name));
+                            ValidateBindFragDataLocation(context, programPacked, color, name));
         if (isCallValid)
         {
-            context->bindFragDataLocation(program, color, name);
+            context->bindFragDataLocation(programPacked, color, name);
         }
-        ANGLE_CAPTURE(BindFragDataLocation, isCallValid, context, program, color, name);
+        ANGLE_CAPTURE(BindFragDataLocation, isCallValid, context, programPacked, color, name);
     }
 }
 
@@ -774,18 +775,19 @@ GLint GL_APIENTRY GetFragDataLocation(GLuint program, const GLchar *name)
     GLint returnValue;
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateGetFragDataLocation(context, program, name));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateGetFragDataLocation(context, programPacked, name));
         if (isCallValid)
         {
-            returnValue = context->getFragDataLocation(program, name);
+            returnValue = context->getFragDataLocation(programPacked, name);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::GetFragDataLocation, GLint>();
         }
-        ANGLE_CAPTURE(GetFragDataLocation, isCallValid, context, program, name, returnValue);
+        ANGLE_CAPTURE(GetFragDataLocation, isCallValid, context, programPacked, name, returnValue);
     }
     else
     {
@@ -949,16 +951,18 @@ void GL_APIENTRY GetTransformFeedbackVarying(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetTransformFeedbackVarying(context, program, index, bufSize,
-                                                                length, size, type, name));
+                            ValidateGetTransformFeedbackVarying(context, programPacked, index,
+                                                                bufSize, length, size, type, name));
         if (isCallValid)
         {
-            context->getTransformFeedbackVarying(program, index, bufSize, length, size, type, name);
+            context->getTransformFeedbackVarying(programPacked, index, bufSize, length, size, type,
+                                                 name);
         }
-        ANGLE_CAPTURE(GetTransformFeedbackVarying, isCallValid, context, program, index, bufSize,
-                      length, size, type, name);
+        ANGLE_CAPTURE(GetTransformFeedbackVarying, isCallValid, context, programPacked, index,
+                      bufSize, length, size, type, name);
     }
 }
 
@@ -970,14 +974,15 @@ void GL_APIENTRY GetUniformuiv(GLuint program, GLint location, GLuint *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetUniformuiv(context, program, location, params));
+                            ValidateGetUniformuiv(context, programPacked, location, params));
         if (isCallValid)
         {
-            context->getUniformuiv(program, location, params);
+            context->getUniformuiv(programPacked, location, params);
         }
-        ANGLE_CAPTURE(GetUniformuiv, isCallValid, context, program, location, params);
+        ANGLE_CAPTURE(GetUniformuiv, isCallValid, context, programPacked, location, params);
     }
 }
 
@@ -1279,16 +1284,17 @@ void GL_APIENTRY TransformFeedbackVaryings(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateTransformFeedbackVaryings(context, program, count, varyings, bufferMode));
+            (context->skipValidation() || ValidateTransformFeedbackVaryings(
+                                              context, programPacked, count, varyings, bufferMode));
         if (isCallValid)
         {
-            context->transformFeedbackVaryings(program, count, varyings, bufferMode);
+            context->transformFeedbackVaryings(programPacked, count, varyings, bufferMode);
         }
-        ANGLE_CAPTURE(TransformFeedbackVaryings, isCallValid, context, program, count, varyings,
-                      bufferMode);
+        ANGLE_CAPTURE(TransformFeedbackVaryings, isCallValid, context, programPacked, count,
+                      varyings, bufferMode);
     }
 }
 

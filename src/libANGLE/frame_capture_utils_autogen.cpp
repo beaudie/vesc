@@ -254,6 +254,9 @@ void WriteParamTypeToStream(std::ostream &os, ParamType paramType, const ParamVa
         case ParamType::TPrimitiveMode:
             WriteParamValueToStream<ParamType::TPrimitiveMode>(os, paramValue.PrimitiveModeVal);
             break;
+        case ParamType::TProgramID:
+            WriteParamValueToStream<ParamType::TProgramID>(os, paramValue.ProgramIDVal);
+            break;
         case ParamType::TProvokingVertexConvention:
             WriteParamValueToStream<ParamType::TProvokingVertexConvention>(
                 os, paramValue.ProvokingVertexConventionVal);
@@ -271,6 +274,16 @@ void WriteParamTypeToStream(std::ostream &os, ParamType paramType, const ParamVa
         case ParamType::TRenderbufferIDPointer:
             WriteParamValueToStream<ParamType::TRenderbufferIDPointer>(
                 os, paramValue.RenderbufferIDPointerVal);
+            break;
+        case ParamType::TShaderID:
+            WriteParamValueToStream<ParamType::TShaderID>(os, paramValue.ShaderIDVal);
+            break;
+        case ParamType::TShaderIDConstPointer:
+            WriteParamValueToStream<ParamType::TShaderIDConstPointer>(
+                os, paramValue.ShaderIDConstPointerVal);
+            break;
+        case ParamType::TShaderIDPointer:
+            WriteParamValueToStream<ParamType::TShaderIDPointer>(os, paramValue.ShaderIDPointerVal);
             break;
         case ParamType::TShaderType:
             WriteParamValueToStream<ParamType::TShaderType>(os, paramValue.ShaderTypeVal);
@@ -472,6 +485,8 @@ const char *ParamTypeToString(ParamType paramType)
             return "GLenum";
         case ParamType::TPrimitiveMode:
             return "GLenum";
+        case ParamType::TProgramID:
+            return "GLuint";
         case ParamType::TProvokingVertexConvention:
             return "GLenum";
         case ParamType::TQueryType:
@@ -481,6 +496,12 @@ const char *ParamTypeToString(ParamType paramType)
         case ParamType::TRenderbufferIDConstPointer:
             return "const GLuint *";
         case ParamType::TRenderbufferIDPointer:
+            return "GLuint *";
+        case ParamType::TShaderID:
+            return "GLuint";
+        case ParamType::TShaderIDConstPointer:
+            return "const GLuint *";
+        case ParamType::TShaderIDPointer:
             return "GLuint *";
         case ParamType::TShaderType:
             return "GLenum";

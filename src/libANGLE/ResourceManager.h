@@ -144,28 +144,30 @@ class ShaderProgramManager : public ResourceManagerBase<HandleAllocator>
   public:
     ShaderProgramManager();
 
-    GLuint createShader(rx::GLImplFactory *factory,
-                        const Limitations &rendererLimitations,
-                        ShaderType type);
-    void deleteShader(const Context *context, GLuint shader);
-    Shader *getShader(GLuint handle) const;
+    ShaderID createShader(rx::GLImplFactory *factory,
+                          const Limitations &rendererLimitations,
+                          ShaderType type);
+    void deleteShader(const Context *context, ShaderID shader);
+    Shader *getShader(ShaderID handle) const;
 
-    GLuint createProgram(rx::GLImplFactory *factory);
-    void deleteProgram(const Context *context, GLuint program);
+    ProgramID createProgram(rx::GLImplFactory *factory);
+    void deleteProgram(const Context *context, ProgramID program);
 
-    ANGLE_INLINE Program *getProgram(GLuint handle) const { return mPrograms.query(handle); }
+    ANGLE_INLINE Program *getProgram(ProgramID handle) const { return mPrograms.query(handle); }
 
   protected:
     ~ShaderProgramManager() override;
 
   private:
-    template <typename ObjectType>
-    void deleteObject(const Context *context, ResourceMap<ObjectType> *objectMap, GLuint id);
+    template <typename ObjectType, typename IDType>
+    void deleteObject(const Context *context,
+                      ResourceMap<ObjectType, IDType> *objectMap,
+                      IDType id);
 
     void reset(const Context *context) override;
 
-    ResourceMap<Shader> mShaders;
-    ResourceMap<Program> mPrograms;
+    ResourceMap<Shader, ShaderID> mShaders;
+    ResourceMap<Program, ProgramID> mPrograms;
 };
 
 class TextureManager

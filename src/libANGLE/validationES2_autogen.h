@@ -18,8 +18,11 @@ namespace gl
 class Context;
 
 bool ValidateActiveTexture(Context *context, GLenum texture);
-bool ValidateAttachShader(Context *context, GLuint program, GLuint shader);
-bool ValidateBindAttribLocation(Context *context, GLuint program, GLuint index, const GLchar *name);
+bool ValidateAttachShader(Context *context, ProgramID programPacked, ShaderID shaderPacked);
+bool ValidateBindAttribLocation(Context *context,
+                                ProgramID programPacked,
+                                GLuint index,
+                                const GLchar *name);
 bool ValidateBindBuffer(Context *context, BufferBinding targetPacked, BufferID bufferPacked);
 bool ValidateBindFramebuffer(Context *context, GLenum target, GLuint framebuffer);
 bool ValidateBindRenderbuffer(Context *context, GLenum target, RenderbufferID renderbufferPacked);
@@ -53,7 +56,7 @@ bool ValidateColorMask(Context *context,
                        GLboolean green,
                        GLboolean blue,
                        GLboolean alpha);
-bool ValidateCompileShader(Context *context, GLuint shader);
+bool ValidateCompileShader(Context *context, ShaderID shaderPacked);
 bool ValidateCompressedTexImage2D(Context *context,
                                   TextureTarget targetPacked,
                                   GLint level,
@@ -96,16 +99,16 @@ bool ValidateCreateShader(Context *context, ShaderType typePacked);
 bool ValidateCullFace(Context *context, CullFaceMode modePacked);
 bool ValidateDeleteBuffers(Context *context, GLsizei n, const BufferID *buffersPacked);
 bool ValidateDeleteFramebuffers(Context *context, GLsizei n, const GLuint *framebuffers);
-bool ValidateDeleteProgram(Context *context, GLuint program);
+bool ValidateDeleteProgram(Context *context, ProgramID programPacked);
 bool ValidateDeleteRenderbuffers(Context *context,
                                  GLsizei n,
                                  const RenderbufferID *renderbuffersPacked);
-bool ValidateDeleteShader(Context *context, GLuint shader);
+bool ValidateDeleteShader(Context *context, ShaderID shaderPacked);
 bool ValidateDeleteTextures(Context *context, GLsizei n, const TextureID *texturesPacked);
 bool ValidateDepthFunc(Context *context, GLenum func);
 bool ValidateDepthMask(Context *context, GLboolean flag);
 bool ValidateDepthRangef(Context *context, GLfloat n, GLfloat f);
-bool ValidateDetachShader(Context *context, GLuint program, GLuint shader);
+bool ValidateDetachShader(Context *context, ProgramID programPacked, ShaderID shaderPacked);
 bool ValidateDisable(Context *context, GLenum cap);
 bool ValidateDisableVertexAttribArray(Context *context, GLuint index);
 bool ValidateDrawArrays(Context *context, PrimitiveMode modePacked, GLint first, GLsizei count);
@@ -136,7 +139,7 @@ bool ValidateGenRenderbuffers(Context *context, GLsizei n, RenderbufferID *rende
 bool ValidateGenTextures(Context *context, GLsizei n, TextureID *texturesPacked);
 bool ValidateGenerateMipmap(Context *context, TextureType targetPacked);
 bool ValidateGetActiveAttrib(Context *context,
-                             GLuint program,
+                             ProgramID programPacked,
                              GLuint index,
                              GLsizei bufSize,
                              GLsizei *length,
@@ -144,7 +147,7 @@ bool ValidateGetActiveAttrib(Context *context,
                              GLenum *type,
                              GLchar *name);
 bool ValidateGetActiveUniform(Context *context,
-                              GLuint program,
+                              ProgramID programPacked,
                               GLuint index,
                               GLsizei bufSize,
                               GLsizei *length,
@@ -152,11 +155,11 @@ bool ValidateGetActiveUniform(Context *context,
                               GLenum *type,
                               GLchar *name);
 bool ValidateGetAttachedShaders(Context *context,
-                                GLuint program,
+                                ProgramID programPacked,
                                 GLsizei maxCount,
                                 GLsizei *count,
-                                GLuint *shaders);
-bool ValidateGetAttribLocation(Context *context, GLuint program, const GLchar *name);
+                                ShaderID *shadersPacked);
+bool ValidateGetAttribLocation(Context *context, ProgramID programPacked, const GLchar *name);
 bool ValidateGetBooleanv(Context *context, GLenum pname, GLboolean *data);
 bool ValidateGetBufferParameteriv(Context *context,
                                   BufferBinding targetPacked,
@@ -171,17 +174,17 @@ bool ValidateGetFramebufferAttachmentParameteriv(Context *context,
                                                  GLint *params);
 bool ValidateGetIntegerv(Context *context, GLenum pname, GLint *data);
 bool ValidateGetProgramInfoLog(Context *context,
-                               GLuint program,
+                               ProgramID programPacked,
                                GLsizei bufSize,
                                GLsizei *length,
                                GLchar *infoLog);
-bool ValidateGetProgramiv(Context *context, GLuint program, GLenum pname, GLint *params);
+bool ValidateGetProgramiv(Context *context, ProgramID programPacked, GLenum pname, GLint *params);
 bool ValidateGetRenderbufferParameteriv(Context *context,
                                         GLenum target,
                                         GLenum pname,
                                         GLint *params);
 bool ValidateGetShaderInfoLog(Context *context,
-                              GLuint shader,
+                              ShaderID shaderPacked,
                               GLsizei bufSize,
                               GLsizei *length,
                               GLchar *infoLog);
@@ -191,11 +194,11 @@ bool ValidateGetShaderPrecisionFormat(Context *context,
                                       GLint *range,
                                       GLint *precision);
 bool ValidateGetShaderSource(Context *context,
-                             GLuint shader,
+                             ShaderID shaderPacked,
                              GLsizei bufSize,
                              GLsizei *length,
                              GLchar *source);
-bool ValidateGetShaderiv(Context *context, GLuint shader, GLenum pname, GLint *params);
+bool ValidateGetShaderiv(Context *context, ShaderID shaderPacked, GLenum pname, GLint *params);
 bool ValidateGetString(Context *context, GLenum name);
 bool ValidateGetTexParameterfv(Context *context,
                                TextureType targetPacked,
@@ -205,9 +208,12 @@ bool ValidateGetTexParameteriv(Context *context,
                                TextureType targetPacked,
                                GLenum pname,
                                GLint *params);
-bool ValidateGetUniformLocation(Context *context, GLuint program, const GLchar *name);
-bool ValidateGetUniformfv(Context *context, GLuint program, GLint location, GLfloat *params);
-bool ValidateGetUniformiv(Context *context, GLuint program, GLint location, GLint *params);
+bool ValidateGetUniformLocation(Context *context, ProgramID programPacked, const GLchar *name);
+bool ValidateGetUniformfv(Context *context,
+                          ProgramID programPacked,
+                          GLint location,
+                          GLfloat *params);
+bool ValidateGetUniformiv(Context *context, ProgramID programPacked, GLint location, GLint *params);
 bool ValidateGetVertexAttribPointerv(Context *context, GLuint index, GLenum pname, void **pointer);
 bool ValidateGetVertexAttribfv(Context *context, GLuint index, GLenum pname, GLfloat *params);
 bool ValidateGetVertexAttribiv(Context *context, GLuint index, GLenum pname, GLint *params);
@@ -215,12 +221,12 @@ bool ValidateHint(Context *context, GLenum target, GLenum mode);
 bool ValidateIsBuffer(Context *context, BufferID bufferPacked);
 bool ValidateIsEnabled(Context *context, GLenum cap);
 bool ValidateIsFramebuffer(Context *context, GLuint framebuffer);
-bool ValidateIsProgram(Context *context, GLuint program);
+bool ValidateIsProgram(Context *context, ProgramID programPacked);
 bool ValidateIsRenderbuffer(Context *context, RenderbufferID renderbufferPacked);
-bool ValidateIsShader(Context *context, GLuint shader);
+bool ValidateIsShader(Context *context, ShaderID shaderPacked);
 bool ValidateIsTexture(Context *context, TextureID texturePacked);
 bool ValidateLineWidth(Context *context, GLfloat width);
-bool ValidateLinkProgram(Context *context, GLuint program);
+bool ValidateLinkProgram(Context *context, ProgramID programPacked);
 bool ValidatePixelStorei(Context *context, GLenum pname, GLint param);
 bool ValidatePolygonOffset(Context *context, GLfloat factor, GLfloat units);
 bool ValidateReadPixels(Context *context,
@@ -241,12 +247,12 @@ bool ValidateSampleCoverage(Context *context, GLfloat value, GLboolean invert);
 bool ValidateScissor(Context *context, GLint x, GLint y, GLsizei width, GLsizei height);
 bool ValidateShaderBinary(Context *context,
                           GLsizei count,
-                          const GLuint *shaders,
+                          const ShaderID *shadersPacked,
                           GLenum binaryformat,
                           const void *binary,
                           GLsizei length);
 bool ValidateShaderSource(Context *context,
-                          GLuint shader,
+                          ShaderID shaderPacked,
                           GLsizei count,
                           const GLchar *const *string,
                           const GLint *length);
@@ -330,8 +336,8 @@ bool ValidateUniformMatrix4fv(Context *context,
                               GLsizei count,
                               GLboolean transpose,
                               const GLfloat *value);
-bool ValidateUseProgram(Context *context, GLuint program);
-bool ValidateValidateProgram(Context *context, GLuint program);
+bool ValidateUseProgram(Context *context, ProgramID programPacked);
+bool ValidateValidateProgram(Context *context, ProgramID programPacked);
 bool ValidateVertexAttrib1f(Context *context, GLuint index, GLfloat x);
 bool ValidateVertexAttrib1fv(Context *context, GLuint index, const GLfloat *v);
 bool ValidateVertexAttrib2f(Context *context, GLuint index, GLfloat x, GLfloat y);

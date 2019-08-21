@@ -67,20 +67,20 @@
                                                    GLsizei bufSize, GLsizei *length,               \
                                                    GLint *params);                                 \
     void getIntegervRobust(GLenum pname, GLsizei bufSize, GLsizei *length, GLint *data);           \
-    void getProgramivRobust(GLuint program, GLenum pname, GLsizei bufSize, GLsizei *length,        \
-                            GLint *params);                                                        \
+    void getProgramivRobust(ProgramID programPacked, GLenum pname, GLsizei bufSize,                \
+                            GLsizei *length, GLint *params);                                       \
     void getRenderbufferParameterivRobust(GLenum target, GLenum pname, GLsizei bufSize,            \
                                           GLsizei *length, GLint *params);                         \
-    void getShaderivRobust(GLuint shader, GLenum pname, GLsizei bufSize, GLsizei *length,          \
+    void getShaderivRobust(ShaderID shaderPacked, GLenum pname, GLsizei bufSize, GLsizei *length,  \
                            GLint *params);                                                         \
     void getTexParameterfvRobust(TextureType targetPacked, GLenum pname, GLsizei bufSize,          \
                                  GLsizei *length, GLfloat *params);                                \
     void getTexParameterivRobust(TextureType targetPacked, GLenum pname, GLsizei bufSize,          \
                                  GLsizei *length, GLint *params);                                  \
-    void getUniformfvRobust(GLuint program, GLint location, GLsizei bufSize, GLsizei *length,      \
-                            GLfloat *params);                                                      \
-    void getUniformivRobust(GLuint program, GLint location, GLsizei bufSize, GLsizei *length,      \
-                            GLint *params);                                                        \
+    void getUniformfvRobust(ProgramID programPacked, GLint location, GLsizei bufSize,              \
+                            GLsizei *length, GLfloat *params);                                     \
+    void getUniformivRobust(ProgramID programPacked, GLint location, GLsizei bufSize,              \
+                            GLsizei *length, GLint *params);                                       \
     void getVertexAttribfvRobust(GLuint index, GLenum pname, GLsizei bufSize, GLsizei *length,     \
                                  GLfloat *params);                                                 \
     void getVertexAttribivRobust(GLuint index, GLenum pname, GLsizei bufSize, GLsizei *length,     \
@@ -135,10 +135,11 @@
                                   GLint *params);                                                  \
     void getVertexAttribIuivRobust(GLuint index, GLenum pname, GLsizei bufSize, GLsizei *length,   \
                                    GLuint *params);                                                \
-    void getUniformuivRobust(GLuint program, GLint location, GLsizei bufSize, GLsizei *length,     \
-                             GLuint *params);                                                      \
-    void getActiveUniformBlockivRobust(GLuint program, GLuint uniformBlockIndex, GLenum pname,     \
-                                       GLsizei bufSize, GLsizei *length, GLint *params);           \
+    void getUniformuivRobust(ProgramID programPacked, GLint location, GLsizei bufSize,             \
+                             GLsizei *length, GLuint *params);                                     \
+    void getActiveUniformBlockivRobust(ProgramID programPacked, GLuint uniformBlockIndex,          \
+                                       GLenum pname, GLsizei bufSize, GLsizei *length,             \
+                                       GLint *params);                                             \
     void getInteger64vRobust(GLenum pname, GLsizei bufSize, GLsizei *length, GLint64 *data);       \
     void getInteger64i_vRobust(GLenum target, GLuint index, GLsizei bufSize, GLsizei *length,      \
                                GLint64 *data);                                                     \
@@ -154,8 +155,9 @@
                                      GLsizei *length, GLfloat *params);                            \
     void getFramebufferParameterivRobust(GLenum target, GLenum pname, GLsizei bufSize,             \
                                          GLsizei *length, GLint *params);                          \
-    void getProgramInterfaceivRobust(GLuint program, GLenum programInterface, GLenum pname,        \
-                                     GLsizei bufSize, GLsizei *length, GLint *params);             \
+    void getProgramInterfaceivRobust(ProgramID programPacked, GLenum programInterface,             \
+                                     GLenum pname, GLsizei bufSize, GLsizei *length,               \
+                                     GLint *params);                                               \
     void getBooleani_vRobust(GLenum target, GLuint index, GLsizei bufSize, GLsizei *length,        \
                              GLboolean *data);                                                     \
     void getMultisamplefvRobust(GLenum pname, GLuint index, GLsizei bufSize, GLsizei *length,      \
@@ -169,12 +171,12 @@
     void readnPixelsRobust(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format,         \
                            GLenum type, GLsizei bufSize, GLsizei *length, GLsizei *columns,        \
                            GLsizei *rows, void *data);                                             \
-    void getnUniformfvRobust(GLuint program, GLint location, GLsizei bufSize, GLsizei *length,     \
-                             GLfloat *params);                                                     \
-    void getnUniformivRobust(GLuint program, GLint location, GLsizei bufSize, GLsizei *length,     \
-                             GLint *params);                                                       \
-    void getnUniformuivRobust(GLuint program, GLint location, GLsizei bufSize, GLsizei *length,    \
-                              GLuint *params);                                                     \
+    void getnUniformfvRobust(ProgramID programPacked, GLint location, GLsizei bufSize,             \
+                             GLsizei *length, GLfloat *params);                                    \
+    void getnUniformivRobust(ProgramID programPacked, GLint location, GLsizei bufSize,             \
+                             GLsizei *length, GLint *params);                                      \
+    void getnUniformuivRobust(ProgramID programPacked, GLint location, GLsizei bufSize,            \
+                              GLsizei *length, GLuint *params);                                    \
     void texParameterIivRobust(TextureType targetPacked, GLenum pname, GLsizei bufSize,            \
                                const GLint *params);                                               \
     void texParameterIuivRobust(TextureType targetPacked, GLenum pname, GLsizei bufSize,           \
@@ -203,7 +205,7 @@
                             GLenum type);                                                          \
     void invalidateTexture(TextureType targetPacked);                                              \
     /* GL_CHROMIUM_bind_uniform_location */                                                        \
-    void bindUniformLocation(GLuint program, GLint location, const GLchar *name);                  \
+    void bindUniformLocation(ProgramID programPacked, GLint location, const GLchar *name);         \
     /* GL_CHROMIUM_copy_compressed_texture */                                                      \
     void compressedCopyTexture(TextureID sourceIdPacked, TextureID destIdPacked);                  \
     /* GL_CHROMIUM_copy_texture */                                                                 \
@@ -259,8 +261,8 @@
                                              const void *paths, GLuint pathBase, GLint reference,  \
                                              GLuint mask, GLenum coverMode, GLenum transformType,  \
                                              const GLfloat *transformValues);                      \
-    void bindFragmentInputLocation(GLuint programs, GLint location, const GLchar *name);           \
-    void programPathFragmentInputGen(GLuint program, GLint location, GLenum genMode,               \
+    void bindFragmentInputLocation(ProgramID programsPacked, GLint location, const GLchar *name);  \
+    void programPathFragmentInputGen(ProgramID programPacked, GLint location, GLenum genMode,      \
                                      GLint components, const GLfloat *coeffs);                     \
                                                                                                    \
     /* GLES2+ Extensions */                                                                        \
@@ -297,14 +299,14 @@
     void provokingVertex(ProvokingVertexConvention modePacked);                                    \
     /* GL_ANGLE_texture_multisample */                                                             \
     /* GL_ANGLE_translated_shader_source */                                                        \
-    void getTranslatedShaderSource(GLuint shader, GLsizei bufsize, GLsizei *length,                \
+    void getTranslatedShaderSource(ShaderID shaderPacked, GLsizei bufsize, GLsizei *length,        \
                                    GLchar *source);                                                \
     /* GL_EXT_blend_func_extended */                                                               \
-    void bindFragDataLocation(GLuint program, GLuint color, const GLchar *name);                   \
-    void bindFragDataLocationIndexed(GLuint program, GLuint colorNumber, GLuint index,             \
+    void bindFragDataLocation(ProgramID programPacked, GLuint color, const GLchar *name);          \
+    void bindFragDataLocationIndexed(ProgramID programPacked, GLuint colorNumber, GLuint index,    \
                                      const GLchar *name);                                          \
-    GLint getFragDataIndex(GLuint program, const GLchar *name);                                    \
-    GLint getProgramResourceLocationIndex(GLuint program, GLenum programInterface,                 \
+    GLint getFragDataIndex(ProgramID programPacked, const GLchar *name);                           \
+    GLint getProgramResourceLocationIndex(ProgramID programPacked, GLenum programInterface,        \
                                           const GLchar *name);                                     \
     /* GL_EXT_debug_marker */                                                                      \
     void insertEventMarker(GLsizei length, const GLchar *marker);                                  \
@@ -350,8 +352,8 @@
     /* GL_EXT_occlusion_query_boolean */                                                           \
     /* GL_EXT_robustness */                                                                        \
     GLenum getGraphicsResetStatus();                                                               \
-    void getnUniformfv(GLuint program, GLint location, GLsizei bufSize, GLfloat *params);          \
-    void getnUniformiv(GLuint program, GLint location, GLsizei bufSize, GLint *params);            \
+    void getnUniformfv(ProgramID programPacked, GLint location, GLsizei bufSize, GLfloat *params); \
+    void getnUniformiv(ProgramID programPacked, GLint location, GLsizei bufSize, GLint *params);   \
     void readnPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type,  \
                      GLsizei bufSize, void *data);                                                 \
     /* GL_EXT_semaphore */                                                                         \

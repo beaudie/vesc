@@ -305,16 +305,16 @@
         "texture": "TextureID"
     },
     "glGetLightfv": {
-        "pname" : "LightParameter"
+        "pname": "LightParameter"
     },
     "glGetLightxv": {
-        "pname" : "LightParameter"
+        "pname": "LightParameter"
     },
     "glGetMaterialfv": {
-        "pname" : "MaterialParameter"
+        "pname": "MaterialParameter"
     },
     "glGetMaterialxv": {
-        "pname" : "MaterialParameter"
+        "pname": "MaterialParameter"
     },
     "glGetNamedBufferParameteri64v": {
         "buffer": "BufferID"
@@ -454,24 +454,24 @@
     "glIsTexture": {
         "texture": "TextureID"
     },
-    "glLightf" : {
-        "pname" : "LightParameter"
+    "glLightf": {
+        "pname": "LightParameter"
     },
-    "glLightfv" : {
-        "pname" : "LightParameter"
+    "glLightfv": {
+        "pname": "LightParameter"
     },
-    "glLightx" : {
-        "pname" : "LightParameter"
+    "glLightx": {
+        "pname": "LightParameter"
     },
-    "glLightxv" : {
-        "pname" : "LightParameter"
+    "glLightxv": {
+        "pname": "LightParameter"
     },
-    "glLogicOp" : {
-        "opcode" : "LogicalOperation"
+    "glLogicOp": {
+        "opcode": "LogicalOperation"
     },
-    "glLoseContext" : {
-        "current" : "GraphicsResetStatus",
-        "other" : "GraphicsResetStatus"
+    "glLoseContext": {
+        "current": "GraphicsResetStatus",
+        "other": "GraphicsResetStatus"
     },
     "glMapBuffer": {
         "target": "BufferBinding"
@@ -549,19 +549,19 @@
         "type": "VertexAttribType"
     },
     "glPointParameterf": {
-        "pname" : "PointParameter"
+        "pname": "PointParameter"
     },
     "glPointParameterfv": {
-        "pname" : "PointParameter"
+        "pname": "PointParameter"
     },
     "glPointParameterx": {
-        "pname" : "PointParameter"
+        "pname": "PointParameter"
     },
     "glPointParameterxv": {
-        "pname" : "PointParameter"
+        "pname": "PointParameter"
     },
     "glPointSizePointer": {
-        "type" : "VertexAttribType"
+        "type": "VertexAttribType"
     },
     "glProvokingVertex": {
         "mode": "ProvokingVertexConvention"
@@ -791,5 +791,311 @@
     "glWaitSemaphore": {
         "buffers": "const BufferID *",
         "textures": "const TextureID *"
+    },
+    "glAttachShader": {
+        "program": "ProgramID",
+        "shader": "ShaderID"
+    },
+    "glCompileShader": {
+        "shader": "ShaderID"
+    },
+    "glDeleteShader": {
+        "shader": "ShaderID"
+    },
+    "glGetAttachedShaders": {
+        "program": "ProgramID",
+        "shaders": "ShaderID *"
+    },
+    "glDetachShader": {
+        "program": "ProgramID",
+        "shader": "ShaderID"
+    },
+    "glGetShaderiv": {
+        "shader": "ShaderID"
+    },
+    "glGetShaderInfoLog": {
+        "shader": "ShaderID"
+    },
+    "glGetShaderPrecisionFormat": {
+        "shader": "ShaderID"
+    },
+    "glGetShaderSource": {
+        "shader": "ShaderID"
+    },
+    "glIsShader": {
+        "shader": "ShaderID"
+    },
+    "glShaderSource": {
+        "shader": "ShaderID"
+    },
+    "glShaderBinary": {
+        "shaders": "const ShaderID *"
+    },
+    "glGetShaderivRobust" : {
+        "shader": "ShaderID"
+    },
+    "glGetTranslatedShaderSource": {
+        "shader": "ShaderID"
+    },
+    "glGetnUniformfv": {
+        "program": "ProgramID"
+    },
+    "glGetnUniformiv": {
+        "program": "ProgramID"
+    },
+    "glExtIsProgramBinary": {
+        "program": "ProgramID"
+    },
+    "glExtGetProgramBinarySource": {
+        "program": "ProgramID"
+    },
+    "glBindAttribLocation": {
+        "program": "ProgramID"
+    },
+    "glDeleteProgram": {
+        "program": "ProgramID"
+    },
+    "glGetActiveAttrib": {
+        "program": "ProgramID"
+    },
+    "glGetActiveUniform": {
+        "program": "ProgramID"
+    },
+    "glGetAttribLocation": {
+        "program": "ProgramID"
+    },
+    "glGetProgramiv": {
+        "program": "ProgramID"
+    },
+    "glGetProgramInfoLog": {
+        "program": "ProgramID"
+    },
+    "glGetUniformfv": {
+        "program": "ProgramID"
+    },
+    "glGetUniformiv": {
+        "program": "ProgramID"
+    },
+    "glGetUniformLocation": {
+        "program": "ProgramID"
+    },
+    "glIsProgram": {
+        "program": "ProgramID"
+    },
+    "glLinkProgram": {
+        "program": "ProgramID"
+    },
+    "glUseProgram": {
+        "program": "ProgramID"
+    },
+    "glValidateProgram": {
+        "program": "ProgramID"
+    },
+    "glGetProgramivRobust": {
+        "program": "ProgramID"
+    },
+    "glGetUniformfvRobust": {
+        "program": "ProgramID"
+    },
+    "glGetUniformivRobust": {
+        "program": "ProgramID"
+    },
+    "glGetUniformuivRobust": {
+        "program": "ProgramID"
+    },
+    "glGetActiveUniformBlockivRobust": {
+        "program": "ProgramID"
+    },
+    "glGetProgramInterfaceivRobust": {
+        "program": "ProgramID"
+    },
+    "glGetnUniformfvRobust": {
+        "program": "ProgramID"
+    },
+    "glGetnUniformivRobust": {
+        "program": "ProgramID"
+    },
+    "glGetnUniformuivRobust": {
+        "program": "ProgramID"
+    },
+    "glGetProgramBinary": {
+        "program": "ProgramID"
+    },
+    "glProgramBinary": {
+        "program": "ProgramID"
+    },
+    "glBindFragDataLocationIndexed": {
+        "program": "ProgramID"
+    },
+    "glBindFragDataLocation": {
+        "program": "ProgramID"
+    },
+    "glGetProgramResourceLocationIndex": {
+        "program": "ProgramID"
+    },
+    "glGetFragDataIndex": {
+        "program": "ProgramID"
+    },
+    "glActiveShaderProgram": {
+        "program": "ProgramID"
+    },
+    "glProgramParameteri": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform1f": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform1fv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform1i": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform1iv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform2f": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform2fv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform2i": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform2iv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform3f": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform3fv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform3i": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform3iv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform4f": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform4fv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform4i": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform4iv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniformMatrix2fv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniformMatrix3fv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniformMatrix4fv": {
+        "program": "ProgramID"
+    },
+    "glUseProgramStages": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform1ui": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform2ui": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform3ui": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform4ui": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform1uiv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform2uiv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform3uiv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniform4uiv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniformMatrix2x3fv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniformMatrix3x2fv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniformMatrix2x4fv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniformMatrix4x2fv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniformMatrix3x4fv": {
+        "program": "ProgramID"
+    },
+    "glProgramUniformMatrix4x3fv": {
+        "program": "ProgramID"
+    },
+    "glBindUniformLocation": {
+        "program": "ProgramID"
+    },
+    "glBindFragmentInputLocation": {
+        "programs": "ProgramID"
+    },
+    "glProgramPathFragmentInputGen": {
+        "program": "ProgramID"
+    },
+    "glGetProgramInterfaceiv": {
+        "program": "ProgramID"
+    },
+    "glGetProgramResourceName": {
+        "program": "ProgramID"
+    },
+    "glGetProgramResourceiv": {
+        "program": "ProgramID"
+    },
+    "glGetProgramResourceLocation": {
+        "program": "ProgramID"
+    },
+    "glGetProgramResourceIndex": {
+        "program": "ProgramID"
+    },
+    "glGetUniformuiv": {
+        "program": "ProgramID"
+    },
+    "glGetFragDataLocation": {
+        "program": "ProgramID"
+    },
+    "glGetUniformIndices": {
+        "program": "ProgramID"
+    },
+    "glGetActiveUniformsiv": {
+        "program": "ProgramID"
+    },
+    "glGetUniformBlockIndex": {
+        "program": "ProgramID"
+    },
+    "glGetActiveUniformBlockiv": {
+        "program": "ProgramID"
+    },
+    "glGetActiveUniformBlockName": {
+        "program": "ProgramID"
+    },
+    "glUniformBlockBinding": {
+        "program": "ProgramID"
+    },
+    "glTransformFeedbackVaryings": {
+        "program": "ProgramID"
+    },
+    "glGetTransformFeedbackVarying": {
+        "program": "ProgramID"
     }
 }

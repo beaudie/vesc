@@ -450,16 +450,17 @@ void GL_APIENTRY GetProgramInterfaceiv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() ||
-             ValidateGetProgramInterfaceiv(context, program, programInterface, pname, params));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateGetProgramInterfaceiv(context, programPacked, programInterface,
+                                                          pname, params));
         if (isCallValid)
         {
-            context->getProgramInterfaceiv(program, programInterface, pname, params);
+            context->getProgramInterfaceiv(programPacked, programInterface, pname, params);
         }
-        ANGLE_CAPTURE(GetProgramInterfaceiv, isCallValid, context, program, programInterface, pname,
-                      params);
+        ANGLE_CAPTURE(GetProgramInterfaceiv, isCallValid, context, programPacked, programInterface,
+                      pname, params);
     }
 }
 
@@ -476,20 +477,21 @@ GLuint GL_APIENTRY GetProgramResourceIndex(GLuint program,
     GLuint returnValue;
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateGetProgramResourceIndex(context, program, programInterface, name));
+             ValidateGetProgramResourceIndex(context, programPacked, programInterface, name));
         if (isCallValid)
         {
-            returnValue = context->getProgramResourceIndex(program, programInterface, name);
+            returnValue = context->getProgramResourceIndex(programPacked, programInterface, name);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::GetProgramResourceIndex, GLuint>();
         }
-        ANGLE_CAPTURE(GetProgramResourceIndex, isCallValid, context, program, programInterface,
-                      name, returnValue);
+        ANGLE_CAPTURE(GetProgramResourceIndex, isCallValid, context, programPacked,
+                      programInterface, name, returnValue);
     }
     else
     {
@@ -511,20 +513,22 @@ GLint GL_APIENTRY GetProgramResourceLocation(GLuint program,
     GLint returnValue;
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateGetProgramResourceLocation(context, program, programInterface, name));
+             ValidateGetProgramResourceLocation(context, programPacked, programInterface, name));
         if (isCallValid)
         {
-            returnValue = context->getProgramResourceLocation(program, programInterface, name);
+            returnValue =
+                context->getProgramResourceLocation(programPacked, programInterface, name);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::GetProgramResourceLocation, GLint>();
         }
-        ANGLE_CAPTURE(GetProgramResourceLocation, isCallValid, context, program, programInterface,
-                      name, returnValue);
+        ANGLE_CAPTURE(GetProgramResourceLocation, isCallValid, context, programPacked,
+                      programInterface, name, returnValue);
     }
     else
     {
@@ -546,20 +550,22 @@ GLint GL_APIENTRY GetProgramResourceLocationIndex(GLuint program,
     GLint returnValue;
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateGetProgramResourceLocationIndex(context, program, programInterface, name));
+            (context->skipValidation() || ValidateGetProgramResourceLocationIndex(
+                                              context, programPacked, programInterface, name));
         if (isCallValid)
         {
-            returnValue = context->getProgramResourceLocationIndex(program, programInterface, name);
+            returnValue =
+                context->getProgramResourceLocationIndex(programPacked, programInterface, name);
         }
         else
         {
             returnValue =
                 GetDefaultReturnValue<EntryPoint::GetProgramResourceLocationIndex, GLint>();
         }
-        ANGLE_CAPTURE(GetProgramResourceLocationIndex, isCallValid, context, program,
+        ANGLE_CAPTURE(GetProgramResourceLocationIndex, isCallValid, context, programPacked,
                       programInterface, name, returnValue);
     }
     else
@@ -585,16 +591,17 @@ void GL_APIENTRY GetProgramResourceName(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetProgramResourceName(context, program, programInterface,
+                            ValidateGetProgramResourceName(context, programPacked, programInterface,
                                                            index, bufSize, length, name));
         if (isCallValid)
         {
-            context->getProgramResourceName(program, programInterface, index, bufSize, length,
+            context->getProgramResourceName(programPacked, programInterface, index, bufSize, length,
                                             name);
         }
-        ANGLE_CAPTURE(GetProgramResourceName, isCallValid, context, program, programInterface,
+        ANGLE_CAPTURE(GetProgramResourceName, isCallValid, context, programPacked, programInterface,
                       index, bufSize, length, name);
     }
 }
@@ -619,18 +626,19 @@ void GL_APIENTRY GetProgramResourceiv(GLuint program,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateGetProgramResourceiv(context, program, programInterface, index, propCount,
-                                          props, bufSize, length, params));
+             ValidateGetProgramResourceiv(context, programPacked, programInterface, index,
+                                          propCount, props, bufSize, length, params));
         if (isCallValid)
         {
-            context->getProgramResourceiv(program, programInterface, index, propCount, props,
+            context->getProgramResourceiv(programPacked, programInterface, index, propCount, props,
                                           bufSize, length, params);
         }
-        ANGLE_CAPTURE(GetProgramResourceiv, isCallValid, context, program, programInterface, index,
-                      propCount, props, bufSize, length, params);
+        ANGLE_CAPTURE(GetProgramResourceiv, isCallValid, context, programPacked, programInterface,
+                      index, propCount, props, bufSize, length, params);
     }
 }
 

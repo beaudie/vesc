@@ -128,7 +128,7 @@ class Shader final : angle::NonCopyable, public LabeledObject
            rx::GLImplFactory *implFactory,
            const gl::Limitations &rendererLimitations,
            ShaderType type,
-           GLuint handle);
+           ShaderID handle);
 
     void onDestroy(const Context *context);
 
@@ -136,7 +136,7 @@ class Shader final : angle::NonCopyable, public LabeledObject
     const std::string &getLabel() const override;
 
     ShaderType getType() const { return mType; }
-    GLuint getHandle() const;
+    ShaderID getHandle() const;
 
     rx::ShaderImpl *getImplementation() const { return mImplementation.get(); }
 
@@ -203,7 +203,7 @@ class Shader final : angle::NonCopyable, public LabeledObject
     ShaderState mState;
     std::unique_ptr<rx::ShaderImpl> mImplementation;
     const gl::Limitations &mRendererLimitations;
-    const GLuint mHandle;
+    const ShaderID mHandle;
     const ShaderType mType;
     unsigned int mRefCount;  // Number of program objects this shader is attached to
     bool mDeleteStatus;  // Flag to indicate that the shader can be deleted when no longer in use

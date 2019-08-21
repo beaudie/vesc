@@ -60,34 +60,34 @@
     void genSamplers(GLsizei count, GLuint *samplers);                                             \
     void genTransformFeedbacks(GLsizei n, GLuint *ids);                                            \
     void genVertexArrays(GLsizei n, GLuint *arrays);                                               \
-    void getActiveUniformBlockName(GLuint program, GLuint uniformBlockIndex, GLsizei bufSize,      \
-                                   GLsizei *length, GLchar *uniformBlockName);                     \
-    void getActiveUniformBlockiv(GLuint program, GLuint uniformBlockIndex, GLenum pname,           \
+    void getActiveUniformBlockName(ProgramID programPacked, GLuint uniformBlockIndex,              \
+                                   GLsizei bufSize, GLsizei *length, GLchar *uniformBlockName);    \
+    void getActiveUniformBlockiv(ProgramID programPacked, GLuint uniformBlockIndex, GLenum pname,  \
                                  GLint *params);                                                   \
-    void getActiveUniformsiv(GLuint program, GLsizei uniformCount, const GLuint *uniformIndices,   \
-                             GLenum pname, GLint *params);                                         \
+    void getActiveUniformsiv(ProgramID programPacked, GLsizei uniformCount,                        \
+                             const GLuint *uniformIndices, GLenum pname, GLint *params);           \
     void getBufferParameteri64v(BufferBinding targetPacked, GLenum pname, GLint64 *params);        \
     void getBufferPointerv(BufferBinding targetPacked, GLenum pname, void **params);               \
-    GLint getFragDataLocation(GLuint program, const GLchar *name);                                 \
+    GLint getFragDataLocation(ProgramID programPacked, const GLchar *name);                        \
     void getInteger64i_v(GLenum target, GLuint index, GLint64 *data);                              \
     void getInteger64v(GLenum pname, GLint64 *data);                                               \
     void getIntegeri_v(GLenum target, GLuint index, GLint *data);                                  \
     void getInternalformativ(GLenum target, GLenum internalformat, GLenum pname, GLsizei bufSize,  \
                              GLint *params);                                                       \
-    void getProgramBinary(GLuint program, GLsizei bufSize, GLsizei *length, GLenum *binaryFormat,  \
-                          void *binary);                                                           \
+    void getProgramBinary(ProgramID programPacked, GLsizei bufSize, GLsizei *length,               \
+                          GLenum *binaryFormat, void *binary);                                     \
     void getQueryObjectuiv(GLuint id, GLenum pname, GLuint *params);                               \
     void getQueryiv(QueryType targetPacked, GLenum pname, GLint *params);                          \
     void getSamplerParameterfv(GLuint sampler, GLenum pname, GLfloat *params);                     \
     void getSamplerParameteriv(GLuint sampler, GLenum pname, GLint *params);                       \
     const GLubyte *getStringi(GLenum name, GLuint index);                                          \
     void getSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values);    \
-    void getTransformFeedbackVarying(GLuint program, GLuint index, GLsizei bufSize,                \
+    void getTransformFeedbackVarying(ProgramID programPacked, GLuint index, GLsizei bufSize,       \
                                      GLsizei *length, GLsizei *size, GLenum *type, GLchar *name);  \
-    GLuint getUniformBlockIndex(GLuint program, const GLchar *uniformBlockName);                   \
-    void getUniformIndices(GLuint program, GLsizei uniformCount,                                   \
+    GLuint getUniformBlockIndex(ProgramID programPacked, const GLchar *uniformBlockName);          \
+    void getUniformIndices(ProgramID programPacked, GLsizei uniformCount,                          \
                            const GLchar *const *uniformNames, GLuint *uniformIndices);             \
-    void getUniformuiv(GLuint program, GLint location, GLuint *params);                            \
+    void getUniformuiv(ProgramID programPacked, GLint location, GLuint *params);                   \
     void getVertexAttribIiv(GLuint index, GLenum pname, GLint *params);                            \
     void getVertexAttribIuiv(GLuint index, GLenum pname, GLuint *params);                          \
     void invalidateFramebuffer(GLenum target, GLsizei numAttachments, const GLenum *attachments);  \
@@ -102,8 +102,9 @@
     void *mapBufferRange(BufferBinding targetPacked, GLintptr offset, GLsizeiptr length,           \
                          GLbitfield access);                                                       \
     void pauseTransformFeedback();                                                                 \
-    void programBinary(GLuint program, GLenum binaryFormat, const void *binary, GLsizei length);   \
-    void programParameteri(GLuint program, GLenum pname, GLint value);                             \
+    void programBinary(ProgramID programPacked, GLenum binaryFormat, const void *binary,           \
+                       GLsizei length);                                                            \
+    void programParameteri(ProgramID programPacked, GLenum pname, GLint value);                    \
     void readBuffer(GLenum src);                                                                   \
     void renderbufferStorageMultisample(GLenum target, GLsizei samples, GLenum internalformat,     \
                                         GLsizei width, GLsizei height);                            \
@@ -122,8 +123,8 @@
     void texSubImage3D(TextureTarget targetPacked, GLint level, GLint xoffset, GLint yoffset,      \
                        GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, \
                        GLenum type, const void *pixels);                                           \
-    void transformFeedbackVaryings(GLuint program, GLsizei count, const GLchar *const *varyings,   \
-                                   GLenum bufferMode);                                             \
+    void transformFeedbackVaryings(ProgramID programPacked, GLsizei count,                         \
+                                   const GLchar *const *varyings, GLenum bufferMode);              \
     void uniform1ui(GLint location, GLuint v0);                                                    \
     void uniform1uiv(GLint location, GLsizei count, const GLuint *value);                          \
     void uniform2ui(GLint location, GLuint v0, GLuint v1);                                         \
@@ -132,7 +133,7 @@
     void uniform3uiv(GLint location, GLsizei count, const GLuint *value);                          \
     void uniform4ui(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3);                   \
     void uniform4uiv(GLint location, GLsizei count, const GLuint *value);                          \
-    void uniformBlockBinding(GLuint program, GLuint uniformBlockIndex,                             \
+    void uniformBlockBinding(ProgramID programPacked, GLuint uniformBlockIndex,                    \
                              GLuint uniformBlockBinding);                                          \
     void uniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose,                    \
                             const GLfloat *value);                                                 \
