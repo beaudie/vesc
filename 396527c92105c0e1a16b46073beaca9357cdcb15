@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d436e2b_0706c46f",
+        "filename": "src/compiler/translator/builtin_variables.json",
+        "patchSetId": 11
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-21T19:58:11Z",
+      "side": 0,
+      "message": "split change.",
+      "range": {
+        "startLine": 680,
+        "startChar": 19,
+        "endLine": 696,
+        "endChar": 57
+      },
+      "revId": "396527c92105c0e1a16b46073beaca9357cdcb15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
