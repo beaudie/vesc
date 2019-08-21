@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ad9d4769_c875a9d5",
+        "filename": "src/gpu_info_util/SystemInfo.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-08-21T18:48:06Z",
+      "side": 1,
+      "message": "This function no longer sets primaryGPUIndex. Please remove the \"deprecated\" part of this comment.",
+      "range": {
+        "startLine": 112,
+        "startChar": 35,
+        "endLine": 112,
+        "endChar": 45
+      },
+      "revId": "0d9728168022ec5e066face1553452b3f7d9acd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
