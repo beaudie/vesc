@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7da0378d_72a97c31",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3275,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-21T20:54:19Z",
+      "side": 1,
+      "message": "Yeah, the more reading I\u0027ve been doing about this says the same thing.   Removing it seems to work locally too, so I\u0027ll see what the CQ bots say too.",
+      "parentUuid": "bfcfcaac_e24c2ffb",
+      "range": {
+        "startLine": 3275,
+        "startChar": 10,
+        "endLine": 3275,
+        "endChar": 85
+      },
+      "revId": "b140f0ba865d58dadcfd5971e3103a72c111e381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5e57ebf8_b347ba23",
         "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
         "patchSetId": 14
@@ -36,6 +60,30 @@
       "writtenOn": "2019-08-21T19:27:10Z",
       "side": 1,
       "message": "for this and all future TODOs (and TODOs in reviews), please include a full http://anglebug.com/ link so that we can track them. Please ensure you do not close the issue until the TODO is resolved. If you don\u0027t plan to take action you can omit the TODO entirely.",
+      "range": {
+        "startLine": 268,
+        "startChar": 7,
+        "endLine": 268,
+        "endChar": 11
+      },
+      "revId": "b140f0ba865d58dadcfd5971e3103a72c111e381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4904c58e_75b8113d",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-21T20:54:19Z",
+      "side": 1,
+      "message": "Yeah, I marked this in case I forgot (which I did) to ask here before starting the review, but what do you think should we do here?\n\nDo we care that the substring isn\u0027t here when there is no vertex shader, or is ignoring the return value fine?   Do you think it\u0027s worth opening a bug to try and clean this up so we never even make it here in the first place?   I haven\u0027t dug far enough into this piece yet to see what else relies on anything generated in here, so I\u0027m hoping for some input from you guys.",
+      "parentUuid": "5e57ebf8_b347ba23",
       "range": {
         "startLine": 268,
         "startChar": 7,
@@ -94,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "b767f78e_02cba433",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-21T20:54:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32723ab5_09b6e1af",
+      "range": {
+        "startLine": 259,
+        "startChar": 19,
+        "endLine": 259,
+        "endChar": 24
+      },
+      "revId": "b140f0ba865d58dadcfd5971e3103a72c111e381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8471e64c_402adc3d",
         "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
         "patchSetId": 14
@@ -114,6 +186,30 @@
       "revId": "b140f0ba865d58dadcfd5971e3103a72c111e381",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2efeef6_780161cd",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-08-21T20:54:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8471e64c_402adc3d",
+      "range": {
+        "startLine": 433,
+        "startChar": 23,
+        "endLine": 433,
+        "endChar": 28
+      },
+      "revId": "b140f0ba865d58dadcfd5971e3103a72c111e381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
