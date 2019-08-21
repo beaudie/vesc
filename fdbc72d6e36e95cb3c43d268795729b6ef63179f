@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b07b985_2e847ae3",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-21T13:39:46Z",
+      "side": 1,
+      "message": "Just followed the existing convention here and added the missing usage flag that was causing validation error. Could detect indirect buffer target and only add flag in that case.",
+      "revId": "fdbc72d6e36e95cb3c43d268795729b6ef63179f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e80ad83_ed50cab4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-21T13:39:46Z",
+      "side": 1,
+      "message": "Vulkan VUID says primitiveRestartEnable must be VK_FALSE for all of these topology types so overriding here.",
+      "revId": "fdbc72d6e36e95cb3c43d268795729b6ef63179f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
