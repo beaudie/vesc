@@ -12,7 +12,7 @@
   "src/compiler/translator/builtin_variables.json":
     "34906b1c84fe40824e412607f9f1c501",
   "src/compiler/translator/gen_builtin_symbols.py":
-    "a700a7e4ed20b26804eec9ac2e065a85",
+    "7756794f62fc69a9444b9abc56fe64f6",
   "src/compiler/translator/tree_util/BuiltIn_autogen.h":
     "80a911c6701baded2fd8d5567c605669",
   "src/tests/compiler_tests/ImmutableString_test_autogen.cpp":

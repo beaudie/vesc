@@ -78,10 +78,16 @@ util_osx_sources = [
   "util/posix/Posix_system_utils.cpp",
 ]
 
-util_android_sources = util_posix_sources + [
-                         "util/android/AndroidPixmap.cpp",
-                         "util/android/AndroidWindow.cpp",
-                         "util/android/AndroidWindow.h",
-                         "util/android/third_party/android_native_app_glue.c",
-                         "util/android/third_party/android_native_app_glue.h",
-                       ]
+util_android_sources =
+    util_posix_sources + [
+      "util/android/AndroidPixmap.cpp",
+      "util/android/AndroidWindow.cpp",
+      "util/android/AndroidWindow.h",
+      "util/android/third_party/android_native_app_glue.c",
+      "util/android/third_party/android_native_app_glue.h",
+      "src/compiler/translator/ImmutableString_ESSL_autogen.cpp",
+      "src/compiler/translator/ParseContext_ESSL_autogen.h",
+      "src/compiler/translator/SymbolTable_ESSL_autogen.cpp",
+      "src/compiler/translator/tree_util/BuiltIn_ESSL_autogen.h",
+      "src/compiler/translator/ImmutableString_test_ESSL_autogen.cpp",
+    ]

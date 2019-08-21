@@ -1081,7 +1081,13 @@ foreach(is_shared_library,
 
     if (is_android) {
       # To prevent linux sources filtering on android
-      set_sources_assignment_filter([])
+      set_sources_assignment_filter([
+                                      "*ImmutableString_autogen.cpp",
+                                      "*ParseContext_autogen.h",
+                                      "*SymbolTable_autogen.cpp",
+                                      "*tree_util/BuiltIn_autogen.h",
+                                      "*ImmutableString_test_autogen.cpp",
+                                    ])
       sources += util_android_sources
       libs += [
         "android",

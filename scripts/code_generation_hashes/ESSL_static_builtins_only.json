@@ -1,0 +1,18 @@
+{
+  "src/compiler/translator/ImmutableString_ESSL_autogen.cpp":
+    "721c010d2f3cdde599ae4a2d8e2084ba",
+  "src/compiler/translator/ParseContext_ESSL_autogen.h":
+    "8ea271a7c6c4c5cfc38ebf7777247a8a",
+  "src/compiler/translator/SymbolTable_ESSL_autogen.cpp":
+    "382a846f984eb1d0b8ef610861cc14fe",
+  "src/compiler/translator/builtin_function_declarations.txt":
+    "fc9b0b050448d015482c9f13cab1df67",
+  "src/compiler/translator/builtin_variables.json":
+    "34906b1c84fe40824e412607f9f1c501",
+  "src/compiler/translator/gen_builtin_symbols_essl_only.py":
+    "ef41bc2343e9d7b47a3fe8ddea55766f",
+  "src/compiler/translator/tree_util/BuiltIn_ESSL_autogen.h":
+    "1185b57e31d13d1621a409b7009a992c",
+  "src/tests/compiler_tests/ImmutableString_test_ESSL_autogen.cpp":
+    "ce6f9d6795f097124a5e91ec4b95d99d"
+}
