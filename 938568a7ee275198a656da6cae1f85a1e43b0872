@@ -192,6 +192,30 @@
     },
     {
       "key": {
+        "uuid": "2cfa891b_181ceeaa",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-21T19:28:59Z",
+      "side": 1,
+      "message": "Change to this interface reverted",
+      "parentUuid": "642305fa_4c737d34",
+      "range": {
+        "startLine": 319,
+        "startChar": 5,
+        "endLine": 319,
+        "endChar": 38
+      },
+      "revId": "938568a7ee275198a656da6cae1f85a1e43b0872",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a155ced6_de98d9c3",
         "filename": "src/libANGLE/Sampler.cpp",
         "patchSetId": 3
