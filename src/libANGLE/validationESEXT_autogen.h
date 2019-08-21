@@ -177,7 +177,7 @@ bool ValidateGetIntegervRobustANGLE(Context *context,
                                     GLsizei *length,
                                     GLint *data);
 bool ValidateGetProgramivRobustANGLE(Context *context,
-                                     GLuint program,
+                                     ProgramID programPacked,
                                      GLenum pname,
                                      GLsizei bufSize,
                                      GLsizei *length,
@@ -189,7 +189,7 @@ bool ValidateGetRenderbufferParameterivRobustANGLE(Context *context,
                                                    GLsizei *length,
                                                    GLint *params);
 bool ValidateGetShaderivRobustANGLE(Context *context,
-                                    GLuint shader,
+                                    ShaderID shaderPacked,
                                     GLenum pname,
                                     GLsizei bufSize,
                                     GLsizei *length,
@@ -207,13 +207,13 @@ bool ValidateGetTexParameterivRobustANGLE(Context *context,
                                           GLsizei *length,
                                           GLint *params);
 bool ValidateGetUniformfvRobustANGLE(Context *context,
-                                     GLuint program,
+                                     ProgramID programPacked,
                                      GLint location,
                                      GLsizei bufSize,
                                      GLsizei *length,
                                      GLfloat *params);
 bool ValidateGetUniformivRobustANGLE(Context *context,
-                                     GLuint program,
+                                     ProgramID programPacked,
                                      GLint location,
                                      GLsizei bufSize,
                                      GLsizei *length,
@@ -394,13 +394,13 @@ bool ValidateGetVertexAttribIuivRobustANGLE(Context *context,
                                             GLsizei *length,
                                             GLuint *params);
 bool ValidateGetUniformuivRobustANGLE(Context *context,
-                                      GLuint program,
+                                      ProgramID programPacked,
                                       GLint location,
                                       GLsizei bufSize,
                                       GLsizei *length,
                                       GLuint *params);
 bool ValidateGetActiveUniformBlockivRobustANGLE(Context *context,
-                                                GLuint program,
+                                                ProgramID programPacked,
                                                 GLuint uniformBlockIndex,
                                                 GLenum pname,
                                                 GLsizei bufSize,
@@ -452,7 +452,7 @@ bool ValidateGetFramebufferParameterivRobustANGLE(Context *context,
                                                   GLsizei *length,
                                                   GLint *params);
 bool ValidateGetProgramInterfaceivRobustANGLE(Context *context,
-                                              GLuint program,
+                                              ProgramID programPacked,
                                               GLenum programInterface,
                                               GLenum pname,
                                               GLsizei bufSize,
@@ -502,19 +502,19 @@ bool ValidateReadnPixelsRobustANGLE(Context *context,
                                     GLsizei *rows,
                                     void *data);
 bool ValidateGetnUniformfvRobustANGLE(Context *context,
-                                      GLuint program,
+                                      ProgramID programPacked,
                                       GLint location,
                                       GLsizei bufSize,
                                       GLsizei *length,
                                       GLfloat *params);
 bool ValidateGetnUniformivRobustANGLE(Context *context,
-                                      GLuint program,
+                                      ProgramID programPacked,
                                       GLint location,
                                       GLsizei bufSize,
                                       GLsizei *length,
                                       GLint *params);
 bool ValidateGetnUniformuivRobustANGLE(Context *context,
-                                       GLuint program,
+                                       ProgramID programPacked,
                                        GLint location,
                                        GLsizei bufSize,
                                        GLsizei *length,
@@ -617,14 +617,14 @@ bool ValidateSampleMaskiANGLE(Context *context, GLuint maskNumber, GLbitfield ma
 
 // GL_ANGLE_translated_shader_source
 bool ValidateGetTranslatedShaderSourceANGLE(Context *context,
-                                            GLuint shader,
+                                            ShaderID shaderPacked,
                                             GLsizei bufsize,
                                             GLsizei *length,
                                             GLchar *source);
 
 // GL_CHROMIUM_bind_uniform_location
 bool ValidateBindUniformLocationCHROMIUM(Context *context,
-                                         GLuint program,
+                                         ProgramID programPacked,
                                          GLint location,
                                          const GLchar *name);
 
@@ -759,11 +759,11 @@ bool ValidateStencilThenCoverStrokePathInstancedCHROMIUM(Context *context,
                                                          GLenum transformType,
                                                          const GLfloat *transformValues);
 bool ValidateBindFragmentInputLocationCHROMIUM(Context *context,
-                                               GLuint programs,
+                                               ProgramID programsPacked,
                                                GLint location,
                                                const GLchar *name);
 bool ValidateProgramPathFragmentInputGenCHROMIUM(Context *context,
-                                                 GLuint program,
+                                                 ProgramID programPacked,
                                                  GLint location,
                                                  GLenum genMode,
                                                  GLint components,
@@ -771,17 +771,17 @@ bool ValidateProgramPathFragmentInputGenCHROMIUM(Context *context,
 
 // GL_EXT_blend_func_extended
 bool ValidateBindFragDataLocationEXT(Context *context,
-                                     GLuint program,
+                                     ProgramID programPacked,
                                      GLuint color,
                                      const GLchar *name);
 bool ValidateBindFragDataLocationIndexedEXT(Context *context,
-                                            GLuint program,
+                                            ProgramID programPacked,
                                             GLuint colorNumber,
                                             GLuint index,
                                             const GLchar *name);
-bool ValidateGetFragDataIndexEXT(Context *context, GLuint program, const GLchar *name);
+bool ValidateGetFragDataIndexEXT(Context *context, ProgramID programPacked, const GLchar *name);
 bool ValidateGetProgramResourceLocationIndexEXT(Context *context,
-                                                GLuint program,
+                                                ProgramID programPacked,
                                                 GLenum programInterface,
                                                 const GLchar *name);
 
@@ -912,12 +912,12 @@ bool ValidateImportMemoryFdEXT(Context *context,
 // GL_EXT_robustness
 bool ValidateGetGraphicsResetStatusEXT(Context *context);
 bool ValidateGetnUniformfvEXT(Context *context,
-                              GLuint program,
+                              ProgramID programPacked,
                               GLint location,
                               GLsizei bufSize,
                               GLfloat *params);
 bool ValidateGetnUniformivEXT(Context *context,
-                              GLuint program,
+                              ProgramID programPacked,
                               GLint location,
                               GLsizei bufSize,
                               GLint *params);
@@ -1127,13 +1127,13 @@ bool ValidateRenderbufferStorageOES(Context *context,
 
 // GL_OES_get_program_binary
 bool ValidateGetProgramBinaryOES(Context *context,
-                                 GLuint program,
+                                 ProgramID programPacked,
                                  GLsizei bufSize,
                                  GLsizei *length,
                                  GLenum *binaryFormat,
                                  void *binary);
 bool ValidateProgramBinaryOES(Context *context,
-                              GLuint program,
+                              ProgramID programPacked,
                               GLenum binaryFormat,
                               const void *binary,
                               GLint length);

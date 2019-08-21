@@ -821,6 +821,18 @@ void WriteParamValueToStream<ParamType::TSamplerID>(std::ostream &os, gl::Sample
     os << value.value;
 }
 
+template <>
+void WriteParamValueToStream<ParamType::TShaderID>(std::ostream &os, gl::ShaderID value)
+{
+    os << value.value;
+}
+
+template <>
+void WriteParamValueToStream<ParamType::TProgramID>(std::ostream &os, gl::ProgramID value)
+{
+    os << value.value;
+}
+
 // TODO(jmadill): Use FenceNV ID map. http://anglebug.com/3611
 template <>
 void WriteParamValueToStream<ParamType::TFenceNVID>(std::ostream &os, gl::FenceNVID value)

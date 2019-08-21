@@ -12,8 +12,8 @@
 
 #define ANGLE_GLES_2_0_CONTEXT_API                                                                 \
     void activeTexture(GLenum texture);                                                            \
-    void attachShader(GLuint program, GLuint shader);                                              \
-    void bindAttribLocation(GLuint program, GLuint index, const GLchar *name);                     \
+    void attachShader(ProgramID programPacked, ShaderID shaderPacked);                             \
+    void bindAttribLocation(ProgramID programPacked, GLuint index, const GLchar *name);            \
     void bindBuffer(BufferBinding targetPacked, BufferID bufferPacked);                            \
     void bindFramebuffer(GLenum target, GLuint framebuffer);                                       \
     void bindRenderbuffer(GLenum target, RenderbufferID renderbufferPacked);                       \
@@ -34,7 +34,7 @@
     void clearDepthf(GLfloat d);                                                                   \
     void clearStencil(GLint s);                                                                    \
     void colorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha);               \
-    void compileShader(GLuint shader);                                                             \
+    void compileShader(ShaderID shaderPacked);                                                     \
     void compressedTexImage2D(TextureTarget targetPacked, GLint level, GLenum internalformat,      \
                               GLsizei width, GLsizei height, GLint border, GLsizei imageSize,      \
                               const void *data);                                                   \
@@ -50,14 +50,14 @@
     void cullFace(CullFaceMode modePacked);                                                        \
     void deleteBuffers(GLsizei n, const BufferID *buffersPacked);                                  \
     void deleteFramebuffers(GLsizei n, const GLuint *framebuffers);                                \
-    void deleteProgram(GLuint program);                                                            \
+    void deleteProgram(ProgramID programPacked);                                                   \
     void deleteRenderbuffers(GLsizei n, const RenderbufferID *renderbuffersPacked);                \
-    void deleteShader(GLuint shader);                                                              \
+    void deleteShader(ShaderID shaderPacked);                                                      \
     void deleteTextures(GLsizei n, const TextureID *texturesPacked);                               \
     void depthFunc(GLenum func);                                                                   \
     void depthMask(GLboolean flag);                                                                \
     void depthRangef(GLfloat n, GLfloat f);                                                        \
-    void detachShader(GLuint program, GLuint shader);                                              \
+    void detachShader(ProgramID programPacked, ShaderID shaderPacked);                             \
     void disable(GLenum cap);                                                                      \
     void disableVertexAttribArray(GLuint index);                                                   \
     void drawArrays(PrimitiveMode modePacked, GLint first, GLsizei count);                         \
@@ -77,12 +77,13 @@
     void genRenderbuffers(GLsizei n, RenderbufferID *renderbuffersPacked);                         \
     void genTextures(GLsizei n, TextureID *texturesPacked);                                        \
     void generateMipmap(TextureType targetPacked);                                                 \
-    void getActiveAttrib(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length,           \
+    void getActiveAttrib(ProgramID programPacked, GLuint index, GLsizei bufSize, GLsizei *length,  \
                          GLint *size, GLenum *type, GLchar *name);                                 \
-    void getActiveUniform(GLuint program, GLuint index, GLsizei bufSize, GLsizei *length,          \
+    void getActiveUniform(ProgramID programPacked, GLuint index, GLsizei bufSize, GLsizei *length, \
                           GLint *size, GLenum *type, GLchar *name);                                \
-    void getAttachedShaders(GLuint program, GLsizei maxCount, GLsizei *count, GLuint *shaders);    \
-    GLint getAttribLocation(GLuint program, const GLchar *name);                                   \
+    void getAttachedShaders(ProgramID programPacked, GLsizei maxCount, GLsizei *count,             \
+                            ShaderID *shadersPacked);                                              \
+    GLint getAttribLocation(ProgramID programPacked, const GLchar *name);                          \
     void getBooleanv(GLenum pname, GLboolean *data);                                               \
     void getBufferParameteriv(BufferBinding targetPacked, GLenum pname, GLint *params);            \
     GLenum getError();                                                                             \
@@ -90,20 +91,22 @@
     void getFramebufferAttachmentParameteriv(GLenum target, GLenum attachment, GLenum pname,       \
                                              GLint *params);                                       \
     void getIntegerv(GLenum pname, GLint *data);                                                   \
-    void getProgramInfoLog(GLuint program, GLsizei bufSize, GLsizei *length, GLchar *infoLog);     \
-    void getProgramiv(GLuint program, GLenum pname, GLint *params);                                \
+    void getProgramInfoLog(ProgramID programPacked, GLsizei bufSize, GLsizei *length,              \
+                           GLchar *infoLog);                                                       \
+    void getProgramiv(ProgramID programPacked, GLenum pname, GLint *params);                       \
     void getRenderbufferParameteriv(GLenum target, GLenum pname, GLint *params);                   \
-    void getShaderInfoLog(GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *infoLog);       \
+    void getShaderInfoLog(ShaderID shaderPacked, GLsizei bufSize, GLsizei *length,                 \
+                          GLchar *infoLog);                                                        \
     void getShaderPrecisionFormat(GLenum shadertype, GLenum precisiontype, GLint *range,           \
                                   GLint *precision);                                               \
-    void getShaderSource(GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *source);         \
-    void getShaderiv(GLuint shader, GLenum pname, GLint *params);                                  \
+    void getShaderSource(ShaderID shaderPacked, GLsizei bufSize, GLsizei *length, GLchar *source); \
+    void getShaderiv(ShaderID shaderPacked, GLenum pname, GLint *params);                          \
     const GLubyte *getString(GLenum name);                                                         \
     void getTexParameterfv(TextureType targetPacked, GLenum pname, GLfloat *params);               \
     void getTexParameteriv(TextureType targetPacked, GLenum pname, GLint *params);                 \
-    GLint getUniformLocation(GLuint program, const GLchar *name);                                  \
-    void getUniformfv(GLuint program, GLint location, GLfloat *params);                            \
-    void getUniformiv(GLuint program, GLint location, GLint *params);                              \
+    GLint getUniformLocation(ProgramID programPacked, const GLchar *name);                         \
+    void getUniformfv(ProgramID programPacked, GLint location, GLfloat *params);                   \
+    void getUniformiv(ProgramID programPacked, GLint location, GLint *params);                     \
     void getVertexAttribPointerv(GLuint index, GLenum pname, void **pointer);                      \
     void getVertexAttribfv(GLuint index, GLenum pname, GLfloat *params);                           \
     void getVertexAttribiv(GLuint index, GLenum pname, GLint *params);                             \
@@ -111,12 +114,12 @@
     GLboolean isBuffer(BufferID bufferPacked);                                                     \
     GLboolean isEnabled(GLenum cap);                                                               \
     GLboolean isFramebuffer(GLuint framebuffer);                                                   \
-    GLboolean isProgram(GLuint program);                                                           \
+    GLboolean isProgram(ProgramID programPacked);                                                  \
     GLboolean isRenderbuffer(RenderbufferID renderbufferPacked);                                   \
-    GLboolean isShader(GLuint shader);                                                             \
+    GLboolean isShader(ShaderID shaderPacked);                                                     \
     GLboolean isTexture(TextureID texturePacked);                                                  \
     void lineWidth(GLfloat width);                                                                 \
-    void linkProgram(GLuint program);                                                              \
+    void linkProgram(ProgramID programPacked);                                                     \
     void pixelStorei(GLenum pname, GLint param);                                                   \
     void polygonOffset(GLfloat factor, GLfloat units);                                             \
     void readPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type,   \
@@ -125,9 +128,9 @@
     void renderbufferStorage(GLenum target, GLenum internalformat, GLsizei width, GLsizei height); \
     void sampleCoverage(GLfloat value, GLboolean invert);                                          \
     void scissor(GLint x, GLint y, GLsizei width, GLsizei height);                                 \
-    void shaderBinary(GLsizei count, const GLuint *shaders, GLenum binaryformat,                   \
+    void shaderBinary(GLsizei count, const ShaderID *shadersPacked, GLenum binaryformat,           \
                       const void *binary, GLsizei length);                                         \
-    void shaderSource(GLuint shader, GLsizei count, const GLchar *const *string,                   \
+    void shaderSource(ShaderID shaderPacked, GLsizei count, const GLchar *const *string,           \
                       const GLint *length);                                                        \
     void stencilFunc(GLenum func, GLint ref, GLuint mask);                                         \
     void stencilFuncSeparate(GLenum face, GLenum func, GLint ref, GLuint mask);                    \
@@ -166,8 +169,8 @@
                           const GLfloat *value);                                                   \
     void uniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose,                      \
                           const GLfloat *value);                                                   \
-    void useProgram(GLuint program);                                                               \
-    void validateProgram(GLuint program);                                                          \
+    void useProgram(ProgramID programPacked);                                                      \
+    void validateProgram(ProgramID programPacked);                                                 \
     void vertexAttrib1f(GLuint index, GLfloat x);                                                  \
     void vertexAttrib1fv(GLuint index, const GLfloat *v);                                          \
     void vertexAttrib2f(GLuint index, GLfloat x, GLfloat y);                                       \

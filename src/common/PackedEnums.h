@@ -386,6 +386,16 @@ struct RenderbufferID
     GLuint value;
 };
 
+struct ShaderID
+{
+    GLuint value;
+};
+
+struct ProgramID
+{
+    GLuint value;
+};
+
 struct TextureID
 {
     GLuint value;

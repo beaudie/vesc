@@ -34,14 +34,15 @@ void GL_APIENTRY ActiveShaderProgram(GLuint pipeline, GLuint program)
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateActiveShaderProgram(context, pipeline, program));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateActiveShaderProgram(context, pipeline, programPacked));
         if (isCallValid)
         {
-            context->activeShaderProgram(pipeline, program);
+            context->activeShaderProgram(pipeline, programPacked);
         }
-        ANGLE_CAPTURE(ActiveShaderProgram, isCallValid, context, pipeline, program);
+        ANGLE_CAPTURE(ActiveShaderProgram, isCallValid, context, pipeline, programPacked);
     }
 }
 
@@ -267,15 +268,16 @@ void GL_APIENTRY GetProgramBinary(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateGetProgramBinary(context, program, bufSize, length, binaryFormat, binary));
+            (context->skipValidation() || ValidateGetProgramBinary(context, programPacked, bufSize,
+                                                                   length, binaryFormat, binary));
         if (isCallValid)
         {
-            context->getProgramBinary(program, bufSize, length, binaryFormat, binary);
+            context->getProgramBinary(programPacked, bufSize, length, binaryFormat, binary);
         }
-        ANGLE_CAPTURE(GetProgramBinary, isCallValid, context, program, bufSize, length,
+        ANGLE_CAPTURE(GetProgramBinary, isCallValid, context, programPacked, bufSize, length,
                       binaryFormat, binary);
     }
 }
@@ -421,14 +423,17 @@ void GL_APIENTRY ProgramBinary(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramBinary(context, program, binaryFormat, binary, length));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramBinary(context, programPacked, binaryFormat, binary, length));
         if (isCallValid)
         {
-            context->programBinary(program, binaryFormat, binary, length);
+            context->programBinary(programPacked, binaryFormat, binary, length);
         }
-        ANGLE_CAPTURE(ProgramBinary, isCallValid, context, program, binaryFormat, binary, length);
+        ANGLE_CAPTURE(ProgramBinary, isCallValid, context, programPacked, binaryFormat, binary,
+                      length);
     }
 }
 
@@ -441,14 +446,15 @@ void GL_APIENTRY ProgramParameteri(GLuint program, GLenum pname, GLint value)
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramParameteri(context, program, pname, value));
+                            ValidateProgramParameteri(context, programPacked, pname, value));
         if (isCallValid)
         {
-            context->programParameteri(program, pname, value);
+            context->programParameteri(programPacked, pname, value);
         }
-        ANGLE_CAPTURE(ProgramParameteri, isCallValid, context, program, pname, value);
+        ANGLE_CAPTURE(ProgramParameteri, isCallValid, context, programPacked, pname, value);
     }
 }
 
@@ -505,14 +511,15 @@ void GL_APIENTRY ProgramUniform1f(GLuint program, GLint location, GLfloat v0)
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateProgramUniform1f(context, program, location, v0));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateProgramUniform1f(context, programPacked, location, v0));
         if (isCallValid)
         {
-            context->programUniform1f(program, location, v0);
+            context->programUniform1f(programPacked, location, v0);
         }
-        ANGLE_CAPTURE(ProgramUniform1f, isCallValid, context, program, location, v0);
+        ANGLE_CAPTURE(ProgramUniform1f, isCallValid, context, programPacked, location, v0);
     }
 }
 
@@ -529,14 +536,17 @@ void GL_APIENTRY ProgramUniform1fv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform1fv(context, program, location, count, value));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform1fv(context, programPacked, location, count, value));
         if (isCallValid)
         {
-            context->programUniform1fv(program, location, count, value);
+            context->programUniform1fv(programPacked, location, count, value);
         }
-        ANGLE_CAPTURE(ProgramUniform1fv, isCallValid, context, program, location, count, value);
+        ANGLE_CAPTURE(ProgramUniform1fv, isCallValid, context, programPacked, location, count,
+                      value);
     }
 }
 
@@ -549,14 +559,15 @@ void GL_APIENTRY ProgramUniform1i(GLuint program, GLint location, GLint v0)
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateProgramUniform1i(context, program, location, v0));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateProgramUniform1i(context, programPacked, location, v0));
         if (isCallValid)
         {
-            context->programUniform1i(program, location, v0);
+            context->programUniform1i(programPacked, location, v0);
         }
-        ANGLE_CAPTURE(ProgramUniform1i, isCallValid, context, program, location, v0);
+        ANGLE_CAPTURE(ProgramUniform1i, isCallValid, context, programPacked, location, v0);
     }
 }
 
@@ -573,14 +584,17 @@ void GL_APIENTRY ProgramUniform1iv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform1iv(context, program, location, count, value));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform1iv(context, programPacked, location, count, value));
         if (isCallValid)
         {
-            context->programUniform1iv(program, location, count, value);
+            context->programUniform1iv(programPacked, location, count, value);
         }
-        ANGLE_CAPTURE(ProgramUniform1iv, isCallValid, context, program, location, count, value);
+        ANGLE_CAPTURE(ProgramUniform1iv, isCallValid, context, programPacked, location, count,
+                      value);
     }
 }
 
@@ -593,14 +607,15 @@ void GL_APIENTRY ProgramUniform1ui(GLuint program, GLint location, GLuint v0)
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform1ui(context, program, location, v0));
+                            ValidateProgramUniform1ui(context, programPacked, location, v0));
         if (isCallValid)
         {
-            context->programUniform1ui(program, location, v0);
+            context->programUniform1ui(programPacked, location, v0);
         }
-        ANGLE_CAPTURE(ProgramUniform1ui, isCallValid, context, program, location, v0);
+        ANGLE_CAPTURE(ProgramUniform1ui, isCallValid, context, programPacked, location, v0);
     }
 }
 
@@ -617,14 +632,17 @@ void GL_APIENTRY ProgramUniform1uiv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform1uiv(context, program, location, count, value));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform1uiv(context, programPacked, location, count, value));
         if (isCallValid)
         {
-            context->programUniform1uiv(program, location, count, value);
+            context->programUniform1uiv(programPacked, location, count, value);
         }
-        ANGLE_CAPTURE(ProgramUniform1uiv, isCallValid, context, program, location, count, value);
+        ANGLE_CAPTURE(ProgramUniform1uiv, isCallValid, context, programPacked, location, count,
+                      value);
     }
 }
 
@@ -683,14 +701,15 @@ void GL_APIENTRY ProgramUniform2f(GLuint program, GLint location, GLfloat v0, GL
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform2f(context, program, location, v0, v1));
+                            ValidateProgramUniform2f(context, programPacked, location, v0, v1));
         if (isCallValid)
         {
-            context->programUniform2f(program, location, v0, v1);
+            context->programUniform2f(programPacked, location, v0, v1);
         }
-        ANGLE_CAPTURE(ProgramUniform2f, isCallValid, context, program, location, v0, v1);
+        ANGLE_CAPTURE(ProgramUniform2f, isCallValid, context, programPacked, location, v0, v1);
     }
 }
 
@@ -707,14 +726,17 @@ void GL_APIENTRY ProgramUniform2fv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform2fv(context, program, location, count, value));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform2fv(context, programPacked, location, count, value));
         if (isCallValid)
         {
-            context->programUniform2fv(program, location, count, value);
+            context->programUniform2fv(programPacked, location, count, value);
         }
-        ANGLE_CAPTURE(ProgramUniform2fv, isCallValid, context, program, location, count, value);
+        ANGLE_CAPTURE(ProgramUniform2fv, isCallValid, context, programPacked, location, count,
+                      value);
     }
 }
 
@@ -727,14 +749,15 @@ void GL_APIENTRY ProgramUniform2i(GLuint program, GLint location, GLint v0, GLin
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform2i(context, program, location, v0, v1));
+                            ValidateProgramUniform2i(context, programPacked, location, v0, v1));
         if (isCallValid)
         {
-            context->programUniform2i(program, location, v0, v1);
+            context->programUniform2i(programPacked, location, v0, v1);
         }
-        ANGLE_CAPTURE(ProgramUniform2i, isCallValid, context, program, location, v0, v1);
+        ANGLE_CAPTURE(ProgramUniform2i, isCallValid, context, programPacked, location, v0, v1);
     }
 }
 
@@ -751,14 +774,17 @@ void GL_APIENTRY ProgramUniform2iv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform2iv(context, program, location, count, value));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform2iv(context, programPacked, location, count, value));
         if (isCallValid)
         {
-            context->programUniform2iv(program, location, count, value);
+            context->programUniform2iv(programPacked, location, count, value);
         }
-        ANGLE_CAPTURE(ProgramUniform2iv, isCallValid, context, program, location, count, value);
+        ANGLE_CAPTURE(ProgramUniform2iv, isCallValid, context, programPacked, location, count,
+                      value);
     }
 }
 
@@ -771,14 +797,15 @@ void GL_APIENTRY ProgramUniform2ui(GLuint program, GLint location, GLuint v0, GL
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform2ui(context, program, location, v0, v1));
+                            ValidateProgramUniform2ui(context, programPacked, location, v0, v1));
         if (isCallValid)
         {
-            context->programUniform2ui(program, location, v0, v1);
+            context->programUniform2ui(programPacked, location, v0, v1);
         }
-        ANGLE_CAPTURE(ProgramUniform2ui, isCallValid, context, program, location, v0, v1);
+        ANGLE_CAPTURE(ProgramUniform2ui, isCallValid, context, programPacked, location, v0, v1);
     }
 }
 
@@ -795,14 +822,17 @@ void GL_APIENTRY ProgramUniform2uiv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform2uiv(context, program, location, count, value));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform2uiv(context, programPacked, location, count, value));
         if (isCallValid)
         {
-            context->programUniform2uiv(program, location, count, value);
+            context->programUniform2uiv(programPacked, location, count, value);
         }
-        ANGLE_CAPTURE(ProgramUniform2uiv, isCallValid, context, program, location, count, value);
+        ANGLE_CAPTURE(ProgramUniform2uiv, isCallValid, context, programPacked, location, count,
+                      value);
     }
 }
 
@@ -863,14 +893,15 @@ ProgramUniform3f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform3f(context, program, location, v0, v1, v2));
+                            ValidateProgramUniform3f(context, programPacked, location, v0, v1, v2));
         if (isCallValid)
         {
-            context->programUniform3f(program, location, v0, v1, v2);
+            context->programUniform3f(programPacked, location, v0, v1, v2);
         }
-        ANGLE_CAPTURE(ProgramUniform3f, isCallValid, context, program, location, v0, v1, v2);
+        ANGLE_CAPTURE(ProgramUniform3f, isCallValid, context, programPacked, location, v0, v1, v2);
     }
 }
 
@@ -887,14 +918,17 @@ void GL_APIENTRY ProgramUniform3fv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform3fv(context, program, location, count, value));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform3fv(context, programPacked, location, count, value));
         if (isCallValid)
         {
-            context->programUniform3fv(program, location, count, value);
+            context->programUniform3fv(programPacked, location, count, value);
         }
-        ANGLE_CAPTURE(ProgramUniform3fv, isCallValid, context, program, location, count, value);
+        ANGLE_CAPTURE(ProgramUniform3fv, isCallValid, context, programPacked, location, count,
+                      value);
     }
 }
 
@@ -908,14 +942,15 @@ void GL_APIENTRY ProgramUniform3i(GLuint program, GLint location, GLint v0, GLin
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform3i(context, program, location, v0, v1, v2));
+                            ValidateProgramUniform3i(context, programPacked, location, v0, v1, v2));
         if (isCallValid)
         {
-            context->programUniform3i(program, location, v0, v1, v2);
+            context->programUniform3i(programPacked, location, v0, v1, v2);
         }
-        ANGLE_CAPTURE(ProgramUniform3i, isCallValid, context, program, location, v0, v1, v2);
+        ANGLE_CAPTURE(ProgramUniform3i, isCallValid, context, programPacked, location, v0, v1, v2);
     }
 }
 
@@ -932,14 +967,17 @@ void GL_APIENTRY ProgramUniform3iv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform3iv(context, program, location, count, value));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform3iv(context, programPacked, location, count, value));
         if (isCallValid)
         {
-            context->programUniform3iv(program, location, count, value);
+            context->programUniform3iv(programPacked, location, count, value);
         }
-        ANGLE_CAPTURE(ProgramUniform3iv, isCallValid, context, program, location, count, value);
+        ANGLE_CAPTURE(ProgramUniform3iv, isCallValid, context, programPacked, location, count,
+                      value);
     }
 }
 
@@ -953,14 +991,16 @@ void GL_APIENTRY ProgramUniform3ui(GLuint program, GLint location, GLuint v0, GL
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform3ui(context, program, location, v0, v1, v2));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform3ui(context, programPacked, location, v0, v1, v2));
         if (isCallValid)
         {
-            context->programUniform3ui(program, location, v0, v1, v2);
+            context->programUniform3ui(programPacked, location, v0, v1, v2);
         }
-        ANGLE_CAPTURE(ProgramUniform3ui, isCallValid, context, program, location, v0, v1, v2);
+        ANGLE_CAPTURE(ProgramUniform3ui, isCallValid, context, programPacked, location, v0, v1, v2);
     }
 }
 
@@ -977,14 +1017,17 @@ void GL_APIENTRY ProgramUniform3uiv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform3uiv(context, program, location, count, value));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform3uiv(context, programPacked, location, count, value));
         if (isCallValid)
         {
-            context->programUniform3uiv(program, location, count, value);
+            context->programUniform3uiv(programPacked, location, count, value);
         }
-        ANGLE_CAPTURE(ProgramUniform3uiv, isCallValid, context, program, location, count, value);
+        ANGLE_CAPTURE(ProgramUniform3uiv, isCallValid, context, programPacked, location, count,
+                      value);
     }
 }
 
@@ -1045,14 +1088,17 @@ ProgramUniform4f(GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform4f(context, program, location, v0, v1, v2, v3));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform4f(context, programPacked, location, v0, v1, v2, v3));
         if (isCallValid)
         {
-            context->programUniform4f(program, location, v0, v1, v2, v3);
+            context->programUniform4f(programPacked, location, v0, v1, v2, v3);
         }
-        ANGLE_CAPTURE(ProgramUniform4f, isCallValid, context, program, location, v0, v1, v2, v3);
+        ANGLE_CAPTURE(ProgramUniform4f, isCallValid, context, programPacked, location, v0, v1, v2,
+                      v3);
     }
 }
 
@@ -1069,14 +1115,17 @@ void GL_APIENTRY ProgramUniform4fv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform4fv(context, program, location, count, value));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform4fv(context, programPacked, location, count, value));
         if (isCallValid)
         {
-            context->programUniform4fv(program, location, count, value);
+            context->programUniform4fv(programPacked, location, count, value);
         }
-        ANGLE_CAPTURE(ProgramUniform4fv, isCallValid, context, program, location, count, value);
+        ANGLE_CAPTURE(ProgramUniform4fv, isCallValid, context, programPacked, location, count,
+                      value);
     }
 }
 
@@ -1091,14 +1140,17 @@ ProgramUniform4i(GLuint program, GLint location, GLint v0, GLint v1, GLint v2, G
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform4i(context, program, location, v0, v1, v2, v3));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform4i(context, programPacked, location, v0, v1, v2, v3));
         if (isCallValid)
         {
-            context->programUniform4i(program, location, v0, v1, v2, v3);
+            context->programUniform4i(programPacked, location, v0, v1, v2, v3);
         }
-        ANGLE_CAPTURE(ProgramUniform4i, isCallValid, context, program, location, v0, v1, v2, v3);
+        ANGLE_CAPTURE(ProgramUniform4i, isCallValid, context, programPacked, location, v0, v1, v2,
+                      v3);
     }
 }
 
@@ -1115,14 +1167,17 @@ void GL_APIENTRY ProgramUniform4iv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform4iv(context, program, location, count, value));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform4iv(context, programPacked, location, count, value));
         if (isCallValid)
         {
-            context->programUniform4iv(program, location, count, value);
+            context->programUniform4iv(programPacked, location, count, value);
         }
-        ANGLE_CAPTURE(ProgramUniform4iv, isCallValid, context, program, location, count, value);
+        ANGLE_CAPTURE(ProgramUniform4iv, isCallValid, context, programPacked, location, count,
+                      value);
     }
 }
 
@@ -1137,14 +1192,17 @@ ProgramUniform4ui(GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform4ui(context, program, location, v0, v1, v2, v3));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform4ui(context, programPacked, location, v0, v1, v2, v3));
         if (isCallValid)
         {
-            context->programUniform4ui(program, location, v0, v1, v2, v3);
+            context->programUniform4ui(programPacked, location, v0, v1, v2, v3);
         }
-        ANGLE_CAPTURE(ProgramUniform4ui, isCallValid, context, program, location, v0, v1, v2, v3);
+        ANGLE_CAPTURE(ProgramUniform4ui, isCallValid, context, programPacked, location, v0, v1, v2,
+                      v3);
     }
 }
 
@@ -1161,14 +1219,17 @@ void GL_APIENTRY ProgramUniform4uiv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateProgramUniform4uiv(context, program, location, count, value));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateProgramUniform4uiv(context, programPacked, location, count, value));
         if (isCallValid)
         {
-            context->programUniform4uiv(program, location, count, value);
+            context->programUniform4uiv(programPacked, location, count, value);
         }
-        ANGLE_CAPTURE(ProgramUniform4uiv, isCallValid, context, program, location, count, value);
+        ANGLE_CAPTURE(ProgramUniform4uiv, isCallValid, context, programPacked, location, count,
+                      value);
     }
 }
 
@@ -1213,15 +1274,16 @@ void GL_APIENTRY ProgramUniformMatrix2fv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() ||
-             ValidateProgramUniformMatrix2fv(context, program, location, count, transpose, value));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateProgramUniformMatrix2fv(context, programPacked, location, count,
+                                                            transpose, value));
         if (isCallValid)
         {
-            context->programUniformMatrix2fv(program, location, count, transpose, value);
+            context->programUniformMatrix2fv(programPacked, location, count, transpose, value);
         }
-        ANGLE_CAPTURE(ProgramUniformMatrix2fv, isCallValid, context, program, location, count,
+        ANGLE_CAPTURE(ProgramUniformMatrix2fv, isCallValid, context, programPacked, location, count,
                       transpose, value);
     }
 }
@@ -1267,16 +1329,17 @@ void GL_APIENTRY ProgramUniformMatrix2x3fv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateProgramUniformMatrix2x3fv(
-                                              context, program, location, count, transpose, value));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateProgramUniformMatrix2x3fv(context, programPacked, location,
+                                                              count, transpose, value));
         if (isCallValid)
         {
-            context->programUniformMatrix2x3fv(program, location, count, transpose, value);
+            context->programUniformMatrix2x3fv(programPacked, location, count, transpose, value);
         }
-        ANGLE_CAPTURE(ProgramUniformMatrix2x3fv, isCallValid, context, program, location, count,
-                      transpose, value);
+        ANGLE_CAPTURE(ProgramUniformMatrix2x3fv, isCallValid, context, programPacked, location,
+                      count, transpose, value);
     }
 }
 
@@ -1321,16 +1384,17 @@ void GL_APIENTRY ProgramUniformMatrix2x4fv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateProgramUniformMatrix2x4fv(
-                                              context, program, location, count, transpose, value));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateProgramUniformMatrix2x4fv(context, programPacked, location,
+                                                              count, transpose, value));
         if (isCallValid)
         {
-            context->programUniformMatrix2x4fv(program, location, count, transpose, value);
+            context->programUniformMatrix2x4fv(programPacked, location, count, transpose, value);
         }
-        ANGLE_CAPTURE(ProgramUniformMatrix2x4fv, isCallValid, context, program, location, count,
-                      transpose, value);
+        ANGLE_CAPTURE(ProgramUniformMatrix2x4fv, isCallValid, context, programPacked, location,
+                      count, transpose, value);
     }
 }
 
@@ -1375,15 +1439,16 @@ void GL_APIENTRY ProgramUniformMatrix3fv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() ||
-             ValidateProgramUniformMatrix3fv(context, program, location, count, transpose, value));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateProgramUniformMatrix3fv(context, programPacked, location, count,
+                                                            transpose, value));
         if (isCallValid)
         {
-            context->programUniformMatrix3fv(program, location, count, transpose, value);
+            context->programUniformMatrix3fv(programPacked, location, count, transpose, value);
         }
-        ANGLE_CAPTURE(ProgramUniformMatrix3fv, isCallValid, context, program, location, count,
+        ANGLE_CAPTURE(ProgramUniformMatrix3fv, isCallValid, context, programPacked, location, count,
                       transpose, value);
     }
 }
@@ -1429,16 +1494,17 @@ void GL_APIENTRY ProgramUniformMatrix3x2fv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateProgramUniformMatrix3x2fv(
-                                              context, program, location, count, transpose, value));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateProgramUniformMatrix3x2fv(context, programPacked, location,
+                                                              count, transpose, value));
         if (isCallValid)
         {
-            context->programUniformMatrix3x2fv(program, location, count, transpose, value);
+            context->programUniformMatrix3x2fv(programPacked, location, count, transpose, value);
         }
-        ANGLE_CAPTURE(ProgramUniformMatrix3x2fv, isCallValid, context, program, location, count,
-                      transpose, value);
+        ANGLE_CAPTURE(ProgramUniformMatrix3x2fv, isCallValid, context, programPacked, location,
+                      count, transpose, value);
     }
 }
 
@@ -1483,16 +1549,17 @@ void GL_APIENTRY ProgramUniformMatrix3x4fv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateProgramUniformMatrix3x4fv(
-                                              context, program, location, count, transpose, value));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateProgramUniformMatrix3x4fv(context, programPacked, location,
+                                                              count, transpose, value));
         if (isCallValid)
         {
-            context->programUniformMatrix3x4fv(program, location, count, transpose, value);
+            context->programUniformMatrix3x4fv(programPacked, location, count, transpose, value);
         }
-        ANGLE_CAPTURE(ProgramUniformMatrix3x4fv, isCallValid, context, program, location, count,
-                      transpose, value);
+        ANGLE_CAPTURE(ProgramUniformMatrix3x4fv, isCallValid, context, programPacked, location,
+                      count, transpose, value);
     }
 }
 
@@ -1537,15 +1604,16 @@ void GL_APIENTRY ProgramUniformMatrix4fv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() ||
-             ValidateProgramUniformMatrix4fv(context, program, location, count, transpose, value));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateProgramUniformMatrix4fv(context, programPacked, location, count,
+                                                            transpose, value));
         if (isCallValid)
         {
-            context->programUniformMatrix4fv(program, location, count, transpose, value);
+            context->programUniformMatrix4fv(programPacked, location, count, transpose, value);
         }
-        ANGLE_CAPTURE(ProgramUniformMatrix4fv, isCallValid, context, program, location, count,
+        ANGLE_CAPTURE(ProgramUniformMatrix4fv, isCallValid, context, programPacked, location, count,
                       transpose, value);
     }
 }
@@ -1591,16 +1659,17 @@ void GL_APIENTRY ProgramUniformMatrix4x2fv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateProgramUniformMatrix4x2fv(
-                                              context, program, location, count, transpose, value));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateProgramUniformMatrix4x2fv(context, programPacked, location,
+                                                              count, transpose, value));
         if (isCallValid)
         {
-            context->programUniformMatrix4x2fv(program, location, count, transpose, value);
+            context->programUniformMatrix4x2fv(programPacked, location, count, transpose, value);
         }
-        ANGLE_CAPTURE(ProgramUniformMatrix4x2fv, isCallValid, context, program, location, count,
-                      transpose, value);
+        ANGLE_CAPTURE(ProgramUniformMatrix4x2fv, isCallValid, context, programPacked, location,
+                      count, transpose, value);
     }
 }
 
@@ -1645,16 +1714,17 @@ void GL_APIENTRY ProgramUniformMatrix4x3fv(GLuint program,
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateProgramUniformMatrix4x3fv(
-                                              context, program, location, count, transpose, value));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateProgramUniformMatrix4x3fv(context, programPacked, location,
+                                                              count, transpose, value));
         if (isCallValid)
         {
-            context->programUniformMatrix4x3fv(program, location, count, transpose, value);
+            context->programUniformMatrix4x3fv(programPacked, location, count, transpose, value);
         }
-        ANGLE_CAPTURE(ProgramUniformMatrix4x3fv, isCallValid, context, program, location, count,
-                      transpose, value);
+        ANGLE_CAPTURE(ProgramUniformMatrix4x3fv, isCallValid, context, programPacked, location,
+                      count, transpose, value);
     }
 }
 
@@ -1752,16 +1822,17 @@ void GL_APIENTRY ShaderBinary(GLsizei count,
 
     if (context)
     {
+        const ShaderID *shadersPacked                 = FromGL<const ShaderID *>(shaders);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateShaderBinary(context, count, shaders, binaryformat, binary, length));
+             ValidateShaderBinary(context, count, shadersPacked, binaryformat, binary, length));
         if (isCallValid)
         {
-            context->shaderBinary(count, shaders, binaryformat, binary, length);
+            context->shaderBinary(count, shadersPacked, binaryformat, binary, length);
         }
-        ANGLE_CAPTURE(ShaderBinary, isCallValid, context, count, shaders, binaryformat, binary,
-                      length);
+        ANGLE_CAPTURE(ShaderBinary, isCallValid, context, count, shadersPacked, binaryformat,
+                      binary, length);
     }
 }
 
@@ -1775,14 +1846,15 @@ void GL_APIENTRY UseProgramStages(GLuint pipeline, GLbitfield stages, GLuint pro
 
     if (context)
     {
+        ProgramID programPacked                       = FromGL<ProgramID>(program);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateUseProgramStages(context, pipeline, stages, program));
+                            ValidateUseProgramStages(context, pipeline, stages, programPacked));
         if (isCallValid)
         {
-            context->useProgramStages(pipeline, stages, program);
+            context->useProgramStages(pipeline, stages, programPacked);
         }
-        ANGLE_CAPTURE(UseProgramStages, isCallValid, context, pipeline, stages, program);
+        ANGLE_CAPTURE(UseProgramStages, isCallValid, context, pipeline, stages, programPacked);
     }
 }
 

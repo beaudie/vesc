@@ -90,6 +90,7 @@ enum class ParamType
     TMatrixType,
     TPointParameter,
     TPrimitiveMode,
+    TProgramID,
     TProvokingVertexConvention,
     TQueryType,
     TRenderbufferID,
@@ -98,6 +99,9 @@ enum class ParamType
     TSamplerID,
     TSamplerIDConstPointer,
     TSamplerIDPointer,
+    TShaderID,
+    TShaderIDConstPointer,
+    TShaderIDPointer,
     TShaderType,
     TShadingModel,
     TTextureEnvParameter,
@@ -189,6 +193,7 @@ union ParamValue
     gl::MatrixType MatrixTypeVal;
     gl::PointParameter PointParameterVal;
     gl::PrimitiveMode PrimitiveModeVal;
+    gl::ProgramID ProgramIDVal;
     gl::ProvokingVertexConvention ProvokingVertexConventionVal;
     gl::QueryType QueryTypeVal;
     gl::RenderbufferID RenderbufferIDVal;
@@ -197,6 +202,9 @@ union ParamValue
     gl::SamplerID SamplerIDVal;
     const gl::SamplerID *SamplerIDConstPointerVal;
     gl::SamplerID *SamplerIDPointerVal;
+    gl::ShaderID ShaderIDVal;
+    const gl::ShaderID *ShaderIDConstPointerVal;
+    gl::ShaderID *ShaderIDPointerVal;
     gl::ShaderType ShaderTypeVal;
     gl::ShadingModel ShadingModelVal;
     gl::TextureEnvParameter TextureEnvParameterVal;
@@ -677,6 +685,12 @@ inline void SetParamVal<ParamType::TPrimitiveMode>(gl::PrimitiveMode valueIn, Pa
 }
 
 template <>
+inline void SetParamVal<ParamType::TProgramID>(gl::ProgramID valueIn, ParamValue *valueOut)
+{
+    valueOut->ProgramIDVal = valueIn;
+}
+
+template <>
 inline void SetParamVal<ParamType::TProvokingVertexConvention>(
     gl::ProvokingVertexConvention valueIn,
     ParamValue *valueOut)
@@ -728,6 +742,25 @@ template <>
 inline void SetParamVal<ParamType::TSamplerIDPointer>(gl::SamplerID *valueIn, ParamValue *valueOut)
 {
     valueOut->SamplerIDPointerVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TShaderID>(gl::ShaderID valueIn, ParamValue *valueOut)
+{
+    valueOut->ShaderIDVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TShaderIDConstPointer>(const gl::ShaderID *valueIn,
+                                                          ParamValue *valueOut)
+{
+    valueOut->ShaderIDConstPointerVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TShaderIDPointer>(gl::ShaderID *valueIn, ParamValue *valueOut)
+{
+    valueOut->ShaderIDPointerVal = valueIn;
 }
 
 template <>
@@ -1049,6 +1082,9 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
         case ParamType::TPrimitiveMode:
             SetParamVal<ParamType::TPrimitiveMode>(valueIn, valueOut);
             break;
+        case ParamType::TProgramID:
+            SetParamVal<ParamType::TProgramID>(valueIn, valueOut);
+            break;
         case ParamType::TProvokingVertexConvention:
             SetParamVal<ParamType::TProvokingVertexConvention>(valueIn, valueOut);
             break;
@@ -1072,6 +1108,15 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
             break;
         case ParamType::TSamplerIDPointer:
             SetParamVal<ParamType::TSamplerIDPointer>(valueIn, valueOut);
+            break;
+        case ParamType::TShaderID:
+            SetParamVal<ParamType::TShaderID>(valueIn, valueOut);
+            break;
+        case ParamType::TShaderIDConstPointer:
+            SetParamVal<ParamType::TShaderIDConstPointer>(valueIn, valueOut);
+            break;
+        case ParamType::TShaderIDPointer:
+            SetParamVal<ParamType::TShaderIDPointer>(valueIn, valueOut);
             break;
         case ParamType::TShaderType:
             SetParamVal<ParamType::TShaderType>(valueIn, valueOut);

@@ -1118,7 +1118,7 @@ bool ProgramState::hasAttachedShader() const
     return false;
 }
 
-Program::Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, GLuint handle)
+Program::Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, ProgramID handle)
     : mProgram(factory->createProgram(mState)),
       mValidated(false),
       mLinked(false),
@@ -1157,7 +1157,7 @@ void Program::onDestroy(const Context *context)
 
     delete this;
 }
-GLuint Program::id() const
+ProgramID Program::id() const
 {
     ASSERT(mLinkResolved);
     return mHandle;
@@ -1835,7 +1835,7 @@ void Program::getInfoLog(GLsizei bufSize, GLsizei *length, char *infoLog) const
     return mInfoLog.getLog(bufSize, length, infoLog);
 }
 
-void Program::getAttachedShaders(GLsizei maxCount, GLsizei *count, GLuint *shaders) const
+void Program::getAttachedShaders(GLsizei maxCount, GLsizei *count, ShaderID *shaders) const
 {
     ASSERT(mLinkResolved);
     int total = 0;
