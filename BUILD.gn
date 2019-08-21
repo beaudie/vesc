@@ -399,6 +399,13 @@ angle_static_library("translator") {
     defines += [ "ANGLE_ENABLE_VULKAN" ]
   }
 
+  if (is_android) {
+    # Use ESSL only builtin symbol table
+    sources += angle_translator_android_sources
+  } else {
+    sources += angle_translator_not_android_sources
+  }
+
   public_configs += [ ":external_config" ]
 
   deps = [

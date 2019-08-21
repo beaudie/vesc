@@ -137,6 +137,12 @@ angle_test("angle_unittests") {
     defines = [ "ANGLE_ENABLE_HLSL" ]
   }
 
+  if (is_android) {
+    sources += angle_unittests_android_sources
+  } else {
+    sources += angle_unittests_not_android_sources
+  }
+
   deps = googletest_deps + [
            "${angle_root}:libANGLE",
            ":angle_test_expectations",
