@@ -399,6 +399,13 @@ angle_static_library("translator") {
     defines += [ "ANGLE_ENABLE_VULKAN" ]
   }
 
+  if (is_android) {
+    # Use ESSL only builtin symbol table
+    sources += angle_translator_android_sources
+  } else {
+    sources += angle_translator_not_android_sources
+  }
+
   public_configs += [ ":external_config" ]
 
   deps = [
@@ -1090,7 +1097,9 @@ foreach(is_shared_library,
     if (is_android) {
       # To prevent linux sources filtering on android
       set_sources_assignment_filter([])
+
       sources += util_android_sources
+
       libs += [
         "android",
         "log",
