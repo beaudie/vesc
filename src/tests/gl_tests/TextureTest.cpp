@@ -4349,6 +4349,171 @@ TEST_P(Texture2DTestES3, DepthTexturesWithMipmaps)
     ASSERT_GL_NO_ERROR();
 }
 
+class Texture2DDepthTest : public Texture2DTest
+{
+  protected:
+    Texture2DDepthTest() : Texture2DTest() {}
+
+    const char *getVertexShaderSource() override
+    {
+        return "attribute vec4 vPosition;\n"
+               "void main() {\n"
+               "  gl_Position = vPosition;\n"
+               "}\n";
+    }
+
+    const char *getFragmentShaderSource() override
+    {
+        return "precision mediump float;\n"
+               "uniform sampler2D ShadowMap;"
+               "void main() {\n"
+               "  vec4 shadow_value = texture2D(ShadowMap, vec2(0.5, 0.5));"
+               "  if (shadow_value.x == shadow_value.z && shadow_value.x != 0.0) {"
+               "    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);"
+               "  } else {"
+               "    gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
+               "  }"
+               "}\n";
+    }
+
+    void testSetUp() override
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, mFbo);
+        ASSERT_GL_NO_ERROR();
+
+        glBindTexture(GL_TEXTURE_2D, mDepthTexture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        TexCoordDrawTest::setUpProgram();
+        mShadowMapLocation = glGetUniformLocation(mProgram, "ShadowMap");
+        ASSERT_NE(-1, mShadowMapLocation);
+
+        mPositionLocation = glGetAttribLocation(mProgram, "vPosition");
+        ASSERT_NE(-1, mPositionLocation);
+    }
+
+    bool checkTexImageFormatSupport(GLenum format, GLenum type)
+    {
+        EXPECT_GL_NO_ERROR();
+
+        GLuint tex = 0;
+        glGenTextures(1, &tex);
+        glBindTexture(GL_TEXTURE_2D, tex);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, 1, 1, 0, format, type, nullptr);
+        glDeleteTextures(1, &tex);
+
+        return (glGetError() == GL_NO_ERROR);
+    }
+
+    void testBehavior(bool useSizedComponent)
+    {
+        int w = getWindowWidth();
+        int h = getWindowHeight();
+
+        if (useSizedComponent)
+        {
+            ANGLE_SKIP_TEST_IF(!checkTexImageFormatSupport(GL_DEPTH_COMPONENT24, GL_UNSIGNED_INT));
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, w, h, 0, GL_DEPTH_COMPONENT,
+                         GL_UNSIGNED_INT, nullptr);
+            ASSERT_GL_NO_ERROR();
+        }
+        else
+        {
+            ANGLE_SKIP_TEST_IF(!checkTexImageFormatSupport(GL_DEPTH_COMPONENT, GL_UNSIGNED_INT));
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, w, h, 0, GL_DEPTH_COMPONENT,
+                         GL_UNSIGNED_INT, nullptr);
+            ASSERT_GL_NO_ERROR();
+        }
+
+        // try adding a color buffer.
+        GLuint colorTex = 0;
+        glGenTextures(1, &colorTex);
+        glBindTexture(GL_TEXTURE_2D, colorTex);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTex, 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, mDepthTexture,
+                               0);
+        EXPECT_GLENUM_EQ(GL_FRAMEBUFFER_COMPLETE, glCheckFramebufferStatus(GL_FRAMEBUFFER));
+        ASSERT_GL_NO_ERROR();
+
+        glViewport(0, 0, w, h);
+        // Fill depthTexture with 0.75
+        glClearDepthf(0.75);
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+        // Revert to normal framebuffer to test depth shader
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glViewport(0, 0, w, h);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearDepthf(0.0f);
+        ASSERT_GL_NO_ERROR();
+
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+        ASSERT_GL_NO_ERROR();
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, mDepthTexture);
+
+        glUseProgram(mProgram);
+        ASSERT_GL_NO_ERROR();
+
+        glUniform1i(mShadowMapLocation, 0);
+
+        const GLfloat gTriangleVertices[] = {-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f};
+
+        glVertexAttribPointer(mPositionLocation, 2, GL_FLOAT, GL_FALSE, 0, gTriangleVertices);
+        ASSERT_GL_NO_ERROR();
+        glEnableVertexAttribArray(mPositionLocation);
+        ASSERT_GL_NO_ERROR();
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        ASSERT_GL_NO_ERROR();
+
+        GLuint pixels[1];
+        glReadPixels(w / 2, h / 2, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+        ASSERT_GL_NO_ERROR();
+        if (useSizedComponent)
+        {
+            ASSERT_NE(pixels[0], 0xff0000ff);
+        }
+        else
+        {
+            ASSERT_EQ(pixels[0], 0xff0000ff);
+        }
+
+        // Detach depth texture
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+  private:
+    GLFramebuffer mFbo;
+    GLuint mDepthTexture;
+    GLint mShadowMapLocation;
+    GLint mPositionLocation;
+};
+
+// Test depth texture compatibility with OES_depth_texture.
+TEST_P(Texture2DDepthTest, DepthTextureES2Compatibility)
+{
+    // When the depth texture is specified with unsized internalformat implementations follow
+    // OES_depth_texture behavior. Otherwise they follow GLES 3.0 behavior.
+    testBehavior(false);
+}
+
+// Test depth texture compatibility with GLES3.
+TEST_P(Texture2DDepthTest, DepthTextureES3Compatibility)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
+
+    testBehavior(true);
+}
+
 // Tests unpacking into the unsized GL_ALPHA format.
 TEST_P(Texture2DTestES3, UnsizedAlphaUnpackBuffer)
 {
@@ -5113,5 +5278,12 @@ ANGLE_INSTANTIATE_TEST(TextureCubeIntegerEdgeTestES3, ES3_D3D11(), ES3_OPENGL())
 ANGLE_INSTANTIATE_TEST(Texture2DIntegerProjectiveOffsetTestES3, ES3_D3D11(), ES3_OPENGL());
 ANGLE_INSTANTIATE_TEST(Texture2DArrayIntegerTestES3, ES3_D3D11(), ES3_OPENGL());
 ANGLE_INSTANTIATE_TEST(Texture3DIntegerTestES3, ES3_D3D11(), ES3_OPENGL());
+ANGLE_INSTANTIATE_TEST(Texture2DDepthTest,
+                       ES2_D3D9(),
+                       ES2_D3D11(),
+                       ES2_OPENGL(),
+                       ES2_OPENGLES(),
+                       ES2_VULKAN(),
+                       ES3_VULKAN());
 
 }  // anonymous namespace
