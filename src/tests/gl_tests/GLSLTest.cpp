@@ -6390,6 +6390,47 @@ TEST_P(GLSLTest, MemoryExhaustedTest)
     EXPECT_NE(0u, program);
 }
 
+// Test uniform precision mismatch, if the it isn't active, then the link should be successful
+TEST_P(GLSLTest, InactiveUniformPrecisionMismatchTest)
+{
+    GLuint tex;
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getWindowWidth(), getWindowHeight(), 0, GL_RGBA,
+                 GL_UNSIGNED_BYTE, nullptr);
+    GLuint fbo;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+
+    constexpr char kVS_inactive[] = R"(
+      attribute highp vec4 position;
+      uniform mediump vec3 out_color;
+      void main(void)
+      {
+          gl_Position = position;
+      })";
+
+    constexpr char kFS[] = R"(
+      uniform highp vec3 out_color;
+      void main(void)
+      {
+          gl_FragColor = vec4(out_color, 1);
+      })";
+
+    ANGLE_GL_PROGRAM(program, kVS_inactive, kFS);
+    glUseProgram(program.get());
+    GLint uniLoc = glGetUniformLocation(program.get(), "out_color");
+    ASSERT_NE(-1, uniLoc);
+    glUniform3f(uniLoc, 0, 1, 0);
+    drawQuad(program.get(), "position", 0.5f);
+    EXPECT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(0, getWindowHeight() - 1, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() - 1, 0, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() - 1, getWindowHeight() - 1, GLColor::green);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(GLSLTest,
