@@ -124,6 +124,24 @@
       "revId": "487e30af4b7c8d70060d795c296b892892f3b810",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1d439ca_8d62f585",
+        "filename": "src/libANGLE/Config.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2019-08-21T22:10:58Z",
+      "side": 1,
+      "message": "constexpr didn\u0027t squelch the warnings. Using EGL_NO_CONFIG_KHR.",
+      "parentUuid": "632650bf_40b41e52",
+      "revId": "487e30af4b7c8d70060d795c296b892892f3b810",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
