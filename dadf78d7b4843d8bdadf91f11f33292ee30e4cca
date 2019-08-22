@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7d7f20b0_e8fd0488",
+        "filename": "extensions/EGL_KHR_no_config_context.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2019-08-22T17:51:03Z",
+      "side": 1,
+      "message": "I saw the other specs and assumed it was the like the pattern to follow. I can remove?",
+      "parentUuid": "e620bbab_a3805890",
+      "revId": "dadf78d7b4843d8bdadf91f11f33292ee30e4cca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d03667e8_c5efdbc9",
         "filename": "scripts/registry_xml.py",
         "patchSetId": 2
@@ -30,6 +48,30 @@
       "writtenOn": "2019-08-22T17:44:00Z",
       "side": 1,
       "message": "nit: sort",
+      "range": {
+        "startLine": 120,
+        "startChar": 5,
+        "endLine": 120,
+        "endChar": 30
+      },
+      "revId": "dadf78d7b4843d8bdadf91f11f33292ee30e4cca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "59c21893_621c7e3b",
+        "filename": "scripts/registry_xml.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2019-08-22T17:51:03Z",
+      "side": 1,
+      "message": "OK. assumed it was just appended.",
+      "parentUuid": "d03667e8_c5efdbc9",
       "range": {
         "startLine": 120,
         "startChar": 5,
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "d75a2be1_3e1e690f",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2019-08-22T17:51:03Z",
+      "side": 1,
+      "message": "Can do.",
+      "parentUuid": "85133690_de5e7810",
+      "range": {
+        "startLine": 1172,
+        "startChar": 3,
+        "endLine": 1173,
+        "endChar": 71
+      },
+      "revId": "dadf78d7b4843d8bdadf91f11f33292ee30e4cca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3fe5102b_9bcac25a",
         "filename": "src/tests/egl_tests/EGLNoConfigContextTest.cpp",
         "patchSetId": 2
@@ -76,6 +142,30 @@
       "writtenOn": "2019-08-22T17:44:00Z",
       "side": 1,
       "message": "no c... we should make a presubmit for htis.",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "dadf78d7b4843d8bdadf91f11f33292ee30e4cca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "404c719d_b376cbbd",
+        "filename": "src/tests/egl_tests/EGLNoConfigContextTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2019-08-22T17:51:03Z",
+      "side": 1,
+      "message": "Will remove. Just a copy and paste overlook.",
+      "parentUuid": "3fe5102b_9bcac25a",
       "range": {
         "startLine": 2,
         "startChar": 13,
