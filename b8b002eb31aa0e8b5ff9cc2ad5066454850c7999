@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "63ba84bb_657306ee",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-22T20:26:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "202bb499_376e5347",
+      "range": {
+        "startLine": 64,
+        "startChar": 7,
+        "endLine": 64,
+        "endChar": 22
+      },
+      "revId": "b8b002eb31aa0e8b5ff9cc2ad5066454850c7999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c7a4e7a1_bb0558f0",
         "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
         "patchSetId": 13
@@ -45,6 +69,30 @@
       "revId": "b8b002eb31aa0e8b5ff9cc2ad5066454850c7999",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "421643c9_1a423649",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-22T20:26:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7a4e7a1_bb0558f0",
+      "range": {
+        "startLine": 250,
+        "startChar": 8,
+        "endLine": 250,
+        "endChar": 9
+      },
+      "revId": "b8b002eb31aa0e8b5ff9cc2ad5066454850c7999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "4ae09480_bf66bbbd",
+        "filename": "src/compiler/translator/tree_ops/RewriteRowMajorMatrices.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-22T20:26:36Z",
+      "side": 1,
+      "message": "Good catch, fixed and added another test.",
+      "parentUuid": "992bd97d_be51f6bb",
+      "range": {
+        "startLine": 286,
+        "startChar": 0,
+        "endLine": 289,
+        "endChar": 13
+      },
+      "revId": "b8b002eb31aa0e8b5ff9cc2ad5066454850c7999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fc6dd0e9_f02777b4",
         "filename": "src/tests/gl_tests/GLSLTest.cpp",
         "patchSetId": 13
@@ -91,6 +163,30 @@
       "revId": "b8b002eb31aa0e8b5ff9cc2ad5066454850c7999",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bc2eeb4_6085888a",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 6614,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-22T20:26:36Z",
+      "side": 1,
+      "message": "Copying one matrix into another. Extra operations are there just to try to trip it above.  A comment in the middle is saying the rest of the operations are undoing the damage done above. I added another comment to make this clearer.",
+      "parentUuid": "fc6dd0e9_f02777b4",
+      "range": {
+        "startLine": 6603,
+        "startChar": 0,
+        "endLine": 6614,
+        "endChar": 32
+      },
+      "revId": "b8b002eb31aa0e8b5ff9cc2ad5066454850c7999",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
