@@ -694,6 +694,7 @@ void TranslatorVulkan::translate(TIntermBlock *root,
         RewriteCubeMapSamplersAs2DArray(
             root, &getSymbolTable(), getShaderType() == GL_FRAGMENT_SHADER,
             compileOptions & SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING_WITH_SUBGROUP_OP);
+        ASSERT(validateAST(root));
     }
 
     if (defaultUniformCount > 0)

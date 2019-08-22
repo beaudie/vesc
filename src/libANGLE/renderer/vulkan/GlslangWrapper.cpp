@@ -929,6 +929,7 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         (*shaderSourcesOut)[shaderType] = intermediateSources[shaderType].getShaderSource();
+        fprintf(stderr, "%s\n", (*shaderSourcesOut)[shaderType].c_str());
     }
 }
 
@@ -1006,7 +1007,7 @@ angle::Result GlslangWrapper::GetShaderCodeImpl(vk::Context *context,
         if (enableSubgroupOps)
         {
             // Enable SPIR-V 1.3 if to be able to use subgroup operations.
-            shader->setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_3);
+            // shader->setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_3);
         }
 
         bool result = shader->parse(&builtInResources, 450, ECoreProfile, false, false, messages);
