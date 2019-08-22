@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e620bbab_a3805890",
+        "filename": "extensions/EGL_KHR_no_config_context.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-22T17:44:00Z",
+      "side": 1,
+      "message": "You don\u0027t technically need to include this extension here since it\u0027s not an ANGLE original extension.",
+      "revId": "dadf78d7b4843d8bdadf91f11f33292ee30e4cca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d03667e8_c5efdbc9",
+        "filename": "scripts/registry_xml.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-22T17:44:00Z",
+      "side": 1,
+      "message": "nit: sort",
+      "range": {
+        "startLine": 120,
+        "startChar": 5,
+        "endLine": 120,
+        "endChar": 30
+      },
+      "revId": "dadf78d7b4843d8bdadf91f11f33292ee30e4cca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85133690_de5e7810",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-22T17:44:00Z",
+      "side": 1,
+      "message": "nit: to clear this up to the reader I suggest using an explicit if\n\nif (config \u003d\u003d NO_CONFIG)\n{\n    return ext;\n}\n\nreturn mConfigSet...",
+      "range": {
+        "startLine": 1172,
+        "startChar": 3,
+        "endLine": 1173,
+        "endChar": 71
+      },
+      "revId": "dadf78d7b4843d8bdadf91f11f33292ee30e4cca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fe5102b_9bcac25a",
+        "filename": "src/tests/egl_tests/EGLNoConfigContextTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-22T17:44:00Z",
+      "side": 1,
+      "message": "no c... we should make a presubmit for htis.",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 16
+      },
+      "revId": "dadf78d7b4843d8bdadf91f11f33292ee30e4cca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
