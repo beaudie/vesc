@@ -216,14 +216,15 @@ void GL_APIENTRY GetQueryObjecti64v(GLuint id, GLenum pname, GLint64 *params)
     Context *context = GetGlobalContext();
     if (context)
     {
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateGetQueryObjecti64v(context, id, pname, params));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateGetQueryObjecti64v(context, idPacked, pname, params));
         if (isCallValid)
         {
-            context->getQueryObjecti64v(id, pname, params);
+            context->getQueryObjecti64v(idPacked, pname, params);
         }
-        ANGLE_CAPTURE(GetQueryObjecti64v, isCallValid, context, id, pname, params);
+        ANGLE_CAPTURE(GetQueryObjecti64v, isCallValid, context, idPacked, pname, params);
     }
 }
 
@@ -235,14 +236,15 @@ void GL_APIENTRY GetQueryObjectui64v(GLuint id, GLenum pname, GLuint64 *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateGetQueryObjectui64v(context, id, pname, params));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateGetQueryObjectui64v(context, idPacked, pname, params));
         if (isCallValid)
         {
-            context->getQueryObjectui64v(id, pname, params);
+            context->getQueryObjectui64v(idPacked, pname, params);
         }
-        ANGLE_CAPTURE(GetQueryObjectui64v, isCallValid, context, id, pname, params);
+        ANGLE_CAPTURE(GetQueryObjectui64v, isCallValid, context, idPacked, pname, params);
     }
 }
 
@@ -554,15 +556,16 @@ void GL_APIENTRY QueryCounter(GLuint id, GLenum target)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        QueryID idPacked                              = FromGL<QueryID>(id);
         QueryType targetPacked                        = FromGL<QueryType>(target);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateQueryCounter(context, id, targetPacked));
+            (context->skipValidation() || ValidateQueryCounter(context, idPacked, targetPacked));
         if (isCallValid)
         {
-            context->queryCounter(id, targetPacked);
+            context->queryCounter(idPacked, targetPacked);
         }
-        ANGLE_CAPTURE(QueryCounter, isCallValid, context, id, targetPacked);
+        ANGLE_CAPTURE(QueryCounter, isCallValid, context, idPacked, targetPacked);
     }
 }
 

@@ -88,6 +88,9 @@ enum class ParamType
     TPointParameter,
     TPrimitiveMode,
     TProvokingVertexConvention,
+    TQueryID,
+    TQueryIDConstPointer,
+    TQueryIDPointer,
     TQueryType,
     TRenderbufferID,
     TRenderbufferIDConstPointer,
@@ -181,6 +184,9 @@ union ParamValue
     gl::PointParameter PointParameterVal;
     gl::PrimitiveMode PrimitiveModeVal;
     gl::ProvokingVertexConvention ProvokingVertexConventionVal;
+    gl::QueryID QueryIDVal;
+    const gl::QueryID *QueryIDConstPointerVal;
+    gl::QueryID *QueryIDPointerVal;
     gl::QueryType QueryTypeVal;
     gl::RenderbufferID RenderbufferIDVal;
     const gl::RenderbufferID *RenderbufferIDConstPointerVal;
@@ -654,6 +660,25 @@ inline void SetParamVal<ParamType::TProvokingVertexConvention>(
 }
 
 template <>
+inline void SetParamVal<ParamType::TQueryID>(gl::QueryID valueIn, ParamValue *valueOut)
+{
+    valueOut->QueryIDVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TQueryIDConstPointer>(const gl::QueryID *valueIn,
+                                                         ParamValue *valueOut)
+{
+    valueOut->QueryIDConstPointerVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TQueryIDPointer>(gl::QueryID *valueIn, ParamValue *valueOut)
+{
+    valueOut->QueryIDPointerVal = valueIn;
+}
+
+template <>
 inline void SetParamVal<ParamType::TQueryType>(gl::QueryType valueIn, ParamValue *valueOut)
 {
     valueOut->QueryTypeVal = valueIn;
@@ -992,6 +1017,15 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
             break;
         case ParamType::TProvokingVertexConvention:
             SetParamVal<ParamType::TProvokingVertexConvention>(valueIn, valueOut);
+            break;
+        case ParamType::TQueryID:
+            SetParamVal<ParamType::TQueryID>(valueIn, valueOut);
+            break;
+        case ParamType::TQueryIDConstPointer:
+            SetParamVal<ParamType::TQueryIDConstPointer>(valueIn, valueOut);
+            break;
+        case ParamType::TQueryIDPointer:
+            SetParamVal<ParamType::TQueryIDPointer>(valueIn, valueOut);
             break;
         case ParamType::TQueryType:
             SetParamVal<ParamType::TQueryType>(valueIn, valueOut);

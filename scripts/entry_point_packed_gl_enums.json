@@ -20,7 +20,8 @@
         "primitiveMode": "PrimitiveMode"
     },
     "glBeginQuery": {
-        "target": "QueryType"
+        "target": "QueryType",
+        "id": "QueryID"
     },
     "glBindBuffer": {
         "target": "BufferBinding",
@@ -347,7 +348,8 @@
         "target": "QueryType"
     },
     "glGetQueryivRobust": {
-        "target": "QueryType"
+        "target": "QueryType",
+        "id": "QueryID"
     },
     "glGetTextureImage": {
         "texture": "TextureID"
@@ -567,7 +569,8 @@
         "mode": "ProvokingVertexConvention"
     },
     "glQueryCounter": {
-        "target": "QueryType"
+        "target": "QueryType",
+        "id": "QueryID"
     },
     "glShadeModel": {
         "mode": "ShadingModel"
@@ -791,5 +794,38 @@
     "glWaitSemaphore": {
         "buffers": "const BufferID *",
         "textures": "const TextureID *"
+    },
+    "glGenQueries": {
+        "ids":  "QueryID *"
+    },
+    "glDeleteQueries": {
+        "ids":  "const QueryID *"
+    },
+    "glIsQuery": {
+        "id": "QueryID"
+    },
+    "glGetQueryObjectuiv": {
+        "id": "QueryID"
+    },
+    "glGetQueryObjectiv": {
+        "id": "QueryID"
+    },
+    "glGetQueryObjecti64v": {
+        "id": "QueryID"
+    },
+    "glGetQueryObjectui64v": {
+        "id": "QueryID"
+    },
+    "glGetQueryObjectivRobust": {
+        "id": "QueryID"
+    },
+    "glGetQueryObjecti64vRobust": {
+        "id": "QueryID"
+    },
+    "glGetQueryObjectui64vRobust": {
+        "id": "QueryID"
+    },
+    "glGetQueryObjectuivRobust": {
+        "id": "QueryID"
     }
 }

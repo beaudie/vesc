@@ -813,5 +813,11 @@ void WriteParamValueToStream<ParamType::TTextureID>(std::ostream &os, gl::Textur
 {
     os << value.value;
 }
+
+template <>
+void WriteParamValueToStream<ParamType::TQueryID>(std::ostream &os, gl::QueryID value)
+{
+    os << value.value;
+}
 #endif  // ANGLE_CAPTURE_ENABLED
 }  // namespace angle

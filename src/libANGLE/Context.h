@@ -378,8 +378,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     Renderbuffer *getRenderbuffer(RenderbufferID handle) const;
     VertexArray *getVertexArray(GLuint handle) const;
     Sampler *getSampler(GLuint handle) const;
-    Query *getQuery(GLuint handle, bool create, QueryType type);
-    Query *getQuery(GLuint handle) const;
+    Query *getQuery(QueryID handle, bool create, QueryType type);
+    Query *getQuery(QueryID handle) const;
     TransformFeedback *getTransformFeedback(GLuint handle) const;
     ProgramPipeline *getProgramPipeline(GLuint handle) const;
     MemoryObject *getMemoryObject(GLuint handle) const;
@@ -647,7 +647,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     ResourceMap<FenceNV> mFenceNVMap;
     HandleAllocator mFenceNVHandleAllocator;
 
-    ResourceMap<Query> mQueryMap;
+    ResourceMap<Query, QueryID> mQueryMap;
     HandleAllocator mQueryHandleAllocator;
 
     ResourceMap<VertexArray> mVertexArrayMap;
