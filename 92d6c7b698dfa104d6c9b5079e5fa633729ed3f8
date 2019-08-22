@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0a6458c1_e9124964",
+        "filename": "src/compiler/translator/ParseContext_interm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-22T17:12:13Z",
+      "side": 1,
+      "message": "Where do I find what platform we are on?",
+      "revId": "92d6c7b698dfa104d6c9b5079e5fa633729ed3f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8f6ab7a1_e096c0ef",
+        "filename": "src/compiler/translator/gen_builtin_symbols_essl_only.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-22T17:12:13Z",
+      "side": 1,
+      "message": "added",
+      "range": {
+        "startLine": 958,
+        "startChar": 8,
+        "endLine": 959,
+        "endChar": 58
+      },
+      "revId": "92d6c7b698dfa104d6c9b5079e5fa633729ed3f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8ca9f9db_e1ecf2f4",
+        "filename": "src/compiler/translator/gen_builtin_symbols_essl_only.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-22T17:12:13Z",
+      "side": 1,
+      "message": "added",
+      "range": {
+        "startLine": 1090,
+        "startChar": 12,
+        "endLine": 1091,
+        "endChar": 46
+      },
+      "revId": "92d6c7b698dfa104d6c9b5079e5fa633729ed3f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa42a7f5_c5d6ac81",
+        "filename": "src/compiler/translator/tree_util/BuiltIn.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-22T17:12:13Z",
+      "side": 1,
+      "message": "platform condition here",
+      "revId": "92d6c7b698dfa104d6c9b5079e5fa633729ed3f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
