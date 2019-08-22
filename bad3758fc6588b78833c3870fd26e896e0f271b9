@@ -124,6 +124,24 @@
       "revId": "bad3758fc6588b78833c3870fd26e896e0f271b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ce480ea_c34be1aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-22T17:03:32Z",
+      "side": 1,
+      "message": "Every time we transition to a new context on the current thread, we are supposed to call unMakeCurrent on the old one which releases references to the surface it used to be current with.  unMakeCurrent sets mCurrentSurface to nullptr.  Asserting that mCurrentSurface is null when calling makeCurrent ensures that the context becoming current was properly un-made current previously.\n\nSomething seems broken in the logic for context destruction which makes the context current before destroying it.  I think it\u0027s possibly due to using the egl::Thread object for looking up what the current context is and some combination of destroying a context when it\u0027s not already current or a null context is current.\n\nThis CL may fix it: https://chromium-review.googlesource.com/c/angle/angle/+/1762364",
+      "parentUuid": "ccf1ff36_d7c1a80c",
+      "revId": "bad3758fc6588b78833c3870fd26e896e0f271b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
