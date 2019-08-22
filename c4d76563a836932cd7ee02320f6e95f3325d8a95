@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9730614e_ddf81f0b",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-22T16:26:12Z",
+      "side": 1,
+      "message": "The latest validation layers are crashing on Android so I added this hack to disable validation layers on Android.",
+      "revId": "c4d76563a836932cd7ee02320f6e95f3325d8a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
