@@ -88,6 +88,24 @@
       "revId": "bad3758fc6588b78833c3870fd26e896e0f271b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "168a7f81_b15bd4e0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-22T14:31:38Z",
+      "side": 1,
+      "message": "I tried running them for about 30 mins and didn\u0027t end up hitting the assert, do you remember any specific test or patch stack?\n\nThe need to set the context current is a hack but it\u0027s still expected to be correct and not hit the assert and hitting it indicates that a surface could be current on multiple contexts.  I don\u0027t mind trying to debug it but no luck yet.",
+      "parentUuid": "7225673e_39ffd4b9",
+      "revId": "bad3758fc6588b78833c3870fd26e896e0f271b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
