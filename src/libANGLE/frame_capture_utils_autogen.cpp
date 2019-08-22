@@ -248,6 +248,9 @@ void WriteParamTypeToStream(std::ostream &os, ParamType paramType, const ParamVa
         case ParamType::TMatrixType:
             WriteParamValueToStream<ParamType::TMatrixType>(os, paramValue.MatrixTypeVal);
             break;
+        case ParamType::TPathID:
+            WriteParamValueToStream<ParamType::TPathID>(os, paramValue.PathIDVal);
+            break;
         case ParamType::TPointParameter:
             WriteParamValueToStream<ParamType::TPointParameter>(os, paramValue.PointParameterVal);
             break;
@@ -479,6 +482,8 @@ const char *ParamTypeToString(ParamType paramType)
             return "GLenum";
         case ParamType::TMatrixType:
             return "GLenum";
+        case ParamType::TPathID:
+            return "GLuint";
         case ParamType::TPointParameter:
             return "GLenum";
         case ParamType::TPrimitiveMode:

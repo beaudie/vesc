@@ -361,7 +361,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void deleteSemaphore(GLuint semaphore);
 
     // CHROMIUM_path_rendering
-    bool isPathGenerated(GLuint path) const;
+    bool isPathGenerated(PathID path) const;
 
     void bindReadFramebuffer(GLuint framebufferHandle);
     void bindDrawFramebuffer(GLuint framebufferHandle);
@@ -600,7 +600,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void detachProgramPipeline(GLuint pipeline);
 
     // A small helper method to facilitate using the ANGLE_CONTEXT_TRY macro.
-    void tryGenPaths(GLsizei range, GLuint *createdOut);
+    void tryGenPaths(GLsizei range, PathID *createdOut);
 
     egl::Error setDefaultFramebuffer(egl::Surface *surface);
     egl::Error unsetDefaultFramebuffer();
