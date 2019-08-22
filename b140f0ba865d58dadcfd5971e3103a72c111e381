@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "c12dab28_66102958",
+        "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-22T16:04:20Z",
+      "side": 1,
+      "message": "You should leave the ASSERT. This is only called in a vertex shader.",
+      "parentUuid": "4904c58e_75b8113d",
+      "range": {
+        "startLine": 268,
+        "startChar": 7,
+        "endLine": 268,
+        "endChar": 11
+      },
+      "revId": "b140f0ba865d58dadcfd5971e3103a72c111e381",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c5d233e6_29bd1dea",
         "filename": "src/libANGLE/renderer/d3d/DynamicHLSL.cpp",
         "patchSetId": 14
