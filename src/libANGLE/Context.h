@@ -349,14 +349,14 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     BufferID createBuffer();
     TextureID createTexture();
     RenderbufferID createRenderbuffer();
-    GLuint createProgramPipeline();
+    ProgramPipelineID createProgramPipeline();
     GLuint createMemoryObject();
     GLuint createSemaphore();
 
     void deleteBuffer(BufferID buffer);
     void deleteTexture(TextureID texture);
     void deleteRenderbuffer(RenderbufferID renderbuffer);
-    void deleteProgramPipeline(GLuint pipeline);
+    void deleteProgramPipeline(ProgramPipelineID pipeline);
     void deleteMemoryObject(GLuint memoryObject);
     void deleteSemaphore(GLuint semaphore);
 
@@ -381,7 +381,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     Query *getQuery(GLuint handle, bool create, QueryType type);
     Query *getQuery(GLuint handle) const;
     TransformFeedback *getTransformFeedback(GLuint handle) const;
-    ProgramPipeline *getProgramPipeline(GLuint handle) const;
+    ProgramPipeline *getProgramPipeline(ProgramPipelineID handle) const;
     MemoryObject *getMemoryObject(GLuint handle) const;
     Semaphore *getSemaphore(GLuint handle) const;
 
@@ -533,7 +533,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     bool isRenderbufferGenerated(RenderbufferID renderbuffer) const;
     bool isFramebufferGenerated(GLuint framebuffer) const;
-    bool isProgramPipelineGenerated(GLuint pipeline) const;
+    bool isProgramPipelineGenerated(ProgramPipelineID pipeline) const;
 
     bool usingDisplayTextureShareGroup() const;
 
@@ -597,7 +597,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void detachVertexArray(GLuint vertexArray);
     void detachTransformFeedback(GLuint transformFeedback);
     void detachSampler(SamplerID sampler);
-    void detachProgramPipeline(GLuint pipeline);
+    void detachProgramPipeline(ProgramPipelineID pipeline);
 
     // A small helper method to facilitate using the ANGLE_CONTEXT_TRY macro.
     void tryGenPaths(GLsizei range, GLuint *createdOut);

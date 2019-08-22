@@ -857,5 +857,32 @@
     "glWaitSemaphore": {
         "buffers": "const BufferID *",
         "textures": "const TextureID *"
+    },
+    "glUseProgramStages": {
+        "pipeline": "ProgramPipelineID"
+    },
+    "glActiveShaderProgram": {
+        "pipeline": "ProgramPipelineID"
+    },
+    "glBindProgramPipeline": {
+        "pipeline": "ProgramPipelineID"
+    },
+    "glValidateProgramPipeline": {
+        "pipeline": "ProgramPipelineID"
+    },
+    "glGetProgramPipelineInfoLog": {
+        "pipeline": "ProgramPipelineID"
+    },
+    "glIsProgramPipeline": {
+        "pipeline": "ProgramPipelineID"
+    },
+    "glGetProgramPipelineiv": {
+        "pipeline": "ProgramPipelineID"
+    },
+    "glGenProgramPipelines": {
+        "pipelines": "ProgramPipelineID *"
+    },
+    "glDeleteProgramPipelines": {
+        "pipelines": "const ProgramPipelineID *"
     }
 }
