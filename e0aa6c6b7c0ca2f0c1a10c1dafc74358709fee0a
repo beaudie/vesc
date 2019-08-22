@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "061885c2_33c23c2b",
+        "filename": "src/image_util/imageformats.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-22T15:30:50Z",
+      "side": 1,
+      "message": "You mean in get_channel_struct ? yeah maybe you can modify that. \"X\" should be supported as a channel name. We already support it in counting pixel bytes. You will need to use \"X2\" to get the right pixel bytes count.",
+      "parentUuid": "8def2a98_6b218811",
+      "range": {
+        "startLine": 688,
+        "startChar": 7,
+        "endLine": 688,
+        "endChar": 18
+      },
+      "revId": "e0aa6c6b7c0ca2f0c1a10c1dafc74358709fee0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6472e18c_03e176e8",
         "filename": "src/libANGLE/renderer/Format_table_autogen.cpp",
         "patchSetId": 7
