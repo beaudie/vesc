@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60d4b23a_25846e2c",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-08-22T01:39:06Z",
+      "side": 1,
+      "message": "I believe ANGLE has RAII objects for these datatypes it generally uses for tests.",
+      "range": {
+        "startLine": 136,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 0
+      },
+      "revId": "856ba1c4f9f20928da432fd366b0304368edca44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d11780b5_704e688a",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-08-22T01:39:06Z",
+      "side": 1,
+      "message": "Nit: becuase --\u003e because",
+      "range": {
+        "startLine": 175,
+        "startChar": 10,
+        "endLine": 175,
+        "endChar": 17
+      },
+      "revId": "856ba1c4f9f20928da432fd366b0304368edca44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "573f8d17_67975fd6",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-08-22T01:39:06Z",
+      "side": 1,
+      "message": "Nit: becuase --\u003e because",
+      "range": {
+        "startLine": 279,
+        "startChar": 14,
+        "endLine": 279,
+        "endChar": 21
+      },
+      "revId": "856ba1c4f9f20928da432fd366b0304368edca44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38a81883_6d137377",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-08-22T01:39:06Z",
+      "side": 1,
+      "message": "The comments interspersed in the test themselves do a good job of giving you the blow by blow of what you\u0027re doing. But it would also be good for each test to have an brief overall comment that explains what it is for.",
+      "range": {
+        "startLine": 309,
+        "startChar": 40,
+        "endLine": 309,
+        "endChar": 72
+      },
+      "revId": "856ba1c4f9f20928da432fd366b0304368edca44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b17ed99a_5d762cae",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-08-22T01:39:06Z",
+      "side": 1,
+      "message": "Nit: Retriving -\u003e Retrieving",
+      "range": {
+        "startLine": 459,
+        "startChar": 7,
+        "endLine": 459,
+        "endChar": 16
+      },
+      "revId": "856ba1c4f9f20928da432fd366b0304368edca44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7dbc974_8d760a0e",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 528,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-08-22T01:39:06Z",
+      "side": 1,
+      "message": "Incomplete sentence?",
+      "range": {
+        "startLine": 528,
+        "startChar": 4,
+        "endLine": 528,
+        "endChar": 20
+      },
+      "revId": "856ba1c4f9f20928da432fd366b0304368edca44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
