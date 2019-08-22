@@ -820,5 +820,12 @@ void WriteParamValueToStream<ParamType::TSamplerID>(std::ostream &os, gl::Sample
 {
     os << value.value;
 }
+
+// TODO(jmadill): Use query ID map. http://anglebug.com/3611
+template <>
+void WriteParamValueToStream<ParamType::TQueryID>(std::ostream &os, gl::QueryID value)
+{
+    os << value.value;
+}
 #endif  // ANGLE_CAPTURE_ENABLED
 }  // namespace angle
