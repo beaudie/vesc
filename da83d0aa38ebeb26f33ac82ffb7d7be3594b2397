@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b8e114c_7f26a6c4",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-22T16:30:28Z",
+      "side": 1,
+      "message": "FenceNVID",
+      "range": {
+        "startLine": 394,
+        "startChar": 7,
+        "endLine": 394,
+        "endChar": 16
+      },
+      "revId": "da83d0aa38ebeb26f33ac82ffb7d7be3594b2397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
