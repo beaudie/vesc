@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8def2a98_6b218811",
+        "filename": "src/image_util/imageformats.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1361695
+      },
+      "writtenOn": "2019-08-22T09:49:27Z",
+      "side": 1,
+      "message": "I can\u0027t use X because X is not processed as channel name in \"gen_angle_format_table.py\". It handles only r,g,b,a,l,d,s as channel name. So I want to calling this R10G10B10 with removing A0 . If you want to use X, I will modify the python script.",
+      "parentUuid": "a949f6f9_242989a3",
+      "range": {
+        "startLine": 688,
+        "startChar": 7,
+        "endLine": 688,
+        "endChar": 18
+      },
+      "revId": "e0aa6c6b7c0ca2f0c1a10c1dafc74358709fee0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6472e18c_03e176e8",
         "filename": "src/libANGLE/renderer/Format_table_autogen.cpp",
         "patchSetId": 7
