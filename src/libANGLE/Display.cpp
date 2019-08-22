@@ -980,9 +980,19 @@ Error Display::makeCurrent(const Thread *thread,
     }
 
     gl::Context *previousContext = thread->getContext();
-    if (previousContext)
+    ANGLE_TRY(makeCurrentImpl(previousContext, drawSurface, readSurface, context));
+
+    return NoError();
+}
+
+Error Display::makeCurrentImpl(gl::Context *prevContext,
+                               Surface *drawSurface,
+                               Surface *readSurface,
+                               gl::Context *context)
+{
+    if (prevContext)
     {
-        ANGLE_TRY(previousContext->unMakeCurrent(this));
+        ANGLE_TRY(prevContext->unMakeCurrent(this));
     }
 
     ANGLE_TRY(mImplementation->makeCurrent(drawSurface, readSurface, context));
@@ -1063,7 +1073,7 @@ Error Display::destroyContext(const Thread *thread, gl::Context *context)
     // any resources it's holding.
     if (changeContextForDeletion)
     {
-        ANGLE_TRY(makeCurrent(thread, nullptr, nullptr, context));
+        ANGLE_TRY(makeCurrentImpl(currentContext, nullptr, nullptr, context));
     }
 
     if (context->usingDisplayTextureShareGroup())
@@ -1087,7 +1097,7 @@ Error Display::destroyContext(const Thread *thread, gl::Context *context)
     // Set the previous context back to current
     if (changeContextForDeletion)
     {
-        ANGLE_TRY(makeCurrent(thread, currentDrawSurface, currentReadSurface, currentContext));
+        ANGLE_TRY(makeCurrentImpl(nullptr, currentDrawSurface, currentReadSurface, currentContext));
     }
 
     return NoError();

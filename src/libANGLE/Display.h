@@ -210,6 +210,11 @@ class Display final : public LabeledObject, angle::NonCopyable
   private:
     Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice);
 
+    Error makeCurrentImpl(gl::Context *prevContext,
+                          Surface *drawSurface,
+                          Surface *readSurface,
+                          gl::Context *context);
+
     void setAttributes(rx::DisplayImpl *impl, const AttributeMap &attribMap);
 
     Error restoreLostDevice();
