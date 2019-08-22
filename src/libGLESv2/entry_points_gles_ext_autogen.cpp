@@ -1437,15 +1437,16 @@ void GL_APIENTRY GetQueryObjectuivRobustANGLE(GLuint id,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateGetQueryObjectuivRobustANGLE(context, id, pname, bufSize, length, params));
+            (context->skipValidation() || ValidateGetQueryObjectuivRobustANGLE(
+                                              context, idPacked, pname, bufSize, length, params));
         if (isCallValid)
         {
-            context->getQueryObjectuivRobust(id, pname, bufSize, length, params);
+            context->getQueryObjectuivRobust(idPacked, pname, bufSize, length, params);
         }
-        ANGLE_CAPTURE(GetQueryObjectuivRobustANGLE, isCallValid, context, id, pname, bufSize,
+        ANGLE_CAPTURE(GetQueryObjectuivRobustANGLE, isCallValid, context, idPacked, pname, bufSize,
                       length, params);
     }
 }
@@ -2406,16 +2407,17 @@ void GL_APIENTRY GetQueryObjectivRobustANGLE(GLuint id,
     Context *context = GetGlobalContext();
     if (context)
     {
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateGetQueryObjectivRobustANGLE(context, id, pname, bufSize, length, params));
+            (context->skipValidation() || ValidateGetQueryObjectivRobustANGLE(
+                                              context, idPacked, pname, bufSize, length, params));
         if (isCallValid)
         {
-            context->getQueryObjectivRobust(id, pname, bufSize, length, params);
+            context->getQueryObjectivRobust(idPacked, pname, bufSize, length, params);
         }
-        ANGLE_CAPTURE(GetQueryObjectivRobustANGLE, isCallValid, context, id, pname, bufSize, length,
-                      params);
+        ANGLE_CAPTURE(GetQueryObjectivRobustANGLE, isCallValid, context, idPacked, pname, bufSize,
+                      length, params);
     }
 }
 
@@ -2434,15 +2436,16 @@ void GL_APIENTRY GetQueryObjecti64vRobustANGLE(GLuint id,
     Context *context = GetGlobalContext();
     if (context)
     {
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateGetQueryObjecti64vRobustANGLE(context, id, pname, bufSize, length, params));
+            (context->skipValidation() || ValidateGetQueryObjecti64vRobustANGLE(
+                                              context, idPacked, pname, bufSize, length, params));
         if (isCallValid)
         {
-            context->getQueryObjecti64vRobust(id, pname, bufSize, length, params);
+            context->getQueryObjecti64vRobust(idPacked, pname, bufSize, length, params);
         }
-        ANGLE_CAPTURE(GetQueryObjecti64vRobustANGLE, isCallValid, context, id, pname, bufSize,
+        ANGLE_CAPTURE(GetQueryObjecti64vRobustANGLE, isCallValid, context, idPacked, pname, bufSize,
                       length, params);
     }
 }
@@ -2462,16 +2465,17 @@ void GL_APIENTRY GetQueryObjectui64vRobustANGLE(GLuint id,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateGetQueryObjectui64vRobustANGLE(context, id, pname, bufSize, length, params));
+            (context->skipValidation() || ValidateGetQueryObjectui64vRobustANGLE(
+                                              context, idPacked, pname, bufSize, length, params));
         if (isCallValid)
         {
-            context->getQueryObjectui64vRobust(id, pname, bufSize, length, params);
+            context->getQueryObjectui64vRobust(idPacked, pname, bufSize, length, params);
         }
-        ANGLE_CAPTURE(GetQueryObjectui64vRobustANGLE, isCallValid, context, id, pname, bufSize,
-                      length, params);
+        ANGLE_CAPTURE(GetQueryObjectui64vRobustANGLE, isCallValid, context, idPacked, pname,
+                      bufSize, length, params);
     }
 }
 
@@ -3692,14 +3696,15 @@ void GL_APIENTRY BeginQueryEXT(GLenum target, GLuint id)
     if (context)
     {
         QueryType targetPacked                        = FromGL<QueryType>(target);
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateBeginQueryEXT(context, targetPacked, id));
+            (context->skipValidation() || ValidateBeginQueryEXT(context, targetPacked, idPacked));
         if (isCallValid)
         {
-            context->beginQuery(targetPacked, id);
+            context->beginQuery(targetPacked, idPacked);
         }
-        ANGLE_CAPTURE(BeginQueryEXT, isCallValid, context, targetPacked, id);
+        ANGLE_CAPTURE(BeginQueryEXT, isCallValid, context, targetPacked, idPacked);
     }
 }
 
@@ -3710,13 +3715,15 @@ void GL_APIENTRY DeleteQueriesEXT(GLsizei n, const GLuint *ids)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        const QueryID *idsPacked                      = FromGL<const QueryID *>(ids);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateDeleteQueriesEXT(context, n, ids));
+        bool isCallValid =
+            (context->skipValidation() || ValidateDeleteQueriesEXT(context, n, idsPacked));
         if (isCallValid)
         {
-            context->deleteQueries(n, ids);
+            context->deleteQueries(n, idsPacked);
         }
-        ANGLE_CAPTURE(DeleteQueriesEXT, isCallValid, context, n, ids);
+        ANGLE_CAPTURE(DeleteQueriesEXT, isCallValid, context, n, idsPacked);
     }
 }
 
@@ -3746,13 +3753,15 @@ void GL_APIENTRY GenQueriesEXT(GLsizei n, GLuint *ids)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        QueryID *idsPacked                            = FromGL<QueryID *>(ids);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateGenQueriesEXT(context, n, ids));
+        bool isCallValid =
+            (context->skipValidation() || ValidateGenQueriesEXT(context, n, idsPacked));
         if (isCallValid)
         {
-            context->genQueries(n, ids);
+            context->genQueries(n, idsPacked);
         }
-        ANGLE_CAPTURE(GenQueriesEXT, isCallValid, context, n, ids);
+        ANGLE_CAPTURE(GenQueriesEXT, isCallValid, context, n, idsPacked);
     }
 }
 
@@ -3764,14 +3773,15 @@ void GL_APIENTRY GetQueryObjecti64vEXT(GLuint id, GLenum pname, GLint64 *params)
     Context *context = GetGlobalContext();
     if (context)
     {
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetQueryObjecti64vEXT(context, id, pname, params));
+                            ValidateGetQueryObjecti64vEXT(context, idPacked, pname, params));
         if (isCallValid)
         {
-            context->getQueryObjecti64v(id, pname, params);
+            context->getQueryObjecti64v(idPacked, pname, params);
         }
-        ANGLE_CAPTURE(GetQueryObjecti64vEXT, isCallValid, context, id, pname, params);
+        ANGLE_CAPTURE(GetQueryObjecti64vEXT, isCallValid, context, idPacked, pname, params);
     }
 }
 
@@ -3783,14 +3793,15 @@ void GL_APIENTRY GetQueryObjectivEXT(GLuint id, GLenum pname, GLint *params)
     Context *context = GetGlobalContext();
     if (context)
     {
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateGetQueryObjectivEXT(context, id, pname, params));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateGetQueryObjectivEXT(context, idPacked, pname, params));
         if (isCallValid)
         {
-            context->getQueryObjectiv(id, pname, params);
+            context->getQueryObjectiv(idPacked, pname, params);
         }
-        ANGLE_CAPTURE(GetQueryObjectivEXT, isCallValid, context, id, pname, params);
+        ANGLE_CAPTURE(GetQueryObjectivEXT, isCallValid, context, idPacked, pname, params);
     }
 }
 
@@ -3802,14 +3813,15 @@ void GL_APIENTRY GetQueryObjectui64vEXT(GLuint id, GLenum pname, GLuint64 *param
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetQueryObjectui64vEXT(context, id, pname, params));
+                            ValidateGetQueryObjectui64vEXT(context, idPacked, pname, params));
         if (isCallValid)
         {
-            context->getQueryObjectui64v(id, pname, params);
+            context->getQueryObjectui64v(idPacked, pname, params);
         }
-        ANGLE_CAPTURE(GetQueryObjectui64vEXT, isCallValid, context, id, pname, params);
+        ANGLE_CAPTURE(GetQueryObjectui64vEXT, isCallValid, context, idPacked, pname, params);
     }
 }
 
@@ -3821,14 +3833,15 @@ void GL_APIENTRY GetQueryObjectuivEXT(GLuint id, GLenum pname, GLuint *params)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateGetQueryObjectuivEXT(context, id, pname, params));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateGetQueryObjectuivEXT(context, idPacked, pname, params));
         if (isCallValid)
         {
-            context->getQueryObjectuiv(id, pname, params);
+            context->getQueryObjectuiv(idPacked, pname, params);
         }
-        ANGLE_CAPTURE(GetQueryObjectuivEXT, isCallValid, context, id, pname, params);
+        ANGLE_CAPTURE(GetQueryObjectuivEXT, isCallValid, context, idPacked, pname, params);
     }
 }
 
@@ -3861,17 +3874,18 @@ GLboolean GL_APIENTRY IsQueryEXT(GLuint id)
     GLboolean returnValue;
     if (context)
     {
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateIsQueryEXT(context, id));
+        bool isCallValid = (context->skipValidation() || ValidateIsQueryEXT(context, idPacked));
         if (isCallValid)
         {
-            returnValue = context->isQuery(id);
+            returnValue = context->isQuery(idPacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsQueryEXT, GLboolean>();
         }
-        ANGLE_CAPTURE(IsQueryEXT, isCallValid, context, id, returnValue);
+        ANGLE_CAPTURE(IsQueryEXT, isCallValid, context, idPacked, returnValue);
     }
     else
     {
@@ -3888,15 +3902,16 @@ void GL_APIENTRY QueryCounterEXT(GLuint id, GLenum target)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        QueryID idPacked                              = FromGL<QueryID>(id);
         QueryType targetPacked                        = FromGL<QueryType>(target);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateQueryCounterEXT(context, id, targetPacked));
+            (context->skipValidation() || ValidateQueryCounterEXT(context, idPacked, targetPacked));
         if (isCallValid)
         {
-            context->queryCounter(id, targetPacked);
+            context->queryCounter(idPacked, targetPacked);
         }
-        ANGLE_CAPTURE(QueryCounterEXT, isCallValid, context, id, targetPacked);
+        ANGLE_CAPTURE(QueryCounterEXT, isCallValid, context, idPacked, targetPacked);
     }
 }
 
@@ -6887,14 +6902,15 @@ void GL_APIENTRY BeginQueryContextANGLE(GLeglContext ctx, GLenum target, GLuint 
     {
         ASSERT(context == GetValidGlobalContext());
         QueryType targetPacked                        = FromGL<QueryType>(target);
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateBeginQuery(context, targetPacked, id));
+            (context->skipValidation() || ValidateBeginQuery(context, targetPacked, idPacked));
         if (isCallValid)
         {
-            context->beginQuery(targetPacked, id);
+            context->beginQuery(targetPacked, idPacked);
         }
-        ANGLE_CAPTURE(BeginQuery, isCallValid, context, targetPacked, id);
+        ANGLE_CAPTURE(BeginQuery, isCallValid, context, targetPacked, idPacked);
     }
 }
 
@@ -6908,14 +6924,15 @@ void GL_APIENTRY BeginQueryEXTContextANGLE(GLeglContext ctx, GLenum target, GLui
     {
         ASSERT(context == GetValidGlobalContext());
         QueryType targetPacked                        = FromGL<QueryType>(target);
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateBeginQueryEXT(context, targetPacked, id));
+            (context->skipValidation() || ValidateBeginQueryEXT(context, targetPacked, idPacked));
         if (isCallValid)
         {
-            context->beginQuery(targetPacked, id);
+            context->beginQuery(targetPacked, idPacked);
         }
-        ANGLE_CAPTURE(BeginQueryEXT, isCallValid, context, targetPacked, id);
+        ANGLE_CAPTURE(BeginQueryEXT, isCallValid, context, targetPacked, idPacked);
     }
 }
 
@@ -8927,13 +8944,15 @@ void GL_APIENTRY DeleteQueriesContextANGLE(GLeglContext ctx, GLsizei n, const GL
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        const QueryID *idsPacked                      = FromGL<const QueryID *>(ids);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateDeleteQueries(context, n, ids));
+        bool isCallValid =
+            (context->skipValidation() || ValidateDeleteQueries(context, n, idsPacked));
         if (isCallValid)
         {
-            context->deleteQueries(n, ids);
+            context->deleteQueries(n, idsPacked);
         }
-        ANGLE_CAPTURE(DeleteQueries, isCallValid, context, n, ids);
+        ANGLE_CAPTURE(DeleteQueries, isCallValid, context, n, idsPacked);
     }
 }
 
@@ -8945,13 +8964,15 @@ void GL_APIENTRY DeleteQueriesEXTContextANGLE(GLeglContext ctx, GLsizei n, const
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        const QueryID *idsPacked                      = FromGL<const QueryID *>(ids);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateDeleteQueriesEXT(context, n, ids));
+        bool isCallValid =
+            (context->skipValidation() || ValidateDeleteQueriesEXT(context, n, idsPacked));
         if (isCallValid)
         {
-            context->deleteQueries(n, ids);
+            context->deleteQueries(n, idsPacked);
         }
-        ANGLE_CAPTURE(DeleteQueriesEXT, isCallValid, context, n, ids);
+        ANGLE_CAPTURE(DeleteQueriesEXT, isCallValid, context, n, idsPacked);
     }
 }
 
@@ -10732,13 +10753,14 @@ void GL_APIENTRY GenQueriesContextANGLE(GLeglContext ctx, GLsizei n, GLuint *ids
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        QueryID *idsPacked                            = FromGL<QueryID *>(ids);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateGenQueries(context, n, ids));
+        bool isCallValid = (context->skipValidation() || ValidateGenQueries(context, n, idsPacked));
         if (isCallValid)
         {
-            context->genQueries(n, ids);
+            context->genQueries(n, idsPacked);
         }
-        ANGLE_CAPTURE(GenQueries, isCallValid, context, n, ids);
+        ANGLE_CAPTURE(GenQueries, isCallValid, context, n, idsPacked);
     }
 }
 
@@ -10750,13 +10772,15 @@ void GL_APIENTRY GenQueriesEXTContextANGLE(GLeglContext ctx, GLsizei n, GLuint *
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        QueryID *idsPacked                            = FromGL<QueryID *>(ids);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateGenQueriesEXT(context, n, ids));
+        bool isCallValid =
+            (context->skipValidation() || ValidateGenQueriesEXT(context, n, idsPacked));
         if (isCallValid)
         {
-            context->genQueries(n, ids);
+            context->genQueries(n, idsPacked);
         }
-        ANGLE_CAPTURE(GenQueriesEXT, isCallValid, context, n, ids);
+        ANGLE_CAPTURE(GenQueriesEXT, isCallValid, context, n, idsPacked);
     }
 }
 
@@ -12400,14 +12424,15 @@ void GL_APIENTRY GetQueryObjecti64vEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetQueryObjecti64vEXT(context, id, pname, params));
+                            ValidateGetQueryObjecti64vEXT(context, idPacked, pname, params));
         if (isCallValid)
         {
-            context->getQueryObjecti64v(id, pname, params);
+            context->getQueryObjecti64v(idPacked, pname, params);
         }
-        ANGLE_CAPTURE(GetQueryObjecti64vEXT, isCallValid, context, id, pname, params);
+        ANGLE_CAPTURE(GetQueryObjecti64vEXT, isCallValid, context, idPacked, pname, params);
     }
 }
 
@@ -12423,14 +12448,15 @@ void GL_APIENTRY GetQueryObjectivEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateGetQueryObjectivEXT(context, id, pname, params));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateGetQueryObjectivEXT(context, idPacked, pname, params));
         if (isCallValid)
         {
-            context->getQueryObjectiv(id, pname, params);
+            context->getQueryObjectiv(idPacked, pname, params);
         }
-        ANGLE_CAPTURE(GetQueryObjectivEXT, isCallValid, context, id, pname, params);
+        ANGLE_CAPTURE(GetQueryObjectivEXT, isCallValid, context, idPacked, pname, params);
     }
 }
 
@@ -12446,14 +12472,15 @@ void GL_APIENTRY GetQueryObjectui64vEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetQueryObjectui64vEXT(context, id, pname, params));
+                            ValidateGetQueryObjectui64vEXT(context, idPacked, pname, params));
         if (isCallValid)
         {
-            context->getQueryObjectui64v(id, pname, params);
+            context->getQueryObjectui64v(idPacked, pname, params);
         }
-        ANGLE_CAPTURE(GetQueryObjectui64vEXT, isCallValid, context, id, pname, params);
+        ANGLE_CAPTURE(GetQueryObjectui64vEXT, isCallValid, context, idPacked, pname, params);
     }
 }
 
@@ -12469,14 +12496,15 @@ void GL_APIENTRY GetQueryObjectuivContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateGetQueryObjectuiv(context, id, pname, params));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateGetQueryObjectuiv(context, idPacked, pname, params));
         if (isCallValid)
         {
-            context->getQueryObjectuiv(id, pname, params);
+            context->getQueryObjectuiv(idPacked, pname, params);
         }
-        ANGLE_CAPTURE(GetQueryObjectuiv, isCallValid, context, id, pname, params);
+        ANGLE_CAPTURE(GetQueryObjectuiv, isCallValid, context, idPacked, pname, params);
     }
 }
 
@@ -12492,14 +12520,15 @@ void GL_APIENTRY GetQueryObjectuivEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateGetQueryObjectuivEXT(context, id, pname, params));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateGetQueryObjectuivEXT(context, idPacked, pname, params));
         if (isCallValid)
         {
-            context->getQueryObjectuiv(id, pname, params);
+            context->getQueryObjectuiv(idPacked, pname, params);
         }
-        ANGLE_CAPTURE(GetQueryObjectuivEXT, isCallValid, context, id, pname, params);
+        ANGLE_CAPTURE(GetQueryObjectuivEXT, isCallValid, context, idPacked, pname, params);
     }
 }
 
@@ -14062,17 +14091,18 @@ GLboolean GL_APIENTRY IsQueryContextANGLE(GLeglContext ctx, GLuint id)
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateIsQuery(context, id));
+        bool isCallValid = (context->skipValidation() || ValidateIsQuery(context, idPacked));
         if (isCallValid)
         {
-            returnValue = context->isQuery(id);
+            returnValue = context->isQuery(idPacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsQuery, GLboolean>();
         }
-        ANGLE_CAPTURE(IsQuery, isCallValid, context, id, returnValue);
+        ANGLE_CAPTURE(IsQuery, isCallValid, context, idPacked, returnValue);
     }
     else
     {
@@ -14090,17 +14120,18 @@ GLboolean GL_APIENTRY IsQueryEXTContextANGLE(GLeglContext ctx, GLuint id)
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateIsQueryEXT(context, id));
+        bool isCallValid = (context->skipValidation() || ValidateIsQueryEXT(context, idPacked));
         if (isCallValid)
         {
-            returnValue = context->isQuery(id);
+            returnValue = context->isQuery(idPacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsQueryEXT, GLboolean>();
         }
-        ANGLE_CAPTURE(IsQueryEXT, isCallValid, context, id, returnValue);
+        ANGLE_CAPTURE(IsQueryEXT, isCallValid, context, idPacked, returnValue);
     }
     else
     {
@@ -16603,15 +16634,16 @@ void GL_APIENTRY QueryCounterEXTContextANGLE(GLeglContext ctx, GLuint id, GLenum
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        QueryID idPacked                              = FromGL<QueryID>(id);
         QueryType targetPacked                        = FromGL<QueryType>(target);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateQueryCounterEXT(context, id, targetPacked));
+            (context->skipValidation() || ValidateQueryCounterEXT(context, idPacked, targetPacked));
         if (isCallValid)
         {
-            context->queryCounter(id, targetPacked);
+            context->queryCounter(idPacked, targetPacked);
         }
-        ANGLE_CAPTURE(QueryCounterEXT, isCallValid, context, id, targetPacked);
+        ANGLE_CAPTURE(QueryCounterEXT, isCallValid, context, idPacked, targetPacked);
     }
 }
 
@@ -21966,15 +21998,16 @@ void GL_APIENTRY GetQueryObjectuivRobustANGLEContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateGetQueryObjectuivRobustANGLE(context, id, pname, bufSize, length, params));
+            (context->skipValidation() || ValidateGetQueryObjectuivRobustANGLE(
+                                              context, idPacked, pname, bufSize, length, params));
         if (isCallValid)
         {
-            context->getQueryObjectuivRobust(id, pname, bufSize, length, params);
+            context->getQueryObjectuivRobust(idPacked, pname, bufSize, length, params);
         }
-        ANGLE_CAPTURE(GetQueryObjectuivRobustANGLE, isCallValid, context, id, pname, bufSize,
+        ANGLE_CAPTURE(GetQueryObjectuivRobustANGLE, isCallValid, context, idPacked, pname, bufSize,
                       length, params);
     }
 }
@@ -23006,16 +23039,17 @@ void GL_APIENTRY GetQueryObjectivRobustANGLEContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateGetQueryObjectivRobustANGLE(context, id, pname, bufSize, length, params));
+            (context->skipValidation() || ValidateGetQueryObjectivRobustANGLE(
+                                              context, idPacked, pname, bufSize, length, params));
         if (isCallValid)
         {
-            context->getQueryObjectivRobust(id, pname, bufSize, length, params);
+            context->getQueryObjectivRobust(idPacked, pname, bufSize, length, params);
         }
-        ANGLE_CAPTURE(GetQueryObjectivRobustANGLE, isCallValid, context, id, pname, bufSize, length,
-                      params);
+        ANGLE_CAPTURE(GetQueryObjectivRobustANGLE, isCallValid, context, idPacked, pname, bufSize,
+                      length, params);
     }
 }
 
@@ -23036,15 +23070,16 @@ void GL_APIENTRY GetQueryObjecti64vRobustANGLEContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateGetQueryObjecti64vRobustANGLE(context, id, pname, bufSize, length, params));
+            (context->skipValidation() || ValidateGetQueryObjecti64vRobustANGLE(
+                                              context, idPacked, pname, bufSize, length, params));
         if (isCallValid)
         {
-            context->getQueryObjecti64vRobust(id, pname, bufSize, length, params);
+            context->getQueryObjecti64vRobust(idPacked, pname, bufSize, length, params);
         }
-        ANGLE_CAPTURE(GetQueryObjecti64vRobustANGLE, isCallValid, context, id, pname, bufSize,
+        ANGLE_CAPTURE(GetQueryObjecti64vRobustANGLE, isCallValid, context, idPacked, pname, bufSize,
                       length, params);
     }
 }
@@ -23066,16 +23101,17 @@ void GL_APIENTRY GetQueryObjectui64vRobustANGLEContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        QueryID idPacked                              = FromGL<QueryID>(id);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateGetQueryObjectui64vRobustANGLE(context, id, pname, bufSize, length, params));
+            (context->skipValidation() || ValidateGetQueryObjectui64vRobustANGLE(
+                                              context, idPacked, pname, bufSize, length, params));
         if (isCallValid)
         {
-            context->getQueryObjectui64vRobust(id, pname, bufSize, length, params);
+            context->getQueryObjectui64vRobust(idPacked, pname, bufSize, length, params);
         }
-        ANGLE_CAPTURE(GetQueryObjectui64vRobustANGLE, isCallValid, context, id, pname, bufSize,
-                      length, params);
+        ANGLE_CAPTURE(GetQueryObjectui64vRobustANGLE, isCallValid, context, idPacked, pname,
+                      bufSize, length, params);
     }
 }
 
