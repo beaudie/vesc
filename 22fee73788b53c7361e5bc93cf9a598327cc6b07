@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0abb9111_268fbf94",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-22T15:44:17Z",
+      "side": 1,
+      "message": "I would give this a more descriptive name. Like `SH_REWRITE_STRUCT_SAMPLERS_WITHOUT_ARRAY_FUNC_PARAMS`",
+      "range": {
+        "startLine": 302,
+        "startChar": 23,
+        "endLine": 302,
+        "endChar": 57
+      },
+      "revId": "22fee73788b53c7361e5bc93cf9a598327cc6b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6620fbab_74d2c670",
+        "filename": "include/platform/FeaturesVk.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-22T15:44:17Z",
+      "side": 1,
+      "message": "Same with this",
+      "range": {
+        "startLine": 206,
+        "startChar": 12,
+        "endLine": 206,
+        "endChar": 41
+      },
+      "revId": "22fee73788b53c7361e5bc93cf9a598327cc6b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97470311_5a82c48f",
+        "filename": "src/compiler.gni",
+        "patchSetId": 18
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-22T15:44:17Z",
+      "side": 1,
+      "message": "And this.\n\nWhen we look at this later on, old vs new doesn\u0027t make much sense.",
+      "range": {
+        "startLine": 169,
+        "startChar": 36,
+        "endLine": 169,
+        "endChar": 60
+      },
+      "revId": "22fee73788b53c7361e5bc93cf9a598327cc6b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "989dc46d_c0d6c8c4",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-22T15:44:17Z",
+      "side": 1,
+      "message": "Probably instead of `Old` in all these variables, you could use something like `NoArrayParam`",
+      "range": {
+        "startLine": 25,
+        "startChar": 40,
+        "endLine": 25,
+        "endChar": 43
+      },
+      "revId": "22fee73788b53c7361e5bc93cf9a598327cc6b07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
