@@ -2943,14 +2943,15 @@ void GL_APIENTRY DeletePathsCHROMIUM(GLuint first, GLsizei range)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID firstPacked                            = FromGL<PathID>(first);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateDeletePathsCHROMIUM(context, first, range));
+            (context->skipValidation() || ValidateDeletePathsCHROMIUM(context, firstPacked, range));
         if (isCallValid)
         {
-            context->deletePaths(first, range);
+            context->deletePaths(firstPacked, range);
         }
-        ANGLE_CAPTURE(DeletePathsCHROMIUM, isCallValid, context, first, range);
+        ANGLE_CAPTURE(DeletePathsCHROMIUM, isCallValid, context, firstPacked, range);
     }
 }
 
@@ -2962,17 +2963,19 @@ GLboolean GL_APIENTRY IsPathCHROMIUM(GLuint path)
     GLboolean returnValue;
     if (context)
     {
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateIsPathCHROMIUM(context, path));
+        bool isCallValid =
+            (context->skipValidation() || ValidateIsPathCHROMIUM(context, pathPacked));
         if (isCallValid)
         {
-            returnValue = context->isPath(path);
+            returnValue = context->isPath(pathPacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsPathCHROMIUM, GLboolean>();
         }
-        ANGLE_CAPTURE(IsPathCHROMIUM, isCallValid, context, path, returnValue);
+        ANGLE_CAPTURE(IsPathCHROMIUM, isCallValid, context, pathPacked, returnValue);
     }
     else
     {
@@ -2997,15 +3000,16 @@ void GL_APIENTRY PathCommandsCHROMIUM(GLuint path,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidatePathCommandsCHROMIUM(context, path, numCommands, commands,
+                            ValidatePathCommandsCHROMIUM(context, pathPacked, numCommands, commands,
                                                          numCoords, coordType, coords));
         if (isCallValid)
         {
-            context->pathCommands(path, numCommands, commands, numCoords, coordType, coords);
+            context->pathCommands(pathPacked, numCommands, commands, numCoords, coordType, coords);
         }
-        ANGLE_CAPTURE(PathCommandsCHROMIUM, isCallValid, context, path, numCommands, commands,
+        ANGLE_CAPTURE(PathCommandsCHROMIUM, isCallValid, context, pathPacked, numCommands, commands,
                       numCoords, coordType, coords);
     }
 }
@@ -3018,14 +3022,15 @@ void GL_APIENTRY PathParameterfCHROMIUM(GLuint path, GLenum pname, GLfloat value
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidatePathParameterfCHROMIUM(context, path, pname, value));
+                            ValidatePathParameterfCHROMIUM(context, pathPacked, pname, value));
         if (isCallValid)
         {
-            context->pathParameterf(path, pname, value);
+            context->pathParameterf(pathPacked, pname, value);
         }
-        ANGLE_CAPTURE(PathParameterfCHROMIUM, isCallValid, context, path, pname, value);
+        ANGLE_CAPTURE(PathParameterfCHROMIUM, isCallValid, context, pathPacked, pname, value);
     }
 }
 
@@ -3037,14 +3042,15 @@ void GL_APIENTRY PathParameteriCHROMIUM(GLuint path, GLenum pname, GLint value)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidatePathParameteriCHROMIUM(context, path, pname, value));
+                            ValidatePathParameteriCHROMIUM(context, pathPacked, pname, value));
         if (isCallValid)
         {
-            context->pathParameteri(path, pname, value);
+            context->pathParameteri(pathPacked, pname, value);
         }
-        ANGLE_CAPTURE(PathParameteriCHROMIUM, isCallValid, context, path, pname, value);
+        ANGLE_CAPTURE(PathParameteriCHROMIUM, isCallValid, context, pathPacked, pname, value);
     }
 }
 
@@ -3056,14 +3062,15 @@ void GL_APIENTRY GetPathParameterfvCHROMIUM(GLuint path, GLenum pname, GLfloat *
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetPathParameterfvCHROMIUM(context, path, pname, value));
+                            ValidateGetPathParameterfvCHROMIUM(context, pathPacked, pname, value));
         if (isCallValid)
         {
-            context->getPathParameterfv(path, pname, value);
+            context->getPathParameterfv(pathPacked, pname, value);
         }
-        ANGLE_CAPTURE(GetPathParameterfvCHROMIUM, isCallValid, context, path, pname, value);
+        ANGLE_CAPTURE(GetPathParameterfvCHROMIUM, isCallValid, context, pathPacked, pname, value);
     }
 }
 
@@ -3075,14 +3082,15 @@ void GL_APIENTRY GetPathParameterivCHROMIUM(GLuint path, GLenum pname, GLint *va
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetPathParameterivCHROMIUM(context, path, pname, value));
+                            ValidateGetPathParameterivCHROMIUM(context, pathPacked, pname, value));
         if (isCallValid)
         {
-            context->getPathParameteriv(path, pname, value);
+            context->getPathParameteriv(pathPacked, pname, value);
         }
-        ANGLE_CAPTURE(GetPathParameterivCHROMIUM, isCallValid, context, path, pname, value);
+        ANGLE_CAPTURE(GetPathParameterivCHROMIUM, isCallValid, context, pathPacked, pname, value);
     }
 }
 
@@ -3113,14 +3121,15 @@ void GL_APIENTRY StencilFillPathCHROMIUM(GLuint path, GLenum fillMode, GLuint ma
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateStencilFillPathCHROMIUM(context, path, fillMode, mask));
+                            ValidateStencilFillPathCHROMIUM(context, pathPacked, fillMode, mask));
         if (isCallValid)
         {
-            context->stencilFillPath(path, fillMode, mask);
+            context->stencilFillPath(pathPacked, fillMode, mask);
         }
-        ANGLE_CAPTURE(StencilFillPathCHROMIUM, isCallValid, context, path, fillMode, mask);
+        ANGLE_CAPTURE(StencilFillPathCHROMIUM, isCallValid, context, pathPacked, fillMode, mask);
     }
 }
 
@@ -3131,14 +3140,15 @@ void GL_APIENTRY StencilStrokePathCHROMIUM(GLuint path, GLint reference, GLuint 
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateStencilStrokePathCHROMIUM(context, path, reference, mask));
+        bool isCallValid = (context->skipValidation() || ValidateStencilStrokePathCHROMIUM(
+                                                             context, pathPacked, reference, mask));
         if (isCallValid)
         {
-            context->stencilStrokePath(path, reference, mask);
+            context->stencilStrokePath(pathPacked, reference, mask);
         }
-        ANGLE_CAPTURE(StencilStrokePathCHROMIUM, isCallValid, context, path, reference, mask);
+        ANGLE_CAPTURE(StencilStrokePathCHROMIUM, isCallValid, context, pathPacked, reference, mask);
     }
 }
 
@@ -3150,14 +3160,15 @@ void GL_APIENTRY CoverFillPathCHROMIUM(GLuint path, GLenum coverMode)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateCoverFillPathCHROMIUM(context, path, coverMode));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateCoverFillPathCHROMIUM(context, pathPacked, coverMode));
         if (isCallValid)
         {
-            context->coverFillPath(path, coverMode);
+            context->coverFillPath(pathPacked, coverMode);
         }
-        ANGLE_CAPTURE(CoverFillPathCHROMIUM, isCallValid, context, path, coverMode);
+        ANGLE_CAPTURE(CoverFillPathCHROMIUM, isCallValid, context, pathPacked, coverMode);
     }
 }
 
@@ -3169,14 +3180,15 @@ void GL_APIENTRY CoverStrokePathCHROMIUM(GLuint path, GLenum coverMode)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateCoverStrokePathCHROMIUM(context, path, coverMode));
+                            ValidateCoverStrokePathCHROMIUM(context, pathPacked, coverMode));
         if (isCallValid)
         {
-            context->coverStrokePath(path, coverMode);
+            context->coverStrokePath(pathPacked, coverMode);
         }
-        ANGLE_CAPTURE(CoverStrokePathCHROMIUM, isCallValid, context, path, coverMode);
+        ANGLE_CAPTURE(CoverStrokePathCHROMIUM, isCallValid, context, pathPacked, coverMode);
     }
 }
 
@@ -3192,16 +3204,17 @@ void GL_APIENTRY StencilThenCoverFillPathCHROMIUM(GLuint path,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateStencilThenCoverFillPathCHROMIUM(context, path, fillMode, mask, coverMode));
+            (context->skipValidation() || ValidateStencilThenCoverFillPathCHROMIUM(
+                                              context, pathPacked, fillMode, mask, coverMode));
         if (isCallValid)
         {
-            context->stencilThenCoverFillPath(path, fillMode, mask, coverMode);
+            context->stencilThenCoverFillPath(pathPacked, fillMode, mask, coverMode);
         }
-        ANGLE_CAPTURE(StencilThenCoverFillPathCHROMIUM, isCallValid, context, path, fillMode, mask,
-                      coverMode);
+        ANGLE_CAPTURE(StencilThenCoverFillPathCHROMIUM, isCallValid, context, pathPacked, fillMode,
+                      mask, coverMode);
     }
 }
 
@@ -3216,16 +3229,17 @@ void GL_APIENTRY StencilThenCoverStrokePathCHROMIUM(GLuint path,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateStencilThenCoverStrokePathCHROMIUM(context, path, reference, mask, coverMode));
+            (context->skipValidation() || ValidateStencilThenCoverStrokePathCHROMIUM(
+                                              context, pathPacked, reference, mask, coverMode));
         if (isCallValid)
         {
-            context->stencilThenCoverStrokePath(path, reference, mask, coverMode);
+            context->stencilThenCoverStrokePath(pathPacked, reference, mask, coverMode);
         }
-        ANGLE_CAPTURE(StencilThenCoverStrokePathCHROMIUM, isCallValid, context, path, reference,
-                      mask, coverMode);
+        ANGLE_CAPTURE(StencilThenCoverStrokePathCHROMIUM, isCallValid, context, pathPacked,
+                      reference, mask, coverMode);
     }
 }
 
@@ -3247,18 +3261,19 @@ void GL_APIENTRY CoverFillPathInstancedCHROMIUM(GLsizei numPath,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathBasePacked                         = FromGL<PathID>(pathBase);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateCoverFillPathInstancedCHROMIUM(context, numPath, pathNameType, paths, pathBase,
-                                                    coverMode, transformType, transformValues));
+            (context->skipValidation() || ValidateCoverFillPathInstancedCHROMIUM(
+                                              context, numPath, pathNameType, paths, pathBasePacked,
+                                              coverMode, transformType, transformValues));
         if (isCallValid)
         {
-            context->coverFillPathInstanced(numPath, pathNameType, paths, pathBase, coverMode,
+            context->coverFillPathInstanced(numPath, pathNameType, paths, pathBasePacked, coverMode,
                                             transformType, transformValues);
         }
         ANGLE_CAPTURE(CoverFillPathInstancedCHROMIUM, isCallValid, context, numPath, pathNameType,
-                      paths, pathBase, coverMode, transformType, transformValues);
+                      paths, pathBasePacked, coverMode, transformType, transformValues);
     }
 }
 
@@ -3280,18 +3295,19 @@ void GL_APIENTRY CoverStrokePathInstancedCHROMIUM(GLsizei numPath,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathBasePacked                         = FromGL<PathID>(pathBase);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateCoverStrokePathInstancedCHROMIUM(
-                                              context, numPath, pathNameType, paths, pathBase,
+                                              context, numPath, pathNameType, paths, pathBasePacked,
                                               coverMode, transformType, transformValues));
         if (isCallValid)
         {
-            context->coverStrokePathInstanced(numPath, pathNameType, paths, pathBase, coverMode,
-                                              transformType, transformValues);
+            context->coverStrokePathInstanced(numPath, pathNameType, paths, pathBasePacked,
+                                              coverMode, transformType, transformValues);
         }
         ANGLE_CAPTURE(CoverStrokePathInstancedCHROMIUM, isCallValid, context, numPath, pathNameType,
-                      paths, pathBase, coverMode, transformType, transformValues);
+                      paths, pathBasePacked, coverMode, transformType, transformValues);
     }
 }
 
@@ -3314,18 +3330,19 @@ void GL_APIENTRY StencilStrokePathInstancedCHROMIUM(GLsizei numPath,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathBasePacked                         = FromGL<PathID>(pathBase);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateStencilStrokePathInstancedCHROMIUM(
-                                              context, numPath, pathNameType, paths, pathBase,
+                                              context, numPath, pathNameType, paths, pathBasePacked,
                                               reference, mask, transformType, transformValues));
         if (isCallValid)
         {
-            context->stencilStrokePathInstanced(numPath, pathNameType, paths, pathBase, reference,
-                                                mask, transformType, transformValues);
+            context->stencilStrokePathInstanced(numPath, pathNameType, paths, pathBasePacked,
+                                                reference, mask, transformType, transformValues);
         }
         ANGLE_CAPTURE(StencilStrokePathInstancedCHROMIUM, isCallValid, context, numPath,
-                      pathNameType, paths, pathBase, reference, mask, transformType,
+                      pathNameType, paths, pathBasePacked, reference, mask, transformType,
                       transformValues);
     }
 }
@@ -3349,18 +3366,19 @@ void GL_APIENTRY StencilFillPathInstancedCHROMIUM(GLsizei numPaths,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathBasePacked                         = FromGL<PathID>(pathBase);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateStencilFillPathInstancedCHROMIUM(
-                                              context, numPaths, pathNameType, paths, pathBase,
-                                              fillMode, mask, transformType, transformValues));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateStencilFillPathInstancedCHROMIUM(
+                                context, numPaths, pathNameType, paths, pathBasePacked, fillMode,
+                                mask, transformType, transformValues));
         if (isCallValid)
         {
-            context->stencilFillPathInstanced(numPaths, pathNameType, paths, pathBase, fillMode,
-                                              mask, transformType, transformValues);
+            context->stencilFillPathInstanced(numPaths, pathNameType, paths, pathBasePacked,
+                                              fillMode, mask, transformType, transformValues);
         }
         ANGLE_CAPTURE(StencilFillPathInstancedCHROMIUM, isCallValid, context, numPaths,
-                      pathNameType, paths, pathBase, fillMode, mask, transformType,
+                      pathNameType, paths, pathBasePacked, fillMode, mask, transformType,
                       transformValues);
     }
 }
@@ -3386,19 +3404,20 @@ void GL_APIENTRY StencilThenCoverFillPathInstancedCHROMIUM(GLsizei numPaths,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathBasePacked                         = FromGL<PathID>(pathBase);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
                             ValidateStencilThenCoverFillPathInstancedCHROMIUM(
-                                context, numPaths, pathNameType, paths, pathBase, fillMode, mask,
-                                coverMode, transformType, transformValues));
+                                context, numPaths, pathNameType, paths, pathBasePacked, fillMode,
+                                mask, coverMode, transformType, transformValues));
         if (isCallValid)
         {
-            context->stencilThenCoverFillPathInstanced(numPaths, pathNameType, paths, pathBase,
-                                                       fillMode, mask, coverMode, transformType,
-                                                       transformValues);
+            context->stencilThenCoverFillPathInstanced(numPaths, pathNameType, paths,
+                                                       pathBasePacked, fillMode, mask, coverMode,
+                                                       transformType, transformValues);
         }
         ANGLE_CAPTURE(StencilThenCoverFillPathInstancedCHROMIUM, isCallValid, context, numPaths,
-                      pathNameType, paths, pathBase, fillMode, mask, coverMode, transformType,
+                      pathNameType, paths, pathBasePacked, fillMode, mask, coverMode, transformType,
                       transformValues);
     }
 }
@@ -3423,20 +3442,21 @@ void GL_APIENTRY StencilThenCoverStrokePathInstancedCHROMIUM(GLsizei numPaths,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        PathID pathBasePacked                         = FromGL<PathID>(pathBase);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
                             ValidateStencilThenCoverStrokePathInstancedCHROMIUM(
-                                context, numPaths, pathNameType, paths, pathBase, reference, mask,
-                                coverMode, transformType, transformValues));
+                                context, numPaths, pathNameType, paths, pathBasePacked, reference,
+                                mask, coverMode, transformType, transformValues));
         if (isCallValid)
         {
-            context->stencilThenCoverStrokePathInstanced(numPaths, pathNameType, paths, pathBase,
-                                                         reference, mask, coverMode, transformType,
-                                                         transformValues);
+            context->stencilThenCoverStrokePathInstanced(numPaths, pathNameType, paths,
+                                                         pathBasePacked, reference, mask, coverMode,
+                                                         transformType, transformValues);
         }
         ANGLE_CAPTURE(StencilThenCoverStrokePathInstancedCHROMIUM, isCallValid, context, numPaths,
-                      pathNameType, paths, pathBase, reference, mask, coverMode, transformType,
-                      transformValues);
+                      pathNameType, paths, pathBasePacked, reference, mask, coverMode,
+                      transformType, transformValues);
     }
 }
 
@@ -20331,14 +20351,15 @@ void GL_APIENTRY DeletePathsCHROMIUMContextANGLE(GLeglContext ctx, GLuint first,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID firstPacked                            = FromGL<PathID>(first);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateDeletePathsCHROMIUM(context, first, range));
+            (context->skipValidation() || ValidateDeletePathsCHROMIUM(context, firstPacked, range));
         if (isCallValid)
         {
-            context->deletePaths(first, range);
+            context->deletePaths(firstPacked, range);
         }
-        ANGLE_CAPTURE(DeletePathsCHROMIUM, isCallValid, context, first, range);
+        ANGLE_CAPTURE(DeletePathsCHROMIUM, isCallValid, context, firstPacked, range);
     }
 }
 
@@ -20351,17 +20372,19 @@ GLboolean GL_APIENTRY IsPathCHROMIUMContextANGLE(GLeglContext ctx, GLuint path)
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateIsPathCHROMIUM(context, path));
+        bool isCallValid =
+            (context->skipValidation() || ValidateIsPathCHROMIUM(context, pathPacked));
         if (isCallValid)
         {
-            returnValue = context->isPath(path);
+            returnValue = context->isPath(pathPacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsPathCHROMIUM, GLboolean>();
         }
-        ANGLE_CAPTURE(IsPathCHROMIUM, isCallValid, context, path, returnValue);
+        ANGLE_CAPTURE(IsPathCHROMIUM, isCallValid, context, pathPacked, returnValue);
     }
     else
     {
@@ -20388,15 +20411,16 @@ void GL_APIENTRY PathCommandsCHROMIUMContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidatePathCommandsCHROMIUM(context, path, numCommands, commands,
+                            ValidatePathCommandsCHROMIUM(context, pathPacked, numCommands, commands,
                                                          numCoords, coordType, coords));
         if (isCallValid)
         {
-            context->pathCommands(path, numCommands, commands, numCoords, coordType, coords);
+            context->pathCommands(pathPacked, numCommands, commands, numCoords, coordType, coords);
         }
-        ANGLE_CAPTURE(PathCommandsCHROMIUM, isCallValid, context, path, numCommands, commands,
+        ANGLE_CAPTURE(PathCommandsCHROMIUM, isCallValid, context, pathPacked, numCommands, commands,
                       numCoords, coordType, coords);
     }
 }
@@ -20413,14 +20437,15 @@ void GL_APIENTRY PathParameterfCHROMIUMContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidatePathParameterfCHROMIUM(context, path, pname, value));
+                            ValidatePathParameterfCHROMIUM(context, pathPacked, pname, value));
         if (isCallValid)
         {
-            context->pathParameterf(path, pname, value);
+            context->pathParameterf(pathPacked, pname, value);
         }
-        ANGLE_CAPTURE(PathParameterfCHROMIUM, isCallValid, context, path, pname, value);
+        ANGLE_CAPTURE(PathParameterfCHROMIUM, isCallValid, context, pathPacked, pname, value);
     }
 }
 
@@ -20436,14 +20461,15 @@ void GL_APIENTRY PathParameteriCHROMIUMContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidatePathParameteriCHROMIUM(context, path, pname, value));
+                            ValidatePathParameteriCHROMIUM(context, pathPacked, pname, value));
         if (isCallValid)
         {
-            context->pathParameteri(path, pname, value);
+            context->pathParameteri(pathPacked, pname, value);
         }
-        ANGLE_CAPTURE(PathParameteriCHROMIUM, isCallValid, context, path, pname, value);
+        ANGLE_CAPTURE(PathParameteriCHROMIUM, isCallValid, context, pathPacked, pname, value);
     }
 }
 
@@ -20459,14 +20485,15 @@ void GL_APIENTRY GetPathParameterfvCHROMIUMContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetPathParameterfvCHROMIUM(context, path, pname, value));
+                            ValidateGetPathParameterfvCHROMIUM(context, pathPacked, pname, value));
         if (isCallValid)
         {
-            context->getPathParameterfv(path, pname, value);
+            context->getPathParameterfv(pathPacked, pname, value);
         }
-        ANGLE_CAPTURE(GetPathParameterfvCHROMIUM, isCallValid, context, path, pname, value);
+        ANGLE_CAPTURE(GetPathParameterfvCHROMIUM, isCallValid, context, pathPacked, pname, value);
     }
 }
 
@@ -20482,14 +20509,15 @@ void GL_APIENTRY GetPathParameterivCHROMIUMContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetPathParameterivCHROMIUM(context, path, pname, value));
+                            ValidateGetPathParameterivCHROMIUM(context, pathPacked, pname, value));
         if (isCallValid)
         {
-            context->getPathParameteriv(path, pname, value);
+            context->getPathParameteriv(pathPacked, pname, value);
         }
-        ANGLE_CAPTURE(GetPathParameterivCHROMIUM, isCallValid, context, path, pname, value);
+        ANGLE_CAPTURE(GetPathParameterivCHROMIUM, isCallValid, context, pathPacked, pname, value);
     }
 }
 
@@ -20528,14 +20556,15 @@ void GL_APIENTRY StencilFillPathCHROMIUMContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateStencilFillPathCHROMIUM(context, path, fillMode, mask));
+                            ValidateStencilFillPathCHROMIUM(context, pathPacked, fillMode, mask));
         if (isCallValid)
         {
-            context->stencilFillPath(path, fillMode, mask);
+            context->stencilFillPath(pathPacked, fillMode, mask);
         }
-        ANGLE_CAPTURE(StencilFillPathCHROMIUM, isCallValid, context, path, fillMode, mask);
+        ANGLE_CAPTURE(StencilFillPathCHROMIUM, isCallValid, context, pathPacked, fillMode, mask);
     }
 }
 
@@ -20550,14 +20579,15 @@ void GL_APIENTRY StencilStrokePathCHROMIUMContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateStencilStrokePathCHROMIUM(context, path, reference, mask));
+        bool isCallValid = (context->skipValidation() || ValidateStencilStrokePathCHROMIUM(
+                                                             context, pathPacked, reference, mask));
         if (isCallValid)
         {
-            context->stencilStrokePath(path, reference, mask);
+            context->stencilStrokePath(pathPacked, reference, mask);
         }
-        ANGLE_CAPTURE(StencilStrokePathCHROMIUM, isCallValid, context, path, reference, mask);
+        ANGLE_CAPTURE(StencilStrokePathCHROMIUM, isCallValid, context, pathPacked, reference, mask);
     }
 }
 
@@ -20570,14 +20600,15 @@ void GL_APIENTRY CoverFillPathCHROMIUMContextANGLE(GLeglContext ctx, GLuint path
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateCoverFillPathCHROMIUM(context, path, coverMode));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateCoverFillPathCHROMIUM(context, pathPacked, coverMode));
         if (isCallValid)
         {
-            context->coverFillPath(path, coverMode);
+            context->coverFillPath(pathPacked, coverMode);
         }
-        ANGLE_CAPTURE(CoverFillPathCHROMIUM, isCallValid, context, path, coverMode);
+        ANGLE_CAPTURE(CoverFillPathCHROMIUM, isCallValid, context, pathPacked, coverMode);
     }
 }
 
@@ -20592,14 +20623,15 @@ void GL_APIENTRY CoverStrokePathCHROMIUMContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateCoverStrokePathCHROMIUM(context, path, coverMode));
+                            ValidateCoverStrokePathCHROMIUM(context, pathPacked, coverMode));
         if (isCallValid)
         {
-            context->coverStrokePath(path, coverMode);
+            context->coverStrokePath(pathPacked, coverMode);
         }
-        ANGLE_CAPTURE(CoverStrokePathCHROMIUM, isCallValid, context, path, coverMode);
+        ANGLE_CAPTURE(CoverStrokePathCHROMIUM, isCallValid, context, pathPacked, coverMode);
     }
 }
 
@@ -20617,16 +20649,17 @@ void GL_APIENTRY StencilThenCoverFillPathCHROMIUMContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateStencilThenCoverFillPathCHROMIUM(context, path, fillMode, mask, coverMode));
+            (context->skipValidation() || ValidateStencilThenCoverFillPathCHROMIUM(
+                                              context, pathPacked, fillMode, mask, coverMode));
         if (isCallValid)
         {
-            context->stencilThenCoverFillPath(path, fillMode, mask, coverMode);
+            context->stencilThenCoverFillPath(pathPacked, fillMode, mask, coverMode);
         }
-        ANGLE_CAPTURE(StencilThenCoverFillPathCHROMIUM, isCallValid, context, path, fillMode, mask,
-                      coverMode);
+        ANGLE_CAPTURE(StencilThenCoverFillPathCHROMIUM, isCallValid, context, pathPacked, fillMode,
+                      mask, coverMode);
     }
 }
 
@@ -20643,16 +20676,17 @@ void GL_APIENTRY StencilThenCoverStrokePathCHROMIUMContextANGLE(GLeglContext ctx
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathPacked                             = FromGL<PathID>(path);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateStencilThenCoverStrokePathCHROMIUM(context, path, reference, mask, coverMode));
+            (context->skipValidation() || ValidateStencilThenCoverStrokePathCHROMIUM(
+                                              context, pathPacked, reference, mask, coverMode));
         if (isCallValid)
         {
-            context->stencilThenCoverStrokePath(path, reference, mask, coverMode);
+            context->stencilThenCoverStrokePath(pathPacked, reference, mask, coverMode);
         }
-        ANGLE_CAPTURE(StencilThenCoverStrokePathCHROMIUM, isCallValid, context, path, reference,
-                      mask, coverMode);
+        ANGLE_CAPTURE(StencilThenCoverStrokePathCHROMIUM, isCallValid, context, pathPacked,
+                      reference, mask, coverMode);
     }
 }
 
@@ -20676,18 +20710,19 @@ void GL_APIENTRY CoverFillPathInstancedCHROMIUMContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathBasePacked                         = FromGL<PathID>(pathBase);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() ||
-             ValidateCoverFillPathInstancedCHROMIUM(context, numPath, pathNameType, paths, pathBase,
-                                                    coverMode, transformType, transformValues));
+            (context->skipValidation() || ValidateCoverFillPathInstancedCHROMIUM(
+                                              context, numPath, pathNameType, paths, pathBasePacked,
+                                              coverMode, transformType, transformValues));
         if (isCallValid)
         {
-            context->coverFillPathInstanced(numPath, pathNameType, paths, pathBase, coverMode,
+            context->coverFillPathInstanced(numPath, pathNameType, paths, pathBasePacked, coverMode,
                                             transformType, transformValues);
         }
         ANGLE_CAPTURE(CoverFillPathInstancedCHROMIUM, isCallValid, context, numPath, pathNameType,
-                      paths, pathBase, coverMode, transformType, transformValues);
+                      paths, pathBasePacked, coverMode, transformType, transformValues);
     }
 }
 
@@ -20711,18 +20746,19 @@ void GL_APIENTRY CoverStrokePathInstancedCHROMIUMContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathBasePacked                         = FromGL<PathID>(pathBase);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateCoverStrokePathInstancedCHROMIUM(
-                                              context, numPath, pathNameType, paths, pathBase,
+                                              context, numPath, pathNameType, paths, pathBasePacked,
                                               coverMode, transformType, transformValues));
         if (isCallValid)
         {
-            context->coverStrokePathInstanced(numPath, pathNameType, paths, pathBase, coverMode,
-                                              transformType, transformValues);
+            context->coverStrokePathInstanced(numPath, pathNameType, paths, pathBasePacked,
+                                              coverMode, transformType, transformValues);
         }
         ANGLE_CAPTURE(CoverStrokePathInstancedCHROMIUM, isCallValid, context, numPath, pathNameType,
-                      paths, pathBase, coverMode, transformType, transformValues);
+                      paths, pathBasePacked, coverMode, transformType, transformValues);
     }
 }
 
@@ -20747,18 +20783,19 @@ void GL_APIENTRY StencilStrokePathInstancedCHROMIUMContextANGLE(GLeglContext ctx
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathBasePacked                         = FromGL<PathID>(pathBase);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateStencilStrokePathInstancedCHROMIUM(
-                                              context, numPath, pathNameType, paths, pathBase,
+                                              context, numPath, pathNameType, paths, pathBasePacked,
                                               reference, mask, transformType, transformValues));
         if (isCallValid)
         {
-            context->stencilStrokePathInstanced(numPath, pathNameType, paths, pathBase, reference,
-                                                mask, transformType, transformValues);
+            context->stencilStrokePathInstanced(numPath, pathNameType, paths, pathBasePacked,
+                                                reference, mask, transformType, transformValues);
         }
         ANGLE_CAPTURE(StencilStrokePathInstancedCHROMIUM, isCallValid, context, numPath,
-                      pathNameType, paths, pathBase, reference, mask, transformType,
+                      pathNameType, paths, pathBasePacked, reference, mask, transformType,
                       transformValues);
     }
 }
@@ -20784,18 +20821,19 @@ void GL_APIENTRY StencilFillPathInstancedCHROMIUMContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathBasePacked                         = FromGL<PathID>(pathBase);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateStencilFillPathInstancedCHROMIUM(
-                                              context, numPaths, pathNameType, paths, pathBase,
-                                              fillMode, mask, transformType, transformValues));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateStencilFillPathInstancedCHROMIUM(
+                                context, numPaths, pathNameType, paths, pathBasePacked, fillMode,
+                                mask, transformType, transformValues));
         if (isCallValid)
         {
-            context->stencilFillPathInstanced(numPaths, pathNameType, paths, pathBase, fillMode,
-                                              mask, transformType, transformValues);
+            context->stencilFillPathInstanced(numPaths, pathNameType, paths, pathBasePacked,
+                                              fillMode, mask, transformType, transformValues);
         }
         ANGLE_CAPTURE(StencilFillPathInstancedCHROMIUM, isCallValid, context, numPaths,
-                      pathNameType, paths, pathBase, fillMode, mask, transformType,
+                      pathNameType, paths, pathBasePacked, fillMode, mask, transformType,
                       transformValues);
     }
 }
@@ -20824,19 +20862,20 @@ StencilThenCoverFillPathInstancedCHROMIUMContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathBasePacked                         = FromGL<PathID>(pathBase);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
                             ValidateStencilThenCoverFillPathInstancedCHROMIUM(
-                                context, numPaths, pathNameType, paths, pathBase, fillMode, mask,
-                                coverMode, transformType, transformValues));
+                                context, numPaths, pathNameType, paths, pathBasePacked, fillMode,
+                                mask, coverMode, transformType, transformValues));
         if (isCallValid)
         {
-            context->stencilThenCoverFillPathInstanced(numPaths, pathNameType, paths, pathBase,
-                                                       fillMode, mask, coverMode, transformType,
-                                                       transformValues);
+            context->stencilThenCoverFillPathInstanced(numPaths, pathNameType, paths,
+                                                       pathBasePacked, fillMode, mask, coverMode,
+                                                       transformType, transformValues);
         }
         ANGLE_CAPTURE(StencilThenCoverFillPathInstancedCHROMIUM, isCallValid, context, numPaths,
-                      pathNameType, paths, pathBase, fillMode, mask, coverMode, transformType,
+                      pathNameType, paths, pathBasePacked, fillMode, mask, coverMode, transformType,
                       transformValues);
     }
 }
@@ -20864,20 +20903,21 @@ StencilThenCoverStrokePathInstancedCHROMIUMContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        PathID pathBasePacked                         = FromGL<PathID>(pathBase);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
                             ValidateStencilThenCoverStrokePathInstancedCHROMIUM(
-                                context, numPaths, pathNameType, paths, pathBase, reference, mask,
-                                coverMode, transformType, transformValues));
+                                context, numPaths, pathNameType, paths, pathBasePacked, reference,
+                                mask, coverMode, transformType, transformValues));
         if (isCallValid)
         {
-            context->stencilThenCoverStrokePathInstanced(numPaths, pathNameType, paths, pathBase,
-                                                         reference, mask, coverMode, transformType,
-                                                         transformValues);
+            context->stencilThenCoverStrokePathInstanced(numPaths, pathNameType, paths,
+                                                         pathBasePacked, reference, mask, coverMode,
+                                                         transformType, transformValues);
         }
         ANGLE_CAPTURE(StencilThenCoverStrokePathInstancedCHROMIUM, isCallValid, context, numPaths,
-                      pathNameType, paths, pathBase, reference, mask, coverMode, transformType,
-                      transformValues);
+                      pathNameType, paths, pathBasePacked, reference, mask, coverMode,
+                      transformType, transformValues);
     }
 }
 
