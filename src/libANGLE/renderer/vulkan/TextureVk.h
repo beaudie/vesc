@@ -161,6 +161,11 @@ class TextureVk : public TextureImpl
                                              size_t layer,
                                              size_t level,
                                              vk::ImageView **imageViewOut);
+    angle::Result getLayerLevelStorageImageView(ContextVk *contextVk,
+                                                bool allLayers,
+                                                size_t singleLayer,
+                                                size_t level,
+                                                vk::ImageView **imageViewOut);
     const vk::Sampler &getSampler() const;
 
     angle::Result ensureImageInitialized(ContextVk *contextVk);
@@ -185,6 +190,9 @@ class TextureVk : public TextureImpl
         vk::ImageView mFetchBaseLevelImageView;
         vk::ImageView mFetchMipmapImageView;
     };
+    using LevelImageViews      = std::vector<vk::ImageView>;
+    using LayerImageViews      = std::vector<vk::ImageView>;
+    using LayerLevelImageViews = std::vector<LevelImageViews>;
 
     // Transform an image index from the frontend into one that can be used on the backing
     // ImageHelper, taking into account mipmap or cube face offsets
@@ -302,6 +310,10 @@ class TextureVk : public TextureImpl
                                     TextureVkViews *views,
                                     VkImageAspectFlags aspectFlags,
                                     gl::SwizzleState mappedSwizzle);
+    vk::ImageView *getLevelImageViewImpl(LevelImageViews *imageViews, size_t level);
+    vk::ImageView *getLayerLevelImageViewImpl(LayerLevelImageViews *imageViews,
+                                              size_t layer,
+                                              size_t level);
     angle::Result initCubeMapRenderTargets(ContextVk *contextVk);
 
     angle::Result ensureImageInitializedImpl(ContextVk *contextVk,
@@ -327,13 +339,19 @@ class TextureVk : public TextureImpl
 
     vk::ImageHelper *mImage;
 
+    // Read views.
     TextureVkViews mDefaultViews;
     TextureVkViews mStencilViews;
-    std::vector<std::vector<vk::ImageView>> mLayerLevelDrawImageViews;
-    vk::Sampler mSampler;
+    // Draw views.
+    LayerLevelImageViews mLayerLevelDrawImageViews;
+    // Fetch views.
+    LayerImageViews mLayerFetchImageView;
+    // Storage image views.
+    LevelImageViews mLevelStorageImageViews;
+    LayerLevelImageViews mLayerLevelStorageImageViews;
 
+    vk::Sampler mSampler;
     RenderTargetVk mRenderTarget;
-    std::vector<vk::ImageView> mLayerFetchImageView;
     std::vector<RenderTargetVk> m3DRenderTargets;
     std::vector<RenderTargetVk> mCubeMapRenderTargets;
 
