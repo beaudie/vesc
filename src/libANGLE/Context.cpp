@@ -9152,6 +9152,7 @@ void StateCache::updateVertexAttribTypesValidation(Context *context)
             {VertexAttribType::UnsignedByte, VertexAttribTypeCase::Valid},
             {VertexAttribType::UnsignedShort, VertexAttribTypeCase::Valid},
             {VertexAttribType::Float, VertexAttribTypeCase::Valid},
+            {VertexAttribType::HalfFloat, VertexAttribTypeCase::Valid},
             {VertexAttribType::Fixed, VertexAttribTypeCase::Valid},
         }};
     }
