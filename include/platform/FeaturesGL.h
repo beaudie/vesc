@@ -367,6 +367,13 @@ struct FeaturesGL : FeatureSetBase
         "remove_dynamic_indexing_of_swizzled_vector", FeatureCategory::OpenGLWorkarounds,
         "Dynamic indexing of swizzled l-values doesn't work correctly on various platforms.",
         &members, "http://crbug.com/709351"};
+
+    // Buffers need to maintain a shadow copy of data when buffer data readback is not possible
+    // through the GL API
+    Feature keepBufferShadowCopy = {
+        "keep_buffer_shadow_copy", FeatureCategory::OpenGLWorkarounds,
+        "Maintain a shadow copy of buffer data when the GL API does not permit reading data back.",
+        &members, ""};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
