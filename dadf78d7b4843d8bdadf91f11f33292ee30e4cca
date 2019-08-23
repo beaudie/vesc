@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "d3318cae_97151b15",
+        "filename": "extensions/EGL_KHR_no_config_context.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-23T14:50:19Z",
+      "side": 1,
+      "message": "Yep, I would remove it.",
+      "parentUuid": "7d7f20b0_e8fd0488",
+      "revId": "dadf78d7b4843d8bdadf91f11f33292ee30e4cca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d03667e8_c5efdbc9",
         "filename": "scripts/registry_xml.py",
         "patchSetId": 2
