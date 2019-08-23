@@ -1481,6 +1481,8 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     VkImageUsageFlags imageUsageFlags = VK_IMAGE_USAGE_TRANSFER_DST_BIT |
                                         VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
                                         VK_IMAGE_USAGE_SAMPLED_BIT;
+
+    // If the image has depth/stencil support, add those as possible usage.
     if (renderer->hasImageFormatFeatureBits(format.vkImageFormat,
                                             VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT))
     {
@@ -1490,6 +1492,13 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
                                                  VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT))
     {
         imageUsageFlags |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    }
+
+    // If the image has storage support, add it for ES3.1 image support.
+    if (renderer->hasImageFormatFeatureBits(format.vkImageFormat,
+                                            VK_FORMAT_FEATURE_STORAGE_IMAGE_BIT))
+    {
+        imageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
     }
 
     VkExtent3D vkExtent;
