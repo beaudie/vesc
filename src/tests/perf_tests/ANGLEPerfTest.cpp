@@ -113,11 +113,10 @@ void UpdateTraceEventDuration(angle::PlatformMethods *platform,
 
 double MonotonicallyIncreasingTime(angle::PlatformMethods *platform)
 {
-    ANGLERenderTest *renderTest = static_cast<ANGLERenderTest *>(platform->context);
     // Move the time origin to the first call to this function, to avoid generating unnecessarily
     // large timestamps.
-    static double origin = renderTest->getTimer()->getAbsoluteTime();
-    return renderTest->getTimer()->getAbsoluteTime() - origin;
+    static double origin = angle::GetCurrentTime();
+    return angle::GetCurrentTime() - origin;
 }
 
 void DumpTraceEventsToJSONFile(const std::vector<TraceEvent> &traceEvents,
@@ -163,7 +162,6 @@ ANGLEPerfTest::ANGLEPerfTest(const std::string &name,
                              unsigned int iterationsPerStep)
     : mName(name),
       mSuffix(suffix),
-      mTimer(CreateTimer()),
       mGPUTimeNs(0),
       mSkipTest(false),
       mStepsToRun(std::numeric_limits<unsigned int>::max()),
@@ -174,7 +172,6 @@ ANGLEPerfTest::ANGLEPerfTest(const std::string &name,
 
 ANGLEPerfTest::~ANGLEPerfTest()
 {
-    SafeDelete(mTimer);
 }
 
 void ANGLEPerfTest::run()
@@ -190,7 +187,7 @@ void ANGLEPerfTest::run()
         doRunLoop(kCalibrationRunTimeSeconds);
 
         // Scale steps down according to the time that exeeded one second.
-        double scale = kCalibrationRunTimeSeconds / mTimer->getElapsedTime();
+        double scale = kCalibrationRunTimeSeconds / mTimer.getElapsedTime();
         mStepsToRun  = static_cast<size_t>(static_cast<double>(mNumStepsPerformed) * scale);
 
         // Calibration allows the perf test runner script to save some time.
@@ -224,7 +221,7 @@ void ANGLEPerfTest::doRunLoop(double maxRunTime)
 {
     mNumStepsPerformed = 0;
     mRunning           = true;
-    mTimer->start();
+    mTimer.start();
     startTest();
 
     while (mRunning)
@@ -233,7 +230,7 @@ void ANGLEPerfTest::doRunLoop(double maxRunTime)
         if (mRunning)
         {
             ++mNumStepsPerformed;
-            if (mTimer->getElapsedTime() > maxRunTime)
+            if (mTimer.getElapsedTime() > maxRunTime)
             {
                 mRunning = false;
             }
@@ -244,7 +241,7 @@ void ANGLEPerfTest::doRunLoop(double maxRunTime)
         }
     }
     finishTest();
-    mTimer->stop();
+    mTimer.stop();
 }
 
 void ANGLEPerfTest::printResult(const std::string &trace,
@@ -270,7 +267,7 @@ void ANGLEPerfTest::TearDown() {}
 double ANGLEPerfTest::printResults()
 {
     double elapsedTimeSeconds[2] = {
-        mTimer->getElapsedTime(),
+        mTimer.getElapsedTime(),
         mGPUTimeNs * 1e-9,
     };
 
