@@ -1547,6 +1547,8 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     features->clipSrcRegionBlitFramebuffer.enabled = IsApple();
 
     features->resettingRectangleTexturesGeneratesErrors.enabled = IsApple();
+
+    features->keepBufferShadowCopy.enabled = !CanMapBufferForRead(functions);
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
