@@ -683,14 +683,15 @@ void GL_APIENTRY CreateVertexArrays(GLsizei n, GLuint *arrays)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        VertexArrayID *arraysPacked                   = FromGL<VertexArrayID *>(arrays);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateCreateVertexArrays(context, n, arrays));
+            (context->skipValidation() || ValidateCreateVertexArrays(context, n, arraysPacked));
         if (isCallValid)
         {
-            context->createVertexArrays(n, arrays);
+            context->createVertexArrays(n, arraysPacked);
         }
-        ANGLE_CAPTURE(CreateVertexArrays, isCallValid, context, n, arrays);
+        ANGLE_CAPTURE(CreateVertexArrays, isCallValid, context, n, arraysPacked);
     }
 }
 
@@ -701,14 +702,15 @@ void GL_APIENTRY DisableVertexArrayAttrib(GLuint vaobj, GLuint index)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        VertexArrayID vaobjPacked                     = FromGL<VertexArrayID>(vaobj);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateDisableVertexArrayAttrib(context, vaobj, index));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateDisableVertexArrayAttrib(context, vaobjPacked, index));
         if (isCallValid)
         {
-            context->disableVertexArrayAttrib(vaobj, index);
+            context->disableVertexArrayAttrib(vaobjPacked, index);
         }
-        ANGLE_CAPTURE(DisableVertexArrayAttrib, isCallValid, context, vaobj, index);
+        ANGLE_CAPTURE(DisableVertexArrayAttrib, isCallValid, context, vaobjPacked, index);
     }
 }
 
@@ -719,14 +721,15 @@ void GL_APIENTRY EnableVertexArrayAttrib(GLuint vaobj, GLuint index)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        VertexArrayID vaobjPacked                     = FromGL<VertexArrayID>(vaobj);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateEnableVertexArrayAttrib(context, vaobj, index));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateEnableVertexArrayAttrib(context, vaobjPacked, index));
         if (isCallValid)
         {
-            context->enableVertexArrayAttrib(vaobj, index);
+            context->enableVertexArrayAttrib(vaobjPacked, index);
         }
-        ANGLE_CAPTURE(EnableVertexArrayAttrib, isCallValid, context, vaobj, index);
+        ANGLE_CAPTURE(EnableVertexArrayAttrib, isCallValid, context, vaobjPacked, index);
     }
 }
 
@@ -1385,14 +1388,17 @@ void GL_APIENTRY GetVertexArrayIndexed64iv(GLuint vaobj, GLuint index, GLenum pn
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        VertexArrayID vaobjPacked                     = FromGL<VertexArrayID>(vaobj);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetVertexArrayIndexed64iv(context, vaobj, index, pname, param));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateGetVertexArrayIndexed64iv(context, vaobjPacked, index, pname, param));
         if (isCallValid)
         {
-            context->getVertexArrayIndexed64iv(vaobj, index, pname, param);
+            context->getVertexArrayIndexed64iv(vaobjPacked, index, pname, param);
         }
-        ANGLE_CAPTURE(GetVertexArrayIndexed64iv, isCallValid, context, vaobj, index, pname, param);
+        ANGLE_CAPTURE(GetVertexArrayIndexed64iv, isCallValid, context, vaobjPacked, index, pname,
+                      param);
     }
 }
 
@@ -1405,14 +1411,17 @@ void GL_APIENTRY GetVertexArrayIndexediv(GLuint vaobj, GLuint index, GLenum pnam
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        VertexArrayID vaobjPacked                     = FromGL<VertexArrayID>(vaobj);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateGetVertexArrayIndexediv(context, vaobj, index, pname, param));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateGetVertexArrayIndexediv(context, vaobjPacked, index, pname, param));
         if (isCallValid)
         {
-            context->getVertexArrayIndexediv(vaobj, index, pname, param);
+            context->getVertexArrayIndexediv(vaobjPacked, index, pname, param);
         }
-        ANGLE_CAPTURE(GetVertexArrayIndexediv, isCallValid, context, vaobj, index, pname, param);
+        ANGLE_CAPTURE(GetVertexArrayIndexediv, isCallValid, context, vaobjPacked, index, pname,
+                      param);
     }
 }
 
@@ -1424,14 +1433,15 @@ void GL_APIENTRY GetVertexArrayiv(GLuint vaobj, GLenum pname, GLint *param)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        VertexArrayID vaobjPacked                     = FromGL<VertexArrayID>(vaobj);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateGetVertexArrayiv(context, vaobj, pname, param));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateGetVertexArrayiv(context, vaobjPacked, pname, param));
         if (isCallValid)
         {
-            context->getVertexArrayiv(vaobj, pname, param);
+            context->getVertexArrayiv(vaobjPacked, pname, param);
         }
-        ANGLE_CAPTURE(GetVertexArrayiv, isCallValid, context, vaobj, pname, param);
+        ANGLE_CAPTURE(GetVertexArrayiv, isCallValid, context, vaobjPacked, pname, param);
     }
 }
 
@@ -2851,15 +2861,16 @@ void GL_APIENTRY VertexArrayAttribBinding(GLuint vaobj, GLuint attribindex, GLui
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        VertexArrayID vaobjPacked                     = FromGL<VertexArrayID>(vaobj);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexArrayAttribBinding(context, vaobj, attribindex, bindingindex));
+             ValidateVertexArrayAttribBinding(context, vaobjPacked, attribindex, bindingindex));
         if (isCallValid)
         {
-            context->vertexArrayAttribBinding(vaobj, attribindex, bindingindex);
+            context->vertexArrayAttribBinding(vaobjPacked, attribindex, bindingindex);
         }
-        ANGLE_CAPTURE(VertexArrayAttribBinding, isCallValid, context, vaobj, attribindex,
+        ANGLE_CAPTURE(VertexArrayAttribBinding, isCallValid, context, vaobjPacked, attribindex,
                       bindingindex);
     }
 }
@@ -2880,17 +2891,18 @@ void GL_APIENTRY VertexArrayAttribFormat(GLuint vaobj,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        VertexArrayID vaobjPacked                     = FromGL<VertexArrayID>(vaobj);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateVertexArrayAttribFormat(context, vaobj, attribindex, size, type,
-                                                            normalized, relativeoffset));
+                            ValidateVertexArrayAttribFormat(context, vaobjPacked, attribindex, size,
+                                                            type, normalized, relativeoffset));
         if (isCallValid)
         {
-            context->vertexArrayAttribFormat(vaobj, attribindex, size, type, normalized,
+            context->vertexArrayAttribFormat(vaobjPacked, attribindex, size, type, normalized,
                                              relativeoffset);
         }
-        ANGLE_CAPTURE(VertexArrayAttribFormat, isCallValid, context, vaobj, attribindex, size, type,
-                      normalized, relativeoffset);
+        ANGLE_CAPTURE(VertexArrayAttribFormat, isCallValid, context, vaobjPacked, attribindex, size,
+                      type, normalized, relativeoffset);
     }
 }
 
@@ -2909,16 +2921,17 @@ void GL_APIENTRY VertexArrayAttribIFormat(GLuint vaobj,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        VertexArrayID vaobjPacked                     = FromGL<VertexArrayID>(vaobj);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateVertexArrayAttribIFormat(context, vaobj, attribindex, size,
-                                                             type, relativeoffset));
+                            ValidateVertexArrayAttribIFormat(context, vaobjPacked, attribindex,
+                                                             size, type, relativeoffset));
         if (isCallValid)
         {
-            context->vertexArrayAttribIFormat(vaobj, attribindex, size, type, relativeoffset);
+            context->vertexArrayAttribIFormat(vaobjPacked, attribindex, size, type, relativeoffset);
         }
-        ANGLE_CAPTURE(VertexArrayAttribIFormat, isCallValid, context, vaobj, attribindex, size,
-                      type, relativeoffset);
+        ANGLE_CAPTURE(VertexArrayAttribIFormat, isCallValid, context, vaobjPacked, attribindex,
+                      size, type, relativeoffset);
     }
 }
 
@@ -2937,16 +2950,17 @@ void GL_APIENTRY VertexArrayAttribLFormat(GLuint vaobj,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        VertexArrayID vaobjPacked                     = FromGL<VertexArrayID>(vaobj);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateVertexArrayAttribLFormat(context, vaobj, attribindex, size,
-                                                             type, relativeoffset));
+                            ValidateVertexArrayAttribLFormat(context, vaobjPacked, attribindex,
+                                                             size, type, relativeoffset));
         if (isCallValid)
         {
-            context->vertexArrayAttribLFormat(vaobj, attribindex, size, type, relativeoffset);
+            context->vertexArrayAttribLFormat(vaobjPacked, attribindex, size, type, relativeoffset);
         }
-        ANGLE_CAPTURE(VertexArrayAttribLFormat, isCallValid, context, vaobj, attribindex, size,
-                      type, relativeoffset);
+        ANGLE_CAPTURE(VertexArrayAttribLFormat, isCallValid, context, vaobjPacked, attribindex,
+                      size, type, relativeoffset);
     }
 }
 
@@ -2958,15 +2972,16 @@ void GL_APIENTRY VertexArrayBindingDivisor(GLuint vaobj, GLuint bindingindex, GL
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        VertexArrayID vaobjPacked                     = FromGL<VertexArrayID>(vaobj);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateVertexArrayBindingDivisor(context, vaobj, bindingindex, divisor));
+             ValidateVertexArrayBindingDivisor(context, vaobjPacked, bindingindex, divisor));
         if (isCallValid)
         {
-            context->vertexArrayBindingDivisor(vaobj, bindingindex, divisor);
+            context->vertexArrayBindingDivisor(vaobjPacked, bindingindex, divisor);
         }
-        ANGLE_CAPTURE(VertexArrayBindingDivisor, isCallValid, context, vaobj, bindingindex,
+        ANGLE_CAPTURE(VertexArrayBindingDivisor, isCallValid, context, vaobjPacked, bindingindex,
                       divisor);
     }
 }
@@ -2978,15 +2993,16 @@ void GL_APIENTRY VertexArrayElementBuffer(GLuint vaobj, GLuint buffer)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        VertexArrayID vaobjPacked                     = FromGL<VertexArrayID>(vaobj);
         BufferID bufferPacked                         = FromGL<BufferID>(buffer);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateVertexArrayElementBuffer(context, vaobj, bufferPacked));
+                            ValidateVertexArrayElementBuffer(context, vaobjPacked, bufferPacked));
         if (isCallValid)
         {
-            context->vertexArrayElementBuffer(vaobj, bufferPacked);
+            context->vertexArrayElementBuffer(vaobjPacked, bufferPacked);
         }
-        ANGLE_CAPTURE(VertexArrayElementBuffer, isCallValid, context, vaobj, bufferPacked);
+        ANGLE_CAPTURE(VertexArrayElementBuffer, isCallValid, context, vaobjPacked, bufferPacked);
     }
 }
 
@@ -3004,16 +3020,18 @@ void GL_APIENTRY VertexArrayVertexBuffer(GLuint vaobj,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        VertexArrayID vaobjPacked                     = FromGL<VertexArrayID>(vaobj);
         BufferID bufferPacked                         = FromGL<BufferID>(buffer);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateVertexArrayVertexBuffer(context, vaobj, bindingindex,
+                            ValidateVertexArrayVertexBuffer(context, vaobjPacked, bindingindex,
                                                             bufferPacked, offset, stride));
         if (isCallValid)
         {
-            context->vertexArrayVertexBuffer(vaobj, bindingindex, bufferPacked, offset, stride);
+            context->vertexArrayVertexBuffer(vaobjPacked, bindingindex, bufferPacked, offset,
+                                             stride);
         }
-        ANGLE_CAPTURE(VertexArrayVertexBuffer, isCallValid, context, vaobj, bindingindex,
+        ANGLE_CAPTURE(VertexArrayVertexBuffer, isCallValid, context, vaobjPacked, bindingindex,
                       bufferPacked, offset, stride);
     }
 }
@@ -3034,16 +3052,18 @@ void GL_APIENTRY VertexArrayVertexBuffers(GLuint vaobj,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        VertexArrayID vaobjPacked                     = FromGL<VertexArrayID>(vaobj);
         const BufferID *buffersPacked                 = FromGL<const BufferID *>(buffers);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateVertexArrayVertexBuffers(context, vaobj, first, count,
+                            ValidateVertexArrayVertexBuffers(context, vaobjPacked, first, count,
                                                              buffersPacked, offsets, strides));
         if (isCallValid)
         {
-            context->vertexArrayVertexBuffers(vaobj, first, count, buffersPacked, offsets, strides);
+            context->vertexArrayVertexBuffers(vaobjPacked, first, count, buffersPacked, offsets,
+                                              strides);
         }
-        ANGLE_CAPTURE(VertexArrayVertexBuffers, isCallValid, context, vaobj, first, count,
+        ANGLE_CAPTURE(VertexArrayVertexBuffers, isCallValid, context, vaobjPacked, first, count,
                       buffersPacked, offsets, strides);
     }
 }
