@@ -945,7 +945,7 @@ bool ValidateTexStorageMem2DMultisampleEXT(Context *context,
                                            GLsizei width,
                                            GLsizei height,
                                            GLboolean fixedSampleLocations,
-                                           GLuint memory,
+                                           MemoryObjectID memory,
                                            GLuint64 offset)
 {
     if (!context->getExtensions().memoryObject)
@@ -1892,7 +1892,7 @@ bool ValidateTexStorageMem3DMultisampleEXT(Context *context,
                                            GLsizei height,
                                            GLsizei depth,
                                            GLboolean fixedSampleLocations,
-                                           GLuint memory,
+                                           MemoryObjectID memory,
                                            GLuint64 offset)
 {
     if (!context->getExtensions().memoryObject)

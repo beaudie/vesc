@@ -3746,14 +3746,14 @@ CallCapture CaptureBufferStorageMemEXT(const Context *context,
                                        bool isCallValid,
                                        TextureType targetPacked,
                                        GLsizeiptr size,
-                                       GLuint memory,
+                                       MemoryObjectID memoryPacked,
                                        GLuint64 offset)
 {
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("targetPacked", ParamType::TTextureType, targetPacked);
     paramBuffer.addValueParam("size", ParamType::TGLsizeiptr, size);
-    paramBuffer.addValueParam("memory", ParamType::TGLuint, memory);
+    paramBuffer.addValueParam("memoryPacked", ParamType::TMemoryObjectID, memoryPacked);
     paramBuffer.addValueParam("offset", ParamType::TGLuint64, offset);
 
     return CallCapture(gl::EntryPoint::BufferStorageMemEXT, std::move(paramBuffer));
@@ -3762,17 +3762,18 @@ CallCapture CaptureBufferStorageMemEXT(const Context *context,
 CallCapture CaptureCreateMemoryObjectsEXT(const Context *context,
                                           bool isCallValid,
                                           GLsizei n,
-                                          GLuint *memoryObjects)
+                                          MemoryObjectID *memoryObjectsPacked)
 {
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("n", ParamType::TGLsizei, n);
 
-    ParamCapture memoryObjectsParam("memoryObjects", ParamType::TGLuintPointer);
-    InitParamValue(ParamType::TGLuintPointer, memoryObjects, &memoryObjectsParam.value);
-    CaptureCreateMemoryObjectsEXT_memoryObjects(context, isCallValid, n, memoryObjects,
-                                                &memoryObjectsParam);
-    paramBuffer.addParam(std::move(memoryObjectsParam));
+    ParamCapture memoryObjectsPackedParam("memoryObjectsPacked", ParamType::TMemoryObjectIDPointer);
+    InitParamValue(ParamType::TMemoryObjectIDPointer, memoryObjectsPacked,
+                   &memoryObjectsPackedParam.value);
+    CaptureCreateMemoryObjectsEXT_memoryObjectsPacked(context, isCallValid, n, memoryObjectsPacked,
+                                                      &memoryObjectsPackedParam);
+    paramBuffer.addParam(std::move(memoryObjectsPackedParam));
 
     return CallCapture(gl::EntryPoint::CreateMemoryObjectsEXT, std::move(paramBuffer));
 }
@@ -3780,37 +3781,39 @@ CallCapture CaptureCreateMemoryObjectsEXT(const Context *context,
 CallCapture CaptureDeleteMemoryObjectsEXT(const Context *context,
                                           bool isCallValid,
                                           GLsizei n,
-                                          const GLuint *memoryObjects)
+                                          const MemoryObjectID *memoryObjectsPacked)
 {
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("n", ParamType::TGLsizei, n);
 
-    ParamCapture memoryObjectsParam("memoryObjects", ParamType::TGLuintConstPointer);
-    InitParamValue(ParamType::TGLuintConstPointer, memoryObjects, &memoryObjectsParam.value);
-    CaptureDeleteMemoryObjectsEXT_memoryObjects(context, isCallValid, n, memoryObjects,
-                                                &memoryObjectsParam);
-    paramBuffer.addParam(std::move(memoryObjectsParam));
+    ParamCapture memoryObjectsPackedParam("memoryObjectsPacked",
+                                          ParamType::TMemoryObjectIDConstPointer);
+    InitParamValue(ParamType::TMemoryObjectIDConstPointer, memoryObjectsPacked,
+                   &memoryObjectsPackedParam.value);
+    CaptureDeleteMemoryObjectsEXT_memoryObjectsPacked(context, isCallValid, n, memoryObjectsPacked,
+                                                      &memoryObjectsPackedParam);
+    paramBuffer.addParam(std::move(memoryObjectsPackedParam));
 
     return CallCapture(gl::EntryPoint::DeleteMemoryObjectsEXT, std::move(paramBuffer));
 }
 
 CallCapture CaptureGetMemoryObjectParameterivEXT(const Context *context,
                                                  bool isCallValid,
-                                                 GLuint memoryObject,
+                                                 MemoryObjectID memoryObjectPacked,
                                                  GLenum pname,
                                                  GLint *params)
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addValueParam("memoryObject", ParamType::TGLuint, memoryObject);
+    paramBuffer.addValueParam("memoryObjectPacked", ParamType::TMemoryObjectID, memoryObjectPacked);
     paramBuffer.addEnumParam("pname", GLenumGroup::MemoryObjectParameterName, ParamType::TGLenum,
                              pname);
 
     ParamCapture paramsParam("params", ParamType::TGLintPointer);
     InitParamValue(ParamType::TGLintPointer, params, &paramsParam.value);
-    CaptureGetMemoryObjectParameterivEXT_params(context, isCallValid, memoryObject, pname, params,
-                                                &paramsParam);
+    CaptureGetMemoryObjectParameterivEXT_params(context, isCallValid, memoryObjectPacked, pname,
+                                                params, &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::GetMemoryObjectParameterivEXT, std::move(paramBuffer));
@@ -3854,12 +3857,12 @@ CallCapture CaptureGetUnsignedBytei_vEXT(const Context *context,
 
 CallCapture CaptureIsMemoryObjectEXT(const Context *context,
                                      bool isCallValid,
-                                     GLuint memoryObject,
+                                     MemoryObjectID memoryObjectPacked,
                                      GLboolean returnValue)
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addValueParam("memoryObject", ParamType::TGLuint, memoryObject);
+    paramBuffer.addValueParam("memoryObjectPacked", ParamType::TMemoryObjectID, memoryObjectPacked);
 
     ParamCapture returnValueCapture("returnValue", ParamType::TGLboolean);
     InitParamValue(ParamType::TGLboolean, returnValue, &returnValueCapture.value);
@@ -3870,20 +3873,20 @@ CallCapture CaptureIsMemoryObjectEXT(const Context *context,
 
 CallCapture CaptureMemoryObjectParameterivEXT(const Context *context,
                                               bool isCallValid,
-                                              GLuint memoryObject,
+                                              MemoryObjectID memoryObjectPacked,
                                               GLenum pname,
                                               const GLint *params)
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addValueParam("memoryObject", ParamType::TGLuint, memoryObject);
+    paramBuffer.addValueParam("memoryObjectPacked", ParamType::TMemoryObjectID, memoryObjectPacked);
     paramBuffer.addEnumParam("pname", GLenumGroup::MemoryObjectParameterName, ParamType::TGLenum,
                              pname);
 
     ParamCapture paramsParam("params", ParamType::TGLintConstPointer);
     InitParamValue(ParamType::TGLintConstPointer, params, &paramsParam.value);
-    CaptureMemoryObjectParameterivEXT_params(context, isCallValid, memoryObject, pname, params,
-                                             &paramsParam);
+    CaptureMemoryObjectParameterivEXT_params(context, isCallValid, memoryObjectPacked, pname,
+                                             params, &paramsParam);
     paramBuffer.addParam(std::move(paramsParam));
 
     return CallCapture(gl::EntryPoint::MemoryObjectParameterivEXT, std::move(paramBuffer));
@@ -3896,7 +3899,7 @@ CallCapture CaptureTexStorageMem2DEXT(const Context *context,
                                       GLenum internalFormat,
                                       GLsizei width,
                                       GLsizei height,
-                                      GLuint memory,
+                                      MemoryObjectID memoryPacked,
                                       GLuint64 offset)
 {
     ParamBuffer paramBuffer;
@@ -3907,7 +3910,7 @@ CallCapture CaptureTexStorageMem2DEXT(const Context *context,
                              internalFormat);
     paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
     paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
-    paramBuffer.addValueParam("memory", ParamType::TGLuint, memory);
+    paramBuffer.addValueParam("memoryPacked", ParamType::TMemoryObjectID, memoryPacked);
     paramBuffer.addValueParam("offset", ParamType::TGLuint64, offset);
 
     return CallCapture(gl::EntryPoint::TexStorageMem2DEXT, std::move(paramBuffer));
@@ -3921,7 +3924,7 @@ CallCapture CaptureTexStorageMem2DMultisampleEXT(const Context *context,
                                                  GLsizei width,
                                                  GLsizei height,
                                                  GLboolean fixedSampleLocations,
-                                                 GLuint memory,
+                                                 MemoryObjectID memoryPacked,
                                                  GLuint64 offset)
 {
     ParamBuffer paramBuffer;
@@ -3933,7 +3936,7 @@ CallCapture CaptureTexStorageMem2DMultisampleEXT(const Context *context,
     paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
     paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
     paramBuffer.addValueParam("fixedSampleLocations", ParamType::TGLboolean, fixedSampleLocations);
-    paramBuffer.addValueParam("memory", ParamType::TGLuint, memory);
+    paramBuffer.addValueParam("memoryPacked", ParamType::TMemoryObjectID, memoryPacked);
     paramBuffer.addValueParam("offset", ParamType::TGLuint64, offset);
 
     return CallCapture(gl::EntryPoint::TexStorageMem2DMultisampleEXT, std::move(paramBuffer));
@@ -3947,7 +3950,7 @@ CallCapture CaptureTexStorageMem3DEXT(const Context *context,
                                       GLsizei width,
                                       GLsizei height,
                                       GLsizei depth,
-                                      GLuint memory,
+                                      MemoryObjectID memoryPacked,
                                       GLuint64 offset)
 {
     ParamBuffer paramBuffer;
@@ -3959,7 +3962,7 @@ CallCapture CaptureTexStorageMem3DEXT(const Context *context,
     paramBuffer.addValueParam("width", ParamType::TGLsizei, width);
     paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
     paramBuffer.addValueParam("depth", ParamType::TGLsizei, depth);
-    paramBuffer.addValueParam("memory", ParamType::TGLuint, memory);
+    paramBuffer.addValueParam("memoryPacked", ParamType::TMemoryObjectID, memoryPacked);
     paramBuffer.addValueParam("offset", ParamType::TGLuint64, offset);
 
     return CallCapture(gl::EntryPoint::TexStorageMem3DEXT, std::move(paramBuffer));
@@ -3974,7 +3977,7 @@ CallCapture CaptureTexStorageMem3DMultisampleEXT(const Context *context,
                                                  GLsizei height,
                                                  GLsizei depth,
                                                  GLboolean fixedSampleLocations,
-                                                 GLuint memory,
+                                                 MemoryObjectID memoryPacked,
                                                  GLuint64 offset)
 {
     ParamBuffer paramBuffer;
@@ -3987,7 +3990,7 @@ CallCapture CaptureTexStorageMem3DMultisampleEXT(const Context *context,
     paramBuffer.addValueParam("height", ParamType::TGLsizei, height);
     paramBuffer.addValueParam("depth", ParamType::TGLsizei, depth);
     paramBuffer.addValueParam("fixedSampleLocations", ParamType::TGLboolean, fixedSampleLocations);
-    paramBuffer.addValueParam("memory", ParamType::TGLuint, memory);
+    paramBuffer.addValueParam("memoryPacked", ParamType::TMemoryObjectID, memoryPacked);
     paramBuffer.addValueParam("offset", ParamType::TGLuint64, offset);
 
     return CallCapture(gl::EntryPoint::TexStorageMem3DMultisampleEXT, std::move(paramBuffer));
@@ -3995,14 +3998,14 @@ CallCapture CaptureTexStorageMem3DMultisampleEXT(const Context *context,
 
 CallCapture CaptureImportMemoryFdEXT(const Context *context,
                                      bool isCallValid,
-                                     GLuint memory,
+                                     MemoryObjectID memoryPacked,
                                      GLuint64 size,
                                      HandleType handleTypePacked,
                                      GLint fd)
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addValueParam("memory", ParamType::TGLuint, memory);
+    paramBuffer.addValueParam("memoryPacked", ParamType::TMemoryObjectID, memoryPacked);
     paramBuffer.addValueParam("size", ParamType::TGLuint64, size);
     paramBuffer.addValueParam("handleTypePacked", ParamType::THandleType, handleTypePacked);
     paramBuffer.addValueParam("fd", ParamType::TGLint, fd);

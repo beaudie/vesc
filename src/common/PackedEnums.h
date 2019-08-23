@@ -399,6 +399,11 @@ struct SemaphoreID
     GLuint value;
 };
 
+struct MemoryObjectID
+{
+    GLuint value;
+};
+
 struct RenderbufferID
 {
     GLuint value;

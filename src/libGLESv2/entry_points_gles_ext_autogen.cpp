@@ -4099,15 +4099,16 @@ void GL_APIENTRY BufferStorageMemEXT(GLenum target, GLsizeiptr size, GLuint memo
     if (context)
     {
         TextureType targetPacked                      = FromGL<TextureType>(target);
+        MemoryObjectID memoryPacked                   = FromGL<MemoryObjectID>(memory);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateBufferStorageMemEXT(context, targetPacked, size, memory, offset));
+             ValidateBufferStorageMemEXT(context, targetPacked, size, memoryPacked, offset));
         if (isCallValid)
         {
-            context->bufferStorageMem(targetPacked, size, memory, offset);
+            context->bufferStorageMem(targetPacked, size, memoryPacked, offset);
         }
-        ANGLE_CAPTURE(BufferStorageMemEXT, isCallValid, context, targetPacked, size, memory,
+        ANGLE_CAPTURE(BufferStorageMemEXT, isCallValid, context, targetPacked, size, memoryPacked,
                       offset);
     }
 }
@@ -4120,14 +4121,15 @@ void GL_APIENTRY CreateMemoryObjectsEXT(GLsizei n, GLuint *memoryObjects)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        MemoryObjectID *memoryObjectsPacked           = FromGL<MemoryObjectID *>(memoryObjects);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateCreateMemoryObjectsEXT(context, n, memoryObjects));
+                            ValidateCreateMemoryObjectsEXT(context, n, memoryObjectsPacked));
         if (isCallValid)
         {
-            context->createMemoryObjects(n, memoryObjects);
+            context->createMemoryObjects(n, memoryObjectsPacked);
         }
-        ANGLE_CAPTURE(CreateMemoryObjectsEXT, isCallValid, context, n, memoryObjects);
+        ANGLE_CAPTURE(CreateMemoryObjectsEXT, isCallValid, context, n, memoryObjectsPacked);
     }
 }
 
@@ -4139,14 +4141,15 @@ void GL_APIENTRY DeleteMemoryObjectsEXT(GLsizei n, const GLuint *memoryObjects)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        const MemoryObjectID *memoryObjectsPacked = FromGL<const MemoryObjectID *>(memoryObjects);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateDeleteMemoryObjectsEXT(context, n, memoryObjects));
+                            ValidateDeleteMemoryObjectsEXT(context, n, memoryObjectsPacked));
         if (isCallValid)
         {
-            context->deleteMemoryObjects(n, memoryObjects);
+            context->deleteMemoryObjects(n, memoryObjectsPacked);
         }
-        ANGLE_CAPTURE(DeleteMemoryObjectsEXT, isCallValid, context, n, memoryObjects);
+        ANGLE_CAPTURE(DeleteMemoryObjectsEXT, isCallValid, context, n, memoryObjectsPacked);
     }
 }
 
@@ -4159,15 +4162,17 @@ void GL_APIENTRY GetMemoryObjectParameterivEXT(GLuint memoryObject, GLenum pname
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        MemoryObjectID memoryObjectPacked             = FromGL<MemoryObjectID>(memoryObject);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateGetMemoryObjectParameterivEXT(
-                                                             context, memoryObject, pname, params));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateGetMemoryObjectParameterivEXT(context, memoryObjectPacked, pname, params));
         if (isCallValid)
         {
-            context->getMemoryObjectParameteriv(memoryObject, pname, params);
+            context->getMemoryObjectParameteriv(memoryObjectPacked, pname, params);
         }
-        ANGLE_CAPTURE(GetMemoryObjectParameterivEXT, isCallValid, context, memoryObject, pname,
-                      params);
+        ANGLE_CAPTURE(GetMemoryObjectParameterivEXT, isCallValid, context, memoryObjectPacked,
+                      pname, params);
     }
 }
 
@@ -4217,18 +4222,19 @@ GLboolean GL_APIENTRY IsMemoryObjectEXT(GLuint memoryObject)
     GLboolean returnValue;
     if (context)
     {
+        MemoryObjectID memoryObjectPacked             = FromGL<MemoryObjectID>(memoryObject);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateIsMemoryObjectEXT(context, memoryObject));
+            (context->skipValidation() || ValidateIsMemoryObjectEXT(context, memoryObjectPacked));
         if (isCallValid)
         {
-            returnValue = context->isMemoryObject(memoryObject);
+            returnValue = context->isMemoryObject(memoryObjectPacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsMemoryObjectEXT, GLboolean>();
         }
-        ANGLE_CAPTURE(IsMemoryObjectEXT, isCallValid, context, memoryObject, returnValue);
+        ANGLE_CAPTURE(IsMemoryObjectEXT, isCallValid, context, memoryObjectPacked, returnValue);
     }
     else
     {
@@ -4246,14 +4252,16 @@ void GL_APIENTRY MemoryObjectParameterivEXT(GLuint memoryObject, GLenum pname, c
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        MemoryObjectID memoryObjectPacked             = FromGL<MemoryObjectID>(memoryObject);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateMemoryObjectParameterivEXT(
-                                                             context, memoryObject, pname, params));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateMemoryObjectParameterivEXT(context, memoryObjectPacked, pname, params));
         if (isCallValid)
         {
-            context->memoryObjectParameteriv(memoryObject, pname, params);
+            context->memoryObjectParameteriv(memoryObjectPacked, pname, params);
         }
-        ANGLE_CAPTURE(MemoryObjectParameterivEXT, isCallValid, context, memoryObject, pname,
+        ANGLE_CAPTURE(MemoryObjectParameterivEXT, isCallValid, context, memoryObjectPacked, pname,
                       params);
     }
 }
@@ -4277,18 +4285,19 @@ void GL_APIENTRY TexStorageMem2DEXT(GLenum target,
     if (context)
     {
         TextureType targetPacked                      = FromGL<TextureType>(target);
+        MemoryObjectID memoryPacked                   = FromGL<MemoryObjectID>(memory);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateTexStorageMem2DEXT(context, targetPacked, levels, internalFormat, width,
-                                        height, memory, offset));
+                                        height, memoryPacked, offset));
         if (isCallValid)
         {
-            context->texStorageMem2D(targetPacked, levels, internalFormat, width, height, memory,
-                                     offset);
+            context->texStorageMem2D(targetPacked, levels, internalFormat, width, height,
+                                     memoryPacked, offset);
         }
         ANGLE_CAPTURE(TexStorageMem2DEXT, isCallValid, context, targetPacked, levels,
-                      internalFormat, width, height, memory, offset);
+                      internalFormat, width, height, memoryPacked, offset);
     }
 }
 
@@ -4313,18 +4322,19 @@ void GL_APIENTRY TexStorageMem2DMultisampleEXT(GLenum target,
     if (context)
     {
         TextureType targetPacked                      = FromGL<TextureType>(target);
+        MemoryObjectID memoryPacked                   = FromGL<MemoryObjectID>(memory);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateTexStorageMem2DMultisampleEXT(
                                               context, targetPacked, samples, internalFormat, width,
-                                              height, fixedSampleLocations, memory, offset));
+                                              height, fixedSampleLocations, memoryPacked, offset));
         if (isCallValid)
         {
             context->texStorageMem2DMultisample(targetPacked, samples, internalFormat, width,
-                                                height, fixedSampleLocations, memory, offset);
+                                                height, fixedSampleLocations, memoryPacked, offset);
         }
         ANGLE_CAPTURE(TexStorageMem2DMultisampleEXT, isCallValid, context, targetPacked, samples,
-                      internalFormat, width, height, fixedSampleLocations, memory, offset);
+                      internalFormat, width, height, fixedSampleLocations, memoryPacked, offset);
     }
 }
 
@@ -4348,18 +4358,19 @@ void GL_APIENTRY TexStorageMem3DEXT(GLenum target,
     if (context)
     {
         TextureType targetPacked                      = FromGL<TextureType>(target);
+        MemoryObjectID memoryPacked                   = FromGL<MemoryObjectID>(memory);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateTexStorageMem3DEXT(context, targetPacked, levels, internalFormat, width,
-                                        height, depth, memory, offset));
+                                        height, depth, memoryPacked, offset));
         if (isCallValid)
         {
             context->texStorageMem3D(targetPacked, levels, internalFormat, width, height, depth,
-                                     memory, offset);
+                                     memoryPacked, offset);
         }
         ANGLE_CAPTURE(TexStorageMem3DEXT, isCallValid, context, targetPacked, levels,
-                      internalFormat, width, height, depth, memory, offset);
+                      internalFormat, width, height, depth, memoryPacked, offset);
     }
 }
 
@@ -4385,19 +4396,21 @@ void GL_APIENTRY TexStorageMem3DMultisampleEXT(GLenum target,
     if (context)
     {
         TextureType targetPacked                      = FromGL<TextureType>(target);
+        MemoryObjectID memoryPacked                   = FromGL<MemoryObjectID>(memory);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateTexStorageMem3DMultisampleEXT(
-                                              context, targetPacked, samples, internalFormat, width,
-                                              height, depth, fixedSampleLocations, memory, offset));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateTexStorageMem3DMultisampleEXT(
+                                context, targetPacked, samples, internalFormat, width, height,
+                                depth, fixedSampleLocations, memoryPacked, offset));
         if (isCallValid)
         {
             context->texStorageMem3DMultisample(targetPacked, samples, internalFormat, width,
-                                                height, depth, fixedSampleLocations, memory,
+                                                height, depth, fixedSampleLocations, memoryPacked,
                                                 offset);
         }
         ANGLE_CAPTURE(TexStorageMem3DMultisampleEXT, isCallValid, context, targetPacked, samples,
-                      internalFormat, width, height, depth, fixedSampleLocations, memory, offset);
+                      internalFormat, width, height, depth, fixedSampleLocations, memoryPacked,
+                      offset);
     }
 }
 
@@ -4411,15 +4424,18 @@ void GL_APIENTRY ImportMemoryFdEXT(GLuint memory, GLuint64 size, GLenum handleTy
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        MemoryObjectID memoryPacked                   = FromGL<MemoryObjectID>(memory);
         HandleType handleTypePacked                   = FromGL<HandleType>(handleType);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateImportMemoryFdEXT(context, memory, size, handleTypePacked, fd));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateImportMemoryFdEXT(context, memoryPacked, size, handleTypePacked, fd));
         if (isCallValid)
         {
-            context->importMemoryFd(memory, size, handleTypePacked, fd);
+            context->importMemoryFd(memoryPacked, size, handleTypePacked, fd);
         }
-        ANGLE_CAPTURE(ImportMemoryFdEXT, isCallValid, context, memory, size, handleTypePacked, fd);
+        ANGLE_CAPTURE(ImportMemoryFdEXT, isCallValid, context, memoryPacked, size, handleTypePacked,
+                      fd);
     }
 }
 
@@ -7629,15 +7645,16 @@ void GL_APIENTRY BufferStorageMemEXTContextANGLE(GLeglContext ctx,
     {
         ASSERT(context == GetValidGlobalContext());
         TextureType targetPacked                      = FromGL<TextureType>(target);
+        MemoryObjectID memoryPacked                   = FromGL<MemoryObjectID>(memory);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateBufferStorageMemEXT(context, targetPacked, size, memory, offset));
+             ValidateBufferStorageMemEXT(context, targetPacked, size, memoryPacked, offset));
         if (isCallValid)
         {
-            context->bufferStorageMem(targetPacked, size, memory, offset);
+            context->bufferStorageMem(targetPacked, size, memoryPacked, offset);
         }
-        ANGLE_CAPTURE(BufferStorageMemEXT, isCallValid, context, targetPacked, size, memory,
+        ANGLE_CAPTURE(BufferStorageMemEXT, isCallValid, context, targetPacked, size, memoryPacked,
                       offset);
     }
 }
@@ -8584,14 +8601,15 @@ void GL_APIENTRY CreateMemoryObjectsEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        MemoryObjectID *memoryObjectsPacked           = FromGL<MemoryObjectID *>(memoryObjects);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateCreateMemoryObjectsEXT(context, n, memoryObjects));
+                            ValidateCreateMemoryObjectsEXT(context, n, memoryObjectsPacked));
         if (isCallValid)
         {
-            context->createMemoryObjects(n, memoryObjects);
+            context->createMemoryObjects(n, memoryObjectsPacked);
         }
-        ANGLE_CAPTURE(CreateMemoryObjectsEXT, isCallValid, context, n, memoryObjects);
+        ANGLE_CAPTURE(CreateMemoryObjectsEXT, isCallValid, context, n, memoryObjectsPacked);
     }
 }
 
@@ -8909,14 +8927,15 @@ void GL_APIENTRY DeleteMemoryObjectsEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        const MemoryObjectID *memoryObjectsPacked = FromGL<const MemoryObjectID *>(memoryObjects);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid                              = (context->skipValidation() ||
-                            ValidateDeleteMemoryObjectsEXT(context, n, memoryObjects));
+                            ValidateDeleteMemoryObjectsEXT(context, n, memoryObjectsPacked));
         if (isCallValid)
         {
-            context->deleteMemoryObjects(n, memoryObjects);
+            context->deleteMemoryObjects(n, memoryObjectsPacked);
         }
-        ANGLE_CAPTURE(DeleteMemoryObjectsEXT, isCallValid, context, n, memoryObjects);
+        ANGLE_CAPTURE(DeleteMemoryObjectsEXT, isCallValid, context, n, memoryObjectsPacked);
     }
 }
 
@@ -11940,15 +11959,17 @@ void GL_APIENTRY GetMemoryObjectParameterivEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        MemoryObjectID memoryObjectPacked             = FromGL<MemoryObjectID>(memoryObject);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateGetMemoryObjectParameterivEXT(
-                                                             context, memoryObject, pname, params));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateGetMemoryObjectParameterivEXT(context, memoryObjectPacked, pname, params));
         if (isCallValid)
         {
-            context->getMemoryObjectParameteriv(memoryObject, pname, params);
+            context->getMemoryObjectParameteriv(memoryObjectPacked, pname, params);
         }
-        ANGLE_CAPTURE(GetMemoryObjectParameterivEXT, isCallValid, context, memoryObject, pname,
-                      params);
+        ANGLE_CAPTURE(GetMemoryObjectParameterivEXT, isCallValid, context, memoryObjectPacked,
+                      pname, params);
     }
 }
 
@@ -13763,15 +13784,18 @@ void GL_APIENTRY ImportMemoryFdEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        MemoryObjectID memoryPacked                   = FromGL<MemoryObjectID>(memory);
         HandleType handleTypePacked                   = FromGL<HandleType>(handleType);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateImportMemoryFdEXT(context, memory, size, handleTypePacked, fd));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateImportMemoryFdEXT(context, memoryPacked, size, handleTypePacked, fd));
         if (isCallValid)
         {
-            context->importMemoryFd(memory, size, handleTypePacked, fd);
+            context->importMemoryFd(memoryPacked, size, handleTypePacked, fd);
         }
-        ANGLE_CAPTURE(ImportMemoryFdEXT, isCallValid, context, memory, size, handleTypePacked, fd);
+        ANGLE_CAPTURE(ImportMemoryFdEXT, isCallValid, context, memoryPacked, size, handleTypePacked,
+                      fd);
     }
 }
 
@@ -14041,18 +14065,19 @@ GLboolean GL_APIENTRY IsMemoryObjectEXTContextANGLE(GLeglContext ctx, GLuint mem
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        MemoryObjectID memoryObjectPacked             = FromGL<MemoryObjectID>(memoryObject);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateIsMemoryObjectEXT(context, memoryObject));
+            (context->skipValidation() || ValidateIsMemoryObjectEXT(context, memoryObjectPacked));
         if (isCallValid)
         {
-            returnValue = context->isMemoryObject(memoryObject);
+            returnValue = context->isMemoryObject(memoryObjectPacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsMemoryObjectEXT, GLboolean>();
         }
-        ANGLE_CAPTURE(IsMemoryObjectEXT, isCallValid, context, memoryObject, returnValue);
+        ANGLE_CAPTURE(IsMemoryObjectEXT, isCallValid, context, memoryObjectPacked, returnValue);
     }
     else
     {
@@ -15106,14 +15131,16 @@ void GL_APIENTRY MemoryObjectParameterivEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        MemoryObjectID memoryObjectPacked             = FromGL<MemoryObjectID>(memoryObject);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateMemoryObjectParameterivEXT(
-                                                             context, memoryObject, pname, params));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateMemoryObjectParameterivEXT(context, memoryObjectPacked, pname, params));
         if (isCallValid)
         {
-            context->memoryObjectParameteriv(memoryObject, pname, params);
+            context->memoryObjectParameteriv(memoryObjectPacked, pname, params);
         }
-        ANGLE_CAPTURE(MemoryObjectParameterivEXT, isCallValid, context, memoryObject, pname,
+        ANGLE_CAPTURE(MemoryObjectParameterivEXT, isCallValid, context, memoryObjectPacked, pname,
                       params);
     }
 }
@@ -18432,18 +18459,19 @@ void GL_APIENTRY TexStorageMem2DEXTContextANGLE(GLeglContext ctx,
     {
         ASSERT(context == GetValidGlobalContext());
         TextureType targetPacked                      = FromGL<TextureType>(target);
+        MemoryObjectID memoryPacked                   = FromGL<MemoryObjectID>(memory);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateTexStorageMem2DEXT(context, targetPacked, levels, internalFormat, width,
-                                        height, memory, offset));
+                                        height, memoryPacked, offset));
         if (isCallValid)
         {
-            context->texStorageMem2D(targetPacked, levels, internalFormat, width, height, memory,
-                                     offset);
+            context->texStorageMem2D(targetPacked, levels, internalFormat, width, height,
+                                     memoryPacked, offset);
         }
         ANGLE_CAPTURE(TexStorageMem2DEXT, isCallValid, context, targetPacked, levels,
-                      internalFormat, width, height, memory, offset);
+                      internalFormat, width, height, memoryPacked, offset);
     }
 }
 
@@ -18470,18 +18498,19 @@ void GL_APIENTRY TexStorageMem2DMultisampleEXTContextANGLE(GLeglContext ctx,
     {
         ASSERT(context == GetValidGlobalContext());
         TextureType targetPacked                      = FromGL<TextureType>(target);
+        MemoryObjectID memoryPacked                   = FromGL<MemoryObjectID>(memory);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() || ValidateTexStorageMem2DMultisampleEXT(
                                               context, targetPacked, samples, internalFormat, width,
-                                              height, fixedSampleLocations, memory, offset));
+                                              height, fixedSampleLocations, memoryPacked, offset));
         if (isCallValid)
         {
             context->texStorageMem2DMultisample(targetPacked, samples, internalFormat, width,
-                                                height, fixedSampleLocations, memory, offset);
+                                                height, fixedSampleLocations, memoryPacked, offset);
         }
         ANGLE_CAPTURE(TexStorageMem2DMultisampleEXT, isCallValid, context, targetPacked, samples,
-                      internalFormat, width, height, fixedSampleLocations, memory, offset);
+                      internalFormat, width, height, fixedSampleLocations, memoryPacked, offset);
     }
 }
 
@@ -18507,18 +18536,19 @@ void GL_APIENTRY TexStorageMem3DEXTContextANGLE(GLeglContext ctx,
     {
         ASSERT(context == GetValidGlobalContext());
         TextureType targetPacked                      = FromGL<TextureType>(target);
+        MemoryObjectID memoryPacked                   = FromGL<MemoryObjectID>(memory);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
              ValidateTexStorageMem3DEXT(context, targetPacked, levels, internalFormat, width,
-                                        height, depth, memory, offset));
+                                        height, depth, memoryPacked, offset));
         if (isCallValid)
         {
             context->texStorageMem3D(targetPacked, levels, internalFormat, width, height, depth,
-                                     memory, offset);
+                                     memoryPacked, offset);
         }
         ANGLE_CAPTURE(TexStorageMem3DEXT, isCallValid, context, targetPacked, levels,
-                      internalFormat, width, height, depth, memory, offset);
+                      internalFormat, width, height, depth, memoryPacked, offset);
     }
 }
 
@@ -18546,19 +18576,21 @@ void GL_APIENTRY TexStorageMem3DMultisampleEXTContextANGLE(GLeglContext ctx,
     {
         ASSERT(context == GetValidGlobalContext());
         TextureType targetPacked                      = FromGL<TextureType>(target);
+        MemoryObjectID memoryPacked                   = FromGL<MemoryObjectID>(memory);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateTexStorageMem3DMultisampleEXT(
-                                              context, targetPacked, samples, internalFormat, width,
-                                              height, depth, fixedSampleLocations, memory, offset));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateTexStorageMem3DMultisampleEXT(
+                                context, targetPacked, samples, internalFormat, width, height,
+                                depth, fixedSampleLocations, memoryPacked, offset));
         if (isCallValid)
         {
             context->texStorageMem3DMultisample(targetPacked, samples, internalFormat, width,
-                                                height, depth, fixedSampleLocations, memory,
+                                                height, depth, fixedSampleLocations, memoryPacked,
                                                 offset);
         }
         ANGLE_CAPTURE(TexStorageMem3DMultisampleEXT, isCallValid, context, targetPacked, samples,
-                      internalFormat, width, height, depth, fixedSampleLocations, memory, offset);
+                      internalFormat, width, height, depth, fixedSampleLocations, memoryPacked,
+                      offset);
     }
 }
 

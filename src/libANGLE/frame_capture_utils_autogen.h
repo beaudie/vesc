@@ -88,6 +88,9 @@ enum class ParamType
     TLogicalOperation,
     TMaterialParameter,
     TMatrixType,
+    TMemoryObjectID,
+    TMemoryObjectIDConstPointer,
+    TMemoryObjectIDPointer,
     TPointParameter,
     TPrimitiveMode,
     TProgramPipelineID,
@@ -193,6 +196,9 @@ union ParamValue
     gl::LogicalOperation LogicalOperationVal;
     gl::MaterialParameter MaterialParameterVal;
     gl::MatrixType MatrixTypeVal;
+    gl::MemoryObjectID MemoryObjectIDVal;
+    const gl::MemoryObjectID *MemoryObjectIDConstPointerVal;
+    gl::MemoryObjectID *MemoryObjectIDPointerVal;
     gl::PointParameter PointParameterVal;
     gl::PrimitiveMode PrimitiveModeVal;
     gl::ProgramPipelineID ProgramPipelineIDVal;
@@ -677,6 +683,27 @@ inline void SetParamVal<ParamType::TMatrixType>(gl::MatrixType valueIn, ParamVal
 }
 
 template <>
+inline void SetParamVal<ParamType::TMemoryObjectID>(gl::MemoryObjectID valueIn,
+                                                    ParamValue *valueOut)
+{
+    valueOut->MemoryObjectIDVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TMemoryObjectIDConstPointer>(const gl::MemoryObjectID *valueIn,
+                                                                ParamValue *valueOut)
+{
+    valueOut->MemoryObjectIDConstPointerVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TMemoryObjectIDPointer>(gl::MemoryObjectID *valueIn,
+                                                           ParamValue *valueOut)
+{
+    valueOut->MemoryObjectIDPointerVal = valueIn;
+}
+
+template <>
 inline void SetParamVal<ParamType::TPointParameter>(gl::PointParameter valueIn,
                                                     ParamValue *valueOut)
 {
@@ -1097,6 +1124,15 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
             break;
         case ParamType::TMatrixType:
             SetParamVal<ParamType::TMatrixType>(valueIn, valueOut);
+            break;
+        case ParamType::TMemoryObjectID:
+            SetParamVal<ParamType::TMemoryObjectID>(valueIn, valueOut);
+            break;
+        case ParamType::TMemoryObjectIDConstPointer:
+            SetParamVal<ParamType::TMemoryObjectIDConstPointer>(valueIn, valueOut);
+            break;
+        case ParamType::TMemoryObjectIDPointer:
+            SetParamVal<ParamType::TMemoryObjectIDPointer>(valueIn, valueOut);
             break;
         case ParamType::TPointParameter:
             SetParamVal<ParamType::TPointParameter>(valueIn, valueOut);
