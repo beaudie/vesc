@@ -1556,6 +1556,8 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
 
     features->resettingTexturesGeneratesErrors.enabled =
         IsApple() || (IsWindows() && IsAMD(device));
+
+    features->keepBufferShadowCopy.enabled = !CanMapBufferForRead(functions);
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
