@@ -334,6 +334,15 @@ void RendererVk::ensureCapsInitialized() const
     }
     mNativeCaps.maxCombinedAtomicCounters = maxAtomicCounters;
 
+    // GL Images correspond to Vulkan Storage Images.
+    const uint32_t maxPerStageImages = limitsVk.maxPerStageDescriptorStorageImages;
+    const uint32_t maxCombinedImages = limitsVk.maxDescriptorSetStorageImages;
+    mNativeCaps.maxShaderImageUniforms[gl::ShaderType::Vertex]   = maxPerStageImages;
+    mNativeCaps.maxShaderImageUniforms[gl::ShaderType::Fragment] = maxPerStageImages;
+    mNativeCaps.maxShaderImageUniforms[gl::ShaderType::Compute]  = maxPerStageImages;
+    mNativeCaps.maxCombinedImageUniforms                         = maxCombinedImages;
+    mNativeCaps.maxImageUnits                                    = maxCombinedImages;
+
     mNativeCaps.minProgramTexelOffset = mPhysicalDeviceProperties.limits.minTexelOffset;
     mNativeCaps.maxProgramTexelOffset = mPhysicalDeviceProperties.limits.maxTexelOffset;
 

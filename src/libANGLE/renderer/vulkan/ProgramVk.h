@@ -123,6 +123,7 @@ class ProgramVk : public ProgramImpl
     bool hasUniformBuffers() const { return !mState.getUniformBlocks().empty(); }
     bool hasStorageBuffers() const { return !mState.getShaderStorageBlocks().empty(); }
     bool hasAtomicCounterBuffers() const { return !mState.getAtomicCounterBuffers().empty(); }
+    bool hasImages() const { return !mState.getImageBindings().empty(); }
     bool hasTransformFeedbackOutput() const
     {
         return !mState.getLinkedTransformFeedbackVaryings().empty();

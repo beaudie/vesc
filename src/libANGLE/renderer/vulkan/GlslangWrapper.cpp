@@ -758,8 +758,29 @@ uint32_t AssignAtomicCounterBufferBindings(const std::vector<gl::AtomicCounterBu
     return bindingStart + 1;
 }
 
-void AssignBufferBindings(const gl::ProgramState &programState,
-                          gl::ShaderMap<IntermediateShaderSource> *shaderSources)
+uint32_t AssignImageBindings(const std::vector<gl::LinkedUniform> &uniforms,
+                             const gl::RangeUI &imageUniformRange,
+                             uint32_t bindingStart,
+                             gl::ShaderMap<IntermediateShaderSource> *shaderSources)
+{
+    const std::string resourcesDescriptorSet = "set = " + Str(kShaderResourceDescriptorSetIndex);
+
+    uint32_t bindingIndex = bindingStart;
+    for (unsigned int uniformIndex : imageUniformRange)
+    {
+        const gl::LinkedUniform &imageUniform = uniforms[uniformIndex];
+        const std::string bindingString =
+            resourcesDescriptorSet + ", binding = " + Str(bindingIndex++);
+
+        AssignResourceBinding(imageUniform.activeShaders(), imageUniform.name, bindingString,
+                              kUniformQualifier, kUnusedUniformSubstitution, shaderSources);
+    }
+
+    return bindingIndex;
+}
+
+void AssignNonTextureBindings(const gl::ProgramState &programState,
+                              gl::ShaderMap<IntermediateShaderSource> *shaderSources)
 {
     uint32_t bindingStart = 0;
 
@@ -775,6 +796,10 @@ void AssignBufferBindings(const gl::ProgramState &programState,
         programState.getAtomicCounterBuffers();
     bindingStart = AssignAtomicCounterBufferBindings(atomicCounterBuffers, kSSBOQualifier,
                                                      bindingStart, shaderSources);
+
+    const std::vector<gl::LinkedUniform> &uniforms = programState.getUniforms();
+    const gl::RangeUI &imageUniformRange           = programState.getImageUniformRange();
+    bindingStart = AssignImageBindings(uniforms, imageUniformRange, bindingStart, shaderSources);
 }
 
 void AssignTextureBindings(const gl::ProgramState &programState,
@@ -905,8 +930,8 @@ void GlslangWrapper::GetShaderSource(const gl::ProgramState &programState,
         AssignVaryingLocations(resources, vertexSource, fragmentSource);
     }
     AssignUniformBindings(&intermediateSources);
-    AssignBufferBindings(programState, &intermediateSources);
     AssignTextureBindings(programState, &intermediateSources);
+    AssignNonTextureBindings(programState, &intermediateSources);
 
     CleanupUnusedEntities(programState, resources,
                           programState.getAttachedShader(gl::ShaderType::Vertex),
