@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "793f788d_305c0ebb",
+        "filename": "src/compiler/translator/ParseContext_interm.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-23T14:15:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a6458c1_e9124964",
+      "revId": "92d6c7b698dfa104d6c9b5079e5fa633729ed3f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7390cfa2_06ffbf25",
         "filename": "src/compiler/translator/gen_builtin_symbols_essl_only.py",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "92d6c7b698dfa104d6c9b5079e5fa633729ed3f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acaa0133_0ed31976",
+        "filename": "src/compiler/translator/gen_builtin_symbols_essl_only.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-23T14:15:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7390cfa2_06ffbf25",
+      "revId": "92d6c7b698dfa104d6c9b5079e5fa633729ed3f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -59,6 +95,30 @@
     },
     {
       "key": {
+        "uuid": "1f28eb18_aedeb3a6",
+        "filename": "src/compiler/translator/gen_builtin_symbols_essl_only.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-23T14:15:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f6ab7a1_e096c0ef",
+      "range": {
+        "startLine": 958,
+        "startChar": 8,
+        "endLine": 959,
+        "endChar": 58
+      },
+      "revId": "92d6c7b698dfa104d6c9b5079e5fa633729ed3f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8ca9f9db_e1ecf2f4",
         "filename": "src/compiler/translator/gen_builtin_symbols_essl_only.py",
         "patchSetId": 2
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "5319e4cb_1b306b9b",
+        "filename": "src/compiler/translator/gen_builtin_symbols_essl_only.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1091,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-23T14:15:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ca9f9db_e1ecf2f4",
+      "range": {
+        "startLine": 1090,
+        "startChar": 12,
+        "endLine": 1091,
+        "endChar": 46
+      },
+      "revId": "92d6c7b698dfa104d6c9b5079e5fa633729ed3f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa42a7f5_c5d6ac81",
         "filename": "src/compiler/translator/tree_util/BuiltIn.h",
         "patchSetId": 2
@@ -96,6 +180,24 @@
       "revId": "92d6c7b698dfa104d6c9b5079e5fa633729ed3f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "952fcf31_c8677df7",
+        "filename": "src/compiler/translator/tree_util/BuiltIn.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1350638
+      },
+      "writtenOn": "2019-08-23T14:15:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa42a7f5_c5d6ac81",
+      "revId": "92d6c7b698dfa104d6c9b5079e5fa633729ed3f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
