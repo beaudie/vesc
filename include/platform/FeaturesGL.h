@@ -484,6 +484,13 @@ struct FeaturesGL : FeatureSetBase
         "Bind transform feedback buffers to the generic binding point before calling "
         "glBindBufferBase or glBindBufferRange.",
         &members, "https://anglebug.com/5140"};
+
+    // Buffers need to maintain a shadow copy of data when buffer data readback is not possible
+    // through the GL API
+    Feature keepBufferShadowCopy = {
+        "keep_buffer_shadow_copy", FeatureCategory::OpenGLWorkarounds,
+        "Maintain a shadow copy of buffer data when the GL API does not permit reading data back.",
+        &members};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
