@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a3da973e_7aa630dd",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-23T23:54:46Z",
+      "side": 1,
+      "message": "Could I do it after all the resourceID converts merged? it is annoying to do it for every patch. (I have some tools that automatically sorted it up, but the tools also reorder the params, which force me to do some manual work..)",
+      "parentUuid": "25337fc3_b381c9ed",
+      "range": {
+        "startLine": 863,
+        "startChar": 0,
+        "endLine": 898,
+        "endChar": 5
+      },
+      "revId": "f78e364d0d8a6de3bf129663f3d30df281235315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f9fb4436_81047172",
         "filename": "src/common/PackedEnums.h",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "f78e364d0d8a6de3bf129663f3d30df281235315",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e3959b8_e2b2fbcf",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-23T23:54:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9fb4436_81047172",
+      "range": {
+        "startLine": 391,
+        "startChar": 0,
+        "endLine": 393,
+        "endChar": 0
+      },
+      "revId": "f78e364d0d8a6de3bf129663f3d30df281235315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "28dc3f5e_7ad4d2f5",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5432,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-23T23:54:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5399584_6cf2373c",
+      "range": {
+        "startLine": 5432,
+        "startChar": 8,
+        "endLine": 5432,
+        "endChar": 40
+      },
+      "revId": "f78e364d0d8a6de3bf129663f3d30df281235315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b45c9867_0060564f",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "f78e364d0d8a6de3bf129663f3d30df281235315",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7d35f69_6dd80318",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-23T23:54:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b45c9867_0060564f",
+      "range": {
+        "startLine": 983,
+        "startChar": 8,
+        "endLine": 983,
+        "endChar": 36
+      },
+      "revId": "f78e364d0d8a6de3bf129663f3d30df281235315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
