@@ -355,6 +355,13 @@ struct FeaturesGL : FeatureSetBase
         "Mac incorrectly executes both sides of && and || expressions when they should "
         "short-circuit.",
         &members, "http://anglebug.com/482"};
+
+    // Buffers need to maintain a shadow copy of data when buffer data readback is not possible
+    // through the GL API
+    Feature keepBufferShadowCopy = {
+        "keep_buffer_shadow_copy", FeatureCategory::OpenGLWorkarounds,
+        "Maintain a shadow copy of buffer data when the GL API does not permit reading data back.",
+        &members, ""};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
