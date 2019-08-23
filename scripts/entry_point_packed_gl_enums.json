@@ -463,6 +463,7 @@
         "handleType": "HandleType"
     },
     "glImportSemaphoreFd": {
+        "semaphore": "SemaphoreID",
         "handleType": "HandleType"
     },
     "glInvalidateBufferData": {
@@ -641,6 +642,7 @@
         "mode": "ShadingModel"
     },
     "glSignalSemaphore": {
+        "semaphore": "SemaphoreID",
         "buffers": "const BufferID *",
         "textures": "const TextureID *"
     },
@@ -854,6 +856,7 @@
         "type": "VertexAttribType"
     },
     "glWaitSemaphore": {
+        "semaphore": "SemaphoreID",
         "buffers": "const BufferID *",
         "textures": "const TextureID *"
     },
@@ -895,5 +898,20 @@
     },
     "glDeleteFramebuffers": {
         "framebuffers": "const FramebufferID *"
+    },
+    "glGenSemaphores": {
+        "semaphores": "SemaphoreID *"
+    },
+    "glDeleteSemaphores": {
+        "semaphores": "const SemaphoreID *"
+    },
+    "glIsSemaphore": {
+        "semaphore": "SemaphoreID"
+    },
+    "glSemaphoreParameterui64v": {
+        "semaphore": "SemaphoreID"
+    },
+    "glGetSemaphoreParameterui64v": {
+        "semaphore": "SemaphoreID"
     }
 }

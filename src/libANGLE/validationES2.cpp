@@ -3365,7 +3365,7 @@ bool ValidateImportMemoryFdEXT(Context *context,
     return true;
 }
 
-bool ValidateDeleteSemaphoresEXT(Context *context, GLsizei n, const GLuint *semaphores)
+bool ValidateDeleteSemaphoresEXT(Context *context, GLsizei n, const SemaphoreID *semaphores)
 {
     if (!context->getExtensions().semaphore)
     {
@@ -3376,7 +3376,7 @@ bool ValidateDeleteSemaphoresEXT(Context *context, GLsizei n, const GLuint *sema
     return ValidateGenOrDelete(context, n);
 }
 
-bool ValidateGenSemaphoresEXT(Context *context, GLsizei n, GLuint *semaphores)
+bool ValidateGenSemaphoresEXT(Context *context, GLsizei n, SemaphoreID *semaphores)
 {
     if (!context->getExtensions().semaphore)
     {
@@ -3388,7 +3388,7 @@ bool ValidateGenSemaphoresEXT(Context *context, GLsizei n, GLuint *semaphores)
 }
 
 bool ValidateGetSemaphoreParameterui64vEXT(Context *context,
-                                           GLuint semaphore,
+                                           SemaphoreID semaphore,
                                            GLenum pname,
                                            GLuint64 *params)
 {
@@ -3402,7 +3402,7 @@ bool ValidateGetSemaphoreParameterui64vEXT(Context *context,
     return false;
 }
 
-bool ValidateIsSemaphoreEXT(Context *context, GLuint semaphore)
+bool ValidateIsSemaphoreEXT(Context *context, SemaphoreID semaphore)
 {
     if (!context->getExtensions().semaphore)
     {
@@ -3414,7 +3414,7 @@ bool ValidateIsSemaphoreEXT(Context *context, GLuint semaphore)
 }
 
 bool ValidateSemaphoreParameterui64vEXT(Context *context,
-                                        GLuint semaphore,
+                                        SemaphoreID semaphore,
                                         GLenum pname,
                                         const GLuint64 *params)
 {
@@ -3429,7 +3429,7 @@ bool ValidateSemaphoreParameterui64vEXT(Context *context,
 }
 
 bool ValidateSignalSemaphoreEXT(Context *context,
-                                GLuint semaphore,
+                                SemaphoreID semaphore,
                                 GLuint numBufferBarriers,
                                 const BufferID *buffers,
                                 GLuint numTextureBarriers,
@@ -3455,7 +3455,7 @@ bool ValidateSignalSemaphoreEXT(Context *context,
 }
 
 bool ValidateWaitSemaphoreEXT(Context *context,
-                              GLuint semaphore,
+                              SemaphoreID semaphore,
                               GLuint numBufferBarriers,
                               const BufferID *buffers,
                               GLuint numTextureBarriers,
@@ -3481,7 +3481,7 @@ bool ValidateWaitSemaphoreEXT(Context *context,
 }
 
 bool ValidateImportSemaphoreFdEXT(Context *context,
-                                  GLuint semaphore,
+                                  SemaphoreID semaphore,
                                   HandleType handleType,
                                   GLint fd)
 {

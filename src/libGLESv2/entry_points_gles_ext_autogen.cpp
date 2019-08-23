@@ -4549,14 +4549,15 @@ void GL_APIENTRY DeleteSemaphoresEXT(GLsizei n, const GLuint *semaphores)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        const SemaphoreID *semaphoresPacked           = FromGL<const SemaphoreID *>(semaphores);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateDeleteSemaphoresEXT(context, n, semaphores));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateDeleteSemaphoresEXT(context, n, semaphoresPacked));
         if (isCallValid)
         {
-            context->deleteSemaphores(n, semaphores);
+            context->deleteSemaphores(n, semaphoresPacked);
         }
-        ANGLE_CAPTURE(DeleteSemaphoresEXT, isCallValid, context, n, semaphores);
+        ANGLE_CAPTURE(DeleteSemaphoresEXT, isCallValid, context, n, semaphoresPacked);
     }
 }
 
@@ -4567,14 +4568,15 @@ void GL_APIENTRY GenSemaphoresEXT(GLsizei n, GLuint *semaphores)
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        SemaphoreID *semaphoresPacked                 = FromGL<SemaphoreID *>(semaphores);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateGenSemaphoresEXT(context, n, semaphores));
+            (context->skipValidation() || ValidateGenSemaphoresEXT(context, n, semaphoresPacked));
         if (isCallValid)
         {
-            context->genSemaphores(n, semaphores);
+            context->genSemaphores(n, semaphoresPacked);
         }
-        ANGLE_CAPTURE(GenSemaphoresEXT, isCallValid, context, n, semaphores);
+        ANGLE_CAPTURE(GenSemaphoresEXT, isCallValid, context, n, semaphoresPacked);
     }
 }
 
@@ -4586,14 +4588,16 @@ void GL_APIENTRY GetSemaphoreParameterui64vEXT(GLuint semaphore, GLenum pname, G
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        SemaphoreID semaphorePacked                   = FromGL<SemaphoreID>(semaphore);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateGetSemaphoreParameterui64vEXT(
-                                                             context, semaphore, pname, params));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateGetSemaphoreParameterui64vEXT(context, semaphorePacked, pname, params));
         if (isCallValid)
         {
-            context->getSemaphoreParameterui64v(semaphore, pname, params);
+            context->getSemaphoreParameterui64v(semaphorePacked, pname, params);
         }
-        ANGLE_CAPTURE(GetSemaphoreParameterui64vEXT, isCallValid, context, semaphore, pname,
+        ANGLE_CAPTURE(GetSemaphoreParameterui64vEXT, isCallValid, context, semaphorePacked, pname,
                       params);
     }
 }
@@ -4606,18 +4610,19 @@ GLboolean GL_APIENTRY IsSemaphoreEXT(GLuint semaphore)
     GLboolean returnValue;
     if (context)
     {
+        SemaphoreID semaphorePacked                   = FromGL<SemaphoreID>(semaphore);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateIsSemaphoreEXT(context, semaphore));
+            (context->skipValidation() || ValidateIsSemaphoreEXT(context, semaphorePacked));
         if (isCallValid)
         {
-            returnValue = context->isSemaphore(semaphore);
+            returnValue = context->isSemaphore(semaphorePacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsSemaphoreEXT, GLboolean>();
         }
-        ANGLE_CAPTURE(IsSemaphoreEXT, isCallValid, context, semaphore, returnValue);
+        ANGLE_CAPTURE(IsSemaphoreEXT, isCallValid, context, semaphorePacked, returnValue);
     }
     else
     {
@@ -4634,14 +4639,17 @@ void GL_APIENTRY SemaphoreParameterui64vEXT(GLuint semaphore, GLenum pname, cons
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        SemaphoreID semaphorePacked                   = FromGL<SemaphoreID>(semaphore);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateSemaphoreParameterui64vEXT(context, semaphore, pname, params));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateSemaphoreParameterui64vEXT(context, semaphorePacked, pname, params));
         if (isCallValid)
         {
-            context->semaphoreParameterui64v(semaphore, pname, params);
+            context->semaphoreParameterui64v(semaphorePacked, pname, params);
         }
-        ANGLE_CAPTURE(SemaphoreParameterui64vEXT, isCallValid, context, semaphore, pname, params);
+        ANGLE_CAPTURE(SemaphoreParameterui64vEXT, isCallValid, context, semaphorePacked, pname,
+                      params);
     }
 }
 
@@ -4662,19 +4670,20 @@ void GL_APIENTRY SignalSemaphoreEXT(GLuint semaphore,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        SemaphoreID semaphorePacked                   = FromGL<SemaphoreID>(semaphore);
         const BufferID *buffersPacked                 = FromGL<const BufferID *>(buffers);
         const TextureID *texturesPacked               = FromGL<const TextureID *>(textures);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateSignalSemaphoreEXT(context, semaphore, numBufferBarriers, buffersPacked,
+             ValidateSignalSemaphoreEXT(context, semaphorePacked, numBufferBarriers, buffersPacked,
                                         numTextureBarriers, texturesPacked, dstLayouts));
         if (isCallValid)
         {
-            context->signalSemaphore(semaphore, numBufferBarriers, buffersPacked,
+            context->signalSemaphore(semaphorePacked, numBufferBarriers, buffersPacked,
                                      numTextureBarriers, texturesPacked, dstLayouts);
         }
-        ANGLE_CAPTURE(SignalSemaphoreEXT, isCallValid, context, semaphore, numBufferBarriers,
+        ANGLE_CAPTURE(SignalSemaphoreEXT, isCallValid, context, semaphorePacked, numBufferBarriers,
                       buffersPacked, numTextureBarriers, texturesPacked, dstLayouts);
     }
 }
@@ -4696,19 +4705,20 @@ void GL_APIENTRY WaitSemaphoreEXT(GLuint semaphore,
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        SemaphoreID semaphorePacked                   = FromGL<SemaphoreID>(semaphore);
         const BufferID *buffersPacked                 = FromGL<const BufferID *>(buffers);
         const TextureID *texturesPacked               = FromGL<const TextureID *>(textures);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateWaitSemaphoreEXT(context, semaphore, numBufferBarriers, buffersPacked,
+             ValidateWaitSemaphoreEXT(context, semaphorePacked, numBufferBarriers, buffersPacked,
                                       numTextureBarriers, texturesPacked, srcLayouts));
         if (isCallValid)
         {
-            context->waitSemaphore(semaphore, numBufferBarriers, buffersPacked, numTextureBarriers,
-                                   texturesPacked, srcLayouts);
+            context->waitSemaphore(semaphorePacked, numBufferBarriers, buffersPacked,
+                                   numTextureBarriers, texturesPacked, srcLayouts);
         }
-        ANGLE_CAPTURE(WaitSemaphoreEXT, isCallValid, context, semaphore, numBufferBarriers,
+        ANGLE_CAPTURE(WaitSemaphoreEXT, isCallValid, context, semaphorePacked, numBufferBarriers,
                       buffersPacked, numTextureBarriers, texturesPacked, srcLayouts);
     }
 }
@@ -4726,15 +4736,18 @@ void GL_APIENTRY ImportSemaphoreFdEXT(GLuint semaphore, GLenum handleType, GLint
     Context *context = GetValidGlobalContext();
     if (context)
     {
+        SemaphoreID semaphorePacked                   = FromGL<SemaphoreID>(semaphore);
         HandleType handleTypePacked                   = FromGL<HandleType>(handleType);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateImportSemaphoreFdEXT(context, semaphore, handleTypePacked, fd));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateImportSemaphoreFdEXT(context, semaphorePacked, handleTypePacked, fd));
         if (isCallValid)
         {
-            context->importSemaphoreFd(semaphore, handleTypePacked, fd);
+            context->importSemaphoreFd(semaphorePacked, handleTypePacked, fd);
         }
-        ANGLE_CAPTURE(ImportSemaphoreFdEXT, isCallValid, context, semaphore, handleTypePacked, fd);
+        ANGLE_CAPTURE(ImportSemaphoreFdEXT, isCallValid, context, semaphorePacked, handleTypePacked,
+                      fd);
     }
 }
 
@@ -9061,14 +9074,15 @@ void GL_APIENTRY DeleteSemaphoresEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        const SemaphoreID *semaphoresPacked           = FromGL<const SemaphoreID *>(semaphores);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid =
-            (context->skipValidation() || ValidateDeleteSemaphoresEXT(context, n, semaphores));
+        bool isCallValid                              = (context->skipValidation() ||
+                            ValidateDeleteSemaphoresEXT(context, n, semaphoresPacked));
         if (isCallValid)
         {
-            context->deleteSemaphores(n, semaphores);
+            context->deleteSemaphores(n, semaphoresPacked);
         }
-        ANGLE_CAPTURE(DeleteSemaphoresEXT, isCallValid, context, n, semaphores);
+        ANGLE_CAPTURE(DeleteSemaphoresEXT, isCallValid, context, n, semaphoresPacked);
     }
 }
 
@@ -10862,14 +10876,15 @@ void GL_APIENTRY GenSemaphoresEXTContextANGLE(GLeglContext ctx, GLsizei n, GLuin
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        SemaphoreID *semaphoresPacked                 = FromGL<SemaphoreID *>(semaphores);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateGenSemaphoresEXT(context, n, semaphores));
+            (context->skipValidation() || ValidateGenSemaphoresEXT(context, n, semaphoresPacked));
         if (isCallValid)
         {
-            context->genSemaphores(n, semaphores);
+            context->genSemaphores(n, semaphoresPacked);
         }
-        ANGLE_CAPTURE(GenSemaphoresEXT, isCallValid, context, n, semaphores);
+        ANGLE_CAPTURE(GenSemaphoresEXT, isCallValid, context, n, semaphoresPacked);
     }
 }
 
@@ -12748,14 +12763,16 @@ void GL_APIENTRY GetSemaphoreParameterui64vEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        SemaphoreID semaphorePacked                   = FromGL<SemaphoreID>(semaphore);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid = (context->skipValidation() || ValidateGetSemaphoreParameterui64vEXT(
-                                                             context, semaphore, pname, params));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateGetSemaphoreParameterui64vEXT(context, semaphorePacked, pname, params));
         if (isCallValid)
         {
-            context->getSemaphoreParameterui64v(semaphore, pname, params);
+            context->getSemaphoreParameterui64v(semaphorePacked, pname, params);
         }
-        ANGLE_CAPTURE(GetSemaphoreParameterui64vEXT, isCallValid, context, semaphore, pname,
+        ANGLE_CAPTURE(GetSemaphoreParameterui64vEXT, isCallValid, context, semaphorePacked, pname,
                       params);
     }
 }
@@ -13770,15 +13787,18 @@ void GL_APIENTRY ImportSemaphoreFdEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        SemaphoreID semaphorePacked                   = FromGL<SemaphoreID>(semaphore);
         HandleType handleTypePacked                   = FromGL<HandleType>(handleType);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateImportSemaphoreFdEXT(context, semaphore, handleTypePacked, fd));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateImportSemaphoreFdEXT(context, semaphorePacked, handleTypePacked, fd));
         if (isCallValid)
         {
-            context->importSemaphoreFd(semaphore, handleTypePacked, fd);
+            context->importSemaphoreFd(semaphorePacked, handleTypePacked, fd);
         }
-        ANGLE_CAPTURE(ImportSemaphoreFdEXT, isCallValid, context, semaphore, handleTypePacked, fd);
+        ANGLE_CAPTURE(ImportSemaphoreFdEXT, isCallValid, context, semaphorePacked, handleTypePacked,
+                      fd);
     }
 }
 
@@ -14224,18 +14244,19 @@ GLboolean GL_APIENTRY IsSemaphoreEXTContextANGLE(GLeglContext ctx, GLuint semaph
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        SemaphoreID semaphorePacked                   = FromGL<SemaphoreID>(semaphore);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
-            (context->skipValidation() || ValidateIsSemaphoreEXT(context, semaphore));
+            (context->skipValidation() || ValidateIsSemaphoreEXT(context, semaphorePacked));
         if (isCallValid)
         {
-            returnValue = context->isSemaphore(semaphore);
+            returnValue = context->isSemaphore(semaphorePacked);
         }
         else
         {
             returnValue = GetDefaultReturnValue<EntryPoint::IsSemaphoreEXT, GLboolean>();
         }
-        ANGLE_CAPTURE(IsSemaphoreEXT, isCallValid, context, semaphore, returnValue);
+        ANGLE_CAPTURE(IsSemaphoreEXT, isCallValid, context, semaphorePacked, returnValue);
     }
     else
     {
@@ -17237,14 +17258,17 @@ void GL_APIENTRY SemaphoreParameterui64vEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        SemaphoreID semaphorePacked                   = FromGL<SemaphoreID>(semaphore);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
-        bool isCallValid                              = (context->skipValidation() ||
-                            ValidateSemaphoreParameterui64vEXT(context, semaphore, pname, params));
+        bool isCallValid =
+            (context->skipValidation() ||
+             ValidateSemaphoreParameterui64vEXT(context, semaphorePacked, pname, params));
         if (isCallValid)
         {
-            context->semaphoreParameterui64v(semaphore, pname, params);
+            context->semaphoreParameterui64v(semaphorePacked, pname, params);
         }
-        ANGLE_CAPTURE(SemaphoreParameterui64vEXT, isCallValid, context, semaphore, pname, params);
+        ANGLE_CAPTURE(SemaphoreParameterui64vEXT, isCallValid, context, semaphorePacked, pname,
+                      params);
     }
 }
 
@@ -17361,19 +17385,20 @@ void GL_APIENTRY SignalSemaphoreEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        SemaphoreID semaphorePacked                   = FromGL<SemaphoreID>(semaphore);
         const BufferID *buffersPacked                 = FromGL<const BufferID *>(buffers);
         const TextureID *texturesPacked               = FromGL<const TextureID *>(textures);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateSignalSemaphoreEXT(context, semaphore, numBufferBarriers, buffersPacked,
+             ValidateSignalSemaphoreEXT(context, semaphorePacked, numBufferBarriers, buffersPacked,
                                         numTextureBarriers, texturesPacked, dstLayouts));
         if (isCallValid)
         {
-            context->signalSemaphore(semaphore, numBufferBarriers, buffersPacked,
+            context->signalSemaphore(semaphorePacked, numBufferBarriers, buffersPacked,
                                      numTextureBarriers, texturesPacked, dstLayouts);
         }
-        ANGLE_CAPTURE(SignalSemaphoreEXT, isCallValid, context, semaphore, numBufferBarriers,
+        ANGLE_CAPTURE(SignalSemaphoreEXT, isCallValid, context, semaphorePacked, numBufferBarriers,
                       buffersPacked, numTextureBarriers, texturesPacked, dstLayouts);
     }
 }
@@ -20166,19 +20191,20 @@ void GL_APIENTRY WaitSemaphoreEXTContextANGLE(GLeglContext ctx,
     if (context)
     {
         ASSERT(context == GetValidGlobalContext());
+        SemaphoreID semaphorePacked                   = FromGL<SemaphoreID>(semaphore);
         const BufferID *buffersPacked                 = FromGL<const BufferID *>(buffers);
         const TextureID *texturesPacked               = FromGL<const TextureID *>(textures);
         std::unique_lock<std::mutex> shareContextLock = GetShareGroupLock(context);
         bool isCallValid =
             (context->skipValidation() ||
-             ValidateWaitSemaphoreEXT(context, semaphore, numBufferBarriers, buffersPacked,
+             ValidateWaitSemaphoreEXT(context, semaphorePacked, numBufferBarriers, buffersPacked,
                                       numTextureBarriers, texturesPacked, srcLayouts));
         if (isCallValid)
         {
-            context->waitSemaphore(semaphore, numBufferBarriers, buffersPacked, numTextureBarriers,
-                                   texturesPacked, srcLayouts);
+            context->waitSemaphore(semaphorePacked, numBufferBarriers, buffersPacked,
+                                   numTextureBarriers, texturesPacked, srcLayouts);
         }
-        ANGLE_CAPTURE(WaitSemaphoreEXT, isCallValid, context, semaphore, numBufferBarriers,
+        ANGLE_CAPTURE(WaitSemaphoreEXT, isCallValid, context, semaphorePacked, numBufferBarriers,
                       buffersPacked, numTextureBarriers, texturesPacked, srcLayouts);
     }
 }

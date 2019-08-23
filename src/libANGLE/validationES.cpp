@@ -3560,7 +3560,7 @@ bool ValidateDrawBuffersBase(Context *context, GLsizei n, const GLenum *bufs)
 
     ASSERT(context->getState().getDrawFramebuffer());
     FramebufferID frameBufferId = context->getState().getDrawFramebuffer()->id();
-    GLuint maxColorAttachment = GL_COLOR_ATTACHMENT0_EXT + context->getCaps().maxColorAttachments;
+    GLuint maxColorAttachment   = GL_COLOR_ATTACHMENT0_EXT + context->getCaps().maxColorAttachments;
 
     // This should come first before the check for the default frame buffer
     // because when we switch to ES3.1+, invalid enums will return INVALID_ENUM

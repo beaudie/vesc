@@ -971,8 +971,8 @@ bool ValidateES3CopyTexImageParametersBase(Context *context,
     }
     ASSERT(textureFormat.valid() || !isSubImage);
 
-    const auto &state            = context->getState();
-    gl::Framebuffer *framebuffer = state.getReadFramebuffer();
+    const auto &state               = context->getState();
+    gl::Framebuffer *framebuffer    = state.getReadFramebuffer();
     FramebufferID readFramebufferID = framebuffer->id();
 
     if (!ValidateFramebufferComplete(context, framebuffer))

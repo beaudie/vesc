@@ -746,7 +746,7 @@ GLuint Context::createMemoryObject()
     return mState.mMemoryObjectManager->createMemoryObject(mImplementation.get());
 }
 
-GLuint Context::createSemaphore()
+SemaphoreID Context::createSemaphore()
 {
     return mState.mSemaphoreManager->createSemaphore(mImplementation.get());
 }
@@ -816,7 +816,7 @@ void Context::deleteMemoryObject(GLuint memoryObject)
     mState.mMemoryObjectManager->deleteMemoryObject(this, memoryObject);
 }
 
-void Context::deleteSemaphore(GLuint semaphore)
+void Context::deleteSemaphore(SemaphoreID semaphore)
 {
     mState.mSemaphoreManager->deleteSemaphore(this, semaphore);
 }
@@ -6067,7 +6067,7 @@ MemoryObject *Context::getMemoryObject(GLuint handle) const
     return mState.mMemoryObjectManager->getMemoryObject(handle);
 }
 
-Semaphore *Context::getSemaphore(GLuint handle) const
+Semaphore *Context::getSemaphore(SemaphoreID handle) const
 {
     return mState.mSemaphoreManager->getSemaphore(handle);
 }
@@ -7592,7 +7592,7 @@ void Context::importMemoryFd(GLuint memory, GLuint64 size, HandleType handleType
     ANGLE_CONTEXT_TRY(memoryObject->importFd(this, size, handleType, fd));
 }
 
-void Context::genSemaphores(GLsizei n, GLuint *semaphores)
+void Context::genSemaphores(GLsizei n, SemaphoreID *semaphores)
 {
     for (int i = 0; i < n; i++)
     {
@@ -7600,7 +7600,7 @@ void Context::genSemaphores(GLsizei n, GLuint *semaphores)
     }
 }
 
-void Context::deleteSemaphores(GLsizei n, const GLuint *semaphores)
+void Context::deleteSemaphores(GLsizei n, const SemaphoreID *semaphores)
 {
     for (int i = 0; i < n; i++)
     {
@@ -7608,9 +7608,9 @@ void Context::deleteSemaphores(GLsizei n, const GLuint *semaphores)
     }
 }
 
-GLboolean Context::isSemaphore(GLuint semaphore)
+GLboolean Context::isSemaphore(SemaphoreID semaphore)
 {
-    if (semaphore == 0)
+    if (semaphore.value == 0)
     {
         return GL_FALSE;
     }
@@ -7618,17 +7618,17 @@ GLboolean Context::isSemaphore(GLuint semaphore)
     return ConvertToGLBoolean(getSemaphore(semaphore));
 }
 
-void Context::semaphoreParameterui64v(GLuint semaphore, GLenum pname, const GLuint64 *params)
+void Context::semaphoreParameterui64v(SemaphoreID semaphore, GLenum pname, const GLuint64 *params)
 {
     UNIMPLEMENTED();
 }
 
-void Context::getSemaphoreParameterui64v(GLuint semaphore, GLenum pname, GLuint64 *params)
+void Context::getSemaphoreParameterui64v(SemaphoreID semaphore, GLenum pname, GLuint64 *params)
 {
     UNIMPLEMENTED();
 }
 
-void Context::waitSemaphore(GLuint semaphoreHandle,
+void Context::waitSemaphore(SemaphoreID semaphoreHandle,
                             GLuint numBufferBarriers,
                             const BufferID *buffers,
                             GLuint numTextureBarriers,
@@ -7654,7 +7654,7 @@ void Context::waitSemaphore(GLuint semaphoreHandle,
     ANGLE_CONTEXT_TRY(semaphore->wait(this, bufferBarriers, textureBarriers));
 }
 
-void Context::signalSemaphore(GLuint semaphoreHandle,
+void Context::signalSemaphore(SemaphoreID semaphoreHandle,
                               GLuint numBufferBarriers,
                               const BufferID *buffers,
                               GLuint numTextureBarriers,
@@ -7680,7 +7680,7 @@ void Context::signalSemaphore(GLuint semaphoreHandle,
     ANGLE_CONTEXT_TRY(semaphore->signal(this, bufferBarriers, textureBarriers));
 }
 
-void Context::importSemaphoreFd(GLuint semaphore, HandleType handleType, GLint fd)
+void Context::importSemaphoreFd(SemaphoreID semaphore, HandleType handleType, GLint fd)
 {
     Semaphore *semaphoreObject = getSemaphore(semaphore);
     ASSERT(semaphoreObject != nullptr);

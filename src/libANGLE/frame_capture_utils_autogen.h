@@ -101,6 +101,9 @@ enum class ParamType
     TSamplerID,
     TSamplerIDConstPointer,
     TSamplerIDPointer,
+    TSemaphoreID,
+    TSemaphoreIDConstPointer,
+    TSemaphoreIDPointer,
     TShaderType,
     TShadingModel,
     TTextureEnvParameter,
@@ -203,6 +206,9 @@ union ParamValue
     gl::SamplerID SamplerIDVal;
     const gl::SamplerID *SamplerIDConstPointerVal;
     gl::SamplerID *SamplerIDPointerVal;
+    gl::SemaphoreID SemaphoreIDVal;
+    const gl::SemaphoreID *SemaphoreIDConstPointerVal;
+    gl::SemaphoreID *SemaphoreIDPointerVal;
     gl::ShaderType ShaderTypeVal;
     gl::ShadingModel ShadingModelVal;
     gl::TextureEnvParameter TextureEnvParameterVal;
@@ -760,6 +766,26 @@ inline void SetParamVal<ParamType::TSamplerIDPointer>(gl::SamplerID *valueIn, Pa
 }
 
 template <>
+inline void SetParamVal<ParamType::TSemaphoreID>(gl::SemaphoreID valueIn, ParamValue *valueOut)
+{
+    valueOut->SemaphoreIDVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TSemaphoreIDConstPointer>(const gl::SemaphoreID *valueIn,
+                                                             ParamValue *valueOut)
+{
+    valueOut->SemaphoreIDConstPointerVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TSemaphoreIDPointer>(gl::SemaphoreID *valueIn,
+                                                        ParamValue *valueOut)
+{
+    valueOut->SemaphoreIDPointerVal = valueIn;
+}
+
+template <>
 inline void SetParamVal<ParamType::TShaderType>(gl::ShaderType valueIn, ParamValue *valueOut)
 {
     valueOut->ShaderTypeVal = valueIn;
@@ -1110,6 +1136,15 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
             break;
         case ParamType::TSamplerIDPointer:
             SetParamVal<ParamType::TSamplerIDPointer>(valueIn, valueOut);
+            break;
+        case ParamType::TSemaphoreID:
+            SetParamVal<ParamType::TSemaphoreID>(valueIn, valueOut);
+            break;
+        case ParamType::TSemaphoreIDConstPointer:
+            SetParamVal<ParamType::TSemaphoreIDConstPointer>(valueIn, valueOut);
+            break;
+        case ParamType::TSemaphoreIDPointer:
+            SetParamVal<ParamType::TSemaphoreIDPointer>(valueIn, valueOut);
             break;
         case ParamType::TShaderType:
             SetParamVal<ParamType::TShaderType>(valueIn, valueOut);
