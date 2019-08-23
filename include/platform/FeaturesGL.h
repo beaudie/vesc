@@ -424,6 +424,13 @@ struct FeaturesGL : FeatureSetBase
     Feature disableSemaphoreFd = {"disable_semaphore_fd", FeatureCategory::OpenGLWorkarounds,
                                   "Disable GL_EXT_semaphore_fd extension", &members,
                                   "https://crbug.com/1046462"};
+
+    // Buffers need to maintain a shadow copy of data when buffer data readback is not possible
+    // through the GL API
+    Feature keepBufferShadowCopy = {
+        "keep_buffer_shadow_copy", FeatureCategory::OpenGLWorkarounds,
+        "Maintain a shadow copy of buffer data when the GL API does not permit reading data back.",
+        &members, ""};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
