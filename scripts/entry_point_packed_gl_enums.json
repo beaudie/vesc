@@ -934,5 +934,17 @@
     },
     "glGetMemoryObjectParameteriv": {
         "memoryObject": "MemoryObjectID"
+    },
+    "glIsVertexArray": {
+        "array": "VertexArrayID"
+    },
+    "glGenVertexArrays": {
+        "arrays": "VertexArrayID *"
+    },
+    "glDeleteVertexArrays": {
+        "arrays": "const VertexArrayID *"
+    },
+    "glBindVertexArray": {
+        "array": "VertexArrayID"
     }
 }

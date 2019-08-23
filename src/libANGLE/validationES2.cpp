@@ -2047,7 +2047,7 @@ bool ValidateDiscardFramebufferEXT(Context *context,
                                           defaultFramebuffer);
 }
 
-bool ValidateBindVertexArrayOES(Context *context, GLuint array)
+bool ValidateBindVertexArrayOES(Context *context, VertexArrayID array)
 {
     if (!context->getExtensions().vertexArrayObject)
     {
@@ -2058,7 +2058,7 @@ bool ValidateBindVertexArrayOES(Context *context, GLuint array)
     return ValidateBindVertexArrayBase(context, array);
 }
 
-bool ValidateDeleteVertexArraysOES(Context *context, GLsizei n, const GLuint *arrays)
+bool ValidateDeleteVertexArraysOES(Context *context, GLsizei n, const VertexArrayID *arrays)
 {
     if (!context->getExtensions().vertexArrayObject)
     {
@@ -2069,7 +2069,7 @@ bool ValidateDeleteVertexArraysOES(Context *context, GLsizei n, const GLuint *ar
     return ValidateGenOrDelete(context, n);
 }
 
-bool ValidateGenVertexArraysOES(Context *context, GLsizei n, GLuint *arrays)
+bool ValidateGenVertexArraysOES(Context *context, GLsizei n, VertexArrayID *arrays)
 {
     if (!context->getExtensions().vertexArrayObject)
     {
@@ -2080,7 +2080,7 @@ bool ValidateGenVertexArraysOES(Context *context, GLsizei n, GLuint *arrays)
     return ValidateGenOrDelete(context, n);
 }
 
-bool ValidateIsVertexArrayOES(Context *context, GLuint array)
+bool ValidateIsVertexArrayOES(Context *context, VertexArrayID array)
 {
     if (!context->getExtensions().vertexArrayObject)
     {
@@ -2396,7 +2396,7 @@ static bool ValidateObjectIdentifierAndName(Context *context, GLenum identifier,
             return true;
 
         case GL_VERTEX_ARRAY:
-            if (context->getVertexArray(name) == nullptr)
+            if (context->getVertexArray({name}) == nullptr)
             {
                 context->validationError(GL_INVALID_VALUE, kInvalidVertexArrayName);
                 return false;

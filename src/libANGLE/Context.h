@@ -376,7 +376,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     Framebuffer *getFramebuffer(FramebufferID handle) const;
     Renderbuffer *getRenderbuffer(RenderbufferID handle) const;
-    VertexArray *getVertexArray(GLuint handle) const;
+    VertexArray *getVertexArray(VertexArrayID handle) const;
     Sampler *getSampler(SamplerID handle) const;
     Query *getQuery(GLuint handle, bool create, QueryType type);
     Query *getQuery(GLuint handle) const;
@@ -391,7 +391,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     Compiler *getCompiler() const;
 
-    bool isVertexArrayGenerated(GLuint vertexArray);
+    bool isVertexArrayGenerated(VertexArrayID vertexArray);
     bool isTransformFeedbackGenerated(GLuint vertexArray);
 
     void getBooleanvImpl(GLenum pname, GLboolean *params);
@@ -585,7 +585,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     angle::Result syncStateForBlit();
     angle::Result syncStateForPathOperation();
 
-    VertexArray *checkVertexArrayAllocation(GLuint vertexArrayHandle);
+    VertexArray *checkVertexArrayAllocation(VertexArrayID vertexArrayHandle);
     TransformFeedback *checkTransformFeedbackAllocation(GLuint transformFeedback);
 
     angle::Result onProgramLink(Program *programObject);
@@ -594,7 +594,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void detachTexture(TextureID texture);
     void detachFramebuffer(FramebufferID framebuffer);
     void detachRenderbuffer(RenderbufferID renderbuffer);
-    void detachVertexArray(GLuint vertexArray);
+    void detachVertexArray(VertexArrayID vertexArray);
     void detachTransformFeedback(GLuint transformFeedback);
     void detachSampler(SamplerID sampler);
     void detachProgramPipeline(ProgramPipelineID pipeline);
@@ -650,7 +650,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     ResourceMap<Query> mQueryMap;
     HandleAllocator mQueryHandleAllocator;
 
-    ResourceMap<VertexArray> mVertexArrayMap;
+    ResourceMap<VertexArray, VertexArrayID> mVertexArrayMap;
     HandleAllocator mVertexArrayHandleAllocator;
 
     ResourceMap<TransformFeedback> mTransformFeedbackMap;

@@ -428,7 +428,7 @@ bool ValidateEGLImageTargetRenderbufferStorageOES(Context *context,
                                                   GLenum target,
                                                   GLeglImageOES image);
 
-bool ValidateBindVertexArrayBase(Context *context, GLuint array);
+bool ValidateBindVertexArrayBase(Context *context, VertexArrayID array);
 
 bool ValidateProgramBinaryBase(Context *context,
                                GLuint program,
