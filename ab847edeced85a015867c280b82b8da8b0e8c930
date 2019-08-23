@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5dc51442_ec7f1136",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T16:23:52Z",
+      "side": 0,
+      "message": "minor thing, but you can leave this blank line in.",
+      "revId": "ab847edeced85a015867c280b82b8da8b0e8c930",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25337fc3_b381c9ed",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T16:23:52Z",
+      "side": 1,
+      "message": "could you sort these into the appropriate order at some point?",
+      "range": {
+        "startLine": 863,
+        "startChar": 0,
+        "endLine": 898,
+        "endChar": 5
+      },
+      "revId": "f78e364d0d8a6de3bf129663f3d30df281235315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9fb4436_81047172",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T16:23:52Z",
+      "side": 1,
+      "message": "nit: can you make these non-class members? Just to keep the class totally bare bones.",
+      "range": {
+        "startLine": 391,
+        "startChar": 0,
+        "endLine": 393,
+        "endChar": 0
+      },
+      "revId": "f78e364d0d8a6de3bf129663f3d30df281235315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5399584_6cf2373c",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5432,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T16:23:52Z",
+      "side": 1,
+      "message": "can probably switch this to !readFramebuffer-\u003eisDefault()",
+      "range": {
+        "startLine": 5432,
+        "startChar": 8,
+        "endLine": 5432,
+        "endChar": 40
+      },
+      "revId": "f78e364d0d8a6de3bf129663f3d30df281235315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b45c9867_0060564f",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T16:23:52Z",
+      "side": 1,
+      "message": "you can probably switch this to !framebuffer-\u003eisDefault()",
+      "range": {
+        "startLine": 983,
+        "startChar": 8,
+        "endLine": 983,
+        "endChar": 36
+      },
+      "revId": "f78e364d0d8a6de3bf129663f3d30df281235315",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
