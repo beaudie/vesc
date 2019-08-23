@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ec846ec_8b96bdd6",
+        "filename": "src/compiler.gni",
+        "patchSetId": 12
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T18:27:23Z",
+      "side": 1,
+      "message": "nit: sort",
+      "range": {
+        "startLine": 233,
+        "startChar": 27,
+        "endLine": 233,
+        "endChar": 55
+      },
+      "revId": "1753d16238edca074351b082c18fa7242dfdc80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f93325fa_9f1c1412",
+        "filename": "src/compiler/translator/BuiltinsWorkaroundVulkanGLSL.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T18:27:23Z",
+      "side": 1,
+      "message": "check if you can use \"ReplaceVariable\" or \"ReplaceVariableWithTyped\"",
+      "revId": "1753d16238edca074351b082c18fa7242dfdc80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6c88d44_47025abc",
+        "filename": "src/compiler/translator/BuiltinsWorkaroundVulkanGLSL.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T18:27:23Z",
+      "side": 1,
+      "message": "update",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 26
+      },
+      "revId": "1753d16238edca074351b082c18fa7242dfdc80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d55f62f_c60081a4",
+        "filename": "src/compiler/translator/BuiltinsWorkaroundVulkanGLSL.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T18:27:23Z",
+      "side": 1,
+      "message": "can\u0027t you use the global BuiltInVariable::angle_BaseInstance()? same above for gl_InstanceIndex, etc.",
+      "range": {
+        "startLine": 41,
+        "startChar": 15,
+        "endLine": 44,
+        "endChar": 61
+      },
+      "revId": "1753d16238edca074351b082c18fa7242dfdc80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6c6c4aac_5803af67",
+        "filename": "src/compiler/translator/BuiltinsWorkaroundVulkanGLSL.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T18:27:23Z",
+      "side": 1,
+      "message": "here too",
+      "range": {
+        "startLine": 59,
+        "startChar": 30,
+        "endLine": 59,
+        "endChar": 45
+      },
+      "revId": "1753d16238edca074351b082c18fa7242dfdc80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a84629e6_dbbf28a2",
+        "filename": "src/compiler/translator/BuiltinsWorkaroundVulkanGLSL.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T18:27:23Z",
+      "side": 1,
+      "message": "update (just 2019, no (c))",
+      "range": {
+        "startLine": 2,
+        "startChar": 13,
+        "endLine": 2,
+        "endChar": 26
+      },
+      "revId": "1753d16238edca074351b082c18fa7242dfdc80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0a31d7e_66fb6ac5",
+        "filename": "src/compiler/translator/BuiltinsWorkaroundVulkanGLSL.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T18:27:23Z",
+      "side": 1,
+      "message": "couple of suggestions:\n\n1. make a helper function instead of exposing the traverser. see other tree ops for an example.\n2. no need to scope this to Vulkan. It is a generic tree op.",
+      "range": {
+        "startLine": 17,
+        "startChar": 6,
+        "endLine": 17,
+        "endChar": 36
+      },
+      "revId": "1753d16238edca074351b082c18fa7242dfdc80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "524ba74c_951db2d0",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1637,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T18:27:23Z",
+      "side": 1,
+      "message": "do you want to reset your cache here?",
+      "range": {
+        "startLine": 1637,
+        "startChar": 14,
+        "endLine": 1637,
+        "endChar": 20
+      },
+      "revId": "1753d16238edca074351b082c18fa7242dfdc80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b87adb5_5a2a9fd7",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T18:27:23Z",
+      "side": 1,
+      "message": "can you kill these default arguments?",
+      "range": {
+        "startLine": 419,
+        "startChar": 41,
+        "endLine": 420,
+        "endChar": 55
+      },
+      "revId": "1753d16238edca074351b082c18fa7242dfdc80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
