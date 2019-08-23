@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "d8ceca76_df452634",
+        "filename": "src/image_util/imageformats.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1361695
+      },
+      "writtenOn": "2019-08-23T08:18:21Z",
+      "side": 1,
+      "message": "Done. Depth structure names are also changed after modifying python script. (D24 -\u003e D24X8, D32FS8 -\u003e D32FS8X24)",
+      "parentUuid": "061885c2_33c23c2b",
+      "range": {
+        "startLine": 688,
+        "startChar": 7,
+        "endLine": 688,
+        "endChar": 18
+      },
+      "revId": "e0aa6c6b7c0ca2f0c1a10c1dafc74358709fee0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6472e18c_03e176e8",
         "filename": "src/libANGLE/renderer/Format_table_autogen.cpp",
         "patchSetId": 7
