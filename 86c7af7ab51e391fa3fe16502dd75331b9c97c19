@@ -1,0 +1,234 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b44c8b8b_d27fb688",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T21:35:46Z",
+      "side": 1,
+      "message": "const gl::Context ?",
+      "range": {
+        "startLine": 693,
+        "startChar": 26,
+        "endLine": 693,
+        "endChar": 46
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cbe2f66_d7d5e40e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T21:35:46Z",
+      "side": 1,
+      "message": "can you merge initialize with the constructor of ReplayContext?",
+      "range": {
+        "startLine": 695,
+        "startChar": 4,
+        "endLine": 696,
+        "endChar": 65
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e8ea79c_236aae96",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T21:35:46Z",
+      "side": 1,
+      "message": "ideally we could make this const \u0026",
+      "range": {
+        "startLine": 697,
+        "startChar": 9,
+        "endLine": 697,
+        "endChar": 35
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c2207d48_50122bb0",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T21:35:46Z",
+      "side": 1,
+      "message": "maybe you can handle this inside ReplayContext::getAsConstPointer?",
+      "range": {
+        "startLine": 723,
+        "startChar": 0,
+        "endLine": 729,
+        "endChar": 9
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "152c076a_ed1f7316",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T21:35:46Z",
+      "side": 1,
+      "message": "can you make these helpers on ReplayContext that take a const ParamCapture \u0026?",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 70,
+        "endChar": 5
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cd721a4_e1fbd830",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T21:35:46Z",
+      "side": 1,
+      "message": "how about just replayContext?",
+      "range": {
+        "startLine": 133,
+        "startChar": 7,
+        "endLine": 133,
+        "endChar": 32
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d460cb80_54bf1502",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T21:35:46Z",
+      "side": 1,
+      "message": "Sizebytes",
+      "range": {
+        "startLine": 138,
+        "startChar": 78,
+        "endLine": 138,
+        "endChar": 98
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3859e86c_7954cbd0",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T21:35:46Z",
+      "side": 1,
+      "message": "nit: you can use gl::AttribArray",
+      "range": {
+        "startLine": 150,
+        "startChar": 42,
+        "endLine": 150,
+        "endChar": 67
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8415856_bd514561",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T21:35:46Z",
+      "side": 1,
+      "message": "caps for statics",
+      "range": {
+        "startLine": 203,
+        "startChar": 16,
+        "endLine": 203,
+        "endChar": 26
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "997a0c7b_de1cda67",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T21:35:46Z",
+      "side": 1,
+      "message": "replayContext",
+      "range": {
+        "startLine": 204,
+        "startChar": 54,
+        "endLine": 204,
+        "endChar": 65
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
