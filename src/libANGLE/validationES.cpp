@@ -1230,7 +1230,7 @@ bool ValidateFramebufferRenderbufferParameters(Context *context,
     Framebuffer *framebuffer = context->getState().getTargetFramebuffer(target);
 
     ASSERT(framebuffer);
-    if (framebuffer->id() == 0)
+    if (framebuffer->isDefault())
     {
         context->validationError(GL_INVALID_OPERATION, kDefaultFramebufferTarget);
         return false;
@@ -2471,7 +2471,8 @@ bool ValidateCopyTexImageParametersBase(Context *context,
         return false;
     }
 
-    if (readFramebuffer->id() != 0 && !ValidateFramebufferNotMultisampled(context, readFramebuffer))
+    if (!readFramebuffer->isDefault() &&
+        !ValidateFramebufferNotMultisampled(context, readFramebuffer))
     {
         return false;
     }
@@ -3059,7 +3060,7 @@ bool ValidateFramebufferTextureBase(Context *context,
     const Framebuffer *framebuffer = context->getState().getTargetFramebuffer(target);
     ASSERT(framebuffer);
 
-    if (framebuffer->id() == 0)
+    if (framebuffer->isDefault())
     {
         context->validationError(GL_INVALID_OPERATION, kDefaultFramebufferTarget);
         return false;
@@ -3558,8 +3559,8 @@ bool ValidateDrawBuffersBase(Context *context, GLsizei n, const GLenum *bufs)
     }
 
     ASSERT(context->getState().getDrawFramebuffer());
-    GLuint frameBufferId      = context->getState().getDrawFramebuffer()->id();
-    GLuint maxColorAttachment = GL_COLOR_ATTACHMENT0_EXT + context->getCaps().maxColorAttachments;
+    FramebufferID frameBufferId = context->getState().getDrawFramebuffer()->id();
+    GLuint maxColorAttachment   = GL_COLOR_ATTACHMENT0_EXT + context->getCaps().maxColorAttachments;
 
     // This should come first before the check for the default frame buffer
     // because when we switch to ES3.1+, invalid enums will return INVALID_ENUM
@@ -3586,7 +3587,7 @@ bool ValidateDrawBuffersBase(Context *context, GLsizei n, const GLenum *bufs)
             return false;
         }
         else if (bufs[colorAttachment] != GL_NONE && bufs[colorAttachment] != attachment &&
-                 frameBufferId != 0)
+                 frameBufferId.value != 0)
         {
             // INVALID_OPERATION-GL is bound to buffer and ith argument
             // is not COLOR_ATTACHMENTi or NONE
@@ -3597,7 +3598,7 @@ bool ValidateDrawBuffersBase(Context *context, GLsizei n, const GLenum *bufs)
 
     // INVALID_OPERATION is generated if GL is bound to the default framebuffer
     // and n is not 1 or bufs is bound to value other than BACK and NONE
-    if (frameBufferId == 0)
+    if (frameBufferId.value == 0)
     {
         if (n != 1)
         {
@@ -3965,7 +3966,7 @@ bool ValidateGetFramebufferAttachmentParameterivBase(Context *context,
     const Framebuffer *framebuffer = context->getState().getTargetFramebuffer(target);
     ASSERT(framebuffer);
 
-    if (framebuffer->id() == 0)
+    if (framebuffer->isDefault())
     {
         if (clientVersion < 3)
         {
@@ -5434,7 +5435,8 @@ bool ValidateReadPixelsBase(Context *context,
         return false;
     }
 
-    if (readFramebuffer->id() != 0 && !ValidateFramebufferNotMultisampled(context, readFramebuffer))
+    if (!readFramebuffer->isDefault() &&
+        !ValidateFramebufferNotMultisampled(context, readFramebuffer))
     {
         return false;
     }

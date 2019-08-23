@@ -716,7 +716,7 @@ GLuint Context::genPaths(GLsizei range)
 }
 
 // Returns an unused framebuffer name
-GLuint Context::createFramebuffer()
+FramebufferID Context::createFramebuffer()
 {
     return mState.mFramebufferManager->createFramebuffer();
 }
@@ -934,7 +934,7 @@ void Context::loseContext(GraphicsResetStatus current, GraphicsResetStatus other
     markContextLost(current);
 }
 
-void Context::deleteFramebuffer(GLuint framebuffer)
+void Context::deleteFramebuffer(FramebufferID framebuffer)
 {
     if (mState.mFramebufferManager->getFramebuffer(framebuffer))
     {
@@ -1017,7 +1017,7 @@ gl::LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) con
         case GL_RENDERBUFFER:
             return getRenderbuffer({name});
         case GL_FRAMEBUFFER:
-            return getFramebuffer(name);
+            return getFramebuffer({name});
         default:
             UNREACHABLE();
             return nullptr;
@@ -1097,7 +1097,7 @@ void Context::bindTexture(TextureType target, TextureID handle)
     mStateCache.onActiveTextureChange(this);
 }
 
-void Context::bindReadFramebuffer(GLuint framebufferHandle)
+void Context::bindReadFramebuffer(FramebufferID framebufferHandle)
 {
     Framebuffer *framebuffer = mState.mFramebufferManager->checkFramebufferAllocation(
         mImplementation.get(), mState.mCaps, framebufferHandle);
@@ -1105,7 +1105,7 @@ void Context::bindReadFramebuffer(GLuint framebufferHandle)
     mReadFramebufferObserverBinding.bind(framebuffer);
 }
 
-void Context::bindDrawFramebuffer(GLuint framebufferHandle)
+void Context::bindDrawFramebuffer(FramebufferID framebufferHandle)
 {
     Framebuffer *framebuffer = mState.mFramebufferManager->checkFramebufferAllocation(
         mImplementation.get(), mState.mCaps, framebufferHandle);
@@ -1322,7 +1322,7 @@ void Context::getQueryObjectui64vRobust(QueryID id,
     getQueryObjectui64v(id, pname, params);
 }
 
-Framebuffer *Context::getFramebuffer(GLuint handle) const
+Framebuffer *Context::getFramebuffer(FramebufferID handle) const
 {
     return mState.mFramebufferManager->getFramebuffer(handle);
 }
@@ -2724,7 +2724,7 @@ EGLenum Context::getClientType() const
 
 EGLenum Context::getRenderBuffer() const
 {
-    const Framebuffer *framebuffer = mState.mFramebufferManager->getFramebuffer(0);
+    const Framebuffer *framebuffer = mState.mFramebufferManager->getFramebuffer({0});
     if (framebuffer == nullptr)
     {
         return EGL_NONE;
@@ -2801,7 +2801,7 @@ void Context::detachBuffer(Buffer *buffer)
     ANGLE_CONTEXT_TRY(mState.detachBuffer(this, buffer));
 }
 
-void Context::detachFramebuffer(GLuint framebuffer)
+void Context::detachFramebuffer(FramebufferID framebuffer)
 {
     // Framebuffer detachment is handled by Context, because 0 is a valid
     // Framebuffer object, and a pointer to it must be passed from Context
@@ -2812,14 +2812,14 @@ void Context::detachFramebuffer(GLuint framebuffer)
     // though BindFramebuffer had been executed with the target of FRAMEBUFFER and framebuffer of
     // zero.
 
-    if (mState.removeReadFramebufferBinding(framebuffer) && framebuffer != 0)
+    if (mState.removeReadFramebufferBinding(framebuffer) && framebuffer.value != 0)
     {
-        bindReadFramebuffer(0);
+        bindReadFramebuffer({0});
     }
 
-    if (mState.removeDrawFramebufferBinding(framebuffer) && framebuffer != 0)
+    if (mState.removeDrawFramebufferBinding(framebuffer) && framebuffer.value != 0)
     {
-        bindDrawFramebuffer(0);
+        bindDrawFramebuffer({0});
     }
 }
 
@@ -5257,7 +5257,7 @@ void Context::bindBufferRange(BufferBinding target,
     }
 }
 
-void Context::bindFramebuffer(GLenum target, GLuint framebuffer)
+void Context::bindFramebuffer(GLenum target, FramebufferID framebuffer)
 {
     if (target == GL_READ_FRAMEBUFFER || target == GL_FRAMEBUFFER)
     {
@@ -5912,11 +5912,11 @@ void Context::deleteBuffers(GLsizei n, const BufferID *buffers)
     }
 }
 
-void Context::deleteFramebuffers(GLsizei n, const GLuint *framebuffers)
+void Context::deleteFramebuffers(GLsizei n, const FramebufferID *framebuffers)
 {
     for (int i = 0; i < n; i++)
     {
-        if (framebuffers[i] != 0)
+        if (framebuffers[i].value != 0)
         {
             deleteFramebuffer(framebuffers[i]);
         }
@@ -5961,7 +5961,7 @@ void Context::genBuffers(GLsizei n, BufferID *buffers)
     }
 }
 
-void Context::genFramebuffers(GLsizei n, GLuint *framebuffers)
+void Context::genFramebuffers(GLsizei n, FramebufferID *framebuffers)
 {
     for (int i = 0; i < n; i++)
     {
@@ -6313,9 +6313,9 @@ GLboolean Context::isEnabled(GLenum cap)
     return mState.getEnableFeature(cap);
 }
 
-GLboolean Context::isFramebuffer(GLuint framebuffer)
+GLboolean Context::isFramebuffer(FramebufferID framebuffer)
 {
-    if (framebuffer == 0)
+    if (framebuffer.value == 0)
     {
         return GL_FALSE;
     }
@@ -8677,7 +8677,7 @@ bool Context::isRenderbufferGenerated(RenderbufferID renderbuffer) const
     return mState.mRenderbufferManager->isHandleGenerated(renderbuffer);
 }
 
-bool Context::isFramebufferGenerated(GLuint framebuffer) const
+bool Context::isFramebufferGenerated(FramebufferID framebuffer) const
 {
     return mState.mFramebufferManager->isHandleGenerated(framebuffer);
 }
@@ -8824,11 +8824,11 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *surface)
         mState.mFramebufferManager->setDefaultFramebuffer(newDefault);
         if (mState.getReadFramebuffer() == nullptr)
         {
-            bindReadFramebuffer(0);
+            bindReadFramebuffer({0});
         }
         if (mState.getDrawFramebuffer() == nullptr)
         {
-            bindDrawFramebuffer(0);
+            bindDrawFramebuffer({0});
         }
     }
 
@@ -8837,7 +8837,7 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *surface)
 
 egl::Error Context::unsetDefaultFramebuffer()
 {
-    gl::Framebuffer *defaultFramebuffer = mState.mFramebufferManager->getFramebuffer(0);
+    gl::Framebuffer *defaultFramebuffer = mState.mFramebufferManager->getFramebuffer({0});
 
     // Remove the default framebuffer
     if (mState.getReadFramebuffer() == defaultFramebuffer)
