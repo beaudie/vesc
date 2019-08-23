@@ -26,6 +26,9 @@ enum class ParamType
     TClientVertexArrayType,
     TCullFaceMode,
     TDrawElementsType,
+    TFramebufferID,
+    TFramebufferIDConstPointer,
+    TFramebufferIDPointer,
     TGLDEBUGPROC,
     TGLDEBUGPROCKHR,
     TGLbitfield,
@@ -125,6 +128,9 @@ union ParamValue
     gl::ClientVertexArrayType ClientVertexArrayTypeVal;
     gl::CullFaceMode CullFaceModeVal;
     gl::DrawElementsType DrawElementsTypeVal;
+    gl::FramebufferID FramebufferIDVal;
+    const gl::FramebufferID *FramebufferIDConstPointerVal;
+    gl::FramebufferID *FramebufferIDPointerVal;
     GLDEBUGPROC GLDEBUGPROCVal;
     GLDEBUGPROCKHR GLDEBUGPROCKHRVal;
     GLbitfield GLbitfieldVal;
@@ -271,6 +277,26 @@ inline void SetParamVal<ParamType::TDrawElementsType>(gl::DrawElementsType value
                                                       ParamValue *valueOut)
 {
     valueOut->DrawElementsTypeVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TFramebufferID>(gl::FramebufferID valueIn, ParamValue *valueOut)
+{
+    valueOut->FramebufferIDVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TFramebufferIDConstPointer>(const gl::FramebufferID *valueIn,
+                                                               ParamValue *valueOut)
+{
+    valueOut->FramebufferIDConstPointerVal = valueIn;
+}
+
+template <>
+inline void SetParamVal<ParamType::TFramebufferIDPointer>(gl::FramebufferID *valueIn,
+                                                          ParamValue *valueOut)
+{
+    valueOut->FramebufferIDPointerVal = valueIn;
 }
 
 template <>
@@ -859,6 +885,15 @@ void InitParamValue(ParamType paramType, T valueIn, ParamValue *valueOut)
             break;
         case ParamType::TDrawElementsType:
             SetParamVal<ParamType::TDrawElementsType>(valueIn, valueOut);
+            break;
+        case ParamType::TFramebufferID:
+            SetParamVal<ParamType::TFramebufferID>(valueIn, valueOut);
+            break;
+        case ParamType::TFramebufferIDConstPointer:
+            SetParamVal<ParamType::TFramebufferIDConstPointer>(valueIn, valueOut);
+            break;
+        case ParamType::TFramebufferIDPointer:
+            SetParamVal<ParamType::TFramebufferIDPointer>(valueIn, valueOut);
             break;
         case ParamType::TGLDEBUGPROC:
             SetParamVal<ParamType::TGLDEBUGPROC>(valueIn, valueOut);

@@ -1355,7 +1355,7 @@ Framebuffer *State::getTargetFramebuffer(GLenum target) const
     }
 }
 
-bool State::removeReadFramebufferBinding(GLuint framebuffer)
+bool State::removeReadFramebufferBinding(FramebufferID framebuffer)
 {
     if (mReadFramebuffer != nullptr && mReadFramebuffer->id() == framebuffer)
     {
@@ -1366,7 +1366,7 @@ bool State::removeReadFramebufferBinding(GLuint framebuffer)
     return false;
 }
 
-bool State::removeDrawFramebufferBinding(GLuint framebuffer)
+bool State::removeDrawFramebufferBinding(FramebufferID framebuffer)
 {
     if (mReadFramebuffer != nullptr && mDrawFramebuffer->id() == framebuffer)
     {
@@ -2072,12 +2072,12 @@ angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *pa
         case GL_DRAW_FRAMEBUFFER_BINDING:
             static_assert(GL_DRAW_FRAMEBUFFER_BINDING == GL_DRAW_FRAMEBUFFER_BINDING_ANGLE,
                           "Enum mismatch");
-            *params = mDrawFramebuffer->id();
+            *params = mDrawFramebuffer->id().value;
             break;
         case GL_READ_FRAMEBUFFER_BINDING:
             static_assert(GL_READ_FRAMEBUFFER_BINDING == GL_READ_FRAMEBUFFER_BINDING_ANGLE,
                           "Enum mismatch");
-            *params = mReadFramebuffer->id();
+            *params = mReadFramebuffer->id().value;
             break;
         case GL_RENDERBUFFER_BINDING:
             *params = mRenderbuffer.id();

@@ -386,6 +386,14 @@ struct ProgramPipelineID
     GLuint value;
 };
 
+struct FramebufferID
+{
+    bool operator==(const FramebufferID &other) const { return value == other.value; }
+    bool operator!=(const FramebufferID &other) const { return value != other.value; }
+
+    GLuint value;
+};
+
 struct RenderbufferID
 {
     GLuint value;

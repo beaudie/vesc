@@ -4896,12 +4896,12 @@ CallCapture CaptureDrawTexxvOES(const Context *context, bool isCallValid, const 
 CallCapture CaptureBindFramebufferOES(const Context *context,
                                       bool isCallValid,
                                       GLenum target,
-                                      GLuint framebuffer)
+                                      FramebufferID framebufferPacked)
 {
     ParamBuffer paramBuffer;
 
     paramBuffer.addEnumParam("target", GLenumGroup::FramebufferTarget, ParamType::TGLenum, target);
-    paramBuffer.addValueParam("framebuffer", ParamType::TGLuint, framebuffer);
+    paramBuffer.addValueParam("framebufferPacked", ParamType::TFramebufferID, framebufferPacked);
 
     return CallCapture(gl::EntryPoint::BindFramebufferOES, std::move(paramBuffer));
 }
@@ -4938,17 +4938,19 @@ CallCapture CaptureCheckFramebufferStatusOES(const Context *context,
 CallCapture CaptureDeleteFramebuffersOES(const Context *context,
                                          bool isCallValid,
                                          GLsizei n,
-                                         const GLuint *framebuffers)
+                                         const FramebufferID *framebuffersPacked)
 {
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("n", ParamType::TGLsizei, n);
 
-    ParamCapture framebuffersParam("framebuffers", ParamType::TGLuintConstPointer);
-    InitParamValue(ParamType::TGLuintConstPointer, framebuffers, &framebuffersParam.value);
-    CaptureDeleteFramebuffersOES_framebuffers(context, isCallValid, n, framebuffers,
-                                              &framebuffersParam);
-    paramBuffer.addParam(std::move(framebuffersParam));
+    ParamCapture framebuffersPackedParam("framebuffersPacked",
+                                         ParamType::TFramebufferIDConstPointer);
+    InitParamValue(ParamType::TFramebufferIDConstPointer, framebuffersPacked,
+                   &framebuffersPackedParam.value);
+    CaptureDeleteFramebuffersOES_framebuffersPacked(context, isCallValid, n, framebuffersPacked,
+                                                    &framebuffersPackedParam);
+    paramBuffer.addParam(std::move(framebuffersPackedParam));
 
     return CallCapture(gl::EntryPoint::DeleteFramebuffersOES, std::move(paramBuffer));
 }
@@ -5015,17 +5017,18 @@ CallCapture CaptureFramebufferTexture2DOES(const Context *context,
 CallCapture CaptureGenFramebuffersOES(const Context *context,
                                       bool isCallValid,
                                       GLsizei n,
-                                      GLuint *framebuffers)
+                                      FramebufferID *framebuffersPacked)
 {
     ParamBuffer paramBuffer;
 
     paramBuffer.addValueParam("n", ParamType::TGLsizei, n);
 
-    ParamCapture framebuffersParam("framebuffers", ParamType::TGLuintPointer);
-    InitParamValue(ParamType::TGLuintPointer, framebuffers, &framebuffersParam.value);
-    CaptureGenFramebuffersOES_framebuffers(context, isCallValid, n, framebuffers,
-                                           &framebuffersParam);
-    paramBuffer.addParam(std::move(framebuffersParam));
+    ParamCapture framebuffersPackedParam("framebuffersPacked", ParamType::TFramebufferIDPointer);
+    InitParamValue(ParamType::TFramebufferIDPointer, framebuffersPacked,
+                   &framebuffersPackedParam.value);
+    CaptureGenFramebuffersOES_framebuffersPacked(context, isCallValid, n, framebuffersPacked,
+                                                 &framebuffersPackedParam);
+    paramBuffer.addParam(std::move(framebuffersPackedParam));
 
     return CallCapture(gl::EntryPoint::GenFramebuffersOES, std::move(paramBuffer));
 }
@@ -5108,12 +5111,12 @@ CallCapture CaptureGetRenderbufferParameterivOES(const Context *context,
 
 CallCapture CaptureIsFramebufferOES(const Context *context,
                                     bool isCallValid,
-                                    GLuint framebuffer,
+                                    FramebufferID framebufferPacked,
                                     GLboolean returnValue)
 {
     ParamBuffer paramBuffer;
 
-    paramBuffer.addValueParam("framebuffer", ParamType::TGLuint, framebuffer);
+    paramBuffer.addValueParam("framebufferPacked", ParamType::TFramebufferID, framebufferPacked);
 
     ParamCapture returnValueCapture("returnValue", ParamType::TGLboolean);
     InitParamValue(ParamType::TGLboolean, returnValue, &returnValueCapture.value);

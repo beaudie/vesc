@@ -9,7 +9,6 @@
         "Note that all entry points have their suffixes stripped in this file.",
         "See gen_packed_gl_enums.py for the generator that uses this data."
     ],
-
     "glAlphaFunc": {
         "func": "AlphaTestFunc"
     },
@@ -884,5 +883,17 @@
     },
     "glDeleteProgramPipelines": {
         "pipelines": "const ProgramPipelineID *"
+    },
+    "glIsFramebuffer": {
+        "framebuffer": "FramebufferID"
+    },
+    "glBindFramebuffer": {
+        "framebuffer": "FramebufferID"
+    },
+    "glGenFramebuffers": {
+        "framebuffers": "FramebufferID *"
+    },
+    "glDeleteFramebuffers": {
+        "framebuffers": "const FramebufferID *"
     }
 }
