@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fc0b14d9_97140c0f",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-23T02:17:06Z",
+      "side": 1,
+      "message": "Surround in {} for style (6 places in this function)",
+      "range": {
+        "startLine": 1211,
+        "startChar": 8,
+        "endLine": 1211,
+        "endChar": 21
+      },
+      "revId": "f523283454796d498de4d51d50f2871347ed6b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d169dd8_4526c150",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplersOld.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-23T02:17:06Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 699,
+        "startChar": 8,
+        "endLine": 699,
+        "endChar": 21
+      },
+      "revId": "f523283454796d498de4d51d50f2871347ed6b99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
