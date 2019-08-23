@@ -769,7 +769,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyShaderResourcesImpl(
     vk::CommandGraphResource *recorder)
 {
     if (mProgram->hasUniformBuffers() || mProgram->hasStorageBuffers() ||
-        mProgram->hasAtomicCounterBuffers())
+        mProgram->hasAtomicCounterBuffers() || mProgram->hasImages())
     {
         ANGLE_TRY(mProgram->updateShaderResourcesDescriptorSet(this, recorder));
     }
@@ -1811,7 +1811,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                     static_cast<uint32_t>(glState.getStencilClearValue());
                 break;
             case gl::State::DIRTY_BIT_UNPACK_STATE:
-                // This is a no-op, its only important to use the right unpack state when we do
+                // This is a no-op, it's only important to use the right unpack state when we do
                 // setImage or setSubImage in TextureVk, which is plumbed through the frontend call
                 break;
             case gl::State::DIRTY_BIT_UNPACK_BUFFER_BINDING:
@@ -1925,6 +1925,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 invalidateDriverUniforms();
                 break;
             case gl::State::DIRTY_BIT_IMAGE_BINDINGS:
+                invalidateCurrentShaderResources();
                 break;
             case gl::State::DIRTY_BIT_MULTISAMPLING:
                 // TODO(syoussefi): this should configure the pipeline to render as if
@@ -2146,7 +2147,7 @@ void ContextVk::invalidateCurrentShaderResources()
 {
     ASSERT(mProgram);
     if (mProgram->hasUniformBuffers() || mProgram->hasStorageBuffers() ||
-        mProgram->hasAtomicCounterBuffers())
+        mProgram->hasAtomicCounterBuffers() || mProgram->hasImages())
     {
         mGraphicsDirtyBits.set(DIRTY_BIT_SHADER_RESOURCES);
         mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
