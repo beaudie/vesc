@@ -358,6 +358,10 @@ std::string IntermediateShaderSource::getShaderSource()
 
     for (Token &block : mTokens)
     {
+        if (block.type != TokenType::Text)
+        {
+            fprintf(stderr, "Going to fail on %s\n", block.text.c_str());
+        }
         // All blocks should have been replaced.
         ASSERT(block.type == TokenType::Text);
         shaderSource += block.text;
@@ -758,8 +762,35 @@ uint32_t AssignAtomicCounterBufferBindings(const std::vector<gl::AtomicCounterBu
     return bindingStart + 1;
 }
 
-void AssignBufferBindings(const gl::ProgramState &programState,
-                          gl::ShaderMap<IntermediateShaderSource> *shaderSources)
+uint32_t AssignImageBindings(const std::vector<gl::LinkedUniform> &uniforms,
+                             const gl::RangeUI &imageUniformRange,
+                             uint32_t bindingStart,
+                             gl::ShaderMap<IntermediateShaderSource> *shaderSources)
+{
+    const std::string resourcesDescriptorSet = "set = " + Str(kShaderResourceDescriptorSetIndex);
+
+    uint32_t bindingIndex = bindingStart;
+    for (unsigned int uniformIndex : imageUniformRange)
+    {
+        const gl::LinkedUniform &imageUniform = uniforms[uniformIndex];
+        const std::string bindingString =
+            resourcesDescriptorSet + ", binding = " + Str(bindingIndex++);
+
+        std::string name = imageUniform.name;
+        if (name.back() == ']')
+        {
+            name = name.substr(0, name.find('['));
+        }
+
+        AssignResourceBinding(imageUniform.activeShaders(), name, bindingString, kUniformQualifier,
+                              kUnusedUniformSubstitution, shaderSources);
+    }
+
+    return bindingIndex;
+}
+
+void AssignNonTextureBindings(const gl::ProgramState &programState,
+                              gl::ShaderMap<IntermediateShaderSource> *shaderSources)
 {
     uint32_t bindingStart = 0;
 
@@ -775,6 +806,10 @@ void AssignBufferBindings(const gl::ProgramState &programState,
         programState.getAtomicCounterBuffers();
     bindingStart = AssignAtomicCounterBufferBindings(atomicCounterBuffers, kSSBOQualifier,
                                                      bindingStart, shaderSources);
+
+    const std::vector<gl::LinkedUniform> &uniforms = programState.getUniforms();
+    const gl::RangeUI &imageUniformRange           = programState.getImageUniformRange();
+    bindingStart = AssignImageBindings(uniforms, imageUniformRange, bindingStart, shaderSources);
 }
 
 void AssignTextureBindings(bool useOldRewriteStructSamplers,
@@ -907,6 +942,7 @@ void GlslangWrapper::GetShaderSource(bool useOldRewriteStructSamplers,
         if (glShader)
         {
             intermediateSources[shaderType].init(glShader->getTranslatedSource());
+            fprintf(stderr, "%s\n", glShader->getTranslatedSource().c_str());
         }
     }
 
@@ -920,8 +956,8 @@ void GlslangWrapper::GetShaderSource(bool useOldRewriteStructSamplers,
         AssignVaryingLocations(resources, vertexSource, fragmentSource);
     }
     AssignUniformBindings(&intermediateSources);
-    AssignBufferBindings(programState, &intermediateSources);
     AssignTextureBindings(useOldRewriteStructSamplers, programState, &intermediateSources);
+    AssignNonTextureBindings(programState, &intermediateSources);
 
     CleanupUnusedEntities(useOldRewriteStructSamplers, programState, resources,
                           programState.getAttachedShader(gl::ShaderType::Vertex),
