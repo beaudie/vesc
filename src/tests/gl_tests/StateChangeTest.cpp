@@ -3086,6 +3086,10 @@ TEST_P(SimpleStateChangeTestES31, RebindImageTextureDispatchAgain)
 // and then dispatch again correctly.
 TEST_P(SimpleStateChangeTestES31, DispatchWithImageTextureTexSubImageThenDispatchAgain)
 {
+    // The change to the texture between the dispatch calls is not flushed in the Vulkan backend.
+    // http://anglebug.com/3539
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+
     std::array<GLColor, 4> colors    = {{GLColor::red, GLColor::red, GLColor::red, GLColor::red}};
     std::array<GLColor, 4> subColors = {
         {GLColor::green, GLColor::green, GLColor::green, GLColor::green}};
@@ -4359,8 +4363,11 @@ ANGLE_INSTANTIATE_TEST(StateChangeRenderTest, ES2_D3D9(), ES2_D3D11(), ES2_OPENG
 ANGLE_INSTANTIATE_TEST(StateChangeTestES3, ES3_D3D11(), ES3_OPENGL());
 ANGLE_INSTANTIATE_TEST(SimpleStateChangeTest, ES2_D3D11(), ES2_VULKAN(), ES2_OPENGL());
 ANGLE_INSTANTIATE_TEST(SimpleStateChangeTestES3, ES3_OPENGL(), ES3_D3D11(), ES3_VULKAN());
-ANGLE_INSTANTIATE_TEST(SimpleStateChangeTestES31, ES31_OPENGL(), ES31_D3D11());
-ANGLE_INSTANTIATE_TEST(ValidationStateChangeTest, ES3_D3D11(), ES3_OPENGL());
-ANGLE_INSTANTIATE_TEST(WebGL2ValidationStateChangeTest, ES3_D3D11(), ES3_OPENGL());
-ANGLE_INSTANTIATE_TEST(ValidationStateChangeTestES31, ES31_OPENGL(), ES31_D3D11());
-ANGLE_INSTANTIATE_TEST(WebGLComputeValidationStateChangeTest, ES31_D3D11(), ES31_OPENGL());
+ANGLE_INSTANTIATE_TEST(SimpleStateChangeTestES31, ES31_OPENGL(), ES31_D3D11(), ES31_VULKAN());
+ANGLE_INSTANTIATE_TEST(ValidationStateChangeTest, ES3_D3D11(), ES3_OPENGL(), ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST(WebGL2ValidationStateChangeTest, ES3_D3D11(), ES3_OPENGL(), ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST(ValidationStateChangeTestES31, ES31_OPENGL(), ES31_D3D11(), ES31_VULKAN());
+ANGLE_INSTANTIATE_TEST(WebGLComputeValidationStateChangeTest,
+                       ES31_D3D11(),
+                       ES31_OPENGL(),
+                       ES31_VULKAN());
