@@ -259,7 +259,7 @@ bool IsClearBufferMaskedOut(const Context *context, GLenum buffer)
 
 // This constructor is only used for default framebuffers.
 FramebufferState::FramebufferState()
-    : mId(0),
+    : mId({0}),
       mLabel(),
       mColorAttachments(1),
       mDrawBufferStates(1, GL_BACK),
@@ -276,7 +276,7 @@ FramebufferState::FramebufferState()
     mEnabledDrawBuffers.set(0);
 }
 
-FramebufferState::FramebufferState(const Caps &caps, GLuint id)
+FramebufferState::FramebufferState(const Caps &caps, FramebufferID id)
     : mId(id),
       mLabel(),
       mColorAttachments(caps.maxColorAttachments),
@@ -290,7 +290,7 @@ FramebufferState::FramebufferState(const Caps &caps, GLuint id)
       mDefaultLayers(0),
       mWebGLDepthStencilConsistent(true)
 {
-    ASSERT(mId != 0);
+    ASSERT(mId.value != 0);
     ASSERT(mDrawBufferStates.size() > 0);
     mDrawBufferStates[0] = GL_COLOR_ATTACHMENT0_EXT;
 }
@@ -617,7 +617,7 @@ Extents FramebufferState::getExtents() const
     return Extents(getDefaultWidth(), getDefaultHeight(), 0);
 }
 
-Framebuffer::Framebuffer(const Caps &caps, rx::GLImplFactory *factory, GLuint id)
+Framebuffer::Framebuffer(const Caps &caps, rx::GLImplFactory *factory, FramebufferID id)
     : mState(caps, id),
       mImpl(factory->createFramebuffer(mState)),
       mCachedStatus(),
@@ -964,7 +964,7 @@ bool Framebuffer::usingExtendedDrawBuffers() const
 
 void Framebuffer::invalidateCompletenessCache()
 {
-    if (mState.mId != 0)
+    if (mState.mId.value != 0)
     {
         mCachedStatus.reset();
     }
@@ -1003,7 +1003,7 @@ GLenum Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
 {
     const State &state = context->getState();
 
-    ASSERT(mState.mId != 0);
+    ASSERT(mState.mId.value != 0);
 
     bool hasAttachments = false;
     Optional<unsigned int> colorbufferSize;
@@ -1555,11 +1555,6 @@ angle::Result Framebuffer::blit(const Context *context,
     return mImpl->blit(context, sourceArea, destArea, blitMask, filter);
 }
 
-bool Framebuffer::isDefault() const
-{
-    return id() == 0;
-}
-
 int Framebuffer::getSamples(const Context *context)
 {
     return (isComplete(context) ? getCachedSamples(context) : 0);
@@ -1917,7 +1912,7 @@ bool Framebuffer::formsRenderingFeedbackLoopWith(const Context *context) const
     const Program *program = state.getProgram();
 
     // TODO(jmadill): Default framebuffer feedback loops.
-    if (mState.mId == 0)
+    if (mState.mId.value == 0)
     {
         return false;
     }
@@ -1981,7 +1976,7 @@ bool Framebuffer::formsCopyingFeedbackLoopWith(GLuint copyTextureID,
                                                GLint copyTextureLevel,
                                                GLint copyTextureLayer) const
 {
-    if (mState.mId == 0)
+    if (mState.mId.value == 0)
     {
         // It seems impossible to form a texture copying feedback loop with the default FBO.
         return false;
