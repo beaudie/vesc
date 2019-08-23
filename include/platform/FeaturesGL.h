@@ -344,6 +344,13 @@ struct FeaturesGL : FeatureSetBase
         "reset_rectangle_texture_generates_errors", FeatureCategory::OpenGLWorkarounds,
         "Calling glTexImage2D with zero size on a rectangle texture generates errors.", &members,
         "http://anglebug.com/3859"};
+
+    // Buffers need to maintain a shadow copy of data when buffer data readback is not possible
+    // through the GL API
+    Feature keepBufferShadowCopy = {
+        "keep_buffer_shadow_copy", FeatureCategory::OpenGLWorkarounds,
+        "Maintain a shadow copy of buffer data when the GL API does not permit reading data back.",
+        &members, ""};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;
