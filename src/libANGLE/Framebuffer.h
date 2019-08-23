@@ -53,7 +53,7 @@ class FramebufferState final : angle::NonCopyable
 {
   public:
     FramebufferState();
-    explicit FramebufferState(const Caps &caps, GLuint id);
+    explicit FramebufferState(const Caps &caps, FramebufferID id);
     ~FramebufferState();
 
     const std::string &getLabel();
@@ -110,7 +110,7 @@ class FramebufferState final : angle::NonCopyable
 
     GLint getBaseViewIndex() const;
 
-    GLuint id() const { return mId; }
+    FramebufferID id() const { return mId; }
 
   private:
     const FramebufferAttachment *getWebGLDepthStencilAttachment() const;
@@ -119,7 +119,7 @@ class FramebufferState final : angle::NonCopyable
 
     friend class Framebuffer;
 
-    GLuint mId;
+    FramebufferID mId;
     std::string mLabel;
 
     std::vector<FramebufferAttachment> mColorAttachments;
@@ -154,7 +154,7 @@ class Framebuffer final : public angle::ObserverInterface,
 {
   public:
     // Constructor to build application-defined framebuffers
-    Framebuffer(const Caps &caps, rx::GLImplFactory *factory, GLuint id);
+    Framebuffer(const Caps &caps, rx::GLImplFactory *factory, FramebufferID id);
     // Constructor to build default framebuffers for a surface and context pair
     Framebuffer(const Context *context, egl::Surface *surface);
     // Constructor to build a fake default framebuffer when surfaceless
@@ -168,7 +168,7 @@ class Framebuffer final : public angle::ObserverInterface,
 
     rx::FramebufferImpl *getImplementation() const { return mImpl; }
 
-    GLuint id() const { return mState.mId; }
+    FramebufferID id() const { return mState.mId; }
 
     void setAttachment(const Context *context,
                        GLenum type,
@@ -246,8 +246,8 @@ class Framebuffer final : public angle::ObserverInterface,
     {
         // The default framebuffer is always complete except when it is surfaceless in which
         // case it is always unsupported.
-        ASSERT(mState.mId != 0 || mCachedStatus.valid());
-        if (mState.mId == 0 || (!hasAnyDirtyBit() && mCachedStatus.valid()))
+        ASSERT(mState.mId.value != 0 || mCachedStatus.valid());
+        if (mState.mId.value == 0 || (!hasAnyDirtyBit() && mCachedStatus.valid()))
         {
             return mCachedStatus.value();
         }
@@ -307,7 +307,7 @@ class Framebuffer final : public angle::ObserverInterface,
                        const Rectangle &destArea,
                        GLbitfield mask,
                        GLenum filter);
-    bool isDefault() const;
+    bool isDefault() const { return id().value == 0; }
 
     enum DirtyBitType : size_t
     {
