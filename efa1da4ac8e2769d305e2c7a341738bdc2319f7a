@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e24a6125_ac9c0983",
+        "filename": "src/compiler.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T15:23:16Z",
+      "side": 1,
+      "message": "instead of doing this, do \n\nif (is_android) {\n  angle_translator_sources +\u003d [ ... ]\n} else {\n  angle_translator_sources +\u003d [ ... ]\n}",
+      "range": {
+        "startLine": 292,
+        "startChar": 0,
+        "endLine": 299,
+        "endChar": 1
+      },
+      "revId": "efa1da4ac8e2769d305e2c7a341738bdc2319f7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af5e064d_0892d711",
+        "filename": "src/tests/angle_unittests.gni",
+        "patchSetId": 6
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-23T15:23:16Z",
+      "side": 1,
+      "message": "instead of doing this you can go\n\nif (is_android) {\n   angle_unittests_sources +\u003d [...]\n} else {\n   angle_unittests_sources +\u003d [...]\n}",
+      "range": {
+        "startLine": 144,
+        "startChar": 1,
+        "endLine": 150,
+        "endChar": 66
+      },
+      "revId": "efa1da4ac8e2769d305e2c7a341738bdc2319f7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
