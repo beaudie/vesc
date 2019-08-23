@@ -884,5 +884,17 @@
     },
     "glDeleteProgramPipelines": {
         "pipelines": "const ProgramPipelineID *"
+    },
+    "glIsFramebuffer": {
+        "framebuffer": "FramebufferID"
+    },
+    "glBindFramebuffer": {
+        "framebuffer": "FramebufferID"
+    },
+    "glGenFramebuffers": {
+        "framebuffers": "FramebufferID *"
+    },
+    "glDeleteFramebuffers": {
+        "framebuffers": "const FramebufferID *"
     }
 }
