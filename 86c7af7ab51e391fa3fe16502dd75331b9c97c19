@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "06e8d600_547678f1",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-23T23:41:06Z",
+      "side": 1,
+      "message": "I am afraid it is not able to make to be const. The replay calls require a non-const context.",
+      "parentUuid": "b44c8b8b_d27fb688",
+      "range": {
+        "startLine": 693,
+        "startChar": 26,
+        "endLine": 693,
+        "endChar": 46
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8cbe2f66_d7d5e40e",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 21
@@ -45,6 +69,30 @@
       "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a764ed2f_02bd9b34",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-23T23:41:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8cbe2f66_d7d5e40e",
+      "range": {
+        "startLine": 695,
+        "startChar": 4,
+        "endLine": 696,
+        "endChar": 65
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a232623c_63455ef5",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 697,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-23T23:41:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e8ea79c_236aae96",
+      "range": {
+        "startLine": 697,
+        "startChar": 9,
+        "endLine": 697,
+        "endChar": 35
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c2207d48_50122bb0",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 21
@@ -91,6 +163,30 @@
       "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e28d447_2cd52ba0",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-23T23:41:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2207d48_50122bb0",
+      "range": {
+        "startLine": 723,
+        "startChar": 0,
+        "endLine": 729,
+        "endChar": 9
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "bb089c9b_d4c7789a",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-23T23:41:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "152c076a_ed1f7316",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 70,
+        "endChar": 5
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2cd721a4_e1fbd830",
         "filename": "src/libANGLE/FrameCapture.h",
         "patchSetId": 21
@@ -137,6 +257,30 @@
       "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e1076c9_e3fe3688",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-23T23:41:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cd721a4_e1fbd830",
+      "range": {
+        "startLine": 133,
+        "startChar": 7,
+        "endLine": 133,
+        "endChar": 32
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "c4c81d87_e0acc4b0",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-23T23:41:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d460cb80_54bf1502",
+      "range": {
+        "startLine": 138,
+        "startChar": 78,
+        "endLine": 138,
+        "endChar": 98
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3859e86c_7954cbd0",
         "filename": "src/libANGLE/FrameCapture.h",
         "patchSetId": 21
@@ -183,6 +351,30 @@
       "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b23468d1_d7bb8a57",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-23T23:41:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3859e86c_7954cbd0",
+      "range": {
+        "startLine": 150,
+        "startChar": 42,
+        "endLine": 150,
+        "endChar": 67
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -209,6 +401,30 @@
     },
     {
       "key": {
+        "uuid": "f0b1fed0_c5c1dcab",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-23T23:41:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8415856_bd514561",
+      "range": {
+        "startLine": 203,
+        "startChar": 16,
+        "endLine": 203,
+        "endChar": 26
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "997a0c7b_de1cda67",
         "filename": "src/libANGLE/FrameCapture.h",
         "patchSetId": 21
@@ -229,6 +445,30 @@
       "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2266e45d_08aa3f41",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-23T23:41:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "997a0c7b_de1cda67",
+      "range": {
+        "startLine": 204,
+        "startChar": 54,
+        "endLine": 204,
+        "endChar": 65
+      },
+      "revId": "86c7af7ab51e391fa3fe16502dd75331b9c97c19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
