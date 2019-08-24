@@ -16,6 +16,24 @@
       "revId": "31480b69f4da1afff13c3c4e577e5ce5ad6d5822",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4818a5f5_f01a482d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3394,
+      "author": {
+        "id": 1361975
+      },
+      "writtenOn": "2019-08-24T09:43:19Z",
+      "side": 1,
+      "message": "I\u0027ve been taking a look at these failures, but unfortunately I cannot reproduce most of them.\n\n\u003e GeometryShaderTest.CombinedResourceLimits/ES3_1_OpenGL\n\nI can reproduce this problem and your suggested solution fixes it.\n\n\u003e VulkanUniformUpdatesTest.DescriptorPoolUpdates*\n\u003e VulkanUniformUpdatesTest.TextureStagingBufferRecycling*\n\nCannot reproduce. Not sure if these are related?\n\n\u003e dEQP.GLES31/functional_state_query_integer_max_combined_uniform_blocks_get*\n\nThese fail _before_ my original change but are fixed by it, at least on my test machine. I don\u0027t know why they\u0027re failing on the CI machines.\n\n\u003e GeometryShaderTest.CombinedResourceLimits/ES3_1_OpenGLES\n\nUnsupported on my test machine so I cannot test it. However presumably it\u0027s the same issue as the desktop GL version?\n\nI\u0027ve uploaded a new patchset anyway since it seems to fix some of these issues, but I\u0027m afraid I don\u0027t know how to go about resolving the others. Thanks for your help with this.",
+      "parentUuid": "4b63539e_d8b30ba8",
+      "revId": "31480b69f4da1afff13c3c4e577e5ce5ad6d5822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
