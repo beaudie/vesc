@@ -319,6 +319,30 @@
     },
     {
       "key": {
+        "uuid": "9d97ed45_fdde0d9b",
+        "filename": "src/compiler/translator/BuiltinsWorkaroundVulkanGLSL.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-26T16:24:48Z",
+      "side": 1,
+      "message": "Re-suggest that you only expose a helper function instead of the traverser itself.",
+      "parentUuid": "583fe24e_fd23878c",
+      "range": {
+        "startLine": 17,
+        "startChar": 6,
+        "endLine": 17,
+        "endChar": 36
+      },
+      "revId": "1753d16238edca074351b082c18fa7242dfdc80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "524ba74c_951db2d0",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 12
