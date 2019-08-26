@@ -656,19 +656,12 @@
 // SSBO and Image qualifiers:
 3602 VULKAN : dEQP-GLES31.functional.synchronization.in_invocation.ssbo_alias_overwrite = FAIL
 
-// Array of array in atomic counters:
-3566 VULKAN : dEQP-GLES31.functional.program_interface_query.uniform.atomic_counter_buffer_index.default_block.array.var_array_array = SKIP
-3566 VULKAN : dEQP-GLES31.functional.program_interface_query.uniform.location.default_block.array.array.atomic_uint = SKIP
-
 // Struct referenced by:
 3596 VULKAN : dEQP-GLES31.functional.program_interface_query.*.referenced_by*struct* = FAIL
 3596 VULKAN : dEQP-GLES31.functional.program_interface_query.*random* = FAIL
 
 // Block name matching failure:
 3459 VULKAN : dEQP-GLES31.functional.shaders.linkage.es31.shader_storage_block.mismatch_with_and_without_instance_name = FAIL
-
-// Shader support for arrays-of-arrays
-3604 VULKAN : dEQP-GLES31.functional.uniform_location.nested_array.* = SKIP
 
 // Indirect draw:
 3564 VULKAN : dEQP-GLES31.functional.draw_indirect.* = SKIP
@@ -686,9 +679,6 @@
 // Debug:
 3590 VULKAN : dEQP-GLES31.functional.debug.negative_coverage.* = SKIP
 3590 VULKAN : dEQP-GLES31.functional.debug.error_groups.case_14 = SKIP
-
-// Transform feedback:
-3205 VULKAN : dEQP-GLES31.functional.debug.*transform_feedback = SKIP
 
 // Stencil textures (some missing support for base level):
 3683 VULKAN PIXEL2 : dEQP-GLES31.functional.stencil_texturing.format.* = FAIL
