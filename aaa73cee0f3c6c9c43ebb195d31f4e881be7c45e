@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78c8826f_af520e7f",
+        "filename": "src/compiler/translator/BuiltinsWorkaroundGLSL.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-26T19:34:58Z",
+      "side": 1,
+      "message": "you can put this in the anonymous namespace.",
+      "range": {
+        "startLine": 24,
+        "startChar": 6,
+        "endLine": 24,
+        "endChar": 29
+      },
+      "revId": "aaa73cee0f3c6c9c43ebb195d31f4e881be7c45e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
