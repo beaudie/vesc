@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "739b6f76_23660164",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-26T16:30:58Z",
+      "side": 1,
+      "message": "nit: these should probably be in sorted order too.",
+      "range": {
+        "startLine": 402,
+        "startChar": 7,
+        "endLine": 402,
+        "endChar": 21
+      },
+      "revId": "16cbdb0bdfbc50c3993b2fa1af26ebd1fbad40dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
