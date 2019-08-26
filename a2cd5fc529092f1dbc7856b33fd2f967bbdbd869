@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ebfc910f_934d24b1",
+        "filename": "src/tests/gles1_conformance_tests/ConformanceTests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-26T16:55:54Z",
+      "side": 1,
+      "message": "can you associate these suppressions with angle bugs in the issue tracker?",
+      "range": {
+        "startLine": 257,
+        "startChar": 4,
+        "endLine": 257,
+        "endChar": 22
+      },
+      "revId": "a2cd5fc529092f1dbc7856b33fd2f967bbdbd869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
