@@ -70,6 +70,30 @@
       "revId": "285753404fb6508bdb6ece4ea52bd40a3af5b5e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad15cf55_dd69dd70",
+        "filename": "src/common/system_utils_linux.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-26T18:31:04Z",
+      "side": 1,
+      "message": "It\u0027s returning values in seconds. Again, not what I would have done, but kept the original (chrome-derived) behavior.",
+      "parentUuid": "d7ba03f3_646a134a",
+      "range": {
+        "startLine": 52,
+        "startChar": 32,
+        "endLine": 52,
+        "endChar": 58
+      },
+      "revId": "285753404fb6508bdb6ece4ea52bd40a3af5b5e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
