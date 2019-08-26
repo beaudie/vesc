@@ -22,6 +22,30 @@
       "revId": "aaa73cee0f3c6c9c43ebb195d31f4e881be7c45e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a24b064_395d02af",
+        "filename": "src/compiler/translator/BuiltinsWorkaroundGLSL.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-26T19:48:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78c8826f_af520e7f",
+      "range": {
+        "startLine": 24,
+        "startChar": 6,
+        "endLine": 24,
+        "endChar": 29
+      },
+      "revId": "aaa73cee0f3c6c9c43ebb195d31f4e881be7c45e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
