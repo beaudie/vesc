@@ -343,6 +343,30 @@
     },
     {
       "key": {
+        "uuid": "653773f6_56a06e6f",
+        "filename": "src/compiler/translator/BuiltinsWorkaroundVulkanGLSL.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-08-26T19:27:39Z",
+      "side": 1,
+      "message": "Is this your original intent? https://chromium-review.googlesource.com/c/angle/angle/+/1750126/16/src/compiler/translator/BuiltinsWorkaroundGLSL.h#17\n\nMoved from TranslatorVulkan.cpp to here",
+      "parentUuid": "9d97ed45_fdde0d9b",
+      "range": {
+        "startLine": 17,
+        "startChar": 6,
+        "endLine": 17,
+        "endChar": 36
+      },
+      "revId": "1753d16238edca074351b082c18fa7242dfdc80f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "524ba74c_951db2d0",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 12
