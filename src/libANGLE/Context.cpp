@@ -5373,6 +5373,14 @@ void Context::renderbufferStorageMultisample(GLenum target,
         renderbuffer->setStorageMultisample(this, samples, convertedInternalFormat, width, height));
 }
 
+void Context::framebufferTexture2DMultisample(GLenum target,
+                                              GLenum attachment,
+                                              GLenum textarget,
+                                              GLuint texture,
+                                              GLint level,
+                                              GLsizei samples)
+{}
+
 void Context::getSynciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *values)
 {
     const Sync *syncObject = nullptr;
