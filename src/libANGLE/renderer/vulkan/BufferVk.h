@@ -84,13 +84,13 @@ class BufferVk : public BufferImpl
     const vk::BufferHelper &getBuffer() const
     {
         ASSERT(mBuffer.valid());
-        return mBuffer;
+        return mBuffer.get();
     }
 
     vk::BufferHelper &getBuffer()
     {
         ASSERT(mBuffer.valid());
-        return mBuffer;
+        return mBuffer.get();
     }
 
     angle::Result mapImpl(ContextVk *contextVk, void **mapPtr);
@@ -136,7 +136,7 @@ class BufferVk : public BufferImpl
         size_t offset;
     };
 
-    vk::BufferHelper mBuffer;
+    vk::Shared<vk::BufferHelper> mBuffer;
 
     // A cache of converted vertex data.
     std::vector<VertexConversionBuffer> mVertexConversionBuffers;
