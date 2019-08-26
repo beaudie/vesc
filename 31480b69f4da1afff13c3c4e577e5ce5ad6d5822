@@ -34,6 +34,24 @@
       "revId": "31480b69f4da1afff13c3c4e577e5ce5ad6d5822",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "29237aae_7708366a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3394,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-26T14:23:53Z",
+      "side": 1,
+      "message": "\u003e \u003e dEQP.GLES31/functional_state_query_integer_max_combined_uniform_blocks_get*\n\u003e\n\u003e These fail _before_ my original change but are fixed by it, at least on my test machine. I don\u0027t know why they\u0027re failing on the CI machines.\n\nI think these were fixed with the same fix. The whitebox failure was probably a flake. I reran the bots to see if they are all green now.",
+      "parentUuid": "4818a5f5_f01a482d",
+      "revId": "31480b69f4da1afff13c3c4e577e5ce5ad6d5822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
