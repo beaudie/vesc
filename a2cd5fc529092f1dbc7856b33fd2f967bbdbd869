@@ -46,6 +46,30 @@
       "revId": "a2cd5fc529092f1dbc7856b33fd2f967bbdbd869",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3e43a41e_0bafdb0b",
+        "filename": "src/tests/gles1_conformance_tests/ConformanceTests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-26T17:52:16Z",
+      "side": 1,
+      "message": "That\u0027s fine. Even if they\u0027re duplicates we can close them later or use blocked on tags, etc.",
+      "parentUuid": "70c83c0a_21c5b2fc",
+      "range": {
+        "startLine": 257,
+        "startChar": 4,
+        "endLine": 257,
+        "endChar": 22
+      },
+      "revId": "a2cd5fc529092f1dbc7856b33fd2f967bbdbd869",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
