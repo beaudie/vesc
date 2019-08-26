@@ -50,7 +50,8 @@ class TextureStorage : angle::NonCopyable
 
     virtual angle::Result getRenderTarget(const gl::Context *context,
                                           const gl::ImageIndex &index,
-                                          RenderTargetD3D **outRT)        = 0;
+                                          RenderTargetD3D **outRT,
+                                          GLsizei samples)                = 0;
     virtual angle::Result generateMipmap(const gl::Context *context,
                                          const gl::ImageIndex &sourceIndex,
                                          const gl::ImageIndex &destIndex) = 0;
@@ -72,6 +73,9 @@ class TextureStorage : angle::NonCopyable
 
     virtual void invalidateTextures() {}
 
+    // RenderToTexture methods
+    virtual GLsizei getRenderToTextureSamples() const;
+
   protected:
     const angle::Subject *mSubject;
 };
@@ -85,6 +89,11 @@ inline angle::Result TextureStorage::useLevelZeroWorkaroundTexture(const gl::Con
                                                                    bool useLevelZeroTexture)
 {
     return angle::Result::Continue;
+}
+
+inline GLsizei TextureStorage::getRenderToTextureSamples() const
+{
+    return 0;
 }
 
 using TexStoragePointer = angle::UniqueObjectPointer<TextureStorage, gl::Context>;
