@@ -34,9 +34,20 @@ class Renderer11;
 class SwapChain11;
 class Image11;
 struct Renderer11DeviceCaps;
+class TextureStorage11_2DMultisample;
 
 template <typename T>
 using CubeFaceArray = std::array<T, gl::kCubeFaceCount>;
+
+struct MultisampledRenderToTextureInfo final
+{
+    MultisampledRenderToTextureInfo(const GLsizei samples, const gl::ImageIndex index);
+    ~MultisampledRenderToTextureInfo();
+
+    GLsizei samples;
+    gl::ImageIndex index;
+    std::unique_ptr<TextureStorage11_2DMultisample> msTex;
+};
 
 class TextureStorage11 : public TextureStorage
 {
@@ -117,6 +128,8 @@ class TextureStorage11 : public TextureStorage
                                                  const gl::ImageIndex &index,
                                                  Image11 *incomingImage)                = 0;
 
+    GLsizei getRenderToTextureSamples() override;
+
   protected:
     TextureStorage11(Renderer11 *renderer, UINT bindFlags, UINT miscFlags, GLenum internalFormat);
     int getLevelWidth(int mipLevel) const;
@@ -182,6 +195,8 @@ class TextureStorage11 : public TextureStorage
 
     gl::TexLevelArray<gl::SwizzleState> mSwizzleCache;
     TextureHelper11 mDropStencilTexture;
+
+    std::unique_ptr<MultisampledRenderToTextureInfo> mMSTexInfo;
 
   private:
     const UINT mBindFlags;
@@ -256,7 +271,8 @@ class TextureStorage11_2D : public TextureStorage11
                                     const TextureHelper11 **outResource) override;
     angle::Result getRenderTarget(const gl::Context *context,
                                   const gl::ImageIndex &index,
-                                  RenderTargetD3D **outRT) override;
+                                  RenderTargetD3D **outRT,
+                                  GLsizei samples) override;
 
     angle::Result copyToStorage(const gl::Context *context, TextureStorage *destStorage) override;
 
@@ -342,7 +358,8 @@ class TextureStorage11_External : public TextureStorage11
                                     const TextureHelper11 **outResource) override;
     angle::Result getRenderTarget(const gl::Context *context,
                                   const gl::ImageIndex &index,
-                                  RenderTargetD3D **outRT) override;
+                                  RenderTargetD3D **outRT,
+                                  GLsizei samples) override;
 
     angle::Result copyToStorage(const gl::Context *context, TextureStorage *destStorage) override;
 
@@ -435,7 +452,8 @@ class TextureStorage11_EGLImage final : public TextureStorage11ImmutableBase
                                     const TextureHelper11 **outResource) override;
     angle::Result getRenderTarget(const gl::Context *context,
                                   const gl::ImageIndex &index,
-                                  RenderTargetD3D **outRT) override;
+                                  RenderTargetD3D **outRT,
+                                  GLsizei samples) override;
 
     angle::Result copyToStorage(const gl::Context *context, TextureStorage *destStorage) override;
 
@@ -494,7 +512,8 @@ class TextureStorage11_Cube : public TextureStorage11
                                     const TextureHelper11 **outResource) override;
     angle::Result getRenderTarget(const gl::Context *context,
                                   const gl::ImageIndex &index,
-                                  RenderTargetD3D **outRT) override;
+                                  RenderTargetD3D **outRT,
+                                  GLsizei samples) override;
 
     angle::Result copyToStorage(const gl::Context *context, TextureStorage *destStorage) override;
 
@@ -578,7 +597,8 @@ class TextureStorage11_3D : public TextureStorage11
     // Handles both layer and non-layer RTs
     angle::Result getRenderTarget(const gl::Context *context,
                                   const gl::ImageIndex &index,
-                                  RenderTargetD3D **outRT) override;
+                                  RenderTargetD3D **outRT,
+                                  GLsizei samples) override;
 
     void associateImage(Image11 *image, const gl::ImageIndex &index) override;
     void disassociateImage(const gl::ImageIndex &index, Image11 *expectedImage) override;
@@ -642,7 +662,8 @@ class TextureStorage11_2DArray : public TextureStorage11
                               const TextureHelper11 **outResource) override;
     angle::Result getRenderTarget(const gl::Context *context,
                                   const gl::ImageIndex &index,
-                                  RenderTargetD3D **outRT) override;
+                                  RenderTargetD3D **outRT,
+                                  GLsizei samples) override;
 
     void associateImage(Image11 *image, const gl::ImageIndex &index) override;
     void disassociateImage(const gl::ImageIndex &index, Image11 *expectedImage) override;
@@ -735,7 +756,8 @@ class TextureStorage11_2DMultisample final : public TextureStorage11ImmutableBas
                               const TextureHelper11 **outResource) override;
     angle::Result getRenderTarget(const gl::Context *context,
                                   const gl::ImageIndex &index,
-                                  RenderTargetD3D **outRT) override;
+                                  RenderTargetD3D **outRT,
+                                  GLsizei samples) override;
 
     angle::Result copyToStorage(const gl::Context *context, TextureStorage *destStorage) override;
 
@@ -785,7 +807,8 @@ class TextureStorage11_2DMultisampleArray final : public TextureStorage11Immutab
                               const TextureHelper11 **outResource) override;
     angle::Result getRenderTarget(const gl::Context *context,
                                   const gl::ImageIndex &index,
-                                  RenderTargetD3D **outRT) override;
+                                  RenderTargetD3D **outRT,
+                                  GLsizei samples) override;
 
     angle::Result copyToStorage(const gl::Context *context, TextureStorage *destStorage) override;
 
