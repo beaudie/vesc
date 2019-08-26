@@ -703,6 +703,9 @@ class ImageHelper final : public CommandGraphResource
                                 VkImageUsageFlags usage,
                                 uint32_t layerCount);
 
+    void release(ContextVk *contextVk);
+    void release(DisplayVk *display, std::vector<GarbageObjectBase> *garbageQueue);
+
     void releaseImage(ContextVk *contextVk);
     void releaseImage(DisplayVk *display, std::vector<GarbageObjectBase> *garbageQueue);
 

@@ -368,7 +368,8 @@ class RefCounted : angle::NonCopyable
         mRefCount--;
     }
 
-    bool isReferenced() const { return mRefCount != 0; }
+    bool isReferenced() const { return mRefCount > 0; }
+    bool isShared() const { return mRefCount > 1; }
 
     T &get() { return mObject; }
     const T &get() const { return mObject; }
@@ -489,6 +490,9 @@ class Shared final : angle::NonCopyable
         ASSERT(!mRefCounted || mRefCounted->isReferenced());
         return mRefCounted != nullptr;
     }
+
+    // Returns true if the shared object currently has multiple owners.
+    bool isShared() const { return mRefCounted && mRefCounted->isShared(); }
 
     T &get()
     {

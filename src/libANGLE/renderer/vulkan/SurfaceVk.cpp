@@ -140,18 +140,21 @@ angle::Result OffscreenSurfaceVk::AttachmentImage::initialize(DisplayVk *display
 
     VkExtent3D extents = {std::max(static_cast<uint32_t>(width), 1u),
                           std::max(static_cast<uint32_t>(height), 1u), 1u};
-    ANGLE_TRY(image.init(displayVk, gl::TextureType::_2D, extents, vkFormat, samples, usage, 1, 1));
+    vk::ImageHelper newImage;
+    ANGLE_TRY(
+        newImage.init(displayVk, gl::TextureType::_2D, extents, vkFormat, samples, usage, 1, 1));
+    image.assign(std::move(newImage), displayVk->getDevice());
 
     VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    ANGLE_TRY(image.initMemory(displayVk, renderer->getMemoryProperties(), flags));
+    ANGLE_TRY(image.get().initMemory(displayVk, renderer->getMemoryProperties(), flags));
 
     VkImageAspectFlags aspect = vk::GetFormatAspectFlags(textureFormat);
 
-    ANGLE_TRY(image.initImageView(displayVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
-                                  &imageView, 0, 1));
+    ANGLE_TRY(image.get().initImageView(displayVk, gl::TextureType::_2D, aspect, gl::SwizzleState(),
+                                        &imageView, 0, 1));
 
     // Clear the image if it has emulated channels.
-    image.stageClearIfEmulatedFormat(gl::ImageIndex::Make2D(0), vkFormat);
+    image.get().stageClearIfEmulatedFormat(gl::ImageIndex::Make2D(0), vkFormat);
 
     return angle::Result::Continue;
 }
@@ -161,8 +164,7 @@ void OffscreenSurfaceVk::AttachmentImage::destroy(const egl::Display *display)
     DisplayVk *displayVk = vk::GetImpl(display);
 
     std::vector<vk::GarbageObjectBase> garbageObjects;
-    image.releaseImage(displayVk, &garbageObjects);
-    image.releaseStagingBuffer(displayVk, &garbageObjects);
+    image.reset(displayVk, &garbageObjects);
 
     // It should be safe to immediately destroy the backing images of a surface on surface
     // destruction.
@@ -181,8 +183,9 @@ OffscreenSurfaceVk::OffscreenSurfaceVk(const egl::SurfaceState &surfaceState,
                                        EGLint height)
     : SurfaceVk(surfaceState), mWidth(width), mHeight(height)
 {
-    mColorRenderTarget.init(&mColorAttachment.image, &mColorAttachment.imageView, nullptr, 0, 0);
-    mDepthStencilRenderTarget.init(&mDepthStencilAttachment.image,
+    mColorRenderTarget.init(&mColorAttachment.image.get(), &mColorAttachment.imageView, nullptr, 0,
+                            0);
+    mDepthStencilRenderTarget.init(&mDepthStencilAttachment.image.get(),
                                    &mDepthStencilAttachment.imageView, nullptr, 0, 0);
 }
 
@@ -302,23 +305,23 @@ angle::Result OffscreenSurfaceVk::initializeContents(const gl::Context *context,
 
     if (mColorAttachment.image.valid())
     {
-        mColorAttachment.image.stageSubresourceRobustClear(
-            imageIndex, mColorAttachment.image.getFormat().angleFormat());
-        ANGLE_TRY(mColorAttachment.image.flushAllStagedUpdates(contextVk));
+        vk::ImageHelper &image = mColorAttachment.image.get();
+        image.stageSubresourceRobustClear(imageIndex, image.getFormat().angleFormat());
+        ANGLE_TRY(image.flushAllStagedUpdates(contextVk));
     }
 
     if (mDepthStencilAttachment.image.valid())
     {
-        mDepthStencilAttachment.image.stageSubresourceRobustClear(
-            imageIndex, mDepthStencilAttachment.image.getFormat().angleFormat());
-        ANGLE_TRY(mDepthStencilAttachment.image.flushAllStagedUpdates(contextVk));
+        vk::ImageHelper &image = mDepthStencilAttachment.image.get();
+        image.stageSubresourceRobustClear(imageIndex, image.getFormat().angleFormat());
+        ANGLE_TRY(image.flushAllStagedUpdates(contextVk));
     }
     return angle::Result::Continue;
 }
 
-vk::ImageHelper *OffscreenSurfaceVk::getColorAttachmentImage()
+vk::Shared<vk::ImageHelper> &OffscreenSurfaceVk::getColorAttachmentImage()
 {
-    return &mColorAttachment.image;
+    return mColorAttachment.image;
 }
 
 WindowSurfaceVk::SwapchainImage::SwapchainImage()  = default;
@@ -636,22 +639,25 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
 
     for (uint32_t imageIndex = 0; imageIndex < imageCount; ++imageIndex)
     {
+        vk::ImageHelper newImage;
+        newImage.init2DWeakReference(swapchainImages[imageIndex], extents, format, 1);
+
         SwapchainImage &member = mSwapchainImages[imageIndex];
-        member.image.init2DWeakReference(swapchainImages[imageIndex], extents, format, 1);
+        member.image.assign(std::move(newImage), device);
 
         if (!mColorImageMS.valid())
         {
             // If the multisampled image is used, we don't need a view on the swapchain image, as
             // it's only used as a resolve destination.  This has the added benefit that we can't
             // accidentally use this image.
-            ANGLE_TRY(member.image.initImageView(context, gl::TextureType::_2D,
-                                                 VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(),
-                                                 &member.imageView, 0, 1));
+            ANGLE_TRY(member.image.get().initImageView(
+                context, gl::TextureType::_2D, VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(),
+                &member.imageView, 0, 1));
 
             // Clear the image if it has emulated channels.  If a multisampled image exists, this
             // image will be unused until a pre-present resolve, at which point it will be fully
             // initialized and wouldn't need a clear.
-            member.image.stageClearIfEmulatedFormat(gl::ImageIndex::Make2D(0), format);
+            member.image.get().stageClearIfEmulatedFormat(gl::ImageIndex::Make2D(0), format);
         }
     }
 
@@ -759,11 +765,11 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 
     for (SwapchainImage &swapchainImage : mSwapchainImages)
     {
-        Serial imageSerial = swapchainImage.image.getStoredQueueSerial();
+        Serial imageSerial = swapchainImage.image.get().getStoredQueueSerial();
 
         // We don't own the swapchain image handles, so we just remove our reference to it.
-        swapchainImage.image.resetImageWeakReference();
-        swapchainImage.image.destroy(contextVk->getDevice());
+        swapchainImage.image.get().resetImageWeakReference();
+        swapchainImage.image.reset(contextVk->getDevice());
 
         if (swapchainImage.imageView.valid())
         {
@@ -810,8 +816,8 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
     for (SwapchainImage &swapchainImage : mSwapchainImages)
     {
         // We don't own the swapchain image handles, so we just remove our reference to it.
-        swapchainImage.image.resetImageWeakReference();
-        swapchainImage.image.destroy(displayVk->getDevice());
+        swapchainImage.image.get().resetImageWeakReference();
+        swapchainImage.image.reset(displayVk->getDevice());
 
         if (swapchainImage.imageView.valid())
         {
@@ -878,7 +884,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
                                    multisampledTransition);
 
         // Setup graph dependency between the swapchain image and the multisampled one.
-        image.image.addReadDependency(&mColorImageMS);
+        image.image.get().addReadDependency(&mColorImageMS);
 
         VkImageResolve resolveRegion                = {};
         resolveRegion.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -888,16 +894,17 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         resolveRegion.srcOffset                     = {};
         resolveRegion.dstSubresource                = resolveRegion.srcSubresource;
         resolveRegion.dstOffset                     = {};
-        resolveRegion.extent                        = image.image.getExtents();
+        resolveRegion.extent                        = image.image.get().getExtents();
 
-        ANGLE_TRY(image.image.recordCommands(contextVk, &swapCommands));
-        mColorImageMS.resolve(&image.image, resolveRegion, swapCommands);
+        ANGLE_TRY(image.image.get().recordCommands(contextVk, &swapCommands));
+        mColorImageMS.resolve(&image.image.get(), resolveRegion, swapCommands);
     }
     else
     {
-        ANGLE_TRY(image.image.recordCommands(contextVk, &swapCommands));
+        ANGLE_TRY(image.image.get().recordCommands(contextVk, &swapCommands));
     }
-    image.image.changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::Present, swapCommands);
+    image.image.get().changeLayout(VK_IMAGE_ASPECT_COLOR_BIT, vk::ImageLayout::Present,
+                                   swapCommands);
 
     ANGLE_VK_TRY(contextVk, swap.presentImageSemaphore.init(contextVk->getDevice()));
 
@@ -1041,14 +1048,14 @@ VkResult WindowSurfaceVk::nextSwapchainImage(vk::Context *context)
     //
     // Clear the image's queue serial because it's possible that it appears to be in the future to
     // the next context that writes to the image.
-    image.image.resetQueueSerial();
+    image.image.get().resetQueueSerial();
 
     // Update RenderTarget pointers to this swapchain image if not multisampling.  Note: a possible
     // optimization is to defer the |vkAcquireNextImageKHR| call itself to |present()| if
     // multisampling, as the swapchain image is essentially unused until then.
     if (!mColorImageMS.valid())
     {
-        mColorRenderTarget.updateSwapchainImage(&image.image, &image.imageView);
+        mColorRenderTarget.updateSwapchainImage(&image.image.get(), &image.imageView);
     }
 
     return VK_SUCCESS;
@@ -1208,10 +1215,11 @@ angle::Result WindowSurfaceVk::initializeContents(const gl::Context *context,
     ASSERT(mSwapchainImages.size() > 0);
     ASSERT(mCurrentSwapchainImageIndex < mSwapchainImages.size());
 
-    vk::ImageHelper *image =
-        isMultiSampled() ? &mColorImageMS : &mSwapchainImages[mCurrentSwapchainImageIndex].image;
-    image->stageSubresourceRobustClear(imageIndex, image->getFormat().angleFormat());
-    ANGLE_TRY(image->flushAllStagedUpdates(contextVk));
+    vk::ImageHelper &image = isMultiSampled()
+                                 ? mColorImageMS
+                                 : mSwapchainImages[mCurrentSwapchainImageIndex].image.get();
+    image.stageSubresourceRobustClear(imageIndex, image.getFormat().angleFormat());
+    ANGLE_TRY(image.flushAllStagedUpdates(contextVk));
 
     if (mDepthStencilImage.valid())
     {
