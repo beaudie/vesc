@@ -254,6 +254,7 @@ TEST_P(GLES1ConformanceTest, LineHV)
 
 TEST_P(GLES1ConformanceTest, LineRaster)
 {
+    ANGLE_SKIP_TEST_IF(IsVulkan());
     ASSERT_NE(CONFORMANCE_TEST_ERROR, LineRasterExec());
 }
 
@@ -344,6 +345,7 @@ TEST_P(GLES1ConformanceTest, Scissor)
 
 TEST_P(GLES1ConformanceTest, SPClear)
 {
+    ANGLE_SKIP_TEST_IF(IsVulkan());
     ASSERT_NE(CONFORMANCE_TEST_ERROR, SPClearExec());
 }
 
@@ -465,6 +467,7 @@ TEST_P(GLES1ConformanceTest, XFormHomogenous)
 
 TEST_P(GLES1ConformanceTest, ZBClear)
 {
+    ANGLE_SKIP_TEST_IF(IsVulkan());
     ASSERT_NE(CONFORMANCE_TEST_ERROR, ZBClearExec());
 }
 
@@ -543,5 +546,5 @@ TEST_P(GLES1ConformanceTest, MatrixPalette)
     ASSERT_NE(CONFORMANCE_TEST_ERROR, MatrixPaletteExec());
 }
 
-ANGLE_INSTANTIATE_TEST(GLES1ConformanceTest, ES1_OPENGL());
+ANGLE_INSTANTIATE_TEST(GLES1ConformanceTest, ES1_OPENGL(), ES1_VULKAN());
 }  // namespace angle
