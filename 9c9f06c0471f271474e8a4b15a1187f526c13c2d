@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "49271a55_3d236206",
+        "filename": "scripts/entry_point_packed_gl_enums.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 887,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-26T16:29:32Z",
+      "side": 1,
+      "message": "these should probably be sorted in alphabetically.",
+      "range": {
+        "startLine": 861,
+        "startChar": 2,
+        "endLine": 887,
+        "endChar": 5
+      },
+      "revId": "9c9f06c0471f271474e8a4b15a1187f526c13c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
