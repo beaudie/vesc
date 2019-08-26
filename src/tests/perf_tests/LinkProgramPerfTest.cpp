@@ -12,6 +12,7 @@
 #include <array>
 
 #include "common/vector_utils.h"
+#include "tests/test_utils/ANGLETest.h"
 #include "util/shader_utils.h"
 
 using namespace angle;
@@ -204,6 +205,8 @@ LinkProgramParams LinkProgramVulkanParams(TaskOption taskOption, ThreadOption th
 
 TEST_P(LinkProgramBenchmark, Run)
 {
+    // TODO(crbug.com/997674) crashes on Win10 FYI x64 Exp Release (Intel HD 630)
+    ANGLE_SKIP_TEST_IF(IsWindows() && IsIntel());
     run();
 }
 
