@@ -22,7 +22,7 @@ class ExternalImageSiblingVk : public ExternalImageSiblingImpl
     ExternalImageSiblingVk() {}
     ~ExternalImageSiblingVk() override {}
 
-    virtual vk::ImageHelper *getImage() const = 0;
+    virtual vk::Shared<vk::ImageHelper> *getImage() const = 0;
 
     virtual void release(DisplayVk *display, std::vector<vk::GarbageObjectBase> *garbageQueue) = 0;
 };
@@ -38,19 +38,20 @@ class ImageVk : public ImageImpl
 
     angle::Result orphan(const gl::Context *context, egl::ImageSibling *sibling) override;
 
-    vk::ImageHelper *getImage() const { return mImage; }
+    const vk::ImageHelper &getImage() const { return mImage.get(); }
+    vk::ImageHelper &getImage() { return mImage.get(); }
     gl::TextureType getImageTextureType() const { return mImageTextureType; }
     uint32_t getImageLevel() const { return mImageLevel; }
     uint32_t getImageLayer() const { return mImageLayer; }
 
   private:
+    ExternalImageSiblingVk *getExternalSource() const;
+
     gl::TextureType mImageTextureType;
     uint32_t mImageLevel;
     uint32_t mImageLayer;
 
-    bool mOwnsImage;
-    vk::ImageHelper *mImage;
-
+    vk::Shared<vk::ImageHelper> mImage;
     std::vector<vk::Shared<vk::Fence>> mImageLastUseFences;
 
     const gl::Context *mContext;

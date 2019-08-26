@@ -151,6 +151,8 @@ class TextureVk : public TextureImpl
         return *mImage;
     }
 
+    const vk::Shared<vk::ImageHelper> &getSharedImage() const;
+
     void releaseOwnershipOfImage(const gl::Context *context);
 
     const vk::ImageView &getReadImageView() const;

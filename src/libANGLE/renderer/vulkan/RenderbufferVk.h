@@ -47,6 +47,8 @@ class RenderbufferVk : public RenderbufferImpl
     vk::ImageHelper *getImage() const { return mImage; }
     void releaseOwnershipOfImage(const gl::Context *context);
 
+    const vk::Shared<vk::ImageHelper> &getSharedImage() const;
+
   private:
     void releaseAndDeleteImage(ContextVk *contextVk);
     void releaseImage(ContextVk *contextVk);
