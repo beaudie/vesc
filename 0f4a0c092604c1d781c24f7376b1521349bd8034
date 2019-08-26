@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "64bb3e37_1246c0a0",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-26T17:54:30Z",
+      "side": 1,
+      "message": "don\u0027t use const-cast. Add a getter that returns a mutable reference.",
+      "range": {
+        "startLine": 772,
+        "startChar": 15,
+        "endLine": 772,
+        "endChar": 90
+      },
+      "revId": "0f4a0c092604c1d781c24f7376b1521349bd8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2cab4263_fe9c984b",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-26T17:54:30Z",
+      "side": 1,
+      "message": "use mName naming for member variables.",
+      "range": {
+        "startLine": 150,
+        "startChar": 25,
+        "endLine": 150,
+        "endChar": 35
+      },
+      "revId": "0f4a0c092604c1d781c24f7376b1521349bd8034",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
