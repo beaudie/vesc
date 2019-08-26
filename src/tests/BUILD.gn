@@ -1026,8 +1026,8 @@ if (build_angle_deqp_tests && !is_fuchsia) {
 
       mustpass_dir = _khronos_mustpass
 
-      data = [
-        "$root_out_dir/$angle_data_dir/gl_cts/",
+      data_deps = [
+        ":angle_deqp_khr_data",
       ]
     }
   }
