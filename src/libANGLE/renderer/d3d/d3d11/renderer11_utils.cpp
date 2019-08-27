@@ -1651,15 +1651,15 @@ void GenerateCaps(ID3D11Device *device,
     extensions->textureStorageMultisample2DArray = true;
     extensions->multiviewMultisample     = ((extensions->multiview || extensions->multiview2) &&
                                         extensions->textureStorageMultisample2DArray);
-    extensions->copyTexture3d            = true;
-    extensions->textureBorderClamp       = true;
-    extensions->textureMultisample       = true;
-    extensions->provokingVertex          = true;
-    extensions->blendFuncExtended        = true;
-    extensions->maxDualSourceDrawBuffers = 1;
+    extensions->copyTexture3d                    = true;
+    extensions->textureBorderClamp               = true;
+    extensions->textureMultisample               = true;
+    extensions->provokingVertex                  = true;
+    extensions->blendFuncExtended                = true;
+    extensions->maxDualSourceDrawBuffers         = 1;
     extensions->texture3DOES                     = true;
     extensions->baseVertexBaseInstance           = true;
-    // extensions->multisampledRenderToTexture = true;
+    extensions->multisampledRenderToTexture      = true;
 
     // D3D11 cannot support reading depth texture as a luminance texture.
     // It treats it as a red-channel-only texture.
