@@ -71,7 +71,7 @@ class OffscreenSurfaceVk : public SurfaceVk
     angle::Result initializeContents(const gl::Context *context,
                                      const gl::ImageIndex &imageIndex) override;
 
-    vk::ImageHelper *getColorAttachmentImage();
+    vk::Shared<vk::ImageHelper> &getColorAttachmentImage();
 
   private:
     struct AttachmentImage final : angle::NonCopyable
@@ -86,7 +86,7 @@ class OffscreenSurfaceVk : public SurfaceVk
                                  GLint samples);
         void destroy(const egl::Display *display);
 
-        vk::ImageHelper image;
+        vk::Shared<vk::ImageHelper> image;
         vk::ImageView imageView;
     };
 
@@ -194,7 +194,7 @@ class WindowSurfaceVk : public SurfaceVk
         SwapchainImage(SwapchainImage &&other);
         ~SwapchainImage();
 
-        vk::ImageHelper image;
+        vk::Shared<vk::ImageHelper> image;
         vk::ImageView imageView;
         vk::Framebuffer framebuffer;
     };
