@@ -181,6 +181,12 @@ class Framebuffer final : public angle::ObserverInterface,
                        GLenum binding,
                        const ImageIndex &textureIndex,
                        FramebufferAttachmentObject *resource);
+    void setAttachmentMultisample(const Context *context,
+                                  GLenum type,
+                                  GLenum binding,
+                                  const ImageIndex &textureIndex,
+                                  FramebufferAttachmentObject *resource,
+                                  GLsizei samples);
     void setAttachmentMultiview(const Context *context,
                                 GLenum type,
                                 GLenum binding,
@@ -232,6 +238,7 @@ class Framebuffer final : public angle::ObserverInterface,
 
     // This method calls checkStatus.
     int getSamples(const Context *context);
+    int getResourceSamples(const Context *context);
 
     angle::Result getSamplePosition(const Context *context, size_t index, GLfloat *xy) const;
 
@@ -247,6 +254,7 @@ class Framebuffer final : public angle::ObserverInterface,
     void setDefaultLayers(GLint defaultLayers);
 
     void invalidateCompletenessCache();
+    ANGLE_INLINE bool cachedStatusValid() { return mCachedStatus.valid(); }
 
     ANGLE_INLINE GLenum checkStatus(const Context *context)
     {
@@ -262,7 +270,7 @@ class Framebuffer final : public angle::ObserverInterface,
     }
 
     // For when we don't want to check completeness in getSamples().
-    int getCachedSamples(const Context *context) const;
+    int getCachedSamples(const Context *context, bool getIntrinsic) const;
 
     // Helper for checkStatus == GL_FRAMEBUFFER_COMPLETE.
     ANGLE_INLINE bool isComplete(const Context *context)
