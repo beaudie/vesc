@@ -113,6 +113,9 @@ class TextureD3D : public TextureImpl
 
     GLsizei getRenderToTextureSamples();
 
+    // ObserverInterface implementation.
+    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
+
   protected:
     angle::Result setImageImpl(const gl::Context *context,
                                const gl::ImageIndex &index,
@@ -184,6 +187,7 @@ class TextureD3D : public TextureImpl
 
     bool mImmutable;
     TextureStorage *mTexStorage;
+    angle::ObserverBinding mTexStorageObserverBinding;
 
   private:
     virtual angle::Result initializeStorage(const gl::Context *context, bool renderTarget) = 0;

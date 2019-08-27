@@ -124,6 +124,9 @@ class FramebufferAttachment final
     Extents getSize() const;
     Format getFormat() const;
     GLsizei getSamples() const;
+    // This will always return the actual sample count of the attachment even if
+    // render_to_texture extension is active on this FBattachment object.
+    GLsizei getIntrinsicSamples() const;
     GLenum type() const { return mType; }
     bool isAttached() const { return mType != GL_NONE; }
     bool isRenderable(const Context *context) const;
@@ -242,6 +245,16 @@ inline Format FramebufferAttachment::getFormat() const
 }
 
 inline GLsizei FramebufferAttachment::getSamples() const
+{
+    if (mRenderToTextureSamples != kDefaultRenderToTextureSamples)
+    {
+        return mRenderToTextureSamples;
+    }
+    ASSERT(mResource);
+    return mResource->getAttachmentSamples(mTarget.textureIndex());
+}
+
+inline GLsizei FramebufferAttachment::getIntrinsicSamples() const
 {
     ASSERT(mResource);
     return mResource->getAttachmentSamples(mTarget.textureIndex());
