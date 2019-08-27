@@ -3442,6 +3442,14 @@ void Context::initCaps()
         }
     }
 
+    // Always require that GL_CHROMIUM_color_buffer_float_rgb and
+    // GL_CHROMIUM_color_buffer_float_rgba are explicitly requested. They are used to allow the
+    // WebGL-specific behaviour of rendering to floating point textures when the
+    // OES_texture[_half]_float extensions are enabled but are not conformant acording to dEQP
+    // framebuffer completeness tests.
+    mState.mExtensions.colorBufferFloatRGB  = false;
+    mState.mExtensions.colorBufferFloatRGBA = false;
+
     // Generate texture caps
     updateCaps();
 }
