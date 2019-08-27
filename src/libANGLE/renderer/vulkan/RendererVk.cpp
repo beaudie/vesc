@@ -1553,7 +1553,7 @@ angle::Result RendererVk::newSharedFence(vk::Context *context,
         mFenceRecycler.fetch(mDevice, &fence);
         ANGLE_VK_TRY(context, fence.reset(mDevice));
     }
-    sharedFenceOut->assign(mDevice, std::move(fence));
+    sharedFenceOut->assign(std::move(fence), mDevice);
     return angle::Result::Continue;
 }
 
