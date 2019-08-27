@@ -44,21 +44,19 @@ class RenderbufferVk : public RenderbufferImpl
     angle::Result initializeContents(const gl::Context *context,
                                      const gl::ImageIndex &imageIndex) override;
 
-    vk::ImageHelper *getImage() const { return mImage; }
-    void releaseOwnershipOfImage(const gl::Context *context);
-
-  private:
-    void releaseAndDeleteImage(ContextVk *contextVk);
     void releaseImage(ContextVk *contextVk);
 
+    vk::ImageHelper &getImage() { return mImage.get(); }
+    const vk::Shared<vk::ImageHelper> &getSharedImage() const { return mImage; }
+
+  private:
     angle::Result setStorageImpl(const gl::Context *context,
                                  size_t samples,
                                  GLenum internalformat,
                                  size_t width,
                                  size_t height);
 
-    bool mOwnsImage;
-    vk::ImageHelper *mImage;
+    vk::Shared<vk::ImageHelper> mImage;
     vk::ImageView mImageView;
     vk::ImageView mCubeImageFetchView;
     RenderTargetVk mRenderTarget;
