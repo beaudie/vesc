@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "369817c1_8c95f387",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-27T16:22:19Z",
+      "side": 1,
+      "message": "don\u0027t expose this until the functionality is in place.",
+      "range": {
+        "startLine": 1662,
+        "startChar": 16,
+        "endLine": 1662,
+        "endChar": 44
+      },
+      "revId": "bd37246f5aa7a5eb8d0c5d6fa09506b0370d258e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
