@@ -1839,14 +1839,24 @@ angle::Result Texture::handleMipmapGenerationHint(Context *context, int level)
 
 void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message)
 {
-    ASSERT(message == angle::SubjectMessage::SubjectChanged);
-    mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION);
-    signalDirtyState(DIRTY_BIT_IMPLEMENTATION);
-
-    // Notify siblings that we are dirty.
-    if (index == rx::kTextureImageImplObserverMessageIndex)
+    switch (message)
     {
-        notifySiblings(message);
+        case angle::SubjectMessage::ContentsChanged:
+            signalDirtyStorage(InitState::Initialized);
+            return;
+        case angle::SubjectMessage::SubjectChanged:
+            mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION);
+            signalDirtyState(DIRTY_BIT_IMPLEMENTATION);
+
+            // Notify siblings that we are dirty.
+            if (index == rx::kTextureImageImplObserverMessageIndex)
+            {
+                notifySiblings(message);
+            }
+            return;
+        default:
+            return;
     }
 }
+
 }  // namespace gl

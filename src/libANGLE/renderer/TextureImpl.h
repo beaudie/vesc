@@ -41,7 +41,9 @@ namespace rx
 {
 class ContextImpl;
 
-class TextureImpl : public FramebufferAttachmentObjectImpl, public angle::Subject
+class TextureImpl : public FramebufferAttachmentObjectImpl,
+                    public angle::Subject,
+                    public angle::ObserverInterface
 {
   public:
     TextureImpl(const gl::TextureState &state);
@@ -187,6 +189,11 @@ class TextureImpl : public FramebufferAttachmentObjectImpl, public angle::Subjec
 
     virtual angle::Result syncState(const gl::Context *context,
                                     const gl::Texture::DirtyBits &dirtyBits) = 0;
+
+    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override
+    {
+        // default to no-op.
+    }
 
   protected:
     const gl::TextureState &mState;
