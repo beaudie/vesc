@@ -26,7 +26,7 @@ namespace gl
 
 const GLsizei FramebufferAttachment::kDefaultNumViews             = 1;
 const GLint FramebufferAttachment::kDefaultBaseViewIndex          = 0;
-const GLint FramebufferAttachment::kDefaultRenderToTextureSamples = -1;
+const GLint FramebufferAttachment::kDefaultRenderToTextureSamples = 0;
 
 FramebufferAttachment::Target::Target() : mBinding(GL_NONE), mTextureIndex() {}
 
