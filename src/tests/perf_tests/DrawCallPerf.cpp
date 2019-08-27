@@ -12,6 +12,8 @@
 #include "test_utils/draw_call_perf_utils.h"
 #include "util/shader_utils.h"
 
+using namespace angle;
+
 namespace
 {
 enum class StateChange
@@ -116,7 +118,14 @@ class DrawCallPerfBenchmark : public ANGLERenderTest,
     int mNumTris       = GetParam().numTris;
 };
 
-DrawCallPerfBenchmark::DrawCallPerfBenchmark() : ANGLERenderTest("DrawCallPerf", GetParam()) {}
+DrawCallPerfBenchmark::DrawCallPerfBenchmark() : ANGLERenderTest("DrawCallPerf", GetParam())
+{
+    // TODO(crbug.com/997674) crashes on Win10 FYI x64 Exp Release (Intel HD 630)
+    if (IsWindows() && IsIntel())
+    {
+        mSkipTest = true;
+    }
+}
 
 void DrawCallPerfBenchmark::initializeBenchmark()
 {

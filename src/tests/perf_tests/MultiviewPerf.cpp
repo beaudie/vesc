@@ -203,7 +203,14 @@ class MultiviewBenchmark : public ANGLERenderTest,
 class MultiviewCPUBoundBenchmark : public MultiviewBenchmark
 {
   public:
-    MultiviewCPUBoundBenchmark() : MultiviewBenchmark("MultiviewCPUBoundBenchmark") {}
+    MultiviewCPUBoundBenchmark() : MultiviewBenchmark("MultiviewCPUBoundBenchmark")
+    {
+        // TODO(crbug.com/997674) crashes on Win10 FYI x64 Exp Release (Intel HD 630)
+        if (IsWindows() && IsIntel())
+        {
+            mSkipTest = true;
+        }
+    }
 
     void initializeBenchmark() override;
 

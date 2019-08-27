@@ -174,7 +174,14 @@ std::vector<Matrix4> GenMatrixData(size_t count, int parity)
     return data;
 }
 
-UniformsBenchmark::UniformsBenchmark() : ANGLERenderTest("Uniforms", GetParam()), mPrograms({}) {}
+UniformsBenchmark::UniformsBenchmark() : ANGLERenderTest("Uniforms", GetParam()), mPrograms({})
+{
+    // TODO(crbug.com/997674) crashes on Win10 FYI x64 Exp Release (Intel HD 630)
+    if (IsWindows() && IsIntel())
+    {
+        mSkipTest = true;
+    }
+}
 
 void UniformsBenchmark::initializeBenchmark()
 {
