@@ -22,6 +22,8 @@ GLsizei TypeStride(GLenum attribType)
             return 1;
         case GL_UNSIGNED_SHORT:
         case GL_SHORT:
+        case GL_HALF_FLOAT:
+        case GL_HALF_FLOAT_OES:
             return 2;
         case GL_UNSIGNED_INT:
         case GL_INT:
@@ -46,6 +48,88 @@ GLfloat Normalize(T value)
     else
     {
         return static_cast<GLfloat>(value) / static_cast<GLfloat>(std::numeric_limits<T>::max());
+    }
+}
+
+void Float2Half(GLhalf *target, GLfloat *source)
+{
+    const uint32_t zeroMask     = 0x7FFFFFFFu;
+    const uint32_t signMask     = 0x80000000u;
+    const uint32_t exponentMask = 0x7F800000u;
+    const uint32_t mantissaMask = 0x007FFFFFu;
+    const uint16_t inf16        = 0x7C00u;
+    const uint16_t nan16        = 0xFE00u;
+    uint16_t *hp                = (uint16_t *)target;
+    uint32_t *xp                = (uint32_t *)source;
+    uint16_t hs, he, hm;
+    uint32_t x, xs, xe, xm;
+    uint32_t hes;
+
+    x = *xp;
+    if ((x & zeroMask) == 0)
+    {                               // Signed zero
+        *hp = (uint16_t)(x >> 16);  // Return the signed zero
+    }
+    else
+    {                           // Not zero
+        xs = x & signMask;      // Pick off sign bit
+        xe = x & exponentMask;  // Pick off exponent bits
+        xm = x & mantissaMask;  // Pick off mantissa bits
+        if (xe == 0)
+        {  // Denormal will underflow, return a signed zero
+            *hp = (uint16_t)(xs >> 16);
+        }
+        else if (xe == exponentMask)
+        {  // Inf or NaN (all the exponent bits are set)
+            if (xm == 0)
+            {                                          // If mantissa is zero ...
+                *hp = (uint16_t)((xs >> 16) | inf16);  // Signed Inf
+            }
+            else
+            {
+                *hp = nan16;  // NaN, only 1st mantissa bit set
+            }
+        }
+        else
+        {                                        // Normalized number
+            hs  = (uint16_t)(xs >> 16);          // Sign bit
+            hes = ((int)(xe >> 23)) - 127 + 15;  // Exponent unbias the single, then bias the halfp
+            if (hes >= 0x1F)
+            {                                          // Overflow
+                *hp = (uint16_t)((xs >> 16) | inf16);  // Signed Inf
+            }
+            else if (hes <= 0)
+            {  // Underflow
+                if ((14 - hes) > 24)
+                {  // Mantissa shifted all the way off & no rounding possibility
+                    hm = (uint16_t)0u;  // Set mantissa to zero
+                }
+                else
+                {
+                    xm |= 0x00800000u;                     // Add the hidden leading bit
+                    hm = (uint16_t)(xm >> (14 - hes));     // Mantissa
+                    if ((xm >> (13 - hes)) & 0x00000001u)  // Check for rounding
+                    {
+                        hm += (uint16_t)1u;  // Round, might overflow into exp bit, but this is OK
+                    }
+                }
+                *hp = (hs | hm);  // Combine sign bit and mantissa bits, biased exponent is zero
+            }
+            else
+            {
+                he = (uint16_t)(hes << 10);  // Exponent
+                hm = (uint16_t)(xm >> 13);   // Mantissa
+                if (xm & 0x00001000u)        // Check for rounding
+                {
+                    *hp =
+                        (hs | he | hm) + (uint16_t)1u;  // Round, might overflow to inf, this is OK
+                }
+                else
+                {
+                    *hp = (hs | he | hm);  // No rounding
+                }
+            }
+        }
     }
 }
 
@@ -124,7 +208,9 @@ class VertexAttributeTest : public ANGLETest
         glEnableVertexAttribArray(mExpectedAttrib);
     }
 
-    void checkPixels()
+    void checkPixels() { checkRGBPixels(true); }
+
+    void checkRGBPixels(bool checkAlpha)
     {
         GLint viewportSize[4];
         glGetIntegerv(GL_VIEWPORT, viewportSize);
@@ -135,10 +221,20 @@ class VertexAttributeTest : public ANGLETest
         // We need to offset our checks from triangle edges to ensure we don't fall on a single tri
         // Avoid making assumptions of drawQuad with four checks to check the four possible tri
         // regions
-        EXPECT_PIXEL_EQ((midPixelX + viewportSize[0]) / 2, midPixelY, 255, 255, 255, 255);
-        EXPECT_PIXEL_EQ((midPixelX + viewportSize[2]) / 2, midPixelY, 255, 255, 255, 255);
-        EXPECT_PIXEL_EQ(midPixelX, (midPixelY + viewportSize[1]) / 2, 255, 255, 255, 255);
-        EXPECT_PIXEL_EQ(midPixelX, (midPixelY + viewportSize[3]) / 2, 255, 255, 255, 255);
+        if (checkAlpha)
+        {
+            EXPECT_PIXEL_EQ((midPixelX + viewportSize[0]) / 2, midPixelY, 255, 255, 255, 255);
+            EXPECT_PIXEL_EQ((midPixelX + viewportSize[2]) / 2, midPixelY, 255, 255, 255, 255);
+            EXPECT_PIXEL_EQ(midPixelX, (midPixelY + viewportSize[1]) / 2, 255, 255, 255, 255);
+            EXPECT_PIXEL_EQ(midPixelX, (midPixelY + viewportSize[3]) / 2, 255, 255, 255, 255);
+        }
+        else
+        {
+            EXPECT_PIXEL_RGB_EQUAL((midPixelX + viewportSize[0]) / 2, midPixelY, 255, 255, 255);
+            EXPECT_PIXEL_RGB_EQUAL((midPixelX + viewportSize[2]) / 2, midPixelY, 255, 255, 255);
+            EXPECT_PIXEL_RGB_EQUAL(midPixelX, (midPixelY + viewportSize[1]) / 2, 255, 255, 255);
+            EXPECT_PIXEL_RGB_EQUAL(midPixelX, (midPixelY + viewportSize[3]) / 2, 255, 255, 255);
+        }
     }
 
     void checkPixelsUnEqual()
@@ -177,7 +273,16 @@ class VertexAttributeTest : public ANGLETest
 
             if (checkPixelEqual)
             {
-                checkPixels();
+                if ((test.type == GL_HALF_FLOAT || test.type == GL_HALF_FLOAT_OES) && IsVulkan() &&
+                    typeSize == 3)
+                {  // We need a special case for RGB16F format on a Vulkan backend due to the fact
+                   // that in such a usecase, we need to ignore the alpha channel.
+                    checkRGBPixels(false);
+                }
+                else
+                {
+                    checkPixels();
+                }
             }
             else
             {
@@ -418,6 +523,36 @@ TEST_P(VertexAttributeTest, ShortNormalized)
 
     TestData data(GL_SHORT, GL_TRUE, Source::IMMEDIATE, inputData.data(), expectedData.data());
     runTest(data);
+}
+
+// Verify that vertex data is updated correctly when using a float/half-float client memory pointer.
+TEST_P(VertexAttributeTest, HalfFloatClientMemoryPointer)
+{
+    ANGLE_SKIP_TEST_IF(IsD3D11() || IsD3D9());
+
+    std::array<GLhalf, kVertexCount> inputData;
+    std::array<GLfloat, kVertexCount> expectedData = {
+        {0.f, 1.5f, 2.3f, 3.2f, -1.8f, -2.2f, -3.9f, -4.f, 34.5f, 32.2f, -78.8f, -77.4f, -76.1f}};
+
+    for (size_t i = 0; i < kVertexCount; i++)
+    {
+        Float2Half(&inputData[i], &expectedData[i]);
+    }
+
+    // If the extension is enabled run the test on all contexts
+    if (IsGLExtensionEnabled("GL_OES_vertex_half_float"))
+    {
+        TestData imediateData(GL_HALF_FLOAT_OES, GL_FALSE, Source::IMMEDIATE, inputData.data(),
+                              expectedData.data());
+        runTest(imediateData);
+    }
+    // Otherwise run the test only if it is an ES3 context
+    else if ((GetParam() == ES3_OPENGL()) || (GetParam() == ES3_OPENGLES()))
+    {
+        TestData imediateData(GL_HALF_FLOAT, GL_FALSE, Source::IMMEDIATE, inputData.data(),
+                              expectedData.data());
+        runTest(imediateData);
+    }
 }
 
 // Verify that using the same client memory pointer in different format won't mess up the draw.
