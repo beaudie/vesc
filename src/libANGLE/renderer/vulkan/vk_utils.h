@@ -431,8 +431,8 @@ class BindingPointer final : angle::NonCopyable
     RefCounted<T> *mRefCounted;
 };
 
-// Helper class to share ref-counted Vulkan objects.  Requires that T have a destroy method
-// that takes a VkDevice and returns void.
+// Helper class to share ref-counted Vulkan objects. Handles T classes that are linked to a
+// VkDevice or a ContextVk.
 template <typename T>
 class Shared final : angle::NonCopyable
 {
@@ -449,34 +449,40 @@ class Shared final : angle::NonCopyable
         return *this;
     }
 
-    void set(VkDevice device, RefCounted<T> *refCounted)
+    void set(RefCounted<T> *refCounted, VkDevice device)
     {
-        if (mRefCounted)
-        {
-            mRefCounted->releaseRef();
-            if (!mRefCounted->isReferenced())
-            {
-                mRefCounted->get().destroy(device);
-                SafeDelete(mRefCounted);
-            }
-        }
-
-        mRefCounted = refCounted;
-
-        if (mRefCounted)
-        {
-            mRefCounted->addRef();
-        }
+        setImpl(refCounted, &T::destroy, device);
     }
 
-    void assign(VkDevice device, T &&newObject)
+    void set(RefCounted<T> *refCounted, ContextVk *contextVk)
     {
-        set(device, new RefCounted<T>(std::move(newObject)));
+        setImpl(refCounted, &T::release, contextVk);
     }
 
-    void copy(VkDevice device, const Shared<T> &other) { set(device, other.mRefCounted); }
+    void set(RefCounted<T> *refCounted,
+             DisplayVk *display,
+             std::vector<GarbageObjectBase> *garbageQueue)
+    {
+        setImpl(refCounted, &T::release, display, garbageQueue);
+    }
 
-    void reset(VkDevice device) { set(device, nullptr); }
+    template <typename... ParamTs>
+    void assign(T &&newObject, ParamTs... params)
+    {
+        set(new RefCounted<T>(std::move(newObject)), params...);
+    }
+
+    template <typename... ParamTs>
+    void copy(const Shared<T> &other, ParamTs... params)
+    {
+        set(other.mRefCounted, params...);
+    }
+
+    template <typename... ParamTs>
+    void reset(ParamTs... params)
+    {
+        set(nullptr, params...);
+    }
 
     template <typename RecyclerT>
     void resetAndRecycle(RecyclerT *recycler)
@@ -514,7 +520,39 @@ class Shared final : angle::NonCopyable
         return mRefCounted->get();
     }
 
+    bool valid() const
+    {
+        return mRefCounted && mRefCounted->isReferenced() && mRefCounted->get().valid();
+    }
+
   private:
+    template <typename... ParamTs>
+    using SetImplHandlerFunc = void (T::*)(ParamTs...);
+
+    template <typename... ParamTs>
+    void setImpl(RefCounted<T> *refCounted,
+                 SetImplHandlerFunc<ParamTs...> handler,
+                 ParamTs... params)
+    {
+        if (mRefCounted)
+        {
+            mRefCounted->releaseRef();
+            if (!mRefCounted->isReferenced())
+            {
+                T &obj = mRefCounted->get();
+                (obj.*handler)(params...);
+                SafeDelete(mRefCounted);
+            }
+        }
+
+        mRefCounted = refCounted;
+
+        if (mRefCounted)
+        {
+            mRefCounted->addRef();
+        }
+    }
+
     RefCounted<T> *mRefCounted;
 };
 
