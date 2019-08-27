@@ -100,7 +100,7 @@ void CaptureDeleteBuffers_buffersPacked(const Context *context,
                                         const BufferID *buffers,
                                         ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureMemory(buffers, sizeof(GLuint) * n, paramCapture);
 }
 
 void CaptureDeleteFramebuffers_framebuffers(const Context *context,
@@ -198,7 +198,7 @@ void CaptureGetActiveAttrib_length(const Context *context,
                                    GLchar *name,
                                    ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLsizei);
 }
 
 void CaptureGetActiveAttrib_size(const Context *context,
@@ -212,7 +212,7 @@ void CaptureGetActiveAttrib_size(const Context *context,
                                  GLchar *name,
                                  ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLint);
 }
 
 void CaptureGetActiveAttrib_type(const Context *context,
@@ -226,7 +226,7 @@ void CaptureGetActiveAttrib_type(const Context *context,
                                  GLchar *name,
                                  ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLenum);
 }
 
 void CaptureGetActiveAttrib_name(const Context *context,
@@ -240,7 +240,7 @@ void CaptureGetActiveAttrib_name(const Context *context,
                                  GLchar *name,
                                  ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLchar) * (strlen(name) + 1);
 }
 
 void CaptureGetActiveUniform_length(const Context *context,
@@ -254,7 +254,7 @@ void CaptureGetActiveUniform_length(const Context *context,
                                     GLchar *name,
                                     ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLsizei);
 }
 
 void CaptureGetActiveUniform_size(const Context *context,
@@ -268,7 +268,7 @@ void CaptureGetActiveUniform_size(const Context *context,
                                   GLchar *name,
                                   ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLint);
 }
 
 void CaptureGetActiveUniform_type(const Context *context,
@@ -282,7 +282,7 @@ void CaptureGetActiveUniform_type(const Context *context,
                                   GLchar *name,
                                   ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLenum);
 }
 
 void CaptureGetActiveUniform_name(const Context *context,
@@ -296,7 +296,7 @@ void CaptureGetActiveUniform_name(const Context *context,
                                   GLchar *name,
                                   ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLchar) * (strlen(name) + 1);
 }
 
 void CaptureGetAttachedShaders_count(const Context *context,
@@ -463,7 +463,7 @@ void CaptureGetShaderPrecisionFormat_range(const Context *context,
                                            GLint *precision,
                                            ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLint) * 2;
 }
 
 void CaptureGetShaderPrecisionFormat_precision(const Context *context,
@@ -474,7 +474,7 @@ void CaptureGetShaderPrecisionFormat_precision(const Context *context,
                                                GLint *precision,
                                                ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLint);
 }
 
 void CaptureGetShaderSource_length(const Context *context,

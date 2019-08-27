@@ -2829,7 +2829,7 @@ void CaptureGetProgramBinaryOES_length(const Context *context,
                                        void *binary,
                                        ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLsizei);
 }
 
 void CaptureGetProgramBinaryOES_binaryFormat(const Context *context,
@@ -2841,7 +2841,7 @@ void CaptureGetProgramBinaryOES_binaryFormat(const Context *context,
                                              void *binary,
                                              ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = sizeof(GLenum);
 }
 
 void CaptureGetProgramBinaryOES_binary(const Context *context,
@@ -2853,7 +2853,7 @@ void CaptureGetProgramBinaryOES_binary(const Context *context,
                                        void *binary,
                                        ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    paramCapture->readBufferSizeBytes = *length;
 }
 
 void CaptureProgramBinaryOES_binary(const Context *context,
@@ -2864,7 +2864,7 @@ void CaptureProgramBinaryOES_binary(const Context *context,
                                     GLint length,
                                     ParamCapture *paramCapture)
 {
-    UNIMPLEMENTED();
+    CaptureMemory(binary, length, paramCapture);
 }
 
 void CaptureGetBufferPointervOES_params(const Context *context,
