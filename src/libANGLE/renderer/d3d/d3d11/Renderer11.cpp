@@ -2532,16 +2532,17 @@ angle::Result Renderer11::createRenderTarget(const gl::Context *context,
     {
         // Create texture resource
         D3D11_TEXTURE2D_DESC desc;
-        desc.Width              = width;
-        desc.Height             = height;
-        desc.MipLevels          = 1;
-        desc.ArraySize          = 1;
-        desc.Format             = formatInfo.texFormat;
-        desc.SampleDesc.Count   = (supportedSamples == 0) ? 1 : supportedSamples;
-        desc.SampleDesc.Quality = 0;
-        desc.Usage              = D3D11_USAGE_DEFAULT;
-        desc.CPUAccessFlags     = 0;
-        desc.MiscFlags          = 0;
+        desc.Width            = width;
+        desc.Height           = height;
+        desc.MipLevels        = 1;
+        desc.ArraySize        = 1;
+        desc.Format           = formatInfo.texFormat;
+        desc.SampleDesc.Count = (supportedSamples == 0) ? 1 : supportedSamples;
+        desc.SampleDesc.Quality =
+            (supportedSamples == 0) ? 0 : static_cast<UINT>(D3D11_STANDARD_MULTISAMPLE_PATTERN);
+        desc.Usage          = D3D11_USAGE_DEFAULT;
+        desc.CPUAccessFlags = 0;
+        desc.MiscFlags      = 0;
 
         // If a rendertarget or depthstencil format exists for this texture format,
         // we'll flag it to allow binding that way. Shader resource views are a little
@@ -3394,7 +3395,8 @@ angle::Result Renderer11::blitRenderbufferRect(const gl::Context *context,
     bool partialDSBlit =
         (nativeFormat.depthBits > 0 && depthBlit) != (nativeFormat.stencilBits > 0 && stencilBlit);
 
-    if (readRenderTarget11->getFormatSet().formatID ==
+    if (drawRenderTarget->getSamples() == readRenderTarget->getSamples() &&
+        readRenderTarget11->getFormatSet().formatID ==
             drawRenderTarget11->getFormatSet().formatID &&
         !stretchRequired && !outOfBounds && !reversalRequired && !partialDSBlit &&
         !colorMaskingNeeded && (!(depthBlit || stencilBlit) || wholeBufferCopy))
