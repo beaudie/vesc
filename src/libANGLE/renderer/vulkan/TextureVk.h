@@ -192,7 +192,7 @@ class TextureVk : public TextureImpl
     uint32_t getNativeImageLevel(uint32_t frontendLevel) const;
     uint32_t getNativeImageLayer(uint32_t frontendLayer) const;
 
-    void releaseAndDeleteImage(ContextVk *contextVk);
+    void releaseImage(ContextVk *contextVk);
     angle::Result ensureImageAllocated(ContextVk *contextVk, const vk::Format &format);
     void setImageHelper(ContextVk *contextVk,
                         vk::ImageHelper *imageHelper,
@@ -286,7 +286,7 @@ class TextureVk : public TextureImpl
                             const vk::Format &format,
                             const gl::Extents &extents,
                             const uint32_t levelCount);
-    void releaseImage(ContextVk *contextVk);
+    void releaseImageAndViews(ContextVk *contextVk);
     void releaseImageViews(ContextVk *contextVk);
     void releaseStagingBuffer(ContextVk *contextVk);
     uint32_t getLevelCount() const;
