@@ -35,6 +35,7 @@ angle_extensions = [
     "GL_ANGLE_robust_client_memory",
     "GL_ANGLE_copy_texture_3d",
     "GL_ANGLE_texture_external_update",
+    "GL_ANGLE_program_binary"
 ]
 
 gles1_extensions = [

@@ -28,6 +28,7 @@ template_gl_enums_header = """// GENERATED FILE - DO NOT EDIT.
 # define LIBANGLE_GL_ENUM_UTILS_AUTOGEN_H_
 
 #include <string>
+#include <ostream>
 
 #include "common/PackedGLEnums_autogen.h"
 
@@ -43,6 +44,10 @@ const char *GLbooleanToString(unsigned int value);
 const char *GLenumToString(GLenumGroup enumGroup, unsigned int value);
 
 std::string GLbitfieldToString(GLenumGroup enumGroup, unsigned int value);
+
+void OutputGLenumString(std::ostream &out, GLenumGroup enumGroup, unsigned int value);
+
+void OutputGLbitfieldString(std::ostream &out, GLenumGroup enumGroup, unsigned int value);
 
 }}
 
@@ -68,6 +73,26 @@ template_gl_enums_source = """// GENERATED FILE - DO NOT EDIT.
 namespace gl
 {{
 
+static const char sEnumUnknown[] = "EnumUnknown";
+
+void OutputGLenumString(std::ostream &out, GLenumGroup enumGroup, unsigned int value)
+{{
+    const char *enumStr = GLenumToString(enumGroup, value);
+    if (enumStr != sEnumUnknown)
+    {{
+        out << enumStr;
+    }}
+    else
+    {{
+        out << std::hex << value << std::dec;
+    }}
+}}
+
+void OutputGLbitfieldString(std::ostream &out, GLenumGroup enumGroup, unsigned int value)
+{{
+    out << GLbitfieldToString(enumGroup, value);
+}}
+
 const char *GLbooleanToString(unsigned int value) {{
     switch (value) {{
         case 0x0:
@@ -75,7 +100,7 @@ const char *GLbooleanToString(unsigned int value) {{
         case 0x1:
             return "GL_TRUE";
         default:
-            return "EnumUnknown";
+            return sEnumUnknown;
     }}
 }}
 
@@ -83,7 +108,7 @@ const char *GLenumToString(GLenumGroup enumGroup, unsigned int value) {{
     switch (enumGroup) {{
         {gl_enums_value_to_string_table}
         default:
-            return "EnumUnknown";
+            return sEnumUnknown;
     }}
 }}
 
@@ -102,7 +127,15 @@ std::string GLbitfieldToString(GLenumGroup enumGroup, unsigned int value) {{
         first = false;
 
         unsigned int mask = 1u << index;
-        st << GLenumToString(enumGroup, mask);
+        const char *enumStr = GLenumToString(enumGroup, mask);
+        if (enumStr != sEnumUnknown)
+        {{
+            st << enumStr;   
+        }}
+        else
+        {{
+            st << std::hex << mask << std::dec;
+        }}
     }}
 
     return st.str();
@@ -116,7 +149,7 @@ template_enum_group_case = """case GLenumGroup::{group_name}: {{
     switch (value) {{
         {inner_group_cases}
         default:
-            return "EnumUnknown";
+            return sEnumUnknown;
     }}
 }}
 """
