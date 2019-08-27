@@ -9318,6 +9318,14 @@ void StateCache::updateVertexAttribTypesValidation(Context *context)
             {VertexAttribType::Float, VertexAttribTypeCase::Valid},
             {VertexAttribType::Fixed, VertexAttribTypeCase::Valid},
         }};
+
+        if (context->getExtensions().vertexHalfFloat)
+        {
+            mCachedVertexAttribTypesValidation[VertexAttribType::HalfFloat] =
+                VertexAttribTypeCase::Valid;
+            mCachedVertexAttribTypesValidation[VertexAttribType::HalfFloatOES] =
+                VertexAttribTypeCase::Valid;
+        }
     }
     else
     {
@@ -9334,6 +9342,12 @@ void StateCache::updateVertexAttribTypesValidation(Context *context)
             {VertexAttribType::Int2101010, VertexAttribTypeCase::ValidSize4Only},
             {VertexAttribType::UnsignedInt2101010, VertexAttribTypeCase::ValidSize4Only},
         }};
+
+        if (context->getExtensions().vertexHalfFloat)
+        {
+            mCachedVertexAttribTypesValidation[VertexAttribType::HalfFloatOES] =
+                VertexAttribTypeCase::Valid;
+        }
 
         mCachedIntegerVertexAttribTypesValidation = {{
             {VertexAttribType::Byte, VertexAttribTypeCase::Valid},
