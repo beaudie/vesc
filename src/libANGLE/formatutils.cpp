@@ -1612,6 +1612,7 @@ angle::FormatID GetVertexFormatID(VertexAttribType type,
 #endif
             }
         case VertexAttribType::HalfFloat:
+        case VertexAttribType::HalfFloatOes:
             switch (components)
             {
                 case 1:
