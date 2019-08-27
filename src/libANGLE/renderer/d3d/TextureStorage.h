@@ -34,11 +34,14 @@ class SwapChainD3D;
 class RenderTargetD3D;
 class ImageD3D;
 
-class TextureStorage : angle::NonCopyable
+// Dirty bit messages from TextureStorage
+constexpr size_t kTextureStorageObserverMessageIndex = 0;
+
+class TextureStorage : public angle::Subject
 {
   public:
     TextureStorage() {}
-    virtual ~TextureStorage() {}
+    ~TextureStorage() override {}
 
     virtual angle::Result onDestroy(const gl::Context *context);
 
@@ -74,7 +77,9 @@ class TextureStorage : angle::NonCopyable
     virtual void invalidateTextures() {}
 
     // RenderToTexture methods
-    virtual GLsizei getRenderToTextureSamples();
+    virtual angle::Result releaseMultisampledTexStorageForLevel(size_t level);
+    virtual angle::Result resolveAndReleaseTexture(const gl::Context *context);
+    virtual GLsizei getRenderToTextureSamples() const;
 
   protected:
     const angle::Subject *mSubject;
@@ -91,7 +96,17 @@ inline angle::Result TextureStorage::useLevelZeroWorkaroundTexture(const gl::Con
     return angle::Result::Continue;
 }
 
-inline GLsizei TextureStorage::getRenderToTextureSamples()
+inline angle::Result TextureStorage::releaseMultisampledTexStorageForLevel(size_t level)
+{
+    return angle::Result::Continue;
+}
+
+inline angle::Result TextureStorage::resolveAndReleaseTexture(const gl::Context *context)
+{
+    return angle::Result::Continue;
+}
+
+inline GLsizei TextureStorage::getRenderToTextureSamples() const
 {
     return 0;
 }

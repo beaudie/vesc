@@ -980,7 +980,8 @@ bool ValidateES3CopyTexImageParametersBase(Context *context,
         return false;
     }
 
-    if (!framebuffer->isDefault() && !ValidateFramebufferNotMultisampled(context, framebuffer))
+    if (!framebuffer->isDefault() &&
+        !ValidateFramebufferNotMultisampled(context, framebuffer, true))
     {
         return false;
     }
