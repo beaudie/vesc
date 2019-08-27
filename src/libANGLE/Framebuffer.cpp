@@ -144,7 +144,8 @@ bool CheckAttachmentSampleCompleteness(const Context *context,
                                        const FramebufferAttachment &attachment,
                                        bool colorAttachment,
                                        Optional<int> *samples,
-                                       Optional<bool> *fixedSampleLocations)
+                                       Optional<bool> *fixedSampleLocations,
+                                       Optional<int> *renderToTextureSamples)
 {
     ASSERT(attachment.isAttached());
 
@@ -152,6 +153,12 @@ bool CheckAttachmentSampleCompleteness(const Context *context,
     {
         const Texture *texture = attachment.getTexture();
         ASSERT(texture);
+        GLenum internalFormat         = attachment.getFormat().info->internalFormat;
+        const TextureCaps &formatCaps = context->getTextureCaps().get(internalFormat);
+        if (static_cast<GLuint>(attachment.getSamples()) > formatCaps.getMaxSamples())
+        {
+            return false;
+        }
 
         const ImageIndex &attachmentImageIndex = attachment.getTextureImageIndex();
         bool fixedSampleloc = texture->getAttachmentFixedSampleLocations(attachmentImageIndex);
@@ -165,9 +172,50 @@ bool CheckAttachmentSampleCompleteness(const Context *context,
         }
     }
 
+    if (renderToTextureSamples->valid())
+    {
+        if (renderToTextureSamples->value() !=
+                FramebufferAttachment::kDefaultRenderToTextureSamples &&
+            attachment.getRenderToTextureSamples() != renderToTextureSamples->value())
+        {
+            if (colorAttachment)
+            {
+                return false;
+            }
+            else
+            {
+                // CHROMIUM_framebuffer_mixed_samples allows a framebuffer to be considered complete
+                // when its depth or stencil samples are a multiple of the number of color samples.
+                if (!context->getExtensions().framebufferMixedSamples)
+                {
+                    return false;
+                }
+
+                if ((attachment.getSamples() % std::max(samples->value(), 1)) != 0)
+                {
+                    return false;
+                }
+            }
+        }
+    }
+    else
+    {
+        if (attachment.getRenderToTextureSamples() !=
+            FramebufferAttachment::kDefaultRenderToTextureSamples)
+        {
+            *renderToTextureSamples = attachment.getRenderToTextureSamples();
+        }
+        else
+        {
+            *renderToTextureSamples = FramebufferAttachment::kDefaultRenderToTextureSamples;
+        }
+    }
+
     if (samples->valid())
     {
-        if (attachment.getSamples() != samples->value())
+        if (renderToTextureSamples->value() ==
+                FramebufferAttachment::kDefaultRenderToTextureSamples &&
+            attachment.getSamples() != samples->value())
         {
             if (colorAttachment)
             {
@@ -1013,6 +1061,7 @@ GLenum Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
     Optional<int> samples;
     Optional<bool> fixedSampleLocations;
     bool hasRenderbuffer = false;
+    Optional<int> renderToTextureSamples;
 
     const FramebufferAttachment *firstAttachment = getFirstNonNullAttachment();
 
@@ -1035,7 +1084,7 @@ GLenum Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
             }
 
             if (!CheckAttachmentSampleCompleteness(context, colorAttachment, true, &samples,
-                                                   &fixedSampleLocations))
+                                                   &fixedSampleLocations, &renderToTextureSamples))
             {
                 return GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE;
             }
@@ -1112,7 +1161,7 @@ GLenum Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
         }
 
         if (!CheckAttachmentSampleCompleteness(context, depthAttachment, false, &samples,
-                                               &fixedSampleLocations))
+                                               &fixedSampleLocations, &renderToTextureSamples))
         {
             return GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE;
         }
@@ -1157,7 +1206,7 @@ GLenum Framebuffer::checkStatusWithGLFrontEnd(const Context *context)
         }
 
         if (!CheckAttachmentSampleCompleteness(context, stencilAttachment, false, &samples,
-                                               &fixedSampleLocations))
+                                               &fixedSampleLocations, &renderToTextureSamples))
         {
             return GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE;
         }
@@ -1565,10 +1614,15 @@ bool Framebuffer::isDefault() const
 
 int Framebuffer::getSamples(const Context *context)
 {
-    return (isComplete(context) ? getCachedSamples(context) : 0);
+    return (isComplete(context) ? getCachedSamples(context, false) : 0);
 }
 
-int Framebuffer::getCachedSamples(const Context *context) const
+int Framebuffer::getIntrinsicSamples(const Context *context)
+{
+    return (isComplete(context) ? getCachedSamples(context, true) : 0);
+}
+
+int Framebuffer::getCachedSamples(const Context *context, bool getIntrinsic) const
 {
     ASSERT(mCachedStatus.valid() && mCachedStatus.value() == GL_FRAMEBUFFER_COMPLETE);
 
@@ -1578,6 +1632,10 @@ int Framebuffer::getCachedSamples(const Context *context) const
     if (firstNonNullAttachment)
     {
         ASSERT(firstNonNullAttachment->isAttached());
+        if (getIntrinsic)
+        {
+            return firstNonNullAttachment->getIntrinsicSamples();
+        }
         return firstNonNullAttachment->getSamples();
     }
 
@@ -1608,6 +1666,18 @@ void Framebuffer::setAttachment(const Context *context,
                   FramebufferAttachment::kDefaultNumViews,
                   FramebufferAttachment::kDefaultBaseViewIndex, false,
                   FramebufferAttachment::kDefaultRenderToTextureSamples);
+}
+
+void Framebuffer::setAttachmentMultisample(const Context *context,
+                                           GLenum type,
+                                           GLenum binding,
+                                           const ImageIndex &textureIndex,
+                                           FramebufferAttachmentObject *resource,
+                                           GLsizei samples)
+{
+    setAttachment(context, type, binding, textureIndex, resource,
+                  FramebufferAttachment::kDefaultNumViews,
+                  FramebufferAttachment::kDefaultBaseViewIndex, false, samples);
 }
 
 void Framebuffer::setAttachment(const Context *context,

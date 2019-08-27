@@ -1839,6 +1839,11 @@ angle::Result Texture::handleMipmapGenerationHint(Context *context, int level)
 
 void Texture::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message)
 {
+    if (message == angle::SubjectMessage::ContentsChanged)
+    {
+        signalDirtyStorage(InitState::Initialized);
+        return;
+    }
     ASSERT(message == angle::SubjectMessage::SubjectChanged);
     mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION);
     signalDirtyState(DIRTY_BIT_IMPLEMENTATION);
