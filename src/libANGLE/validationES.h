@@ -606,7 +606,9 @@ bool ValidateGetInternalFormativBase(Context *context,
                                      GLsizei bufSize,
                                      GLsizei *numParams);
 
-bool ValidateFramebufferNotMultisampled(Context *context, Framebuffer *framebuffer);
+bool ValidateFramebufferNotMultisampled(Context *context,
+                                        Framebuffer *framebuffer,
+                                        bool needIntrinsic);
 
 bool ValidateMultitextureUnit(Context *context, GLenum texture);
 

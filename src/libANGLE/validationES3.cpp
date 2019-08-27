@@ -980,7 +980,10 @@ bool ValidateES3CopyTexImageParametersBase(Context *context,
         return false;
     }
 
-    if (!framebuffer->isDefault() && !ValidateFramebufferNotMultisampled(context, framebuffer))
+    // needIntrinsic = true. Treat renderToTexture textures as single sample since they wil be
+    // resolved before copying
+    if (!framebuffer->isDefault() &&
+        !ValidateFramebufferNotMultisampled(context, framebuffer, true))
     {
         return false;
     }
