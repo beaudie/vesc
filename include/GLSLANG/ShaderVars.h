@@ -171,6 +171,7 @@ struct VariableWithLocation : public ShaderVariable
     VariableWithLocation();
     ~VariableWithLocation();
     VariableWithLocation(const VariableWithLocation &other);
+    VariableWithLocation(const ShaderVariable &other, int location);
     VariableWithLocation &operator=(const VariableWithLocation &other);
     bool operator==(const VariableWithLocation &other) const;
     bool operator!=(const VariableWithLocation &other) const { return !operator==(other); }
@@ -244,6 +245,7 @@ struct Varying : public VariableWithLocation
     Varying();
     ~Varying();
     Varying(const Varying &other);
+    Varying(const ShaderVariable &other, int location);
     Varying &operator=(const Varying &other);
     bool operator==(const Varying &other) const;
     bool operator!=(const Varying &other) const { return !operator==(other); }

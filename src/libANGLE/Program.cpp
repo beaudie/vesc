@@ -1499,6 +1499,8 @@ angle::Result Program::link(const Context *context)
     mLinkingState->resources         = std::move(resources);
     mLinkResolved                    = false;
 
+    mState.updateProgramInterfaceInputs();
+
     return angle::Result::Continue;
 }
 
@@ -1633,6 +1635,41 @@ void ProgramState::updateActiveImages()
         for (GLint imageUnit : imageBinding.boundImageUnits)
         {
             mActiveImagesMask.set(imageUnit);
+        }
+    }
+}
+
+void ProgramState::updateProgramInterfaceInputs()
+{
+    if (hasLinkedShaderStage(ShaderType::Vertex))
+    {
+        // Vertex attributes are already what we need, so nothing to do
+        return;
+    }
+
+    for (Shader *shader : getAttachedShaders())
+    {
+        if (shader)
+        {
+            ASSERT(shader->getType() != ShaderType::Vertex);
+            // Copy over each input varying, since the Shader could go away
+            for (const sh::Varying &varying : shader->getInputVaryings())
+            {
+                if (varying.isStruct())
+                {
+                    for (const sh::ShaderVariable &field : varying.fields)
+                    {
+                        sh::Varying fieldVarying = sh::Varying(field, varying.location);
+                        fieldVarying.name        = varying.name + "." + field.name;
+                        mInputVaryings.emplace_back(fieldVarying);
+                    }
+                }
+                else
+                {
+                    mInputVaryings.emplace_back(varying);
+                }
+            }
+            break;
         }
     }
 }
@@ -1978,10 +2015,65 @@ GLint Program::getGeometryShaderMaxVertices() const
     return mState.mGeometryShaderMaxVertices;
 }
 
+std::string Program::stripArraySubscriptFromName(const GLchar *name) const
+{
+    std::string nameString = std::string(name);
+
+    std::size_t bracketPos = nameString.find("[");
+    if (bracketPos != std::string::npos)
+    {
+        nameString = nameString.substr(0, bracketPos);
+    }
+
+    return nameString;
+}
+
+int Program::getArrayIndexFromName(const GLchar *name) const
+{
+    std::string nameString = std::string(name);
+
+    std::size_t openBracketPos = nameString.find("[");
+    if (openBracketPos != std::string::npos)
+    {
+        std::size_t closeBracketPos = nameString.find("]");
+        if (closeBracketPos != std::string::npos)
+        {
+            return std::stoi(
+                nameString.substr(openBracketPos + 1, closeBracketPos - openBracketPos - 1));
+        }
+    }
+
+    // An array variable name without any subscripting defaults to "[0]"
+    return 0;
+}
+
+template <typename T>
+GLuint getResourceIndex(const std::vector<T> list, const std::string &name)
+{
+    for (size_t index = 0; index < list.size(); index++)
+    {
+        if (list[index].name == name)
+        {
+            return static_cast<GLuint>(index);
+        }
+    }
+
+    return GL_INVALID_INDEX;
+}
+
 GLuint Program::getInputResourceIndex(const GLchar *name) const
 {
     ASSERT(mLinkResolved);
-    return GetResourceIndexFromName(mState.mAttributes, std::string(name));
+    const std::string nameString = stripArraySubscriptFromName(name);
+
+    if (hasLinkedShaderStage(ShaderType::Vertex))
+    {
+        return getResourceIndex(mState.mAttributes, nameString);
+    }
+    else
+    {
+        return getResourceIndex(mState.mInputVaryings, nameString);
+    }
 }
 
 GLuint Program::getOutputResourceIndex(const GLchar *name) const
@@ -2002,12 +2094,10 @@ const std::vector<GLenum> &Program::getOutputVariableTypes() const
     return mState.mOutputVariableTypes;
 }
 
-template <typename T>
-void Program::getResourceName(GLuint index,
-                              const std::vector<T> &resources,
-                              GLsizei bufSize,
-                              GLsizei *length,
-                              GLchar *name) const
+void Program::writeResourceName(const std::string name,
+                                GLsizei bufSize,
+                                GLsizei *length,
+                                GLchar *dest) const
 {
     if (length)
     {
@@ -2018,60 +2108,85 @@ void Program::getResourceName(GLuint index,
     {
         if (bufSize > 0)
         {
-            name[0] = '\0';
+            dest[0] = '\0';
         }
         return;
     }
-    ASSERT(index < resources.size());
-    const auto &resource = resources[index];
 
     if (bufSize > 0)
     {
-        CopyStringToBuffer(name, resource.name, bufSize, length);
+        CopyStringToBuffer(dest, name, bufSize, length);
     }
 }
 
-void Program::getInputResourceName(GLuint index,
-                                   GLsizei bufSize,
-                                   GLsizei *length,
-                                   GLchar *name) const
-{
-    ASSERT(mLinkResolved);
-    getResourceName(index, mState.mAttributes, bufSize, length, name);
-}
-
-void Program::getOutputResourceName(GLuint index,
-                                    GLsizei bufSize,
-                                    GLsizei *length,
-                                    GLchar *name) const
-{
-    ASSERT(mLinkResolved);
-    getResourceName(index, mState.mOutputVariables, bufSize, length, name);
-}
-
-void Program::getUniformResourceName(GLuint index,
+void Program::writeInputResourceName(GLuint index,
                                      GLsizei bufSize,
                                      GLsizei *length,
                                      GLchar *name) const
 {
     ASSERT(mLinkResolved);
-    getResourceName(index, mState.mUniforms, bufSize, length, name);
+    writeResourceName(getInputResourceName(index), bufSize, length, name);
 }
 
-void Program::getBufferVariableResourceName(GLuint index,
-                                            GLsizei bufSize,
-                                            GLsizei *length,
-                                            GLchar *name) const
+void Program::writeOutputResourceName(GLuint index,
+                                      GLsizei bufSize,
+                                      GLsizei *length,
+                                      GLchar *name) const
 {
     ASSERT(mLinkResolved);
-    getResourceName(index, mState.mBufferVariables, bufSize, length, name);
+    ASSERT(index < mState.mOutputVariables.size());
+    writeResourceName(mState.mOutputVariables[index].name, bufSize, length, name);
 }
 
-const sh::Attribute &Program::getInputResource(GLuint index) const
+void Program::writeUniformResourceName(GLuint index,
+                                       GLsizei bufSize,
+                                       GLsizei *length,
+                                       GLchar *name) const
 {
     ASSERT(mLinkResolved);
-    ASSERT(index < mState.mAttributes.size());
-    return mState.mAttributes[index];
+    ASSERT(index < mState.mUniforms.size());
+    writeResourceName(mState.mUniforms[index].name, bufSize, length, name);
+}
+
+void Program::writeBufferVariableResourceName(GLuint index,
+                                              GLsizei bufSize,
+                                              GLsizei *length,
+                                              GLchar *name) const
+{
+    ASSERT(mLinkResolved);
+    ASSERT(index < mState.mBufferVariables.size());
+    writeResourceName(mState.mBufferVariables[index].name, bufSize, length, name);
+}
+
+const std::string Program::getInputResourceName(GLuint index) const
+{
+    ASSERT(mLinkResolved);
+
+    const sh::VariableWithLocation &resource = getInputResource(index);
+    std::string resourceName                 = resource.name;
+
+    if (resource.isArray())
+    {
+        resourceName += "[0]";
+    }
+
+    return resourceName;
+}
+
+const sh::VariableWithLocation &Program::getInputResource(GLuint index) const
+{
+    ASSERT(mLinkResolved);
+
+    if (hasLinkedShaderStage(ShaderType::Vertex))
+    {
+        ASSERT(index < mState.mAttributes.size());
+        return mState.mAttributes[index];
+    }
+    else
+    {
+        ASSERT(index < mState.mInputVaryings.size());
+        return mState.mInputVaryings[index];
+    }
 }
 
 const sh::OutputVariable &Program::getOutputResource(GLuint index) const
