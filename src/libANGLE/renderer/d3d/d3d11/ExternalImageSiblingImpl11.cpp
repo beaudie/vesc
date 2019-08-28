@@ -17,10 +17,12 @@
 
 namespace rx
 {
-ExternalImageSiblingImpl11::ExternalImageSiblingImpl11(Renderer11 *renderer, EGLClientBuffer buffer)
+ExternalImageSiblingImpl11::ExternalImageSiblingImpl11(Renderer11 *renderer,
+                                                       EGLClientBuffer buffer,
+                                                       const egl::AttributeMap &attribs)
     : mRenderer(renderer),
       mBuffer(buffer),
-      mFormat(GL_NONE),
+      mFormat(static_cast<GLenum>(attribs.get(EGL_D3D11_TEXTURE_FORMAT_ANGLE, GL_NONE))),
       mIsRenderable(false),
       mIsTexturable(false),
       mSamples(0)
@@ -31,10 +33,13 @@ ExternalImageSiblingImpl11::~ExternalImageSiblingImpl11() {}
 egl::Error ExternalImageSiblingImpl11::initialize(const egl::Display *display)
 {
     EGLint width, height, samples = 0;
-    const angle::Format *format = nullptr;
+    const angle::Format *textureFormat = nullptr;
     ANGLE_TRY(mRenderer->getD3DTextureInfo(nullptr, static_cast<IUnknown *>(mBuffer), &width,
-                                           &height, &samples, &format));
-    mFormat  = gl::Format(format->glInternalFormat);
+                                           &height, &samples, &textureFormat));
+    if (!mFormat.valid())
+    {
+        mFormat = gl::Format(textureFormat->glInternalFormat);
+    }
     mSize    = gl::Extents(width, height, 1);
     mSamples = static_cast<size_t>(samples);
 
@@ -42,7 +47,7 @@ egl::Error ExternalImageSiblingImpl11::initialize(const egl::Display *display)
         d3d11::DynamicCastComObject<ID3D11Texture2D>(static_cast<IUnknown *>(mBuffer));
     ASSERT(texture != nullptr);
     // TextureHelper11 will release texture on destruction.
-    mTexture.set(texture, d3d11::Format::Get(format->glInternalFormat,
+    mTexture.set(texture, d3d11::Format::Get(textureFormat->glInternalFormat,
                                              mRenderer->getRenderer11DeviceCaps()));
     D3D11_TEXTURE2D_DESC textureDesc = {};
     mTexture.getDesc(&textureDesc);
