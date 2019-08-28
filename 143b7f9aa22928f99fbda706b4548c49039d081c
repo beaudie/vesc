@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "866f6577_646ebe79",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3289,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-28T17:59:13Z",
+      "side": 1,
+      "message": "can you early out if this is not a VS? You shouldn\u0027t need to clear mAttributes as that\u0027s done in unlink().",
+      "range": {
+        "startLine": 3287,
+        "startChar": 0,
+        "endLine": 3289,
+        "endChar": 20
+      },
+      "revId": "143b7f9aa22928f99fbda706b4548c49039d081c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
