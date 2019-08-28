@@ -615,24 +615,52 @@ GLint GetCommonVariableProperty(const sh::ShaderVariable &var, GLenum prop)
 
 GLint GetInputResourceProperty(const Program *program, GLuint index, GLenum prop)
 {
-    const auto &attribute = program->getInputResource(index);
+    const sh::VariableWithLocation *variable = program->getInputResource(index);
+    ASSERT(variable);
+
     switch (prop)
     {
         case GL_TYPE:
         case GL_ARRAY_SIZE:
+            return GetCommonVariableProperty(*variable, prop);
+
         case GL_NAME_LENGTH:
-            return GetCommonVariableProperty(attribute, prop);
+            return clampCast<GLint>(program->getInputResourceName(index).size() + 1u);
 
         case GL_LOCATION:
-            return program->getAttributeLocation(attribute.name);
+            return variable->location;
 
         case GL_REFERENCED_BY_VERTEX_SHADER:
-            return 1;
-
         case GL_REFERENCED_BY_FRAGMENT_SHADER:
         case GL_REFERENCED_BY_COMPUTE_SHADER:
         case GL_REFERENCED_BY_GEOMETRY_SHADER_EXT:
-            return 0;
+        {
+            // The query is targeted at the set of active input variables used by the first shader
+            // stage of program. If program contains multiple shader stages then input variables
+            // from any stage other than the first will not be enumerated. Since we found the
+            // variable to get this far, we know it exists in the first attached shader stage.
+            ShaderType shaderType = ShaderType::InvalidEnum;
+            for (Shader *shader : program->getState().getAttachedShaders())
+            {
+                if (shader)
+                {
+                    shaderType = shader->getType();
+                    break;
+                }
+            }
+
+            switch (prop)
+            {
+                case GL_REFERENCED_BY_VERTEX_SHADER:
+                    return shaderType == ShaderType::Vertex;
+                case GL_REFERENCED_BY_FRAGMENT_SHADER:
+                    return shaderType == ShaderType::Fragment;
+                case GL_REFERENCED_BY_COMPUTE_SHADER:
+                    return shaderType == ShaderType::Compute;
+                case GL_REFERENCED_BY_GEOMETRY_SHADER_EXT:
+                    return shaderType == ShaderType::Geometry;
+            }
+        }
 
         default:
             UNREACHABLE();
@@ -698,7 +726,7 @@ GLint QueryProgramInterfaceActiveResources(const Program *program, GLenum progra
     switch (programInterface)
     {
         case GL_PROGRAM_INPUT:
-            return clampCast<GLint>(program->getAttributes().size());
+            return clampCast<GLint>(program->getState().getProgramInterfaceInputs().size());
 
         case GL_PROGRAM_OUTPUT:
             return clampCast<GLint>(program->getState().getOutputVariables().size());
@@ -727,6 +755,23 @@ GLint QueryProgramInterfaceActiveResources(const Program *program, GLenum progra
     }
 }
 
+GLint FindMaxNameSize(const ProgramInterfaceList &resources)
+{
+    GLint max = 0;
+    for (const ProgramInterfacePair &resource : resources)
+    {
+        if (resource.second->isArray())
+        {
+            max = std::max(max, clampCast<GLint>((resource.first + "[0]").size()));
+        }
+        else
+        {
+            max = std::max(max, clampCast<GLint>((resource.first).size()));
+        }
+    }
+    return max;
+}
+
 template <typename T, typename M>
 GLint FindMaxSize(const std::vector<T> &resources, M member)
 {
@@ -744,7 +789,7 @@ GLint QueryProgramInterfaceMaxNameLength(const Program *program, GLenum programI
     switch (programInterface)
     {
         case GL_PROGRAM_INPUT:
-            maxNameLength = FindMaxSize(program->getAttributes(), &sh::Attribute::name);
+            maxNameLength = FindMaxNameSize(program->getState().getProgramInterfaceInputs());
             break;
 
         case GL_PROGRAM_OUTPUT:
@@ -1707,7 +1752,7 @@ GLint GetUniformResourceProperty(const Program *program, GLuint index, const GLe
 
 GLint GetBufferVariableResourceProperty(const Program *program, GLuint index, const GLenum prop)
 {
-    const auto &bufferVariable = program->getBufferVariableByIndex(index);
+    const BufferVariable &bufferVariable = program->getBufferVariableByIndex(index);
     switch (prop)
     {
         case GL_TYPE:
@@ -1797,19 +1842,19 @@ void QueryProgramResourceName(const Program *program,
     switch (programInterface)
     {
         case GL_PROGRAM_INPUT:
-            program->getInputResourceName(index, bufSize, length, name);
+            program->writeInputResourceName(index, bufSize, length, name);
             break;
 
         case GL_PROGRAM_OUTPUT:
-            program->getOutputResourceName(index, bufSize, length, name);
+            program->writeOutputResourceName(index, bufSize, length, name);
             break;
 
         case GL_UNIFORM:
-            program->getUniformResourceName(index, bufSize, length, name);
+            program->writeUniformResourceName(index, bufSize, length, name);
             break;
 
         case GL_BUFFER_VARIABLE:
-            program->getBufferVariableResourceName(index, bufSize, length, name);
+            program->writeBufferVariableResourceName(index, bufSize, length, name);
             break;
 
         case GL_SHADER_STORAGE_BLOCK:
@@ -1836,7 +1881,22 @@ GLint QueryProgramResourceLocation(const Program *program,
     switch (programInterface)
     {
         case GL_PROGRAM_INPUT:
-            return program->getAttributeLocation(name);
+        {
+            const GLuint index = program->getInputResourceIndex(name);
+            if (index == GL_INVALID_INDEX)
+            {
+                return index;
+            }
+
+            const sh::VariableWithLocation *variable = program->getInputResource(index);
+            GLint location                           = variable->location;
+            if (variable->isArray())
+            {
+                location += +program->getArrayIndexFromName(name);
+            }
+
+            return location;
+        }
 
         case GL_PROGRAM_OUTPUT:
             return program->getFragDataLocation(name);
@@ -1859,12 +1919,19 @@ void QueryProgramResourceiv(const Program *program,
                             GLsizei *length,
                             GLint *params)
 {
+    if (length != nullptr)
+    {
+        *length = 0;
+    }
+
     if (!program->isLinked())
     {
-        if (length != nullptr)
-        {
-            *length = 0;
-        }
+        return;
+    }
+
+    if (bufSize == 0)
+    {
+        // No room to write the results
         return;
     }
 

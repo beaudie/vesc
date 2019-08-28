@@ -267,7 +267,10 @@ bool ValidateProgramResourceIndex(const Program *programObject,
     switch (programInterface)
     {
         case GL_PROGRAM_INPUT:
-            return (index < static_cast<GLuint>(programObject->getActiveAttributeCount()));
+        {
+            const ProgramState &programState = programObject->getState();
+            return (index < static_cast<GLuint>(programState.getProgramInterfaceInputs().size()));
+        }
 
         case GL_PROGRAM_OUTPUT:
             return (index < static_cast<GLuint>(programObject->getOutputResourceCount()));

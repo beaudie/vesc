@@ -292,6 +292,9 @@ struct ImageBinding
     bool unreferenced;
 };
 
+using ProgramInterfacePair = std::pair<std::string, const sh::VariableWithLocation *>;
+using ProgramInterfaceList = std::vector<ProgramInterfacePair>;
+
 class ProgramState final : angle::NonCopyable
 {
   public:
@@ -365,6 +368,11 @@ class ProgramState final : angle::NonCopyable
         return mAtomicCounterBuffers;
     }
 
+    const ProgramInterfaceList &getProgramInterfaceInputs() const
+    {
+        return mProgramInterfaceInputs;
+    }
+
     // Count the number of uniform and storage buffer declarations, counting arrays as one.
     size_t getUniqueUniformBlockCount() const;
     size_t getUniqueStorageBlockCount() const;
@@ -408,6 +416,8 @@ class ProgramState final : angle::NonCopyable
     void updateTransformFeedbackStrides();
     void updateActiveSamplers();
     void updateActiveImages();
+    template <typename T>
+    void updateProgramInterfaceInputs(const std::vector<T> &shaderInputs);
 
     // Scans the sampler bindings for type conflicts with sampler 'textureUnitIndex'.
     void setSamplerUniformTextureTypeAndFormat(size_t textureUnitIndex);
@@ -431,6 +441,9 @@ class ProgramState final : angle::NonCopyable
     ComponentTypeMask mAttributesTypeMask;
     // mAttributesMask is identical to mActiveAttribLocationsMask with built-in attributes removed.
     AttributesMask mAttributesMask;
+
+    // Program Interface Query support
+    ProgramInterfaceList mProgramInterfaceInputs;
 
     // Uniforms are sorted in order:
     //  1. Non-opaque uniforms
@@ -872,14 +885,21 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     GLuint getInputResourceIndex(const GLchar *name) const;
     GLuint getOutputResourceIndex(const GLchar *name) const;
-    void getInputResourceName(GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name) const;
-    void getOutputResourceName(GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name) const;
-    void getUniformResourceName(GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name) const;
-    void getBufferVariableResourceName(GLuint index,
-                                       GLsizei bufSize,
-                                       GLsizei *length,
-                                       GLchar *name) const;
-    const sh::Attribute &getInputResource(GLuint index) const;
+    void writeInputResourceName(GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name) const;
+    void writeOutputResourceName(GLuint index,
+                                 GLsizei bufSize,
+                                 GLsizei *length,
+                                 GLchar *name) const;
+    void writeUniformResourceName(GLuint index,
+                                  GLsizei bufSize,
+                                  GLsizei *length,
+                                  GLchar *name) const;
+    void writeBufferVariableResourceName(GLuint index,
+                                         GLsizei bufSize,
+                                         GLsizei *length,
+                                         GLchar *name) const;
+    const sh::VariableWithLocation *getInputResource(GLuint index) const;
+    const std::string getInputResourceName(GLuint index) const;
     const sh::OutputVariable &getOutputResource(GLuint index) const;
 
     const ProgramBindings &getAttributeBindings() const;
@@ -935,6 +955,8 @@ class Program final : angle::NonCopyable, public LabeledObject
 
     // Writes a program's binary to the output memory buffer.
     void serialize(const Context *context, angle::MemoryBuffer *binaryOut) const;
+
+    int getArrayIndexFromName(const GLchar *name) const;
 
   private:
     struct LinkingState;
@@ -1024,12 +1046,10 @@ class Program final : angle::NonCopyable, public LabeledObject
                             GLenum nativeType,
                             int components) const;
 
-    template <typename T>
-    void getResourceName(GLuint index,
-                         const std::vector<T> &resources,
-                         GLsizei bufSize,
-                         GLsizei *length,
-                         GLchar *name) const;
+    void writeResourceName(const std::string name,
+                           GLsizei bufSize,
+                           GLsizei *length,
+                           GLchar *dest) const;
 
     template <typename T>
     GLint getActiveInterfaceBlockMaxNameLength(const std::vector<T> &resources) const;
@@ -1042,6 +1062,8 @@ class Program final : angle::NonCopyable, public LabeledObject
     void resolveLinkImpl(const gl::Context *context);
 
     void postResolveLink(const gl::Context *context);
+
+    std::string stripArraySubscriptFromName(const GLchar *name) const;
 
     ProgramState mState;
     rx::ProgramImpl *mProgram;

@@ -331,6 +331,10 @@ VariableWithLocation::VariableWithLocation(const VariableWithLocation &other)
     : ShaderVariable(other), location(other.location)
 {}
 
+VariableWithLocation::VariableWithLocation(const ShaderVariable &other, int location)
+    : ShaderVariable(other), location(location)
+{}
+
 VariableWithLocation &VariableWithLocation::operator=(const VariableWithLocation &other)
 {
     ShaderVariable::operator=(other);
