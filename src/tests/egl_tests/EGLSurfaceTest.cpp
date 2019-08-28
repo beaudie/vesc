@@ -719,7 +719,7 @@ TEST_P(EGLSurfaceTestD3D11, CreateDirectCompositionSurface)
     ASSERT_EGL_SUCCESS();
 
     mConfig = config;
-    initializeContext(2);
+    initializeContext();
 
     eglMakeCurrent(mDisplay, mPbufferSurface, mPbufferSurface, mContext);
     ASSERT_EGL_SUCCESS();
