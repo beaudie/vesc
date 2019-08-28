@@ -615,24 +615,45 @@ GLint GetCommonVariableProperty(const sh::ShaderVariable &var, GLenum prop)
 
 GLint GetInputResourceProperty(const Program *program, GLuint index, GLenum prop)
 {
-    const auto &attribute = program->getInputResource(index);
+    const sh::ShaderVariable &variable = program->getInputResource(index);
+
     switch (prop)
     {
         case GL_TYPE:
         case GL_ARRAY_SIZE:
+            return GetCommonVariableProperty(variable, prop);
+
         case GL_NAME_LENGTH:
-            return GetCommonVariableProperty(attribute, prop);
+            return clampCast<GLint>(program->getInputResourceName(index).size() + 1u);
 
         case GL_LOCATION:
-            return program->getAttributeLocation(attribute.name);
+            return variable.location;
 
         case GL_REFERENCED_BY_VERTEX_SHADER:
-            return 1;
-
         case GL_REFERENCED_BY_FRAGMENT_SHADER:
         case GL_REFERENCED_BY_COMPUTE_SHADER:
         case GL_REFERENCED_BY_GEOMETRY_SHADER_EXT:
-            return 0;
+        {
+            // The query is targeted at the set of active input variables used by the first shader
+            // stage of program. If program contains multiple shader stages then input variables
+            // from any stage other than the first will not be enumerated. Since we found the
+            // variable to get this far, we know it exists in the first attached shader stage.
+            const ShaderType shaderType = program->getState().getFirstAttachedShaderStageType();
+
+            switch (prop)
+            {
+                case GL_REFERENCED_BY_VERTEX_SHADER:
+                    return shaderType == ShaderType::Vertex;
+                case GL_REFERENCED_BY_FRAGMENT_SHADER:
+                    return shaderType == ShaderType::Fragment;
+                case GL_REFERENCED_BY_COMPUTE_SHADER:
+                    return shaderType == ShaderType::Compute;
+                case GL_REFERENCED_BY_GEOMETRY_SHADER_EXT:
+                    return shaderType == ShaderType::Geometry;
+            }
+
+            return false;
+        }
 
         default:
             UNREACHABLE();
@@ -698,7 +719,7 @@ GLint QueryProgramInterfaceActiveResources(const Program *program, GLenum progra
     switch (programInterface)
     {
         case GL_PROGRAM_INPUT:
-            return clampCast<GLint>(program->getAttributes().size());
+            return clampCast<GLint>(program->getState().getProgramInputs().size());
 
         case GL_PROGRAM_OUTPUT:
             return clampCast<GLint>(program->getState().getOutputVariables().size());
@@ -744,7 +765,7 @@ GLint QueryProgramInterfaceMaxNameLength(const Program *program, GLenum programI
     switch (programInterface)
     {
         case GL_PROGRAM_INPUT:
-            maxNameLength = FindMaxSize(program->getAttributes(), &sh::ShaderVariable::name);
+            maxNameLength = program->getInputResourceMaxNameSize();
             break;
 
         case GL_PROGRAM_OUTPUT:
@@ -1707,7 +1728,7 @@ GLint GetUniformResourceProperty(const Program *program, GLuint index, const GLe
 
 GLint GetBufferVariableResourceProperty(const Program *program, GLuint index, const GLenum prop)
 {
-    const auto &bufferVariable = program->getBufferVariableByIndex(index);
+    const BufferVariable &bufferVariable = program->getBufferVariableByIndex(index);
     switch (prop)
     {
         case GL_TYPE:
@@ -1836,7 +1857,7 @@ GLint QueryProgramResourceLocation(const Program *program,
     switch (programInterface)
     {
         case GL_PROGRAM_INPUT:
-            return program->getAttributeLocation(name);
+            return program->getInputResourceLocation(name);
 
         case GL_PROGRAM_OUTPUT:
             return program->getFragDataLocation(name);
@@ -1861,10 +1882,17 @@ void QueryProgramResourceiv(const Program *program,
 {
     if (!program->isLinked())
     {
-        if (length != nullptr)
-        {
-            *length = 0;
-        }
+        return;
+    }
+
+    if (length != nullptr)
+    {
+        *length = 0;
+    }
+
+    if (bufSize == 0)
+    {
+        // No room to write the results
         return;
     }
 
