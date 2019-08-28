@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0c6f316_fe2b5dd1",
+        "filename": "src/libANGLE/ResourceManager.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-28T18:49:08Z",
+      "side": 1,
+      "message": "Is this intended to stay here?",
+      "revId": "14fedda04795400fd947eadd1b1b089294d5c5f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
