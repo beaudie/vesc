@@ -267,7 +267,16 @@ bool ValidateProgramResourceIndex(const Program *programObject,
     switch (programInterface)
     {
         case GL_PROGRAM_INPUT:
-            return (index < static_cast<GLuint>(programObject->getActiveAttributeCount()));
+            if (programObject->hasLinkedShaderStage(ShaderType::Vertex))
+            {
+                return (index <
+                        static_cast<GLuint>(programObject->getState().getAttributes().size()));
+            }
+            else
+            {
+                return (index <
+                        static_cast<GLuint>(programObject->getState().getInputVaryings().size()));
+            }
 
         case GL_PROGRAM_OUTPUT:
             return (index < static_cast<GLuint>(programObject->getOutputResourceCount()));
