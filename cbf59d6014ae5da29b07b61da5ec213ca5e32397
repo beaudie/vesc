@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d78d2ca0_253bad2f",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 3287,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-28T18:11:51Z",
+      "side": 1,
+      "message": "you can omit this.",
+      "range": {
+        "startLine": 3287,
+        "startChar": 4,
+        "endLine": 3287,
+        "endChar": 56
+      },
+      "revId": "cbf59d6014ae5da29b07b61da5ec213ca5e32397",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
