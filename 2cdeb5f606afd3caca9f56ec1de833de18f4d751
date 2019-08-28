@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d1c1fba6_f3c03ae8",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-28T20:29:16Z",
+      "side": 1,
+      "message": "This is always a null terminated string?  You could add a size argument too: \n\n    std::string str(reinterpret_cast\u003cconst char *\u003e(data.data()), data.size());",
+      "range": {
+        "startLine": 108,
+        "startChar": 51,
+        "endLine": 108,
+        "endChar": 62
+      },
+      "revId": "2cdeb5f606afd3caca9f56ec1de833de18f4d751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1ffcb81_a71d4d0e",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-28T20:29:16Z",
+      "side": 1,
+      "message": "same comment as above.",
+      "range": {
+        "startLine": 566,
+        "startChar": 8,
+        "endLine": 566,
+        "endChar": 69
+      },
+      "revId": "2cdeb5f606afd3caca9f56ec1de833de18f4d751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
