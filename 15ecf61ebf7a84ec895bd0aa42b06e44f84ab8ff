@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6a19e572_0238acb8",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-08-28T19:50:18Z",
+      "side": 1,
+      "message": "Sorry if I\u0027m missing something ... Is this really just crashing with NVIDIA?  Could we use \"VULKAN NVIDIA\" to allow the tests to run with other IHVs\u0027 drivers?",
+      "revId": "15ecf61ebf7a84ec895bd0aa42b06e44f84ab8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
