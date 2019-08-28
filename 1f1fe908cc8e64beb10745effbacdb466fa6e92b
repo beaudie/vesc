@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b66cf38_d24b7472",
+        "filename": "scripts/gen_gl_enum_utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-28T21:17:40Z",
+      "side": 1,
+      "message": "use anonymous namespace, and make it constexpr char kEnumUnknown[]",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 49
+      },
+      "revId": "1f1fe908cc8e64beb10745effbacdb466fa6e92b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1fb2df25_2968f600",
+        "filename": "scripts/gen_gl_enum_utils.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-28T21:17:40Z",
+      "side": 1,
+      "message": "whitespace",
+      "range": {
+        "startLine": 133,
+        "startChar": 26,
+        "endLine": 133,
+        "endChar": 29
+      },
+      "revId": "1f1fe908cc8e64beb10745effbacdb466fa6e92b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2363813_2f344d5c",
+        "filename": "scripts/registry_xml.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-28T21:17:40Z",
+      "side": 1,
+      "message": "nit: sort\n\nWhat does this actually do? I don\u0027t see any changes to gl_angle_ext.xml.",
+      "range": {
+        "startLine": 38,
+        "startChar": 5,
+        "endLine": 38,
+        "endChar": 28
+      },
+      "revId": "1f1fe908cc8e64beb10745effbacdb466fa6e92b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
