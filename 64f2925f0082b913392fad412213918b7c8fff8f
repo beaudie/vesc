@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "41940f91_065f5ab3",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-28T21:35:05Z",
+      "side": 1,
+      "message": "technically length can be nullptr",
+      "range": {
+        "startLine": 201,
+        "startChar": 18,
+        "endLine": 201,
+        "endChar": 38
+      },
+      "revId": "64f2925f0082b913392fad412213918b7c8fff8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d003bae8_077a8b53",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-28T21:35:05Z",
+      "side": 1,
+      "message": "I think name interacts with bufSize. See CopyStringToBuffer in Program.cpp.",
+      "range": {
+        "startLine": 243,
+        "startChar": 57,
+        "endLine": 243,
+        "endChar": 70
+      },
+      "revId": "64f2925f0082b913392fad412213918b7c8fff8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a9796f5_66a5f571",
+        "filename": "src/libANGLE/capture_gles_2_0_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-28T21:35:05Z",
+      "side": 1,
+      "message": "better check all these as well.",
+      "range": {
+        "startLine": 257,
+        "startChar": 18,
+        "endLine": 257,
+        "endChar": 38
+      },
+      "revId": "64f2925f0082b913392fad412213918b7c8fff8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a09c8a3e_c625571e",
+        "filename": "src/libANGLE/capture_gles_ext_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2856,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-28T21:35:05Z",
+      "side": 1,
+      "message": "not sure this is correct. Length can be null, so this would potentially deref null.",
+      "range": {
+        "startLine": 2856,
+        "startChar": 4,
+        "endLine": 2856,
+        "endChar": 48
+      },
+      "revId": "64f2925f0082b913392fad412213918b7c8fff8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6d588a7_f563a2fb",
+        "filename": "src/libANGLE/capture_gles_ext_params.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2867,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-28T21:35:05Z",
+      "side": 1,
+      "message": "similarly here, it\u0027s a bit more complex. See Program::saveProgramBinary",
+      "range": {
+        "startLine": 2867,
+        "startChar": 4,
+        "endLine": 2867,
+        "endChar": 17
+      },
+      "revId": "64f2925f0082b913392fad412213918b7c8fff8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
