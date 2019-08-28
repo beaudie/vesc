@@ -17,9 +17,12 @@
 
 namespace rx
 {
-ExternalImageSiblingImpl11::ExternalImageSiblingImpl11(Renderer11 *renderer, EGLClientBuffer buffer)
+ExternalImageSiblingImpl11::ExternalImageSiblingImpl11(Renderer11 *renderer,
+                                                       EGLClientBuffer buffer,
+                                                       const egl::AttributeMap &attribs)
     : mRenderer(renderer),
       mBuffer(buffer),
+      mAttribs(attribs),
       mFormat(GL_NONE),
       mIsRenderable(false),
       mIsTexturable(false),
@@ -31,10 +34,11 @@ ExternalImageSiblingImpl11::~ExternalImageSiblingImpl11() {}
 egl::Error ExternalImageSiblingImpl11::initialize(const egl::Display *display)
 {
     EGLint width, height, samples = 0;
-    const angle::Format *format = nullptr;
-    ANGLE_TRY(mRenderer->getD3DTextureInfo(nullptr, static_cast<IUnknown *>(mBuffer), &width,
-                                           &height, &samples, &format));
-    mFormat  = gl::Format(format->glInternalFormat);
+    const angle::Format *angleFormat = nullptr;
+    ANGLE_TRY(mRenderer->getD3DTextureInfo(nullptr, static_cast<IUnknown *>(mBuffer), mAttribs,
+                                           &width, &height, &samples, &angleFormat));
+    ASSERT(angleFormat);
+    mFormat  = gl::Format(angleFormat->glInternalFormat);
     mSize    = gl::Extents(width, height, 1);
     mSamples = static_cast<size_t>(samples);
 
@@ -42,7 +46,7 @@ egl::Error ExternalImageSiblingImpl11::initialize(const egl::Display *display)
         d3d11::DynamicCastComObject<ID3D11Texture2D>(static_cast<IUnknown *>(mBuffer));
     ASSERT(texture != nullptr);
     // TextureHelper11 will release texture on destruction.
-    mTexture.set(texture, d3d11::Format::Get(format->glInternalFormat,
+    mTexture.set(texture, d3d11::Format::Get(mFormat.info->internalFormat,
                                              mRenderer->getRenderer11DeviceCaps()));
     D3D11_TEXTURE2D_DESC textureDesc = {};
     mTexture.getDesc(&textureDesc);
@@ -143,8 +147,8 @@ angle::Result ExternalImageSiblingImpl11::createRenderTarget(const gl::Context *
     d3d11::SharedSRV blitSrv = srv.makeCopy();
 
     mRenderTarget = std::make_unique<TextureRenderTarget11>(
-        std::move(rtv), mTexture, std::move(srv), std::move(blitSrv), formatInfo.internalFormat,
-        formatInfo, mSize.width, mSize.height, 1, 1);
+        std::move(rtv), mTexture, std::move(srv), std::move(blitSrv), mFormat.info->internalFormat,
+        formatInfo, mSize.width, mSize.height, 1, mSamples);
     return angle::Result::Continue;
 }
 

@@ -715,6 +715,7 @@ SwapChainD3D *Renderer9::createSwapChain(NativeWindowD3D *nativeWindow,
 
 egl::Error Renderer9::getD3DTextureInfo(const egl::Config *configuration,
                                         IUnknown *d3dTexture,
+                                        const egl::AttributeMap &attribs,
                                         EGLint *width,
                                         EGLint *height,
                                         EGLint *samples,
