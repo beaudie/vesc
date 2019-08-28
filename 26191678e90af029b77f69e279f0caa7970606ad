@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e88957d6_9e8aeb87",
+        "filename": "src/libANGLE/validationGL3_autogen.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-08-28T14:51:07Z",
+      "side": 1,
+      "message": "Based on link error seems like definition of this and a few other functions didn\u0027t get updated.",
+      "revId": "26191678e90af029b77f69e279f0caa7970606ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
