@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "09d8d98e_aa92e232",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-28T22:37:59Z",
+      "side": 1,
+      "message": "It is always null terminate. With the size, probably better still use the iterator, as long as it is null terminate, it at least has size 1, end() - 1 should be fine.",
+      "parentUuid": "d1c1fba6_f3c03ae8",
+      "range": {
+        "startLine": 108,
+        "startChar": 51,
+        "endLine": 108,
+        "endChar": 62
+      },
+      "revId": "2cdeb5f606afd3caca9f56ec1de833de18f4d751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f1ffcb81_a71d4d0e",
         "filename": "src/libANGLE/FrameCapture.cpp",
         "patchSetId": 2
@@ -45,6 +69,30 @@
       "revId": "2cdeb5f606afd3caca9f56ec1de833de18f4d751",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae64a35a_4c55572d",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-28T22:37:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f1ffcb81_a71d4d0e",
+      "range": {
+        "startLine": 566,
+        "startChar": 8,
+        "endLine": 566,
+        "endChar": 69
+      },
+      "revId": "2cdeb5f606afd3caca9f56ec1de833de18f4d751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
