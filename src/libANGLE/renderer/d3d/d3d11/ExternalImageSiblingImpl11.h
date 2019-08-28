@@ -19,7 +19,9 @@ class RenderTargetD3D;
 class ExternalImageSiblingImpl11 : public ExternalImageSiblingImpl
 {
   public:
-    ExternalImageSiblingImpl11(Renderer11 *renderer, EGLClientBuffer clientBuffer);
+    ExternalImageSiblingImpl11(Renderer11 *renderer,
+                               EGLClientBuffer clientBuffer,
+                               const egl::AttributeMap &attribs);
     ~ExternalImageSiblingImpl11() override;
 
     // ExternalImageSiblingImpl interface

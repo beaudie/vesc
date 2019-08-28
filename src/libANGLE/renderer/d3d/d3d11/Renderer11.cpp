@@ -2935,7 +2935,7 @@ ExternalImageSiblingImpl *Renderer11::createExternalImageSibling(const gl::Conte
     switch (target)
     {
         case EGL_D3D11_TEXTURE_ANGLE:
-            return new ExternalImageSiblingImpl11(this, buffer);
+            return new ExternalImageSiblingImpl11(this, buffer, attribs);
 
         default:
             UNREACHABLE();

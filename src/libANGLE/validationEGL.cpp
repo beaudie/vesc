@@ -1901,6 +1901,14 @@ Error ValidateCreateImage(const Display *display,
                 }
                 break;
 
+            case EGL_D3D11_TEXTURE_FORMAT_ANGLE:
+                if (!displayExtensions.imageD3D11Texture)
+                {
+                    return EglBadParameter() << "EGL_D3D11_TEXTURE_FORMAT_ANGLE cannot be used "
+                                                "with EGL_ANGLE_image_d3d11_texture support.";
+                }
+                break;
+
             default:
                 return EglBadParameter()
                        << "invalid attribute: 0x" << std::hex << std::uppercase << attribute;
