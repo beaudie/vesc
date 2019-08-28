@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd741371_9ed82e60",
+        "filename": "src/libANGLE/FrameCapture.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-28T16:59:43Z",
+      "side": 1,
+      "message": "you can probably just pass a const gl::Context * here.",
+      "range": {
+        "startLine": 159,
+        "startChar": 21,
+        "endLine": 159,
+        "endChar": 33
+      },
+      "revId": "1abbe00425c7b390a80447a9b9af630698178938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
