@@ -16,6 +16,24 @@
       "revId": "14fedda04795400fd947eadd1b1b089294d5c5f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8e312cc_03747905",
+        "filename": "src/libANGLE/ResourceManager.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-28T19:07:25Z",
+      "side": 1,
+      "message": "Thanks very much for the reviewing! I mean to make some change here, but it got left out.\nDid some update in latest patch.",
+      "parentUuid": "b0c6f316_fe2b5dd1",
+      "revId": "14fedda04795400fd947eadd1b1b089294d5c5f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
