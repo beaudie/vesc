@@ -331,6 +331,10 @@ VariableWithLocation::VariableWithLocation(const VariableWithLocation &other)
     : ShaderVariable(other), location(other.location)
 {}
 
+VariableWithLocation::VariableWithLocation(const ShaderVariable &other, int location)
+    : ShaderVariable(other), location(location)
+{}
+
 VariableWithLocation &VariableWithLocation::operator=(const VariableWithLocation &other)
 {
     ShaderVariable::operator=(other);
@@ -404,6 +408,10 @@ Varying::Varying(const Varying &other)
     : VariableWithLocation(other),
       interpolation(other.interpolation),
       isInvariant(other.isInvariant)
+{}
+
+Varying::Varying(const ShaderVariable &other, int location)
+    : VariableWithLocation(other, location), interpolation(INTERPOLATION_SMOOTH), isInvariant(false)
 {}
 
 Varying &Varying::operator=(const Varying &other)
