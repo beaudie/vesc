@@ -45,6 +45,23 @@
       "revId": "639ce09a962710a18a998045aae14a3e7e7bb2fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3852640_4bd8ffd8",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 4480,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-08-29T20:00:08Z",
+      "side": 1,
+      "message": "nit:  A comment here about what these values mean relative to the spec would be helpful for future reference.",
+      "revId": "639ce09a962710a18a998045aae14a3e7e7bb2fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
