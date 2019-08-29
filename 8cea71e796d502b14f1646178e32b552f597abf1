@@ -22,6 +22,30 @@
       "revId": "8cea71e796d502b14f1646178e32b552f597abf1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "423dca2f_05eba208",
+        "filename": "scripts/gen_gl_enum_utils.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-29T14:55:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a21fe87_22fab828",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 141,
+        "endChar": 10
+      },
+      "revId": "8cea71e796d502b14f1646178e32b552f597abf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
