@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5d95a2de_9e35f115",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1364,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-29T19:50:20Z",
+      "side": 1,
+      "message": "I\u0027d prefer if we didn\u0027t have to redesign this part. It\u0027s intentional that if the back-end errors out the Texture is not updated. You should be able to get the sized-ness of the format from \"GLenum internalFormat\" and pass it along as necessary.",
+      "range": {
+        "startLine": 1364,
+        "startChar": 24,
+        "endLine": 1364,
+        "endChar": 48
+      },
+      "revId": "639ce09a962710a18a998045aae14a3e7e7bb2fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69ed50dd_990a8a41",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-29T19:50:20Z",
+      "side": 1,
+      "message": "can we remove this now?",
+      "range": {
+        "startLine": 372,
+        "startChar": 40,
+        "endLine": 372,
+        "endChar": 80
+      },
+      "revId": "639ce09a962710a18a998045aae14a3e7e7bb2fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
