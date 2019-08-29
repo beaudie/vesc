@@ -605,9 +605,9 @@
 1729 D3D11 : dEQP-GLES31.functional.atomic_counter.* = SKIP
 1951 D3D11 : dEQP-GLES31.functional.layout_binding.ssbo.* = SKIP
 1951 D3D11 : dEQP-GLES31.functional.shaders.opaque_type_indexing.ssbo.* = SKIP
-1442 D3D11 : dEQP-GLES31.functional.program_interface_query.* = SKIP
+//1442 D3D11 : dEQP-GLES31.functional.program_interface_query.* = SKIP
 1442 D3D11 : dEQP-GLES31.functional.synchronization.* = SKIP
-1442 D3D11 : dEQP-GLES31.functional.layout_binding.image.* = SKIP
+//1442 D3D11 : dEQP-GLES31.functional.layout_binding.image.* = SKIP
 // This case is skipped since it uses atomic counter builtin functions which haven't been implemented.
 1729 D3D11 : dEQP-GLES31.functional.state_query.program.active_atomic_counter_buffers_get_programiv = SKIP
 
