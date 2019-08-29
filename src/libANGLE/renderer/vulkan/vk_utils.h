@@ -94,6 +94,7 @@ enum class ICD
 {
     Default,
     Mock,
+    SwiftShader,
 };
 
 enum class TextureDimension
