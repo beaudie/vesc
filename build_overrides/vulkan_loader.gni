@@ -4,11 +4,12 @@
 
 import("//gni/angle.gni")
 
+# Paths to loader dependencies:
 vulkan_headers_dir = "//third_party/vulkan-headers/src"
 
-vulkan_loader_extra_defines = [
-  "ANGLE_VK_DATA_DIR=\"$angle_data_dir\"",
-  "ANGLE_VK_ICD_JSON=\"$angle_data_dir/VkICD_mock_icd.json\"",
-]
+# Extra loader parameters:
+vulkan_loader_extra_defines = []
 vulkan_gen_subdir = "angle/vulkan"
+
+# Tell the loader if we want to build libvulkan as a shared library.
 vulkan_loader_shared = angle_shared_libvulkan
