@@ -90,6 +90,12 @@ bool GetAvailableValidationLayers(const std::vector<VkLayerProperties> &layerPro
 extern const char *gVkLoaderLayersPathEnv;
 extern const char *gVkLoaderICDFilenamesEnv;
 
+enum class ICD
+{
+    Default,
+    Mock,
+};
+
 enum class TextureDimension
 {
     TEX_2D,
