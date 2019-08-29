@@ -1464,6 +1464,7 @@ ImageHelper::ImageHelper()
       mSamples(0),
       mCurrentLayout(ImageLayout::Undefined),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
+      mBaseLevel(0),
       mLayerCount(0),
       mLevelCount(0)
 {}
@@ -1477,6 +1478,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mSamples(other.mSamples),
       mCurrentLayout(other.mCurrentLayout),
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
+      mBaseLevel(other.mBaseLevel),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
       mStagingBuffer(std::move(other.mStagingBuffer)),
@@ -1484,6 +1486,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
 {
     ASSERT(this != &other);
     other.mCurrentLayout = ImageLayout::Undefined;
+    other.mBaseLevel     = 0;
     other.mLayerCount    = 0;
     other.mLevelCount    = 0;
 }
@@ -1508,11 +1511,12 @@ angle::Result ImageHelper::init(Context *context,
                                 const Format &format,
                                 GLint samples,
                                 VkImageUsageFlags usage,
+                                uint32_t baseLevel,
                                 uint32_t mipLevels,
                                 uint32_t layerCount)
 {
     return initExternal(context, textureType, extents, format, samples, usage,
-                        ImageLayout::Undefined, nullptr, mipLevels, layerCount);
+                        ImageLayout::Undefined, nullptr, baseLevel, mipLevels, layerCount);
 }
 
 angle::Result ImageHelper::initExternal(Context *context,
@@ -1523,6 +1527,7 @@ angle::Result ImageHelper::initExternal(Context *context,
                                         VkImageUsageFlags usage,
                                         ImageLayout initialLayout,
                                         const void *externalImageCreateInfo,
+                                        uint32_t baseLevel,
                                         uint32_t mipLevels,
                                         uint32_t layerCount)
 {
@@ -1531,6 +1536,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     mExtents    = extents;
     mFormat     = &format;
     mSamples    = samples;
+    mBaseLevel  = baseLevel;
     mLevelCount = mipLevels;
     mLayerCount = layerCount;
 
@@ -1807,6 +1813,93 @@ void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
 {
     ASSERT(isQueueChangeNeccesary(newQueueFamilyIndex));
     forceChangeLayoutAndQueue(aspectMask, newLayout, newQueueFamilyIndex, commandBuffer);
+}
+
+uint32_t ImageHelper::getBaseLevel()
+{
+    return mBaseLevel;
+}
+
+void ImageHelper::setBaseLevel(uint32_t baseLevel)
+{
+    mBaseLevel = baseLevel;
+}
+
+angle::Result ImageHelper::updateBaseLevel(ContextVk *contextVk,
+                                           gl::TextureType textureType,
+                                           uint32_t maxLevel,
+                                           VkImageUsageFlags usage,
+                                           VkExtent3D &extent)
+{
+    // Recreate the underlying vkImage to accomodate a new base level.
+
+    // Initialize new image
+    Image newImage;
+    DeviceMemory newMemory;
+
+    VkImageCreateInfo imageInfo     = {};
+    imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    imageInfo.pNext                 = nullptr;
+    imageInfo.flags                 = GetImageCreateFlags(textureType);
+    imageInfo.imageType             = gl_vk::GetImageType(textureType);
+    imageInfo.format                = mFormat->vkImageFormat;
+    imageInfo.extent                = extent;
+    imageInfo.mipLevels             = maxLevel;
+    imageInfo.arrayLayers           = mLayerCount;
+    imageInfo.samples               = gl_vk::GetSamples(mSamples);
+    imageInfo.tiling                = VK_IMAGE_TILING_OPTIMAL;
+    imageInfo.usage                 = usage;
+    imageInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    imageInfo.queueFamilyIndexCount = 0;
+    imageInfo.pQueueFamilyIndices   = nullptr;
+    imageInfo.initialLayout         = kImageMemoryBarrierData[ImageLayout::Undefined].layout;
+
+    ANGLE_VK_TRY(contextVk, newImage.init(contextVk->getDevice(), imageInfo));
+
+    // Allocate device memory for the dst image.
+    const VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    ANGLE_TRY(AllocateImageMemory(contextVk, flags, nullptr, &newImage, &newMemory));
+
+    // Track the previous layout before changing the new one
+    vk::ImageLayout previousLayout = mCurrentLayout;
+    mCurrentLayout                 = ImageLayout::Undefined;
+
+    // Change the new image layout from Undefined to previousLayout
+    vk::CommandBuffer *transitionBuffer = nullptr;
+    ANGLE_TRY(recordCommands(contextVk, &transitionBuffer));
+
+    const ImageMemoryBarrierData &transitionFrom = kImageMemoryBarrierData[ImageLayout::Undefined];
+    const ImageMemoryBarrierData &transitionTo   = kImageMemoryBarrierData[previousLayout];
+
+    VkImageMemoryBarrier imageMemoryBarrier = {};
+    imageMemoryBarrier.sType                = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    imageMemoryBarrier.srcAccessMask        = transitionFrom.srcAccessMask;
+    imageMemoryBarrier.dstAccessMask        = transitionTo.dstAccessMask;
+    imageMemoryBarrier.oldLayout            = transitionFrom.layout;
+    imageMemoryBarrier.newLayout            = transitionTo.layout;
+    imageMemoryBarrier.srcQueueFamilyIndex  = 0;
+    imageMemoryBarrier.dstQueueFamilyIndex  = mCurrentQueueFamilyIndex;
+    imageMemoryBarrier.image                = newImage.getHandle();
+
+    imageMemoryBarrier.subresourceRange.baseMipLevel   = 0;
+    imageMemoryBarrier.subresourceRange.levelCount     = maxLevel;
+    imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
+    imageMemoryBarrier.subresourceRange.layerCount     = mLayerCount;
+    imageMemoryBarrier.subresourceRange.aspectMask =
+        vk::GetFormatAspectFlags(mFormat->imageFormat());
+
+    transitionBuffer->imageBarrier(transitionFrom.srcStageMask, transitionTo.dstStageMask,
+                                   &imageMemoryBarrier);
+
+    // Now replace the current image with the new image
+    releaseImage(contextVk);
+    mImage        = std::move(newImage);
+    mDeviceMemory = std::move(newMemory);
+
+    // Update the properties
+    mLevelCount = maxLevel;
+
+    return angle::Result::Continue;
 }
 
 void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
@@ -2311,6 +2404,38 @@ angle::Result ImageHelper::stageSubresourceUpdateAndGetData(ContextVk *contextVk
     return angle::Result::Continue;
 }
 
+angle::Result ImageHelper::stageSubresourceUpdateFromOffset(ContextVk *contextVk,
+                                                            size_t allocationSize,
+                                                            uint32_t mipLevel,
+                                                            uint32_t baseArrayLayer,
+                                                            uint32_t layerCount,
+                                                            const gl::Extents &glExtents,
+                                                            const gl::Offset &offset,
+                                                            VkBuffer &stagingBufferHandle,
+                                                            VkDeviceSize &stagingOffset)
+{
+    // This function stages an update from explicitly provided handle and offset
+    // It is used when the texture base level has changed, and we need to propagate data
+
+    VkBufferImageCopy copy               = {};
+    copy.bufferOffset                    = stagingOffset;
+    copy.bufferRowLength                 = glExtents.width;
+    copy.bufferImageHeight               = glExtents.height;
+    copy.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    copy.imageSubresource.mipLevel       = mipLevel;
+    copy.imageSubresource.baseArrayLayer = baseArrayLayer;
+    copy.imageSubresource.layerCount     = layerCount;
+
+    ASSERT(getAspectFlags() == VK_IMAGE_ASPECT_COLOR_BIT);
+
+    gl_vk::GetOffset(offset, &copy.imageOffset);
+    gl_vk::GetExtent(glExtents, &copy.imageExtent);
+
+    mSubresourceUpdates.emplace_back(stagingBufferHandle, copy);
+
+    return angle::Result::Continue;
+}
+
 angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     const gl::Context *context,
     const gl::ImageIndex &index,
@@ -2556,7 +2681,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
         // If the update level is not within the requested range, skip the update.
         const bool isUpdateLevelOutsideRange =
-            updateMipLevel < levelStart || updateMipLevel >= levelEnd;
+            updateMipLevel < (levelStart + mBaseLevel) || updateMipLevel > (levelEnd + mBaseLevel);
+
         // If the update layers don't intersect the requested layers, skip the update.
         const bool areUpdateLayersOutsideRange =
             updateBaseLayer + updateLayerCount <= layerStart || updateBaseLayer >= layerEnd;
@@ -2565,6 +2691,23 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         {
             updatesToKeep.emplace_back(update);
             continue;
+        }
+
+        if (mBaseLevel > 0)
+        {
+            // We need to shift the miplevel in the update to fall into the vkiamge
+            if (update.updateSource == SubresourceUpdate::UpdateSource::Clear)
+            {
+                update.clear.levelIndex -= mBaseLevel;
+            }
+            else if (update.updateSource == SubresourceUpdate::UpdateSource::Buffer)
+            {
+                update.buffer.copyRegion.imageSubresource.mipLevel -= mBaseLevel;
+            }
+            else if (update.updateSource == SubresourceUpdate::UpdateSource::Image)
+            {
+                update.image.copyRegion.dstSubresource.mipLevel -= mBaseLevel;
+            }
         }
 
         if (updateLayerCount >= kMaxParallelSubresourceUpload)
@@ -2632,6 +2775,48 @@ angle::Result ImageHelper::flushAllStagedUpdates(ContextVk *contextVk)
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
     return flushStagedUpdates(contextVk, 0, mLevelCount, 0, mLayerCount, commandBuffer);
+}
+
+bool ImageHelper::isUpdateStaged(uint32_t level, uint32_t layer)
+{
+    // Check to see if any updates are staged for the given level and layer
+
+    if (mSubresourceUpdates.empty())
+    {
+        return false;
+    }
+
+    for (SubresourceUpdate &update : mSubresourceUpdates)
+    {
+        uint32_t updateMipLevel;
+        uint32_t updateBaseLayer;
+        uint32_t updateLayerCount;
+
+        if (update.updateSource == SubresourceUpdate::UpdateSource::Clear)
+        {
+            updateMipLevel   = update.clear.levelIndex;
+            updateBaseLayer  = update.clear.layerIndex;
+            updateLayerCount = update.clear.layerCount;
+        }
+        else
+        {
+            const VkImageSubresourceLayers &dstSubresource = update.dstSubresource();
+            updateMipLevel                                 = dstSubresource.mipLevel;
+            updateBaseLayer                                = dstSubresource.baseArrayLayer;
+            updateLayerCount                               = dstSubresource.layerCount;
+        }
+
+        if (updateMipLevel == level)
+        {
+            if (layer >= updateBaseLayer && layer < (updateBaseLayer + updateLayerCount))
+            {
+                // The level matches, and the layer is within the range
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 // ImageHelper::SubresourceUpdate implementation
