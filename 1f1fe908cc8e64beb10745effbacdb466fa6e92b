@@ -315,6 +315,30 @@
       "revId": "1f1fe908cc8e64beb10745effbacdb466fa6e92b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "124e8710_be5c9303",
+        "filename": "scripts/registry_xml.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-29T14:09:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ca00c6c6_2308aaf0",
+      "range": {
+        "startLine": 38,
+        "startChar": 5,
+        "endLine": 38,
+        "endChar": 28
+      },
+      "revId": "1f1fe908cc8e64beb10745effbacdb466fa6e92b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
