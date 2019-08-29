@@ -206,6 +206,7 @@ class TextureVk : public TextureImpl
                         const vk::Format &format,
                         uint32_t imageLevelOffset,
                         uint32_t imageLayerOffset,
+                        uint32_t imageBaseLevel,
                         bool selfOwned);
     void updateImageHelper(ContextVk *contextVk, const vk::Format &internalFormat);
 
@@ -230,10 +231,19 @@ class TextureVk : public TextureImpl
                                   const uint8_t *pixels,
                                   const vk::Format &vkFormat);
 
+    angle::Result copyImageDataToBufferAndGetData(ContextVk *contextVk,
+                                                  size_t sourceLevel,
+                                                  uint32_t layerCount,
+                                                  const gl::Rectangle &sourceArea,
+                                                  uint8_t **outDataPtr);
+
     angle::Result copyImageDataToBuffer(ContextVk *contextVk,
                                         size_t sourceLevel,
                                         uint32_t layerCount,
-                                        const gl::Rectangle &sourceArea,
+                                        uint32_t layer,
+                                        const gl::Box &sourceArea,
+                                        VkBuffer *stagingBufferHandleOut,
+                                        VkDeviceSize *stagingOffsetOut,
                                         uint8_t **outDataPtr);
 
     angle::Result generateMipmapsWithCPU(const gl::Context *context);
