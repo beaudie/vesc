@@ -206,6 +206,7 @@ class TextureVk : public TextureImpl
                         const vk::Format &format,
                         uint32_t imageLevelOffset,
                         uint32_t imageLayerOffset,
+                        uint32_t imageBaseLevel,
                         bool selfOwned);
     void updateImageHelper(ContextVk *contextVk, const vk::Format &internalFormat);
 

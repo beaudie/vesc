@@ -1464,6 +1464,7 @@ ImageHelper::ImageHelper()
       mSamples(0),
       mCurrentLayout(ImageLayout::Undefined),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
+      mBaseLevel(0),
       mLayerCount(0),
       mLevelCount(0)
 {}
@@ -1477,6 +1478,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mSamples(other.mSamples),
       mCurrentLayout(other.mCurrentLayout),
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
+      mBaseLevel(other.mBaseLevel),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
       mStagingBuffer(std::move(other.mStagingBuffer)),
@@ -1484,6 +1486,7 @@ ImageHelper::ImageHelper(ImageHelper &&other)
 {
     ASSERT(this != &other);
     other.mCurrentLayout = ImageLayout::Undefined;
+    other.mBaseLevel     = 0;
     other.mLayerCount    = 0;
     other.mLevelCount    = 0;
 }
@@ -1508,11 +1511,12 @@ angle::Result ImageHelper::init(Context *context,
                                 const Format &format,
                                 GLint samples,
                                 VkImageUsageFlags usage,
+                                uint32_t baseLevel,
                                 uint32_t mipLevels,
                                 uint32_t layerCount)
 {
     return initExternal(context, textureType, extents, format, samples, usage,
-                        ImageLayout::Undefined, nullptr, mipLevels, layerCount);
+                        ImageLayout::Undefined, nullptr, baseLevel, mipLevels, layerCount);
 }
 
 angle::Result ImageHelper::initExternal(Context *context,
@@ -1523,6 +1527,7 @@ angle::Result ImageHelper::initExternal(Context *context,
                                         VkImageUsageFlags usage,
                                         ImageLayout initialLayout,
                                         const void *externalImageCreateInfo,
+                                        uint32_t baseLevel,
                                         uint32_t mipLevels,
                                         uint32_t layerCount)
 {
@@ -1531,6 +1536,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     mExtents    = extents;
     mFormat     = &format;
     mSamples    = samples;
+    mBaseLevel  = baseLevel;
     mLevelCount = mipLevels;
     mLayerCount = layerCount;
 
@@ -1807,6 +1813,16 @@ void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
 {
     ASSERT(isQueueChangeNeccesary(newQueueFamilyIndex));
     forceChangeLayoutAndQueue(aspectMask, newLayout, newQueueFamilyIndex, commandBuffer);
+}
+
+uint32_t ImageHelper::getBaseLevel()
+{
+    return mBaseLevel;
+}
+
+void ImageHelper::setBaseLevel(uint32_t baseLevel)
+{
+    mBaseLevel = baseLevel;
 }
 
 void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
@@ -2556,7 +2572,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
         // If the update level is not within the requested range, skip the update.
         const bool isUpdateLevelOutsideRange =
-            updateMipLevel < levelStart || updateMipLevel >= levelEnd;
+            updateMipLevel < (levelStart + mBaseLevel) || updateMipLevel > (levelEnd + mBaseLevel);
+
         // If the update layers don't intersect the requested layers, skip the update.
         const bool areUpdateLayersOutsideRange =
             updateBaseLayer + updateLayerCount <= layerStart || updateBaseLayer >= layerEnd;
@@ -2565,6 +2582,23 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         {
             updatesToKeep.emplace_back(update);
             continue;
+        }
+
+        if (mBaseLevel > 0)
+        {
+            // We need to shift the miplevel in the update to fall into the vkiamge
+            if (update.updateSource == SubresourceUpdate::UpdateSource::Clear)
+            {
+                update.clear.levelIndex -= mBaseLevel;
+            }
+            else if (update.updateSource == SubresourceUpdate::UpdateSource::Buffer)
+            {
+                update.buffer.copyRegion.imageSubresource.mipLevel -= mBaseLevel;
+            }
+            else if (update.updateSource == SubresourceUpdate::UpdateSource::Image)
+            {
+                update.image.copyRegion.dstSubresource.mipLevel -= mBaseLevel;
+            }
         }
 
         if (updateLayerCount >= kMaxParallelSubresourceUpload)
