@@ -22,6 +22,30 @@
       "revId": "d32de7353f968cdb055ad1e487a018e2cff21e7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "489c0ea5_159dad2d",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-29T20:53:29Z",
+      "side": 1,
+      "message": "I think cast does not work here. However, the IDType here can be omitted if we want it to be simpler.\n\nIt is not really necessary, the iterator can always have GLuint value and we construct to ResourceID outside. But I think it looks more clear placing it here to let the iterator return ResourceID directly.",
+      "parentUuid": "5523cf43_7d6e5c1a",
+      "range": {
+        "startLine": 313,
+        "startChar": 24,
+        "endLine": 313,
+        "endChar": 30
+      },
+      "revId": "d32de7353f968cdb055ad1e487a018e2cff21e7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
