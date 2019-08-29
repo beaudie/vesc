@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "10498adf_e071a0ba",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-29T00:28:58Z",
+      "side": 1,
+      "message": "This would break if data is zero-sized.  It sounds like this is not possible because it\u0027s null terminated so let\u0027s add an assert that data.size() \u003e\u003d 1",
+      "range": {
+        "startLine": 109,
+        "startChar": 4,
+        "endLine": 109,
+        "endChar": 50
+      },
+      "revId": "8951c31d623a8087b1a84a700bbca45e629a1ea4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
