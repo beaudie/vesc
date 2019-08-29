@@ -1465,6 +1465,8 @@ ImageHelper::ImageHelper()
       mSamples(0),
       mCurrentLayout(ImageLayout::Undefined),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
+      mBaseLevel(0),
+      mMaxLevel(0),
       mLayerCount(0),
       mLevelCount(0)
 {}
@@ -1478,6 +1480,8 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mSamples(other.mSamples),
       mCurrentLayout(other.mCurrentLayout),
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
+      mBaseLevel(other.mBaseLevel),
+      mMaxLevel(other.mMaxLevel),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
       mStagingBuffer(std::move(other.mStagingBuffer)),
@@ -1485,6 +1489,8 @@ ImageHelper::ImageHelper(ImageHelper &&other)
 {
     ASSERT(this != &other);
     other.mCurrentLayout = ImageLayout::Undefined;
+    other.mBaseLevel     = 0;
+    other.mMaxLevel      = 0;
     other.mLayerCount    = 0;
     other.mLevelCount    = 0;
 }
@@ -1509,11 +1515,14 @@ angle::Result ImageHelper::init(Context *context,
                                 const Format &format,
                                 GLint samples,
                                 VkImageUsageFlags usage,
+                                uint32_t baseLevel,
+                                uint32_t maxLevel,
                                 uint32_t mipLevels,
                                 uint32_t layerCount)
 {
     return initExternal(context, textureType, extents, format, samples, usage,
-                        ImageLayout::Undefined, nullptr, mipLevels, layerCount);
+                        ImageLayout::Undefined, nullptr, baseLevel, maxLevel, mipLevels,
+                        layerCount);
 }
 
 angle::Result ImageHelper::initExternal(Context *context,
@@ -1524,6 +1533,8 @@ angle::Result ImageHelper::initExternal(Context *context,
                                         VkImageUsageFlags usage,
                                         ImageLayout initialLayout,
                                         const void *externalImageCreateInfo,
+                                        uint32_t baseLevel,
+                                        uint32_t maxLevel,
                                         uint32_t mipLevels,
                                         uint32_t layerCount)
 {
@@ -1532,6 +1543,8 @@ angle::Result ImageHelper::initExternal(Context *context,
     mExtents    = extents;
     mFormat     = &format;
     mSamples    = samples;
+    mBaseLevel  = baseLevel;
+    mMaxLevel   = maxLevel;
     mLevelCount = mipLevels;
     mLayerCount = layerCount;
 
@@ -1808,6 +1821,17 @@ void ImageHelper::changeLayoutAndQueue(VkImageAspectFlags aspectMask,
 {
     ASSERT(isQueueChangeNeccesary(newQueueFamilyIndex));
     forceChangeLayoutAndQueue(aspectMask, newLayout, newQueueFamilyIndex, commandBuffer);
+}
+
+uint32_t ImageHelper::getBaseLevel()
+{
+    return mBaseLevel;
+}
+
+void ImageHelper::setBaseAndMaxLevels(uint32_t baseLevel, uint32_t maxLevel)
+{
+    mBaseLevel = baseLevel;
+    mMaxLevel  = maxLevel;
 }
 
 void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
@@ -2317,6 +2341,38 @@ angle::Result ImageHelper::stageSubresourceUpdateAndGetData(ContextVk *contextVk
     return angle::Result::Continue;
 }
 
+angle::Result ImageHelper::stageSubresourceUpdateFromBuffer(ContextVk *contextVk,
+                                                            size_t allocationSize,
+                                                            uint32_t mipLevel,
+                                                            uint32_t baseArrayLayer,
+                                                            uint32_t layerCount,
+                                                            const gl::Extents &glExtents,
+                                                            const gl::Offset &offset,
+                                                            VkBuffer stagingBufferHandle,
+                                                            VkDeviceSize stagingOffset)
+{
+    // This function stages an update from explicitly provided handle and offset
+    // It is used when the texture base level has changed, and we need to propagate data
+
+    VkBufferImageCopy copy               = {};
+    copy.bufferOffset                    = stagingOffset;
+    copy.bufferRowLength                 = glExtents.width;
+    copy.bufferImageHeight               = glExtents.height;
+    copy.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    copy.imageSubresource.mipLevel       = mipLevel;
+    copy.imageSubresource.baseArrayLayer = baseArrayLayer;
+    copy.imageSubresource.layerCount     = layerCount;
+
+    ASSERT(getAspectFlags() == VK_IMAGE_ASPECT_COLOR_BIT);
+
+    gl_vk::GetOffset(offset, &copy.imageOffset);
+    gl_vk::GetExtent(glExtents, &copy.imageExtent);
+
+    mSubresourceUpdates.emplace_back(stagingBufferHandle, copy);
+
+    return angle::Result::Continue;
+}
+
 angle::Result ImageHelper::stageSubresourceUpdateFromFramebuffer(
     const gl::Context *context,
     const gl::ImageIndex &index,
@@ -2562,7 +2618,9 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
         // If the update level is not within the requested range, skip the update.
         const bool isUpdateLevelOutsideRange =
-            updateMipLevel < levelStart || updateMipLevel >= levelEnd;
+            updateMipLevel < (levelStart + mBaseLevel) ||
+            (updateMipLevel > (levelEnd + mBaseLevel) || updateMipLevel > mMaxLevel);
+
         // If the update layers don't intersect the requested layers, skip the update.
         const bool areUpdateLayersOutsideRange =
             updateBaseLayer + updateLayerCount <= layerStart || updateBaseLayer >= layerEnd;
@@ -2571,6 +2629,23 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
         {
             updatesToKeep.emplace_back(update);
             continue;
+        }
+
+        if (mBaseLevel > 0)
+        {
+            // We need to shift the miplevel in the update to fall into the vkiamge
+            if (update.updateSource == SubresourceUpdate::UpdateSource::Clear)
+            {
+                update.clear.levelIndex -= mBaseLevel;
+            }
+            else if (update.updateSource == SubresourceUpdate::UpdateSource::Buffer)
+            {
+                update.buffer.copyRegion.imageSubresource.mipLevel -= mBaseLevel;
+            }
+            else if (update.updateSource == SubresourceUpdate::UpdateSource::Image)
+            {
+                update.image.copyRegion.dstSubresource.mipLevel -= mBaseLevel;
+            }
         }
 
         if (updateLayerCount >= kMaxParallelSubresourceUpload)
@@ -2638,6 +2713,48 @@ angle::Result ImageHelper::flushAllStagedUpdates(ContextVk *contextVk)
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
     return flushStagedUpdates(contextVk, 0, mLevelCount, 0, mLayerCount, commandBuffer);
+}
+
+bool ImageHelper::isUpdateStaged(uint32_t level, uint32_t layer)
+{
+    // Check to see if any updates are staged for the given level and layer
+
+    if (mSubresourceUpdates.empty())
+    {
+        return false;
+    }
+
+    for (SubresourceUpdate &update : mSubresourceUpdates)
+    {
+        uint32_t updateMipLevel;
+        uint32_t updateBaseLayer;
+        uint32_t updateLayerCount;
+
+        if (update.updateSource == SubresourceUpdate::UpdateSource::Clear)
+        {
+            updateMipLevel   = update.clear.levelIndex;
+            updateBaseLayer  = update.clear.layerIndex;
+            updateLayerCount = update.clear.layerCount;
+        }
+        else
+        {
+            const VkImageSubresourceLayers &dstSubresource = update.dstSubresource();
+            updateMipLevel                                 = dstSubresource.mipLevel;
+            updateBaseLayer                                = dstSubresource.baseArrayLayer;
+            updateLayerCount                               = dstSubresource.layerCount;
+        }
+
+        if (updateMipLevel == level)
+        {
+            if (layer >= updateBaseLayer && layer < (updateBaseLayer + updateLayerCount))
+            {
+                // The level matches, and the layer is within the range
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 // ImageHelper::SubresourceUpdate implementation
