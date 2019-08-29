@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dd9d722e_d89748b4",
+        "filename": "src/libANGLE/FramebufferAttachment.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-29T00:26:34Z",
+      "side": 1,
+      "message": "How about we rename this to getResourceSamples and change getSamples to:\n\n    inline GLsizei FramebufferAttachment::getSamples() const\n    {\n        return (mRenderToTextureSamples !\u003d kDefaultRenderToTextureSamples) ? getRenderToTextureSamples() : getResourceSamples();\n    }\n    \nThis way, most of the other code will stay the same (calling getSamples) and then the few special cases can call the explicit getters.",
+      "range": {
+        "startLine": 246,
+        "startChar": 0,
+        "endLine": 247,
+        "endChar": 67
+      },
+      "revId": "4e5891e23ba330f5cae4a04ec62d6345cd9e25fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b843ce46_a593771a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Buffer11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1570,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-29T00:26:34Z",
+      "side": 1,
+      "message": "Won\u0027t 0 do the same thing?  I see the -1 used in a bunch of places and we should either use a constant or make sure 0 works (because it\u0027s fairly obvious that 0 would resolve).",
+      "range": {
+        "startLine": 1570,
+        "startChar": 54,
+        "endLine": 1570,
+        "endChar": 56
+      },
+      "revId": "4e5891e23ba330f5cae4a04ec62d6345cd9e25fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

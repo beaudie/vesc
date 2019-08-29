@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b2e711e_a4d46806",
+        "filename": "src/libANGLE/renderer/d3d/TextureD3D.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-29T00:26:34Z",
+      "side": 1,
+      "message": "nit: const method",
+      "range": {
+        "startLine": 114,
+        "startChar": 39,
+        "endLine": 114,
+        "endChar": 40
+      },
+      "revId": "f9cc59e56b4c06d3cce5c09bd34396bde261ed2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95e7ecf4_4e3ba68a",
+        "filename": "src/libANGLE/renderer/d3d/TextureStorage.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-29T00:26:34Z",
+      "side": 1,
+      "message": "nit: method should be const.",
+      "range": {
+        "startLine": 77,
+        "startChar": 47,
+        "endLine": 77,
+        "endChar": 48
+      },
+      "revId": "f9cc59e56b4c06d3cce5c09bd34396bde261ed2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88dbdde5_2dbd7bde",
+        "filename": "src/libANGLE/renderer/d3d/TextureStorage.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-29T00:26:34Z",
+      "side": 1,
+      "message": "Same with this, 0 for not multisampled.",
+      "range": {
+        "startLine": 96,
+        "startChar": 11,
+        "endLine": 96,
+        "endChar": 13
+      },
+      "revId": "f9cc59e56b4c06d3cce5c09bd34396bde261ed2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "05d87fbc_06d50042",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-29T00:26:34Z",
+      "side": 1,
+      "message": "I\u0027m hoping we can use 0 here too instead of special values.  0 can be treated as not multisampling for this feature I think.",
+      "range": {
+        "startLine": 866,
+        "startChar": 11,
+        "endLine": 866,
+        "endChar": 13
+      },
+      "revId": "f9cc59e56b4c06d3cce5c09bd34396bde261ed2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
