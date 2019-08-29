@@ -46,6 +46,30 @@
       "revId": "d32de7353f968cdb055ad1e487a018e2cff21e7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0caa622b_d0edbfff",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-29T21:02:11Z",
+      "side": 1,
+      "message": "Maybe take it out for now if it\u0027s not necessary. I left it out of this internal class because of casting issues.",
+      "parentUuid": "489c0ea5_159dad2d",
+      "range": {
+        "startLine": 313,
+        "startChar": 24,
+        "endLine": 313,
+        "endChar": 30
+      },
+      "revId": "d32de7353f968cdb055ad1e487a018e2cff21e7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
