@@ -16,6 +16,24 @@
       "revId": "15ecf61ebf7a84ec895bd0aa42b06e44f84ab8ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41e2f95d_1d57de72",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-29T16:08:53Z",
+      "side": 1,
+      "message": "Right, I figured they may fail elsewhere too. I\u0027ll give it a shot on the bots to limit them to Nvidia.",
+      "parentUuid": "6a19e572_0238acb8",
+      "revId": "15ecf61ebf7a84ec895bd0aa42b06e44f84ab8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
