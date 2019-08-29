@@ -942,6 +942,7 @@ class ImageHelper final : public CommandGraphResource
     uint32_t mCurrentQueueFamilyIndex;
 
     // Cached properties.
+    uint32_t mBaseLevel;
     uint32_t mLayerCount;
     uint32_t mLevelCount;
 

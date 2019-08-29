@@ -2631,7 +2631,7 @@ angle::Result ImageHelper::flushAllStagedUpdates(ContextVk *contextVk)
     // Clear the image.
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
-    return flushStagedUpdates(contextVk, 0, mLevelCount, 0, mLayerCount, commandBuffer);
+    return flushStagedUpdates(contextVk, mBaseLevel, mLevelCount, 0, mLayerCount, commandBuffer);
 }
 
 // ImageHelper::SubresourceUpdate implementation
