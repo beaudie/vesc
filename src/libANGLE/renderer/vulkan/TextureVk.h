@@ -288,6 +288,7 @@ class TextureVk : public TextureImpl
                                            const vk::ImageView *srcView);
 
     angle::Result initImage(ContextVk *contextVk,
+                            const GLenum internalformat,
                             const vk::Format &format,
                             const gl::Extents &extents,
                             const uint32_t levelCount);
@@ -316,6 +317,7 @@ class TextureVk : public TextureImpl
     angle::Result ensureImageInitializedImpl(ContextVk *contextVk,
                                              const gl::Extents &baseLevelExtents,
                                              uint32_t levelCount,
+                                             GLenum internalformat,
                                              const vk::Format &format);
 
     void onStagingBufferChange() { onStateChange(angle::SubjectMessage::SubjectChanged); }
@@ -335,6 +337,8 @@ class TextureVk : public TextureImpl
     uint32_t mImageLevelOffset;
 
     vk::ImageHelper *mImage;
+
+    GLenum mOriginalInternalformat;
 
     // Read views.
     TextureVkViews mDefaultViews;
