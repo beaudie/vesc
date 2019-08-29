@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5523cf43_7d6e5c1a",
+        "filename": "src/libANGLE/ResourceMap.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-29T14:07:16Z",
+      "side": 1,
+      "message": "possible to use c++ casts here and below? are these even necessary changes?",
+      "range": {
+        "startLine": 313,
+        "startChar": 24,
+        "endLine": 313,
+        "endChar": 30
+      },
+      "revId": "d32de7353f968cdb055ad1e487a018e2cff21e7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
