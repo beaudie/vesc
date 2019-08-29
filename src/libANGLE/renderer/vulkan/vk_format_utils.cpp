@@ -334,6 +334,7 @@ void ComposeSwizzleState(const gl::SwizzleState &first,
 
 void MapSwizzleState(const ContextVk *contextVk,
                      const vk::Format &format,
+                     const bool isUnsizedDepthInternalformat,
                      const gl::SwizzleState &swizzleState,
                      gl::SwizzleState *swizzleStateOut)
 {
@@ -367,7 +368,8 @@ void MapSwizzleState(const ContextVk *contextVk,
                 bool hasRed = angleFormat.depthBits > 0;
                 // In OES_depth_texture/ARB_depth_texture, depth
                 // textures are treated as luminance.
-                bool hasGB = hasRed && contextVk->getClientMajorVersion() <= 2;
+                // If the internalformat was not sized, use OES_depth_texture behavior
+                bool hasGB = hasRed && isUnsizedDepthInternalformat;
 
                 internalSwizzle.swizzleRed   = hasRed ? GL_RED : GL_ZERO;
                 internalSwizzle.swizzleGreen = hasGB ? GL_RED : GL_ZERO;
@@ -391,5 +393,18 @@ void MapSwizzleState(const ContextVk *contextVk,
             break;
     }
     ComposeSwizzleState(internalSwizzle, swizzleState, swizzleStateOut);
+}
+
+bool IsUnsizedDepthInternalFormat(GLenum internalformat)
+{
+    ASSERT(internalformat != 0);
+
+    switch (internalformat)
+    {
+        case GL_DEPTH_COMPONENT:
+        case GL_DEPTH_STENCIL:
+            return true;
+    }
+    return false;
 }
 }  // namespace rx

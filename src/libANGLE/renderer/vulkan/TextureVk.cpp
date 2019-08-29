@@ -149,6 +149,7 @@ TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
       mImageLayerOffset(0),
       mImageLevelOffset(0),
       mImage(nullptr),
+      mOriginalInternalformat(0),
       mStagingBufferInitialSize(vk::kStagingBufferSize)
 {}
 
@@ -767,7 +768,7 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
         releaseImage(contextVk);
     }
 
-    ANGLE_TRY(initImage(contextVk, format, size, static_cast<uint32_t>(levels)));
+    ANGLE_TRY(initImage(contextVk, internalFormat, format, size, static_cast<uint32_t>(levels)));
     return angle::Result::Continue;
 }
 
@@ -826,6 +827,8 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
                    imageVk->getImageLevel(), imageVk->getImageLayer(), false);
 
     ASSERT(type != gl::TextureType::CubeMap);
+    ASSERT(IsUnsizedDepthInternalFormat(mOriginalInternalformat) ==
+           !image->getFormat().info->sized);
     ANGLE_TRY(initImageViews(contextVk, format, 1, 1));
 
     // Transfer the image to this queue if needed
@@ -1177,12 +1180,14 @@ angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk)
     const vk::Format &format =
         contextVk->getRenderer()->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
 
-    return ensureImageInitializedImpl(contextVk, baseLevelExtents, levelCount, format);
+    return ensureImageInitializedImpl(contextVk, baseLevelExtents, levelCount,
+                                      baseLevelDesc.format.info->internalFormat, format);
 }
 
 angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
                                                     const gl::Extents &baseLevelExtents,
                                                     uint32_t levelCount,
+                                                    GLenum internalformat,
                                                     const vk::Format &format)
 {
     if (mImage->valid() && !mImage->hasStagedUpdates())
@@ -1192,7 +1197,7 @@ angle::Result TextureVk::ensureImageInitializedImpl(ContextVk *contextVk,
 
     if (!mImage->valid())
     {
-        ANGLE_TRY(initImage(contextVk, format, baseLevelExtents, levelCount));
+        ANGLE_TRY(initImage(contextVk, internalformat, format, baseLevelExtents, levelCount));
     }
 
     vk::CommandBuffer *commandBuffer = nullptr;
@@ -1221,7 +1226,9 @@ angle::Result TextureVk::init3DRenderTargets(ContextVk *contextVk)
         // Users of the render target expect the views to directly view the desired layer, so we
         // need create a fetch view for each layer as well.
         gl::SwizzleState mappedSwizzle;
-        MapSwizzleState(contextVk, mImage->getFormat(), mState.getSwizzleState(), &mappedSwizzle);
+        MapSwizzleState(contextVk, mImage->getFormat(),
+                        IsUnsizedDepthInternalFormat(mOriginalInternalformat),
+                        mState.getSwizzleState(), &mappedSwizzle);
         gl::TextureType arrayType = vk::Get2DTextureType(layerCount, mImage->getSamples());
         ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, mImage->getAspectFlags(),
                                              mappedSwizzle, &mLayerFetchImageView[layerIndex],
@@ -1250,7 +1257,9 @@ angle::Result TextureVk::initCubeMapRenderTargets(ContextVk *contextVk)
         // Users of the render target expect the views to directly view the desired layer, so we
         // need create a fetch view for each layer as well.
         gl::SwizzleState mappedSwizzle;
-        MapSwizzleState(contextVk, mImage->getFormat(), mState.getSwizzleState(), &mappedSwizzle);
+        MapSwizzleState(contextVk, mImage->getFormat(),
+                        IsUnsizedDepthInternalFormat(mOriginalInternalformat),
+                        mState.getSwizzleState(), &mappedSwizzle);
         gl::TextureType arrayType = vk::Get2DTextureType(gl::kCubeFaceCount, mImage->getSamples());
         ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, mImage->getAspectFlags(),
                                              mappedSwizzle, &mLayerFetchImageView[cubeMapFaceIndex],
@@ -1467,11 +1476,13 @@ const vk::Sampler &TextureVk::getSampler() const
 }
 
 angle::Result TextureVk::initImage(ContextVk *contextVk,
+                                   const GLenum internalformat,
                                    const vk::Format &format,
                                    const gl::Extents &extents,
                                    const uint32_t levelCount)
 {
     RendererVk *renderer = contextVk->getRenderer();
+    mOriginalInternalformat = internalformat;
 
     VkImageUsageFlags imageUsageFlags = VK_IMAGE_USAGE_TRANSFER_DST_BIT |
                                         VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
@@ -1569,7 +1580,8 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
     ASSERT(mImage != nullptr);
 
     gl::SwizzleState mappedSwizzle;
-    MapSwizzleState(contextVk, format, mState.getSwizzleState(), &mappedSwizzle);
+    MapSwizzleState(contextVk, format, IsUnsizedDepthInternalFormat(mOriginalInternalformat),
+                    mState.getSwizzleState(), &mappedSwizzle);
 
     VkImageAspectFlags aspectFlags = vk::GetFormatAspectFlags(format.angleFormat());
     if (HasBothDepthAndStencilAspects(aspectFlags))
