@@ -1173,6 +1173,9 @@ TEST_P(VertexAttributeTest, DrawArraysWithBufferOffset)
     // TODO(geofflang): Figure out why this is broken on AMD OpenGL
     ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
 
+    // TODO(cnorthrop): Test this again on more recent drivers. http://anglebug.com/3148
+    ANGLE_SKIP_TEST_IF(IsLinux() && IsNVIDIA() && IsVulkan());
+
     initBasicProgram();
     glUseProgram(mProgram);
 
