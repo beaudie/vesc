@@ -148,6 +148,7 @@ TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
       mImageNativeType(gl::TextureType::InvalidEnum),
       mImageLayerOffset(0),
       mImageLevelOffset(0),
+      mBaseLevel(0),
       mImage(nullptr),
       mStagingBufferInitialSize(vk::kStagingBufferSize)
 {}
@@ -787,7 +788,7 @@ angle::Result TextureVk::setStorageExternalMemory(const gl::Context *context,
 
     const vk::Format &format = renderer->getFormat(internalFormat);
 
-    setImageHelper(contextVk, new vk::ImageHelper(), mState.getType(), format, 0, 0, true);
+    setImageHelper(contextVk, new vk::ImageHelper(), mState.getType(), format, 0, 0, 0, true);
 
     ANGLE_TRY(
         memoryObjectVk->createImage(context, type, levels, internalFormat, size, offset, mImage));
@@ -823,7 +824,7 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
 
     ImageVk *imageVk = vk::GetImpl(image);
     setImageHelper(contextVk, imageVk->getImage(), imageVk->getImageTextureType(), format,
-                   imageVk->getImageLevel(), imageVk->getImageLayer(), false);
+                   imageVk->getImageLevel(), imageVk->getImageLayer(), mBaseLevel, false);
 
     ASSERT(type != gl::TextureType::CubeMap);
     ANGLE_TRY(initImageViews(contextVk, format, 1, 1));
@@ -895,7 +896,7 @@ angle::Result TextureVk::ensureImageAllocated(ContextVk *contextVk, const vk::Fo
 {
     if (mImage == nullptr)
     {
-        setImageHelper(contextVk, new vk::ImageHelper(), mState.getType(), format, 0, 0, true);
+        setImageHelper(contextVk, new vk::ImageHelper(), mState.getType(), format, 0, 0, 0, true);
     }
     else
     {
@@ -911,6 +912,7 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
                                const vk::Format &format,
                                uint32_t imageLevelOffset,
                                uint32_t imageLayerOffset,
+                               uint32_t imageBaseLevel,
                                bool selfOwned)
 {
     ASSERT(mImage == nullptr);
@@ -919,6 +921,7 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
     mImageNativeType  = imageType;
     mImageLevelOffset = imageLevelOffset;
     mImageLayerOffset = imageLayerOffset;
+    mBaseLevel        = imageBaseLevel;
     mImage            = imageHelper;
     mImage->initStagingBuffer(contextVk->getRenderer(), format, vk::kStagingBufferFlags,
                               mStagingBufferInitialSize);
@@ -975,6 +978,18 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
     {
         ANGLE_TRY(ensureImageAllocated(contextVk, format));
     }
+
+    return angle::Result::Continue;
+}
+
+angle::Result TextureVk::copyBufferDataToImage(ContextVk *contextVk,
+                                               size_t destLevel,
+                                               uint32_t layerCount,
+                                               const gl::Rectangle &destArea,
+                                               uint8_t *buffer)
+{
+    // Copy the buffer to targeted destlevel
+    UNIMPLEMENTED();
 
     return angle::Result::Continue;
 }
@@ -1105,8 +1120,93 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
 
 angle::Result TextureVk::setBaseLevel(const gl::Context *context, GLuint baseLevel)
 {
-    ANGLE_VK_UNREACHABLE(vk::GetImpl(context));
-    return angle::Result::Stop;
+    if (baseLevel == mBaseLevel)
+    {
+        // No work to do
+        return angle::Result::Continue;
+    }
+
+    ContextVk *contextVk = vk::GetImpl(context);
+
+    // Some data is pending, or the image has not been defined at all yet
+    if (!mImage->valid())
+    {
+        // Clear all pending work before changing the base level
+        if (mImage->hasStagedUpdates())
+        {
+            ANGLE_TRY(ensureImageInitialized(contextVk));
+            ASSERT(mImage->valid());
+        }
+    }
+
+    // Create a new image that reflects the modified base level
+    std::unique_ptr<vk::ImageHelper> newImage;
+    newImage = std::make_unique<vk::ImageHelper>();
+
+    // Current work should finish before we populate the new image with data from the current image
+    newImage->addReadDependency(mImage);
+
+    // Reserve enough room to track all the mip levels
+    mImageOriginalMips.resize(mImage->getLevelCount());
+
+    // Determine which levels we need to remember
+    if (baseLevel > mBaseLevel)
+    {
+        // Base level is moving up, so new image will be a subset of the current image
+        // We need to store away level data for potential future use
+
+        // Store away mip levels that are going away
+        for (int i = mBaseLevel; i < baseLevel; i++)
+        {
+            uint8_t *storedLevel = nullptr;
+            gl::Rectangle levelArea(0, 0, sourceLevel.width, sourceLevel.height);
+
+            // This function pulls from the currently active mImage
+            copyImageDataToBuffer(contextVk, i, 1, levelArea, &storedLevel);
+
+            // Track it in the original mip chain
+            mImageOriginalMips[mBaseLevel + i] = storedLevel;
+        }
+
+        // Initialize newImage from remainder of mImage
+        for (int i = 0; i < mImage->getLevelCount() - baseLevel; i++)
+        {
+            // Copy levels from current image (?? if there is a helper for this)
+            newImage.level[i] = mImage.level[i + baseLevel];
+        }
+
+        // Start tracking the new image
+        mImage = newImage.get();
+    }
+    else
+    {
+        // Base level is moving down, so new image will be a superset
+        // We need to populate it with data we stored away from the previous texture
+
+        // Initialize newImage from current mImage
+        for (int i = 0; i < mImage->getLevelCount(); i++)
+        {
+            // Copy levels from current image (?? if there is a helper for this)
+            newImage.level[mBaseLevel - baseLevel + i] = mImage.level[i];
+        }
+
+        // Start tracking the new image
+        mImage = newImage.get();
+
+        // Populate new levels with stored away buffers
+        for (int i = baseLevel; i < mBaseLevel; i++)
+        {
+            gl::Rectangle levelArea(0, 0, destLevel.width, destLevel.height);
+
+            // This function will populate a level in the current mImage
+            copyBufferDataToImage(contextVk, i, 1, levelArea, mImageOriginalMips[i]);
+        }
+    }
+
+    // Track the new base level
+    mBaseLevel = baseLevel;
+
+    return angle::Result::Continue;
 }
 
 angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *surface)
@@ -1121,7 +1221,7 @@ angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *
     // eglBindTexImage can only be called with pbuffer (offscreen) surfaces
     OffscreenSurfaceVk *offscreenSurface = GetImplAs<OffscreenSurfaceVk>(surface);
     setImageHelper(contextVk, offscreenSurface->getColorAttachmentImage(), mState.getType(), format,
-                   surface->getMipmapLevel(), 0, false);
+                   surface->getMipmapLevel(), 0, mBaseLevel, false);
 
     ASSERT(mImage->getLayerCount() == 1);
     return initImageViews(contextVk, format, 1, 1);
@@ -1639,9 +1739,16 @@ void TextureVk::releaseStagingBuffer(ContextVk *contextVk)
 
 uint32_t TextureVk::getLevelCount() const
 {
-    ASSERT(mState.getEffectiveBaseLevel() == 0);
-
-    // getMipmapMaxLevel will be 0 here if mipmaps are not used, so the levelCount is always +1.
-    return mState.getMipmapMaxLevel() + 1;
+    // getMipmapMaxLevel will be 0 here if mipmaps are not used
+    if (mState.getMipmapMaxLevel() > 0)
+    {
+        // getMipmapMaxLevel incorporates base level
+        return mState.getMipmapMaxLevel();
+    }
+    else
+    {
+        // No mip levels means levelCount is 1.
+        return 1;
+    }
 }
 }  // namespace rx

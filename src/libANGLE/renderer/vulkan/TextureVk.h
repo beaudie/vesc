@@ -200,6 +200,7 @@ class TextureVk : public TextureImpl
                         const vk::Format &format,
                         uint32_t imageLevelOffset,
                         uint32_t imageLayerOffset,
+                        uint32_t imageBaseLevel,
                         bool selfOwned);
     void updateImageHelper(ContextVk *contextVk, const vk::Format &internalFormat);
 
@@ -223,6 +224,12 @@ class TextureVk : public TextureImpl
                                   const gl::PixelUnpackState &unpack,
                                   const uint8_t *pixels,
                                   const vk::Format &vkFormat);
+
+    angle::Result copyBufferDataToImage(ContextVk *contextVk,
+                                        size_t destLevel,
+                                        uint32_t layerCount,
+                                        const gl::Rectangle &destArea,
+                                        uint8_t *buffer);
 
     angle::Result copyImageDataToBuffer(ContextVk *contextVk,
                                         size_t sourceLevel,
@@ -325,7 +332,10 @@ class TextureVk : public TextureImpl
     // mImage.
     uint32_t mImageLevelOffset;
 
+    uint32_t mBaseLevel;
+
     vk::ImageHelper *mImage;
+    std::vector<uint8_t *> mImageOriginalMips;
 
     TextureVkViews mDefaultViews;
     TextureVkViews mStencilViews;
