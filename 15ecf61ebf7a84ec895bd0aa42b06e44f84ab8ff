@@ -52,6 +52,24 @@
       "revId": "15ecf61ebf7a84ec895bd0aa42b06e44f84ab8ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38ec93d9_c2f2e43b",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-29T19:12:34Z",
+      "side": 1,
+      "message": "My bad, fails on windows too (always Nvidia).",
+      "parentUuid": "00b441b0_583f5538",
+      "revId": "15ecf61ebf7a84ec895bd0aa42b06e44f84ab8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
