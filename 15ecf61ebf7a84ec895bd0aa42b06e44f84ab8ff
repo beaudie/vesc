@@ -34,6 +34,24 @@
       "revId": "15ecf61ebf7a84ec895bd0aa42b06e44f84ab8ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00b441b0_583f5538",
+        "filename": "src/tests/deqp_support/deqp_khr_gles31_test_expectations.txt",
+        "patchSetId": 9
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-29T16:41:44Z",
+      "side": 1,
+      "message": "Turned out to fail only on Nvidia/Linux. It passes at home, so the bug is fixed in newer versions. Constrained it to `VULKAN NVIDIA LINUX`.",
+      "parentUuid": "41e2f95d_1d57de72",
+      "revId": "15ecf61ebf7a84ec895bd0aa42b06e44f84ab8ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
