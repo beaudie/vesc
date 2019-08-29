@@ -21,6 +21,7 @@ enum VendorID : uint32_t
     VENDOR_ID_AMD     = 0x1002,
     VENDOR_ID_ARM     = 0x13B5,
     VENDOR_ID_INTEL   = 0x8086,
+    VENDOR_ID_GOOGLE  = 0x1AE0,
     VENDOR_ID_NVIDIA  = 0x10DE,
     // This is Qualcomm PCI Vendor ID.
     // Android doesn't have a PCI bus, but all we need is a unique id.
