@@ -5,6 +5,7 @@
 vars = {
   'android_git': 'https://android.googlesource.com',
   'chromium_git': 'https://chromium.googlesource.com',
+  'swiftshader_git': 'https://swiftshader.googlesource.com',
 
   # This variable is set on the Chrome infra for compatiblity with gclient.
   'angle_root': '.',
@@ -157,6 +158,11 @@ deps = {
 
   '{angle_root}/third_party/spirv-tools/src': {
     'url': '{chromium_git}/external/github.com/KhronosGroup/SPIRV-Tools@{spirv_tools_revision}',
+    'condition': 'not build_with_chromium',
+  },
+
+  '{angle_root}/third_party/SwiftShader': {
+    'url': '{swiftshader_git}/SwiftShader@bbd8c42deb7292f6a7b2d89f127d6742d929e931',
     'condition': 'not build_with_chromium',
   },
 
