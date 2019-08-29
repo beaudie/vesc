@@ -22,6 +22,30 @@
       "revId": "8951c31d623a8087b1a84a700bbca45e629a1ea4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56a2b85b_a598debd",
+        "filename": "src/libANGLE/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-29T14:48:56Z",
+      "side": 1,
+      "message": "Good point!",
+      "parentUuid": "10498adf_e071a0ba",
+      "range": {
+        "startLine": 109,
+        "startChar": 4,
+        "endLine": 109,
+        "endChar": 50
+      },
+      "revId": "8951c31d623a8087b1a84a700bbca45e629a1ea4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
