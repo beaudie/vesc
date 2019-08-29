@@ -200,6 +200,7 @@ class TextureVk : public TextureImpl
                         const vk::Format &format,
                         uint32_t imageLevelOffset,
                         uint32_t imageLayerOffset,
+                        uint32_t imageBaseLevel,
                         bool selfOwned);
     void updateImageHelper(ContextVk *contextVk, const vk::Format &internalFormat);
 
@@ -325,7 +326,10 @@ class TextureVk : public TextureImpl
     // mImage.
     uint32_t mImageLevelOffset;
 
+    uint32_t mBaseLevel;
+
     vk::ImageHelper *mImage;
+    std::vector<std::vector<uint8_t *>> mImageOriginalMips;
 
     TextureVkViews mDefaultViews;
     TextureVkViews mStencilViews;
