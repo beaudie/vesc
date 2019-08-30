@@ -22,6 +22,30 @@
       "revId": "65a71c53215b434ae98eecdb1166f14253993cf8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0a61a60_d1ffc03e",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4363,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-30T16:03:15Z",
+      "side": 1,
+      "message": "I did that so that I don\u0027t need to know the actual contents of the texture, other than it being non-zero.",
+      "parentUuid": "62c153a8_7ba922be",
+      "range": {
+        "startLine": 4363,
+        "startChar": 18,
+        "endLine": 4363,
+        "endChar": 80
+      },
+      "revId": "65a71c53215b434ae98eecdb1166f14253993cf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
