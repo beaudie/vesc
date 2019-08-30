@@ -16,6 +16,24 @@
       "revId": "520090c54a92c72da5e1edc327d0de124a0a1d65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "147d3bb3_279e1089",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-30T17:26:21Z",
+      "side": 0,
+      "message": "Yeah. Added a mention to the issue description and a comment here.",
+      "parentUuid": "d900959d_43968d99",
+      "revId": "520090c54a92c72da5e1edc327d0de124a0a1d65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
