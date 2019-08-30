@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "62c153a8_7ba922be",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4363,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-08-30T15:23:10Z",
+      "side": 1,
+      "message": "Would it be possible to use this logic outside of the shader, and just write the texture2D result to the framebuffer?  If not, you can move forward with the CL.  It would just make the test easier to read if the gtest asserts are checking the actual results instead of whether or not red was written.",
+      "range": {
+        "startLine": 4363,
+        "startChar": 18,
+        "endLine": 4363,
+        "endChar": 80
+      },
+      "revId": "65a71c53215b434ae98eecdb1166f14253993cf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
