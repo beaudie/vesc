@@ -16,6 +16,24 @@
       "revId": "b9924ea19a568c996368afb3de9475cfa91d83b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cbdcd7b_f1c991f3",
+        "filename": "build_overrides/vulkan_loader.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-30T17:10:36Z",
+      "side": 1,
+      "message": "I think they still need to exist if we use it with the current ToT GN loader. We should remove them from the loader upstream. Let me know if you want to do that. Or I\u0027ll submit a CL.",
+      "parentUuid": "05bca218_b3387adb",
+      "revId": "b9924ea19a568c996368afb3de9475cfa91d83b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
