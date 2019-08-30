@@ -22,8 +22,8 @@ namespace rx
 
 namespace
 {
-
-constexpr size_t kUniformBlockDynamicBufferMinSize = 256 * 128;
+// This size is picked according to the required maxUniformBufferRange in the Vulkan spec.
+constexpr size_t kUniformBlockDynamicBufferMinSize = 16384u;
 
 // Identical to Std140 encoder in all aspects, except it ignores opaque uniform types.
 class VulkanDefaultBlockEncoder : public sh::Std140BlockEncoder
@@ -1410,7 +1410,7 @@ angle::Result ProgramVk::updateTransformFeedbackDescriptorSet(ContextVk *context
 
 void ProgramVk::updateTransformFeedbackDescriptorSetImpl(ContextVk *contextVk)
 {
-    const gl::State &glState = contextVk->getState();
+    const gl::State &glState                 = contextVk->getState();
     gl::TransformFeedback *transformFeedback = glState.getCurrentTransformFeedback();
 
     if (!hasTransformFeedbackOutput())
