@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "eb20085f_b5644337",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-30T22:54:55Z",
+      "side": 1,
+      "message": "nit: Caps for static methods.",
+      "range": {
+        "startLine": 631,
+        "startChar": 20,
+        "endLine": 631,
+        "endChar": 35
+      },
+      "revId": "8c0c3b17a49ea00edafdde490577377c6d24d098",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5b353b1_216a4ef8",
+        "filename": "src/tests/test_utils/ANGLETest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-30T22:54:55Z",
+      "side": 1,
+      "message": "here can you call ReleaseFixtures?",
+      "range": {
+        "startLine": 1339,
+        "startChar": 0,
+        "endLine": 1339,
+        "endChar": 40
+      },
+      "revId": "8c0c3b17a49ea00edafdde490577377c6d24d098",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
