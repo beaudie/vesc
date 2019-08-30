@@ -636,7 +636,7 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk,
         // prevent failures due to too many swapchains allocated.
         //
         // Note: Nvidia has been observed to fail creation of swapchains after 20 are allocated.
-        static constexpr size_t kMaxOldSwapchains = 10;
+        static constexpr size_t kMaxOldSwapchains = 5;
         if (mOldSwapchains.size() > kMaxOldSwapchains)
         {
             ANGLE_TRY(contextVk->getRenderer()->queueWaitIdle(contextVk));
