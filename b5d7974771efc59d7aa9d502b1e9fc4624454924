@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0ea59623_5304818f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-30T14:43:46Z",
+      "side": 1,
+      "message": "If this image is not valid, I\u0027m pretty sure you can early exit. Same if it\u0027s null (which you miss a check for)",
+      "range": {
+        "startLine": 1132,
+        "startChar": 4,
+        "endLine": 1132,
+        "endChar": 25
+      },
+      "revId": "b5d7974771efc59d7aa9d502b1e9fc4624454924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3da303c3_60e1de45",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-30T14:43:46Z",
+      "side": 1,
+      "message": "I think what you need to do here is ensure the staging buffer is initialized in mImage. Then, once per level/layer, use TextureVk::copyImageDataToBuffer to read back into the staging buffer. You can use ImageHelper::stageSubresourceUpdateAndGetData to store a subresource update for these. See TextureVk::copySubTextureImpl for an example. We don\u0027t need the GetData part so maybe we could do a bit of refactoring.\n\nAfter the function finishes here you will have no valid mImage and all data in staging buffers. That\u0027s fine. It will get flushed on the next draw.",
+      "range": {
+        "startLine": 1142,
+        "startChar": 4,
+        "endLine": 1142,
+        "endChar": 63
+      },
+      "revId": "b5d7974771efc59d7aa9d502b1e9fc4624454924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
