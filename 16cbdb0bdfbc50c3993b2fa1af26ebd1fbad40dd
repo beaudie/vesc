@@ -22,6 +22,30 @@
       "revId": "16cbdb0bdfbc50c3993b2fa1af26ebd1fbad40dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94e6c448_9014ca32",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 402,
+      "author": {
+        "id": 1351342
+      },
+      "writtenOn": "2019-08-30T16:49:17Z",
+      "side": 1,
+      "message": "I will do it in the last ResourceID convert CL, sort it here will give a lot of merge conflict for following changes",
+      "parentUuid": "739b6f76_23660164",
+      "range": {
+        "startLine": 402,
+        "startChar": 7,
+        "endLine": 402,
+        "endChar": 21
+      },
+      "revId": "16cbdb0bdfbc50c3993b2fa1af26ebd1fbad40dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
