@@ -628,6 +628,17 @@ void ANGLETestBase::ANGLETestTearDown()
     }
 }
 
+void ANGLETestBase::releaseFixtures()
+{
+    for (auto it = gFixtures.begin(); it != gFixtures.end(); it++)
+    {
+        if (it->second.eglWindow)
+        {
+            it->second.eglWindow->destroyGL();
+        }
+    }
+}
+
 void ANGLETestBase::swapBuffers()
 {
     if (getGLWindow()->isGLInitialized())
