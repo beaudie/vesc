@@ -474,6 +474,14 @@ ANGLETestBase::~ANGLETestBase()
     {
         GTEST_NONFATAL_FAILURE_("TearDown not called.");
     }
+
+    for (auto it = gFixtures.begin(); it != gFixtures.end(); it++)
+    {
+        if (it->second.eglWindow)
+        {
+            it->second.eglWindow->destroyGL();
+        }
+    }
 }
 
 void ANGLETestBase::ANGLETestSetUp()
