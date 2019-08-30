@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0490a7ce_fe875a06",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-30T19:37:59Z",
+      "side": 1,
+      "message": "I was meaning to move these out of the class, forgot about that. Done.",
+      "parentUuid": "b753f5fa_46af4a1d",
+      "range": {
+        "startLine": 243,
+        "startChar": 0,
+        "endLine": 269,
+        "endChar": 0
+      },
+      "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "830efdfb_51344e4d",
         "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
         "patchSetId": 3
@@ -36,6 +60,24 @@
       "writtenOn": "2019-08-30T16:51:07Z",
       "side": 1,
       "message": "Thanks for documenting this.",
+      "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "31419184_eacea069",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-30T19:37:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "830efdfb_51344e4d",
       "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
@@ -65,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "71839be9_40899f92",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-30T19:37:59Z",
+      "side": 1,
+      "message": "Yes, done",
+      "parentUuid": "9cf811c4_ca5944b4",
+      "range": {
+        "startLine": 44,
+        "startChar": 22,
+        "endLine": 44,
+        "endChar": 43
+      },
+      "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8c1c897e_8cc14682",
         "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
         "patchSetId": 3
@@ -85,6 +151,30 @@
       "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e918884_db5c6678",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-30T19:37:59Z",
+      "side": 1,
+      "message": "Clarified.",
+      "parentUuid": "8c1c897e_8cc14682",
+      "range": {
+        "startLine": 52,
+        "startChar": 2,
+        "endLine": 53,
+        "endChar": 65
+      },
+      "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "22b689a4_090f4dd5",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-30T19:37:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3817bd9c_a6399447",
+      "range": {
+        "startLine": 63,
+        "startChar": 51,
+        "endLine": 63,
+        "endChar": 100
+      },
+      "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f4a1bed1_8945c780",
         "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
         "patchSetId": 3
@@ -131,6 +245,30 @@
       "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "84ba0512_be66327c",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-08-30T19:37:59Z",
+      "side": 1,
+      "message": "Done. Was missing the link specification below.",
+      "parentUuid": "f4a1bed1_8945c780",
+      "range": {
+        "startLine": 69,
+        "startChar": 66,
+        "endLine": 69,
+        "endChar": 88
+      },
+      "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
