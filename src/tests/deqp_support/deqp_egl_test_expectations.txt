@@ -148,14 +148,10 @@
 2546 LINUX : dEQP-EGL.functional.native_coord_mapping.native_window.* = FAIL
 2546 LINUX : dEQP-EGL.functional.negative_api.choose_config = FAIL
 2546 LINUX : dEQP-EGL.functional.negative_api.swap_interval = FAIL
-2546 LINUX : dEQP-EGL.functional.query_surface.simple.pbuffer.rgba8888_depth_stencil = FAIL
-2546 LINUX : dEQP-EGL.functional.query_surface.simple.pbuffer.rgba8888_no_depth_no_stencil = FAIL
+2546 LINUX OPENGL : dEQP-EGL.functional.query_surface.simple.pbuffer.rgba8888_depth_stencil = FAIL
+2546 LINUX OPENGL : dEQP-EGL.functional.query_surface.simple.pbuffer.rgba8888_no_depth_no_stencil = FAIL
 
 // Linux Vulkan failures
-2635 LINUX VULKAN : dEQP-EGL.functional.query_surface.set_attribute.pbuffer.rgba8888_depth_stencil = FAIL
-2635 LINUX VULKAN : dEQP-EGL.functional.query_surface.set_attribute.pbuffer.rgba8888_no_depth_no_stencil = FAIL
-2715 LINUX VULKAN : dEQP-EGL.functional.query_surface.simple.pbuffer.rgb888_depth_stencil = FAIL
-2715 LINUX VULKAN : dEQP-EGL.functional.query_surface.simple.pbuffer.rgb888_no_depth_no_stencil = FAIL
 2716 LINUX VULKAN : dEQP-EGL.functional.preserve_swap.no_preserve.* = FAIL
 
 // Mac failures
@@ -199,21 +195,8 @@
 2546 ANDROID : dEQP-EGL.functional.thread_cleanup.multi_context_* = SKIP
 2546 ANDROID : dEQP-EGL.functional.thread_cleanup.single_context_* = FAIL
 
-// Vulkan
-3081 VULKAN : dEQP-EGL.functional.image.create.gles2_renderbuffer_depth16_depth_buffer = SKIP
-3081 VULKAN : dEQP-EGL.functional.image.create.gles2_renderbuffer_stencil_stencil_buffer = SKIP
-3081 VULKAN : dEQP-EGL.functional.image.modify.renderbuffer_depth16_renderbuffer_clear_depth = SKIP
-3081 VULKAN : dEQP-EGL.functional.image.modify.renderbuffer_stencil_renderbuffer_clear_stencil = SKIP
-3081 VULKAN : dEQP-EGL.functional.image.render_multiple_contexts.gles2_renderbuffer_depth16_depth_buffer = SKIP
-3081 VULKAN : dEQP-EGL.functional.image.render_multiple_contexts.gles2_renderbuffer_stencil_stencil_buffer = SKIP
-
 // Android Vulkan
-2546 ANDROID VULKAN : dEQP-EGL.functional.create_surface.window.other = SKIP
-2546 ANDROID VULKAN : dEQP-EGL.functional.query_context.get_current_surface.other = SKIP
-2546 ANDROID VULKAN : dEQP-EGL.functional.query_surface.set_attribute.window.other = SKIP
-2546 ANDROID VULKAN : dEQP-EGL.functional.query_surface.simple.window.other = SKIP
-2546 ANDROID VULKAN : dEQP-EGL.functional.resize.pixel_density.* = SKIP
-2546 ANDROID VULKAN : dEQP-EGL.functional.wide_color.window* = SKIP
+2546 ANDROID VULKAN : dEQP-EGL.functional.query_context.get_current_surface.other = FAIL
 
 // Robustness failures on multiple platforms
 3711 : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds.reset_status.reads.* = FAIL
@@ -226,13 +209,6 @@
 2306 MAC : dEQP-EGL.functional.color_clears.multi_context.gles1* = FAIL
 2306 LINUX : dEQP-EGL.functional.color_clears.single_context.gles1* = FAIL
 2306 LINUX : dEQP-EGL.functional.color_clears.multi_context.gles1* = FAIL
-
-// Tests failing since the Jan 2018 roll of dEQP
-2341 : dEQP-EGL.functional.swap_buffers.* = SKIP
-2330 : dEQP-EGL.functional.robustness.create_context.no_reset_notification = SKIP
-2330 : dEQP-EGL.functional.robustness.create_context.lose_context_on_reset = SKIP
-2330 : dEQP-EGL.functional.robustness.reset_context.fixed_function_pipeline.reset_status.index_buffer_out_of_bounds = SKIP
-2330 : dEQP-EGL.functional.robustness.reset_context.fixed_function_pipeline.reset_status.vertex_buffer_out_of_bounds = SKIP
 
 // Tests were being hidden by flakiness (anglebug.com/3271)
 3325 : dEQP-EGL.functional.fence_sync.* = SKIP
