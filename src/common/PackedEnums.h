@@ -406,6 +406,11 @@ struct VertexArrayID
     GLuint value;
 };
 
+struct TransformFeedbackID
+{
+    GLuint value;
+};
+
 struct RenderbufferID
 {
     GLuint value;

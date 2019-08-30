@@ -894,6 +894,11 @@ void WriteParamValueToStream<ParamType::TVertexArrayID>(std::ostream &os, gl::Ve
 }
 
 template <>
+void WriteParamValueToStream<ParamType::TTransformFeedbackID>(std::ostream &os,
+                                                              gl::TransformFeedbackID value)
+{}
+
+template <>
 void WriteParamValueToStream<ParamType::TRenderbufferID>(std::ostream &os, gl::RenderbufferID value)
 {
     os << "gRenderbufferMap[" << value.value << "]";

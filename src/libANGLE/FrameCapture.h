@@ -284,6 +284,10 @@ template <>
 void WriteParamValueToStream<ParamType::TVertexArrayID>(std::ostream &os, gl::VertexArrayID value);
 
 template <>
+void WriteParamValueToStream<ParamType::TTransformFeedbackID>(std::ostream &os,
+                                                              gl::TransformFeedbackID value);
+
+template <>
 void WriteParamValueToStream<ParamType::TRenderbufferID>(std::ostream &os,
                                                          gl::RenderbufferID value);
 

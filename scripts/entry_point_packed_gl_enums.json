@@ -1598,5 +1598,29 @@
     },
     "glVertexArrayBindingDivisor": {
         "vaobj": "VertexArrayID"
+    },
+    "glDrawTransformFeedback": {
+        "id": "TransformFeedbackID"
+    },
+    "glDrawTransformFeedbackInstanced": {
+        "id": "TransformFeedbackID"
+    },
+    "glDrawTransformFeedbackStream": {
+        "id": "TransformFeedbackID"
+    },
+    "glDrawTransformFeedbackStreamInstanced": {
+        "id": "TransformFeedbackID"
+    },
+    "glBindTransformFeedback": {
+        "id": "TransformFeedbackID"
+    },
+    "glIsTransformFeedback": {
+        "id": "TransformFeedbackID"
+    },
+    "glGenTransformFeedbacks": {
+        "ids": "TransformFeedbackID *"
+    },
+    "glDeleteTransformFeedbacks": {
+        "ids": "const TransformFeedbackID *"
     }
 }
