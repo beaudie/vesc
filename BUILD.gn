@@ -540,10 +540,46 @@ if (angle_enable_vulkan) {
     defines = [
       "ANGLE_VK_LAYERS_DIR=\"$angle_data_dir\"",
       "ANGLE_VK_MOCK_ICD_JSON=\"$angle_data_dir/VkICD_mock_icd.json\"",
+      "ANGLE_VK_SWIFTSHADER_ICD_JSON=\"swiftshader/libvk_swiftshader_icd.json\"",
     ]
     if (is_android) {
       libs = [ "vulkan" ]
     }
+  }
+
+  copy("angle_swiftshader_icd_rename") {
+    sources = [
+      "$swiftshader_dir/src/Vulkan/vk_swiftshader_icd.json",
+    ]
+    outputs = [
+      "$root_gen_dir/angle/libvk_swiftshader_icd.json",
+    ]
+  }
+
+  action("angle_swiftshader_icd") {
+    deps = [
+      ":angle_swiftshader_icd_rename",
+    ]
+    script = "scripts/generate_vulkan_layers_json.py"
+    sources = [
+      "$root_gen_dir/angle/libvk_swiftshader_icd.json",
+      "third_party/vulkan-headers/src/include/vulkan/vulkan_core.h",
+    ]
+
+    outputs = [
+      "$root_out_dir/swiftshader/libvk_swiftshader_icd.json",
+    ]
+    data = outputs
+
+    _raw_sws_in = rebase_path("$root_gen_dir/angle", root_out_dir)
+    _raw_sws_out = rebase_path("$root_out_dir/swiftshader", root_out_dir)
+    args = [
+             "--icd",
+             "--subdir",
+             "swiftshader",
+             _raw_sws_in,
+             _raw_sws_out,
+           ] + rebase_path(sources, root_build_dir)
   }
 
   # Use this target to include everything ANGLE needs for Vulkan.
@@ -581,6 +617,11 @@ if (angle_enable_vulkan) {
         }
       }
     }
+
+    deps += [
+      ":angle_swiftshader_icd",
+      "$swiftshader_dir/src/Vulkan:swiftshader_libvulkan",
+    ]
   }
 }
 
