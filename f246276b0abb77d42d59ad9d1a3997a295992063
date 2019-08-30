@@ -22,6 +22,29 @@
       "revId": "f246276b0abb77d42d59ad9d1a3997a295992063",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d604b84c_9bef697e",
+        "filename": "src/tests/test_expectations/GPUTestConfig.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-30T16:38:09Z",
+      "side": 1,
+      "message": "some compilers are having issues with this. I think 32-bit configs might not be able to support uint64_t angle::BitSetTs. Maybe add the ParamT template variable to the angle::BitSet helper and default to size_t?",
+      "range": {
+        "startLine": 68,
+        "startChar": 63,
+        "endLine": 68,
+        "endChar": 71
+      },
+      "revId": "f246276b0abb77d42d59ad9d1a3997a295992063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
