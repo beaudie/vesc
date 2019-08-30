@@ -106,6 +106,7 @@ enum class ICD
 {
     Default,
     Mock,
+    SwiftShader,
 };
 
 // Abstracts error handling. Implemented by both ContextVk for GL and DisplayVk for EGL errors.
