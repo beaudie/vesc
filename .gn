@@ -17,7 +17,30 @@ buildconfig = "//build/config/BUILDCONFIG.gn"
 # matching these patterns (see "gn help label_pattern" for format) will have
 # their includes checked for proper dependencies when you run either
 # "gn check" or "gn gen --check".
-check_targets = [ "*" ]
+check_targets = [
+  "//build/*",
+  "//buildtools/*",
+  "//samples/*",
+  "//src/*",
+  "//testing/*",
+  "//third_party/glmark2/*",
+  "//third_party/glslang/src/*",
+  "//third_party/googletest/*",
+  "//third_party/jsoncpp/*",
+  "//third_party/libjpeg_turbo/*",
+  "//third_party/libpng/*",
+  "//third_party/minigbm/*",
+  "//third_party/rapidjson/*",
+  "//third_party/spirv-tools/src/*",
+
+  # "//third_party/SwiftShader/*", # Quite a few errors
+  "//third_party/vulkan-headers/*",
+  "//third_party/vulkan-loader/*",
+  "//third_party/vulkan-tools/*",
+  "//third_party/vulkan-validation-layers/*",
+  "//third_party/yasm/*",
+  "//third_party/zlib/*",
+]
 
 # These are the list of GN files that run exec_script. This whitelist exists
 # to force additional review for new uses of exec_script, which is strongly
