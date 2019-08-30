@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "c0846ede_e22a3471",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Framebuffer9.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-08-30T18:49:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d562caa_22517b55",
+      "range": {
+        "startLine": 247,
+        "startChar": 55,
+        "endLine": 247,
+        "endChar": 94
+      },
+      "revId": "1aa7d47084705ba0ed88c0553ab7df6960520f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "622a6d3f_6c378e0f",
         "filename": "src/libANGLE/renderer/d3d/d3d9/Framebuffer9.cpp",
         "patchSetId": 6
@@ -45,6 +69,30 @@
       "revId": "1aa7d47084705ba0ed88c0553ab7df6960520f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8772c2f9_1e8c83fb",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Framebuffer9.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-08-30T18:49:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "622a6d3f_6c378e0f",
+      "range": {
+        "startLine": 365,
+        "startChar": 67,
+        "endLine": 365,
+        "endChar": 92
+      },
+      "revId": "1aa7d47084705ba0ed88c0553ab7df6960520f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "0f8fc4a2_b264c301",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/Renderer9.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-08-30T18:49:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0e3c133_5aaa641c",
+      "range": {
+        "startLine": 1087,
+        "startChar": 43,
+        "endLine": 1087,
+        "endChar": 68
+      },
+      "revId": "1aa7d47084705ba0ed88c0553ab7df6960520f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4553c70c_8468748f",
         "filename": "src/libANGLE/renderer/d3d/d3d9/TextureStorage9.cpp",
         "patchSetId": 6
@@ -85,6 +157,24 @@
       "revId": "1aa7d47084705ba0ed88c0553ab7df6960520f8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51c75aa9_065db4db",
+        "filename": "src/libANGLE/renderer/d3d/d3d9/TextureStorage9.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-08-30T18:49:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4553c70c_8468748f",
+      "revId": "1aa7d47084705ba0ed88c0553ab7df6960520f8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
