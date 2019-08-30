@@ -562,4 +562,83 @@ const GPUTestConfig::ConditionArray &GPUTestConfig::getConditions() const
     return mConditions;
 }
 
+// Returns the name of a condition for GPUTestConfig debugging.
+const char *GetConditionName(GPUTestConfig::Condition condition)
+{
+    switch (condition)
+    {
+        case GPUTestConfig::kConditionNone:
+            return "NONE";
+        case GPUTestConfig::kConditionWinXP:
+            return "WINXP";
+        case GPUTestConfig::kConditionWinVista:
+            return "WINVISTA";
+        case GPUTestConfig::kConditionWin7:
+            return "WIN7";
+        case GPUTestConfig::kConditionWin8:
+            return "WIN8";
+        case GPUTestConfig::kConditionWin10:
+            return "WIN10";
+        case GPUTestConfig::kConditionWin:
+            return "WIN";
+        case GPUTestConfig::kConditionMacLeopard:
+            return "LEOPARD";
+        case GPUTestConfig::kConditionMacSnowLeopard:
+            return "SNOWLEOPARD";
+        case GPUTestConfig::kConditionMacLion:
+            return "LION";
+        case GPUTestConfig::kConditionMacMountainLion:
+            return "MOUNTAINLION";
+        case GPUTestConfig::kConditionMacMavericks:
+            return "MAVERICKS";
+        case GPUTestConfig::kConditionMacYosemite:
+            return "YOSEMITE";
+        case GPUTestConfig::kConditionMacElCapitan:
+            return "ELCAPITAN";
+        case GPUTestConfig::kConditionMacSierra:
+            return "SIERRA";
+        case GPUTestConfig::kConditionMacHighSierra:
+            return "HIGHSIERRA";
+        case GPUTestConfig::kConditionMacMojave:
+            return "MOJAVE";
+        case GPUTestConfig::kConditionMac:
+            return "MAC";
+        case GPUTestConfig::kConditionLinux:
+            return "LINUX";
+        case GPUTestConfig::kConditionAndroid:
+            return "ANDROID";
+        case GPUTestConfig::kConditionNVIDIA:
+            return "NVIDIA";
+        case GPUTestConfig::kConditionAMD:
+            return "AMD";
+        case GPUTestConfig::kConditionIntel:
+            return "INTEL";
+        case GPUTestConfig::kConditionVMWare:
+            return "VMWARE";
+        case GPUTestConfig::kConditionRelease:
+            return "RELEASE";
+        case GPUTestConfig::kConditionDebug:
+            return "DEBUG";
+        case GPUTestConfig::kConditionD3D9:
+            return "D3D9";
+        case GPUTestConfig::kConditionD3D11:
+            return "D3D11";
+        case GPUTestConfig::kConditionGLDesktop:
+            return "OPENGL";
+        case GPUTestConfig::kConditionGLES:
+            return "GLES";
+        case GPUTestConfig::kConditionVulkan:
+            return "VULKAN";
+        case GPUTestConfig::kConditionNexus5X:
+            return "NEXUS5X";
+        case GPUTestConfig::kConditionPixel2:
+            return "PIXEL2";
+        case GPUTestConfig::kConditionNVIDIAQuadroP400:
+            return "QUADROP400";
+        default:
+            UNREACHABLE();
+            return nullptr;
+    }
+}
+
 }  // namespace angle

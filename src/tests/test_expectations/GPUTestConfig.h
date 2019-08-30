@@ -7,7 +7,7 @@
 #ifndef TEST_EXPECTATIONS_GPU_TEST_CONFIG_H_
 #define TEST_EXPECTATIONS_GPU_TEST_CONFIG_H_
 
-#include <array>
+#include "common/bitset_utils.h"
 
 namespace angle
 {
@@ -65,16 +65,18 @@ struct GPUTestConfig
         kNumberOfConditions,
     };
 
-    typedef std::array<bool, GPUTestConfig::kNumberOfConditions> ConditionArray;
+    using ConditionArray = angle::BitSetT<kNumberOfConditions, uint64_t, Condition>;
 
     GPUTestConfig();
     GPUTestConfig(const API &api);
 
-    const GPUTestConfig::ConditionArray &getConditions() const;
+    const ConditionArray &getConditions() const;
 
   protected:
-    GPUTestConfig::ConditionArray mConditions;
+    ConditionArray mConditions;
 };
+
+const char *GetConditionName(GPUTestConfig::Condition condition);
 
 }  // namespace angle
 

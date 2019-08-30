@@ -263,6 +263,12 @@ void dEQPCaseList::initialize()
 
     GPUTestConfig testConfig = GPUTestConfig(api);
 
+    std::cout << "Using test config with:" << std::endl;
+    for (GPUTestConfig::Condition condition : testConfig.getConditions())
+    {
+        std::cout << " - " << GetConditionName(condition) << std::endl;
+    }
+
     if (!mTestExpectationsParser.loadTestExpectationsFromFile(testConfig,
                                                               testExpectationsPath.value()))
     {
