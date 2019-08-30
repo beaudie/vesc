@@ -314,7 +314,8 @@ class State : angle::NonCopyable
                !curTransformFeedback->isPaused();
     }
 
-    bool removeTransformFeedbackBinding(const Context *context, GLuint transformFeedback);
+    bool removeTransformFeedbackBinding(const Context *context,
+                                        TransformFeedbackID transformFeedback);
 
     // Query binding manipulation
     bool isQueryActive(QueryType type) const;

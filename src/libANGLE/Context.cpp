@@ -453,7 +453,7 @@ void Context::initialize()
         // In the initial state, a default transform feedback object is bound and treated as
         // a transform feedback object with a name of zero. That object is bound any time
         // BindTransformFeedback is called with id of zero
-        bindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
+        bindTransformFeedback(GL_TRANSFORM_FEEDBACK, {0});
     }
 
     for (auto type : angle::AllEnums<BufferBinding>())
@@ -987,7 +987,7 @@ Sampler *Context::getSampler(SamplerID handle) const
     return mState.mSamplerManager->getSampler(handle);
 }
 
-TransformFeedback *Context::getTransformFeedback(GLuint handle) const
+TransformFeedback *Context::getTransformFeedback(TransformFeedbackID handle) const
 {
     return mTransformFeedbackMap.query(handle);
 }
@@ -1012,7 +1012,7 @@ gl::LabeledObject *Context::getLabeledObject(GLenum identifier, GLuint name) con
         case GL_QUERY:
             return getQuery({name});
         case GL_TRANSFORM_FEEDBACK:
-            return getTransformFeedback(name);
+            return getTransformFeedback({name});
         case GL_SAMPLER:
             return getSampler({name});
         case GL_TEXTURE:
@@ -1171,7 +1171,7 @@ void Context::useProgramStages(ProgramPipelineID pipeline,
     UNIMPLEMENTED();
 }
 
-void Context::bindTransformFeedback(GLenum target, GLuint transformFeedbackHandle)
+void Context::bindTransformFeedback(GLenum target, TransformFeedbackID transformFeedbackHandle)
 {
     ASSERT(target == GL_TRANSFORM_FEEDBACK);
     TransformFeedback *transformFeedback =
@@ -2756,7 +2756,8 @@ VertexArray *Context::checkVertexArrayAllocation(VertexArrayID vertexArrayHandle
     return vertexArray;
 }
 
-TransformFeedback *Context::checkTransformFeedbackAllocation(GLuint transformFeedbackHandle)
+TransformFeedback *Context::checkTransformFeedbackAllocation(
+    TransformFeedbackID transformFeedbackHandle)
 {
     // Only called after a prior call to Gen.
     TransformFeedback *transformFeedback = getTransformFeedback(transformFeedbackHandle);
@@ -2777,9 +2778,9 @@ bool Context::isVertexArrayGenerated(VertexArrayID vertexArray)
     return mVertexArrayMap.contains(vertexArray);
 }
 
-bool Context::isTransformFeedbackGenerated(GLuint transformFeedback)
+bool Context::isTransformFeedbackGenerated(TransformFeedbackID transformFeedback)
 {
-    ASSERT(mTransformFeedbackMap.contains(0));
+    ASSERT(mTransformFeedbackMap.contains({0}));
     return mTransformFeedbackMap.contains(transformFeedback);
 }
 
@@ -2847,7 +2848,7 @@ void Context::detachVertexArray(VertexArrayID vertexArray)
     }
 }
 
-void Context::detachTransformFeedback(GLuint transformFeedback)
+void Context::detachTransformFeedback(TransformFeedbackID transformFeedback)
 {
     // Transform feedback detachment is handled by Context, because 0 is a valid
     // transform feedback, and a pointer to it must be passed from Context to State at
@@ -2858,7 +2859,7 @@ void Context::detachTransformFeedback(GLuint transformFeedback)
     // VAOs and FBOs and set the current bound transform feedback back to 0.
     if (mState.removeTransformFeedbackBinding(this, transformFeedback))
     {
-        bindTransformFeedback(GL_TRANSFORM_FEEDBACK, 0);
+        bindTransformFeedback(GL_TRANSFORM_FEEDBACK, {0});
     }
 }
 
@@ -6835,12 +6836,12 @@ void Context::getTransformFeedbackVarying(ShaderProgramID program,
     programObject->getTransformFeedbackVarying(index, bufSize, length, size, type, name);
 }
 
-void Context::deleteTransformFeedbacks(GLsizei n, const GLuint *ids)
+void Context::deleteTransformFeedbacks(GLsizei n, const TransformFeedbackID *ids)
 {
     for (int i = 0; i < n; i++)
     {
-        GLuint transformFeedback = ids[i];
-        if (transformFeedback == 0)
+        TransformFeedbackID transformFeedback = ids[i];
+        if (transformFeedback.value == 0)
         {
             continue;
         }
@@ -6854,24 +6855,24 @@ void Context::deleteTransformFeedbacks(GLsizei n, const GLuint *ids)
                 transformFeedbackObject->release(this);
             }
 
-            mTransformFeedbackHandleAllocator.release(transformFeedback);
+            mTransformFeedbackHandleAllocator.release(transformFeedback.value);
         }
     }
 }
 
-void Context::genTransformFeedbacks(GLsizei n, GLuint *ids)
+void Context::genTransformFeedbacks(GLsizei n, TransformFeedbackID *ids)
 {
     for (int i = 0; i < n; i++)
     {
-        GLuint transformFeedback = mTransformFeedbackHandleAllocator.allocate();
+        TransformFeedbackID transformFeedback = {mTransformFeedbackHandleAllocator.allocate()};
         mTransformFeedbackMap.assign(transformFeedback, nullptr);
         ids[i] = transformFeedback;
     }
 }
 
-GLboolean Context::isTransformFeedback(GLuint id)
+GLboolean Context::isTransformFeedback(TransformFeedbackID id)
 {
-    if (id == 0)
+    if (id.value == 0)
     {
         // The 3.0.4 spec [section 6.1.11] states that if ID is zero, IsTransformFeedback
         // returns FALSE
