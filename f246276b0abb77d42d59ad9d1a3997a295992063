@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c5904fb5_21e5cc6f",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-08-30T16:17:16Z",
+      "side": 1,
+      "message": "Can you add this to GPUTestExpectationsParser.h instead and just loop over the kTokenData array to get the names? Would avoid this duplication.",
+      "range": {
+        "startLine": 566,
+        "startChar": 12,
+        "endLine": 566,
+        "endChar": 28
+      },
+      "revId": "f246276b0abb77d42d59ad9d1a3997a295992063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
