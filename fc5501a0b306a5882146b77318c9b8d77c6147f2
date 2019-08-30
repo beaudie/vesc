@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b753f5fa_46af4a1d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-30T16:51:07Z",
+      "side": 1,
+      "message": "nit: types before members\n\nhttps://google.github.io/styleguide/cppguide.html#Declaration_Order",
+      "range": {
+        "startLine": 243,
+        "startChar": 0,
+        "endLine": 269,
+        "endChar": 0
+      },
+      "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "830efdfb_51344e4d",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-30T16:51:07Z",
+      "side": 1,
+      "message": "Thanks for documenting this.",
+      "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9cf811c4_ca5944b4",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-30T16:51:07Z",
+      "side": 1,
+      "message": "Be careful about passive voice. Who is pacing the CPU? ANGLE?",
+      "range": {
+        "startLine": 44,
+        "startChar": 22,
+        "endLine": 44,
+        "endChar": 43
+      },
+      "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c1c897e_8cc14682",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-30T16:51:07Z",
+      "side": 1,
+      "message": "consider rewording. It\u0027s not clear why an application\u0027s size is relevant. Maybe \"While the above is accurate for most use cases, the queue length in the example is likely to be about n+2, where n is the number of swapchain images.\"\n\nYMMV",
+      "range": {
+        "startLine": 52,
+        "startChar": 2,
+        "endLine": 53,
+        "endChar": 65
+      },
+      "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3817bd9c_a6399447",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-30T16:51:07Z",
+      "side": 1,
+      "message": "I\u0027d change this to \"there\u0027s no feedback (see [internal Khronos Issue])",
+      "range": {
+        "startLine": 63,
+        "startChar": 51,
+        "endLine": 63,
+        "endChar": 100
+      },
+      "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4a1bed1_8945c780",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-08-30T16:51:07Z",
+      "side": 1,
+      "message": "this didn\u0027t come through as a correct link, check spelling.",
+      "range": {
+        "startLine": 69,
+        "startChar": 66,
+        "endLine": 69,
+        "endChar": 88
+      },
+      "revId": "fc5501a0b306a5882146b77318c9b8d77c6147f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
