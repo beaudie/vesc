@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "87c329cf_30e590f0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1576,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-08-30T17:45:48Z",
+      "side": 1,
+      "message": "Yup, that\u0027s what I\u0027m looking at.",
+      "parentUuid": "ba96d05d_3d3b7e0a",
+      "range": {
+        "startLine": 1576,
+        "startChar": 5,
+        "endLine": 1576,
+        "endChar": 67
+      },
+      "revId": "65a71c53215b434ae98eecdb1166f14253993cf8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "62c153a8_7ba922be",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 10
