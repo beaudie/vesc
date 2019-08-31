@@ -294,7 +294,19 @@ angle::Result ContextGL::drawArraysInstancedBaseInstance(const gl::Context *cont
                                                          GLsizei instanceCount,
                                                          GLuint baseInstance)
 {
-    return drawArraysInstanced(context, mode, first, count, instanceCount);
+    // return drawArraysInstanced(context, mode, first, count, instanceCount);
+    GLsizei adjustedInstanceCount = instanceCount;
+    const gl::Program *program    = context->getState().getProgram();
+    if (program->usesMultiview())
+    {
+        adjustedInstanceCount *= program->getNumViews();
+    }
+
+    ANGLE_TRY(setDrawArraysState(context, first, count, adjustedInstanceCount));
+    // GLES ?????
+    getFunctions()->drawArraysInstancedBaseInstance(ToGLenum(mode), first, count,
+                                                    adjustedInstanceCount, baseInstance);
+    return angle::Result::Continue;
 }
 
 angle::Result ContextGL::drawElements(const gl::Context *context,
@@ -366,10 +378,14 @@ angle::Result ContextGL::drawElementsInstancedBaseVertexBaseInstance(const gl::C
 
     const FunctionsGL *functions = getFunctions();
 
-    // GLES 3.2+ or GL 3.2+
-    // or GL_OES_draw_elements_base_vertex / GL_EXT_draw_elements_base_vertex
-    functions->drawElementsInstancedBaseVertex(ToGLenum(mode), count, ToGLenum(type),
-                                               drawIndexPointer, adjustedInstanceCount, baseVertex);
+    // GLES 3.2+ ??? or GL 4.2+
+    // or GL_EXT_base_instance
+    functions->drawElementsInstancedBaseVertexBaseInstance(ToGLenum(mode), count, ToGLenum(type),
+                                                           drawIndexPointer, adjustedInstanceCount,
+                                                           baseVertex, baseInstance);
+    // functions->drawElementsInstancedBaseVertex(ToGLenum(mode), count, ToGLenum(type),
+    //                                            drawIndexPointer, adjustedInstanceCount,
+    //                                            baseVertex);
 
     return angle::Result::Continue;
 }
