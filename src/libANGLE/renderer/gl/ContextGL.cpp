@@ -294,7 +294,96 @@ angle::Result ContextGL::drawArraysInstancedBaseInstance(const gl::Context *cont
                                                          GLsizei instanceCount,
                                                          GLuint baseInstance)
 {
-    return drawArraysInstanced(context, mode, first, count, instanceCount);
+    GLsizei adjustedInstanceCount = instanceCount;
+    const gl::Program *program    = context->getState().getProgram();
+    if (program->usesMultiview())
+    {
+        adjustedInstanceCount *= program->getNumViews();
+    }
+
+    ANGLE_TRY(setDrawArraysState(context, first, count, adjustedInstanceCount));
+
+    const FunctionsGL *functions = getFunctions();
+
+    if (functions->drawArraysInstancedBaseInstance)
+    {
+        // GL 4.2+ or GL_EXT_base_instance
+        functions->drawArraysInstancedBaseInstance(ToGLenum(mode), first, count,
+                                                   adjustedInstanceCount, baseInstance);
+    }
+    else
+    {
+        // GL 3.3+ or GLES 3.2+
+        // TODO(shrekshao): This is a temporary solution by setting and resetting pointer offset
+        // calling vertexAttribPointer
+        // Will refactor stateCache and pass baseInstance to setDrawArraysState to set pointer
+        // offset
+        GLuint bufferIDToRebind = getStateManager()->getBufferID(gl::BufferBinding::Array);
+        std::map<size_t, const void *> attribPointersToReset;
+        if (baseInstance != 0)
+        {
+            const auto &attribs  = mState.getVertexArray()->getVertexAttributes();
+            const auto &bindings = mState.getVertexArray()->getVertexBindings();
+            for (size_t attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; attribIndex++)
+            {
+                const gl::VertexAttribute &attrib = attribs[attribIndex];
+                const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];
+                if (program->isAttribLocationActive(attribIndex) && binding.getDivisor() != 0)
+                {
+                    attribPointersToReset.emplace(attribIndex, attrib.pointer);
+                    const char *p          = static_cast<const char *>(attrib.pointer);
+                    const void *newPointer = p + attrib.format->pixelBytes * baseInstance;
+
+                    getStateManager()->bindBuffer(
+                        gl::BufferBinding::Array,
+                        GetImplAs<BufferGL>(binding.getBuffer().get())->getBufferID());
+                    if (attrib.format->isPureInt())
+                    {
+                        functions->vertexAttribIPointer(
+                            (GLuint)attribIndex, attrib.format->channelCount,
+                            gl::ToGLenum(attrib.format->vertexAttribType),
+                            attrib.vertexAttribArrayStride, newPointer);
+                    }
+                    else
+                    {
+                        functions->vertexAttribPointer(
+                            (GLuint)attribIndex, attrib.format->channelCount,
+                            gl::ToGLenum(attrib.format->vertexAttribType), attrib.format->isNorm(),
+                            attrib.vertexAttribArrayStride, newPointer);
+                    }
+                }
+            }
+        }
+
+        functions->drawArraysInstanced(ToGLenum(mode), first, count, adjustedInstanceCount);
+
+        for (auto &p : attribPointersToReset)
+        {
+            const gl::VertexAttribute &attrib =
+                mState.getVertexArray()->getVertexAttributes()[p.first];
+            const gl::VertexBinding &binding =
+                (mState.getVertexArray()->getVertexBindings())[attrib.bindingIndex];
+            getStateManager()->bindBuffer(
+                gl::BufferBinding::Array,
+                GetImplAs<BufferGL>(binding.getBuffer().get())->getBufferID());
+            if (attrib.format->isPureInt())
+            {
+                functions->vertexAttribIPointer((GLuint)p.first, attrib.format->channelCount,
+                                                gl::ToGLenum(attrib.format->vertexAttribType),
+                                                attrib.vertexAttribArrayStride, p.second);
+            }
+            else
+            {
+                functions->vertexAttribPointer((GLuint)p.first, attrib.format->channelCount,
+                                               gl::ToGLenum(attrib.format->vertexAttribType),
+                                               attrib.format->isNorm(),
+                                               attrib.vertexAttribArrayStride, p.second);
+            }
+        }
+        getStateManager()->bindBuffer(gl::BufferBinding::Array, bufferIDToRebind);
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result ContextGL::drawElements(const gl::Context *context,
@@ -366,10 +455,83 @@ angle::Result ContextGL::drawElementsInstancedBaseVertexBaseInstance(const gl::C
 
     const FunctionsGL *functions = getFunctions();
 
-    // GLES 3.2+ or GL 3.2+
-    // or GL_OES_draw_elements_base_vertex / GL_EXT_draw_elements_base_vertex
-    functions->drawElementsInstancedBaseVertex(ToGLenum(mode), count, ToGLenum(type),
-                                               drawIndexPointer, adjustedInstanceCount, baseVertex);
+    if (functions->drawElementsInstancedBaseVertexBaseInstance)
+    {
+        // GL 4.2+ or GL_EXT_base_instance
+        functions->drawElementsInstancedBaseVertexBaseInstance(
+            ToGLenum(mode), count, ToGLenum(type), drawIndexPointer, adjustedInstanceCount,
+            baseVertex, baseInstance);
+    }
+    else
+    {
+        // GL 3.3+ or GLES 3.2+
+        // TODO(shrekshao): same as above
+        GLuint bufferIDToRebind = getStateManager()->getBufferID(gl::BufferBinding::Array);
+        std::map<size_t, const void *> attribPointersToReset;
+        if (baseInstance != 0)
+        {
+            const auto &attribs  = mState.getVertexArray()->getVertexAttributes();
+            const auto &bindings = mState.getVertexArray()->getVertexBindings();
+            for (size_t attribIndex = 0; attribIndex < gl::MAX_VERTEX_ATTRIBS; attribIndex++)
+            {
+                const gl::VertexAttribute &attrib = attribs[attribIndex];
+                const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];
+                if (program->isAttribLocationActive(attribIndex) && binding.getDivisor() != 0)
+                {
+                    attribPointersToReset.emplace(attribIndex, attrib.pointer);
+
+                    const char *p          = static_cast<const char *>(attrib.pointer);
+                    const void *newPointer = p + attrib.format->pixelBytes * baseInstance;
+                    getStateManager()->bindBuffer(
+                        gl::BufferBinding::Array,
+                        GetImplAs<BufferGL>(binding.getBuffer().get())->getBufferID());
+                    if (attrib.format->isPureInt())
+                    {
+                        functions->vertexAttribIPointer(
+                            (GLuint)attribIndex, attrib.format->channelCount,
+                            gl::ToGLenum(attrib.format->vertexAttribType),
+                            attrib.vertexAttribArrayStride, newPointer);
+                    }
+                    else
+                    {
+                        functions->vertexAttribPointer(
+                            (GLuint)attribIndex, attrib.format->channelCount,
+                            gl::ToGLenum(attrib.format->vertexAttribType), attrib.format->isNorm(),
+                            attrib.vertexAttribArrayStride, newPointer);
+                    }
+                }
+            }
+        }
+
+        functions->drawElementsInstancedBaseVertex(ToGLenum(mode), count, ToGLenum(type),
+                                                   drawIndexPointer, adjustedInstanceCount,
+                                                   baseVertex);
+
+        for (auto &p : attribPointersToReset)
+        {
+            const gl::VertexAttribute &attrib =
+                mState.getVertexArray()->getVertexAttributes()[p.first];
+            const gl::VertexBinding &binding =
+                (mState.getVertexArray()->getVertexBindings())[attrib.bindingIndex];
+            getStateManager()->bindBuffer(
+                gl::BufferBinding::Array,
+                GetImplAs<BufferGL>(binding.getBuffer().get())->getBufferID());
+            if (attrib.format->isPureInt())
+            {
+                functions->vertexAttribIPointer((GLuint)p.first, attrib.format->channelCount,
+                                                gl::ToGLenum(attrib.format->vertexAttribType),
+                                                attrib.vertexAttribArrayStride, p.second);
+            }
+            else
+            {
+                functions->vertexAttribPointer((GLuint)p.first, attrib.format->channelCount,
+                                               gl::ToGLenum(attrib.format->vertexAttribType),
+                                               attrib.format->isNorm(),
+                                               attrib.vertexAttribArrayStride, p.second);
+            }
+        }
+        getStateManager()->bindBuffer(gl::BufferBinding::Array, bufferIDToRebind);
+    }
 
     return angle::Result::Continue;
 }
