@@ -1435,7 +1435,8 @@ angle::Result Renderer11::drawArrays(const gl::Context *context,
                                      gl::PrimitiveMode mode,
                                      GLint firstVertex,
                                      GLsizei vertexCount,
-                                     GLsizei instanceCount)
+                                     GLsizei instanceCount,
+                                     GLuint baseInstance)
 {
     if (mStateManager.getCullEverything())
     {
@@ -1479,7 +1480,7 @@ angle::Result Renderer11::drawArrays(const gl::Context *context,
                 // D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST and DrawIndexedInstanced is called instead.
                 if (adjustedInstanceCount == 0)
                 {
-                    mDeviceContext->DrawIndexedInstanced(6, clampedVertexCount, 0, 0, 0);
+                    mDeviceContext->DrawIndexedInstanced(6, clampedVertexCount, 0, 0, baseInstance);
                     return angle::Result::Continue;
                 }
 
@@ -1493,7 +1494,7 @@ angle::Result Renderer11::drawArrays(const gl::Context *context,
                 {
                     ANGLE_TRY(mStateManager.updateVertexOffsetsForPointSpritesEmulation(
                         context, firstVertex, i));
-                    mDeviceContext->DrawIndexedInstanced(6, clampedVertexCount, 0, 0, 0);
+                    mDeviceContext->DrawIndexedInstanced(6, clampedVertexCount, 0, 0, baseInstance);
                 }
 
                 // This required by updateVertexOffsets... above but is outside of the loop for
@@ -1513,7 +1514,7 @@ angle::Result Renderer11::drawArrays(const gl::Context *context,
     }
     else
     {
-        mDeviceContext->DrawInstanced(clampedVertexCount, adjustedInstanceCount, 0, 0);
+        mDeviceContext->DrawInstanced(clampedVertexCount, adjustedInstanceCount, 0, baseInstance);
     }
     return angle::Result::Continue;
 }

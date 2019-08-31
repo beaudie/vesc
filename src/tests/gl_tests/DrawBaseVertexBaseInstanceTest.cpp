@@ -133,6 +133,8 @@ class DrawBaseVertexBaseInstanceTest
                 mRegularIndices[oi + j] = mIndices[j] + ov;
             }
         }
+
+        std::iota(mInstancedArrayId.begin(), mInstancedArrayId.end(), 0.0f);
     }
 
     void SetUp() override { ANGLETestBase::ANGLETestSetUp(); }
@@ -162,13 +164,17 @@ class DrawBaseVertexBaseInstanceTest
                << "#define kCountY " << kCountY << "\n"
                << R"(
 in vec2 vPosition;
+)" << (useBaseInstanceBuiltin() ? "" : "in float vInstanceID;")
+               << R"(
 out vec4 color;
 void main()
 {
     const float xStep = 1.0 / float(kCountX);
     const float yStep = 1.0 / float(kCountY);
-    float x_id = float(gl_InstanceID)"
-               << (useBaseInstanceBuiltin() ? " + gl_BaseInstance" : "") << R"();
+    float x_id = )"
+               << (useBaseInstanceBuiltin() ? " float(gl_InstanceID + gl_BaseInstance);"
+                                            : "vInstanceID;")
+               << R"(
     float y_id = floor(float(gl_VertexID) / )"
                << (isDrawArrays ? "6.0" : "4.0") << R"( + 0.01);
 
@@ -209,6 +215,10 @@ void main()
         ASSERT_TRUE(program.valid());
         glUseProgram(program.get());
         mPositionLoc = glGetAttribLocation(program.get(), "vPosition");
+        if (!useBaseInstanceBuiltin())
+        {
+            mInstanceIDLoc = glGetAttribLocation(program.get(), "vInstanceID");
+        }
     }
 
     void setupNonIndexedBuffers(GLBuffer &vertexBuffer)
@@ -233,6 +243,15 @@ void main()
         ASSERT_GL_NO_ERROR();
     }
 
+    void setupInstanceIDBuffer(GLBuffer &instanceIDBuffer)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, instanceIDBuffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * mInstancedArrayId.size(),
+                     mInstancedArrayId.data(), GL_STATIC_DRAW);
+
+        ASSERT_GL_NO_ERROR();
+    }
+
     void setupRegularIndexedBuffer(GLBuffer &indexBuffer)
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -242,53 +261,37 @@ void main()
         ASSERT_GL_NO_ERROR();
     }
 
-    void doDrawCommons()
+    void setupPositionVertexAttribPointer()
     {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnableVertexAttribArray(mPositionLoc);
         glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
-    void doVertexAttribDivisor(GLint location, GLuint divisor)
+    void setupInstanceIDVertexAttribPointer()
     {
-        if (getClientMajorVersion() <= 2)
-        {
-            ASSERT_TRUE(IsGLExtensionEnabled("GL_ANGLE_instanced_arrays"));
-            glVertexAttribDivisorANGLE(location, divisor);
-        }
-        else
-        {
-            glVertexAttribDivisor(location, divisor);
-        }
+        glEnableVertexAttribArray(mInstanceIDLoc);
+        glVertexAttribPointer(mInstanceIDLoc, 1, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribDivisor(mInstanceIDLoc, 1);
     }
 
     void doDrawArraysInstancedBaseInstance()
     {
-        doDrawCommons();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         const uint32_t countPerDraw = kCountY * 6;
 
-        if (useBaseInstanceBuiltin())
+        for (uint32_t i = 0; i < kCountX; i += 2)
         {
-            for (uint32_t i = 0; i < kCountX; i += 2)
-            {
-                glDrawArraysInstancedBaseInstanceANGLE(GL_TRIANGLES, 0, countPerDraw, 2, i);
-            }
-        }
-        else
-        {
-            glDrawArraysInstancedBaseInstanceANGLE(GL_TRIANGLES, 0, countPerDraw, kCountX, 0);
+            glDrawArraysInstancedBaseInstanceANGLE(GL_TRIANGLES, 0, countPerDraw, 2, i);
         }
     }
 
     void doMultiDrawArraysInstancedBaseInstance()
     {
-        doDrawCommons();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         const uint32_t countPerDraw = kCountY * 6;
 
-        if (useBaseInstanceBuiltin())
-        {
             const GLsizei drawCount = kCountX;
             const std::vector<GLsizei> counts(drawCount, countPerDraw);
             const std::vector<GLsizei> firsts(drawCount, 0);
@@ -301,43 +304,22 @@ void main()
             glMultiDrawArraysInstancedBaseInstanceANGLE(GL_TRIANGLES, drawCount, counts.data(),
                                                         instanceCounts.data(), firsts.data(),
                                                         baseInstances.data());
-        }
-        else
-        {
-            const GLsizei drawCount = 1;
-            const std::vector<GLsizei> counts(drawCount, countPerDraw);
-            const std::vector<GLsizei> firsts(drawCount, 0);
-            const std::vector<GLsizei> instanceCounts(drawCount, kCountX);
-            const std::vector<GLuint> baseInstances(drawCount, 0);
-            glMultiDrawArraysInstancedBaseInstanceANGLE(GL_TRIANGLES, drawCount, counts.data(),
-                                                        instanceCounts.data(), firsts.data(),
-                                                        baseInstances.data());
-        }
     }
 
     void doDrawElementsInstancedBaseVertexBaseInstance()
     {
-        doDrawCommons();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         const uint32_t countPerDraw = 6;
 
         for (uint32_t v = 0; v < kCountY; v++)
         {
-            if (useBaseInstanceBuiltin())
-            {
                 for (uint32_t i = 0; i < kCountX; i += 2)
                 {
                     glDrawElementsInstancedBaseVertexBaseInstanceANGLE(
                         GL_TRIANGLES, countPerDraw, GL_UNSIGNED_SHORT,
                         reinterpret_cast<GLvoid *>(static_cast<uintptr_t>(0)), 2, v * 4, i);
                 }
-            }
-            else
-            {
-                glDrawElementsInstancedBaseVertexBaseInstanceANGLE(
-                    GL_TRIANGLES, countPerDraw, GL_UNSIGNED_SHORT,
-                    reinterpret_cast<GLvoid *>(static_cast<uintptr_t>(0)), kCountX, v * 4, 0);
-            }
         }
     }
 
@@ -345,63 +327,42 @@ void main()
     // BaseInstance are reset to zero
     void doDrawArraysBaseInstanceReset()
     {
-        doDrawCommons();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 6 * kCountY);
     }
 
     void doDrawElementsBaseVertexBaseInstanceReset()
     {
-        doDrawCommons();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawElements(GL_TRIANGLES, 6 * kCountY, GL_UNSIGNED_SHORT,
                        reinterpret_cast<GLvoid *>(static_cast<uintptr_t>(0)));
     }
 
     void doMultiDrawElementsInstancedBaseVertexBaseInstance()
     {
-        doDrawCommons();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        if (useBaseInstanceBuiltin())
+        const GLsizei drawCount = kCountX * kCountY / 2;
+        const std::vector<GLsizei> counts(drawCount, 6);
+        const std::vector<GLsizei> instanceCounts(drawCount, 2);
+        const std::vector<GLvoid *> indices(drawCount, 0);
+        std::vector<GLint> baseVertices(drawCount);
+        std::vector<GLuint> baseInstances(drawCount);
+
+        GLsizei b = 0;
+        for (uint32_t v = 0; v < kCountY; v++)
         {
-            const GLsizei drawCount = kCountX * kCountY / 2;
-            const std::vector<GLsizei> counts(drawCount, 6);
-            const std::vector<GLsizei> instanceCounts(drawCount, 2);
-            const std::vector<GLvoid *> indices(drawCount, 0);
-            std::vector<GLint> baseVertices(drawCount);
-            std::vector<GLuint> baseInstances(drawCount);
-
-            GLsizei b = 0;
-            for (uint32_t v = 0; v < kCountY; v++)
+            for (uint32_t i = 0; i < kCountX; i += 2)
             {
-                for (uint32_t i = 0; i < kCountX; i += 2)
-                {
-                    baseVertices[b]  = v * 4;
-                    baseInstances[b] = i;
-                    b++;
-                }
+                baseVertices[b]  = v * 4;
+                baseInstances[b] = i;
+                b++;
+            }
             }
 
             glMultiDrawElementsInstancedBaseVertexBaseInstanceANGLE(
                 GL_TRIANGLES, GL_UNSIGNED_SHORT, drawCount, counts.data(), instanceCounts.data(),
                 indices.data(), baseVertices.data(), baseInstances.data());
-        }
-        else
-        {
-            const GLsizei drawCount = kCountY;
-            const std::vector<GLsizei> counts(drawCount, 6);
-            const std::vector<GLsizei> instanceCounts(drawCount, kCountX);
-            const std::vector<GLvoid *> indices(drawCount, 0);
-            std::vector<GLint> baseVertices(drawCount);
-            const std::vector<GLuint> baseInstances(drawCount, 0);
-
-            for (uint32_t v = 0; v < drawCount; v++)
-            {
-                baseVertices[v] = v * 4;
-            }
-
-            glMultiDrawElementsInstancedBaseVertexBaseInstanceANGLE(
-                GL_TRIANGLES, GL_UNSIGNED_SHORT, drawCount, counts.data(), instanceCounts.data(),
-                indices.data(), baseVertices.data(), baseInstances.data());
-        }
     }
 
     void checkDrawResult(bool hasBaseVertex, bool oneColumn = false)
@@ -474,9 +435,12 @@ void main()
     std::vector<GLushort> mIndices;
     std::vector<GLfloat> mVertices;
     std::vector<GLfloat> mNonIndexedVertices;
+    // Used when gl_BaseInstance is not used
+    std::array<GLfloat, kCountX> mInstancedArrayId;
     // Used for regular draw calls without base vertex base instance
     std::vector<GLushort> mRegularIndices;
     GLint mPositionLoc;
+    GLint mInstanceIDLoc;
 };
 
 // Tests that compile a program with the extension succeeds
@@ -513,10 +477,21 @@ TEST_P(DrawBaseVertexBaseInstanceTest, DrawArraysInstancedBaseInstance)
     }
 
     ANGLE_SKIP_TEST_IF(!requestExtensions());
-    GLBuffer vertexBuffer;
-    setupNonIndexedBuffers(vertexBuffer);
+
     GLProgram program;
     setupProgram(program, true);
+
+    GLBuffer vertexBuffer;
+    setupNonIndexedBuffers(vertexBuffer);
+    setupPositionVertexAttribPointer();
+
+    GLBuffer instanceIDBuffer;
+    if (!useBaseInstanceBuiltin())
+    {
+        setupInstanceIDBuffer(instanceIDBuffer);
+        setupInstanceIDVertexAttribPointer();
+    }
+
     doDrawArraysInstancedBaseInstance();
     EXPECT_GL_NO_ERROR();
     checkDrawResult(false);
@@ -538,10 +513,21 @@ TEST_P(DrawBaseVertexBaseInstanceTest, MultiDrawArraysInstancedBaseInstance)
     }
 
     ANGLE_SKIP_TEST_IF(!requestExtensions());
-    GLBuffer vertexBuffer;
-    setupNonIndexedBuffers(vertexBuffer);
+
     GLProgram program;
     setupProgram(program, true, true);
+
+    GLBuffer vertexBuffer;
+    setupNonIndexedBuffers(vertexBuffer);
+    setupPositionVertexAttribPointer();
+
+    GLBuffer instanceIDBuffer;
+    if (!useBaseInstanceBuiltin())
+    {
+        setupInstanceIDBuffer(instanceIDBuffer);
+        setupInstanceIDVertexAttribPointer();
+    }
+
     doMultiDrawArraysInstancedBaseInstance();
     EXPECT_GL_NO_ERROR();
     checkDrawResult(false);
@@ -554,11 +540,22 @@ TEST_P(DrawBaseVertexBaseInstanceTest, MultiDrawArraysInstancedBaseInstance)
 TEST_P(DrawBaseVertexBaseInstanceTest, DrawElementsInstancedBaseVertexBaseInstance)
 {
     ANGLE_SKIP_TEST_IF(!requestExtensions());
+
+    GLProgram program;
+    setupProgram(program, false);
+
     GLBuffer indexBuffer;
     GLBuffer vertexBuffer;
     setupIndexedBuffers(vertexBuffer, indexBuffer);
-    GLProgram program;
-    setupProgram(program, false);
+    setupPositionVertexAttribPointer();
+
+    GLBuffer instanceIDBuffer;
+    if (!useBaseInstanceBuiltin())
+    {
+        setupInstanceIDBuffer(instanceIDBuffer);
+        setupInstanceIDVertexAttribPointer();
+    }
+
     doDrawElementsInstancedBaseVertexBaseInstance();
     EXPECT_GL_NO_ERROR();
     checkDrawResult(true);
@@ -573,11 +570,22 @@ TEST_P(DrawBaseVertexBaseInstanceTest, DrawElementsInstancedBaseVertexBaseInstan
 TEST_P(DrawBaseVertexBaseInstanceTest, MultiDrawElementsInstancedBaseVertexBaseInstance)
 {
     ANGLE_SKIP_TEST_IF(!requestExtensions());
+
+    GLProgram program;
+    setupProgram(program, false, true);
+
     GLBuffer indexBuffer;
     GLBuffer vertexBuffer;
     setupIndexedBuffers(vertexBuffer, indexBuffer);
-    GLProgram program;
-    setupProgram(program, false, true);
+    setupPositionVertexAttribPointer();
+
+    GLBuffer instanceIDBuffer;
+    if (!useBaseInstanceBuiltin())
+    {
+        setupInstanceIDBuffer(instanceIDBuffer);
+        setupInstanceIDVertexAttribPointer();
+    }
+
     doMultiDrawElementsInstancedBaseVertexBaseInstance();
     EXPECT_GL_NO_ERROR();
     checkDrawResult(true);
