@@ -753,7 +753,7 @@ class ImageHelper final : public CommandGraphResource
                      const VkImageSubresourceLayers &dstSubresources,
                      vk::CommandBuffer *commandBuffer);
 
-    angle::Result generateMipmapsWithBlit(ContextVk *contextVk, GLuint maxLevel);
+    angle::Result generateMipmapsWithBlit(ContextVk *contextVk, GLuint maxLevel, VkFilter filter);
 
     // Resolve this image into a destination image.  This image should be in the TransferSrc layout.
     // The destination image is automatically transitioned into TransferDst.

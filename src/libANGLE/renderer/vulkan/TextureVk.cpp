@@ -1093,7 +1093,12 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
     if (renderer->hasImageFormatFeatureBits(mImage->getFormat().vkImageFormat, kBlitFeatureFlags))
     {
         ANGLE_TRY(ensureImageInitialized(contextVk));
-        ANGLE_TRY(mImage->generateMipmapsWithBlit(contextVk, mState.getMipmapMaxLevel()));
+        ANGLE_TRY(mImage->generateMipmapsWithBlit(
+            contextVk, mState.getMipmapMaxLevel(),
+            renderer->hasImageFormatFeatureBits(mImage->getFormat().vkImageFormat,
+                                                VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT)
+                ? VK_FILTER_LINEAR
+                : VK_FILTER_NEAREST));
     }
     else
     {
