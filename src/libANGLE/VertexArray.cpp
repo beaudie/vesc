@@ -678,6 +678,44 @@ angle::Result VertexArray::getIndexRangeImpl(const Context *context,
     return angle::Result::Continue;
 }
 
+// void VertexArray::setVertexAttribPointerBaseInstance(const gl::Context *context,
+//                                                      size_t attribIndex,
+//                                                      GLuint baseInstance,
+//                                                      const void *pointer)
+// {
+//     // temp test
+//     auto &attrib = mState.mVertexAttributes[attribIndex];
+
+//     GLuint size = mState.mVertexAttributes[attribIndex].format->pixelBytes;
+
+//     // char *p =
+//     //     static_cast<char *>(const_cast<void
+//     *>(mState.mVertexAttributes[attribIndex].pointer)); char *p = static_cast<char
+//     *>(const_cast<void *>(pointer));
+
+//     // mState.mVertexAttributes[attribIndex].pointer = p + size * baseInstance;
+//     const void *newPointer = p + size * baseInstance;
+
+//     const auto &binding = mState.mVertexBindings[attrib.bindingIndex];
+//     setVertexAttribPointer(context, attribIndex, binding.getBuffer().get(),
+//                            attrib.format->channelCount, attrib.format->vertexAttribType,
+//                            attrib.format->isNorm(), attrib.vertexAttribArrayStride, newPointer);
+
+//     // // printf("\n\n%u\n\n", attrib.bindingIndex);
+//     // glBindBuffer(GL_ARRAY_BUFFER, attrib.bindingIndex);
+//     // glVertexAttribPointer(
+//     //                     // attrib.bindingIndex,
+//     //                     (GLuint)attribIndex,
+//     //                     attrib.format->channelCount,
+//     //                     ToGLenum(attrib.format->vertexAttribType),
+//     //                     attrib.format->isNorm(),
+//     //                     attrib.vertexAttribArrayStride,
+//     //                     newPointer
+//     //                 );
+
+//     // bindVertexBufferImpl(context, attribIndex, boundBuffer, offset, effectiveStride);
+// }
+
 VertexArray::IndexRangeCache::IndexRangeCache() = default;
 
 void VertexArray::IndexRangeCache::put(DrawElementsType type,
