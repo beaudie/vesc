@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "52d96777_0296669a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-08-31T00:00:07Z",
+      "side": 1,
+      "message": "Nit: This paragraph doesn\u0027t quite reflect the code that your merging with this CL. The next \"not adding any real code\" paragraph is more representative. \n\nIf you want to keep the paragraph in, perhaps add a preface saying that paragraph is for informational purposes on what\u0027s going to happen in the future.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 37
+      },
+      "revId": "5679e13b4248459b0474b8bd2fe21b67831dd906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca46aff2_66f24ef7",
+        "filename": "src/libANGLE/renderer/d3d/FramebufferD3D.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-08-31T00:00:07Z",
+      "side": 1,
+      "message": "Does asking for the color read format (and read type below) end up causing a resolve? If so, I do not remember reading that in the spec.",
+      "range": {
+        "startLine": 204,
+        "startChar": 67,
+        "endLine": 204,
+        "endChar": 69
+      },
+      "revId": "5679e13b4248459b0474b8bd2fe21b67831dd906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba04a777_2b3c5b58",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-08-31T00:00:07Z",
+      "side": 1,
+      "message": "Nit: Any reason you pulled destSamples into its own variable and didn\u0027t pass 0 into getRenderTarget like you\u0027ve done in other places?",
+      "range": {
+        "startLine": 651,
+        "startChar": 0,
+        "endLine": 651,
+        "endChar": 30
+      },
+      "revId": "5679e13b4248459b0474b8bd2fe21b67831dd906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2197b21d_294cfce7",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-08-31T00:00:07Z",
+      "side": 1,
+      "message": "Nit: Since we\u0027re never going to inherit from MultisampledRenderToTextureInfo, this final keyword is a bit overkill.",
+      "range": {
+        "startLine": 42,
+        "startChar": 39,
+        "endLine": 42,
+        "endChar": 44
+      },
+      "revId": "5679e13b4248459b0474b8bd2fe21b67831dd906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfecc57f_36b1acdf",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-08-31T00:00:07Z",
+      "side": 1,
+      "message": "Is there an ANGLE convention that all out parameters must be last?  If so, samples should probably be declared before **outRT.",
+      "range": {
+        "startLine": 456,
+        "startChar": 34,
+        "endLine": 456,
+        "endChar": 49
+      },
+      "revId": "5679e13b4248459b0474b8bd2fe21b67831dd906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d699e52_d0394179",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/renderer11_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-08-31T00:00:07Z",
+      "side": 1,
+      "message": "Nit: Please remove this commented out code. You should add it uncommented when the final change does through.",
+      "range": {
+        "startLine": 1662,
+        "startChar": 0,
+        "endLine": 1662,
+        "endChar": 54
+      },
+      "revId": "5679e13b4248459b0474b8bd2fe21b67831dd906",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
