@@ -233,12 +233,10 @@ Modifications to the OpenGL ES Shading Language Specification, Version 3.00
 
       #define GL_ANGLE_base_vertex_base_instance 1
 
-Dependencies on GL_OES_draw_elements_base_vertex and
-GL_EXT_draw_elements_base_vertex
+Dependencies on GL_EXT_base_instance
 
     If the OpenGL ES context version is less than 3.2, this extension is only
-    available when GL_OES_draw_elements_base_vertex or
-    GL_EXT_draw_elements_base_vertex are available.
+    available when GL_EXT_base_instance.
 
 Issues
 

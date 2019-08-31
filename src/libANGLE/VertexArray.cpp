@@ -678,6 +678,17 @@ angle::Result VertexArray::getIndexRangeImpl(const Context *context,
     return angle::Result::Continue;
 }
 
+void VertexArray::setVertexAttribPointerBaseInstance(size_t attributeIndex, GLuint baseInstance)
+{
+    // temp test
+    GLuint size = mState.mVertexAttributes[attributeIndex].format->pixelBytes;
+
+    auto p =
+        static_cast<char *>(const_cast<void *>(mState.mVertexAttributes[attributeIndex].pointer));
+
+    mState.mVertexAttributes[attributeIndex].pointer = p + size * baseInstance;
+}
+
 VertexArray::IndexRangeCache::IndexRangeCache() = default;
 
 void VertexArray::IndexRangeCache::put(DrawElementsType type,

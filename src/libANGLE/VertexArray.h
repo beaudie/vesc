@@ -278,6 +278,13 @@ class VertexArray final : public angle::ObserverInterface,
         mBufferAccessValidationEnabled = enabled;
     }
 
+    void setVertexAttribPointerBaseInstance(size_t attributeIndex, GLuint baseInstance);
+    void setVertexAttribPointerDirectly(size_t attributeIndex, const void *p)
+    {
+        // temp
+        mState.mVertexAttributes[attributeIndex].pointer = p;
+    }
+
   private:
     ~VertexArray() override;
 

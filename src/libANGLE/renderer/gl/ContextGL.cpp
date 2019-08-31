@@ -31,6 +31,8 @@
 #include "libANGLE/renderer/gl/TransformFeedbackGL.h"
 #include "libANGLE/renderer/gl/VertexArrayGL.h"
 
+// #include "libANGLE/VertexAttribute.h"
+
 namespace rx
 {
 
@@ -294,7 +296,77 @@ angle::Result ContextGL::drawArraysInstancedBaseInstance(const gl::Context *cont
                                                          GLsizei instanceCount,
                                                          GLuint baseInstance)
 {
-    return drawArraysInstanced(context, mode, first, count, instanceCount);
+    // return drawArraysInstanced(context, mode, first, count, instanceCount);
+    GLsizei adjustedInstanceCount = instanceCount;
+    const gl::Program *program    = context->getState().getProgram();
+    if (program->usesMultiview())
+    {
+        adjustedInstanceCount *= program->getNumViews();
+    }
+
+    ANGLE_TRY(setDrawArraysState(context, first, count, adjustedInstanceCount));
+
+    if (getFunctions()->drawArraysInstancedBaseInstance)
+    {
+        getFunctions()->drawArraysInstancedBaseInstance(ToGLenum(mode), first, count,
+                                                        adjustedInstanceCount, baseInstance);
+    }
+    else
+    {
+        printf("\n\n\n\nmac os don't fucking have drawArraysInstancedBaseInstance\n\n\n\n\n\n\n\n");
+        // TODO: Vertex attrib divisor workaround
+        // getFunctions->vertexAttribDivisor
+        // mState.
+
+        // temp test
+        // std::vector<size_t> attribIdsNeedReset;
+        std::map<size_t, const void *> attribPointersToReset;
+        if (baseInstance != 0)
+        {
+
+            // auto &vertexArray = mState.getVertexArray();
+
+            // TODO: cache
+            const auto &attribs  = mState.getVertexArray()->getVertexAttributes();
+            const auto &bindings = mState.getVertexArray()->getVertexBindings();
+            for (size_t attributeIndex = 0; attributeIndex < GL_MAX_VERTEX_ATTRIBS;
+                 attributeIndex++)
+            {
+                const gl::VertexAttribute &attrib = attribs[attributeIndex];
+                const gl::VertexBinding &binding  = bindings[attrib.bindingIndex];
+                if (program->isAttribLocationActive(attributeIndex) && binding.getDivisor() != 0)
+                {
+                    // glVertexAttribPointer(
+                    //     attrib.bindingIndex,
+                    //     1, // ???????????size?????????
+                    //     attrib.format,
+                    //     GL_FALSE,
+                    //     0,
+                    // );
+
+                    // mState.getVertexArray()->setVertexAttribPointer(
+                    //     context,
+                    //     attributeIndex,
+                    //     attrib.
+                    // )
+                    // attrib.pointer;
+                    mState.getVertexArray()->setVertexAttribPointerBaseInstance(attributeIndex,
+                                                                                baseInstance);
+                    // attribIdsNeedReset.push_back(attributeIndex);
+                    attribPointersToReset.emplace(attributeIndex, attrib.pointer);
+                }
+            }
+        }
+
+        getFunctions()->drawArraysInstanced(ToGLenum(mode), first, count, adjustedInstanceCount);
+
+        for (auto &p : attribPointersToReset)
+        {
+            mState.getVertexArray()->setVertexAttribPointerDirectly(p.first, p.second);
+        }
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result ContextGL::drawElements(const gl::Context *context,
@@ -366,10 +438,14 @@ angle::Result ContextGL::drawElementsInstancedBaseVertexBaseInstance(const gl::C
 
     const FunctionsGL *functions = getFunctions();
 
-    // GLES 3.2+ or GL 3.2+
-    // or GL_OES_draw_elements_base_vertex / GL_EXT_draw_elements_base_vertex
-    functions->drawElementsInstancedBaseVertex(ToGLenum(mode), count, ToGLenum(type),
-                                               drawIndexPointer, adjustedInstanceCount, baseVertex);
+    // GLES 3.2+ ??? or GL 4.2+
+    // or GL_EXT_base_instance
+    functions->drawElementsInstancedBaseVertexBaseInstance(ToGLenum(mode), count, ToGLenum(type),
+                                                           drawIndexPointer, adjustedInstanceCount,
+                                                           baseVertex, baseInstance);
+    // functions->drawElementsInstancedBaseVertex(ToGLenum(mode), count, ToGLenum(type),
+    //                                            drawIndexPointer, adjustedInstanceCount,
+    //                                            baseVertex);
 
     return angle::Result::Continue;
 }
