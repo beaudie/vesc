@@ -102,6 +102,7 @@ class IntermediateShaderSource final : angle::NonCopyable
     void init(const std::string &source);
     bool empty() const { return mTokens.empty(); }
 
+    bool findTokenName(const std::string &name);
     // Find @@ LAYOUT-name(extra, args) @@ and replace it with:
     //
     //     layout(specifier, extra, args)
@@ -278,6 +279,18 @@ void IntermediateShaderSource::init(const std::string &source)
         // Continue from after the closing of this macro.
         cur += ConstStrLen(kMarkerEnd);
     }
+}
+
+bool IntermediateShaderSource::findTokenName(const std::string &name)
+{
+    for (Token &block : mTokens)
+    {
+        if (block.text == name)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void IntermediateShaderSource::insertLayoutSpecifier(const std::string &name,
@@ -606,6 +619,11 @@ void AssignVaryingLocations(const gl::ProgramLinkedResources &resources,
         // such a case, use |parentStructName|.
         const std::string &name =
             varying.isStructField() ? varying.parentStructName : varying.varying->name;
+
+        if (!outStageSource->findTokenName(name) || !inStageSource->findTokenName(name))
+        {
+            continue;
+        }
 
         outStageSource->insertLayoutSpecifier(name, locationString);
         inStageSource->insertLayoutSpecifier(name, locationString);
@@ -939,8 +957,16 @@ void GlslangWrapper::GetShaderSource(bool useOldRewriteStructSamplers,
 
     IntermediateShaderSource *vertexSource   = &intermediateSources[gl::ShaderType::Vertex];
     IntermediateShaderSource *fragmentSource = &intermediateSources[gl::ShaderType::Fragment];
+    IntermediateShaderSource *geometrySource = &intermediateSources[gl::ShaderType::Geometry];
 
-    if (!vertexSource->empty())
+    if (!geometrySource->empty())
+    {
+        AssignAttributeLocations(programState, vertexSource);
+        AssignOutputLocations(programState, fragmentSource);
+        AssignVaryingLocations(resources, geometrySource, fragmentSource);
+        AssignVaryingLocations(resources, vertexSource, geometrySource);
+    }
+    else if (!vertexSource->empty())
     {
         AssignAttributeLocations(programState, vertexSource);
         AssignOutputLocations(programState, fragmentSource);
@@ -1004,6 +1030,14 @@ angle::Result GlslangWrapper::GetShaderCode(vk::Context *context,
                        angle::ReplaceSubstring(&patchedSources[gl::ShaderType::Fragment],
                                                kVersionDefine, kLineRasterDefine),
                        VK_ERROR_INVALID_SHADER_NV);
+
+        if (!shaderSources[gl::ShaderType::Geometry].empty())
+        {
+            ANGLE_VK_CHECK(context,
+                           angle::ReplaceSubstring(&patchedSources[gl::ShaderType::Geometry],
+                                                   kVersionDefine, kLineRasterDefine),
+                           VK_ERROR_INVALID_SHADER_NV);
+        }
 
         return GetShaderCodeImpl(context, glCaps, patchedSources, shaderCodeOut);
     }
