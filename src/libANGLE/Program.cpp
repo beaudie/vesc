@@ -1504,6 +1504,18 @@ angle::Result Program::link(const Context *context)
             return angle::Result::Continue;
         }
 
+        Shader *geometryShader = mState.mAttachedShaders[ShaderType::Geometry];
+        if (geometryShader)
+        {
+            mState.mGeometryShaderInputPrimitiveType =
+                geometryShader->getGeometryShaderInputPrimitiveType().value();
+            mState.mGeometryShaderOutputPrimitiveType =
+                geometryShader->getGeometryShaderOutputPrimitiveType().value();
+            mState.mGeometryShaderMaxVertices =
+                geometryShader->getGeometryShaderMaxVertices().value();
+            mState.mGeometryShaderInvocations = geometryShader->getGeometryShaderInvocations();
+        }
+
         gatherTransformFeedbackVaryings(mergedVaryings);
         mState.updateTransformFeedbackStrides();
     }
@@ -3088,11 +3100,6 @@ bool Program::linkValidateShaders(InfoLog &infoLog)
                 mInfoLog << "'max_vertices' is not specified in the geometry shader.";
                 return false;
             }
-
-            mState.mGeometryShaderInputPrimitiveType  = inputPrimitive.value();
-            mState.mGeometryShaderOutputPrimitiveType = outputPrimitive.value();
-            mState.mGeometryShaderMaxVertices         = maxVertices.value();
-            mState.mGeometryShaderInvocations = geometryShader->getGeometryShaderInvocations();
         }
     }
 
@@ -4144,7 +4151,7 @@ ProgramMergedVaryings Program::getMergedVaryings() const
     {
         for (const sh::ShaderVariable &varying : vertexShader->getOutputVaryings())
         {
-            merged[varying.name].vertex = &varying;
+            merged[varying.name].out = &varying;
         }
     }
 
@@ -4153,7 +4160,20 @@ ProgramMergedVaryings Program::getMergedVaryings() const
     {
         for (const sh::ShaderVariable &varying : fragmentShader->getInputVaryings())
         {
-            merged[varying.name].fragment = &varying;
+            merged[varying.name].in = &varying;
+        }
+    }
+
+    Shader *geometryShader = mState.mAttachedShaders[ShaderType::Geometry];
+    if (geometryShader)
+    {
+        for (const sh::Varying &varying : geometryShader->getInputVaryings())
+        {
+            merged[varying.name].in = &varying;
+        }
+        for (const sh::Varying &varying : geometryShader->getOutputVaryings())
+        {
+            merged[varying.name].out = &varying;
         }
     }
 
