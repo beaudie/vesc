@@ -601,9 +601,10 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     const gl::ComponentTypeMask &programAttribsTypeMask,
     const ShaderModule *vertexModule,
     const ShaderModule *fragmentModule,
+    const ShaderModule *geometryModule,
     Pipeline *pipelineOut) const
 {
-    angle::FixedVector<VkPipelineShaderStageCreateInfo, 2> shaderStages;
+    angle::FixedVector<VkPipelineShaderStageCreateInfo, 3> shaderStages;
     VkPipelineVertexInputStateCreateInfo vertexInputState     = {};
     VkPipelineInputAssemblyStateCreateInfo inputAssemblyState = {};
     VkPipelineViewportStateCreateInfo viewportState           = {};
@@ -625,6 +626,18 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
     vertexStage.pName               = "main";
     vertexStage.pSpecializationInfo = nullptr;
     shaderStages.push_back(vertexStage);
+
+    if (geometryModule)
+    {
+        VkPipelineShaderStageCreateInfo geometryStage = {};
+        geometryStage.sType               = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+        geometryStage.flags               = 0;
+        geometryStage.stage               = VK_SHADER_STAGE_GEOMETRY_BIT;
+        geometryStage.module              = geometryModule->getHandle();
+        geometryStage.pName               = "main";
+        geometryStage.pSpecializationInfo = nullptr;
+        shaderStages.push_back(geometryStage);
+    }
 
     // Fragment shader is optional.
     // anglebug.com/3509 - Don't compile the fragment shader if rasterizationDiscardEnable = true
@@ -1494,7 +1507,7 @@ void PipelineLayoutDesc::updatePushConstantRange(gl::ShaderType shaderType,
                                                  uint32_t size)
 {
     ASSERT(shaderType == gl::ShaderType::Vertex || shaderType == gl::ShaderType::Fragment ||
-           shaderType == gl::ShaderType::Compute);
+           shaderType == gl::ShaderType::Geometry || shaderType == gl::ShaderType::Compute);
     PackedPushConstantRange &packed = mPushConstantRanges[shaderType];
     packed.offset                   = offset;
     packed.size                     = size;
@@ -1705,6 +1718,7 @@ angle::Result GraphicsPipelineCache::insertPipeline(
     const gl::ComponentTypeMask &programAttribsTypeMask,
     const vk::ShaderModule *vertexModule,
     const vk::ShaderModule *fragmentModule,
+    const vk::ShaderModule *geometryModule,
     const vk::GraphicsPipelineDesc &desc,
     const vk::GraphicsPipelineDesc **descPtrOut,
     vk::PipelineHelper **pipelineOut)
@@ -1718,7 +1732,7 @@ angle::Result GraphicsPipelineCache::insertPipeline(
         ANGLE_TRY(desc.initializePipeline(contextVk, pipelineCacheVk, compatibleRenderPass,
                                           pipelineLayout, activeAttribLocationsMask,
                                           programAttribsTypeMask, vertexModule, fragmentModule,
-                                          &newPipeline));
+                                          geometryModule, &newPipeline));
     }
 
     // The Serial will be updated outside of this query.
