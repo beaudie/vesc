@@ -185,7 +185,9 @@ ANGLEPerfTest::ANGLEPerfTest(const std::string &name,
     mReporter->RegisterFyiMetric(".steps", "count");
 }
 
-ANGLEPerfTest::~ANGLEPerfTest() {}
+ANGLEPerfTest::~ANGLEPerfTest()
+{
+}
 
 void ANGLEPerfTest::run()
 {
