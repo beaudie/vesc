@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8c0c7a19_e3ed39d8",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2019-09-02T12:23:15Z",
+      "side": 1,
+      "message": "Sounds good, it will be N squared but that\u0027s ok for initialization.",
+      "parentUuid": "c5904fb5_21e5cc6f",
+      "range": {
+        "startLine": 566,
+        "startChar": 12,
+        "endLine": 566,
+        "endChar": 28
+      },
+      "revId": "f246276b0abb77d42d59ad9d1a3997a295992063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d604b84c_9bef697e",
         "filename": "src/tests/test_expectations/GPUTestConfig.h",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2019-08-30T16:38:09Z",
       "side": 1,
       "message": "some compilers are having issues with this. I think 32-bit configs might not be able to support uint64_t angle::BitSetTs. Maybe add the ParamT template variable to the angle::BitSet helper and default to size_t?",
+      "range": {
+        "startLine": 68,
+        "startChar": 63,
+        "endLine": 68,
+        "endChar": 71
+      },
+      "revId": "f246276b0abb77d42d59ad9d1a3997a295992063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "efe49c76_3d637c09",
+        "filename": "src/tests/test_expectations/GPUTestConfig.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1119849
+      },
+      "writtenOn": "2019-09-02T12:23:15Z",
+      "side": 1,
+      "message": "That wouldn\u0027t work on 32 bit systems because there are 34 values in this enum. Used angle::Bitset instead which lost some typing information in PatchSet 2.",
+      "parentUuid": "d604b84c_9bef697e",
       "range": {
         "startLine": 68,
         "startChar": 63,
