@@ -1382,7 +1382,8 @@ angle::Result Program::link(const Context *context)
     unlink();
 
     // Re-link shaders after the unlink call.
-    ASSERT(linkValidateShaders(mInfoLog));
+    bool result = linkValidateShaders(mInfoLog);
+    ASSERT(result);
 
     std::unique_ptr<ProgramLinkedResources> resources;
     if (mState.mAttachedShaders[ShaderType::Compute])
@@ -1502,6 +1503,18 @@ angle::Result Program::link(const Context *context)
                 mInfoLog, mergedVaryings, mState.getTransformFeedbackVaryingNames()))
         {
             return angle::Result::Continue;
+        }
+
+        Shader *geometryShader = mState.mAttachedShaders[ShaderType::Geometry];
+        if (geometryShader)
+        {
+            mState.mGeometryShaderInputPrimitiveType =
+                geometryShader->getGeometryShaderInputPrimitiveType().value();
+            mState.mGeometryShaderOutputPrimitiveType =
+                geometryShader->getGeometryShaderOutputPrimitiveType().value();
+            mState.mGeometryShaderMaxVertices =
+                geometryShader->getGeometryShaderMaxVertices().value();
+            mState.mGeometryShaderInvocations = geometryShader->getGeometryShaderInvocations();
         }
 
         gatherTransformFeedbackVaryings(mergedVaryings);
@@ -3088,11 +3101,6 @@ bool Program::linkValidateShaders(InfoLog &infoLog)
                 mInfoLog << "'max_vertices' is not specified in the geometry shader.";
                 return false;
             }
-
-            mState.mGeometryShaderInputPrimitiveType  = inputPrimitive.value();
-            mState.mGeometryShaderOutputPrimitiveType = outputPrimitive.value();
-            mState.mGeometryShaderMaxVertices         = maxVertices.value();
-            mState.mGeometryShaderInvocations = geometryShader->getGeometryShaderInvocations();
         }
     }
 
@@ -4043,7 +4051,7 @@ bool Program::linkValidateGlobalNames(InfoLog &infoLog) const
                     uniformBlockFieldMap[field.name];
                 for (const auto &prevBlockFieldPair : prevBlockFieldPairs)
                 {
-                    const sh::InterfaceBlock *prevUniformBlock = prevBlockFieldPair.first;
+                    const sh::InterfaceBlock *prevUniformBlock      = prevBlockFieldPair.first;
                     const sh::ShaderVariable *prevUniformBlockField = prevBlockFieldPair.second;
 
                     if (uniformBlock.isSameInterfaceBlockAtLinkTime(*prevUniformBlock))
@@ -4139,21 +4147,18 @@ ProgramMergedVaryings Program::getMergedVaryings() const
 {
     ProgramMergedVaryings merged;
 
-    Shader *vertexShader = mState.mAttachedShaders[ShaderType::Vertex];
-    if (vertexShader)
+    for (Shader *shader : mState.mAttachedShaders)
     {
-        for (const sh::ShaderVariable &varying : vertexShader->getOutputVaryings())
+        if (shader)
         {
-            merged[varying.name].vertex = &varying;
-        }
-    }
-
-    Shader *fragmentShader = mState.mAttachedShaders[ShaderType::Fragment];
-    if (fragmentShader)
-    {
-        for (const sh::ShaderVariable &varying : fragmentShader->getInputVaryings())
-        {
-            merged[varying.name].fragment = &varying;
+            for (const sh::ShaderVariable &varying : shader->getOutputVaryings())
+            {
+                merged[varying.name].frontShader = &varying;
+            }
+            for (const sh::ShaderVariable &varying : shader->getInputVaryings())
+            {
+                merged[varying.name].backShader = &varying;
+            }
         }
     }
 

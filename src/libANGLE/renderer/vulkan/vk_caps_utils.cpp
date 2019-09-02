@@ -430,6 +430,24 @@ void RendererVk::ensureCapsInitialized() const
 
     // Enable GL_NV_pixel_buffer_object extension.
     mNativeExtensions.pixelBufferObject = true;
+
+    // Geometry shader is optional.
+    if (mPhysicalDeviceFeatures.geometryShader)
+    {
+        mNativeExtensions.geometryShader = true;
+        mNativeCaps.maxFramebufferLayers = limitsVk.maxFramebufferLayers;
+        mNativeCaps.layerProvokingVertex = GL_LAST_VERTEX_CONVENTION_EXT;
+
+        mNativeCaps.maxGeometryInputComponents       = limitsVk.maxGeometryInputComponents;
+        mNativeCaps.maxGeometryOutputComponents      = limitsVk.maxGeometryOutputComponents;
+        mNativeCaps.maxGeometryOutputVertices        = limitsVk.maxGeometryOutputVertices;
+        mNativeCaps.maxGeometryTotalOutputComponents = limitsVk.maxGeometryTotalOutputComponents;
+        mNativeCaps.maxShaderStorageBlocks[gl::ShaderType::Geometry] =
+            mNativeCaps.maxCombinedShaderOutputResources;
+        mNativeCaps.maxShaderAtomicCounterBuffers[gl::ShaderType::Geometry] =
+            maxCombinedAtomicCounterBuffers;
+        mNativeCaps.maxGeometryShaderInvocations = limitsVk.maxGeometryShaderInvocations;
+    }
 }
 
 namespace egl_vk

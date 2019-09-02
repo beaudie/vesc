@@ -665,3 +665,13 @@
 
 // Inactive SSBOs with flexible array member (about 20% of these tests are affected):
 3714 VULKAN : dEQP-GLES31.functional.ssbo.layout.random.* = FAIL
+
+// Geometry
+3571 VULKAN : dEQP-GLES31.functional.geometry_shading.vertex_transform_feedback.* = SKIP
+3571 VULKAN : dEQP-GLES31.functional.geometry_shading.query.primitives_generated* = SKIP
+3571 VULKAN : dEQP-GLES31.functional.geometry_shading.input.basic_primitive.*adjacency = SKIP
+3571 VULKAN : dEQP-GLES31.functional.geometry_shading.input.triangle_strip_adjacency.vertex_count_* = SKIP
+3571 VULKAN : dEQP-GLES31.functional.geometry_shading.layered.* = SKIP
+3571 VULKAN : dEQP-GLES31.functional.geometry_shading.instanced.invocation_* = SKIP
+3571 VULKAN : dEQP-GLES31.functional.geometry_shading.instanced.multiple_layers_per_invocation_* = SKIP
+3571 VULKAN : dEQP-GLES31.functional.program_interface_query.program_*.*separable_geometry* = SKIP
