@@ -97,6 +97,10 @@ void InitExtensionBehavior(const ShBuiltInResources &resources, TExtensionBehavi
     {
         extBehavior[TExtension::ANGLE_base_vertex_base_instance] = EBhUndefined;
     }
+    if (resources.WEBGL_video_texture)
+    {
+        extBehavior[TExtension::WEBGL_video_texture] = EBhEnable;
+    }
 }
 
 void ResetExtensionBehavior(TExtensionBehavior &extBehavior)
@@ -104,6 +108,10 @@ void ResetExtensionBehavior(TExtensionBehavior &extBehavior)
     for (auto &ext : extBehavior)
     {
         if (ext.first == TExtension::ARB_texture_rectangle)
+        {
+            ext.second = EBhEnable;
+        }
+        else if (ext.first == TExtension::WEBGL_video_texture)
         {
             ext.second = EBhEnable;
         }

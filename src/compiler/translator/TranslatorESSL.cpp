@@ -11,6 +11,7 @@
 #include "compiler/translator/OutputESSL.h"
 #include "compiler/translator/tree_ops/EmulatePrecision.h"
 #include "compiler/translator/tree_ops/RecordConstantPrecision.h"
+#include "compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.h"
 
 namespace sh
 {
@@ -83,6 +84,11 @@ void TranslatorESSL::translate(TIntermBlock *root,
 
     // Write array bounds clamping emulation if needed.
     getArrayBoundsClamper().OutputClampingFunctionDefinition(sink);
+
+    if (IsExtensionEnabled(getExtensionBehavior(), TExtension::WEBGL_video_texture))
+    {
+        RewriteSamplerVideoWEBGLAs2D(root, &getSymbolTable());
+    }
 
     if (getShaderType() == GL_COMPUTE_SHADER)
     {

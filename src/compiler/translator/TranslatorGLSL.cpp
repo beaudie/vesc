@@ -12,6 +12,7 @@
 #include "compiler/translator/OutputGLSL.h"
 #include "compiler/translator/VersionGLSL.h"
 #include "compiler/translator/tree_ops/EmulatePrecision.h"
+#include "compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.h"
 #include "compiler/translator/tree_ops/RewriteTexelFetchOffset.h"
 #include "compiler/translator/tree_ops/RewriteUnaryMinusOperatorFloat.h"
 
@@ -192,6 +193,11 @@ void TranslatorGLSL::translate(TIntermBlock *root,
             sink << "out vec4 angle_SecondaryFragData[" << getResources().MaxDualSourceDrawBuffers
                  << "];\n";
         }
+    }
+
+    if (IsExtensionEnabled(getExtensionBehavior(), TExtension::WEBGL_video_texture))
+    {
+        RewriteSamplerVideoWEBGLAs2D(root, &getSymbolTable());
     }
 
     if (getShaderType() == GL_COMPUTE_SHADER)

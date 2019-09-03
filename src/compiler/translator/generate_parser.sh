@@ -9,7 +9,7 @@ run_flex()
 {
 input_file=./$1.l
 output_source=./$1_lex.cpp
-flex --noline --nounistd --outfile=$output_source $input_file
+flex.exe --noline --nounistd --outfile=$output_source $input_file
 }
 
 run_bison()
@@ -17,7 +17,7 @@ run_bison()
 input_file=./$1.y
 output_header=./$1_tab.h
 output_source=./$1_tab.cpp
-bison --no-lines --skeleton=yacc.c --defines=$output_header --output=$output_source $input_file
+bison.exe --no-lines --skeleton=yacc.c --defines=$output_header --output=$output_source $input_file
 }
 
 script_dir=$(dirname $0)

@@ -17,6 +17,7 @@
 #include "compiler/translator/tree_ops/RewriteAtomicFunctionExpressions.h"
 #include "compiler/translator/tree_ops/RewriteElseBlocks.h"
 #include "compiler/translator/tree_ops/RewriteExpressionsWithShaderStorageBlock.h"
+#include "compiler/translator/tree_ops/RewriteSamplerVideoWEBGLAs2D.h"
 #include "compiler/translator/tree_ops/RewriteTexelFetchOffset.h"
 #include "compiler/translator/tree_ops/RewriteUnaryMinusOperatorInt.h"
 #include "compiler/translator/tree_ops/SeparateArrayConstructorStatements.h"
@@ -129,6 +130,11 @@ void TranslatorHLSL::translate(TIntermBlock *root,
         sh::RewriteUnaryMinusOperatorInt(root);
     }
 
+    if (IsExtensionEnabled(getExtensionBehavior(), TExtension::WEBGL_video_texture))
+    {
+        RewriteSamplerVideoWEBGLAs2D(root, &getSymbolTable());
+    }
+
     if (getShaderVersion() >= 310)
     {
         // Due to ssbo also can be used as the argument of atomic memory functions, we should put
@@ -151,6 +157,7 @@ void TranslatorHLSL::translate(TIntermBlock *root,
     mReadonlyImage2DRegisterIndex  = outputHLSL.getReadonlyImage2DRegisterIndex();
     mImage2DRegisterIndex          = outputHLSL.getImage2DRegisterIndex();
     mUsedImage2DFunctionNames      = outputHLSL.getUsedImage2DFunctionNames();
+    //printf("%s\n", outputHLSL.getInfoSink().c_str());
 }
 
 bool TranslatorHLSL::shouldFlattenPragmaStdglInvariantAll()
