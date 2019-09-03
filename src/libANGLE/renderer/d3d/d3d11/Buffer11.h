@@ -39,6 +39,7 @@ enum BufferUsage
     BUFFER_USAGE_PIXEL_UNPACK,
     BUFFER_USAGE_PIXEL_PACK,
     BUFFER_USAGE_UNIFORM,
+    BUFFER_USAGE_STRUCURED,
     BUFFER_USAGE_EMULATED_INDEXED_VERTEX,
     BUFFER_USAGE_RAW_UAV,
 
@@ -67,6 +68,11 @@ class Buffer11 : public BufferD3D
                                          const d3d11::Buffer **bufferOut,
                                          UINT *firstConstantOut,
                                          UINT *numConstantsOut);
+    angle::Result getStructuredBufferRangeSRV(const gl::Context *context,
+                                              unsigned int offset,
+                                              unsigned int size,
+                                              unsigned int structureByteStride,
+                                              const d3d11::ShaderResourceView **srvOut);
     angle::Result getSRV(const gl::Context *context,
                          DXGI_FORMAT srvFormat,
                          const d3d11::ShaderResourceView **srvOut);
@@ -120,13 +126,21 @@ class Buffer11 : public BufferD3D
     class NativeStorage;
     class PackStorage;
     class SystemMemoryStorage;
+    class StructuredBufferStorage;
 
-    struct ConstantBufferCacheEntry
+    struct BufferCacheEntry
     {
-        ConstantBufferCacheEntry() : storage(nullptr), lruCount(0) {}
+        BufferCacheEntry() : storage(nullptr), lruCount(0) {}
 
         BufferStorage *storage;
         unsigned int lruCount;
+    };
+
+    struct StructuredBufferCacheEntry : BufferCacheEntry
+    {
+        StructuredBufferCacheEntry() : structureByteStride(0) {}
+
+        unsigned int structureByteStride;
     };
 
     void markBufferUsage(BufferUsage usage);
@@ -189,10 +203,15 @@ class Buffer11 : public BufferD3D
     // Cache of D3D11 constant buffer for specific ranges of buffer data.
     // This is used to emulate UBO ranges on 11.0 devices.
     // Constant buffers are indexed by there start offset.
-    typedef std::map<GLintptr /*offset*/, ConstantBufferCacheEntry> ConstantBufferCache;
-    ConstantBufferCache mConstantBufferRangeStoragesCache;
+    typedef std::map<GLintptr /*offset*/, BufferCacheEntry> BufferCache;
+    BufferCache mConstantBufferRangeStoragesCache;
     size_t mConstantBufferStorageAdditionalSize;
     unsigned int mMaxConstantBufferLruCount;
+
+    typedef std::map<GLintptr /*offset*/, StructuredBufferCacheEntry> StructuredBufferCache;
+    StructuredBufferCache mStructuredBufferRangeStoragesCache;
+    size_t mStructuredBufferStorageAdditionalSize;
+    unsigned int mMaxStructuredBufferLruCount;
 };
 
 }  // namespace rx
