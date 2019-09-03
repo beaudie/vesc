@@ -158,7 +158,7 @@ void TextureVk::onDestroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
-    releaseAndDeleteImage(contextVk);
+    releaseImage(contextVk);
     contextVk->releaseObject(contextVk->getCurrentQueueSerial(), &mSampler);
 }
 
@@ -756,7 +756,7 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
 
     if (!mOwnsImage)
     {
-        releaseAndDeleteImage(contextVk);
+        releaseImage(contextVk);
     }
 
     const vk::Format &format = renderer->getFormat(internalFormat);
@@ -764,7 +764,7 @@ angle::Result TextureVk::setStorage(const gl::Context *context,
 
     if (mImage->valid())
     {
-        releaseImage(contextVk);
+        releaseImageAndViews(contextVk);
     }
 
     ANGLE_TRY(initImage(contextVk, format, size, static_cast<uint32_t>(levels)));
@@ -783,7 +783,7 @@ angle::Result TextureVk::setStorageExternalMemory(const gl::Context *context,
     RendererVk *renderer           = contextVk->getRenderer();
     MemoryObjectVk *memoryObjectVk = vk::GetImpl(memoryObject);
 
-    releaseAndDeleteImage(contextVk);
+    releaseImage(contextVk);
 
     const vk::Format &format = renderer->getFormat(internalFormat);
 
@@ -817,7 +817,7 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    releaseAndDeleteImage(contextVk);
+    releaseImage(contextVk);
 
     const vk::Format &format = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
 
@@ -881,11 +881,11 @@ uint32_t TextureVk::getNativeImageLayer(uint32_t frontendLayer) const
     return mImageLayerOffset + frontendLayer;
 }
 
-void TextureVk::releaseAndDeleteImage(ContextVk *contextVk)
+void TextureVk::releaseImage(ContextVk *contextVk)
 {
     if (mImage)
     {
-        releaseImage(contextVk);
+        releaseImageAndViews(contextVk);
         releaseStagingBuffer(contextVk);
         SafeDelete(mImage);
     }
@@ -950,7 +950,7 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
 
     if (!mOwnsImage)
     {
-        releaseAndDeleteImage(contextVk);
+        releaseImage(contextVk);
     }
 
     if (mImage != nullptr)
@@ -966,7 +966,7 @@ angle::Result TextureVk::redefineImage(const gl::Context *context,
             // must release it.
             if (mImage->getFormat() != format || size != mImage->getSize(index))
             {
-                releaseImage(contextVk);
+                releaseImageAndViews(contextVk);
             }
         }
     }
@@ -1114,7 +1114,7 @@ angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    releaseAndDeleteImage(contextVk);
+    releaseImage(contextVk);
 
     const vk::Format &format = renderer->getFormat(surface->getConfig()->renderTargetFormat);
 
@@ -1131,7 +1131,7 @@ angle::Result TextureVk::releaseTexImage(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
-    releaseImage(contextVk);
+    releaseImageAndViews(contextVk);
 
     return angle::Result::Continue;
 }
@@ -1375,7 +1375,7 @@ void TextureVk::releaseOwnershipOfImage(const gl::Context *context)
     ContextVk *contextVk = vk::GetImpl(context);
 
     mOwnsImage = false;
-    releaseAndDeleteImage(contextVk);
+    releaseImage(contextVk);
 }
 
 const TextureVk::TextureVkViews *TextureVk::getTextureViews() const
@@ -1652,7 +1652,7 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-void TextureVk::releaseImage(ContextVk *contextVk)
+void TextureVk::releaseImageAndViews(ContextVk *contextVk)
 {
     if (mImage)
     {
