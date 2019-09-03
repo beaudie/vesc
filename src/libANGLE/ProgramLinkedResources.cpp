@@ -469,9 +469,9 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
             LinkedUniform linkedUniform(variable.type, variable.precision, fullNameWithArrayIndex,
                                         variable.arraySizes, getBinding(), getOffset(), mLocation,
                                         -1, sh::kDefaultBlockMemberInfo);
-            linkedUniform.mappedName = fullMappedNameWithArrayIndex;
-            linkedUniform.active     = mMarkActive;
-            linkedUniform.staticUse  = mMarkStaticUse;
+            linkedUniform.mappedName      = fullMappedNameWithArrayIndex;
+            linkedUniform.active          = mMarkActive;
+            linkedUniform.staticUse       = mMarkStaticUse;
             linkedUniform.outerArraySizes = arraySizes;
             if (variable.hasParentArrayIndex())
             {
@@ -1130,6 +1130,8 @@ void InterfaceBlockLinker::defineInterfaceBlock(const GetBlockSizeFunc &getBlock
         blockIndexes.push_back(static_cast<unsigned int>(blockMemberIndex));
     }
 
+    unsigned int firstFieldArraySize = interfaceBlock.fields[0].getArraySizeProduct();
+
     for (unsigned int arrayElement = 0; arrayElement < interfaceBlock.elementCount();
          ++arrayElement)
     {
@@ -1153,7 +1155,8 @@ void InterfaceBlockLinker::defineInterfaceBlock(const GetBlockSizeFunc &getBlock
         int blockBinding =
             (interfaceBlock.binding == -1 ? 0 : interfaceBlock.binding + arrayElement);
         InterfaceBlock block(interfaceBlock.name, interfaceBlock.mappedName,
-                             interfaceBlock.isArray(), arrayElement, blockBinding);
+                             interfaceBlock.isArray(), arrayElement, firstFieldArraySize,
+                             blockBinding);
         block.memberIndexes = blockIndexes;
         block.setActive(shaderType, interfaceBlock.active);
 
