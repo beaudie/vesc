@@ -3495,13 +3495,13 @@ angle::Result StateManager11::syncUniformBuffersForShader(const gl::Context *con
 
     for (size_t bufferIndex = 0; bufferIndex < shaderUniformBuffers.size(); ++bufferIndex)
     {
-        const GLint binding = shaderUniformBuffers[bufferIndex];
-        if (binding == -1)
+        const D3DUBOCache cache = shaderUniformBuffers[bufferIndex];
+        if (cache.binding == -1)
         {
             continue;
         }
 
-        const auto &uniformBuffer          = glState.getIndexedUniformBuffer(binding);
+        const auto &uniformBuffer          = glState.getIndexedUniformBuffer(cache.binding);
         const GLintptr uniformBufferOffset = uniformBuffer.getOffset();
         const GLsizeiptr uniformBufferSize = uniformBuffer.getSize();
 
@@ -3613,6 +3613,41 @@ angle::Result StateManager11::syncUniformBuffersForShader(const gl::Context *con
             default:
                 UNREACHABLE();
         }
+    }
+
+    const auto &shaderUniformBuffersUseSB =
+        mProgramD3D->getShaderUniformBufferCacheUseSB(shaderType);
+    for (size_t bufferIndex = 0; bufferIndex < shaderUniformBuffersUseSB.size(); ++bufferIndex)
+    {
+        const D3DUBOCacheUseSB cache = shaderUniformBuffersUseSB[bufferIndex];
+        if (cache.binding == -1)
+        {
+            continue;
+        }
+
+        const auto &uniformBuffer          = glState.getIndexedUniformBuffer(cache.binding);
+        const GLintptr uniformBufferOffset = uniformBuffer.getOffset();
+        const GLsizeiptr uniformBufferSize = uniformBuffer.getSize();
+
+        if (uniformBuffer.get() == nullptr)
+        {
+            continue;
+        }
+
+        const auto &uniformBlockBuffer = glState.getIndexedUniformBuffer(cache.binding);
+        if (uniformBlockBuffer.get() == nullptr)
+        {
+            continue;
+        }
+
+        Buffer11 *bufferStorage                    = GetImplAs<Buffer11>(uniformBuffer.get());
+        const d3d11::ShaderResourceView *bufferSRV = nullptr;
+        ANGLE_TRY(bufferStorage->getStructuredBufferRangeSRV(
+            context, static_cast<unsigned int>(uniformBufferOffset),
+            static_cast<unsigned int>(uniformBufferSize), cache.structureByteStride, &bufferSRV));
+
+        ASSERT(bufferSRV->valid());
+        setShaderResourceInternal(shaderType, cache.registerIndex, bufferSRV);
     }
 
     return angle::Result::Continue;
