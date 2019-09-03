@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1752694c_d3303fa3",
+        "filename": "src/tests/gl_tests/WebGLFramebufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-03T19:59:09Z",
+      "side": 1,
+      "message": "Does this block need to be scoped?   Or is/was there an extension that needs to be checked here too?",
+      "revId": "61f539521619b2b62f5626072c3e378ba4b88df4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
