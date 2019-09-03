@@ -1778,27 +1778,13 @@ void Framebuffer::setAttachmentImpl(const Context *context,
     {
         case GL_DEPTH_STENCIL:
         case GL_DEPTH_STENCIL_ATTACHMENT:
-        {
-            // ensure this is a legitimate depth+stencil format
-            FramebufferAttachmentObject *attachmentObj = resource;
-            if (resource)
-            {
-                const Format &format = resource->getAttachmentFormat(binding, textureIndex);
-                if (format.info->depthBits == 0 || format.info->stencilBits == 0)
-                {
-                    // Attaching nullptr detaches the current attachment.
-                    attachmentObj = nullptr;
-                }
-            }
-
             updateAttachment(context, &mState.mDepthAttachment, DIRTY_BIT_DEPTH_ATTACHMENT,
-                             &mDirtyDepthAttachmentBinding, type, binding, textureIndex,
-                             attachmentObj, numViews, baseViewIndex, isMultiview);
+                             &mDirtyDepthAttachmentBinding, type, binding, textureIndex, resource,
+                             numViews, baseViewIndex, isMultiview);
             updateAttachment(context, &mState.mStencilAttachment, DIRTY_BIT_STENCIL_ATTACHMENT,
-                             &mDirtyStencilAttachmentBinding, type, binding, textureIndex,
-                             attachmentObj, numViews, baseViewIndex, isMultiview);
+                             &mDirtyStencilAttachmentBinding, type, binding, textureIndex, resource,
+                             numViews, baseViewIndex, isMultiview);
             break;
-        }
 
         case GL_DEPTH:
         case GL_DEPTH_ATTACHMENT:
