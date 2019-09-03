@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 218
+#define ANGLE_SH_VERSION 219
 
 enum ShShaderSpec
 {
@@ -668,6 +668,8 @@ bool GetShaderStorageBlockRegister(const ShHandle handle,
 bool GetUniformBlockRegister(const ShHandle handle,
                              const std::string &uniformBlockName,
                              unsigned int *indexOut);
+
+bool IsUniformBlockUseStructuredBuffer(const ShHandle handle, const std::string &uniformBlockName);
 
 // Gives a map from uniform names to compiler-assigned registers in the default uniform block.
 // Note that the map contains also registers of samplers that have been extracted from structs.
