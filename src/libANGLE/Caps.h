@@ -526,6 +526,9 @@ struct Extensions
 
     // GL_ANGLE_base_vertex_base_instance
     bool baseVertexBaseInstance = false;
+
+    // WEBGL_video_texture
+    bool webglVideoTexture = false;
 };
 
 struct ExtensionInfo

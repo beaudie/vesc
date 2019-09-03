@@ -360,6 +360,9 @@ GLenum GLVariableType(const TType &type)
     switch (type.getBasicType())
     {
         case EbtSampler2D:
+        // Video texture extension using sampler2D to sample
+        // video frame.
+        case EbtSamplerVideoWEBGL:
             return GL_SAMPLER_2D;
         case EbtSampler3D:
             return GL_SAMPLER_3D;

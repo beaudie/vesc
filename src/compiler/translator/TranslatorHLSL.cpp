@@ -151,6 +151,7 @@ void TranslatorHLSL::translate(TIntermBlock *root,
     mReadonlyImage2DRegisterIndex  = outputHLSL.getReadonlyImage2DRegisterIndex();
     mImage2DRegisterIndex          = outputHLSL.getImage2DRegisterIndex();
     mUsedImage2DFunctionNames      = outputHLSL.getUsedImage2DFunctionNames();
+    printf("%s\n", outputHLSL.getInfoSink().c_str());
 }
 
 bool TranslatorHLSL::shouldFlattenPragmaStdglInvariantAll()

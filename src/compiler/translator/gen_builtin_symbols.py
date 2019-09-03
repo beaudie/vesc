@@ -430,6 +430,7 @@ basic_types_enumeration = [
     'SubpassInputMS',
     'ISubpassInputMS',
     'USubpassInputMS',
+    'SamplerVideoWEBGL',
 ]
 
 id_counter = 0

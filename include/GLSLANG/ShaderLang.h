@@ -294,7 +294,7 @@ const ShCompileOptions SH_EMULATE_GL_BASE_VERTEX_BASE_INSTANCE = UINT64_C(1) << 
 // There are two variations of this.  One using subgroup operations where available, and another
 // that emulates those operations using dFdxFine and dFdyFine.  The latter is more universally
 // available, but is buggy on Nvidia.
-const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING = UINT64_C(1) << 44;
+const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING                  = UINT64_C(1) << 44;
 const ShCompileOptions SH_EMULATE_SEAMFUL_CUBE_MAP_SAMPLING_WITH_SUBGROUP_OP = UINT64_C(1) << 45;
 
 // Defines alternate strategies for implementing array index clamping.
@@ -351,6 +351,7 @@ struct ShBuiltInResources
     int ANGLE_texture_multisample;
     int ANGLE_multi_draw;
     int ANGLE_base_vertex_base_instance;
+    int WEBGL_video_texture;
 
     // Set to 1 to enable replacing GL_EXT_draw_buffers #extension directives
     // with GL_NV_draw_buffers in ESSL output. This flag can be used to emulate

@@ -845,6 +845,9 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_OES_point_sprite"] = enableableExtension(&Extensions::pointSprite);
         map["GL_OES_draw_texture"] = enableableExtension(&Extensions::drawTexture);
         map["GL_ANGLE_memory_size"] = enableableExtension(&Extensions::memorySize);
+
+        // WEBGL_video_texture extension
+        map["WEBGL_video_texture"] = enableableExtension(&Extensions::webglVideoTexture);
         // clang-format on
 
         return map;
