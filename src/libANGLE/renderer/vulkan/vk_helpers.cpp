@@ -1276,6 +1276,19 @@ BufferHelper::BufferHelper()
       mCurrentReadAccess(0)
 {}
 
+BufferHelper::BufferHelper(BufferHelper &&other)
+    : CommandGraphResource(CommandGraphResourceType::Buffer),
+      mBuffer(std::move(other.mBuffer)),
+      mBufferView(std::move(other.mBufferView)),
+      mDeviceMemory(std::move(other.mDeviceMemory)),
+      mMemoryPropertyFlags(other.mMemoryPropertyFlags),
+      mSize(other.mSize),
+      mMappedMemory(other.mMappedMemory),
+      mViewFormat(other.mViewFormat),
+      mCurrentWriteAccess(other.mCurrentWriteAccess),
+      mCurrentReadAccess(other.mCurrentReadAccess)
+{}
+
 BufferHelper::~BufferHelper() = default;
 
 angle::Result BufferHelper::init(ContextVk *contextVk,

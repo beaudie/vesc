@@ -441,6 +441,7 @@ class BufferHelper final : public CommandGraphResource
 {
   public:
     BufferHelper();
+    BufferHelper(BufferHelper &&other);
     ~BufferHelper() override;
 
     angle::Result init(ContextVk *contextVk,
