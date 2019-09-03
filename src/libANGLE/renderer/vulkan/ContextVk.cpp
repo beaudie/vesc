@@ -2811,7 +2811,7 @@ angle::Result ContextVk::getNextSubmitFence(vk::Shared<vk::Fence> *sharedFenceOu
         ANGLE_TRY(getRenderer()->newSharedFence(this, &mSubmitFence));
     }
     ASSERT(!sharedFenceOut->isReferenced());
-    sharedFenceOut->copy(getDevice(), mSubmitFence);
+    sharedFenceOut->copy(mSubmitFence, getDevice());
     return angle::Result::Continue;
 }
 
@@ -2820,7 +2820,7 @@ vk::Shared<vk::Fence> ContextVk::getLastSubmittedFence() const
     vk::Shared<vk::Fence> fence;
     if (!mInFlightCommands.empty())
     {
-        fence.copy(getDevice(), mInFlightCommands.back().fence);
+        fence.copy(mInFlightCommands.back().fence, getDevice());
     }
 
     return fence;
