@@ -26,6 +26,8 @@ const GLColorRGB GLColorRGB::blue(0u, 0u, 255u);
 const GLColorRGB GLColorRGB::green(0u, 255u, 0u);
 const GLColorRGB GLColorRGB::red(255u, 0u, 0u);
 const GLColorRGB GLColorRGB::yellow(255u, 255u, 0);
+const GLColorRGB GLColorRGB::magenta(255u, 0, 255u);
+const GLColorRGB GLColorRGB::cyan(0, 255u, 255u);
 
 const GLColor GLColor::black            = GLColor(0u, 0u, 0u, 255u);
 const GLColor GLColor::blue             = GLColor(0u, 0u, 255u, 255u);

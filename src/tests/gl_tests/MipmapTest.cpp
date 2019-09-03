@@ -680,8 +680,8 @@ TEST_P(MipmapTest, DefineValidExtraLevelAndUseItLater)
     }
 
     // Define an extra level that won't be used for now
-    std::vector<GLubyte> magentaExtraLevelData =
-        createRGBInitData(getWindowWidth() * 2, getWindowHeight() * 2, 255, 0, 255);
+    const int numPixels = getWindowWidth() * 2 * getWindowHeight() * 2;
+    std::vector<GLColorRGB> magentaExtraLevelData(numPixels, GLColorRGB::magenta);
     glTexImage2D(GL_TEXTURE_2D, maxLevel, GL_RGB, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE,
                  magentaExtraLevelData.data());
 
@@ -707,9 +707,7 @@ TEST_P(MipmapTest, DefineValidExtraLevelAndUseItLater)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 
     // Now redefine everything above level 8 to be a mipcomplete chain again.
-    std::vector<GLubyte> levelDoubleSizeYellowInitData =
-        createRGBInitData(getWindowWidth() * 2, getWindowHeight() * 2, 255, 255, 0);
-
+    std::vector<GLColorRGB> levelDoubleSizeYellowInitData(numPixels, GLColorRGB::yellow);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getWindowWidth() * 2, getWindowHeight() * 2, 0, GL_RGB,
                  GL_UNSIGNED_BYTE, levelDoubleSizeYellowInitData.data());  // 256
 

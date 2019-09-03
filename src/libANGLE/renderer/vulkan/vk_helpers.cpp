@@ -1578,6 +1578,18 @@ angle::Result ImageHelper::initExternal(Context *context,
     return angle::Result::Continue;
 }
 
+void ImageHelper::release(ContextVk *contextVk)
+{
+    releaseImage(contextVk);
+    releaseStagingBuffer(contextVk);
+}
+
+void ImageHelper::release(DisplayVk *display, std::vector<GarbageObjectBase> *garbageQueue)
+{
+    releaseImage(display, garbageQueue);
+    releaseStagingBuffer(display, garbageQueue);
+}
+
 void ImageHelper::releaseImage(ContextVk *contextVk)
 {
     contextVk->releaseObject(getStoredQueueSerial(), &mImage);

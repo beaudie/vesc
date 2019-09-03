@@ -141,17 +141,17 @@ class TextureVk : public TextureImpl
 
     const vk::ImageHelper &getImage() const
     {
-        ASSERT(mImage && mImage->valid());
-        return *mImage;
+        ASSERT(mImage.valid());
+        return mImage.get();
     }
 
     vk::ImageHelper &getImage()
     {
-        ASSERT(mImage && mImage->valid());
-        return *mImage;
+        ASSERT(mImage.valid());
+        return mImage.get();
     }
 
-    void releaseOwnershipOfImage(const gl::Context *context);
+    const vk::Shared<vk::ImageHelper> &getSharedImage() const { return mImage; }
 
     const vk::ImageView &getReadImageView() const;
     // A special view for cube maps as a 2D array, used with shaders that do texelFetch() and for
@@ -177,6 +177,8 @@ class TextureVk : public TextureImpl
         mStagingBufferInitialSize = initialSizeForTesting;
     }
 
+    void releaseImage(ContextVk *contextVk);
+
   private:
     struct TextureVkViews final : angle::NonCopyable
     {
@@ -197,10 +199,9 @@ class TextureVk : public TextureImpl
     uint32_t getNativeImageLevel(uint32_t frontendLevel) const;
     uint32_t getNativeImageLayer(uint32_t frontendLayer) const;
 
-    void releaseImage(ContextVk *contextVk);
     angle::Result ensureImageAllocated(ContextVk *contextVk, const vk::Format &format);
     void setImageHelper(ContextVk *contextVk,
-                        vk::ImageHelper *imageHelper,
+                        const vk::Shared<vk::ImageHelper> *sharedImage,
                         gl::TextureType imageType,
                         const vk::Format &format,
                         uint32_t imageLevelOffset,
@@ -322,8 +323,6 @@ class TextureVk : public TextureImpl
 
     const TextureVkViews *getTextureViews() const;
 
-    bool mOwnsImage;
-
     gl::TextureType mImageNativeType;
 
     // The layer offset to apply when converting from a frontend texture layer to a texture layer in
@@ -334,7 +333,7 @@ class TextureVk : public TextureImpl
     // mImage.
     uint32_t mImageLevelOffset;
 
-    vk::ImageHelper *mImage;
+    vk::Shared<vk::ImageHelper> mImage;
 
     // Read views.
     TextureVkViews mDefaultViews;
