@@ -6,6 +6,7 @@
 
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
+#include "util/random_utils.h"
 
 using namespace angle;
 
@@ -1594,6 +1595,451 @@ TEST_P(UniformBufferTest, SizeOverMaxBlockSize)
     EXPECT_PIXEL_COLOR_EQ(width / 2 - 5, height / 2 - 5, GLColor::red);
     // Top right should be green
     EXPECT_PIXEL_COLOR_EQ(width / 2 + 5, height / 2 + 5, GLColor::green);
+}
+
+// Compile uniform buffer with large array member.
+TEST_P(UniformBufferTest, LargeArrayOfStructs)
+{
+    constexpr char kVertexShader[] = R"(#version 300 es
+        struct InstancingData
+        {
+            mat4 transformation;
+        };
+
+        #define MAX_INSTANCE_COUNT 800
+
+        layout(std140) uniform InstanceBlock
+        {
+            InstancingData instances[MAX_INSTANCE_COUNT];
+        };
+
+        void main()
+        {
+            gl_Position = vec4(1.0) * instances[gl_InstanceID].transformation;
+        })";
+
+    constexpr char kFragmentShader[] = R"(#version 300 es
+        precision mediump float;
+        out vec4 outFragColor;
+        void main()
+        {
+            outFragColor = vec4(0.0);
+        })";
+
+    ANGLE_GL_PROGRAM(program, kVertexShader, kFragmentShader);
+}
+
+// Test uniform buffer with large struct array member, where the struct itself contains a mat4
+// member.
+TEST_P(UniformBufferTest, UniformBlockWithOneStructLargeArrayMember)
+{
+    constexpr char kFS[] = R"(#version 300 es
+        precision highp float;
+        out vec4 my_FragColor;
+        struct S { mat4 color;};
+        layout(std140) uniform buffer { S s[512]; };
+        void main()
+        {
+            uvec2 coord = uvec2(floor(gl_FragCoord.xy));
+            uint index = coord.x +  coord.y * uint(128);
+            uint index_x = index / uint(32);
+            uint index_y = (index % uint(32)) / uint(8);
+            my_FragColor = s[index_x].color[index_y];
+        })";
+
+    const size_t readPixelsTimes = 10;
+    int randXCoord, randYCoord;
+    int width  = getWindowWidth();
+    int height = getWindowHeight();
+    RNG rng;
+
+    GLint blockSize;
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    GLint uniformBufferIndex = glGetUniformBlockIndex(program, "buffer");
+    glGetActiveUniformBlockiv(program, uniformBufferIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
+
+    glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, blockSize, nullptr, GL_STATIC_DRAW);
+
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, mUniformBuffer);
+    glUniformBlockBinding(program, uniformBufferIndex, 0);
+
+    const GLsizei kArraySize      = 512;
+    const GLsizei kVectorPerMat   = 4;
+    const GLsizei kFloatPerVector = 4;
+    const GLsizei kVectorCount    = kArraySize * kVectorPerMat;
+    const GLsizei kFloatCount     = kVectorCount * kFloatPerVector;
+    std::vector<GLfloat> floatData(kFloatCount, 0.0f);
+
+    for (size_t i = 0; i < kVectorCount; i++)
+    {
+        floatData[4 * i + 2] = 1.0f;
+        floatData[4 * i + 3] = 1.0f;
+    }
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, kFloatCount * sizeof(GLfloat), floatData.data());
+    drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    for (size_t i = 0; i < readPixelsTimes; i++)
+    {
+        randXCoord = rng.randomIntBetween(0, width - 1);
+        randYCoord = rng.randomIntBetween(0, height - 1);
+        EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::blue);
+    }
+
+    for (size_t i = 0; i < kVectorCount; i++)
+    {
+        floatData[4 * i + 1] = 1.0f;
+        floatData[4 * i + 2] = 0.0f;
+    }
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, kFloatCount * sizeof(GLfloat), floatData.data());
+    drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    for (size_t i = 0; i < readPixelsTimes; i++)
+    {
+        randXCoord = rng.randomIntBetween(0, width - 1);
+        randYCoord = rng.randomIntBetween(0, height - 1);
+        EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::green);
+    }
+
+    for (size_t i = kVectorCount / 4; i < kVectorCount / 2; i++)
+    {
+        floatData[4 * i]     = 1.0f;
+        floatData[4 * i + 1] = 0.0f;
+    }
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, kFloatCount * sizeof(GLfloat), floatData.data());
+    drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    for (size_t i = 0; i < readPixelsTimes; i++)
+    {
+        randXCoord = rng.randomIntBetween(0, width - 1);
+        randYCoord = rng.randomIntBetween(0, height - 1);
+        if (randYCoord > 31 && randYCoord < 64)
+        {
+            EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::red);
+        }
+        else
+        {
+            EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::green);
+        }
+    }
+}
+
+// Test uniform buffer with large struct array member, where the struct itself contains
+// a mat4 member and a float member.
+TEST_P(UniformBufferTest, UniformBlockWithOneMixStructLargeArrayMember)
+{
+    constexpr char kFS[] = R"(#version 300 es
+        precision highp float;
+        out vec4 my_FragColor;
+        struct S { mat4 color; float factor; };
+        layout(std140) uniform buffer { S s[512]; };
+        void main()
+        {
+            uvec2 coord = uvec2(floor(gl_FragCoord.xy));
+            uint index = coord.x +  coord.y * uint(128);
+            uint index_x = index / uint(32);
+            uint index_y = (index % uint(32)) / uint(8);
+            my_FragColor = s[index_x].factor * s[index_x].color[index_y];
+        })";
+
+    const size_t readPixelsTimes = 10;
+    int randXCoord, randYCoord;
+    int width  = getWindowWidth();
+    int height = getWindowHeight();
+    RNG rng;
+
+    GLint blockSize;
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    GLint uniformBufferIndex = glGetUniformBlockIndex(program, "buffer");
+    glGetActiveUniformBlockiv(program, uniformBufferIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
+
+    glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, blockSize, nullptr, GL_STATIC_DRAW);
+
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, mUniformBuffer);
+    glUniformBlockBinding(program, uniformBufferIndex, 0);
+
+    const GLsizei kArraySize      = 512;
+    const GLsizei kVectorPerMat   = 4;
+    const GLsizei kFloatPerVector = 4;
+    // The member s is an array of S structures, each element of s should be rounded up
+    // to the base alignment of a vec4 according to std140 storage layout rules.
+    const GLsizei kFloatCount = kArraySize * (kVectorPerMat * kFloatPerVector + kFloatPerVector);
+    std::vector<GLfloat> floatData(kFloatCount, 0.0f);
+
+    const size_t kStrideofFloatCount = kVectorPerMat * kFloatPerVector + kFloatPerVector;
+    for (size_t i = 0; i < kArraySize; i++)
+    {
+        for (size_t j = 0; j < kVectorPerMat; j++)
+        {
+            floatData[i * kStrideofFloatCount + kVectorPerMat * j + 2] = 0.5f;
+            floatData[i * kStrideofFloatCount + kVectorPerMat * j + 3] = 0.5f;
+        }
+        floatData[i * kStrideofFloatCount + kVectorPerMat * kFloatPerVector] = 2.0f;
+    }
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, kFloatCount * sizeof(GLfloat), floatData.data());
+    drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    for (size_t i = 0; i < readPixelsTimes; i++)
+    {
+        randXCoord = rng.randomIntBetween(0, width - 1);
+        randYCoord = rng.randomIntBetween(0, height - 1);
+        EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::blue);
+    }
+
+    for (size_t i = 0; i < kArraySize; i++)
+    {
+        for (size_t j = 0; j < kVectorPerMat; j++)
+        {
+            floatData[i * kStrideofFloatCount + kVectorPerMat * j + 1] = 0.5f;
+            floatData[i * kStrideofFloatCount + kVectorPerMat * j + 2] = 0.0f;
+        }
+    }
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, kFloatCount * sizeof(GLfloat), floatData.data());
+    drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    for (size_t i = 0; i < readPixelsTimes; i++)
+    {
+        randXCoord = rng.randomIntBetween(0, width - 1);
+        randYCoord = rng.randomIntBetween(0, height - 1);
+        EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::green);
+    }
+
+    for (size_t i = kArraySize / 4; i < kArraySize / 2; i++)
+    {
+        for (size_t j = 0; j < kVectorPerMat; j++)
+        {
+            floatData[i * kStrideofFloatCount + kVectorPerMat * j]     = 0.5f;
+            floatData[i * kStrideofFloatCount + kVectorPerMat * j + 1] = 0.0f;
+        }
+    }
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, kFloatCount * sizeof(GLfloat), floatData.data());
+    drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    for (size_t i = 0; i < readPixelsTimes; i++)
+    {
+        randXCoord = rng.randomIntBetween(0, width - 1);
+        randYCoord = rng.randomIntBetween(0, height - 1);
+        if (randYCoord > 31 && randYCoord < 64)
+        {
+            EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::red);
+        }
+        else
+        {
+            EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::green);
+        }
+    }
+}
+
+// Test a uniform block with large struct array member and a uniform block with small
+// struct array member in the same program, and they share a uniform buffer.
+TEST_P(UniformBufferTest, UniformBlocksInSameProgramShareUniformBuffer)
+{
+    constexpr char kFS[] = R"(#version 300 es
+        precision highp float;
+        out vec4 my_FragColor;
+        struct S { mat4 color;};
+        layout(std140) uniform buffer1 { S s1[512]; };
+        layout(std140) uniform buffer2 { S s2[32]; };
+        void main()
+        {
+            uvec2 coord = uvec2(floor(gl_FragCoord.xy));
+            uint index = coord.x +  coord.y * uint(128);
+            uint index_x1 = index / uint(32);
+            uint index_y1 = (index % uint(32)) / uint(8);
+            uint index_x2 = coord.x / uint(4);
+            uint index_y2 = coord.x % uint(4);
+            my_FragColor = s1[index_x1].color[index_y1] + s2[index_x2].color[index_y2];
+        })";
+
+    const size_t readPixelsTimes = 10;
+    int randXCoord, randYCoord;
+    int width  = getWindowWidth();
+    int height = getWindowHeight();
+    RNG rng;
+
+    GLint blockSize1, blockSize2;
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    GLint uniformBufferIndex1 = glGetUniformBlockIndex(program, "buffer1");
+    GLint uniformBufferIndex2 = glGetUniformBlockIndex(program, "buffer2");
+    glGetActiveUniformBlockiv(program, uniformBufferIndex1, GL_UNIFORM_BLOCK_DATA_SIZE,
+                              &blockSize1);
+    glGetActiveUniformBlockiv(program, uniformBufferIndex2, GL_UNIFORM_BLOCK_DATA_SIZE,
+                              &blockSize2);
+
+    glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, blockSize1 + blockSize2, nullptr, GL_STATIC_DRAW);
+
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, mUniformBuffer, 0, blockSize2);
+    glUniformBlockBinding(program, uniformBufferIndex2, 0);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 1, mUniformBuffer, blockSize2, blockSize1);
+    glUniformBlockBinding(program, uniformBufferIndex1, 1);
+
+    const GLsizei kArraySize1     = 512;
+    const GLsizei kArraySize2     = 32;
+    const GLsizei kVectorPerMat   = 4;
+    const GLsizei kFloatPerVector = 4;
+    const GLsizei kVectorCount1   = kArraySize1 * kVectorPerMat;
+    const GLsizei kVectorCount2   = kArraySize2 * kVectorPerMat;
+    const GLsizei kFloatCount1    = kVectorCount1 * kFloatPerVector;
+    const GLsizei kFloatCount2    = kVectorCount2 * kFloatPerVector;
+    const GLsizei kFloatCount     = kFloatCount1 + kFloatCount2;
+    std::vector<GLfloat> floatData(kFloatCount, 0.0f);
+
+    for (size_t i = kVectorCount2; i < kVectorCount1 + kVectorCount2; i++)
+    {
+        floatData[4 * i + 2] = 1.0f;
+        floatData[4 * i + 3] = 1.0f;
+    }
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, kFloatCount2 * sizeof(GLfloat), &floatData[0]);
+    glBufferSubData(GL_UNIFORM_BUFFER, blockSize2, kFloatCount1 * sizeof(GLfloat),
+                    &floatData[kFloatCount2]);
+    drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    for (size_t i = 0; i < readPixelsTimes; i++)
+    {
+        randXCoord = rng.randomIntBetween(0, width - 1);
+        randYCoord = rng.randomIntBetween(0, height - 1);
+        EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::blue);
+    }
+
+    for (size_t i = 0; i < kVectorCount2; i++)
+    {
+        floatData[4 * i + 1] = 1.0f;
+    }
+    for (size_t i = kVectorCount2 + kVectorCount1 / 4; i < kVectorCount2 + kVectorCount1 / 2; i++)
+    {
+        floatData[4 * i]     = 1.0f;
+        floatData[4 * i + 2] = 0.0f;
+    }
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, kFloatCount2 * sizeof(GLfloat), &floatData[0]);
+    glBufferSubData(GL_UNIFORM_BUFFER, blockSize2 + kVectorCount1 * sizeof(GLfloat),
+                    kVectorCount1 * sizeof(GLfloat), &floatData[kFloatCount2 + kVectorCount1]);
+    drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    for (size_t i = 0; i < readPixelsTimes; i++)
+    {
+        randXCoord = rng.randomIntBetween(0, width - 1);
+        randYCoord = rng.randomIntBetween(0, height - 1);
+        if (randYCoord > 31 && randYCoord < 64)
+        {
+            EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::yellow);
+        }
+        else
+        {
+            EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::cyan);
+        }
+    }
+}
+
+// Test a uniform block with large struct array member and a uniform block with small
+// struct array member in the different programs, and they share a uniform buffer.
+TEST_P(UniformBufferTest, UniformBlocksInDiffProgramShareUniformBuffer)
+{
+    constexpr char kFS1[] = R"(#version 300 es
+        precision highp float;
+        out vec4 my_FragColor;
+        struct S { mat4 color;};
+        layout(std140) uniform buffer { S s[512]; };
+        void main()
+        {
+            uvec2 coord = uvec2(floor(gl_FragCoord.xy));
+            uint index = coord.x +  coord.y * uint(128);
+            uint index_x = index / uint(32);
+            uint index_y = (index % uint(32)) / uint(8);
+            my_FragColor = s[index_x].color[index_y];
+        })";
+
+    constexpr char kFS2[] = R"(#version 300 es
+        precision highp float;
+        out vec4 my_FragColor;
+        struct S { mat4 color;};
+        layout(std140) uniform buffer { S s[32]; };
+        void main()
+        {
+            uvec2 coord = uvec2(floor(gl_FragCoord.xy));
+            uint index = coord.x +  coord.y * uint(128);
+            uint index_x = coord.x / uint(4);
+            uint index_y = coord.x % uint(4);
+            my_FragColor = s[index_x].color[index_y];
+        })";
+
+    const size_t readPixelsTimes = 10;
+    int randXCoord, randYCoord;
+    int width  = getWindowWidth();
+    int height = getWindowHeight();
+    RNG rng;
+
+    GLint blockSize1, blockSize2;
+    ANGLE_GL_PROGRAM(program1, essl3_shaders::vs::Simple(), kFS1);
+    ANGLE_GL_PROGRAM(program2, essl3_shaders::vs::Simple(), kFS2);
+    GLint uniformBufferIndex1 = glGetUniformBlockIndex(program1, "buffer");
+    GLint uniformBufferIndex2 = glGetUniformBlockIndex(program2, "buffer");
+    glGetActiveUniformBlockiv(program1, uniformBufferIndex1, GL_UNIFORM_BLOCK_DATA_SIZE,
+                              &blockSize1);
+    glGetActiveUniformBlockiv(program2, uniformBufferIndex2, GL_UNIFORM_BLOCK_DATA_SIZE,
+                              &blockSize2);
+
+    glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, std::max(blockSize1, blockSize2), nullptr, GL_STATIC_DRAW);
+
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, mUniformBuffer, 0, blockSize2);
+    glUniformBlockBinding(program2, uniformBufferIndex2, 0);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 1, mUniformBuffer, 0, blockSize1);
+    glUniformBlockBinding(program1, uniformBufferIndex1, 1);
+
+    const GLsizei kArraySize1     = 512;
+    const GLsizei kArraySize2     = 32;
+    const GLsizei kVectorPerMat   = 4;
+    const GLsizei kFloatPerVector = 4;
+    const GLsizei kVectorCount1   = kArraySize1 * kVectorPerMat;
+    const GLsizei kVectorCount2   = kArraySize2 * kVectorPerMat;
+    const GLsizei kFloatCount1    = kVectorCount1 * kFloatPerVector;
+    const GLsizei kFloatCount2    = kVectorCount2 * kFloatPerVector;
+    const GLsizei kFloatCount     = kFloatCount1;
+    std::vector<GLfloat> floatData(kFloatCount, 0.0f);
+
+    for (size_t i = 0; i < kVectorCount1; i++)
+    {
+        floatData[4 * i + 2] = 1.0f;
+        floatData[4 * i + 3] = 1.0f;
+    }
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, kFloatCount * sizeof(GLfloat), &floatData[0]);
+    drawQuad(program1.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    for (size_t i = 0; i < readPixelsTimes; i++)
+    {
+        randXCoord = rng.randomIntBetween(0, width - 1);
+        randYCoord = rng.randomIntBetween(0, height - 1);
+        EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::blue);
+    }
+
+    for (size_t i = 0; i < kVectorCount2; i++)
+    {
+        floatData[4 * i + 1] = 1.0f;
+        floatData[4 * i + 2] = 0.0f;
+    }
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, kFloatCount2 * sizeof(GLfloat), &floatData[0]);
+    drawQuad(program2.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    for (size_t i = 0; i < readPixelsTimes; i++)
+    {
+        randXCoord = rng.randomIntBetween(0, width - 1);
+        randYCoord = rng.randomIntBetween(0, height - 1);
+        EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::green);
+    }
+
+    for (size_t i = kVectorCount2; i < kVectorCount1 / 2; i++)
+    {
+        floatData[4 * i + 1] = 1.0f;
+        floatData[4 * i + 2] = 0.0f;
+    }
+    glBufferSubData(GL_UNIFORM_BUFFER, kFloatCount2 * sizeof(GLfloat),
+                    (kFloatCount1 / 2 - kFloatCount2) * sizeof(GLfloat), &floatData[0]);
+    drawQuad(program1.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    for (size_t i = 0; i < readPixelsTimes; i++)
+    {
+        randXCoord = rng.randomIntBetween(0, width - 1);
+        randYCoord = rng.randomIntBetween(0, height - 1);
+        if (randYCoord < 64)
+        {
+            EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::green);
+        }
+        else
+        {
+            EXPECT_PIXEL_COLOR_EQ(randXCoord, randYCoord, GLColor::blue);
+        }
+    }
 }
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
