@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "96de7a38_332a5bc2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-03T21:52:34Z",
+      "side": 1,
+      "message": "nit: use condensed syntax: gl::Format glFormat(internalFormat);",
+      "range": {
+        "startLine": 770,
+        "startChar": 4,
+        "endLine": 770,
+        "endChar": 53
+      },
+      "revId": "17745c30be4c5fe799f9645466b043307d5a878d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2fba605a_739e9cb2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 797,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-03T21:52:34Z",
+      "side": 1,
+      "message": "nit: use condensed syntax: gl::Format glFormat(internalFormat);",
+      "range": {
+        "startLine": 797,
+        "startChar": 4,
+        "endLine": 797,
+        "endChar": 53
+      },
+      "revId": "17745c30be4c5fe799f9645466b043307d5a878d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f3ad4e4_02760efa",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-03T21:52:34Z",
+      "side": 1,
+      "message": "nit: use condensed syntax: gl::Format glFormat(internalFormat);",
+      "range": {
+        "startLine": 1131,
+        "startChar": 4,
+        "endLine": 1131,
+        "endChar": 53
+      },
+      "revId": "17745c30be4c5fe799f9645466b043307d5a878d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4acf6a1b_46f37a73",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 4397,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-03T21:52:34Z",
+      "side": 1,
+      "message": "do you actually need to do this in testSetUp/testTearDown? Can you use RAII stuff and do it in the test behaviour method?",
+      "range": {
+        "startLine": 4373,
+        "startChar": 0,
+        "endLine": 4397,
+        "endChar": 34
+      },
+      "revId": "17745c30be4c5fe799f9645466b043307d5a878d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "afef8ca8_37d6c389",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 4404,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-03T21:52:34Z",
+      "side": 1,
+      "message": "nit: use GLTexture RAII",
+      "range": {
+        "startLine": 4404,
+        "startChar": 8,
+        "endLine": 4404,
+        "endChar": 23
+      },
+      "revId": "17745c30be4c5fe799f9645466b043307d5a878d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
