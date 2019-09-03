@@ -205,6 +205,7 @@ bool TranslatorHLSL::translate(TIntermBlock *root,
 
     mShaderStorageBlockRegisterMap = outputHLSL.getShaderStorageBlockRegisterMap();
     mUniformBlockRegisterMap       = outputHLSL.getUniformBlockRegisterMap();
+    mUniformBlockUseStructuredBufferMap = outputHLSL.getUniformBlockUseStructuredBufferMap();
     mUniformRegisterMap            = outputHLSL.getUniformRegisterMap();
     mReadonlyImage2DRegisterIndex  = outputHLSL.getReadonlyImage2DRegisterIndex();
     mImage2DRegisterIndex          = outputHLSL.getImage2DRegisterIndex();
@@ -260,6 +261,14 @@ unsigned int TranslatorHLSL::getImage2DRegisterIndex() const
 const std::set<std::string> *TranslatorHLSL::getUsedImage2DFunctionNames() const
 {
     return &mUsedImage2DFunctionNames;
+}
+
+unsigned int TranslatorHLSL::IsUniformBlockUseStructuredBuffer(
+    const std::string &uniformBlockName) const
+{
+    auto uniformBlockIter = mUniformBlockUseStructuredBufferMap.find(uniformBlockName);
+    return uniformBlockIter != mUniformBlockUseStructuredBufferMap.end() ? uniformBlockIter->second
+                                                                         : false;
 }
 
 }  // namespace sh

@@ -134,8 +134,13 @@ InterfaceBlock::InterfaceBlock(const std::string &nameIn,
                                const std::string &mappedNameIn,
                                bool isArrayIn,
                                unsigned int arrayElementIn,
+                               unsigned int firstFieldArraySizeIn,
                                int bindingIn)
-    : name(nameIn), mappedName(mappedNameIn), isArray(isArrayIn), arrayElement(arrayElementIn)
+    : name(nameIn),
+      mappedName(mappedNameIn),
+      isArray(isArrayIn),
+      arrayElement(arrayElementIn),
+      firstFieldArraySize(firstFieldArraySizeIn)
 {
     binding = bindingIn;
 }

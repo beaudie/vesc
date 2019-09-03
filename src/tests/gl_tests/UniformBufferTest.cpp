@@ -1596,6 +1596,197 @@ TEST_P(UniformBufferTest, SizeOverMaxBlockSize)
     EXPECT_PIXEL_COLOR_EQ(width / 2 + 5, height / 2 + 5, GLColor::green);
 }
 
+TEST_P(UniformBufferTest, LargeArrayOfStructs)
+{
+    constexpr char kVertexShader[] = R"(#version 300 es
+        struct InstancingData
+        {
+            mat4 transformation;
+        };
+
+        #define MAX_INSTANCE_COUNT 800
+
+        layout(std140) uniform InstanceBlock
+        {
+            InstancingData instances[MAX_INSTANCE_COUNT];
+        };
+
+        void main()
+        {
+            gl_Position = vec4(1.0) * instances[gl_InstanceID].transformation;
+        })";
+
+    constexpr char kFragmentShader[] = R"(#version 300 es
+        precision mediump float;
+        out vec4 outFragColor;
+        void main()
+        {
+            outFragColor = vec4(0.0);
+        })";
+
+    ANGLE_GL_PROGRAM(program, kVertexShader, kFragmentShader);
+}
+
+TEST_P(UniformBufferTest, UniformBlockOneMemberStructWithSmallArray)
+{
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "layout(std140) uniform buffer { mat4 color[512]; };\n"
+        "void main()\n"
+        "{\n"
+        "    uvec2 coord = uvec2(floor(gl_FragCoord.xy));\n"
+        "    uint index_x = coord.x / uint(4);\n"
+        "    uint index_y = coord.y / uint(32);\n"
+        "    my_FragColor = color[index_x][index_y];\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    GLint uniformBufferIndex = glGetUniformBlockIndex(program, "buffer");
+
+    glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
+    const GLsizei kArraySize         = 512;
+    const GLsizei kVectorPerMat      = 4;
+    const GLsizei kElementsPerVector = 4;
+    const GLsizei kBytesPerElement   = 4;
+    const GLsizei kDataSize = kArraySize * kVectorPerMat * kElementsPerVector * kBytesPerElement;
+    std::vector<GLubyte> v(kDataSize, 0);
+    float *vAsFloat = reinterpret_cast<float *>(v.data());
+
+    for (size_t i = 0; i < kArraySize; i++)
+    {
+        vAsFloat[16 * i + 0]  = 0.1f;
+        vAsFloat[16 * i + 1]  = 0.1f;
+        vAsFloat[16 * i + 2]  = 0.1f;
+        vAsFloat[16 * i + 3]  = 0.1f;
+        vAsFloat[16 * i + 4]  = 0.3f;
+        vAsFloat[16 * i + 5]  = 0.3f;
+        vAsFloat[16 * i + 6]  = 0.3f;
+        vAsFloat[16 * i + 7]  = 0.3f;
+        vAsFloat[16 * i + 8]  = 0.5f;
+        vAsFloat[16 * i + 9]  = 0.5f;
+        vAsFloat[16 * i + 10] = 0.5f;
+        vAsFloat[16 * i + 11] = 0.5f;
+        vAsFloat[16 * i + 12] = 0.9f;
+        vAsFloat[16 * i + 13] = 0.9f;
+        vAsFloat[16 * i + 14] = 0.9f;
+        vAsFloat[16 * i + 15] = 0.9f;
+    }
+
+    glBufferData(GL_UNIFORM_BUFFER, kDataSize, v.data(), GL_STATIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, mUniformBuffer);
+    glUniformBlockBinding(program, uniformBufferIndex, 0);
+    drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(23, 45, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(56, 34, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(127, 127, GLColor::blue);
+}
+
+TEST_P(UniformBufferTest, UniformBlockOneMemberStructWithLargeArray)
+{
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "layout(std140) uniform buffer { mat4 color[512]; };\n"
+        "void main()\n"
+        "{\n"
+        "    uvec2 coord = uvec2(floor(gl_FragCoord.xy));\n"
+        "    uint index_x = coord.x % uint(4);\n"
+        "    uint index_y = coord.y % uint(32);\n"
+        "    my_FragColor = color[index_x][index_y];\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    GLint uniformBufferIndex = glGetUniformBlockIndex(program, "buffer");
+
+    glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
+    const GLsizei kArraySize         = 512;
+    const GLsizei kVectorPerMat      = 4;
+    const GLsizei kElementsPerVector = 4;
+    const GLsizei kBytesPerElement   = 4;
+    const GLsizei kDataSize = kArraySize * kVectorPerMat * kElementsPerVector * kBytesPerElement;
+    std::vector<GLubyte> v(kDataSize, 0);
+    float *vAsFloat = reinterpret_cast<float *>(v.data());
+
+    for (size_t i = 0; i < kArraySize * kVectorPerMat; i++)
+    {
+        vAsFloat[4 * i]     = 0.1f;
+        vAsFloat[4 * i + 1] = 0.3f;
+        vAsFloat[4 * i + 2] = 0.6f;
+        vAsFloat[4 * i + 3] = 0.9f;
+    }
+
+    glBufferData(GL_UNIFORM_BUFFER, kDataSize, v.data(), GL_STATIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, mUniformBuffer);
+    glUniformBlockBinding(program, uniformBufferIndex, 0);
+    drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(0, 75, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(13, 98, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(32, 32, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(33, 65, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(54, 23, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(67, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(86, 43, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(100, 53, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(109, 76, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(127, 127, GLColor::blue);
+}
+
+TEST_P(UniformBufferTest, UniformBlockOneMemberStructWithArray)
+{
+    constexpr char kFS[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "struct S { mat4 color; };\n"
+        "layout(std140) uniform buffer { S s[512]; };\n"
+        "void main()\n"
+        "{\n"
+        "    uvec2 coord = uvec2(floor(gl_FragCoord.xy));\n"
+        "    uint index_x = coord.x % uint(4);\n"
+        "    uint index_y = coord.y % uint(32);\n"
+        "    my_FragColor = s[index_x].color[index_y];\n"
+        "}\n";
+
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+    GLint uniformBufferIndex = glGetUniformBlockIndex(program, "buffer");
+
+    glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
+    const GLsizei kArraySize         = 512;
+    const GLsizei kVectorPerMat      = 4;
+    const GLsizei kElementsPerVector = 4;
+    const GLsizei kBytesPerElement   = 4;
+    const GLsizei kDataSize = kArraySize * kVectorPerMat * kElementsPerVector * kBytesPerElement;
+    std::vector<GLubyte> v(kDataSize, 0);
+    float *vAsFloat = reinterpret_cast<float *>(v.data());
+
+    for (size_t i = 0; i < kArraySize * kVectorPerMat; i++)
+    {
+        vAsFloat[4 * i + 2] = 1.0f;
+        vAsFloat[4 * i + 3] = 1.0f;
+    }
+
+    glBufferData(GL_UNIFORM_BUFFER, kDataSize, v.data(), GL_STATIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, mUniformBuffer);
+    glUniformBlockBinding(program, uniformBufferIndex, 0);
+    drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(0, 75, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(13, 98, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(32, 32, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(33, 65, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(54, 23, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(67, 0, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(86, 43, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(100, 53, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(109, 76, GLColor::blue);
+    EXPECT_PIXEL_COLOR_EQ(127, 127, GLColor::blue);
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(UniformBufferTest, ES3_D3D11(), ES3_OPENGL(), ES3_OPENGLES(), ES3_VULKAN());

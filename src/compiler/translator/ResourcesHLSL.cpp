@@ -24,6 +24,9 @@ namespace
 {
 
 constexpr const ImmutableString kAngleDecorString("angle_");
+// D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT = 128;
+const unsigned int kMaxTextureRegisterSize          = 128u;
+const unsigned int kMinArraySizeUseStructuredBuffer = 1u;
 
 static const char *UniformRegisterPrefix(const TType &type)
 {
@@ -642,6 +645,27 @@ TString ResourcesHLSL::uniformBlocksHeader(
             interfaceBlocks += uniformBlockStructString(interfaceBlock);
         }
 
+        // when uniform block meets the following conditions, in order to avoid compile performance
+        // issue, translate uniform block to structured buffer.
+        // https://bugs.chromium.org/p/angleproject/issues/detail?id=3682
+        // TODO(xinghua.cao@intel.com): add to support "instanceVariable != nullptr"
+        if (instanceVariable == nullptr && mTextureRegister < kMaxTextureRegisterSize &&
+            interfaceBlock.fields().size() == 1u &&
+            (interfaceBlock.fields()[0]->type()->getStruct() != nullptr ||
+             interfaceBlock.fields()[0]->type()->isMatrix()) &&
+            interfaceBlock.fields()[0]->type()->getNumArraySizes() == 1u &&
+            interfaceBlock.fields()[0]->type()->getOutermostArraySize() >
+                kMinArraySizeUseStructuredBuffer)
+        {
+            unsigned int structuredBufferRegister = mTextureRegister;
+            interfaceBlocks += uniformBlockWithOneArrayStructureNumberString(
+                interfaceBlock, structuredBufferRegister);
+            mUniformBlockRegisterMap[interfaceBlock.name().data()] = structuredBufferRegister;
+            mUniformBlockUseStructuredBufferMap[interfaceBlock.name().data()] = true;
+            mTextureRegister += 1u;
+            continue;
+        }
+
         unsigned int activeRegister                            = mUniformBlockRegister;
         mUniformBlockRegisterMap[interfaceBlock.name().data()] = activeRegister;
 
@@ -725,6 +749,22 @@ TString ResourcesHLSL::uniformBlockString(const TInterfaceBlock &interfaceBlock,
     }
 
     hlsl += "};\n\n";
+
+    return hlsl;
+}
+
+TString ResourcesHLSL::uniformBlockWithOneArrayStructureNumberString(
+    const TInterfaceBlock &interfaceBlock,
+    unsigned int registerIndex)
+{
+    TString hlsl, typeString;
+
+    const TField &field                    = *interfaceBlock.fields()[0];
+    const TLayoutBlockStorage blockStorage = interfaceBlock.blockStorage();
+    typeString                             = InterfaceBlockFieldTypeString(field, blockStorage);
+
+    hlsl += "StructuredBuffer <" + typeString + "> " + Decorate(field.name()) + " : register(t" +
+            str(registerIndex) + ");\n";
 
     return hlsl;
 }

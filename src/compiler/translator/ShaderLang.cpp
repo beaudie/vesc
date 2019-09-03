@@ -542,6 +542,40 @@ bool GetUniformBlockRegister(const ShHandle handle,
 #endif  // ANGLE_ENABLE_HLSL
 }
 
+bool IsUniformBlockUseStructuredBuffer(const ShHandle handle, const std::string &uniformBlockName)
+{
+#ifdef ANGLE_ENABLE_HLSL
+    TranslatorHLSL *translator = GetTranslatorHLSLFromHandle(handle);
+    ASSERT(translator);
+
+    return translator->IsUniformBlockUseStructuredBuffer(uniformBlockName);
+#else
+    return false;
+#endif  // ANGLE_ENABLE_HLSL
+}
+
+bool IsUniformBlockRegister(const ShHandle handle,
+                            const std::string &uniformBlockName,
+                            unsigned int *indexOut)
+{
+#ifdef ANGLE_ENABLE_HLSL
+    ASSERT(indexOut);
+
+    TranslatorHLSL *translator = GetTranslatorHLSLFromHandle(handle);
+    ASSERT(translator);
+
+    if (!translator->hasUniformBlock(uniformBlockName))
+    {
+        return false;
+    }
+
+    *indexOut = translator->getUniformBlockRegister(uniformBlockName);
+    return true;
+#else
+    return false;
+#endif  // ANGLE_ENABLE_HLSL
+}
+
 const std::map<std::string, unsigned int> *GetUniformRegisterMap(const ShHandle handle)
 {
 #ifdef ANGLE_ENABLE_HLSL
