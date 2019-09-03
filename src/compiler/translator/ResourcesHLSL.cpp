@@ -642,6 +642,20 @@ TString ResourcesHLSL::uniformBlocksHeader(
             interfaceBlocks += uniformBlockStructString(interfaceBlock);
         }
 
+        if (interfaceBlock.fields().size() == 1u &&
+            interfaceBlock.fields()[0]->type()->getStruct() != nullptr &&
+            interfaceBlock.fields()[0]->type()->isArray())
+        {
+            unsigned int structuredBufferRegister = mTextureRegister;
+            // TODO(xinghua.cao@intel.com): add to support "instanceVariable != nullptr"
+            ASSERT(instanceVariable == nullptr);
+            interfaceBlocks += uniformBlockWithOneArrayStructureNumberString(
+                interfaceBlock, structuredBufferRegister);
+            mUniformBlockRegisterMap[interfaceBlock.name().data()] = structuredBufferRegister;
+            mTextureRegister += 1u;
+            continue;
+        }
+
         unsigned int activeRegister                            = mUniformBlockRegister;
         mUniformBlockRegisterMap[interfaceBlock.name().data()] = activeRegister;
 
@@ -725,6 +739,21 @@ TString ResourcesHLSL::uniformBlockString(const TInterfaceBlock &interfaceBlock,
     }
 
     hlsl += "};\n\n";
+
+    return hlsl;
+}
+
+TString ResourcesHLSL::uniformBlockWithOneArrayStructureNumberString(
+    const TInterfaceBlock &interfaceBlock,
+    unsigned int registerIndex)
+{
+    TString hlsl;
+
+    const TField &field                    = *interfaceBlock.fields()[0];
+    const TLayoutBlockStorage blockStorage = interfaceBlock.blockStorage();
+
+    hlsl += "StructuredBuffer <" + InterfaceBlockFieldTypeString(field, blockStorage) + "> " +
+            Decorate(field.name()) + " : register(t" + str(registerIndex) + ");\n";
 
     return hlsl;
 }

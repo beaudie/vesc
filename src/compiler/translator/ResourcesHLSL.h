@@ -67,6 +67,8 @@ class ResourcesHLSL : angle::NonCopyable
                                const TVariable *instanceVariable,
                                unsigned int registerIndex,
                                unsigned int arrayIndex);
+    TString uniformBlockWithOneArrayStructureNumberString(const TInterfaceBlock &interfaceBlock,
+                                                          unsigned int registerIndex);
 
     TString shaderStorageBlockString(const TInterfaceBlock &interfaceBlock,
                                      const TVariable *instanceVariable,
