@@ -431,6 +431,11 @@ const std::map<std::string, unsigned int> &OutputHLSL::getUniformBlockRegisterMa
     return mResourcesHLSL->getUniformBlockRegisterMap();
 }
 
+const std::map<std::string, bool> &OutputHLSL::getUniformBlockUseStructuredBufferMap() const
+{
+    return mResourcesHLSL->getUniformBlockUseStructuredBufferMap();
+}
+
 const std::map<std::string, unsigned int> &OutputHLSL::getUniformRegisterMap() const
 {
     return mResourcesHLSL->getUniformRegisterMap();
