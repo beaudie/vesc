@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "590aea9c_86ea10ca",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 17
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-04T15:06:47Z",
+      "side": 1,
+      "message": "also update this to mention unsized.",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 47
+      },
+      "revId": "eeb00d28ec65fa7425a8227f78e2bc1f636b5223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff58652e_a732ba78",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 4504,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-04T15:06:47Z",
+      "side": 1,
+      "message": "and update this to mentioned unsized vs GLES 3.",
+      "range": {
+        "startLine": 4503,
+        "startChar": 0,
+        "endLine": 4504,
+        "endChar": 56
+      },
+      "revId": "eeb00d28ec65fa7425a8227f78e2bc1f636b5223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a984984_1ce2f69b",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 4506,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-04T15:06:47Z",
+      "side": 1,
+      "message": "oh, you can remove this.",
+      "range": {
+        "startLine": 4506,
+        "startChar": 5,
+        "endLine": 4506,
+        "endChar": 52
+      },
+      "revId": "eeb00d28ec65fa7425a8227f78e2bc1f636b5223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
