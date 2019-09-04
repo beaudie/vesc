@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "78d0c49d_0e72b494",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1111,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-09-04T18:57:49Z",
+      "side": 1,
+      "message": "My other comment fits well with your usage here.\n\nWith the way you\u0027ve implemented redefineWithMimaps (where the copy is immediately done), you may be doing copies out of order. You could put this call before redefineWithMipmaps (though I still recommend having redefineWithMipmaps stage the change, and have `ensureImageInitialized` called after).",
+      "range": {
+        "startLine": 1111,
+        "startChar": 4,
+        "endLine": 1111,
+        "endChar": 49
+      },
+      "revId": "9b101c0974b1d18e73d82d4bcc92d352a40f7e82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "441f08ba_35ec8f01",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-09-04T18:57:49Z",
+      "side": 1,
+      "message": "assert this. `ensureImageInitialized` should allocate the image.",
+      "range": {
+        "startLine": 1113,
+        "startChar": 8,
+        "endLine": 1113,
+        "endChar": 34
+      },
+      "revId": "9b101c0974b1d18e73d82d4bcc92d352a40f7e82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24b04a91_818612fe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2122,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-09-04T18:57:49Z",
+      "side": 1,
+      "message": "Why not use dstImage.changeLayout()?",
+      "range": {
+        "startLine": 2101,
+        "startChar": 0,
+        "endLine": 2122,
+        "endChar": 53
+      },
+      "revId": "9b101c0974b1d18e73d82d4bcc92d352a40f7e82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f29e87a1_23c3649c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-09-04T18:57:49Z",
+      "side": 1,
+      "message": "Instead of all this, you can use stageSubresourceUpdateFromImage to stage the old image to be copied to the new image whenever it happens to be flushed. Take care to make sure the flush actually happens (for example, if this happens during syncState(), the flush wouldn\u0027t happen until next draw).",
+      "range": {
+        "startLine": 2149,
+        "startChar": 0,
+        "endLine": 2151,
+        "endChar": 0
+      },
+      "revId": "9b101c0974b1d18e73d82d4bcc92d352a40f7e82",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
