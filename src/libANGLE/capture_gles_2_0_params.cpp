@@ -184,7 +184,8 @@ void CaptureGenTextures_texturesPacked(const Context *context,
                                        TextureID *textures,
                                        ParamCapture *paramCapture)
 {
-    paramCapture->readBufferSizeBytes = sizeof(GLuint) * n;
+    paramCapture->readBufferSizeBytes = sizeof(TextureID) * n;
+    CaptureMemory(textures, paramCapture->readBufferSizeBytes, paramCapture);
 }
 
 void CaptureGetActiveAttrib_length(const Context *context,
