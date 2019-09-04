@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa23d722_2ff01b60",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 4373,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-04T14:49:39Z",
+      "side": 1,
+      "message": "nit: you can omit these",
+      "range": {
+        "startLine": 4371,
+        "startChar": 0,
+        "endLine": 4373,
+        "endChar": 35
+      },
+      "revId": "d97e911dd03009b08825e1fc52f4e6c6011d1a3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f0a90fe4_826f11cf",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 4493,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-04T14:49:39Z",
+      "side": 1,
+      "message": "nit: don\u0027t think these need to be members as you only use them in local scope.",
+      "range": {
+        "startLine": 4491,
+        "startChar": 0,
+        "endLine": 4493,
+        "endChar": 28
+      },
+      "revId": "d97e911dd03009b08825e1fc52f4e6c6011d1a3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
