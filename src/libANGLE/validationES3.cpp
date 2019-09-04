@@ -475,6 +475,13 @@ bool ValidateES3TexImageParametersBase(Context *context,
         return false;
     }
 
+    if ((texType == TextureType::_3D) && IsETC2EACFormat(format))
+    {
+        // ES 3.1, Section 8.7, page 169.
+        context->validationError(GL_INVALID_OPERATION, kInternalFormatRequiresTexture2DArray);
+        return false;
+    }
+
     // Validate texture formats
     GLenum actualInternalFormat =
         isSubImage ? texture->getFormat(target, level).info->internalFormat : internalformat;
@@ -531,20 +538,6 @@ bool ValidateES3TexImageParametersBase(Context *context,
         if (!actualFormatInfo.textureSupport(context->getClientVersion(), context->getExtensions()))
         {
             context->validationError(GL_INVALID_ENUM, kInvalidFormat);
-            return false;
-        }
-
-        if ((texType == TextureType::_3D) && IsETC2EACFormat(internalformat))
-        {
-            // ES 3.1, Section 8.7, page 169.
-            context->validationError(GL_INVALID_OPERATION, kInternalFormatRequiresTexture2DArray);
-            return false;
-        }
-
-        // Disallow 3D-only compressed formats from being set on 2D textures
-        if (actualFormatInfo.compressedBlockDepth > 1 && texType != TextureType::_2DArray)
-        {
-            context->validationError(GL_INVALID_OPERATION, kInvalidTextureTarget);
             return false;
         }
     }
