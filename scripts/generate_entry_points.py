@@ -522,6 +522,8 @@ enum class ParamType
     {param_types}
 }};
 
+constexpr uint32_t kParamTypeCount = {param_type_count};
+
 union ParamValue
 {{
     {param_union_values}
@@ -1331,6 +1333,7 @@ def write_capture_helper_header(all_param_types):
         data_source_name="gl.xml and gl_angle_ext.xml",
         year=date.today().year,
         param_types=param_types,
+        param_type_count=len(all_param_types),
         param_union_values=param_union_values,
         get_param_val_specializations=get_param_val_specializations,
         access_param_value_cases=access_param_value_cases,

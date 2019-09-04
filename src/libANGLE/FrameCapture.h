@@ -95,6 +95,26 @@ struct CallCapture
     ParamBuffer params;
 };
 
+enum class ResourceIDType
+{
+    Buffer,
+    FenceNV,
+    Framebuffer,
+    MemoryObject,
+    Path,
+    ProgramPipeline,
+    Query,
+    Renderbuffer,
+    Sampler,
+    Semaphore,
+    ShaderProgram,
+    Texture,
+    TransformFeedback,
+    VertexArray,
+    EnumCount,
+    InvalidEnum = EnumCount
+};
+
 class ReplayContext
 {
   public:
@@ -180,10 +200,12 @@ class FrameCapture final : angle::NonCopyable
                                        std::ostream &header,
                                        const CallCapture &call,
                                        const ParamCapture &param);
-    void writeRenderbufferIDPointerParamReplay(std::ostream &out,
-                                               std::ostream &header,
-                                               const CallCapture &call,
-                                               const ParamCapture &param);
+    template <typename ParamT>
+    void writeResourceIDPointerParamReplay(std::ostream &out,
+                                           std::ostream &header,
+                                           const CallCapture &call,
+                                           const ParamCapture &param);
+
     void writeBinaryParamReplay(std::ostream &out,
                                 std::ostream &header,
                                 const CallCapture &call,
@@ -197,6 +219,7 @@ class FrameCapture final : angle::NonCopyable
     size_t mFrameIndex;
     gl::AttribArray<size_t> mClientArraySizes;
     std::map<Counter, int> mDataCounters;
+    angle::PackedEnumMap<ResourceIDType, uint32_t, angle::kParamTypeCount> mResourceIDCounts;
     size_t mReadBufferSize;
 
     static void ReplayCall(gl::Context *context,
