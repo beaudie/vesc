@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36d5716c_50ac08f0",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "This code is a duplicate of the \"samples-\u003evalid()\" code path. Is this something we can pull into a helper function?",
+      "range": {
+        "startLine": 181,
+        "startChar": 0,
+        "endLine": 199,
+        "endChar": 0
+      },
+      "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ce4f83a_1f821f24",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "Can this be simplified to just assign *renderToTextureSamples to the return value of attachment.getRenderToTextureSamples()?",
+      "range": {
+        "startLine": 203,
+        "startChar": 0,
+        "endLine": 212,
+        "endChar": 0
+      },
+      "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75d71e25_d1aa9a4f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2541,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "Why is the cast from D3D11_STANDARD_MULTISAMPLE_PATTERN to UINT necessary?",
+      "range": {
+        "startLine": 2541,
+        "startChar": 42,
+        "endLine": 2541,
+        "endChar": 95
+      },
+      "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c572f63f_678db1c5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "Since both your new code and existing code dereferences fbo, seems superfluous to have this assert. If we must keep it, we should put it after the first dereference.",
+      "range": {
+        "startLine": 1521,
+        "startChar": 0,
+        "endLine": 1521,
+        "endChar": 16
+      },
+      "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d814fe75_ceb3d86a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "Previous to your code, this method always looked at cached information when making decisions. \nWhat are the ramifications (performance or otherwise) of forcing a status check here?",
+      "range": {
+        "startLine": 1516,
+        "startChar": 0,
+        "endLine": 1521,
+        "endChar": 0
+      },
+      "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ddf21100_8e9917d5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "If we\u0027re resolving and releasing the texture on line 653 and getrenderTarget always passes zero as the first parameter, when will this if statement ever be true?",
+      "range": {
+        "startLine": 661,
+        "startChar": 0,
+        "endLine": 664,
+        "endChar": 5
+      },
+      "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

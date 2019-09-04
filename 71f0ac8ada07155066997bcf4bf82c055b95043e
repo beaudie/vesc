@@ -1,0 +1,280 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2782232a_ddce59ef",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1847,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "To make it easier to add additional message handlers in the future, consider changing to an if/then/else or doing a switch on the incoming message.",
+      "range": {
+        "startLine": 1842,
+        "startChar": 0,
+        "endLine": 1847,
+        "endChar": 0
+      },
+      "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45721926_0cb71e6e",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "Do we need to notify siblings of our message?",
+      "range": {
+        "startLine": 1854,
+        "startChar": 7,
+        "endLine": 1854,
+        "endChar": 32
+      },
+      "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "359fb0f5_9d7ce9f9",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2426,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "resolveAndReleaseTexture already checks mMSTexInfo for nullptr so we shouldn\u0027t need to also check it here.",
+      "range": {
+        "startLine": 2422,
+        "startChar": 0,
+        "endLine": 2426,
+        "endChar": 0
+      },
+      "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7585d2c5_d781ca21",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 2427,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "All of this code is very similar to the version in TextureStorage11_2D::getRenderTarget. Would it be possible to reuse the code but putting it in a baseclass and passing it the objects we need?",
+      "range": {
+        "startLine": 2369,
+        "startChar": 0,
+        "endLine": 2427,
+        "endChar": 0
+      },
+      "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00a8d5c8_e443923a",
+        "filename": "src/libANGLE/renderer/gl/FramebufferGL.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "When can the number of samples become -1? I thought the plan was to use zero to denote \u0027resolve me\u0027.  Is this a special to the OpenGL backend?",
+      "range": {
+        "startLine": 571,
+        "startChar": 57,
+        "endLine": 571,
+        "endChar": 95
+      },
+      "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "658e45ee_681d1129",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 5453,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "Please add a small comment describing why you\u0027re passing true vs. false here in ValidateReadPixelsBase.\n\n(Same goes for the other calls to ValidateFramebufferNotMultisampled)",
+      "range": {
+        "startLine": 5453,
+        "startChar": 70,
+        "endLine": 5453,
+        "endChar": 75
+      },
+      "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36796867_1977e806",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 7265,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "Same comment as before, please watch for casts that escape validation",
+      "range": {
+        "startLine": 7265,
+        "startChar": 8,
+        "endLine": 7265,
+        "endChar": 36
+      },
+      "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b52b629_1a1291a0",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 7315,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "Same comment as before, please watch for casts that escape validation.",
+      "range": {
+        "startLine": 7315,
+        "startChar": 16,
+        "endLine": 7315,
+        "endChar": 44
+      },
+      "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eaf8a23b_b5718729",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 7342,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "Since this is a top level validation function, we should be careful that casts like these do not end up turning a negative numbers into positive numbers and escaping validation.",
+      "range": {
+        "startLine": 7342,
+        "startChar": 8,
+        "endLine": 7342,
+        "endChar": 36
+      },
+      "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd4289f5_f150a26a",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 7355,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "Same comment as before, please watch for casts that escape validation.",
+      "range": {
+        "startLine": 7355,
+        "startChar": 12,
+        "endLine": 7355,
+        "endChar": 40
+      },
+      "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9bbb9c8b_ba9baa10",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 984,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "Would be good to include a comment here describing why you need to pass true instead of false for this callsite.",
+      "range": {
+        "startLine": 984,
+        "startChar": 66,
+        "endLine": 984,
+        "endChar": 70
+      },
+      "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93d579df_c41571a2",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-04T01:54:26Z",
+      "side": 1,
+      "message": "Nit: becuase --\u003e because",
+      "range": {
+        "startLine": 260,
+        "startChar": 14,
+        "endLine": 260,
+        "endChar": 21
+      },
+      "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
