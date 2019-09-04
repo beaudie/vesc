@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a349869_02879f2b",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-09-04T21:19:56Z",
+      "side": 1,
+      "message": "Nit: \"... and the presentation occurs no earlier than when rendering is finished.\"",
+      "revId": "2fe9eced0e6f42648266452292692b655d99f6cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f4b7ff8_77301602",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-09-04T21:19:56Z",
+      "side": 1,
+      "message": "Please change to:  \"In FIFO mode, the PE present queue may also grow indefinitely.\"\n\nIndefinite growth is not the way most PEs work, but it is the way some work.",
+      "revId": "2fe9eced0e6f42648266452292692b655d99f6cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a7821670_f67b7e5a",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-09-04T21:19:56Z",
+      "side": 1,
+      "message": "I suggest dropping this last sentence.  I\u0027m not sure it helps, and for most PEs, the present queue should be \u003c n (e.g. n is 3 with 1 being displayed, 1-2 in the queue, 0-1 acquired by the app).",
+      "revId": "2fe9eced0e6f42648266452292692b655d99f6cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4458466_48d70180",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-09-04T21:19:56Z",
+      "side": 1,
+      "message": "Good example, but I think the math is a bit off.  Please forgive me for quibbling!\n\nGiven infinitesimally-short rendering, for the \"more-common PE archicture\" (i.e. behaves normally), for FIFO, the first 1000 QS/QP commands will likely occur before the first V-Sync.  That means that the 1001\u0027th call to ANI will block until the 2nd V-Sync occurs (1st to display the 1st QP\u0027d image, 2nd to display the 2nd QP\u0027d image, which frees up the 1st to be re-acquired by the app).  I think that means that CPU pacing is a no-op for the first 1000 submissions since the app will be blocked by ANI from then on.\n\nFYI, various terms get used for this.  The SurfaceFlinger types speak of this as the app \"stuffing the queue\" and that SF provides \"back-pressure.\"  James Jones (long-time WSI person from NVIDIA) speaks of a \"\u003c??\u003e bubble.\"\n\nFor the strange type of PE that I\u0027ve described (e.g. MoltenVk, at least in the past), I think that the PE won\u0027t block ANI until it runs out of memory (since it keeps making new copies of memory), and ANGLE\u0027s CPU pacing won\u0027t either.  I\u0027m not sure if anybody ever ran it that long, but we theorized that it would run out of memory and that would finally stop the strange behavior:-).  I\u0027m hoping/guessing that MoltenVk \"fixed\" their behavior, and I don\u0027t think ANGLE should design for it.\n\nI think that ANGLE design for the \"more-common PE archicture\", or at least ones that behaves enough like it that this semaphore-reuse approach will work (e.g. the NVIDIA Windows driver has times where it copies buffers, but it never lets the queue get too long).",
+      "revId": "2fe9eced0e6f42648266452292692b655d99f6cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5930386_f21998a6",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-09-04T21:19:56Z",
+      "side": 1,
+      "message": "\"...know that the first image of the new swapchain has already been processed.\"",
+      "revId": "2fe9eced0e6f42648266452292692b655d99f6cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
