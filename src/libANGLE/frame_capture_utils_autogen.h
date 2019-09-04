@@ -139,6 +139,8 @@ enum class ParamType
     TvoidPointerPointer,
 };
 
+constexpr uint32_t kParamTypeCount = 120;
+
 union ParamValue
 {
     gl::AlphaTestFunc AlphaTestFuncVal;
