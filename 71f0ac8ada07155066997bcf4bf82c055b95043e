@@ -472,6 +472,30 @@
     },
     {
       "key": {
+        "uuid": "e643fe84_a139e92a",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 7355,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-05T20:11:28Z",
+      "side": 1,
+      "message": "Might make sense to call the base one right after you check for the extension so that you don\u0027t do comparisons with bad data.",
+      "parentUuid": "8d41ada2_1a7501b4",
+      "range": {
+        "startLine": 7355,
+        "startChar": 12,
+        "endLine": 7355,
+        "endChar": 40
+      },
+      "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9bbb9c8b_ba9baa10",
         "filename": "src/libANGLE/validationES3.cpp",
         "patchSetId": 13
@@ -539,6 +563,30 @@
       "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bec33418_a433c083",
+        "filename": "src/tests/gl_tests/MultisampledRenderToTextureTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-05T20:11:28Z",
+      "side": 1,
+      "message": "This one appears to be fixed so resolving it.",
+      "parentUuid": "93d579df_c41571a2",
+      "range": {
+        "startLine": 260,
+        "startChar": 14,
+        "endLine": 260,
+        "endChar": 21
+      },
+      "revId": "71f0ac8ada07155066997bcf4bf82c055b95043e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }

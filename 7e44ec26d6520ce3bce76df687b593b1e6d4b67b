@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b0d7f704_11f5dfd7",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-05T20:11:28Z",
+      "side": 0,
+      "message": "This \"APPLE_framebuffer_multisample\" comment seems to have gone missing in the green code. I presume it is still relevant?",
+      "range": {
+        "startLine": 174,
+        "startChar": 1,
+        "endLine": 176,
+        "endChar": 0
+      },
+      "revId": "7e44ec26d6520ce3bce76df687b593b1e6d4b67b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
