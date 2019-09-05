@@ -71,6 +71,8 @@ vk::ICD ChooseICDFromAttribs(const egl::AttributeMap &attribs)
             break;
         case EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE:
             return vk::ICD::Mock;
+        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_SWIFTSHADER_ANGLE:
+            return vk::ICD::SwiftShader;
         default:
             UNREACHABLE();
             break;
@@ -365,6 +367,13 @@ class ScopedVkLoaderEnvironment : angle::NonCopyable
                 ERR() << "Error setting environment for Mock/Null Driver.";
             }
         }
+        else if (icd == vk::ICD::SwiftShader)
+        {
+            if (!setICDEnvironment(ANGLE_VK_SWIFTSHADER_ICD_JSON))
+            {
+                ERR() << "Error setting environment for SwiftShader.";
+            }
+        }
         if (mEnableValidationLayers || icd != vk::ICD::Default)
         {
             const auto &cwd = angle::GetCWD();
@@ -483,8 +492,8 @@ angle::Result WaitFences(vk::Context *context,
 {
     uint64_t timeout = block ? kMaxFenceWaitTimeNs : 0;
 
-    // Iterate backwards over the fences, removing them from the list in constant time when they are
-    // complete.
+    // Iterate backwards over the fences, removing them from the list in constant time when they
+    // are complete.
     while (!fences->empty())
     {
         VkResult result = fences->back().get().wait(context->getDevice(), timeout);
@@ -501,7 +510,7 @@ angle::Result WaitFences(vk::Context *context,
     return angle::Result::Continue;
 }
 
-}  // anonymous namespace
+}  // namespace
 
 // RendererVk implementation.
 RendererVk::RendererVk()
