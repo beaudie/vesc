@@ -1966,7 +1966,9 @@ void ImageHelper::Copy(ImageHelper *srcImage,
                              dstImage->getImage(), dstImage->getCurrentLayout(), 1, &region);
 }
 
-angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint maxLevel)
+angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk,
+                                                   GLuint maxLevel,
+                                                   VkFilter filter)
 {
     vk::CommandBuffer *commandBuffer = nullptr;
     ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
@@ -2022,7 +2024,7 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
         mipHeight = nextMipHeight;
 
         commandBuffer->blitImage(mImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, mImage,
-                                 VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit, VK_FILTER_LINEAR);
+                                 VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &blit, filter);
     }
 
     // Transition the last mip level to the same layout as all the other ones, so we can declare
