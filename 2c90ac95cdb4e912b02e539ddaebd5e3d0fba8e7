@@ -16,6 +16,24 @@
       "revId": "2c90ac95cdb4e912b02e539ddaebd5e3d0fba8e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bec82532_76d5f16c",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-05T15:48:21Z",
+      "side": 1,
+      "message": "I thought the same thing, so I was going to check the \u0027format\u0027 value also like this:\n\nif ((texType \u003d\u003d TextureType::_3D) \u0026\u0026 \n    (IsETC2EACFormat(format) || (IsETC2EACFormat(internalformat)))\n\n\nHowever, I can\u0027t find any tests that fail with the current code that\u0027s only checking the \u0027internalFormat\u0027 (the CQ run is green).   It\u0027s probably better to do that check anyway though.",
+      "parentUuid": "ffa27b57_62bbefe8",
+      "revId": "2c90ac95cdb4e912b02e539ddaebd5e3d0fba8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
