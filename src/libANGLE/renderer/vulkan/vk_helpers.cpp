@@ -354,8 +354,7 @@ angle::Result DynamicBuffer::allocate(ContextVk *contextVk,
         {
             ANGLE_TRY(flush(contextVk));
             mBuffer->unmap(contextVk->getDevice());
-            mBuffer->onGraphAccess(contextVk->getCurrentQueueSerial(),
-                                   contextVk->getCommandGraph());
+            mBuffer->onGraphAccess(contextVk->getCommandGraph());
 
             mInFlightBuffers.push_back(mBuffer);
             mBuffer = nullptr;
@@ -495,7 +494,7 @@ void DynamicBuffer::release(ContextVk *contextVk)
         // The buffers may not have been recording commands, but they could be used to store data so
         // they should live until at most this frame.  For example a vertex buffer filled entirely
         // by the CPU currently never gets a chance to have its serial set.
-        mBuffer->onGraphAccess(contextVk->getCurrentQueueSerial(), contextVk->getCommandGraph());
+        mBuffer->onGraphAccess(contextVk->getCommandGraph());
         mBuffer->release(contextVk);
         delete mBuffer;
         mBuffer = nullptr;
