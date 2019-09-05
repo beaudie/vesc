@@ -225,6 +225,8 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
         ANGLE_TRY(contextVk->finishToSerial(mBuffer.getStoredQueueSerial()));
     }
 
+    ASSERT(!mBuffer.isResourceInUse(contextVk));
+
     ANGLE_VK_TRY(contextVk, mBuffer.getDeviceMemory().map(contextVk->getDevice(), offset, length, 0,
                                                           reinterpret_cast<uint8_t **>(mapPtr)));
     return angle::Result::Continue;
