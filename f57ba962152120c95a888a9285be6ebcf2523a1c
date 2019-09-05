@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "3619acc7_88aa5959",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-09-05T00:06:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36d5716c_50ac08f0",
+      "range": {
+        "startLine": 181,
+        "startChar": 0,
+        "endLine": 199,
+        "endChar": 0
+      },
+      "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6ce4f83a_1f821f24",
         "filename": "src/libANGLE/Framebuffer.cpp",
         "patchSetId": 9
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "949bf189_8bf66bf5",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-09-05T00:06:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ce4f83a_1f821f24",
+      "range": {
+        "startLine": 203,
+        "startChar": 0,
+        "endLine": 212,
+        "endChar": 0
+      },
+      "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "75d71e25_d1aa9a4f",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 9
@@ -68,6 +116,30 @@
       "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f8ee5e4_7429099d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2541,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-09-05T00:06:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75d71e25_d1aa9a4f",
+      "range": {
+        "startLine": 2541,
+        "startChar": 42,
+        "endLine": 2541,
+        "endChar": 95
+      },
+      "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +189,54 @@
     },
     {
       "key": {
+        "uuid": "8874f0ae_d6db7efb",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-09-05T00:06:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c572f63f_678db1c5",
+      "range": {
+        "startLine": 1521,
+        "startChar": 0,
+        "endLine": 1521,
+        "endChar": 16
+      },
+      "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dcdc7f56_b40e429e",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-09-05T00:06:13Z",
+      "side": 1,
+      "message": "It\u0027s been a while since I debugged this, but what I found was it was getting to fbo-\u003egetCachedSamples and mCachedStatus would not be valid. This was (probably) because resolveAndReleaseTexture (i think in syncFramebuffer which happens as part of the sync calls before draw commands) which sends up the observer chain that the contents have changed and thus invalidates this cache. \n\nso I check here that this information is still valid, and if not I do a status check.",
+      "parentUuid": "d814fe75_ceb3d86a",
+      "range": {
+        "startLine": 1516,
+        "startChar": 0,
+        "endLine": 1521,
+        "endChar": 0
+      },
+      "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ddf21100_8e9917d5",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
         "patchSetId": 9
@@ -137,6 +257,30 @@
       "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30129651_fc622340",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1335991
+      },
+      "writtenOn": "2019-09-05T00:06:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddf21100_8e9917d5",
+      "range": {
+        "startLine": 661,
+        "startChar": 0,
+        "endLine": 664,
+        "endChar": 5
+      },
+      "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
