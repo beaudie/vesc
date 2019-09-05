@@ -48,6 +48,75 @@
     },
     {
       "key": {
+        "uuid": "16e798b7_6ee806b1",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-05T21:05:42Z",
+      "side": 1,
+      "message": "Do you think this would be cleaner if you remove this constant and just use zero for this check? Same for the other uses.",
+      "range": {
+        "startLine": 207,
+        "startChar": 12,
+        "endLine": 207,
+        "endChar": 65
+      },
+      "revId": "0116c4a68baecd0ef459b08fd74516dd2430b432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b39e5f1a_72822ff6",
+        "filename": "src/libANGLE/Framebuffer.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1647,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-05T21:05:42Z",
+      "side": 1,
+      "message": "is it possible that we could make this a typed enum or something like that?",
+      "range": {
+        "startLine": 1647,
+        "startChar": 63,
+        "endLine": 1647,
+        "endChar": 75
+      },
+      "revId": "0116c4a68baecd0ef459b08fd74516dd2430b432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e92e0d1_8dcb42be",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 1845,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-05T21:05:42Z",
+      "side": 1,
+      "message": "where does this come from again? the dirty storage notification is for when the storage of the texture itself changes. rather than the contents. maybe we can tweak this slightly if I were to understand.",
+      "range": {
+        "startLine": 1844,
+        "startChar": 8,
+        "endLine": 1845,
+        "endChar": 55
+      },
+      "revId": "0116c4a68baecd0ef459b08fd74516dd2430b432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d87d126a_69d6c286",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
         "patchSetId": 14
@@ -64,6 +133,29 @@
         "startChar": 8,
         "endLine": 897,
         "endChar": 9
+      },
+      "revId": "0116c4a68baecd0ef459b08fd74516dd2430b432",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "404af424_a992956f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 960,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-05T21:05:42Z",
+      "side": 1,
+      "message": "It\u0027s not critical that we clean up everything in the D3D11 back-end. But would it be possible to return a bool or something indicating that we had a state change instead of using the callback? Most of the places seem to be called mostly directly from TextureD3D. Wasn\u0027t sure if there was one site in TextureD3D that called in through a common non-MS function and reached this code.",
+      "range": {
+        "startLine": 960,
+        "startChar": 8,
+        "endLine": 960,
+        "endChar": 21
       },
       "revId": "0116c4a68baecd0ef459b08fd74516dd2430b432",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
