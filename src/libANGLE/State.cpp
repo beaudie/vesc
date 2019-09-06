@@ -2064,6 +2064,8 @@ angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *pa
             *params = mBoundBuffers[BufferBinding::Array].id();
             break;
         case GL_DRAW_INDIRECT_BUFFER_BINDING:
+            // TODO: What happens if we try to read the buffer binding ID when there is no buffer
+            // bound? Do we catch that in validation?
             *params = mBoundBuffers[BufferBinding::DrawIndirect].id();
             break;
         case GL_ELEMENT_ARRAY_BUFFER_BINDING:
