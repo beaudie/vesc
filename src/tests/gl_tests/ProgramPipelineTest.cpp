@@ -109,7 +109,9 @@ ANGLE_INSTANTIATE_TEST(ProgramPipelineTest,
                        ES3_OPENGL(),
                        ES3_OPENGLES(),
                        ES31_OPENGL(),
-                       ES31_OPENGLES());
-ANGLE_INSTANTIATE_TEST(ProgramPipelineTest31, ES31_OPENGL(), ES31_OPENGLES());
+                       ES31_OPENGLES(),
+                       ES3_VULKAN(),
+                       ES31_VULKAN());
+ANGLE_INSTANTIATE_TEST(ProgramPipelineTest31, ES31_OPENGL(), ES31_OPENGLES(), ES31_VULKAN());
 
 }  // namespace
