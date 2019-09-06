@@ -16,6 +16,24 @@
       "revId": "61f539521619b2b62f5626072c3e378ba4b88df4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbbffaa4_550847db",
+        "filename": "src/tests/gl_tests/WebGLFramebufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-06T14:13:17Z",
+      "side": 1,
+      "message": "It doesn\u0027t need to be scoped but I did it anyways for consistency with the other extension checks.",
+      "parentUuid": "1752694c_d3303fa3",
+      "revId": "61f539521619b2b62f5626072c3e378ba4b88df4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
