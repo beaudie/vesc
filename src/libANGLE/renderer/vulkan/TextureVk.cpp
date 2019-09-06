@@ -1217,7 +1217,7 @@ angle::Result TextureVk::init3DRenderTargets(ContextVk *contextVk)
     if (!m3DRenderTargets.empty())
         return angle::Result::Continue;
 
-    uint32_t layerCount = GetImageLayerCountForView(*mImage);
+    uint32_t layerCount                = GetImageLayerCountForView(*mImage);
     const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
 
     mLayerFetchImageView.resize(layerCount);

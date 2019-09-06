@@ -584,6 +584,106 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
                      mIndexedDirtyBitsMask, commandBufferOut);
 }
 
+angle::Result ContextVk::setupIndexedIndirectDraw(const gl::Context *context,
+                                                  gl::PrimitiveMode mode,
+                                                  gl::DrawElementsType indexType,
+                                                  gl::Buffer *indirectBuffer,
+                                                  const void *offset,
+                                                  vk::CommandBuffer **commandBufferOut)
+{
+    ASSERT(mode != gl::PrimitiveMode::LineLoop);
+
+    if (indexType != mCurrentDrawElementsType)
+    {
+        mCurrentDrawElementsType = indexType;
+        setIndexBufferDirty();
+    }
+
+    const gl::Buffer *indexBuffer = mVertexArray->getState().getElementArrayBuffer();
+    ASSERT(indexBuffer);
+
+    if (indexType == gl::DrawElementsType::UnsignedByte &&
+        mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
+    {
+        BufferVk *indexVk     = vk::GetImpl(indexBuffer);
+        BufferVk *cmdBufferVk = vk::GetImpl(indirectBuffer);
+        ANGLE_TRY(mVertexArray->convertIndexBufferIndirectGPU(this, cmdBufferVk, indexVk, offset));
+    }
+
+    // Set any dirty bits that depend on draw call parameters or other objects.
+    if (mode != mCurrentDrawMode)
+    {
+        invalidateCurrentGraphicsPipeline();
+        mCurrentDrawMode = mode;
+        mGraphicsPipelineDesc->updateTopology(&mGraphicsPipelineTransition, mCurrentDrawMode);
+    }
+
+    // Must be called before the command buffer is started. Can call finish.
+    // TODO: Can this happen with Indirect?
+    if (context->getStateCache().hasAnyActiveClientAttrib())
+    {
+        // TODO: I don't know what vertices will be used, that's in GPU memory, just update
+        // everything?
+        // ANGLE_TRY(mVertexArray->updateClientAttribs(context, firstVertex, vertexOrIndexCount,
+        //                                            instanceCount, indexTypeOrNone, indices));
+        mGraphicsDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
+    }
+
+    // This could be improved using a dirty bit. But currently it's slower to use a handler
+    // function than an inlined if. We should probably replace the dirty bit dispatch table
+    // with a switch with inlined handler functions.
+    // TODO(jmadill): Use dirty bit. http://anglebug.com/3014
+    if (!mRenderPassCommandBuffer)
+    {
+        mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
+
+        gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getScissoredRenderArea(this);
+        if (!mDrawFramebuffer->appendToStartedRenderPass(
+                getCurrentQueueSerial(), scissoredRenderArea, &mRenderPassCommandBuffer))
+        {
+            ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, scissoredRenderArea,
+                                                           &mRenderPassCommandBuffer));
+        }
+    }
+
+    // We keep a local copy of the command buffer. It's possible that some state changes could
+    // trigger a command buffer invalidation. The local copy ensures we retain the reference.
+    // Command buffers are pool allocated and only deleted after submit. Thus we know the
+    // command buffer will still be valid for the duration of this API call.
+    *commandBufferOut = mRenderPassCommandBuffer;
+    ASSERT(*commandBufferOut);
+
+    if (mProgram->dirtyUniforms())
+    {
+        ANGLE_TRY(mProgram->updateUniforms(this));
+        mGraphicsDirtyBits.set(DIRTY_BIT_DESCRIPTOR_SETS);
+    }
+
+    if (mState.isTransformFeedbackActiveUnpaused())
+    {
+        // TODO: what happens with transform feedback and indirect calls?
+        // Spec says: An INVALID_OPERATION error is generated if transform feedback is active and
+        // not paused
+        ANGLE_VK_UNREACHABLE(this);
+        return angle::Result::Stop;
+    }
+
+    DirtyBits dirtyBits = mGraphicsDirtyBits & mIndexedDirtyBitsMask;
+
+    if (dirtyBits.none())
+        return angle::Result::Continue;
+
+    // Flush any relevant dirty bits.
+    for (size_t dirtyBit : dirtyBits)
+    {
+        ANGLE_TRY((this->*mGraphicsDirtyBitHandlers[dirtyBit])(context, *commandBufferOut));
+    }
+
+    mGraphicsDirtyBits &= ~mIndexedDirtyBitsMask;
+
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
                                            gl::PrimitiveMode mode,
                                            GLint firstVertex,
@@ -1470,6 +1570,13 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
                                             gl::PrimitiveMode mode,
                                             const void *indirect)
 {
+    if (mode == gl::PrimitiveMode::LineLoop)
+    {
+        // TODO - http://anglebug.com/3564
+        ANGLE_VK_UNREACHABLE(this);
+        return angle::Result::Stop;
+    }
+
     ANGLE_VK_UNREACHABLE(this);
     return angle::Result::Stop;
 }
@@ -1479,8 +1586,26 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
                                               gl::DrawElementsType type,
                                               const void *indirect)
 {
-    ANGLE_VK_UNREACHABLE(this);
-    return angle::Result::Stop;
+    gl::Buffer *indirectBuffer = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
+    ASSERT(indirectBuffer);
+
+    if (mode == gl::PrimitiveMode::LineLoop)
+    {
+        // TODO - http://anglebug.com/3564
+        ANGLE_VK_UNREACHABLE(this);
+        return angle::Result::Stop;
+    }
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(
+        setupIndexedIndirectDraw(context, mode, type, indirectBuffer, indirect, &commandBuffer));
+    vk::BufferHelper &buffer           = vk::GetImpl(indirectBuffer)->getBuffer();
+    vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
+    buffer.onRead(framebuffer, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
+
+    commandBuffer->drawIndexedIndirect(buffer.getBuffer(), reinterpret_cast<VkDeviceSize>(indirect),
+                                       1, 0);
+    return angle::Result::Continue;
 }
 
 gl::GraphicsResetStatus ContextVk::getResetStatus()
