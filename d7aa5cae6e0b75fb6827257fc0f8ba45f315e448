@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "15d37f22_f6e2f7d4",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-06T14:34:29Z",
+      "side": 1,
+      "message": "We can re-use EGL_TEXTURE_INTERNAL_FORMAT_ANGLE + EGL_TEXTURE_TYPE_ANGLE from our IOSurface extension I think.  We can then say that we only accept unsized internal formats and the type must match the data type of the texture.",
+      "range": {
+        "startLine": 232,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 45
+      },
+      "revId": "d7aa5cae6e0b75fb6827257fc0f8ba45f315e448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5eaa982_ee9c3aa5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ExternalImageSiblingImpl11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-06T14:34:29Z",
+      "side": 1,
+      "message": "Let\u0027s assert that it is valid after this.",
+      "revId": "d7aa5cae6e0b75fb6827257fc0f8ba45f315e448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c986bdff_348b9e67",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1903,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-06T14:34:29Z",
+      "side": 1,
+      "message": "Please also add validation of the format to DisplayD3D::validateImageClientBuffer.  I think it\u0027s enough to query the requested format, make sure it\u0027s valid and then make sure the type matches the texture\u0027s type.",
+      "revId": "d7aa5cae6e0b75fb6827257fc0f8ba45f315e448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

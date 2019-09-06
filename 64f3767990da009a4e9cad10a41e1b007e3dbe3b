@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ccd9eb6_6b0b11be",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2129,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-06T14:34:29Z",
+      "side": 1,
+      "message": "Add a similar validation here that if attributes contains EGL_D3D11_TEXTURE_FORMAT_ANGLE then the target must be EGL_D3D11_TEXTURE_ANGLE",
+      "revId": "64f3767990da009a4e9cad10a41e1b007e3dbe3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
