@@ -2113,4 +2113,16 @@ void StateManagerGL::syncTransformFeedbackState(const gl::Context *context)
         mCurrentTransformFeedback = nullptr;
     }
 }
+
+bool StateManagerGL::validateState(const gl::Context *context) const
+{
+    const gl::State &state     = context->getState();
+    const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(state.getVertexArray());
+    if (!vaoGL->validateState())
+    {
+        return false;
+    }
+
+    return true;
+}
 }  // namespace rx

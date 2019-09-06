@@ -730,4 +730,21 @@ void VertexArrayGL::applyActiveAttribLocationsMask(const gl::AttributesMask &act
     }
 }
 
+bool VertexArrayGL::validateState() const
+{
+    // Element array buffer
+    GLint elementArrayBufferBinding;
+    mFunctions->getIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &elementArrayBufferBinding);
+    const BufferGL *bufferGL = GetImplAs<BufferGL>(mAppliedElementArrayBuffer.get());
+    if (bufferGL->getBufferID() != static_cast<GLuint>(elementArrayBufferBinding))
+    {
+        return false;
+    }
+
+    // mutable std::vector<gl::VertexAttribute> mAppliedAttributes;
+    // mutable std::vector<gl::VertexBinding> mAppliedBindings;
+
+    return true;
+}
+
 }  // namespace rx

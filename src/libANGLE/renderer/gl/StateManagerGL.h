@@ -184,6 +184,8 @@ class StateManagerGL final : angle::NonCopyable
     }
     GLuint getBufferID(gl::BufferBinding binding) const { return mBuffers[binding]; }
 
+    bool validateState(const gl::Context *context) const;
+
   private:
     void setTextureCubemapSeamlessEnabled(bool enabled);
 

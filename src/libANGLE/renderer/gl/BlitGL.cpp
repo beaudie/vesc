@@ -604,6 +604,7 @@ angle::Result BlitGL::copySubTexture(const gl::Context *context,
     }
 
     mStateManager->bindVertexArray(mVAO, 0);
+    ASSERT(mStateManager->validateState(context));
     mFunctions->drawArrays(GL_TRIANGLES, 0, 3);
 
     *copySucceededOut = true;
