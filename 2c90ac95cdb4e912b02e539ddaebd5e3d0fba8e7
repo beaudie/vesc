@@ -52,6 +52,24 @@
       "revId": "2c90ac95cdb4e912b02e539ddaebd5e3d0fba8e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82c4a3cc_f5144ebf",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-06T14:19:12Z",
+      "side": 1,
+      "message": "Just below this check, there is an \u0027actualInternalFormat\u0027 variable that you can use for this validation.",
+      "parentUuid": "be971512_f4ccd403",
+      "revId": "2c90ac95cdb4e912b02e539ddaebd5e3d0fba8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
