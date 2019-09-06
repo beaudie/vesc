@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ee9961e0_526bdab8",
+        "filename": "src/libANGLE/renderer/angle_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-09-06T15:47:35Z",
+      "side": 1,
+      "message": "FYI - jamie, inline with your comment from the other 10_10_10_2 gerrit we have named this RGB10X2 for those formats without an alpha channel\n\nan aside, you can see that the channel ordering is reversed in that 1010102 maps to an enum that reads 2101010. that is due to legacy code. We have an internal task to fix the ordering across angle to make it uniform, i.e, 1010102 maps to an enum that reads like 1010102\n\nlet us know if there is a particular reason for the reverse ordering and we will close out the internal task",
+      "revId": "36ac4073d56ed226cb42e7b73041f2db487d0e77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
