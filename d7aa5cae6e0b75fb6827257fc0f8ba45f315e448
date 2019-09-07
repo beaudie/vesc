@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "08fa44c8_621f5300",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2019-09-07T02:24:40Z",
+      "side": 1,
+      "message": "I changed this to reuse EGL_TEXTURE_INTERNAL_FORMAT_ANGLE which will be the unsized internal format (GL_RGBA, GL_BGRA_EXT, or GL_RGB), but since we can\u0027t override the texture type I\u0027m not using EGL_TEXTURE_TYPE_ANGLE - instead we\u0027ll get the type from the default GL format that we infer from the texture\u0027s DXGI_FORMAT.",
+      "parentUuid": "15d37f22_f6e2f7d4",
+      "range": {
+        "startLine": 232,
+        "startChar": 0,
+        "endLine": 232,
+        "endChar": 45
+      },
+      "revId": "d7aa5cae6e0b75fb6827257fc0f8ba45f315e448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5eaa982_ee9c3aa5",
         "filename": "src/libANGLE/renderer/d3d/d3d11/ExternalImageSiblingImpl11.cpp",
         "patchSetId": 3
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "8ff9bd8d_309b956f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ExternalImageSiblingImpl11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2019-09-07T02:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5eaa982_ee9c3aa5",
+      "revId": "d7aa5cae6e0b75fb6827257fc0f8ba45f315e448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c986bdff_348b9e67",
         "filename": "src/libANGLE/validationEGL.cpp",
         "patchSetId": 3
@@ -56,6 +98,24 @@
       "revId": "d7aa5cae6e0b75fb6827257fc0f8ba45f315e448",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74e99b9d_83421c02",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1903,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2019-09-07T02:24:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c986bdff_348b9e67",
+      "revId": "d7aa5cae6e0b75fb6827257fc0f8ba45f315e448",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
