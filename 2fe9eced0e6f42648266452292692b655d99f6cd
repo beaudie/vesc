@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "4aed9cda_4aeac5eb",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2019-09-07T19:02:22Z",
+      "side": 1,
+      "message": "Note that at frame N, we wait for frame N-2 to finish. The 1001st submission uses I1, but waits on submission 999 (using I999, which finishes instantly). The 1002nd submission uses I2, but waits on submission 1000 (using I1000, which finishes instantly), The 1003rd submission uses I3, but waits on submission 1001 (using I1), but since I1 is in use (until V-Sync), submission 1001 will not even begin processing (it\u0027s waiting on ANI semaphore).\n\nSo The first 1002 submissions are instant, and submission 1003 waits for V-Sync.",
+      "parentUuid": "a4458466_48d70180",
+      "revId": "2fe9eced0e6f42648266452292692b655d99f6cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e5930386_f21998a6",
         "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
         "patchSetId": 1
