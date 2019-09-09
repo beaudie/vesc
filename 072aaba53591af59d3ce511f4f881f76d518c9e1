@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccd7ea91_2340cc25",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-09T15:19:06Z",
+      "side": 1,
+      "message": "This is something we should do in VertexArrayGL so it\u0027s cached and doesn\u0027t need to be set and reset every draw call.\n\nI would pass the baseInstance parameter to setDrawArraysState/setDrawElementsState and feed it into VertexArrayGL::syncDrawState.  VertexArrayGL can have a new mAppliedBaseInstance that it compares the new basevertex with and updates the attributes if needed.\n\nThere are a couple things missing in this code that need to be handled though: glVertexAttribIPointer needs to be called for integer attributes, glVertexAttribPointer can\u0027t be called in all cases (see VertexArrayGL::callVertexAttribPointer).  Also, when glVertexAttrib[I]Pointer is called, it captures the current GL_ARRAY_BUFFER to use as the attribute source, so you have to bind the buffer first.  I\u0027m guessing the tests only use one buffer and it\u0027s bound at this time.",
+      "range": {
+        "startLine": 316,
+        "startChar": 8,
+        "endLine": 350,
+        "endChar": 5
+      },
+      "revId": "072aaba53591af59d3ce511f4f881f76d518c9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
