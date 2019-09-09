@@ -356,6 +356,10 @@ void RendererVk::ensureCapsInitialized() const
 
     mNativeCaps.minProgramTexelOffset = mPhysicalDeviceProperties.limits.minTexelOffset;
     mNativeCaps.maxProgramTexelOffset = mPhysicalDeviceProperties.limits.maxTexelOffset;
+    mNativeCaps.minProgramTextureGatherOffset =
+        mPhysicalDeviceProperties.limits.minTexelGatherOffset;
+    mNativeCaps.maxProgramTextureGatherOffset =
+        mPhysicalDeviceProperties.limits.maxTexelGatherOffset;
 
     // There is no additional limit to the combined number of components.  We can have up to a
     // maximum number of uniform buffers, each having the maximum number of components.  Note that
