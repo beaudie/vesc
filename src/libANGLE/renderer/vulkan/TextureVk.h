@@ -169,7 +169,9 @@ class TextureVk : public TextureImpl
                                                 const vk::ImageView **imageViewOut);
     const vk::Sampler &getSampler() const;
 
-    angle::Result ensureImageInitialized(ContextVk *contextVk);
+    angle::Result ensureImageInitialized(
+        ContextVk *contextVk,
+        vk::ImageMipLevels mipLevels = vk::ImageMipLevels::EnabledLevels);
 
     Serial getSerial() const { return mSerial; }
 
@@ -293,7 +295,14 @@ class TextureVk : public TextureImpl
     void releaseImage(ContextVk *contextVk);
     void releaseImageViews(ContextVk *contextVk);
     void releaseStagingBuffer(ContextVk *contextVk);
-    uint32_t getLevelCount() const;
+    uint32_t getMipLevelCount(vk::ImageMipLevels mipLevels) const;
+    uint32_t getMaxLevelCount() const;
+    angle::Result copyImageDataToStagingBuffer(ContextVk *contextVk,
+                                               const gl::ImageDesc &desc,
+                                               bool ignoreLayerCount,
+                                               uint32_t currentLayer,
+                                               uint32_t sourceLevel,
+                                               uint32_t stagingDstMipLevel);
     angle::Result initImageViews(ContextVk *contextVk,
                                  const vk::Format &format,
                                  const bool sized,

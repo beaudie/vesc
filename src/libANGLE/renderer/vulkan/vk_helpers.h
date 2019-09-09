@@ -642,6 +642,14 @@ enum class ImageLayout
     EnumCount   = 11,
 };
 
+enum class ImageMipLevels
+{
+    EnabledLevels = 0,
+    FullMipChain  = 1,
+
+    InvalidEnum = 2,
+};
+
 class ImageHelper final : public CommandGraphResource
 {
   public:
