@@ -85,6 +85,10 @@
     "dbd9529dd0c4ba0947842a9eb18e6189",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000001.inc":
     "2e8b92c66a347f3517ae1945d3ad625c",
+  "src/libANGLE/renderer/vulkan/shaders/gen/ConvertIndexIndirect.comp.00000000.inc":
+    "be27317601f39d9db32c3155ed6e4eaa",
+  "src/libANGLE/renderer/vulkan/shaders/gen/ConvertIndexIndirect.comp.00000001.inc":
+    "af9cce92d5f54af926877a1386f86716",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000000.inc":
     "f5ef892346ee10e5d0d9f8cba2a491b2",
   "src/libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000001.inc":
@@ -231,6 +235,8 @@
     "b7c20e019199f8328ef37b11c6fbcadd",
   "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp":
     "ca35df77d258baa0636529d1f0f446a9",
+  "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndexIndirect.comp":
+    "deb9ed2d23fa747fcf151ed2fe4bc953",
   "src/libANGLE/renderer/vulkan/shaders/src/ConvertVertex.comp":
     "d6abd323d011689cef5db83162214be2",
   "src/libANGLE/renderer/vulkan/shaders/src/FullScreenQuad.vert":
@@ -240,9 +246,9 @@
   "src/libANGLE/renderer/vulkan/shaders/src/ImageCopy.frag":
     "f0f3cc82d78198f114b698e1aea31267",
   "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.cpp":
-    "0660e11229f28464a6de11eb07fff7d3",
+    "8c80e278ccff055b870e3a3a9cb854f4",
   "src/libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h":
-    "0532a7219ffa0a5a9ca0cd7a6eb3206e",
+    "c4e46bd3e04e393f23c6c336b092876c",
   "tools/glslang/glslang_validator.exe.sha1":
     "289f30598865a987a21b79ae525fc66f",
   "tools/glslang/glslang_validator.sha1":

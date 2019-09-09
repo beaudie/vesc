@@ -598,28 +598,19 @@ angle::Result ContextVk::setupIndexedIndirectDraw(const gl::Context *context,
         setIndexBufferDirty();
     }
 
-    const gl::Buffer *elementArrayBuffer = mVertexArray->getState().getElementArrayBuffer();
-    ASSERT(elementArrayBuffer);
-    if (!elementArrayBuffer)
+    const gl::Buffer *indexBuffer = mVertexArray->getState().getElementArrayBuffer();
+    ASSERT(indexBuffer);
+
+    if (indexType == gl::DrawElementsType::UnsignedByte &&
+        mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
     {
-        // TODO: We need to read from the indirectBuffer to figure out what indices will be used.
-        mGraphicsDirtyBits.set(DIRTY_BIT_INDEX_BUFFER);
-        // ANGLE_TRY(mVertexArray->convertIndexBufferCPU(this, indexType, indexCount, indices));
-    }
-    else
-    {
-        // TODO: Do we need to add a read dependency for the element array buffer?
-        if (indexType == gl::DrawElementsType::UnsignedByte &&
-            mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
-        {
-            // TODO: If we get here we have an 8bit index buffer that needs to be converted.
-            // The count is in the indirectBuffer which we'll need to map and read, ugh.
-            // Use varient of VertexArrayVk::convertIndexBufferGPU
-            ANGLE_VK_UNREACHABLE(this);
-            return angle::Result::Stop;
-            // BufferVk *bufferVk = vk::GetImpl(elementArrayBuffer);
-            // ANGLE_TRY(mVertexArray->convertIndexBufferGPU(this, bufferVk, indices));
-        }
+        // TODO: If we get here we have an 8bit index buffer that needs to be converted.
+        // The count is in the indirectBuffer which we'll need to map and read, ugh.
+        // Use varient of VertexArrayVk::convertIndexBufferGPU
+        ANGLE_VK_UNREACHABLE(this);
+        return angle::Result::Stop;
+        // BufferVk *bufferVk = vk::GetImpl(indexBuffer);
+        // ANGLE_TRY(mVertexArray->convertIndexBufferGPU(this, bufferVk, indices));
     }
 
     // Set any dirty bits that depend on draw call parameters or other objects.
