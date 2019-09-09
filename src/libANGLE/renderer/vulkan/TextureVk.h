@@ -293,7 +293,14 @@ class TextureVk : public TextureImpl
     void releaseImage(ContextVk *contextVk);
     void releaseImageViews(ContextVk *contextVk);
     void releaseStagingBuffer(ContextVk *contextVk);
-    uint32_t getLevelCount() const;
+    uint32_t getEnabledLevelCount() const;
+    uint32_t getMaxLevelCount() const;
+    angle::Result CopyImageToBufferAndUpdate(ContextVk *contextVk,
+                                             const gl::ImageDesc &desc,
+                                             bool ignoreLayerCount,
+                                             uint32_t currentLayer,
+                                             uint32_t sourceLevel,
+                                             uint32_t stagingDstMipLevel);
     angle::Result initImageViews(ContextVk *contextVk,
                                  const vk::Format &format,
                                  const bool sized,
