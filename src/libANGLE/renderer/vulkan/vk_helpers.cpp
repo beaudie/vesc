@@ -2041,6 +2041,133 @@ angle::Result ImageHelper::generateMipmapsWithBlit(ContextVk *contextVk, GLuint 
     return angle::Result::Continue;
 }
 
+angle::Result ImageHelper::redefineWithMipmaps(ContextVk *contextVk,
+                                               gl::TextureType textureType,
+                                               VkImageUsageFlags usage,
+                                               GLuint maxLevel)
+{
+    // Initialize new image
+    Image dstImage;
+    DeviceMemory dstMemory;
+
+    VkImageCreateInfo imageInfo     = {};
+    imageInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    imageInfo.pNext                 = nullptr;
+    imageInfo.flags                 = GetImageCreateFlags(textureType);
+    imageInfo.imageType             = gl_vk::GetImageType(textureType);
+    imageInfo.format                = mFormat->vkImageFormat;
+    imageInfo.extent                = mExtents;
+    imageInfo.mipLevels             = maxLevel;
+    imageInfo.arrayLayers           = mLayerCount;
+    imageInfo.samples               = gl_vk::GetSamples(mSamples);
+    imageInfo.tiling                = VK_IMAGE_TILING_OPTIMAL;
+    imageInfo.usage                 = usage;
+    imageInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+    imageInfo.queueFamilyIndexCount = 0;
+    imageInfo.pQueueFamilyIndices   = nullptr;
+    imageInfo.initialLayout         = kImageMemoryBarrierData[ImageLayout::Undefined].layout;
+
+    ANGLE_VK_TRY(contextVk, dstImage.init(contextVk->getDevice(), imageInfo));
+
+    // Allocate device memory for the dst image.
+    const VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    ANGLE_TRY(AllocateImageMemory(contextVk, flags, nullptr, &dstImage, &dstMemory));
+
+    // If the current image layout is undefined, it doesn't need to copy
+    if (mCurrentLayout == vk::ImageLayout::Undefined)
+    {
+        // Release the origin image and replace mImage.
+        releaseImage(contextVk);
+        mImage        = std::move(dstImage);
+        mDeviceMemory = std::move(dstMemory);
+        mLevelCount   = maxLevel;
+        return angle::Result::Continue;
+    }
+
+    vk::CommandBuffer *srcLayoutChange = nullptr;
+    // Change the origin image layout if necessary
+    vk::ImageLayout srcLayout = mCurrentLayout;
+    VkImageAspectFlags aspect = vk::GetFormatAspectFlags(mFormat->imageFormat());
+
+    if (isLayoutChangeNecessary(vk::ImageLayout::TransferSrc))
+    {
+        ANGLE_TRY(recordCommands(contextVk, &srcLayoutChange));
+        changeLayout(aspect, vk::ImageLayout::TransferSrc, srcLayoutChange);
+    }
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+
+    // Change the dst image layout from Undefined to TransferDst
+    const ImageMemoryBarrierData &transitionFrom = kImageMemoryBarrierData[ImageLayout::Undefined];
+    const ImageMemoryBarrierData &transitionTo = kImageMemoryBarrierData[ImageLayout::TransferDst];
+
+    VkImageMemoryBarrier imageMemoryBarrier = {};
+    imageMemoryBarrier.sType                = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    imageMemoryBarrier.srcAccessMask        = transitionFrom.srcAccessMask;
+    imageMemoryBarrier.dstAccessMask        = transitionTo.dstAccessMask;
+    imageMemoryBarrier.oldLayout            = transitionFrom.layout;
+    imageMemoryBarrier.newLayout            = transitionTo.layout;
+    imageMemoryBarrier.srcQueueFamilyIndex  = 0;
+    imageMemoryBarrier.dstQueueFamilyIndex  = mCurrentQueueFamilyIndex;
+    imageMemoryBarrier.image                = dstImage.getHandle();
+
+    imageMemoryBarrier.subresourceRange.aspectMask     = aspect;
+    imageMemoryBarrier.subresourceRange.baseMipLevel   = 0;
+    imageMemoryBarrier.subresourceRange.levelCount     = maxLevel;
+    imageMemoryBarrier.subresourceRange.baseArrayLayer = 0;
+    imageMemoryBarrier.subresourceRange.layerCount     = mLayerCount;
+
+    commandBuffer->imageBarrier(transitionFrom.srcStageMask, transitionTo.dstStageMask,
+                                &imageMemoryBarrier);
+
+    // Copy the origin image to dst image's level 0.
+    const gl::ImageIndex imgIndex = gl::ImageIndex::MakeFromType(textureType, 0);
+
+    uint32_t level      = imgIndex.getLevelIndex();
+    uint32_t baseLayer  = imgIndex.hasLayer() ? imgIndex.getLayerIndex() : 0;
+    uint32_t layerCount = imgIndex.getLayerCount();
+
+    VkImageSubresourceLayers subresource = {};
+    subresource.aspectMask               = aspect;
+    subresource.mipLevel                 = level;
+    subresource.baseArrayLayer           = baseLayer;
+    subresource.layerCount               = layerCount;
+
+    VkImageCopy region    = {};
+    region.srcSubresource = subresource;
+    region.srcOffset.x    = 0;
+    region.srcOffset.y    = 0;
+    region.srcOffset.z    = 0;
+    region.dstSubresource = subresource;
+    region.dstOffset.x    = 0;
+    region.dstOffset.y    = 0;
+    region.dstOffset.z    = 0;
+    region.extent.width   = mExtents.width;
+    region.extent.height  = mExtents.height;
+    region.extent.depth   = mExtents.depth;
+    commandBuffer->copyImage(mImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, dstImage,
+                             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+
+    // Release the origin image and replace it.
+    releaseImage(contextVk);
+    mImage        = std::move(dstImage);
+    mDeviceMemory = std::move(dstMemory);
+
+    // Update the properties.
+    mLevelCount    = maxLevel;
+    mCurrentLayout = ImageLayout::TransferDst;
+
+    // Change dst image layout back to origin layout.
+    if (isLayoutChangeNecessary(srcLayout))
+    {
+        ANGLE_TRY(recordCommands(contextVk, &commandBuffer));
+        changeLayout(aspect, srcLayout, commandBuffer);
+    }
+
+    return angle::Result::Continue;
+}
+
 void ImageHelper::resolve(ImageHelper *dest,
                           const VkImageResolve &region,
                           vk::CommandBuffer *commandBuffer)
