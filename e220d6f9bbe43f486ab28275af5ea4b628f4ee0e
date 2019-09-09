@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "790599f2_f699bf3e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2149,
+      "author": {
+        "id": 1340324
+      },
+      "writtenOn": "2019-09-09T10:24:38Z",
+      "side": 1,
+      "message": "Does it need to add dependency before copy? If yes, how to do that? ImageVk is not CommandGraphResource.",
+      "revId": "e220d6f9bbe43f486ab28275af5ea4b628f4ee0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
