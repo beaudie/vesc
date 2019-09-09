@@ -88,6 +88,24 @@
       "revId": "2c90ac95cdb4e912b02e539ddaebd5e3d0fba8e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "349d4887_6b3b20d5",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-09T14:43:53Z",
+      "side": 1,
+      "message": "Nice debugging, I look at it a bit too and I understand why checking actualInternalFormat isn\u0027t enough now:  actualInternalFormat assumes this is a valid call (and we error if actualInternalFormat is GL_NONE).  In this case, the texture has no format yet and we\u0027re trying to subimage it (which is invalid) but we need to return a specific error based on the format which is lost due to the way we validate. \n\nYour latest CL is correct but this is slightly more precise, it should use format/internalformat based on isSubImage:\n\n    if (isCompressed \u0026\u0026 texType \u003d\u003d TextureType::_3D)\n    {\n        GLenum compressedDataFormat \u003d isSubImage ? format : internalformat;\n        if (IsETC2EACFormat(compressedDataFormat))\n        {\n            // ES 3.1, Section 8.7, page 169.\n            context-\u003evalidationError(GL_INVALID_OPERATION, kInternalFormatRequiresTexture2DArray);\n            return false;\n        }\n    }",
+      "parentUuid": "ab1a17e0_4d467f16",
+      "revId": "2c90ac95cdb4e912b02e539ddaebd5e3d0fba8e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
