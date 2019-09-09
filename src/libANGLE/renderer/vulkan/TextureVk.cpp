@@ -1058,6 +1058,14 @@ angle::Result TextureVk::generateMipmapsWithCPU(const gl::Context *context)
 angle::Result TextureVk::generateMipmap(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+    RendererVk *renderer   = contextVk->getRenderer();
+    bool needRedefineImage = true;
+
+    const gl::ImageDesc &baseLevelDesc        = mState.getBaseLevelDesc();
+    const gl::Extents &baseLevelExtents       = baseLevelDesc.size;
+    const gl::InternalFormat &baseLevelFormat = *baseLevelDesc.format.info;
+    const vk::Format &format =
+        contextVk->getRenderer()->getFormat(baseLevelFormat.sizedInternalFormat);
 
     // Some data is pending, or the image has not been defined at all yet
     if (!mImage->valid())
@@ -1065,8 +1073,12 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
         // Let's initialize the image so we can generate the next levels.
         if (mImage->hasStagedUpdates())
         {
-            ANGLE_TRY(ensureImageInitialized(contextVk));
+            // ANGLE_TRY(ensureImageInitialized(contextVk));
+            ANGLE_TRY(ensureImageInitializedImpl(
+                contextVk, baseLevelExtents, getMaxLevelCount() - mState.getEffectiveBaseLevel(),
+                format));
             ASSERT(mImage->valid());
+            needRedefineImage = false;
         }
         else
         {
@@ -1075,13 +1087,32 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
         }
     }
 
-    RendererVk *renderer = contextVk->getRenderer();
+    if (needRedefineImage)
+    {
+        // Flush update if needed.
+        if (mImage->hasStagedUpdates())
+        {
+            vk::CommandBuffer *commandBuffer = nullptr;
+            ANGLE_TRY(mImage->recordCommands(contextVk, &commandBuffer));
+            ANGLE_TRY(mImage->flushStagedUpdates(contextVk, getNativeImageLevel(0),
+                                                 mImage->getLevelCount(), getNativeImageLayer(0),
+                                                 mImage->getLayerCount(), commandBuffer));
+        }
 
+        // Redefine the images with mipmaps.
+        // Copy image to the staging buffer and stage an update to the new one.
+        ANGLE_TRY(CopyImageToBufferAndUpdate(contextVk, baseLevelDesc, 0, mImage->getBaseLevel()));
+
+        // Release the origin image and recreate it with new mipmap counts.
+        releaseImage(contextVk);
+        ANGLE_TRY(ensureImageInitializedImpl(contextVk, baseLevelExtents,
+                                             getMaxLevelCount() - mState.getEffectiveBaseLevel(),
+                                             format));
+    }
     // Check if the image supports blit. If it does, we can do the mipmap generation on the gpu
     // only.
     if (renderer->hasImageFormatFeatureBits(mImage->getFormat().vkImageFormat, kBlitFeatureFlags))
     {
-        ANGLE_TRY(ensureImageInitialized(contextVk));
         ANGLE_TRY(mImage->generateMipmapsWithBlit(
             contextVk, mState.getMipmapMaxLevel() - mState.getEffectiveBaseLevel()));
     }
@@ -1089,6 +1120,82 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
     {
         ANGLE_TRY(generateMipmapsWithCPU(context));
     }
+
+    return angle::Result::Continue;
+}
+
+angle::Result TextureVk::CopyImageToBufferAndUpdate(ContextVk *contextVk,
+                                                    const gl::ImageDesc &desc,
+                                                    uint32_t sourceMipLevel,
+                                                    uint32_t stagingDstMipLevel)
+{
+    // const gl::Extents &baseLevelExtents       = desc.size;
+    // const gl::InternalFormat &baseLevelFormat = *desc.format.info;
+
+    for (uint32_t layer = 0; layer < mImage->getLayerCount(); layer++)
+    {
+        for (uint32_t level = 0; level < mImage->getLevelCount(); level++)
+        {
+            if (mImage->isUpdateStaged(level, layer))
+            {
+                continue;
+            }
+
+            // Pull data from the current image and stage it as an update for the new image
+
+            // First we populate the staging buffer with current level data
+            const gl::ImageDesc &subdesc =
+                mState.getImageDesc(gl::TextureTypeToTarget(mState.getType(), layer), level);
+            const gl::Extents &subextents  = subdesc.size;
+            const gl::InternalFormat &info = *subdesc.format.info;
+
+            // We need to adjust the source Vulkan level to reflect the previous base level.
+            // vk level 0 previously aligned with whatever the base level was.
+            uint32_t srcLevelVK =
+                mImage->getBaseLevel() != 0 ? level - mImage->getBaseLevel() : level;
+            ASSERT(srcLevelVK <= mImage->getLevelCount());
+
+            // Adjust offset and depth based on our knowledge of image type here
+            gl::Box area(0, 0, 0, subextents.width, subextents.height, subextents.depth);
+            if (gl::IsArrayTextureType(mState.getType()))
+            {
+                area.z     = 0;
+                area.depth = 1;
+            }
+
+            // Now copy from the image to the staging buffer
+            vk::BufferHelper *stagingBuffer  = nullptr;
+            VkDeviceSize stagingBufferOffset = 0;
+            ANGLE_TRY(copyImageDataToBuffer(contextVk, srcLevelVK, 1, layer, area, &stagingBuffer,
+                                            &stagingBufferOffset, nullptr));
+
+            // Stage an update to the new image that we will populate with existing mip levels
+            // We're providing the buffer handle and offset to use, since we *just* populated it
+            size_t bufferSize =
+                subextents.width * subextents.height * subextents.depth * info.pixelBytes;
+            ANGLE_TRY(mImage->stageSubresourceUpdateFromBuffer(contextVk, bufferSize, level, layer,
+                                                               1, subextents, gl::Offset(),
+                                                               stagingBuffer, stagingBufferOffset));
+        }
+    }
+    // Copy from the base level image to the staging buffer
+    /* vk::BufferHelper *stagingBuffer  = nullptr;
+     VkDeviceSize stagingBufferOffset = 0;
+     ANGLE_TRY(copyImageDataToBuffer(
+             contextVk, sourceMipLevel, mImage->getLayerCount(), 0,
+             gl::Box(0, 0, 0, baseLevelExtents.width, baseLevelExtents.height,
+     baseLevelExtents.depth), &stagingBuffer, &stagingBufferOffset, nullptr));
+
+     // Stage an update to the new image
+     size_t bufferSize = baseLevelExtents.width * baseLevelExtents.height * baseLevelExtents.depth *
+     baseLevelFormat.pixelBytes; ANGLE_TRY(mImage->stageSubresourceUpdateFromBuffer( contextVk,
+     bufferSize, stagingDstMipLevel, 0, mImage->getLayerCount(), baseLevelExtents, gl::Offset(),
+     stagingBuffer, stagingBufferOffset));*/
+
+    onStagingBufferChange();
+
+    // Release the origin image and recreate it with new mipmap counts.
+    releaseImage(contextVk);
 
     return angle::Result::Continue;
 }
@@ -1277,7 +1384,7 @@ angle::Result TextureVk::ensureImageInitialized(ContextVk *contextVk)
 {
     const gl::ImageDesc &baseLevelDesc  = mState.getBaseLevelDesc();
     const gl::Extents &baseLevelExtents = baseLevelDesc.size;
-    const uint32_t levelCount           = getLevelCount() - mState.getEffectiveBaseLevel();
+    const uint32_t levelCount           = getEnabledLevelCount();
 
     const vk::Format &format =
         contextVk->getRenderer()->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
@@ -1746,9 +1853,13 @@ void TextureVk::releaseStagingBuffer(ContextVk *contextVk)
     }
 }
 
-uint32_t TextureVk::getLevelCount() const
+uint32_t TextureVk::getEnabledLevelCount() const
 {
-    // getMipmapMaxLevel will be 0 here if mipmaps are not used, so the levelCount is always +1.
+    return mState.getEnabledLevelCount();
+}
+
+uint32_t TextureVk::getMaxLevelCount() const
+{
     return mState.getMipmapMaxLevel() + 1;
 }
 
