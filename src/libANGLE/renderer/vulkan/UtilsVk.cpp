@@ -810,6 +810,7 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
     shaderParams.outputCount = shaderParams.componentCount / shaderParams.Ed;
     shaderParams.srcOffset   = static_cast<uint32_t>(params.srcOffset);
     shaderParams.destOffset  = static_cast<uint32_t>(params.destOffset);
+    shaderParams.clientMajorVersion = static_cast<uint32_t>(contextVk->getClientMajorVersion());
 
     uint32_t flags = GetConvertVertexFlags(params);
 

@@ -1260,6 +1260,12 @@ bool IsOpenGLES()
     return (rendererString.find("OpenGL ES") != std::string::npos);
 }
 
+bool IsOpenGLES20()
+{
+    std::string rendererString(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
+    return (rendererString.find("OpenGL ES 2.") != std::string::npos);
+}
+
 bool IsOpenGL()
 {
     std::string rendererString(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
