@@ -16,6 +16,17 @@ vars = {
   # We overload Chromium's 'src-internal' for infra simplicity.
   'checkout_src_internal': False,
 
+  # Copied from Chromium:
+  # By default, we should check out everything needed to run on the main
+  # chromium waterfalls. This var can be also be set to "small", in order
+  # to skip things are not strictly needed to build chromium for development
+  # purposes, by adding the following line to src.git's .gclient entry:
+  #      "custom_vars": { "checkout_configuration": "small" },
+  'checkout_configuration': 'default',
+
+  # For MSAN builds.
+  'checkout_instrumented_libraries': 'checkout_linux and checkout_configuration != "small"',
+
   # Current revision of dEQP.
   'deqp_revision': 'd3eef28e67ce6795ba3a2124aaa977819729d45f',
 
@@ -205,6 +216,11 @@ deps = {
     'url': '{chromium_git}/chromium/src/tools/memory@89552acb6e60f528fe3c98eac7b445d4c34183ee',
     'condition': 'not build_with_chromium',
   },
+
+  '{angle_root}/third_party/instrumented_libraries': {
+    'url': '{chromium_git}/chromium/src/third_party/instrumented_libraries@e2897773b97b65f70b0bb15b753c73d9f6e3afdb',
+    'condition': 'not build_with_chromium and checkout_instrumented_libraries',
+  }
 }
 
 hooks = [
@@ -340,6 +356,31 @@ hooks = [
                 '--bucket', 'angle-glslang-validator',
                 '-s', '{angle_root}/tools/glslang/glslang_validator.exe.sha1',
     ],
+  },
+
+  {
+    'name': 'msan_chained_origins',
+    'pattern': '.',
+    'condition': 'checkout_instrumented_libraries and not build_with_chromium',
+    'action': [ 'python',
+                'src/third_party/depot_tools/download_from_google_storage.py',
+                '--no_resume',
+                '--no_auth',
+                '--bucket', 'chromium-instrumented-libraries',
+                '-s', 'src/third_party/instrumented_libraries/binaries/msan-chained-origins-trusty.tgz.sha1',
+              ],
+  },
+  {
+    'name': 'msan_no_origins',
+    'pattern': '.',
+    'condition': 'checkout_instrumented_libraries and not build_with_chromium',
+    'action': [ 'python',
+                'src/third_party/depot_tools/download_from_google_storage.py',
+                '--no_resume',
+                '--no_auth',
+                '--bucket', 'chromium-instrumented-libraries',
+                '-s', 'src/third_party/instrumented_libraries/binaries/msan-no-origins-trusty.tgz.sha1',
+              ],
   },
 ]
 
