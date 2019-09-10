@@ -227,6 +227,7 @@ class UtilsVk : angle::NonCopyable
         uint32_t Bd             = 0;
         uint32_t Sd             = 0;
         uint32_t Ed             = 0;
+        uint32_t clientMajorVersion = 0;
     };
 
     struct ImageClearShaderParams

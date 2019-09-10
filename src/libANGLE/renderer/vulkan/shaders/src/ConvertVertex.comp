@@ -129,6 +129,9 @@ layout (push_constant) uniform PushConstants
     uint Bd;       // Destination component byte size
     uint Sd;       // Precalculated Nd*Bd
     uint Ed;       // Precalculated 4/Bd
+
+    // Parameter for selecting the formula between GLES 2.0 and GLES 3.0 to convert snorm to float.
+    uint clientMajorVersion;
 } params;
 
 // Define shorthands for more readable formulas:
@@ -246,7 +249,16 @@ SrcType loadSourceComponent(uint cd)
         valueAsUint |= signExtension;
     }
     int valueAsInt = int(valueAsUint);
-    SrcType value = (2 * float(valueAsInt) + 1) / valueMask;
+    SrcType value;
+    if (params.clientMajorVersion == 2)
+    {
+        value = (2 * float(valueAsInt) + 1) / valueMask;
+    }
+    else
+    {
+        value = float(valueAsInt) / (valueMask >> 1);
+        value = (value >= float(-1)) ? value : float(-1);
+    }
 #elif UnormToFloat
     float positiveMax = valueMask;
     // Scale [0, P] to [0, 1]

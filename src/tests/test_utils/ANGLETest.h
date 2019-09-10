@@ -559,6 +559,7 @@ bool IsD3D9();
 bool IsD3DSM3();
 bool IsDesktopOpenGL();
 bool IsOpenGLES();
+bool IsOpenGLES20();
 bool IsOpenGL();
 bool IsNULL();
 bool IsVulkan();
