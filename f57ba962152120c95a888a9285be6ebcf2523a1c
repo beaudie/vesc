@@ -237,6 +237,30 @@
     },
     {
       "key": {
+        "uuid": "808289ef_2b5a0983",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-10T00:55:54Z",
+      "side": 1,
+      "message": "Jamie/Geoff, does Mingyu\u0027s explanation look good to you?",
+      "parentUuid": "dcdc7f56_b40e429e",
+      "range": {
+        "startLine": 1516,
+        "startChar": 0,
+        "endLine": 1521,
+        "endChar": 0
+      },
+      "revId": "f57ba962152120c95a888a9285be6ebcf2523a1c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ddf21100_8e9917d5",
         "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
         "patchSetId": 9
