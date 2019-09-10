@@ -683,7 +683,8 @@ class ImageHelper final : public CommandGraphResource
                                      uint32_t baseMipLevel,
                                      uint32_t levelCount,
                                      uint32_t baseArrayLayer,
-                                     uint32_t layerCount);
+                                     uint32_t layerCount,
+                                     VkFormat format);
     angle::Result initImageView(Context *context,
                                 gl::TextureType textureType,
                                 VkImageAspectFlags aspectMask,

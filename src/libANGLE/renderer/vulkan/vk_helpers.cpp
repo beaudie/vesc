@@ -221,17 +221,22 @@ constexpr angle::PackedEnumMap<ImageLayout, ImageMemoryBarrierData> kImageMemory
 
 VkImageCreateFlags GetImageCreateFlags(gl::TextureType textureType)
 {
+    VkImageCreateFlags flags = VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
     switch (textureType)
     {
         case gl::TextureType::CubeMap:
-            return VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
+            flags |= VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT;
+            break;
 
         case gl::TextureType::_3D:
-            return VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT;
+            flags |= VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT;
+            break;
 
         default:
-            return 0;
+            break;
     }
+
+    return flags;
 }
 
 void HandlePrimitiveRestart(gl::DrawElementsType glIndexType,
@@ -1639,7 +1644,7 @@ angle::Result ImageHelper::initImageView(Context *context,
                                          uint32_t levelCount)
 {
     return initLayerImageView(context, textureType, aspectMask, swizzleMap, imageViewOut,
-                              baseMipLevel, levelCount, 0, mLayerCount);
+                              baseMipLevel, levelCount, 0, mLayerCount, getFormat().vkImageFormat);
 }
 
 angle::Result ImageHelper::initLayerImageView(Context *context,
@@ -1650,14 +1655,15 @@ angle::Result ImageHelper::initLayerImageView(Context *context,
                                               uint32_t baseMipLevel,
                                               uint32_t levelCount,
                                               uint32_t baseArrayLayer,
-                                              uint32_t layerCount)
+                                              uint32_t layerCount,
+                                              VkFormat format)
 {
     VkImageViewCreateInfo viewInfo = {};
     viewInfo.sType                 = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
     viewInfo.flags                 = 0;
     viewInfo.image                 = mImage.getHandle();
     viewInfo.viewType              = gl_vk::GetImageViewType(textureType);
-    viewInfo.format                = mFormat->vkImageFormat;
+    viewInfo.format                = format;
     if (swizzleMap.swizzleRequired())
     {
         viewInfo.components.r = gl_vk::GetSwizzle(swizzleMap.swizzleRed);

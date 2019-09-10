@@ -163,9 +163,7 @@ class TextureVk : public TextureImpl
                                              size_t level,
                                              const vk::ImageView **imageViewOut);
     angle::Result getLayerLevelStorageImageView(ContextVk *contextVk,
-                                                bool allLayers,
-                                                size_t singleLayer,
-                                                size_t level,
+                                                const gl::ImageUnit &binding,
                                                 const vk::ImageView **imageViewOut);
     const vk::Sampler &getSampler() const;
 

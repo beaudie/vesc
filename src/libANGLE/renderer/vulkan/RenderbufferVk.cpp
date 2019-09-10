@@ -170,7 +170,8 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
 
     ANGLE_TRY(mImage->initLayerImageView(contextVk, imageVk->getImageTextureType(), aspect,
                                          gl::SwizzleState(), &mImageView, imageVk->getImageLevel(),
-                                         1, imageVk->getImageLayer(), 1));
+                                         1, imageVk->getImageLayer(), 1,
+                                         mImage->getFormat().vkImageFormat));
 
     if (imageVk->getImageTextureType() == gl::TextureType::CubeMap)
     {
@@ -178,7 +179,8 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
                                                          imageVk->getImage()->getSamples());
         ANGLE_TRY(mImage->initLayerImageView(contextVk, arrayType, aspect, gl::SwizzleState(),
                                              &mCubeImageFetchView, imageVk->getImageLevel(), 1,
-                                             imageVk->getImageLayer(), 1));
+                                             imageVk->getImageLayer(), 1,
+                                             mImage->getFormat().vkImageFormat));
     }
 
     mRenderTarget.init(mImage, &mImageView,
