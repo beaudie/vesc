@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6755dde7_4687439d",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-11T20:44:42Z",
+      "side": 1,
+      "message": "I don\u0027t think this needs to be saved/restored.",
+      "range": {
+        "startLine": 321,
+        "startChar": 8,
+        "endLine": 321,
+        "endChar": 91
+      },
+      "revId": "f843d3304cb4573825b743831f79d4f73c79b143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5646e2cb_3c4cc4cd",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-11T20:44:42Z",
+      "side": 1,
+      "message": "Let\u0027s use a gl::AttributesMask to keep a bitset of which attributes need to be reset.  You can then iterate over the indices:\n\n  for (size_t attribIndex : attribPointersToReset)\n\nI don\u0027t think you need to store the old pointer, it\u0027s still in the attrib.",
+      "range": {
+        "startLine": 322,
+        "startChar": 8,
+        "endLine": 322,
+        "endChar": 61
+      },
+      "revId": "f843d3304cb4573825b743831f79d4f73c79b143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4acf4547_7056a42b",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-11T20:44:42Z",
+      "side": 1,
+      "message": "Because this code is repeated in both draw calls, can you refactor it into a \u0027updateAttributesForBaseInstance\u0027 which returns the mask of which attributes need to be reset and a \u0027resetAttributes\u0027 function.",
+      "revId": "f843d3304cb4573825b743831f79d4f73c79b143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d568cd7c_a19afc2b",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-11T20:44:42Z",
+      "side": 1,
+      "message": "See ComputeVertexAttributeStride in VertexAttribute.h, this assumes the stride is the same as the data type size.",
+      "range": {
+        "startLine": 335,
+        "startChar": 49,
+        "endLine": 335,
+        "endChar": 75
+      },
+      "revId": "f843d3304cb4573825b743831f79d4f73c79b143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e8b4e00_4948bb36",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-11T20:44:42Z",
+      "side": 1,
+      "message": "The buffer could be null, you\u0027ll need to bind 0.  In fact, we often stream data from scratch buffers when client side data is being used (not with Chrome, luckily) and that information is in VertexArrayGL.  I would assert that the buffer is non-null because this case isn\u0027t handled.",
+      "range": {
+        "startLine": 339,
+        "startChar": 44,
+        "endLine": 339,
+        "endChar": 69
+      },
+      "revId": "f843d3304cb4573825b743831f79d4f73c79b143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2c954fc5_9d2cb6ca",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-11T20:44:42Z",
+      "side": 1,
+      "message": "nit: static_cast (below too)",
+      "range": {
+        "startLine": 343,
+        "startChar": 28,
+        "endLine": 343,
+        "endChar": 36
+      },
+      "revId": "f843d3304cb4573825b743831f79d4f73c79b143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
