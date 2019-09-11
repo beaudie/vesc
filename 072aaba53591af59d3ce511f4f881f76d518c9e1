@@ -22,6 +22,30 @@
       "revId": "072aaba53591af59d3ce511f4f881f76d518c9e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7fff3f0_fd31a010",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-09-11T01:53:03Z",
+      "side": 1,
+      "message": "Thanks for the review and guidance.\n\nAs we discussed in meeting, keep this patch with this set/reset approach. Added vertexAttrib[I]Pointer branch and bind/rebind the appropriate array buffer. Added a new test by setting up two indexed array.\n\nWill refactor the stateCache and passed baseInstance via setDrawArraysState to set vertexAttribPointer offset in a later patch.\n\nWill also investigate, fix, and add new tests on the D3D11 IndexRange issue mentioned here https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d3402#c3.",
+      "parentUuid": "ccd7ea91_2340cc25",
+      "range": {
+        "startLine": 316,
+        "startChar": 8,
+        "endLine": 350,
+        "endChar": 5
+      },
+      "revId": "072aaba53591af59d3ce511f4f881f76d518c9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
