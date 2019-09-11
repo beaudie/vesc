@@ -184,6 +184,10 @@ class StateManagerGL final : angle::NonCopyable
     }
     GLuint getBufferID(gl::BufferBinding binding) const { return mBuffers[binding]; }
 
+#if defined(ANGLE_STATE_VALIDATION_ENABLED)
+    void validateState() const;
+#endif  // ANGLE_STATE_VALIDATION_ENABLED
+
   private:
     void setTextureCubemapSeamlessEnabled(bool enabled);
 

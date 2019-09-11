@@ -242,6 +242,10 @@ class ContextGL : public ContextImpl
 
     void invalidateTexture(gl::TextureType target) override;
 
+#if defined(ANGLE_STATE_VALIDATION_ENABLED)
+    void validateState() const;
+#endif  // ANGLE_STATE_VALIDATION_ENABLED
+
   private:
     angle::Result setDrawArraysState(const gl::Context *context,
                                      GLint first,
