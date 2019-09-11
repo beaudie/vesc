@@ -229,9 +229,18 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
         std::vector<std::string> transformFeedbackVaryingMappedNames;
         for (const auto &tfVarying : mState.getTransformFeedbackVaryingNames())
         {
-            std::string tfVaryingMappedName =
+            std::string tfVaryingMappedName;
+
+            if (mState.hasLinkedShaderStage(gl::ShaderType::Geometry))
+            {
+                mState.getAttachedShader(gl::ShaderType::Geometry)
+                    ->getTransformFeedbackVaryingMappedName(tfVarying);
+            }
+            else if (mState.hasLinkedShaderStage(gl::ShaderType::Vertex))
+            {
                 mState.getAttachedShader(gl::ShaderType::Vertex)
                     ->getTransformFeedbackVaryingMappedName(tfVarying);
+            }
             transformFeedbackVaryingMappedNames.push_back(tfVaryingMappedName);
         }
 
