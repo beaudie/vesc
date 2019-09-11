@@ -105,6 +105,7 @@ bool SupportsTexImage(gl::TextureType type);
 bool UseTexImage2D(gl::TextureType textureType);
 bool UseTexImage3D(gl::TextureType textureType);
 GLenum GetTextureBindingQuery(gl::TextureType textureType);
+GLenum GetBufferBindingQuery(gl::BufferBinding bufferBinding);
 }  // namespace nativegl
 
 bool CanMapBufferForRead(const FunctionsGL *functions);
