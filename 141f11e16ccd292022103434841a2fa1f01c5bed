@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "deef260b_61bf0d24",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2019-09-11T23:24:48Z",
+      "side": 1,
+      "message": "Do you want to point to Daksh\u0027s other change in the angle_end2end_tests - maybe at least a bug ID? - so that these two pieces of code have some sort of link together?",
+      "range": {
+        "startLine": 329,
+        "startChar": 46,
+        "endLine": 329,
+        "endChar": 47
+      },
+      "revId": "141f11e16ccd292022103434841a2fa1f01c5bed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
