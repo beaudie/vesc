@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b335571b_2d5cc76b",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 986,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-11T18:22:56Z",
+      "side": 1,
+      "message": "nit:  A slightly cleaner way of doing this while still using ANGLE_TRY:\n\n    if (configuration)\n    {\n        ANGLE_TRY(validateConfig(display, configuration));\n    }\n    else\n    {\n        ANGLE_TRY(validateDisplay(display));\n        const DisplayExtensions \u0026displayExtensions \u003d display-\u003egetExtensions();\n        if (!displayExtensions.noConfigContext)\n        {\n            return EglBadConfig();\n        }\n    }",
+      "range": {
+        "startLine": 971,
+        "startChar": 0,
+        "endLine": 986,
+        "endChar": 5
+      },
+      "revId": "e9e6386d13db58e8e1e9884770c96f1154fe17de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
