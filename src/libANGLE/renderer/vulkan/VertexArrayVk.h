@@ -87,6 +87,12 @@ class VertexArrayVk : public VertexArrayImpl
                                                 BufferVk *indexBufferVk,
                                                 const void *indices);
 
+    angle::Result convertLineLoopIndexBufferIndirectGPU(ContextVk *contextVk,
+                                                        BufferVk *cmdBufferVk,
+                                                        BufferVk *indexBufferVk,
+                                                        int indexSize,
+                                                        const void *indices);
+
     angle::Result convertIndexBufferCPU(ContextVk *contextVk,
                                         gl::DrawElementsType indexType,
                                         size_t indexCount,
@@ -125,6 +131,8 @@ class VertexArrayVk : public VertexArrayImpl
     vk::DynamicBuffer mDynamicVertexData;
     vk::DynamicBuffer mDynamicIndexData;
     vk::DynamicBuffer mTranslatedByteIndexData;
+    vk::DynamicBuffer mTranslatedLineLoopIndexData;
+    vk::DynamicBuffer mTranslatedLineLoopCmdData;
 
     vk::LineLoopHelper mLineLoopHelper;
     Optional<GLint> mLineLoopBufferFirstIndex;
