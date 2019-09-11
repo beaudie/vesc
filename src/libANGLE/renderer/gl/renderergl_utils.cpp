@@ -1667,6 +1667,74 @@ GLenum GetTextureBindingQuery(gl::TextureType textureType)
     }
 }
 
+GLenum GetBufferBindingQuery(gl::BufferBinding bufferBinding)
+{
+    switch (bufferBinding)
+    {
+        case gl::BufferBinding::Array:
+            return GL_ARRAY_BUFFER_BINDING;
+        case gl::BufferBinding::AtomicCounter:
+            return GL_ATOMIC_COUNTER_BUFFER_BINDING;
+        case gl::BufferBinding::CopyRead:
+            return GL_COPY_READ_BUFFER_BINDING;
+        case gl::BufferBinding::CopyWrite:
+            return GL_COPY_WRITE_BUFFER_BINDING;
+        case gl::BufferBinding::DispatchIndirect:
+            return GL_DISPATCH_INDIRECT_BUFFER_BINDING;
+        case gl::BufferBinding::DrawIndirect:
+            return GL_DRAW_INDIRECT_BUFFER_BINDING;
+        case gl::BufferBinding::ElementArray:
+            return GL_ELEMENT_ARRAY_BUFFER_BINDING;
+        case gl::BufferBinding::PixelPack:
+            return GL_PIXEL_PACK_BUFFER_BINDING;
+        case gl::BufferBinding::PixelUnpack:
+            return GL_PIXEL_UNPACK_BUFFER_BINDING;
+        case gl::BufferBinding::ShaderStorage:
+            return GL_SHADER_STORAGE_BUFFER_BINDING;
+        case gl::BufferBinding::TransformFeedback:
+            return GL_TRANSFORM_FEEDBACK_BUFFER_BINDING;
+        case gl::BufferBinding::Uniform:
+            return GL_UNIFORM_BUFFER_BINDING;
+        default:
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+std::string GetBufferBindingString(gl::BufferBinding bufferBinding)
+{
+    switch (bufferBinding)
+    {
+        case gl::BufferBinding::Array:
+            return "GL_ARRAY_BUFFER_BINDING";
+        case gl::BufferBinding::AtomicCounter:
+            return "GL_ATOMIC_COUNTER_BUFFER_BINDING";
+        case gl::BufferBinding::CopyRead:
+            return "GL_COPY_READ_BUFFER_BINDING";
+        case gl::BufferBinding::CopyWrite:
+            return "GL_COPY_WRITE_BUFFER_BINDING";
+        case gl::BufferBinding::DispatchIndirect:
+            return "GL_DISPATCH_INDIRECT_BUFFER_BINDING";
+        case gl::BufferBinding::DrawIndirect:
+            return "GL_DRAW_INDIRECT_BUFFER_BINDING";
+        case gl::BufferBinding::ElementArray:
+            return "GL_ELEMENT_ARRAY_BUFFER_BINDING";
+        case gl::BufferBinding::PixelPack:
+            return "GL_PIXEL_PACK_BUFFER_BINDING";
+        case gl::BufferBinding::PixelUnpack:
+            return "GL_PIXEL_UNPACK_BUFFER_BINDING";
+        case gl::BufferBinding::ShaderStorage:
+            return "GL_SHADER_STORAGE_BUFFER_BINDING";
+        case gl::BufferBinding::TransformFeedback:
+            return "GL_TRANSFORM_FEEDBACK_BUFFER_BINDING";
+        case gl::BufferBinding::Uniform:
+            return "GL_UNIFORM_BUFFER_BINDING";
+        default:
+            UNREACHABLE();
+            return "";
+    }
+}
+
 }  // namespace nativegl
 
 const FunctionsGL *GetFunctionsGL(const gl::Context *context)
