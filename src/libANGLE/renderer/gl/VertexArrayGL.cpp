@@ -730,4 +730,149 @@ void VertexArrayGL::applyActiveAttribLocationsMask(const gl::AttributesMask &act
     }
 }
 
+void VertexArrayGL::validateState() const
+{
+    GLint queryValue;
+
+    // Ensure this vao is currently bound
+    mFunctions->getIntegerv(GL_VERTEX_ARRAY_BINDING, &queryValue);
+    if (mVertexArrayID != static_cast<GLuint>(queryValue))
+    {
+        WARN() << "mVertexArrayID (" << mVertexArrayID << ") != GL_VERTEX_ARRAY_BINDING ("
+               << queryValue << ")";
+        ASSERT(false);
+    }
+
+    // Element array buffer
+    mFunctions->getIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &queryValue);
+    if (mAppliedElementArrayBuffer.get() != nullptr)
+    {
+        const BufferGL *bufferGL = GetImplAs<BufferGL>(mAppliedElementArrayBuffer.get());
+        if (bufferGL->getBufferID() != static_cast<GLuint>(queryValue))
+        {
+            WARN() << "mAppliedElementArrayBuffer (" << bufferGL->getBufferID()
+                   << ") != GL_ELEMENT_ARRAY_BUFFER_BINDING (" << queryValue << ")";
+            ASSERT(false);
+        }
+    }
+    else
+    {
+        if (queryValue != 0)
+        {
+            WARN() << "mAppliedElementArrayBuffer (0) != GL_ELEMENT_ARRAY_BUFFER_BINDING ("
+                   << queryValue << ")";
+            ASSERT(false);
+        }
+    }
+
+    // Applied attributes
+    mFunctions->getIntegerv(GL_MAX_VERTEX_ATTRIBS, &queryValue);
+    if (mAppliedAttributes.size() != static_cast<size_t>(queryValue))
+    {
+        WARN() << "mAppliedAttributes.size() (" << mAppliedAttributes.size()
+               << ") != GL_MAX_VERTEX_ATTRIBS (" << queryValue << ")";
+        ASSERT(false);
+    }
+
+    for (GLuint index = 0; index < mAppliedAttributes.size(); index++)
+    {
+        VertexAttribute &attribute = mAppliedAttributes[index];
+        VertexBinding &binding     = mAppliedBindings[attribute.bindingIndex];
+
+        mFunctions->getVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_ENABLED, &queryValue);
+        if (attribute.enabled != static_cast<bool>(queryValue))
+        {
+            WARN() << "mAppliedAttributes[" << index << "].enabled (" << attribute.enabled
+                   << ") != GL_VERTEX_ATTRIB_ARRAY_ENABLED (" << queryValue << ")";
+            ASSERT(false);
+        }
+
+        if (attribute.enabled)
+        {
+            mFunctions->getVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_TYPE, &queryValue);
+            if (ToGLenum(attribute.format->vertexAttribType) != static_cast<GLenum>(queryValue))
+            {
+                WARN() << "mAppliedAttributes[" << index << "].format->vertexAttribType ("
+                       << ToGLenum(attribute.format->vertexAttribType)
+                       << ") != GL_VERTEX_ATTRIB_ARRAY_TYPE (" << queryValue << ")";
+                ASSERT(false);
+            }
+
+            mFunctions->getVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_SIZE, &queryValue);
+            if (attribute.format->channelCount != static_cast<GLuint>(queryValue))
+            {
+                WARN() << "mAppliedAttributes[" << index << "].format->channelCount ("
+                       << attribute.format->channelCount << ") != GL_VERTEX_ATTRIB_ARRAY_SIZE ("
+                       << queryValue << ")";
+                ASSERT(false);
+            }
+
+            mFunctions->getVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_NORMALIZED, &queryValue);
+            if (attribute.format->isNorm() != static_cast<bool>(queryValue))
+            {
+                WARN() << "mAppliedAttributes[" << index << "].format->isNorm() ("
+                       << attribute.format->isNorm() << ") != GL_VERTEX_ATTRIB_ARRAY_NORMALIZED ("
+                       << queryValue << ")";
+                ASSERT(false);
+            }
+
+            mFunctions->getVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_INTEGER, &queryValue);
+            if (attribute.format->isPureInt() != static_cast<bool>(queryValue))
+            {
+                WARN() << "mAppliedAttributes[" << index << "].format->isPureInt() ("
+                       << attribute.format->isPureInt() << ") != GL_VERTEX_ATTRIB_ARRAY_INTEGER ("
+                       << queryValue << ")";
+                ASSERT(false);
+            }
+
+            mFunctions->getVertexAttribiv(index, GL_VERTEX_ATTRIB_RELATIVE_OFFSET, &queryValue);
+            if (attribute.relativeOffset != static_cast<GLuint>(queryValue))
+            {
+                WARN() << "mAppliedAttributes[" << index << "].relativeOffset ("
+                       << attribute.relativeOffset << ") != GL_VERTEX_ATTRIB_RELATIVE_OFFSET ("
+                       << queryValue << ")";
+                ASSERT(false);
+            }
+
+            mFunctions->getVertexAttribiv(index, GL_VERTEX_ATTRIB_BINDING, &queryValue);
+            if (attribute.bindingIndex != static_cast<GLuint>(queryValue))
+            {
+                WARN() << "mAppliedAttributes[" << index << "].bindingIndex ("
+                       << attribute.bindingIndex << ") != GL_VERTEX_ATTRIB_BINDING (" << queryValue
+                       << ")";
+                ASSERT(false);
+            }
+
+            mFunctions->getVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING,
+                                          &queryValue);
+            const BufferGL *arrayBufferGL = GetImplAs<BufferGL>(binding.getBuffer().get());
+            if (arrayBufferGL->getBufferID() != static_cast<GLuint>(queryValue))
+            {
+                WARN() << "mAppliedBindings[" << attribute.bindingIndex << "].bufferID ("
+                       << arrayBufferGL->getBufferID()
+                       << ") != GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING (" << queryValue << ")";
+                ASSERT(false);
+            }
+
+            mFunctions->getVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_STRIDE, &queryValue);
+            if (binding.getStride() != static_cast<GLuint>(queryValue))
+            {
+                WARN() << "mAppliedBindings[" << attribute.bindingIndex << "].mStride ("
+                       << binding.getStride() << ") != GL_VERTEX_ATTRIB_ARRAY_STRIDE ("
+                       << queryValue << ")";
+                ASSERT(false);
+            }
+
+            mFunctions->getVertexAttribiv(index, GL_VERTEX_ATTRIB_ARRAY_DIVISOR, &queryValue);
+            if (binding.getDivisor() != static_cast<GLuint>(queryValue))
+            {
+                WARN() << "mAppliedBindings[" << attribute.bindingIndex << "].mDivisor ("
+                       << binding.getDivisor() << ") != GL_VERTEX_ATTRIB_ARRAY_DIVISOR ("
+                       << queryValue << ")";
+                ASSERT(false);
+            }
+        }
+    }
+}
+
 }  // namespace rx

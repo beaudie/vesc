@@ -221,6 +221,8 @@ ANGLE_INLINE angle::Result ContextGL::setDrawArraysState(const gl::Context *cont
 
         ANGLE_TRY(vaoGL->syncClientSideData(context, program->getActiveAttribLocationsMask(), first,
                                             count, instanceCount));
+
+        vaoGL->validateState();
     }
 
     return angle::Result::Continue;
@@ -252,6 +254,9 @@ ANGLE_INLINE angle::Result ContextGL::setDrawElementsState(const gl::Context *co
         *outIndices = indices;
     }
 
+    const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
+    vaoGL->validateState();
+
     return angle::Result::Continue;
 }
 
@@ -263,6 +268,8 @@ angle::Result ContextGL::drawArrays(const gl::Context *context,
     const gl::Program *program  = context->getState().getProgram();
     const bool usesMultiview    = program->usesMultiview();
     const GLsizei instanceCount = usesMultiview ? program->getNumViews() : 0;
+
+    validateState();
 
     ANGLE_TRY(setDrawArraysState(context, first, count, instanceCount));
     if (!usesMultiview)
@@ -315,6 +322,8 @@ angle::Result ContextGL::drawElements(const gl::Context *context,
     const bool usesMultiview    = program->usesMultiview();
     const GLsizei instanceCount = usesMultiview ? program->getNumViews() : 0;
     const void *drawIndexPtr    = nullptr;
+
+    validateState();
 
     ANGLE_TRY(setDrawElementsState(context, count, type, indices, instanceCount, &drawIndexPtr));
     if (!usesMultiview)
@@ -654,6 +663,12 @@ void ContextGL::setMaxShaderCompilerThreads(GLuint count)
 void ContextGL::invalidateTexture(gl::TextureType target)
 {
     mRenderer->getStateManager()->invalidateTexture(target);
+}
+
+void ContextGL::validateState() const
+{
+    const StateManagerGL *stateManager = mRenderer->getStateManager();
+    stateManager->validateState();
 }
 
 }  // namespace rx
