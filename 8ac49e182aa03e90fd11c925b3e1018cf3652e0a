@@ -70,6 +70,30 @@
       "revId": "8ac49e182aa03e90fd11c925b3e1018cf3652e0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7efe7655_41b607f6",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2019-09-12T22:46:29Z",
+      "side": 0,
+      "message": "Looks like shell\u003dTrue is necessary on Windows. I\u0027ve made it pass True for Windows and false on all other platforms.",
+      "parentUuid": "d29e1d61_a8567787",
+      "range": {
+        "startLine": 110,
+        "startChar": 16,
+        "endLine": 110,
+        "endChar": 26
+      },
+      "revId": "8ac49e182aa03e90fd11c925b3e1018cf3652e0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
