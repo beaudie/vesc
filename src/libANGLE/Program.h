@@ -401,6 +401,7 @@ class ProgramState final : angle::NonCopyable
         return mActiveSamplerFormats[textureUnitIndex];
     }
     ShaderType getFirstAttachedShaderStageType() const;
+    ShaderType getLastAttachedShaderStageType() const;
 
   private:
     friend class MemoryProgramCache;
@@ -410,6 +411,7 @@ class ProgramState final : angle::NonCopyable
     void updateActiveSamplers();
     void updateActiveImages();
     void updateProgramInterfaceInputs();
+    void updateProgramInterfaceOutputs();
 
     // Scans the sampler bindings for type conflicts with sampler 'textureUnitIndex'.
     void setSamplerUniformTextureTypeAndFormat(size_t textureUnitIndex);
@@ -883,10 +885,16 @@ class Program final : angle::NonCopyable, public LabeledObject
                                        GLsizei *length,
                                        GLchar *name) const;
     const sh::ShaderVariable &getInputResource(size_t index) const;
+    GLuint getResourceMaxNameSize(const sh::ShaderVariable &resource, GLint max) const;
     GLuint getInputResourceMaxNameSize() const;
+    GLuint getOutputResourceMaxNameSize() const;
+    GLuint getResourceLocation(const GLchar *name, const sh::ShaderVariable &variable) const;
     GLuint getInputResourceLocation(const GLchar *name) const;
+    GLuint getOutputResourceLocation(const GLchar *name) const;
+    const std::string getResourceName(const sh::ShaderVariable &resource) const;
     const std::string getInputResourceName(GLuint index) const;
-    const sh::ShaderVariable &getOutputResource(GLuint index) const;
+    const std::string getOutputResourceName(GLuint index) const;
+    const sh::ShaderVariable &getOutputResource(size_t index) const;
 
     const ProgramBindings &getAttributeBindings() const;
     const ProgramBindings &getUniformLocationBindings() const;
