@@ -428,18 +428,7 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
             uniformList = mAtomicCounterUniforms;
         }
 
-        std::string fullNameWithArrayIndex(name);
-        std::string fullMappedNameWithArrayIndex(mappedName);
-
-        if (variable.isArray())
-        {
-            // We're following the GLES 3.1 November 2016 spec section 7.3.1.1 Naming Active
-            // Resources and including [0] at the end of array variable names.
-            fullNameWithArrayIndex += "[0]";
-            fullMappedNameWithArrayIndex += "[0]";
-        }
-
-        LinkedUniform *existingUniform = FindUniform(*uniformList, fullNameWithArrayIndex);
+        LinkedUniform *existingUniform = FindUniform(*uniformList, name);
         if (existingUniform)
         {
             if (getBinding() != -1)
@@ -466,10 +455,10 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
         }
         else
         {
-            LinkedUniform linkedUniform(variable.type, variable.precision, fullNameWithArrayIndex,
+            LinkedUniform linkedUniform(variable.type, variable.precision, name,
                                         variable.arraySizes, getBinding(), getOffset(), mLocation,
                                         -1, sh::kDefaultBlockMemberInfo);
-            linkedUniform.mappedName = fullMappedNameWithArrayIndex;
+            linkedUniform.mappedName      = mappedName;
             linkedUniform.active     = mMarkActive;
             linkedUniform.staticUse  = mMarkStaticUse;
             linkedUniform.outerArraySizes = arraySizes;
@@ -889,7 +878,7 @@ bool UniformLinker::gatherUniformLocationsAndCheckConflicts(
     // from the shader. Other uniforms should not be assigned to those locations.
     for (const auto &locationBinding : uniformLocationBindings)
     {
-        GLuint location = locationBinding.second.location;
+        GLuint location = locationBinding.second;
         if (reservedLocations.find(location) == reservedLocations.end())
         {
             ignoredLocations->insert(location);

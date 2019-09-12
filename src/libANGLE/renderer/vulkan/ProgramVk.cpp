@@ -790,18 +790,11 @@ void ProgramVk::initDefaultUniformLayoutMapping(gl::ShaderMap<sh::BlockLayoutMap
             const auto &uniform = uniforms[location.index];
             if (uniform.isInDefaultBlock() && !uniform.isSampler() && !uniform.isImage())
             {
-                std::string uniformName = uniform.name;
-                if (uniform.isArray())
-                {
-                    // Gets the uniform name without the [0] at the end.
-                    uniformName = gl::StripLastArrayIndex(uniformName);
-                }
-
                 bool found = false;
 
                 for (const gl::ShaderType shaderType : mState.getLinkedShaderStages())
                 {
-                    auto it = layoutMap[shaderType].find(uniformName);
+                    auto it = layoutMap[shaderType].find(uniform.name);
                     if (it != layoutMap[shaderType].end())
                     {
                         found                  = true;
