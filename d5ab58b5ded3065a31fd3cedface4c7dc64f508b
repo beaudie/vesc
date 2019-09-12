@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "0dd86d1b_73ab78fc",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-12T21:34:16Z",
+      "side": 1,
+      "message": "I think I would remove the explicit references to Firefox and say like \"PRIMARY_EXPORT_TARGETS\" and \"_CheckExportValidity\" or something. WDYT?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 24
+      },
+      "revId": "d5ab58b5ded3065a31fd3cedface4c7dc64f508b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9b4f20ab_9fbce0a2",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-12T21:34:16Z",
+      "side": 1,
+      "message": "how slow is this check? I wonder if it would be better done some way that only checks things when BUILD.gn files change.",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 30
+      },
+      "revId": "d5ab58b5ded3065a31fd3cedface4c7dc64f508b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "715fb64c_9e9506d5",
         "filename": "scripts/export_targets.py",
         "patchSetId": 4
@@ -13,6 +59,30 @@
       "writtenOn": "2019-09-12T21:29:34Z",
       "side": 1,
       "message": "With this still in place, this ends up getting hit when checking //:libEGL, e.g. AssertionError: //third_party/spirv-tools/src:spvtools. Not sure if that\u0027s because there\u0027s a legitimate issue/I\u0027m holding it wrong, or if this just needs to be changed to:\n\nassert dep_name.startswith(\u0027//\u0027), dep_name\n\nand properly strip off both \u0027//\u0027 and \u0027//:\u0027 instead of unconditionally stripping off the first three characters.",
+      "range": {
+        "startLine": 287,
+        "startChar": 12,
+        "endLine": 287,
+        "endChar": 56
+      },
+      "revId": "d5ab58b5ded3065a31fd3cedface4c7dc64f508b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d21ff33b_e497ee2e",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-12T21:34:16Z",
+      "side": 1,
+      "message": "This rule is saying ANGLE can\u0027t include any dependencies? That\u0027s weird, probably should remove it.",
+      "parentUuid": "715fb64c_9e9506d5",
       "range": {
         "startLine": 287,
         "startChar": 12,
