@@ -46,6 +46,30 @@
       "revId": "8ac49e182aa03e90fd11c925b3e1018cf3652e0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d29e1d61_a8567787",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2019-09-12T21:48:20Z",
+      "side": 0,
+      "message": "Tested locally with Linux, will dust off my Windows workstation and give it a try as well.",
+      "parentUuid": "1a276bbf_5a0fd9df",
+      "range": {
+        "startLine": 110,
+        "startChar": 16,
+        "endLine": 110,
+        "endChar": 26
+      },
+      "revId": "8ac49e182aa03e90fd11c925b3e1018cf3652e0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }

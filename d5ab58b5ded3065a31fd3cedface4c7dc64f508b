@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0b63b3a4_6f60f3a9",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2019-09-12T21:48:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0dd86d1b_73ab78fc",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 24
+      },
+      "revId": "d5ab58b5ded3065a31fd3cedface4c7dc64f508b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9b4f20ab_9fbce0a2",
         "filename": "PRESUBMIT.py",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2019-09-12T21:34:16Z",
       "side": 1,
       "message": "how slow is this check? I wonder if it would be better done some way that only checks things when BUILD.gn files change.",
+      "range": {
+        "startLine": 115,
+        "startChar": 4,
+        "endLine": 115,
+        "endChar": 30
+      },
+      "revId": "d5ab58b5ded3065a31fd3cedface4c7dc64f508b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a4d4094_c89ef622",
+        "filename": "PRESUBMIT.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2019-09-12T21:48:20Z",
+      "side": 1,
+      "message": "It\u0027s pretty fast. Total presubmit for me locally takes 4.8 seconds.",
+      "parentUuid": "9b4f20ab_9fbce0a2",
       "range": {
         "startLine": 115,
         "startChar": 4,
