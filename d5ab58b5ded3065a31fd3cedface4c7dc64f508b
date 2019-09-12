@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "715fb64c_9e9506d5",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2019-09-12T21:29:34Z",
+      "side": 1,
+      "message": "With this still in place, this ends up getting hit when checking //:libEGL, e.g. AssertionError: //third_party/spirv-tools/src:spvtools. Not sure if that\u0027s because there\u0027s a legitimate issue/I\u0027m holding it wrong, or if this just needs to be changed to:\n\nassert dep_name.startswith(\u0027//\u0027), dep_name\n\nand properly strip off both \u0027//\u0027 and \u0027//:\u0027 instead of unconditionally stripping off the first three characters.",
+      "range": {
+        "startLine": 287,
+        "startChar": 12,
+        "endLine": 287,
+        "endChar": 56
+      },
+      "revId": "d5ab58b5ded3065a31fd3cedface4c7dc64f508b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

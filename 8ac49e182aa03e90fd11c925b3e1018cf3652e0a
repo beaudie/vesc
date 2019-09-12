@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26d0dc52_2a037019",
+        "filename": "scripts/export_targets.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2019-09-12T21:29:34Z",
+      "side": 0,
+      "message": "Running with shell\u003dTrue ended up failing for me locally due to \u0027*\u0027 not getting quoted.",
+      "range": {
+        "startLine": 110,
+        "startChar": 16,
+        "endLine": 110,
+        "endChar": 26
+      },
+      "revId": "8ac49e182aa03e90fd11c925b3e1018cf3652e0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
