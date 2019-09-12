@@ -592,7 +592,9 @@ ANGLE_INSTANTIATE_TEST(EXTBlendFuncExtendedTestES3,
                        ES3_OPENGL(),
                        ES3_OPENGLES(),
                        ES31_OPENGL(),
-                       ES31_OPENGLES());
+                       ES31_OPENGLES(),
+                       ES3_VULKAN(),
+                       ES31_VULKAN());
 ANGLE_INSTANTIATE_TEST(EXTBlendFuncExtendedDrawTest,
                        ES2_OPENGL(),
                        ES2_OPENGLES(),
@@ -603,4 +605,6 @@ ANGLE_INSTANTIATE_TEST(EXTBlendFuncExtendedDrawTestES3,
                        ES3_OPENGL(),
                        ES3_OPENGLES(),
                        ES31_OPENGL(),
-                       ES31_OPENGLES());
+                       ES31_OPENGLES(),
+                       ES3_VULKAN(),
+                       ES31_VULKAN());

@@ -509,13 +509,6 @@ void AssignAttributeLocations(const gl::ProgramState &programState,
     }
 }
 
-std::string RemoveArrayZeroSubscript(const std::string &expression)
-{
-    ASSERT(expression.size() > 3);
-    ASSERT(expression.substr(expression.size() - 3) == "[0]");
-    return expression.substr(0, expression.size() - 3);
-}
-
 void AssignOutputLocations(const gl::ProgramState &programState,
                            IntermediateShaderSource *fragmentSource)
 {
@@ -526,27 +519,14 @@ void AssignOutputLocations(const gl::ProgramState &programState,
     const auto &outputVariables                      = programState.getOutputVariables();
     const std::array<std::string, 3> implicitOutputs = {"gl_FragDepth", "gl_SampleMask",
                                                         "gl_FragStencilRefARB"};
+    int location                                     = 0;
     for (const gl::VariableLocation &outputLocation : outputLocations)
     {
         if (outputLocation.arrayIndex == 0 && outputLocation.used() && !outputLocation.ignored)
         {
             const sh::ShaderVariable &outputVar = outputVariables[outputLocation.index];
 
-            // In the following:
-            //
-            //     out vec4 fragOutput[N];
-            //
-            // The varying name is |fragOutput[0]|.  We need to remove the extra |[0]|.
             std::string name = outputVar.name;
-            if (outputVar.isArray())
-            {
-                name = RemoveArrayZeroSubscript(name);
-                if (outputVar.isArrayOfArrays())
-                {
-                    name = RemoveArrayZeroSubscript(name);
-                }
-            }
-
             std::string locationString;
             if (outputVar.location != -1)
             {
@@ -559,7 +539,9 @@ void AssignOutputLocations(const gl::ProgramState &programState,
                 // which case it defaults to 0.  GLSL ES 3.00 spec, section 4.3.8.2.
                 ASSERT(CountExplicitOutputs(outputVariables.begin(), outputVariables.end(),
                                             implicitOutputs.begin(), implicitOutputs.end()) == 1);
-                locationString = "location = 0";
+                locationString = "location = " + std::to_string(location);
+                const_cast<sh::ShaderVariable &>(outputVar).location = location;
+                ++location;
             }
 
             fragmentSource->insertLayoutSpecifier(name, locationString);
