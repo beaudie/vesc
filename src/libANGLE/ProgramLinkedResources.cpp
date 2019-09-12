@@ -889,7 +889,7 @@ bool UniformLinker::gatherUniformLocationsAndCheckConflicts(
     // from the shader. Other uniforms should not be assigned to those locations.
     for (const auto &locationBinding : uniformLocationBindings)
     {
-        GLuint location = locationBinding.second.location;
+        GLuint location = locationBinding.second;
         if (reservedLocations.find(location) == reservedLocations.end())
         {
             ignoredLocations->insert(location);

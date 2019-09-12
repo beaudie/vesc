@@ -147,36 +147,14 @@ GLint GetVariableLocation(const std::vector<VarT> &list,
         // Array output variables may be bound out of order, so we need to ensure we only pick the
         // first element if given the base name. Uniforms don't allow this behavior and some code
         // seemingly depends on the opposite behavior, so only enable it for output variables.
-        if (angle::BeginsWith(variable.name, name) &&
+        if ((variable.name == name) &&
             (!std::is_base_of<sh::ShaderVariable, VarT>::value || variableLocation.arrayIndex == 0))
         {
-            if (name.length() == variable.name.length())
-            {
-                ASSERT(name == variable.name);
-                // GLES 3.1 November 2016 page 87.
-                // The string exactly matches the name of the active variable.
-                return static_cast<GLint>(location);
-            }
-            if (name.length() + 3u == variable.name.length() && variable.isArray())
-            {
-                ASSERT(name + "[0]" == variable.name);
-                // The string identifies the base name of an active array, where the string would
-                // exactly match the name of the variable if the suffix "[0]" were appended to the
-                // string.
-                return static_cast<GLint>(location);
-            }
+            return static_cast<GLint>(location);
         }
         if (variable.isArray() && variableLocation.arrayIndex == arrayIndex &&
-            nameLengthWithoutArrayIndex + 3u == variable.name.length() &&
-            angle::BeginsWith(variable.name, name, nameLengthWithoutArrayIndex))
+            (name == (variable.name + "[0]")))
         {
-            ASSERT(name.substr(0u, nameLengthWithoutArrayIndex) + "[0]" == variable.name);
-            // The string identifies an active element of the array, where the string ends with the
-            // concatenation of the "[" character, an integer (with no "+" sign, extra leading
-            // zeroes, or whitespace) identifying an array element, and the "]" character, the
-            // integer is less than the number of active elements of the array variable, and where
-            // the string would exactly match the enumerated name of the array if the decimal
-            // integer were replaced with zero.
             return static_cast<GLint>(location);
         }
     }
@@ -902,31 +880,13 @@ ProgramBindings::~ProgramBindings() {}
 
 void ProgramBindings::bindLocation(GLuint index, const std::string &name)
 {
-    mBindings[name] = ProgramBinding(index);
-
-    // EXT_blend_func_extended spec: "If it specifies the base name of an array,
-    // it identifies the resources associated with the first element of the array."
-    //
-    // Normalize array bindings so that "name" and "name[0]" map to the same entry.
-    // If this binding is of the form "name[0]", then mark the "name" binding as
-    // aliased but do not update it yet in case "name" is not actually an array.
-    size_t nameLengthWithoutArrayIndex;
-    unsigned int arrayIndex = ParseArrayIndex(name, &nameLengthWithoutArrayIndex);
-    if (arrayIndex == 0)
-    {
-        std::string baseName = name.substr(0u, nameLengthWithoutArrayIndex);
-        auto iter            = mBindings.find(baseName);
-        if (iter != mBindings.end())
-        {
-            iter->second.aliased = true;
-        }
-    }
+    mBindings[name] = index;
 }
 
 int ProgramBindings::getBindingByName(const std::string &name) const
 {
     auto iter = mBindings.find(name);
-    return (iter != mBindings.end()) ? iter->second.location : -1;
+    return (iter != mBindings.end()) ? iter->second : -1;
 }
 
 int ProgramBindings::getBinding(const sh::ShaderVariable &variable) const
@@ -936,19 +896,7 @@ int ProgramBindings::getBinding(const sh::ShaderVariable &variable) const
     // Check with the normalized array name if applicable.
     if (variable.isArray())
     {
-        size_t nameLengthWithoutArrayIndex;
-        unsigned int arrayIndex = ParseArrayIndex(name, &nameLengthWithoutArrayIndex);
-        if (arrayIndex == 0)
-        {
-            std::string baseName = name.substr(0u, nameLengthWithoutArrayIndex);
-            auto iter            = mBindings.find(baseName);
-            // If "name" exists and is not aliased, that means it was modified more
-            // recently than its "name[0]" form and should be used instead of that.
-            if (iter != mBindings.end() && !iter->second.aliased)
-            {
-                return iter->second.location;
-            }
-        }
+        return getBindingByName(name + "[0]");
     }
 
     return getBindingByName(name);
@@ -1137,6 +1085,26 @@ ShaderType ProgramState::getFirstAttachedShaderStageType() const
     return ShaderType::InvalidEnum;
 }
 
+ShaderType ProgramState::getLastAttachedShaderStageType() const
+{
+    for (int i = gl::kAllGraphicsShaderTypes.size() - 1; i >= 0; --i)
+    {
+        const gl::ShaderType shaderType = gl::kAllGraphicsShaderTypes[i];
+
+        if (hasLinkedShaderStage(shaderType))
+        {
+            return shaderType;
+        }
+    }
+
+    if (hasLinkedShaderStage(ShaderType::Compute))
+    {
+        return ShaderType::Compute;
+    }
+
+    return ShaderType::InvalidEnum;
+}
+
 Program::Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, ShaderProgramID handle)
     : mProgram(factory->createProgram(mState)),
       mValidated(false),
@@ -1279,7 +1247,7 @@ BindingInfo Program::getFragmentInputBindingInfo(GLint index) const
 
     for (const auto &binding : mFragmentInputBindings)
     {
-        if (binding.second.location != static_cast<GLuint>(index))
+        if (binding.second != static_cast<GLuint>(index))
             continue;
 
         ret.valid = true;
@@ -1509,7 +1477,6 @@ angle::Result Program::link(const Context *context)
     }
 
     updateLinkedShaderStages();
-    mState.updateProgramInterfaceInputs();
 
     mLinkingState.reset(new LinkingState());
     mLinkingState->linkingFromBinary = false;
@@ -1517,6 +1484,10 @@ angle::Result Program::link(const Context *context)
     mLinkingState->linkEvent         = mProgram->link(context, *resources, mInfoLog);
     mLinkingState->resources         = std::move(resources);
     mLinkResolved                    = false;
+
+    // Must be after mProgram->link() to avoid misleading the linker about output variables.
+    mState.updateProgramInterfaceInputs();
+    mState.updateProgramInterfaceOutputs();
 
     return angle::Result::Continue;
 }
@@ -1685,6 +1656,44 @@ void ProgramState::updateProgramInterfaceInputs()
         else
         {
             mProgramInputs.emplace_back(varying);
+        }
+    }
+}
+
+void ProgramState::updateProgramInterfaceOutputs()
+{
+    const ShaderType lastAttachedShaderType = getLastAttachedShaderStageType();
+
+    if (lastAttachedShaderType == ShaderType::Fragment)
+    {
+        // Fragment outputs are already what we need, so nothing to do
+        return;
+    }
+    if (lastAttachedShaderType == ShaderType::Compute)
+    {
+        // If the program only contains a Compute Shader, then there are no user-defined outputs.
+        return;
+    }
+
+    Shader *shader = getAttachedShader(lastAttachedShaderType);
+    ASSERT(shader);
+
+    // Copy over each output varying, since the Shader could go away
+    for (const sh::ShaderVariable &varying : shader->getOutputVaryings())
+    {
+        if (varying.isStruct())
+        {
+            for (const sh::ShaderVariable &field : varying.fields)
+            {
+                sh::ShaderVariable fieldVarying = sh::ShaderVariable(field);
+                fieldVarying.location           = varying.location;
+                fieldVarying.name               = varying.name + "." + field.name;
+                mOutputVariables.emplace_back(fieldVarying);
+            }
+        }
+        else
+        {
+            mOutputVariables.emplace_back(varying);
         }
     }
 }
@@ -2086,6 +2095,18 @@ GLuint Program::getInputResourceIndex(const GLchar *name) const
     return GL_INVALID_INDEX;
 }
 
+GLuint Program::getResourceMaxNameSize(const sh::ShaderVariable &resource, GLint max) const
+{
+    if (resource.isArray())
+    {
+        return std::max(max, clampCast<GLint>((resource.name + "[0]").size()));
+    }
+    else
+    {
+        return std::max(max, clampCast<GLint>((resource.name).size()));
+    }
+}
+
 GLuint Program::getInputResourceMaxNameSize() const
 {
     GLint max = 0;
@@ -2094,17 +2115,35 @@ GLuint Program::getInputResourceMaxNameSize() const
     {
         const sh::ShaderVariable &resource = getInputResource(index);
 
-        if (resource.isArray())
-        {
-            max = std::max(max, clampCast<GLint>((resource.name + "[0]").size()));
-        }
-        else
-        {
-            max = std::max(max, clampCast<GLint>((resource.name).size()));
-        }
+        max = getResourceMaxNameSize(resource, max);
     }
 
     return max;
+}
+
+GLuint Program::getOutputResourceMaxNameSize() const
+{
+    GLint max = 0;
+
+    for (size_t index = 0; index < mState.mOutputVariables.size(); index++)
+    {
+        const sh::ShaderVariable &resource = getOutputResource(index);
+
+        max = getResourceMaxNameSize(resource, max);
+    }
+
+    return max;
+}
+
+GLuint Program::getResourceLocation(const GLchar *name, const sh::ShaderVariable &variable) const
+{
+    GLint location = variable.location;
+    if (variable.isArray())
+    {
+        location += getArrayIndexFromName(name);
+    }
+
+    return location;
 }
 
 GLuint Program::getInputResourceLocation(const GLchar *name) const
@@ -2116,19 +2155,38 @@ GLuint Program::getInputResourceLocation(const GLchar *name) const
     }
 
     const sh::ShaderVariable &variable = getInputResource(index);
-    GLint location                     = variable.location;
-    if (variable.isArray())
+
+    return getResourceLocation(name, variable);
+}
+
+GLuint Program::getOutputResourceLocation(const GLchar *name) const
+{
+    const GLuint index = getOutputResourceIndex(name);
+    if (index == GL_INVALID_INDEX)
     {
-        location += getArrayIndexFromName(name);
+        return index;
     }
 
-    return location;
+    const sh::ShaderVariable &variable = getOutputResource(index);
+
+    return getResourceLocation(name, variable);
 }
 
 GLuint Program::getOutputResourceIndex(const GLchar *name) const
 {
     ASSERT(mLinkResolved);
-    return GetResourceIndexFromName(mState.mOutputVariables, std::string(name));
+    const std::string nameString = stripArraySubscriptFromName(name);
+
+    for (size_t index = 0; index < mState.mOutputVariables.size(); index++)
+    {
+        sh::ShaderVariable resource = getOutputResource(index);
+        if (resource.name == nameString)
+        {
+            return static_cast<GLuint>(index);
+        }
+    }
+
+    return GL_INVALID_INDEX;
 }
 
 size_t Program::getOutputResourceCount() const
@@ -2183,8 +2241,7 @@ void Program::getOutputResourceName(GLuint index,
                                     GLchar *name) const
 {
     ASSERT(mLinkResolved);
-    ASSERT(index < mState.mOutputVariables.size());
-    getResourceName(mState.mOutputVariables[index].name, bufSize, length, name);
+    getResourceName(getOutputResourceName(index), bufSize, length, name);
 }
 
 void Program::getUniformResourceName(GLuint index,
@@ -2207,12 +2264,9 @@ void Program::getBufferVariableResourceName(GLuint index,
     getResourceName(mState.mBufferVariables[index].name, bufSize, length, name);
 }
 
-const std::string Program::getInputResourceName(GLuint index) const
+const std::string Program::getResourceName(const sh::ShaderVariable &resource) const
 {
-    ASSERT(mLinkResolved);
-
-    const sh::ShaderVariable &resource = getInputResource(index);
-    std::string resourceName           = resource.name;
+    std::string resourceName = resource.name;
 
     if (resource.isArray())
     {
@@ -2222,7 +2276,23 @@ const std::string Program::getInputResourceName(GLuint index) const
     return resourceName;
 }
 
-const sh::ShaderVariable &Program::getOutputResource(GLuint index) const
+const std::string Program::getInputResourceName(GLuint index) const
+{
+    ASSERT(mLinkResolved);
+    const sh::ShaderVariable &resource = getInputResource(index);
+
+    return getResourceName(resource);
+}
+
+const std::string Program::getOutputResourceName(GLuint index) const
+{
+    ASSERT(mLinkResolved);
+    const sh::ShaderVariable &resource = getOutputResource(index);
+
+    return getResourceName(resource);
+}
+
+const sh::ShaderVariable &Program::getOutputResource(size_t index) const
 {
     ASSERT(mLinkResolved);
     ASSERT(index < mState.mOutputVariables.size());
@@ -4332,17 +4402,6 @@ bool Program::linkOutputVariables(const Caps &caps,
     mState.mOutputVariables = outputVariables;
     // TODO(jmadill): any caps validation here?
 
-    for (sh::ShaderVariable &outputVariable : mState.mOutputVariables)
-    {
-        if (outputVariable.isArray())
-        {
-            // We're following the GLES 3.1 November 2016 spec section 7.3.1.1 Naming Active
-            // Resources and including [0] at the end of array variable names.
-            outputVariable.name += "[0]";
-            outputVariable.mappedName += "[0]";
-        }
-    }
-
     // EXT_blend_func_extended doesn't specify anything related to binding specific elements of an
     // output array in explicit terms.
     //
@@ -4393,7 +4452,7 @@ bool Program::linkOutputVariables(const Caps &caps,
             auto &outputLocations = mFragmentOutputIndexes.getBindingByName(binding.first) == 1
                                         ? mState.mSecondaryOutputLocations
                                         : mState.mOutputLocations;
-            unsigned int location = binding.second.location;
+            unsigned int location = binding.second;
             VariableLocation locationInfo(arrayIndex, outputVariableIndex);
             if (location >= outputLocations.size())
             {
