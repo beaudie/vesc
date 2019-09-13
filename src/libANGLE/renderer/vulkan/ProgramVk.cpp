@@ -247,7 +247,7 @@ void AddImageDescriptorSetDesc(const gl::ProgramState &programState,
 }
 
 void AddTextureDescriptorSetDesc(const gl::ProgramState &programState,
-                                 bool useOldRewriteStructSamplers,
+                                 bool useOldRewriteStructSamplersIn,
                                  vk::DescriptorSetLayoutDesc *descOut)
 {
     uint32_t bindingIndex                                  = 0;
@@ -257,9 +257,10 @@ void AddTextureDescriptorSetDesc(const gl::ProgramState &programState,
     for (uint32_t textureIndex = 0; textureIndex < samplerBindings.size(); ++textureIndex)
     {
         const gl::SamplerBinding &samplerBinding = samplerBindings[textureIndex];
-
         uint32_t uniformIndex = programState.getUniformIndexFromSamplerIndex(textureIndex);
         const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
+        bool useOldRewriteStructSamplers =
+            useOldRewriteStructSamplersIn && samplerUniform.isStruct();
 
         // The front-end always binds array sampler units sequentially.
         uint32_t arraySize = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
@@ -1592,7 +1593,6 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk)
     const gl::ActiveTextureArray<vk::TextureUnit> &activeTextures = contextVk->getActiveTextures();
 
     bool emulateSeamfulCubeMapSampling = contextVk->emulateSeamfulCubeMapSampling();
-    bool useOldRewriteStructSamplers   = contextVk->useOldRewriteStructSamplers();
 
     std::unordered_map<std::string, uint32_t> mappedSamplerNameToBindingIndex;
     std::unordered_map<std::string, uint32_t> mappedSamplerNameToArrayOffset;
@@ -1609,6 +1609,8 @@ angle::Result ProgramVk::updateTexturesDescriptorSet(ContextVk *contextVk)
         uint32_t uniformIndex = mState.getUniformIndexFromSamplerIndex(textureIndex);
         const gl::LinkedUniform &samplerUniform = mState.getUniforms()[uniformIndex];
         std::string mappedSamplerName           = vk::GetMappedSamplerName(samplerUniform.name);
+        bool useOldRewriteStructSamplers =
+            contextVk->useOldRewriteStructSamplers() && samplerUniform.isStruct();
 
         if (useOldRewriteStructSamplers ||
             mappedSamplerNameToBindingIndex.emplace(mappedSamplerName, currentBindingIndex).second)
