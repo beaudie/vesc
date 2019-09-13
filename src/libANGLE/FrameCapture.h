@@ -149,6 +149,21 @@ class ReplayContext
     gl::AttribArray<std::vector<uint8_t>> mClientArraysBuffer;
 };
 
+// Helper to use unique IDs for each local data variable.
+class DataCounters final : angle::NonCopyable
+{
+  public:
+    DataCounters();
+    ~DataCounters();
+
+    int getAndIncrement(gl::EntryPoint entryPoint, const std::string &paramName);
+
+  private:
+    // <CallName, ParamName>
+    using Counter = std::tuple<gl::EntryPoint, std::string>;
+    std::map<Counter, int> mData;
+};
+
 class FrameCapture final : angle::NonCopyable
 {
   public:
@@ -169,26 +184,13 @@ class FrameCapture final : angle::NonCopyable
                                     size_t instanceCount);
 
     void writeCallReplay(const CallCapture &call,
+                         DataCounters *counters,
                          std::ostream &out,
                          std::ostream &header,
                          std::vector<uint8_t> *binaryData);
     void reset();
-    int getAndIncrementCounter(gl::EntryPoint entryPoint, const std::string &paramName);
     bool anyClientArray() const;
     void saveCapturedFrameAsCpp(int contextId);
-    void writeStringPointerParamReplay(std::ostream &out,
-                                       std::ostream &header,
-                                       const CallCapture &call,
-                                       const ParamCapture &param);
-    void writeRenderbufferIDPointerParamReplay(std::ostream &out,
-                                               std::ostream &header,
-                                               const CallCapture &call,
-                                               const ParamCapture &param);
-    void writeBinaryParamReplay(std::ostream &out,
-                                std::ostream &header,
-                                const CallCapture &call,
-                                const ParamCapture &param,
-                                std::vector<uint8_t> *binaryData);
     void maybeCaptureClientData(const gl::Context *context, const CallCapture &call);
     void maybeUpdateResourceIDs(const gl::Context *context, const CallCapture &call);
 
@@ -196,7 +198,6 @@ class FrameCapture final : angle::NonCopyable
     gl::AttribArray<int> mClientVertexArrayMap;
     size_t mFrameIndex;
     gl::AttribArray<size_t> mClientArraySizes;
-    std::map<Counter, int> mDataCounters;
     size_t mReadBufferSize;
 
     static void ReplayCall(gl::Context *context,
