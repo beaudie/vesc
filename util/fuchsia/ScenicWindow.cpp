@@ -107,9 +107,9 @@ void ScenicWindow::destroy()
 
 void ScenicWindow::resetNativeWindow()
 {
-    fuchsia::images::ImagePipePtr imagePipe;
+    fuchsia::images::ImagePipe2Ptr imagePipe;
     uint32_t imagePipeId = mScenicSession.AllocResourceId();
-    mScenicSession.Enqueue(scenic::NewCreateImagePipeCmd(imagePipeId, imagePipe.NewRequest()));
+    mScenicSession.Enqueue(scenic::NewCreateImagePipe2Cmd(imagePipeId, imagePipe.NewRequest()));
     mMaterial.SetTexture(imagePipeId);
     mScenicSession.ReleaseResource(imagePipeId);
     mScenicSession.Present(0, [](fuchsia::images::PresentationInfo info) {});
