@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8b4d346a_5662725a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-13T18:31:33Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d2132400_d8ed22c8",
+      "range": {
+        "startLine": 1163,
+        "startChar": 4,
+        "endLine": 1163,
+        "endChar": 15
+      },
+      "revId": "22926fb2c4dd18420745194d434956d104d8e458",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e24045ef_7eee8db5",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2019-09-05T13:40:51Z",
       "side": 1,
       "message": "I\u0027d be careful about this. Probably want to exclude it. See https://chromium-review.googlesource.com/c/angle/angle/+/1750627",
+      "range": {
+        "startLine": 1794,
+        "startChar": 0,
+        "endLine": 1804,
+        "endChar": 5
+      },
+      "revId": "22926fb2c4dd18420745194d434956d104d8e458",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cb0b5d78_4f37eb36",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-13T18:31:33Z",
+      "side": 1,
+      "message": "I\u0027m following along, thanks.  There\u0027s going to be some crossover for sure.",
+      "parentUuid": "e24045ef_7eee8db5",
       "range": {
         "startLine": 1794,
         "startChar": 0,

@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a632605e_ad8a1978",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-13T18:31:33Z",
+      "side": 1,
+      "message": "Yeah, I can probably meld them together.  Although I\u0027m tempted to merge stageImageDataToBuffer and stageSubresourceUpdateFromOffset.  The primary differences are lack of initialization/flushes, and we return the actual buffer and offset used so we can immediately stage with it.",
+      "parentUuid": "d08d8b3e_d4fdd408",
+      "range": {
+        "startLine": 1038,
+        "startChar": 25,
+        "endLine": 1038,
+        "endChar": 47
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4f12603a_c0986775",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 5
@@ -36,6 +60,30 @@
       "writtenOn": "2019-09-13T17:30:47Z",
       "side": 1,
       "message": "this is not what you want to be doing. Stop usually indicates an error, and could abort execution unusually. Think of it as throwing an exception. What you probably want is Continue.",
+      "range": {
+        "startLine": 1162,
+        "startChar": 30,
+        "endLine": 1162,
+        "endChar": 34
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "85bbdae7_1f5e33b2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-13T18:31:33Z",
+      "side": 1,
+      "message": "Okay",
+      "parentUuid": "4f12603a_c0986775",
       "range": {
         "startLine": 1162,
         "startChar": 30,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "3a9ad0cb_f07ce9b8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-13T18:31:33Z",
+      "side": 1,
+      "message": "Okay.",
+      "parentUuid": "b462b09e_1c7d58ac",
+      "range": {
+        "startLine": 1165,
+        "startChar": 3,
+        "endLine": 1169,
+        "endChar": 5
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b16f3bc1_670625e6",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 5
@@ -82,6 +154,30 @@
       "writtenOn": "2019-09-13T17:30:47Z",
       "side": 1,
       "message": "this looks wrong to me. say you have this set of events\n\n1. create and draw with a texture (blue)\n2. stage some updates (green)\n3. change the base level, which erases the texture and re-stages the blue texture data\n4. draw with the texture -\u003e get blue (bad)\n\nI think it would be better to just \"ensureImageInitialized\" to flush the necessary updates from the prior state of the texture before re-staging them. It\u0027s a bit not fast. That\u0027s okay as we\u0027re focused on conformance for now over performance.\n\nDo you know if there\u0027s a test that covers this pattern?",
+      "range": {
+        "startLine": 1196,
+        "startChar": 0,
+        "endLine": 1203,
+        "endChar": 13
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ccc7d1e_bbbc823f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-13T18:31:33Z",
+      "side": 1,
+      "message": "I think in that scenario, the staged updates (green) would prevent this code from staging blue updates.\n\nTrying to avoid calling ensureImageInitialized because it pulls things from the front end, including a new base level which already reflects the change.\n\nI agree I\u0027m not 100% sold on this solution, but it works nicely for preserving updates from multiple sources.\n\nI\u0027ll look through the tests, see if that is covered.",
+      "parentUuid": "b16f3bc1_670625e6",
       "range": {
         "startLine": 1196,
         "startChar": 0,
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "2e4a9fde_4b519c09",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-13T18:31:33Z",
+      "side": 1,
+      "message": "Okay, will try that, thanks.",
+      "parentUuid": "422dead7_6bb8dece",
+      "range": {
+        "startLine": 1205,
+        "startChar": 0,
+        "endLine": 1206,
+        "endChar": 96
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "70acbd6f_a3aa2676",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 5
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "dd9b38b7_2bbdfdbe",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-13T18:31:33Z",
+      "side": 1,
+      "message": "mState.getBaseLevel() already reflects the new base level at this stage.",
+      "parentUuid": "70acbd6f_a3aa2676",
+      "range": {
+        "startLine": 1214,
+        "startChar": 12,
+        "endLine": 1214,
+        "endChar": 60
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a53688e4_422a99e8",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 5
@@ -151,6 +295,30 @@
       "writtenOn": "2019-09-13T17:30:47Z",
       "side": 1,
       "message": "not sure what this is in reference to?",
+      "range": {
+        "startLine": 1224,
+        "startChar": 12,
+        "endLine": 1224,
+        "endChar": 78
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "738a2f97_08bad0fd",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-13T18:31:33Z",
+      "side": 1,
+      "message": "Rather than passing matching handle and offset to two separate/new functions (stageImageDataToBuffer and stageSubresourceUpdateFromOffset), just wondering whether it is worth bring them together in one new function.  They only live separately because they are modifications of other, existing methods.  There is an argument to keeping them separate and trying to update existing functions to support the new use cases.  I\u0027ll explore it, it just takes more time and perturbs other functionality.",
+      "parentUuid": "a53688e4_422a99e8",
       "range": {
         "startLine": 1224,
         "startChar": 12,
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "b66e3ff3_2dda0992",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-13T18:31:33Z",
+      "side": 1,
+      "message": "Okay",
+      "parentUuid": "73bc8f0b_64757051",
+      "range": {
+        "startLine": 1236,
+        "startChar": 0,
+        "endLine": 1237,
+        "endChar": 36
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ce280ee1_311f2dde",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 5
@@ -197,6 +389,30 @@
       "writtenOn": "2019-09-13T17:30:47Z",
       "side": 1,
       "message": "You *should* be able to omit most of this code and just release the image. The texture should get updated automatically on the next use. you will need to call onStagingBufferChange() somewhere in here to signal to the front-end that the back-end needs an update.",
+      "range": {
+        "startLine": 1265,
+        "startChar": 0,
+        "endLine": 1279,
+        "endChar": 5
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ccbae4d6_dffb1d36",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1279,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-13T18:31:33Z",
+      "side": 1,
+      "message": "Okay, interesting, will give that a try.",
+      "parentUuid": "ce280ee1_311f2dde",
       "range": {
         "startLine": 1265,
         "startChar": 0,
@@ -232,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "62dd72b8_7fef36a2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1923,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-13T18:31:33Z",
+      "side": 1,
+      "message": "It depends on what we want this function to return.\n\nIf we want this to return the front end level count, ignoring base level, then we don\u0027t need to modify this function (other than removing the assert).\n\nIf we want this to return the actual number of effective layers, not including those below base level, we need to subtract it from the maxMipMapLevel.",
+      "parentUuid": "b348e1a3_c01907b1",
+      "range": {
+        "startLine": 1911,
+        "startChar": 0,
+        "endLine": 1923,
+        "endChar": 5
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "de131097_a45ccdd8",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -255,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "c9d23c2e_b9cf7070",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2407,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-13T18:31:33Z",
+      "side": 1,
+      "message": "Okay.",
+      "parentUuid": "de131097_a45ccdd8",
+      "range": {
+        "startLine": 2407,
+        "startChar": 27,
+        "endLine": 2407,
+        "endChar": 59
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "25cdd049_b44c9edc",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 5
@@ -266,6 +530,30 @@
       "writtenOn": "2019-09-13T17:30:47Z",
       "side": 1,
       "message": "how come you are wanting to pass a reference here? you should just be able to pass by value. it\u0027ll be faster (no indirection) and also conformant to the style guide (prohibits reference arguments)",
+      "range": {
+        "startLine": 2414,
+        "startChar": 68,
+        "endLine": 2414,
+        "endChar": 70
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "846a05cc_1e5d6e78",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2414,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-13T18:31:33Z",
+      "side": 1,
+      "message": "No good reason, will switch over.",
+      "parentUuid": "25cdd049_b44c9edc",
       "range": {
         "startLine": 2414,
         "startChar": 68,
