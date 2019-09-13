@@ -699,7 +699,7 @@ bool RewriteStructSamplersOld(TCompiler *compiler,
     {
         return false;
     }
-    *removedUniformsCountOut = rewriteStructSamplers.removedUniformsCount();
+    *removedUniformsCountOut += rewriteStructSamplers.removedUniformsCount();
     return true;
 }
 }  // namespace sh

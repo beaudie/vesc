@@ -618,9 +618,6 @@
 3726 VULKAN ANDROID : dEQP-GLES31.functional.synchronization.inter_call.without_memory_barrier.*atomic_counter* = FAIL
 3726 VULKAN ANDROID : dEQP-GLES31.functional.compute.basic.atomic_counter* = FAIL
 
-// Validation error on SPIR-V (but only on Android!)
-3882 VULKAN ANDROID : dEQP-GLES31.functional.uniform_location.nested_array.*sampler* = FAIL
-
 // General Vulkan failures
 
 // Limits:

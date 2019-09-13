@@ -483,7 +483,8 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
             }
             else
             {
-                mUnusedUniforms->emplace_back(linkedUniform.name, linkedUniform.isSampler());
+                mUnusedUniforms->emplace_back(linkedUniform.name, linkedUniform.isSampler(),
+                                              linkedUniform.isStruct());
             }
 
             uniformList->push_back(linkedUniform);
@@ -911,7 +912,8 @@ void UniformLinker::pruneUnusedUniforms()
         }
         else
         {
-            mUnusedUniforms.emplace_back(uniformIter->name, uniformIter->isSampler());
+            mUnusedUniforms.emplace_back(uniformIter->name, uniformIter->isSampler(),
+                                         uniformIter->isStruct());
             uniformIter = mUniforms.erase(uniformIter);
         }
     }
@@ -939,7 +941,8 @@ bool UniformLinker::flattenUniformsAndCheckCapsForShader(
         }
         else
         {
-            unusedUniforms.emplace_back(uniform.name, IsSamplerType(uniform.type));
+            unusedUniforms.emplace_back(uniform.name, IsSamplerType(uniform.type),
+                                        uniform.isStruct());
         }
     }
 

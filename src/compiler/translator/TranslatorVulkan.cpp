@@ -706,18 +706,18 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
             return false;
         }
 
-        bool rewriteStructSamplersResult;
-        int removedUniformsCount;
+        int removedUniformsCount = 0;
+
+        bool rewriteStructSamplersResult =
+            RewriteStructSamplers(this, root, &getSymbolTable(), &removedUniformsCount);
 
         if (compileOptions & SH_USE_OLD_REWRITE_STRUCT_SAMPLERS)
         {
+            // RewriteStructSamplers() did some initial cleanup like flattening arrays of samplers,
+            // but some additional work may required to pull samplers out of structs.
             rewriteStructSamplersResult =
+                rewriteStructSamplersResult &&
                 RewriteStructSamplersOld(this, root, &getSymbolTable(), &removedUniformsCount);
-        }
-        else
-        {
-            rewriteStructSamplersResult =
-                RewriteStructSamplers(this, root, &getSymbolTable(), &removedUniformsCount);
         }
 
         if (!rewriteStructSamplersResult)

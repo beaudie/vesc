@@ -803,7 +803,7 @@ void AssignNonTextureBindings(const gl::ProgramState &programState,
     bindingStart = AssignImageBindings(uniforms, imageUniformRange, bindingStart, shaderSources);
 }
 
-void AssignTextureBindings(bool useOldRewriteStructSamplers,
+void AssignTextureBindings(bool useOldRewriteStructSamplersIn,
                            const gl::ProgramState &programState,
                            gl::ShaderMap<IntermediateShaderSource> *shaderSources)
 {
@@ -816,6 +816,8 @@ void AssignTextureBindings(bool useOldRewriteStructSamplers,
     for (unsigned int uniformIndex : programState.getSamplerUniformRange())
     {
         const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
+        bool useOldRewriteStructSamplers =
+            useOldRewriteStructSamplersIn && samplerUniform.isStruct();
 
         if (!useOldRewriteStructSamplers &&
             vk::SamplerNameContainsNonZeroArrayElement(samplerUniform.name))
@@ -886,7 +888,7 @@ void CleanupUnusedEntities(bool useOldRewriteStructSamplers,
     for (const gl::UnusedUniform &unusedUniform : resources.unusedUniforms)
     {
         std::string uniformName = unusedUniform.isSampler
-                                      ? useOldRewriteStructSamplers
+                                      ? (useOldRewriteStructSamplers && unusedUniform.isStruct)
                                             ? GetMappedSamplerNameOld(unusedUniform.name)
                                             : vk::GetMappedSamplerName(unusedUniform.name)
                                       : unusedUniform.name;

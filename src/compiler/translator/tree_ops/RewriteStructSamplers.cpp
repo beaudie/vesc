@@ -1200,7 +1200,7 @@ bool RewriteStructSamplers(TCompiler *compiler,
     {
         return false;
     }
-    *removedUniformsCountOut = rewriteStructSamplers.removedUniformsCount();
+    *removedUniformsCountOut += rewriteStructSamplers.removedUniformsCount();
 
     if (rewriteStructSamplers.getFunctionInstantiations()->empty())
     {
