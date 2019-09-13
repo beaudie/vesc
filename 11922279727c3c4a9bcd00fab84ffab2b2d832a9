@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "153a24d8_75071f7e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T18:50:33Z",
+      "side": 1,
+      "message": "The stage function shouldn\u0027t really do much except enqueue the subresource update. But would like to see less duplication.",
+      "parentUuid": "a632605e_ad8a1978",
+      "range": {
+        "startLine": 1038,
+        "startChar": 25,
+        "endLine": 1038,
+        "endChar": 47
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4f12603a_c0986775",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 5
@@ -143,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "892e2841_21264e8e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T18:50:33Z",
+      "side": 1,
+      "message": "Actually you can remove this as it\u0027s already done in TextureState::setBaseLevel. Can probably change this to ASSERT.",
+      "parentUuid": "3a9ad0cb_f07ce9b8",
+      "range": {
+        "startLine": 1165,
+        "startChar": 3,
+        "endLine": 1169,
+        "endChar": 5
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b16f3bc1_670625e6",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 5
@@ -187,6 +235,30 @@
       "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bdf88ef_273fd649",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T18:50:33Z",
+      "side": 1,
+      "message": "True, I thought the base level does not actually get updated until after this call returns. But you\u0027re right that it would probably stop the update from being overwritten. So seems okay.",
+      "parentUuid": "2ccc7d1e_bbbc823f",
+      "range": {
+        "startLine": 1196,
+        "startChar": 0,
+        "endLine": 1203,
+        "endChar": 13
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -284,6 +356,30 @@
     },
     {
       "key": {
+        "uuid": "28a66960_c9cd7543",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T18:50:33Z",
+      "side": 1,
+      "message": "Ah, you\u0027re right. It differs from the other set patterns.",
+      "parentUuid": "dd9b38b7_2bbdfdbe",
+      "range": {
+        "startLine": 1214,
+        "startChar": 12,
+        "endLine": 1214,
+        "endChar": 60
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a53688e4_422a99e8",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 5
@@ -319,6 +415,30 @@
       "side": 1,
       "message": "Rather than passing matching handle and offset to two separate/new functions (stageImageDataToBuffer and stageSubresourceUpdateFromOffset), just wondering whether it is worth bring them together in one new function.  They only live separately because they are modifications of other, existing methods.  There is an argument to keeping them separate and trying to update existing functions to support the new use cases.  I\u0027ll explore it, it just takes more time and perturbs other functionality.",
       "parentUuid": "a53688e4_422a99e8",
+      "range": {
+        "startLine": 1224,
+        "startChar": 12,
+        "endLine": 1224,
+        "endChar": 78
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "38ca742e_127bc76c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T18:50:33Z",
+      "side": 1,
+      "message": "I\u0027m fine with a new stage function. But also fine with changing things to reduce duplication generally.",
+      "parentUuid": "738a2f97_08bad0fd",
       "range": {
         "startLine": 1224,
         "startChar": 12,
@@ -460,6 +580,30 @@
       "side": 1,
       "message": "It depends on what we want this function to return.\n\nIf we want this to return the front end level count, ignoring base level, then we don\u0027t need to modify this function (other than removing the assert).\n\nIf we want this to return the actual number of effective layers, not including those below base level, we need to subtract it from the maxMipMapLevel.",
       "parentUuid": "b348e1a3_c01907b1",
+      "range": {
+        "startLine": 1911,
+        "startChar": 0,
+        "endLine": 1923,
+        "endChar": 5
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f945f03e_87f20808",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1923,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T18:50:33Z",
+      "side": 1,
+      "message": "If you can make the tests pass without this code I would recommend doing so.",
+      "parentUuid": "62dd72b8_7fef36a2",
       "range": {
         "startLine": 1911,
         "startChar": 0,

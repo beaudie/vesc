@@ -93,6 +93,30 @@
       "revId": "22926fb2c4dd18420745194d434956d104d8e458",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae5c7126_04b0030e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T18:50:33Z",
+      "side": 1,
+      "message": "Yeah. I would remove it from this CL if it\u0027s not mandatory.",
+      "parentUuid": "cb0b5d78_4f37eb36",
+      "range": {
+        "startLine": 1794,
+        "startChar": 0,
+        "endLine": 1804,
+        "endChar": 5
+      },
+      "revId": "22926fb2c4dd18420745194d434956d104d8e458",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
