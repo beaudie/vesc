@@ -1,0 +1,303 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d08d8b3e_d4fdd408",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1038,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T17:30:47Z",
+      "side": 1,
+      "message": "can you make copyImageDataToBuffer share code with this new code? It\u0027s not very different. would like to reduce duplication.",
+      "range": {
+        "startLine": 1038,
+        "startChar": 25,
+        "endLine": 1038,
+        "endChar": 47
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f12603a_c0986775",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T17:30:47Z",
+      "side": 1,
+      "message": "this is not what you want to be doing. Stop usually indicates an error, and could abort execution unusually. Think of it as throwing an exception. What you probably want is Continue.",
+      "range": {
+        "startLine": 1162,
+        "startChar": 30,
+        "endLine": 1162,
+        "endChar": 34
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b462b09e_1c7d58ac",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T17:30:47Z",
+      "side": 1,
+      "message": "can you move this to the front-end? seems reasonable. but applies to all back-ends.",
+      "range": {
+        "startLine": 1165,
+        "startChar": 3,
+        "endLine": 1169,
+        "endChar": 5
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b16f3bc1_670625e6",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T17:30:47Z",
+      "side": 1,
+      "message": "this looks wrong to me. say you have this set of events\n\n1. create and draw with a texture (blue)\n2. stage some updates (green)\n3. change the base level, which erases the texture and re-stages the blue texture data\n4. draw with the texture -\u003e get blue (bad)\n\nI think it would be better to just \"ensureImageInitialized\" to flush the necessary updates from the prior state of the texture before re-staging them. It\u0027s a bit not fast. That\u0027s okay as we\u0027re focused on conformance for now over performance.\n\nDo you know if there\u0027s a test that covers this pattern?",
+      "range": {
+        "startLine": 1196,
+        "startChar": 0,
+        "endLine": 1203,
+        "endChar": 13
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "422dead7_6bb8dece",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T17:30:47Z",
+      "side": 1,
+      "message": "you can use gl::TextureTypeToTarget to avoid needing to make an index.",
+      "range": {
+        "startLine": 1205,
+        "startChar": 0,
+        "endLine": 1206,
+        "endChar": 96
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70acbd6f_a3aa2676",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T17:30:47Z",
+      "side": 1,
+      "message": "you can also get the prior base level from mState.getBaseLevel(). though this is probably fine.",
+      "range": {
+        "startLine": 1214,
+        "startChar": 12,
+        "endLine": 1214,
+        "endChar": 60
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a53688e4_422a99e8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T17:30:47Z",
+      "side": 1,
+      "message": "not sure what this is in reference to?",
+      "range": {
+        "startLine": 1224,
+        "startChar": 12,
+        "endLine": 1224,
+        "endChar": 78
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73bc8f0b_64757051",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T17:30:47Z",
+      "side": 1,
+      "message": "you can probably assume there\u0027s a staging update if we reach this code. so you can put it outside the loop.",
+      "range": {
+        "startLine": 1236,
+        "startChar": 0,
+        "endLine": 1237,
+        "endChar": 36
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce280ee1_311f2dde",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1279,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T17:30:47Z",
+      "side": 1,
+      "message": "You *should* be able to omit most of this code and just release the image. The texture should get updated automatically on the next use. you will need to call onStagingBufferChange() somewhere in here to signal to the front-end that the back-end needs an update.",
+      "range": {
+        "startLine": 1265,
+        "startChar": 0,
+        "endLine": 1279,
+        "endChar": 5
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b348e1a3_c01907b1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1923,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T17:30:47Z",
+      "side": 1,
+      "message": "can you omit this? I don\u0027t think it\u0027s related to this CL. the ARM CL should address this. Not sure why you need it (or think you need it?)",
+      "range": {
+        "startLine": 1911,
+        "startChar": 0,
+        "endLine": 1923,
+        "endChar": 5
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de131097_a45ccdd8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2407,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T17:30:47Z",
+      "side": 1,
+      "message": "maybe FromBuffer, since you\u0027re copying from a Buffer.",
+      "range": {
+        "startLine": 2407,
+        "startChar": 27,
+        "endLine": 2407,
+        "endChar": 59
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "25cdd049_b44c9edc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2414,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T17:30:47Z",
+      "side": 1,
+      "message": "how come you are wanting to pass a reference here? you should just be able to pass by value. it\u0027ll be faster (no indirection) and also conformant to the style guide (prohibits reference arguments)",
+      "range": {
+        "startLine": 2414,
+        "startChar": 68,
+        "endLine": 2414,
+        "endChar": 70
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15440ca0_799980bb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 2415,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-13T17:30:47Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 2415,
+        "startChar": 73,
+        "endLine": 2415,
+        "endChar": 74
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
