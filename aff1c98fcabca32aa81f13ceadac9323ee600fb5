@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c53fa565_a784599b",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-09-14T02:15:04Z",
+      "side": 1,
+      "message": "Sorry I was a bit confused here. Do you mean ComputeVertexAttributeStride or ComputeVertexAttributeTypeSize? The stride I passed to glVertexAttribPointer is 0 (tightly packed). But the stride returned here is 4. Does this stride have a different definition here?",
+      "revId": "aff1c98fcabca32aa81f13ceadac9323ee600fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
