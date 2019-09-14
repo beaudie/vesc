@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "7f873246_07298dff",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-09-14T01:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6755dde7_4687439d",
+      "range": {
+        "startLine": 321,
+        "startChar": 8,
+        "endLine": 321,
+        "endChar": 91
+      },
+      "revId": "f843d3304cb4573825b743831f79d4f73c79b143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5646e2cb_3c4cc4cd",
         "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "46103140_97988327",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-09-14T01:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5646e2cb_3c4cc4cd",
+      "range": {
+        "startLine": 322,
+        "startChar": 8,
+        "endLine": 322,
+        "endChar": 61
+      },
+      "revId": "f843d3304cb4573825b743831f79d4f73c79b143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4acf4547_7056a42b",
         "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
         "patchSetId": 7
@@ -62,6 +110,24 @@
       "revId": "f843d3304cb4573825b743831f79d4f73c79b143",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92dc0332_18b58f3f",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-09-14T01:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4acf4547_7056a42b",
+      "revId": "f843d3304cb4573825b743831f79d4f73c79b143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "b31b7b90_1ded8937",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-09-14T01:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d568cd7c_a19afc2b",
+      "range": {
+        "startLine": 335,
+        "startChar": 49,
+        "endLine": 335,
+        "endChar": 75
+      },
+      "revId": "f843d3304cb4573825b743831f79d4f73c79b143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e8b4e00_4948bb36",
         "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
         "patchSetId": 7
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "99a803b9_f601d210",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-09-14T01:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4e8b4e00_4948bb36",
+      "range": {
+        "startLine": 339,
+        "startChar": 44,
+        "endLine": 339,
+        "endChar": 69
+      },
+      "revId": "f843d3304cb4573825b743831f79d4f73c79b143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c954fc5_9d2cb6ca",
         "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
         "patchSetId": 7
@@ -131,6 +245,30 @@
       "revId": "f843d3304cb4573825b743831f79d4f73c79b143",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "571e2c77_77eafce8",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-09-14T01:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c954fc5_9d2cb6ca",
+      "range": {
+        "startLine": 343,
+        "startChar": 28,
+        "endLine": 343,
+        "endChar": 36
+      },
+      "revId": "f843d3304cb4573825b743831f79d4f73c79b143",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
