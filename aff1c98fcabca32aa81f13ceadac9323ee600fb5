@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5605641a_dd682c1e",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-09-16T19:04:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acc45a7e_896c1928",
+      "range": {
+        "startLine": 307,
+        "startChar": 13,
+        "endLine": 307,
+        "endChar": 19
+      },
+      "revId": "aff1c98fcabca32aa81f13ceadac9323ee600fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c53fa565_a784599b",
         "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
         "patchSetId": 9
@@ -60,6 +84,24 @@
     },
     {
       "key": {
+        "uuid": "2d7bef53_d7665dd4",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-09-16T19:04:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5500c40d_ed4e01ea",
+      "revId": "aff1c98fcabca32aa81f13ceadac9323ee600fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "194b91f2_52483b85",
         "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
         "patchSetId": 9
@@ -83,6 +125,30 @@
     },
     {
       "key": {
+        "uuid": "a5eb477d_a6eb699e",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-09-16T19:04:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "194b91f2_52483b85",
+      "range": {
+        "startLine": 319,
+        "startChar": 16,
+        "endLine": 319,
+        "endChar": 31
+      },
+      "revId": "aff1c98fcabca32aa81f13ceadac9323ee600fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "82658276_f686888f",
         "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
         "patchSetId": 9
@@ -94,6 +160,30 @@
       "writtenOn": "2019-09-16T17:19:50Z",
       "side": 1,
       "message": "Same GLuint comment.",
+      "range": {
+        "startLine": 345,
+        "startChar": 9,
+        "endLine": 345,
+        "endChar": 15
+      },
+      "revId": "aff1c98fcabca32aa81f13ceadac9323ee600fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef12b612_ffaf1bf0",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-09-16T19:04:23Z",
+      "side": 1,
+      "message": "I don\u0027t think you could type cast in a ranged for loop? Keep this as is for now.",
+      "parentUuid": "82658276_f686888f",
       "range": {
         "startLine": 345,
         "startChar": 9,
@@ -126,6 +216,30 @@
       "revId": "aff1c98fcabca32aa81f13ceadac9323ee600fb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cc156b3c_17ec7ca8",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1328182
+      },
+      "writtenOn": "2019-09-16T19:04:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2dfbd414_3079f630",
+      "range": {
+        "startLine": 493,
+        "startChar": 16,
+        "endLine": 493,
+        "endChar": 25
+      },
+      "revId": "aff1c98fcabca32aa81f13ceadac9323ee600fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
