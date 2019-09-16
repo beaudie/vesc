@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "acc45a7e_896c1928",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-16T17:19:50Z",
+      "side": 1,
+      "message": "nit: might as well loop using a GLuint and not cast below.",
+      "range": {
+        "startLine": 307,
+        "startChar": 13,
+        "endLine": 307,
+        "endChar": 19
+      },
+      "revId": "aff1c98fcabca32aa81f13ceadac9323ee600fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c53fa565_a784599b",
         "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
         "patchSetId": 9
@@ -13,6 +36,70 @@
       "writtenOn": "2019-09-14T02:15:04Z",
       "side": 1,
       "message": "Sorry I was a bit confused here. Do you mean ComputeVertexAttributeStride or ComputeVertexAttributeTypeSize? The stride I passed to glVertexAttribPointer is 0 (tightly packed). But the stride returned here is 4. Does this stride have a different definition here?",
+      "revId": "aff1c98fcabca32aa81f13ceadac9323ee600fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5500c40d_ed4e01ea",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 315,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-16T17:19:50Z",
+      "side": 1,
+      "message": "ComputeVertexAttributeStride would compute the actual number of bytes per stride so if you passed 0 then it would compute it based on the data type.\n\nWhat you weren\u0027t handling before is strides greater than the size of the data type (say for interleaved attributes), I think this makes sure the offsetting you\u0027re doing handles that.",
+      "parentUuid": "c53fa565_a784599b",
+      "revId": "aff1c98fcabca32aa81f13ceadac9323ee600fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "194b91f2_52483b85",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-16T17:19:50Z",
+      "side": 1,
+      "message": "nit: add a comment explaining that client-side data is not handled yet.",
+      "range": {
+        "startLine": 319,
+        "startChar": 16,
+        "endLine": 319,
+        "endChar": 31
+      },
+      "revId": "aff1c98fcabca32aa81f13ceadac9323ee600fb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "82658276_f686888f",
+        "filename": "src/libANGLE/renderer/gl/ContextGL.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-16T17:19:50Z",
+      "side": 1,
+      "message": "Same GLuint comment.",
+      "range": {
+        "startLine": 345,
+        "startChar": 9,
+        "endLine": 345,
+        "endChar": 15
+      },
       "revId": "aff1c98fcabca32aa81f13ceadac9323ee600fb5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
