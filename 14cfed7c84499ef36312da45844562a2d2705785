@@ -164,6 +164,30 @@
     },
     {
       "key": {
+        "uuid": "b6170d64_7a051efa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-16T15:41:42Z",
+      "side": 1,
+      "message": "Sounds good. Probably not necessary for the flat shading right now.",
+      "parentUuid": "d7da0384_444e54a4",
+      "range": {
+        "startLine": 434,
+        "startChar": 8,
+        "endLine": 434,
+        "endChar": 48
+      },
+      "revId": "14cfed7c84499ef36312da45844562a2d2705785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4e8b93e8_22efdfa6",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 4
