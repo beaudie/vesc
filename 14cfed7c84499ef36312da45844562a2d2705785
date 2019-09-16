@@ -117,6 +117,29 @@
     },
     {
       "key": {
+        "uuid": "dafcfb27_4a5b8e2b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-16T15:38:04Z",
+      "side": 1,
+      "message": "ah, this is why the tests started failing.\n\nI don\u0027t think you should expose this extension until the functionality is in place.",
+      "range": {
+        "startLine": 434,
+        "startChar": 8,
+        "endLine": 434,
+        "endChar": 48
+      },
+      "revId": "14cfed7c84499ef36312da45844562a2d2705785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4e8b93e8_22efdfa6",
         "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
         "patchSetId": 4
