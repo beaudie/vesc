@@ -351,10 +351,10 @@ angle::Result StagingBuffer::init(Context *context, VkDeviceSize size, StagingUs
     return angle::Result::Continue;
 }
 
-void StagingBuffer::dumpResources(GarbageList *garbageList)
+void StagingBuffer::release(ContextVk *contextVk)
 {
-    mBuffer.dumpResources(garbageList);
-    mDeviceMemory.dumpResources(garbageList);
+    contextVk->addGarbage(&mBuffer);
+    contextVk->addGarbage(&mDeviceMemory);
 }
 
 angle::Result AllocateBufferMemory(vk::Context *context,
@@ -436,6 +436,10 @@ gl::TextureType Get2DTextureType(uint32_t layerCount, GLint samples)
 }
 
 GarbageObjectBase::GarbageObjectBase() : mHandleType(HandleType::Invalid), mHandle(VK_NULL_HANDLE)
+{}
+
+GarbageObjectBase::GarbageObjectBase(HandleType handleType, GarbageHandle handle)
+    : mHandleType(handleType), mHandle(handle)
 {}
 
 GarbageObjectBase::GarbageObjectBase(GarbageObjectBase &&other) : GarbageObjectBase()
