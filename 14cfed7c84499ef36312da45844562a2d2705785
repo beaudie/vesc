@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9b0d51a8_e32243ba",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1517,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-16T14:43:50Z",
+      "side": 1,
+      "message": "trying to understand why this code had to move but couldn\u0027t figure it out. why does this have to happen later?",
+      "range": {
+        "startLine": 1507,
+        "startChar": 0,
+        "endLine": 1517,
+        "endChar": 9
+      },
+      "revId": "14cfed7c84499ef36312da45844562a2d2705785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2a6f42b_dade1eeb",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4145,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-16T14:43:50Z",
+      "side": 1,
+      "message": "With geometry shaders we\u0027ll probably need to support multiple shader interfaces within one program. This code just merges the two interfaces into one list?",
+      "range": {
+        "startLine": 4145,
+        "startChar": 31,
+        "endLine": 4145,
+        "endChar": 48
+      },
+      "revId": "14cfed7c84499ef36312da45844562a2d2705785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d0e4adb_3fdfe467",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-16T14:43:50Z",
+      "side": 1,
+      "message": "maybe refactor this a bit -\n\ngl::ShaderType tfShaderType \u003d hasLinkedShaderStage(Geometry) ? Geometry : Vertex;\nstd::string tfVaryingMappedName \u003d getAttachedShader(tfShaderType)...\n\nAlso thanks for making this fix, but why was it necessary for the GL back-end?",
+      "range": {
+        "startLine": 234,
+        "startChar": 0,
+        "endLine": 243,
+        "endChar": 13
+      },
+      "revId": "14cfed7c84499ef36312da45844562a2d2705785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfb5fa3d_e3eac58c",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-16T14:43:50Z",
+      "side": 1,
+      "message": "Can you instead copy these varyings into ProgramLinkedResources in Program.cpp after gatherTransformFeedbackVaryings? It feels like they belong in there.",
+      "range": {
+        "startLine": 626,
+        "startChar": 12,
+        "endLine": 627,
+        "endChar": 96
+      },
+      "revId": "14cfed7c84499ef36312da45844562a2d2705785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0a727dc_0caa8d8b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-16T14:43:50Z",
+      "side": 1,
+      "message": "there should be a check somewhere that limits the max ES version to 2.0 if GS is not supported. Note though we can\u0027t support ES 1.x without it either. Unless we get an extension for the provoking vertex functionality.",
+      "range": {
+        "startLine": 430,
+        "startChar": 0,
+        "endLine": 432,
+        "endChar": 47
+      },
+      "revId": "14cfed7c84499ef36312da45844562a2d2705785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e8b93e8_22efdfa6",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-16T14:43:50Z",
+      "side": 1,
+      "message": "did these start failing? They should still be not supported if the extension isn\u0027t available.",
+      "range": {
+        "startLine": 712,
+        "startChar": 1,
+        "endLine": 719,
+        "endChar": 86
+      },
+      "revId": "14cfed7c84499ef36312da45844562a2d2705785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
