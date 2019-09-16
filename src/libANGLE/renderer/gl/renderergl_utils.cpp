@@ -1556,6 +1556,8 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
 
     features->resettingTexturesGeneratesErrors.enabled =
         IsApple() || (IsWindows() && IsAMD(device));
+
+    features->rgbDXT1TexturesSampleZeroAlpha.enabled = IsApple() && IsIntel(device);
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
