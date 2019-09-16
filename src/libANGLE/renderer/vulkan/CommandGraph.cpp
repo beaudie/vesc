@@ -822,6 +822,29 @@ void CommandGraphNode::getMemoryUsageStatsForDiagnostics(size_t *usedMemoryOut,
     *allocatedMemoryOut += commandBufferAllocated;
 }
 
+// SharedGarbageObject implementation.
+SharedGarbageObject::SharedGarbageObject() = default;
+
+SharedGarbageObject::SharedGarbageObject(const SharedResourceUse &lifetimeIn,
+                                         GarbageObjectBase &&objectIn)
+{
+    lifetime.set(lifetimeIn);
+}
+
+SharedGarbageObject::SharedGarbageObject(SharedGarbageObject &&other)
+{
+    *this = std::move(other);
+}
+
+SharedGarbageObject::~SharedGarbageObject() = default;
+
+SharedGarbageObject &SharedGarbageObject::operator=(SharedGarbageObject &&rhs)
+{
+    std::swap(lifetime, rhs.lifetime);
+    std::swap(object, rhs.object);
+    return *this;
+}
+
 // CommandGraph implementation.
 CommandGraph::CommandGraph(bool enableGraphDiagnostics, angle::PoolAllocator *poolAllocator)
     : mEnableGraphDiagnostics(enableGraphDiagnostics),

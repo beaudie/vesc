@@ -254,7 +254,7 @@ GarbageObjectBase GetGarbage(T *obj)
     return GarbageObjectBase::Get(obj);
 }
 
-using GarbageList      = std::vector<vk::GarbageObjectBase>;
+using GarbageList      = std::vector<GarbageObjectBase>;
 using GarbageAndSerial = ObjectAndSerial<GarbageList>;
 using GarbageQueue     = std::vector<GarbageAndSerial>;
 
