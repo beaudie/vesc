@@ -1316,9 +1316,9 @@ void BufferHelper::release(DisplayVk *display, std::vector<GarbageObjectBase> *g
     mSize       = 0;
     mViewFormat = nullptr;
 
-    mBuffer.dumpResources(garbageQueue);
-    mBufferView.dumpResources(garbageQueue);
-    mDeviceMemory.dumpResources(garbageQueue);
+    garbageQueue->emplace_back(GetGarbage(&mBuffer));
+    garbageQueue->emplace_back(GetGarbage(&mBufferView));
+    garbageQueue->emplace_back(GetGarbage(&mDeviceMemory));
 }
 
 bool BufferHelper::needsOnWriteBarrier(VkAccessFlags readAccessType,
@@ -1573,8 +1573,8 @@ void ImageHelper::releaseImage(ContextVk *contextVk)
 
 void ImageHelper::releaseImage(DisplayVk *display, std::vector<GarbageObjectBase> *garbageQueue)
 {
-    mImage.dumpResources(garbageQueue);
-    mDeviceMemory.dumpResources(garbageQueue);
+    garbageQueue->emplace_back(GetGarbage(&mImage));
+    garbageQueue->emplace_back(GetGarbage(&mDeviceMemory));
 }
 
 void ImageHelper::releaseStagingBuffer(ContextVk *contextVk)
@@ -1686,6 +1686,7 @@ void ImageHelper::destroy(VkDevice device)
 {
     mImage.destroy(device);
     mDeviceMemory.destroy(device);
+    mStagingBuffer.destroy(device);
     mCurrentLayout = ImageLayout::Undefined;
     mLayerCount    = 0;
     mLevelCount    = 0;
@@ -1753,12 +1754,6 @@ angle::Result ImageHelper::init2DStaging(Context *context,
 VkImageAspectFlags ImageHelper::getAspectFlags() const
 {
     return GetFormatAspectFlags(mFormat->imageFormat());
-}
-
-void ImageHelper::dumpResources(GarbageList *garbageList)
-{
-    mImage.dumpResources(garbageList);
-    mDeviceMemory.dumpResources(garbageList);
 }
 
 VkImageLayout ImageHelper::getCurrentLayout() const
