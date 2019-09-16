@@ -137,6 +137,30 @@
       "revId": "14cfed7c84499ef36312da45844562a2d2705785",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14108d27_4978e879",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-09-16T15:11:30Z",
+      "side": 1,
+      "message": "no but these started passing -\n\u003e dEQP-GLES31.functional.geometry_shading.input.basic_primitive.points\n\u003e dEQP-GLES31.functional.geometry_shading.input.basic_primitive.lines\n\u003e dEQP-GLES31.functional.geometry_shading.input.basic_primitive.line_loop\n\u003e dEQP-GLES31.functional.geometry_shading.input.basic_primitive.line_strip\n\u003e dEQP-GLES31.functional.geometry_shading.input.basic_primitive.triangles\n\u003e dEQP-GLES31.functional.geometry_shading.input.basic_primitive.triangle_strip\n\u003e dEQP-GLES31.functional.geometry_shading.input.basic_primitive.triangle_fan\n\nso had to explicitly call out the failures",
+      "parentUuid": "4e8b93e8_22efdfa6",
+      "range": {
+        "startLine": 712,
+        "startChar": 1,
+        "endLine": 719,
+        "endChar": 86
+      },
+      "revId": "14cfed7c84499ef36312da45844562a2d2705785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
