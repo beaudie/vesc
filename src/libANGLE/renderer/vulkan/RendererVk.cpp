@@ -519,6 +519,8 @@ RendererVk::RendererVk()
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
       mMaxVertexAttribDivisor(1),
       mDevice(VK_NULL_HANDLE),
+      mLastCompletedQueueSerial(mQueueSerialFactory.generate()),
+      mCurrentQueueSerial(mQueueSerialFactory.generate()),
       mDeviceLost(false),
       mPipelineCacheVkUpdateTimeout(kPipelineCacheVkUpdatePeriod),
       mPipelineCacheDirty(false),
@@ -577,7 +579,8 @@ void RendererVk::onDestroy(vk::Context *context)
 
 void RendererVk::notifyDeviceLost()
 {
-    mDeviceLost = true;
+    mLastCompletedQueueSerial = mLastSubmittedQueueSerial;
+    mDeviceLost               = true;
     mDisplay->notifyDeviceLost();
 }
 
@@ -1518,7 +1521,8 @@ bool RendererVk::hasBufferFormatFeatureBits(VkFormat format, const VkFormatFeatu
 
 angle::Result RendererVk::queueSubmit(vk::Context *context,
                                       const VkSubmitInfo &submitInfo,
-                                      const vk::Fence &fence)
+                                      const vk::Fence &fence,
+                                      Serial *serialOut)
 {
     {
         std::lock_guard<decltype(mQueueMutex)> lock(mQueueMutex);
@@ -1539,6 +1543,10 @@ angle::Result RendererVk::queueWaitIdle(vk::Context *context)
 
     ANGLE_TRY(cleanupGarbage(context, false));
 
+    *serialOut                = mCurrentQueueSerial;
+    mLastSubmittedQueueSerial = mCurrentQueueSerial;
+    mCurrentQueueSerial       = mQueueSerialFactory.generate();
+
     return angle::Result::Continue;
 }
 
@@ -1552,11 +1560,6 @@ VkResult RendererVk::queuePresent(const VkPresentInfoKHR &presentInfo)
         ANGLE_TRACE_EVENT0("gpu.angle", "vkQueuePresentKHR");
         return vkQueuePresentKHR(mQueue, &presentInfo);
     }
-}
-
-Serial RendererVk::nextSerial()
-{
-    return mQueueSerialFactory.generate();
 }
 
 angle::Result RendererVk::newSharedFence(vk::Context *context,
@@ -1667,5 +1670,30 @@ std::string RendererVk::getAndClearLastValidationMessage(uint32_t *countSinceLas
     mValidationMessageCount = 0;
 
     return std::move(mLastValidationMessage);
+}
+
+void RendererVk::onCompletedSerial(Serial serial)
+{
+    if (serial > mLastCompletedQueueSerial)
+    {
+        mLastCompletedQueueSerial = serial;
+    }
+}
+
+angle::Result RendererVk::globalFinish()
+{
+    for (gl::Context *context : mDisplay->getContextSet())
+    {
+        ContextVk *contextVk = vk::GetImpl(context);
+        ANGLE_TRY(contextVk->flushImpl(nullptr));
+    }
+
+    for (gl::Context *context : mDisplay->getContextSet())
+    {
+        ContextVk *contextVk = vk::GetImpl(context);
+        ANGLE_TRY(contextVk->finishImpl());
+    }
+
+    return angle::Result::Continue;
 }
 }  // namespace rx
