@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a507a4f_faa2e2b0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-16T14:14:44Z",
+      "side": 1,
+      "message": "tiny nit, also correct base offset.",
+      "range": {
+        "startLine": 1214,
+        "startChar": 34,
+        "endLine": 1214,
+        "endChar": 54
+      },
+      "revId": "219642dfd1d4099498cb24ea5942e1183a093961",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

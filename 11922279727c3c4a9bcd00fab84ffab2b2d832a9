@@ -405,6 +405,30 @@
     },
     {
       "key": {
+        "uuid": "c3f45bd4_1adb6ed3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-16T14:14:44Z",
+      "side": 1,
+      "message": "You can go ahead and expose gl::TextureTypeToTarget in ImageIndex.h or PackedEnums.h. Sorry I didn\u0027t notice it was private at the time. Not sure if there\u0027s a better way but it\u0027s probably better than making a dummy index.",
+      "parentUuid": "7d3c87c5_f88c6ddf",
+      "range": {
+        "startLine": 1205,
+        "startChar": 0,
+        "endLine": 1206,
+        "endChar": 96
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "70acbd6f_a3aa2676",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 5
@@ -568,6 +592,30 @@
       "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4a67ac4_acc739b2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-16T14:14:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b4694cd3_fbf5448a",
+      "range": {
+        "startLine": 1224,
+        "startChar": 12,
+        "endLine": 1224,
+        "endChar": 78
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -805,6 +853,30 @@
       "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78442c21_22636c2b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1923,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-16T14:14:44Z",
+      "side": 1,
+      "message": "Nice!",
+      "parentUuid": "28194c46_16e5fa21",
+      "range": {
+        "startLine": 1911,
+        "startChar": 0,
+        "endLine": 1923,
+        "endChar": 5
+      },
+      "revId": "11922279727c3c4a9bcd00fab84ffab2b2d832a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
