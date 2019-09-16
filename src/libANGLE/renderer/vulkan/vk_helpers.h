@@ -713,7 +713,6 @@ class ImageHelper final : public CommandGraphResource
 
     VkImageAspectFlags getAspectFlags() const;
     void destroy(VkDevice device);
-    void dumpResources(GarbageList *garbageList);
 
     void init2DWeakReference(VkImage handle,
                              const gl::Extents &glExtents,
