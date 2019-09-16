@@ -474,32 +474,7 @@ void ChoosePhysicalDevice(const std::vector<VkPhysicalDevice> &physicalDevices,
     *physicalDeviceOut = physicalDevices[0];
     vkGetPhysicalDeviceProperties(*physicalDeviceOut, physicalDevicePropertiesOut);
 }
-
-angle::Result WaitFences(vk::Context *context,
-                         std::vector<vk::Shared<vk::Fence>> *fences,
-                         bool block)
-{
-    uint64_t timeout = block ? context->getRenderer()->getMaxFenceWaitTimeNs() : 0;
-
-    // Iterate backwards over the fences, removing them from the list in constant time when they are
-    // complete.
-    while (!fences->empty())
-    {
-        VkResult result = fences->back().get().wait(context->getDevice(), timeout);
-        if (result == VK_TIMEOUT)
-        {
-            return angle::Result::Continue;
-        }
-        ANGLE_VK_TRY(context, result);
-
-        context->getRenderer()->resetSharedFence(&fences->back());
-        fences->pop_back();
-    }
-
-    return angle::Result::Continue;
-}
-
-}  // anonymous namespace
+}  // namespace
 
 // RendererVk implementation.
 RendererVk::RendererVk()
@@ -530,7 +505,7 @@ RendererVk::RendererVk()
 
 RendererVk::~RendererVk()
 {
-    ASSERT(mFencedGarbage.empty());
+    ASSERT(mSharedGarbage.empty());
 }
 
 void RendererVk::onDestroy(vk::Context *context)
@@ -1580,19 +1555,10 @@ angle::Result RendererVk::newSharedFence(vk::Context *context,
     return angle::Result::Continue;
 }
 
-void RendererVk::addGarbage(vk::Shared<vk::Fence> &&fence,
-                            std::vector<vk::GarbageObjectBase> &&garbage)
+void RendererVk::addSharedGarbage(const vk::SharedResourceUse &lifetime,
+                                  vk::GarbageObjectBase &&object)
 {
-    std::vector<vk::Shared<vk::Fence>> fences;
-    fences.push_back(std::move(fence));
-    addGarbage(std::move(fences), std::move(garbage));
-}
-
-void RendererVk::addGarbage(std::vector<vk::Shared<vk::Fence>> &&fences,
-                            std::vector<vk::GarbageObjectBase> &&garbage)
-{
-    std::lock_guard<decltype(mGarbageMutex)> lock(mGarbageMutex);
-    mFencedGarbage.emplace_back(std::move(fences), std::move(garbage));
+    mSharedGarbage.emplace_back(lifetime, std::move(object));
 }
 
 template <VkFormatFeatureFlags VkFormatProperties::*features>
@@ -1635,17 +1601,14 @@ angle::Result RendererVk::cleanupGarbage(vk::Context *context, bool block)
 {
     std::lock_guard<decltype(mGarbageMutex)> lock(mGarbageMutex);
 
-    auto garbageIter = mFencedGarbage.begin();
-    while (garbageIter != mFencedGarbage.end())
+    for (auto garbageIter = mSharedGarbage.begin(); garbageIter != mSharedGarbage.end();)
     {
-        ANGLE_TRY(WaitFences(context, &garbageIter->first, block));
-        if (garbageIter->first.empty())
+        // Possibly 'counter' should be always zero when we add the object to garbage.
+        vk::SharedGarbageObject &garbage = *garbageIter;
+        if (garbage.lifetime->counter == 0 && garbage.lifetime->serial <= mLastCompletedQueueSerial)
         {
-            for (vk::GarbageObjectBase &garbageObject : garbageIter->second)
-            {
-                garbageObject.destroy(mDevice);
-            }
-            garbageIter = mFencedGarbage.erase(garbageIter);
+            garbage.object.destroy(mDevice);
+            garbageIter = mSharedGarbage.erase(garbageIter);
         }
         else
         {
