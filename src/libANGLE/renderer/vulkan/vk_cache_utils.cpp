@@ -593,7 +593,7 @@ void GraphicsPipelineDesc::initDefaults()
 }
 
 angle::Result GraphicsPipelineDesc::initializePipeline(
-    vk::Context *context,
+    ContextVk *context,
     const vk::PipelineCache &pipelineCacheVk,
     const RenderPass &compatibleRenderPass,
     const PipelineLayout &pipelineLayout,
@@ -684,7 +684,10 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         angle::FormatID formatID         = static_cast<angle::FormatID>(packedAttrib.format);
         const vk::Format &format         = context->getRenderer()->getFormat(formatID);
         const angle::Format &angleFormat = format.angleFormat();
-        VkFormat vkFormat                = format.vkBufferFormat;
+        const bool isSnormAndGLES20      = IsSnormAndGLES20(context, format);
+        VkFormat vkFormat                = (isSnormAndGLES20)
+                                ? GetDestVkFormat(context->getRenderer(), format).vkBufferFormat
+                                : (format.vkBufferFormat);
 
         gl::ComponentType attribType =
             GetVertexAttributeComponentType(angleFormat.isPureInt(), angleFormat.vertexAttribType);
@@ -1592,7 +1595,7 @@ void RenderPassCache::destroy(VkDevice device)
     mPayload.clear();
 }
 
-angle::Result RenderPassCache::addRenderPass(vk::Context *context,
+angle::Result RenderPassCache::addRenderPass(ContextVk *context,
                                              Serial serial,
                                              const vk::RenderPassDesc &desc,
                                              vk::RenderPass **renderPassOut)
@@ -1697,7 +1700,7 @@ void GraphicsPipelineCache::release(ContextVk *context)
 }
 
 angle::Result GraphicsPipelineCache::insertPipeline(
-    vk::Context *context,
+    ContextVk *context,
     const vk::PipelineCache &pipelineCacheVk,
     const vk::RenderPass &compatibleRenderPass,
     const vk::PipelineLayout &pipelineLayout,

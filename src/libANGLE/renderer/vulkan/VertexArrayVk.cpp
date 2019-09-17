@@ -27,6 +27,15 @@ namespace
 constexpr size_t kDynamicVertexDataSize = 1024 * 1024;
 constexpr size_t kDynamicIndexDataSize  = 1024 * 8;
 
+// Force convert vertex format in 2 usecases -
+//     1. When backend doesn't support vertex format
+//     2. When GLES context version is 2.0 and vertex format is signed normalized type
+//        Because GLES 2.0 formula for converting is different from that of Vulkan.
+ANGLE_INLINE bool ForceConversion(const vk::Format &vertexFormat, const bool isSnormAndGLES20)
+{
+    return isSnormAndGLES20 || vertexFormat.vertexLoadRequiresConversion;
+}
+
 ANGLE_INLINE bool BindingIsAligned(const gl::VertexBinding &binding,
                                    const angle::Format &angleFormat,
                                    unsigned int attribSize,
@@ -238,10 +247,14 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
                                                     size_t attribIndex,
                                                     const vk::Format &vertexFormat,
                                                     ConversionBuffer *conversion,
-                                                    GLuint relativeOffset)
+                                                    GLuint relativeOffset,
+                                                    const bool isSnormAndGLES20)
 {
+    const vk::Format &destVertexFormat =
+        (isSnormAndGLES20) ? GetDestVkFormat(contextVk->getRenderer(), vertexFormat)
+                           : (vertexFormat);
     const angle::Format &srcFormat  = vertexFormat.angleFormat();
-    const angle::Format &destFormat = vertexFormat.bufferFormat();
+    const angle::Format &destFormat = destVertexFormat.bufferFormat();
 
     ASSERT(binding.getStride() % (srcFormat.pixelBytes / srcFormat.channelCount) == 0);
 
@@ -254,7 +267,7 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
-    ASSERT(GetVertexInputAlignment(vertexFormat) <= vk::kVertexBufferAlignment);
+    ASSERT(GetVertexInputAlignment(destVertexFormat) <= vk::kVertexBufferAlignment);
 
     // Allocate buffer for results
     conversion->data.releaseInFlightBuffers(contextVk);
@@ -284,12 +297,22 @@ angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
                                                     size_t attribIndex,
                                                     const vk::Format &vertexFormat,
                                                     ConversionBuffer *conversion,
-                                                    GLuint relativeOffset)
+                                                    GLuint relativeOffset,
+                                                    const bool isSnormAndGLES20)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "VertexArrayVk::convertVertexBufferCpu");
 
-    unsigned srcFormatSize = vertexFormat.angleFormat().pixelBytes;
-    unsigned dstFormatSize = vertexFormat.bufferFormat().pixelBytes;
+    const vk::Format &destVertexFormat =
+        (isSnormAndGLES20) ? GetDestVkFormat(contextVk->getRenderer(), vertexFormat)
+                           : (vertexFormat);
+    const angle::Format &srcFormat  = vertexFormat.angleFormat();
+    const angle::Format &destFormat = destVertexFormat.bufferFormat();
+
+    VertexCopyFunction vertexLoadFunction = (isSnormAndGLES20)
+                                                ? GetVertexLoadFunctionOverride(vertexFormat)
+                                                : vertexFormat.vertexLoadFunction;
+    unsigned srcFormatSize = srcFormat.pixelBytes;
+    unsigned dstFormatSize = destFormat.pixelBytes;
 
     conversion->data.releaseInFlightBuffers(contextVk);
 
@@ -303,9 +326,9 @@ angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
     ANGLE_TRY(srcBuffer->mapImpl(contextVk, &src));
     const uint8_t *srcBytes = reinterpret_cast<const uint8_t *>(src);
     srcBytes += binding.getOffset() + relativeOffset;
-    ASSERT(GetVertexInputAlignment(vertexFormat) <= vk::kVertexBufferAlignment);
+    ASSERT(GetVertexInputAlignment(destVertexFormat) <= vk::kVertexBufferAlignment);
     ANGLE_TRY(StreamVertexData(contextVk, &conversion->data, srcBytes, numVertices * dstFormatSize,
-                               0, numVertices, binding.getStride(), vertexFormat.vertexLoadFunction,
+                               0, numVertices, binding.getStride(), vertexLoadFunction,
                                &mCurrentArrayBuffers[attribIndex],
                                &conversion->lastAllocationOffset));
     srcBuffer->unmapImpl(contextVk);
@@ -427,6 +450,9 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
     {
         RendererVk *renderer           = contextVk->getRenderer();
         const vk::Format &vertexFormat = renderer->getFormat(attrib.format->id);
+        const bool isSnormAndGLES20    = IsSnormAndGLES20(contextVk, vertexFormat);
+        const vk::Format &destVertexFormat =
+            (isSnormAndGLES20) ? GetDestVkFormat(renderer, vertexFormat) : (vertexFormat);
 
         GLuint stride;
         bool anyVertexBufferConvertedOnGpu = false;
@@ -437,8 +463,9 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
             const angle::Format &angleFormat = vertexFormat.angleFormat();
             bool bindingIsAligned = BindingIsAligned(binding, angleFormat, angleFormat.channelCount,
                                                      attrib.relativeOffset);
+            bool forceConversion  = ForceConversion(vertexFormat, isSnormAndGLES20);
 
-            if (vertexFormat.vertexLoadRequiresConversion || !bindingIsAligned)
+            if (forceConversion || !bindingIsAligned)
             {
                 ConversionBuffer *conversion = bufferVk->getVertexConversionBuffer(
                     renderer, angleFormat.id, binding.getStride(),
@@ -449,14 +476,14 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                     {
                         ANGLE_TRY(convertVertexBufferGPU(contextVk, bufferVk, binding, attribIndex,
                                                          vertexFormat, conversion,
-                                                         attrib.relativeOffset));
+                                                         attrib.relativeOffset, isSnormAndGLES20));
                         anyVertexBufferConvertedOnGpu = true;
                     }
                     else
                     {
                         ANGLE_TRY(convertVertexBufferCPU(contextVk, bufferVk, binding, attribIndex,
                                                          vertexFormat, conversion,
-                                                         attrib.relativeOffset));
+                                                         attrib.relativeOffset, isSnormAndGLES20));
                     }
 
                     // If conversion happens, the destination buffer stride may be changed,
@@ -472,7 +499,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                 mCurrentArrayBufferOffsets[attribIndex] = conversion->lastAllocationOffset;
 
                 // Converted buffer is tightly packed
-                stride = vertexFormat.bufferFormat().pixelBytes;
+                stride = destVertexFormat.bufferFormat().pixelBytes;
             }
             else
             {
@@ -486,7 +513,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                 }
                 else
                 {
-                    vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
+                    vk::BufferHelper &bufferHelper          = bufferVk->getBuffer();
                     mCurrentArrayBuffers[attribIndex]       = &bufferHelper;
                     mCurrentArrayBufferHandles[attribIndex] = bufferHelper.getBuffer().getHandle();
                     mCurrentArrayBufferOffsets[attribIndex] = binding.getOffset();
@@ -500,7 +527,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
             mCurrentArrayBufferHandles[attribIndex] = mTheNullBuffer.getBuffer().getHandle();
             mCurrentArrayBufferOffsets[attribIndex] = 0;
             // Client side buffer will be transfered to a tightly packed buffer later
-            stride = vertexFormat.bufferFormat().pixelBytes;
+            stride = destVertexFormat.bufferFormat().pixelBytes;
         }
 
         if (bufferOnly)
@@ -566,9 +593,17 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
         ASSERT(attrib.enabled && binding.getBuffer().get() == nullptr);
 
         const vk::Format &vertexFormat = renderer->getFormat(attrib.format->id);
-        GLuint stride                  = vertexFormat.bufferFormat().pixelBytes;
+        const bool isSnormAndGLES20    = IsSnormAndGLES20(contextVk, vertexFormat);
+        const vk::Format &destVertexFormat =
+            (isSnormAndGLES20) ? GetDestVkFormat(renderer, vertexFormat) : (vertexFormat);
+        const angle::Format &destFormat = destVertexFormat.bufferFormat();
 
-        ASSERT(GetVertexInputAlignment(vertexFormat) <= vk::kVertexBufferAlignment);
+        VertexCopyFunction vertexLoadFunction = (isSnormAndGLES20)
+                                                    ? GetVertexLoadFunctionOverride(vertexFormat)
+                                                    : vertexFormat.vertexLoadFunction;
+        GLuint stride = destFormat.pixelBytes;
+
+        ASSERT(GetVertexInputAlignment(destVertexFormat) <= vk::kVertexBufferAlignment);
 
         const uint8_t *src = static_cast<const uint8_t *>(attrib.pointer);
         if (binding.getDivisor() > 0)
@@ -578,7 +613,7 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
             size_t bytesToAllocate = count * stride;
 
             ANGLE_TRY(StreamVertexData(contextVk, &mDynamicVertexData, src, bytesToAllocate, 0,
-                                       count, binding.getStride(), vertexFormat.vertexLoadFunction,
+                                       count, binding.getStride(), vertexLoadFunction,
                                        &mCurrentArrayBuffers[attribIndex],
                                        &mCurrentArrayBufferOffsets[attribIndex]));
         }
@@ -591,10 +626,10 @@ angle::Result VertexArrayVk::updateClientAttribs(const gl::Context *context,
             src += startVertex * binding.getStride();
             size_t destOffset = startVertex * stride;
 
-            ANGLE_TRY(StreamVertexData(
-                contextVk, &mDynamicVertexData, src, bytesToAllocate, destOffset, vertexCount,
-                binding.getStride(), vertexFormat.vertexLoadFunction,
-                &mCurrentArrayBuffers[attribIndex], &mCurrentArrayBufferOffsets[attribIndex]));
+            ANGLE_TRY(StreamVertexData(contextVk, &mDynamicVertexData, src, bytesToAllocate,
+                                       destOffset, vertexCount, binding.getStride(),
+                                       vertexLoadFunction, &mCurrentArrayBuffers[attribIndex],
+                                       &mCurrentArrayBufferOffsets[attribIndex]));
         }
 
         mCurrentArrayBufferHandles[attribIndex] =

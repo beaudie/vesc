@@ -82,24 +82,25 @@ namespace ConvertVertex_comp
 enum flags
 {
     kIsAligned = 0x00000001,
+    kIsGLES20  = 0x00000002,
 };
 enum Conversion
 {
     kSintToSint          = 0x00000000,
-    kUintToUint          = 0x00000002,
-    kSintToFloat         = 0x00000004,
-    kUintToFloat         = 0x00000006,
-    kSnormToFloat        = 0x00000008,
-    kUnormToFloat        = 0x0000000A,
-    kFixedToFloat        = 0x0000000C,
-    kFloatToFloat        = 0x0000000E,
-    kA2BGR10SintToSint   = 0x00000010,
-    kA2BGR10UintToUint   = 0x00000012,
-    kA2BGR10SintToFloat  = 0x00000014,
-    kA2BGR10UintToFloat  = 0x00000016,
-    kA2BGR10SnormToFloat = 0x00000018,
+    kUintToUint          = 0x00000004,
+    kSintToFloat         = 0x00000008,
+    kUintToFloat         = 0x0000000C,
+    kSnormToFloat        = 0x00000010,
+    kUnormToFloat        = 0x00000014,
+    kFixedToFloat        = 0x00000018,
+    kFloatToFloat        = 0x0000001C,
+    kA2BGR10SintToSint   = 0x00000020,
+    kA2BGR10UintToUint   = 0x00000024,
+    kA2BGR10SintToFloat  = 0x00000028,
+    kA2BGR10UintToFloat  = 0x0000002C,
+    kA2BGR10SnormToFloat = 0x00000030,
 };
-constexpr size_t kArrayLen = 0x0000001A;
+constexpr size_t kArrayLen = 0x00000034;
 }  // namespace ConvertVertex_comp
 
 namespace FullScreenQuad_vert

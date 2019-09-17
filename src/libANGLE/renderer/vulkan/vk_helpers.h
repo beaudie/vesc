@@ -1010,7 +1010,7 @@ class ShaderProgramHelper : angle::NonCopyable
 
     // For getting a vk::Pipeline and from the pipeline cache.
     ANGLE_INLINE angle::Result getGraphicsPipeline(
-        Context *context,
+        ContextVk *context,
         RenderPassCache *renderPassCache,
         const PipelineCache &pipelineCache,
         Serial currentQueueSerial,

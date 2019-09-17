@@ -356,7 +356,7 @@ class GraphicsPipelineDesc final
         return reinterpret_cast<const T *>(this);
     }
 
-    angle::Result initializePipeline(vk::Context *context,
+    angle::Result initializePipeline(ContextVk *context,
                                      const vk::PipelineCache &pipelineCacheVk,
                                      const RenderPass &compatibleRenderPass,
                                      const PipelineLayout &pipelineLayout,
@@ -768,7 +768,7 @@ class RenderPassCache final : angle::NonCopyable
 
     void destroy(VkDevice device);
 
-    ANGLE_INLINE angle::Result getCompatibleRenderPass(vk::Context *context,
+    ANGLE_INLINE angle::Result getCompatibleRenderPass(ContextVk *context,
                                                        Serial serial,
                                                        const vk::RenderPassDesc &desc,
                                                        vk::RenderPass **renderPassOut)
@@ -795,7 +795,7 @@ class RenderPassCache final : angle::NonCopyable
                                        vk::RenderPass **renderPassOut);
 
   private:
-    angle::Result addRenderPass(vk::Context *context,
+    angle::Result addRenderPass(ContextVk *context,
                                 Serial serial,
                                 const vk::RenderPassDesc &desc,
                                 vk::RenderPass **renderPassOut);
@@ -820,7 +820,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
 
     void populate(const vk::GraphicsPipelineDesc &desc, vk::Pipeline &&pipeline);
 
-    ANGLE_INLINE angle::Result getPipeline(vk::Context *context,
+    ANGLE_INLINE angle::Result getPipeline(ContextVk *context,
                                            const vk::PipelineCache &pipelineCacheVk,
                                            const vk::RenderPass &compatibleRenderPass,
                                            const vk::PipelineLayout &pipelineLayout,
@@ -846,7 +846,7 @@ class GraphicsPipelineCache final : angle::NonCopyable
     }
 
   private:
-    angle::Result insertPipeline(vk::Context *context,
+    angle::Result insertPipeline(ContextVk *context,
                                  const vk::PipelineCache &pipelineCacheVk,
                                  const vk::RenderPass &compatibleRenderPass,
                                  const vk::PipelineLayout &pipelineLayout,

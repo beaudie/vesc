@@ -817,6 +817,9 @@ angle::Result UtilsVk::convertVertexBuffer(ContextVk *contextVk,
         shaderParams.outputCount % 64 == 0 && shaderParams.componentCount % shaderParams.Ed == 0;
     flags |= isAligned ? ConvertVertex_comp::kIsAligned : 0;
 
+    bool isGLES20 = contextVk->getClientMajorVersion() == 2;
+    flags |= isGLES20 ? ConvertVertex_comp::kIsGLES20 : 0;
+
     VkDescriptorSet descriptorSet;
     vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
     ANGLE_TRY(allocateDescriptorSet(contextVk, Function::ConvertVertexBuffer,
