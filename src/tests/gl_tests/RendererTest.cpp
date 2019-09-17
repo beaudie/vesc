@@ -180,6 +180,8 @@ ANGLE_INSTANTIATE_TEST(RendererTest,
                        ES2_D3D11(),
                        ES3_D3D11(),
 
+                       ES3_D3D11_11on12(),
+
                        // ES on top of desktop OpenGL.
                        ES2_OPENGL(),
                        ES3_OPENGL(),
