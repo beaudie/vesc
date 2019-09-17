@@ -187,7 +187,7 @@ class StateManagerGL final : angle::NonCopyable
   private:
     void setTextureCubemapSeamlessEnabled(bool enabled);
 
-    void propagateProgramToVAO(const gl::Program *program, VertexArrayGL *vao);
+    angle::Result propagateProgramToVAO(const gl::Context *context);
 
     void updateProgramTextureBindings(const gl::Context *context);
     void updateProgramStorageBufferBindings(const gl::Context *context);

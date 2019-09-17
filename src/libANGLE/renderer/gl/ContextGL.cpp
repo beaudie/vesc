@@ -111,7 +111,12 @@ BufferImpl *ContextGL::createBuffer(const gl::BufferState &state)
 
 VertexArrayImpl *ContextGL::createVertexArray(const gl::VertexArrayState &data)
 {
-    return new VertexArrayGL(data, getFunctions(), getStateManager());
+    const FunctionsGL *functions = getFunctions();
+
+    GLuint vao = 0;
+    functions->genVertexArrays(1, &vao);
+
+    return new VertexArrayGL(data, vao);
 }
 
 QueryImpl *ContextGL::createQuery(gl::QueryType type)
@@ -212,7 +217,7 @@ ANGLE_INLINE angle::Result ContextGL::setDrawArraysState(const gl::Context *cont
                                             first, count, instanceCount));
 
 #if defined(ANGLE_STATE_VALIDATION_ENABLED)
-        vaoGL->validateState();
+        ANGLE_TRY(vaoGL->validateState(context));
 #endif  // ANGLE_STATE_VALIDATION_ENABLED
     }
 
@@ -254,7 +259,7 @@ ANGLE_INLINE angle::Result ContextGL::setDrawElementsState(const gl::Context *co
 
 #if defined(ANGLE_STATE_VALIDATION_ENABLED)
     const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
-    vaoGL->validateState();
+    ANGLE_TRY(vaoGL->validateState(context));
 #endif  // ANGLE_STATE_VALIDATION_ENABLED
 
     return angle::Result::Continue;

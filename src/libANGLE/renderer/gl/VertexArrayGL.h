@@ -24,9 +24,7 @@ class StateManagerGL;
 class VertexArrayGL : public VertexArrayImpl
 {
   public:
-    VertexArrayGL(const gl::VertexArrayState &data,
-                  const FunctionsGL *functions,
-                  StateManagerGL *stateManager);
+    VertexArrayGL(const gl::VertexArrayState &data, GLuint id);
     ~VertexArrayGL() override;
 
     void destroy(const gl::Context *context) override;
@@ -53,10 +51,11 @@ class VertexArrayGL : public VertexArrayImpl
                             gl::VertexArray::DirtyAttribBitsArray *attribBits,
                             gl::VertexArray::DirtyBindingBitsArray *bindingBits) override;
 
-    void applyNumViewsToDivisor(int numViews);
-    void applyActiveAttribLocationsMask(const gl::AttributesMask &activeMask);
+    angle::Result applyNumViewsToDivisor(const gl::Context *context, int numViews);
+    angle::Result applyActiveAttribLocationsMask(const gl::Context *context,
+                                                 const gl::AttributesMask &activeMask);
 
-    void validateState() const;
+    angle::Result validateState(const gl::Context *context) const;
 
   private:
     angle::Result syncDrawState(const gl::Context *context,
@@ -92,32 +91,30 @@ class VertexArrayGL : public VertexArrayImpl
                                    const gl::AttributesMask &attribsToStream,
                                    GLsizei instanceCount,
                                    const gl::IndexRange &indexRange) const;
-    void syncDirtyAttrib(const gl::Context *context,
-                         size_t attribIndex,
-                         const gl::VertexArray::DirtyAttribBits &dirtyAttribBits);
-    void syncDirtyBinding(const gl::Context *context,
-                          size_t bindingIndex,
-                          const gl::VertexArray::DirtyBindingBits &dirtyBindingBits);
+    angle::Result syncDirtyAttrib(const gl::Context *context,
+                                  size_t attribIndex,
+                                  const gl::VertexArray::DirtyAttribBits &dirtyAttribBits);
+    angle::Result syncDirtyBinding(const gl::Context *context,
+                                   size_t bindingIndex,
+                                   const gl::VertexArray::DirtyBindingBits &dirtyBindingBits);
 
-    void updateAttribEnabled(size_t attribIndex);
-    void updateAttribPointer(const gl::Context *context, size_t attribIndex);
+    angle::Result updateAttribEnabled(const gl::Context *context, size_t attribIndex);
+    angle::Result updateAttribPointer(const gl::Context *context, size_t attribIndex);
 
-    bool supportVertexAttribBinding() const;
+    bool supportVertexAttribBinding(const gl::Context *context) const;
 
-    void updateAttribFormat(size_t attribIndex);
-    void updateAttribBinding(size_t attribIndex);
-    void updateBindingBuffer(const gl::Context *context, size_t bindingIndex);
-    void updateBindingDivisor(size_t bindingIndex);
+    angle::Result updateAttribFormat(const gl::Context *context, size_t attribIndex);
+    angle::Result updateAttribBinding(const gl::Context *context, size_t attribIndex);
+    angle::Result updateBindingBuffer(const gl::Context *context, size_t bindingIndex);
+    angle::Result updateBindingDivisor(const gl::Context *context, size_t bindingIndex);
 
-    void updateElementArrayBufferBinding(const gl::Context *context) const;
+    angle::Result updateElementArrayBufferBinding(const gl::Context *context) const;
 
-    void callVertexAttribPointer(GLuint attribIndex,
-                                 const gl::VertexAttribute &attrib,
-                                 GLsizei stride,
-                                 GLintptr offset) const;
-
-    const FunctionsGL *mFunctions;
-    StateManagerGL *mStateManager;
+    angle::Result callVertexAttribPointer(const gl::Context *context,
+                                          GLuint attribIndex,
+                                          const gl::VertexAttribute &attrib,
+                                          GLsizei stride,
+                                          GLintptr offset) const;
 
     GLuint mVertexArrayID;
     int mAppliedNumViews;
