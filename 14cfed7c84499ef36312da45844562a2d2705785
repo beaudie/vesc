@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8f25ee8e_b391857a",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1517,
+      "author": {
+        "id": 1361695
+      },
+      "writtenOn": "2019-09-17T22:48:15Z",
+      "side": 1,
+      "message": "If you look at line 1385, linkValidateShaders() is called in ASSERT(). So it is not compiled if we build with release mode. We think it is because linkValidateShader() is belong to validation layer. If it is validation layer, it should not set mState variable. So we moved geometry shader stuff to link().",
+      "parentUuid": "9b0d51a8_e32243ba",
+      "range": {
+        "startLine": 1507,
+        "startChar": 0,
+        "endLine": 1517,
+        "endChar": 9
+      },
+      "revId": "14cfed7c84499ef36312da45844562a2d2705785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e2a6f42b_dade1eeb",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 4
