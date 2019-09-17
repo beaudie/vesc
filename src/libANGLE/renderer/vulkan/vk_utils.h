@@ -253,7 +253,7 @@ GarbageObjectBase GetGarbage(T *obj)
     return GarbageObjectBase::Get(obj);
 }
 
-using GarbageList      = std::vector<GarbageObjectBase>;
+using GarbageList      = std::vector<vk::GarbageObjectBase>;
 using GarbageAndSerial = ObjectAndSerial<GarbageList>;
 using GarbageQueue     = std::vector<GarbageAndSerial>;
 
@@ -365,6 +365,23 @@ class ContextScoped final : angle::NonCopyable
 
   private:
     ContextVk *mContextVk;
+    T mVar;
+};
+
+template <typename T>
+class RendererScoped final : angle::NonCopyable
+{
+  public:
+    RendererScoped(RendererVk *renderer) : mRenderer(renderer) {}
+    ~RendererScoped() { mVar.release(mRenderer); }
+
+    const T &get() const { return mVar; }
+    T &get() { return mVar; }
+
+    T &&release() { return std::move(mVar); }
+
+  private:
+    RendererVk *mRenderer;
     T mVar;
 };
 

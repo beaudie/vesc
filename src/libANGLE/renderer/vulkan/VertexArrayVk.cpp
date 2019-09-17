@@ -128,11 +128,13 @@ void VertexArrayVk::destroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
-    mTheNullBuffer.release(contextVk);
+    RendererVk *renderer = contextVk->getRenderer();
 
-    mDynamicVertexData.release(contextVk);
-    mDynamicIndexData.release(contextVk);
-    mTranslatedByteIndexData.release(contextVk);
+    mTheNullBuffer.release(renderer);
+
+    mDynamicVertexData.release(renderer);
+    mDynamicIndexData.release(renderer);
+    mTranslatedByteIndexData.release(renderer);
     mLineLoopHelper.release(contextVk);
 }
 
@@ -486,7 +488,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
                 }
                 else
                 {
-                    vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
+                    vk::BufferHelper &bufferHelper          = bufferVk->getBuffer();
                     mCurrentArrayBuffers[attribIndex]       = &bufferHelper;
                     mCurrentArrayBufferHandles[attribIndex] = bufferHelper.getBuffer().getHandle();
                     mCurrentArrayBufferOffsets[attribIndex] = binding.getOffset();
