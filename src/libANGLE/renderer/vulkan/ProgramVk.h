@@ -282,6 +282,7 @@ class ProgramVk : public ProgramImpl
     // Descriptor sets for uniform blocks and textures for this program.
     std::vector<VkDescriptorSet> mDescriptorSets;
     vk::DescriptorSetLayoutArray<VkDescriptorSet> mEmptyDescriptorSets;
+    std::vector<vk::BufferHelper *> mDescriptorBuffersCache;
 
     std::unordered_map<vk::TextureDescriptorDesc, VkDescriptorSet> mTextureDescriptorsCache;
 
