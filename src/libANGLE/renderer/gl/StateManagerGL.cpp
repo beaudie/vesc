@@ -1513,16 +1513,16 @@ void StateManagerGL::setClearStencil(GLint clearStencil)
     }
 }
 
-void StateManagerGL::syncState(const gl::Context *context,
-                               const gl::State::DirtyBits &glDirtyBits,
-                               const gl::State::DirtyBits &bitMask)
+angle::Result StateManagerGL::syncState(const gl::Context *context,
+                                        const gl::State::DirtyBits &glDirtyBits,
+                                        const gl::State::DirtyBits &bitMask)
 {
     const gl::State &state = context->getState();
 
     const gl::State::DirtyBits glAndLocalDirtyBits = (glDirtyBits | mLocalDirtyBits) & bitMask;
     if (!glAndLocalDirtyBits.any())
     {
-        return;
+        return angle::Result::Continue;
     }
 
     // TODO(jmadill): Investigate only syncing vertex state for active attributes
@@ -1741,9 +1741,7 @@ void StateManagerGL::syncState(const gl::Context *context,
             {
                 const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(state.getVertexArray());
                 bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getAppliedElementArrayBufferID());
-
-                propagateProgramToVAO(state.getProgram(),
-                                      GetImplAs<VertexArrayGL>(state.getVertexArray()));
+                ANGLE_TRY(propagateProgramToVAO(context));
                 break;
             }
             case gl::State::DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING:
@@ -1797,8 +1795,7 @@ void StateManagerGL::syncState(const gl::Context *context,
 
                 if (!program || !program->hasLinkedShaderStage(gl::ShaderType::Compute))
                 {
-                    propagateProgramToVAO(program,
-                                          GetImplAs<VertexArrayGL>(state.getVertexArray()));
+                    ANGLE_TRY(propagateProgramToVAO(context));
                 }
                 break;
             }
@@ -1880,6 +1877,7 @@ void StateManagerGL::syncState(const gl::Context *context,
     }
 
     mLocalDirtyBits &= ~(bitMask);
+    return angle::Result::Continue;
 }
 
 void StateManagerGL::setFramebufferSRGBEnabled(const gl::Context *context, bool enabled)
@@ -2066,12 +2064,10 @@ void StateManagerGL::setTextureCubemapSeamlessEnabled(bool enabled)
     }
 }
 
-void StateManagerGL::propagateProgramToVAO(const gl::Program *program, VertexArrayGL *vao)
+angle::Result StateManagerGL::propagateProgramToVAO(const gl::Context *context)
 {
-    if (vao == nullptr)
-    {
-        return;
-    }
+    const gl::Program *program = context->getState().getProgram();
+    VertexArrayGL *vao         = GetImplAs<VertexArrayGL>(context->getState().getVertexArray());
 
     // Number of views:
     if (mIsMultiviewEnabled)
@@ -2081,14 +2077,17 @@ void StateManagerGL::propagateProgramToVAO(const gl::Program *program, VertexArr
         {
             programNumViews = program->getNumViews();
         }
-        vao->applyNumViewsToDivisor(programNumViews);
+        ANGLE_TRY(vao->applyNumViewsToDivisor(context, programNumViews));
     }
 
     // Attribute enabled mask:
     if (program)
     {
-        vao->applyActiveAttribLocationsMask(program->getActiveAttribLocationsMask());
+        ANGLE_TRY(
+            vao->applyActiveAttribLocationsMask(context, program->getActiveAttribLocationsMask()));
     }
+
+    return angle::Result::Continue;
 }
 
 void StateManagerGL::updateMultiviewBaseViewLayerIndexUniformImpl(

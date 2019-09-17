@@ -162,9 +162,9 @@ class StateManagerGL final : angle::NonCopyable
     angle::Result resumeQuery(const gl::Context *context, gl::QueryType type);
     angle::Result onMakeCurrent(const gl::Context *context);
 
-    void syncState(const gl::Context *context,
-                   const gl::State::DirtyBits &glDirtyBits,
-                   const gl::State::DirtyBits &bitMask);
+    angle::Result syncState(const gl::Context *context,
+                            const gl::State::DirtyBits &glDirtyBits,
+                            const gl::State::DirtyBits &bitMask);
 
     ANGLE_INLINE void updateMultiviewBaseViewLayerIndexUniform(
         const gl::Program *program,
@@ -189,7 +189,7 @@ class StateManagerGL final : angle::NonCopyable
   private:
     void setTextureCubemapSeamlessEnabled(bool enabled);
 
-    void propagateProgramToVAO(const gl::Program *program, VertexArrayGL *vao);
+    angle::Result propagateProgramToVAO(const gl::Context *context);
 
     void updateProgramTextureBindings(const gl::Context *context);
     void updateProgramStorageBufferBindings(const gl::Context *context);
