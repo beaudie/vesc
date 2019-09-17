@@ -113,7 +113,12 @@ BufferImpl *ContextGL::createBuffer(const gl::BufferState &state)
 
 VertexArrayImpl *ContextGL::createVertexArray(const gl::VertexArrayState &data)
 {
-    return new VertexArrayGL(data, getFunctions(), getStateManager());
+    const FunctionsGL *functions = getFunctions();
+
+    GLuint vao = 0;
+    functions->genVertexArrays(1, &vao);
+
+    return new VertexArrayGL(data, vao);
 }
 
 QueryImpl *ContextGL::createQuery(gl::QueryType type)
@@ -699,8 +704,7 @@ angle::Result ContextGL::syncState(const gl::Context *context,
                                    const gl::State::DirtyBits &dirtyBits,
                                    const gl::State::DirtyBits &bitMask)
 {
-    mRenderer->getStateManager()->syncState(context, dirtyBits, bitMask);
-    return angle::Result::Continue;
+    return mRenderer->getStateManager()->syncState(context, dirtyBits, bitMask);
 }
 
 GLint ContextGL::getGPUDisjoint()
