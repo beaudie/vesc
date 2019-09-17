@@ -461,6 +461,7 @@ Error ValidateGetPlatformDisplayCommon(EGLenum platform,
 
                         case EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D_WARP_ANGLE:
                         case EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D_REFERENCE_ANGLE:
+                        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D11on12_ANGLE:
                             if (!clientExtensions.platformANGLED3D)
                             {
                                 return EglBadAttribute()

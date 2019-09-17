@@ -141,6 +141,10 @@ std::ostream &operator<<(std::ostream &stream, const PlatformParameters &pp)
             stream << "_Warp";
             break;
 
+        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D11on12_ANGLE:
+            stream << "_11on12";
+            break;
+
         case EGL_PLATFORM_ANGLE_DEVICE_TYPE_SWIFTSHADER_ANGLE:
             stream << "_SwiftShader";
             break;
@@ -334,6 +338,12 @@ EGLPlatformParameters D3D11_FL9_3_REFERENCE()
 {
     return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE, 9, 3,
                                  EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D_REFERENCE_ANGLE);
+}
+
+EGLPlatformParameters D3D11_11on12()
+{
+    return EGLPlatformParameters(EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE, EGL_DONT_CARE, EGL_DONT_CARE,
+                                 EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D11on12_ANGLE);
 }
 
 EGLPlatformParameters OPENGL()
@@ -554,6 +564,11 @@ PlatformParameters ES3_D3D11_FL11_0_WARP()
 PlatformParameters ES3_D3D11_FL10_1_WARP()
 {
     return PlatformParameters(3, 0, egl_platform::D3D11_FL10_1_WARP());
+}
+
+PlatformParameters ES3_D3D11_11on12()
+{
+    return PlatformParameters(3, 0, egl_platform::D3D11_11on12());
 }
 
 PlatformParameters ES1_OPENGLES()
