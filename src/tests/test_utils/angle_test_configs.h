@@ -98,6 +98,8 @@ EGLPlatformParameters D3D11_FL10_1_REFERENCE();
 EGLPlatformParameters D3D11_FL10_0_REFERENCE();
 EGLPlatformParameters D3D11_FL9_3_REFERENCE();
 
+EGLPlatformParameters D3D11_11on12();
+
 EGLPlatformParameters OPENGL();
 EGLPlatformParameters OPENGL(EGLint major, EGLint minor);
 EGLPlatformParameters OPENGL_NULL();
@@ -150,6 +152,8 @@ PlatformParameters ES3_D3D11_WARP();
 PlatformParameters ES3_D3D11_FL11_1_WARP();
 PlatformParameters ES3_D3D11_FL11_0_WARP();
 PlatformParameters ES3_D3D11_FL10_1_WARP();
+
+PlatformParameters ES3_D3D11_11on12();
 
 PlatformParameters ES1_OPENGL();
 PlatformParameters ES2_OPENGL();
