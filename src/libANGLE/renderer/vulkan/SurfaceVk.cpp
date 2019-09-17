@@ -886,10 +886,12 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
 
 void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 {
+    RendererVk *renderer = contextVk->getRenderer();
+
     if (mDepthStencilImage.valid())
     {
-        mDepthStencilImage.releaseImage(contextVk);
-        mDepthStencilImage.releaseStagingBuffer(contextVk);
+        mDepthStencilImage.releaseImage(renderer);
+        mDepthStencilImage.releaseStagingBuffer(renderer);
 
         if (mDepthStencilImageView.valid())
         {
@@ -899,8 +901,8 @@ void WindowSurfaceVk::releaseSwapchainImages(ContextVk *contextVk)
 
     if (mColorImageMS.valid())
     {
-        mColorImageMS.releaseImage(contextVk);
-        mColorImageMS.releaseStagingBuffer(contextVk);
+        mColorImageMS.releaseImage(renderer);
+        mColorImageMS.releaseStagingBuffer(renderer);
 
         contextVk->addGarbage(&mColorImageViewMS);
         contextVk->addGarbage(&mFramebufferMS);

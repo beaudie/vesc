@@ -1558,7 +1558,10 @@ angle::Result RendererVk::newSharedFence(vk::Context *context,
 void RendererVk::addSharedGarbage(const vk::SharedResourceUse &lifetime,
                                   vk::GarbageObjectBase &&object)
 {
-    mSharedGarbage.emplace_back(lifetime, std::move(object));
+    if (object.valid())
+    {
+        mSharedGarbage.emplace_back(lifetime, std::move(object));
+    }
 }
 
 template <VkFormatFeatureFlags VkFormatProperties::*features>
