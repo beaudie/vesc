@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ab31c167_b818d44d",
+        "filename": "include/platform/FeaturesGL.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-09-17T18:11:50Z",
+      "side": 1,
+      "message": "I\u0027m planning to clean up the descriptions to avoid the situation like when that person thought mrtPerfWorkaround was related to their bug report. Can you include that it\u0027s only on Mac?",
+      "revId": "6217056c8cd043356c9b37e6d3734f328dfa04cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
