@@ -21,7 +21,7 @@ Status
 
 Version
 
-    Version 3, 2014-11-26
+    Version 5, 2019-09-24
 
 Number
 
@@ -64,6 +64,7 @@ New Tokens
 
         EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D_WARP_ANGLE      0x320B
         EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D_REFERENCE_ANGLE 0x320C
+		EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D11on12_ANGLE     0x3210
 
 Additions to the EGL Specification
 
@@ -97,6 +98,8 @@ New Behavior
         optimized software rasterizer.
       - EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D_REFERENCE_ANGLE to request a
         reference rasterizer.
+	  - EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D11on12_ANGLE to request an
+	    emulated D3D11 device running on the D3D12 API.
 
     If EGL_PLATFORM_ANGLE_TYPE_ANGLE is set to
     EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE, the display can automatically respond
@@ -139,3 +142,5 @@ Revision History
       - Remove the USE_WARP bool and replace it with a DEVICE_TYPE enum.
     Version 4, 2015-03-11 (Geoff Lang)
       - Add the ENABLE_AUTOMATIC_TRIM enum.
+	Version 5, 2019-09-24 (Nathan Zabriskie)
+	  - Add the EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D11on12_ANGLE enum
