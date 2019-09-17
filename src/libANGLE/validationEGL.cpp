@@ -467,6 +467,9 @@ Error ValidateGetPlatformDisplayCommon(EGLenum platform,
                                        << "EGL_ANGLE_platform_angle_d3d is not supported";
                             }
                             break;
+                        case EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D11on12:
+                            // TODO(nazabris): checks/defines
+                            break;
 
                         default:
                             return EglBadAttribute() << "Invalid value for "
