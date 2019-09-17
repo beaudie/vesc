@@ -1756,9 +1756,7 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
             {
                 const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(state.getVertexArray());
                 bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getAppliedElementArrayBufferID());
-
-                propagateProgramToVAO(state.getProgram(),
-                                      GetImplAs<VertexArrayGL>(state.getVertexArray()));
+                ANGLE_TRY(propagateProgramToVAO(context));
                 break;
             }
             case gl::State::DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING:
@@ -1815,8 +1813,7 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                 if (!program ||
                     !program->getExecutable().hasLinkedShaderStage(gl::ShaderType::Compute))
                 {
-                    propagateProgramToVAO(program,
-                                          GetImplAs<VertexArrayGL>(state.getVertexArray()));
+                    ANGLE_TRY(propagateProgramToVAO(context));
                 }
                 break;
             }
@@ -2043,12 +2040,10 @@ void StateManagerGL::setTextureCubemapSeamlessEnabled(bool enabled)
     }
 }
 
-void StateManagerGL::propagateProgramToVAO(const gl::Program *program, VertexArrayGL *vao)
+angle::Result StateManagerGL::propagateProgramToVAO(const gl::Context *context)
 {
-    if (vao == nullptr)
-    {
-        return;
-    }
+    const gl::Program *program = context->getState().getProgram();
+    VertexArrayGL *vao         = GetImplAs<VertexArrayGL>(context->getState().getVertexArray());
 
     // Number of views:
     if (mIsMultiviewEnabled)
@@ -2058,15 +2053,17 @@ void StateManagerGL::propagateProgramToVAO(const gl::Program *program, VertexArr
         {
             programNumViews = program->getNumViews();
         }
-        vao->applyNumViewsToDivisor(programNumViews);
+        ANGLE_TRY(vao->applyNumViewsToDivisor(context, programNumViews));
     }
 
     // Attribute enabled mask:
     if (program)
     {
-        vao->applyActiveAttribLocationsMask(
-            program->getExecutable().getActiveAttribLocationsMask());
+        ANGLE_TRY(vao->applyActiveAttribLocationsMask(
+            context, program->getExecutable().getActiveAttribLocationsMask()));
     }
+
+    return angle::Result::Continue;
 }
 
 void StateManagerGL::updateMultiviewBaseViewLayerIndexUniformImpl(
