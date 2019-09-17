@@ -1676,7 +1676,7 @@ void TextureVk::releaseImage(ContextVk *contextVk)
     {
         if (mOwnsImage)
         {
-            mImage->releaseImage(contextVk);
+            mImage->releaseImage(contextVk->getRenderer());
         }
         else
         {
@@ -1729,7 +1729,7 @@ void TextureVk::releaseStagingBuffer(ContextVk *contextVk)
 {
     if (mImage)
     {
-        mImage->releaseStagingBuffer(contextVk);
+        mImage->releaseStagingBuffer(contextVk->getRenderer());
     }
 }
 
