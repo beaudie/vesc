@@ -25,31 +25,34 @@ if (build_with_chromium) {
 } else {
   group("all") {
     testonly = true
-    deps = [
-      "//src/tests:angle_end2end_tests",
-      "//src/tests:angle_perftests",
-      "//src/tests:angle_unittests",
-    ]
-    if (!is_fuchsia) {
+    if (!angle_is_winuwp) {
       deps += [
-        "//src/tests:angle_white_box_perftests",
-        "//src/tests:angle_white_box_tests",
+        "//src/tests:angle_end2end_tests",
+        "//src/tests:angle_perftests",
+        "//src/tests:angle_unittests",
       ]
-    }
-    if (build_angle_deqp_tests && !is_fuchsia) {
-      deps += [
-        "//src/tests:angle_deqp_egl_no_gtest",
-        "//src/tests:angle_deqp_egl_tests",
-        "//src/tests:angle_deqp_gles2_no_gtest",
-        "//src/tests:angle_deqp_gles2_tests",
-        "//src/tests:angle_deqp_gles31_no_gtest",
-        "//src/tests:angle_deqp_gles31_tests",
-        "//src/tests:angle_deqp_gles3_no_gtest",
-        "//src/tests:angle_deqp_gles3_tests",
-      ]
-    }
-    if (build_angle_gles1_conform_tests) {
-      deps += [ "//src/tests:angle_gles1_conformance_tests" ]
+
+      if (!is_fuchsia) {
+        deps += [
+          "//src/tests:angle_white_box_perftests",
+          "//src/tests:angle_white_box_tests",
+        ]
+      }
+      if (build_angle_deqp_tests && !is_fuchsia) {
+        deps += [
+          "//src/tests:angle_deqp_egl_no_gtest",
+          "//src/tests:angle_deqp_egl_tests",
+          "//src/tests:angle_deqp_gles2_no_gtest",
+          "//src/tests:angle_deqp_gles2_tests",
+          "//src/tests:angle_deqp_gles31_no_gtest",
+          "//src/tests:angle_deqp_gles31_tests",
+          "//src/tests:angle_deqp_gles3_no_gtest",
+          "//src/tests:angle_deqp_gles3_tests",
+        ]
+      }
+      if (build_angle_gles1_conform_tests) {
+        deps += [ "//src/tests:angle_gles1_conformance_tests" ]
+      }
     }
   }
 }
@@ -154,7 +157,8 @@ angle_test("angle_unittests") {
   }
 }
 
-if (is_win || is_linux || is_mac || is_android || is_fuchsia) {
+if ((is_win && !angle_is_winuwp) || is_linux || is_mac || is_android ||
+    is_fuchsia) {
   import("angle_end2end_tests.gni")
 
   angle_test("angle_end2end_tests") {
@@ -209,7 +213,7 @@ if (is_win || is_linux || is_mac || is_android || is_fuchsia) {
   }
 }
 
-if (is_win || is_linux || is_mac || is_android) {
+if ((is_win && !angle_is_winuwp) || is_linux || is_mac || is_android) {
   import("angle_white_box_tests.gni")
 
   angle_test("angle_white_box_tests") {
@@ -245,7 +249,7 @@ if (is_win || is_linux || is_mac || is_android) {
   }
 }
 
-if (is_win || is_linux || is_android || is_mac) {
+if ((is_win && !angle_is_winuwp) || is_linux || is_android || is_mac) {
   import("angle_perftests.gni")
 
   # This test suite is for perf tests that use ANGLE's internals in some direct way.
@@ -283,7 +287,8 @@ if (is_win || is_linux || is_android || is_mac) {
   }
 }
 
-if (is_win || is_linux || is_android || is_mac || is_fuchsia) {
+if ((is_win && !angle_is_winuwp) || is_linux || is_android || is_mac ||
+    is_fuchsia) {
   import("angle_perftests.gni")
 
   # This test suite is designed to run against a generic GL implementation.
