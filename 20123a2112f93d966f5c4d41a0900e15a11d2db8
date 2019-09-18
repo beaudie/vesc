@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8679bf74_616e925f",
+        "filename": "src/compiler/translator/ShaderVars.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-18T21:20:30Z",
+      "side": 1,
+      "message": "nice catch",
+      "range": {
+        "startLine": 104,
+        "startChar": 4,
+        "endLine": 104,
+        "endChar": 34
+      },
+      "revId": "20123a2112f93d966f5c4d41a0900e15a11d2db8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62b62085_9337e40d",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-18T21:20:30Z",
+      "side": 1,
+      "message": "can you compare against GL_TRUE here?",
+      "range": {
+        "startLine": 927,
+        "startChar": 12,
+        "endLine": 927,
+        "endChar": 13
+      },
+      "revId": "20123a2112f93d966f5c4d41a0900e15a11d2db8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cce3c8ff_deed47a6",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-18T21:20:30Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 318,
+        "startChar": 39,
+        "endLine": 318,
+        "endChar": 40
+      },
+      "revId": "20123a2112f93d966f5c4d41a0900e15a11d2db8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3393b69c_09daf273",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-18T21:20:30Z",
+      "side": 1,
+      "message": "can you compare against GL_TRUE here?",
+      "range": {
+        "startLine": 1468,
+        "startChar": 27,
+        "endLine": 1468,
+        "endChar": 28
+      },
+      "revId": "20123a2112f93d966f5c4d41a0900e15a11d2db8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ab512dc2_82b62d7e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-18T21:20:30Z",
+      "side": 1,
+      "message": "can you check against VK_TRUE here?",
+      "range": {
+        "startLine": 91,
+        "startChar": 51,
+        "endLine": 91,
+        "endChar": 53
+      },
+      "revId": "20123a2112f93d966f5c4d41a0900e15a11d2db8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5cea0ac4_70287c83",
+        "filename": "src/libANGLE/renderer/vulkan/vk_wrapper.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-18T21:20:30Z",
+      "side": 1,
+      "message": "same here.",
+      "range": {
+        "startLine": 192,
+        "startChar": 15,
+        "endLine": 192,
+        "endChar": 16
+      },
+      "revId": "20123a2112f93d966f5c4d41a0900e15a11d2db8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
