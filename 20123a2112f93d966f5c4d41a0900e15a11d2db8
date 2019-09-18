@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "4dea43fa_26e84756",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 1115160
+      },
+      "writtenOn": "2019-09-18T21:32:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62b62085_9337e40d",
+      "range": {
+        "startLine": 927,
+        "startChar": 12,
+        "endLine": 927,
+        "endChar": 13
+      },
+      "revId": "20123a2112f93d966f5c4d41a0900e15a11d2db8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cce3c8ff_deed47a6",
         "filename": "src/libANGLE/VertexArray.cpp",
         "patchSetId": 2
