@@ -341,6 +341,8 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
 
     const gl::OverlayType *getOverlay() const { return mState.getOverlay(); }
 
+    uint64_t getMaxFenceWaitTimeNs() const;
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
