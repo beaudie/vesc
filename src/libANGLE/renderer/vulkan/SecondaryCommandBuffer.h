@@ -52,6 +52,7 @@ enum class CommandID : uint16_t
     DrawInstanced,
     DrawInstancedBaseInstance,
     DrawIndexedIndirect,
+    DrawIndirect,
     EndQuery,
     ExecutionBarrier,
     FillBuffer,
@@ -490,6 +491,11 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                              VkDeviceSize offset,
                              uint32_t drawCount,
                              uint32_t stride);
+
+    void drawIndirect(const Buffer &buffer,
+                      VkDeviceSize offset,
+                      uint32_t drawCount,
+                      uint32_t stride);
 
     void endQuery(VkQueryPool queryPool, uint32_t query);
 
@@ -969,6 +975,18 @@ ANGLE_INLINE void SecondaryCommandBuffer::drawIndexedIndirect(const Buffer &buff
     paramStruct->offset    = offset;
     paramStruct->drawCount = drawCount;
     paramStruct->stride    = stride;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::drawIndirect(const Buffer &buffer,
+                                                       VkDeviceSize offset,
+                                                       uint32_t drawCount,
+                                                       uint32_t stride)
+{
+    DrawIndirectParams *paramStruct = initCommand<DrawIndirectParams>(CommandID::DrawIndirect);
+    paramStruct->buffer             = buffer.getHandle();
+    paramStruct->offset             = offset;
+    paramStruct->drawCount          = drawCount;
+    paramStruct->stride             = stride;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::endQuery(VkQueryPool queryPool, uint32_t query)

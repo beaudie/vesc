@@ -390,6 +390,17 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                    gl::DrawElementsType indexType,
                                    const void *indices,
                                    vk::CommandBuffer **commandBufferOut);
+    angle::Result setupIndirectDrawHelper(const gl::Context *context,
+                                          gl::PrimitiveMode mode,
+                                          gl::Buffer *indirectBuffer,
+                                          const void *offset,
+                                          DirtyBits dirtyMask,
+                                          vk::CommandBuffer **commandBufferOut);
+    angle::Result setupIndirectDraw(const gl::Context *context,
+                                    gl::PrimitiveMode mode,
+                                    gl::Buffer *indirectBuffer,
+                                    const void *offset,
+                                    vk::CommandBuffer **commandBufferOut);
     angle::Result setupIndexedIndirectDraw(const gl::Context *context,
                                            gl::PrimitiveMode mode,
                                            gl::DrawElementsType indexType,

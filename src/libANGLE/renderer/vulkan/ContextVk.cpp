@@ -584,31 +584,14 @@ angle::Result ContextVk::setupIndexedDraw(const gl::Context *context,
                      mIndexedDirtyBitsMask, commandBufferOut);
 }
 
-angle::Result ContextVk::setupIndexedIndirectDraw(const gl::Context *context,
-                                                  gl::PrimitiveMode mode,
-                                                  gl::DrawElementsType indexType,
-                                                  gl::Buffer *indirectBuffer,
-                                                  const void *offset,
-                                                  vk::CommandBuffer **commandBufferOut)
+angle::Result ContextVk::setupIndirectDrawHelper(const gl::Context *context,
+                                                 gl::PrimitiveMode mode,
+                                                 gl::Buffer *indirectBuffer,
+                                                 const void *offset,
+                                                 DirtyBits dirtyMask,
+                                                 vk::CommandBuffer **commandBufferOut)
 {
     ASSERT(mode != gl::PrimitiveMode::LineLoop);
-
-    if (indexType != mCurrentDrawElementsType)
-    {
-        mCurrentDrawElementsType = indexType;
-        setIndexBufferDirty();
-    }
-
-    const gl::Buffer *indexBuffer = mVertexArray->getState().getElementArrayBuffer();
-    ASSERT(indexBuffer);
-
-    if (indexType == gl::DrawElementsType::UnsignedByte &&
-        mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
-    {
-        BufferVk *indexVk     = vk::GetImpl(indexBuffer);
-        BufferVk *cmdBufferVk = vk::GetImpl(indirectBuffer);
-        ANGLE_TRY(mVertexArray->convertIndexBufferIndirectGPU(this, cmdBufferVk, indexVk, offset));
-    }
 
     // Set any dirty bits that depend on draw call parameters or other objects.
     if (mode != mCurrentDrawMode)
@@ -668,7 +651,7 @@ angle::Result ContextVk::setupIndexedIndirectDraw(const gl::Context *context,
         return angle::Result::Stop;
     }
 
-    DirtyBits dirtyBits = mGraphicsDirtyBits & mIndexedDirtyBitsMask;
+    DirtyBits dirtyBits = mGraphicsDirtyBits & dirtyMask;
 
     if (dirtyBits.none())
         return angle::Result::Continue;
@@ -679,9 +662,49 @@ angle::Result ContextVk::setupIndexedIndirectDraw(const gl::Context *context,
         ANGLE_TRY((this->*mGraphicsDirtyBitHandlers[dirtyBit])(context, *commandBufferOut));
     }
 
-    mGraphicsDirtyBits &= ~mIndexedDirtyBitsMask;
+    mGraphicsDirtyBits &= ~dirtyMask;
 
     return angle::Result::Continue;
+}
+
+angle::Result ContextVk::setupIndirectDraw(const gl::Context *context,
+                                           gl::PrimitiveMode mode,
+                                           gl::Buffer *indirectBuffer,
+                                           const void *offset,
+                                           vk::CommandBuffer **commandBufferOut)
+{
+    return setupIndirectDrawHelper(context, mode, indirectBuffer, offset, mNonIndexedDirtyBitsMask,
+                                   commandBufferOut);
+}
+
+angle::Result ContextVk::setupIndexedIndirectDraw(const gl::Context *context,
+                                                  gl::PrimitiveMode mode,
+                                                  gl::DrawElementsType indexType,
+                                                  gl::Buffer *indirectBuffer,
+                                                  const void *offset,
+                                                  vk::CommandBuffer **commandBufferOut)
+{
+    ASSERT(mode != gl::PrimitiveMode::LineLoop);
+
+    if (indexType != mCurrentDrawElementsType)
+    {
+        mCurrentDrawElementsType = indexType;
+        setIndexBufferDirty();
+    }
+
+    const gl::Buffer *indexBuffer = mVertexArray->getState().getElementArrayBuffer();
+    ASSERT(indexBuffer);
+
+    if (indexType == gl::DrawElementsType::UnsignedByte &&
+        mGraphicsDirtyBits[DIRTY_BIT_INDEX_BUFFER])
+    {
+        BufferVk *indexVk     = vk::GetImpl(indexBuffer);
+        BufferVk *cmdBufferVk = vk::GetImpl(indirectBuffer);
+        ANGLE_TRY(mVertexArray->convertIndexBufferIndirectGPU(this, cmdBufferVk, indexVk, offset));
+    }
+
+    return setupIndirectDrawHelper(context, mode, indirectBuffer, offset, mIndexedDirtyBitsMask,
+                                   commandBufferOut);
 }
 
 angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
@@ -1577,8 +1600,19 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
         return angle::Result::Stop;
     }
 
-    ANGLE_VK_UNREACHABLE(this);
-    return angle::Result::Stop;
+    gl::Buffer *indirectBuffer = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
+    ASSERT(indirectBuffer);
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    vk::BufferHelper &buffer         = vk::GetImpl(indirectBuffer)->getBuffer();
+
+    ANGLE_TRY(setupIndirectDraw(context, mode, indirectBuffer, indirect, &commandBuffer));
+
+    vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
+    buffer.onRead(framebuffer, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
+
+    commandBuffer->drawIndirect(buffer.getBuffer(), reinterpret_cast<VkDeviceSize>(indirect), 1, 0);
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
