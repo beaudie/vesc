@@ -584,7 +584,6 @@
 2830 VULKAN ANDROID : dEQP-GLES3.functional.clipping.line.long_line_clip = FAIL
 
 // Base/Max levels:
-3148 VULKAN : dEQP-GLES3.functional.texture.mipmap.*max_level* = SKIP
 3148 VULKAN : dEQP-GLES3.functional.shaders.texture_functions.texturesize.* = SKIP
 
 // Misc unimplemented:

@@ -655,6 +655,7 @@ class ImageHelper final : public CommandGraphResource
                        GLint samples,
                        VkImageUsageFlags usage,
                        uint32_t baseLevel,
+                       uint32_t maxLevel,
                        uint32_t mipLevels,
                        uint32_t layerCount);
     angle::Result initExternal(Context *context,
@@ -666,6 +667,7 @@ class ImageHelper final : public CommandGraphResource
                                ImageLayout initialLayout,
                                const void *externalImageCreateInfo,
                                uint32_t baseLevel,
+                               uint32_t maxLevel,
                                uint32_t mipLevels,
                                uint32_t layerCount);
     angle::Result initMemory(Context *context,
@@ -866,6 +868,12 @@ class ImageHelper final : public CommandGraphResource
     uint32_t getBaseLevel();
     void setBaseLevel(uint32_t baseLevel);
 
+    uint32_t getMaxLevel();
+    void setMaxLevel(uint32_t maxLevel);
+
+    uint32_t getHighestLevel();
+    void setHighestLevel(uint32_t level);
+
   private:
     void forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                    ImageLayout newLayout,
@@ -960,12 +968,19 @@ class ImageHelper final : public CommandGraphResource
 
     // Cached properties.
     uint32_t mBaseLevel;
+    uint32_t mMaxLevel;
     uint32_t mLayerCount;
     uint32_t mLevelCount;
 
     // Staging buffer
     vk::DynamicBuffer mStagingBuffer;
     std::vector<SubresourceUpdate> mSubresourceUpdates;
+
+    // Track the highest mip level that we've seen for this vkImage,
+    // which can change as texture max level moves around.  We use
+    // this to ensure we always propagate all the current image data
+    // for staged updates.
+    uint32_t mHighestLevel;
 };
 
 class FramebufferHelper : public CommandGraphResource

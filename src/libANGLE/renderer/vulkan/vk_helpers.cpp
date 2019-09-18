@@ -1464,7 +1464,9 @@ ImageHelper::ImageHelper()
       mSamples(0),
       mCurrentLayout(ImageLayout::Undefined),
       mCurrentQueueFamilyIndex(std::numeric_limits<uint32_t>::max()),
+      mHighestLevel(0),
       mBaseLevel(0),
+      mMaxLevel(0),
       mLayerCount(0),
       mLevelCount(0)
 {}
@@ -1478,7 +1480,9 @@ ImageHelper::ImageHelper(ImageHelper &&other)
       mSamples(other.mSamples),
       mCurrentLayout(other.mCurrentLayout),
       mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
+      mHighestLevel(other.mHighestLevel),
       mBaseLevel(other.mBaseLevel),
+      mMaxLevel(other.mMaxLevel),
       mLayerCount(other.mLayerCount),
       mLevelCount(other.mLevelCount),
       mStagingBuffer(std::move(other.mStagingBuffer)),
@@ -1487,6 +1491,8 @@ ImageHelper::ImageHelper(ImageHelper &&other)
     ASSERT(this != &other);
     other.mCurrentLayout = ImageLayout::Undefined;
     other.mBaseLevel     = 0;
+    other.mMaxLevel      = 0;
+    other.mHighestLevel  = 0;
     other.mLayerCount    = 0;
     other.mLevelCount    = 0;
 }
@@ -1512,11 +1518,13 @@ angle::Result ImageHelper::init(Context *context,
                                 GLint samples,
                                 VkImageUsageFlags usage,
                                 uint32_t baseLevel,
+                                uint32_t maxLevel,
                                 uint32_t mipLevels,
                                 uint32_t layerCount)
 {
     return initExternal(context, textureType, extents, format, samples, usage,
-                        ImageLayout::Undefined, nullptr, baseLevel, mipLevels, layerCount);
+                        ImageLayout::Undefined, nullptr, baseLevel, maxLevel, mipLevels,
+                        layerCount);
 }
 
 angle::Result ImageHelper::initExternal(Context *context,
@@ -1528,6 +1536,7 @@ angle::Result ImageHelper::initExternal(Context *context,
                                         ImageLayout initialLayout,
                                         const void *externalImageCreateInfo,
                                         uint32_t baseLevel,
+                                        uint32_t maxLevel,
                                         uint32_t mipLevels,
                                         uint32_t layerCount)
 {
@@ -1537,6 +1546,7 @@ angle::Result ImageHelper::initExternal(Context *context,
     mFormat     = &format;
     mSamples    = samples;
     mBaseLevel  = baseLevel;
+    mMaxLevel   = maxLevel;
     mLevelCount = mipLevels;
     mLayerCount = layerCount;
 
@@ -1825,6 +1835,25 @@ void ImageHelper::setBaseLevel(uint32_t baseLevel)
     mBaseLevel = baseLevel;
 }
 
+uint32_t ImageHelper::getMaxLevel()
+{
+    return mMaxLevel;
+}
+
+void ImageHelper::setMaxLevel(uint32_t maxLevel)
+{
+    mMaxLevel = maxLevel;
+}
+
+uint32_t ImageHelper::getHighestLevel()
+{
+    return mHighestLevel;
+}
+
+void ImageHelper::setHighestLevel(uint32_t level)
+{
+    mHighestLevel = level;
+}
 void ImageHelper::forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
                                             ImageLayout newLayout,
                                             uint32_t newQueueFamilyIndex,
@@ -2609,7 +2638,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
         // If the update level is not within the requested range, skip the update.
         const bool isUpdateLevelOutsideRange =
-            updateMipLevel < (levelStart + mBaseLevel) || updateMipLevel > (levelEnd + mBaseLevel);
+            updateMipLevel < (levelStart + mBaseLevel) ||
+            (updateMipLevel > (levelEnd + mBaseLevel) || updateMipLevel > mMaxLevel);
 
         // If the update layers don't intersect the requested layers, skip the update.
         const bool areUpdateLayersOutsideRange =
