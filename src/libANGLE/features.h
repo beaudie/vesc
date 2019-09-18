@@ -53,8 +53,11 @@
 #endif
 
 // Controls if our threading code uses std::async or falls back to single-threaded operations.
+// Note that we can't use easily use std::async in UWPs due to UWP threading restrictions.
 #if !defined(ANGLE_STD_ASYNC_WORKERS)
-#    define ANGLE_STD_ASYNC_WORKERS ANGLE_ENABLED
+#    if !defined(ANGLE_ENABLE_WINDOWS_UWP)
+#        define ANGLE_STD_ASYNC_WORKERS ANGLE_ENABLED
+#    endif
 #endif  // !defined(ANGLE_STD_ASYNC_WORKERS)
 
 #endif  // LIBANGLE_FEATURES_H_
