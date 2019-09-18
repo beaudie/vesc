@@ -1133,33 +1133,34 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
 
 angle::Result TextureVk::setBaseLevel(const gl::Context *context, GLuint baseLevel)
 {
+    return angle::Result::Continue;
+}
+
+angle::Result TextureVk::changeLevels(ContextVk *contextVk, GLuint baseLevel, GLuint maxLevel)
+{
     if (!mImage)
     {
         return angle::Result::Continue;
     }
 
-    // This should be caught in the front end
-    ASSERT(baseLevel != mImage->getBaseLevel());
-
-    // Track the previous level for use in update loop below
+    // Track the previous levels for use in update loop below
     uint32_t previousBaseLevel = mImage->getBaseLevel();
 
-    // Track the base level in our ImageHelper
-    mImage->setBaseLevel(baseLevel);
+    // Track the levels in our ImageHelper
+    mImage->setBaseAndMaxLevels(baseLevel, maxLevel);
 
     if (!mImage->valid())
     {
-        // No further work to do, let staged updates handle the new base level
+        // No further work to do, let staged updates handle the new levels
         return angle::Result::Continue;
     }
 
     // If we get here, we already have a valid image and it needs to be recreated
-    // to reflect new base level.  We should first back up any data we need to
+    // to reflect new base or max levels.  We should first back up any data we need to
     // preserve by staging it as updates to the new image, then free the old one.
-    ContextVk *contextVk = vk::GetImpl(context);
 
-    // Stage updates for all current levels in the texture
-    uint32_t updateCount = mState.getMipmapMaxLevel() + 1;
+    // Stage updates for all levels in the vk image, even if they won't fit yet
+    uint32_t updateCount = mImage->getLevelCount();
 
     // The staged updates won't be applied until the image has the requisite mip levels
     for (uint32_t layer = 0; layer < mImage->getLayerCount(); layer++)
@@ -1212,7 +1213,7 @@ angle::Result TextureVk::setBaseLevel(const gl::Context *context, GLuint baseLev
     onStagingBufferChange();
 
     // Now that we've staged all the updates, release the current image so that it will be
-    // recreated with the correct number of mip levels and base level.
+    // recreated with the correct number of mip levels, base level, and max level.
     releaseImage(contextVk);
 
     return angle::Result::Continue;
@@ -1388,6 +1389,14 @@ angle::Result TextureVk::syncState(const gl::Context *context,
                                    const gl::Texture::DirtyBits &dirtyBits)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+
+    // Set base and max level before initializing the image
+    if (dirtyBits.test(gl::Texture::DIRTY_BIT_MAX_LEVEL) ||
+        dirtyBits.test(gl::Texture::DIRTY_BIT_BASE_LEVEL))
+    {
+        ANGLE_TRY(
+            changeLevels(contextVk, mState.getEffectiveBaseLevel(), mState.getEffectiveMaxLevel()));
+    }
 
     // Initialize the image storage and flush the pixel buffer.
     ANGLE_TRY(ensureImageInitialized(contextVk));
@@ -1684,7 +1693,8 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     gl_vk::GetExtentsAndLayerCount(mState.getType(), extents, &vkExtent, &layerCount);
 
     ANGLE_TRY(mImage->init(contextVk, mState.getType(), vkExtent, format, 1, imageUsageFlags,
-                           mState.getEffectiveBaseLevel(), levelCount, layerCount));
+                           mState.getEffectiveBaseLevel(), mState.getEffectiveMaxLevel(),
+                           levelCount, layerCount));
 
     const VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 

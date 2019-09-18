@@ -335,6 +335,8 @@ class TextureVk : public TextureImpl
 
     const TextureVkViews *getTextureViews() const;
 
+    angle::Result changeLevels(ContextVk *contextVk, GLuint baseLevel, GLuint maxLevel);
+
     bool mOwnsImage;
 
     gl::TextureType mImageNativeType;

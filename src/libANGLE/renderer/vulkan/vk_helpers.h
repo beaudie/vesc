@@ -655,6 +655,7 @@ class ImageHelper final : public CommandGraphResource
                        GLint samples,
                        VkImageUsageFlags usage,
                        uint32_t baseLevel,
+                       uint32_t maxLevel,
                        uint32_t mipLevels,
                        uint32_t layerCount);
     angle::Result initExternal(Context *context,
@@ -666,6 +667,7 @@ class ImageHelper final : public CommandGraphResource
                                ImageLayout initialLayout,
                                const void *externalImageCreateInfo,
                                uint32_t baseLevel,
+                               uint32_t maxLevel,
                                uint32_t mipLevels,
                                uint32_t layerCount);
     angle::Result initMemory(Context *context,
@@ -864,7 +866,7 @@ class ImageHelper final : public CommandGraphResource
                               vk::CommandBuffer *commandBuffer);
 
     uint32_t getBaseLevel();
-    void setBaseLevel(uint32_t baseLevel);
+    void setBaseAndMaxLevels(uint32_t baseLevel, uint32_t maxLevel);
 
   private:
     void forceChangeLayoutAndQueue(VkImageAspectFlags aspectMask,
@@ -960,6 +962,7 @@ class ImageHelper final : public CommandGraphResource
 
     // Cached properties.
     uint32_t mBaseLevel;
+    uint32_t mMaxLevel;
     uint32_t mLayerCount;
     uint32_t mLevelCount;
 
