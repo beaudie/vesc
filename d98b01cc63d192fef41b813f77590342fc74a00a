@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17bfcd97_a5670194",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1239,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-18T20:40:54Z",
+      "side": 1,
+      "message": "Should this check that the new serial is not earlier than the current?\n\nASSERT(serial \u003e\u003d use-\u003eserial);\n\nThe scenario I\u0027m thinking of is:\n\nStart:\nuse-\u003ecounter \u003d 2\nuse-\u003eserial \u003d 0\n\nThread 1 calls updateResourceUses():\nuse-\u003ecounter \u003d 1\nuse-\u003eserial \u003d 2\n\nThread 2 calls updateResourceUses():\nuse-\u003ecounter \u003d 0\nuse-\u003eserial \u003d 1\n\nThen we attempt to free the resource when we see serial 1 has completed, even though it\u0027s still needed for serial 2.\n\nOr would all of the work for serial 1 need to be submitted before serial 2 can be started/submitted, so this can\u0027t happen?",
+      "revId": "d98b01cc63d192fef41b813f77590342fc74a00a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
