@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33b8144b_b52782f4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-18T18:07:47Z",
+      "side": 1,
+      "message": "nit: can make this private.",
+      "range": {
+        "startLine": 344,
+        "startChar": 5,
+        "endLine": 344,
+        "endChar": 43
+      },
+      "revId": "e601114a0965649421e4d47536bfa52476fb2822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee27927e_29259ade",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-18T18:07:47Z",
+      "side": 1,
+      "message": "nit: you can replace this with context-\u003egetRenderer()-\u003egetMaxFenceWaitTimeNs()",
+      "range": {
+        "startLine": 512,
+        "startChar": 25,
+        "endLine": 512,
+        "endChar": 52
+      },
+      "revId": "e601114a0965649421e4d47536bfa52476fb2822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "90b53231_e320200c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1707,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-18T18:07:47Z",
+      "side": 1,
+      "message": "tiny nit: use #if defined(NDEBUG) for style consistency (and to generally make chaining rules easier)",
+      "range": {
+        "startLine": 1707,
+        "startChar": 0,
+        "endLine": 1707,
+        "endChar": 13
+      },
+      "revId": "e601114a0965649421e4d47536bfa52476fb2822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
