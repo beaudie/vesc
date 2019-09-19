@@ -494,8 +494,7 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         mGraphicsDirtyBits |= mNewGraphicsCommandBufferDirtyBits;
 
         gl::Rectangle scissoredRenderArea = mDrawFramebuffer->getScissoredRenderArea(this);
-        if (!mDrawFramebuffer->appendToStartedRenderPass(mCurrentQueueSerial, &mCommandGraph,
-                                                         scissoredRenderArea,
+        if (!mDrawFramebuffer->appendToStartedRenderPass(&mCommandGraph, scissoredRenderArea,
                                                          &mRenderPassCommandBuffer))
         {
             ANGLE_TRY(mDrawFramebuffer->startNewRenderPass(this, scissoredRenderArea,
@@ -2991,7 +2990,7 @@ void ContextVk::waitForSwapchainImageIfNecessary()
         if (waitSemaphore.valid())
         {
             addWaitSemaphore(waitSemaphore.getHandle());
-            releaseObject(getCurrentQueueSerial(), &waitSemaphore);
+            addGarbage(&waitSemaphore);
         }
     }
 }
