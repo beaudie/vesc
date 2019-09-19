@@ -22,6 +22,30 @@
       "revId": "23691060970a848d680bd36db1dbda0936596e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24e13041_452adbd1",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-19T17:34:57Z",
+      "side": 1,
+      "message": "I tried, but they are still failing on the CQ bots.   This is expected, since the Android devices in the farm are not running ToT git_master (which I\u0027m using for conformance), but Android Q (beta?) builds instead.\n\nThey likely won\u0027t get a public release of Android with the updated QC drivers until next year some time, so the tests will need to be disabled unless we want to get fancier with when we enable/disable the emulation based on what version of Android is running.   Does ANGLE support that kind of run-time decision making?",
+      "parentUuid": "101b599d_f10c4298",
+      "range": {
+        "startLine": 309,
+        "startChar": 0,
+        "endLine": 311,
+        "endChar": 81
+      },
+      "revId": "23691060970a848d680bd36db1dbda0936596e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
