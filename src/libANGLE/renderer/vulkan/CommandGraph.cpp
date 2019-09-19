@@ -250,28 +250,31 @@ bool CommandGraphResource::isResourceInUse(ContextVk *contextVk) const
     return mUse->counter > 0 || contextVk->isSerialInUse(mUse->serial);
 }
 
-angle::Result CommandGraphResource::recordCommands(ContextVk *context,
+angle::Result CommandGraphResource::recordCommands(ContextVk *contextVk,
                                                    CommandBuffer **commandBufferOut)
 {
-    onGraphAccess(context->getCommandGraph());
+    updateCurrentAccessNodes();
 
     if (!hasChildlessWritingNode() || hasStartedRenderPass())
     {
-        startNewCommands(context);
+        startNewCommands(contextVk);
         return mCurrentWritingNode->beginOutsideRenderPassRecording(
-            context, context->getCommandPool(), commandBufferOut);
+            contextVk, contextVk->getCommandPool(), commandBufferOut);
     }
 
     CommandBuffer *outsideRenderPassCommands = mCurrentWritingNode->getOutsideRenderPassCommands();
     if (!outsideRenderPassCommands->valid())
     {
         ANGLE_TRY(mCurrentWritingNode->beginOutsideRenderPassRecording(
-            context, context->getCommandPool(), commandBufferOut));
+            contextVk, contextVk->getCommandPool(), commandBufferOut));
     }
     else
     {
         *commandBufferOut = outsideRenderPassCommands;
     }
+
+    // Store reference to usage in graph.
+    contextVk->getCommandGraph()->onResourceUse(mUse);
 
     return angle::Result::Continue;
 }
@@ -852,6 +855,7 @@ CommandGraph::CommandGraph(bool enableGraphDiagnostics, angle::PoolAllocator *po
 CommandGraph::~CommandGraph()
 {
     ASSERT(empty());
+    ASSERT(mResourceUses.empty());
 }
 
 CommandGraphNode *CommandGraph::allocateNode(CommandGraphNodeFunction function)
