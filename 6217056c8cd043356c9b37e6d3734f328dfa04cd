@@ -16,6 +16,24 @@
       "revId": "6217056c8cd043356c9b37e6d3734f328dfa04cd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1ac400ac_2cb1fe11",
+        "filename": "include/platform/FeaturesGL.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-19T13:56:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ab31c167_b818d44d",
+      "revId": "6217056c8cd043356c9b37e6d3734f328dfa04cd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
