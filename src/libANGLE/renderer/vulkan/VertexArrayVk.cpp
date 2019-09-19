@@ -120,6 +120,10 @@ VertexArrayVk::VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &s
                            kDynamicIndexDataSize, true);
     mTranslatedByteIndexData.init(renderer, vk::kIndexBufferUsageFlags, vk::kIndexBufferAlignment,
                                   kDynamicIndexDataSize, true);
+    mTranslatedLineLoopIndexData.init(renderer, vk::kIndexBufferUsageFlags,
+                                      vk::kIndexBufferAlignment, kDynamicIndexDataSize, true);
+    mTranslatedLineLoopCmdData.init(renderer, vk::kIndexBufferUsageFlags, vk::kIndexBufferAlignment,
+                                    kDynamicIndexDataSize, true);
 }
 
 VertexArrayVk::~VertexArrayVk() {}
@@ -133,6 +137,8 @@ void VertexArrayVk::destroy(const gl::Context *context)
     mDynamicVertexData.release(contextVk);
     mDynamicIndexData.release(contextVk);
     mTranslatedByteIndexData.release(contextVk);
+    mTranslatedLineLoopIndexData.release(contextVk);
+    mTranslatedLineLoopCmdData.release(contextVk);
     mLineLoopHelper.release(contextVk);
 }
 
@@ -190,6 +196,43 @@ angle::Result VertexArrayVk::convertIndexBufferIndirectGPU(ContextVk *contextVk,
 
     return contextVk->getUtils().convertIndexIndirectBuffer(contextVk, &cmdBufferVk->getBuffer(),
                                                             dest, src, params);
+}
+
+angle::Result VertexArrayVk::convertLineLoopIndexBufferIndirectGPU(ContextVk *contextVk,
+                                                                   BufferVk *cmdBufferVk,
+                                                                   BufferVk *indexBufferVk,
+                                                                   int indexSize,
+                                                                   const void *offset)
+{
+    intptr_t offsetIntoCmdData = reinterpret_cast<intptr_t>(offset);
+    size_t srcDataSize         = static_cast<size_t>(indexBufferVk->getSize()) + 1;
+
+    mTranslatedLineLoopIndexData.releaseInFlightBuffers(contextVk);
+    mTranslatedLineLoopCmdData.releaseInFlightBuffers(contextVk);
+
+    ANGLE_TRY(mTranslatedLineLoopIndexData.allocate(contextVk, indexSize * srcDataSize, nullptr,
+                                                    nullptr, &mCurrentElementArrayBufferOffset,
+                                                    nullptr));
+    mCurrentElementArrayBuffer = mTranslatedLineLoopIndexData.getCurrentBuffer();
+
+    VkDeviceSize destCmdOffset = 0;
+    ANGLE_TRY(mTranslatedLineLoopCmdData.allocate(contextVk, sizeof(VkDrawIndexedIndirectCommand),
+                                                  nullptr, nullptr, &destCmdOffset, nullptr));
+
+    vk::BufferHelper *dest    = mTranslatedLineLoopIndexData.getCurrentBuffer();
+    vk::BufferHelper *destCmd = mTranslatedLineLoopCmdData.getCurrentBuffer();
+    vk::BufferHelper *src     = &indexBufferVk->getBuffer();
+
+    // Copy relevant section of the source into destination at allocated offset.  Note that the
+    // offset returned by allocate() above is in bytes. As is the indices offset pointer.
+    UtilsVk::ConvertLineLoopIndexIndirectParameters params = {};
+    params.cmdOffset    = static_cast<uint32_t>(offsetIntoCmdData);
+    params.dstCmdOffset = static_cast<uint32_t>(destCmdOffset);
+    params.dstOffset    = static_cast<uint32_t>(mCurrentElementArrayBufferOffset);
+    params.is32Bit      = srcDataSize == 4;
+
+    return contextVk->getUtils().convertLineLoopIndexIndirectBuffer(
+        contextVk, &cmdBufferVk->getBuffer(), destCmd, dest, src, params);
 }
 
 angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
