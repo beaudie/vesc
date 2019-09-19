@@ -128,6 +128,30 @@
       "revId": "d98b01cc63d192fef41b813f77590342fc74a00a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "29b39da2_63fee67b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-19T20:45:51Z",
+      "side": 1,
+      "message": "I understand, my question is could it not be a pointer, just a regular \u0027ResourceUse mUse\u0027?\n\nCommandGraph::mResourceUses would be a std::vector\u003cResourceUse*\u003e.\n\nThe main reason for it to be in a shared_ptr is that the CommandGraphResource::mUse could outlive the CommandGraphResource and I don\u0027t think that\u0027s the intent.  Right now it does a double ref-counting by having the ref count in the shared_ptr and the counter which both get incremented and decremented when ResourceUse is stored in CommandGraph.",
+      "parentUuid": "a19ffd4b_590c1b2e",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 380,
+        "endChar": 27
+      },
+      "revId": "d98b01cc63d192fef41b813f77590342fc74a00a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
