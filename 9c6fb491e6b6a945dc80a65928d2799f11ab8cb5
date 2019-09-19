@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c016c127_7f988a40",
+        "filename": "src/tests/gles1_conformance_tests/ConformanceTests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T16:36:05Z",
+      "side": 1,
+      "message": "you can remove this as well.\n\nfyi you can use http://anglebug.com/#### links now.",
+      "range": {
+        "startLine": 344,
+        "startChar": 4,
+        "endLine": 344,
+        "endChar": 32
+      },
+      "revId": "9c6fb491e6b6a945dc80a65928d2799f11ab8cb5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
