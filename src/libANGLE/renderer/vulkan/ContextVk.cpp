@@ -656,6 +656,59 @@ angle::Result ContextVk::setupIndexedIndirectDraw(const gl::Context *context,
                                    indirectBufferOut);
 }
 
+angle::Result ContextVk::setupLineLoopIndexedIndirectDraw(const gl::Context *context,
+                                                          gl::PrimitiveMode mode,
+                                                          gl::DrawElementsType indexType,
+                                                          const gl::Buffer *indirectBuffer,
+                                                          VkDeviceSize indirectBufferOffset,
+                                                          const gl::Buffer *indexBuffer,
+                                                          vk::CommandBuffer **commandBufferOut,
+                                                          vk::Buffer **indirectBufferOut,
+                                                          VkDeviceSize *indirectBufferOffsetOut)
+{
+    ASSERT(mode == gl::PrimitiveMode::LineLoop);
+
+    BufferVk *indirectBufferVk                = vk::GetImpl(indirectBuffer);
+    vk::BufferHelper *indirectBufferHelperOut = nullptr;
+
+    ANGLE_TRY(mVertexArray->handleLineLoopIndirect(this, indirectBufferVk, indexType,
+                                                   indirectBufferOffset, &indirectBufferHelperOut,
+                                                   indirectBufferOffsetOut));
+
+    *indirectBufferOut = const_cast<vk::Buffer *>(&indirectBufferHelperOut->getBuffer());
+
+    if (indexType != mCurrentDrawElementsType)
+    {
+        mCurrentDrawElementsType = indexType;
+        setIndexBufferDirty();
+    }
+
+    // Must be called before the command buffer is started. Can call finish.
+    // TODO: Can this happen with Indirect?
+    if (context->getStateCache().hasAnyActiveClientAttrib())
+    {
+        // TODO: I don't know what vertices will be used, that's in GPU memory, just update
+        // everything?
+        // ANGLE_TRY(mVertexArray->updateClientAttribs(context, firstVertex, vertexOrIndexCount,
+        //                                            instanceCount, indexTypeOrNone, indices));
+        mGraphicsDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
+    }
+
+    if (mState.isTransformFeedbackActiveUnpaused())
+    {
+        // TODO: what happens with transform feedback and indirect calls?
+        // Spec says: An INVALID_OPERATION error is generated if transform feedback is active and
+        // not paused
+        ANGLE_VK_UNREACHABLE(this);
+        return angle::Result::Stop;
+    }
+
+    vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
+    indirectBufferHelperOut->onRead(this, framebuffer, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
+
+    return setupDrawHelper(context, mode, mIndexedDirtyBitsMask, commandBufferOut);
+}
+
 angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
                                            gl::PrimitiveMode mode,
                                            GLint firstVertex,
@@ -1566,7 +1619,8 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
                                               gl::DrawElementsType type,
                                               const void *indirect)
 {
-    gl::Buffer *indirectBuffer = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
+    VkDeviceSize indirectBufferOffset = reinterpret_cast<VkDeviceSize>(indirect);
+    gl::Buffer *indirectBuffer        = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
     ASSERT(indirectBuffer);
 
     const gl::Buffer *indexBuffer = mVertexArray->getState().getElementArrayBuffer();
@@ -1581,18 +1635,21 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
     }
 
     vk::CommandBuffer *commandBuffer = nullptr;
-    vk::Buffer *buffer               = nullptr;
-
-    ANGLE_TRY(setupIndexedIndirectDraw(context, mode, type, &commandBuffer, &buffer));
+    vk::Buffer *indirectBufferFinal  = nullptr;
 
     if (mode == gl::PrimitiveMode::LineLoop)
     {
-        // TODO - http://anglebug.com/3564
-        ANGLE_VK_UNREACHABLE(this);
-        return angle::Result::Stop;
+        ANGLE_TRY(setupLineLoopIndexedIndirectDraw(
+            context, mode, type, indirectBuffer, indirectBufferOffset, indexBuffer, &commandBuffer,
+            &indirectBufferFinal, &indirectBufferOffset));
+    }
+    else
+    {
+        ANGLE_TRY(
+            setupIndexedIndirectDraw(context, mode, type, &commandBuffer, &indirectBufferFinal));
     }
 
-    commandBuffer->drawIndexedIndirect(*buffer, reinterpret_cast<VkDeviceSize>(indirect), 1, 0);
+    commandBuffer->drawIndexedIndirect(*indirectBufferFinal, indirectBufferOffset, 1, 0);
     return angle::Result::Continue;
 }
 
