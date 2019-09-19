@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ce2169b_86fee173",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T14:46:28Z",
+      "side": 1,
+      "message": "What happens if you have an invalid mip chain? i.e.\n\n16x16\n8x8\n0x0\n4x4\n0x0\n1x1\n\nor some other non-mip-complete sizes? Do you want to return \"4\" here, or \"6\", or \"2\"? It might not matter too much but it could be relevant in some edge cases.\n\nMaybe call this getMaxDefinedMipmapLevel() and return the max instead of a count. Or you could stop when you get a non-mip-complete level.",
+      "range": {
+        "startLine": 499,
+        "startChar": 21,
+        "endLine": 499,
+        "endChar": 41
+      },
+      "revId": "360042ef80f580980765f65db6b0c1f7d4a8777b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
