@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d2ccb225_1a041093",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1233,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T18:32:44Z",
+      "side": 1,
+      "message": "It\u0027s also updating the serials. Changed to releaseResourceUsesAndUpdateSerials.",
+      "parentUuid": "0dca7887_3890cedb",
+      "range": {
+        "startLine": 1233,
+        "startChar": 19,
+        "endLine": 1233,
+        "endChar": 37
+      },
+      "revId": "d98b01cc63d192fef41b813f77590342fc74a00a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "17bfcd97_a5670194",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
         "patchSetId": 17
@@ -39,6 +63,24 @@
       "revId": "d98b01cc63d192fef41b813f77590342fc74a00a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fee20978_4fa75f2f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1239,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T18:32:44Z",
+      "side": 1,
+      "message": "I did have a similar ASSERT in a later patch set. Moved here, will see if it passes.",
+      "parentUuid": "17bfcd97_a5670194",
+      "revId": "d98b01cc63d192fef41b813f77590342fc74a00a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -62,6 +104,30 @@
       "revId": "d98b01cc63d192fef41b813f77590342fc74a00a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a19ffd4b_590c1b2e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T18:32:44Z",
+      "side": 1,
+      "message": "It is a pointer. A shared_ptr to be specific. When we copy a shared_ptr around it\u0027ll internally addref/deref to an internal pointer.",
+      "parentUuid": "27465609_076f132c",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 380,
+        "endChar": 27
+      },
+      "revId": "d98b01cc63d192fef41b813f77590342fc74a00a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
