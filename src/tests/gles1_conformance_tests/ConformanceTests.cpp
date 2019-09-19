@@ -341,8 +341,6 @@ TEST_P(GLES1ConformanceTest, RescaleNormal)
 
 TEST_P(GLES1ConformanceTest, Scissor)
 {
-    // http://g.co/anglebug/3867
-    ANGLE_SKIP_TEST_IF(IsVulkan());
     ASSERT_NE(CONFORMANCE_TEST_ERROR, ScissorExec());
 }
 

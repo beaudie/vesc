@@ -150,7 +150,9 @@ struct FeaturesVk : FeatureSetBase
 
     // When the scissor is (0,0,0,0) on Windows Intel, the driver acts as if the scissor was
     // disabled.  Work-around this by setting the scissor to just outside of the render area
-    // (e.g. (renderArea.x, renderArea.y, 1, 1)). http://anglebug.com/3407
+    // (e.g. (renderArea.x, renderArea.y, 1, 1)).  The driver bug was fixed by at least version
+    // 25.20.100.6373, which correlates to a VkPhysicalDeviceProperties::driverVersion of
+    // 0x001918e5 (i.e. when this work-around can be disabled).  http://anglebug.com/3407
     Feature forceNonZeroScissor = {
         "force_non_zero_scissor", FeatureCategory::VulkanWorkarounds,
         "On Windows Intel, when the scissor is (0,0,0,0), the driver acts as if the "

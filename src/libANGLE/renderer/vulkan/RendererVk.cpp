@@ -57,6 +57,13 @@ constexpr uint64_t kMaxFenceWaitTimeNs = 10'000'000'000llu;
 // This value must be increased whenever ANGLE starts using functionality from a newer core
 // version of Vulkan.
 constexpr uint32_t kPreferredVulkanAPIVersion = VK_API_VERSION_1_1;
+// Earlier versions of the Intel Windows Vulkan driver had a scissor bug that is worked-around when
+// mFeatures.forceNonZeroScissor.enabled is set to true.  The bug was fixed at least by version
+// 25.20.100.6373, which correlates to a VkPhysicalDeviceProperties::driverVersion of 0x001918e5.
+// Drivers that are at least this version do not need the work-around.
+////constexpr uint32_t kIntelWindowsScissorBugFixedAtVersion = 0x001918e5;
+// FIXME/HACK: Try to find a version old enough for the bots.  Try 0x00191789 for 24.20.100.6025
+constexpr uint32_t kIntelWindowsScissorBugFixedAtVersion = 0x00191789;
 
 vk::ICD ChooseICDFromAttribs(const egl::AttributeMap &attribs)
 {
@@ -1292,7 +1299,8 @@ void RendererVk::initFeatures(const ExtensionNameList &deviceExtensionNames)
         mFeatures.forceOldRewriteStructSamplers.enabled = true;
     }
 
-    if (IsWindows() && IsIntel(mPhysicalDeviceProperties.vendorID))
+    if (IsWindows() && IsIntel(mPhysicalDeviceProperties.vendorID) &&
+        (mPhysicalDeviceProperties.driverVersion < kIntelWindowsScissorBugFixedAtVersion))
     {
         mFeatures.forceNonZeroScissor.enabled = true;
     }
