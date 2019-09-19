@@ -51,6 +51,7 @@ enum class CommandID : uint16_t
     DrawIndexedInstancedBaseVertexBaseInstance,
     DrawInstanced,
     DrawInstancedBaseInstance,
+    DrawIndexedIndirect,
     EndQuery,
     ExecutionBarrier,
     FillBuffer,
@@ -229,6 +230,15 @@ struct DrawIndexedInstancedBaseVertexBaseInstanceParams
     uint32_t firstInstance;
 };
 VERIFY_4_BYTE_ALIGNMENT(DrawIndexedInstancedBaseVertexBaseInstanceParams)
+
+struct DrawIndirectParams
+{
+    VkBuffer buffer;
+    VkDeviceSize offset;
+    uint32_t drawCount;
+    uint32_t stride;
+};
+VERIFY_4_BYTE_ALIGNMENT(DrawIndirectParams)
 
 struct DispatchParams
 {
@@ -475,6 +485,11 @@ class SecondaryCommandBuffer final : angle::NonCopyable
                                    uint32_t instanceCount,
                                    uint32_t firstVertex,
                                    uint32_t firstInstance);
+
+    void drawIndexedIndirect(const Buffer &buffer,
+                             VkDeviceSize offset,
+                             uint32_t drawCount,
+                             uint32_t stride);
 
     void endQuery(VkQueryPool queryPool, uint32_t query);
 
@@ -941,6 +956,19 @@ ANGLE_INLINE void SecondaryCommandBuffer::drawInstancedBaseInstance(uint32_t ver
     paramStruct->instanceCount = instanceCount;
     paramStruct->firstVertex   = firstVertex;
     paramStruct->firstInstance = firstInstance;
+}
+
+ANGLE_INLINE void SecondaryCommandBuffer::drawIndexedIndirect(const Buffer &buffer,
+                                                              VkDeviceSize offset,
+                                                              uint32_t drawCount,
+                                                              uint32_t stride)
+{
+    DrawIndirectParams *paramStruct =
+        initCommand<DrawIndirectParams>(CommandID::DrawIndexedIndirect);
+    paramStruct->buffer    = buffer.getHandle();
+    paramStruct->offset    = offset;
+    paramStruct->drawCount = drawCount;
+    paramStruct->stride    = stride;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::endQuery(VkQueryPool queryPool, uint32_t query)
