@@ -517,6 +517,25 @@ angle::Result UtilsVk::ensureConvertIndexIndirectResourcesInitialized(ContextVk 
                                       sizeof(ConvertIndexIndirectShaderParams));
 }
 
+angle::Result UtilsVk::ensureConvertIndexIndirectLineLoopResourcesInitialized(ContextVk *contextVk)
+{
+    if (mPipelineLayouts[Function::ConvertIndexIndirectLineLoopBuffer].valid())
+    {
+        return angle::Result::Continue;
+    }
+
+    VkDescriptorPoolSize setSizes[4] = {
+        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},  // cmd buffer
+        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},  // dest cmd buffer
+        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},  // source index buffer
+        {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1},  // dest index buffer
+    };
+
+    return ensureResourcesInitialized(contextVk, Function::ConvertIndexIndirectLineLoopBuffer,
+                                      setSizes, ArraySize(setSizes),
+                                      sizeof(ConvertIndexIndirectShaderParams));
+}
+
 angle::Result UtilsVk::ensureConvertVertexResourcesInitialized(ContextVk *contextVk)
 {
     if (mPipelineLayouts[Function::ConvertVertexBuffer].valid())
@@ -907,6 +926,73 @@ angle::Result UtilsVk::convertIndexIndirectBuffer(ContextVk *contextVk,
     const uint32_t kGroupCount =
         UnsignedCeilDivide(kIndexCount * kInvocationsPerIndex, kInvocationsPerGroup);
     commandBuffer->dispatch(kGroupCount, 1, 1);
+
+    descriptorPoolBinding.reset();
+
+    return angle::Result::Continue;
+}
+
+angle::Result UtilsVk::convertLineLoopIndexIndirectBuffer(
+    ContextVk *contextVk,
+    vk::BufferHelper *cmdBuffer,
+    vk::BufferHelper *destCmdBuffer,
+    vk::BufferHelper *dest,
+    vk::BufferHelper *src,
+    const ConvertLineLoopIndexIndirectParameters &params)
+{
+    ANGLE_TRY(ensureConvertIndexIndirectResourcesInitialized(contextVk));
+
+    vk::CommandBuffer *commandBuffer;
+    ANGLE_TRY(dest->recordCommands(contextVk, &commandBuffer));
+
+    // Tell src we are going to read from it and dest it's being written to.
+    src->onReadByBuffer(contextVk, dest, VK_ACCESS_SHADER_READ_BIT, VK_ACCESS_SHADER_WRITE_BIT);
+    cmdBuffer->onReadByBuffer(contextVk, dest, VK_ACCESS_SHADER_READ_BIT,
+                              VK_ACCESS_SHADER_WRITE_BIT);
+    destCmdBuffer->onReadByBuffer(contextVk, cmdBuffer, VK_ACCESS_SHADER_READ_BIT,
+                                  VK_ACCESS_SHADER_WRITE_BIT);
+
+    VkDescriptorSet descriptorSet;
+    vk::RefCountedDescriptorPoolBinding descriptorPoolBinding;
+    ANGLE_TRY(allocateDescriptorSet(contextVk, Function::ConvertIndexIndirectBuffer,
+                                    &descriptorPoolBinding, &descriptorSet));
+
+    std::array<VkDescriptorBufferInfo, 4> buffers = {{
+        {cmdBuffer->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {destCmdBuffer->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {dest->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+        {src->getBuffer().getHandle(), 0, VK_WHOLE_SIZE},
+    }};
+
+    VkWriteDescriptorSet writeInfo = {};
+    writeInfo.sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfo.dstSet               = descriptorSet;
+    writeInfo.dstBinding           = kConvertIndexDestinationBinding;
+    writeInfo.descriptorCount      = 4;
+    writeInfo.descriptorType       = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    writeInfo.pBufferInfo          = buffers.data();
+
+    vkUpdateDescriptorSets(contextVk->getDevice(), 1, &writeInfo, 0, nullptr);
+
+    ConvertIndexIndirectLineLoopShaderParams shaderParams = {
+        params.cmdOffset >> 2, params.dstCmdOffset >> 2, params.dstOffset >> 2,
+        contextVk->getState().isPrimitiveRestartEnabled()};
+
+    uint32_t flags = 0;
+    if (params.is32Bit)
+    {
+        flags |= vk::InternalShader::ConvertIndexIndirectLineloop_comp::kIs32Bit;
+    }
+
+    vk::RefCounted<vk::ShaderAndSerial> *shader = nullptr;
+    ANGLE_TRY(contextVk->getShaderLibrary().getConvertIndexIndirectLineloop_comp(contextVk, flags,
+                                                                                 &shader));
+
+    ANGLE_TRY(setupProgram(contextVk, Function::ConvertIndexIndirectBuffer, shader, nullptr,
+                           &mConvertIndexPrograms[flags], nullptr, descriptorSet, &shaderParams,
+                           sizeof(ConvertIndexIndirectShaderParams), commandBuffer));
+
+    commandBuffer->dispatch(1, 1, 1);
 
     descriptorPoolBinding.reset();
 
