@@ -252,6 +252,8 @@ template_symboltable_cpp = """// GENERATED FILE - DO NOT EDIT.
 
 namespace sh
 {{
+using Resources = ShBuiltInResources;
+using TableBase = TSymbolTableBase;
 
 // Since some of the BuiltInId declarations are used outside of constexpr expressions, we need to
 // have these definitions without an initializer. C++17 should eventually remove the need for this.
@@ -296,18 +298,23 @@ namespace UnmangledBuiltIns
 // TODO(oetuaho): Would be nice to make this a class instead of a namespace so that we could friend
 // this from TFunction. Now symbol constructors taking an id have to be public even though they're
 // not supposed to be accessible from outside of here. http://anglebug.com/2390
-namespace BuiltInFunction
+namespace Func
 {{
 
 {function_declarations}
 
-}}  // namespace BuiltInFunction
+}}  // namespace Func
 
 namespace BuiltInArray
 {{
 
+// Rules used to initialize the mangled name array.
+{mangled_rules}
+
+// Flat array of all mangled name identifiers.
 constexpr SymbolEntry mangled[] = {{ {mangled_array} }};
 
+// Flat array of all unmangled name identifiers.
 constexpr UnmangledEntry unmangled[] = {{ {unmangled_array} }};
 
 }}
@@ -370,45 +377,6 @@ bool CheckShaderType(Shader expected, GLenum actual)
 
 }}
 
-const TSymbol *TSymbolTable::getSymbol(SymbolEntry entry, const ImmutableString &name, int version) const
-{{
-    if (entry.name != name)
-    {{
-        return nullptr;
-    }}
-    if ((entry.symbol || entry.var) && CheckShaderType(entry.shaderType, mShaderType))
-    {{
-        // Non-extension symbol or variable
-        if (!IsDesktopGLSpec(mShaderSpec) && CheckESSLVersion(entry.esslVersion, version))
-        {{
-            return entry.symbol ? entry.symbol : this->*(entry.var);
-        }}
-        if (IsDesktopGLSpec(mShaderSpec) && CheckGLSLVersion(entry.glslVersion, version))
-        {{
-            return entry.symbol ? entry.symbol : this->*(entry.var);
-        }}
-    }}
-    if (entry.esslExtension && mResources.*(entry.esslExtension) && !IsDesktopGLSpec(mShaderSpec) &&
-        CheckESSLVersion(entry.esslExtVersion, version) &&
-        CheckShaderType(entry.esslExtShaderType, mShaderType))
-    {{
-        return entry.esslExtSymbol ? entry.esslExtSymbol : this->*(entry.esslExtVar);
-    }}
-    if (entry.glslExtension && mResources.*(entry.glslExtension) && IsDesktopGLSpec(mShaderSpec) &&
-        CheckGLSLVersion(entry.glslExtVersion, version) &&
-        CheckShaderType(entry.glslExtShaderType, mShaderType))
-    {{
-        return entry.glslExtSymbol ? entry.glslExtSymbol : this->*(entry.glslExtVar);
-    }}
-    if (entry.esslExtension2 && mResources.*(entry.esslExtension2) && !IsDesktopGLSpec(mShaderSpec) &&
-        CheckESSLVersion(entry.esslExtVersion2, version) &&
-        CheckShaderType(entry.esslExtShaderType2, mShaderType))
-    {{
-        return entry.esslExtSymbol2 ? entry.esslExtSymbol2 : this->*(entry.esslExtVar2);
-    }}
-    return nullptr;
-}}
-
 const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name,
                                          int shaderVersion) const
 {{
@@ -418,7 +386,8 @@ const TSymbol *TSymbolTable::findBuiltIn(const ImmutableString &name,
     uint32_t nameHash = name.mangledNameHash();
     if (nameHash >= {num_mangled_names})
         return nullptr;
-    return getSymbol(BuiltInArray::mangled[nameHash], name, shaderVersion);
+
+    return BuiltInArray::mangled[nameHash].findBuiltIn(name, mShaderSpec, shaderVersion, mShaderType, mResources, *this);
 }}
 
 const UnmangledBuiltIn *TSymbolTable::getUnmangled(UnmangledEntry entry, const ImmutableString &name, int version) const
@@ -484,6 +453,8 @@ namespace BuiltInGroup
 #endif  // COMPILER_TRANSLATOR_PARSECONTEXT_AUTOGEN_H_
 
 """
+
+template_rule = """{{ {spec}, {version}, {shaders}, {extension}, {symbol}, {resourceVar} }}"""
 
 basic_types_enumeration = [
     'Void',
@@ -657,6 +628,13 @@ def get_glsl_shader_version_for_level(level):
         raise Exception('Unsupported symbol table level')
 
 
+def get_shader_version_for_level(spec, level):
+    if spec == "ESSL":
+        return get_essl_shader_version_for_level(level)
+    else:
+        return get_glsl_shader_version_for_level(level)
+
+
 class GroupedList:
     """"Class for storing a list of objects grouped by symbol table level and condition."""
 
@@ -666,16 +644,8 @@ class GroupedList:
         self.hashfn = hashfn
         self.num_names = num_names
 
-    def add_obj(self,
-                essl_level,
-                glsl_level,
-                shader_type,
-                name,
-                obj,
-                essl_extension,
-                glsl_extension,
-                script_generated_hash_tests,
-                var_obj=False):
+    def add_entry(self, essl_level, glsl_level, shader_type, name, symbol, essl_extension,
+                  glsl_extension, script_generated_hash_tests):
         if essl_level and essl_level not in essl_levels:
             raise Exception('Unexpected essl level: ' + str(essl_level))
         if glsl_level and glsl_level not in glsl_levels:
@@ -694,133 +664,170 @@ class GroupedList:
                 self.objs[name_hash]['essl_level'] = essl_level
             if glsl_level:
                 self.objs[name_hash]['glsl_level'] = glsl_level
-            if var_obj:
-                self.objs[name_hash]['var'] = obj
-            else:
-                self.objs[name_hash]['obj'] = obj
+            self.objs[name_hash]['symbol'] = symbol
             self.objs[name_hash]['shader_type'] = shader_type
 
         if essl_extension != 'UNDEFINED':
-            if (var_obj and 'essl_ext_var' in self.objs[name_hash] and
-                    self.objs[name_hash]['essl_ext_var'] != obj) or (
-                        not var_obj and 'essl_ext_obj' in self.objs[name_hash] and
-                        self.objs[name_hash]['essl_ext_obj'] != obj):
+            if ('essl_ext_obj' in self.objs[name_hash] and
+                    self.objs[name_hash]['essl_ext_obj'] != symbol):
                 # Adding a variable that is part of two ESSL extensions
                 if essl_extension != 'UNDEFINED':
                     self.objs[name_hash]['essl_extension2'] = essl_extension
                     self.objs[name_hash]['essl_ext_level2'] = essl_level
-                    if var_obj:
-                        self.objs[name_hash]['essl_ext_var2'] = obj
-                    else:
-                        self.objs[name_hash]['essl_ext_obj2'] = obj
-                        self.objs[name_hash]['essl_ext_shader_type2'] = shader_type
+                    self.objs[name_hash]['essl_ext_obj2'] = symbol
+                    self.objs[name_hash]['essl_ext_shader_type2'] = shader_type
             else:
                 self.objs[name_hash]['essl_extension'] = essl_extension
                 self.objs[name_hash]['essl_ext_level'] = essl_level
-                if var_obj:
-                    self.objs[name_hash]['essl_ext_var'] = obj
-                else:
-                    self.objs[name_hash]['essl_ext_obj'] = obj
-                    self.objs[name_hash]['essl_ext_shader_type'] = shader_type
+                self.objs[name_hash]['essl_ext_obj'] = symbol
+                self.objs[name_hash]['essl_ext_shader_type'] = shader_type
 
         if glsl_extension != 'UNDEFINED':
             self.objs[name_hash]['glsl_extension'] = glsl_extension
             self.objs[name_hash]['glsl_ext_level'] = glsl_level
-            if var_obj:
-                self.objs[name_hash]['glsl_ext_var'] = obj
-            else:
-                self.objs[name_hash]['glsl_ext_obj'] = obj
+            self.objs[name_hash]['glsl_ext_obj'] = symbol
             self.objs[name_hash]['glsl_ext_shader_type'] = shader_type
 
     def get_max_name_length(self):
         return self.max_name_length
 
+    def format_rule(self, rule):
+        return template_rule.format(**rule)
+
+    def format_rules(self, rules):
+        return ", ".join([self.format_rule(rule) for rule in rules])
+
+    def get_rules(self):
+        return self.rules
+
     def get_array(self):
-        code = []
+        return self.array
+
+    def update_array_and_rules(self):
+
+        def add_rule(rules, spec, level, shaders, extension, symbol):
+            spec = "ESSL" if spec == "ESSL" else "GLSL"
+            shaders = "ALL" if shaders == "NONE" else shaders
+            extension = "0" if extension == None else "&Resources::%s" % extension
+
+            if symbol.startswith("gl"):
+                resourceVar = "&TableBase::m%s" % symbol
+                symbol = "0"
+            else:
+                resourceVar = "0"
+
+            rules.append({
+                "spec": "Spec::%s" % spec,
+                "version": get_shader_version_for_level(spec, level),
+                "shaders": "Shader::%s" % shaders,
+                "extension": extension,
+                "symbol": symbol,
+                "resourceVar": resourceVar
+            })
+
+        self.array = []
+        self.rules = []
         for hash_val in range(0, self.num_names):
             if hash_val in self.objs:
                 obj_data = self.objs[hash_val]
 
                 data = []
-                data.append('"{name}"'.format(name=obj_data['name']))
+                data.append('"%s"' % obj_data['name'])
 
-                symbol = obj_data['obj'] if 'obj' in obj_data else 'nullptr'
-                var = '&TSymbolTableBase::{}'.format(
-                    obj_data['var']) if 'var' in obj_data else 'nullptr'
-                essl_level = obj_data['essl_level'] if 'essl_level' in obj_data else None
-                glsl_level = obj_data['glsl_level'] if 'glsl_level' in obj_data else None
-                essl_version = get_essl_shader_version_for_level(essl_level)
-                glsl_version = get_glsl_shader_version_for_level(glsl_level)
-                shader_type = 'Shader::' + obj_data[
-                    'shader_type'] if 'shader_type' in obj_data and obj_data[
-                        'shader_type'] != 'NONE' else 'Shader::ALL'
+                rules = []
 
-                data.append(symbol)
-                data.append(var)
-                data.append(essl_version)
-                data.append(glsl_version)
-                data.append(shader_type)
+                if "symbol" in obj_data and "essl_level" in obj_data:
+                    add_rule(rules, "ESSL", obj_data['essl_level'], obj_data['shader_type'], None,
+                             obj_data["symbol"])
 
-                essl_ext_symbol = obj_data[
-                    'essl_ext_obj'] if 'essl_ext_obj' in obj_data else 'nullptr'
-                essl_ext_var = '&TSymbolTableBase::{}'.format(
-                    obj_data['essl_ext_var']) if 'essl_ext_var' in obj_data else 'nullptr'
-                essl_ext_version = get_essl_shader_version_for_level(
-                    obj_data['essl_ext_level']) if 'essl_extension' in obj_data else '-1'
-                essl_ext_shader_type = 'Shader::' + obj_data[
-                    'essl_ext_shader_type'] if 'essl_ext_shader_type' in obj_data and obj_data[
-                        'essl_ext_shader_type'] != 'NONE' else 'Shader::ALL'
-                essl_extension = '&ShBuiltInResources::{}'.format(
-                    obj_data['essl_extension']) if 'essl_extension' in obj_data else 'nullptr'
+                if "symbol" in obj_data and "glsl_level" in obj_data:
+                    add_rule(rules, "GLSL", obj_data['glsl_level'], obj_data['shader_type'], None,
+                             obj_data["symbol"])
 
-                data.append(essl_ext_symbol)
-                data.append(essl_ext_var)
-                data.append(essl_ext_version)
-                data.append(essl_ext_shader_type)
-                data.append(essl_extension)
+                if "essl_ext_obj" in obj_data:
+                    add_rule(rules, "ESSL", obj_data["essl_ext_level"],
+                             obj_data["essl_ext_shader_type"], obj_data["essl_extension"],
+                             obj_data["essl_ext_obj"])
 
-                glsl_ext_symbol = obj_data[
-                    'glsl_ext_obj'] if 'glsl_ext_obj' in obj_data else 'nullptr'
-                glsl_ext_var = '&TSymbolTableBase::{}'.format(
-                    obj_data['glsl_ext_var']) if 'glsl_ext_var' in obj_data else 'nullptr'
-                glsl_ext_version = get_glsl_shader_version_for_level(
-                    obj_data['glsl_ext_level']) if 'glsl_extension' in obj_data else '-1'
-                glsl_ext_shader_type = 'Shader::' + obj_data[
-                    'glsl_ext_shader_type'] if 'glsl_ext_shader_type' in obj_data and obj_data[
-                        'glsl_ext_shader_type'] != 'NONE' else 'Shader::ALL'
-                glsl_extension = '&ShBuiltInResources::{}'.format(
-                    obj_data['glsl_extension']) if 'glsl_extension' in obj_data else 'nullptr'
+                if "glsl_ext_obj" in obj_data:
+                    add_rule(rules, "GLSL", obj_data["glsl_ext_level"],
+                             obj_data["glsl_ext_shader_type"], obj_data["glsl_extension"],
+                             obj_data["glsl_ext_obj"])
 
-                data.append(glsl_ext_symbol)
-                data.append(glsl_ext_var)
-                data.append(glsl_ext_version)
-                data.append(glsl_ext_shader_type)
-                data.append(glsl_extension)
+                if "essl_ext_obj2" in obj_data:
+                    add_rule(rules, "ESSL", obj_data["essl_ext_level2"],
+                             obj_data["essl_ext_shader_type2"], obj_data["essl_extension2"],
+                             obj_data["essl_ext_obj2"])
 
-                if 'essl_extension2' in obj_data:
-                    essl_ext_symbol2 = obj_data[
-                        'essl_ext_obj2'] if 'essl_ext_obj2' in obj_data else 'nullptr'
-                    essl_ext_var2 = '&TSymbolTableBase::{}'.format(
-                        obj_data['essl_ext_var2']) if 'essl_ext_var2' in obj_data else 'nullptr'
-                    essl_ext_version2 = get_essl_shader_version_for_level(
-                        obj_data['essl_ext_level2'])
-                    essl_ext_shader_type2 = 'Shader::' + obj_data[
-                        'essl_ext_shader_type2'] if 'essl_ext_shader_type2' in obj_data and obj_data[
-                            'essl_ext_shader_type2'] != 'NONE' else 'Shader::ALL'
-                    essl_extension2 = '&ShBuiltInResources::{}'.format(obj_data['essl_extension2'])
-                    data.append(essl_ext_symbol2)
-                    data.append(essl_ext_var2)
-                    data.append(essl_ext_version2)
-                    data.append(essl_ext_shader_type2)
-                    data.append(essl_extension2)
+                # symbol = obj_data['obj'] if 'obj' in obj_data else 'nullptr'
+                # var = '&TSymbolTableBase::{}'.format(
+                #     obj_data['var']) if 'var' in obj_data else 'nullptr'
+                # essl_level = obj_data['essl_level'] if 'essl_level' in obj_data else None
+                # glsl_level = obj_data['glsl_level'] if 'glsl_level' in obj_data else None
+                # essl_version = get_essl_shader_version_for_level(essl_level)
+                # glsl_version = get_glsl_shader_version_for_level(glsl_level)
+                # data.append(symbol)
+                # data.append(var)
+                # data.append(essl_version)
+                # data.append(glsl_version)
+                # data.append(shader_type)
 
-                code.append('SymbolEntry(' + ', '.join(data) + ')')
+                # essl_ext_symbol = obj_data[
+                #     'essl_ext_obj'] if 'essl_ext_obj' in obj_data else 'nullptr'
+                # essl_ext_var = '&TSymbolTableBase::{}'.format(
+                #     obj_data['essl_ext_var']) if 'essl_ext_var' in obj_data else 'nullptr'
+                # essl_ext_version = get_essl_shader_version_for_level(
+                #     obj_data['essl_ext_level']) if 'essl_extension' in obj_data else '-1'
+
+                # data.append(essl_ext_symbol)
+                # data.append(essl_ext_var)
+                # data.append(essl_ext_version)
+                # data.append(essl_ext_shader_type)
+                # data.append(essl_extension)
+
+                # glsl_ext_symbol = obj_data[
+                #     'glsl_ext_obj'] if 'glsl_ext_obj' in obj_data else 'nullptr'
+                # glsl_ext_var = '&TSymbolTableBase::{}'.format(
+                #     obj_data['glsl_ext_var']) if 'glsl_ext_var' in obj_data else 'nullptr'
+                # glsl_ext_version = get_glsl_shader_version_for_level(
+                #     obj_data['glsl_ext_level']) if 'glsl_extension' in obj_data else '-1'
+                # glsl_ext_shader_type = 'Shader::' + obj_data[
+                #     'glsl_ext_shader_type'] if 'glsl_ext_shader_type' in obj_data and obj_data[
+                #         'glsl_ext_shader_type'] != 'NONE' else 'Shader::ALL'
+                # glsl_extension = '&ShBuiltInResources::{}'.format(
+                #     obj_data['glsl_extension']) if 'glsl_extension' in obj_data else 'nullptr'
+
+                # data.append(glsl_ext_symbol)
+                # data.append(glsl_ext_var)
+                # data.append(glsl_ext_version)
+                # data.append(glsl_ext_shader_type)
+                # data.append(glsl_extension)
+
+                # if 'essl_extension2' in obj_data:
+                #     essl_ext_symbol2 = obj_data[
+                #         'essl_ext_obj2'] if 'essl_ext_obj2' in obj_data else 'nullptr'
+                #     essl_ext_var2 = '&TSymbolTableBase::{}'.format(
+                #         obj_data['essl_ext_var2']) if 'essl_ext_var2' in obj_data else 'nullptr'
+                #     essl_ext_version2 = get_essl_shader_version_for_level(
+                #         obj_data['essl_ext_level2'])
+                #     essl_ext_shader_type2 = 'Shader::' + obj_data[
+                #         'essl_ext_shader_type2'] if 'essl_ext_shader_type2' in obj_data and obj_data[
+                #             'essl_ext_shader_type2'] != 'NONE' else 'Shader::ALL'
+                #     essl_extension2 = '&ShBuiltInResources::{}'.format(obj_data['essl_extension2'])
+                #     data.append(essl_ext_symbol2)
+                #     data.append(essl_ext_var2)
+                #     data.append(essl_ext_version2)
+                #     data.append(essl_ext_shader_type2)
+                #     data.append(essl_extension2)
+
+                rules_name = "k%sRules" % obj_data['name'].replace('(', '_')
+                data.append('%s' % rules_name)
+
+                self.array.append('{%s}' % ', '.join(data))
+                self.rules.append(
+                    'constexpr SymbolRule %s[] = {%s};' % (rules_name, self.format_rules(rules)))
             else:
-                code.append("""SymbolEntry("",
-                       nullptr, nullptr, -1, -1, Shader::ALL,
-                       nullptr, nullptr, -1, Shader::ALL, nullptr,
-                       nullptr, nullptr, -1, Shader::ALL, nullptr)""")
-        return ', '.join(code)
+                self.array.append("SymbolEntry()")
 
 
 class UnmangledGroupedList:
@@ -877,7 +884,13 @@ class UnmangledGroupedList:
     def get_max_name_length(self):
         return self.max_name_length
 
-    def get_array(self, unmangled_builtin_declarations):
+    def get_declarations(self, unmangled_builtin_declarations):
+        for hash_val in range(0, self.num_names):
+            obj_data = self.objs[hash_val]
+            unmangled_builtin_declarations.add(obj_data['essl_declaration'])
+            unmangled_builtin_declarations.add(obj_data['glsl_declaration'])
+
+    def get_array(self):
         code = []
         for hash_val in range(0, self.num_names):
             obj_data = self.objs[hash_val]
@@ -894,10 +907,7 @@ class UnmangledGroupedList:
             data.append(shader_type)
 
             code.append('UnmangledEntry(' + ', '.join(data) + ')')
-
-            unmangled_builtin_declarations.add(obj_data['essl_declaration'])
-            unmangled_builtin_declarations.add(obj_data['glsl_declaration'])
-        return ', '.join(code)
+        return code
 
 
 class TType:
@@ -1304,7 +1314,7 @@ def get_variable_name_to_store_parameters(parameters):
 
 
 def define_constexpr_variable(template_args, variable_declarations):
-    template_variable_declaration = 'constexpr const TVariable kVar_{name_with_suffix}(BuiltInId::{name_with_suffix}, BuiltInName::{name}, SymbolType::BuiltIn, TExtension::{extension}, {type});'
+    template_variable_declaration = 'constexpr const TVariable k{name_with_suffix}(BuiltInId::{name_with_suffix}, BuiltInName::{name}, SymbolType::BuiltIn, TExtension::{extension}, {type});'
     variable_declarations.append(template_variable_declaration.format(**template_args))
 
 
@@ -1470,9 +1480,9 @@ def process_single_function_group(
                 template_args['name_with_suffix'], parameters)
             template_args['mangled_name_length'] = len(template_args['mangled_name'])
 
-            obj = '&BuiltInFunction::function_{unique_name}'.format(**template_args)
-            get_builtin_if_statements.add_obj(
-                essl_level, glsl_level, shader_type, template_args['mangled_name'], obj,
+            symbol = '&Func::{unique_name}'.format(**template_args)
+            get_builtin_if_statements.add_entry(
+                essl_level, glsl_level, shader_type, template_args['mangled_name'], symbol,
                 template_args['essl_extension'], template_args['glsl_extension'],
                 script_generated_hash_tests)
 
@@ -1503,7 +1513,7 @@ def process_single_function_group(
                     define_constexpr_variable(param_template_args, variable_declarations)
                     defined_parameter_names.add(unique_param_name)
                 parameters_list.append(
-                    '&BuiltInVariable::kVar_{name_with_suffix}'.format(**param_template_args))
+                    '&BuiltInVariable::k{name_with_suffix}'.format(**param_template_args))
 
             template_args['parameters_var_name'] = get_variable_name_to_store_parameters(
                 parameters)
@@ -1519,7 +1529,7 @@ def process_single_function_group(
                     'parameters_var_name']] = template_parameter_list_declaration.format(
                         **template_args)
 
-            template_function_declaration = 'constexpr const TFunction function_{unique_name}(BuiltInId::{human_readable_name}, BuiltInName::{name_with_suffix}, TExtension::{extension}, BuiltInParameters::{parameters_var_name}, {param_count}, {return_type}, EOp{op}, {known_to_not_have_side_effects});'
+            template_function_declaration = 'constexpr const TFunction {unique_name}(BuiltInId::{human_readable_name}, BuiltInName::{name_with_suffix}, TExtension::{extension}, BuiltInParameters::{parameters_var_name}, {param_count}, {return_type}, EOp{op}, {known_to_not_have_side_effects});'
             function_declarations.append(template_function_declaration.format(**template_args))
 
             id_counter += 1
@@ -1662,7 +1672,7 @@ def process_single_variable_group(shader_type, group_name, group, builtin_id_dec
             if 'private' in props and props['private']:
                 is_member = False
             else:
-                template_init_variable = '    mVar_{name_with_suffix} = {name_with_suffix};'
+                template_init_variable = '    m{name_with_suffix} = {name_with_suffix};'
 
         elif 'initDynamicType' in props:
             # Handle variables whose type can't be expressed as TStaticType
@@ -1672,7 +1682,7 @@ def process_single_variable_group(shader_type, group_name, group, builtin_id_dec
             template_args['initDynamicType'] = props['initDynamicType'].format(**template_args)
             template_init_variable = """    {initDynamicType}
     {type_name}->realize();
-    mVar_{name_with_suffix} = new TVariable(BuiltInId::{name_with_suffix}, BuiltInName::{name}, SymbolType::BuiltIn, TExtension::{extension}, {type});"""
+    m{name_with_suffix} = new TVariable(BuiltInId::{name_with_suffix}, BuiltInName::{name}, SymbolType::BuiltIn, TExtension::{extension}, {type});"""
 
         elif 'value' in props:
             # Handle variables with constant value, such as gl_MaxDrawBuffers.
@@ -1684,21 +1694,21 @@ def process_single_variable_group(shader_type, group_name, group, builtin_id_dec
                 resources_key = props['valueKey']
             template_args['value'] = 'resources.' + resources_key
             template_args['object_size'] = TType(props['type']).get_object_size()
-            template_init_variable = """    mVar_{name_with_suffix} = new TVariable(BuiltInId::{name_with_suffix}, BuiltInName::{name}, SymbolType::BuiltIn, TExtension::{extension}, {type});
+            template_init_variable = """    m{name_with_suffix} = new TVariable(BuiltInId::{name_with_suffix}, BuiltInName::{name}, SymbolType::BuiltIn, TExtension::{extension}, {type});
     {{
         TConstantUnion *unionArray = new TConstantUnion[{object_size}];
         unionArray[0].setIConst({value});
-        static_cast<TVariable *>(mVar_{name_with_suffix})->shareConstPointer(unionArray);
+        static_cast<TVariable *>(m{name_with_suffix})->shareConstPointer(unionArray);
     }}"""
             if template_args['object_size'] > 1:
-                template_init_variable = """    mVar_{name_with_suffix} = new TVariable(BuiltInId::{name_with_suffix}, BuiltInName::{name}, SymbolType::BuiltIn, TExtension::{extension}, {type});
+                template_init_variable = """    m{name_with_suffix} = new TVariable(BuiltInId::{name_with_suffix}, BuiltInName::{name}, SymbolType::BuiltIn, TExtension::{extension}, {type});
     {{
         TConstantUnion *unionArray = new TConstantUnion[{object_size}];
         for (size_t index = 0u; index < {object_size}; ++index)
         {{
             unionArray[index].setIConst({value}[index]);
         }}
-        static_cast<TVariable *>(mVar_{name_with_suffix})->shareConstPointer(unionArray);
+        static_cast<TVariable *>(m{name_with_suffix})->shareConstPointer(unionArray);
     }}"""
 
         else:
@@ -1713,16 +1723,16 @@ def process_single_variable_group(shader_type, group_name, group, builtin_id_dec
 
             template_get_variable_definition = """const TVariable *{name_with_suffix}()
 {{
-    return &kVar_{name_with_suffix};
+    return &k{name_with_suffix};
 }}
 """
             get_variable_definitions.append(
                 template_get_variable_definition.format(**template_args))
 
             if essl_level != 'GLSL_BUILTINS':
-                obj = '&BuiltInVariable::kVar_{name_with_suffix}'.format(**template_args)
+                obj = '&BuiltInVariable::k{name_with_suffix}'.format(**template_args)
                 # TODO(http://anglebug.com/3835): Add GLSL level once GLSL built-in vars are added
-                get_builtin_if_statements.add_obj(
+                get_builtin_if_statements.add_entry(
                     essl_level, 'COMMON_BUILTINS', shader_type, template_args['name'], obj,
                     template_args['essl_extension'], template_args['glsl_extension'],
                     script_generated_hash_tests)
@@ -1730,17 +1740,17 @@ def process_single_variable_group(shader_type, group_name, group, builtin_id_dec
         if is_member:
             init_member_variables.append(template_init_variable.format(**template_args))
 
-            template_declare_member_variable = 'TSymbol *mVar_{name_with_suffix} = nullptr;'
+            template_declare_member_variable = 'TSymbol *m{name_with_suffix} = nullptr;'
             declare_member_variables.append(
                 template_declare_member_variable.format(**template_args))
 
-            obj = 'mVar_{name_with_suffix}'.format(**template_args)
+            obj = '{name_with_suffix}'.format(**template_args)
 
             # TODO(http://anglebug.com/3835): Add GLSL level once GLSL built-in vars are added
-            get_builtin_if_statements.add_obj(
+            get_builtin_if_statements.add_entry(
                 essl_level, 'COMMON_BUILTINS', shader_type, template_args['name'], obj,
                 template_args['essl_extension'], template_args['glsl_extension'],
-                script_generated_hash_tests, True)
+                script_generated_hash_tests)
 
         id_counter += 1
 
@@ -1884,6 +1894,9 @@ def generate_files(essl_only, args, functions_txt_filename, variables_json_filen
                                declare_member_variables, variable_declarations,
                                get_variable_definitions, script_generated_hash_tests)
 
+    get_builtin_if_statements.update_array_and_rules()
+    unmangled_function_if_statements.get_declarations(unmangled_builtin_declarations)
+
     output_strings = {
         'script_name':
             os.path.basename(__file__),
@@ -1918,9 +1931,11 @@ def generate_files(essl_only, args, functions_txt_filename, variables_json_filen
         'init_member_variables':
             '\n'.join(init_member_variables),
         'mangled_array':
-            get_builtin_if_statements.get_array(),
+            ', '.join(get_builtin_if_statements.get_array()),
+        'mangled_rules':
+            '\n'.join(get_builtin_if_statements.get_rules()),
         'unmangled_array':
-            unmangled_function_if_statements.get_array(unmangled_builtin_declarations),
+            ', '.join(unmangled_function_if_statements.get_array()),
         'max_unmangled_name_length':
             unmangled_function_if_statements.get_max_name_length(),
         'max_mangled_name_length':

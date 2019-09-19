@@ -62,82 +62,88 @@ struct UnmangledBuiltIn
     TExtension extension;
 };
 
-using VarPointer = TSymbol *(TSymbolTableBase::*);
-
+using VarPointer        = TSymbol *(TSymbolTableBase::*);
 using ValidateExtension = int(ShBuiltInResources::*);
 
-struct SymbolEntry
+enum class Spec
 {
-    constexpr SymbolEntry(const char *name,
-                          const TSymbol *symbol,
-                          VarPointer var,
-                          int esslVersion,
-                          int glslVersion,
-                          Shader shaderType,
-                          const TSymbol *esslExtSymbol,
-                          VarPointer esslExtVar,
-                          int esslExtVersion,
-                          Shader esslExtShaderType,
-                          ValidateExtension esslExtension,
-                          const TSymbol *glslExtSymbol,
-                          VarPointer glslExtVar,
-                          int glslExtVersion,
-                          Shader glslExtShaderType,
-                          ValidateExtension glslExtension,
-                          const TSymbol *esslExtSymbol2    = nullptr,
-                          VarPointer esslExtVar2           = nullptr,
-                          int esslExtVersion2              = -1,
-                          Shader esslExtShaderType2        = Shader::ALL,
-                          ValidateExtension esslExtension2 = nullptr)
-        : name(name),
-          symbol(symbol),
-          var(var),
-          esslVersion(esslVersion),
-          glslVersion(glslVersion),
-          shaderType(shaderType),
-          esslExtSymbol(esslExtSymbol),
-          esslExtVar(esslExtVar),
-          esslExtVersion(esslExtVersion),
-          esslExtShaderType(esslExtShaderType),
-          esslExtension(esslExtension),
-          glslExtSymbol(glslExtSymbol),
-          glslExtVar(glslExtVar),
-          glslExtVersion(glslExtVersion),
-          glslExtShaderType(glslExtShaderType),
-          glslExtension(glslExtension),
-          esslExtSymbol2(esslExtSymbol2),
-          esslExtVar2(esslExtVar2),
-          esslExtVersion2(esslExtVersion2),
-          esslExtShaderType2(esslExtShaderType2),
-          esslExtension2(esslExtension2)
-    {}
-
-    ImmutableString name;
-
-    const TSymbol *symbol;
-    VarPointer var;
-    int esslVersion;
-    int glslVersion;
-    Shader shaderType;
-
-    const TSymbol *esslExtSymbol;
-    VarPointer esslExtVar;
-    int esslExtVersion;
-    Shader esslExtShaderType;
-    ValidateExtension esslExtension;
-
-    const TSymbol *glslExtSymbol;
-    VarPointer glslExtVar;
-    int glslExtVersion;
-    Shader glslExtShaderType;
-    ValidateExtension glslExtension;
-
-    const TSymbol *esslExtSymbol2;
-    VarPointer esslExtVar2;
-    int esslExtVersion2;
-    Shader esslExtShaderType2;
-    ValidateExtension esslExtension2;
+    GLSL,
+    ESSL
 };
+
+constexpr int kESSL1Only = 100;
+
+class SymbolRule
+{
+  public:
+    constexpr SymbolRule(Spec spec,
+                         int version,
+                         Shader shaders,
+                         ValidateExtension extension,
+                         const TSymbol *symbol,
+                         VarPointer resourceVar);
+
+    const TSymbol *get(ShShaderSpec shaderSpec,
+                       int shaderVersion,
+                       sh::GLenum shaderType,
+                       const ShBuiltInResources &resources,
+                       const TSymbolTableBase &symbolTable) const;
+
+  private:
+    Spec mSpec;
+    int mVersion;
+    Shader mShaders;
+    ValidateExtension mExtension;
+    const TSymbol *mSymbol;
+    VarPointer mResourceVar;
+};
+
+constexpr SymbolRule::SymbolRule(Spec spec,
+                                 int version,
+                                 Shader shaders,
+                                 ValidateExtension extension,
+                                 const TSymbol *symbol,
+                                 VarPointer resourceVar)
+    : mSpec(spec),
+      mVersion(version),
+      mShaders(shaders),
+      mExtension(extension),
+      mSymbol(symbol),
+      mResourceVar(resourceVar)
+{}
+
+class SymbolEntry
+{
+  public:
+    constexpr SymbolEntry();
+    constexpr SymbolEntry(const char *name, uint32_t ruleCount, const SymbolRule *rules);
+
+    template <size_t N>
+    constexpr SymbolEntry(const char *name, const SymbolRule (&rules)[N]);
+
+    const TSymbol *findBuiltIn(const ImmutableString &name,
+                               ShShaderSpec shaderSpec,
+                               int shaderVersion,
+                               sh::GLenum shaderType,
+                               const ShBuiltInResources &resources,
+                               const TSymbolTableBase &symbolTable) const;
+
+  private:
+    ImmutableString mName;
+    uint32_t mRuleCount;
+    const SymbolRule *mRules;
+};
+
+constexpr SymbolEntry::SymbolEntry() : mName(""), mRuleCount(0), mRules(nullptr) {}
+
+constexpr SymbolEntry::SymbolEntry(const char *name, uint32_t ruleCount, const SymbolRule *rules)
+    : mName(name), mRuleCount(ruleCount), mRules(rules)
+{}
+
+template <size_t N>
+constexpr SymbolEntry::SymbolEntry(const char *name, const SymbolRule (&rules)[N])
+    : SymbolEntry(name, N, rules)
+{}
 
 struct UnmangledEntry
 {
