@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a5c4daa1_12edb06d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T13:59:17Z",
+      "side": 1,
+      "message": "maybe make this a single update function?",
+      "range": {
+        "startLine": 1150,
+        "startChar": 0,
+        "endLine": 1151,
+        "endChar": 34
+      },
+      "revId": "e323ca33302d7663ff266fb5fa073d5e8822f2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c7b11b3_aa0751f2",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T13:59:17Z",
+      "side": 1,
+      "message": "you can introduce a helper function similar to the below but like getMaxDefinedLevel()\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/1750627/5/src/libANGLE/Texture.cpp",
+      "range": {
+        "startLine": 1170,
+        "startChar": 35,
+        "endLine": 1170,
+        "endChar": 50
+      },
+      "revId": "e323ca33302d7663ff266fb5fa073d5e8822f2e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
