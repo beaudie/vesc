@@ -609,6 +609,14 @@ angle::Result ContextVk::setupIndirectDraw(const gl::Context *context,
     vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
     buffer.onRead(this, framebuffer, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
 
+    return setupIndirectDrawHelper(context, mode, dirtyBitMask, commandBufferOut);
+}
+
+angle::Result ContextVk::setupIndirectDrawHelper(const gl::Context *context,
+                                                 gl::PrimitiveMode mode,
+                                                 DirtyBits dirtyBitMask,
+                                                 vk::CommandBuffer **commandBufferOut)
+{
     // Set any dirty bits that depend on draw call parameters or other objects.
     if (mode != mCurrentDrawMode)
     {
@@ -686,6 +694,46 @@ angle::Result ContextVk::setupIndexedIndirectDraw(const gl::Context *context,
 
     return setupIndirectDraw(context, mode, mIndexedDirtyBitsMask, commandBufferOut,
                              indirectBufferOut);
+}
+
+angle::Result ContextVk::setupLineLoopIndexedIndirectDraw(const gl::Context *context,
+                                                          gl::PrimitiveMode mode,
+                                                          gl::DrawElementsType indexType,
+                                                          const gl::Buffer *indirectBuffer,
+                                                          VkDeviceSize indirectBufferOffset,
+                                                          const gl::Buffer *indexBuffer,
+                                                          vk::CommandBuffer **commandBufferOut,
+                                                          vk::Buffer **indirectBufferOut,
+                                                          VkDeviceSize *indirectBufferOffsetOut)
+{
+    ASSERT(mode == gl::PrimitiveMode::LineLoop);
+
+    BufferVk *indirectBufferVk                = vk::GetImpl(indirectBuffer);
+    vk::BufferHelper *indirectBufferHelperOut = nullptr;
+
+    ANGLE_TRY(mVertexArray->handleLineLoopIndirect(this, indirectBufferVk, indexType,
+                                                   indirectBufferOffset, &indirectBufferHelperOut,
+                                                   indirectBufferOffsetOut));
+
+    *indirectBufferOut = const_cast<vk::Buffer *>(&indirectBufferHelperOut->getBuffer());
+
+    if (indexType != mCurrentDrawElementsType)
+    {
+        mCurrentDrawElementsType = indexType;
+        setIndexBufferDirty();
+    }
+
+    // Must be called before the command buffer is started. Can call finish.
+    // TODO: Can this happen with Indirect?
+    if (context->getStateCache().hasAnyActiveClientAttrib())
+    {
+        mGraphicsDirtyBits.set(DIRTY_BIT_VERTEX_BUFFERS);
+    }
+
+    vk::FramebufferHelper *framebuffer = mDrawFramebuffer->getFramebuffer();
+    indirectBufferHelperOut->onRead(this, framebuffer, VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
+
+    return setupIndirectDrawHelper(context, mode, mIndexedDirtyBitsMask, commandBufferOut);
 }
 
 angle::Result ContextVk::setupLineLoopDraw(const gl::Context *context,
@@ -1595,7 +1643,8 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
                                               gl::DrawElementsType type,
                                               const void *indirect)
 {
-    gl::Buffer *indirectBuffer = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
+    VkDeviceSize indirectBufferOffset = reinterpret_cast<VkDeviceSize>(indirect);
+    gl::Buffer *indirectBuffer        = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
     ASSERT(indirectBuffer);
 
     const gl::Buffer *indexBuffer = mVertexArray->getState().getElementArrayBuffer();
@@ -1610,18 +1659,21 @@ angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
     }
 
     vk::CommandBuffer *commandBuffer = nullptr;
-    vk::Buffer *buffer               = nullptr;
-
-    ANGLE_TRY(setupIndexedIndirectDraw(context, mode, type, &commandBuffer, &buffer));
+    vk::Buffer *indirectBufferFinal  = nullptr;
 
     if (mode == gl::PrimitiveMode::LineLoop)
     {
-        // TODO - http://anglebug.com/3564
-        ANGLE_VK_UNREACHABLE(this);
-        return angle::Result::Stop;
+        ANGLE_TRY(setupLineLoopIndexedIndirectDraw(
+            context, mode, type, indirectBuffer, indirectBufferOffset, indexBuffer, &commandBuffer,
+            &indirectBufferFinal, &indirectBufferOffset));
+    }
+    else
+    {
+        ANGLE_TRY(
+            setupIndexedIndirectDraw(context, mode, type, &commandBuffer, &indirectBufferFinal));
     }
 
-    commandBuffer->drawIndexedIndirect(*buffer, reinterpret_cast<VkDeviceSize>(indirect), 1, 0);
+    commandBuffer->drawIndexedIndirect(*indirectBufferFinal, indirectBufferOffset, 1, 0);
     return angle::Result::Continue;
 }
 
