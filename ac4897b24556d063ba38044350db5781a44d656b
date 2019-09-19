@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb383558_72a4dabc",
+        "filename": "src/gpu_info_util/SystemInfo_winuwp.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-19T18:31:46Z",
+      "side": 1,
+      "message": "This is nearly identical to SystemInfo_win.cpp.  Could you add some macros into that file to if-def out the incompatible parts?",
+      "revId": "ac4897b24556d063ba38044350db5781a44d656b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
