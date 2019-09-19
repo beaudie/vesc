@@ -409,6 +409,16 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                            vk::CommandBuffer **commandBufferOut,
                                            vk::Buffer **indirectBufferOut);
 
+    angle::Result setupLineLoopIndexedIndirectDraw(const gl::Context *context,
+                                                   gl::PrimitiveMode mode,
+                                                   gl::DrawElementsType indexType,
+                                                   const gl::Buffer *indirectBuffer,
+                                                   VkDeviceSize indirectBufferOffset,
+                                                   const gl::Buffer *indexBuffer,
+                                                   vk::CommandBuffer **commandBufferOut,
+                                                   vk::Buffer **indirectBufferOut,
+                                                   VkDeviceSize *indirectBufferOffsetOut);
+
     angle::Result setupLineLoopDraw(const gl::Context *context,
                                     gl::PrimitiveMode mode,
                                     GLint firstVertex,
