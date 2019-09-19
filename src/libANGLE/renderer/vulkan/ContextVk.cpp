@@ -1541,8 +1541,23 @@ angle::Result ContextVk::drawArraysIndirect(const gl::Context *context,
                                             gl::PrimitiveMode mode,
                                             const void *indirect)
 {
-    ANGLE_VK_UNREACHABLE(this);
-    return angle::Result::Stop;
+    if (mode == gl::PrimitiveMode::LineLoop)
+    {
+        // TODO - http://anglebug.com/3564
+        ANGLE_VK_UNREACHABLE(this);
+        return angle::Result::Stop;
+    }
+
+    gl::Buffer *indirectBuffer = mState.getTargetBuffer(gl::BufferBinding::DrawIndirect);
+    ASSERT(indirectBuffer);
+
+    vk::CommandBuffer *commandBuffer = nullptr;
+    vk::Buffer *buffer               = nullptr;
+
+    ANGLE_TRY(setupIndirectDraw(context, mode, &commandBuffer, &buffer));
+
+    commandBuffer->drawIndirect(*buffer, reinterpret_cast<VkDeviceSize>(indirect), 1, 0);
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::drawElementsIndirect(const gl::Context *context,
