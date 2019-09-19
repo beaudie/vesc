@@ -231,6 +231,7 @@ class GarbageObjectBase
     GarbageObjectBase(GarbageObjectBase &&other);
     GarbageObjectBase &operator=(GarbageObjectBase &&rhs);
 
+    bool valid() const { return mHandle != VK_NULL_HANDLE; }
     void destroy(VkDevice device);
 
     template <typename DerivedT, typename HandleT>
@@ -366,6 +367,23 @@ class ContextScoped final : angle::NonCopyable
 
   private:
     ContextVk *mContextVk;
+    T mVar;
+};
+
+template <typename T>
+class RendererScoped final : angle::NonCopyable
+{
+  public:
+    RendererScoped(RendererVk *renderer) : mRenderer(renderer) {}
+    ~RendererScoped() { mVar.release(mRenderer); }
+
+    const T &get() const { return mVar; }
+    T &get() { return mVar; }
+
+    T &&release() { return std::move(mVar); }
+
+  private:
+    RendererVk *mRenderer;
     T mVar;
 };
 

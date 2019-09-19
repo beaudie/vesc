@@ -389,6 +389,7 @@ class CommandGraphResource : angle::NonCopyable
     // Updates the in-use serial tracked for this resource. Will clear dependencies if the resource
     // was not used in this set of command nodes.
     void onGraphAccess(CommandGraph *commandGraph);
+    void updateCurrentAccessNodes();
 
     // Allocates a write node via getNewWriteNode and returns a started command buffer.
     // The started command buffer will render outside of a RenderPass.
@@ -595,7 +596,7 @@ ANGLE_INLINE bool CommandGraphResource::hasStartedRenderPass() const
     return hasChildlessWritingNode() && mCurrentWritingNode->getInsideRenderPassCommands()->valid();
 }
 
-ANGLE_INLINE void CommandGraphResource::onGraphAccess(CommandGraph *commandGraph)
+ANGLE_INLINE void CommandGraphResource::updateCurrentAccessNodes()
 {
     // Clear dependencies if this is a new access. The minimum counter value is 1.
     if (mUse.getCounter() == 1)
@@ -603,6 +604,11 @@ ANGLE_INLINE void CommandGraphResource::onGraphAccess(CommandGraph *commandGraph
         mCurrentWritingNode = nullptr;
         mCurrentReadingNodes.clear();
     }
+}
+
+ANGLE_INLINE void CommandGraphResource::onGraphAccess(CommandGraph *commandGraph)
+{
+    updateCurrentAccessNodes();
 
     // Store reference to usage in graph.
     commandGraph->onResourceUse(mUse);
@@ -612,9 +618,13 @@ ANGLE_INLINE bool CommandGraphResource::appendToStartedRenderPass(CommandGraph *
                                                                   const gl::Rectangle &renderArea,
                                                                   CommandBuffer **commandBufferOut)
 {
-    onGraphAccess(graph);
+    updateCurrentAccessNodes();
+
     if (hasStartedRenderPass())
     {
+        // Store reference to usage in graph.
+        graph->onResourceUse(mUse);
+
         if (mCurrentWritingNode->getRenderPassRenderArea().encloses(renderArea))
         {
             *commandBufferOut = mCurrentWritingNode->getInsideRenderPassCommands();
@@ -701,6 +711,7 @@ ANGLE_INLINE bool CommandGraphResource::hasChildlessWritingNode() const
 // CommandGraph inlines.
 ANGLE_INLINE void CommandGraph::onResourceUse(const SharedResourceUse &resourceUse)
 {
+    ASSERT(!empty());
     SharedResourceUse newUse;
     newUse.set(resourceUse);
     mResourceUses.emplace_back(std::move(newUse));

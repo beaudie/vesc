@@ -82,7 +82,6 @@ class DynamicBuffer : angle::NonCopyable
     angle::Result invalidate(ContextVk *contextVk);
 
     // This releases resources when they might currently be in use.
-    void release(ContextVk *contextVk);
     void release(RendererVk *renderer);
 
     // This releases all the buffers that have been allocated since this was last called.
@@ -101,7 +100,6 @@ class DynamicBuffer : angle::NonCopyable
   private:
     void reset();
     angle::Result allocateNewBuffer(ContextVk *contextVk);
-    void releaseBufferListToContext(ContextVk *contextVk, std::vector<BufferHelper *> *buffers);
     void releaseBufferListToRenderer(RendererVk *renderer, std::vector<BufferHelper *> *buffers);
     void destroyBufferList(VkDevice device, std::vector<BufferHelper *> *buffers);
 
@@ -446,7 +444,6 @@ class BufferHelper final : public CommandGraphResource
                        VkMemoryPropertyFlags memoryPropertyFlags);
     void destroy(VkDevice device);
 
-    void release(ContextVk *contextVk);
     void release(RendererVk *renderer);
 
     bool valid() const { return mBuffer.valid(); }
@@ -701,10 +698,7 @@ class ImageHelper final : public CommandGraphResource
                                 VkImageUsageFlags usage,
                                 uint32_t layerCount);
 
-    void releaseImage(ContextVk *contextVk);
     void releaseImage(RendererVk *rendererVk);
-
-    void releaseStagingBuffer(ContextVk *contextVk);
     void releaseStagingBuffer(RendererVk *renderer);
 
     bool valid() const { return mImage.valid(); }
@@ -873,15 +867,38 @@ class ImageHelper final : public CommandGraphResource
                            uint32_t layerCount,
                            vk::CommandBuffer *commandBuffer);
 
+    enum class UpdateSource
+    {
+        Clear,
+        Buffer,
+        Image,
+    };
+    struct ClearUpdate
+    {
+        VkClearValue value;
+        uint32_t levelIndex;
+        uint32_t layerIndex;
+        uint32_t layerCount;
+    };
+    struct BufferUpdate
+    {
+        BufferHelper *bufferHelper;
+        VkBufferImageCopy copyRegion;
+    };
+    struct ImageUpdate
+    {
+        vk::ImageHelper *image;
+        VkImageCopy copyRegion;
+    };
+
     struct SubresourceUpdate
     {
         SubresourceUpdate();
-        SubresourceUpdate(VkBuffer bufferHandle, const VkBufferImageCopy &copyRegion);
+        SubresourceUpdate(BufferHelper *bufferHelperIn, const VkBufferImageCopy &copyRegion);
         SubresourceUpdate(vk::ImageHelper *image, const VkImageCopy &copyRegion);
         SubresourceUpdate(const VkClearValue &clearValue, const gl::ImageIndex &imageIndex);
         SubresourceUpdate(const SubresourceUpdate &other);
 
-        void release(ContextVk *contextVk);
         void release(RendererVk *renderer);
 
         const VkImageSubresourceLayers &dstSubresource() const
@@ -891,30 +908,6 @@ class ImageHelper final : public CommandGraphResource
                                                         : image.copyRegion.dstSubresource;
         }
         bool isUpdateToLayerLevel(uint32_t layerIndex, uint32_t levelIndex) const;
-
-        enum class UpdateSource
-        {
-            Clear,
-            Buffer,
-            Image,
-        };
-        struct ClearUpdate
-        {
-            VkClearValue value;
-            uint32_t levelIndex;
-            uint32_t layerIndex;
-            uint32_t layerCount;
-        };
-        struct BufferUpdate
-        {
-            VkBuffer bufferHandle;
-            VkBufferImageCopy copyRegion;
-        };
-        struct ImageUpdate
-        {
-            vk::ImageHelper *image;
-            VkImageCopy copyRegion;
-        };
 
         UpdateSource updateSource;
         union
