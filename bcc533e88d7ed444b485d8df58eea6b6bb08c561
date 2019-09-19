@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c25a3e71_c34403c8",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-19T18:12:40Z",
+      "side": 1,
+      "message": "nit: const ref",
+      "range": {
+        "startLine": 44,
+        "startChar": 32,
+        "endLine": 45,
+        "endChar": 59
+      },
+      "revId": "bcc533e88d7ed444b485d8df58eea6b6bb08c561",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da884eb8_cdb16395",
+        "filename": "src/libANGLE/renderer/gl/VertexArrayGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-19T18:12:40Z",
+      "side": 1,
+      "message": "Can these be const char*? If not, const ref std::string",
+      "range": {
+        "startLine": 56,
+        "startChar": 43,
+        "endLine": 57,
+        "endChar": 71
+      },
+      "revId": "bcc533e88d7ed444b485d8df58eea6b6bb08c561",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9030e58_cdd5d6a4",
+        "filename": "src/libANGLE/renderer/gl/VertexArrayGL.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 796,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-19T18:12:40Z",
+      "side": 1,
+      "message": "This maaaay not always be true, I think mAppliedAttributes may be sized to the frontend\u0027s MAX_VERTEX_ATTRIBS which should be \u003c\u003d the driver\u0027s.",
+      "range": {
+        "startLine": 792,
+        "startChar": 0,
+        "endLine": 796,
+        "endChar": 0
+      },
+      "revId": "bcc533e88d7ed444b485d8df58eea6b6bb08c561",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed9f327b_926a37f2",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1735,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-19T18:12:40Z",
+      "side": 1,
+      "message": "I wonder if we could generate the string instead to save the maintenance cost of this function, something like:\n\n   std::ostringstream os;\n   os \u003c\u003c bufferBinding \u003c\u003c \"_BINDING\";\n   return os.str();",
+      "range": {
+        "startLine": 1706,
+        "startChar": 4,
+        "endLine": 1735,
+        "endChar": 5
+      },
+      "revId": "bcc533e88d7ed444b485d8df58eea6b6bb08c561",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
