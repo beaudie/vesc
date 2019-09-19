@@ -21,6 +21,32 @@
 
 namespace sh
 {
+namespace
+{
+bool CheckShaderType(Shader expected, GLenum actual)
+{
+    switch (expected)
+    {
+        case Shader::ALL:
+            return true;
+        case Shader::FRAGMENT:
+            return actual == GL_FRAGMENT_SHADER;
+        case Shader::VERTEX:
+            return actual == GL_VERTEX_SHADER;
+        case Shader::COMPUTE:
+            return actual == GL_COMPUTE_SHADER;
+        case Shader::GEOMETRY:
+            return actual == GL_GEOMETRY_SHADER;
+        case Shader::GEOMETRY_EXT:
+            return actual == GL_GEOMETRY_SHADER_EXT;
+        case Shader::NOT_COMPUTE:
+            return actual != GL_COMPUTE_SHADER;
+        default:
+            UNREACHABLE();
+            return false;
+    }
+}
+}  // namespace
 
 class TSymbolTable::TSymbolTableLevel
 {
@@ -133,7 +159,7 @@ bool TSymbolTable::setGlInArraySize(unsigned int inputArraySize)
     {
         return mGlInVariableWithArraySize->getType().getOutermostArraySize() == inputArraySize;
     }
-    const TInterfaceBlock *glPerVertex = static_cast<const TInterfaceBlock *>(mVar_gl_PerVertex);
+    const TInterfaceBlock *glPerVertex = static_cast<const TInterfaceBlock *>(mgl_PerVertex);
     TType *glInType = new TType(glPerVertex, EvqPerVertexIn, TLayoutQualifier::Create());
     glInType->makeArray(inputArraySize);
     mGlInVariableWithArraySize =
@@ -149,12 +175,12 @@ TVariable *TSymbolTable::getGlInVariableWithArraySize() const
 
 const TVariable *TSymbolTable::gl_FragData() const
 {
-    return static_cast<const TVariable *>(mVar_gl_FragData);
+    return static_cast<const TVariable *>(mgl_FragData);
 }
 
 const TVariable *TSymbolTable::gl_SecondaryFragDataEXT() const
 {
-    return static_cast<const TVariable *>(mVar_gl_SecondaryFragDataEXT);
+    return static_cast<const TVariable *>(mgl_SecondaryFragDataEXT);
 }
 
 TSymbolTable::VariableMetadata *TSymbolTable::getOrCreateVariableMetadata(const TVariable &variable)
@@ -416,4 +442,53 @@ void TSymbolTable::initSamplerDefaultPrecision(TBasicType samplerType)
 TSymbolTable::VariableMetadata::VariableMetadata()
     : staticRead(false), staticWrite(false), invariant(false)
 {}
+
+const TSymbol *SymbolRule::get(ShShaderSpec shaderSpec,
+                               int shaderVersion,
+                               sh::GLenum shaderType,
+                               const ShBuiltInResources &resources,
+                               const TSymbolTableBase &symbolTable) const
+{
+    if (IsDesktopGLSpec(shaderSpec) != (mSpec == Spec::GLSL))
+        return nullptr;
+
+    if (mVersion == kESSL1Only && shaderVersion != 100)
+        return nullptr;
+
+    if (mVersion > shaderVersion)
+        return nullptr;
+
+    if (!CheckShaderType(mShaders, shaderType))
+        return nullptr;
+
+    if (mExtension && resources.*mExtension == 0)
+        return nullptr;
+
+    ASSERT(mSymbol || mResourceVar);
+    return mSymbol ? mSymbol : symbolTable.*mResourceVar;
+}
+
+const TSymbol *SymbolEntry::findBuiltIn(const ImmutableString &name,
+                                        ShShaderSpec shaderSpec,
+                                        int shaderVersion,
+                                        sh::GLenum shaderType,
+                                        const ShBuiltInResources &resources,
+                                        const TSymbolTableBase &symbolTable) const
+{
+    if (name != mName)
+        return nullptr;
+
+    for (uint32_t ruleIndex = 0; ruleIndex < mRuleCount; ++ruleIndex)
+    {
+        const TSymbol *symbol =
+            mRules[ruleIndex].get(shaderSpec, shaderVersion, shaderType, resources, symbolTable);
+        if (symbol)
+        {
+            return symbol;
+        }
+    }
+
+    return nullptr;
+}
+
 }  // namespace sh
