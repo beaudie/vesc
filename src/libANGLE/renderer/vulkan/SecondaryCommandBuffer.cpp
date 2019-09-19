@@ -221,6 +221,14 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                                              params->drawCount, params->stride);
                     break;
                 }
+                case CommandID::DrawIndirect:
+                {
+                    const DrawIndirectParams *params =
+                        getParamPtr<DrawIndirectParams>(currentCommand);
+                    vkCmdDrawIndirect(cmdBuffer, params->buffer, params->offset, params->drawCount,
+                                      params->stride);
+                    break;
+                }
                 case CommandID::EndQuery:
                 {
                     const EndQueryParams *params = getParamPtr<EndQueryParams>(currentCommand);
