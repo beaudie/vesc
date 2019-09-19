@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e5f09a1a_eed7c8cf",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T14:52:09Z",
+      "side": 1,
+      "message": "you should probably add this stuff for consistency",
+      "range": {
+        "startLine": 1652,
+        "startChar": 0,
+        "endLine": 1656,
+        "endChar": 6
+      },
+      "revId": "1515dc47cfa6b73494d764cd6f90a343dab82aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a130b7fe_299fc9ee",
+        "filename": "src/tests/gl_tests/VertexAttributeTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T14:52:09Z",
+      "side": 1,
+      "message": "nit: please comment before each new test.",
+      "range": {
+        "startLine": 837,
+        "startChar": 0,
+        "endLine": 837,
+        "endChar": 6
+      },
+      "revId": "1515dc47cfa6b73494d764cd6f90a343dab82aa9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
