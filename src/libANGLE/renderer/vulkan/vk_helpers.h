@@ -426,6 +426,16 @@ class LineLoopHelper final : angle::NonCopyable
                                 VkDeviceSize *bufferOffsetOut,
                                 uint32_t *indexCountOut);
 
+    angle::Result streamIndicesIndirect(ContextVk *contextVk,
+                                        gl::DrawElementsType glIndexType,
+                                        vk::BufferHelper *indexBuffer,
+                                        vk::BufferHelper *indirectBuffer,
+                                        VkDeviceSize indirectBufferOffset,
+                                        vk::BufferHelper **indexBufferOut,
+                                        VkDeviceSize *indexBufferOffsetOut,
+                                        vk::BufferHelper **indirectBufferOut,
+                                        VkDeviceSize *indirectBufferOffsetOut);
+
     void release(ContextVk *contextVk);
     void destroy(VkDevice device);
 
@@ -433,6 +443,7 @@ class LineLoopHelper final : angle::NonCopyable
 
   private:
     DynamicBuffer mDynamicIndexBuffer;
+    DynamicBuffer mDynamicIndirectBuffer;
 };
 
 class FramebufferHelper;
