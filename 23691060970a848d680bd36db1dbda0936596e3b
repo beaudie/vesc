@@ -46,6 +46,30 @@
       "revId": "23691060970a848d680bd36db1dbda0936596e3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d7e69df_e77a8f0b",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T17:38:10Z",
+      "side": 1,
+      "message": "The test expectations kind of do, but it would need additional code that\u0027s probably not worth it right now. Current CL SGTM if those tests are expected to be broken here and fixed in git master.",
+      "parentUuid": "24e13041_452adbd1",
+      "range": {
+        "startLine": 309,
+        "startChar": 0,
+        "endLine": 311,
+        "endChar": 81
+      },
+      "revId": "23691060970a848d680bd36db1dbda0936596e3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
