@@ -742,7 +742,7 @@ class GroupedList:
                 obj_data = self.objs[hash_val]
 
                 data = []
-                data.append('ImmutableString("{name}")'.format(name=obj_data['name']))
+                data.append('"{name}"'.format(name=obj_data['name']))
 
                 symbol = obj_data['obj'] if 'obj' in obj_data else 'nullptr'
                 var = '&TSymbolTableBase::{}'.format(
@@ -816,7 +816,7 @@ class GroupedList:
 
                 code.append('SymbolEntry(' + ', '.join(data) + ')')
             else:
-                code.append("""SymbolEntry(ImmutableString(""),
+                code.append("""SymbolEntry("",
                        nullptr, nullptr, -1, -1, Shader::ALL,
                        nullptr, nullptr, -1, Shader::ALL, nullptr,
                        nullptr, nullptr, -1, Shader::ALL, nullptr)""")
