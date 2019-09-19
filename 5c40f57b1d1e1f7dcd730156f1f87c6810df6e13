@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c8a3d92_fd2b81a8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-19T22:39:45Z",
+      "side": 1,
+      "message": "Please add at least one test where you use the new flag you\u0027ve added and run some basic tests with it.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89d37be3_c39938d3",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-19T22:39:45Z",
+      "side": 1,
+      "message": "Strange that this enum is in the current location with the number that it has.  Is there a requirement that this be alphabetized?",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 55
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58422a46_10cbbecf",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-19T22:39:45Z",
+      "side": 1,
+      "message": "To be consistent with the other enums, we should call the new one EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D11on12_ANGLE.",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 48
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a2af2ff_6b39d05a",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-19T22:39:45Z",
+      "side": 1,
+      "message": "The feature levels you ask for here should match the ones you pass to createDevice11on12.",
+      "range": {
+        "startLine": 681,
+        "startChar": 45,
+        "endLine": 681,
+        "endChar": 67
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07cd7a50_0618b0fa",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-19T22:39:45Z",
+      "side": 1,
+      "message": "Most new code in ANGLE now uses ComPtr to manage memory instead of using manual addref and release like you have here. I would prefer that we use ComPtr for all new code. If Jamie/Geoff want to keep the member variables of the class using raw pointers, we should at least use ComPtr in this function.",
+      "range": {
+        "startLine": 699,
+        "startChar": 0,
+        "endLine": 706,
+        "endChar": 0
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8bc1834e_09e2a3ed",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-19T22:39:45Z",
+      "side": 1,
+      "message": "For best performance, please only load the D3D12 module when the developer wants an 11on12 device.",
+      "range": {
+        "startLine": 722,
+        "startChar": 0,
+        "endLine": 722,
+        "endChar": 58
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5abcc8b8_6aef2644",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-19T22:39:45Z",
+      "side": 1,
+      "message": "This same enum (D3D12_INIT_MISSING_DEP) and comment are already on line 82.  Why did you need to duplicate it here?",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 27
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cfb707a1_d9ccff3c",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-19T22:39:45Z",
+      "side": 1,
+      "message": "Placeholder issue for you to fix the TODO before landing. I think you should be able to merge this case statement with the WARP_ANGLE and REFERENCE_ANGLE ones.",
+      "range": {
+        "startLine": 470,
+        "startChar": 0,
+        "endLine": 473,
+        "endChar": 0
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
