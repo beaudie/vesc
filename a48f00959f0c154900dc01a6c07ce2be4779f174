@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3763d3f4_0fcfef7d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T15:21:21Z",
+      "side": 1,
+      "message": "you start duplicating code here. is it possible to call setupDraw normally from this point? I don\u0027t see where your code diverges.",
+      "range": {
+        "startLine": 613,
+        "startChar": 0,
+        "endLine": 619,
+        "endChar": 5
+      },
+      "revId": "a48f00959f0c154900dc01a6c07ce2be4779f174",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f30193db_1d424535",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T15:21:21Z",
+      "side": 1,
+      "message": "This is a simpler case and still disabled. I\u0027m wondering if we should do the simple case first. WDYT?",
+      "range": {
+        "startLine": 1579,
+        "startChar": 0,
+        "endLine": 1581,
+        "endChar": 31
+      },
+      "revId": "a48f00959f0c154900dc01a6c07ce2be4779f174",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd48b715_776b5020",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1590,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T15:21:21Z",
+      "side": 1,
+      "message": "can do this also in setup.",
+      "range": {
+        "startLine": 1589,
+        "startChar": 0,
+        "endLine": 1590,
+        "endChar": 27
+      },
+      "revId": "a48f00959f0c154900dc01a6c07ce2be4779f174",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ee3b79f3_dc0260eb",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1604,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T15:21:21Z",
+      "side": 1,
+      "message": "probably should be in setupIndexedIndirectDraw as it will be shared with the other indirect draws. You can add another \"out\" parameter to setup so you can get teh buffer handle.",
+      "range": {
+        "startLine": 1602,
+        "startChar": 0,
+        "endLine": 1604,
+        "endChar": 68
+      },
+      "revId": "a48f00959f0c154900dc01a6c07ce2be4779f174",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca23a1f3_e686b828",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndexIndirect.comp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-19T15:21:21Z",
+      "side": 1,
+      "message": "I suggested an alternate design in your design doc. This shares a lot of common code with ConvertIndex. We can use flags to conditionally compile bits. I\u0027m a bit concerned about the code duplication and wonder if we can merge the two with the flags. WDYT?",
+      "revId": "a48f00959f0c154900dc01a6c07ce2be4779f174",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
