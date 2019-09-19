@@ -212,6 +212,21 @@ angle::Result VertexArrayVk::convertIndexBufferIndirectGPU(ContextVk *contextVk,
                                                             dest, src, params);
 }
 
+angle::Result VertexArrayVk::handleLineLoopIndirect(ContextVk *contextVk,
+                                                    BufferVk *indirectBufferVk,
+                                                    gl::DrawElementsType glIndexType,
+                                                    VkDeviceSize indirectBufferOffset,
+                                                    vk::BufferHelper **indirectBufferOut,
+                                                    VkDeviceSize *indirectBufferOffsetOut)
+{
+    ANGLE_TRY(mLineLoopHelper.streamIndicesIndirect(
+        contextVk, glIndexType, mCurrentElementArrayBuffer, &indirectBufferVk->getBuffer(),
+        indirectBufferOffset, &mCurrentElementArrayBuffer, &mCurrentElementArrayBufferOffset,
+        indirectBufferOut, indirectBufferOffsetOut));
+
+    return angle::Result::Continue;
+}
+
 angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
                                                    gl::DrawElementsType indexType,
                                                    size_t indexCount,
@@ -597,7 +612,7 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
                                                    gl::DrawElementsType indexTypeOrInvalid,
                                                    const void *indices)
 {
-    ContextVk *contextVk                    = vk::GetImpl(context);
+    ContextVk *contextVk = vk::GetImpl(context);
     const gl::AttributesMask activeAttribs =
         context->getStateCache().getActiveClientAttribsMask() |
         context->getStateCache().getActiveBufferedAttribsMask();
@@ -631,7 +646,7 @@ angle::Result VertexArrayVk::updateStreamedAttribs(const gl::Context *context,
 
         ASSERT(GetVertexInputAlignment(vertexFormat) <= vk::kVertexBufferAlignment);
 
-        const uint8_t *src = static_cast<const uint8_t *>(attrib.pointer);
+        const uint8_t *src     = static_cast<const uint8_t *>(attrib.pointer);
         const uint32_t divisor = binding.getDivisor();
         if (divisor > 0)
         {
