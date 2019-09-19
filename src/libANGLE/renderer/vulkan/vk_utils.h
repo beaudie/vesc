@@ -186,83 +186,6 @@ inline OverlayVk *GetImpl(const gl::DummyOverlay *glObject)
     return nullptr;
 }
 
-class GarbageObjectBase
-{
-  public:
-    template <typename ObjectT>
-    GarbageObjectBase(const ObjectT &object)
-        : mHandleType(HandleTypeHelper<ObjectT>::kHandleType),
-          mHandle(reinterpret_cast<VkDevice>(object.getHandle()))
-    {}
-    GarbageObjectBase();
-
-    void destroy(VkDevice device);
-
-  private:
-    HandleType mHandleType;
-    VkDevice mHandle;
-};
-
-class GarbageObject final : public GarbageObjectBase
-{
-  public:
-    template <typename ObjectT>
-    GarbageObject(Serial serial, const ObjectT &object) : GarbageObjectBase(object), mSerial(serial)
-    {}
-
-    GarbageObject();
-    GarbageObject(const GarbageObject &other);
-    GarbageObject &operator=(const GarbageObject &other);
-
-    bool destroyIfComplete(VkDevice device, Serial completedSerial);
-
-  private:
-    // TODO(jmadill): Since many objects will have the same serial, it might be more efficient to
-    // store the serial outside of the garbage object itself. We could index ranges of garbage
-    // objects in the Renderer, using a circular buffer.
-    Serial mSerial;
-};
-
-class MemoryProperties final : angle::NonCopyable
-{
-  public:
-    MemoryProperties();
-
-    void init(VkPhysicalDevice physicalDevice);
-    angle::Result findCompatibleMemoryIndex(Context *context,
-                                            const VkMemoryRequirements &memoryRequirements,
-                                            VkMemoryPropertyFlags requestedMemoryPropertyFlags,
-                                            VkMemoryPropertyFlags *memoryPropertyFlagsOut,
-                                            uint32_t *indexOut) const;
-    void destroy();
-
-  private:
-    VkPhysicalDeviceMemoryProperties mMemoryProperties;
-};
-
-// Similar to StagingImage, for Buffers.
-class StagingBuffer final : angle::NonCopyable
-{
-  public:
-    StagingBuffer();
-    void destroy(VkDevice device);
-
-    angle::Result init(Context *context, VkDeviceSize size, StagingUsage usage);
-
-    Buffer &getBuffer() { return mBuffer; }
-    const Buffer &getBuffer() const { return mBuffer; }
-    DeviceMemory &getDeviceMemory() { return mDeviceMemory; }
-    const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
-    size_t getSize() const { return mSize; }
-
-    void dumpResources(Serial serial, std::vector<GarbageObject> *garbageQueue);
-
-  private:
-    Buffer mBuffer;
-    DeviceMemory mDeviceMemory;
-    size_t mSize;
-};
-
 template <typename ObjT>
 class ObjectAndSerial final : angle::NonCopyable
 {
@@ -298,6 +221,69 @@ class ObjectAndSerial final : angle::NonCopyable
   private:
     ObjT mObject;
     Serial mSerial;
+};
+
+class GarbageObjectBase
+{
+  public:
+    template <typename ObjectT>
+    GarbageObjectBase(const ObjectT &object)
+        : mHandleType(HandleTypeHelper<ObjectT>::kHandleType),
+          mHandle(reinterpret_cast<VkDevice>(object.getHandle()))
+    {}
+    GarbageObjectBase();
+    GarbageObjectBase(GarbageObjectBase &&other);
+    GarbageObjectBase &operator=(GarbageObjectBase &&rhs);
+
+    void destroy(VkDevice device);
+
+  private:
+    HandleType mHandleType;
+    VkDevice mHandle;
+};
+
+using GarbageList      = std::vector<vk::GarbageObjectBase>;
+using GarbageAndSerial = ObjectAndSerial<GarbageList>;
+using GarbageQueue     = std::vector<GarbageAndSerial>;
+
+class MemoryProperties final : angle::NonCopyable
+{
+  public:
+    MemoryProperties();
+
+    void init(VkPhysicalDevice physicalDevice);
+    angle::Result findCompatibleMemoryIndex(Context *context,
+                                            const VkMemoryRequirements &memoryRequirements,
+                                            VkMemoryPropertyFlags requestedMemoryPropertyFlags,
+                                            VkMemoryPropertyFlags *memoryPropertyFlagsOut,
+                                            uint32_t *indexOut) const;
+    void destroy();
+
+  private:
+    VkPhysicalDeviceMemoryProperties mMemoryProperties;
+};
+
+// Similar to StagingImage, for Buffers.
+class StagingBuffer final : angle::NonCopyable
+{
+  public:
+    StagingBuffer();
+    void destroy(VkDevice device);
+
+    angle::Result init(Context *context, VkDeviceSize size, StagingUsage usage);
+
+    Buffer &getBuffer() { return mBuffer; }
+    const Buffer &getBuffer() const { return mBuffer; }
+    DeviceMemory &getDeviceMemory() { return mDeviceMemory; }
+    const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
+    size_t getSize() const { return mSize; }
+
+    void dumpResources(GarbageList *garbageList);
+
+  private:
+    Buffer mBuffer;
+    DeviceMemory mDeviceMemory;
+    size_t mSize;
 };
 
 angle::Result AllocateBufferMemory(vk::Context *context,
