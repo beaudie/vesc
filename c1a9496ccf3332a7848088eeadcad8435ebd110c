@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "95089268_82318000",
+        "filename": "src/compiler/translator/SymbolTable.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-09-20T20:45:24Z",
+      "side": 1,
+      "message": "mIsDesktop explicitly checked against 1 vs mIsVar converted implicitly to bool below, should probably be consistent",
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8404ee0b_27401763",
+        "filename": "src/compiler/translator/SymbolTable.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-09-20T20:45:24Z",
+      "side": 1,
+      "message": "Is the 100 a reference to kESSL1Only or is it a different 100?",
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa6e1ff8_546d3a9c",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-09-20T20:45:24Z",
+      "side": 1,
+      "message": "uint16_t? It\u0027s only being compared against 14 bits",
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5dfaa15_a086ce4a",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-09-20T20:45:24Z",
+      "side": 1,
+      "message": "Is the binary size the reason for a bitfield here? I\u0027m just worried about the way these members may be accessed, is it going to be messier/slower than just using some uint8_t members? Also is version guaranteed to fit into 14 bits? It\u0027s only cast to 16 bits, are you sure there won\u0027t be issues truncating the extra bits?",
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2b18d6f_87cc62b3",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-09-20T20:45:24Z",
+      "side": 1,
+      "message": "Could be a macro, also 1U/0U is more portable because bit field semantics are implementation dependent.",
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0904226_b47b6c7f",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2019-09-20T20:45:24Z",
+      "side": 1,
+      "message": "Same goes for mIsVar",
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
