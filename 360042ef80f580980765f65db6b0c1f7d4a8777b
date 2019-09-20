@@ -46,6 +46,30 @@
       "revId": "360042ef80f580980765f65db6b0c1f7d4a8777b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae5aa401_a4551c35",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1323708
+      },
+      "writtenOn": "2019-09-20T01:38:45Z",
+      "side": 1,
+      "message": "so we need the base/max level change first",
+      "parentUuid": "f8a56848_66ea2c5b",
+      "range": {
+        "startLine": 499,
+        "startChar": 21,
+        "endLine": 499,
+        "endChar": 41
+      },
+      "revId": "360042ef80f580980765f65db6b0c1f7d4a8777b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
