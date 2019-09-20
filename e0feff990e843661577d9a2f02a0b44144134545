@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ee95841_b19b7626",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-20T18:15:12Z",
+      "side": 1,
+      "message": "Can this be clarified a bit more?   Serials are still being used by the Vulkan back end, but this makes it sound like they are being removed entirely.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 54
+      },
+      "revId": "e0feff990e843661577d9a2f02a0b44144134545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4efa1b3_ae32baab",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-20T18:15:12Z",
+      "side": 1,
+      "message": "Can this go now too?",
+      "revId": "e0feff990e843661577d9a2f02a0b44144134545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1eeb1119_51ca75ba",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-20T18:15:12Z",
+      "side": 1,
+      "message": "Why are these sticking around?   Who still needs/uses them?\n\nMaybe a better question is can the entire \u0027Serial\u0027 class be removed if the CommandGraph doesn\u0027t use them anymore?",
+      "revId": "e0feff990e843661577d9a2f02a0b44144134545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

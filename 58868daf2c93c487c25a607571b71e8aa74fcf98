@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "589865c7_4196b21c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 1242,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-20T18:15:12Z",
+      "side": 0,
+      "message": "Why doesn\u0027t this need to be replaced with an onGraphAccess() call?   It looks like this work isn\u0027t being done anymore:\n\n    mCurrentWritingNode \u003d nullptr;\n    mCurrentReadingNodes.clear();",
+      "revId": "58868daf2c93c487c25a607571b71e8aa74fcf98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
