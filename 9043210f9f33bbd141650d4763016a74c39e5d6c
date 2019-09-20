@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d22563b8_c437ec4b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-20T18:50:37Z",
+      "side": 1,
+      "message": "So we will wait for all commands for all Contexts to finish, even if those commands are for resources that this Context never owned?   And the \"for now\" indicates that this could be improved by being smarter about which commands need to complete or which share group this context was in before this Context can be destroyed?",
+      "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9f25111f_b542d8b3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-20T18:50:37Z",
+      "side": 1,
+      "message": "nit:\nContexts -\u003e Context\nremove \u0027they\u0027",
+      "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8683172a_0b9202a3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2745,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-20T18:50:37Z",
+      "side": 1,
+      "message": "Using a std::queue and front()/pop() would allow this block to be removed.",
+      "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ae165c36_439a1169",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2929,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-20T18:50:37Z",
+      "side": 1,
+      "message": "Since it looks a little strange, can you add a note here that we\u0027re throwing the Serial away on purpose to avoid changing any state?   This is mentioned above, but it\u0027s at the of a large comment block kind of far away.",
+      "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec50d316_586f470e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-20T18:50:37Z",
+      "side": 1,
+      "message": "Why does garbage need to pass through mCurrentGarbage rather than being added to mGarbageQueue directly in addGarbage()?   Or, why does the garbage need to be collected in mCurrentGarbage before it\u0027s moved over submitFrame() to mGarbageQueue?",
+      "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "55acee10_9805a83b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1705,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-20T18:50:37Z",
+      "side": 1,
+      "message": "For these blocks, as soon as a context hits an error, any remaining contexts won\u0027t have the commands issued.   Should we still try and issue the flush/finish to all contexts, regardless of whether any of them hit an error?\n\nAlso, would it be helpful to know which context failed and/or if multiple contexts failed?",
+      "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de4199cf_ba181afc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-20T18:50:37Z",
+      "side": 1,
+      "message": "Based on this usage, it seems using std::queue here would be better so you could peek and pop when necessary.",
+      "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
