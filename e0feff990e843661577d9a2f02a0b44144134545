@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "d93c09ae_ec3faf1b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-20T21:29:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ee95841_b19b7626",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 54
+      },
+      "revId": "e0feff990e843661577d9a2f02a0b44144134545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e4efa1b3_ae32baab",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 19
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "2a80707f_470db4bc",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-20T21:29:34Z",
+      "side": 1,
+      "message": "Still used in BufferVk::mapImpl, but renamed for clarity.",
+      "parentUuid": "e4efa1b3_ae32baab",
+      "revId": "e0feff990e843661577d9a2f02a0b44144134545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1eeb1119_51ca75ba",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 19
@@ -56,6 +98,24 @@
       "revId": "e0feff990e843661577d9a2f02a0b44144134545",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "412e37c5_ba7ac774",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 19
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-20T21:29:34Z",
+      "side": 1,
+      "message": "Sorry, Serials are still around. I just refactoring how they were stored in the CommandGraphResource object. Hopefully the new description helps a bit.",
+      "parentUuid": "1eeb1119_51ca75ba",
+      "revId": "e0feff990e843661577d9a2f02a0b44144134545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
