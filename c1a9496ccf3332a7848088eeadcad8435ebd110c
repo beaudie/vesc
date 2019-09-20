@@ -70,6 +70,24 @@
     },
     {
       "key": {
+        "uuid": "87651432_8f7dbcef",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2019-09-20T22:09:39Z",
+      "side": 1,
+      "message": "Good points.  If the version is the GLSL spec version (e.g. 320 or 450), 14 bits should be more than sufficient.",
+      "parentUuid": "e5dfaa15_a086ce4a",
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d2b18d6f_87cc62b3",
         "filename": "src/compiler/translator/SymbolTable.h",
         "patchSetId": 4
