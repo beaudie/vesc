@@ -152,6 +152,30 @@
       "revId": "d98b01cc63d192fef41b813f77590342fc74a00a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "91a6dc24_6d51726a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-20T13:36:54Z",
+      "side": 1,
+      "message": "Ah yes. The mUse can outlive the CGR. Say a Buffer gets deleted. The BufferVk will be destroyed and the BufferHelper that owns the mUse will also be destroyed. The mUse could still be referenced in a graph. Similarly for ImageHelper.\n\nOriginally I was planning on making the entire BufferHelper/ImageHelper be referenced counted. But it seemed cleaner to just always make this little helper struct shared with the CommandGraph.",
+      "parentUuid": "29b39da2_63fee67b",
+      "range": {
+        "startLine": 379,
+        "startChar": 0,
+        "endLine": 380,
+        "endChar": 27
+      },
+      "revId": "d98b01cc63d192fef41b813f77590342fc74a00a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
