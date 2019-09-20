@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1486add9_968802c8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-20T16:22:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acbb7a57_59597d54",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 5
+      },
+      "revId": "db9b9c6d04c1ff074e4b5dcca01fc44d45186a81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3142bcfd_133127b6",
         "filename": "build_overrides/vulkan_loader.gni",
         "patchSetId": 13
@@ -45,6 +69,30 @@
       "revId": "db9b9c6d04c1ff074e4b5dcca01fc44d45186a81",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8a90cfa_67b34f7a",
+        "filename": "build_overrides/vulkan_loader.gni",
+        "patchSetId": 13
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-20T16:22:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3142bcfd_133127b6",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 1
+      },
+      "revId": "db9b9c6d04c1ff074e4b5dcca01fc44d45186a81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "a97195e1_29c690d2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-20T16:22:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f25c2f79_17d2903f",
+      "range": {
+        "startLine": 120,
+        "startChar": 6,
+        "endLine": 120,
+        "endChar": 10
+      },
+      "revId": "db9b9c6d04c1ff074e4b5dcca01fc44d45186a81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c629114_ec8fdd25",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 13
@@ -82,6 +154,30 @@
       "writtenOn": "2019-09-19T16:57:45Z",
       "side": 1,
       "message": "can we revert this? I think we figure out the underlying problem, but forget the details.",
+      "range": {
+        "startLine": 672,
+        "startChar": 0,
+        "endLine": 675,
+        "endChar": 5
+      },
+      "revId": "db9b9c6d04c1ff074e4b5dcca01fc44d45186a81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0160188_0129b01c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-20T16:22:37Z",
+      "side": 1,
+      "message": "I don\u0027t think this is resolved. Caused fails again when I tried to use DebugUtils on Android.",
+      "parentUuid": "9c629114_ec8fdd25",
       "range": {
         "startLine": 672,
         "startChar": 0,
