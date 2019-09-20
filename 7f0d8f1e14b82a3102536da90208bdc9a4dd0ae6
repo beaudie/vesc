@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c25c122_5d5cdade",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-20T18:37:42Z",
+      "side": 1,
+      "message": "it\u0027s probably fine to always compile these functions and only call them when ASSERTs are enabled. i.e. make a macro ANGLE_GL_VALIDATE(func) that internally checks the define. Generally we don\u0027t concern ourselves with a little bit of binary bloat.",
+      "range": {
+        "startLine": 188,
+        "startChar": 4,
+        "endLine": 188,
+        "endChar": 31
+      },
+      "revId": "7f0d8f1e14b82a3102536da90208bdc9a4dd0ae6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51fb6fc5_ebac565b",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 6555,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-20T18:37:42Z",
+      "side": 1,
+      "message": "maybe tag this with something that can get cleaned up when you fix some of the warnings.",
+      "range": {
+        "startLine": 6555,
+        "startChar": 8,
+        "endLine": 6555,
+        "endChar": 16
+      },
+      "revId": "7f0d8f1e14b82a3102536da90208bdc9a4dd0ae6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
