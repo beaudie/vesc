@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c220302f_0ff5e65b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-20T20:03:25Z",
+      "side": 1,
+      "message": "A lot of the original multithreading design tried to avoid this situation where one thread would call functions on contexts current on other threads because it would never allow us to remove a global lock.  Is there no way for the command graph to ref these deleted objects so they are not deleted until the command graph from other contexts are finished with them?",
+      "parentUuid": "d22563b8_c437ec4b",
+      "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f25111f_b542d8b3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
