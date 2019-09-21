@@ -119,6 +119,29 @@
       "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ac0948f_6d732066",
+        "filename": "src/compiler/translator/SymbolTable_ESSL_autogen.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9936,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-21T02:08:03Z",
+      "side": 1,
+      "message": "1. Looks like this comment is supposed to be on the next line.\n\n2. These look a little awkward with the open paren but no matching closing one.   I may have missed it, but are the parens necessary, or can another character be used, like \"_\"?",
+      "range": {
+        "startLine": 9936,
+        "startChar": 42,
+        "endLine": 9936,
+        "endChar": 63
+      },
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
