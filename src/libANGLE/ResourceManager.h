@@ -177,7 +177,7 @@ class TextureManager
     TextureID createTexture();
     ANGLE_INLINE Texture *getTexture(TextureID handle) const
     {
-        ASSERT(mObjectMap.query({0}) == nullptr);
+        // ASSERT(mObjectMap.query({0}) == nullptr);
         return mObjectMap.query(handle);
     }
 
