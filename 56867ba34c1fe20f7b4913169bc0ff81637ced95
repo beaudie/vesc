@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c82e6c6f_eccc79f3",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-23T21:52:49Z",
+      "side": 1,
+      "message": "Why greater than \u00271\u0027 instead of \u00270\u0027?",
+      "range": {
+        "startLine": 255,
+        "startChar": 11,
+        "endLine": 255,
+        "endChar": 32
+      },
+      "revId": "56867ba34c1fe20f7b4913169bc0ff81637ced95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c0622a2_a641c921",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-23T21:52:49Z",
+      "side": 1,
+      "message": "Looks like this can just be:\n\n    ANGLE_INLINE void releaseAndUpdateSerial(Serial serial)\n    {\n        updateSerial();\n        release();\n    }",
+      "revId": "56867ba34c1fe20f7b4913169bc0ff81637ced95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
