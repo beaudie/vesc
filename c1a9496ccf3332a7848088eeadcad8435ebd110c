@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "15be4d7f_1120fe7e",
+        "filename": "src/compiler/translator/SymbolTable.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-23T17:03:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95089268_82318000",
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8404ee0b_27401763",
         "filename": "src/compiler/translator/SymbolTable.cpp",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "2e4129e0_5d738423",
+        "filename": "src/compiler/translator/SymbolTable.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-23T17:03:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8404ee0b_27401763",
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa6e1ff8_546d3a9c",
         "filename": "src/compiler/translator/SymbolTable.h",
         "patchSetId": 4
@@ -50,6 +86,24 @@
       "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5162b59_c71d3179",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-23T17:03:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa6e1ff8_546d3a9c",
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "30d71f9d_8d54117c",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-23T17:03:25Z",
+      "side": 1,
+      "message": "Yes, binary size is the reason. Rejiggered this to use static_assert.",
+      "parentUuid": "87651432_8f7dbcef",
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2b18d6f_87cc62b3",
         "filename": "src/compiler/translator/SymbolTable.h",
         "patchSetId": 4
@@ -105,6 +177,24 @@
     },
     {
       "key": {
+        "uuid": "729f8d72_8c0f8819",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-23T17:03:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2b18d6f_87cc62b3",
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e0904226_b47b6c7f",
         "filename": "src/compiler/translator/SymbolTable.h",
         "patchSetId": 4
@@ -119,6 +209,24 @@
       "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d153011_3fefc9ea",
+        "filename": "src/compiler/translator/SymbolTable.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-23T17:03:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0904226_b47b6c7f",
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -142,6 +250,30 @@
       "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8000950_ad6c1530",
+        "filename": "src/compiler/translator/SymbolTable_ESSL_autogen.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9936,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-23T17:03:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ac0948f_6d732066",
+      "range": {
+        "startLine": 9936,
+        "startChar": 42,
+        "endLine": 9936,
+        "endChar": 63
+      },
+      "revId": "c1a9496ccf3332a7848088eeadcad8435ebd110c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
