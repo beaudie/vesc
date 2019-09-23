@@ -36,6 +36,97 @@
     },
     {
       "key": {
+        "uuid": "c112b956_2870720f",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-23T21:36:30Z",
+      "side": 1,
+      "message": "This should probably be updated to prevent memory overwrites before they occur:\n\nwhile ((dataCopied + (stride * replicateCount)) \u003c bytesToAllocate)",
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d199716c_f55dfcb9",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-23T21:36:30Z",
+      "side": 1,
+      "message": "I\u0027m not sure this piece is necessary, but if you want to keep it in here, I suggest updating it to also prevent memory overwrites:\n\n((dataCopied + stride) \u003c bytesToAllocate)",
+      "range": {
+        "startLine": 79,
+        "startChar": 57,
+        "endLine": 79,
+        "endChar": 87
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3261f9c4_d6407b23",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-23T21:36:30Z",
+      "side": 1,
+      "message": "Lots of little memcpy\u0027s aren\u0027t great.   Is there a vectorized version of this we could make?",
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f598df8_5647589d",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-23T21:36:30Z",
+      "side": 1,
+      "message": "I think this would look better as:\nmEmulateAttribDivisorMask.set(attribIndex);\n\nand then in the else case:\nmEmulateAttribDivisorMask.reset(attribIndex);",
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7bdeb12d_db4fab86",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-23T21:36:30Z",
+      "side": 1,
+      "message": "What is \u0027\u0026emulatedBufferedAttribs\u0027 actually a reference to that\u0027s holding the result you\u0027re calculating?   I would have expected this to need to be a standalone gl::AttributesMask.",
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "14c56652_c569de91",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 10
