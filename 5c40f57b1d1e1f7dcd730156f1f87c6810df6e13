@@ -71,6 +71,54 @@
     },
     {
       "key": {
+        "uuid": "b2833570_86283512",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-09-23T17:48:59Z",
+      "side": 1,
+      "message": "Moved it down in numerical order.",
+      "parentUuid": "89d37be3_c39938d3",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 55
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e778c7f8_4b3a9b70",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-09-23T17:48:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "58422a46_10cbbecf",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 48
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a2af2ff_6b39d05a",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 1
@@ -82,6 +130,30 @@
       "writtenOn": "2019-09-19T22:39:45Z",
       "side": 1,
       "message": "The feature levels you ask for here should match the ones you pass to createDevice11on12.",
+      "range": {
+        "startLine": 681,
+        "startChar": 45,
+        "endLine": 681,
+        "endChar": 67
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad64fba3_73569224",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-09-23T17:48:59Z",
+      "side": 1,
+      "message": "Whoops, copied this from my earlier prototype and missed that. Is it ok to pass in mAvailableFeatureLevels[0] here even though we use the full array below?",
+      "parentUuid": "1a2af2ff_6b39d05a",
       "range": {
         "startLine": 681,
         "startChar": 45,
@@ -140,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "5b9adb44_e577745f",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-09-23T17:48:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8bc1834e_09e2a3ed",
+      "range": {
+        "startLine": 722,
+        "startChar": 0,
+        "endLine": 722,
+        "endChar": 58
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5abcc8b8_6aef2644",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.h",
         "patchSetId": 1
@@ -151,6 +247,30 @@
       "writtenOn": "2019-09-19T22:39:45Z",
       "side": 1,
       "message": "This same enum (D3D12_INIT_MISSING_DEP) and comment are already on line 82.  Why did you need to duplicate it here?",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 27
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de57974f_716054b7",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-09-23T17:48:59Z",
+      "side": 1,
+      "message": "The one on line 82 is for D3D11, should I just use the same enum for 11on12 initialization errors?",
+      "parentUuid": "5abcc8b8_6aef2644",
       "range": {
         "startLine": 110,
         "startChar": 0,
@@ -183,6 +303,30 @@
       "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43c09249_6cbae22a",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-09-23T17:48:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cfb707a1_d9ccff3c",
+      "range": {
+        "startLine": 470,
+        "startChar": 0,
+        "endLine": 473,
+        "endChar": 0
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
