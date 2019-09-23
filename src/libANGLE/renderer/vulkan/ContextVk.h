@@ -374,12 +374,16 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
         EnumCount   = 2,
     };
 
+    angle::Result setupDrawHelper(const gl::Context *context,
+                                  gl::PrimitiveMode mode,
+                                  DirtyBits dirtyBitMask,
+                                  vk::CommandBuffer **commandBufferOut);
     angle::Result setupDraw(const gl::Context *context,
                             gl::PrimitiveMode mode,
                             GLint firstVertex,
                             GLsizei vertexOrIndexCount,
                             GLsizei instanceCount,
-                            gl::DrawElementsType indexTypeOrInvalid,
+                            gl::DrawElementsType indexTypeOrNone,
                             const void *indices,
                             DirtyBits dirtyBitMask,
                             vk::CommandBuffer **commandBufferOut);
@@ -390,6 +394,16 @@ class ContextVk : public ContextImpl, public vk::Context, public vk::RenderPassO
                                    gl::DrawElementsType indexType,
                                    const void *indices,
                                    vk::CommandBuffer **commandBufferOut);
+    angle::Result setupIndirectDrawHelper(const gl::Context *context,
+                                          gl::PrimitiveMode mode,
+                                          DirtyBits dirtyMask,
+                                          vk::CommandBuffer **commandBufferOut,
+                                          vk::Buffer **indirectBufferOut);
+    angle::Result setupIndirectDraw(const gl::Context *context,
+                                    gl::PrimitiveMode mode,
+                                    vk::CommandBuffer **commandBufferOut,
+                                    vk::Buffer **indirectBufferOut);
+
     angle::Result setupLineLoopDraw(const gl::Context *context,
                                     gl::PrimitiveMode mode,
                                     GLint firstVertex,
