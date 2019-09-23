@@ -221,6 +221,14 @@ void SecondaryCommandBuffer::executeCommands(VkCommandBuffer cmdBuffer)
                                       params->stride);
                     break;
                 }
+                case CommandID::DrawIndexedIndirect:
+                {
+                    const DrawIndirectParams *params =
+                        getParamPtr<DrawIndirectParams>(currentCommand);
+                    vkCmdDrawIndexedIndirect(cmdBuffer, params->buffer, params->offset,
+                                             params->drawCount, params->stride);
+                    break;
+                }
                 case CommandID::EndQuery:
                 {
                     const EndQueryParams *params = getParamPtr<EndQueryParams>(currentCommand);
@@ -443,6 +451,9 @@ std::string SecondaryCommandBuffer::dumpCommands(const char *separator) const
                     break;
                 case CommandID::DrawInstanced:
                     result += "DrawInstanced";
+                    break;
+                case CommandID::DrawIndexedIndirect:
+                    result += "DrawIndexedIndirect";
                     break;
                 case CommandID::EndQuery:
                     result += "EndQuery";
