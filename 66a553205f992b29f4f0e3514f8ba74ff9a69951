@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0cb63db4_f19e1993",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-23T17:03:12Z",
+      "side": 1,
+      "message": "I templated this as a perf opt so that in non-emulated case the additional branch is avoided. Can change this to no be templated and just use \"replicateCount !\u003d 1\" to decide if special copy path should be taken.",
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54bed2c2_a00870d0",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-23T17:03:12Z",
+      "side": 1,
+      "message": "This seems to be working. There are a number of variants of vertexLoadFunctions so I was suspicious if this direct approach would have some issues with various vtx formats, but on everything we\u0027re testing, at least, it\u0027s working.",
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14c56652_c569de91",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-23T17:03:12Z",
+      "side": 1,
+      "message": "For the buffer case, just need to map the source data and then can follow the same path as client attribs.",
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
