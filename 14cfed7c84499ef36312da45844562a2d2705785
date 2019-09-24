@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "a6f2c4d6_29a549e6",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1517,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-24T18:26:37Z",
+      "side": 1,
+      "message": "Thanks for catching this. This is a bug. linkValidateShaders should not be in an ASSERT. We should call linkValidateShaders then ASSERT the result is true. Can you fix this in this CL or make a small CL to fix this bug independently?\n\nThis regressed in https://chromium-review.googlesource.com/c/angle/angle/+/989262",
+      "parentUuid": "8f25ee8e_b391857a",
+      "range": {
+        "startLine": 1507,
+        "startChar": 0,
+        "endLine": 1517,
+        "endChar": 9
+      },
+      "revId": "14cfed7c84499ef36312da45844562a2d2705785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e2a6f42b_dade1eeb",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 4
@@ -106,6 +130,30 @@
       "writtenOn": "2019-09-16T14:43:50Z",
       "side": 1,
       "message": "Can you instead copy these varyings into ProgramLinkedResources in Program.cpp after gatherTransformFeedbackVaryings? It feels like they belong in there.",
+      "range": {
+        "startLine": 626,
+        "startChar": 12,
+        "endLine": 627,
+        "endChar": 96
+      },
+      "revId": "14cfed7c84499ef36312da45844562a2d2705785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71306e60_df709f13",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-24T18:26:37Z",
+      "side": 1,
+      "message": "Repeat this comment.",
+      "parentUuid": "dfb5fa3d_e3eac58c",
       "range": {
         "startLine": 626,
         "startChar": 12,
