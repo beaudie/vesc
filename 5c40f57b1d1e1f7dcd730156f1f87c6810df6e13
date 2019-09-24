@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "eb460043_20ad5ee3",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-24T00:59:17Z",
+      "side": 1,
+      "message": "Unless there is a good reason not to, I suggest passing the same array to both APIs.",
+      "parentUuid": "ad64fba3_73569224",
+      "range": {
+        "startLine": 681,
+        "startChar": 45,
+        "endLine": 681,
+        "endChar": 67
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "07cd7a50_0618b0fa",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 1
@@ -271,6 +295,30 @@
       "side": 1,
       "message": "The one on line 82 is for D3D11, should I just use the same enum for 11on12 initialization errors?",
       "parentUuid": "5abcc8b8_6aef2644",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 27
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f7ff536_5607d9ce",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-24T00:59:17Z",
+      "side": 1,
+      "message": "Yes. 11on12 is implemented by having the D3D11 runtime run on with a driver who\u0027s implementation runs D3D12. So your new error is just as much \"for D3D11\" as the old one.",
+      "parentUuid": "de57974f_716054b7",
       "range": {
         "startLine": 110,
         "startChar": 0,

@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bc6117e7_1fed2885",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-24T00:59:17Z",
+      "side": 1,
+      "message": "Strictly speaking, the ANGLE side change is not behind a use-angle flag since use-angle is a Chromium flag, not an ANGLE flag. People who use ANGLE independently of Chromium will get confused by this.  \n\nI think it is sufficient to say that you\u0027re adding support for running ANGLE with 11on12.",
+      "range": {
+        "startLine": 7,
+        "startChar": 21,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "332ef363a5706c323b734b9db7f1bd06052eec18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7537e9b_dcc81d8e",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-24T00:59:17Z",
+      "side": 1,
+      "message": "Please add this enum to the extensions\\EGL_ANGLE_platform_angle_d3d.txt file along with an explanation of what it does.",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 54
+      },
+      "revId": "332ef363a5706c323b734b9db7f1bd06052eec18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4bd8db53_25ac44f2",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1130144
+      },
+      "writtenOn": "2019-09-24T00:59:17Z",
+      "side": 1,
+      "message": "I know you used a smartpointer as a member variable, but we should call Reset() on the smartpointer here so that everything is released in an orderly fashion in one method.",
+      "range": {
+        "startLine": 2024,
+        "startChar": 0,
+        "endLine": 2026,
+        "endChar": 0
+      },
+      "revId": "332ef363a5706c323b734b9db7f1bd06052eec18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
