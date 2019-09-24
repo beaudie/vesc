@@ -481,7 +481,7 @@ void ANGLETestBase::ANGLETestSetUp()
 {
     mSetUpCalled = true;
 
-    InitCrashHandler();
+    InitCrashHandler(nullptr);
 
     gDefaultPlatformMethods.overrideWorkaroundsD3D = TestPlatform_overrideWorkaroundsD3D;
     gDefaultPlatformMethods.overrideFeaturesVk     = TestPlatform_overrideFeaturesVk;

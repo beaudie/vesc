@@ -76,7 +76,7 @@ std::string GetEnvironmentVar(const char *variableName)
     }
 }
 
-const char *GetPathSeparator()
+const char *GetPathSeparatorForEnvironmentVar()
 {
     return ";";
 }
@@ -165,4 +165,5 @@ void BreakDebugger()
 {
     __debugbreak();
 }
+
 }  // namespace angle

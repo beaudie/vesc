@@ -11,8 +11,13 @@
 #include <stdarg.h>
 #include <windows.h>
 #include <array>
+#include <iostream>
+#include <vector>
 
 #include "common/angleutils.h"
+
+#include "anglebase/no_destructor.h"
+#include "util/Timer.h"
 #include "util/windows/third_party/StackWalker/src/StackWalker.h"
 
 namespace angle
@@ -106,6 +111,17 @@ LONG WINAPI StackTraceCrashHandler(EXCEPTION_POINTERS *e)
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
+CrashCallback *gCrashHandlerCallback;
+
+LONG WINAPI CrashHandler(EXCEPTION_POINTERS *e)
+{
+    if (gCrashHandlerCallback)
+    {
+        (*gCrashHandlerCallback)();
+    }
+    return StackTraceCrashHandler(e);
+}
+
 struct ScopedPipe
 {
     ~ScopedPipe()
@@ -117,7 +133,7 @@ struct ScopedPipe
     {
         if (readHandle)
         {
-            CloseHandle(readHandle);
+            ::CloseHandle(readHandle);
             readHandle = nullptr;
         }
     }
@@ -125,10 +141,22 @@ struct ScopedPipe
     {
         if (writeHandle)
         {
-            CloseHandle(writeHandle);
+            ::CloseHandle(writeHandle);
             writeHandle = nullptr;
         }
     }
+
+    bool initPipe(SECURITY_ATTRIBUTES *securityAttribs)
+    {
+        if (::CreatePipe(&readHandle, &writeHandle, securityAttribs, 0) == FALSE)
+        {
+            return false;
+        }
+
+        // Ensure the read handles to the pipes are not inherited.
+        return ::SetHandleInformation(readHandle, HANDLE_FLAG_INHERIT, 0) == TRUE;
+    }
+
     HANDLE readHandle  = nullptr;
     HANDLE writeHandle = nullptr;
 };
@@ -152,6 +180,162 @@ void ReadEntireFile(HANDLE handle, std::string *out)
         out->append(buffer, bytesRead);
     }
 }
+
+// Returns the Win32 last error code or ERROR_SUCCESS if the last error code is
+// ERROR_FILE_NOT_FOUND or ERROR_PATH_NOT_FOUND. This is useful in cases where
+// the absence of a file or path is a success condition (e.g., when attempting
+// to delete an item in the filesystem).
+bool ReturnSuccessOnNotFound()
+{
+    const DWORD error_code = ::GetLastError();
+    return (error_code == ERROR_FILE_NOT_FOUND || error_code == ERROR_PATH_NOT_FOUND);
+}
+
+class WindowsProcess : public Process
+{
+  public:
+    WindowsProcess(const std::vector<const char *> &commandLineArgs,
+                   bool captureStdOut,
+                   bool captureStdErr)
+    {
+        mProcessInfo.hProcess = INVALID_HANDLE_VALUE;
+        mProcessInfo.hThread  = INVALID_HANDLE_VALUE;
+
+        std::vector<char> commandLineString;
+        for (const char *arg : commandLineArgs)
+        {
+            if (arg)
+            {
+                if (!commandLineString.empty())
+                {
+                    commandLineString.push_back(' ');
+                }
+                commandLineString.insert(commandLineString.end(), arg, arg + strlen(arg));
+            }
+        }
+        commandLineString.push_back('\0');
+
+        // Set the bInheritHandle flag so pipe handles are inherited.
+        SECURITY_ATTRIBUTES securityAttribs;
+        securityAttribs.nLength              = sizeof(SECURITY_ATTRIBUTES);
+        securityAttribs.bInheritHandle       = TRUE;
+        securityAttribs.lpSecurityDescriptor = nullptr;
+
+        STARTUPINFOA startInfo = {};
+
+        // Create pipes for stdout and stderr.
+        startInfo.cb        = sizeof(STARTUPINFOA);
+        startInfo.hStdInput = ::GetStdHandle(STD_INPUT_HANDLE);
+        if (captureStdOut)
+        {
+            if (!mStdoutPipe.initPipe(&securityAttribs))
+            {
+                return;
+            }
+            startInfo.hStdOutput = mStdoutPipe.writeHandle;
+        }
+        else
+        {
+            startInfo.hStdOutput = ::GetStdHandle(STD_OUTPUT_HANDLE);
+        }
+
+        if (captureStdErr)
+        {
+            if (!mStderrPipe.initPipe(&securityAttribs))
+            {
+                return;
+            }
+            startInfo.hStdError = mStderrPipe.writeHandle;
+        }
+        else
+        {
+            startInfo.hStdError = ::GetStdHandle(STD_ERROR_HANDLE);
+        }
+
+        if (captureStdOut || captureStdErr)
+        {
+            startInfo.dwFlags |= STARTF_USESTDHANDLES;
+        }
+
+        // Create the child process.
+        if (::CreateProcessA(nullptr, commandLineString.data(), nullptr, nullptr,
+                             TRUE,  // Handles are inherited.
+                             0, nullptr, nullptr, &startInfo, &mProcessInfo) == FALSE)
+        {
+            std::cerr << "CreateProcessA Error code: " << GetLastError() << "\n";
+            return;
+        }
+
+        mStarted = true;
+        mTimer.start();
+
+        // Close the write end of the pipes, so EOF can be generated when child exits.
+        mStdoutPipe.closeWriteHandle();
+        mStderrPipe.closeWriteHandle();
+    }
+
+    ~WindowsProcess() override
+    {
+        if (mProcessInfo.hProcess != INVALID_HANDLE_VALUE)
+        {
+            ::CloseHandle(mProcessInfo.hProcess);
+        }
+        if (mProcessInfo.hThread != INVALID_HANDLE_VALUE)
+        {
+            ::CloseHandle(mProcessInfo.hThread);
+        }
+    }
+
+    bool started() override { return mStarted; }
+
+    void getStdout(std::string *stdoutOut) { ReadEntireFile(mStdoutPipe.readHandle, stdoutOut); }
+
+    void getStderr(std::string *stderrOut) { ReadEntireFile(mStderrPipe.readHandle, stderrOut); }
+
+    bool finish() override
+    {
+        return ::WaitForSingleObject(mProcessInfo.hProcess, INFINITE) == WAIT_OBJECT_0;
+    }
+
+    bool finished() override
+    {
+        if (!mStarted)
+            return false;
+
+        DWORD result = ::WaitForSingleObject(mProcessInfo.hProcess, 0);
+        if (result == WAIT_OBJECT_0)
+            return true;
+        if (result == WAIT_TIMEOUT)
+            return false;
+        std::cerr << "Unexpected result from WaitForSingleObject: " << result
+                  << ". Last error: " << ::GetLastError() << "\n";
+        return false;
+    }
+
+    int getExitCode() override
+    {
+        if (!mStarted)
+            return -1;
+
+        if (mProcessInfo.hProcess == INVALID_HANDLE_VALUE)
+            return -1;
+
+        DWORD exitCode = 0;
+        if (::GetExitCodeProcess(mProcessInfo.hProcess, &exitCode) == FALSE)
+            return false;
+
+        return static_cast<int>(exitCode);
+    }
+
+    double getElapsedTimeSeconds() override { return mTimer.getElapsedTime(); }
+
+  private:
+    bool mStarted = false;
+    ScopedPipe mStdoutPipe;
+    ScopedPipe mStderrPipe;
+    PROCESS_INFORMATION mProcessInfo = {};
+    Timer mTimer;
+};
 }  // anonymous namespace
 
 void Sleep(unsigned int milliseconds)
@@ -174,13 +358,18 @@ void WriteDebugMessage(const char *format, ...)
     OutputDebugStringA(buffer.data());
 }
 
-void InitCrashHandler()
+void InitCrashHandler(CrashCallback *callback)
 {
-    SetUnhandledExceptionFilter(StackTraceCrashHandler);
+    if (callback)
+    {
+        gCrashHandlerCallback = callback;
+    }
+    SetUnhandledExceptionFilter(CrashHandler);
 }
 
 void TerminateCrashHandler()
 {
+    gCrashHandlerCallback = nullptr;
     SetUnhandledExceptionFilter(nullptr);
 }
 
@@ -197,109 +386,80 @@ bool RunApp(const std::vector<const char *> &args,
             std::string *stderrOut,
             int *exitCodeOut)
 {
-    ScopedPipe stdoutPipe;
-    ScopedPipe stderrPipe;
+    WindowsProcess process(args, stdoutOut != nullptr, stderrOut != nullptr);
 
-    SECURITY_ATTRIBUTES sa_attr;
-    // Set the bInheritHandle flag so pipe handles are inherited.
-    sa_attr.nLength              = sizeof(SECURITY_ATTRIBUTES);
-    sa_attr.bInheritHandle       = TRUE;
-    sa_attr.lpSecurityDescriptor = nullptr;
-
-    // Create pipes for stdout and stderr.  Ensure the read handles to the pipes are not inherited.
-    if (stdoutOut && !CreatePipe(&stdoutPipe.readHandle, &stdoutPipe.writeHandle, &sa_attr, 0) &&
-        !SetHandleInformation(stdoutPipe.readHandle, HANDLE_FLAG_INHERIT, 0))
-    {
+    if (!process.started())
         return false;
-    }
-    if (stderrOut && !CreatePipe(&stderrPipe.readHandle, &stderrPipe.writeHandle, &sa_attr, 0) &&
-        !SetHandleInformation(stderrPipe.readHandle, HANDLE_FLAG_INHERIT, 0))
-    {
-        return false;
-    }
-
-    // Concat the nicely separated arguments into one string so the application has to reparse it.
-    // We don't support quotation and spaces in arguments currently.
-    std::vector<char> commandLineString;
-    for (const char *arg : args)
-    {
-        if (arg)
-        {
-            if (!commandLineString.empty())
-            {
-                commandLineString.push_back(' ');
-            }
-            commandLineString.insert(commandLineString.end(), arg, arg + strlen(arg));
-        }
-    }
-    commandLineString.push_back('\0');
-
-    STARTUPINFOA startInfo = {};
-
-    startInfo.cb        = sizeof(STARTUPINFOA);
-    startInfo.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
-    if (stdoutOut)
-    {
-        startInfo.hStdOutput = stdoutPipe.writeHandle;
-    }
-    else
-    {
-        startInfo.hStdError = GetStdHandle(STD_OUTPUT_HANDLE);
-    }
-    if (stderrOut)
-    {
-        startInfo.hStdError = stderrPipe.writeHandle;
-    }
-    else
-    {
-        startInfo.hStdError = GetStdHandle(STD_ERROR_HANDLE);
-    }
-
-    if (stderrOut || stdoutOut)
-    {
-        startInfo.dwFlags |= STARTF_USESTDHANDLES;
-    }
-
-    // Create the child process.
-    PROCESS_INFORMATION processInfo = {};
-    if (!CreateProcessA(nullptr, commandLineString.data(), nullptr, nullptr,
-                        TRUE,  // Handles are inherited.
-                        0, nullptr, nullptr, &startInfo, &processInfo))
-    {
-        return false;
-    }
-
-    // Close the write end of the pipes, so EOF can be generated when child exits.
-    stdoutPipe.closeWriteHandle();
-    stderrPipe.closeWriteHandle();
 
     // Read back the output of the child.
     if (stdoutOut)
     {
-        ReadEntireFile(stdoutPipe.readHandle, stdoutOut);
+        process.getStdout(stdoutOut);
     }
     if (stderrOut)
     {
-        ReadEntireFile(stderrPipe.readHandle, stderrOut);
+        process.getStderr(stderrOut);
     }
 
     // Cleanup the child.
-    bool success = WaitForSingleObject(processInfo.hProcess, INFINITE) == WAIT_OBJECT_0;
+    if (!process.finish())
+        return false;
 
-    if (success)
+    *exitCodeOut = process.getExitCode();
+    return true;
+}
+
+Process *RunProcessAsync(const std::vector<const char *> &args)
+{
+    return nullptr;
+}
+
+bool GetTempDir(std::string *tempDirOut)
+{
+    char tempPath[MAX_PATH + 1];
+    DWORD pathLen = ::GetTempPathA(MAX_PATH, tempPath);
+    if (pathLen >= MAX_PATH || pathLen <= 0)
+        return false;
+    *tempDirOut = tempPath;
+    return true;
+}
+
+bool CreateTemporaryFileInDir(const std::string &dir, std::string *tempFileNameOut)
+{
+    char fileName[MAX_PATH + 1];
+    if (::GetTempFileNameA(dir.c_str(), "ANGLE", 0, fileName) == 0)
+        return false;
+
+    *tempFileNameOut = fileName;
+    return true;
+}
+
+bool DeleteFile(const char *path)
+{
+    if (strlen(path) >= MAX_PATH)
+        return false;
+
+    const DWORD attr = ::GetFileAttributesA(path);
+    // Report success if the file or path does not exist.
+    if (attr == INVALID_FILE_ATTRIBUTES)
     {
-        DWORD exitCode = 0;
-        success        = GetExitCodeProcess(processInfo.hProcess, &exitCode);
-
-        if (success)
-        {
-            *exitCodeOut = static_cast<int>(exitCode);
-        }
+        return ReturnSuccessOnNotFound();
     }
 
-    CloseHandle(processInfo.hProcess);
-    CloseHandle(processInfo.hThread);
+    // Clear the read-only bit if it is set.
+    if ((attr & FILE_ATTRIBUTE_READONLY) &&
+        !::SetFileAttributesA(path, attr & ~FILE_ATTRIBUTE_READONLY))
+    {
+        // It's possible for |path| to be gone now under a race with other deleters.
+        return ReturnSuccessOnNotFound();
+    }
 
-    return success;
+    // We don't handle directories right now.
+    if ((attr & FILE_ATTRIBUTE_DIRECTORY) != 0)
+    {
+        return false;
+    }
+
+    return !!::DeleteFileA(path) ? true : ReturnSuccessOnNotFound();
 }
 }  // namespace angle
