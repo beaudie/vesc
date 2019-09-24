@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3be8e1df_edab8b1f",
+        "filename": "samples/line_raster/LineRaster.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-24T21:33:14Z",
+      "side": 1,
+      "message": "the scale here was intended to emulating quantizing behaviour. you can disable it by replacing it with 1.0 (or making it * 1.0 probably)",
+      "range": {
+        "startLine": 52,
+        "startChar": 16,
+        "endLine": 52,
+        "endChar": 44
+      },
+      "revId": "a646b5fe3bca35676bc292c3abe4e9816b3e311d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
