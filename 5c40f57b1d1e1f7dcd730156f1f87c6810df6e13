@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "127e60f4_018e02bc",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-09-24T20:27:14Z",
+      "side": 1,
+      "message": "D3D12CreateDevice doesn\u0027t accept an array, just a minimum feature level. I could maybe pass in D3D_FEATURE_LEVEL_11_0 and then check the maximum feature level supported using \nmDevice12-\u003eCheckFeatureSupport() ?",
+      "parentUuid": "eb460043_20ad5ee3",
+      "range": {
+        "startLine": 681,
+        "startChar": 45,
+        "endLine": 681,
+        "endChar": 67
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "07cd7a50_0618b0fa",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 1
@@ -328,6 +352,30 @@
       "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35f78aac_06bcd279",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-09-24T20:27:14Z",
+      "side": 1,
+      "message": "Removed D3D12_INIT_MISSING_DEP and using D3D11_INIT_MISSING_DEP instead.",
+      "parentUuid": "5f7ff536_5607d9ce",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 27
+      },
+      "revId": "5c40f57b1d1e1f7dcd730156f1f87c6810df6e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {

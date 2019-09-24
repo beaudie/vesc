@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2dceca9b_f7e525af",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-09-24T20:27:14Z",
+      "side": 1,
+      "message": "Updated commit message",
+      "parentUuid": "bc6117e7_1fed2885",
+      "range": {
+        "startLine": 7,
+        "startChar": 21,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "332ef363a5706c323b734b9db7f1bd06052eec18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e7537e9b_dcc81d8e",
         "filename": "include/EGL/eglext_angle.h",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "2c0f5e5a_06087141",
+        "filename": "include/EGL/eglext_angle.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-09-24T20:27:14Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e7537e9b_dcc81d8e",
+      "range": {
+        "startLine": 66,
+        "startChar": 8,
+        "endLine": 66,
+        "endChar": 54
+      },
+      "revId": "332ef363a5706c323b734b9db7f1bd06052eec18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4bd8db53_25ac44f2",
         "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
         "patchSetId": 3
@@ -68,6 +116,30 @@
       "revId": "332ef363a5706c323b734b9db7f1bd06052eec18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6753dd2a_8d5315e7",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1323689
+      },
+      "writtenOn": "2019-09-24T20:27:14Z",
+      "side": 1,
+      "message": "Added Reset() for smart pointers.",
+      "parentUuid": "4bd8db53_25ac44f2",
+      "range": {
+        "startLine": 2024,
+        "startChar": 0,
+        "endLine": 2026,
+        "endChar": 0
+      },
+      "revId": "332ef363a5706c323b734b9db7f1bd06052eec18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
