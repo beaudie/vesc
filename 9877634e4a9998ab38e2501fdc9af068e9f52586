@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "70554eea_ad6c47a5",
+        "filename": "src/libANGLE/VaryingPacking.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-24T14:35:57Z",
+      "side": 1,
+      "message": "Reversing the names here is confusing, it at least needs a comment.",
+      "range": {
+        "startLine": 290,
+        "startChar": 0,
+        "endLine": 291,
+        "endChar": 57
+      },
+      "revId": "9877634e4a9998ab38e2501fdc9af068e9f52586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e62f14b3_1ed48702",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-24T14:35:57Z",
+      "side": 1,
+      "message": "Could you add a comment about what this is doing?",
+      "revId": "9877634e4a9998ab38e2501fdc9af068e9f52586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bbf2916_3038df3f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 638,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-24T14:35:57Z",
+      "side": 1,
+      "message": "This code is now duplicated 3 times, could you refactor it into a small helper?",
+      "range": {
+        "startLine": 632,
+        "startChar": 0,
+        "endLine": 638,
+        "endChar": 52
+      },
+      "revId": "9877634e4a9998ab38e2501fdc9af068e9f52586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ae50ff4_ed81d9e3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 925,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2019-09-24T14:35:57Z",
+      "side": 1,
+      "message": "Needs an update.",
+      "range": {
+        "startLine": 925,
+        "startChar": 78,
+        "endLine": 925,
+        "endChar": 82
+      },
+      "revId": "9877634e4a9998ab38e2501fdc9af068e9f52586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
