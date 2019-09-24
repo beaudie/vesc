@@ -14,7 +14,7 @@
 
 #include "platform/Platform.h"
 #include "util/OSWindow.h"
-#include "util/system_utils.h"
+#include "util/test_utils.h"
 
 // ConfigParameters implementation.
 ConfigParameters::ConfigParameters()

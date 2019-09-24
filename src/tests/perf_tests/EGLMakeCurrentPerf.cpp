@@ -12,7 +12,7 @@
 #include "platform/Platform.h"
 #include "test_utils/angle_test_configs.h"
 #include "test_utils/angle_test_instantiate.h"
-#include "util/system_utils.h"
+#include "util/test_utils.h"
 
 #define ITERATIONS 20
 

@@ -20,7 +20,7 @@
 #include "platform/Platform.h"
 #include "util/EGLWindow.h"
 #include "util/shader_utils.h"
-#include "util/system_utils.h"
+#include "util/test_utils.h"
 #include "util/util_gl.h"
 
 namespace angle

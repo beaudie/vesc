@@ -8,7 +8,7 @@
 //     https://github.com/google/skia/blob/master/tools/CrashHandler.cpp
 //
 
-#include "util/system_utils.h"
+#include "util/test_utils.h"
 
 #include "common/angleutils.h"
 
@@ -140,7 +140,7 @@ static constexpr int kSignals[] = {
     SIGABRT, SIGBUS, SIGFPE, SIGILL, SIGSEGV, SIGTRAP,
 };
 
-void InitCrashHandler()
+void InitCrashHandler(std::function<void()> callback)
 {
     for (int sig : kSignals)
     {

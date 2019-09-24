@@ -3,11 +3,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// system_utils_unittest_helper.cpp: Helper to the SystemUtils.RunApp unittest
+// test_utils_unittest_helper.cpp: Helper to the RunApp unittest
 
-#include "common/system_utils_unittest_helper.h"
+#include "util/test_utils_unittest_helper.h"
 #include <string.h>
-#include "common/system_utils.h"
+#include "util/test_utils.h"
 
 int main(int argc, char **argv)
 {

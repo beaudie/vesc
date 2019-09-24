@@ -20,7 +20,7 @@
 #include "tcuRandomOrderExecutor.h"
 #include "tcuResource.hpp"
 #include "tcuTestLog.hpp"
-#include "util/system_utils.h"
+#include "util/test_utils.h"
 
 tcu::Platform *CreateANGLEPlatform(angle::LogErrorFunc logErrorFunc);
 

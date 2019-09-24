@@ -22,7 +22,7 @@
 #include "platform/Platform.h"
 #include "tests/test_expectations/GPUTestConfig.h"
 #include "tests/test_expectations/GPUTestExpectationsParser.h"
-#include "util/system_utils.h"
+#include "util/test_utils.h"
 
 namespace angle
 {

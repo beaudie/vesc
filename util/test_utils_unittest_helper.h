@@ -3,10 +3,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// system_utils_unittest_helper.h: Constants used by the SystemUtils.RunApp unittest
+// test_utils_unittest_helper.h: Constants used by the SystemUtils.RunApp unittest
 
-#ifndef COMMON_SYSTEM_UTILS_UNITTEST_HELPER_H_
-#define COMMON_SYSTEM_UTILS_UNITTEST_HELPER_H_
+#ifndef COMMON_TEST_UTILS_UNITTEST_HELPER_H_
+#define COMMON_TEST_UTILS_UNITTEST_HELPER_H_
 
 namespace
 {
@@ -18,4 +18,4 @@ constexpr char kRunAppTestArg1[]   = "--expected-arg1";
 constexpr char kRunAppTestArg2[]   = "expected_arg2";
 }  // anonymous namespace
 
-#endif  // COMMON_SYSTEM_UTILS_UNITTEST_HELPER_H_
+#endif  // COMMON_TEST_UTILS_UNITTEST_HELPER_H_
