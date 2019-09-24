@@ -31,6 +31,8 @@ GLsizei TypeStride(GLenum attribType)
         case GL_FLOAT:
         case GL_UNSIGNED_INT_10_10_10_2_OES:
         case GL_INT_10_10_10_2_OES:
+        case GL_UNSIGNED_INT_2_10_10_10_REV:
+        case GL_INT_2_10_10_10_REV:
             return 4;
         default:
             EXPECT_TRUE(false);
@@ -38,71 +40,133 @@ GLsizei TypeStride(GLenum attribType)
     }
 }
 
+// Implemented by GLES2.0 specification
 template <typename T>
-GLfloat Normalize(T value)
+GLfloat NormalizeScale(T value, T max)
 {
-    static_assert(std::is_integral<T>::value, "Integer required.");
+    GLfloat outputValue;
     if (std::is_signed<T>::value)
     {
-        typedef typename std::make_unsigned<T>::type unsigned_type;
-        return (2.0f * static_cast<GLfloat>(value) + 1.0f) /
-               static_cast<GLfloat>(std::numeric_limits<unsigned_type>::max());
+        outputValue = static_cast<GLfloat>(2 * value + 1) / static_cast<GLfloat>(2 * max + 1);
     }
     else
     {
-        return static_cast<GLfloat>(value) / static_cast<GLfloat>(std::numeric_limits<T>::max());
+        outputValue = static_cast<GLfloat>(value) / static_cast<GLfloat>(max);
     }
+    return outputValue;
 }
 
-// Normalization for each channel of signed/unsigned 10_10_10_2 types
+// Implemented by GLES3.0 specification
+// It is also same as Vulkan 1.1.83 spec.
 template <typename T>
-GLfloat Normalize10(T value)
+GLfloat NormalizeClamp(T value, T max)
+{
+    const GLfloat min   = static_cast<GLfloat>(-1.0f);
+    GLfloat outputValue = static_cast<GLfloat>(value) / static_cast<GLfloat>(max);
+
+    // OpenGL's normalization rules dictate that it should be clamped to -1.0f in
+    // this case.
+    if (outputValue < min)
+    {
+        outputValue = min;
+    }
+
+    return outputValue;
+}
+
+template <typename T>
+GLfloat Normalize(T value, bool isGLES20)
 {
     static_assert(std::is_integral<T>::value, "Integer required.");
+
+    using NormalizeFunction        = GLfloat (*)(T, T);
+    NormalizeFunction normFunction = (isGLES20) ? (NormalizeScale<T>) : (NormalizeClamp<T>);
+    return normFunction(value, std::numeric_limits<T>::max());
+}
+
+// Normalization for each channel of signed/unsigned 10_10_10_2 types and 2_10_10_10 types
+template <typename T>
+GLfloat Normalize10(T value, bool isGLES20)
+{
+    static_assert(std::is_integral<T>::value, "Integer required.");
+
+    using NormalizeFunction        = GLfloat (*)(T, T);
+    NormalizeFunction normFunction = (isGLES20) ? (NormalizeScale<T>) : (NormalizeClamp<T>);
     GLfloat floatOutput;
     if (std::is_signed<T>::value)
     {
         const uint32_t signMask     = 0x200;       // 1 set at the 9th bit
         const uint32_t negativeMask = 0xFFFFFC00;  // All bits from 10 to 31 set to 1
 
-        if (value & signMask)
+        T inputValue = value;
+        if (inputValue & signMask)
         {
-            int negativeNumber = value | negativeMask;
-            floatOutput        = static_cast<GLfloat>(negativeNumber);
-        }
-        else
-        {
-            floatOutput = static_cast<GLfloat>(value);
+            inputValue |= negativeMask;
         }
 
-        const int32_t maxValue = 0x1FF;       // 1 set in bits 0 through 8
-        const int32_t minValue = 0xFFFFFE01;  // Inverse of maxValue
-
-        // A 10-bit two's complement number has the possibility of being minValue - 1 but
-        // OpenGL's normalization rules dictate that it should be clamped to minValue in
-        // this case.
-        if (floatOutput < minValue)
-            floatOutput = minValue;
-
-        const int32_t halfRange = (maxValue - minValue) >> 1;
-        floatOutput             = ((floatOutput - minValue) / halfRange) - 1.0f;
+        const T maxValue = 0x1FF;  // 1 set in bits 0 through 8
+        floatOutput      = normFunction(inputValue, maxValue);
     }
     else
     {
-        const GLfloat maxValue = 1023.0f;  // 1 set in bits 0 through 9
-        floatOutput            = static_cast<GLfloat>(value) / maxValue;
+        const T maxValue = 0x3FF;  // 1 set in bits 0 through 9
+        floatOutput      = normFunction(value, maxValue);
     }
     return floatOutput;
 }
 
 template <typename T>
-GLfloat Normalize2(T value)
+GLfloat Normalize2(T value, bool isGLES20)
 {
     static_assert(std::is_integral<T>::value, "Integer required.");
+
+    using NormalizeFunction        = GLfloat (*)(T, T);
+    NormalizeFunction normFunction = (isGLES20) ? (NormalizeScale<T>) : (NormalizeClamp<T>);
+    GLfloat floatOutput;
     if (std::is_signed<T>::value)
-        return static_cast<float>(value * 2 + 1) / 3.0f;
+    {
+        const uint32_t signMask     = 0x2;         // 1 set at the 1th bit
+        const uint32_t negativeMask = 0xFFFFFFFC;  // All bits from 2 to 31 set to 1
+
+        T inputValue = value;
+        if (inputValue & signMask)
+        {
+            inputValue |= negativeMask;
+        }
+
+        const T maxValue = 0x1;  // 1 set at the 0th bit
+        floatOutput      = normFunction(inputValue, maxValue);
+    }
     else
-        return static_cast<float>(value) / 3.0f;
+    {
+        constexpr T maxValue = 0x3;
+        floatOutput          = normFunction(value, maxValue);
+    }
+    return floatOutput;
+}
+
+template <typename DestT, typename SrcT>
+void Pack2101010(std::array<SrcT, 4> input, DestT *output)
+{
+    static_assert(std::is_integral<SrcT>::value, "Integer required.");
+    static_assert(std::is_integral<DestT>::value, "Integer required.");
+    static_assert(std::is_unsigned<SrcT>::value == std::is_unsigned<DestT>::value,
+                  "Signedness should be equal.");
+
+    const uint32_t xyzValueBits = 10;
+    // 0th = Alpha, 1th = Blue, 2th = Green, 3th = Red
+    const uint32_t bitMasks[4] = {0xC0000000u, 0x3FF00000u, 0x000FFC00u, 0x000003FFu};
+    DestT rOut, gOut, bOut, aOut, output_value;
+
+    aOut = static_cast<DestT>(input[0]);
+    bOut = static_cast<DestT>(input[1]);
+    gOut = static_cast<DestT>(input[2]);
+    rOut = static_cast<DestT>(input[3]);
+    output_value =
+        ((bitMasks[0] & aOut << (xyzValueBits * 3)) | (bitMasks[1] & bOut << (xyzValueBits * 2)) |
+         (bitMasks[2] & gOut << (xyzValueBits)) | (bitMasks[3] & rOut));
+
+    memcpy(output, &output_value, 4);
 }
 
 template <typename DestT, typename SrcT>
@@ -251,14 +315,18 @@ class VertexAttributeTest : public ANGLETest
         EXPECT_PIXEL_NE(midPixelX, (midPixelY + viewportSize[3]) / 2, 255, 255, 255, 255);
     }
 
-    void runTest(const TestData &test) { runTest(test, true); }
+    void runTest(const TestData &test) { runTest(test, true, 1); }
 
-    void runTest(const TestData &test, bool checkPixelEqual)
+    void runTest(const TestData &test, bool checkPixelEqual) { runTest(test, checkPixelEqual, 1); }
+
+    void runTest(const TestData &test, GLint startTypeSize) { runTest(test, true, startTypeSize); }
+
+    void runTest(const TestData &test, bool checkPixelEqual, GLint startTypeSize)
     {
         // TODO(geofflang): Figure out why this is broken on AMD OpenGL
         ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
 
-        for (GLint i = 0; i < 4; i++)
+        for (GLint i = startTypeSize - 1; i < 4; i++)
         {
             GLint typeSize = i + 1;
             setupTest(test, typeSize);
@@ -426,9 +494,10 @@ TEST_P(VertexAttributeTest, UnsignedByteNormalized)
     std::array<GLubyte, kVertexCount> inputData = {
         {0, 1, 2, 3, 4, 5, 6, 7, 125, 126, 127, 128, 129, 250, 251, 252, 253, 254, 255}};
     std::array<GLfloat, kVertexCount> expectedData;
+    bool isGLES20 = (getClientMajorVersion() == 2);
     for (size_t i = 0; i < kVertexCount; i++)
     {
-        expectedData[i] = Normalize(inputData[i]);
+        expectedData[i] = Normalize(inputData[i], isGLES20);
     }
 
     TestData data(GL_UNSIGNED_BYTE, GL_TRUE, Source::IMMEDIATE, inputData.data(),
@@ -455,9 +524,10 @@ TEST_P(VertexAttributeTest, ByteNormalized)
     std::array<GLbyte, kVertexCount> inputData = {
         {0, 1, 2, 3, 4, -1, -2, -3, -4, 125, 126, 127, -128, -127, -126}};
     std::array<GLfloat, kVertexCount> expectedData;
+    bool isGLES20 = (getClientMajorVersion() == 2);
     for (size_t i = 0; i < kVertexCount; i++)
     {
-        expectedData[i] = Normalize(inputData[i]);
+        expectedData[i] = Normalize(inputData[i], isGLES20);
     }
 
     TestData data(GL_BYTE, GL_TRUE, Source::IMMEDIATE, inputData.data(), expectedData.data());
@@ -484,9 +554,10 @@ TEST_P(VertexAttributeTest, UnsignedShortNormalized)
     std::array<GLushort, kVertexCount> inputData = {
         {0, 1, 2, 3, 254, 255, 256, 32766, 32767, 32768, 65533, 65534, 65535}};
     std::array<GLfloat, kVertexCount> expectedData;
+    bool isGLES20 = (getClientMajorVersion() == 2);
     for (size_t i = 0; i < kVertexCount; i++)
     {
-        expectedData[i] = Normalize(inputData[i]);
+        expectedData[i] = Normalize(inputData[i], isGLES20);
     }
 
     TestData data(GL_UNSIGNED_SHORT, GL_TRUE, Source::IMMEDIATE, inputData.data(),
@@ -513,9 +584,10 @@ TEST_P(VertexAttributeTest, ShortNormalized)
     std::array<GLshort, kVertexCount> inputData = {
         {0, 1, 2, 3, -1, -2, -3, -4, 32766, 32767, -32768, -32767, -32766}};
     std::array<GLfloat, kVertexCount> expectedData;
+    bool isGLES20 = (getClientMajorVersion() == 2);
     for (size_t i = 0; i < kVertexCount; i++)
     {
-        expectedData[i] = Normalize(inputData[i]);
+        expectedData[i] = Normalize(inputData[i], isGLES20);
     }
 
     TestData data(GL_SHORT, GL_TRUE, Source::IMMEDIATE, inputData.data(), expectedData.data());
@@ -567,10 +639,11 @@ TEST_P(VertexAttributeTest, UsingDifferentFormatAndSameClientMemoryPointer)
     runTest(unnormalizedData);
 
     std::array<GLfloat, kVertexCount> normalizedExpectedData;
+    bool isGLES20 = (getClientMajorVersion() == 2);
     for (size_t i = 0; i < kVertexCount; i++)
     {
         inputData[i]              = -inputData[i];
-        normalizedExpectedData[i] = Normalize(inputData[i]);
+        normalizedExpectedData[i] = Normalize(inputData[i], isGLES20);
     }
 
     TestData normalizedData(GL_SHORT, GL_TRUE, Source::IMMEDIATE, inputData.data(),
@@ -610,10 +683,11 @@ TEST_P(VertexAttributeTest, UsingDifferentFormatAndSameBuffer)
 
     std::array<GLfloat, kVertexCount> unnormalizedExpectedData;
     std::array<GLfloat, kVertexCount> normalizedExpectedData;
+    bool isGLES20 = (getClientMajorVersion() == 2);
     for (size_t i = 0; i < kVertexCount; i++)
     {
         unnormalizedExpectedData[i] = inputData[i];
-        normalizedExpectedData[i]   = Normalize(inputData[i]);
+        normalizedExpectedData[i]   = Normalize(inputData[i], isGLES20);
     }
 
     // Use unnormalized short as the format of the data in mBuffer in the first draw.
@@ -661,10 +735,11 @@ TEST_P(VertexAttributeTest, MixedUsingBufferAndClientMemoryPointer)
 
     std::array<GLfloat, kVertexCount> unnormalizedExpectedData;
     std::array<GLfloat, kVertexCount> normalizedExpectedData;
+    bool isGLES20 = (getClientMajorVersion() == 2);
     for (size_t i = 0; i < kVertexCount; i++)
     {
         unnormalizedExpectedData[i] = inputData[i];
-        normalizedExpectedData[i]   = Normalize(inputData[i]);
+        normalizedExpectedData[i]   = Normalize(inputData[i], isGLES20);
     }
 
     TestData unnormalizedData(GL_SHORT, GL_FALSE, Source::IMMEDIATE, inputData.data(),
@@ -748,22 +823,25 @@ TEST_P(VertexAttributeTest, SignedPacked1010102ExtensionNormalized)
     std::array<GLint, kVertexCount> packedInput;
     std::array<GLfloat, kVertexCount> expectedNormalizedTypeSize4;
     std::array<GLfloat, kVertexCount> expectedNormalizedTypeSize3;
+    bool isGLES20 = (getClientMajorVersion() == 2);
 
     for (size_t i = 0; i < kVertexCount / 4; i++)
     {
         packedInput[i] = Pack1010102<GLint, GLshort>(unpackedInput[i]);
 
         expectedNormalizedTypeSize3[i * 3 + 0] = expectedNormalizedTypeSize4[i * 4 + 0] =
-            Normalize10<GLshort>(unpackedInput[i][0]);
+            Normalize10<GLshort>(unpackedInput[i][0], isGLES20);
         expectedNormalizedTypeSize3[i * 3 + 1] = expectedNormalizedTypeSize4[i * 4 + 1] =
-            Normalize10<GLshort>(unpackedInput[i][1]);
+            Normalize10<GLshort>(unpackedInput[i][1], isGLES20);
         expectedNormalizedTypeSize3[i * 3 + 2] = expectedNormalizedTypeSize4[i * 4 + 2] =
-            Normalize10<GLshort>(unpackedInput[i][2]);
+            Normalize10<GLshort>(unpackedInput[i][2], isGLES20);
 
         // when the type size is 3, alpha will be 1.0f by GLES driver
-        expectedNormalizedTypeSize4[i * 4 + 3] = Normalize2<GLshort>(unpackedInput[i][3]);
+        expectedNormalizedTypeSize4[i * 4 + 3] = Normalize2<GLshort>(unpackedInput[i][3], isGLES20);
     }
 
+    TestData data4(GL_INT_10_10_10_2_OES, GL_TRUE, Source::IMMEDIATE, packedInput.data(),
+                   expectedNormalizedTypeSize4.data());
     TestData bufferedData4(GL_INT_10_10_10_2_OES, GL_TRUE, Source::BUFFER, packedInput.data(),
                            expectedNormalizedTypeSize4.data());
     TestData data3(GL_INT_10_10_10_2_OES, GL_TRUE, Source::IMMEDIATE, packedInput.data(),
@@ -771,8 +849,8 @@ TEST_P(VertexAttributeTest, SignedPacked1010102ExtensionNormalized)
     TestData bufferedData3(GL_INT_10_10_10_2_OES, GL_TRUE, Source::BUFFER, packedInput.data(),
                            expectedNormalizedTypeSize3.data());
 
-    std::array<std::pair<const TestData &, GLint>, 3> dataSet = {
-        {{bufferedData4, 4}, {data3, 3}, {bufferedData3, 3}}};
+    std::array<std::pair<const TestData &, GLint>, 4> dataSet = {
+        {{data4, 4}, {bufferedData4, 4}, {data3, 3}, {bufferedData3, 3}}};
 
     for (auto data : dataSet)
     {
@@ -853,20 +931,21 @@ TEST_P(VertexAttributeTest, UnsignedPacked1010102ExtensionNormalized)
     std::array<GLuint, kVertexCount> packedInput;
     std::array<GLfloat, kVertexCount> expectedTypeSize4;
     std::array<GLfloat, kVertexCount> expectedTypeSize3;
+    bool isGLES20 = (getClientMajorVersion() == 2);
 
     for (size_t i = 0; i < kVertexCount / 4; i++)
     {
         packedInput[i] = Pack1010102<GLuint, GLushort>(unpackedInput[i]);
 
         expectedTypeSize3[i * 3 + 0] = expectedTypeSize4[i * 4 + 0] =
-            Normalize10<GLushort>(unpackedInput[i][0]);
+            Normalize10<GLushort>(unpackedInput[i][0], isGLES20);
         expectedTypeSize3[i * 3 + 1] = expectedTypeSize4[i * 4 + 1] =
-            Normalize10<GLushort>(unpackedInput[i][1]);
+            Normalize10<GLushort>(unpackedInput[i][1], isGLES20);
         expectedTypeSize3[i * 3 + 2] = expectedTypeSize4[i * 4 + 2] =
-            Normalize10<GLushort>(unpackedInput[i][2]);
+            Normalize10<GLushort>(unpackedInput[i][2], isGLES20);
 
         // when the type size is 3, alpha will be 1.0f by GLES driver
-        expectedTypeSize4[i * 4 + 3] = Normalize2<GLushort>(unpackedInput[i][3]);
+        expectedTypeSize4[i * 4 + 3] = Normalize2<GLushort>(unpackedInput[i][3], isGLES20);
     }
 
     TestData data4(GL_UNSIGNED_INT_10_10_10_2_OES, GL_TRUE, Source::IMMEDIATE, packedInput.data(),
@@ -920,9 +999,10 @@ TEST_P(VertexAttributeTestES3, IntNormalized)
     std::array<GLint, kVertexCount> inputData = {
         {0, 1, 2, 3, -1, -2, -3, -4, -1, hi, hi - 1, lo, lo + 1}};
     std::array<GLfloat, kVertexCount> expectedData;
+    bool isGLES20 = (getClientMajorVersion() == 2);
     for (size_t i = 0; i < kVertexCount; i++)
     {
-        expectedData[i] = Normalize(inputData[i]);
+        expectedData[i] = Normalize(inputData[i], isGLES20);
     }
 
     TestData data(GL_INT, GL_TRUE, Source::BUFFER, inputData.data(), expectedData.data());
@@ -952,13 +1032,316 @@ TEST_P(VertexAttributeTestES3, UnsignedIntNormalized)
     std::array<GLuint, kVertexCount> inputData = {
         {0, 1, 2, 3, 254, 255, 256, mid - 1, mid, mid + 1, hi - 2, hi - 1, hi}};
     std::array<GLfloat, kVertexCount> expectedData;
+    bool isGLES20 = (getClientMajorVersion() == 2);
     for (size_t i = 0; i < kVertexCount; i++)
     {
-        expectedData[i] = Normalize(inputData[i]);
+        expectedData[i] = Normalize(inputData[i], isGLES20);
     }
 
     TestData data(GL_UNSIGNED_INT, GL_TRUE, Source::BUFFER, inputData.data(), expectedData.data());
     runTest(data);
+}
+
+// Verify the vertex format types, GL_INT_2_10_10_10_REV
+TEST_P(VertexAttributeTestES3, SignedPacked2101010UnnormalizedUserPtr)
+{
+    // RGB channels are 10-bits, alpha is 2-bits
+    GLshort rgb_hi                                                     = 511;
+    GLshort rgb_low                                                    = -512;
+    GLshort a_hi                                                       = 1;
+    GLshort a_low                                                      = -2;
+    std::array<std::array<GLshort, 4>, kVertexCount / 4> unpackedInput = {
+        {{0, 2, 1, 0},
+         {a_hi, 256, 255, 254},
+         {a_low, 254, 255, 256},
+         {-1, 509, 510, rgb_hi},
+         {a_low, -500, -511, rgb_low},
+         {a_hi, -3, -2, -1}}};
+    std::array<GLint, kVertexCount / 4> packedInput;
+    std::array<GLfloat, kVertexCount> expectedData;
+
+    for (size_t i = 0; i < kVertexCount / 4; i++)
+    {
+        GLfloat *expectedRedValue   = static_cast<GLfloat *>(&expectedData[i * 4 + 0]);
+        GLfloat *expectedGreenValue = static_cast<GLfloat *>(&expectedData[i * 4 + 1]);
+        GLfloat *expectedBlueValue  = static_cast<GLfloat *>(&expectedData[i * 4 + 2]);
+        GLfloat *expectedAlphaValue = static_cast<GLfloat *>(&expectedData[i * 4 + 3]);
+
+        Pack2101010<GLint, GLshort>(unpackedInput[i], &packedInput[i]);
+        *expectedAlphaValue = unpackedInput[i][0];
+        *expectedBlueValue  = unpackedInput[i][1];
+        *expectedGreenValue = unpackedInput[i][2];
+        *expectedRedValue   = unpackedInput[i][3];
+    }
+
+    TestData data4(GL_INT_2_10_10_10_REV, GL_FALSE, Source::IMMEDIATE, packedInput.data(),
+                   expectedData.data());
+    runTest(data4, 4);
+}
+
+TEST_P(VertexAttributeTestES3, SignedPacked2101010UnnormalizedBuffer)
+{
+    // RGB channels are 10-bits, alpha is 2-bits
+    GLshort rgb_hi                                                     = 511;
+    GLshort rgb_low                                                    = -512;
+    GLshort a_hi                                                       = 1;
+    GLshort a_low                                                      = -2;
+    std::array<std::array<GLshort, 4>, kVertexCount / 4> unpackedInput = {
+        {{0, 2, 1, 0},
+         {a_hi, 256, 255, 254},
+         {a_low, 254, 255, 256},
+         {-1, 509, 510, rgb_hi},
+         {a_low, -500, -511, rgb_low},
+         {a_hi, -3, -2, -1}}};
+    std::array<GLint, kVertexCount / 4> packedInput;
+    std::array<GLfloat, kVertexCount> expectedData;
+
+    for (size_t i = 0; i < kVertexCount / 4; i++)
+    {
+        GLfloat *expectedRedValue   = static_cast<GLfloat *>(&expectedData[i * 4 + 0]);
+        GLfloat *expectedGreenValue = static_cast<GLfloat *>(&expectedData[i * 4 + 1]);
+        GLfloat *expectedBlueValue  = static_cast<GLfloat *>(&expectedData[i * 4 + 2]);
+        GLfloat *expectedAlphaValue = static_cast<GLfloat *>(&expectedData[i * 4 + 3]);
+
+        Pack2101010<GLint, GLshort>(unpackedInput[i], &packedInput[i]);
+        *expectedAlphaValue = unpackedInput[i][0];
+        *expectedBlueValue  = unpackedInput[i][1];
+        *expectedGreenValue = unpackedInput[i][2];
+        *expectedRedValue   = unpackedInput[i][3];
+    }
+
+    TestData bufferedData4(GL_INT_2_10_10_10_REV, GL_FALSE, Source::BUFFER, packedInput.data(),
+                           expectedData.data());
+    runTest(bufferedData4, 4);
+}
+
+TEST_P(VertexAttributeTestES3, SignedPacked2101010NormalizedUserPtr)
+{
+    // RGB channels are 10-bits, alpha is 2-bits
+    GLshort rgb_hi                                                     = 511;
+    GLshort rgb_low                                                    = -512;
+    GLshort a_hi                                                       = 1;
+    GLshort a_low                                                      = -2;
+    std::array<std::array<GLshort, 4>, kVertexCount / 4> unpackedInput = {
+        {{0, 2, 1, 0},
+         {a_hi, 256, 255, 254},
+         {a_low, 254, 255, 256},
+         {-1, 509, 510, rgb_hi},
+         {a_low, -500, -511, rgb_low},
+         {a_hi, -3, -2, -1}}};
+    std::array<GLint, kVertexCount / 4> packedInput;
+    std::array<GLfloat, kVertexCount> expectedData;
+    bool isGLES20 = (getClientMajorVersion() == 2);
+
+    for (size_t i = 0; i < kVertexCount / 4; i++)
+    {
+        GLfloat *expectedRedValue   = static_cast<GLfloat *>(&expectedData[i * 4 + 0]);
+        GLfloat *expectedGreenValue = static_cast<GLfloat *>(&expectedData[i * 4 + 1]);
+        GLfloat *expectedBlueValue  = static_cast<GLfloat *>(&expectedData[i * 4 + 2]);
+        GLfloat *expectedAlphaValue = static_cast<GLfloat *>(&expectedData[i * 4 + 3]);
+
+        Pack2101010<GLint, GLshort>(unpackedInput[i], &packedInput[i]);
+        *expectedAlphaValue = Normalize2<GLshort>(unpackedInput[i][0], isGLES20);
+        *expectedBlueValue  = Normalize10<GLshort>(unpackedInput[i][1], isGLES20);
+        *expectedGreenValue = Normalize10<GLshort>(unpackedInput[i][2], isGLES20);
+        *expectedRedValue   = Normalize10<GLshort>(unpackedInput[i][3], isGLES20);
+    }
+
+    TestData data4(GL_INT_2_10_10_10_REV, GL_TRUE, Source::IMMEDIATE, packedInput.data(),
+                   expectedData.data());
+    runTest(data4, 4);
+}
+
+TEST_P(VertexAttributeTestES3, SignedPacked2101010NormalizedBuffer)
+{
+    // RGB channels are 10-bits, alpha is 2-bits
+    GLshort rgb_hi                                                     = 511;
+    GLshort rgb_low                                                    = -512;
+    GLshort a_hi                                                       = 1;
+    GLshort a_low                                                      = -2;
+    std::array<std::array<GLshort, 4>, kVertexCount / 4> unpackedInput = {
+        {{0, 2, 1, 0},
+         {a_hi, 256, 255, 254},
+         {a_low, 254, 255, 256},
+         {-1, 509, 510, rgb_hi},
+         {a_low, -500, -511, rgb_low},
+         {a_hi, -3, -2, -1}}};
+    std::array<GLint, kVertexCount / 4> packedInput;
+    std::array<GLfloat, kVertexCount> expectedData;
+    bool isGLES20 = (getClientMajorVersion() == 2);
+
+    for (size_t i = 0; i < kVertexCount / 4; i++)
+    {
+        GLfloat *expectedRedValue   = static_cast<GLfloat *>(&expectedData[i * 4 + 0]);
+        GLfloat *expectedGreenValue = static_cast<GLfloat *>(&expectedData[i * 4 + 1]);
+        GLfloat *expectedBlueValue  = static_cast<GLfloat *>(&expectedData[i * 4 + 2]);
+        GLfloat *expectedAlphaValue = static_cast<GLfloat *>(&expectedData[i * 4 + 3]);
+
+        Pack2101010<GLint, GLshort>(unpackedInput[i], &packedInput[i]);
+        *expectedAlphaValue = Normalize2<GLshort>(unpackedInput[i][0], isGLES20);
+        *expectedBlueValue  = Normalize10<GLshort>(unpackedInput[i][1], isGLES20);
+        *expectedGreenValue = Normalize10<GLshort>(unpackedInput[i][2], isGLES20);
+        *expectedRedValue   = Normalize10<GLshort>(unpackedInput[i][3], isGLES20);
+    }
+
+    TestData data4(GL_INT_2_10_10_10_REV, GL_TRUE, Source::BUFFER, packedInput.data(),
+                   expectedData.data());
+    runTest(data4, 4);
+}
+
+// Verify the vertex format types, GL_UNSIGNED_INT_2_10_10_10_REV
+TEST_P(VertexAttributeTestES3, UnsignedPacked2101010UnnormalizedUserPtr)
+{
+    // RGB channels are 10-bits, alpha is 2-bits
+    GLushort rgb_hi                                                     = 1023;
+    GLushort rgb_mid                                                    = rgb_hi >> 1;  // 511
+    GLushort rgb_low                                                    = 0;
+    GLushort a_hi                                                       = 3;
+    GLushort a_mid                                                      = a_hi >> 1;  // 1
+    GLushort a_low                                                      = 0;
+    std::array<std::array<GLushort, 4>, kVertexCount / 4> unpackedInput = {
+        {{a_low, 2, 1, rgb_low},
+         {a_mid, 512, 513, rgb_mid},
+         {a_hi, 1021, 1022, rgb_hi},
+         {2, rgb_mid, 512, 513},
+         {a_hi, 0, 1, 2},
+         {a_low, 1022, 1022, rgb_hi}}};
+    std::array<GLuint, kVertexCount / 4> packedInput;
+    std::array<GLfloat, kVertexCount> expectedData;
+
+    for (size_t i = 0; i < kVertexCount / 4; i++)
+    {
+        GLfloat *expectedRedValue   = static_cast<GLfloat *>(&expectedData[i * 4 + 0]);
+        GLfloat *expectedGreenValue = static_cast<GLfloat *>(&expectedData[i * 4 + 1]);
+        GLfloat *expectedBlueValue  = static_cast<GLfloat *>(&expectedData[i * 4 + 2]);
+        GLfloat *expectedAlphaValue = static_cast<GLfloat *>(&expectedData[i * 4 + 3]);
+
+        Pack2101010<GLuint, GLushort>(unpackedInput[i], &packedInput[i]);
+        *expectedAlphaValue = unpackedInput[i][0];
+        *expectedBlueValue  = unpackedInput[i][1];
+        *expectedGreenValue = unpackedInput[i][2];
+        *expectedRedValue   = unpackedInput[i][3];
+    }
+
+    TestData bufferedData4(GL_UNSIGNED_INT_2_10_10_10_REV, GL_FALSE, Source::IMMEDIATE,
+                           packedInput.data(), expectedData.data());
+    runTest(bufferedData4, 4);
+}
+
+TEST_P(VertexAttributeTestES3, UnsignedPacked2101010UnnormalizedBuffer)
+{
+    // RGB channels are 10-bits, alpha is 2-bits
+    GLushort rgb_hi                                                     = 1023;
+    GLushort rgb_mid                                                    = rgb_hi >> 1;  // 511
+    GLushort rgb_low                                                    = 0;
+    GLushort a_hi                                                       = 3;
+    GLushort a_mid                                                      = a_hi >> 1;  // 1
+    GLushort a_low                                                      = 0;
+    std::array<std::array<GLushort, 4>, kVertexCount / 4> unpackedInput = {
+        {{a_low, 2, 1, rgb_low},
+         {a_mid, 512, 513, rgb_mid},
+         {a_hi, 1021, 1022, rgb_hi},
+         {2, rgb_mid, 512, 513},
+         {a_hi, 0, 1, 2},
+         {a_low, 1022, 1022, rgb_hi}}};
+    std::array<GLuint, kVertexCount / 4> packedInput;
+    std::array<GLfloat, kVertexCount> expectedData;
+
+    for (size_t i = 0; i < kVertexCount / 4; i++)
+    {
+        GLfloat *expectedRedValue   = static_cast<GLfloat *>(&expectedData[i * 4 + 0]);
+        GLfloat *expectedGreenValue = static_cast<GLfloat *>(&expectedData[i * 4 + 1]);
+        GLfloat *expectedBlueValue  = static_cast<GLfloat *>(&expectedData[i * 4 + 2]);
+        GLfloat *expectedAlphaValue = static_cast<GLfloat *>(&expectedData[i * 4 + 3]);
+
+        Pack2101010<GLuint, GLushort>(unpackedInput[i], &packedInput[i]);
+        *expectedAlphaValue = unpackedInput[i][0];
+        *expectedBlueValue  = unpackedInput[i][1];
+        *expectedGreenValue = unpackedInput[i][2];
+        *expectedRedValue   = unpackedInput[i][3];
+    }
+
+    TestData bufferedData4(GL_UNSIGNED_INT_2_10_10_10_REV, GL_FALSE, Source::BUFFER,
+                           packedInput.data(), expectedData.data());
+    runTest(bufferedData4, 4);
+}
+
+TEST_P(VertexAttributeTestES3, UnsignedPacked2101010NormalizedUserPtr)
+{
+    // RGB channels are 10-bits, alpha is 2-bits
+    GLushort rgb_hi                                                     = 1023;
+    GLushort rgb_mid                                                    = rgb_hi >> 1;  // 511
+    GLushort rgb_low                                                    = 0;
+    GLushort a_hi                                                       = 3;
+    GLushort a_mid                                                      = a_hi >> 1;  // 1
+    GLushort a_low                                                      = 0;
+    std::array<std::array<GLushort, 4>, kVertexCount / 4> unpackedInput = {
+        {{a_low, 2, 1, rgb_low},
+         {a_mid, 512, 513, rgb_mid},
+         {a_hi, 1021, 1022, rgb_hi},
+         {2, rgb_mid, 512, 513},
+         {a_hi, 0, 1, 2},
+         {a_low, 1022, 1022, rgb_hi}}};
+    std::array<GLuint, kVertexCount / 4> packedInput;
+    std::array<GLfloat, kVertexCount> expectedData;
+    bool isGLES20 = (getClientMajorVersion() == 2);
+
+    for (size_t i = 0; i < kVertexCount / 4; i++)
+    {
+        GLfloat *expectedRedValue   = static_cast<GLfloat *>(&expectedData[i * 4 + 0]);
+        GLfloat *expectedGreenValue = static_cast<GLfloat *>(&expectedData[i * 4 + 1]);
+        GLfloat *expectedBlueValue  = static_cast<GLfloat *>(&expectedData[i * 4 + 2]);
+        GLfloat *expectedAlphaValue = static_cast<GLfloat *>(&expectedData[i * 4 + 3]);
+
+        Pack2101010<GLuint, GLushort>(unpackedInput[i], &packedInput[i]);
+        *expectedAlphaValue = Normalize2<GLushort>(unpackedInput[i][0], isGLES20);
+        *expectedBlueValue  = Normalize10<GLushort>(unpackedInput[i][1], isGLES20);
+        *expectedGreenValue = Normalize10<GLushort>(unpackedInput[i][2], isGLES20);
+        *expectedRedValue   = Normalize10<GLushort>(unpackedInput[i][3], isGLES20);
+    }
+
+    TestData bufferedData4(GL_UNSIGNED_INT_2_10_10_10_REV, GL_TRUE, Source::IMMEDIATE,
+                           packedInput.data(), expectedData.data());
+    runTest(bufferedData4, 4);
+}
+
+TEST_P(VertexAttributeTestES3, UnsignedPacked2101010NormalizedBuffer)
+{
+    // RGB channels are 10-bits, alpha is 2-bits
+    GLushort rgb_hi                                                     = 1023;
+    GLushort rgb_mid                                                    = rgb_hi >> 1;  // 511
+    GLushort rgb_low                                                    = 0;
+    GLushort a_hi                                                       = 3;
+    GLushort a_mid                                                      = a_hi >> 1;  // 1
+    GLushort a_low                                                      = 0;
+    std::array<std::array<GLushort, 4>, kVertexCount / 4> unpackedInput = {
+        {{a_low, 2, 1, rgb_low},
+         {a_mid, 512, 513, rgb_mid},
+         {a_hi, 1021, 1022, rgb_hi},
+         {2, rgb_mid, 512, 513},
+         {a_hi, 0, 1, 2},
+         {a_low, 1022, 1022, rgb_hi}}};
+    std::array<GLuint, kVertexCount / 4> packedInput;
+    std::array<GLfloat, kVertexCount> expectedData;
+    bool isGLES20 = (getClientMajorVersion() == 2);
+
+    for (size_t i = 0; i < kVertexCount / 4; i++)
+    {
+        GLfloat *expectedRedValue   = static_cast<GLfloat *>(&expectedData[i * 4 + 0]);
+        GLfloat *expectedGreenValue = static_cast<GLfloat *>(&expectedData[i * 4 + 1]);
+        GLfloat *expectedBlueValue  = static_cast<GLfloat *>(&expectedData[i * 4 + 2]);
+        GLfloat *expectedAlphaValue = static_cast<GLfloat *>(&expectedData[i * 4 + 3]);
+
+        Pack2101010<GLuint, GLushort>(unpackedInput[i], &packedInput[i]);
+        *expectedAlphaValue = Normalize2<GLushort>(unpackedInput[i][0], isGLES20);
+        *expectedBlueValue  = Normalize10<GLushort>(unpackedInput[i][1], isGLES20);
+        *expectedGreenValue = Normalize10<GLushort>(unpackedInput[i][2], isGLES20);
+        *expectedRedValue   = Normalize10<GLushort>(unpackedInput[i][3], isGLES20);
+    }
+
+    TestData bufferedData4(GL_UNSIGNED_INT_2_10_10_10_REV, GL_TRUE, Source::BUFFER,
+                           packedInput.data(), expectedData.data());
+    runTest(bufferedData4, 4);
 }
 
 void SetupColorsForUnitQuad(GLint location, const GLColor32F &color, GLenum usage, GLBuffer *vbo)
@@ -1670,9 +2053,10 @@ void main()
     std::array<GLuint, kVertexCount> inputData = {
         {0, 1, 2, 3, 254, 255, 256, mid - 1, mid, mid + 1, hi - 2, hi - 1, hi}};
     std::array<GLfloat, kVertexCount> expectedData;
+    bool isGLES20 = (getClientMajorVersion() == 2);
     for (size_t i = 0; i < kVertexCount; i++)
     {
-        expectedData[i] = Normalize(inputData[i]);
+        expectedData[i] = Normalize(inputData[i], isGLES20);
     }
 
     // Normalized unsigned int attribute will be classified as translated static attribute.
@@ -1872,7 +2256,8 @@ class VertexAttributeCachingTest : public VertexAttributeTest
     template <typename DestT>
     static std::vector<GLfloat> GetExpectedData(const std::vector<GLubyte> &srcData,
                                                 GLenum attribType,
-                                                GLboolean normalized);
+                                                GLboolean normalized,
+                                                bool isGLES20);
 
     void initDoubleAttribProgram()
     {
@@ -1937,7 +2322,8 @@ template <typename DestT>
 std::vector<GLfloat> VertexAttributeCachingTest::GetExpectedData(
     const std::vector<GLubyte> &srcData,
     GLenum attribType,
-    GLboolean normalized)
+    GLboolean normalized,
+    bool isGLES20)
 {
     std::vector<GLfloat> expectedData;
 
@@ -1948,7 +2334,7 @@ std::vector<GLfloat> VertexAttributeCachingTest::GetExpectedData(
     {
         for (size_t index = 0; index < iterations; ++index)
         {
-            expectedData.push_back(Normalize(typedSrcPtr[index]));
+            expectedData.push_back(Normalize(typedSrcPtr[index], isGLES20));
         }
     }
     else
@@ -1988,6 +2374,7 @@ void VertexAttributeCachingTest::testSetUp()
     attribTypes.push_back(GL_SHORT);
     attribTypes.push_back(GL_UNSIGNED_SHORT);
 
+    bool isGLES20 = (getClientMajorVersion() == 2);
     if (getClientMajorVersion() >= 3)
     {
         attribTypes.push_back(GL_INT);
@@ -2012,22 +2399,25 @@ void VertexAttributeCachingTest::testSetUp()
         }
     }
 
-    mExpectedData[GL_BYTE]          = GetExpectedData<GLbyte>(srcData, GL_BYTE, GL_FALSE);
-    mExpectedData[GL_UNSIGNED_BYTE] = GetExpectedData<GLubyte>(srcData, GL_UNSIGNED_BYTE, GL_FALSE);
-    mExpectedData[GL_SHORT]         = GetExpectedData<GLshort>(srcData, GL_SHORT, GL_FALSE);
+    mExpectedData[GL_BYTE] = GetExpectedData<GLbyte>(srcData, GL_BYTE, GL_FALSE, isGLES20);
+    mExpectedData[GL_UNSIGNED_BYTE] =
+        GetExpectedData<GLubyte>(srcData, GL_UNSIGNED_BYTE, GL_FALSE, isGLES20);
+    mExpectedData[GL_SHORT] = GetExpectedData<GLshort>(srcData, GL_SHORT, GL_FALSE, isGLES20);
     mExpectedData[GL_UNSIGNED_SHORT] =
-        GetExpectedData<GLushort>(srcData, GL_UNSIGNED_SHORT, GL_FALSE);
-    mExpectedData[GL_INT]          = GetExpectedData<GLint>(srcData, GL_INT, GL_FALSE);
-    mExpectedData[GL_UNSIGNED_INT] = GetExpectedData<GLuint>(srcData, GL_UNSIGNED_INT, GL_FALSE);
+        GetExpectedData<GLushort>(srcData, GL_UNSIGNED_SHORT, GL_FALSE, isGLES20);
+    mExpectedData[GL_INT] = GetExpectedData<GLint>(srcData, GL_INT, GL_FALSE, isGLES20);
+    mExpectedData[GL_UNSIGNED_INT] =
+        GetExpectedData<GLuint>(srcData, GL_UNSIGNED_INT, GL_FALSE, isGLES20);
 
-    mNormExpectedData[GL_BYTE] = GetExpectedData<GLbyte>(srcData, GL_BYTE, GL_TRUE);
+    mNormExpectedData[GL_BYTE] = GetExpectedData<GLbyte>(srcData, GL_BYTE, GL_TRUE, isGLES20);
     mNormExpectedData[GL_UNSIGNED_BYTE] =
-        GetExpectedData<GLubyte>(srcData, GL_UNSIGNED_BYTE, GL_TRUE);
-    mNormExpectedData[GL_SHORT] = GetExpectedData<GLshort>(srcData, GL_SHORT, GL_TRUE);
+        GetExpectedData<GLubyte>(srcData, GL_UNSIGNED_BYTE, GL_TRUE, isGLES20);
+    mNormExpectedData[GL_SHORT] = GetExpectedData<GLshort>(srcData, GL_SHORT, GL_TRUE, isGLES20);
     mNormExpectedData[GL_UNSIGNED_SHORT] =
-        GetExpectedData<GLushort>(srcData, GL_UNSIGNED_SHORT, GL_TRUE);
-    mNormExpectedData[GL_INT]          = GetExpectedData<GLint>(srcData, GL_INT, GL_TRUE);
-    mNormExpectedData[GL_UNSIGNED_INT] = GetExpectedData<GLuint>(srcData, GL_UNSIGNED_INT, GL_TRUE);
+        GetExpectedData<GLushort>(srcData, GL_UNSIGNED_SHORT, GL_TRUE, isGLES20);
+    mNormExpectedData[GL_INT] = GetExpectedData<GLint>(srcData, GL_INT, GL_TRUE, isGLES20);
+    mNormExpectedData[GL_UNSIGNED_INT] =
+        GetExpectedData<GLuint>(srcData, GL_UNSIGNED_INT, GL_TRUE, isGLES20);
 }
 
 // In D3D11, we must sometimes translate buffer data into static attribute caches. We also use a

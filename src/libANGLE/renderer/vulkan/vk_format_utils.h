@@ -158,6 +158,15 @@ void MapSwizzleState(const ContextVk *contextVk,
                      const bool sized,
                      const gl::SwizzleState &swizzleState,
                      gl::SwizzleState *swizzleStateOut);
+
+// GLES2.0 and GLES3.0 have different snorm -> float normalization equations.
+// The following functions help us account for such differences
+bool IsSnormAndGLES20(const ContextVk *contextVk, const vk::Format &vertexFormat);
+
+const vk::Format &GetDestVkFormat(const RendererVk *renderer, const vk::Format &vertexFormat);
+
+VertexCopyFunction GetVertexLoadFunctionOverride(const vk::Format &vertexFormat);
+
 }  // namespace rx
 
 #endif  // LIBANGLE_RENDERER_VULKAN_VK_FORMAT_UTILS_H_

@@ -395,4 +395,115 @@ void MapSwizzleState(const ContextVk *contextVk,
     }
     ComposeSwizzleState(internalSwizzle, swizzleState, swizzleStateOut);
 }
+
+bool IsSnormAndGLES20(const ContextVk *contextVk, const vk::Format &vertexFormat)
+{
+    return ((vertexFormat.angleFormat().isSnorm()) && (contextVk->getClientMajorVersion() == 2));
+}
+
+const vk::Format &GetDestVkFormat(const RendererVk *renderer, const vk::Format &vertexFormat)
+{
+    switch (vertexFormat.angleFormat().channelCount)
+    {
+        case 1:
+            return renderer->getFormat(angle::FormatID::R32_FLOAT);
+        case 2:
+            return renderer->getFormat(angle::FormatID::R32G32_FLOAT);
+        case 3:
+            if (vertexFormat.angleFormat().vertexAttribType == gl::VertexAttribType::Int1010102)
+            {
+                return renderer->getFormat(angle::FormatID::R32G32B32A32_FLOAT);
+            }
+            else
+            {
+                return renderer->getFormat(angle::FormatID::R32G32B32_FLOAT);
+            }
+        case 4:
+            return renderer->getFormat(angle::FormatID::R32G32B32A32_FLOAT);
+        default:
+            UNREACHABLE();
+            return renderer->getFormat(angle::FormatID::NONE);
+    }
+}
+
+VertexCopyFunction GetVertexLoadFunctionOverride(const vk::Format &vertexFormat)
+{
+    const angle::Format &srcFormat = vertexFormat.angleFormat();
+
+    if (srcFormat.vertexAttribType == gl::VertexAttribType::Int2101010)
+    {
+        return CopyXYZ10W2ToXYZW32FVertexDataForGLES20<true, true, true>;
+    }
+    else if (srcFormat.vertexAttribType == gl::VertexAttribType::Int1010102)
+    {
+        switch (srcFormat.channelCount)
+        {
+            case 3:
+                return CopyXYZ10ToXYZW32FVertexDataForGLES20<true, true>;
+            case 4:
+                return CopyW2XYZ10ToXYZW32FVertexDataForGLES20<true, true>;
+            default:
+                UNREACHABLE();
+                return nullptr;
+        }
+    }
+    else
+    {
+        switch (srcFormat.vertexAttribType)
+        {
+            case gl::VertexAttribType::Byte:
+                switch (srcFormat.channelCount)
+                {
+                    case 1:
+                        return CopyTo32FVertexDataForGLES20<GLbyte, 1, 1, true>;
+                    case 2:
+                        return CopyTo32FVertexDataForGLES20<GLbyte, 2, 2, true>;
+                    case 3:
+                        return CopyTo32FVertexDataForGLES20<GLbyte, 3, 3, true>;
+                    case 4:
+                        return CopyTo32FVertexDataForGLES20<GLbyte, 4, 4, true>;
+                    default:
+                        UNREACHABLE();
+                        return nullptr;
+                }
+                break;
+            case gl::VertexAttribType::Short:
+                switch (srcFormat.channelCount)
+                {
+                    case 1:
+                        return CopyTo32FVertexDataForGLES20<GLshort, 1, 1, true>;
+                    case 2:
+                        return CopyTo32FVertexDataForGLES20<GLshort, 2, 2, true>;
+                    case 3:
+                        return CopyTo32FVertexDataForGLES20<GLshort, 3, 3, true>;
+                    case 4:
+                        return CopyTo32FVertexDataForGLES20<GLshort, 4, 4, true>;
+                    default:
+                        UNREACHABLE();
+                        return nullptr;
+                }
+                break;
+            case gl::VertexAttribType::Int:
+                switch (srcFormat.channelCount)
+                {
+                    case 1:
+                        return CopyTo32FVertexDataForGLES20<GLint, 1, 1, true>;
+                    case 2:
+                        return CopyTo32FVertexDataForGLES20<GLint, 2, 2, true>;
+                    case 3:
+                        return CopyTo32FVertexDataForGLES20<GLint, 3, 3, true>;
+                    case 4:
+                        return CopyTo32FVertexDataForGLES20<GLint, 4, 4, true>;
+                    default:
+                        UNREACHABLE();
+                        return nullptr;
+                }
+                break;
+            default:
+                UNREACHABLE();
+                return nullptr;
+        }
+    }
+}
+
 }  // namespace rx

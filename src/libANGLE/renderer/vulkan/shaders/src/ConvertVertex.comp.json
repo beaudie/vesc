@@ -7,7 +7,8 @@
         "ConvertVertex.comp.json: Build parameters for ConvertVertex.comp."
     ],
     "Flags": [
-        "IsAligned"
+        "IsAligned",
+        "IsGLES20"
     ],
     "Conversion": [
         "SintToSint",

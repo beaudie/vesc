@@ -100,6 +100,48 @@ namespace
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000027.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000028.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000029.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000002A.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000002B.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000002C.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000002D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000002E.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000002F.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000030.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000031.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000032.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000033.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000034.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000035.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000036.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000037.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000038.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000039.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000003A.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000003B.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000003C.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000003D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000003E.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000003F.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000040.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000041.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000042.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000043.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000044.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000045.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000046.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000047.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000048.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000049.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000004A.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000004B.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000004C.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000004D.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000004E.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.0000004F.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000050.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000051.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000052.inc"
+#include "libANGLE/renderer/vulkan/shaders/gen/ConvertVertex.comp.00000053.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/FullScreenQuad.vert.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ImageClear.frag.00000000.inc"
 #include "libANGLE/renderer/vulkan/shaders/gen/ImageClear.frag.00000001.inc"
@@ -252,6 +294,48 @@ constexpr ShaderBlob kConvertVertex_comp_shaders[] = {
     {kConvertVertex_comp_00000027, sizeof(kConvertVertex_comp_00000027)},
     {kConvertVertex_comp_00000028, sizeof(kConvertVertex_comp_00000028)},
     {kConvertVertex_comp_00000029, sizeof(kConvertVertex_comp_00000029)},
+    {kConvertVertex_comp_0000002A, sizeof(kConvertVertex_comp_0000002A)},
+    {kConvertVertex_comp_0000002B, sizeof(kConvertVertex_comp_0000002B)},
+    {kConvertVertex_comp_0000002C, sizeof(kConvertVertex_comp_0000002C)},
+    {kConvertVertex_comp_0000002D, sizeof(kConvertVertex_comp_0000002D)},
+    {kConvertVertex_comp_0000002E, sizeof(kConvertVertex_comp_0000002E)},
+    {kConvertVertex_comp_0000002F, sizeof(kConvertVertex_comp_0000002F)},
+    {kConvertVertex_comp_00000030, sizeof(kConvertVertex_comp_00000030)},
+    {kConvertVertex_comp_00000031, sizeof(kConvertVertex_comp_00000031)},
+    {kConvertVertex_comp_00000032, sizeof(kConvertVertex_comp_00000032)},
+    {kConvertVertex_comp_00000033, sizeof(kConvertVertex_comp_00000033)},
+    {kConvertVertex_comp_00000034, sizeof(kConvertVertex_comp_00000034)},
+    {kConvertVertex_comp_00000035, sizeof(kConvertVertex_comp_00000035)},
+    {kConvertVertex_comp_00000036, sizeof(kConvertVertex_comp_00000036)},
+    {kConvertVertex_comp_00000037, sizeof(kConvertVertex_comp_00000037)},
+    {kConvertVertex_comp_00000038, sizeof(kConvertVertex_comp_00000038)},
+    {kConvertVertex_comp_00000039, sizeof(kConvertVertex_comp_00000039)},
+    {kConvertVertex_comp_0000003A, sizeof(kConvertVertex_comp_0000003A)},
+    {kConvertVertex_comp_0000003B, sizeof(kConvertVertex_comp_0000003B)},
+    {kConvertVertex_comp_0000003C, sizeof(kConvertVertex_comp_0000003C)},
+    {kConvertVertex_comp_0000003D, sizeof(kConvertVertex_comp_0000003D)},
+    {kConvertVertex_comp_0000003E, sizeof(kConvertVertex_comp_0000003E)},
+    {kConvertVertex_comp_0000003F, sizeof(kConvertVertex_comp_0000003F)},
+    {kConvertVertex_comp_00000040, sizeof(kConvertVertex_comp_00000040)},
+    {kConvertVertex_comp_00000041, sizeof(kConvertVertex_comp_00000041)},
+    {kConvertVertex_comp_00000042, sizeof(kConvertVertex_comp_00000042)},
+    {kConvertVertex_comp_00000043, sizeof(kConvertVertex_comp_00000043)},
+    {kConvertVertex_comp_00000044, sizeof(kConvertVertex_comp_00000044)},
+    {kConvertVertex_comp_00000045, sizeof(kConvertVertex_comp_00000045)},
+    {kConvertVertex_comp_00000046, sizeof(kConvertVertex_comp_00000046)},
+    {kConvertVertex_comp_00000047, sizeof(kConvertVertex_comp_00000047)},
+    {kConvertVertex_comp_00000048, sizeof(kConvertVertex_comp_00000048)},
+    {kConvertVertex_comp_00000049, sizeof(kConvertVertex_comp_00000049)},
+    {kConvertVertex_comp_0000004A, sizeof(kConvertVertex_comp_0000004A)},
+    {kConvertVertex_comp_0000004B, sizeof(kConvertVertex_comp_0000004B)},
+    {kConvertVertex_comp_0000004C, sizeof(kConvertVertex_comp_0000004C)},
+    {kConvertVertex_comp_0000004D, sizeof(kConvertVertex_comp_0000004D)},
+    {kConvertVertex_comp_0000004E, sizeof(kConvertVertex_comp_0000004E)},
+    {kConvertVertex_comp_0000004F, sizeof(kConvertVertex_comp_0000004F)},
+    {kConvertVertex_comp_00000050, sizeof(kConvertVertex_comp_00000050)},
+    {kConvertVertex_comp_00000051, sizeof(kConvertVertex_comp_00000051)},
+    {kConvertVertex_comp_00000052, sizeof(kConvertVertex_comp_00000052)},
+    {kConvertVertex_comp_00000053, sizeof(kConvertVertex_comp_00000053)},
 };
 constexpr ShaderBlob kFullScreenQuad_vert_shaders[] = {
     {kFullScreenQuad_vert_00000000, sizeof(kFullScreenQuad_vert_00000000)},
