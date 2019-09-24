@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "2a3e90e6_bdb73abe",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2603,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "I don\u0027t remember the exact tests, but there were some dEQP tests where this was true which led to me adding this function to handle mVertexArray \u003d\u003d nullptr case.",
+      "parentUuid": "923b2690_77bdcaf8",
+      "range": {
+        "startLine": 2603,
+        "startChar": 12,
+        "endLine": 2603,
+        "endChar": 25
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "23e0aa07_67c9a02e",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 10
@@ -68,6 +92,30 @@
       "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf4f8e34_a8e5c0d5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1055,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23e0aa07_67c9a02e",
+      "range": {
+        "startLine": 1055,
+        "startChar": 42,
+        "endLine": 1055,
+        "endChar": 46
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -106,6 +154,24 @@
     },
     {
       "key": {
+        "uuid": "e84c173d_2cea7406",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29d7f651_ba65e65b",
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a6633362_c05c6e0a",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 10
@@ -126,6 +192,30 @@
       "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "78a56e94_ef7d33ac",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6633362_c05c6e0a",
+      "range": {
+        "startLine": 62,
+        "startChar": 32,
+        "endLine": 62,
+        "endChar": 58
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -181,6 +271,42 @@
     },
     {
       "key": {
+        "uuid": "443b68d9_1fc70521",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "Refactored this loop",
+      "parentUuid": "c112b956_2870720f",
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4aee4330_c534b2cb",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "The matrix tests were hitting this case, updated copy to use convert function 1 element at a time.",
+      "parentUuid": "6ff2663c_c4d65fa4",
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d199716c_f55dfcb9",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 10
@@ -201,6 +327,30 @@
       "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "072ef142_c2265d22",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d199716c_f55dfcb9",
+      "range": {
+        "startLine": 79,
+        "startChar": 57,
+        "endLine": 79,
+        "endChar": 87
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -239,6 +389,24 @@
     },
     {
       "key": {
+        "uuid": "3957bea0_da770034",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8816f54f_3e900449",
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "80770163_e35cbfb8",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 10
@@ -259,6 +427,30 @@
       "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5231918_57d9f236",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80770163_e35cbfb8",
+      "range": {
+        "startLine": 121,
+        "startChar": 6,
+        "endLine": 121,
+        "endChar": 34
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -329,6 +521,24 @@
       "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f02c8f5_f349c852",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04824c5a_b68473e0",
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -418,6 +628,30 @@
     },
     {
       "key": {
+        "uuid": "f2a462f6_c22b8def",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 626,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87a53d40_6a40e6f9",
+      "range": {
+        "startLine": 625,
+        "startChar": 0,
+        "endLine": 626,
+        "endChar": 49
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6babf1dd_0d9238b1",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 10
@@ -438,6 +672,30 @@
       "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a91a234_42d80198",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6babf1dd_0d9238b1",
+      "range": {
+        "startLine": 634,
+        "startChar": 20,
+        "endLine": 634,
+        "endChar": 56
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
@@ -510,6 +768,30 @@
     },
     {
       "key": {
+        "uuid": "a875d616_ab0deeb8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "The maxAttribDivisor is now set to 255 so divisors \u003e max will always be flagged as emulated in  VertexArrayVk::syncDirtyAttrib() and have divisor set to 1.",
+      "parentUuid": "ae0b4cbf_04341a8b",
+      "range": {
+        "startLine": 877,
+        "startChar": 4,
+        "endLine": 877,
+        "endChar": 47
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "281c904b_8feb66e5",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 10
@@ -533,6 +815,30 @@
     },
     {
       "key": {
+        "uuid": "381d0295_75d9d218",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "281c904b_8feb66e5",
+      "range": {
+        "startLine": 168,
+        "startChar": 4,
+        "endLine": 168,
+        "endChar": 79
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "962d4619_68b23be3",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 10
@@ -544,6 +850,30 @@
       "writtenOn": "2019-09-24T17:58:27Z",
       "side": 1,
       "message": "nit: can you revert this?",
+      "range": {
+        "startLine": 318,
+        "startChar": 0,
+        "endLine": 320,
+        "endChar": 21
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d1e57ab_e263fb13",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "Before I revert note that I changed the ordering to match the ordering of private members in GraphicsPipelineDesc which made it easier to verify that these sizes aligned when I was initially debugging.\nHappy to revert, though, if you\u0027d still like that.",
+      "parentUuid": "962d4619_68b23be3",
       "range": {
         "startLine": 318,
         "startChar": 0,
@@ -576,6 +906,30 @@
       "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e2c2cdb_f12617c5",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-24T22:38:42Z",
+      "side": 1,
+      "message": "Needed to use convert functions, fixed with new copy loop.",
+      "parentUuid": "defa57b7_dfb73a8d",
+      "range": {
+        "startLine": 558,
+        "startChar": 52,
+        "endLine": 558,
+        "endChar": 55
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
