@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1b523b5d_fa820f57",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-24T18:32:59Z",
+      "side": 0,
+      "message": "Sorry, but could you revert the setupDraw/setupDrawHelper refactor? I\u0027m less worried about indirect draw behaviour at the moment and checking some bits that should be disabled shouldn\u0027t impact correctness. I\u0027m mildly worried about additional overhead for the existing setupDraw.",
+      "range": {
+        "startLine": 462,
+        "startChar": 0,
+        "endLine": 471,
+        "endChar": 1
+      },
+      "revId": "ee891ce3a4b26e899fd5ca5c0b65bfc9473fcdb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}

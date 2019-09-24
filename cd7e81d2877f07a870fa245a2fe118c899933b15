@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26c90a9d_db0ead5b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 593,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-24T18:32:59Z",
+      "side": 1,
+      "message": "can you just rename this setupIndirectDraw and remove Helper?",
+      "range": {
+        "startLine": 593,
+        "startChar": 25,
+        "endLine": 593,
+        "endChar": 48
+      },
+      "revId": "cd7e81d2877f07a870fa245a2fe118c899933b15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2182f93d_b7672edf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-24T18:32:59Z",
+      "side": 1,
+      "message": "unnecessary, you can omit this. Or just change to ASSERT(.. condition ..). This is all handled in the validation layer.",
+      "range": {
+        "startLine": 601,
+        "startChar": 0,
+        "endLine": 619,
+        "endChar": 5
+      },
+      "revId": "cd7e81d2877f07a870fa245a2fe118c899933b15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "000fcb20_995d7535",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1535,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-24T18:32:59Z",
+      "side": 1,
+      "message": "nit: you can omit this.",
+      "range": {
+        "startLine": 1533,
+        "startChar": 0,
+        "endLine": 1535,
+        "endChar": 27
+      },
+      "revId": "cd7e81d2877f07a870fa245a2fe118c899933b15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
