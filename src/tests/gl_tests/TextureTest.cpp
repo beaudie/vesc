@@ -16,6 +16,12 @@ namespace
 constexpr GLuint kPixelTolerance     = 1u;
 constexpr GLfloat kPixelTolerance32F = 0.01f;
 
+const GLColor &CompressedImageColor = GLColor::red;
+
+// Single compressed ETC2 block of source pixels all set to:
+// CompressedImageColor.
+const uint8_t CompressedImageETC2[] = {0x7E, 0x80, 0x04, 0x7F, 0x00, 0x07, 0xE0, 0x00};
+
 // Take a pixel, and reset the components not covered by the format to default
 // values. In particular, the default value for the alpha component is 255
 // (1.0 as unsigned normalized fixed point value).
@@ -1395,6 +1401,29 @@ class Texture3DIntegerTestES3 : public Texture3DTestES3
     }
 };
 
+class PBOCompressedTextureTest : public Texture2DTest
+{
+  protected:
+    PBOCompressedTextureTest() : Texture2DTest() {}
+
+    void testSetUp() override
+    {
+        Texture2DTest::testSetUp();
+        setUpProgram();
+
+        glGenBuffers(1, &mPBO);
+        glBindBuffer(GL_PIXEL_UNPACK_BUFFER, mPBO);
+    }
+
+    void testTearDown() override
+    {
+        glDeleteBuffers(1, &mPBO);
+        Texture2DTest::testTearDown();
+    }
+
+    GLuint mPBO;
+};
+
 TEST_P(Texture2DTest, NegativeAPISubImage)
 {
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -1739,7 +1768,8 @@ TEST_P(Texture2DTest, TexStorage)
 // initialized the image with a default color.
 TEST_P(Texture2DTest, TexStorageWithPBO)
 {
-    if (IsGLExtensionEnabled("NV_pixel_buffer_object"))
+    if (IsGLExtensionEnabled("GL_NV_pixel_buffer_object") &&
+        IsGLExtensionEnabled("GL_EXT_texture_storage"))
     {
         int width  = getWindowWidth();
         int height = getWindowHeight();
@@ -1786,6 +1816,118 @@ TEST_P(Texture2DTest, TexStorageWithPBO)
         EXPECT_PIXEL_EQ(3 * width / 4, 3 * height / 4, 0, 0, 0, 255);
         EXPECT_PIXEL_EQ(width / 4, height / 4, 255, 0, 0, 255);
     }
+}
+
+// Test that glTexSubImage2D combined with a PBO works properly after deleting the PBO
+// and drawing with the texture
+// Pseudo code for the follow test:
+// 1. Upload PBO to mTexture2D
+// 2. Delete PBO
+// 3. Draw with otherTexture (x5)
+// 4. Draw with mTexture2D
+// 5. Validate color output
+TEST_P(Texture2DTest, PBOWithMultipleDraws)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_NV_pixel_buffer_object"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_storage"));
+
+    const GLuint width  = 128u;
+    const GLuint height = 128u;
+    std::vector<GLColor> pixelsRed(width * height, GLColor::red);
+    std::vector<GLColor> pixelsGreen(width * height, GLColor::green);
+
+    setWindowWidth(width);
+    setWindowHeight(height);
+
+    // Create secondary draw that does not use mTexture
+    const char *vertexShaderSource   = getVertexShaderSource();
+    const char *fragmentShaderSource = getFragmentShaderSource();
+    GLuint otherProgram              = CompileProgram(vertexShaderSource, fragmentShaderSource);
+    ASSERT_NE(0u, otherProgram);
+    GLint uniformLoc = glGetUniformLocation(otherProgram, getTextureUniformName());
+    ASSERT_NE(-1, uniformLoc);
+    glUseProgram(0);
+
+    // Create secondary Texture to draw with
+    GLuint otherTexture = 0;
+    glGenTextures(1, &otherTexture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, otherTexture);
+    glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE,
+                    pixelsRed.data());
+    ASSERT_GL_NO_ERROR();
+
+    // Setup primary Texture
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
+    ASSERT_GL_NO_ERROR();
+
+    // Setup PBO
+    GLuint pbo = 0;
+    glGenBuffers(1, &pbo);
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, pixelsGreen.size() * 4u, pixelsGreen.data(),
+                 GL_STATIC_DRAW);
+    ASSERT_GL_NO_ERROR();
+
+    // Write PBO to mTexture
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    ASSERT_GL_NO_ERROR();
+    // Delete PBO as ANGLE should be properly handling refcount of this buffer
+    glDeleteBuffers(1, &pbo);
+    pixelsGreen.clear();
+
+    // Do 5 draws not involving primary texture that the PBO updated
+    glUseProgram(otherProgram);
+    glUniform1i(uniformLoc, 0);
+    glBindTexture(GL_TEXTURE_2D, otherTexture);
+    drawQuad(otherProgram, "position", 0.5f);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glUseProgram(0);
+
+    glUseProgram(otherProgram);
+    glUniform1i(uniformLoc, 0);
+    glBindTexture(GL_TEXTURE_2D, otherTexture);
+    drawQuad(otherProgram, "position", 0.5f);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glUseProgram(0);
+
+    glUseProgram(otherProgram);
+    glUniform1i(uniformLoc, 0);
+    glBindTexture(GL_TEXTURE_2D, otherTexture);
+    drawQuad(otherProgram, "position", 0.5f);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glUseProgram(0);
+
+    glUseProgram(otherProgram);
+    glUniform1i(uniformLoc, 0);
+    glBindTexture(GL_TEXTURE_2D, otherTexture);
+    drawQuad(otherProgram, "position", 0.5f);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glUseProgram(0);
+    ASSERT_GL_NO_ERROR();
+
+    setUpProgram();
+    // Draw using PBO updated texture
+    glUseProgram(mProgram);
+    glUniform1i(mTexture2DUniformLocation, 0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    drawQuad(mProgram, "position", 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    GLuint windowPixelCount = getWindowWidth() * getWindowHeight();
+    std::vector<GLColor> actual(windowPixelCount, GLColor::black);
+    glReadPixels(0, 0, getWindowWidth(), getWindowHeight(), GL_RGBA, GL_UNSIGNED_BYTE,
+                 actual.data());
+    // Value should be green as it was updated during PBO transfer to mTexture
+    std::vector<GLColor> expected(windowPixelCount, GLColor::green);
+    EXPECT_EQ(expected, actual);
+
+    glDeleteProgram(otherProgram);
+    glDeleteTextures(1, &otherTexture);
 }
 
 // Tests CopySubImage for float formats
@@ -5646,6 +5788,51 @@ TEST_P(Texture3DIntegerTestES3, NonZeroBaseLevel)
     EXPECT_PIXEL_COLOR_EQ(width - 1, height - 1, color);
 }
 
+// Test that uses glCompressedTexSubImage2D combined with a PBO
+TEST_P(PBOCompressedTextureTest, PBOCompressedSubImage)
+{
+    if (getClientMajorVersion() < 3)
+    {
+        ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_storage"));
+        ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_NV_pixel_buffer_object"));
+        ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_compressed_ETC2_RGB8_texture"));
+    }
+
+    const GLuint width  = 4u;
+    const GLuint height = 4u;
+
+    setWindowWidth(width);
+    setWindowHeight(height);
+
+    // Setup primary Texture
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_COMPRESSED_RGB8_ETC2, width, height);
+    ASSERT_GL_NO_ERROR();
+
+    // Setup PBO
+    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, mPBO);
+    glBufferData(GL_PIXEL_UNPACK_BUFFER, width * height / 2u, CompressedImageETC2, GL_STATIC_DRAW);
+    ASSERT_GL_NO_ERROR();
+
+    // Write PBO to mTexture
+    glCompressedTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_COMPRESSED_RGB8_ETC2,
+                              width * height / 2u, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    setUpProgram();
+    // Draw using PBO updated texture
+    glUseProgram(mProgram);
+    glUniform1i(mTexture2DUniformLocation, 0);
+    glBindTexture(GL_TEXTURE_2D, mTexture2D);
+    drawQuad(mProgram, "position", 0.5f);
+    ASSERT_GL_NO_ERROR();
+
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 2, getWindowHeight() / 2, CompressedImageColor);
+    ASSERT_GL_NO_ERROR();
+}
+
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST(Texture2DTest,
@@ -5793,5 +5980,6 @@ ANGLE_INSTANTIATE_TEST(Texture2DDepthTest,
                        ES2_OPENGLES(),
                        ES2_VULKAN(),
                        ES3_VULKAN());
+ANGLE_INSTANTIATE_TEST(PBOCompressedTextureTest, ES2_VULKAN(), ES3_VULKAN());
 
 }  // anonymous namespace
