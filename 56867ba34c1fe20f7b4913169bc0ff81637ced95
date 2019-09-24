@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fd6ebbdb_3a1cd015",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-24T14:13:33Z",
+      "side": 1,
+      "message": "The prior CL had two ref counts perf object. The implicit refcount in std::shared_ptr and the count of the number of times the object was used in the graph. With this CL I removed std::shared_ptr. To compensate for that I included the base ref count (is this object deleted?) in the counter here. Possibly could be cleaned up using different query functions instead of querying the counter value.",
+      "parentUuid": "c82e6c6f_eccc79f3",
+      "range": {
+        "startLine": 255,
+        "startChar": 11,
+        "endLine": 255,
+        "endChar": 32
+      },
+      "revId": "56867ba34c1fe20f7b4913169bc0ff81637ced95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c0622a2_a641c921",
         "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
         "patchSetId": 1
@@ -39,6 +63,24 @@
       "revId": "56867ba34c1fe20f7b4913169bc0ff81637ced95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94bfabc8_c3096b68",
+        "filename": "src/libANGLE/renderer/vulkan/CommandGraph.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-24T14:13:33Z",
+      "side": 1,
+      "message": "Not quite because of the way I structured the ASSERT. updateSerial uses \u003c and this uses \u003c\u003d. Left as-is for now but can revisit at some point.",
+      "parentUuid": "7c0622a2_a641c921",
+      "revId": "56867ba34c1fe20f7b4913169bc0ff81637ced95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
