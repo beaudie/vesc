@@ -1014,6 +1014,7 @@ unsigned int TParseContext::checkIsValidArraySize(const TSourceLoc &line, TInter
         return 1u;
     }
 
+#ifdef ANGLE_ENABLE_HLSL
     // The size of arrays is restricted here to prevent issues further down the
     // compiler/translator/driver stack. Shader Model 5 generation hardware is limited to
     // 4096 registers so this should be reasonable even for aggressively optimizable code.
@@ -1024,6 +1025,7 @@ unsigned int TParseContext::checkIsValidArraySize(const TSourceLoc &line, TInter
         error(line, "array size too large", "");
         return 1u;
     }
+#endif
 
     return size;
 }
