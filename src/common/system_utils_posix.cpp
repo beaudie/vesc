@@ -100,7 +100,7 @@ std::string GetEnvironmentVar(const char *variableName)
     return (value == nullptr ? std::string() : std::string(value));
 }
 
-const char *GetPathSeparator()
+const char *GetPathSeparatorForEnvrionmentVar()
 {
     return ":";
 }
