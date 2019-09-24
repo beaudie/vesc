@@ -785,6 +785,19 @@ class ImageHelper final : public CommandGraphResource
     // Data staging
     void removeStagedUpdates(ContextVk *contextVk, const gl::ImageIndex &index);
 
+    angle::Result stageSubresourceUpdateImpl(ContextVk *contextVk,
+                                             const gl::ImageIndex &index,
+                                             const gl::Extents &glExtents,
+                                             const gl::Offset &offset,
+                                             const gl::InternalFormat &formatInfo,
+                                             const gl::PixelUnpackState &unpack,
+                                             GLenum type,
+                                             const uint8_t *pixels,
+                                             const Format &vkFormat,
+                                             const GLuint inputRowPitch,
+                                             const GLuint inputDepthPitch,
+                                             const GLuint inputSkipBytes);
+
     angle::Result stageSubresourceUpdate(ContextVk *contextVk,
                                          const gl::ImageIndex &index,
                                          const gl::Extents &glExtents,
