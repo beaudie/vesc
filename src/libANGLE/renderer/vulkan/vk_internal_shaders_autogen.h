@@ -82,32 +82,33 @@ namespace ConvertVertex_comp
 enum flags
 {
     kIsAligned = 0x00000001,
+    kIsGLES20  = 0x00000002,
 };
 enum Conversion
 {
     kSintToSint          = 0x00000000,
-    kUintToUint          = 0x00000002,
-    kSintToFloat         = 0x00000004,
-    kUintToFloat         = 0x00000006,
-    kSnormToFloat        = 0x00000008,
-    kUnormToFloat        = 0x0000000A,
-    kFixedToFloat        = 0x0000000C,
-    kFloatToFloat        = 0x0000000E,
-    kA2BGR10SintToSint   = 0x00000010,
-    kA2BGR10UintToUint   = 0x00000012,
-    kA2BGR10SintToFloat  = 0x00000014,
-    kA2BGR10UintToFloat  = 0x00000016,
-    kA2BGR10SnormToFloat = 0x00000018,
-    kRGB10A2SintToFloat  = 0x0000001A,
-    kRGB10A2UintToFloat  = 0x0000001C,
-    kRGB10A2SnormToFloat = 0x0000001E,
-    kRGB10A2UnormToFloat = 0x00000020,
-    kRGB10X2SintToFloat  = 0x00000022,
-    kRGB10X2UintToFloat  = 0x00000024,
-    kRGB10X2SnormToFloat = 0x00000026,
-    kRGB10X2UnormToFloat = 0x00000028,
+    kUintToUint          = 0x00000004,
+    kSintToFloat         = 0x00000008,
+    kUintToFloat         = 0x0000000C,
+    kSnormToFloat        = 0x00000010,
+    kUnormToFloat        = 0x00000014,
+    kFixedToFloat        = 0x00000018,
+    kFloatToFloat        = 0x0000001C,
+    kA2BGR10SintToSint   = 0x00000020,
+    kA2BGR10UintToUint   = 0x00000024,
+    kA2BGR10SintToFloat  = 0x00000028,
+    kA2BGR10UintToFloat  = 0x0000002C,
+    kA2BGR10SnormToFloat = 0x00000030,
+    kRGB10A2SintToFloat  = 0x00000034,
+    kRGB10A2UintToFloat  = 0x00000038,
+    kRGB10A2SnormToFloat = 0x0000003C,
+    kRGB10A2UnormToFloat = 0x00000040,
+    kRGB10X2SintToFloat  = 0x00000044,
+    kRGB10X2UintToFloat  = 0x00000048,
+    kRGB10X2SnormToFloat = 0x0000004C,
+    kRGB10X2UnormToFloat = 0x00000050,
 };
-constexpr size_t kArrayLen = 0x0000002A;
+constexpr size_t kArrayLen = 0x00000054;
 }  // namespace ConvertVertex_comp
 
 namespace FullScreenQuad_vert

@@ -39,6 +39,7 @@
 //     * IsAligned: if true, assumes the workgroup size divides the output count, so there is no
 //                  need for bound checking.
 //     * IsBigEndian
+//     * IsGLES20: if true, SnormToFloat uses the conversion formula of GLES 2.0 version.
 //   - Conversion:
 //     * SintToSint: covers byte, short and int types (distinguished by Bs and Bd).
 //     * UintToUint: covers ubyte, ushort and uint types (distinguished by Bs and Bd).
@@ -285,7 +286,12 @@ SrcType loadSourceComponent(uint cd)
         valueAsUint |= signExtension;
     }
     int valueAsInt = int(valueAsUint);
+#if IsGLES20
     SrcType value = (2 * float(valueAsInt) + 1) / valueMask;
+#else
+    SrcType value = float(valueAsInt) / (valueMask >> 1);
+    value = (value >= float(-1)) ? value : float(-1);
+#endif  // IsGLES20
 #elif UnormToFloat || RGB10A2UnormToFloat || RGB10X2UnormToFloat
     float positiveMax = valueMask;
     // Scale [0, P] to [0, 1]

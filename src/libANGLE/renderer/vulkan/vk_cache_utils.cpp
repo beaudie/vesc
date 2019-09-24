@@ -684,7 +684,10 @@ angle::Result GraphicsPipelineDesc::initializePipeline(
         angle::FormatID formatID         = static_cast<angle::FormatID>(packedAttrib.format);
         const vk::Format &format         = contextVk->getRenderer()->getFormat(formatID);
         const angle::Format &angleFormat = format.angleFormat();
-        VkFormat vkFormat                = format.vkBufferFormat;
+        const bool isSnormAndGLES20      = IsSnormAndGLES20(contextVk, format);
+        VkFormat vkFormat                = (isSnormAndGLES20)
+                                ? GetDestVkFormat(contextVk->getRenderer(), format).vkBufferFormat
+                                : (format.vkBufferFormat);
 
         gl::ComponentType attribType =
             GetVertexAttributeComponentType(angleFormat.isPureInt(), angleFormat.vertexAttribType);

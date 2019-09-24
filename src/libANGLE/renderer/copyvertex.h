@@ -44,11 +44,41 @@ void Copy32FixedTo32FVertexData(const uint8_t *input, size_t stride, size_t coun
 template <typename T, size_t inputComponentCount, size_t outputComponentCount, bool normalized>
 void CopyTo32FVertexData(const uint8_t *input, size_t stride, size_t count, uint8_t *output);
 
+template <bool isSigned, bool normalized>
+inline void CopyW2XYZ10ToXYZW32FVertexData(const uint8_t *input,
+                                           size_t stride,
+                                           size_t count,
+                                           uint8_t *output);
+
+template <bool isSigned, bool normalized>
+inline void CopyXYZ10ToXYZW32FVertexData(const uint8_t *input,
+                                         size_t stride,
+                                         size_t count,
+                                         uint8_t *output);
+
 template <bool isSigned, bool normalized, bool toFloat>
 void CopyXYZ10W2ToXYZW32FVertexData(const uint8_t *input,
                                     size_t stride,
                                     size_t count,
                                     uint8_t *output);
+
+template <bool isSigned, bool normalized>
+inline void CopyW2XYZ10ToXYZW32FVertexDataForGLES20(const uint8_t *input,
+                                                    size_t stride,
+                                                    size_t count,
+                                                    uint8_t *output);
+
+template <bool isSigned, bool normalized>
+inline void CopyXYZ10ToXYZW32FVertexDataForGLES20(const uint8_t *input,
+                                                  size_t stride,
+                                                  size_t count,
+                                                  uint8_t *output);
+
+template <bool isSigned, bool normalized, bool toFloat>
+inline void CopyXYZ10W2ToXYZW32FVertexDataForGLES20(const uint8_t *input,
+                                                    size_t stride,
+                                                    size_t count,
+                                                    uint8_t *output);
 
 }  // namespace rx
 
