@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "6c3440eb_0d9910cd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:00:32Z",
+      "side": 1,
+      "message": "I wrote a CL at the very top of the stack that reverts this global finish. I left a TODO here to clean this up.\n\nNote that this is an extremely rare circumstance: context destruction.",
+      "parentUuid": "d6d15b9b_07b8186f",
+      "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "9f25111f_b542d8b3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
@@ -72,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "61a5175b_1575c44c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:00:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f25111f_b542d8b3",
+      "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8683172a_0b9202a3",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 21
@@ -83,6 +119,24 @@
       "writtenOn": "2019-09-20T18:50:37Z",
       "side": 1,
       "message": "Using a std::queue and front()/pop() would allow this block to be removed.",
+      "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6efd6af0_94890f3c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2745,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:00:32Z",
+      "side": 1,
+      "message": "The random access is pretty handy for block operations. This results in several fewer calls in this somewhat hot path. AFAIK std::queue has no iterator support. Is there a real advantage to using std::queue for anything ever?",
+      "parentUuid": "8683172a_0b9202a3",
       "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -106,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "7e2cef3d_e008b828",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2929,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:00:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ae165c36_439a1169",
+      "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ec50d316_586f470e",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 21
@@ -117,6 +189,24 @@
       "writtenOn": "2019-09-20T18:50:37Z",
       "side": 1,
       "message": "Why does garbage need to pass through mCurrentGarbage rather than being added to mGarbageQueue directly in addGarbage()?   Or, why does the garbage need to be collected in mCurrentGarbage before it\u0027s moved over submitFrame() to mGarbageQueue?",
+      "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e145775d_3e438826",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:00:32Z",
+      "side": 1,
+      "message": "The mGarbageQueue stores a list of {serial, GarbageList}. And serials aren\u0027t generated until submit time. mCurrentGarbage just stores a list with no serial. Probably easier to keep it separated. I added a comment to help clarify this.",
+      "parentUuid": "ec50d316_586f470e",
       "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -151,6 +241,24 @@
       "writtenOn": "2019-09-20T18:50:37Z",
       "side": 1,
       "message": "Based on this usage, it seems using std::queue here would be better so you could peek and pop when necessary.",
+      "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fb50d5fb_0cffe173",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:00:32Z",
+      "side": 1,
+      "message": "Disagree. See other comment. I think std::queue degrades performance.",
+      "parentUuid": "de4199cf_ba181afc",
       "revId": "9043210f9f33bbd141650d4763016a74c39e5d6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
