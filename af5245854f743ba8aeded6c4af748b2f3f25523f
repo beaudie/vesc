@@ -22,6 +22,30 @@
       "revId": "af5245854f743ba8aeded6c4af748b2f3f25523f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6f83077_0eb9f0e7",
+        "filename": "gni/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T00:29:23Z",
+      "side": 1,
+      "message": "The original code used \"source_set\" instead of \"angle_source_set\". \"angle_source_set\" suppresses this config. But we need it because we import base/. We aren\u0027t really supposed to do that.",
+      "parentUuid": "5a5d0801_604d92cd",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 3
+      },
+      "revId": "af5245854f743ba8aeded6c4af748b2f3f25523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
