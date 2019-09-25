@@ -542,6 +542,7 @@ RendererVk::~RendererVk()
 void RendererVk::onDestroy(vk::Context *context)
 {
     (void)cleanupGarbage(context, true);
+    ASSERT(mSharedGarbage.empty());
 
     mFenceRecycler.destroy(mDevice);
 
@@ -1591,14 +1592,6 @@ angle::Result RendererVk::newSharedFence(vk::Context *context,
     return angle::Result::Continue;
 }
 
-void RendererVk::addSharedGarbage(const vk::SharedResourceUse &lifetime, vk::GarbageObject &&object)
-{
-    if (object.valid())
-    {
-        mSharedGarbage.emplace_back(lifetime, std::move(object));
-    }
-}
-
 template <VkFormatFeatureFlags VkFormatProperties::*features>
 VkFormatFeatureFlags RendererVk::getFormatFeatureBits(VkFormat format,
                                                       const VkFormatFeatureFlags featureBits)
@@ -1642,12 +1635,9 @@ angle::Result RendererVk::cleanupGarbage(vk::Context *context, bool block)
     for (auto garbageIter = mSharedGarbage.begin(); garbageIter != mSharedGarbage.end();)
     {
         // Possibly 'counter' should be always zero when we add the object to garbage.
-        vk::SharedGarbageObject &garbage = *garbageIter;
-        if (!garbage.lifetime.isCurrentlyInGraph() &&
-            garbage.lifetime.getSerial() <= mLastCompletedQueueSerial)
+        vk::SharedGarbage &garbage = *garbageIter;
+        if (garbage.destroyIfComplete(mDevice, mLastCompletedQueueSerial))
         {
-            garbage.lifetime.release();
-            garbage.object.destroy(mDevice);
             garbageIter = mSharedGarbage.erase(garbageIter);
         }
         else

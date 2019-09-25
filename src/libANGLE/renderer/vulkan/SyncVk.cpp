@@ -31,7 +31,7 @@ SyncHelper::~SyncHelper()
 
 void SyncHelper::releaseToRenderer(RendererVk *renderer)
 {
-    renderer->addSharedGarbage(mUse, GetGarbage(&mEvent));
+    renderer->collectGarbage(&mUse, &mEvent);
     mFence.reset(renderer->getDevice());
 }
 

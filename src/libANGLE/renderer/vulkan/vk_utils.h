@@ -378,6 +378,23 @@ class ContextScoped final : angle::NonCopyable
     T mVar;
 };
 
+template <typename T>
+class RendererScoped final : angle::NonCopyable
+{
+  public:
+    RendererScoped(RendererVk *renderer) : mRenderer(renderer) {}
+    ~RendererScoped() { mVar.release(mRenderer); }
+
+    const T &get() const { return mVar; }
+    T &get() { return mVar; }
+
+    T &&release() { return std::move(mVar); }
+
+  private:
+    RendererVk *mRenderer;
+    T mVar;
+};
+
 // This is a very simple RefCount class that has no autoreleasing. Used in the descriptor set and
 // pipeline layout caches.
 template <typename T>

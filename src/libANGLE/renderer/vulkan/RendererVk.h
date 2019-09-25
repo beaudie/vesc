@@ -45,6 +45,18 @@ struct Format;
 // glSignalSemaphoreEXT.
 using SignalSemaphoreVector = angle::FixedVector<VkSemaphore, 2>;
 
+inline void CollectGarbage(std::vector<vk::GarbageObject> *garbageOut) {}
+
+template <typename ArgT, typename... ArgsT>
+void CollectGarbage(std::vector<vk::GarbageObject> *garbageOut, ArgT object, ArgsT... objectsIn)
+{
+    if (object->valid())
+    {
+        garbageOut->emplace_back(vk::GarbageObject::Get(object));
+    }
+    CollectGarbage(garbageOut, objectsIn...);
+}
+
 class RendererVk : angle::NonCopyable
 {
   public:
@@ -150,7 +162,23 @@ class RendererVk : angle::NonCopyable
         sharedFenceIn->resetAndRecycle(&mFenceRecycler);
     }
 
-    void addSharedGarbage(const vk::SharedResourceUse &lifetime, vk::GarbageObject &&object);
+    template <typename... ArgsT>
+    void collectGarbage(vk::SharedResourceUse *use, ArgsT... garbageIn)
+    {
+        std::vector<vk::GarbageObject> sharedGarbage;
+        CollectGarbage(&sharedGarbage, garbageIn...);
+        if (!sharedGarbage.empty())
+        {
+            mSharedGarbage.emplace_back(std::move(*use), std::move(sharedGarbage));
+        }
+        else
+        {
+            // Force releasing "use" even if no garbage was created.
+            use->release();
+        }
+        // Keep "use" valid.
+        use->init();
+    }
 
     static constexpr size_t kMaxExtensionNames = 200;
     using ExtensionNameList = angle::FixedVector<const char *, kMaxExtensionNames>;
