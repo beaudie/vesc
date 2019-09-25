@@ -224,26 +224,37 @@ class ObjectAndSerial final : angle::NonCopyable
     Serial mSerial;
 };
 
-class GarbageObjectBase
+class GarbageObject
 {
   public:
-    template <typename ObjectT>
-    GarbageObjectBase(const ObjectT &object)
-        : mHandleType(HandleTypeHelper<ObjectT>::kHandleType),
-          mHandle(reinterpret_cast<VkDevice>(object.getHandle()))
-    {}
-    GarbageObjectBase();
-    GarbageObjectBase(GarbageObjectBase &&other);
-    GarbageObjectBase &operator=(GarbageObjectBase &&rhs);
+    GarbageObject();
+    GarbageObject(GarbageObject &&other);
+    GarbageObject &operator=(GarbageObject &&rhs);
 
     void destroy(VkDevice device);
 
+    template <typename DerivedT, typename HandleT>
+    static GarbageObject Get(WrappedObject<DerivedT, HandleT> *object)
+    {
+        return GarbageObject(HandleTypeHelper<DerivedT>::kHandleType,
+                             reinterpret_cast<GarbageHandle>(object->release()));
+    }
+
   private:
+    VK_DEFINE_HANDLE(GarbageHandle)
+    GarbageObject(HandleType handleType, GarbageHandle handle);
+
     HandleType mHandleType;
-    VkDevice mHandle;
+    GarbageHandle mHandle;
 };
 
-using GarbageList      = std::vector<GarbageObjectBase>;
+template <typename T>
+GarbageObject GetGarbage(T *obj)
+{
+    return GarbageObject::Get(obj);
+}
+
+using GarbageList      = std::vector<GarbageObject>;
 using GarbageAndSerial = ObjectAndSerial<GarbageList>;
 using GarbageQueue     = std::vector<GarbageAndSerial>;
 
@@ -269,6 +280,7 @@ class StagingBuffer final : angle::NonCopyable
 {
   public:
     StagingBuffer();
+    void release(ContextVk *contextVk);
     void destroy(VkDevice device);
 
     angle::Result init(Context *context, VkDeviceSize size, StagingUsage usage);
@@ -278,8 +290,6 @@ class StagingBuffer final : angle::NonCopyable
     DeviceMemory &getDeviceMemory() { return mDeviceMemory; }
     const DeviceMemory &getDeviceMemory() const { return mDeviceMemory; }
     size_t getSize() const { return mSize; }
-
-    void dumpResources(GarbageList *garbageList);
 
   private:
     Buffer mBuffer;

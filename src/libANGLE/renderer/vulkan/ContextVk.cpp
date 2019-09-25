@@ -1281,7 +1281,7 @@ void ContextVk::flushGpuEvents(double nextSyncGpuTimestampS, double nextSyncCpuT
 void ContextVk::clearAllGarbage()
 {
     VkDevice device = getDevice();
-    for (vk::GarbageObjectBase &garbage : mCurrentGarbage)
+    for (vk::GarbageObject &garbage : mCurrentGarbage)
     {
         garbage.destroy(device);
     }
@@ -1289,7 +1289,7 @@ void ContextVk::clearAllGarbage()
 
     for (vk::GarbageAndSerial &garbageList : mGarbageQueue)
     {
-        for (vk::GarbageObjectBase &garbage : garbageList.get())
+        for (vk::GarbageObject &garbage : garbageList.get())
         {
             garbage.destroy(device);
         }
@@ -2730,7 +2730,7 @@ angle::Result ContextVk::checkCompletedCommands()
         vk::GarbageAndSerial &garbageList = mGarbageQueue[freeIndex];
         if (garbageList.getSerial() < lastCompleted)
         {
-            for (vk::GarbageObjectBase &garbage : garbageList.get())
+            for (vk::GarbageObject &garbage : garbageList.get())
             {
                 garbage.destroy(device);
             }
