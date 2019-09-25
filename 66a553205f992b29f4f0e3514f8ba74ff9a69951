@@ -120,6 +120,30 @@
     },
     {
       "key": {
+        "uuid": "5a72e615_63e95353",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 2603,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:14:18Z",
+      "side": 1,
+      "message": "It doesn\u0027t look like you call this anywhere. Can you remove it?",
+      "parentUuid": "fd9a0bbb_990524fe",
+      "range": {
+        "startLine": 2603,
+        "startChar": 12,
+        "endLine": 2603,
+        "endChar": 25
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "23e0aa07_67c9a02e",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 10
@@ -719,6 +743,24 @@
     },
     {
       "key": {
+        "uuid": "489515c6_5c79c607",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:14:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "14c56652_c569de91",
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "87a53d40_6a40e6f9",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 10
@@ -883,6 +925,30 @@
     },
     {
       "key": {
+        "uuid": "b832cb08_10508a5b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:14:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b4b6fb7e_b31a9947",
+      "range": {
+        "startLine": 661,
+        "startChar": 0,
+        "endLine": 662,
+        "endChar": 97
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ae0b4cbf_04341a8b",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 10
@@ -918,6 +984,30 @@
       "side": 1,
       "message": "The maxAttribDivisor is now set to 255 so divisors \u003e max will always be flagged as emulated in  VertexArrayVk::syncDirtyAttrib() and have divisor set to 1.",
       "parentUuid": "ae0b4cbf_04341a8b",
+      "range": {
+        "startLine": 877,
+        "startChar": 4,
+        "endLine": 877,
+        "endChar": 47
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5828aeaf_65f0689d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:14:18Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a875d616_ab0deeb8",
       "range": {
         "startLine": 877,
         "startChar": 4,
@@ -1012,6 +1102,30 @@
       "side": 1,
       "message": "Before I revert note that I changed the ordering to match the ordering of private members in GraphicsPipelineDesc which made it easier to verify that these sizes aligned when I was initially debugging.\nHappy to revert, though, if you\u0027d still like that.",
       "parentUuid": "962d4619_68b23be3",
+      "range": {
+        "startLine": 318,
+        "startChar": 0,
+        "endLine": 320,
+        "endChar": 21
+      },
+      "revId": "66a553205f992b29f4f0e3514f8ba74ff9a69951",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ff0becd_6151d893",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:14:18Z",
+      "side": 1,
+      "message": "Ack, you can leave it.",
+      "parentUuid": "2d1e57ab_e263fb13",
       "range": {
         "startLine": 318,
         "startChar": 0,

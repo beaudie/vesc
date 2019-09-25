@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3f0f8710_054428ea",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:14:18Z",
+      "side": 1,
+      "message": "feels like this would be better done as a double-for loop. WDYT?",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 43
+      },
+      "revId": "a37de009f10ebbc97ae0913c4a5d8c7c461d514c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1e2e74f_d878d68d",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:14:18Z",
+      "side": 1,
+      "message": "nit: maybe make this a temporary or helper function to clean up the code slightly.",
+      "range": {
+        "startLine": 456,
+        "startChar": 25,
+        "endLine": 457,
+        "endChar": 49
+      },
+      "revId": "a37de009f10ebbc97ae0913c4a5d8c7c461d514c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7f1b4cc9_58c70f0b",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:14:18Z",
+      "side": 1,
+      "message": "nit: needs a wording update: \"are not active\". Disabled means something different.",
+      "range": {
+        "startLine": 577,
+        "startChar": 68,
+        "endLine": 577,
+        "endChar": 86
+      },
+      "revId": "a37de009f10ebbc97ae0913c4a5d8c7c461d514c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
