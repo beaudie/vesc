@@ -456,13 +456,12 @@ void DynamicBuffer::releaseBufferListToContext(ContextVk *contextVk,
     buffers->clear();
 }
 
-void DynamicBuffer::releaseBufferListToDisplay(DisplayVk *display,
-                                               std::vector<GarbageObject> *garbageQueue,
-                                               std::vector<BufferHelper *> *buffers)
+void DynamicBuffer::releaseBufferListToRenderer(RendererVk *renderer,
+                                                std::vector<BufferHelper *> *buffers)
 {
     for (BufferHelper *toFree : *buffers)
     {
-        toFree->release(display, garbageQueue);
+        toFree->release(renderer);
         delete toFree;
     }
 
@@ -496,25 +495,22 @@ void DynamicBuffer::release(ContextVk *contextVk)
         // by the CPU currently never gets a chance to have its serial set.
         mBuffer->onGraphAccess(contextVk->getCommandGraph());
         mBuffer->release(contextVk);
-        delete mBuffer;
-        mBuffer = nullptr;
+        SafeDelete(mBuffer);
     }
 }
 
-void DynamicBuffer::release(DisplayVk *display, std::vector<GarbageObject> *garbageQueue)
+void DynamicBuffer::release(RendererVk *renderer)
 {
     reset();
 
-    releaseBufferListToDisplay(display, garbageQueue, &mInFlightBuffers);
-    releaseBufferListToDisplay(display, garbageQueue, &mBufferFreeList);
+    releaseBufferListToRenderer(renderer, &mInFlightBuffers);
+    releaseBufferListToRenderer(renderer, &mBufferFreeList);
 
     if (mBuffer)
     {
-        mBuffer->unmap(display->getDevice());
-
-        mBuffer->release(display, garbageQueue);
-        delete mBuffer;
-        mBuffer = nullptr;
+        mBuffer->unmap(renderer->getDevice());
+        mBuffer->release(renderer);
+        SafeDelete(mBuffer);
     }
 }
 
@@ -1310,15 +1306,15 @@ void BufferHelper::release(ContextVk *contextVk)
     contextVk->addGarbage(&mDeviceMemory);
 }
 
-void BufferHelper::release(DisplayVk *display, std::vector<GarbageObject> *garbageQueue)
+void BufferHelper::release(RendererVk *renderer)
 {
-    unmap(display->getDevice());
+    unmap(renderer->getDevice());
     mSize       = 0;
     mViewFormat = nullptr;
 
-    garbageQueue->emplace_back(GetGarbage(&mBuffer));
-    garbageQueue->emplace_back(GetGarbage(&mBufferView));
-    garbageQueue->emplace_back(GetGarbage(&mDeviceMemory));
+    renderer->addSharedGarbage(mUse, GetGarbage(&mBuffer));
+    renderer->addSharedGarbage(mUse, GetGarbage(&mBufferView));
+    renderer->addSharedGarbage(mUse, GetGarbage(&mDeviceMemory));
 }
 
 bool BufferHelper::needsOnWriteBarrier(VkAccessFlags readAccessType,
@@ -1571,10 +1567,10 @@ void ImageHelper::releaseImage(ContextVk *contextVk)
     contextVk->addGarbage(&mDeviceMemory);
 }
 
-void ImageHelper::releaseImage(DisplayVk *display, std::vector<GarbageObject> *garbageQueue)
+void ImageHelper::releaseImage(RendererVk *renderer)
 {
-    garbageQueue->emplace_back(GetGarbage(&mImage));
-    garbageQueue->emplace_back(GetGarbage(&mDeviceMemory));
+    renderer->addSharedGarbage(mUse, GetGarbage(&mImage));
+    renderer->addSharedGarbage(mUse, GetGarbage(&mDeviceMemory));
 }
 
 void ImageHelper::releaseStagingBuffer(ContextVk *contextVk)
@@ -1588,14 +1584,14 @@ void ImageHelper::releaseStagingBuffer(ContextVk *contextVk)
     mSubresourceUpdates.clear();
 }
 
-void ImageHelper::releaseStagingBuffer(DisplayVk *display, std::vector<GarbageObject> *garbageQueue)
+void ImageHelper::releaseStagingBuffer(RendererVk *renderer)
 {
     // Remove updates that never made it to the texture.
     for (SubresourceUpdate &update : mSubresourceUpdates)
     {
-        update.release(display, garbageQueue);
+        update.release(renderer);
     }
-    mStagingBuffer.release(display, garbageQueue);
+    mStagingBuffer.release(renderer);
     mSubresourceUpdates.clear();
 }
 
@@ -2510,6 +2506,13 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
     ANGLE_TRY(mStagingBuffer.flush(contextVk));
 
+    BufferHelper *currentBuffer = mStagingBuffer.getCurrentBuffer();
+    if (currentBuffer)
+    {
+        ASSERT(currentBuffer->valid());
+        currentBuffer->onGraphAccess(contextVk->getCommandGraph());
+    }
+
     std::vector<SubresourceUpdate> updatesToKeep;
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(mFormat->imageFormat());
 
@@ -2685,13 +2688,12 @@ void ImageHelper::SubresourceUpdate::release(ContextVk *contextVk)
     }
 }
 
-void ImageHelper::SubresourceUpdate::release(DisplayVk *display,
-                                             std::vector<GarbageObject> *garbageQueue)
+void ImageHelper::SubresourceUpdate::release(RendererVk *renderer)
 {
     if (updateSource == UpdateSource::Image)
     {
-        image.image->releaseImage(display, garbageQueue);
-        image.image->releaseStagingBuffer(display, garbageQueue);
+        image.image->releaseImage(renderer);
+        image.image->releaseStagingBuffer(renderer);
         SafeDelete(image.image);
     }
 }

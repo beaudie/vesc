@@ -351,6 +351,20 @@ class SharedResourceUse final : angle::NonCopyable
     ResourceUse *mUse;
 };
 
+struct SharedGarbageObject
+{
+    SharedGarbageObject();
+    SharedGarbageObject(const SharedResourceUse &lifetimeIn, GarbageObject &&objectIn);
+    SharedGarbageObject(SharedGarbageObject &&other);
+    ~SharedGarbageObject();
+    SharedGarbageObject &operator=(SharedGarbageObject &&rhs);
+
+    SharedResourceUse lifetime;
+    GarbageObject object;
+};
+
+using SharedGarbageList = std::vector<SharedGarbageObject>;
+
 // This is a helper class for back-end objects used in Vk command buffers. It records a serial
 // at command recording times indicating an order in the queue. We use Fences to detect when
 // commands finish, and then release any unreferenced and deleted resources based on the stored
@@ -427,6 +441,9 @@ class CommandGraphResource : angle::NonCopyable
   protected:
     explicit CommandGraphResource(CommandGraphResourceType resourceType);
 
+    // Current resource lifetime.
+    SharedResourceUse mUse;
+
   private:
     // Returns true if this node has a current writing node with no children.
     ANGLE_INLINE bool hasChildlessWritingNode() const;
@@ -434,9 +451,6 @@ class CommandGraphResource : angle::NonCopyable
     void startNewCommands(ContextVk *contextVk);
 
     void onWriteImpl(ContextVk *contextVk, CommandGraphNode *writingNode);
-
-    // Current resource lifetime.
-    SharedResourceUse mUse;
 
     std::vector<CommandGraphNode *> mCurrentReadingNodes;
 
