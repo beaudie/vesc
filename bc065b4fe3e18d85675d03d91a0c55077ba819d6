@@ -16,6 +16,24 @@
       "revId": "bc065b4fe3e18d85675d03d91a0c55077ba819d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e8c7bcd_1c078372",
+        "filename": "src/common/PackedEnums.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T22:24:37Z",
+      "side": 1,
+      "message": "It was because of clang-format. I was trying to avoid using custom format tags. But I put them in because it is a bit too funky.",
+      "parentUuid": "ef66749c_aee08eba",
+      "revId": "bc065b4fe3e18d85675d03d91a0c55077ba819d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
