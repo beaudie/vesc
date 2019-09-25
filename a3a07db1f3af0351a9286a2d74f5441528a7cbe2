@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b6e6940_117f1e1f",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-25T16:53:16Z",
+      "side": 1,
+      "message": "Can hard code 1, 0 as last two args to function.",
+      "revId": "a3a07db1f3af0351a9286a2d74f5441528a7cbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cee027b2_08bab5e4",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-25T16:53:16Z",
+      "side": 1,
+      "message": "The only use of drawIndexedIndirect() in this CL has drawCount \u003d\u003d 1 \u0026\u0026 stride \u003d\u003d 0. Do you have follow-on CLs where these values vary? If not then I recommend killing them from struct for now and using hard-coded values when parsing command buffer. Cmd buffer processing can be critical path so saving a few instructions helps.",
+      "revId": "a3a07db1f3af0351a9286a2d74f5441528a7cbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "647bc1a0_989a5d4a",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-25T16:53:16Z",
+      "side": 1,
+      "message": "With hard-code opt mentioned above you can assert here to make sure drawCount \u003d\u003d 1 and stride \u003d\u003d 0. If/when assert is hit, struct members can be added and dynamically set.",
+      "revId": "a3a07db1f3af0351a9286a2d74f5441528a7cbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1701e8d_7e728d3b",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000000.inc",
+        "patchSetId": 8
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-25T16:53:16Z",
+      "side": 1,
+      "message": "Did clang-format do this? For readability would prefer to see:\n\nuint index \u003d ((gl_GlobalInvocationID.x + (firstIndex \u003e\u003e 1)) \u003c\u003c 1);",
+      "revId": "a3a07db1f3af0351a9286a2d74f5441528a7cbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8c9c168_062a3c9c",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000001.inc",
+        "patchSetId": 8
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-25T16:53:16Z",
+      "side": 1,
+      "message": "Same formatting comment",
+      "revId": "a3a07db1f3af0351a9286a2d74f5441528a7cbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "75b0bf38_d4e86879",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/gen/ConvertIndex.comp.00000002.inc",
+        "patchSetId": 8
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-25T16:53:16Z",
+      "side": 1,
+      "message": "Various other formatting like this throughout the commented shader code that make it slightly less readable. Not a big deal as it\u0027s just code in comments so happy if it\u0027s updated but fine either way.",
+      "revId": "a3a07db1f3af0351a9286a2d74f5441528a7cbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "39c38910_85a35685",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-25T16:53:16Z",
+      "side": 1,
+      "message": "This comment is weird. Should there only be one of [offset|cmdOffset]?",
+      "revId": "a3a07db1f3af0351a9286a2d74f5441528a7cbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
