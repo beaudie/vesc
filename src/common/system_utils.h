@@ -29,17 +29,6 @@ bool IsDirectory(const char *filename);
 // Get absolute time in seconds.  Use this function to get an absolute time with an unknown origin.
 double GetCurrentTime();
 
-// Run an application and get the output.  Gets a nullptr-terminated set of args to execute the
-// application with, and returns the stdout and stderr outputs as well as the exit code.
-//
-// Pass nullptr for stdoutOut/stderrOut if you don't need to capture. exitCodeOut is required.
-//
-// Returns false if it fails to actually execute the application.
-bool RunApp(const std::vector<const char *> &args,
-            std::string *stdoutOut,
-            std::string *stderrOut,
-            int *exitCodeOut);
-
 class Library : angle::NonCopyable
 {
   public:
