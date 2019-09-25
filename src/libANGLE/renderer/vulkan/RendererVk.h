@@ -196,9 +196,6 @@ class RendererVk : angle::NonCopyable
 
     void onCompletedSerial(Serial serial);
 
-    // Calls finish on every Context in the active set.
-    angle::Result globalFinish();
-
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
