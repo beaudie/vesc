@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "44a1cffd_fb8103f2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T23:37:24Z",
+      "side": 1,
+      "message": "Note - life gets really complicated with emulated instancing, like it would for line loops.",
+      "parentUuid": "b39463b5_ce1af0b9",
+      "range": {
+        "startLine": 482,
+        "startChar": 8,
+        "endLine": 482,
+        "endChar": 39
+      },
+      "revId": "0bff14cb4deea96513878cdf1a3dd623ae4b1b44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "acdfe952_f2164c11",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 8
