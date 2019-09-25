@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba375511_4cc86bc1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T16:24:22Z",
+      "side": 1,
+      "message": "can you make this call setupDraw internally?",
+      "range": {
+        "startLine": 586,
+        "startChar": 25,
+        "endLine": 586,
+        "endChar": 42
+      },
+      "revId": "70717d57399c6207bd73e67cc026bd51508d07e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac79fea9_9e859868",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T16:24:22Z",
+      "side": 1,
+      "message": "you can remove this now.",
+      "range": {
+        "startLine": 370,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 72
+      },
+      "revId": "70717d57399c6207bd73e67cc026bd51508d07e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56d8c492_68ca2d0b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T16:24:22Z",
+      "side": 1,
+      "message": "should still be indexTypeOrInvalid - see other uses.",
+      "range": {
+        "startLine": 379,
+        "startChar": 49,
+        "endLine": 379,
+        "endChar": 64
+      },
+      "revId": "70717d57399c6207bd73e67cc026bd51508d07e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
