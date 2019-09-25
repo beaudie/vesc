@@ -99,9 +99,9 @@ uint32_t GetConvertVertexFlags(const UtilsVk::ConvertVertexParameters &params)
 
     // Assert on the types to make sure the shader supports its.  These are based on
     // ConvertVertex_comp::Conversion values.
-    ASSERT(!destIsSint || srcIsSint);    // If destination is sint, src must be sint too
-    ASSERT(!destIsUint || srcIsUint);    // If destination is uint, src must be uint too
-    ASSERT(!srcIsFixed || destIsFloat);  // If source is fixed, dest must be float
+    ASSERT(!destIsSint || srcIsSint);           // If destination is sint, src must be sint too
+    ASSERT(!destIsUint || srcIsUint);           // If destination is uint, src must be uint too
+    ASSERT(!srcIsFixed || destIsFloat);         // If source is fixed, dest must be float
     ASSERT(srcIsHalfFloat == destIsHalfFloat);  // Both src and dest are half float or neither
 
     // One of each bool set must be true
