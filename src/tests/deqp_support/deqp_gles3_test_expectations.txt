@@ -565,10 +565,6 @@
 2672 VULKAN : dEQP-GLES3.functional.instanced.draw_arrays_instanced.mixed.4_instances = FAIL
 2672 VULKAN : dEQP-GLES3.functional.instanced.types* = FAIL
 
-// Polygon offset:
-3678 VULKAN : dEQP-GLES3.functional.polygon_offset.float32_result_depth_clamp = FAIL
-3678 VULKAN : dEQP-GLES3.functional.polygon_offset.float32_factor_1_slope = FAIL
-
 // Flat shading:
 3430 VULKAN : dEQP-GLES3.functional.rasterization.flatshading.* = FAIL
 3430 VULKAN : dEQP-GLES3.functional.shaders.linkage.varying.basic_types.u* = FAIL
