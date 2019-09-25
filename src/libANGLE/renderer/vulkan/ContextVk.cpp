@@ -589,8 +589,8 @@ void ContextVk::onDestroy(const gl::Context *context)
     // This will not destroy any resources. It will release them to be collected after finish.
     mIncompleteTextures.onDestroy(context);
 
-    // Need all commands in the share group to complete. For now finish all Contexts.
-    (void)mRenderer->globalFinish();
+    // Flush and complete current outstanding work before destruction.
+    (void)finishImpl();
 
     VkDevice device = getDevice();
 
