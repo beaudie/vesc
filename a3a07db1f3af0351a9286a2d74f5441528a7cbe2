@@ -118,6 +118,29 @@
       "revId": "a3a07db1f3af0351a9286a2d74f5441528a7cbe2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "903226a0_054bc316",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/ConvertIndex.comp.json",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T19:22:36Z",
+      "side": 1,
+      "message": "nit: stray tab",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 1
+      },
+      "revId": "a3a07db1f3af0351a9286a2d74f5441528a7cbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
     }
   ]
 }
