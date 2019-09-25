@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "6b44f41b_66adf48b",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-25T21:18:38Z",
+      "side": 1,
+      "message": "Your current design without mod lgtm.",
+      "parentUuid": "17f2a668_277b136a",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 43
+      },
+      "revId": "a37de009f10ebbc97ae0913c4a5d8c7c461d514c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1e2e74f_d878d68d",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 12
