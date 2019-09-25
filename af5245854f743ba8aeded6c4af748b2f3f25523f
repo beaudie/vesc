@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a5d0801_604d92cd",
+        "filename": "gni/angle.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2019-09-25T00:01:27Z",
+      "side": 1,
+      "message": "I didn\u0027t see this in the original code, why is this needed now?",
+      "range": {
+        "startLine": 158,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 3
+      },
+      "revId": "af5245854f743ba8aeded6c4af748b2f3f25523f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
