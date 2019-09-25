@@ -351,19 +351,23 @@ class SharedResourceUse final : angle::NonCopyable
     ResourceUse *mUse;
 };
 
-struct SharedGarbageObject
+class SharedGarbage
 {
-    SharedGarbageObject();
-    SharedGarbageObject(const SharedResourceUse &lifetimeIn, GarbageObject &&objectIn);
-    SharedGarbageObject(SharedGarbageObject &&other);
-    ~SharedGarbageObject();
-    SharedGarbageObject &operator=(SharedGarbageObject &&rhs);
+  public:
+    SharedGarbage();
+    SharedGarbage(SharedGarbage &&other);
+    SharedGarbage(SharedResourceUse &&use, std::vector<GarbageObject> &&garbage);
+    ~SharedGarbage();
+    SharedGarbage &operator=(SharedGarbage &&rhs);
 
-    SharedResourceUse lifetime;
-    GarbageObject object;
+    bool destroyIfComplete(VkDevice device, Serial completedSerial);
+
+  private:
+    SharedResourceUse mLifetime;
+    std::vector<GarbageObject> mGarbage;
 };
 
-using SharedGarbageList = std::vector<SharedGarbageObject>;
+using SharedGarbageList = std::vector<SharedGarbage>;
 
 // This is a helper class for back-end objects used in Vk command buffers. It records a serial
 // at command recording times indicating an order in the queue. We use Fences to detect when
@@ -391,6 +395,7 @@ class CommandGraphResource : angle::NonCopyable
     // Updates the in-use serial tracked for this resource. Will clear dependencies if the resource
     // was not used in this set of command nodes.
     void onGraphAccess(CommandGraph *commandGraph);
+    void updateCurrentAccessNodes();
 
     // Allocates a write node via getNewWriteNode and returns a started command buffer.
     // The started command buffer will render outside of a RenderPass.
@@ -597,7 +602,7 @@ ANGLE_INLINE bool CommandGraphResource::hasStartedRenderPass() const
     return hasChildlessWritingNode() && mCurrentWritingNode->getInsideRenderPassCommands()->valid();
 }
 
-ANGLE_INLINE void CommandGraphResource::onGraphAccess(CommandGraph *commandGraph)
+ANGLE_INLINE void CommandGraphResource::updateCurrentAccessNodes()
 {
     // Clear dependencies if this is a new access.
     if (!mUse.isCurrentlyInGraph())
@@ -605,6 +610,11 @@ ANGLE_INLINE void CommandGraphResource::onGraphAccess(CommandGraph *commandGraph
         mCurrentWritingNode = nullptr;
         mCurrentReadingNodes.clear();
     }
+}
+
+ANGLE_INLINE void CommandGraphResource::onGraphAccess(CommandGraph *commandGraph)
+{
+    updateCurrentAccessNodes();
 
     // Store reference to usage in graph.
     commandGraph->onResourceUse(mUse);
@@ -614,9 +624,13 @@ ANGLE_INLINE bool CommandGraphResource::appendToStartedRenderPass(CommandGraph *
                                                                   const gl::Rectangle &renderArea,
                                                                   CommandBuffer **commandBufferOut)
 {
-    onGraphAccess(graph);
+    updateCurrentAccessNodes();
+
     if (hasStartedRenderPass())
     {
+        // Store reference to usage in graph.
+        graph->onResourceUse(mUse);
+
         if (mCurrentWritingNode->getRenderPassRenderArea().encloses(renderArea))
         {
             *commandBufferOut = mCurrentWritingNode->getInsideRenderPassCommands();
@@ -703,6 +717,7 @@ ANGLE_INLINE bool CommandGraphResource::hasChildlessWritingNode() const
 // CommandGraph inlines.
 ANGLE_INLINE void CommandGraph::onResourceUse(const SharedResourceUse &resourceUse)
 {
+    ASSERT(!empty());
     SharedResourceUse newUse;
     newUse.set(resourceUse);
     mResourceUses.emplace_back(std::move(newUse));
