@@ -4,14 +4,14 @@
 // found in the LICENSE file.
 //
 
-// system_utils.h: declaration of OS-specific utility functions
+// test_utils.h: declaration of OS-specific utility functions
 
-#ifndef UTIL_SYSTEM_UTILS_H_
-#define UTIL_SYSTEM_UTILS_H_
+#ifndef UTIL_TEST_UTILS_H_
+#define UTIL_TEST_UTILS_H_
 
 #include <string>
+#include <vector>
 
-#include "common/system_utils.h"
 #include "util/util_export.h"
 
 namespace angle
@@ -33,6 +33,18 @@ ANGLE_UTIL_EXPORT void TerminateCrashHandler();
 
 // Print a stack back trace.
 ANGLE_UTIL_EXPORT void PrintStackBacktrace();
+
+// Run an application and get the output.  Gets a nullptr-terminated set of args to execute the
+// application with, and returns the stdout and stderr outputs as well as the exit code.
+//
+// Pass nullptr for stdoutOut/stderrOut if you don't need to capture. exitCodeOut is required.
+//
+// Returns false if it fails to actually execute the application.
+ANGLE_UTIL_EXPORT bool RunApp(const std::vector<const char *> &args,
+                              std::string *stdoutOut,
+                              std::string *stderrOut,
+                              int *exitCodeOut);
+
 }  // namespace angle
 
-#endif  // UTIL_SYSTEM_UTILS_H_
+#endif  // UTIL_TEST_UTILS_H_
