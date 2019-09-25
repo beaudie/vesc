@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "5622b80c_9c5f3ebb",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1517,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-09-25T16:02:40Z",
+      "side": 1,
+      "message": "will fix it in this CL",
+      "parentUuid": "a6f2c4d6_29a549e6",
+      "range": {
+        "startLine": 1507,
+        "startChar": 0,
+        "endLine": 1517,
+        "endChar": 9
+      },
+      "revId": "14cfed7c84499ef36312da45844562a2d2705785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e2a6f42b_dade1eeb",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 4
@@ -163,6 +187,30 @@
       "revId": "14cfed7c84499ef36312da45844562a2d2705785",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5282cc89_da9a33fa",
+        "filename": "src/libANGLE/renderer/vulkan/GlslangWrapper.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2019-09-25T16:02:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71306e60_df709f13",
+      "range": {
+        "startLine": 626,
+        "startChar": 12,
+        "endLine": 627,
+        "endChar": 96
+      },
+      "revId": "14cfed7c84499ef36312da45844562a2d2705785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
