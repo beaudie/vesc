@@ -231,6 +231,7 @@ class GarbageObject
     GarbageObject(GarbageObject &&other);
     GarbageObject &operator=(GarbageObject &&rhs);
 
+    bool valid() const { return mHandle != VK_NULL_HANDLE; }
     void destroy(VkDevice device);
 
     template <typename DerivedT, typename HandleT>

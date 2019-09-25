@@ -150,9 +150,7 @@ class RendererVk : angle::NonCopyable
         sharedFenceIn->resetAndRecycle(&mFenceRecycler);
     }
 
-    void addGarbage(vk::Shared<vk::Fence> &&fence, std::vector<vk::GarbageObject> &&garbage);
-    void addGarbage(std::vector<vk::Shared<vk::Fence>> &&fences,
-                    std::vector<vk::GarbageObject> &&garbage);
+    void addSharedGarbage(const vk::SharedResourceUse &lifetime, vk::GarbageObject &&object);
 
     static constexpr size_t kMaxExtensionNames = 200;
     using ExtensionNameList = angle::FixedVector<const char *, kMaxExtensionNames>;
@@ -229,9 +227,7 @@ class RendererVk : angle::NonCopyable
     vk::Recycler<vk::Fence> mFenceRecycler;
 
     std::mutex mGarbageMutex;
-    using FencedGarbage =
-        std::pair<std::vector<vk::Shared<vk::Fence>>, std::vector<vk::GarbageObject>>;
-    std::vector<FencedGarbage> mFencedGarbage;
+    vk::SharedGarbageList mSharedGarbage;
 
     vk::MemoryProperties mMemoryProperties;
     vk::FormatTable mFormatTable;
