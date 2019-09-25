@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0b405d5c_6d6776c8",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-25T20:46:43Z",
+      "side": 1,
+      "message": "I\u0027ve gone through a few iterations and re-attempted a double for loop but settled on a single for loop that I\u0027m happy with. I liked the while loop version but didn\u0027t like the mod operator in the loop. The annoyance with the double-for loop is that the number of iterations may not be divisible by replicateCount so either:\n1. The inner loop needed to have an extra guard to handle the case where the last attrib needed to be copied OR\n2. The outer loop had to have an extra guard to quit early and then a separate loop would have to pick up any leftover copies for the final attrib\n\nThere may have been a nicer option to the above but instead I\u0027ve settle on the single for-loop with the mod operator removed. I think this is good for getting it functional and if/when we need to optimize this can go to an on-GPU SIMD solution.",
+      "parentUuid": "3f0f8710_054428ea",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 85,
+        "endChar": 43
+      },
+      "revId": "a37de009f10ebbc97ae0913c4a5d8c7c461d514c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1e2e74f_d878d68d",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 12
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "e9c95a6f_48196875",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-25T20:46:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1e2e74f_d878d68d",
+      "range": {
+        "startLine": 456,
+        "startChar": 25,
+        "endLine": 457,
+        "endChar": 49
+      },
+      "revId": "a37de009f10ebbc97ae0913c4a5d8c7c461d514c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7f1b4cc9_58c70f0b",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 12
@@ -68,6 +116,30 @@
       "revId": "a37de009f10ebbc97ae0913c4a5d8c7c461d514c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e230d172_0182e200",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 577,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-25T20:46:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f1b4cc9_58c70f0b",
+      "range": {
+        "startLine": 577,
+        "startChar": 68,
+        "endLine": 577,
+        "endChar": 86
+      },
+      "revId": "a37de009f10ebbc97ae0913c4a5d8c7c461d514c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
