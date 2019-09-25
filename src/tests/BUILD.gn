@@ -50,6 +50,7 @@ angle_executable("angle_unittests_helper") {
 
   deps = [
     "${angle_root}:angle_common",
+    "${angle_root}:angle_util",
   ]
 }
 
