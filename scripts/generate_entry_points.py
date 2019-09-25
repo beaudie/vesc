@@ -475,6 +475,7 @@ template_sources_includes_gl32 = """#include "libGL/entry_points_{}_autogen.h"
 #include "libANGLE/validationES2.h"
 #include "libANGLE/validationES3.h"
 #include "libANGLE/validationES31.h"
+#include "libANGLE/validationES32.h"
 #include "libANGLE/validationESEXT.h"
 #include "libANGLE/validationGL{}{}_autogen.h"
 #include "libANGLE/entry_points_utils.h"
@@ -1168,7 +1169,8 @@ def write_context_api_decls(template, decls, api):
 
 
 def write_glext_explicit_context_inc(version, ptrs, protos):
-    folder_version = version if version != "31" else "3"
+    possible_versions = ["31", "32"]
+    folder_version = version if version not in possible_versions else "3"
 
     content = template_glext_explicit_context_inc.format(
         script_name=os.path.basename(sys.argv[0]),
@@ -1561,6 +1563,7 @@ def main():
             '../src/libANGLE/validationES1_autogen.h',
             '../src/libANGLE/validationES2_autogen.h',
             '../src/libANGLE/validationES31_autogen.h',
+            '../src/libANGLE/validationES32_autogen.h',
             '../src/libANGLE/validationES3_autogen.h',
             '../src/libANGLE/validationESEXT_autogen.h',
             '../src/libANGLE/validationGL1_autogen.h',
@@ -1653,7 +1656,7 @@ def main():
     glesdecls = {}
     glesdecls['core'] = {}
     glesdecls['exts'] = {}
-    for ver in [(1, 0), (2, 0), (3, 0), (3, 1)]:
+    for ver in [(1, 0), (2, 0), (3, 0), (3, 1), (3, 2)]:
         glesdecls['core'][ver] = []
     for ver in ['GLES1 Extensions', 'GLES2+ Extensions', 'ANGLE Extensions']:
         glesdecls['exts'][ver] = {}
@@ -1670,7 +1673,7 @@ def main():
 
     # First run through the main GLES entry points.  Since ES2+ is the primary use
     # case, we go through those first and then add ES1-only APIs at the end.
-    for major_version, minor_version in [[2, 0], [3, 0], [3, 1], [1, 0]]:
+    for major_version, minor_version in [[2, 0], [3, 0], [3, 1], [3, 2], [1, 0]]:
         version = "{}_{}".format(major_version, minor_version)
         annotation = "GLES_{}".format(version)
         name_prefix = "GL_ES_VERSION_"
@@ -1821,7 +1824,7 @@ def main():
         libgles_ep_exports += get_exports(cmds, lambda x: "%sContextANGLE" % x)
 
         # Generate .inc files for extension function pointers and declarations
-        for major, minor in [[2, 0], [3, 0], [3, 1], [1, 0]]:
+        for major, minor in [[2, 0], [3, 0], [3, 1], [3, 2], [1, 0]]:
             annotation = "{}_{}".format(major, minor)
 
             major_if_not_one = major if major != 1 else ""
@@ -1964,6 +1967,7 @@ def main():
     #include "libANGLE/validationES2.h"
     #include "libANGLE/validationES3.h"
     #include "libANGLE/validationES31.h"
+    #include "libANGLE/validationES32.h"
     """
 
     write_file("gles_ext", "GLES extension", template_entry_point_header,
