@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54ce2a3d_9f2fd70b",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-09-26T20:44:11Z",
+      "side": 1,
+      "message": "Do we need to worry about flushing the pipeline to get up-to-date bits here?",
+      "revId": "bbd92f62ed6a3c8d939d02e5eff5e10b6ac38d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8a85ef28_87b006a5",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-09-26T20:44:11Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem right. If divisor is 5 we should have 5 copies of each the attribute, right?\nShouldn\u0027t this be divisor * stride\nMaybe need * instanceCount as well?",
+      "revId": "bbd92f62ed6a3c8d939d02e5eff5e10b6ac38d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5b4cea79_d86add7e",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-09-26T20:44:11Z",
+      "side": 1,
+      "message": "nit: already have this value in divisor",
+      "range": {
+        "startLine": 629,
+        "startChar": 20,
+        "endLine": 629,
+        "endChar": 40
+      },
+      "revId": "bbd92f62ed6a3c8d939d02e5eff5e10b6ac38d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
