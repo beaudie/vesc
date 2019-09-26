@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1eb8fdb7_94b02622",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1519,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-26T18:27:01Z",
+      "side": 1,
+      "message": "can you revert this code back to its prior location now that the ASSERT bug has been fixed?",
+      "range": {
+        "startLine": 1507,
+        "startChar": 0,
+        "endLine": 1519,
+        "endChar": 0
+      },
+      "revId": "1880e1d3d6b99735d18b60ae9f76ab4e9a2a7a85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "806140f6_4d621c76",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-26T18:27:01Z",
+      "side": 1,
+      "message": "couple style rules:\n\n1. avoid non-const reference arguments\n\nhttps://google.github.io/styleguide/cppguide.html#Reference_Arguments\n\n2. member functions should use lower case for ANGLE style\n\nhttps://chromium.googlesource.com/angle/angle/+/master/doc/CodingStandard.md#variable-names\n\nIn this case though, could you make this a static helper function (with CapsCamelCase naming) at the top of the file? It doesn\u0027t need to access any member variables in GraphicsPipelineDesc.\n\nI also suggest the name \u0027SetPipelineShaderStageInfo\u0027 or SetPipelineShaderStageCreateInfo just to drop the \u0027Vk\u0027 (we\u0027re always using Vk here)",
+      "range": {
+        "startLine": 595,
+        "startChar": 0,
+        "endLine": 608,
+        "endChar": 0
+      },
+      "revId": "1880e1d3d6b99735d18b60ae9f76ab4e9a2a7a85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f549ce85_056b912f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-26T18:27:01Z",
+      "side": 1,
+      "message": "I think you should leave this out of this CL. It is saying that applications can use Geometry Shaders, which is not yet implemented. At least I would leave the extension disabled with a TODO(http://anglebug.com/3571)",
+      "range": {
+        "startLine": 437,
+        "startChar": 1,
+        "endLine": 449,
+        "endChar": 89
+      },
+      "revId": "1880e1d3d6b99735d18b60ae9f76ab4e9a2a7a85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
