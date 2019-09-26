@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "494ebe68_04c47cf9",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-09-26T20:54:42Z",
+      "side": 1,
+      "message": "I see your copy loop will drop you out before exceeding bytesToAllocate, but still it seems odd that we are asking for divisor copies but we only allocate room for instanceCount copies.\nProbably something I don\u0027t understand about this...",
+      "parentUuid": "8a85ef28_87b006a5",
+      "revId": "bbd92f62ed6a3c8d939d02e5eff5e10b6ac38d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5b4cea79_d86add7e",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 13
