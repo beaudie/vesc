@@ -455,7 +455,10 @@ TVariable *AddANGLEPositionVaryingDeclaration(TIntermBlock *root,
     return varyingVar;
 }
 
-void AddANGLEPositionVarying(TIntermBlock *root, TSymbolTable *symbolTable)
+ANGLE_NO_DISCARD bool AddBresenhamEmulationVS(TCompiler *compiler,
+                                              TIntermBlock *root,
+                                              TSymbolTable *symbolTable,
+                                              const TVariable *driverUniforms)
 {
     TVariable *anglePosition = AddANGLEPositionVaryingDeclaration(root, symbolTable, EvqVaryingOut);
 
@@ -465,12 +468,38 @@ void AddANGLEPositionVarying(TIntermBlock *root, TSymbolTable *symbolTable)
     TIntermBinary *assignment =
         new TIntermBinary(EOpAssign, varyingRef, new TIntermSymbol(position));
 
+    // Clamp position to subpixel grid.
+    // "temp = gl_Viewport.zw * (2^subpixel bits);"
+    TIntermBinary *viewportRef      = CreateDriverUniformRef(driverUniforms, kViewport);
+    TIntermSwizzle *viewportSwizzle = CreateSwizzle(viewportRef, 2, 3);
+
+    int subpixelBits                    = compiler->getResources().SubPixelBits;
+    TIntermConstantUnion *scaleConstant = CreateFloatNode(1 << subpixelBits);
+    TIntermBinary *scaledValue =
+        new TIntermBinary(EOpVectorTimesScalar, viewportSwizzle, scaleConstant);
+
+    const TType *vec2Type     = StaticType::GetBasic<EbtFloat, 2>();
+    TVariable *tempVar        = CreateTempVariable(symbolTable, vec2Type);
+    TIntermBinary *tempAssign = CreateTempAssignmentNode(tempVar, scaledValue);
+
+    // "ANGLEPosition.xy = round(ANGLEPosition.xy * temp) / temp".
+    TIntermSwizzle *positionXY = CreateSwizzle(varyingRef->deepCopy(), 0, 1);
+    TIntermBinary *scaledPosition =
+        new TIntermBinary(EOpVectorTimesScalar, positionXY, CreateTempSymbolNode(tempVar));
+    TIntermUnary *roundedPosition = new TIntermUnary(EOpRound, scaledPosition, nullptr);
+    TIntermBinary *clamped =
+        new TIntermBinary(EOpDiv, roundedPosition, CreateTempSymbolNode(tempVar));
+    TIntermBinary *clampAssign = new TIntermBinary(EOpAssign, positionXY->deepCopy(), clamped);
+
     // Ensure the assignment runs at the end of the main() function.
     TIntermFunctionDefinition *main = FindMain(root);
     TIntermBlock *mainBody          = main->getBody();
     mainBody->appendStatement(GenerateLineRasterIfDef());
     mainBody->appendStatement(assignment);
+    mainBody->appendStatement(tempAssign);
+    mainBody->appendStatement(clampAssign);
     mainBody->appendStatement(GenerateEndIf());
+    return compiler->validateAST(root);
 }
 
 ANGLE_NO_DISCARD bool InsertFragCoordCorrection(TCompiler *compiler,
@@ -510,12 +539,12 @@ ANGLE_NO_DISCARD bool InsertFragCoordCorrection(TCompiler *compiler,
 //         discard;
 //     <otherwise run fragment shader main>
 // }
-ANGLE_NO_DISCARD bool AddLineSegmentRasterizationEmulation(TCompiler *compiler,
-                                                           TInfoSinkBase &sink,
-                                                           TIntermBlock *root,
-                                                           TSymbolTable *symbolTable,
-                                                           const TVariable *driverUniforms,
-                                                           bool usesFragCoord)
+ANGLE_NO_DISCARD bool AddBresenhamEmulationFS(TCompiler *compiler,
+                                              TInfoSinkBase &sink,
+                                              TIntermBlock *root,
+                                              TSymbolTable *symbolTable,
+                                              const TVariable *driverUniforms,
+                                              bool usesFragCoord)
 {
     TVariable *anglePosition = AddANGLEPositionVaryingDeclaration(root, symbolTable, EvqVaryingIn);
 
@@ -837,8 +866,8 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
             }
         }
 
-        if (!AddLineSegmentRasterizationEmulation(this, sink, root, &getSymbolTable(),
-                                                  driverUniforms, usesFragCoord))
+        if (!AddBresenhamEmulationFS(this, sink, root, &getSymbolTable(), driverUniforms,
+                                     usesFragCoord))
         {
             return false;
         }
@@ -903,7 +932,10 @@ bool TranslatorVulkan::translate(TIntermBlock *root,
     }
     else if (getShaderType() == GL_VERTEX_SHADER)
     {
-        AddANGLEPositionVarying(root, &getSymbolTable());
+        if (!AddBresenhamEmulationVS(this, root, &getSymbolTable(), driverUniforms))
+        {
+            return false;
+        }
 
         // Add a macro to declare transform feedback buffers.
         sink << "@@ XFB-DECL @@\n\n";
