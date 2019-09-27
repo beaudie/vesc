@@ -1,0 +1,153 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c206e10b_44bb3b02",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-27T17:11:00Z",
+      "side": 1,
+      "message": "It looks like this query comes up quite a bit.   Can it be moved into a helper function in RendererVk for readability?   Something like:\n\nbool RendererVk::isTransientCommandBufferEnabled()\n{\n    return getFeatures().transientCommandBuffer.enabled;\n}",
+      "range": {
+        "startLine": 239,
+        "startChar": 19,
+        "endLine": 239,
+        "endChar": 63
+      },
+      "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "26493ee5_032e72ae",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-27T17:11:00Z",
+      "side": 1,
+      "message": "nit: For consistency to match freeIndex below (since these blocks are pretty similar), this should be a size_t.\n\n\nOh, looks like this code was all moved from below.",
+      "range": {
+        "startLine": 252,
+        "startChar": 4,
+        "endLine": 252,
+        "endChar": 7
+      },
+      "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1319d8ca_58cb3c7e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-27T17:11:00Z",
+      "side": 1,
+      "message": "Does this need a check that finishedCount \u003e 0 like freeIndex below, or is there guaranteed to be at least 1 finished batch if we get into here?",
+      "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "611e8fbf_a9925da7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-27T17:11:00Z",
+      "side": 1,
+      "message": "I see you didn\u0027t actually add this, you just moved it, but:\n\nHow big do we expect mInFlightCommands to get?   Is a linear search fine because it\u0027s usually small, or should we try and get fancier with a binary search since the values are sorted?   This may be getting a bit deep into premature micro-optimization territory, but linear searches like this are also a quick way to pollute a lot of your d-cache with data you don\u0027t actually care about yet.\n\nOh, I see below:\nASSERT(mInFlightCommands.size() \u003c\u003d kInFlightCommandsLimit)\nkInFlightCommandsLimit \u003d 100u\n\nThat\u0027s probably small enough not to worry about it, since I assume it\u0027s unlikely we actually walk a full list start to finish.",
+      "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8bf49bf_ce602342",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-27T17:11:00Z",
+      "side": 1,
+      "message": "Why is this a problem for the CPU?",
+      "range": {
+        "startLine": 481,
+        "startChar": 7,
+        "endLine": 481,
+        "endChar": 79
+      },
+      "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ea269d0_252b47d2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-27T17:11:00Z",
+      "side": 1,
+      "message": "What issue is this referring to?",
+      "range": {
+        "startLine": 688,
+        "startChar": 11,
+        "endLine": 688,
+        "endChar": 60
+      },
+      "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d9b18e4_58d5138f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2019-09-27T17:11:00Z",
+      "side": 1,
+      "message": "Is it worth marking this with a TODO?",
+      "range": {
+        "startLine": 84,
+        "startChar": 16,
+        "endLine": 84,
+        "endChar": 89
+      },
+      "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
