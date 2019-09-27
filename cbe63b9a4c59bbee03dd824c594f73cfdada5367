@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "118eddf1_ee2fad39",
+        "filename": "src/image_util/loadimage.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1259,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-09-27T21:47:30Z",
+      "side": 1,
+      "message": "This is \"weird\". All other uses of D24S8 have the depth in the lower 24bits and stencil in the upper 8. But for reasons I don\u0027t understand yet, the test put depth in the upper 24bits and stencil in lower 8.",
+      "revId": "cbe63b9a4c59bbee03dd824c594f73cfdada5367",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    }
+  ]
+}
