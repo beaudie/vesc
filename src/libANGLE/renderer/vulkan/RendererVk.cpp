@@ -660,8 +660,16 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     {
         bool layersRequested =
             (attribs.get(EGL_PLATFORM_ANGLE_DEBUG_LAYERS_ENABLED_ANGLE, EGL_DONT_CARE) == EGL_TRUE);
+        if (layersRequested)
+            WARN() << "VK Validation layers ARE requested & doing a lookup for " << layersRequested
+                   << " layers.";
+        else
+            WARN() << "VK Validation layers ARE NOT requested & doing a lookup for "
+                   << layersRequested << " layers.";
+
         mEnableValidationLayers = GetAvailableValidationLayers(instanceLayerProps, layersRequested,
                                                                &enabledInstanceLayerNames);
+        WARN() << "Found " << enabledInstanceLayerNames.size() << " layers.";
     }
 
     if (wsiLayer)
