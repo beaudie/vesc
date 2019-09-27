@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fd75f403_9e120959",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 619,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-27T14:18:19Z",
+      "side": 1,
+      "message": "Great thought. After some digging I believe the answer is \"no.\" The attribs will be stored in host-coherent memory and if they previously underwent conversion on the GPU in VertexArrayVk::syncDirtyAttrib() then any updated data is flushed at the end of that function.",
+      "parentUuid": "54ce2a3d_9f2fd70b",
+      "revId": "bbd92f62ed6a3c8d939d02e5eff5e10b6ac38d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8a85ef28_87b006a5",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 13
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "53023419_09fde4be",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-27T14:18:19Z",
+      "side": 1,
+      "message": "Since divisor is set to 1, we always need 1 attrib per instance. Consider instance count of 12 with divisor of 5. The original buffer would have 3 attribs where 1st two are each used 5 times and last one is used twice. For our emulation, we copy the first two five times each and then the last one twice for a total of 12 (or instanceCount) attribs.",
+      "parentUuid": "494ebe68_04c47cf9",
+      "revId": "bbd92f62ed6a3c8d939d02e5eff5e10b6ac38d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b4cea79_d86add7e",
         "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
         "patchSetId": 13
@@ -74,6 +110,30 @@
       "revId": "bbd92f62ed6a3c8d939d02e5eff5e10b6ac38d50",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20c93171_a0d2d3e5",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1256245
+      },
+      "writtenOn": "2019-09-27T14:18:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b4cea79_d86add7e",
+      "range": {
+        "startLine": 629,
+        "startChar": 20,
+        "endLine": 629,
+        "endChar": 40
+      },
+      "revId": "bbd92f62ed6a3c8d939d02e5eff5e10b6ac38d50",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
