@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "05e7cd70_3decc050",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-27T17:13:55Z",
+      "side": 1,
+      "message": "I think he needs this for the prior use case. see \u0027ref\u0027",
+      "parentUuid": "ba9e1525_cab6adab",
+      "revId": "8936447f19fac65611240c6490612bb7f198da94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "efc080af_69cd3626",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 17
