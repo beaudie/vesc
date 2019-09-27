@@ -299,7 +299,7 @@ class TextureVk : public TextureImpl
                                  const bool sized,
                                  uint32_t levelCount,
                                  uint32_t layerCount);
-    angle::Result initLayerRenderTargets(ContextVk *contextVk, GLuint layerCount);
+    angle::Result initRenderTargets(ContextVk *contextVk, GLuint layerCount, GLuint levelIndex);
     vk::ImageView *getLevelImageViewImpl(vk::ImageViewVector *imageViews, size_t level);
     vk::ImageView *getLayerLevelImageViewImpl(vk::LayerLevelImageViewVector *imageViews,
                                               size_t layer,
@@ -341,8 +341,7 @@ class TextureVk : public TextureImpl
     vk::ImageViewVector mLevelStorageImageViews;
 
     vk::Sampler mSampler;
-    RenderTargetVk mRenderTarget;
-    std::vector<RenderTargetVk> mLayerRenderTargets;
+    std::vector<vk::RenderTargetVector> mRenderTargets;
 
     // The serial is used for cache indexing.
     Serial mSerial;
