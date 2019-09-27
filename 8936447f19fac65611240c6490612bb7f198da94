@@ -126,6 +126,24 @@
     },
     {
       "key": {
+        "uuid": "42b2ae58_9ef9302d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-09-27T20:56:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6547956e_4e20b70a",
+      "revId": "8936447f19fac65611240c6490612bb7f198da94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cf5a8308_06a757cf",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 17
@@ -229,6 +247,24 @@
       "revId": "8936447f19fac65611240c6490612bb7f198da94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4fd3cbd_c7b9738c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1263724
+      },
+      "writtenOn": "2019-09-27T20:56:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0606337_8cbebcdf",
+      "revId": "8936447f19fac65611240c6490612bb7f198da94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     }
   ]
 }
