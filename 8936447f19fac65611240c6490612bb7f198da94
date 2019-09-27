@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "904d4bf9_b1a0df08",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-27T18:55:58Z",
+      "side": 1,
+      "message": "This function is designed to replicate what copyImageDataToBuffer used to be, and calls into the shared components needed to support the staging for base/max level (the new copyImageDataToBuffer).  It looks a little weird in the diff, but I didn\u0027t author these lines here.  I see Jamie pointed to the original.",
+      "parentUuid": "05e7cd70_3decc050",
+      "revId": "8936447f19fac65611240c6490612bb7f198da94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "efc080af_69cd3626",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 17
@@ -48,6 +66,24 @@
       "writtenOn": "2019-09-27T17:10:38Z",
       "side": 1,
       "message": "Seems this test depends on previous changes being flushed so that there is only one pending update staged for any particular level\u0026layer.\nWhat about the case:\nT0, T1, T2 (valid mip chain), all staged initially.\nMaxLevel set to 1. Now working with T0, T1.\nRender to T1. This will push the staged updates for T0 and T1 to HW.\nTexSubImage2D(T1, ....) stage an update to T1 to a portion of the surface. Call it T1.2.\nMaxLevel set to 0. Now working only on T0. Since T1.2 is staged, we do not create a staged copy of T1. That seems like we\u0027ve lost those changes. What we want is to stage that surface and have this staged copy apply before the subimage change. Or we flush the T1.2 staged change before performing the max level change. It could be there is an implicit flush in there somewhere that\u0027s hard to see without writing the code.\nSeems like you\u0027d need to flush any conflicting changes in the staging buffer and then stage the copies. So this wouldn\u0027t be a continue, but a flush of the matching staged updates and then we\u0027d stage the copy.\nThis only matters when the GPU may have changed the content of the texture and if the staged changes are less than a full level.",
+      "revId": "8936447f19fac65611240c6490612bb7f198da94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3bd5fc4_c0c4ee96",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-27T18:55:58Z",
+      "side": 1,
+      "message": "I agree that case isn\u0027t covered with this design.  I would lean toward detecting this case early and flush that update.  We only want to skip copying from the current image if the data is outdated and doesn\u0027t need to be preserved, or has never been applied to the image due to level/layer limits.",
+      "parentUuid": "efc080af_69cd3626",
       "revId": "8936447f19fac65611240c6490612bb7f198da94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -77,6 +113,30 @@
     },
     {
       "key": {
+        "uuid": "b8b97585_b4db5e0c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-27T18:55:58Z",
+      "side": 1,
+      "message": "I\u0027ll check, thanks.",
+      "parentUuid": "cf5a8308_06a757cf",
+      "range": {
+        "startLine": 1210,
+        "startChar": 81,
+        "endLine": 1210,
+        "endChar": 98
+      },
+      "revId": "8936447f19fac65611240c6490612bb7f198da94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "33d60408_8ee86a53",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 17
@@ -88,6 +148,24 @@
       "writtenOn": "2019-09-27T17:10:38Z",
       "side": 1,
       "message": "It looks like all these calls to init and initExternal, maxLevel \u003d\u003d mipLevels-1\nIf that\u0027s always the case, do we need both args? If not, what did we miss? (Or likely I missed one).",
+      "revId": "8936447f19fac65611240c6490612bb7f198da94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a0606337_8cbebcdf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 17
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-27T18:55:58Z",
+      "side": 1,
+      "message": "I think the main one is in TextureVk::initImage:\n\nANGLE_TRY(mImage-\u003einit(contextVk, mState.getType(), vkExtent, format, 1, imageUsageFlags,\n                           mState.getEffectiveBaseLevel(), mState.getEffectiveMaxLevel(),\n                           levelCount, layerCount));",
+      "parentUuid": "33d60408_8ee86a53",
       "revId": "8936447f19fac65611240c6490612bb7f198da94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
