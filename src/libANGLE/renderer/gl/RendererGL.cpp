@@ -486,28 +486,12 @@ std::string RendererGL::getRendererDescription() const
         reinterpret_cast<const char *>(mFunctions->getString(GL_VENDOR)));
     std::string nativeRendererString(
         reinterpret_cast<const char *>(mFunctions->getString(GL_RENDERER)));
+    std::string nativeVersionString(
+        reinterpret_cast<const char *>(mFunctions->getString(GL_VERSION)));
 
     std::ostringstream rendererString;
-    rendererString << nativeVendorString << ", " << nativeRendererString << ", OpenGL";
-    if (mFunctions->standard == STANDARD_GL_ES)
-    {
-        rendererString << " ES";
-    }
-    rendererString << " " << mFunctions->version.major << "." << mFunctions->version.minor;
-    if (mFunctions->standard == STANDARD_GL_DESKTOP)
-    {
-        // Some drivers (NVIDIA) use a profile mask of 0 when in compatibility profile.
-        if ((mFunctions->profile & GL_CONTEXT_COMPATIBILITY_PROFILE_BIT) != 0 ||
-            (mFunctions->isAtLeastGL(gl::Version(3, 2)) && mFunctions->profile == 0))
-        {
-            rendererString << " compatibility";
-        }
-        else if ((mFunctions->profile & GL_CONTEXT_CORE_PROFILE_BIT) != 0)
-        {
-            rendererString << " core";
-        }
-    }
-
+    rendererString << nativeVendorString << ", " << nativeRendererString << ", "
+                   << nativeVersionString;
     return rendererString.str();
 }
 
