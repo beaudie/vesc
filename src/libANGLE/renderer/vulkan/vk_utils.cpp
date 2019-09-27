@@ -61,8 +61,10 @@ const char *g_VkValidationLayerNames[]     = {
 
 bool HasValidationLayer(const std::vector<VkLayerProperties> &layerProps, const char *layerName)
 {
+    WARN() << "Looking for validation layer " << layerName;
     for (const auto &layerProp : layerProps)
     {
+        WARN() << "  Checking against layer " << layerProp.layerName;
         if (std::string(layerProp.layerName) == layerName)
         {
             return true;
