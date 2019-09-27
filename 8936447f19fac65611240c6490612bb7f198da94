@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "6547956e_4e20b70a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-27T20:44:25Z",
+      "side": 1,
+      "message": "Okay, posted an update the adds a flushStagedUpdates before this loop, we should take care of any pending work that would land on the existing vkImage.",
+      "parentUuid": "a3bd5fc4_c0c4ee96",
+      "revId": "8936447f19fac65611240c6490612bb7f198da94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cf5a8308_06a757cf",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 17
@@ -152,6 +170,30 @@
       "revId": "8936447f19fac65611240c6490612bb7f198da94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b8a1e5fa_b38ad4cf",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2019-09-27T20:44:25Z",
+      "side": 1,
+      "message": "Good catch, removed the extra lookup. Done",
+      "parentUuid": "b8b97585_b4db5e0c",
+      "range": {
+        "startLine": 1210,
+        "startChar": 81,
+        "endLine": 1210,
+        "endChar": 98
+      },
+      "revId": "8936447f19fac65611240c6490612bb7f198da94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": false
     },
     {
       "key": {
