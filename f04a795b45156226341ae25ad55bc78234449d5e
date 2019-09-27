@@ -48,6 +48,30 @@
     },
     {
       "key": {
+        "uuid": "0fdf56ec_32a7c266",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-27T17:21:13Z",
+      "side": 1,
+      "message": "Also we\u0027re not really supposed to use size_t.\n\nhttps://google.github.io/styleguide/cppguide.html#Integer_Types",
+      "parentUuid": "26493ee5_032e72ae",
+      "range": {
+        "startLine": 252,
+        "startChar": 4,
+        "endLine": 252,
+        "endChar": 7
+      },
+      "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1319d8ca_58cb3c7e",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 22
@@ -59,6 +83,24 @@
       "writtenOn": "2019-09-27T17:11:00Z",
       "side": 1,
       "message": "Does this need a check that finishedCount \u003e 0 like freeIndex below, or is there guaranteed to be at least 1 finished batch if we get into here?",
+      "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a5059750_3d73de16",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-27T17:21:13Z",
+      "side": 1,
+      "message": "erase no-ops if finishedCount \u003d\u003d 0.",
+      "parentUuid": "1319d8ca_58cb3c7e",
       "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
       "unresolved": true
@@ -82,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "a4885023_5de61645",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-27T17:21:13Z",
+      "side": 1,
+      "message": "yep, acknowledged. probably no greater than 1-2 in non-benchmarking cases.",
+      "parentUuid": "611e8fbf_a9925da7",
+      "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a8bf49bf_ce602342",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 22
@@ -93,6 +153,30 @@
       "writtenOn": "2019-09-27T17:11:00Z",
       "side": 1,
       "message": "Why is this a problem for the CPU?",
+      "range": {
+        "startLine": 481,
+        "startChar": 7,
+        "endLine": 481,
+        "endChar": 79
+      },
+      "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0144ce6c_15df21d4",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-27T17:21:13Z",
+      "side": 1,
+      "message": "Shabi wrote this code. The gist of it is microbenchmarks enqueue frames as fast as possible. Sometimes faster than the queue can actually process them. So there can be unbounded growth.",
+      "parentUuid": "a8bf49bf_ce602342",
       "range": {
         "startLine": 481,
         "startChar": 7,
@@ -128,6 +212,30 @@
     },
     {
       "key": {
+        "uuid": "6870c088_5c8e288c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-27T17:21:13Z",
+      "side": 1,
+      "message": "http://anglebug.com/3508, should probably comment that here. This was from Jiacheng who was working around a QC bug.",
+      "parentUuid": "0ea269d0_252b47d2",
+      "range": {
+        "startLine": 688,
+        "startChar": 11,
+        "endLine": 688,
+        "endChar": 60
+      },
+      "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6d9b18e4_58d5138f",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 22
@@ -139,6 +247,30 @@
       "writtenOn": "2019-09-27T17:11:00Z",
       "side": 1,
       "message": "Is it worth marking this with a TODO?",
+      "range": {
+        "startLine": 84,
+        "startChar": 16,
+        "endLine": 84,
+        "endChar": 89
+      },
+      "revId": "f04a795b45156226341ae25ad55bc78234449d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28441c76_02af3095",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 22
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1329751
+      },
+      "writtenOn": "2019-09-27T17:21:13Z",
+      "side": 1,
+      "message": "I don\u0027t intend to take action on it, so probably not.",
+      "parentUuid": "6d9b18e4_58d5138f",
       "range": {
         "startLine": 84,
         "startChar": 16,
